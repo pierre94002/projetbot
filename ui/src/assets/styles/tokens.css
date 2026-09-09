@@ -29,6 +29,46 @@
   --cm-radius-lg: 16px;
   --cm-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
 
+  /* Matériau "glass" (flat glass blur) — vient EN PLUS des surfaces opaques
+     ci-dessus, jamais à la place. Direction délibérément "flat" et pas
+     glossy : pas d'ombre marquée, pas de bordure lumineuse, flou modéré —
+     seules la transparence et le flou donnent le relief, comme le Centre de
+     contrôle iOS en mode sombre (matériau = fond assombri légèrement teinté
+     de blanc + flou, pas un film blanc opaque). Un fond doux (cf.
+     .shell__wash dans AppShell.vue) est nécessaire pour que le flou révèle
+     quelque chose : flouter une couleur plate ne produit aucun effet visible.
+
+     Triplet RGB (pas un rgba figé) pour faire varier l'alpha indépendamment :
+     rgb(var(--cm-glass-tint) / var(--cm-elevation-2)) par ex. */
+  --cm-glass-tint: 255 255 255;
+  --cm-glass-alpha-1: 0.04;
+  --cm-glass-alpha-2: 0.07;
+  --cm-glass-alpha-3: 0.1;
+  --cm-glass-border: rgba(255, 255, 255, 0.08);
+  --cm-glass-blur-sm: 12px;
+  --cm-glass-blur-md: 20px;
+  --cm-glass-blur-lg: 32px;
+  --cm-glass-saturate: 1.2;
+
+  /* Presets d'élévation — un nom plutôt que recomposer alpha+flou à chaque
+     composant (même principe que --cm-surface-hover aujourd'hui). Jamais
+     d'ombre portée marquée à aucun niveau, seulement alpha+flou+bordure
+     hairline : 1 = chrome persistant (sidebar/topbar), 2 = cards/panneaux,
+     3 = popovers/dropdowns, 4 = modals (élévation la plus haute). */
+  --cm-elevation-1: var(--cm-glass-alpha-1);
+  --cm-elevation-1-blur: var(--cm-glass-blur-sm);
+  --cm-elevation-2: var(--cm-glass-alpha-2);
+  --cm-elevation-2-blur: var(--cm-glass-blur-sm);
+  --cm-elevation-3: var(--cm-glass-alpha-3);
+  --cm-elevation-3-blur: var(--cm-glass-blur-md);
+  --cm-elevation-4: var(--cm-glass-alpha-3);
+  --cm-elevation-4-blur: var(--cm-glass-blur-lg);
+
+  /* Alias sport — coût nul aujourd'hui (football = seul sport actif), évite
+     une passe de renommage si un futur sport a besoin de son propre accent
+     sans toucher --cm-accent (encore utilisé tel quel un peu partout). */
+  --cm-sport-accent: var(--cm-accent);
+
   /* Typo */
   --cm-font: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
   --cm-font-mono: 'Cascadia Code', 'SF Mono', Consolas, monospace;

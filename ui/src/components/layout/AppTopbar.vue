@@ -31,11 +31,12 @@ const statusLabel = computed(() => {
   align-items: center;
   justify-content: space-between;
   padding: 0 28px;
-  border-bottom: 1px solid var(--cm-border-soft);
+  border-bottom: 1px solid var(--cm-glass-border);
   position: sticky;
   top: 0;
-  background: rgba(10, 13, 19, 0.85);
-  backdrop-filter: blur(8px);
+  background: rgb(var(--cm-glass-tint) / var(--cm-elevation-2));
+  backdrop-filter: blur(var(--cm-elevation-2-blur)) saturate(var(--cm-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--cm-elevation-2-blur)) saturate(var(--cm-glass-saturate));
   z-index: 10;
 }
 

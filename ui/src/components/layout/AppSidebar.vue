@@ -35,10 +35,13 @@ const NAV_ITEMS = [
   height: 100vh;
   position: sticky;
   top: 0;
+  z-index: 1;
   display: flex;
   flex-direction: column;
-  background: var(--cm-surface);
-  border-right: 1px solid var(--cm-border-soft);
+  background: rgb(var(--cm-glass-tint) / var(--cm-elevation-1));
+  backdrop-filter: blur(var(--cm-elevation-1-blur)) saturate(var(--cm-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--cm-elevation-1-blur)) saturate(var(--cm-glass-saturate));
+  border-right: 1px solid var(--cm-glass-border);
   padding: 20px 14px;
 }
 
