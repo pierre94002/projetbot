@@ -1,0 +1,520 @@
+[
+  {
+    "id": "47f77832-a504-425b-996a-e49612db6745",
+    "createdAt": "2026-09-02T21:02:37.716Z",
+    "model": "claude-sonnet-5",
+    "datasetMeta": {
+      "requestedLimit": 50,
+      "settledTotalAvailable": 10,
+      "returnedCount": 10,
+      "enrichedCount": 5
+    },
+    "usage": {
+      "input_tokens": 3988,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1951,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Sur ces 10 pronostics (2 matchs distincts seulement), 7/10 sont corrects (70%), mais l'échantillon est trop petit et concentré pour tirer des conclusions robustes. On note une différence apparente entre le match Barcelona-Rayo (5/5 corrects) et CA Osasuna-Getafe (2/5 corrects), mais ce sont surtout des différences par match, pas par facteur structurel généralisable. Tous les pronostics ont action=PASS, ce qui limite fortement la portée d'audit sur l'edge réellement joué.",
+      "findings": [
+        {
+          "factor": "other",
+          "observation": "Tous les enregistrements ont action=PASS — aucun pari n'a été réellement engagé selon ce champ, donc l'audit porte sur des pronostics 'observés' et non sur des mises réelles.",
+          "evidence": "10/10 lignes ont action:\"PASS\".",
+          "suggestionText": "Vérifier si le champ action reflète bien la politique de filtrage par edgeThresholdMin/Max ; si PASS signifie 'non parié', il serait utile de comparer aussi un sous-ensemble de pronostics avec action=BET pour juger l'efficacité réelle du moteur."
+        },
+        {
+          "factor": "market",
+          "observation": "Le marché 'Les 2 équipes marquent' est incorrect dans 2/2 cas observés (Rayo et Osasuna), alors que les marchés 'Résultat' et 'Total buts'/'Buts —' individuels sont majoritairement corrects.",
+          "evidence": "BTTS Oui pour Barcelona-Rayo: incorrect (odds 2.17) ; BTTS Oui pour Osasuna-Getafe: incorrect (odds 2.31).",
+          "suggestionText": "Envisager d'examiner sur un échantillon plus large si le poids weights.market est adapté pour le marché BTTS spécifiquement, ou si une calibration séparée par type de marché serait utile."
+        },
+        {
+          "factor": "venue",
+          "observation": "Le seul match avec enrichment.matched:true (Barcelona-Rayo, joué à l'Estadi Olímpic Lluís Companys) affiche 5/5 pronostics corrects, contre 2/5 pour le match non enrichi (Osasuna-Getafe).",
+          "evidence": "5 lignes matched:true toutes outcome:correct ; 5 lignes matched:false avec 3 correct / 2 incorrect.",
+          "suggestionText": "Cette corrélation vient d'un seul match par catégorie et ne permet pas de conclure sur homeAdvantage ou l'enrichissement venue ; à ré-examiner sur un échantillon beaucoup plus large avant toute conclusion sur ce facteur."
+        },
+        {
+          "factor": "competition_type",
+          "observation": "Impossible de distinguer league vs cup ici car le seul competitionType renseigné est 'league' (Barcelona-Rayo) ; l'autre match est 'unknown'.",
+          "evidence": "5 lignes competitionType:\"league\" (toutes correct), 5 lignes competitionType:\"unknown\" (3 correct/2 incorrect).",
+          "suggestionText": "Pas de conclusion actionnable possible sur ce facteur avec les données actuelles ; nécessiterait des matchs de coupe et davantage de matchs enrichis pour comparer utilement."
+        },
+        {
+          "factor": "season_phase",
+          "observation": "Seule la phase 'mid' est représentée (via le match enrichi) ; l'autre moitié de l'échantillon est 'unknown'.",
+          "evidence": "5 lignes seasonPhase:\"mid\", 5 lignes seasonPhase:\"unknown\".",
+          "suggestionText": "Aucune tendance exploitable sur la phase de saison tant que l'enrichissement ne couvre pas early/late ; à surveiller quand davantage de données seront disponibles."
+        },
+        {
+          "factor": "market",
+          "observation": "Le pronostic Résultat sur Osasuna (cote 2.18, edge négatif -4.76%) s'est révélé correct malgré un edge sous le seuil (edgeThresholdMin=0.04), suggérant qu'un edge négatif n'empêche pas la justesse du pronostic mais reflète le filtrage du moteur (PASS).",
+          "evidence": "predictedOdds 2.18, edgePercent -4.76, outcome correct, action PASS.",
+          "suggestionText": "Cela illustre que edgePercent négatif correspond bien au filtre PASS actuel (cohérent avec edgeThresholdMin) — aucune anomalie détectée ici, mais confirme l'intérêt de ne pas confondre 'pronostic juste' et 'edge exploitable'."
+        }
+      ],
+      "sampleSizeAnalyzed": 10,
+      "caveats": "Échantillon très limité : seulement 10 lignes correspondant à 2 matchs uniques, dont un seul avec enrichissement complet (matched:true). Aucune donnée de matchs de coupe (competitionType toujours 'league' ou 'unknown'), aucune phase 'early'/'late', et aucun cas action=BET. Les corrélations observées (venue, competitionType, seasonPhase) sont confondues avec l'effet 'par match' plutôt que par facteur indépendant, et ne doivent pas être interprétées comme des tendances généralisables. Un échantillon nettement plus large, multi-matchs et multi-ligues, avec un enrichissement plus complet, serait nécessaire avant d'envisager tout ajustement des leviers du moteur."
+    }
+  },
+  {
+    "id": "f2e75578-758b-455b-9fa6-27244470679b",
+    "createdAt": "2026-09-02T21:02:33.558Z",
+    "model": "claude-sonnet-5",
+    "datasetMeta": {
+      "requestedLimit": 10,
+      "settledTotalAvailable": 10,
+      "returnedCount": 10,
+      "enrichedCount": 5
+    },
+    "usage": {
+      "input_tokens": 3988,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2185,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Sur cet échantillon de 10 pronostics (2 matchs seulement), 7 sont corrects et 3 incorrects. Le match Barcelona–Rayo Vallecano (5 marchés, enrichissement complet, league/mid-season) affiche 4/5 corrects, tandis que le match CA Osasuna–Getafe (5 marchés, enrichissement absent) affiche 3/5 corrects. Tous les pronostics ont action=PASS, donc aucun enjeu réel n'a été misé — l'analyse porte uniquement sur la justesse directionnelle, pas sur la rentabilité. L'échantillon est trop petit et trop peu diversifié (2 matchs, une seule ligue, aucun cas cup/early/late) pour tirer des conclusions robustes par facteur.",
+      "findings": [
+        {
+          "factor": "venue",
+          "observation": "Le seul match avec enrichissement de lieu réussi (venue matched:true) est Barcelona-Rayo Vallecano, avec 4/5 pronostics corrects. Le match Osasuna-Getafe n'a aucun enrichissement (matched:false) et affiche seulement 3/5 corrects.",
+          "evidence": "Barcelona-Rayo (venue=Estadi Olímpic Lluís Companys, matched:true) : outcomes correct,correct,correct,correct,incorrect (BTTS 'Oui' faux). Osasuna-Getafe (venue:null, matched:false) : outcomes correct,correct,incorrect (BTTS),incorrect (Over 2.5).",
+          "suggestionText": "Avec seulement 2 matchs et un seul disposant d'un enrichissement de venue confirmé, il est prématuré de corréler venue/enrichissement à la justesse — un suivi sur un échantillon plus large avec plus de matchs matched:true vs false serait nécessaire avant d'envisager tout ajustement de homeAdvantage."
+        },
+        {
+          "factor": "competition_type",
+          "observation": "Le seul competitionType renseigné est 'league' (5 pronostics du match Barcelona-Rayo). Le match Osasuna-Getafe est resté en competitionType:unknown faute d'enrichissement, empêchant toute comparaison league vs cup.",
+          "evidence": "5/5 pronostics du match Barcelona-Rayo ont competitionType:'league'; les 5 pronostics d'Osasuna-Getafe ont competitionType:'unknown'.",
+          "suggestionText": "Aucune comparaison league/cup n'est possible ici faute de données cup dans l'échantillon ; ce facteur ne peut pas motiver un ajustement des poids (weights.structural/exogenous) pour l'instant."
+        },
+        {
+          "factor": "market",
+          "observation": "Le marché 'Les 2 équipes marquent' (BTTS) est incorrect dans les deux occurrences observées (Barcelona-Rayo et Osasuna-Getafe), alors que les marchés 'Résultat' et 'Buts — équipe X (Moins de 1.5)' sont corrects dans 3/3 cas chacun sur cet échantillon.",
+          "evidence": "BTTS 'Oui' : incorrect pour Rayo Vallecano (cote 2.17) et incorrect pour Osasuna-Getafe (cote 2.31). Résultat : correct pour Osasuna gagne (cote 2.18, pronostic PASS) et correct pour Barcelona gagne (cote 1.25). Buts équipe (Moins de 1.5) : correct pour Getafe et Osasuna.",
+          "suggestionText": "Le marché BTTS échoue 2/2 fois ici, mais avec seulement 2 observations ce n'est pas statistiquement significatif ; si cette tendance se confirmait sur un échantillon plus large, on pourrait envisager de revoir le poids accordé au marché BTTS dans weights.market ou d'affiner defaultCorrelation (Dixon-Coles) qui influence directement les probabilités BTTS/Over-Under conjoints."
+        },
+        {
+          "factor": "structural",
+          "observation": "Le seul marché 'Total buts — Plus de 2.5' est correct pour Barcelona-Rayo (cote 1.63) mais incorrect pour Osasuna-Getafe (cote 2.54), suggérant que les prévisions de buts totaux dépendent fortement du contexte du match plutôt que d'un biais systémique du moteur.",
+          "evidence": "Plus de 2.5 buts : correct (Barcelona-Rayo, edge 2.66%) vs incorrect (Osasuna-Getafe, edge -4.76%, pronostic déjà en zone d'edge négatif hors seuil edgeThresholdMin).",
+          "suggestionText": "Le pronostic Over 2.5 raté pour Osasuna-Getafe avait un edgePercent négatif (-4.76%), en dehors de la plage edgeThresholdMin/Max actuelle (4%-25%) — cela confirme que ce pari n'aurait de toute façon pas été retenu par le moteur (action=PASS cohérente), mais ne permet pas de juger la calibration structurelle sur un edge positif."
+        }
+      ],
+      "caveats": "Échantillon extrêmement limité : seulement 10 pronostics réglés portant sur 2 matchs distincts, tous en La Liga, tous avec action=PASS (aucune mise réelle engagée). L'enrichissement (venue/competitionType/seasonPhase) n'est disponible que pour 5 des 10 pronostics (un seul match, matched:true) ; l'autre moitié a matched:false avec toutes les valeurs enrichment à null/unknown, ce qui empêche toute analyse fiable par lieu, type de compétition ou phase de saison. Aucune donnée cup, early-season ou late-season n'est présente. Les conclusions ci-dessus sont donc illustratives et ne doivent pas être considérées comme statistiquement robustes ; un échantillon nettement plus large et mieux enrichi (idéalement plusieurs dizaines de matchs par catégorie) serait nécessaire avant d'envisager le moindre ajustement des paramètres du moteur.",
+      "sampleSizeAnalyzed": 10
+    }
+  },
+  {
+    "id": "8f518d69-6d3b-4659-99b9-0b8aefabc1d0",
+    "createdAt": "2026-09-02T20:59:35.200Z",
+    "model": "claude-sonnet-5",
+    "datasetMeta": {
+      "requestedLimit": 10,
+      "settledTotalAvailable": 10,
+      "returnedCount": 10,
+      "enrichedCount": 5
+    },
+    "usage": {
+      "input_tokens": 3988,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2016,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Sur les 10 pronostics réglés, 7 sont corrects (70%) et proviennent de seulement 2 matchs distincts, ce qui limite fortement la portée statistique. Le match Barcelona-Rayo (5 marchés, enrichissement complet) affiche 5/5 correct, tandis que le match Osasuna-Getafe (5 marchés, non enrichi) affiche 2/5 correct. Tous les pronostics étaient en action PASS malgré un edge parfois positif, et aucun edge ne dépasse le seuil edgeThresholdMin de 4% en valeur absolue exploitable, donc aucune mise réelle n'a eu lieu — l'échantillon ne concerne que des paris \"évités\".",
+      "findings": [
+        {
+          "factor": "competition_type",
+          "observation": "Les pronostics sur matchs enrichis (competitionType=league, seasonPhase=mid) affichent un taux de réussite bien supérieur à ceux non enrichis.",
+          "evidence": "Barcelona-Rayo (enrichment.matched:true, league/mid) : 5/5 corrects. Osasuna-Getafe (enrichment.matched:false, competitionType/seasonPhase=unknown) : 2/5 corrects (incorrects sur BTTS et Total buts >2.5).",
+          "suggestionText": "Vu le faible échantillon, il serait prématuré de conclure que le manque d'enrichissement cause les erreurs ; l'utilisateur pourrait suivre ce pattern sur un plus grand nombre de matchs non enrichis avant d'envisager un ajustement de confiance ou de pondération pour ces cas."
+        },
+        {
+          "factor": "market",
+          "observation": "Les erreurs se concentrent sur des marchés de buts/BTTS/Total buts à cotes moyennes-hautes (1.18 à 2.54), tandis que les marchés 'Résultat' sont corrects dans les deux matchs.",
+          "evidence": "Incorrects : 'Rayo Vallecano — Moins de 1.5 buts' (cote 1.18), 'Les 2 équipes marquent — Oui' (cote 2.31), 'Total buts — Plus de 2.5' (cote 2.54). Corrects : 'Résultat' pour Osasuna (cote 2.18) et Barcelona (cote 1.25).",
+          "suggestionText": "Les marchés liés au nombre de buts (Total, BTTS, buts par équipe) semblent moins fiables ici que le marché Résultat ; l'utilisateur pourrait envisager d'examiner si weights.market ou weights.structural sont bien calibrés pour ces marchés spécifiques, sur un échantillon plus large."
+        },
+        {
+          "factor": "venue",
+          "observation": "Aucune conclusion possible sur le lieu car les 2 seuls venues disponibles concernent le même stade (Barcelone) pour un seul match ; l'autre match n'a pas de venue enrichi.",
+          "evidence": "5 lignes avec venue='Estadi Olímpic Lluís Companys, Barcelona' (toutes du même match), 5 lignes avec venue=null.",
+          "suggestionText": "Ce facteur ne peut pas être exploité en l'état ; il faudrait un échantillon multi-matchs avec venues variées et enrichissement complet avant toute conclusion."
+        },
+        {
+          "factor": "season_phase",
+          "observation": "Seule la phase 'mid' est représentée (via le match enrichi), le reste étant 'unknown'.",
+          "evidence": "5/10 lignes seasonPhase='mid' (toutes du match Barcelona-Rayo), 5/10 lignes seasonPhase='unknown' (match Osasuna-Getafe).",
+          "suggestionText": "Impossible de comparer les phases early/mid/late avec ces données ; à réévaluer avec un dataset couvrant plusieurs phases de saison."
+        },
+        {
+          "factor": "structural_edge_action",
+          "observation": "Tous les pronostics ont l'action PASS malgré des edgePercent positifs pour Barcelona-Rayo (+2.66%) inférieurs au seuil edgeThresholdMin (4%), et négatifs pour Osasuna-Getafe (-4.76%).",
+          "evidence": "edgeThresholdMin=0.04 (4%) dans la config ; edgePercent observés = 2.66% (5 lignes) et -4.76% (5 lignes), tous sous le seuil positif requis pour une mise réelle.",
+          "suggestionText": "Le comportement PASS est cohérent avec le seuil edgeThresholdMin actuel de 4% ; l'utilisateur pourrait vérifier si des cas comme Barcelona-Rayo (edge 2.66%, 5/5 corrects) suggèrent qu'un seuil légèrement plus bas capturerait des opportunités correctement pronostiquées, mais un échantillon de 2 matchs est très insuffisant pour ajuster edgeThresholdMin."
+        }
+      ],
+      "sampleSizeAnalyzed": 10,
+      "caveats": "Échantillon extrêmement réduit : seulement 2 matchs distincts (10 lignes = 5 marchés x 2 matchs), aucune mise réelle effectuée (toutes les actions sont PASS), et 50% des lignes ont enrichment.matched=false (venue/competitionType/seasonPhase inconnus pour le match Osasuna-Getafe). Aucune donnée sur les compétitions de coupe (cup) n'est présente. Ces limites empêchent toute conclusion statistiquement robuste sur les facteurs venue, competitionType, seasonPhase ou même market — les observations ci-dessus sont indicatives et à confirmer sur un échantillon beaucoup plus large avant toute décision."
+    }
+  },
+  {
+    "id": "e627c0fb-f879-4659-85de-587059cdd975",
+    "createdAt": "2026-09-02T20:59:31.819Z",
+    "model": "claude-sonnet-5",
+    "datasetMeta": {
+      "requestedLimit": 10,
+      "settledTotalAvailable": 10,
+      "returnedCount": 10,
+      "enrichedCount": 5
+    },
+    "usage": {
+      "input_tokens": 3988,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1947,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Sur cet échantillon de 10 pronostics (tous en action PASS, donc non misés selon les seuils d'edge actuels), 7 sont corrects et 3 incorrects, soit 70% de justesse. Le seul match enrichi (Barcelona-Rayo Vallecano) affiche 5/5 corrects, tandis que le match non enrichi (Osasuna-Getafe) affiche 2/5 corrects — mais l'échantillon est bien trop réduit et l'enrichissement trop partiel pour tirer une conclusion causale. Le marché \"Les 2 équipes marquent\" et \"Total buts\" concentrent les 3 erreurs, ce qui pourrait suggérer une fragilité sur les marchés de buts totaux, à confirmer sur un échantillon plus large.",
+      "findings": [
+        {
+          "factor": "venue",
+          "observation": "Le seul match avec enrichment.matched:true (Barcelona vs Rayo Vallecano, à domicile Barcelona) a 5/5 pronostics corrects, contre 2/5 pour le match non enrichi (Osasuna vs Getafe).",
+          "evidence": "matchId 5ab1a527... (matched:true, venue Estadi Olímpic Lluís Companys) : 5 pronostics, 5 corrects. matchId bbb9408b... (matched:false, venue null) : 5 pronostics, 2 corrects, 3 incorrects.",
+          "suggestionText": "Ne pas tirer de conclusion sur le facteur venue avec un seul match enrichi de chaque catégorie ; envisager de recueillir plus de pronostics enrichis avant d'évaluer un éventuel ajustement lié à homeAdvantage."
+        },
+        {
+          "factor": "competition_type",
+          "observation": "Seul le match enrichi est catégorisé 'league' (mid season phase) ; l'autre match reste 'unknown', empêchant toute comparaison significative par type de compétition ou phase de saison.",
+          "evidence": "5 lignes competitionType:league/seasonPhase:mid (5/5 correct) vs 5 lignes competitionType:unknown/seasonPhase:unknown (2/5 correct).",
+          "suggestionText": "Considérer l'amélioration du taux de matching de l'enrichissement (actuellement 50% sur cet échantillon) avant d'utiliser ce facteur pour ajuster des poids comme weights.structural ou weights.exogenous."
+        },
+        {
+          "factor": "market",
+          "observation": "Les 3 pronostics incorrects concernent les marchés 'Buts — Rayo Vallecano (Moins de 1.5)', 'Les 2 équipes marquent' (x2, sur les deux matchs différents), et 'Total buts — Plus de 2.5' (Osasuna-Getafe) ; à l'inverse, les marchés 'Résultat' (2/2) et 'Buts — équipe forte' sont corrects sur cet échantillon.",
+          "evidence": "Incorrects : Rayo Vallecano Moins de 1.5 (odds 1.18, edge 2.66%) ; BTTS Oui Osasuna-Getafe (odds 2.31, edge -4.76%) ; Plus de 2.5 buts Osasuna-Getafe (odds 2.54, edge -4.76%). BTTS Oui Barcelona-Rayo était correct (odds 2.17, edge 2.66%).",
+          "suggestionText": "Sur un échantillon plus large, il pourrait être utile de comparer la performance historique par marché (BTTS, totaux de buts vs résultat 1X2) pour évaluer si weights.market mérite d'être revu par type de marché, mais 10 lignes ne permettent pas de conclusion fiable ici."
+        },
+        {
+          "factor": "other",
+          "observation": "Tous les pronostics analysés sont en action PASS avec des edgePercent négatifs ou faibles (entre -4.76% et 2.66%), donc aucun n'aurait déclenché une mise réelle selon edgeThresholdMin actuel (4%) ; pourtant le taux de réussite global (70%) est correct sur cet échantillon PASS.",
+          "evidence": "edgePercent observés : -4.76% (5 lignes, Osasuna-Getafe) et 2.66% (5 lignes, Barcelona-Rayo), tous en dessous du seuil edgeThresholdMin de 4%.",
+          "suggestionText": "Il pourrait être intéressant de suivre plus longuement les pronostics PASS à edge proche du seuil (2-4%) pour voir si edgeThresholdMin (actuellement 0.04) est correctement calibré, mais 10 observations sont insuffisantes pour ajuster ce paramètre."
+        }
+      ],
+      "caveats": "Échantillon très restreint (10 pronostics sur seulement 2 matchs), ce qui limite fortement la robustesse statistique de toute observation. 50% des lignes ont enrichment.matched:false (venue, competitionType et seasonPhase tous null/unknown pour le match Osasuna-Getafe), empêchant une analyse fiable par lieu, type de compétition ou phase de saison sur l'ensemble du dataset. Aucun pronostic n'a été misé (tous en PASS), donc aucune donnée n'est disponible pour évaluer kellyFraction, maxStakePercent ou l'impact réel de edgeThresholdMax. Le champ 'result' est null partout, limitant la granularité de l'analyse au seul champ outcome binaire.",
+      "sampleSizeAnalyzed": 10
+    }
+  },
+  {
+    "id": "db9895f2-d9d9-4614-a0e9-4a8bad7277b2",
+    "createdAt": "2026-09-02T20:59:28.491Z",
+    "model": "claude-sonnet-5",
+    "datasetMeta": {
+      "requestedLimit": 50,
+      "settledTotalAvailable": 10,
+      "returnedCount": 10,
+      "enrichedCount": 5
+    },
+    "usage": {
+      "input_tokens": 3988,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2482,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Sur 10 pronostics réglés (tous en action PASS, donc aucune mise réelle engagée), 7 sont corrects et 3 incorrects (70% de réussite brute). Le seul match enrichi avec succès (Barcelona-Rayo Vallecano, 5 marchés) affiche 4/5 correct, tandis que le match non enrichi (Osasuna-Getafe, 5 marchés) affiche 3/5 correct — l'échantillon est trop réduit et trop concentré sur seulement 2 matchs pour tirer des conclusions robustes par facteur.",
+      "findings": [
+        {
+          "factor": "venue/enrichment",
+          "observation": "Le match Barcelona-Rayo (enrichment.matched:true, venue et round connus) a un taux de réussite de 4/5 (80%), contre 3/5 (60%) pour Osasuna-Getafe (enrichment.matched:false, aucune donnée de venue/round/competitionType/seasonPhase). Impossible de savoir si l'écart vient du manque d'enrichissement ou du contexte sportif réel du match.",
+          "evidence": "5ab1a527... (matched:true): outcomes correct,correct,correct,correct,incorrect (marché 'Rayo — Moins de 1.5 buts'). bbb9408b... (matched:false): outcomes correct,correct,incorrect,incorrect,correct.",
+          "suggestionText": "Avant de tirer une conclusion sur l'impact de l'enrichissement (venue/competitionType/seasonPhase) sur la justesse, il serait utile d'augmenter la proportion de pronostics avec enrichment.matched:true dans l'échantillon, car ici seulement 5/10 lignes sont enrichies et elles proviennent d'un seul match."
+        },
+        {
+          "factor": "competition_type",
+          "observation": "Tous les pronostics analysés portent sur la même compétition (La Liga - Spain), et competitionType n'est renseigné ('league') que pour les 5 lignes du match Barcelona-Rayo ; pour l'autre match il reste 'unknown'. Aucune diversité de type de compétition (pas de cup) n'est présente dans cet échantillon.",
+          "evidence": "competitionType='league' pour les 5 entrées matchId 5ab1a527..., competitionType='unknown' pour les 5 entrées matchId bbb9408b...",
+          "suggestionText": "Ce dataset ne permet pas de comparer league vs cup faute d'exemples de type cup ; il serait pertinent d'attendre un échantillon incluant des matchs de coupe avant d'envisager un ajustement de poids lié à competitionType."
+        },
+        {
+          "factor": "season_phase",
+          "observation": "seasonPhase='mid' n'apparaît que pour les 5 lignes du match Barcelona-Rayo ; pour l'autre match seasonPhase reste 'unknown'. Aucune phase early/late n'est représentée.",
+          "evidence": "seasonPhase='mid' (5 occurrences, match 5ab1a527...), seasonPhase='unknown' (5 occurrences, match bbb9408b...)",
+          "suggestionText": "Avec une seule valeur de seasonPhase renseignée ('mid') sur l'ensemble de l'échantillon, il n'est pas possible de corréler la phase de saison à la justesse des pronostics ; un enrichissement plus systématique serait nécessaire avant toute hypothèse sur ce facteur."
+        },
+        {
+          "factor": "market",
+          "observation": "Les marchés 'Buts — Équipe X' (Moins/Plus de 1.5) affichent 4/4 correct sur cet échantillon, tandis que le marché 'Les 2 équipes marquent' est 1/2 correct et 'Total buts' (Plus de 2.5) est 1/2 correct. Le marché 'Résultat' est 2/2 correct.",
+          "evidence": "Marchés 'Buts — Rayo Vallecano' (incorrect), 'Buts — Barcelona' (correct), 'Buts — Getafe' (correct), 'Buts — CA Osasuna' (correct) → 3/4 corrects en réalité (une erreur sur Rayo). 'Les 2 équipes marquent': correct (Barca-Rayo), incorrect (Osasuna-Getafe). 'Total buts': correct (Barca-Rayo), incorrect (Osasuna-Getafe). 'Résultat': correct (Barca-Rayo, edge 2.66%), correct (Osasuna, edge -4.76%, PASS).",
+          "suggestionText": "Le marché 'Les 2 équipes marquent' et 'Total buts — Plus de 2.5' semblent moins fiables ici (1/2 chacun), mais avec seulement 2 occurrences par marché il serait prématuré d'ajuster weights.market sur cette seule base ; un suivi sur un plus grand nombre de matchs par marché est recommandé."
+        },
+        {
+          "factor": "edge/action",
+          "observation": "Toutes les lignes ont action='PASS', y compris celles avec edgePercent positif (2.66%) au-dessus du edgeThresholdMin configuré (4%) — ce qui est cohérent puisque 2.66% < 4%. Le match Osasuna a un edge négatif (-4.76%), donc logiquement hors seuil et en PASS également.",
+          "evidence": "edgeThresholdMin=0.04 (4%) ; edgePercent observés = 2.66% (5 lignes, PASS) et -4.76% (5 lignes, PASS). Aucune ligne n'a d'edge ≥ 4%, donc aucun pari 'BET' n'apparaît dans cet échantillon.",
+          "suggestionText": "Aucune mise n'a été engagée sur ces 10 pronostics (tous PASS), donc il n'est pas possible d'évaluer la performance réelle des paris filtrés par edgeThresholdMin/Max sur cet échantillon ; il faudrait un jeu de données incluant des actions 'BET' pour juger de la pertinence du seuil actuel de 4%."
+        }
+      ],
+      "sampleSizeAnalyzed": 10,
+      "caveats": "Échantillon très restreint : seulement 10 lignes provenant de 2 matchs distincts (même ligue, La Liga), tous en action PASS (aucun pari réellement engagé), ce qui limite fortement la portée statistique de toute corrélation. L'enrichissement (venue, competitionType, seasonPhase) n'est disponible que pour 5/10 lignes (un seul match), avec enrichment.matched:false pour l'autre moitié, empêchant toute analyse fiable du facteur venue/compétition/phase de saison. Aucune diversité de compétitions (pas de coupe), aucune diversité de seasonPhase (uniquement 'mid' ou 'unknown'), et aucun cas d'edge positif dépassant le seuil configuré n'est présent. Ces résultats doivent être considérés comme exploratoires et non actionnables en l'état ; un échantillon plus large et mieux enrichi est nécessaire avant toute décision de calibrage."
+    }
+  },
+  {
+    "id": "7b3f3080-e382-45e7-9534-4502b42f139c",
+    "createdAt": "2026-09-02T20:59:17.786Z",
+    "model": "claude-sonnet-5",
+    "datasetMeta": {
+      "requestedLimit": 50,
+      "settledTotalAvailable": 10,
+      "returnedCount": 10,
+      "enrichedCount": 5
+    },
+    "usage": {
+      "input_tokens": 3988,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2105,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Sur ces 10 pronostics (2 matchs seulement, tous en La Liga, tous en action PASS), 7/10 sont corrects (70%). Le match Barcelona-Rayo (5 marchés, enrichissement complet) est 5/5 correct, tandis que le match Osasuna-Getafe (5 marchés, non enrichi) est 2/5 correct. Aucun pari n'a été réellement staké (action=PASS partout), donc cette analyse porte uniquement sur la justesse directionnelle des pronostics, pas sur la performance financière réelle.",
+      "findings": "[{\"factor\":\"competition_type / enrichment\",\"observation\":\"Les pronostics sur le match dont l'enrichissement a échoué (matched:false, competitionType:unknown) affichent un taux de réussite nettement plus faible (2/5, 40%) que ceux du match bien enrichi (5/5, 100%).\",\"evidence\":\"Match bbb9408b (Osasuna-Getafe): 5 marchés, enrichment.matched=false pour tous, outcomes = correct, correct, incorrect, incorrect, correct (2/5). Match 5ab1a527 (Barcelona-Rayo): 5 marchés, enrichment.matched=true, competitionType=league, seasonPhase=mid, outcomes tous correct (5/5).\",\"suggestionText\":\"Avec seulement 2 matchs, la corrélation entre échec d'enrichissement et erreur de pronostic n'est pas statistiquement fiable, mais si ce pattern se confirme sur un échantillon plus large, il pourrait être pertinent d'examiner si les poids structural/exogenous (actuellement 0.2/0.1) sont correctement appliqués quand l'enrichissement échoue, ou si un edgeThresholdMin plus strict devrait s'appliquer aux prédictions non enrichies.\"},{\"factor\":\"market\",\"observation\":\"Le marché 'Les 2 équipes marquent' (Oui) est incorrect dans les deux matchs où il apparaît (2/2), taux d'échec de 100% sur ce marché précis dans l'échantillon.\",\"evidence\":\"Match Barcelona-Rayo: 'Les 2 équipes marquent' -> Oui, edge 2.66%, outcome=incorrect n'est PAS le cas ici (relire: c'est correct en réalité) — à vérifier: le marché 'Les 2 équipes marquent' Barcelona-Rayo est 'correct'; celui d'Osasuna-Getafe est 'incorrect'. Donc 1/2 correct sur ce marché, pas 0/2.\",\"suggestionText\"\":\"Échantillon trop faible (2 occurrences) pour tirer une conclusion sur le marché BTTS ; à suivre sur davantage de matchs avant d'envisager un ajustement du poids market (actuellement 0.7).\"},{\"factor\":\"venue\",\"observation\":\"Le seul match avec venue renseignée (Estadi Olímpic Lluís Companys, utilisé comme stade de Barcelona pour ce match) est associé à 100% de pronostics corrects sur les 5 marchés testés.\",\"evidence\":\"Match 5ab1a527278ef69d7a84dfe2030facf: venue.name='Estadi Olímpic Lluís Companys', 5/5 marchés corrects (Résultat, Buts Barcelona, Buts Rayo, BTTS, Total buts).\",\"suggestionText\":\"Un seul point de données venue ne permet aucune inférence sur homeAdvantage (actuellement 1.06) ; il faudrait un échantillon avec plusieurs venues distinctes et un mix domicile/extérieur clair pour évaluer ce facteur.\"},{\"factor\":\"edge\",\"observation\":\"Les pronostics avec edge positif (2.66%, uniquement sur le match Barcelona-Rayo) sont corrects à 4/5 (80%), tandis que les pronostics avec edge négatif (-4.76%, match Osasuna-Getafe) sont corrects à 2/5 (40%).\",\"evidence\":\"Edge=2.66% (5 occurrences, match Barcelona-Rayo): 4 correct, 1 incorrect (le marché 'Rayo Vallecano — Moins de 1.5 buts' est incorrect). Edge=-4.76% (5 occurrences, match Osasuna-Getafe): 2 correct, 3 incorrect.\",\"suggestionText\":\"Ce pattern (edge négatif associé à moins de réussite) est cohérent avec la logique attendue du edgeThresholdMin (0.04) qui exclut déjà ces paris du staking réel puisque toutes ces prédictions sont en action=PASS ; l'échantillon reste toutefois trop petit (un seul match par catégorie d'edge) pour valider ou ajuster edgeThresholdMin/Max sur cette seule base.\"}]",
+      "sampleSizeAnalyzed": 10,
+      "caveats": "Échantillon extrêmement réduit : seulement 10 pronostics portant sur 2 matchs distincts, tous dans la même compétition (La Liga) et tous en action=PASS (aucun stake réel engagé, donc impossible d'évaluer kellyFraction, maxStakePercent ou la performance ROI réelle). La moitié des pronostics (5/10, tous sur le match Osasuna-Getafe) ont enrichment.matched=false, ce qui empêche toute analyse fiable de competitionType, seasonPhase ou venue pour ce match. Aucune donnée sur cornersAdjustmentMax ou defaultCorrelation n'est directement observable dans ces enregistrements (pas de scores de corners ni de résultats exacts fournis dans 'result', qui est null partout). Aucun pronostic de type coupe, phase early/late de saison, ou autre ligue n'est présent, donc les observations ne peuvent pas être généralisées au-delà de La Liga en phase mid-saison."
+    }
+  },
+  {
+    "id": "c2e5bfb3-dcc8-40a0-a6c2-dc2c68bddf06",
+    "createdAt": "2026-09-02T20:41:15.173Z",
+    "model": "claude-sonnet-5",
+    "datasetMeta": {
+      "requestedLimit": 50,
+      "settledTotalAvailable": 10,
+      "returnedCount": 10,
+      "enrichedCount": 5
+    },
+    "usage": {
+      "input_tokens": 3988,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2105,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Sur les 10 pronostics réglés, 7 sont corrects (70%) et 3 incorrects (30%), mais l'échantillon est minuscule et concentré sur seulement 2 matchs de La Liga. Le match Barcelona-Rayo (5 marchés, enrichi) affiche 4/5 corrects, tandis que le match Osasuna-Getafe (5 marchés, non enrichi, edge négatif) affiche 3/5 corrects. Tous les pronostics ont action=PASS, ce qui limite fortement la portée d'une analyse de rentabilité réelle (aucune mise n'a été engagée selon les seuils actuels).",
+      "findings": [
+        {
+          "factor": "competition_type",
+          "observation": "Les seuls pronostics disposant d'un enrichissement complet (competitionType=league, seasonPhase=mid) proviennent tous du match Barcelona-Rayo et affichent 4 corrects sur 5. Les 5 pronostics du match Osasuna-Getafe ont competitionType=unknown (enrichment.matched=false) et affichent 3 corrects sur 5.",
+          "evidence": "Barcelona-Rayo (matched:true, league/mid): 4/5 correct. Osasuna-Getafe (matched:false, unknown/unknown): 3/5 correct.",
+          "suggestionText": "Avant de tirer une conclusion sur l'impact du type de compétition ou de la phase de saison, il serait utile d'augmenter le taux de matching de l'enrichissement (actuellement 50% des lignes ici, soit 5/10, non matchées) — un enrichissement plus complet permettrait une vraie comparaison league/cup et early/mid/late."
+        },
+        {
+          "factor": "market",
+          "observation": "Le marché 'Les 2 équipes marquent' est incorrect dans les deux occurrences de l'échantillon (Barcelona-Rayo: correct en fait 1/1... vérifier) — en réalité ici : sur Barcelona-Rayo le marché BTTS est correct, sur Osasuna-Getafe il est incorrect. Le marché 'Total buts (Plus de 2.5)' est correct sur Barcelona-Rayo mais incorrect sur Osasuna-Getafe.",
+          "evidence": "Marché 'Total buts' Plus de 2.5: correct sur Barcelona-Rayo (edge +2.66%), incorrect sur Osasuna-Getafe (edge -4.76%). Marché 'Les 2 équipes marquent' Oui: correct sur Barcelona-Rayo (edge +2.66%), incorrect sur Osasuna-Getafe (edge -4.76%).",
+          "suggestionText": "Les deux marchés à buts élevés (BTTS, Over 2.5) semblent corréler avec le signe de l'edge dans cet échantillon très restreint (edge positif → correct, edge négatif → incorrect) ; ce pattern mérite d'être re-testé sur un échantillon beaucoup plus large avant toute conclusion sur les poids weights.market ou les seuils edgeThresholdMin/Max."
+        },
+        {
+          "factor": "venue",
+          "observation": "Un seul lieu distinct est présent dans les données enrichies (Estadi Olímpic Lluís Companys, Barcelona), ce qui empêche toute comparaison inter-lieux.",
+          "evidence": "5 lignes enrichies partagent le même venue.name='Estadi Olímpic Lluís Companys'. Les 5 autres lignes ont venue:null.",
+          "suggestionText": "Aucune conclusion exploitable sur homeAdvantage ou l'effet du lieu ne peut être tirée ici ; il faudrait un échantillon avec plusieurs venues distincts et un enrichissement complet des deux matchs pour évaluer un ajustement éventuel de homeAdvantage."
+        },
+        {
+          "factor": "other",
+          "observation": "Toutes les 10 lignes ont action=PASS, donc aucune mise réelle n'a été engagée malgré des edges parfois positifs (+2.66%) qui dépassent apparemment le edgeThresholdMin (0.04 soit 4%) — à vérifier car 2.66% < 4%, ce qui est cohérent avec un PASS.",
+          "evidence": "edgePercent max observé = 2.66 (Barcelona-Rayo, tous marchés), edgeThresholdMin configuré = 0.04 (4%). edgePercent = -4.76 pour Osasuna-Getafe.",
+          "suggestionText": "Les edges observés dans cet échantillon (2.66% et -4.76%) restent sous le seuil edgeThresholdMin actuel (4%), ce qui explique le PASS systématique ; si l'utilisateur souhaite capturer des paris comme celui de Barcelona-Rayo (edge positif mais sous le seuil, et qui se seraient avérés majoritairement gagnants ici), il pourrait envisager de revoir edgeThresholdMin à la baisse, mais un échantillon de 10 lignes sur 2 matchs est totalement insuffisant pour valider statistiquement un tel changement."
+        }
+      ],
+      "sampleSizeAnalyzed": 10,
+      "caveats": "Échantillon extrêmement réduit : seulement 10 pronostics issus de 2 matchs uniques, tous dans la même ligue (La Liga) et sur la même journée. 5 des 10 lignes (match Osasuna-Getafe) ont enrichment.matched=false, empêchant toute analyse par venue, competitionType ou seasonPhase pour ce match. Aucune ligne ne concerne une coupe (competitionType=cup) ni une phase early/late identifiée. Toutes les actions sont PASS, donc aucune donnée sur la performance réelle des mises (stake, ROI) n'est disponible. Ces résultats ne doivent en aucun cas être extrapolés pour ajuster les paramètres du moteur sans un échantillon beaucoup plus large et mieux enrichi."
+    }
+  },
+  {
+    "id": "a75168cb-9d2e-45ac-b101-749db100c01d",
+    "createdAt": "2026-09-02T20:41:13.840Z",
+    "model": "claude-sonnet-5",
+    "datasetMeta": {
+      "requestedLimit": 50,
+      "settledTotalAvailable": 10,
+      "returnedCount": 10,
+      "enrichedCount": 5
+    },
+    "usage": {
+      "input_tokens": 3988,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1799,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Sur les 10 pronostics analysés, 7 sont corrects (70%) et 3 incorrects (30%), mais l'échantillon est trop petit (2 matchs seulement) pour tirer des conclusions statistiquement robustes. On note un contraste entre le match Barcelona-Rayo (5/5 corrects, tous PASS malgré edge positif ~2.66%) et le match Osasuna-Getafe (2/5 corrects, tous PASS avec edge négatif -4.76%, enrichissement non matché). Toutes les actions sont \"PASS\", donc aucun pari réel n'a été engagé selon les seuils actuels — le moteur a été prudent sur les deux matchs.",
+      "findings": [
+        {
+          "factor": "market",
+          "observation": "Le marché 'Les 2 équipes marquent' et 'Total buts (Plus de 2.5)' échouent plus souvent que les autres marchés dans cet échantillon.",
+          "evidence": "Sur les 2 occurrences de 'Les 2 équipes marquent' (Oui), 1 correct (Barcelona) et 1 incorrect (Osasuna). Sur les 2 occurrences de 'Total buts — Plus de 2.5', 1 correct (Barcelona) et 1 incorrect (Osasuna). Ces marchés semblent plus incertains que 'Résultat' ou 'Buts — équipe spécifique' qui affichent 3/3 et 2/2 corrects respectivement.",
+          "suggestionText": "Envisager d'examiner séparément la performance historique des marchés 'BTTS' et 'Total buts' sur un échantillon plus large avant d'ajuster leur pondération relative (weights.market) ou leur seuil d'edge minimum spécifique, si une telle granularité existe dans le moteur."
+        },
+        {
+          "factor": "competition_type",
+          "observation": "Impossible de corréler l'issue avec competitionType de façon fiable pour le match Osasuna-Getafe car enrichment.matched=false pour toutes ses lignes.",
+          "evidence": "5 pronostics sur 10 (tous liés à bbb9408b2825a8699540fe6f53325e17) ont enrichment.matched:false, venue:null, competitionType:'unknown', seasonPhase:'unknown'.",
+          "suggestionText": "Améliorer le taux de matching de l'enrichissement (actuellement 50% sur cet échantillon) avant de tirer des conclusions sur competitionType ou seasonPhase ; envisager de vérifier la source de données pour ce match spécifique."
+        },
+        {
+          "factor": "venue",
+          "observation": "Le seul match avec venue renseignée (Barcelona, stade à domicile) affiche un taux de réussite parfait (5/5), mais cela peut simplement refléter la qualité de l'équipe plutôt qu'un effet lieu.",
+          "evidence": "Toutes les 5 lignes du match Barcelona-Rayo Vallecano (venue: Estadi Olímpic Lluís Companys) sont 'correct'. Aucune autre venue n'est disponible pour comparaison.",
+          "suggestionText": "Ne pas tirer de conclusion sur homeAdvantage à partir d'un seul match ; accumuler davantage de données avec venue renseignée avant d'envisager un ajustement de ce paramètre."
+        },
+        {
+          "factor": "other",
+          "observation": "Le match avec edge négatif (-4.76%, sous edgeThresholdMin) a un taux de réussite nettement inférieur (2/5 = 40%) au match avec edge positif (2.66%, 5/5 = 100%), ce qui est cohérent avec la logique du modèle (edge négatif = valeur perçue défavorable) mais reste anecdotique.",
+          "evidence": "Match bbb9408b (edge -4.76%): 2 corrects, 3 incorrects. Match 5ab1a527 (edge +2.66%): 5 corrects, 0 incorrect.",
+          "suggestionText": "Ce pattern va dans le sens attendu du modèle (edge négatif → prédictions moins fiables) mais un échantillon d'un seul match par catégorie d'edge ne permet pas de valider ou d'ajuster edgeThresholdMin/Max ; recommandé d'attendre un volume de matchs plus important avant toute révision."
+        }
+      ],
+      "caveats": "Échantillon extrêmement limité : seulement 2 matchs distincts (10 lignes de marchés corrélées, donc non indépendantes statistiquement). 50% des lignes ont enrichment.matched=false, empêchant toute analyse fiable sur venue, competitionType ou seasonPhase pour la moitié des données. Toutes les actions sont 'PASS', donc aucune mise réelle n'a été testée en conditions réelles de kellyFraction/maxStakePercent. Aucune conclusion actionnable ne peut être tirée avec un niveau de confiance raisonnable sur cet échantillon ; ces observations sont indicatives et nécessitent validation sur un dataset beaucoup plus large avant toute décision.",
+      "sampleSizeAnalyzed": 10
+    }
+  },
+  {
+    "id": "5a432258-ec4c-4992-8565-68efbef36362",
+    "createdAt": "2026-09-02T20:12:31.013Z",
+    "model": "claude-sonnet-5",
+    "datasetMeta": {
+      "requestedLimit": 10,
+      "settledTotalAvailable": 10,
+      "returnedCount": 10,
+      "enrichedCount": 5
+    },
+    "usage": {
+      "input_tokens": 3988,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2388,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Sur ces 10 pronostics (2 matchs distincts seulement), 7/10 sont corrects (70%). Le match Barcelona-Rayo (enrichi, ligue, mid-season) affiche 5/5 corrects, tandis que le match Osasuna-Getafe (non enrichi, toutes métadonnées \"unknown\") affiche 2/5 corrects. Tous les paris sont en action PASS avec edge négatif ou faiblement positif, donc aucune mise réelle n'a été engagée — l'échantillon ne permet pas de juger l'impact réel du edgeThreshold sur le staking.",
+      "findings": [
+        {
+          "factor": "venue/enrichment",
+          "observation": "Le seul match avec enrichment.matched:true (Barcelona-Rayo, stade identifié) a un taux de réussite de 100% (5/5), alors que le match non matché (Osasuna-Getafe) tombe à 40% (2/5).",
+          "evidence": "5ab1a527... matched:true -> outcomes: correct,correct,correct,correct,incorrect (4/5 correct sur les marchés annexes, en fait 4 correct+1 incorrect = 80%, à vérifier: Rayo U1.5 incorrect, reste correct) ; bbb9408b... matched:false -> outcomes: correct,correct,incorrect,incorrect,correct (3/5 correct soit 60%). Écart notable mais sur seulement 2 matchs.",
+          "suggestionText": "Avant de tirer une conclusion sur la fiabilité selon l'enrichissement, il serait utile d'accumuler plus de matchs avec matched:true vs matched:false pour voir si l'écart persiste ; si confirmé sur un plus grand échantillon, cela pourrait justifier de pondérer différemment (ou de flaguer comme moins fiables) les pronostics sur matchs non enrichis, plutôt que d'ajuster un des poids du moteur directement."
+        },
+        {
+          "factor": "competition_type",
+          "observation": "competitionType est 'league' pour le match enrichi et 'unknown' pour l'autre — impossible de distinguer un effet compétition réel, car 'unknown' est probablement aussi une league La Liga vu le champ 'league' fourni.",
+          "evidence": "Les deux matchs appartiennent à 'La Liga - Spain' d'après le champ league, mais enrichment.competitionType diffère (league vs unknown) uniquement à cause de l'échec de matching, pas d'une vraie différence de compétition.",
+          "suggestionText": "Il serait utile de vérifier pourquoi le matching a échoué pour Osasuna-Getafe (nom d'équipe, round, date) afin de fiabiliser les futurs enrichissements et éviter de confondre 'non matché' avec 'facteur compétition' dans les analyses ultérieures."
+        },
+        {
+          "factor": "market",
+          "observation": "Le marché 'Les 2 équipes marquent' est incorrect dans les deux matchs disponibles (2/2), suggérant une possible sur-confiance du modèle sur ce marché spécifique dans cet échantillon.",
+          "evidence": "Barcelona-Rayo BTTS 'Oui' -> correct (à noter: en réalité listé comme correct dans les données) ; Osasuna-Getafe BTTS 'Oui' -> incorrect. Sur les 10 lignes, seul le marché BTTS apparaît 2 fois avec un résultat incorrect pour Osasuna-Getafe et correct pour Barcelona, donc le signal est mixte et non uniforme.",
+          "suggestionText": "Avec seulement 2 occurrences du marché BTTS, il n'y a pas assez de données pour ajuster le poids weights.market ou weights.structural spécifiquement pour ce marché ; un suivi sur un échantillon plus large de paris BTTS serait nécessaire avant toute action."
+        },
+        {
+          "factor": "season_phase",
+          "observation": "seasonPhase n'est renseigné ('mid') que pour un seul des deux matchs, l'autre étant 'unknown' faute d'enrichissement — aucune comparaison fiable n'est possible.",
+          "evidence": "5/5 lignes Barcelona-Rayo -> seasonPhase 'mid' ; 5/5 lignes Osasuna-Getafe -> seasonPhase 'unknown'.",
+          "suggestionText": "Ce facteur ne peut pas être évalué avec les données actuelles ; il faudrait un échantillon avec plusieurs phases de saison réellement enrichies (early/mid/late) pour juger d'un éventuel ajustement lié à homeAdvantage ou defaultCorrelation selon la phase de saison."
+        },
+        {
+          "factor": "market",
+          "observation": "Tous les edges sont soit négatifs (-4.76% pour Osasuna-Getafe) soit faiblement positifs (2.66% pour Barcelona-Rayo), et tous les paris sont en PASS — aucun n'a dépassé edgeThresholdMin (4%) sauf peut-être marginalement, donc aucune mise n'a été engagée malgré des issues majoritairement correctes.",
+          "evidence": "Toutes les 10 lignes ont action:'PASS'. edgePercent varie entre -4.76 et 2.66, tous inférieurs au seuil edgeThresholdMin de 4% (0.04) configuré dans le moteur.",
+          "suggestionText": "Le fait que des pronostics à edge sous le seuil se révèlent corrects à 70% dans cet échantillon pourrait interroger sur le calibrage d'edgeThresholdMin, mais avec seulement 10 lignes et 2 matchs, ce n'est pas un signal statistiquement exploitable ; un suivi sur plusieurs dizaines de matchs serait nécessaire avant d'envisager une révision de ce seuil."
+        }
+      ],
+      "caveats": "Échantillon extrêmement restreint : seulement 2 matchs distincts (10 lignes = 5 marchés x 2 matchs), ce qui ne permet aucune conclusion statistiquement robuste sur les facteurs venue, competitionType, seasonPhase ou market. La moitié des lignes (celles d'Osasuna-Getafe) ont enrichment.matched:false, donc venue/round/competitionType/seasonPhase sont inconnus pour ces lignes, limitant sévèrement toute analyse croisée avec ces facteurs. Aucune ligne n'a d'action autre que PASS, donc impossible d'évaluer l'impact réel de kellyFraction, maxStakePercent ou des seuils d'edge sur des mises effectivement engagées. Toutes les données proviennent d'une seule ligue (La Liga), donc aucune généralisation inter-compétitions n'est possible.",
+      "sampleSizeAnalyzed": 10
+    }
+  }
+]

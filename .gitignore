@@ -3,9 +3,13 @@ dist/
 .env
 .env.local
 
-# État runtime généré localement (config modifiée à chaud, rapports d'analyse)
-server/data/runtime/
+# Rapports d'analyse générés localement — pas de valeur à versionner
 server/data/reports/
+
+# server/data/runtime/ est suivi depuis le refactor sport/glass (checkpoint des
+# vraies données paris/pronostics/résultats) — SAUF ai-config.json, qui
+# contient une clé API en clair et ne doit jamais entrer dans l'historique.
+server/data/runtime/ai-config.json
 
 npm-debug.log*
 .DS_Store
