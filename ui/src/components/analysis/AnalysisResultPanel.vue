@@ -1,0 +1,352 @@
+<script setup>
+import { computed } from 'vue';
+import AppIcon from '@/components/common/AppIcon.vue';
+import AppButton from '@/components/common/AppButton.vue';
+import CollapsibleSection from '@/components/common/CollapsibleSection.vue';
+import MatchStatsPanel from '@/components/matches/MatchStatsPanel.vue';
+import { formatOdds } from '@/utils/format.js';
+import { SHOTS_ON_TARGET_LINES, CORNER_LINES, combinedLinesFromValues, goalLinesWithOdds, bothTeamsScorePercentFromOdds } from '@/utils/betTrends.js';
+import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
+import { useMatchStatus } from '@/composables/useMatchStatus.js';
+import { LIVE_MATCH_UNAVAILABLE_MESSAGES } from '@/utils/lineupMessages.js';
+
+const teamStatsModalStore = useTeamStatsModalStore();
+
+const props = defineProps({
+  result: { type: Object, required: true },
+  averagesComparison: { type: Object, default: null }, // { loading, error, teams, homeTeamId, homeName, awayName }
+  liveMatchDetails: { type: Object, default: null } // { loading, error, data }
+});
+
+defineEmits(['compare-averages-click', 'show-live-match-click']);
+
+// Bouton "Voir le direct" affiché uniquement pour un match dont l'heure de
+// coup d'envoi est passée depuis moins de 130 min (cf. matchStatus.js) —
+// aucun intérêt à proposer ça pour un match pas encore joué ou déjà terminé.
+const matchStatus = useMatchStatus(() => props.result.commenceTime);
+
+const goalLinesSuggestion = computed(() =>
+  goalLinesWithOdds(props.result.teamStats?.home?.goals?.for?.total, props.result.teamStats?.away?.goals?.for?.total, props.result.trueOdds)
+);
+
+const bothTeamsScorePercent = computed(() => bothTeamsScorePercentFromOdds(props.result.trueOdds?.bothTeamsScore));
+
+// Tirs cadrés et corners ne sont pas fournis automatiquement (contrairement
+// aux buts) : ils viennent des moyennes 34 champs, coûteuses en appels API,
+// donc chargées seulement quand l'utilisateur clique "Moyennes des deux
+// équipes". Tant que ce n'est pas fait, ces deux tendances restent masquées.
+const averagesTeamsStats = computed(() => {
+  const teams = props.averagesComparison?.teams;
+  return teams?.length === 2 ? teams : null;
+});
+
+const shotsOnTargetSuggestion = computed(() => {
+  const teams = averagesTeamsStats.value;
+  if (!teams) return null;
+  return combinedLinesFromValues(teams[0].stats?.['Shots on Goal'], teams[1].stats?.['Shots on Goal'], SHOTS_ON_TARGET_LINES);
+});
+
+const cornersLinesSuggestion = computed(() => {
+  const teams = averagesTeamsStats.value;
+  if (!teams) return null;
+  return combinedLinesFromValues(teams[0].stats?.['Corner Kicks'], teams[1].stats?.['Corner Kicks'], CORNER_LINES);
+});
+</script>
+
+<template>
+  <div class="analysis">
+    <header class="analysis__header">
+      <p class="analysis__match">
+        <button type="button" class="cm-team-link" @click="teamStatsModalStore.openFor(result.teamStats?.home?.name ?? 'Domicile', result.league, result.matchId)">{{ result.teamStats?.home?.name ?? 'Domicile' }}</button>
+        vs
+        <button type="button" class="cm-team-link" @click="teamStatsModalStore.openFor(result.teamStats?.away?.name ?? 'Extérieur', result.league, result.matchId)">{{ result.teamStats?.away?.name ?? 'Extérieur' }}</button>
+      </p>
+    </header>
+
+    <div class="analysis__tabs-row">
+      <button
+        type="button"
+        class="analysis__compare-tab"
+        title="Voir la moyenne de toutes les statistiques des deux équipes"
+        @click="
+          $emit('compare-averages-click', {
+            homeName: result.teamStats.home.name,
+            awayName: result.teamStats.away.name,
+            league: result.league
+          })
+        "
+      >
+        <AppIcon name="trendUp" :size="12" />
+        Moyennes des deux équipes
+      </button>
+
+      <button
+        v-if="matchStatus === 'live'"
+        type="button"
+        class="analysis__compare-tab analysis__compare-tab--live"
+        title="Voir le score et les statistiques en direct"
+        @click="$emit('show-live-match-click', { homeName: result.teamStats.home.name, commenceTime: result.commenceTime })"
+      >
+        <span class="analysis__live-dot"></span>
+        Voir le direct
+      </button>
+    </div>
+
+    <CollapsibleSection v-if="liveMatchDetails" default-open class="analysis__live-match">
+      <template #header>
+        <p class="analysis__odds-1x2-head">En direct</p>
+      </template>
+      <p v-if="liveMatchDetails.loading" class="cm-text-muted analysis__live-note">Récupération du score et des statistiques…</p>
+      <p v-else-if="liveMatchDetails.error" class="cm-text-muted analysis__live-note">Erreur : {{ liveMatchDetails.error }}</p>
+      <p v-else-if="liveMatchDetails.data && !liveMatchDetails.data.available" class="cm-text-muted analysis__live-note">
+        {{ LIVE_MATCH_UNAVAILABLE_MESSAGES[liveMatchDetails.data.reason] ?? 'Détails en direct indisponibles pour ce match.' }}
+      </p>
+      <template v-else-if="liveMatchDetails.data?.available">
+        <p class="analysis__live-score">
+          <span class="cm-numeric">{{ liveMatchDetails.data.score.home ?? '—' }} - {{ liveMatchDetails.data.score.away ?? '—' }}</span>
+          <span v-if="liveMatchDetails.data.status?.elapsed" class="cm-text-muted"> · {{ liveMatchDetails.data.status.elapsed }}'</span>
+          <span v-if="liveMatchDetails.data.status?.long" class="cm-text-muted"> · {{ liveMatchDetails.data.status.long }}</span>
+        </p>
+        <MatchStatsPanel
+          v-if="liveMatchDetails.data.teams?.length"
+          :teams="liveMatchDetails.data.teams"
+          :primary-team-id="result.teamStats?.home?.id ?? null"
+          :fallback-primary-name="result.teamStats?.home?.name"
+          :fallback-opponent-name="result.teamStats?.away?.name"
+        />
+        <p v-else class="cm-text-muted analysis__live-note">Statistiques détaillées pas encore publiées pour ce match.</p>
+      </template>
+    </CollapsibleSection>
+
+    <CollapsibleSection v-if="averagesComparison" default-open class="analysis__averages-table">
+      <template #header>
+        <p class="analysis__odds-1x2-head">Détail complet des statistiques <span class="cm-text-muted">(34 champs)</span></p>
+      </template>
+      <MatchStatsPanel
+        :loading="averagesComparison.loading"
+        :error="averagesComparison.error"
+        :teams="averagesComparison.teams"
+        :primary-team-id="averagesComparison.homeTeamId"
+        :fallback-primary-name="averagesComparison.homeName"
+        :fallback-opponent-name="averagesComparison.awayName"
+      />
+    </CollapsibleSection>
+
+    <CollapsibleSection v-if="goalLinesSuggestion || shotsOnTargetSuggestion || cornersLinesSuggestion" default-open class="analysis__goal-lines">
+      <template #header>
+        <p class="analysis__odds-1x2-head">Tendances <span class="cm-text-muted">(buts, tirs cadrés, corners)</span></p>
+      </template>
+      <div v-if="goalLinesSuggestion" class="analysis__goal-lines-row">
+        <div class="analysis__goal-lines-head">
+          <span>Tendance buts</span>
+          <span class="cm-numeric">Σ {{ goalLinesSuggestion.combined }} buts/match estimés</span>
+        </div>
+        <div class="analysis__goal-lines-tags">
+          <span v-for="item in goalLinesSuggestion.favorable" :key="item.line" class="analysis__goal-line-tag">
+            <AppIcon name="trendUp" :size="11" />
+            Plus de {{ item.line }} buts
+            <span v-if="item.odds" class="analysis__goal-line-odds">@ {{ formatOdds(item.odds) }}</span>
+          </span>
+          <span v-if="bothTeamsScorePercent !== null" class="analysis__goal-line-tag analysis__goal-line-tag--info">
+            Les 2 équipes marquent : {{ bothTeamsScorePercent }}% <span class="cm-text-muted">(modèle)</span>
+            <span class="analysis__goal-line-odds">@ {{ formatOdds(result.trueOdds.bothTeamsScore) }}</span>
+          </span>
+        </div>
+        <p class="cm-text-muted analysis__goal-lines-note">
+          Cotes calculées par le modèle (Poisson + Dixon-Coles) — une estimation, pas une garantie de résultat.
+        </p>
+      </div>
+
+      <div v-if="shotsOnTargetSuggestion" class="analysis__goal-lines-row">
+        <div class="analysis__goal-lines-head">
+          <span>Tendance tirs cadrés</span>
+          <span class="cm-numeric">Σ {{ shotsOnTargetSuggestion.combined }} tirs cadrés/match estimés</span>
+        </div>
+        <div class="analysis__goal-lines-tags">
+          <span v-for="line in shotsOnTargetSuggestion.favorable" :key="line" class="analysis__goal-line-tag">
+            <AppIcon name="trendUp" :size="11" />
+            Plus de {{ line }} tirs cadrés
+          </span>
+        </div>
+      </div>
+
+      <div v-if="cornersLinesSuggestion" class="analysis__goal-lines-row">
+        <div class="analysis__goal-lines-head">
+          <span>Tendance corners</span>
+          <span class="cm-numeric">Σ {{ cornersLinesSuggestion.combined }} corners/match estimés</span>
+        </div>
+        <div class="analysis__goal-lines-tags">
+          <span v-for="line in cornersLinesSuggestion.favorable" :key="line" class="analysis__goal-line-tag">
+            <AppIcon name="trendUp" :size="11" />
+            Plus de {{ line }} corners
+          </span>
+        </div>
+      </div>
+
+      <p v-if="cornersLinesSuggestion" class="cm-text-muted analysis__goal-lines-note">
+        Corners : pas de cote calculée — aucun marché ni modèle de probabilité dédié dans l'app pour cette statistique,
+        seulement la tendance basée sur la moyenne saison.
+      </p>
+      <p v-if="!averagesTeamsStats" class="cm-text-muted analysis__goal-lines-note">
+        Clique sur "Moyennes des deux équipes" pour débloquer les tendances tirs cadrés et corners.
+      </p>
+    </CollapsibleSection>
+  </div>
+</template>
+
+<style scoped>
+.analysis {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.analysis__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.analysis__match {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.analysis__odds-1x2-head {
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.analysis__averages-table {
+  padding: 12px 14px;
+  background: var(--cm-surface-alt);
+  border-radius: var(--cm-radius);
+}
+
+.analysis__goal-lines {
+  padding: 12px 14px;
+  background: var(--cm-surface-alt);
+  border-radius: var(--cm-radius);
+}
+
+.analysis__goal-lines-row + .analysis__goal-lines-row {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--cm-border-soft);
+}
+
+.analysis__goal-lines-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.analysis__goal-lines-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.analysis__goal-line-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--cm-accent-soft);
+  color: var(--cm-accent);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.analysis__goal-line-odds {
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+.analysis__goal-line-tag--info {
+  background: var(--cm-info-soft);
+  color: var(--cm-info);
+}
+
+.analysis__goal-lines-note {
+  font-size: 11px;
+  margin-top: 8px;
+}
+
+.analysis__tabs-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.analysis__compare-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--cm-border);
+  background: var(--cm-surface-hover);
+  color: var(--cm-text-secondary);
+  font-size: 10.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color var(--cm-transition), color var(--cm-transition);
+}
+
+.analysis__compare-tab:hover {
+  border-color: var(--cm-accent);
+  color: var(--cm-accent);
+}
+
+.analysis__compare-tab--live {
+  border-color: var(--cm-danger);
+  color: var(--cm-danger);
+}
+
+.analysis__compare-tab--live:hover {
+  border-color: var(--cm-danger);
+  color: var(--cm-danger);
+  background: var(--cm-danger-soft);
+}
+
+.analysis__live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cm-danger);
+  animation: cm-live-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes cm-live-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.analysis__live-match {
+  padding: 12px 14px;
+  background: var(--cm-surface-alt);
+  border-radius: var(--cm-radius);
+}
+
+.analysis__live-note {
+  font-size: 11.5px;
+}
+
+.analysis__live-score {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+</style>

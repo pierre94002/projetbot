@@ -1,0 +1,42 @@
+.cm-numeric {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+.cm-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cm-text-secondary {
+  color: var(--cm-text-secondary);
+}
+
+.cm-text-muted {
+  color: var(--cm-text-muted);
+}
+
+.cm-positive {
+  color: var(--cm-accent);
+}
+
+.cm-negative {
+  color: var(--cm-danger);
+}
+
+.cm-team-link {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.cm-team-link:hover {
+  color: var(--cm-accent);
+  text-decoration: underline;
+}
