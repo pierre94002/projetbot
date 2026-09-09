@@ -10,10 +10,10 @@ import AppIcon from '@/components/common/AppIcon.vue';
 import AppTextField from '@/components/common/AppTextField.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import MatchStatusBadge from '@/components/common/MatchStatusBadge.vue';
+import LeagueBadge from '@/components/matches/LeagueBadge.vue';
 import BetsPerformanceView from '@/views/BetsPerformanceView.vue';
 import BetsTicketsView from '@/views/BetsTicketsView.vue';
 import { formatOdds, formatDay, formatPercent } from '@/utils/format.js';
-import { parseLeagueLabel } from '@/utils/leagueDisplay.js';
 import { marketBreakdownLabel, extractGoalLine, namesMatch } from '@/utils/betTrends.js';
 import { matchResultsApi } from '@/services/matchResultsApi.js';
 import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
@@ -526,8 +526,7 @@ onMounted(() => {
             @click="toggleLeague(leagueGroup.league)"
             @keydown.enter="toggleLeague(leagueGroup.league)"
           >
-            <span v-if="parseLeagueLabel(leagueGroup.league).countryCode" class="league-group__country">{{ parseLeagueLabel(leagueGroup.league).countryCode }}</span>
-            <span class="league-group__name cm-truncate">{{ parseLeagueLabel(leagueGroup.league).name }}</span>
+            <LeagueBadge :league="leagueGroup.league" />
             <span class="cm-text-muted cm-numeric league-group__count">{{ leagueGroup.groups.length }}</span>
             <AppIcon
               name="chevronRight"
@@ -754,24 +753,6 @@ onMounted(() => {
   border: none;
   cursor: pointer;
   text-align: left;
-}
-
-.league-group__country {
-  flex-shrink: 0;
-  padding: 2px 6px;
-  border-radius: 4px;
-  background: var(--cm-surface-hover);
-  color: var(--cm-text-muted);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-}
-
-.league-group__name {
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--cm-text-secondary);
-  flex: 1;
 }
 
 .league-group__count {

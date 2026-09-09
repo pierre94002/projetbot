@@ -1,19 +1,19 @@
 <script setup>
 import { computed } from 'vue';
 
+// Codes résultat V/N/D — propres au foot (un sport sans match nul n'aurait
+// pas de "N"), volontairement séparés des états génériques de StatusBadge.vue.
 const props = defineProps({
-  status: { type: String, required: true }
+  result: { type: String, required: true }
 });
 
 const STYLES = {
-  RECOMMENDED: { label: 'Value détectée', tone: 'positive' },
-  PASS: { label: 'Pass', tone: 'neutral' },
-  CIRCUIT_BREAKER_ACTIVE: { label: 'Coupe-circuit actif', tone: 'negative' },
-  analyzed: { label: 'Analysé', tone: 'positive' },
-  rejected: { label: 'Rejeté', tone: 'negative' }
+  V: { label: 'Victoire', tone: 'positive' },
+  N: { label: 'Nul', tone: 'neutral' },
+  D: { label: 'Défaite', tone: 'negative' }
 };
 
-const style = computed(() => STYLES[props.status] ?? { label: props.status, tone: 'neutral' });
+const style = computed(() => STYLES[props.result] ?? { label: props.result, tone: 'neutral' });
 </script>
 
 <template>

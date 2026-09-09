@@ -6,8 +6,8 @@ import AppTextField from '@/components/common/AppTextField.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
-import BetTicketRow from '@/components/common/BetTicketRow.vue';
-import { parseLeagueLabel } from '@/utils/leagueDisplay.js';
+import BetTicketRow from '@/components/betting/BetTicketRow.vue';
+import LeagueBadge from '@/components/matches/LeagueBadge.vue';
 
 const betsStore = useBetsStore();
 
@@ -129,8 +129,7 @@ onMounted(() => {
                 @click="toggleWonLeague(leagueGroup.league)"
                 @keydown.enter="toggleWonLeague(leagueGroup.league)"
               >
-                <span v-if="parseLeagueLabel(leagueGroup.league).countryCode" class="league-group__country">{{ parseLeagueLabel(leagueGroup.league).countryCode }}</span>
-                <span class="league-group__name cm-truncate">{{ parseLeagueLabel(leagueGroup.league).name }}</span>
+                <LeagueBadge :league="leagueGroup.league" />
                 <span class="cm-text-muted cm-numeric league-group__count">{{ leagueGroup.bets.length }}</span>
                 <AppIcon
                   name="chevronRight"
@@ -160,8 +159,7 @@ onMounted(() => {
                 @click="toggleLostLeague(leagueGroup.league)"
                 @keydown.enter="toggleLostLeague(leagueGroup.league)"
               >
-                <span v-if="parseLeagueLabel(leagueGroup.league).countryCode" class="league-group__country">{{ parseLeagueLabel(leagueGroup.league).countryCode }}</span>
-                <span class="league-group__name cm-truncate">{{ parseLeagueLabel(leagueGroup.league).name }}</span>
+                <LeagueBadge :league="leagueGroup.league" />
                 <span class="cm-text-muted cm-numeric league-group__count">{{ leagueGroup.bets.length }}</span>
                 <AppIcon
                   name="chevronRight"
@@ -252,19 +250,6 @@ onMounted(() => {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.3px;
-}
-
-.league-group__country {
-  flex-shrink: 0;
-  padding: 1px 5px;
-  border-radius: 4px;
-  background: var(--cm-surface-hover);
-  color: var(--cm-text-muted);
-  font-size: 9.5px;
-}
-
-.league-group__name {
-  flex: 1;
 }
 
 .league-group__count {

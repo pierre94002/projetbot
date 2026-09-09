@@ -3,8 +3,9 @@ import { computed, reactive, watch } from 'vue';
 import AppIcon from '@/components/common/AppIcon.vue';
 import TeamAvatar from './TeamAvatar.vue';
 import FormBadges from './FormBadges.vue';
+import LeagueBadge from './LeagueBadge.vue';
 import { formatOdds, formatTime, formatDay } from '@/utils/format.js';
-import { parseLeagueLabel, groupMatchesByLeague, groupMatchesByDate } from '@/utils/leagueDisplay.js';
+import { groupMatchesByLeague, groupMatchesByDate } from '@/utils/leagueDisplay.js';
 import { liveNow } from '@/utils/liveClock.js';
 import { computeMatchStatus } from '@/utils/matchStatus.js';
 
@@ -119,8 +120,7 @@ function formatDayHeader(dayKey) {
         @click="toggleCollapse(group.league)"
         @keydown.enter="toggleCollapse(group.league)"
       >
-        <span v-if="parseLeagueLabel(group.league).countryCode" class="league-group__country">{{ parseLeagueLabel(group.league).countryCode }}</span>
-        <span class="league-group__name cm-truncate">{{ parseLeagueLabel(group.league).name }}</span>
+        <LeagueBadge :league="group.league" />
         <button
           v-if="group.matches.some(isLive)"
           type="button"
@@ -235,24 +235,6 @@ function formatDayHeader(dayKey) {
   border: none;
   cursor: pointer;
   text-align: left;
-}
-
-.league-group__country {
-  flex-shrink: 0;
-  padding: 2px 6px;
-  border-radius: 4px;
-  background: var(--cm-surface-hover);
-  color: var(--cm-text-muted);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-}
-
-.league-group__name {
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--cm-text-secondary);
-  flex: 1;
 }
 
 .league-group__count {

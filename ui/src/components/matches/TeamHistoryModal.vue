@@ -1,7 +1,7 @@
 <script setup>
 import { reactive } from 'vue';
 import TeamAvatar from './TeamAvatar.vue';
-import StatusBadge from '@/components/common/StatusBadge.vue';
+import MatchResultBadge from './MatchResultBadge.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
@@ -69,7 +69,7 @@ async function toggleStats(fixtureId) {
               <p class="cm-text-muted team-history__date">{{ formatDateTime(match.date) }}</p>
             </div>
             <span class="team-history__score cm-numeric">{{ match.score }}</span>
-            <StatusBadge :status="match.result" />
+            <MatchResultBadge :result="match.result" />
             <span v-if="match.local" class="cm-text-muted team-history__local-tag" title="Score saisi manuellement dans Historique moteur — pas de détail statistique disponible pour ce match.">
               Saisi
             </span>

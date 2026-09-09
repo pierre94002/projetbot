@@ -41,8 +41,10 @@ const emit = defineEmits(['close']);
 .modal {
   width: min(460px, 100%);
   height: 100vh;
-  background: var(--cm-surface);
-  border-left: 1px solid var(--cm-border);
+  background: rgb(var(--cm-glass-tint) / var(--cm-elevation-4));
+  backdrop-filter: blur(var(--cm-elevation-4-blur)) saturate(var(--cm-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--cm-elevation-4-blur)) saturate(var(--cm-glass-saturate));
+  border-left: 1px solid var(--cm-glass-border);
   display: flex;
   flex-direction: column;
   animation: slide-in 200ms ease;
@@ -64,7 +66,7 @@ const emit = defineEmits(['close']);
   align-items: center;
   justify-content: space-between;
   padding: 18px 20px;
-  border-bottom: 1px solid var(--cm-border-soft);
+  border-bottom: 1px solid var(--cm-glass-border);
 }
 
 .modal__title {

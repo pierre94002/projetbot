@@ -25,8 +25,10 @@ defineProps({
 
 <style scoped>
 .card {
-  background: var(--cm-surface);
-  border: 1px solid var(--cm-border-soft);
+  background: rgb(var(--cm-glass-tint) / var(--cm-elevation-2));
+  backdrop-filter: blur(var(--cm-elevation-2-blur)) saturate(var(--cm-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--cm-elevation-2-blur)) saturate(var(--cm-glass-saturate));
+  border: 1px solid var(--cm-glass-border);
   border-radius: var(--cm-radius-lg);
 }
 

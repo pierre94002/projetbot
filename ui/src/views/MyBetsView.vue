@@ -25,6 +25,7 @@ import MatchesFilterBar from '@/components/matches/MatchesFilterBar.vue';
 import PicksSearchCard from '@/components/matches/PicksSearchCard.vue';
 import MatchStatusBadge from '@/components/common/MatchStatusBadge.vue';
 import MatchStatsPanel from '@/components/matches/MatchStatsPanel.vue';
+import LeagueBadge from '@/components/matches/LeagueBadge.vue';
 import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
 import { formatOdds, formatCurrency, formatPercent, formatDateTime, formatKickoff } from '@/utils/format.js';
 
@@ -567,8 +568,7 @@ onMounted(() => {
             @click="toggleBetLeague(leagueGroup.league)"
             @keydown.enter="toggleBetLeague(leagueGroup.league)"
           >
-            <span v-if="parseLeagueLabel(leagueGroup.league).countryCode" class="league-group__country">{{ parseLeagueLabel(leagueGroup.league).countryCode }}</span>
-            <span class="league-group__name cm-truncate">{{ parseLeagueLabel(leagueGroup.league).name }}</span>
+            <LeagueBadge :league="leagueGroup.league" />
             <span v-if="leagueGroup.matches.some(isMatchGroupLive)" class="league-group__live">
               <span class="league-group__live-dot"></span>{{ leagueGroup.matches.filter(isMatchGroupLive).length }} en direct
             </span>
@@ -1129,19 +1129,6 @@ onMounted(() => {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.3px;
-}
-
-.league-group__country {
-  flex-shrink: 0;
-  padding: 1px 5px;
-  border-radius: 4px;
-  background: var(--cm-surface-hover);
-  color: var(--cm-text-muted);
-  font-size: 9.5px;
-}
-
-.league-group__name {
-  flex: 1;
 }
 
 .league-group__count {

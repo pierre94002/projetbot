@@ -6,8 +6,8 @@ import AppIcon from '@/components/common/AppIcon.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import MatchStatusBadge from '@/components/common/MatchStatusBadge.vue';
+import LeagueBadge from './LeagueBadge.vue';
 import { formatOdds, formatKickoff } from '@/utils/format.js';
-import { parseLeagueLabel } from '@/utils/leagueDisplay.js';
 import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
 
 const teamStatsModalStore = useTeamStatsModalStore();
@@ -131,8 +131,7 @@ function impliedProbability(odds) {
           @click="toggleLeague(group.league)"
           @keydown.enter="toggleLeague(group.league)"
         >
-          <span v-if="parseLeagueLabel(group.league).countryCode" class="picks-search__country">{{ parseLeagueLabel(group.league).countryCode }}</span>
-          <span class="picks-search__league-name cm-truncate">{{ parseLeagueLabel(group.league).name }}</span>
+          <LeagueBadge :league="group.league" />
           <span class="cm-text-muted cm-numeric">{{ group.count }}</span>
           <AppIcon
             name="chevronRight"
@@ -248,10 +247,6 @@ function impliedProbability(odds) {
   text-align: left;
 }
 
-.picks-search__league-name {
-  flex: 1;
-}
-
 .picks-search__league-header .cm-numeric {
   margin-left: auto;
   font-size: 10.5px;
@@ -268,15 +263,6 @@ function impliedProbability(odds) {
 
 .picks-search__league-chevron--open {
   transform: rotate(-90deg);
-}
-
-.picks-search__country {
-  flex-shrink: 0;
-  padding: 1px 5px;
-  border-radius: 4px;
-  background: var(--cm-surface-hover);
-  color: var(--cm-text-muted);
-  font-size: 9.5px;
 }
 
 .picks-search__match {
