@@ -20,8 +20,19 @@ function writeResults(results) {
   fs.writeFileSync(RESULTS_FILE_PATH, JSON.stringify(results, null, 2), 'utf8');
 }
 
+// `homeGoals`/`awayGoals` sont le nom historique (football) du champ ; un
+// futur sport parlerait de "score" plutôt que de "buts" — `homeScore`/
+// `awayScore` est donc ajouté EN PLUS (jamais à la place) sur tout ce qui
+// est lu ou écrit, sans script de migration séparé : la valeur est
+// identique, il ne s'agit que d'exposer aussi le nom neutre.
+function withNeutralScoreFields(entry) {
+  return { ...entry, homeScore: entry.homeScore ?? entry.homeGoals, awayScore: entry.awayScore ?? entry.awayGoals };
+}
+
 export function listMatchResults() {
-  return readResults().sort((a, b) => new Date(b.settledAt) - new Date(a.settledAt));
+  return readResults()
+    .sort((a, b) => new Date(b.settledAt) - new Date(a.settledAt))
+    .map(withNeutralScoreFields);
 }
 
 // Un seul résultat par match — une nouvelle saisie sur le même match corrige
@@ -33,12 +44,25 @@ export function recordMatchResult({ matchId, homeName, awayName, league, homeGoa
   if (existing) {
     existing.homeGoals = homeGoals;
     existing.awayGoals = awayGoals;
+    existing.homeScore = homeGoals;
+    existing.awayScore = awayGoals;
     existing.settledAt = now;
     writeResults(results);
-    return existing;
+    return withNeutralScoreFields(existing);
   }
 
-  const entry = { id: crypto.randomUUID(), matchId, homeName, awayName, league: league ?? null, homeGoals, awayGoals, settledAt: now };
+  const entry = {
+    id: crypto.randomUUID(),
+    matchId,
+    homeName,
+    awayName,
+    league: league ?? null,
+    homeGoals,
+    awayGoals,
+    homeScore: homeGoals,
+    awayScore: awayGoals,
+    settledAt: now
+  };
   results.push(entry);
   writeResults(results);
   return entry;

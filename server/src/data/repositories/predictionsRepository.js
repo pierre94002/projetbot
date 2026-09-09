@@ -49,6 +49,11 @@ export function upsertPredictions(entries) {
       existing.action = entry.action;
       existing.edgePercent = entry.edgePercent;
       existing.lastSeenAt = now;
+      // Un rescan d'un match déjà journalisé AVANT la migration vers le
+      // marché structuré (cf. sports/football/markets.js) le fait passer au
+      // nouveau format à cette occasion, sans script à relancer.
+      if (entry.marketId) existing.marketId = entry.marketId;
+      if (entry.params) existing.params = entry.params;
     } else {
       log.push({
         id: crypto.randomUUID(),
@@ -58,6 +63,8 @@ export function upsertPredictions(entries) {
         awayName: entry.awayName,
         league: entry.league ?? null,
         market: entry.market,
+        marketId: entry.marketId ?? null,
+        params: entry.params ?? null,
         predictedOutcome: entry.predictedOutcome,
         predictedLabel: entry.predictedLabel,
         predictedOdds: entry.predictedOdds,

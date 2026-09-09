@@ -6,6 +6,10 @@ dist/
 # Rapports d'analyse générés localement — pas de valeur à versionner
 server/data/reports/
 
+# Sauvegardes ponctuelles créées par les scripts de migration (server/scripts/)
+# — redondant avec git une fois le commit fait, pas la peine d'alourdir le dépôt.
+server/data/backups/
+
 # server/data/runtime/ est suivi depuis le refactor sport/glass (checkpoint des
 # vraies données paris/pronostics/résultats) — SAUF ai-config.json, qui
 # contient une clé API en clair et ne doit jamais entrer dans l'historique.

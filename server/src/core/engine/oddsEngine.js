@@ -100,7 +100,7 @@ export async function analyzeMatch(match, config, tiltState, sport) {
 
   const staking = evaluateStakingDecision(edgeHome, match.bankroll, lambda, mu, config, tiltState);
 
-  return {
+  const result = {
     matchId: match.matchId ?? null,
     label: `${match.home ?? 'Domicile'} vs ${match.away ?? 'Extérieur'}`,
     league: match.league ?? null,
@@ -141,6 +141,16 @@ export async function analyzeMatch(match, config, tiltState, sport) {
     staking,
     corners
   };
+
+  // Dérivation du pronostic par marché (source UNIQUE — cf. markets.js) : a
+  // besoin du DTO déjà construit (trueOdds/market), donc calculée ici plutôt
+  // que par sport.model. Optionnelle : un sport peut ne pas encore implémenter
+  // markets.deriveMarketPredictions sans casser le reste de l'analyse.
+  if (typeof sport.markets?.deriveMarketPredictions === 'function') {
+    result.marketPredictions = sport.markets.deriveMarketPredictions(match, result);
+  }
+
+  return result;
 }
 
 function clamp(value, min, max) {

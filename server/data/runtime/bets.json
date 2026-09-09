@@ -14,7 +14,13 @@
         "league": "La Liga - Spain",
         "market": "Buts — Barcelona",
         "pick": "Plus de 1.5 buts",
-        "odds": 1.41
+        "odds": 1.41,
+        "marketId": "teamGoals",
+        "params": {
+          "team": "home",
+          "line": 1.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -33,7 +39,13 @@
         "league": "La Liga - Spain",
         "market": "Buts — CA Osasuna",
         "pick": "Moins de 1.5 buts",
-        "odds": 1.75
+        "odds": 1.75,
+        "marketId": "teamGoals",
+        "params": {
+          "team": "home",
+          "line": 1.5,
+          "side": "under"
+        }
       }
     ]
   },
@@ -53,7 +65,9 @@
         "market": "Les 2 équipes marquent",
         "pick": "Oui",
         "odds": 2.17,
-        "status": "won"
+        "status": "won",
+        "marketId": "bothTeamsScore",
+        "params": {}
       },
       {
         "matchId": "bbb9408b2825a8699540fe6f53325e17",
@@ -63,7 +77,9 @@
         "market": "Les 2 équipes marquent",
         "pick": "Oui",
         "odds": 2.31,
-        "status": "void"
+        "status": "void",
+        "marketId": "bothTeamsScore",
+        "params": {}
       }
     ]
   },
@@ -82,7 +98,13 @@
         "league": "La Liga - Spain",
         "market": "Buts par équipe",
         "pick": "Barcelona — Plus de 1.5 buts",
-        "odds": 1.41
+        "odds": 1.41,
+        "marketId": "teamGoals",
+        "params": {
+          "team": "home",
+          "line": 1.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -101,7 +123,12 @@
         "league": "La Liga - Spain",
         "market": "Total buts",
         "pick": "Plus de 1.5 buts",
-        "odds": 1.49
+        "odds": 1.49,
+        "marketId": "totalGoals",
+        "params": {
+          "line": 1.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -120,7 +147,12 @@
         "league": "La Liga - Spain",
         "market": "Résultat + Total buts",
         "pick": "Barcelona & Plus de 1.5 buts",
-        "odds": 1.51
+        "odds": 1.51,
+        "marketId": "resultAndTotal",
+        "params": {
+          "line": 1.5,
+          "key": "homeOver"
+        }
       }
     ]
   },
@@ -139,7 +171,12 @@
         "league": "La Liga - Spain",
         "market": "Total buts",
         "pick": "Plus de 2.5 buts",
-        "odds": 1.63
+        "odds": 1.63,
+        "marketId": "totalGoals",
+        "params": {
+          "line": 2.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -158,7 +195,13 @@
         "league": "La Liga - Spain",
         "market": "Buts par équipe",
         "pick": "CA Osasuna — Moins de 1.5 buts",
-        "odds": 1.75
+        "odds": 1.75,
+        "marketId": "teamGoals",
+        "params": {
+          "team": "home",
+          "line": 1.5,
+          "side": "under"
+        }
       }
     ]
   },
@@ -177,7 +220,13 @@
         "league": "La Liga - Spain",
         "market": "Buts par équipe",
         "pick": "Getafe — Plus de 0.5 buts",
-        "odds": 1.79
+        "odds": 1.79,
+        "marketId": "teamGoals",
+        "params": {
+          "team": "away",
+          "line": 0.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -196,7 +245,12 @@
         "league": "La Liga - Spain",
         "market": "Résultat + Total buts",
         "pick": "CA Osasuna & Plus de 0.5 buts",
-        "odds": 1.96
+        "odds": 1.96,
+        "marketId": "resultAndTotal",
+        "params": {
+          "line": 0.5,
+          "key": "homeOver"
+        }
       }
     ]
   },
@@ -215,7 +269,13 @@
         "league": "La Liga - Spain",
         "market": "Buts par équipe",
         "pick": "Rayo Vallecano — Plus de 0.5 buts",
-        "odds": 1.99
+        "odds": 1.99,
+        "marketId": "teamGoals",
+        "params": {
+          "team": "away",
+          "line": 0.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -234,7 +294,9 @@
         "league": "La Liga - Spain",
         "market": "Les 2 équipes marquent",
         "pick": "Oui",
-        "odds": 2.17
+        "odds": 2.17,
+        "marketId": "bothTeamsScore",
+        "params": {}
       }
     ]
   },
@@ -253,7 +315,9 @@
         "league": "La Liga - Spain",
         "market": "Les 2 équipes marquent",
         "pick": "Oui",
-        "odds": 2.31
+        "odds": 2.31,
+        "marketId": "bothTeamsScore",
+        "params": {}
       }
     ]
   },
@@ -273,7 +337,11 @@
         "market": "1N2",
         "pick": "Málaga gagne",
         "odds": 2.48,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "result",
+        "params": {
+          "outcome": "home"
+        }
       }
     ]
   },
@@ -293,7 +361,11 @@
         "market": "1N2",
         "pick": "Wuhan Three Towns gagne",
         "odds": 1.85,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "result",
+        "params": {
+          "outcome": "home"
+        }
       }
     ]
   },
@@ -313,7 +385,11 @@
         "market": "1N2",
         "pick": "Dalian Yingbo gagne",
         "odds": 1.43,
-        "status": "won"
+        "status": "won",
+        "marketId": "result",
+        "params": {
+          "outcome": "home"
+        }
       }
     ]
   },
@@ -333,7 +409,11 @@
         "market": "1N2",
         "pick": "FC Dynamo Makhachkala gagne",
         "odds": 1.74,
-        "status": "void"
+        "status": "void",
+        "marketId": "result",
+        "params": {
+          "outcome": "home"
+        }
       }
     ]
   },
@@ -353,7 +433,11 @@
         "market": "1N2",
         "pick": "Rubin Kazan gagne",
         "odds": 2.78,
-        "status": "won"
+        "status": "won",
+        "marketId": "result",
+        "params": {
+          "outcome": "home"
+        }
       }
     ]
   },
@@ -373,7 +457,13 @@
         "market": "Buts par équipe",
         "pick": "Real Madrid — Plus de 0.5 buts",
         "odds": 1.38,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "away",
+          "line": 0.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -393,7 +483,11 @@
         "market": "1N2",
         "pick": "Real Sociedad gagne",
         "odds": 1.95,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "result",
+        "params": {
+          "outcome": "home"
+        }
       }
     ]
   },
@@ -414,7 +508,11 @@
         "market": "1N2",
         "pick": "Rayo Vallecano gagne",
         "odds": 2.23,
-        "status": "won"
+        "status": "won",
+        "marketId": "result",
+        "params": {
+          "outcome": "home"
+        }
       }
     ]
   },
@@ -435,7 +533,11 @@
         "market": "1N2",
         "pick": "Espanyol gagne",
         "odds": 2.32,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "result",
+        "params": {
+          "outcome": "home"
+        }
       }
     ]
   },
@@ -456,7 +558,11 @@
         "market": "1N2",
         "pick": "Getafe gagne",
         "odds": 2.62,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "result",
+        "params": {
+          "outcome": "home"
+        }
       }
     ]
   },
@@ -477,7 +583,11 @@
         "market": "1N2",
         "pick": "Espanyol gagne",
         "odds": 2.32,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "result",
+        "params": {
+          "outcome": "home"
+        }
       }
     ]
   },
@@ -498,7 +608,11 @@
         "market": "1N2",
         "pick": "Getafe gagne",
         "odds": 2.62,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "result",
+        "params": {
+          "outcome": "home"
+        }
       }
     ]
   },
@@ -519,7 +633,11 @@
         "market": "1N2",
         "pick": "Sevilla gagne",
         "odds": 2.31,
-        "status": "pending"
+        "status": "pending",
+        "marketId": "result",
+        "params": {
+          "outcome": "home"
+        }
       }
     ]
   },
@@ -540,7 +658,11 @@
         "market": "1N2",
         "pick": "Shanghai SIPG FC gagne",
         "odds": 2.17,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "result",
+        "params": {
+          "outcome": "home"
+        }
       }
     ]
   },
@@ -561,7 +683,11 @@
         "market": "1N2",
         "pick": "Shandong Luneng Taishan FC gagne",
         "odds": 1.57,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "result",
+        "params": {
+          "outcome": "home"
+        }
       }
     ]
   },
@@ -582,7 +708,11 @@
         "market": "1N2",
         "pick": "Kryliya Sovetov gagne",
         "odds": 4.76,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "result",
+        "params": {
+          "outcome": "home"
+        }
       }
     ]
   },
@@ -603,7 +733,11 @@
         "market": "1N2",
         "pick": "FK Rostov gagne",
         "odds": 1.95,
-        "status": "won"
+        "status": "won",
+        "marketId": "result",
+        "params": {
+          "outcome": "home"
+        }
       }
     ]
   },
@@ -624,7 +758,11 @@
         "market": "1N2",
         "pick": "Gazovik Orenburg gagne",
         "odds": 1.76,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "result",
+        "params": {
+          "outcome": "home"
+        }
       }
     ]
   },
@@ -645,7 +783,11 @@
         "market": "1N2",
         "pick": "Dinamo Moscow gagne",
         "odds": 2.87,
-        "status": "won"
+        "status": "won",
+        "marketId": "result",
+        "params": {
+          "outcome": "home"
+        }
       }
     ]
   },
@@ -666,7 +808,11 @@
         "market": "1N2",
         "pick": "FC Baltika Kaliningrad gagne",
         "odds": 2.05,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "result",
+        "params": {
+          "outcome": "home"
+        }
       }
     ]
   },
@@ -687,7 +833,13 @@
         "market": "Buts par équipe",
         "pick": "Sevilla — Moins de 1.5 buts",
         "odds": 1.35,
-        "status": "won"
+        "status": "won",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "away",
+          "line": 1.5,
+          "side": "under"
+        }
       }
     ]
   },
@@ -708,7 +860,13 @@
         "market": "Buts par équipe",
         "pick": "Sevilla — Moins de 1.5 buts",
         "odds": 1.35,
-        "status": "won"
+        "status": "won",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "away",
+          "line": 1.5,
+          "side": "under"
+        }
       }
     ]
   },
@@ -729,7 +887,13 @@
         "market": "Buts par équipe",
         "pick": "Espanyol — Moins de 2.5 buts",
         "odds": 1.4,
-        "status": "won"
+        "status": "won",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "home",
+          "line": 2.5,
+          "side": "under"
+        }
       }
     ]
   },
@@ -750,7 +914,12 @@
         "market": "Résultat + Total buts",
         "pick": "Espanyol & Plus de 0.5 buts",
         "odds": 1.76,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "resultAndTotal",
+        "params": {
+          "line": 0.5,
+          "key": "homeOver"
+        }
       }
     ]
   },
@@ -771,7 +940,9 @@
         "market": "Les 2 équipes marquent",
         "pick": "Oui",
         "odds": 1.86,
-        "status": "won"
+        "status": "won",
+        "marketId": "bothTeamsScore",
+        "params": {}
       }
     ]
   },
@@ -792,7 +963,13 @@
         "market": "Buts par équipe",
         "pick": "Valencia — Plus de 0.5 buts",
         "odds": 1.39,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "home",
+          "line": 0.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -813,7 +990,13 @@
         "market": "Buts par équipe",
         "pick": "Barcelona — Moins de 2.5 buts",
         "odds": 1.46,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "away",
+          "line": 2.5,
+          "side": "under"
+        }
       }
     ]
   },
@@ -834,7 +1017,12 @@
         "market": "Total buts",
         "pick": "Plus de 2.5 buts",
         "odds": 1.59,
-        "status": "won"
+        "status": "won",
+        "marketId": "totalGoals",
+        "params": {
+          "line": 2.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -855,7 +1043,9 @@
         "market": "Les 2 équipes marquent",
         "pick": "Oui",
         "odds": 1.6,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "bothTeamsScore",
+        "params": {}
       }
     ]
   },
@@ -876,7 +1066,12 @@
         "market": "Résultat + Total buts",
         "pick": "Barcelona & Plus de 0.5 buts",
         "odds": 1.89,
-        "status": "won"
+        "status": "won",
+        "marketId": "resultAndTotal",
+        "params": {
+          "line": 0.5,
+          "key": "awayOver"
+        }
       }
     ]
   },
@@ -897,7 +1092,13 @@
         "market": "Buts par équipe",
         "pick": "Sevilla — Moins de 1.5 buts",
         "odds": 1.35,
-        "status": "won"
+        "status": "won",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "away",
+          "line": 1.5,
+          "side": "under"
+        }
       }
     ]
   },
@@ -918,7 +1119,13 @@
         "market": "Buts par équipe",
         "pick": "Valencia — Plus de 0.5 buts",
         "odds": 1.39,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "home",
+          "line": 0.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -939,7 +1146,12 @@
         "market": "Total buts",
         "pick": "Plus de 1.5 buts",
         "odds": 1.39,
-        "status": "won"
+        "status": "won",
+        "marketId": "totalGoals",
+        "params": {
+          "line": 1.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -960,7 +1172,13 @@
         "market": "Buts par équipe",
         "pick": "Athletic Bilbao — Moins de 1.5 buts",
         "odds": 1.4,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "home",
+          "line": 1.5,
+          "side": "under"
+        }
       }
     ]
   },
@@ -981,7 +1199,13 @@
         "market": "Buts par équipe",
         "pick": "Real Racing Club de Santander — Moins de 1.5 buts",
         "odds": 1.45,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "away",
+          "line": 1.5,
+          "side": "under"
+        }
       }
     ]
   },
@@ -1002,7 +1226,13 @@
         "market": "Buts par équipe",
         "pick": "Real Racing Club de Santander — Moins de 1.5 buts",
         "odds": 1.45,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "away",
+          "line": 1.5,
+          "side": "under"
+        }
       }
     ]
   },
@@ -1023,7 +1253,9 @@
         "market": "Les 2 équipes marquent",
         "pick": "Oui",
         "odds": 1.78,
-        "status": "won"
+        "status": "won",
+        "marketId": "bothTeamsScore",
+        "params": {}
       }
     ]
   },
@@ -1044,7 +1276,13 @@
         "market": "Buts par équipe",
         "pick": "Rayo Vallecano — Plus de 1.5 buts",
         "odds": 1.95,
-        "status": "won"
+        "status": "won",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "home",
+          "line": 1.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -1065,7 +1303,12 @@
         "market": "Résultat + Total buts",
         "pick": "Rayo Vallecano & Plus de 0.5 buts",
         "odds": 1.98,
-        "status": "won"
+        "status": "won",
+        "marketId": "resultAndTotal",
+        "params": {
+          "line": 0.5,
+          "key": "homeOver"
+        }
       }
     ]
   },
@@ -1086,7 +1329,12 @@
         "market": "Total buts",
         "pick": "Plus de 1.5 buts",
         "odds": 1.45,
-        "status": "won"
+        "status": "won",
+        "marketId": "totalGoals",
+        "params": {
+          "line": 1.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -1107,7 +1355,13 @@
         "market": "Buts par équipe",
         "pick": "Celta Vigo — Plus de 0.5 buts",
         "odds": 1.62,
-        "status": "won"
+        "status": "won",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "away",
+          "line": 0.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -1128,7 +1382,13 @@
         "market": "Buts par équipe",
         "pick": "Getafe — Moins de 1.5 buts",
         "odds": 1.67,
-        "status": "won"
+        "status": "won",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "home",
+          "line": 1.5,
+          "side": "under"
+        }
       }
     ]
   },
@@ -1149,7 +1409,9 @@
         "market": "Les 2 équipes marquent",
         "pick": "Oui",
         "odds": 2.12,
-        "status": "won"
+        "status": "won",
+        "marketId": "bothTeamsScore",
+        "params": {}
       }
     ]
   },
@@ -1170,7 +1432,12 @@
         "market": "Résultat + Total buts",
         "pick": "Getafe & Plus de 0.5 buts",
         "odds": 2.19,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "resultAndTotal",
+        "params": {
+          "line": 0.5,
+          "key": "homeOver"
+        }
       }
     ]
   },
@@ -1191,7 +1458,12 @@
         "market": "Total buts",
         "pick": "Plus de 1.5 buts",
         "odds": 1.52,
-        "status": "pending"
+        "status": "pending",
+        "marketId": "totalGoals",
+        "params": {
+          "line": 1.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -1212,7 +1484,13 @@
         "market": "Buts par équipe",
         "pick": "Sevilla — Moins de 1.5 buts",
         "odds": 1.76,
-        "status": "pending"
+        "status": "pending",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "home",
+          "line": 1.5,
+          "side": "under"
+        }
       }
     ]
   },
@@ -1233,7 +1511,12 @@
         "market": "Résultat + Total buts",
         "pick": "Sevilla & Plus de 0.5 buts",
         "odds": 1.86,
-        "status": "pending"
+        "status": "pending",
+        "marketId": "resultAndTotal",
+        "params": {
+          "line": 0.5,
+          "key": "homeOver"
+        }
       }
     ]
   },
@@ -1254,7 +1537,13 @@
         "market": "Buts par équipe",
         "pick": "Valencia — Plus de 0.5 buts",
         "odds": 1.91,
-        "status": "pending"
+        "status": "pending",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "away",
+          "line": 0.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -1275,7 +1564,9 @@
         "market": "Les 2 équipes marquent",
         "pick": "Oui",
         "odds": 2.42,
-        "status": "pending"
+        "status": "pending",
+        "marketId": "bothTeamsScore",
+        "params": {}
       }
     ]
   },
@@ -1296,7 +1587,12 @@
         "market": "Total buts",
         "pick": "Plus de 0.5 buts",
         "odds": 1.6,
-        "status": "won"
+        "status": "won",
+        "marketId": "totalGoals",
+        "params": {
+          "line": 0.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -1317,7 +1613,13 @@
         "market": "Buts par équipe",
         "pick": "Villarreal — Moins de 0.5 buts",
         "odds": 1.65,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "home",
+          "line": 0.5,
+          "side": "under"
+        }
       }
     ]
   },
@@ -1338,7 +1640,13 @@
         "market": "Buts par équipe",
         "pick": "Deportivo La Coruna — Moins de 0.5 buts",
         "odds": 1.65,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "away",
+          "line": 0.5,
+          "side": "under"
+        }
       }
     ]
   },
@@ -1359,7 +1667,12 @@
         "market": "Résultat + Total buts",
         "pick": "Nul & Moins de 2.5 buts",
         "odds": 2.11,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "resultAndTotal",
+        "params": {
+          "line": 2.5,
+          "key": "drawUnder"
+        }
       }
     ]
   },
@@ -1380,7 +1693,9 @@
         "market": "Les 2 équipes marquent",
         "pick": "Oui",
         "odds": 6.18,
-        "status": "won"
+        "status": "won",
+        "marketId": "bothTeamsScore",
+        "params": {}
       }
     ]
   },
@@ -1401,7 +1716,12 @@
         "market": "Total buts",
         "pick": "Plus de 0.5 buts",
         "odds": 1.6,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "totalGoals",
+        "params": {
+          "line": 0.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -1422,7 +1742,13 @@
         "market": "Buts par équipe",
         "pick": "Malaga — Moins de 0.5 buts",
         "odds": 1.65,
-        "status": "won"
+        "status": "won",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "home",
+          "line": 0.5,
+          "side": "under"
+        }
       }
     ]
   },
@@ -1443,7 +1769,13 @@
         "market": "Buts par équipe",
         "pick": "Levante — Moins de 0.5 buts",
         "odds": 1.65,
-        "status": "won"
+        "status": "won",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "away",
+          "line": 0.5,
+          "side": "under"
+        }
       }
     ]
   },
@@ -1464,7 +1796,12 @@
         "market": "Résultat + Total buts",
         "pick": "Nul & Moins de 2.5 buts",
         "odds": 2.11,
-        "status": "won"
+        "status": "won",
+        "marketId": "resultAndTotal",
+        "params": {
+          "line": 2.5,
+          "key": "drawUnder"
+        }
       }
     ]
   },
@@ -1485,7 +1822,9 @@
         "market": "Les 2 équipes marquent",
         "pick": "Oui",
         "odds": 6.18,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "bothTeamsScore",
+        "params": {}
       }
     ]
   },
@@ -1506,7 +1845,13 @@
         "market": "Buts par équipe",
         "pick": "Alaves — Plus de 0.5 buts",
         "odds": 1.66,
-        "status": "won"
+        "status": "won",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "home",
+          "line": 0.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -1527,7 +1872,13 @@
         "market": "Buts par équipe",
         "pick": "CA Osasuna — Plus de 0.5 buts",
         "odds": 1.94,
-        "status": "won"
+        "status": "won",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "away",
+          "line": 0.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -1548,7 +1899,12 @@
         "market": "Résultat + Total buts",
         "pick": "Alaves & Plus de 0.5 buts",
         "odds": 2.66,
-        "status": "won"
+        "status": "won",
+        "marketId": "resultAndTotal",
+        "params": {
+          "line": 0.5,
+          "key": "homeOver"
+        }
       }
     ]
   },
@@ -1569,7 +1925,9 @@
         "market": "Les 2 équipes marquent",
         "pick": "Oui",
         "odds": 3.13,
-        "status": "won"
+        "status": "won",
+        "marketId": "bothTeamsScore",
+        "params": {}
       }
     ]
   },
@@ -1590,7 +1948,9 @@
         "market": "Les 2 équipes marquent",
         "pick": "Oui",
         "odds": 2.22,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "bothTeamsScore",
+        "params": {}
       }
     ]
   },
@@ -1611,7 +1971,9 @@
         "market": "Les 2 équipes marquent",
         "pick": "Oui",
         "odds": 1.78,
-        "status": "won"
+        "status": "won",
+        "marketId": "bothTeamsScore",
+        "params": {}
       }
     ]
   },
@@ -1632,7 +1994,12 @@
         "market": "Total buts",
         "pick": "Plus de 0.5 buts",
         "odds": 1.6,
-        "status": "won"
+        "status": "won",
+        "marketId": "totalGoals",
+        "params": {
+          "line": 0.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -1653,7 +2020,11 @@
         "market": "Résultat",
         "pick": "Barcelona gagne",
         "odds": 1.5,
-        "status": "won"
+        "status": "won",
+        "marketId": "result",
+        "params": {
+          "outcome": "away"
+        }
       }
     ]
   },
@@ -1674,7 +2045,12 @@
         "market": "Total buts",
         "pick": "Plus de 0.5 buts",
         "odds": 1.25,
-        "status": "won"
+        "status": "won",
+        "marketId": "totalGoals",
+        "params": {
+          "line": 0.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -1695,7 +2071,13 @@
         "market": "Buts par équipe",
         "pick": "Valencia — Plus de 0.5 buts",
         "odds": 1.39,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "home",
+          "line": 0.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -1716,7 +2098,13 @@
         "market": "Buts par équipe",
         "pick": "Barcelona — Moins de 2.5 buts",
         "odds": 1.46,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "away",
+          "line": 2.5,
+          "side": "under"
+        }
       }
     ]
   },
@@ -1737,7 +2125,12 @@
         "market": "Total buts",
         "pick": "Plus de 2.5 buts",
         "odds": 1.59,
-        "status": "won"
+        "status": "won",
+        "marketId": "totalGoals",
+        "params": {
+          "line": 2.5,
+          "side": "over"
+        }
       }
     ]
   },
@@ -1758,7 +2151,9 @@
         "market": "Les 2 équipes marquent",
         "pick": "Oui",
         "odds": 1.6,
-        "status": "lost"
+        "status": "lost",
+        "marketId": "bothTeamsScore",
+        "params": {}
       }
     ]
   },
@@ -1779,7 +2174,12 @@
         "market": "Résultat + Total buts",
         "pick": "Barcelona & Plus de 0.5 buts",
         "odds": 1.89,
-        "status": "won"
+        "status": "won",
+        "marketId": "resultAndTotal",
+        "params": {
+          "line": 0.5,
+          "key": "awayOver"
+        }
       }
     ]
   },
@@ -1800,7 +2200,13 @@
         "market": "Buts par équipe",
         "pick": "Atletico Madrid — Moins de 1.5 buts",
         "odds": 1.45,
-        "status": "won"
+        "status": "won",
+        "marketId": "teamGoals",
+        "params": {
+          "team": "away",
+          "line": 1.5,
+          "side": "under"
+        }
       }
     ]
   },
@@ -1821,7 +2227,12 @@
         "market": "Résultat + Total buts",
         "pick": "Domicile & Plus de 0.5 buts",
         "odds": 1.47,
-        "status": "pending"
+        "status": "pending",
+        "marketId": "resultAndTotal",
+        "params": {
+          "line": 0.5,
+          "key": "homeOver"
+        }
       }
     ]
   },
@@ -1842,7 +2253,11 @@
         "market": "Résultat",
         "pick": "Sevilla gagne",
         "odds": 2.26,
-        "status": "pending"
+        "status": "pending",
+        "marketId": "result",
+        "params": {
+          "outcome": "home"
+        }
       }
     ]
   },
@@ -1863,7 +2278,11 @@
         "market": "1N2",
         "pick": "Crystal Palace gagne",
         "odds": 1.68,
-        "status": "pending"
+        "status": "pending",
+        "marketId": "result",
+        "params": {
+          "outcome": "home"
+        }
       }
     ]
   },
@@ -1884,7 +2303,11 @@
         "market": "1N2",
         "pick": "Chelsea gagne",
         "odds": 1.61,
-        "status": "pending"
+        "status": "pending",
+        "marketId": "result",
+        "params": {
+          "outcome": "home"
+        }
       }
     ]
   }

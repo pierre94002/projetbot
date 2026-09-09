@@ -8,7 +8,7 @@ import { useToastStore } from '@/stores/toastStore.js';
 import { analysisApi } from '@/services/analysisApi.js';
 import { teamStatsApi } from '@/services/teamStatsApi.js';
 import { computeSafestPicks } from '@/utils/safestPicks.js';
-import { teamGoalsLineOdds, TEAM_GOAL_LINES, legStatus } from '@/utils/betTrends.js';
+import { legStatus } from '@/utils/betTrends.js';
 import { parseLeagueLabel } from '@/utils/leagueDisplay.js';
 import { liveNow } from '@/utils/liveClock.js';
 import { computeMatchStatus } from '@/utils/matchStatus.js';
@@ -243,123 +243,6 @@ function matchKickoff(leg) {
   return matchesStore.matches.find((m) => m.matchId === leg.matchId)?.commenceTime ?? null;
 }
 
-// Parmi des candidats {odds, ...}, celui que le moteur juge le plus probable
-// (cote la plus basse) — sans seuil de type "pari intéressant" (contrairement
-// à safestPicks.js) : on mesure ici la précision du moteur sur SA propre
-// meilleure estimation, pas une suggestion de pari, donc même une quasi-
-// certitude doit être journalisée plutôt qu'écartée.
-function lowestOdds(candidates) {
-  let best = null;
-  for (const candidate of candidates) {
-    if (candidate.odds == null) continue;
-    if (!best || candidate.odds < best.odds) best = candidate;
-  }
-  return best;
-}
-
-function resultAndTotalLabel(line, key, homeName, awayName) {
-  const labels = {
-    homeOver: `${homeName} & Plus de ${line} buts`,
-    homeUnder: `${homeName} & Moins de ${line} buts`,
-    drawOver: `Nul & Plus de ${line} buts`,
-    drawUnder: `Nul & Moins de ${line} buts`,
-    awayOver: `${awayName} & Plus de ${line} buts`,
-    awayUnder: `${awayName} & Moins de ${line} buts`
-  };
-  return labels[key];
-}
-
-// Le pronostic du moteur pour un match, sur TOUS les marchés déjà calculés
-// gratuitement par le moteur (aucun appel API en plus — tout vient de la
-// même réponse analyzeMatchById) : résultat 1N2, total buts (les 4 lignes
-// 0.5/1.5/2.5/3.5, on garde la plus probable), résultat + total buts
-// combinés, les 2 équipes marquent, buts par équipe (les 4 lignes, par
-// équipe). Les corners/tirs cadrés restent volontairement exclus : sans les
-// moyennes 34 champs (coûteuses, jamais chargées en masse), il n'y a aucune
-// tendance calculable honnêtement pour ces marchés ici.
-function buildMarketPredictions(match, data) {
-  const predictions = [];
-  const trueOdds = data.trueOdds;
-
-  // Résultat (1N2) est le SEUL marché où l'app dispose d'une vraie cote
-  // bookmaker (The Odds API n'est interrogée que sur le marché h2h, pour
-  // préserver le quota) — c'est pourquoi predictedMarketOdds n'existe que
-  // pour cette entrée, jamais pour Total buts/BTTS/Buts par équipe/etc.
-  const outcomeOptions = [
-    { outcome: 'home', odds: trueOdds.home, marketOdds: data.market?.odds1 ?? null, label: `${match.home} gagne` },
-    { outcome: 'draw', odds: trueOdds.draw, marketOdds: data.market?.oddsDraw ?? null, label: 'Match nul' },
-    { outcome: 'away', odds: trueOdds.away, marketOdds: data.market?.odds2 ?? null, label: `${match.away} gagne` }
-  ];
-  const result = outcomeOptions.reduce((best, o) => (o.odds < best.odds ? o : best));
-  predictions.push({
-    market: 'Résultat',
-    predictedOutcome: result.outcome,
-    predictedLabel: result.label,
-    predictedOdds: result.odds,
-    predictedMarketOdds: result.marketOdds
-  });
-
-  const totalGoalsBest = lowestOdds([
-    { line: 0.5, odds: trueOdds.over05 },
-    { line: 1.5, odds: trueOdds.over15 },
-    { line: 2.5, odds: trueOdds.over25 },
-    { line: 3.5, odds: trueOdds.over35 }
-  ]);
-  if (totalGoalsBest) {
-    predictions.push({
-      market: 'Total buts',
-      predictedOutcome: 'over',
-      predictedLabel: `Plus de ${totalGoalsBest.line} buts`,
-      predictedOdds: totalGoalsBest.odds
-    });
-  }
-
-  if (trueOdds.bothTeamsScore != null) {
-    predictions.push({ market: 'Les 2 équipes marquent', predictedOutcome: 'yes', predictedLabel: 'Oui', predictedOdds: trueOdds.bothTeamsScore });
-  }
-
-  if (trueOdds.resultAndTotal) {
-    const candidates = [];
-    for (const [line, bucket] of Object.entries(trueOdds.resultAndTotal)) {
-      for (const [key, odds] of Object.entries(bucket)) {
-        if (odds == null) continue;
-        candidates.push({ odds, key, label: resultAndTotalLabel(line, key, match.home, match.away) });
-      }
-    }
-    const best = lowestOdds(candidates);
-    if (best) {
-      predictions.push({ market: 'Résultat + Total buts', predictedOutcome: best.key, predictedLabel: best.label, predictedOdds: best.odds });
-    }
-  }
-
-  for (const [bucketKey, teamName] of [
-    ['homeTeamGoals', match.home],
-    ['awayTeamGoals', match.away]
-  ]) {
-    const bucket = trueOdds[bucketKey];
-    if (!bucket) continue;
-    const candidates = TEAM_GOAL_LINES.flatMap((line) => {
-      const lineOdds = teamGoalsLineOdds(bucket, line);
-      return [
-        { odds: lineOdds?.overOdds, side: 'over', line },
-        { odds: lineOdds?.underOdds, side: 'under', line }
-      ];
-    });
-    const best = lowestOdds(candidates);
-    if (best) {
-      const sideLabel = best.side === 'over' ? 'Plus de' : 'Moins de';
-      predictions.push({
-        market: `Buts — ${teamName}`,
-        predictedOutcome: best.side,
-        predictedLabel: `${teamName} — ${sideLabel} ${best.line} buts`,
-        predictedOdds: best.odds
-      });
-    }
-  }
-
-  return predictions;
-}
-
 async function scanMatches() {
   scanning.value = true;
   scanned.value = true;
@@ -392,7 +275,13 @@ async function scanMatches() {
       if (data.staking?.action === 'RECOMMENDED' && data.market.odds1 >= MIN_DISPLAYED_ODDS) {
         foundValue.push({
           ...base,
-          market: '1N2',
+          // Même marché que la prédiction "Résultat" ci-dessous (issue 1X2) —
+          // même libellé obligatoire, sinon un pari ici et une prédiction
+          // journalisée par ailleurs sur le même marché divergent en base
+          // ('1N2' vs 'Résultat' coexistaient avant, bug confirmé en prod).
+          market: 'Résultat',
+          marketId: 'result',
+          params: { outcome: 'home' },
           pick: `${match.home} gagne`,
           odds: data.market.odds1,
           modelOdds: data.trueOdds.home,
@@ -407,10 +296,20 @@ async function scanMatches() {
         allSafest.push({ ...base, market: safePick.market, pick: safePick.pick, odds: safePick.odds });
       }
 
-      const marketPredictions = buildMarketPredictions(match, data);
+      // Dérivé côté serveur (cf. sports/football/markets.js) — source unique,
+      // plus de duplication de cette logique ici.
+      const marketPredictions = data.marketPredictions ?? [];
       for (const p of marketPredictions) {
         if (p.predictedOdds < MIN_DISPLAYED_ODDS) continue;
-        allPicks.push({ ...base, market: p.market, pick: p.predictedLabel, odds: p.predictedOdds, marketOdds: p.predictedMarketOdds ?? null });
+        allPicks.push({
+          ...base,
+          market: p.market,
+          pick: p.predictedLabel,
+          odds: p.predictedOdds,
+          marketOdds: p.predictedMarketOdds ?? null,
+          marketId: p.marketId ?? null,
+          params: p.params ?? null
+        });
       }
       for (const marketPrediction of marketPredictions) {
         predictionEntries.push({
@@ -540,6 +439,8 @@ async function submitSlip() {
         league: leg.league,
         commenceTime: leg.commenceTime ?? null,
         market: leg.market,
+        marketId: leg.marketId ?? null,
+        params: leg.params ?? null,
         pick: leg.pick,
         odds: leg.odds
       }))

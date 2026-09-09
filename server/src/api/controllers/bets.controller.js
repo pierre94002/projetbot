@@ -23,6 +23,11 @@ function validateLeg(leg, index) {
     league: leg.league ?? null,
     commenceTime: leg.commenceTime ?? null,
     market,
+    // Identifiant de marché structuré + paramètres (cf.
+    // sports/football/markets.js) — optionnels, absents pour tout pari placé
+    // avant la migration.
+    marketId: leg.marketId ?? null,
+    params: leg.params ?? null,
     pick,
     odds: numericOdds
   };

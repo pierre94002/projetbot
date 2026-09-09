@@ -31,7 +31,13 @@ function validateEntry(entry, index) {
     predictedLabel,
     predictedOdds: numericOdds,
     action: action ?? null,
-    edgePercent: Number(entry.edgePercent) || 0
+    edgePercent: Number(entry.edgePercent) || 0,
+    // Identifiant de marché structuré + paramètres (cf. sports/football/markets.js)
+    // — optionnels : absents pour tout ce qui a été journalisé avant la
+    // migration, jamais requis ici pour ne pas casser un futur sport qui
+    // n'aurait pas encore cette dérivation.
+    marketId: entry.marketId ?? null,
+    params: entry.params ?? null
   };
 }
 
