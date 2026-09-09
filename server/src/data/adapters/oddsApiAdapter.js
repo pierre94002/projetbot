@@ -1,5 +1,5 @@
-import { computeMarketConsensus } from '../../core/market/bookmakerConsensus.js';
-import { getLeagueBaselineXg } from '../../core/xg/xgBaseline.js';
+import { computeMarketConsensus } from '../../sports/football/bookmakerConsensus.js';
+import { getLeagueBaselineXg } from '../../sports/football/xgBaseline.js';
 
 /**
  * Convertit un match brut au format "The Odds API" (voir

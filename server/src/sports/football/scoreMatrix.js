@@ -1,5 +1,5 @@
-import { poissonProbability } from './poisson.js';
-import { dixonColesAdjustment } from './dixonColes.js';
+import { poissonProbability } from '../../core/model/poisson.js';
+import { dixonColesAdjustment } from '../../core/model/dixonColes.js';
 
 const MAX_GOALS_SIMULATED = 8;
 

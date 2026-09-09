@@ -1,13 +1,17 @@
 {
-  "edgeThresholdMin": 0.04,
-  "edgeThresholdMax": 0.25,
-  "defaultCorrelation": -0.075,
-  "kellyFraction": 0.125,
-  "maxStakePercent": 0.02,
-  "homeAdvantage": 1.06,
-  "weights": {
-    "market": 0.7,
-    "structural": 0.2,
-    "exogenous": 0.1
+  "football": {
+    "edgeThresholdMin": 0.04,
+    "edgeThresholdMax": 0.25,
+    "defaultCorrelation": -0.075,
+    "kellyFraction": 0.125,
+    "maxStakePercent": 0.02,
+    "homeAdvantage": 1.06,
+    "cornersAdjustmentMax": 0.08,
+    "maxExpectedRateGap": 0.4,
+    "weights": {
+      "market": 0.7,
+      "structural": 0.2,
+      "exogenous": 0.1
+    }
   }
 }

@@ -1,16 +1,23 @@
-import { getEngineConfig, updateEngineConfig, resetEngineConfig, DEFAULT_ENGINE_CONFIG } from '../../core/engine/engineConfig.js';
+import { getEngineConfig, updateEngineConfig, resetEngineConfig, DEFAULT_ENGINE_CONFIG_BY_SPORT } from '../../core/engine/engineConfig.js';
 import { getTiltState, setCircuitBreaker, resetTiltState } from '../../core/engine/tiltState.js';
 
+function resolveSportId(req) {
+  return req.query.sport || 'football';
+}
+
 export function getConfig(req, res) {
-  res.json({ config: getEngineConfig(), defaults: DEFAULT_ENGINE_CONFIG });
+  const sportId = resolveSportId(req);
+  res.json({ config: getEngineConfig(sportId), defaults: DEFAULT_ENGINE_CONFIG_BY_SPORT[sportId] ?? DEFAULT_ENGINE_CONFIG_BY_SPORT.football });
 }
 
 export function putConfig(req, res) {
-  res.json({ config: updateEngineConfig(req.body ?? {}) });
+  const sportId = resolveSportId(req);
+  res.json({ config: updateEngineConfig(sportId, req.body ?? {}) });
 }
 
 export function postResetConfig(req, res) {
-  res.json({ config: resetEngineConfig() });
+  const sportId = resolveSportId(req);
+  res.json({ config: resetEngineConfig(sportId) });
 }
 
 export function getTilt(req, res) {

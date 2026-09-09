@@ -3,6 +3,7 @@ import { getEngineConfig } from '../../core/engine/engineConfig.js';
 import { getTiltState } from '../../core/engine/tiltState.js';
 import { listAdaptedMatches } from '../../data/matchSources.js';
 import { enrichMatchWithRealAverages } from '../../data/providers/matchEnrichment.js';
+import { getSport } from '../../sports/index.js';
 import { ApiError } from '../middlewares/errorHandler.js';
 
 /**
@@ -14,6 +15,7 @@ import { ApiError } from '../middlewares/errorHandler.js';
  */
 export async function analyzeMatchById(req, res) {
   const source = req.query.source || 'odds-api';
+  const sportId = req.query.sport || 'football';
   const bankroll = Number(req.query.bankroll) || 10000;
   const shouldEnrich = req.query.enrich !== 'false';
   const includeCorners = req.query.includeCorners === 'true';
@@ -26,5 +28,5 @@ export async function analyzeMatchById(req, res) {
     ? await enrichMatchWithRealAverages(match, { includeCorners, cornersSampleSize })
     : match;
 
-  res.json(await analyzeMatch(finalMatch, getEngineConfig(), getTiltState()));
+  res.json(await analyzeMatch(finalMatch, getEngineConfig(sportId), getTiltState(), getSport(sportId)));
 }

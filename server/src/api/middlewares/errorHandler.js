@@ -11,7 +11,9 @@ export function notFoundHandler(req, res) {
 
 // eslint-disable-next-line no-unused-vars
 export function errorHandler(error, req, res, next) {
-  const statusCode = error.statusCode || 500;
+  // `statusCode` (ApiError, couche api/) ou `status` (DomainError, couche
+  // core/ — cf. core/errors.js, qui ne doit rien importer de cette couche).
+  const statusCode = error.statusCode || error.status || 500;
   if (statusCode === 500) {
     console.error(error);
   }

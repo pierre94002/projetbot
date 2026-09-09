@@ -5,19 +5,19 @@ import { callAnthropicMessages } from './anthropicClient.js';
 import { buildAnalysisRequest, SUBMIT_ANALYSIS_TOOL, SUBMIT_ANALYSIS_TOOL_CHOICE } from './aiAnalysisPrompt.js';
 import { getEngineConfig } from '../engine/engineConfig.js';
 import { saveAnalysisResult } from '../../data/repositories/aiAnalysisHistoryRepository.js';
-import { ApiError } from '../../api/middlewares/errorHandler.js';
+import { DomainError } from '../errors.js';
 
 const MAX_RESPONSE_TOKENS = 4096; // garde-fou coût sur la réponse
 
 export async function runAnalysis({ limit } = {}) {
   const { apiKey, model, workspaceId } = getAiConfig();
   if (!apiKey) {
-    throw new ApiError(400, 'Aucune clé API Anthropic configurée. Connectez-en une depuis Réglages > Connexion IA.');
+    throw new DomainError('Aucune clé API Anthropic configurée. Connectez-en une depuis Réglages > Connexion IA.', { status: 400 });
   }
 
   const dataset = buildAnalysisDataset({ limit });
   if (dataset.records.length === 0) {
-    throw new ApiError(400, 'Aucun pronostic réglé (correct/incorrect) disponible pour l\'analyse.');
+    throw new DomainError('Aucun pronostic réglé (correct/incorrect) disponible pour l\'analyse.', { status: 400 });
   }
 
   const { system, messages } = buildAnalysisRequest(dataset.records, getEngineConfig());
@@ -35,12 +35,12 @@ export async function runAnalysis({ limit } = {}) {
       maxTokens: MAX_RESPONSE_TOKENS
     });
   } catch (error) {
-    throw new ApiError(502, `Analyse IA impossible : ${error.message}`);
+    throw new DomainError(`Analyse IA impossible : ${error.message}`, { status: 502 });
   }
 
   const toolUse = response.content?.find((block) => block.type === 'tool_use' && block.name === 'submit_analysis');
   if (!toolUse) {
-    throw new ApiError(502, 'Réponse Anthropic inattendue (pas de résultat structuré).');
+    throw new DomainError('Réponse Anthropic inattendue (pas de résultat structuré).', { status: 502 });
   }
 
   const result = {

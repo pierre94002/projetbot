@@ -1,21 +1,11 @@
-import { smoothExpectedGoals } from '../xg/xgSmoothing.js';
-import { computeStructuralExpectedGoals } from '../xg/xgStructural.js';
-import { getLeagueBaselineXg } from '../xg/xgBaseline.js';
 import { computeStructuralFactor } from '../risk/structuralFactors.js';
 import { computeExogenousFactor } from '../risk/exogenousFactors.js';
-import { computeScoreMatrix } from '../model/scoreMatrix.js';
-import { removeBookmakerMargin } from '../market/marginRemoval.js';
+import { removeMargin } from '../market/marginRemoval.js';
 import { evaluateStakingDecision } from '../risk/staking.js';
 import { computeCornersAdjustment } from '../signals/cornersSignal.js';
-import { getLeagueGoalAverages } from '../../data/providers/standingsService.js';
 
 const EXPECTED_GOALS_BOUNDS = { min: 0.5, max: 2.8 };
 const MARKET_OVERROUND_ESTIMATE = 1.05;
-
-// Sources d'xG fournies explicitement par un humain (Simulateur libre, jeu de
-// données de test) : on respecte ce chiffre tel quel plutôt que de le
-// recalculer depuis attaque/défense, qui n'a pas de sens sans stats d'équipe.
-const MANUAL_XG_PROVIDERS = new Set(['Opta', 'StatsBomb', 'default']);
 
 /**
  * Analyse un match unique en fusionnant trois signaux indépendants :
@@ -30,16 +20,21 @@ const MANUAL_XG_PROVIDERS = new Set(['Opta', 'StatsBomb', 'default']);
  * marché : ancrer 70% du poids au marché rend l'edge mécaniquement plus
  * conservateur qu'un modèle 100% indépendant — c'est voulu.
  *
+ * Orchestrateur sport-agnostique : toute la résolution du taux de base
+ * (lambda/mu) et le modèle de probabilités par score viennent de `sport`
+ * (cf. sports/sportPort.js) plutôt que d'être importés en dur ici — c'est la
+ * frontière qui permettra d'ajouter un futur sport sans toucher ce fichier.
+ *
  * @param {object} match - voir `docs contrat` dans matchAdapter.js pour le format attendu.
  * @param {object} config - configuration du moteur (cf. engineConfig.js).
  * @param {object} tiltState - état du coupe-circuit (cf. tiltState.js).
+ * @param {object} sport - implémentation Sport active (cf. sports/sportPort.js).
  */
-export async function analyzeMatch(match, config, tiltState) {
+export async function analyzeMatch(match, config, tiltState, sport) {
   if (!match) throw new Error('Données de match manquantes.');
+  if (!sport) throw new Error('Sport manquant (cf. sports/sportPort.js#getSport).');
 
-  const homeAdvantage = clamp(match.homeAdvantage ?? config.homeAdvantage, 0.94, 1.06);
-
-  const base = await resolveBaseExpectedGoals(match, homeAdvantage);
+  const base = await sport.model.resolveBaseRates(match, config);
   const structuralHome = computeStructuralFactor(match.structural?.home);
   const structuralAway = computeStructuralFactor(match.structural?.away);
 
@@ -59,14 +54,14 @@ export async function analyzeMatch(match, config, tiltState) {
   );
 
   // P_structurel : le modèle statistique seul (attaque/défense + Dixon-Coles).
-  const probabilitiesStructural = computeScoreMatrix(lambda, mu, config.defaultCorrelation);
+  const probabilitiesStructural = sport.model.computeMarketProbabilities(lambda, mu, config);
 
   // P_exogène : le même modèle, ajusté par météo/état du terrain (neutre =
   // P_structurel tant qu'aucune donnée exogène n'est fournie sur le match).
   const exogenousFactor = computeExogenousFactor(match.exogenous);
   const lambdaExogenous = clamp(lambda * exogenousFactor, EXPECTED_GOALS_BOUNDS.min, EXPECTED_GOALS_BOUNDS.max);
   const muExogenous = clamp(mu * exogenousFactor, EXPECTED_GOALS_BOUNDS.min, EXPECTED_GOALS_BOUNDS.max);
-  const probabilitiesExogenous = computeScoreMatrix(lambdaExogenous, muExogenous, config.defaultCorrelation);
+  const probabilitiesExogenous = sport.model.computeMarketProbabilities(lambdaExogenous, muExogenous, config);
 
   // P_marché : cotes du marché, marge bookmaker retirée.
   const marketOdds = {
@@ -74,7 +69,8 @@ export async function analyzeMatch(match, config, tiltState) {
     oddsDraw: match.marketOdds?.oddsDraw ?? (1 / probabilitiesStructural.draw) * MARKET_OVERROUND_ESTIMATE,
     odds2: match.marketOdds?.odds2 ?? (1 / probabilitiesStructural.away) * MARKET_OVERROUND_ESTIMATE
   };
-  const netMarket = removeBookmakerMargin(marketOdds.odds1, marketOdds.oddsDraw, marketOdds.odds2);
+  const netMarket = removeMargin([marketOdds.odds1, marketOdds.oddsDraw, marketOdds.odds2]);
+  const [marketProbHome, marketProbDraw, marketProbAway] = netMarket.probabilities;
 
   // Fusion pondérée : P_final = poids.marché·P_marché + poids.structurel·P_structurel + poids.exogène·P_exogène.
   // Over 2.5 / BTTS n'ont pas d'équivalent marché dans cette app (seules les
@@ -82,9 +78,9 @@ export async function analyzeMatch(match, config, tiltState) {
   // disponible sans marché.
   const weights = config.weights;
   const probabilities = {
-    home: weights.market * netMarket.probability1 + weights.structural * probabilitiesStructural.home + weights.exogenous * probabilitiesExogenous.home,
-    draw: weights.market * netMarket.probabilityDraw + weights.structural * probabilitiesStructural.draw + weights.exogenous * probabilitiesExogenous.draw,
-    away: weights.market * netMarket.probability2 + weights.structural * probabilitiesStructural.away + weights.exogenous * probabilitiesExogenous.away,
+    home: weights.market * marketProbHome + weights.structural * probabilitiesStructural.home + weights.exogenous * probabilitiesExogenous.home,
+    draw: weights.market * marketProbDraw + weights.structural * probabilitiesStructural.draw + weights.exogenous * probabilitiesExogenous.draw,
+    away: weights.market * marketProbAway + weights.structural * probabilitiesStructural.away + weights.exogenous * probabilitiesExogenous.away,
     over05: probabilitiesExogenous.over05,
     over15: probabilitiesExogenous.over15,
     over25: probabilitiesExogenous.over25,
@@ -100,7 +96,7 @@ export async function analyzeMatch(match, config, tiltState) {
   // − 1). Avant, la division était inversée (p_marché/p_modèle − 1) : ça
   // recommandait un pari précisément quand le marché est PLUS confiant que
   // notre propre modèle sur cette issue — l'inverse d'un vrai value bet.
-  const edgeHome = probabilities.home / netMarket.probability1 - 1;
+  const edgeHome = probabilities.home / marketProbHome - 1;
 
   const staking = evaluateStakingDecision(edgeHome, match.bankroll, lambda, mu, config, tiltState);
 
@@ -145,44 +141,6 @@ export async function analyzeMatch(match, config, tiltState) {
     staking,
     corners
   };
-}
-
-/**
- * Résout le lambda/mu de base (avant facteurs structurel/exogène) :
- * - xG fourni explicitement par un humain (Simulateur libre, jeu de test) → respecté tel quel.
- * - match réel → force attaque/défense des deux équipes vs moyenne de la ligue (cf. xgStructural.js),
- *   avec repli sur la moyenne de ligue pour un côté sans stats d'équipe (jamais de NaN/crash).
- */
-async function resolveBaseExpectedGoals(match, homeAdvantage) {
-  const provider = match.expectedGoals?.provider;
-  if (provider && MANUAL_XG_PROVIDERS.has(provider)) {
-    const xgHome = smoothExpectedGoals(match.expectedGoals?.home, provider, 1.35);
-    const xgAway = smoothExpectedGoals(match.expectedGoals?.away, provider, 1.15);
-    return { lambda: xgHome * homeAdvantage, mu: xgAway / homeAdvantage };
-  }
-
-  const league = await resolveLeagueAverages(match);
-  const homeGoals = match.teamStats?.home?.goals;
-  const awayGoals = match.teamStats?.away?.goals;
-
-  return computeStructuralExpectedGoals({
-    homeAttack: homeGoals?.for?.home ?? league.home,
-    homeDefense: homeGoals?.against?.home ?? league.away,
-    awayAttack: awayGoals?.for?.away ?? league.away,
-    awayDefense: awayGoals?.against?.away ?? league.home,
-    leagueHomeAvg: league.home,
-    leagueAwayAvg: league.away,
-    homeAdvantage
-  });
-}
-
-/** Moyenne de ligue réelle (classement, sans coût API dédié) avec repli sur le barème par palier si indisponible. */
-async function resolveLeagueAverages(match) {
-  const real = match.league ? await getLeagueGoalAverages(match.league).catch(() => null) : null;
-  if (real) return real;
-
-  const fallback = getLeagueBaselineXg(match.sportKey, {});
-  return { home: fallback.xgHome, away: fallback.xgAway };
 }
 
 function clamp(value, min, max) {
