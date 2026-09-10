@@ -420,10 +420,11 @@ onMounted(() => {
   <div class="predictions-history-view">
     <TabbedView v-model="activeTab" :tabs="TABS" query-param="onglet" />
 
-    <BetsPerformanceView v-if="activeTab === 'performance'" />
-    <BetsTicketsView v-else-if="activeTab === 'tickets'" />
+    <Transition name="view" mode="out-in">
+    <BetsPerformanceView v-if="activeTab === 'performance'" key="performance" />
+    <BetsTicketsView v-else-if="activeTab === 'tickets'" key="tickets" />
 
-    <template v-else>
+    <div v-else key="moteur" class="predictions-history-view__default">
     <AppCard
       title="Historique — Pronostics du moteur"
       subtitle="Résultat, total buts, les 2 équipes marquent, buts par équipe — moyenne générale sur tous les matchs scannés"
@@ -618,7 +619,8 @@ onMounted(() => {
         </div>
       </div>
     </AppCard>
-    </template>
+    </div>
+    </Transition>
   </div>
 </template>
 
@@ -629,6 +631,11 @@ onMounted(() => {
   gap: 16px;
 }
 
+.predictions-history-view__default {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
 .performance-summary {
   font-size: 12.5px;

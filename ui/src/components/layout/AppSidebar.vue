@@ -38,7 +38,6 @@ const NAV_ITEMS = [
   z-index: 1;
   display: flex;
   flex-direction: column;
-  background: rgb(var(--cm-glass-tint) / var(--cm-elevation-1));
   backdrop-filter: blur(var(--cm-elevation-1-blur)) saturate(var(--cm-glass-saturate));
   -webkit-backdrop-filter: blur(var(--cm-elevation-1-blur)) saturate(var(--cm-glass-saturate));
   border-right: 1px solid var(--cm-glass-border);

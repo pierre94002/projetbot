@@ -1,5 +1,6 @@
 <script setup>
 import { ref, reactive, computed, watch, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 import { useMatchesStore } from '@/stores/matchesStore.js';
 import { useSourcesStore } from '@/stores/sourcesStore.js';
 import { useBetsStore } from '@/stores/betsStore.js';
@@ -26,9 +27,11 @@ import PicksSearchCard from '@/components/matches/PicksSearchCard.vue';
 import MatchStatusBadge from '@/components/common/MatchStatusBadge.vue';
 import MatchStatsPanel from '@/components/matches/MatchStatsPanel.vue';
 import LeagueBadge from '@/components/matches/LeagueBadge.vue';
+import TabbedView from '@/components/common/TabbedView.vue';
 import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
 import { formatOdds, formatCurrency, formatPercent, formatDateTime, formatKickoff } from '@/utils/format.js';
 
+const route = useRoute();
 const matchesStore = useMatchesStore();
 const sourcesStore = useSourcesStore();
 const betsStore = useBetsStore();
@@ -209,7 +212,8 @@ const MIN_DISPLAYED_ODDS = 1.2;
 // une fois qu'il y a des dizaines de paris par liste. L'onglet "Bankroll"
 // (scanner, carnet réel, réglages de mise) est prioritaire/par défaut ; un
 // seul scan y alimente les trois autres onglets.
-const activeTab = ref('bankroll'); // 'bankroll' | 'value' | 'safest' | 'all'
+const TAB_VALUES = ['bankroll', 'value', 'safest', 'all'];
+const activeTab = ref(TAB_VALUES.includes(route.query.onglet) ? route.query.onglet : 'bankroll');
 
 const scanning = ref(false);
 const scanned = ref(false);
@@ -353,6 +357,13 @@ const activeSafestPicksPool = computed(() =>
 );
 const activeAllPicksPool = computed(() => allPicksPool.value.filter((c) => liveMatchIds.value.has(c.matchId) && !takenLegKeys.value.has(legKey(c))));
 
+const TABS = computed(() => [
+  { value: 'bankroll', label: 'Bankroll & carnet' },
+  { value: 'value', label: 'Value bets détectées', count: activeValueBets.value.length },
+  { value: 'safest', label: 'Paris les plus probables', count: activeSafestPicksPool.value.length },
+  { value: 'all', label: 'Tous les paris', count: activeAllPicksPool.value.length }
+]);
+
 const valueBetsSearchQuery = ref('');
 const filteredValueBets = computed(() => {
   const query = valueBetsSearchQuery.value.trim().toLowerCase();
@@ -464,20 +475,7 @@ onMounted(() => {
 
 <template>
   <div class="my-bets-view">
-    <div class="my-bets-view__tabs">
-      <button type="button" class="my-bets-view__tab" :class="{ 'my-bets-view__tab--active': activeTab === 'bankroll' }" @click="activeTab = 'bankroll'">
-        Bankroll &amp; carnet
-      </button>
-      <button type="button" class="my-bets-view__tab" :class="{ 'my-bets-view__tab--active': activeTab === 'value' }" @click="activeTab = 'value'">
-        Value bets détectées <span class="cm-numeric">{{ activeValueBets.length }}</span>
-      </button>
-      <button type="button" class="my-bets-view__tab" :class="{ 'my-bets-view__tab--active': activeTab === 'safest' }" @click="activeTab = 'safest'">
-        Paris les plus probables <span class="cm-numeric">{{ activeSafestPicksPool.length }}</span>
-      </button>
-      <button type="button" class="my-bets-view__tab" :class="{ 'my-bets-view__tab--active': activeTab === 'all' }" @click="activeTab = 'all'">
-        Tous les paris <span class="cm-numeric">{{ activeAllPicksPool.length }}</span>
-      </button>
-    </div>
+    <TabbedView v-model="activeTab" :tabs="TABS" query-param="onglet" />
 
     <div v-if="selectedLegs.length" class="bet-slip">
       <p class="bet-slip__title">
@@ -490,7 +488,8 @@ onMounted(() => {
       </AppButton>
     </div>
 
-    <template v-if="activeTab === 'bankroll'">
+    <Transition name="view" mode="out-in">
+    <div v-if="activeTab === 'bankroll'" key="bankroll" class="my-bets-view__bankroll">
     <AppCard title="Mes paris" subtitle="Carnet de paris — simples et combinés">
       <div class="my-bets-view__summary">
         <div class="my-bets-view__stat">
@@ -716,9 +715,9 @@ onMounted(() => {
         </div>
       </div>
     </AppCard>
-    </template>
+    </div>
 
-    <AppCard v-else-if="activeTab === 'value'" title="Value bets détectées" subtitle="Cote de notre moteur vs cote du marché — edge positif sur l'issue domicile">
+    <AppCard v-else-if="activeTab === 'value'" key="value" title="Value bets détectées" subtitle="Cote de notre moteur vs cote du marché — edge positif sur l'issue domicile">
       <AppTextField v-model="valueBetsSearchQuery" placeholder="Rechercher (équipe, marché, pick)…" class="value-bets__search">
         <template #icon><AppIcon name="search" :size="14" /></template>
       </AppTextField>
@@ -803,6 +802,7 @@ onMounted(() => {
 
     <PicksSearchCard
       v-else-if="activeTab === 'safest'"
+      key="safest"
       title="Paris les plus probables"
       subtitle="Le pari le plus sûr (⌀ le plus bas ≥ 1.35) par marché et par match scanné"
       search-placeholder="Rechercher (équipe, marché, pick)…"
@@ -817,6 +817,7 @@ onMounted(() => {
 
     <PicksSearchCard
       v-else-if="activeTab === 'all'"
+      key="all"
       title="Tous les paris"
       subtitle="Tous les pronostics du moteur, sans filtre — pour parier sur autre chose"
       search-placeholder="Rechercher (équipe, marché, pick)…"
@@ -828,11 +829,18 @@ onMounted(() => {
       empty-description="Aucun pronostic trouvé sur la période scannée."
       @toggle="toggleSelect"
     />
+    </Transition>
   </div>
 </template>
 
 <style scoped>
 .my-bets-view {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.my-bets-view__bankroll {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -857,42 +865,6 @@ onMounted(() => {
 .my-bets-view__stat .cm-numeric {
   font-size: 15px;
   font-weight: 700;
-}
-
-.my-bets-view__tabs {
-  display: flex;
-  gap: 6px;
-}
-
-.my-bets-view__tab {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 15px;
-  border-radius: 999px;
-  border: 1px solid var(--cm-border);
-  background: var(--cm-surface-alt);
-  color: var(--cm-text-secondary);
-  font-size: 12.5px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background var(--cm-transition), color var(--cm-transition), border-color var(--cm-transition);
-}
-
-.my-bets-view__tab .cm-numeric {
-  font-size: 10.5px;
-  opacity: 0.8;
-}
-
-.my-bets-view__tab:hover {
-  border-color: var(--cm-accent);
-  color: var(--cm-text-primary);
-}
-
-.my-bets-view__tab--active {
-  background: var(--cm-accent);
-  border-color: var(--cm-accent);
-  color: #06251b;
 }
 
 .value-bets__controls {

@@ -210,10 +210,11 @@ onMounted(() => {
   <div class="matches-view">
     <TabbedView v-model="activeTab" :tabs="TABS" query-param="onglet" />
 
-    <TeamStatsView v-if="activeTab === 'stats'" />
-    <TeamSquadView v-else-if="activeTab === 'squad'" />
+    <Transition name="view" mode="out-in">
+    <TeamStatsView v-if="activeTab === 'stats'" key="stats" />
+    <TeamSquadView v-else-if="activeTab === 'squad'" key="squad" />
 
-    <template v-else>
+    <div v-else key="matches" class="matches-view__default">
     <AppCard padded>
       <div class="matches-view__controls">
         <AppSelect v-model="matchesStore.source" label="Source de données" :options="sourcesStore.options" />
@@ -298,12 +299,19 @@ onMounted(() => {
     <AppModal v-if="standings" :title="`Classement — ${standings.league}`" @close="standings = null">
       <StandingsTable :loading="standings.loading" :error="standings.error" :rows="standings.rows" />
     </AppModal>
-    </template>
+    </div>
+    </Transition>
   </div>
 </template>
 
 <style scoped>
 .matches-view {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.matches-view__default {
   display: flex;
   flex-direction: column;
   gap: 16px;

@@ -6,7 +6,7 @@ import { useRoute, useRouter } from 'vue-router';
 // généralisée ici sans complexifier inutilement ce composant.
 const props = defineProps({
   modelValue: { type: String, required: true },
-  tabs: { type: Array, required: true }, // [{ value, label }]
+  tabs: { type: Array, required: true }, // [{ value, label, count? }]
   // Nom du paramètre d'URL à synchroniser avec l'onglet actif (ex. "tab") —
   // laissé vide tant qu'aucune page n'en a besoin (état local uniquement).
   queryParam: { type: String, default: null }
@@ -34,6 +34,7 @@ function selectTab(value) {
       @click="selectTab(tab.value)"
     >
       {{ tab.label }}
+      <span v-if="tab.count !== undefined" class="cm-numeric tabbed-view__tab-count">{{ tab.count }}</span>
     </button>
   </div>
 </template>
@@ -45,6 +46,9 @@ function selectTab(value) {
 }
 
 .tabbed-view__tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   padding: 7px 15px;
   border-radius: 999px;
   border: 1px solid var(--cm-border);
@@ -54,6 +58,11 @@ function selectTab(value) {
   font-weight: 600;
   cursor: pointer;
   transition: background var(--cm-transition), color var(--cm-transition), border-color var(--cm-transition);
+}
+
+.tabbed-view__tab-count {
+  font-size: 10.5px;
+  opacity: 0.8;
 }
 
 .tabbed-view__tab:hover {

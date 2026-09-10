@@ -77,3 +77,23 @@ textarea {
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
+
+/* Transition "view" — partagée par tous les changements de vue (route ou
+   onglet interne) pour un mouvement cohérent dans toute l'appli : un seul
+   nom, réutilisé par simple <Transition name="view">, jamais redéfini
+   localement. Fondu + léger glissement vertical, pas d'échelle (coûteux à
+   combiner avec le blur déjà posé sur sidebar/topbar/cards). */
+.view-enter-active,
+.view-leave-active {
+  transition: opacity 220ms cubic-bezier(0.22, 1, 0.36, 1), transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.view-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.view-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}

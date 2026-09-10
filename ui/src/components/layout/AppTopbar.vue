@@ -34,9 +34,8 @@ const statusLabel = computed(() => {
   border-bottom: 1px solid var(--cm-glass-border);
   position: sticky;
   top: 0;
-  background: rgb(var(--cm-glass-tint) / var(--cm-elevation-2));
-  backdrop-filter: blur(var(--cm-elevation-2-blur)) saturate(var(--cm-glass-saturate));
-  -webkit-backdrop-filter: blur(var(--cm-elevation-2-blur)) saturate(var(--cm-glass-saturate));
+  backdrop-filter: blur(var(--cm-elevation-1-blur)) saturate(var(--cm-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--cm-elevation-1-blur)) saturate(var(--cm-glass-saturate));
   z-index: 10;
 }
 
