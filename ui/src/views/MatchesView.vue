@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useMatchesStore } from '@/stores/matchesStore.js';
 import { useAnalysisStore } from '@/stores/analysisStore.js';
 import { useSourcesStore } from '@/stores/sourcesStore.js';
@@ -27,6 +27,7 @@ import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
 
 const props = defineProps({ matchId: { type: String, default: null } });
 
+const route = useRoute();
 const router = useRouter();
 const matchesStore = useMatchesStore();
 const analysisStore = useAnalysisStore();
@@ -38,12 +39,14 @@ const teamStatsModalStore = useTeamStatsModalStore();
 // (store/API/état propres) — intégrés ici comme de simples onglets plutôt
 // que des pages séparées, pour regrouper tout ce qui concerne les
 // matchs/statistiques à un seul endroit.
-const activeTab = ref('matches'); // 'matches' | 'stats' | 'squad'
 const TABS = [
   { value: 'matches', label: 'Matchs' },
   { value: 'stats', label: 'Statistiques ligue' },
   { value: 'squad', label: 'Compo & joueurs' }
 ];
+// Onglet initial lu depuis ?vue=... s'il est valide (lien partagé/rechargement
+// de page) — sinon "Matchs" par défaut, comme avant l'ajout du reflet d'URL.
+const activeTab = ref(TABS.some((t) => t.value === route.query.onglet) ? route.query.onglet : 'matches');
 
 const searchQuery = ref('');
 const leagueQuery = ref('');
@@ -175,7 +178,7 @@ function handleDeselect() {
   analysisStore.clear();
   averagesComparison.value = null;
   liveMatchDetails.value = null;
-  router.replace('/matches');
+  router.replace({ path: '/matches', query: route.query });
 }
 
 async function handleViewStandings(league) {
@@ -192,7 +195,7 @@ watch(
   () => matchesStore.source,
   () => {
     analysisStore.clear();
-    router.replace('/matches');
+    router.replace({ path: '/matches', query: route.query });
     loadMatches();
   }
 );
@@ -205,7 +208,7 @@ onMounted(() => {
 
 <template>
   <div class="matches-view">
-    <TabbedView v-model="activeTab" :tabs="TABS" />
+    <TabbedView v-model="activeTab" :tabs="TABS" query-param="onglet" />
 
     <TeamStatsView v-if="activeTab === 'stats'" />
     <TeamSquadView v-else-if="activeTab === 'squad'" />

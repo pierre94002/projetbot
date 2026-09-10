@@ -1,5 +1,6 @@
 <script setup>
 import { computed, reactive, ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 import { usePredictionsStore } from '@/stores/predictionsStore.js';
 import { useBetsStore } from '@/stores/betsStore.js';
 import { useMatchesStore } from '@/stores/matchesStore.js';
@@ -19,6 +20,7 @@ import { marketBreakdownLabel, extractGoalLine, namesMatch } from '@/utils/betTr
 import { matchResultsApi } from '@/services/matchResultsApi.js';
 import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
 
+const route = useRoute();
 const predictionsStore = usePredictionsStore();
 const betsStore = useBetsStore();
 const matchesStore = useMatchesStore();
@@ -29,12 +31,12 @@ const teamStatsModalStore = useTeamStatsModalStore();
 // propres) — intégrés ici comme de simples onglets plutôt que des pages
 // séparées, même principe que Statistiques ligue dans Matchs : l'onglet
 // prioritaire (moteur) reste le défaut, les autres s'ouvrent au clic.
-const activeTab = ref('moteur'); // 'moteur' | 'performance' | 'tickets'
 const TABS = [
   { value: 'moteur', label: 'Historique moteur' },
   { value: 'performance', label: 'Performance paris' },
   { value: 'tickets', label: 'Mes tickets' }
 ];
+const activeTab = ref(TABS.some((t) => t.value === route.query.onglet) ? route.query.onglet : 'moteur');
 
 const PREDICTION_STATUS_LABELS = { pending: 'En attente', correct: 'Correct', incorrect: 'Incorrect', void: 'Annulé' };
 
@@ -416,7 +418,7 @@ onMounted(() => {
 
 <template>
   <div class="predictions-history-view">
-    <TabbedView v-model="activeTab" :tabs="TABS" />
+    <TabbedView v-model="activeTab" :tabs="TABS" query-param="onglet" />
 
     <BetsPerformanceView v-if="activeTab === 'performance'" />
     <BetsTicketsView v-else-if="activeTab === 'tickets'" />
