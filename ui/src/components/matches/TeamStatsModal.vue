@@ -6,6 +6,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import MatchStatsPanel from './MatchStatsPanel.vue';
 import TeamHistoryModal from './TeamHistoryModal.vue';
+import TeamLineup from './TeamLineup.vue';
 import { LINEUP_UNAVAILABLE_MESSAGES } from '@/utils/lineupMessages.js';
 
 const store = useTeamStatsModalStore();
@@ -28,28 +29,7 @@ const averagesTeams = computed(() => (store.averages ? [{ teamId: store.teamId, 
       </p>
 
       <div v-else-if="store.lineups?.available" class="team-modal__lineups">
-        <div v-for="team in store.lineups.teams" :key="team.teamId" class="team-modal__lineup-team">
-          <p class="team-modal__lineup-team-name">{{ team.teamName }}</p>
-          <p class="cm-text-muted team-modal__lineup-meta">
-            {{ team.formation ?? '—' }} <span v-if="team.coach">· {{ team.coach }}</span>
-          </p>
-          <p class="team-modal__lineup-subhead cm-text-muted">Titulaires</p>
-          <ul class="team-modal__player-list">
-            <li v-for="p in team.startXI" :key="p.id" class="team-modal__player-row">
-              <span class="cm-numeric team-modal__player-number">{{ p.number ?? '—' }}</span>
-              <span class="cm-truncate">{{ p.name }}</span>
-              <span class="cm-text-muted">{{ p.position }}</span>
-            </li>
-          </ul>
-          <p class="team-modal__lineup-subhead cm-text-muted">Remplaçants</p>
-          <ul class="team-modal__player-list">
-            <li v-for="p in team.substitutes" :key="p.id" class="team-modal__player-row">
-              <span class="cm-numeric team-modal__player-number">{{ p.number ?? '—' }}</span>
-              <span class="cm-truncate">{{ p.name }}</span>
-              <span class="cm-text-muted">{{ p.position }}</span>
-            </li>
-          </ul>
-        </div>
+        <TeamLineup v-for="team in store.lineups.teams" :key="team.teamId" :team="team" />
       </div>
     </section>
 
@@ -138,48 +118,10 @@ const averagesTeams = computed(() => (store.averages ? [{ teamId: store.teamId, 
   font-size: 11.5px;
 }
 
-.team-modal__lineup-team + .team-modal__lineup-team {
+.team-modal__lineups .team-lineup + .team-lineup {
   margin-top: 16px;
   padding-top: 14px;
   border-top: 1px solid var(--cm-border-soft);
-}
-
-.team-modal__lineup-team-name {
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.team-modal__lineup-meta {
-  font-size: 11px;
-  margin-top: 2px;
-  margin-bottom: 8px;
-}
-
-.team-modal__lineup-subhead {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  margin: 8px 0 4px;
-}
-
-.team-modal__player-list {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.team-modal__player-row {
-  display: grid;
-  grid-template-columns: 18px 1fr auto;
-  gap: 8px;
-  align-items: center;
-  font-size: 12px;
-  padding: 2px 0;
-}
-
-.team-modal__player-number {
-  color: var(--cm-text-muted);
-  font-size: 10.5px;
 }
 
 .team-modal__players-table-wrap {

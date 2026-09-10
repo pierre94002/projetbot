@@ -10,6 +10,7 @@ import AppButton from '@/components/common/AppButton.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
+import TeamLineup from '@/components/matches/TeamLineup.vue';
 import { formatKickoff } from '@/utils/format.js';
 import { LINEUP_UNAVAILABLE_MESSAGES } from '@/utils/lineupMessages.js';
 
@@ -85,30 +86,7 @@ async function loadPlayers() {
       <EmptyState v-else-if="lineups?.error" icon="alert" title="Erreur" :description="lineups.error" />
 
       <div v-else-if="lineups?.result?.available" class="team-squad__lineups">
-        <div v-for="team in lineups.result.teams" :key="team.teamId" class="team-squad__lineup-col">
-          <p class="team-squad__lineup-team">{{ team.teamName }}</p>
-          <p class="cm-text-muted team-squad__lineup-meta">
-            {{ team.formation ?? '—' }} <span v-if="team.coach">· {{ team.coach }}</span>
-          </p>
-
-          <p class="team-squad__lineup-subhead cm-text-muted">Titulaires</p>
-          <ul class="team-squad__player-list">
-            <li v-for="p in team.startXI" :key="p.id" class="team-squad__player">
-              <span class="cm-numeric team-squad__player-number">{{ p.number ?? '—' }}</span>
-              <span class="cm-truncate">{{ p.name }}</span>
-              <span class="cm-text-muted">{{ p.position }}</span>
-            </li>
-          </ul>
-
-          <p class="team-squad__lineup-subhead cm-text-muted">Remplaçants</p>
-          <ul class="team-squad__player-list">
-            <li v-for="p in team.substitutes" :key="p.id" class="team-squad__player">
-              <span class="cm-numeric team-squad__player-number">{{ p.number ?? '—' }}</span>
-              <span class="cm-truncate">{{ p.name }}</span>
-              <span class="cm-text-muted">{{ p.position }}</span>
-            </li>
-          </ul>
-        </div>
+        <TeamLineup v-for="team in lineups.result.teams" :key="team.teamId" :team="team" />
       </div>
 
       <EmptyState
@@ -200,44 +178,6 @@ async function loadPlayers() {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
-}
-
-.team-squad__lineup-team {
-  font-size: 13.5px;
-  font-weight: 700;
-}
-
-.team-squad__lineup-meta {
-  font-size: 11.5px;
-  margin-top: 2px;
-  margin-bottom: 12px;
-}
-
-.team-squad__lineup-subhead {
-  font-size: 10.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  margin: 10px 0 4px;
-}
-
-.team-squad__player-list {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.team-squad__player {
-  display: grid;
-  grid-template-columns: 20px 1fr auto;
-  gap: 8px;
-  align-items: center;
-  padding: 3px 0;
-  font-size: 12.5px;
-}
-
-.team-squad__player-number {
-  color: var(--cm-text-muted);
-  font-size: 11px;
 }
 
 .team-squad__players-season {

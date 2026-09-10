@@ -11,6 +11,7 @@ import AppTextField from '@/components/common/AppTextField.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import MatchStatusBadge from '@/components/common/MatchStatusBadge.vue';
 import LeagueBadge from '@/components/matches/LeagueBadge.vue';
+import TabbedView from '@/components/common/TabbedView.vue';
 import BetsPerformanceView from '@/views/BetsPerformanceView.vue';
 import BetsTicketsView from '@/views/BetsTicketsView.vue';
 import { formatOdds, formatDay, formatPercent } from '@/utils/format.js';
@@ -29,6 +30,11 @@ const teamStatsModalStore = useTeamStatsModalStore();
 // séparées, même principe que Statistiques ligue dans Matchs : l'onglet
 // prioritaire (moteur) reste le défaut, les autres s'ouvrent au clic.
 const activeTab = ref('moteur'); // 'moteur' | 'performance' | 'tickets'
+const TABS = [
+  { value: 'moteur', label: 'Historique moteur' },
+  { value: 'performance', label: 'Performance paris' },
+  { value: 'tickets', label: 'Mes tickets' }
+];
 
 const PREDICTION_STATUS_LABELS = { pending: 'En attente', correct: 'Correct', incorrect: 'Incorrect', void: 'Annulé' };
 
@@ -410,17 +416,7 @@ onMounted(() => {
 
 <template>
   <div class="predictions-history-view">
-    <div class="predictions-history-view__tabs">
-      <button type="button" class="predictions-history-view__tab" :class="{ 'predictions-history-view__tab--active': activeTab === 'moteur' }" @click="activeTab = 'moteur'">
-        Historique moteur
-      </button>
-      <button type="button" class="predictions-history-view__tab" :class="{ 'predictions-history-view__tab--active': activeTab === 'performance' }" @click="activeTab = 'performance'">
-        Performance paris
-      </button>
-      <button type="button" class="predictions-history-view__tab" :class="{ 'predictions-history-view__tab--active': activeTab === 'tickets' }" @click="activeTab = 'tickets'">
-        Mes tickets
-      </button>
-    </div>
+    <TabbedView v-model="activeTab" :tabs="TABS" />
 
     <BetsPerformanceView v-if="activeTab === 'performance'" />
     <BetsTicketsView v-else-if="activeTab === 'tickets'" />
@@ -631,33 +627,6 @@ onMounted(() => {
   gap: 16px;
 }
 
-.predictions-history-view__tabs {
-  display: flex;
-  gap: 6px;
-}
-
-.predictions-history-view__tab {
-  padding: 7px 15px;
-  border-radius: 999px;
-  border: 1px solid var(--cm-border);
-  background: var(--cm-surface-alt);
-  color: var(--cm-text-secondary);
-  font-size: 12.5px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background var(--cm-transition), color var(--cm-transition), border-color var(--cm-transition);
-}
-
-.predictions-history-view__tab:hover {
-  border-color: var(--cm-accent);
-  color: var(--cm-text-primary);
-}
-
-.predictions-history-view__tab--active {
-  background: var(--cm-accent);
-  border-color: var(--cm-accent);
-  color: #06251b;
-}
 
 .performance-summary {
   font-size: 12.5px;

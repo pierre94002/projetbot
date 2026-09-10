@@ -16,6 +16,7 @@ import MatchesTable from '@/components/matches/MatchesTable.vue';
 import AnalysisResultPanel from '@/components/analysis/AnalysisResultPanel.vue';
 import SafestPicksSummary from '@/components/analysis/SafestPicksSummary.vue';
 import AppModal from '@/components/common/AppModal.vue';
+import TabbedView from '@/components/common/TabbedView.vue';
 import MatchesFilterBar from '@/components/matches/MatchesFilterBar.vue';
 import StandingsTable from '@/components/matches/StandingsTable.vue';
 import TeamStatsView from '@/views/TeamStatsView.vue';
@@ -38,6 +39,11 @@ const teamStatsModalStore = useTeamStatsModalStore();
 // que des pages séparées, pour regrouper tout ce qui concerne les
 // matchs/statistiques à un seul endroit.
 const activeTab = ref('matches'); // 'matches' | 'stats' | 'squad'
+const TABS = [
+  { value: 'matches', label: 'Matchs' },
+  { value: 'stats', label: 'Statistiques ligue' },
+  { value: 'squad', label: 'Compo & joueurs' }
+];
 
 const searchQuery = ref('');
 const leagueQuery = ref('');
@@ -199,17 +205,7 @@ onMounted(() => {
 
 <template>
   <div class="matches-view">
-    <div class="matches-view__tabs">
-      <button type="button" class="matches-view__tab" :class="{ 'matches-view__tab--active': activeTab === 'matches' }" @click="activeTab = 'matches'">
-        Matchs
-      </button>
-      <button type="button" class="matches-view__tab" :class="{ 'matches-view__tab--active': activeTab === 'stats' }" @click="activeTab = 'stats'">
-        Statistiques ligue
-      </button>
-      <button type="button" class="matches-view__tab" :class="{ 'matches-view__tab--active': activeTab === 'squad' }" @click="activeTab = 'squad'">
-        Compo &amp; joueurs
-      </button>
-    </div>
+    <TabbedView v-model="activeTab" :tabs="TABS" />
 
     <TeamStatsView v-if="activeTab === 'stats'" />
     <TeamSquadView v-else-if="activeTab === 'squad'" />
@@ -308,34 +304,6 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
-
-.matches-view__tabs {
-  display: flex;
-  gap: 6px;
-}
-
-.matches-view__tab {
-  padding: 7px 15px;
-  border-radius: 999px;
-  border: 1px solid var(--cm-border);
-  background: var(--cm-surface-alt);
-  color: var(--cm-text-secondary);
-  font-size: 12.5px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background var(--cm-transition), color var(--cm-transition), border-color var(--cm-transition);
-}
-
-.matches-view__tab:hover {
-  border-color: var(--cm-accent);
-  color: var(--cm-text-primary);
-}
-
-.matches-view__tab--active {
-  background: var(--cm-accent);
-  border-color: var(--cm-accent);
-  color: #06251b;
 }
 
 .matches-view__controls {
