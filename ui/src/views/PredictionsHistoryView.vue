@@ -217,6 +217,20 @@ function getScore(matchId) {
   return scores[matchId];
 }
 
+function hasMatchResult(matchId) {
+  const score = getScore(matchId);
+  return score.home !== null && score.away !== null;
+}
+
+// La section IA s'affiche dès qu'il y a quelque chose à montrer : soit une
+// analyse déjà faite (avant-match, même si le match n'est pas encore joué —
+// pour pouvoir la relire depuis Historique moteur sans attendre le résultat),
+// soit un match déjà réglé sans analyse (message explicatif). Un match ni
+// analysé ni réglé n'a rien à afficher ici.
+function showMatchAi(matchId) {
+  return Boolean(matchAiAnalysisStore.byMatchId[matchId]) || hasMatchResult(matchId);
+}
+
 function onScoreInput(matchId, side, event) {
   const raw = event.target.value;
   getScore(matchId)[side] = raw === '' ? null : Number(raw);
@@ -633,12 +647,13 @@ onMounted(() => {
             </div>
           </div>
 
-          <div v-if="getScore(group.matchId).home !== null && getScore(group.matchId).away !== null" class="match-group__ai">
+          <div v-if="showMatchAi(group.matchId)" class="match-group__ai">
             <MatchAiAnalysisPanel
               :connected="aiAnalysisStore.status?.connected ?? false"
               :running="matchAiAnalysisStore.running"
               :entry="matchAiAnalysisStore.byMatchId[group.matchId] ?? null"
               :allow-pre-match="false"
+              :has-result="hasMatchResult(group.matchId)"
               @run-post-match="handleRunPostMatchAi(group.matchId)"
             />
           </div>

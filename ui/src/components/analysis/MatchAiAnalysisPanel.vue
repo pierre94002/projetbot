@@ -8,7 +8,11 @@ defineProps({
   entry: { type: Object, default: null }, // { analysis, postMatchReview? } | null
   // false dans Historique moteur : le match est déjà joué, proposer de
   // lancer une analyse "avant-match" n'a plus de sens à ce stade.
-  allowPreMatch: { type: Boolean, default: true }
+  allowPreMatch: { type: Boolean, default: true },
+  // false dans Historique moteur tant que le score n'est pas saisi : le
+  // bouton "après-match" échouerait côté serveur (résultat requis), donc on
+  // affiche un message d'attente à la place plutôt qu'un bouton voué à échouer.
+  hasResult: { type: Boolean, default: true }
 });
 
 defineEmits(['run-pre-match', 'run-post-match']);
@@ -35,23 +39,12 @@ defineEmits(['run-pre-match', 'run-post-match']);
       <div class="match-ai__block">
         <p class="match-ai__summary">{{ entry.analysis.summary }}</p>
 
-        <div v-if="entry.analysis.keyFactors?.length" class="match-ai-factors-wrap">
-          <table class="match-ai-factors">
-            <thead>
-              <tr>
-                <th>Facteur</th>
-                <th>Constat</th>
-                <th>Preuve</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(factor, index) in entry.analysis.keyFactors" :key="index">
-                <td><span class="match-ai-factors__factor">{{ factor.factor }}</span></td>
-                <td>{{ factor.observation }}</td>
-                <td class="cm-text-muted">{{ factor.evidence }}</td>
-              </tr>
-            </tbody>
-          </table>
+        <div v-if="entry.analysis.keyFactors?.length" class="match-ai-factors">
+          <div v-for="(factor, index) in entry.analysis.keyFactors" :key="index" class="match-ai-factor">
+            <span class="match-ai-factor__badge">{{ factor.factor }}</span>
+            <p class="match-ai-factor__observation">{{ factor.observation }}</p>
+            <p class="cm-text-muted match-ai-factor__evidence">{{ factor.evidence }}</p>
+          </div>
         </div>
 
         <p class="match-ai__alignment"><strong>Par rapport au moteur : </strong>{{ entry.analysis.alignmentWithModel }}</p>
@@ -66,6 +59,8 @@ defineEmits(['run-pre-match', 'run-post-match']);
         <p class="match-ai__alignment"><strong>Résultat vs moteur : </strong>{{ entry.postMatchReview.outcomeVsEngine }}</p>
         <p v-if="entry.postMatchReview.caveats" class="cm-text-muted match-ai__caveats">{{ entry.postMatchReview.caveats }}</p>
       </div>
+
+      <p v-else-if="!hasResult" class="cm-text-muted match-ai__hint">L'analyse après-match sera disponible une fois le résultat de ce match saisi.</p>
 
       <AppButton v-else variant="secondary" size="sm" :loading="running" @click="$emit('run-post-match')">
         <template #icon><AppIcon name="bolt" :size="14" /></template>
@@ -127,53 +122,40 @@ defineEmits(['run-pre-match', 'run-post-match']);
   font-style: italic;
 }
 
-.match-ai-factors-wrap {
-  overflow-x: auto;
-}
-
 .match-ai-factors {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 12px;
-  table-layout: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.match-ai-factors th,
-.match-ai-factors td {
-  padding: 6px 9px;
-  text-align: left;
-  vertical-align: top;
-  border-bottom: 1px solid var(--cm-border-soft);
-  white-space: normal;
-  overflow-wrap: break-word;
+.match-ai-factor {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 10px;
+  background: var(--cm-surface-hover);
+  border-radius: var(--cm-radius-sm);
 }
 
-.match-ai-factors th {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  color: var(--cm-text-muted);
-  font-weight: 600;
-}
-
-.match-ai-factors th:nth-child(1),
-.match-ai-factors td:nth-child(1) {
-  width: 18%;
-}
-
-.match-ai-factors tbody tr:last-child td {
-  border-bottom: none;
-}
-
-.match-ai-factors__factor {
-  display: inline-block;
+.match-ai-factor__badge {
+  align-self: flex-start;
   padding: 2px 7px;
   border-radius: 999px;
-  background: var(--cm-surface-hover);
+  background: var(--cm-surface);
   color: var(--cm-text-secondary);
   font-size: 9.5px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.3px;
+}
+
+.match-ai-factor__observation {
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.match-ai-factor__evidence {
+  font-size: 11px;
+  line-height: 1.4;
 }
 </style>

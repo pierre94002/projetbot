@@ -33,6 +33,35 @@ function findStandingRow(standings, teamName) {
   return standings?.rows?.find((row) => row.teamName.trim().toLowerCase() === normalized) ?? null;
 }
 
+// Filet de sécurité : de rares réponses laissent fuiter des fragments de
+// balises façon ancien format de function-calling texte (ex. "</caveats>
+// </invoke>") au lieu de s'en tenir uniquement au JSON de l'outil natif —
+// retiré ici plutôt que d'afficher ce bruit tel quel dans l'UI. Un texte de
+// match légitime ne contient jamais de séquence "<...>" , donc aucun risque
+// de retirer du contenu valide.
+function stripLeakedTags(text) {
+  if (typeof text !== 'string') return text;
+  return text.replace(/<\/?[a-zA-Z_][\w:-]*(?:\s+[^<>]*)?>/g, '').trim();
+}
+
+function sanitizeToolInput(input) {
+  const sanitized = {};
+  for (const [key, value] of Object.entries(input)) {
+    if (typeof value === 'string') {
+      sanitized[key] = stripLeakedTags(value);
+    } else if (Array.isArray(value)) {
+      sanitized[key] = value.map((item) =>
+        item && typeof item === 'object'
+          ? Object.fromEntries(Object.entries(item).map(([k, v]) => [k, stripLeakedTags(v)]))
+          : stripLeakedTags(item)
+      );
+    } else {
+      sanitized[key] = value;
+    }
+  }
+  return sanitized;
+}
+
 function curateEngineSummary(engineResult) {
   return {
     label: engineResult.label ?? null,
@@ -120,7 +149,7 @@ export async function runPreMatchAnalysis({ matchId, home, away, league, engineR
     model,
     engineSnapshot: engineSummary,
     usage: response.usage ?? null,
-    analysis: toolUse.input
+    analysis: sanitizeToolInput(toolUse.input)
   });
 }
 
@@ -168,5 +197,5 @@ export async function runPostMatchAnalysis({ matchId }) {
   const toolUse = response.content?.find((b) => b.type === 'tool_use' && b.name === 'submit_post_match_review');
   if (!toolUse) throw new DomainError('Réponse Anthropic inattendue (pas de résultat structuré).', { status: 502 });
 
-  return savePostMatchReview(matchId, { ...toolUse.input, model, usage: response.usage ?? null, createdAt: new Date().toISOString() });
+  return savePostMatchReview(matchId, { ...sanitizeToolInput(toolUse.input), model, usage: response.usage ?? null, createdAt: new Date().toISOString() });
 }
