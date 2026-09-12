@@ -410,6 +410,7 @@ onMounted(() => {
   predictionsStore.fetchPredictions();
   betsStore.fetchBets();
   if (!aiAnalysisStore.status) aiAnalysisStore.fetchStatus();
+  matchAiAnalysisStore.fetchAll();
   // Nécessaire pour que le clic sur une équipe puisse résoudre la compo en
   // direct (teamStatsModalStore croise le matchId avec matchesStore) — sans
   // ça, arriver ici directement (sans passer par Matchs/Mes paris avant)
@@ -424,10 +425,6 @@ onMounted(() => {
     .then(({ results }) => {
       for (const result of results) {
         scores[result.matchId] = { home: result.homeGoals, away: result.awayGoals };
-        // Coût nul (lecture disque locale, pas d'appel externe) — seuls les
-        // matchs déjà réglés nous intéressent ici, l'analyse après-match ne
-        // s'affichant que pour ceux-là.
-        matchAiAnalysisStore.fetchForMatch(result.matchId).catch(() => {});
       }
     })
     .catch(() => {});
@@ -565,6 +562,9 @@ onMounted(() => {
               <p class="cm-text-muted match-group__meta cm-truncate">
                 {{ formatDay(group.day) }}
                 <MatchStatusBadge :commence-time="matchKickoff(group.matchId)" class="match-group__status-badge" />
+                <span v-if="matchAiAnalysisStore.byMatchId[group.matchId]" class="match-group__ai-badge" title="Analyse IA disponible pour ce match">
+                  <AppIcon name="bolt" :size="9" />IA
+                </span>
               </p>
             </div>
             <div class="match-group__score">
@@ -787,6 +787,19 @@ onMounted(() => {
 .match-group__ai {
   padding: 12px 16px;
   border-top: 1px solid var(--cm-border-soft);
+}
+
+.match-group__ai-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 1px 5px;
+  border-radius: 999px;
+  background: var(--cm-info-soft);
+  color: var(--cm-info);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
 }
 
 .match-group__header {

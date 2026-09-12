@@ -8,6 +8,19 @@ export const useMatchAiAnalysisStore = defineStore('matchAiAnalysis', {
     running: false
   }),
   actions: {
+    // Un seul appel pour peupler byMatchId pour TOUS les matchs déjà
+    // analysés — sert aux badges "analyse IA disponible" dans les listes
+    // (Matchs, Historique moteur), plutôt qu'un fetchForMatch par match visible.
+    async fetchAll() {
+      this.loading = true;
+      try {
+        const { entries } = await matchAiAnalysisApi.getAll();
+        this.byMatchId = { ...this.byMatchId, ...Object.fromEntries(entries.map((e) => [e.matchId, e])) };
+        return entries;
+      } finally {
+        this.loading = false;
+      }
+    },
     async fetchForMatch(matchId) {
       this.loading = true;
       try {

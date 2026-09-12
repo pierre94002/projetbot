@@ -12,7 +12,8 @@ import { computeMatchStatus } from '@/utils/matchStatus.js';
 const props = defineProps({
   matches: { type: Array, required: true },
   selectedMatchId: { type: String, default: null },
-  formByMatchId: { type: Object, default: () => ({}) }
+  formByMatchId: { type: Object, default: () => ({}) },
+  aiAnalysisByMatchId: { type: Object, default: () => ({}) }
 });
 
 const emit = defineEmits(['select', 'team-click', 'view-standings', 'deselect']);
@@ -181,6 +182,9 @@ function formatDayHeader(dayKey) {
                 </span>
                 <span v-else-if="isFinished(match)" class="match-row__finished">TERMINÉ</span>
                 <template v-else>{{ formatTime(match.commenceTime) }}</template>
+                <span v-if="aiAnalysisByMatchId[match.matchId]" class="match-row__ai-badge" title="Analyse IA disponible pour ce match">
+                  <AppIcon name="bolt" :size="9" />IA
+                </span>
               </span>
 
               <span class="match-row__teams">
@@ -425,7 +429,24 @@ function formatDayHeader(dayKey) {
 }
 
 .match-row__time {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
   font-size: 11px;
+}
+
+.match-row__ai-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 1px 5px;
+  border-radius: 999px;
+  background: var(--cm-info-soft);
+  color: var(--cm-info);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
 }
 
 .match-row__live {

@@ -23,6 +23,12 @@ export function getByMatchId(matchId) {
   return readAll().find((e) => e.matchId === matchId) ?? null;
 }
 
+// Sert uniquement à savoir QUELS matchs ont une analyse (badge dans les listes
+// Matchs/Historique moteur) — un seul appel plutôt qu'un par matchId visible.
+export function listAll() {
+  return readAll();
+}
+
 // Un seul enregistrement par match : une nouvelle analyse avant-match sur le
 // même matchId remplace la précédente plutôt que d'empiler des doublons
 // (cohérent avec matchResultsRepository.js). `postMatchReview` n'est jamais

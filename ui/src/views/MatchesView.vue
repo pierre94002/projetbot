@@ -231,6 +231,7 @@ watch(
 onMounted(() => {
   if (!sourcesStore.sources.length) sourcesStore.fetchSources();
   if (!aiAnalysisStore.status) aiAnalysisStore.fetchStatus();
+  matchAiAnalysisStore.fetchAll();
   loadMatches();
 });
 </script>
@@ -291,6 +292,7 @@ onMounted(() => {
             :matches="filteredMatches"
             :selected-match-id="props.matchId"
             :form-by-match-id="matchesStore.formByMatchId"
+            :ai-analysis-by-match-id="matchAiAnalysisStore.byMatchId"
             @select="(match) => selectMatch(match.matchId)"
             @team-click="handleTeamClick"
             @view-standings="handleViewStandings"
