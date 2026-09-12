@@ -1,0 +1,167 @@
+[
+  {
+    "matchId": "50cc233d42943dcf77315adb0aaa6c09",
+    "homeName": "Real Racing Club de Santander",
+    "awayName": "Alavés",
+    "league": "La Liga - Spain",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Real Racing Club de Santander vs Alavés",
+      "expectedGoals": {
+        "home": 2.113,
+        "away": 1.043,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 2.17,
+        "draw": 3.84,
+        "away": 3.6
+      },
+      "market": {
+        "odds1": 2.37,
+        "oddsDraw": 3.37,
+        "odds2": 2.9
+      },
+      "edgePercent": 16.27,
+      "staking": {
+        "action": "RECOMMENDED",
+        "stake": 200
+      }
+    },
+    "usage": {
+      "input_tokens": 1676,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 904,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Les données disponibles sont partielles : aucune information sur le classement ni sur la forme ou les statistiques du Racing Santander, seules quelques données concernant Alavés permettent un éclairage limité. Sur ses 5 derniers matchs, Alavés affiche une forme moyenne (2N, 2V, 1D), avec des statistiques offensives modestes sur 10 matchs (xG moyen de 1,09, 3,5 tirs cadrés par match, 45,5% de possession). Ce profil suggère une équipe capable de ponctuellement gagner ou tenir le nul, mais sans domination nette dans le jeu.",
+      "keyFactors": [
+        {
+          "factor": "forme récente (Alavés)",
+          "observation": "Forme irrégulière avec plus de nuls que de victoires ou défaites sur les 5 derniers matchs.",
+          "evidence": "Résultats: N, V, V, D, N (2N, 2V, 1D sur 5 matchs)"
+        },
+        {
+          "factor": "statistiques offensives (Alavés)",
+          "observation": "Production offensive modérée et possession légèrement inférieure à 50%, cohérent avec un xG attendu du moteur inférieur à celui du Racing pour ce match.",
+          "evidence": "xG moyen 1,09, 10,5 tirs totaux et 3,5 tirs cadrés par match sur 10 matchs, possession 45,5%"
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur identifie un edge significatif sur la victoire du Racing Santander, avec un expectedGoals nettement supérieur pour l'équipe à domicile.",
+          "evidence": "expectedGoals home 2,113 vs away 1,043 ; edgePercent 16,27%"
+        }
+      ],
+      "alignmentWithModel": "Les quelques données qualitatives disponibles sur Alavés (xG modeste, possession inférieure à 50%, forme sans victoire nette dominante) ne contredisent pas l'edge du moteur en faveur du Racing Santander à domicile ; elles vont plutôt dans le même sens, sans toutefois pouvoir être confirmées faute de données sur le Racing lui-même.",
+      "caveats": "Classement des deux équipes indisponible. Aucune statistique moyenne ni forme récente disponible pour le Racing Santander (équipe à domicile), ce qui limite fortement la portée du contexte qualitatif fourni ici, basé uniquement sur les données d'Alavés."
+    },
+    "updatedAt": "2026-09-12T13:24:20.405Z",
+    "createdAt": "2026-09-12T13:24:20.405Z"
+  },
+  {
+    "matchId": "5a4aaa142d12a350f302f2fb62fef0b3",
+    "homeName": "Real Sociedad",
+    "awayName": "Celta Vigo",
+    "league": "La Liga - Spain",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Real Sociedad vs Celta Vigo",
+      "expectedGoals": {
+        "home": 1.4,
+        "away": 1.1
+      },
+      "trueOdds": {
+        "home": 2.1,
+        "draw": 3.3,
+        "away": 3.4
+      },
+      "market": {
+        "odds1": 2,
+        "oddsDraw": 3.4,
+        "odds2": 3.6
+      },
+      "edgePercent": 5.2,
+      "staking": {
+        "recommended": false
+      }
+    },
+    "usage": {
+      "input_tokens": 2104,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1118,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Le classement final de la saison place Celta Vigo (7e, 55 pts, qualifié en Europa League) nettement devant Real Sociedad (11e, 46 pts). Celta affiche une meilleure attaque et un différentiel de buts positif, tandis que la Sociedad termine avec un bilan négatif à domicile comme à l'extérieur en moyenne. La forme récente confirme cette hiérarchie : Celta plus solide sur les 5 derniers matchs, la Sociedad plus irrégulière.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Celta Vigo termine la saison largement devant Real Sociedad au classement général et avec un goal-average positif, contrairement à la Sociedad.",
+          "evidence": "Celta 7e (55 pts, +2 diff) vs Real Sociedad 11e (46 pts, -11 diff)"
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Celta Vigo montre une meilleure dynamique sur les 5 derniers matchs, avec plus de victoires que la Sociedad.",
+          "evidence": "Celta: V-D-V-V-D (3V) ; Real Sociedad: D-V-D-D-N (1V)"
+        },
+        {
+          "factor": "statistiques offensives moyennes",
+          "observation": "Sur l'échantillon récent (10 matchs), Celta produit davantage de tirs, de tirs cadrés et un xG supérieur à celui de la Sociedad.",
+          "evidence": "Celta: 6.2 tirs cadrés, 14.5 tirs total, xG 1.55 ; Real Sociedad: 3.7 tirs cadrés, 10.7 tirs total, xG 1.26"
+        },
+        {
+          "factor": "forme à domicile/extérieur (saison)",
+          "observation": "Le bilan extérieur de Celta cette saison est plus fragile que son bilan domicile, ce qui nuance son avantage face à une équipe recevant à domicile.",
+          "evidence": "Celta à l'extérieur: 27 buts marqués, 36 encaissés sur 19 matchs ; Real Sociedad à domicile: 20 buts marqués, 20 encaissés sur 19 matchs"
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif va globalement dans le sens de l'edge identifié par le modèle sur l'issue extérieure : classement, forme récente et statistiques offensives moyennes favorisent Celta Vigo. Toutefois, le bilan plus faible de Celta en déplacement et la solidité relative de la Sociedad à domicile apportent une nuance qui rejoint la prudence du moteur, celui-ci ne recommandant pas de mise malgré l'edge détecté.",
+      "caveats": "Les statistiques moyennes (tirs, xG, possession) proviennent d'un échantillon réduit de 10 matchs et ne précisent pas s'il s'agit de matchs à domicile ou à l'extérieur spécifiquement. La forme récente sur 5 matchs n'indique pas non plus le lieu (domicile/extérieur) de chaque rencontre.</caveats>\n</invoke>\n"
+    },
+    "updatedAt": "2026-09-12T13:28:16.638Z",
+    "createdAt": "2026-09-12T13:26:52.707Z",
+    "postMatchReview": {
+      "summary": "Le match s'est soldé par un score nul et vierge (0-0), un résultat qui ne favorise clairement ni l'analyse qualitative ni le chiffrage du moteur, tous deux orientés vers un avantage Celta Vigo (edge à l'extérieur, xG moteur légèrement supérieur pour Sociedad à domicile mais probabilités \"away\" les plus hautes du marché théorique). Le nul reflète en réalité un match fermé, sans doute proche du scénario neutre que le modèle plaçait à 3.3 (cote true odds draw), donc pas totalement hors radar mais pas la tendance principale identifiée.",
+      "whatWasRight": "L'analyse avait bien identifié une équilibre relatif malgré l'avantage Celta : la nuance apportée sur le bilan extérieur fragile de Celta (27 marqués/36 encaissés à l'extérieur) et la solidité de la Sociedad à domicile (20/20) laissait présager un match plus serré qu'un simple différentiel de classement ne le suggérait. Le fait que le moteur n'ait pas recommandé de mise (staking recommended:false) malgré l'edge de 5.2% converge avec cette prudence, et le résultat nul confirme qu'aucune issue nette ne s'est dégagée.",
+      "whatWasMissed": "L'analyse et le moteur tablaient tous deux sur un match avec des buts (expectedGoals 1.4 et 1.1, soit un total attendu proche de 2.5), alors que le résultat réel (0-0) montre une rencontre beaucoup plus fermée et improductive que prévu par les statistiques offensives moyennes de Celta (xG 1.55, 6.2 tirs cadrés en moyenne). Ni la forme récente ni les chiffres offensifs n'ont anticipé cette stérilité collective, ce qui suggère un facteur non capté par l'échantillon (approche tactique prudente des deux équipes, enjeu de fin de saison, ou méforme ponctuelle des attaques ce jour-là).",
+      "outcomeVsEngine": "Le résultat contredit à la fois l'edge du moteur (qui penchait pour une victoire extérieure de Celta avec la cote true odds la plus favorable à 3.4 contre 3.6 marché) et l'analyse qualitative qui privilégiait clairement Celta sur la base du classement et de la forme. Cependant, comme le moteur n'avait pas recommandé de mise sur cet edge modeste (5.2%), le nul valide indirectement la prudence du système plutôt que sa prédiction directionnelle.",
+      "caveats": "Confrontation basée sur un seul match, ce qui ne permet aucune généralisation sur la fiabilité du modèle ou de l'analyse qualitative. Aucune donnée in-match (xG réel du match, tirs cadrés, possession) n'a été fournie pour expliquer pourquoi les deux attaques, statistiquement productives en moyenne, n'ont inscrit aucun but ce jour-là.",
+      "model": "claude-sonnet-5",
+      "usage": {
+        "input_tokens": 2550,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 1130,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global"
+      },
+      "createdAt": "2026-09-12T13:28:16.637Z"
+    }
+  }
+]

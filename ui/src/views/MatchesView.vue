@@ -5,6 +5,8 @@ import { useMatchesStore } from '@/stores/matchesStore.js';
 import { useAnalysisStore } from '@/stores/analysisStore.js';
 import { useSourcesStore } from '@/stores/sourcesStore.js';
 import { useToastStore } from '@/stores/toastStore.js';
+import { useAiAnalysisStore } from '@/stores/aiAnalysisStore.js';
+import { useMatchAiAnalysisStore } from '@/stores/matchAiAnalysisStore.js';
 import AppCard from '@/components/common/AppCard.vue';
 import AppSelect from '@/components/common/AppSelect.vue';
 import AppTextField from '@/components/common/AppTextField.vue';
@@ -34,6 +36,8 @@ const analysisStore = useAnalysisStore();
 const sourcesStore = useSourcesStore();
 const toastStore = useToastStore();
 const teamStatsModalStore = useTeamStatsModalStore();
+const aiAnalysisStore = useAiAnalysisStore();
+const matchAiAnalysisStore = useMatchAiAnalysisStore();
 
 // "Statistiques ligue" et "Compo & joueurs" sont des modules autonomes
 // (store/API/état propres) — intégrés ici comme de simples onglets plutôt
@@ -107,6 +111,30 @@ async function selectMatch(matchId, { skipNavigate = false } = {}) {
     await analysisStore.analyzeMatchById(matchId, matchesStore.source, matchesStore.bankroll);
   } catch (error) {
     toastStore.error(`Analyse impossible : ${error.message}`);
+  }
+  matchAiAnalysisStore.fetchForMatch(matchId).catch(() => {});
+}
+
+async function handleRunPreMatchAi() {
+  const matchId = analysisStore.result?.matchId;
+  const match = matchesStore.matches.find((m) => m.matchId === matchId);
+  if (!match) {
+    toastStore.error('Match introuvable dans la liste actuelle — actualisez puis réessayez.');
+    return;
+  }
+  try {
+    await matchAiAnalysisStore.runPreMatch(matchId, { home: match.home, away: match.away, league: match.league, engineResult: analysisStore.result });
+  } catch (error) {
+    toastStore.error(`Analyse IA pré-match impossible : ${error.message}`);
+  }
+}
+
+async function handleRunPostMatchAi() {
+  const matchId = analysisStore.result?.matchId;
+  try {
+    await matchAiAnalysisStore.runPostMatch(matchId);
+  } catch (error) {
+    toastStore.error(`Analyse IA après-match impossible : ${error.message}`);
   }
 }
 
@@ -202,6 +230,7 @@ watch(
 
 onMounted(() => {
   if (!sourcesStore.sources.length) sourcesStore.fetchSources();
+  if (!aiAnalysisStore.status) aiAnalysisStore.fetchStatus();
   loadMatches();
 });
 </script>
@@ -290,8 +319,11 @@ onMounted(() => {
           :result="analysisStore.result"
           :averages-comparison="averagesComparison"
           :live-match-details="liveMatchDetails"
+          :match-ai="{ connected: aiAnalysisStore.status?.connected ?? false, running: matchAiAnalysisStore.running, entry: matchAiAnalysisStore.byMatchId[analysisStore.result.matchId] ?? null }"
           @compare-averages-click="handleCompareAverages"
           @show-live-match-click="handleShowLiveMatch"
+          @run-pre-match-ai-click="handleRunPreMatchAi"
+          @run-post-match-ai-click="handleRunPostMatchAi"
         />
       </AppCard>
     </div>

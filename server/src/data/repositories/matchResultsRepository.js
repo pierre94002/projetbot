@@ -35,6 +35,11 @@ export function listMatchResults() {
     .map(withNeutralScoreFields);
 }
 
+export function getResultByMatchId(matchId) {
+  const found = readResults().find((r) => r.matchId === matchId);
+  return found ? withNeutralScoreFields(found) : null;
+}
+
 // Un seul résultat par match — une nouvelle saisie sur le même match corrige
 // l'ancienne plutôt que de la dupliquer (ex. score corrigé après coup).
 export function recordMatchResult({ matchId, homeName, awayName, league, homeGoals, awayGoals }) {

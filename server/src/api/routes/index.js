@@ -11,6 +11,7 @@ import betsRoutes from './bets.routes.js';
 import predictionsRoutes from './predictions.routes.js';
 import matchResultsRoutes from './matchResults.routes.js';
 import aiAnalysisRoutes from './aiAnalysis.routes.js';
+import matchAiAnalysisRoutes from './matchAiAnalysis.routes.js';
 
 const router = Router();
 
@@ -28,5 +29,6 @@ router.use('/bets', betsRoutes);
 router.use('/predictions', predictionsRoutes);
 router.use('/match-results', matchResultsRoutes);
 router.use('/ai-analysis', aiAnalysisRoutes);
+router.use('/match-ai-analysis', matchAiAnalysisRoutes);
 
 export default router;

@@ -18,3 +18,7 @@ server/data/runtime/ai-config.json
 npm-debug.log*
 .DS_Store
 Thumbs.db
+
+# Worktrees temporaires créés par les agents Explore/Plan isolés (isolation:
+# "worktree") — pas toujours nettoyés automatiquement, jamais à versionner.
+.claude/worktrees/

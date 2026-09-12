@@ -4,6 +4,7 @@ import AppIcon from '@/components/common/AppIcon.vue';
 import AppButton from '@/components/common/AppButton.vue';
 import CollapsibleSection from '@/components/common/CollapsibleSection.vue';
 import MatchStatsPanel from '@/components/matches/MatchStatsPanel.vue';
+import MatchAiAnalysisPanel from './MatchAiAnalysisPanel.vue';
 import { formatOdds } from '@/utils/format.js';
 import { SHOTS_ON_TARGET_LINES, CORNER_LINES, combinedLinesFromValues, goalLinesWithOdds, bothTeamsScorePercentFromOdds } from '@/utils/betTrends.js';
 import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
@@ -15,10 +16,11 @@ const teamStatsModalStore = useTeamStatsModalStore();
 const props = defineProps({
   result: { type: Object, required: true },
   averagesComparison: { type: Object, default: null }, // { loading, error, teams, homeTeamId, homeName, awayName }
-  liveMatchDetails: { type: Object, default: null } // { loading, error, data }
+  liveMatchDetails: { type: Object, default: null }, // { loading, error, data }
+  matchAi: { type: Object, default: () => ({ connected: false, running: false, entry: null }) }
 });
 
-defineEmits(['compare-averages-click', 'show-live-match-click']);
+defineEmits(['compare-averages-click', 'show-live-match-click', 'run-pre-match-ai-click', 'run-post-match-ai-click']);
 
 // Bouton "Voir le direct" affiché uniquement pour un match dont l'heure de
 // coup d'envoi est passée depuis moins de 130 min (cf. matchStatus.js) —
@@ -91,6 +93,19 @@ const cornersLinesSuggestion = computed(() => {
         Voir le direct
       </button>
     </div>
+
+    <CollapsibleSection default-open class="analysis__match-ai">
+      <template #header>
+        <p class="analysis__odds-1x2-head">Analyse IA</p>
+      </template>
+      <MatchAiAnalysisPanel
+        :connected="matchAi.connected"
+        :running="matchAi.running"
+        :entry="matchAi.entry"
+        @run-pre-match="$emit('run-pre-match-ai-click')"
+        @run-post-match="$emit('run-post-match-ai-click')"
+      />
+    </CollapsibleSection>
 
     <CollapsibleSection v-if="liveMatchDetails" default-open class="analysis__live-match">
       <template #header>
@@ -335,6 +350,12 @@ const cornersLinesSuggestion = computed(() => {
 }
 
 .analysis__live-match {
+  padding: 12px 14px;
+  background: var(--cm-surface-alt);
+  border-radius: var(--cm-radius);
+}
+
+.analysis__match-ai {
   padding: 12px 14px;
   background: var(--cm-surface-alt);
   border-radius: var(--cm-radius);
