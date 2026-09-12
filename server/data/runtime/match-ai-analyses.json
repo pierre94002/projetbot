@@ -163,5 +163,134 @@
       },
       "createdAt": "2026-09-12T13:28:16.637Z"
     }
+  },
+  {
+    "matchId": "69178ef705263258d50abce330d9101f",
+    "homeName": "Athletic Bilbao",
+    "awayName": "Elche CF",
+    "league": "La Liga - Spain",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Athletic Bilbao vs Elche CF",
+      "expectedGoals": {
+        "home": 1.919,
+        "away": 0.936,
+        "source": "league-baseline"
+      },
+      "trueOdds": {
+        "home": 1.67,
+        "draw": 4.29,
+        "away": 5.96
+      },
+      "market": {
+        "odds1": 1.56,
+        "oddsDraw": 4.02,
+        "odds2": 5.63
+      },
+      "edgePercent": -0.2,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 1574,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 626,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Aucune donnée qualitative n'est disponible pour ce match (ni classement, ni forme récente, ni statistiques moyennes des deux équipes). Le seul élément exploitable reste donc le chiffrage du moteur CôteMaster, qui attribue un xG nettement supérieur à Athletic Bilbao (1.919) par rapport à Elche CF (0.936), suggérant une domination attendue à domicile.</summary>\n<keyFactors>[{\"factor\":\"expected goals (modèle)\",\"observation\":\"Le modèle attribue un avantage offensif clair à Athletic Bilbao à domicile face à Elche CF.\",\"evidence\":\"xG domicile 1.919 vs xG extérieur 0.936\"},{\"factor\":\"edge du modèle\",\"observation\":\"L'écart entre la cote juste calculée et la cote du marché est très faible, ce qui a conduit le moteur à ne recommander aucune mise.\",\"evidence\":\"edgePercent: -0.2%, staking.action: PASS\"}]</keyFactors>\n<alignmentWithModel\">En l'absence totale de contexte qualitatif (classement, forme, statistiques), il n'est pas possible de confirmer, nuancer ou contredire l'edge chiffré du moteur. L'analyse qualitative ne peut donc ni renforcer ni tempérer la position de \"PASS\" retenue par le modèle ; elle reste neutre faute de données.</alignmentWithModel>\n<caveats>Classement des deux équipes non disponible. Statistiques moyennes (homeStats/awayStats) absentes. Forme récente (homeForm/awayForm) non renseignée. L'analyse qualitative repose donc uniquement sur les chiffres du moteur, sans validation contextuelle externe.</caveats>\n</invoke>\n"
+    },
+    "updatedAt": "2026-09-12T17:57:33.279Z",
+    "createdAt": "2026-09-12T17:57:33.279Z"
+  },
+  {
+    "matchId": "fc0154734861d4a222bdb50e15d2bee2",
+    "homeName": "Real Madrid",
+    "awayName": "Rayo Vallecano",
+    "league": "La Liga - Spain",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Real Madrid vs Rayo Vallecano",
+      "expectedGoals": {
+        "home": 2.182,
+        "away": 0.619,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 1.25,
+        "draw": 7.37,
+        "away": 15.81
+      },
+      "market": {
+        "odds1": 1.13,
+        "oddsDraw": 8.32,
+        "odds2": 17.51
+      },
+      "edgePercent": -3.79,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 2126,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1135,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Le Real Madrid, dauphin du championnat (2e, 84 pts), reçoit un Rayo Vallecano solide mais nettement moins performant (8e, 52 pts). La forme récente et les statistiques offensives/défensives des deux équipes confirment une hiérarchie claire en faveur du Real, cohérente avec l'écart d'expected goals du moteur.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Écart important au classement final de Liga entre les deux équipes",
+          "evidence": "Real Madrid 2e avec 84 pts (26V-6N-6D, diff +40) contre Rayo Vallecano 8e avec 52 pts (13V-13N-12D, diff -4)"
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Le Real affiche une meilleure dynamique sur les 5 derniers matchs, même si Rayo reste invaincu récemment",
+          "evidence": "Real Madrid: V-V-V-D-V ; Rayo Vallecano: N-V-N-V-V"
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Nette supériorité du Real en volume de jeu offensif et possession sur l'échantillon récent",
+          "evidence": "Real: 18.9 tirs/match dont 7.5 cadrés, 60.5% possession, xG 2.23 vs Rayo: 14.4 tirs/match dont 5.1 cadrés, 54.1% possession, xG 1.11"
+        },
+        {
+          "factor": "performance domicile/extérieur",
+          "observation": "Le Real est très solide à domicile alors que Rayo peine à l'extérieur",
+          "evidence": "Real à domicile: 45 buts marqués / 19 encaissés sur 19 matchs ; Rayo à l'extérieur: 17 buts marqués / 19 encaissés sur 19 matchs"
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur signale un edge négatif sur ce match malgré la domination attendue du Real, ce qui traduit une cote de marché déjà très resserrée sur la victoire locale",
+          "evidence": "edgePercent -3.79%, action PASS, cote vraie 1.25 vs cote marché 1.13 sur la victoire du Real"
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif renforce clairement la logique du moteur sur la supériorité globale du Real Madrid (classement, forme, statistiques offensives et bilan domicile/extérieur), ce qui confirme l'issue la plus probable identifiée par le modèle. Cependant, ces éléments ne changent rien au constat du moteur selon lequel le marché a déjà intégré cette domination de façon excessive, d'où l'edge négatif et la recommandation de passer sur ce match.",
+      "caveats": "Aucune donnée sur les confrontations directes (head-to-head) entre les deux équipes n'est fournie. Les échantillons de forme (5 matchs) et de statistiques moyennes (10 matchs) restent limités pour capter d'éventuelles fluctuations récentes (blessures, rotation d'effectif en fin de saison, enjeu sportif résiduel).</caveats>\n</invoke>\n"
+    },
+    "updatedAt": "2026-09-12T20:02:31.887Z",
+    "createdAt": "2026-09-12T20:02:31.887Z"
   }
 ]

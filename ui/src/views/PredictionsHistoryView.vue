@@ -19,6 +19,9 @@ import { formatOdds, formatDay, formatPercent } from '@/utils/format.js';
 import { marketBreakdownLabel, extractGoalLine, namesMatch } from '@/utils/betTrends.js';
 import { matchResultsApi } from '@/services/matchResultsApi.js';
 import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
+import { useAiAnalysisStore } from '@/stores/aiAnalysisStore.js';
+import { useMatchAiAnalysisStore } from '@/stores/matchAiAnalysisStore.js';
+import MatchAiAnalysisPanel from '@/components/analysis/MatchAiAnalysisPanel.vue';
 
 const route = useRoute();
 const predictionsStore = usePredictionsStore();
@@ -26,6 +29,8 @@ const betsStore = useBetsStore();
 const matchesStore = useMatchesStore();
 const toastStore = useToastStore();
 const teamStatsModalStore = useTeamStatsModalStore();
+const aiAnalysisStore = useAiAnalysisStore();
+const matchAiAnalysisStore = useMatchAiAnalysisStore();
 
 // "Performance paris" et "Mes tickets" sont des modules autonomes (store/état
 // propres) — intégrés ici comme de simples onglets plutôt que des pages
@@ -393,9 +398,18 @@ async function removePrediction(entry) {
   }
 }
 
+async function handleRunPostMatchAi(matchId) {
+  try {
+    await matchAiAnalysisStore.runPostMatch(matchId);
+  } catch (error) {
+    toastStore.error(`Analyse IA après-match impossible : ${error.message}`);
+  }
+}
+
 onMounted(() => {
   predictionsStore.fetchPredictions();
   betsStore.fetchBets();
+  if (!aiAnalysisStore.status) aiAnalysisStore.fetchStatus();
   // Nécessaire pour que le clic sur une équipe puisse résoudre la compo en
   // direct (teamStatsModalStore croise le matchId avec matchesStore) — sans
   // ça, arriver ici directement (sans passer par Matchs/Mes paris avant)
@@ -410,6 +424,10 @@ onMounted(() => {
     .then(({ results }) => {
       for (const result of results) {
         scores[result.matchId] = { home: result.homeGoals, away: result.awayGoals };
+        // Coût nul (lecture disque locale, pas d'appel externe) — seuls les
+        // matchs déjà réglés nous intéressent ici, l'analyse après-match ne
+        // s'affichant que pour ceux-là.
+        matchAiAnalysisStore.fetchForMatch(result.matchId).catch(() => {});
       }
     })
     .catch(() => {});
@@ -614,6 +632,16 @@ onMounted(() => {
               </button>
             </div>
           </div>
+
+          <div v-if="getScore(group.matchId).home !== null && getScore(group.matchId).away !== null" class="match-group__ai">
+            <MatchAiAnalysisPanel
+              :connected="aiAnalysisStore.status?.connected ?? false"
+              :running="matchAiAnalysisStore.running"
+              :entry="matchAiAnalysisStore.byMatchId[group.matchId] ?? null"
+              :allow-pre-match="false"
+              @run-post-match="handleRunPostMatchAi(group.matchId)"
+            />
+          </div>
         </div>
           </template>
         </div>
@@ -754,6 +782,11 @@ onMounted(() => {
 
 .match-group:last-child {
   border-bottom: none;
+}
+
+.match-group__ai {
+  padding: 12px 16px;
+  border-top: 1px solid var(--cm-border-soft);
 }
 
 .match-group__header {

@@ -5,7 +5,10 @@ import AppIcon from '@/components/common/AppIcon.vue';
 defineProps({
   connected: { type: Boolean, default: false },
   running: { type: Boolean, default: false },
-  entry: { type: Object, default: null } // { analysis, postMatchReview? } | null
+  entry: { type: Object, default: null }, // { analysis, postMatchReview? } | null
+  // false dans Historique moteur : le match est déjà joué, proposer de
+  // lancer une analyse "avant-match" n'a plus de sens à ce stade.
+  allowPreMatch: { type: Boolean, default: true }
 });
 
 defineEmits(['run-pre-match', 'run-post-match']);
@@ -16,11 +19,16 @@ defineEmits(['run-pre-match', 'run-post-match']);
     <p v-if="!connected" class="cm-text-muted match-ai__hint">Connectez une clé API Anthropic depuis Réglages > Connexion IA pour activer l'analyse IA.</p>
 
     <template v-else-if="!entry?.analysis">
-      <AppButton variant="primary" size="sm" :loading="running" @click="$emit('run-pre-match')">
-        <template #icon><AppIcon name="bolt" :size="14" /></template>
-        Lancer l'analyse IA
-      </AppButton>
-      <p class="cm-text-muted match-ai__hint">Commentaire qualitatif de Claude en complément du chiffrage du moteur — coût de quelques centimes.</p>
+      <template v-if="allowPreMatch">
+        <AppButton variant="primary" size="sm" :loading="running" @click="$emit('run-pre-match')">
+          <template #icon><AppIcon name="bolt" :size="14" /></template>
+          Lancer l'analyse IA
+        </AppButton>
+        <p class="cm-text-muted match-ai__hint">Commentaire qualitatif de Claude en complément du chiffrage du moteur — coût de quelques centimes.</p>
+      </template>
+      <p v-else class="cm-text-muted match-ai__hint">
+        Aucune analyse avant-match n'a été faite pour ce match — l'analyse après-match nécessite une analyse avant-match préalable.
+      </p>
     </template>
 
     <template v-else>
