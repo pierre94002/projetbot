@@ -292,5 +292,227 @@
     },
     "updatedAt": "2026-09-12T20:02:31.887Z",
     "createdAt": "2026-09-12T20:02:31.887Z"
+  },
+  {
+    "matchId": "0eba3c2d3bcf1d1fe4ab3180a3d03152",
+    "homeName": "Celta Vigo",
+    "awayName": "Málaga",
+    "league": "La Liga - Spain",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Celta Vigo vs Málaga",
+      "expectedGoals": {
+        "home": 0.5,
+        "away": 0.5,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 2.22,
+        "draw": 3.03,
+        "away": 4.53
+      },
+      "market": {
+        "odds1": 1.71,
+        "oddsDraw": 3.41,
+        "odds2": 4.45
+      },
+      "edgePercent": -15.29,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 1857,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1004,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Celta Vigo présente un profil solide sur la saison écoulée (7e, 55 pts, 16V-7N-15D) avec un net avantage à domicile (32 buts marqués / 21 encaissés sur 19 matchs). La forme récente est correcte (3V-2D sur les 5 derniers). Aucune donnée n'est disponible pour Málaga, ce qui limite fortement la comparaison entre les deux équipes.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Celta termine dans le milieu de tableau haut, avec qualification européenne, signe d'une saison globalement positive",
+          "evidence": "7e place, 55 points, 16V-7N-15D, diff de buts +2"
+        },
+        {
+          "factor": "forme à domicile",
+          "observation": "Celta est nettement plus performant à domicile qu'à l'extérieur sur la saison",
+          "evidence": "Domicile: 32 buts pour / 21 contre sur 19 matchs vs extérieur: 27 pour / 36 contre"
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Tendance récente favorable pour Celta sur les 5 derniers matchs",
+          "evidence": "Résultats récents: V, D, V, V, D (3V-2D)"
+        },
+        {
+          "factor": "statistiques offensives récentes",
+          "observation": "Celta génère un volume de tirs conséquent sur ses 10 derniers matchs",
+          "evidence": "14.5 tirs totaux dont 6.2 cadrés en moyenne, xG moyen de 1.55, possession 53.3%"
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur signale un edge négatif significatif, incitant à passer sur ce match malgré des cotes du marché plus basses que la cote réelle calculée sur le favori",
+          "evidence": "edgePercent -15.29%, action PASS, cote vraie domicile 2.22 vs cote marché 1.71"
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif disponible sur Celta (forme correcte, solidité à domicile, volume offensif notable) pourrait sembler favorable à l'équipe locale, mais l'absence totale de données sur Málaga empêche toute mise en perspective comparative fiable. Ce déséquilibre informationnel renforce plutôt la prudence du moteur, qui recommande de passer sur ce match plutôt que de le nuancer.",
+      "caveats": "Aucune donnée disponible pour Málaga : classement, forme récente et statistiques moyennes sont absents. Le xG affiché par le moteur (0.5/0.5) contraste avec le xG moyen de Celta sur 10 matchs (1.55), sans qu'il soit possible d'expliquer cet écart faute de données comparatives sur l'adversaire."
+    },
+    "updatedAt": "2026-09-12T23:15:09.480Z",
+    "createdAt": "2026-09-12T23:15:09.480Z"
+  },
+  {
+    "matchId": "6406438af00a2a42a81d6b2f1656d474",
+    "homeName": "Levante",
+    "awayName": "Barcelona",
+    "league": "La Liga - Spain",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Levante vs Barcelona",
+      "expectedGoals": {
+        "home": 0.5,
+        "away": 0.5,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 6.73,
+        "draw": 4,
+        "away": 1.66
+      },
+      "market": {
+        "odds1": 9.33,
+        "oddsDraw": 6.22,
+        "odds2": 1.26
+      },
+      "edgePercent": 47.4,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 1841,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1030,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Barcelone aborde ce déplacement en position de force écrasante : leader du championnat avec 88 points sur 38 matches (28V-4N-6D), une différence de buts de +63 et un rendement à l'extérieur particulièrement solide (50 buts marqués, seulement 19 encaissés sur 19 matches). La forme récente confirme cette dynamique (4V-1D sur les 5 derniers matches), avec des statistiques offensives moyennes impressionnantes sur l'échantillon récent (xG 2.3, 20 tirs et 72.2% de possession en moyenne). Aucune donnée de classement ou de forme n'est disponible pour Levante, ce qui limite la lecture du contexte côté domicile.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Barcelone termine la saison en tête du championnat avec un bilan quasi parfait à l'extérieur.",
+          "evidence": "1er, 88 pts, 28V-4N-6D, à l'extérieur : 19 matches, 50 buts pour, 19 contre"
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Barcelone affiche une dynamique très positive sur ses cinq derniers matches.",
+          "evidence": "Forme: V-D-V-V-V (4V, 1D sur 5)"
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Les données offensives récentes de Barcelone montrent une domination nette en tirs et possession.",
+          "evidence": "Moyennes sur 10 matches: 20 tirs totaux, 6.8 tirs cadrés, xG 2.3, possession 72.2%, 8.2 corners"
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur identifie un edge important sur la victoire de Barcelone mais recommande de ne pas miser.",
+          "evidence": "Edge 47.4%, cote vraie équipe extérieure 1.66 vs cote marché 1.26, staking action: PASS"
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif renforce clairement le sens de l'edge chiffré par le moteur en faveur de Barcelone : classement, forme et statistiques offensives convergent vers une nette supériorité de l'équipe visiteuse. Cela dit, ces éléments ne permettent pas d'évaluer si l'ampleur de l'edge (47.4%) est justifiée, la décision de staking (PASS) relevant uniquement du calibrage du moteur.",
+      "caveats": "Aucune donnée de classement disponible pour Levante (standings.home = null). Aucune statistique moyenne disponible pour Levante (homeStats = null). Aucune forme récente disponible pour Levante (homeForm.results vide, sampleSize=0), ce qui empêche toute comparaison directe entre les deux équipes sur ces critères."
+    },
+    "updatedAt": "2026-09-13T00:13:20.861Z",
+    "createdAt": "2026-09-13T00:13:20.861Z"
+  },
+  {
+    "matchId": "15e3bf25540c88237a06c03df1cb334b",
+    "homeName": "Getafe",
+    "awayName": "Deportivo La Coruña",
+    "league": "La Liga - Spain",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Getafe vs Deportivo La Coruña",
+      "expectedGoals": {
+        "home": 0.5,
+        "away": 0.5,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 2.62,
+        "draw": 2.69,
+        "away": 4.06
+      },
+      "market": {
+        "odds1": 2.08,
+        "oddsDraw": 2.77,
+        "odds2": 3.75
+      },
+      "edgePercent": -12.01,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 1854,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 968,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Getafe termine la saison à une 13e place avec un bilan équilibré mais modeste (11V-9N-18D, différence de buts négative), et sa forme récente est franchement mauvaise avec 4 défaites sur les 5 derniers matchs. Aucune donnée de classement, de forme ou de statistiques n'est disponible pour le Deportivo La Coruña, ce qui limite fortement la comparaison. Les statistiques offensives de Getafe (11.6 tirs, 3.9 cadrés en moyenne sur 10 matchs) montrent une équipe qui génère du jeu mais avec une possession faible (39.8%), cohérent avec un profil de contre-attaque.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Getafe est milieu de tableau avec une différence de buts légèrement négative, sans dominer son propre championnat.",
+          "evidence": "13e place, 42 points en 38 matchs, 34 buts pour / 39 contre, diff -5"
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Getafe traverse une période très difficile juste avant ce match.",
+          "evidence": "Forme sur 5 matchs : D, V, D, D, D (1 victoire, 4 défaites)"
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Getafe produit un volume de tirs correct mais avec une possession faible, suggérant un jeu direct plutôt qu'une domination du ballon.",
+          "evidence": "11.6 tirs totaux, 3.9 tirs cadrés, 3.9 corners, possession 39.8% sur 10 matchs, xG 1.14"
+        }
+      ],
+      "alignmentWithModel": "Le moteur affiche un edge négatif (-12.01%) et recommande de passer sur ce match, ce qui est cohérent avec le contexte qualitatif disponible : la forme récente très négative de Getafe (4 défaites sur 5) ne plaide pas en faveur d'une confiance accrue sur le favori supposé du marché, et l'absence totale de données sur Deportivo empêche de contrebalancer ou de nuancer ce signal. Le contexte qualitatif ne contredit donc pas la prudence du modèle, sans pour autant permettre de la renforcer davantage faute d'informations sur l'adversaire.",
+      "caveats": "Aucune donnée de classement, de forme récente ni de statistiques moyennes n'est disponible pour le Deportivo La Coruña, ce qui limite fortement l'analyse comparative. L'échantillon de forme de Getafe (5 matchs) et de statistiques (10 matchs) reste par ailleurs limité."
+    },
+    "updatedAt": "2026-09-13T11:27:47.136Z",
+    "createdAt": "2026-09-13T11:27:47.136Z"
   }
 ]

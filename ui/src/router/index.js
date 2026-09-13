@@ -29,6 +29,13 @@ const routes = [
     meta: { title: 'Historique moteur' }
   },
   {
+    path: '/historique-moteur/:matchId',
+    name: 'prediction-match-detail',
+    component: () => import('@/views/PredictionMatchDetailView.vue'),
+    props: true,
+    meta: { title: 'Détail du match' }
+  },
+  {
     path: '/performance-paris',
     redirect: '/historique-moteur'
   },

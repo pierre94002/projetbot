@@ -1,5 +1,68 @@
 [
   {
+    "id": "4ebddfde-0ae8-49e0-a4a4-03a147dc7039",
+    "createdAt": "2026-09-12T23:13:01.773Z",
+    "model": "claude-sonnet-5",
+    "datasetMeta": {
+      "requestedLimit": 50,
+      "settledTotalAvailable": 238,
+      "returnedCount": 50,
+      "enrichedCount": 6
+    },
+    "usage": {
+      "input_tokens": 13586,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2206,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Sur les 50 pronostics analysés (9 matchs), le taux de réussite global est élevé (~80%, 40/50 corrects). Les marchés \"Total buts\" et \"Buts — équipe favorite (Moins de 3.5)\" affichent une fiabilité quasi parfaite, tandis que le marché \"Les 2 équipes marquent\" (BTTS) concentre une part disproportionnée des erreurs. L'enrichissement contextuel (venue/competitionType/seasonPhase) est très partiel (seulement 1 match sur 9 matché), ce qui limite fortement les conclusions sur lieu/compétition/phase de saison.",
+      "findings": [
+        {
+          "factor": "market",
+          "observation": "Le marché 'Les 2 équipes marquent' (BTTS) concentre une proportion élevée d'erreurs par rapport aux autres marchés.",
+          "evidence": "Sur 9 occurrences du marché BTTS dans le dataset, 4 sont incorrectes (Athletic Bilbao-Elche, Millwall-Newcastle, Sunderland-Hull, Crystal Palace-Middlesbrough, Bournemouth-Lincoln), soit ~44% d'erreur, contre un taux d'erreur global d'environ 20% sur l'ensemble des 50 lignes.",
+          "suggestionText": "Il pourrait être utile d'examiner spécifiquement la calibration du modèle sur le marché BTTS (poids exogenous/structural, ou defaultCorrelation Dixon-Coles) puisque ce marché semble sur-performer en volume d'erreurs relativement aux autres, même si l'échantillon reste faible (9 paris)."
+        },
+        {
+          "factor": "market",
+          "observation": "Les marchés 'Total buts (Plus de 0.5)' et 'Buts — [équipe] Moins de 3.5' sont corrects dans quasiment 100% des cas observés.",
+          "evidence": "Sur les 9 lignes 'Total buts', 9/9 correctes ; sur les 9 lignes 'Moins de 3.5 buts' (équipe outsider), 9/9 correctes également.",
+          "suggestionText": "Ces marchés à cotes très basses (proches de 1.01-1.07) semblent quasi triviaux à prédire correctement ; cela pourrait suggérer de vérifier si l'edge affiché sur ces lignes reflète une réelle valeur ajoutée ou si le edgeThresholdMin filtre déjà correctement ce type de paris à faible intérêt économique malgré leur haute fiabilité."
+        },
+        {
+          "factor": "edge",
+          "observation": "Aucune corrélation nette n'apparaît entre l'ampleur de l'edgePercent affiché et la justesse du pronostic ; des edges très élevés (ex: 86.3%, 37.61%) coexistent avec des erreurs sur certains sous-marchés du même match.",
+          "evidence": "Le match Millwall-Newcastle (edge 86.3%) contient 3 lignes incorrectes sur 6 (BTTS, Résultat+Total buts Millwall, Buts Millwall Plus 0.5) malgré un edge très élevé ; à l'inverse Bournemouth-Lincoln (edge -1.2%, donc sous le seuil) a 5/6 lignes correctes.",
+          "suggestionText": "Il pourrait être pertinent d'analyser si edgeThresholdMin/Max capturent bien la fiabilité réelle par marché, car un edge élevé calculé au niveau du match ne semble pas garantir la justesse de chaque sous-marché associé (résultat, BTTS, etc.)."
+        },
+        {
+          "factor": "competition_type",
+          "observation": "Les matchs de coupe (EFL Cup) représentent une part importante de l'échantillon et affichent un bon taux de réussite global, mais concentrent aussi la majorité des erreurs sur le marché BTTS.",
+          "evidence": "6 des 9 matchs proviennent de l'EFL Cup (Millwall, Sunderland, Crystal Palace, Leyton Orient, Bournemouth, Chelsea) ; 4 des 5 erreurs BTTS proviennent de matchs EFL Cup.",
+          "suggestionText": "Sans enrichissement fiable (competitionType marqué 'unknown' pour 8 des 9 matchs), il est difficile de confirmer si le type 'cup' influence spécifiquement la fiabilité du marché BTTS ; ce point mériterait d'être creusé une fois l'enrichissement des données de compétition amélioré."
+        },
+        {
+          "factor": "other",
+          "observation": "Le seul match disposant d'un enrichissement complet (venue/competitionType/seasonPhase matché) est Real Madrid-Rayo Vallecano (league, late season, Bernabéu), avec un score parfait de 6/6 pronostics corrects.",
+          "evidence": "enrichment.matched=true uniquement pour les 6 lignes du match Real Madrid vs Rayo Vallecano ; toutes les autres 44 lignes ont enrichment.matched=false.",
+          "suggestionText": "Ce point isolé ne permet aucune généralisation sur l'effet du lieu ou de la phase de saison ; il faudrait un enrichissement plus large avant de tirer des conclusions sur homeAdvantage ou seasonPhase."
+        }
+      ],
+      "caveats": "L'échantillon est très limité : seulement 9 matchs distincts (50 lignes car chaque match génère jusqu'à 6 paris sur différents marchés), ce qui signifie une forte corrélation intra-match et une faible indépendance statistique entre les lignes. De plus, l'enrichissement (venue, competitionType, seasonPhase) n'est disponible que pour 1 match sur 9 (enrichment.matched=false pour 44/50 lignes), rendant impossible toute conclusion robuste sur l'effet du lieu, du type de compétition ou de la phase de saison. Les observations sur le marché BTTS et sur la relation edge/justesse reposent sur un nombre d'occurrences encore faible et mériteraient confirmation sur un échantillon plus large et plus diversifié (plus de ligues, plus de matchs par ligue, enrichissement complet) avant toute action.",
+      "sampleSizeAnalyzed": 50
+    }
+  },
+  {
     "id": "47f77832-a504-425b-996a-e49612db6745",
     "createdAt": "2026-09-02T21:02:37.716Z",
     "model": "claude-sonnet-5",

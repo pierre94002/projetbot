@@ -4,7 +4,6 @@ import { useRoute } from 'vue-router';
 import { usePredictionsStore } from '@/stores/predictionsStore.js';
 import { useBetsStore } from '@/stores/betsStore.js';
 import { useMatchesStore } from '@/stores/matchesStore.js';
-import { useToastStore } from '@/stores/toastStore.js';
 import AppCard from '@/components/common/AppCard.vue';
 import AppButton from '@/components/common/AppButton.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
@@ -15,22 +14,20 @@ import LeagueBadge from '@/components/matches/LeagueBadge.vue';
 import TabbedView from '@/components/common/TabbedView.vue';
 import BetsPerformanceView from '@/views/BetsPerformanceView.vue';
 import BetsTicketsView from '@/views/BetsTicketsView.vue';
-import { formatOdds, formatDay, formatPercent } from '@/utils/format.js';
-import { marketBreakdownLabel, extractGoalLine, namesMatch } from '@/utils/betTrends.js';
+import { formatDay, formatPercent } from '@/utils/format.js';
+import { marketBreakdownLabel } from '@/utils/betTrends.js';
 import { matchResultsApi } from '@/services/matchResultsApi.js';
 import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
-import { useAiAnalysisStore } from '@/stores/aiAnalysisStore.js';
 import { useMatchAiAnalysisStore } from '@/stores/matchAiAnalysisStore.js';
-import MatchAiAnalysisPanel from '@/components/analysis/MatchAiAnalysisPanel.vue';
+import { usePredictionSettlement } from '@/composables/usePredictionSettlement.js';
 
 const route = useRoute();
 const predictionsStore = usePredictionsStore();
 const betsStore = useBetsStore();
 const matchesStore = useMatchesStore();
-const toastStore = useToastStore();
 const teamStatsModalStore = useTeamStatsModalStore();
-const aiAnalysisStore = useAiAnalysisStore();
 const matchAiAnalysisStore = useMatchAiAnalysisStore();
+const { settling, settleMatch } = usePredictionSettlement();
 
 // "Performance paris" et "Mes tickets" sont des modules autonomes (store/état
 // propres) — intégrés ici comme de simples onglets plutôt que des pages
@@ -42,8 +39,6 @@ const TABS = [
   { value: 'tickets', label: 'Mes tickets' }
 ];
 const activeTab = ref(TABS.some((t) => t.value === route.query.onglet) ? route.query.onglet : 'moteur');
-
-const PREDICTION_STATUS_LABELS = { pending: 'En attente', correct: 'Correct', incorrect: 'Incorrect', void: 'Annulé' };
 
 // Le pronostic du moteur pour CHAQUE match scanné (pas seulement les value
 // bets), journalisé depuis la page Mes paris — sert à mesurer le taux de
@@ -210,25 +205,10 @@ function isLeagueOpen(league) {
 }
 
 const scores = reactive({}); // matchId -> { home, away }
-const settling = reactive({}); // matchId -> bool
 
 function getScore(matchId) {
   if (!scores[matchId]) scores[matchId] = { home: null, away: null };
   return scores[matchId];
-}
-
-function hasMatchResult(matchId) {
-  const score = getScore(matchId);
-  return score.home !== null && score.away !== null;
-}
-
-// La section IA s'affiche dès qu'il y a quelque chose à montrer : soit une
-// analyse déjà faite (avant-match, même si le match n'est pas encore joué —
-// pour pouvoir la relire depuis Historique moteur sans attendre le résultat),
-// soit un match déjà réglé sans analyse (message explicatif). Un match ni
-// analysé ni réglé n'a rien à afficher ici.
-function showMatchAi(matchId) {
-  return Boolean(matchAiAnalysisStore.byMatchId[matchId]) || hasMatchResult(matchId);
 }
 
 function onScoreInput(matchId, side, event) {
@@ -236,164 +216,10 @@ function onScoreInput(matchId, side, event) {
   getScore(matchId)[side] = raw === '' ? null : Number(raw);
 }
 
-// Le score final détermine mécaniquement l'issue de CHAQUE marché déjà
-// pronostiqué pour ce match (résultat, total buts, BTTS, buts par équipe,
-// résultat + total buts) — pas besoin d'une source de résultats en direct :
-// une seule saisie suffit à régler tous les marchés du match d'un coup, au
-// lieu de cliquer sur chacun. La ligne (0.5/1.5/2.5/3.5) est extraite du
-// libellé déjà enregistré plutôt que supposée fixe : le moteur journalise
-// désormais la ligne la plus probable, pas toujours la même.
-function deriveActualOutcome(entry, homeGoals, awayGoals) {
-  const total = homeGoals + awayGoals;
-  const resultSide = homeGoals > awayGoals ? 'home' : homeGoals < awayGoals ? 'away' : 'draw';
-
-  if (entry.market === 'Résultat') return resultSide;
-  if (entry.market === 'Les 2 équipes marquent') return homeGoals > 0 && awayGoals > 0 ? 'yes' : 'no';
-
-  if (entry.market === 'Total buts') {
-    const line = extractGoalLine(entry.predictedLabel);
-    return line === null ? null : total > Number(line) ? 'over' : 'under';
-  }
-  if (entry.market === `Buts — ${entry.homeName}`) {
-    const line = extractGoalLine(entry.predictedLabel);
-    return line === null ? null : homeGoals > Number(line) ? 'over' : 'under';
-  }
-  if (entry.market === `Buts — ${entry.awayName}`) {
-    const line = extractGoalLine(entry.predictedLabel);
-    return line === null ? null : awayGoals > Number(line) ? 'over' : 'under';
-  }
-  if (entry.market === 'Résultat + Total buts') {
-    const line = extractGoalLine(entry.predictedLabel);
-    if (line === null) return null;
-    const totalSide = total > Number(line) ? 'Over' : 'Under';
-    const sideKey = resultSide === 'draw' ? 'draw' : resultSide;
-    return `${sideKey}${totalSide}`;
-  }
-  return null;
-}
-
-// Même principe que deriveActualOutcome ci-dessus, mais pour un pari réel
-// (Mes paris) : le pick est un libellé humain ("Plus de 2.5 buts", "{équipe}
-// — Moins de 1.5 buts"...) plutôt qu'un enum propre, donc on en extrait la
-// ligne/le sens via texte plutôt que de comparer un champ structuré. Marché
-// non reconnu (corners, tirs cadrés...) → null, jamais deviné.
-function deriveBetLegOutcome(leg, homeGoals, awayGoals) {
-  const total = homeGoals + awayGoals;
-  const bttsYes = homeGoals > 0 && awayGoals > 0;
-  const resultSide = homeGoals > awayGoals ? 'home' : homeGoals < awayGoals ? 'away' : 'draw';
-  const pick = leg.pick ?? '';
-
-  if (leg.market === 'Résultat' || leg.market === '1N2') {
-    if (/nul/i.test(pick)) return resultSide === 'draw' ? 'won' : 'lost';
-    if (namesMatch(pick, leg.homeName)) return resultSide === 'home' ? 'won' : 'lost';
-    if (namesMatch(pick, leg.awayName)) return resultSide === 'away' ? 'won' : 'lost';
-    return null;
-  }
-
-  if (leg.market === 'Total buts') {
-    const line = extractGoalLine(pick);
-    if (line === null) return null;
-    const isOver = /plus de/i.test(pick);
-    return (total > Number(line)) === isOver ? 'won' : 'lost';
-  }
-
-  if (leg.market === 'Les 2 équipes marquent') {
-    return bttsYes === /oui/i.test(pick) ? 'won' : 'lost';
-  }
-
-  if (leg.market === 'Buts par équipe' || leg.market.startsWith('Buts — ')) {
-    const line = extractGoalLine(pick);
-    if (line === null) return null;
-    const isOver = /plus de/i.test(pick);
-    const isHomeTeam = namesMatch(pick, leg.homeName);
-    const isAwayTeam = namesMatch(pick, leg.awayName);
-    if (!isHomeTeam && !isAwayTeam) return null;
-    const teamGoals = isHomeTeam ? homeGoals : awayGoals;
-    return (teamGoals > Number(line)) === isOver ? 'won' : 'lost';
-  }
-
-  if (leg.market === 'Résultat + Total buts') {
-    const line = extractGoalLine(pick);
-    if (line === null) return null;
-    const isOver = /plus de/i.test(pick);
-    let sideMatches;
-    if (/nul/i.test(pick)) sideMatches = resultSide === 'draw';
-    else if (namesMatch(pick, leg.homeName)) sideMatches = resultSide === 'home';
-    else if (namesMatch(pick, leg.awayName)) sideMatches = resultSide === 'away';
-    else return null;
-    return sideMatches && (total > Number(line)) === isOver ? 'won' : 'lost';
-  }
-
-  return null;
-}
-
-async function settleMatch(group) {
-  const score = getScore(group.matchId);
-  if (score.home === null || score.away === null || Number.isNaN(score.home) || Number.isNaN(score.away)) return;
-
-  settling[group.matchId] = true;
-  try {
-    // Le score est aussi enregistré comme un vrai résultat (pas seulement
-    // utilisé pour régler les pronostics ci-dessous) : les prochaines
-    // analyses impliquant l'une de ces deux équipes mélangeront ce score réel
-    // à la moyenne API-Football, cf. blendGoalsWithLocalResults côté serveur.
-    await matchResultsApi.record({
-      matchId: group.matchId,
-      homeName: group.homeName,
-      awayName: group.awayName,
-      league: group.league,
-      homeGoals: score.home,
-      awayGoals: score.away
-    });
-
-    // matchesStore reste chargé en mémoire tout le temps que l'app est
-    // ouverte — sans ce retrait immédiat, un scan lancé plus tard dans "Mes
-    // paris" repartirait d'une liste de matchs encore périmée et
-    // proposerait à nouveau ce match pourtant déjà réglé.
-    matchesStore.removeMatch(group.matchId);
-
-    for (const entry of group.entries) {
-      const actual = deriveActualOutcome(entry, score.home, score.away);
-      if (actual === null) continue;
-      const status = actual === entry.predictedOutcome ? 'correct' : 'incorrect';
-      if (entry.status !== status) await predictionsStore.updateStatus(entry.id, status);
-    }
-
-    // Règle aussi les paris réels du carnet sur ce même match — seulement les
-    // sélections encore "en attente" : un statut déjà réglé à la main (ex.
-    // annulé pour match reporté) n'est jamais écrasé automatiquement.
-    let betsSettled = 0;
-    for (const bet of betsStore.bets) {
-      for (let legIndex = 0; legIndex < bet.legs.length; legIndex++) {
-        const leg = bet.legs[legIndex];
-        if (leg.matchId !== group.matchId) continue;
-        const currentStatus = leg.status ?? (bet.legs.length === 1 ? bet.status : 'pending');
-        if (currentStatus !== 'pending') continue;
-        const outcome = deriveBetLegOutcome(leg, score.home, score.away);
-        if (outcome === null) continue;
-        await betsStore.updateBetLegStatus(bet.id, legIndex, outcome);
-        betsSettled++;
-      }
-    }
-
-    toastStore.success(
-      `Score ${group.homeName} ${score.home} - ${score.away} ${group.awayName} enregistré — pronostics réglés` +
-        (betsSettled ? `, ${betsSettled} pari(s) réglé(s)` : '') +
-        ' et moyennes mises à jour pour les prochaines analyses.'
-    );
-  } catch (error) {
-    toastStore.error(`Réglage automatique impossible : ${error.message}`);
-  } finally {
-    settling[group.matchId] = false;
-  }
-}
-
-async function setPredictionStatus(entry, status) {
-  try {
-    await predictionsStore.updateStatus(entry.id, status);
-  } catch (error) {
-    toastStore.error(`Mise à jour impossible : ${error.message}`);
-  }
+// Compte par statut pour le résumé compact de chaque match (le détail
+// marché-par-marché vit désormais sur sa propre page, cf. "Voir le détail").
+function countByStatus(group, status) {
+  return group.entries.filter((e) => e.status === status).length;
 }
 
 // Les pronostics n'ont pas leur propre horodatage de coup d'envoi (seulement
@@ -404,26 +230,9 @@ function matchKickoff(matchId) {
   return matchesStore.matches.find((m) => m.matchId === matchId)?.commenceTime ?? null;
 }
 
-async function removePrediction(entry) {
-  try {
-    await predictionsStore.removeEntry(entry.id);
-  } catch (error) {
-    toastStore.error(`Suppression impossible : ${error.message}`);
-  }
-}
-
-async function handleRunPostMatchAi(matchId) {
-  try {
-    await matchAiAnalysisStore.runPostMatch(matchId);
-  } catch (error) {
-    toastStore.error(`Analyse IA après-match impossible : ${error.message}`);
-  }
-}
-
 onMounted(() => {
   predictionsStore.fetchPredictions();
   betsStore.fetchBets();
-  if (!aiAnalysisStore.status) aiAnalysisStore.fetchStatus();
   matchAiAnalysisStore.fetchAll();
   // Nécessaire pour que le clic sur une équipe puisse résoudre la compo en
   // direct (teamStatsModalStore croise le matchId avec matchesStore) — sans
@@ -612,50 +421,14 @@ onMounted(() => {
             </div>
           </div>
 
-          <div
-            v-for="entry in group.entries"
-            :key="entry.id"
-            class="bets-row"
-            :class="`bets-row--${entry.status === 'correct' ? 'won' : entry.status === 'incorrect' ? 'lost' : entry.status}`"
-          >
-            <div class="bets-row__main">
-              <p class="cm-text-muted bets-row__market cm-truncate">
-                {{ entry.market }}
-                <span v-if="entry.market === 'Résultat' && entry.action === 'RECOMMENDED'" class="cm-positive"> · value bet</span>
-              </p>
-              <p class="bets-row__pick cm-truncate">{{ entry.predictedLabel }}</p>
-            </div>
-            <div class="value-bet-row__figures">
-              <span class="cm-numeric">@ {{ formatOdds(entry.predictedOdds) }}</span>
-            </div>
-            <span
-              class="bets-row__status"
-              :class="`bets-row__status--${entry.status === 'correct' ? 'won' : entry.status === 'incorrect' ? 'lost' : entry.status}`"
-            >
-              {{ PREDICTION_STATUS_LABELS[entry.status] }}
-            </span>
-            <div class="bets-row__actions">
-              <template v-if="entry.status === 'pending'">
-                <AppButton variant="ghost" size="sm" @click="setPredictionStatus(entry, 'correct')">Correct</AppButton>
-                <AppButton variant="ghost" size="sm" @click="setPredictionStatus(entry, 'incorrect')">Incorrect</AppButton>
-                <AppButton variant="ghost" size="sm" @click="setPredictionStatus(entry, 'void')">Annulé</AppButton>
-              </template>
-              <AppButton v-else variant="ghost" size="sm" @click="setPredictionStatus(entry, 'pending')">Réouvrir</AppButton>
-              <button type="button" class="bets-row__delete" title="Supprimer" @click="removePrediction(entry)">
-                <AppIcon name="x" :size="14" />
-              </button>
-            </div>
-          </div>
-
-          <div v-if="showMatchAi(group.matchId)" class="match-group__ai">
-            <MatchAiAnalysisPanel
-              :connected="aiAnalysisStore.status?.connected ?? false"
-              :running="matchAiAnalysisStore.running"
-              :entry="matchAiAnalysisStore.byMatchId[group.matchId] ?? null"
-              :allow-pre-match="false"
-              :has-result="hasMatchResult(group.matchId)"
-              @run-post-match="handleRunPostMatchAi(group.matchId)"
-            />
+          <div class="match-group__summary">
+            <span class="cm-text-muted cm-numeric">{{ group.entries.length }} pronostic(s)</span>
+            <span v-if="countByStatus(group, 'correct')" class="cm-positive cm-numeric">{{ countByStatus(group, 'correct') }} correct(s)</span>
+            <span v-if="countByStatus(group, 'incorrect')" class="cm-negative cm-numeric">{{ countByStatus(group, 'incorrect') }} incorrect(s)</span>
+            <span v-if="countByStatus(group, 'pending')" class="cm-text-muted cm-numeric">{{ countByStatus(group, 'pending') }} en attente</span>
+            <RouterLink :to="`/historique-moteur/${group.matchId}`" class="match-group__detail-link">
+              Voir le détail <AppIcon name="chevronRight" :size="12" />
+            </RouterLink>
           </div>
         </div>
           </template>
@@ -799,11 +572,6 @@ onMounted(() => {
   border-bottom: none;
 }
 
-.match-group__ai {
-  padding: 12px 16px;
-  border-top: 1px solid var(--cm-border-soft);
-}
-
 .match-group__ai-badge {
   display: inline-flex;
   align-items: center;
@@ -873,107 +641,29 @@ onMounted(() => {
   opacity: 1;
 }
 
-.bets-row {
-  display: grid;
-  grid-template-columns: 1fr auto auto auto;
-  align-items: center;
-  gap: 16px;
-  padding: 10px 16px 10px 28px;
-  border-bottom: 1px solid var(--cm-border-soft);
-  border-left: 3px solid transparent;
-}
-
-.match-group .bets-row:last-child {
-  border-bottom: none;
-}
-
-.bets-row--won {
-  border-left-color: var(--cm-accent);
-}
-
-.bets-row--lost {
-  border-left-color: var(--cm-danger);
-}
-
-.bets-row__main {
-  min-width: 0;
-}
-
-.bets-row__market {
-  font-size: 10.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
-
-.bets-row__pick {
-  font-size: 12.5px;
-  font-weight: 600;
-  margin-top: 3px;
-}
-
-.bets-row__status {
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 10.5px;
-  font-weight: 700;
-  text-align: center;
-  background: var(--cm-surface-hover);
-  color: var(--cm-text-muted);
-}
-
-.bets-row__status--won {
-  background: var(--cm-accent-soft);
-  color: var(--cm-accent);
-}
-
-.bets-row__status--lost {
-  background: var(--cm-danger-soft);
-  color: var(--cm-danger);
-}
-
-.bets-row__status--pending {
-  background: var(--cm-accent-soft);
-  color: var(--cm-accent);
-}
-
-.bets-row__actions {
+.match-group__summary {
   display: flex;
   align-items: center;
-  gap: 4px;
-}
-
-.bets-row__delete {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  border: none;
-  border-radius: var(--cm-radius-sm);
-  background: transparent;
-  color: var(--cm-text-muted);
-  cursor: pointer;
-}
-
-.bets-row__delete:hover {
-  background: var(--cm-danger-soft);
-  color: var(--cm-danger);
-}
-
-.value-bet-row__figures {
-  display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 4px 10px;
-  font-size: 11.5px;
-  flex-shrink: 0;
+  gap: 6px 12px;
+  padding: 10px 16px;
+  font-size: 12px;
+}
+
+.match-group__detail-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: auto;
+  font-weight: 600;
+  color: var(--cm-accent);
+}
+
+.match-group__detail-link:hover {
+  color: var(--cm-accent-strong);
 }
 
 @media (max-width: 960px) {
-  .bets-row {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
   .match-group__header {
     flex-direction: column;
     align-items: flex-start;
