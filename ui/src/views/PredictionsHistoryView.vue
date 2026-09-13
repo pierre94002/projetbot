@@ -187,21 +187,23 @@ const groupedByLeague = computed(() => {
   return [...byLeague.entries()].map(([league, groups]) => ({ league, groups }));
 });
 
-// Vide par défaut : tous les championnats démarrent fermés, comme dans
-// Matchs et Mes paris.
-const expandedLeagues = ref(new Set());
+// Ouverts par défaut (contrairement à Matchs/Mes paris) : le nombre de
+// championnats en attente ici reste petit, et le point de cette page est
+// justement de retrouver un match précis (via "Voir le détail") sans clic
+// de découverte supplémentaire.
+const collapsedLeagues = ref(new Set());
 
 function toggleLeague(league) {
-  const next = new Set(expandedLeagues.value);
+  const next = new Set(collapsedLeagues.value);
   if (next.has(league)) next.delete(league);
   else next.add(league);
-  expandedLeagues.value = next;
+  collapsedLeagues.value = next;
 }
 
 // Une recherche active doit révéler ses résultats même dans un championnat
-// resté fermé — sinon la recherche semblerait ne rien trouver.
+// replié manuellement — sinon la recherche semblerait ne rien trouver.
 function isLeagueOpen(league) {
-  return Boolean(predictionsSearchQuery.value.trim()) || expandedLeagues.value.has(league);
+  return Boolean(predictionsSearchQuery.value.trim()) || !collapsedLeagues.value.has(league);
 }
 
 const scores = reactive({}); // matchId -> { home, away }
@@ -414,7 +416,7 @@ onMounted(() => {
                 size="sm"
                 :loading="settling[group.matchId]"
                 :disabled="getScore(group.matchId).home === null || getScore(group.matchId).away === null"
-                @click="settleMatch(group)"
+                @click="settleMatch(group, getScore(group.matchId))"
               >
                 Régler
               </AppButton>
