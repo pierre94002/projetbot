@@ -62,15 +62,43 @@ function loadPersistedConfig() {
   return result;
 }
 
-let currentConfigBySport = loadPersistedConfig();
+/**
+ * Cache invalidé par la date de modification du fichier, sur le modèle de
+ * matchStatsWebRepository. La config est relue à chaque analyse de match : la
+ * garder en mémoire évite de re-parser le fichier à chaque appel, mais la
+ * comparer au mtime fait qu'une modification venue d'ailleurs — édition à la
+ * main, script de fusion, restauration d'une sauvegarde — est prise en compte
+ * sans redémarrer le serveur. C'était le seul fichier de data/runtime qui
+ * exigeait encore un redémarrage.
+ */
+let cache = { mtimeMs: undefined, configBySport: null };
 
-function persistConfig() {
+function currentMtimeMs() {
+  try {
+    return fs.statSync(CONFIG_FILE_PATH).mtimeMs;
+  } catch {
+    return null; // Fichier absent : état légitime, on sert les valeurs par défaut.
+  }
+}
+
+function getConfigBySport() {
+  const mtimeMs = currentMtimeMs();
+  if (cache.configBySport && cache.mtimeMs === mtimeMs) return cache.configBySport;
+  cache = { mtimeMs, configBySport: loadPersistedConfig() };
+  return cache.configBySport;
+}
+
+function persistConfig(configBySport) {
   fs.mkdirSync(path.dirname(CONFIG_FILE_PATH), { recursive: true });
-  fs.writeFileSync(CONFIG_FILE_PATH, JSON.stringify(currentConfigBySport, null, 2), 'utf8');
+  fs.writeFileSync(CONFIG_FILE_PATH, JSON.stringify(configBySport, null, 2), 'utf8');
+  // On réaligne le cache sur le fichier qu'on vient d'écrire, sinon le
+  // prochain appel le relirait pour rien.
+  cache = { mtimeMs: currentMtimeMs(), configBySport };
 }
 
 export function getEngineConfig(sportId = 'football') {
-  return currentConfigBySport[sportId] ?? currentConfigBySport.football;
+  const configBySport = getConfigBySport();
+  return configBySport[sportId] ?? configBySport.football;
 }
 
 export function updateEngineConfig(sportId, partialConfig) {
@@ -80,16 +108,16 @@ export function updateEngineConfig(sportId, partialConfig) {
     sportId = 'football';
   }
   const current = getEngineConfig(sportId);
-  currentConfigBySport = {
-    ...currentConfigBySport,
+  const next = {
+    ...getConfigBySport(),
     [sportId]: { ...current, ...partialConfig, weights: { ...current.weights, ...partialConfig.weights } }
   };
-  persistConfig();
-  return currentConfigBySport[sportId];
+  persistConfig(next);
+  return next[sportId];
 }
 
 export function resetEngineConfig(sportId = 'football') {
-  currentConfigBySport = { ...currentConfigBySport, [sportId]: { ...DEFAULT_ENGINE_CONFIG_BY_SPORT[sportId] } };
-  persistConfig();
-  return currentConfigBySport[sportId];
+  const next = { ...getConfigBySport(), [sportId]: { ...DEFAULT_ENGINE_CONFIG_BY_SPORT[sportId] } };
+  persistConfig(next);
+  return next[sportId];
 }
