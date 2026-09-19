@@ -15,6 +15,12 @@ server/data/backups/
 # contient une clé API en clair et ne doit jamais entrer dans l'historique.
 server/data/runtime/ai-config.json
 
+# Caches et instantanés réécrits en entier à chaque appel d'API : plusieurs Mo
+# de bruit par commit, sans valeur d'historique (le cache se reconstruit tout
+# seul, l'instantané de cotes se réactualise depuis Réglages > Données).
+server/data/runtime/team-stats-cache.json
+server/data/fixtures/odds/odds-snapshot.json
+
 npm-debug.log*
 .DS_Store
 Thumbs.db
@@ -22,3 +28,16 @@ Thumbs.db
 # Worktrees temporaires créés par les agents Explore/Plan isolés (isolation:
 # "worktree") — pas toujours nettoyés automatiquement, jamais à versionner.
 .claude/worktrees/
+
+# Brut FlashScore (~110 Mo/journee) telecharge par scripts/import-flashscore-history.mjs
+server/data/runtime/flashscore-raw/
+server/data/runtime/_tmp-flashscore-import/
+# Fichiers intermediaires de scripts/csv-to-season-data.mjs (regeneres a chaque run)
+server/data/runtime/_tmp-season-import/
+
+# CSV bruts football-data.co.uk (~14 Mo, 16 championnats x 5 saisons) : source
+# gratuite et sans quota, retelechargeable a tout moment par
+#   node server/scripts/import-historical-matches.js
+# Les donnees derivees qui comptent (calendrier, classements) sont versionnees,
+# elles, dans server/data/runtime/.
+server/data/fixtures/historique/
