@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import crypto from 'node:crypto';
+import { teamNamesLikelyMatch } from '../../utils/teamNameMatch.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const RESULTS_FILE_PATH = path.resolve(__dirname, '../../../data/runtime/match-results.json');
@@ -38,6 +39,48 @@ export function listMatchResults() {
 export function getResultByMatchId(matchId) {
   const found = readResults().find((r) => r.matchId === matchId);
   return found ? withNeutralScoreFields(found) : null;
+}
+
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+const WEB_RESULT_ID = /^web-\d{4}-\d{2}-\d{2}-/;
+
+/**
+ * Retrouve le résultat d'une rencontre SANS se fier au seul matchId.
+ *
+ * Deux espaces d'identifiants coexistent : les matchs affichés par l'appli
+ * portent le matchId opaque de The Odds API, tandis que les résultats importés
+ * par merge-daily-results.mjs (recherche web) n'ont qu'un id dérivé
+ * "web-<date>-<équipes>". Comparer les deux ne donne jamais rien, et sans ce
+ * repli un match terminé restait indéfiniment dans la liste des matchs à
+ * analyser.
+ *
+ * D'où l'ordre : d'abord l'égalité de matchId (score saisi à la main depuis
+ * Historique moteur), puis le rapprochement par date (±1 jour, pour absorber
+ * les décalages de fuseau entre le coup d'envoi UTC et la date du résultat) et
+ * par noms d'équipe via le registre partagé.
+ *
+ * @returns {(matchId: string, day: string, homeName: string, awayName: string) => object|null}
+ */
+export function createResultLookup(results = listMatchResults()) {
+  const byMatchId = new Map(results.map((r) => [r.matchId, r]));
+  const webResults = results.filter((r) => typeof r.matchId === 'string' && WEB_RESULT_ID.test(r.matchId));
+
+  return (matchId, day, homeName, awayName) => {
+    const direct = byMatchId.get(matchId);
+    if (direct) return direct;
+
+    const dayMs = Date.parse(day ?? '');
+    if (!Number.isFinite(dayMs)) return null;
+
+    return (
+      webResults.find(
+        (r) =>
+          Math.abs(Date.parse(r.matchId.slice(4, 14)) - dayMs) <= ONE_DAY_MS &&
+          teamNamesLikelyMatch(r.homeName, homeName) &&
+          teamNamesLikelyMatch(r.awayName, awayName)
+      ) ?? null
+    );
+  };
 }
 
 // Un seul résultat par match — une nouvelle saisie sur le même match corrige

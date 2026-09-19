@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { matchesApi } from '@/services/matchesApi.js';
 import { teamStatsApi } from '@/services/teamStatsApi.js';
-import { matchResultsApi } from '@/services/matchResultsApi.js';
 
 export const useMatchesStore = defineStore('matches', {
   state: () => ({
@@ -19,20 +18,17 @@ export const useMatchesStore = defineStore('matches', {
       this.error = null;
       try {
         const { matches } = await matchesApi.list(this.source, this.bankroll);
-        // Un match dont le score réel a déjà été saisi (Historique moteur)
-        // est terminé — il n'a plus rien à faire dans la liste des matchs à
-        // analyser/parier, sur AUCUNE page (Matchs, Mes paris, Compo &
-        // joueurs partagent tous cette même liste). Centralisé ici plutôt
-        // que filtré séparément par chaque vue. Dégradation silencieuse si
-        // la récupération des résultats échoue : on affiche tout plutôt que
-        // de bloquer la liste des matchs pour ça.
-        const settledMatchIds = new Set(
-          await matchResultsApi
-            .list()
-            .then(({ results }) => results.map((r) => r.matchId))
-            .catch(() => [])
-        );
-        this.matches = matches.filter((match) => !settledMatchIds.has(match.matchId));
+        // Un match dont le score est connu est terminé — il n'a plus rien à
+        // faire dans la liste des matchs à analyser/parier, sur AUCUNE page
+        // (Matchs, Mes paris, Compo & joueurs partagent tous cette même
+        // liste). Centralisé ici plutôt que filtré séparément par chaque vue.
+        //
+        // C'est le serveur qui pose `settled` : un score saisi à la main porte
+        // le matchId The Odds API, mais un résultat importé par la tâche
+        // quotidienne n'a qu'un id "web-<date>-<équipes>". Les rapprocher
+        // demande le registre de noms d'équipe, qui n'existe que côté serveur
+        // — comparer les identifiants ici ne retirait jamais ces matchs-là.
+        this.matches = matches.filter((match) => !match.settled);
       } catch (error) {
         this.error = error.message;
         this.matches = [];
