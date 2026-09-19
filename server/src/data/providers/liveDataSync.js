@@ -4,21 +4,26 @@ import { saveOddsMatches, saveCompetitions } from '../repositories/fixturesRepos
 
 /**
  * Championnats suivis par CôteMaster côté The Odds API. Liste choisie le
- * 2026-09-14 (5 grands championnats + leurs 2e/3e/4e divisions déjà
- * couvertes par The Odds API + coupes européennes) — remplace un premier
- * choix arbitraire (La Liga/EFL Cup/Russie/Chine) qui ne correspondait à
- * aucun besoin précis. La Serie C italienne n'existe pas dans le catalogue
- * de The Odds API (vérifié via GET /v4/sports), donc absente ici — aucune
- * source de cotes ne la couvre. Chaque entrée consomme un crédit par appel
- * (plan gratuit "Starter" : 500/mois), sans rafraîchissement automatique
- * ailleurs dans l'appli (cf. oddsApiClient.js) — ajoutez-en ici si besoin, en
- * gardant un œil sur le quota restant renvoyé par chaque appel.
+ * 2026-09-14 (5 grands championnats + leurs 2e divisions + coupes
+ * européennes) — remplace un premier choix arbitraire (La Liga/EFL Cup/
+ * Russie/Chine) qui ne correspondait à aucun besoin précis.
+ *
+ * Volontairement ABSENTS, faute de données exploitables :
+ * - League One et League Two (3e et 4e divisions anglaises), retirées le
+ *   2026-09-19 : les cotes existent, mais aucune source d'historique ni de
+ *   statistiques ne les couvre (38 des 48 équipes n'avaient strictement
+ *   aucune donnée), donc le moteur n'avait rien pour les analyser.
+ * - La Serie C italienne, absente du catalogue de The Odds API (vérifié via
+ *   GET /v4/sports).
+ *
+ * Chaque entrée consomme un crédit par appel (plan gratuit "Starter" :
+ * 500/mois), sans rafraîchissement automatique ailleurs dans l'appli (cf.
+ * oddsApiClient.js) — ajoutez-en ici si besoin, en gardant un œil sur le
+ * quota restant renvoyé par chaque appel.
  */
 export const TRACKED_SPORT_KEYS = [
   'soccer_epl',
   'soccer_efl_champ',
-  'soccer_england_league1',
-  'soccer_england_league2',
   'soccer_england_efl_cup',
   'soccer_spain_la_liga',
   'soccer_spain_segunda_division',
