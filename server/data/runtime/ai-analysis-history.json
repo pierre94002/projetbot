@@ -1,5 +1,68 @@
 [
   {
+    "id": "5678147a-4a74-43fb-93ab-a6a27d8eab2f",
+    "createdAt": "2026-09-16T22:05:08.062Z",
+    "model": "claude-sonnet-5",
+    "datasetMeta": {
+      "requestedLimit": 50,
+      "settledTotalAvailable": 334,
+      "returnedCount": 50,
+      "enrichedCount": 0
+    },
+    "usage": {
+      "input_tokens": 13313,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 2441,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "caveats": "Échantillon très limité : 50 pronostics mais seulement 9 matchs distincts (5-6 marchés dérivés par match), tous en EFL Cup (coupe anglaise), donc aucune diversité de competitionType (100% \"unknown\" côté enrichissement, mais tous manifestement des matchs de coupe à en juger par la league). enrichment.matched=false sur 100% des lignes : venue, round et seasonPhase sont systématiquement null/unknown, ce qui rend TOUTE conclusion sur lieu ou phase de saison impossible — ce ne sont pas des facteurs analysables ici, juste un défaut d'enrichissement à corriger en amont si on veut un jour les exploiter. Les résultats par marché sont fortement corrélés entre eux car dérivés du même match (non-indépendance statistique), donc les taux de réussite par marché doivent être lus avec prudence sur un si petit nombre de matchs sources (9). Pas de repli sur les edges très élevés (>100%) en dehors de 2 matchs, donc la tendance edge/résultat action=PASS reste anecdotique.",
+      "findings": [
+        {
+          "factor": "venue",
+          "observation": "Impossible d'analyser l'effet domicile/extérieur.",
+          "evidence": "enrichment.venue est null sur les 50/50 lignes (matched:false partout).",
+          "suggestionText": "Avant de tirer des conclusions sur homeAdvantage, il faudrait fiabiliser le pipeline d'enrichissement pour obtenir un venue renseigné ; actuellement aucune donnée exploitable ne permet de juger si 1.06 est bien calibré."
+        },
+        {
+          "factor": "competition_type",
+          "observation": "Tous les matchs de l'échantillon sont des rencontres de EFL Cup (coupe), mais le champ competitionType reste 'unknown' faute de matching, empêchant toute comparaison ligue vs coupe.",
+          "evidence": "9/9 matchs ont league='EFL Cup' et enrichment.competitionType='unknown'.",
+          "suggestionText": "Si l'objectif est de vérifier si les pronostics sont moins fiables en coupe (matchs à enjeu variable, rotations d'effectifs), il faudrait d'abord que le champ competitionType soit correctement peuplé depuis la donnée league disponible, puis comparer un échantillon coupe vs un échantillon ligue avant d'envisager un ajustement de pondération structurelle."
+        },
+        {
+          "factor": "season_phase",
+          "observation": "Aucune donnée de phase de saison disponible.",
+          "evidence": "enrichment.seasonPhase='unknown' sur les 50 lignes.",
+          "suggestionText": "Ce facteur ne peut pas être audité en l'état ; à revoir une fois l'enrichissement de saison fonctionnel."
+        },
+        {
+          "factor": "market",
+          "observation": "Sur cet échantillon (9 matchs x plusieurs marchés dérivés), les marchés 'Total buts Plus de 0.5' et 'Buts — équipe X Moins de 3.5' (cotes très proches de 1.01-1.13, donc quasi-certains) sont corrects quasiment à chaque fois (8-9/9), tandis que le marché combiné 'Résultat + Total buts' échoue plus souvent (5 incorrects sur 9, soit ~44% d'échec) et le marché 'Résultat' simple est également mitigé (5 incorrects sur 9).",
+          "evidence": "Exemples d'échecs 'Résultat + Total buts': Peterborough&+0.5 (résultat 3-3), Reading&+0.5 (1-2), Ipswich&+0.5 (2-4), West Ham&+0.5 (2-3), Man Utd&+0.5 (2-3). Échecs 'Résultat': Peterborough gagne (3-3 nul), Sheffield Utd gagne (1-0 perdu), Man Utd gagne (2-3 perdu), West Ham gagne (2-3 perdu).",
+          "suggestionText": "Les marchés à très faible incertitude (quasi-évidents, cote ~1.01-1.13) gonflent mécaniquement le taux de réussite global et ne reflètent pas la qualité prédictive réelle du moteur ; à l'inverse, les marchés combinés (Résultat + Total buts) et Résultat simple concentrent la majorité des erreurs. Il pourrait être utile de séparer l'analyse de performance par granularité de marché (marchés quasi-certains vs marchés à incertitude réelle) plutôt que de mélanger tous les marchés dérivés d'un même match dans un taux de réussite unique, avant d'envisager un ajustement de weights.market."
+        },
+        {
+          "factor": "other",
+          "observation": "Le taux d'action RECOMMENDED vs PASS ne semble pas clairement associé à l'edgePercent de façon monotone dans cet échantillon : les edges les plus extrêmes (108%, 139%) sont classés PASS (donc hors des bornes edgeThresholdMin/Max actuelles ou d'un autre filtre), tandis que des edges modestes (5-9%) sont RECOMMENDED, et les deux catégories contiennent des erreurs.",
+          "evidence": "PASS avec edge=139.89% (Reading/Brentford) et edge=108.32% (Ipswich/Arsenal) contre RECOMMENDED avec edge=5.97% (Everton/Wolves) et edge=7.76% (Liverpool/Tottenham).",
+          "suggestionText": "Il pourrait être intéressant de documenter explicitement la logique qui classe en PASS les edges très élevés (probablement hors plage edgeThresholdMax=0.25 exprimée en fraction vs edgePercent en %), afin de vérifier que ce n'est pas un artefact d'unité (25% vs 139%) plutôt qu'un filtre de qualité voulu — à confirmer avant toute autre interprétation liée à edgeThresholdMax."
+        }
+      ],
+      "sampleSizeAnalyzed": 50,
+      "summary": "L'échantillon de 50 pronostics ne couvre que 9 matchs distincts, tous en EFL Cup, avec un enrichissement (venue, competitionType, seasonPhase) totalement absent (matched:false partout), ce qui bloque toute analyse par lieu ou phase de saison et rend l'analyse par type de compétition purement descriptive (100% coupe). La seule dimension réellement exploitable est le marché : les marchés quasi-certains (cotes 1.01-1.13) affichent un taux de réussite très élevé, quasi mécanique, alors que les marchés Résultat et Résultat+Total buts concentrent la quasi-totalité des erreurs observées. Un point notable mais non conclusif concerne la relation entre edgePercent et l'action RECOMMENDED/PASS, potentiellement liée à une différence d'unité (% vs fraction) plutôt qu'à un signal de qualité."
+    }
+  },
+  {
     "id": "4ebddfde-0ae8-49e0-a4a4-03a147dc7039",
     "createdAt": "2026-09-12T23:13:01.773Z",
     "model": "claude-sonnet-5",
@@ -514,69 +577,6 @@
         }
       ],
       "caveats": "Échantillon extrêmement limité : seulement 2 matchs distincts (10 lignes de marchés corrélées, donc non indépendantes statistiquement). 50% des lignes ont enrichment.matched=false, empêchant toute analyse fiable sur venue, competitionType ou seasonPhase pour la moitié des données. Toutes les actions sont 'PASS', donc aucune mise réelle n'a été testée en conditions réelles de kellyFraction/maxStakePercent. Aucune conclusion actionnable ne peut être tirée avec un niveau de confiance raisonnable sur cet échantillon ; ces observations sont indicatives et nécessitent validation sur un dataset beaucoup plus large avant toute décision.",
-      "sampleSizeAnalyzed": 10
-    }
-  },
-  {
-    "id": "5a432258-ec4c-4992-8565-68efbef36362",
-    "createdAt": "2026-09-02T20:12:31.013Z",
-    "model": "claude-sonnet-5",
-    "datasetMeta": {
-      "requestedLimit": 10,
-      "settledTotalAvailable": 10,
-      "returnedCount": 10,
-      "enrichedCount": 5
-    },
-    "usage": {
-      "input_tokens": 3988,
-      "cache_creation_input_tokens": 0,
-      "cache_read_input_tokens": 0,
-      "cache_creation": {
-        "ephemeral_5m_input_tokens": 0,
-        "ephemeral_1h_input_tokens": 0
-      },
-      "output_tokens": 2388,
-      "output_tokens_details": {
-        "thinking_tokens": 0
-      },
-      "service_tier": "standard",
-      "inference_geo": "global"
-    },
-    "analysis": {
-      "summary": "Sur ces 10 pronostics (2 matchs distincts seulement), 7/10 sont corrects (70%). Le match Barcelona-Rayo (enrichi, ligue, mid-season) affiche 5/5 corrects, tandis que le match Osasuna-Getafe (non enrichi, toutes métadonnées \"unknown\") affiche 2/5 corrects. Tous les paris sont en action PASS avec edge négatif ou faiblement positif, donc aucune mise réelle n'a été engagée — l'échantillon ne permet pas de juger l'impact réel du edgeThreshold sur le staking.",
-      "findings": [
-        {
-          "factor": "venue/enrichment",
-          "observation": "Le seul match avec enrichment.matched:true (Barcelona-Rayo, stade identifié) a un taux de réussite de 100% (5/5), alors que le match non matché (Osasuna-Getafe) tombe à 40% (2/5).",
-          "evidence": "5ab1a527... matched:true -> outcomes: correct,correct,correct,correct,incorrect (4/5 correct sur les marchés annexes, en fait 4 correct+1 incorrect = 80%, à vérifier: Rayo U1.5 incorrect, reste correct) ; bbb9408b... matched:false -> outcomes: correct,correct,incorrect,incorrect,correct (3/5 correct soit 60%). Écart notable mais sur seulement 2 matchs.",
-          "suggestionText": "Avant de tirer une conclusion sur la fiabilité selon l'enrichissement, il serait utile d'accumuler plus de matchs avec matched:true vs matched:false pour voir si l'écart persiste ; si confirmé sur un plus grand échantillon, cela pourrait justifier de pondérer différemment (ou de flaguer comme moins fiables) les pronostics sur matchs non enrichis, plutôt que d'ajuster un des poids du moteur directement."
-        },
-        {
-          "factor": "competition_type",
-          "observation": "competitionType est 'league' pour le match enrichi et 'unknown' pour l'autre — impossible de distinguer un effet compétition réel, car 'unknown' est probablement aussi une league La Liga vu le champ 'league' fourni.",
-          "evidence": "Les deux matchs appartiennent à 'La Liga - Spain' d'après le champ league, mais enrichment.competitionType diffère (league vs unknown) uniquement à cause de l'échec de matching, pas d'une vraie différence de compétition.",
-          "suggestionText": "Il serait utile de vérifier pourquoi le matching a échoué pour Osasuna-Getafe (nom d'équipe, round, date) afin de fiabiliser les futurs enrichissements et éviter de confondre 'non matché' avec 'facteur compétition' dans les analyses ultérieures."
-        },
-        {
-          "factor": "market",
-          "observation": "Le marché 'Les 2 équipes marquent' est incorrect dans les deux matchs disponibles (2/2), suggérant une possible sur-confiance du modèle sur ce marché spécifique dans cet échantillon.",
-          "evidence": "Barcelona-Rayo BTTS 'Oui' -> correct (à noter: en réalité listé comme correct dans les données) ; Osasuna-Getafe BTTS 'Oui' -> incorrect. Sur les 10 lignes, seul le marché BTTS apparaît 2 fois avec un résultat incorrect pour Osasuna-Getafe et correct pour Barcelona, donc le signal est mixte et non uniforme.",
-          "suggestionText": "Avec seulement 2 occurrences du marché BTTS, il n'y a pas assez de données pour ajuster le poids weights.market ou weights.structural spécifiquement pour ce marché ; un suivi sur un échantillon plus large de paris BTTS serait nécessaire avant toute action."
-        },
-        {
-          "factor": "season_phase",
-          "observation": "seasonPhase n'est renseigné ('mid') que pour un seul des deux matchs, l'autre étant 'unknown' faute d'enrichissement — aucune comparaison fiable n'est possible.",
-          "evidence": "5/5 lignes Barcelona-Rayo -> seasonPhase 'mid' ; 5/5 lignes Osasuna-Getafe -> seasonPhase 'unknown'.",
-          "suggestionText": "Ce facteur ne peut pas être évalué avec les données actuelles ; il faudrait un échantillon avec plusieurs phases de saison réellement enrichies (early/mid/late) pour juger d'un éventuel ajustement lié à homeAdvantage ou defaultCorrelation selon la phase de saison."
-        },
-        {
-          "factor": "market",
-          "observation": "Tous les edges sont soit négatifs (-4.76% pour Osasuna-Getafe) soit faiblement positifs (2.66% pour Barcelona-Rayo), et tous les paris sont en PASS — aucun n'a dépassé edgeThresholdMin (4%) sauf peut-être marginalement, donc aucune mise n'a été engagée malgré des issues majoritairement correctes.",
-          "evidence": "Toutes les 10 lignes ont action:'PASS'. edgePercent varie entre -4.76 et 2.66, tous inférieurs au seuil edgeThresholdMin de 4% (0.04) configuré dans le moteur.",
-          "suggestionText": "Le fait que des pronostics à edge sous le seuil se révèlent corrects à 70% dans cet échantillon pourrait interroger sur le calibrage d'edgeThresholdMin, mais avec seulement 10 lignes et 2 matchs, ce n'est pas un signal statistiquement exploitable ; un suivi sur plusieurs dizaines de matchs serait nécessaire avant d'envisager une révision de ce seuil."
-        }
-      ],
-      "caveats": "Échantillon extrêmement restreint : seulement 2 matchs distincts (10 lignes = 5 marchés x 2 matchs), ce qui ne permet aucune conclusion statistiquement robuste sur les facteurs venue, competitionType, seasonPhase ou market. La moitié des lignes (celles d'Osasuna-Getafe) ont enrichment.matched:false, donc venue/round/competitionType/seasonPhase sont inconnus pour ces lignes, limitant sévèrement toute analyse croisée avec ces facteurs. Aucune ligne n'a d'action autre que PASS, donc impossible d'évaluer l'impact réel de kellyFraction, maxStakePercent ou des seuils d'edge sur des mises effectivement engagées. Toutes les données proviennent d'une seule ligue (La Liga), donc aucune généralisation inter-compétitions n'est possible.",
       "sampleSizeAnalyzed": 10
     }
   }
