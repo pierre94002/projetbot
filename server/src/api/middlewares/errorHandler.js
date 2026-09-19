@@ -5,6 +5,24 @@ export class ApiError extends Error {
   }
 }
 
+// Express (qs) transforme "?x=a&x=b" en tableau et "?x[k]=v" en objet : les
+// couches basses appellent .trim()/.normalize() dessus et lèveraient un 500.
+export function requireStringParam(value, name) {
+  if (typeof value !== 'string' || !value.trim()) throw new ApiError(400, `Le paramètre "${name}" est requis (chaîne non vide).`);
+  return value.trim();
+}
+
+export function optionalStringParam(value, name) {
+  return value === undefined || value === '' ? undefined : requireStringParam(value, name);
+}
+
+export function optionalPositiveInt(value, name) {
+  if (value === undefined || value === '') return undefined;
+  const number = Number(value);
+  if (!Number.isInteger(number) || number < 1) throw new ApiError(400, `Le paramètre "${name}" doit être un entier positif.`);
+  return number;
+}
+
 export function notFoundHandler(req, res) {
   res.status(404).json({ error: `Route introuvable : ${req.method} ${req.originalUrl}` });
 }

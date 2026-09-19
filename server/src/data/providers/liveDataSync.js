@@ -3,36 +3,67 @@ import { getCompetitionsRaw } from './footballDataClient.js';
 import { saveOddsMatches, saveCompetitions } from '../repositories/fixturesRepository.js';
 
 /**
- * Championnats suivis par CôteMaster côté The Odds API. Volontairement
- * restreint (chaque entrée consomme des crédits sur le plan gratuit) —
- * ajoutez-en ici si besoin, en gardant un œil sur le quota restant renvoyé
- * par chaque appel.
+ * Championnats suivis par CôteMaster côté The Odds API. Liste choisie le
+ * 2026-09-14 (5 grands championnats + leurs 2e/3e/4e divisions déjà
+ * couvertes par The Odds API + coupes européennes) — remplace un premier
+ * choix arbitraire (La Liga/EFL Cup/Russie/Chine) qui ne correspondait à
+ * aucun besoin précis. La Serie C italienne n'existe pas dans le catalogue
+ * de The Odds API (vérifié via GET /v4/sports), donc absente ici — aucune
+ * source de cotes ne la couvre. Chaque entrée consomme un crédit par appel
+ * (plan gratuit "Starter" : 500/mois), sans rafraîchissement automatique
+ * ailleurs dans l'appli (cf. oddsApiClient.js) — ajoutez-en ici si besoin, en
+ * gardant un œil sur le quota restant renvoyé par chaque appel.
  */
 export const TRACKED_SPORT_KEYS = [
-  'soccer_spain_la_liga',
+  'soccer_epl',
+  'soccer_efl_champ',
+  'soccer_england_league1',
+  'soccer_england_league2',
   'soccer_england_efl_cup',
-  'soccer_china_superleague',
-  'soccer_russia_premier_league'
+  'soccer_spain_la_liga',
+  'soccer_spain_segunda_division',
+  'soccer_italy_serie_a',
+  'soccer_italy_serie_b',
+  'soccer_germany_bundesliga',
+  'soccer_germany_bundesliga2',
+  'soccer_france_ligue_one',
+  'soccer_france_ligue_two',
+  'soccer_uefa_champs_league',
+  'soccer_uefa_europa_league',
+  'soccer_uefa_europa_conference_league'
 ];
 
 /**
  * Récupère les cotes en direct pour chaque championnat suivi et remplace
  * l'instantané local (server/data/fixtures/odds/odds-snapshot.json). Ne se
  * déclenche jamais automatiquement : uniquement sur action explicite de
- * l'utilisateur, pour préserver le quota mensuel.
+ * l'utilisateur, pour préserver le quota mensuel. Une compétition en échec
+ * (coupe entre deux tours, clé hors saison) n'annule pas les autres : on
+ * sauvegarde ce qui a répondu et on remonte la liste des échecs.
  */
 export async function refreshLiveOdds() {
   const allMatches = [];
+  const sportsRefreshed = [];
+  const failures = [];
   let lastQuota = null;
 
   for (const sportKey of TRACKED_SPORT_KEYS) {
-    const { matches, quota } = await getSportOddsRaw(sportKey);
-    allMatches.push(...matches);
-    lastQuota = quota;
+    try {
+      const { matches, quota } = await getSportOddsRaw(sportKey);
+      allMatches.push(...matches);
+      sportsRefreshed.push(sportKey);
+      lastQuota = quota ?? lastQuota;
+    } catch (error) {
+      failures.push({ sportKey, message: error.message });
+    }
+  }
+
+  if (!sportsRefreshed.length) {
+    throw new Error(`Aucune compétition n'a pu être rafraîchie : ${failures.map((f) => `${f.sportKey} (${f.message})`).join(' ; ')}`);
   }
 
   saveOddsMatches(allMatches);
-  return { matchesFetched: allMatches.length, sportsRefreshed: TRACKED_SPORT_KEYS, quota: lastQuota };
+  return { matchesFetched: allMatches.length, sportsRefreshed, failures, quota: lastQuota };
 }
 
 /** Récupère la liste des compétitions en direct et remplace l'instantané local. */

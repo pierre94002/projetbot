@@ -12,6 +12,9 @@ import predictionsRoutes from './predictions.routes.js';
 import matchResultsRoutes from './matchResults.routes.js';
 import aiAnalysisRoutes from './aiAnalysis.routes.js';
 import matchAiAnalysisRoutes from './matchAiAnalysis.routes.js';
+import flashscoreRoutes from './flashscore.routes.js';
+import seasonCalendarRoutes from './seasonCalendar.routes.js';
+import matchStatsRoutes from './matchStats.routes.js';
 
 const router = Router();
 
@@ -30,5 +33,8 @@ router.use('/predictions', predictionsRoutes);
 router.use('/match-results', matchResultsRoutes);
 router.use('/ai-analysis', aiAnalysisRoutes);
 router.use('/match-ai-analysis', matchAiAnalysisRoutes);
+router.use('/flashscore', flashscoreRoutes);
+router.use('/season-calendar', seasonCalendarRoutes);
+router.use('/match-stats', matchStatsRoutes);
 
 export default router;
