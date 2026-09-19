@@ -51,10 +51,15 @@ const TEAM_ALIASES = {
   olympiakos: ['olympiacos', 'olympiakos piraeus', 'olympiacos piraeus', 'olympiacos fc'],
   omonia: ['omonoia', 'omonoia fc', 'omonia nicosia', 'ac omonia'],
   nordsjaelland: ['fc nordsjaelland', 'fc nordsjalland'],
+  copenhagen: ['f c kobenhavn', 'fc kobenhavn', 'kobenhavn', 'fc copenhagen'],
+  // Deux clubs de Craiova coexistent : on n'enregistre que la forme complete
+  // de chacun, jamais l'abrege "u craiova" qui vaut pour les deux.
+  'universitatea craiova': ['csu craiova'],
   'sheffield wednesday': ['sheffield weds'],
   'sheffield united': ['sheffield utd'],
   'west bromwich albion': ['west brom'],
   'wolverhampton wanderers': ['wolves'],
+  'queens park rangers': ['qpr'],
   'deportivo la coruna': ['dep a coruna', 'deportivo', 'dep la coruna'],
   'athletic bilbao': ['ath bilbao', 'athletic club'],
   'atletico madrid': ['ath madrid', 'atl madrid'],
@@ -62,6 +67,7 @@ const TEAM_ALIASES = {
   'rayo vallecano': ['vallecano'],
   'real sociedad': ['sociedad'],
   'saint etienne': ['st etienne', 'asse'],
+  rennes: ['stade rennais', 'stade rennais fc'],
   // Nom trop court pour le rapprochement par tokens (moins de 3 lettres).
   'az alkmaar': ['az'],
 
