@@ -92,10 +92,31 @@ for (const m of newMatches) {
   const sameDay = (e) => e.league === league && e.date === date;
   const sameOrientation = (e) => teamNamesEqual(e.homeName, homeName) || teamNamesEqual(e.awayName, awayName) || (teamNamesLikelyMatch(e.homeName, homeName) && teamNamesLikelyMatch(e.awayName, awayName));
   const swappedOrientation = (e) => teamNamesEqual(e.homeName, awayName) || teamNamesEqual(e.awayName, homeName) || (teamNamesLikelyMatch(e.homeName, awayName) && teamNamesLikelyMatch(e.awayName, homeName));
+  // Match RE-PROGRAMMÉ : la même affiche, encore "à venir", à quelques jours
+  // d'écart. Les dates de championnat bougent sans arrêt (télévision, coupes
+  // d'Europe) ; sans ce rattrapage, chaque décalage laissait l'ancienne date
+  // en "à venir" pour toujours et créait un doublon à la nouvelle. On exige
+  // la MÊME orientation : l'affiche inversée est le match retour, pas le même
+  // match. Et uniquement sur une entrée sans score : un résultat acquis ne se
+  // déplace pas.
+  const NEARBY_DAYS = 7;
+  const dayGap = (e) => Math.abs(Date.parse(e.date) - Date.parse(date)) / 86400000;
+  const rescheduled = () =>
+    calendar.find(
+      (e) =>
+        e.league === league &&
+        e.date !== date &&
+        e.status !== 'finished' &&
+        (e.homeGoals === null || e.homeGoals === undefined) &&
+        dayGap(e) <= NEARBY_DAYS &&
+        sameOrientation(e)
+    );
+
   const existing =
     calendar.find((e) => e.matchId === matchId) ??
     calendar.find((e) => sameDay(e) && sameOrientation(e)) ??
-    calendar.find((e) => sameDay(e) && swappedOrientation(e));
+    calendar.find((e) => sameDay(e) && swappedOrientation(e)) ??
+    rescheduled();
   // Report : on déplace l'entrée d'origine plutôt que d'en créer une seconde.
   if (postponedTo) {
     const targetId = `cal-${postponedTo}-${slug(homeName)}-${slug(awayName)}`;
@@ -160,10 +181,29 @@ for (const m of newMatches) {
       existing.homeGoals = incomingHomeGoals;
       existing.awayGoals = incomingAwayGoals;
     }
+    // Entrée retrouvée à une autre date (re-programmation) : on la déplace au
+    // lieu de laisser un fantôme derrière elle.
+    if (existing.date !== date) {
+      existing.date = date;
+      existing.matchId = `cal-${date}-${slug(existing.homeName)}-${slug(existing.awayName)}`;
+      moved++;
+    } else {
+      updated++;
+    }
     existing.round = round ?? existing.round ?? null;
     existing.source = source ?? existing.source ?? 'web';
     existing.updatedAt = now;
-    updated++;
+  } else if (
+    // La même affiche a DÉJÀ été jouée à quelques jours près : une source en
+    // retard la réannonce "à venir" à une date décalée. Créer l'entrée
+    // fabriquerait un match fantôme qui ne se résoudrait jamais.
+    !incomingHasScore &&
+    calendar.some(
+      (e) => e.league === league && e.status === 'finished' && dayGap(e) <= NEARBY_DAYS && sameOrientation(e)
+    )
+  ) {
+    console.error(`Ignoré (déjà joué à quelques jours près) : ${date} ${homeName}-${awayName}`);
+    skipped++;
   } else {
     calendar.push({
       id: crypto.randomUUID(),
