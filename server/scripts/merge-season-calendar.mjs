@@ -101,6 +101,13 @@ for (const m of newMatches) {
   // déplace pas.
   const NEARBY_DAYS = 7;
   const dayGap = (e) => Math.abs(Date.parse(e.date) - Date.parse(date)) / 86400000;
+  // ATTENTION : `sameOrientation` se contente d'UN seul camp identique. C'est
+  // volontaire et sûr à l'intérieur d'une même journée (une équipe n'y joue
+  // qu'une fois), mais faux dès qu'on compare deux dates : « Arsenal - Leeds »
+  // et « Arsenal - Everton » de la semaine suivante partagent un camp sans
+  // être le même match. Les règles qui traversent les dates exigent donc les
+  // DEUX camps.
+  const samePairing = (e) => teamNamesLikelyMatch(e.homeName, homeName) && teamNamesLikelyMatch(e.awayName, awayName);
   const rescheduled = () =>
     calendar.find(
       (e) =>
@@ -109,7 +116,7 @@ for (const m of newMatches) {
         e.status !== 'finished' &&
         (e.homeGoals === null || e.homeGoals === undefined) &&
         dayGap(e) <= NEARBY_DAYS &&
-        sameOrientation(e)
+        samePairing(e)
     );
 
   const existing =
@@ -198,9 +205,7 @@ for (const m of newMatches) {
     // retard la réannonce "à venir" à une date décalée. Créer l'entrée
     // fabriquerait un match fantôme qui ne se résoudrait jamais.
     !incomingHasScore &&
-    calendar.some(
-      (e) => e.league === league && e.status === 'finished' && dayGap(e) <= NEARBY_DAYS && sameOrientation(e)
-    )
+    calendar.some((e) => e.league === league && e.status === 'finished' && dayGap(e) <= NEARBY_DAYS && samePairing(e))
   ) {
     console.error(`Ignoré (déjà joué à quelques jours près) : ${date} ${homeName}-${awayName}`);
     skipped++;
