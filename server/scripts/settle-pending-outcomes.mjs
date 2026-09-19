@@ -25,37 +25,13 @@
  * -----------------------------------------------------------------------
  */
 
-import { listMatchResults } from '../src/data/repositories/matchResultsRepository.js';
+import { createResultLookup } from '../src/data/repositories/matchResultsRepository.js';
 import { listPredictions, updatePredictionStatus } from '../src/data/repositories/predictionsRepository.js';
 import { listBets, updateBetLegStatus } from '../src/data/repositories/betsRepository.js';
-import { teamNamesLikelyMatch } from '../src/utils/teamNameMatch.js';
-
-const ONE_DAY_MS = 24 * 60 * 60 * 1000;
-
-/**
- * Les pronostics et paris portent le matchId The Odds API, alors que les
- * résultats importés par merge-daily-results.mjs n'ont qu'un id dérivé
- * "web-<date>-<équipes>" : sans ce repli par date (±1 jour, fuseau) et noms
- * d'équipe, rien n'était jamais réglé automatiquement.
- */
-function buildResultLookup(results) {
-  const byMatchId = new Map(results.map((r) => [r.matchId, r]));
-  const webResults = results.filter((r) => typeof r.matchId === 'string' && /^web-\d{4}-\d{2}-\d{2}-/.test(r.matchId));
-  return (matchId, day, homeName, awayName) => {
-    const direct = byMatchId.get(matchId);
-    if (direct) return direct;
-    const dayMs = Date.parse(day ?? '');
-    if (!Number.isFinite(dayMs)) return null;
-    return (
-      webResults.find(
-        (r) =>
-          Math.abs(Date.parse(r.matchId.slice(4, 14)) - dayMs) <= ONE_DAY_MS &&
-          teamNamesLikelyMatch(r.homeName, homeName) &&
-          teamNamesLikelyMatch(r.awayName, awayName)
-      ) ?? null
-    );
-  };
-}
+// Le rapprochement matchId Odds API <-> résultat importé du web vit dans
+// matchResultsRepository (createResultLookup) : l'API des matchs s'en sert
+// aussi pour retirer de la liste les rencontres déjà terminées, et les deux
+// doivent trancher exactement pareil.
 
 const GOAL_LINE_IN_LABEL = /(?:plus|moins) de (\d+(?:[.,]\d+)?)\s*buts?/i;
 
@@ -149,7 +125,7 @@ function deriveBetLegOutcome(leg, homeGoals, awayGoals) {
 }
 
 function main() {
-  const findResult = buildResultLookup(listMatchResults());
+  const findResult = createResultLookup();
 
   let predictionsSettled = 0;
   let predictionsSkippedNoRule = 0;
