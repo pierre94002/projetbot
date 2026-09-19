@@ -18,6 +18,15 @@
  * compétition (pas seulement les nouveautés) : upsert par matchId stable
  * (date + équipes) — un match déjà connu est mis à jour (score qui tombe,
  * date décalée...), jamais dupliqué.
+ *
+ * MATCH REPORTÉ — champ optionnel "postponedTo" : "AAAA-MM-JJ", où "date"
+ * reste la date D'ORIGINE. L'entrée existante est alors DÉPLACÉE vers la
+ * nouvelle date (son matchId est recalculé) au lieu d'en créer une seconde.
+ * Sans ça, la rencontre initiale resterait éternellement "à venir" à une date
+ * passée, invisible pour tout le monde — c'est ce qui est arrivé à
+ * Levante - Athletic Club, reporté du 16 septembre au 21 octobre 2026 pour
+ * cause de pelouse inondée. L'opération est idempotente : relancée, elle ne
+ * retrouve plus rien à l'ancienne date et se contente de vérifier la nouvelle.
  * -----------------------------------------------------------------------
  */
 
@@ -57,10 +66,12 @@ const newMatches = readJson(newMatchesPath, []);
 let created = 0;
 let updated = 0;
 let skipped = 0;
+let moved = 0;
+let removed = 0;
 const now = new Date().toISOString();
 
 for (const m of newMatches) {
-  const { date, league, homeName, awayName, status, homeGoals, awayGoals, round, source } = m;
+  const { date, league, homeName, awayName, status, homeGoals, awayGoals, round, source, postponedTo } = m;
 
   if (!date || !homeName || !awayName || !league) {
     console.error(`Ignoré (données incomplètes) : ${JSON.stringify(m)}`);
@@ -85,6 +96,57 @@ for (const m of newMatches) {
     calendar.find((e) => e.matchId === matchId) ??
     calendar.find((e) => sameDay(e) && sameOrientation(e)) ??
     calendar.find((e) => sameDay(e) && swappedOrientation(e));
+  // Report : on déplace l'entrée d'origine plutôt que d'en créer une seconde.
+  if (postponedTo) {
+    const targetId = `cal-${postponedTo}-${slug(homeName)}-${slug(awayName)}`;
+    const atNewDate =
+      calendar.find((e) => e.matchId === targetId) ??
+      calendar.find((e) => e.league === league && e.date === postponedTo && (sameOrientation(e) || swappedOrientation(e)));
+
+    // Garde-fou : un match dont le score est déjà connu a bien été joué. Une
+    // source qui le dit reporté se trompe (ou parle d'une autre rencontre) —
+    // on ne détruit pas un résultat acquis sur cette foi-là.
+    if (existing && (existing.homeGoals !== null && existing.homeGoals !== undefined)) {
+      console.error(`Report ignoré, score déjà connu : ${date} ${homeName}-${awayName} (${existing.homeGoals}-${existing.awayGoals})`);
+      skipped++;
+    } else if (existing && atNewDate && existing !== atNewDate) {
+      calendar.splice(calendar.indexOf(existing), 1); // La nouvelle date est déjà au calendrier : l'ancienne fait doublon.
+      removed++;
+    } else if (existing) {
+      existing.date = postponedTo;
+      // Recalculé sur SES noms, pas ceux de la source entrante : l'entrée
+      // garde son identité, seule la date change (cf. invariant plus bas).
+      existing.matchId = `cal-${postponedTo}-${slug(existing.homeName)}-${slug(existing.awayName)}`;
+      existing.status = 'scheduled';
+      existing.homeGoals = null;
+      existing.awayGoals = null;
+      existing.round = round ?? existing.round ?? null;
+      existing.source = source ?? existing.source ?? 'web';
+      existing.updatedAt = now;
+      moved++;
+    } else if (atNewDate) {
+      atNewDate.updatedAt = now; // Déjà déplacé lors d'une exécution précédente.
+      updated++;
+    } else {
+      calendar.push({
+        id: crypto.randomUUID(),
+        matchId: targetId,
+        date: postponedTo,
+        league,
+        homeName,
+        awayName,
+        status: 'scheduled',
+        homeGoals: null,
+        awayGoals: null,
+        round: round ?? null,
+        source: source ?? 'web',
+        updatedAt: now
+      });
+      created++;
+    }
+    continue;
+  }
+
   const swapped = Boolean(existing) && existing.matchId !== matchId && !sameOrientation(existing);
   const incomingHomeGoals = (swapped ? awayGoals : homeGoals) ?? null;
   const incomingAwayGoals = (swapped ? homeGoals : awayGoals) ?? null;
@@ -124,4 +186,4 @@ for (const m of newMatches) {
 fs.mkdirSync(path.dirname(calendarPath), { recursive: true });
 fs.writeFileSync(calendarPath, JSON.stringify(calendar, null, 2), 'utf8');
 
-console.log(JSON.stringify({ created, updated, skipped, total: calendar.length }));
+console.log(JSON.stringify({ created, updated, skipped, moved, removed, total: calendar.length }));
