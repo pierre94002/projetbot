@@ -112,11 +112,31 @@ function significantTokens(name) {
   return meaningful.length ? meaningful : tokens;
 }
 
+// Villes ecrites en langue locale ou traduites selon la source : "Slavia
+// Praha" et "Slavia Prague" sont le meme club. Une equivalence par ville
+// couvre d'un coup tous les clubs qui la portent.
+const TOKEN_SYNONYMS = new Map([
+  ['praha', 'prague'],
+  ['munchen', 'munich'],
+  ['koln', 'cologne'],
+  ['wien', 'vienna'],
+  ['beograd', 'belgrade'],
+  ['moskva', 'moscow'],
+  ['lisboa', 'lisbon'],
+  ['antwerpen', 'antwerp'],
+  ['bucuresti', 'bucharest'],
+  ['warszawa', 'warsaw']
+]);
+
+const canonicalToken = (token) => TOKEN_SYNONYMS.get(token) ?? token;
+
 // Un token en abrege ("man" -> manchester) ou une terminaison qui varie
 // ("karlsruhe" -> "karlsruher", "laval" -> "lavallois"). Au-dela de 4 lettres
 // d'ecart, deux mots qui commencent pareil sont deux mots differents
 // ("villa" n'est pas "villarreal").
-function tokensEquivalent(a, b) {
+function tokensEquivalent(rawA, rawB) {
+  const a = canonicalToken(rawA);
+  const b = canonicalToken(rawB);
   if (a === b) return true;
   const [short, long] = a.length <= b.length ? [a, b] : [b, a];
   if (!long.startsWith(short)) return false;
