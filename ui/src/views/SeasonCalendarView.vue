@@ -1,6 +1,7 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { seasonCalendarApi } from '@/services/seasonCalendarApi.js';
+import { useDataVersionStore } from '@/stores/dataVersionStore.js';
 import AppCard from '@/components/common/AppCard.vue';
 import AppTextField from '@/components/common/AppTextField.vue';
 import AppSelect from '@/components/common/AppSelect.vue';
@@ -68,6 +69,19 @@ const lastUpdatedAt = computed(() => {
 });
 
 onMounted(load);
+
+// Cette vue garde son calendrier en local (pas dans un store Pinia), donc le
+// rafraîchissement automatique global ne peut pas le remettre à jour à sa
+// place : on recharge dès que l'empreinte des données côté serveur change.
+// C'est la vue la plus concernée, puisqu'elle affiche exactement ce que la
+// tâche planifiée réécrit chaque jour.
+const dataVersion = useDataVersionStore();
+watch(
+  () => dataVersion.version,
+  (next, previous) => {
+    if (previous && next && next !== previous) load();
+  }
+);
 </script>
 
 <template>
