@@ -1,35 +1,108 @@
-// Comparaison floue de noms d'équipe, partagée par toutes les sources
-// tierces dont l'orthographe ne correspond pas exactement à celle déjà
-// utilisée dans CôteMaster (Odds API/API-Football) — ex. FlashScore "Dep. A
-// Coruna" vs "Deportivo La Coruña", ou football-data.co.uk "Man United" vs
-// "Manchester United". Comparaison par recouvrement de tokens significatifs
-// plutôt qu'une égalité stricte, délibérément permissive : une source
-// additive qui rate une équipe perd juste un bonus de contexte. Le revers
-// (deux clubs distincts confondus : Inter/Milan, Paris FC/PSG) est contenu
-// par findBestTeamNameMatch — égalité exacte d'abord, puis le candidat le
-// plus proche, jamais le premier venu.
+// Comparaison de noms d'équipe, partagée par toutes les sources tierces dont
+// l'orthographe ne correspond pas à celle d'Odds API/API-Football — ex.
+// football-data.co.uk "Man United", FlashScore "Dep. A Coruna", ou un
+// classement web "Sparta Praha" la ou l'app dit "Sparta Prague".
+//
+// Deux mecanismes, dans cet ordre :
+//  1. Un REGISTRE de clubs connus (ci-dessous). Quand les deux noms y sont,
+//     le verdict est ferme : meme club ou non, sans approximation. C'est ce
+//     qui separe des clubs que tout rapprochement flou confondrait
+//     (Inter/Milan, Paris FC/PSG, Villarreal/Aston Villa, Union Berlin/SG).
+//  2. Sinon, un rapprochement flou par recouvrement de tokens, volontairement
+//     permissif : une source additive qui rate une equipe perd un bonus de
+//     contexte, pas une fonctionnalite.
 
-// Sigles de type de club et articles : présents dans beaucoup de noms sans
+// Caracteres que la decomposition Unicode (NFD) ne separe pas : sans ca,
+// "Lillestrøm" et "Lillestrom" sont deux equipes differentes.
+const LETTER_EQUIVALENTS = [
+  [/ß/g, 'ss'],
+  [/ø/g, 'o'],
+  [/æ/g, 'ae'],
+  [/œ/g, 'oe'],
+  [/đ|ð/g, 'd'],
+  [/ł/g, 'l'],
+  [/þ/g, 'th'],
+  [/ı/g, 'i']
+];
+
+function normalizeTeamName(name) {
+  let text = (name ?? '').toLowerCase();
+  for (const [pattern, replacement] of LETTER_EQUIVALENTS) text = text.replace(pattern, replacement);
+  return text
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/\([^)]*\)/g, '')
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * Clubs dont le nom varie trop d'une source a l'autre pour etre rapproches
+ * sans risque, ET clubs distincts qui se ressemblent assez pour etre
+ * confondus. Un nom present ici est resolu de facon deterministe : ajouter
+ * une entree est toujours plus sur que d'assouplir le rapprochement flou.
+ */
+const TEAM_ALIASES = {
+  // Noms radicalement differents selon la source
+  'borussia monchengladbach': ["m'gladbach", 'mgladbach', 'gladbach', 'borussia mgladbach'],
+  'crvena zvezda': ['red star belgrade', 'red star', 'fk crvena zvezda'],
+  'sparta prague': ['sparta praha', 'ac sparta praha', 'ac sparta prague'],
+  olympiakos: ['olympiacos', 'olympiakos piraeus', 'olympiacos piraeus', 'olympiacos fc'],
+  omonia: ['omonoia', 'omonoia fc', 'omonia nicosia', 'ac omonia'],
+  nordsjaelland: ['fc nordsjaelland', 'fc nordsjalland'],
+  'sheffield wednesday': ['sheffield weds'],
+  'sheffield united': ['sheffield utd'],
+  'west bromwich albion': ['west brom'],
+  'wolverhampton wanderers': ['wolves'],
+  'deportivo la coruna': ['dep a coruna', 'deportivo', 'dep la coruna'],
+  'athletic bilbao': ['ath bilbao', 'athletic club'],
+  'atletico madrid': ['ath madrid', 'atl madrid'],
+  espanyol: ['espanol', 'rcd espanyol'],
+  'rayo vallecano': ['vallecano'],
+  'real sociedad': ['sociedad'],
+  'saint etienne': ['st etienne', 'asse'],
+  // Nom trop court pour le rapprochement par tokens (moins de 3 lettres).
+  'az alkmaar': ['az'],
+
+  // Clubs DISTINCTS qui se ressemblent : chacun doit exister ici pour que le
+  // registre puisse trancher entre eux.
+  'paris saint germain': ['psg', 'paris sg'],
+  'paris fc': [],
+  'inter milan': ['inter', 'internazionale'],
+  'ac milan': ['milan'],
+  villarreal: [],
+  'aston villa': [],
+  'union berlin': ['1 fc union berlin'],
+  'union saint gilloise': ['union sg', 'royale union saint gilloise'],
+  'sporting cp': ['sporting lisbon', 'sporting clube de portugal'],
+  'sporting gijon': ['sporting de gijon'],
+  'bristol city': [],
+  'bristol rovers': [],
+  'manchester united': ['man united', 'man utd'],
+  'manchester city': ['man city'],
+  'real madrid': [],
+  'real betis': ['betis'],
+  'nottingham forest': ["nott'm forest", 'nottm forest']
+};
+
+const ALIAS_TO_CANONICAL = new Map();
+for (const [canonical, variants] of Object.entries(TEAM_ALIASES)) {
+  ALIAS_TO_CANONICAL.set(normalizeTeamName(canonical), canonical);
+  for (const variant of variants) ALIAS_TO_CANONICAL.set(normalizeTeamName(variant), canonical);
+}
+
+function canonicalTeamName(name) {
+  return ALIAS_TO_CANONICAL.get(normalizeTeamName(name)) ?? null;
+}
+
+// Sigles de type de club et articles : presents dans beaucoup de noms sans
 // rien distinguer ("and" faisait matcher Brighton and Hove Albion avec
-// Anderlecht par préfixe).
+// Anderlecht par prefixe).
 const STOP_WORDS = new Set([
   'fc', 'afc', 'cf', 'sc', 'ac', 'as', 'ss', 'ssc', 'us', 'ud', 'cd', 'sd', 'rc', 'rcd', 'bsc', 'sv', 'vfb', 'vfl', 'tsg', 'fsv',
   'sk', 'fk', 'nk', 'hnk', 'gnk', 'kv', 'rsc', 'kaa', 'krc', 'ogc', 'club', 'de', 'del', 'la', 'las', 'los', 'le', 'the', 'and', 'und'
 ]);
-// Un préfixe n'est accepté que pour une abréviation ("man" → manchester,
-// "weds" → wednesday) : au-delà, "villa" ferait matcher Villarreal avec Aston Villa.
-const MAX_PREFIX_TOKEN_LENGTH = 4;
-
-function normalizeTeamName(name) {
-  return (name ?? '')
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .replace(/\([^)]*\)/g, '')
-    .replace(/[^a-zA-Z0-9\s]/g, ' ')
-    .toLowerCase()
-    .replace(/\s+/g, ' ')
-    .trim();
-}
 
 function significantTokens(name) {
   const tokens = normalizeTeamName(name)
@@ -39,10 +112,15 @@ function significantTokens(name) {
   return meaningful.length ? meaningful : tokens;
 }
 
+// Un token en abrege ("man" -> manchester) ou une terminaison qui varie
+// ("karlsruhe" -> "karlsruher", "laval" -> "lavallois"). Au-dela de 4 lettres
+// d'ecart, deux mots qui commencent pareil sont deux mots differents
+// ("villa" n'est pas "villarreal").
 function tokensEquivalent(a, b) {
   if (a === b) return true;
   const [short, long] = a.length <= b.length ? [a, b] : [b, a];
-  return short.length <= MAX_PREFIX_TOKEN_LENGTH && long.startsWith(short);
+  if (!long.startsWith(short)) return false;
+  return short.length <= 4 || long.length - short.length <= 4;
 }
 
 function overlap(tokensA, tokensB) {
@@ -53,7 +131,10 @@ function overlap(tokensA, tokensB) {
 
 export function teamNamesEqual(a, b) {
   const normalizedA = normalizeTeamName(a);
-  return Boolean(normalizedA) && normalizedA === normalizeTeamName(b);
+  if (!normalizedA) return false;
+  if (normalizedA === normalizeTeamName(b)) return true;
+  const canonicalA = canonicalTeamName(a);
+  return Boolean(canonicalA) && canonicalA === canonicalTeamName(b);
 }
 
 export function teamNamesLikelyMatch(a, b) {
@@ -61,6 +142,11 @@ export function teamNamesLikelyMatch(a, b) {
   const normalizedB = normalizeTeamName(b);
   if (!normalizedA || !normalizedB) return false;
   if (normalizedA === normalizedB) return true;
+
+  // Deux clubs connus du registre : verdict ferme, jamais d'approximation.
+  const canonicalA = canonicalTeamName(a);
+  const canonicalB = canonicalTeamName(b);
+  if (canonicalA && canonicalB) return canonicalA === canonicalB;
 
   const tokensA = significantTokens(a);
   const tokensB = significantTokens(b);
@@ -71,17 +157,17 @@ export function teamNamesLikelyMatch(a, b) {
 }
 
 /**
- * Meilleur candidat pour un nom d'équipe : égalité (normalisée) d'abord,
- * sinon le candidat flou dont les tokens recouvrent le mieux le nom cherché
- * (Jaccard), avec le premier token comme départage ("Inter Milan" → "Inter"
- * plutôt que "Milan"). `null` si aucun candidat ne correspond ou si deux
- * restent indiscernables — mieux vaut pas de donnée qu'une autre équipe.
+ * Meilleur candidat pour un nom d'equipe : egalite (ou equivalence connue)
+ * d'abord, sinon le candidat flou dont les tokens recouvrent le mieux le nom
+ * cherche (Jaccard), avec le premier token comme departage ("Inter Milan" ->
+ * "Inter" plutot que "Milan"). `null` si aucun candidat ne correspond ou si
+ * deux restent indiscernables — mieux vaut pas de donnee qu'une autre equipe.
  */
 export function findBestTeamNameMatch(teamName, candidates, getName = (candidate) => candidate) {
   const target = normalizeTeamName(teamName);
   if (!target) return null;
 
-  const exact = candidates.find((candidate) => normalizeTeamName(getName(candidate)) === target);
+  const exact = candidates.find((candidate) => teamNamesEqual(teamName, getName(candidate)));
   if (exact) return exact;
 
   const targetTokens = significantTokens(teamName);

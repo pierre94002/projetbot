@@ -22,23 +22,49 @@ const DATA_DIR = path.resolve(__dirname, '../../../data/fixtures/historique');
  * partagés entre plusieurs pays (ex. "Super League" : Grèce ET Turquie).
  */
 const LEAGUE_CODES = {
-  E0: { countries: ['england'], leagues: ['premier league', 'epl'] },
-  E1: { countries: ['england'], leagues: ['championship'] },
-  SC0: { countries: ['scotland'], leagues: ['premiership'] },
-  D1: { countries: ['germany'], leagues: ['bundesliga'] },
-  D2: { countries: ['germany'], leagues: ['2. bundesliga', 'bundesliga 2', '2 bundesliga'] },
-  I1: { countries: ['italy'], leagues: ['serie a'] },
-  I2: { countries: ['italy'], leagues: ['serie b'] },
-  SP1: { countries: ['spain'], leagues: ['la liga', 'laliga', 'primera division'] },
-  SP2: { countries: ['spain'], leagues: ['la liga 2', 'laliga 2', 'segunda division'] },
-  F1: { countries: ['france'], leagues: ['ligue 1'] },
-  F2: { countries: ['france'], leagues: ['ligue 2'] },
-  N1: { countries: ['netherlands'], leagues: ['eredivisie'] },
-  B1: { countries: ['belgium'], leagues: ['pro league', 'jupiler pro league', 'first division a'] },
-  P1: { countries: ['portugal'], leagues: ['primeira liga', 'liga portugal'] },
-  T1: { countries: ['turkey'], leagues: ['super lig', 'super league'] },
-  G1: { countries: ['greece'], leagues: ['super league'] }
+  E0: { countries: ['england'], leagues: ['premier league', 'epl'], label: 'Premier League' },
+  E1: { countries: ['england'], leagues: ['championship'], label: 'Championship' },
+  SC0: { countries: ['scotland'], leagues: ['premiership'], label: 'Premiership' },
+  D1: { countries: ['germany'], leagues: ['bundesliga'], label: 'Bundesliga' },
+  D2: { countries: ['germany'], leagues: ['2. bundesliga', 'bundesliga 2', '2 bundesliga'], label: '2. Bundesliga' },
+  I1: { countries: ['italy'], leagues: ['serie a'], label: 'Serie A' },
+  I2: { countries: ['italy'], leagues: ['serie b'], label: 'Serie B' },
+  SP1: { countries: ['spain'], leagues: ['la liga', 'laliga', 'primera division'], label: 'La Liga' },
+  SP2: { countries: ['spain'], leagues: ['la liga 2', 'laliga 2', 'segunda division'], label: 'La Liga 2' },
+  F1: { countries: ['france'], leagues: ['ligue 1'], label: 'Ligue 1' },
+  F2: { countries: ['france'], leagues: ['ligue 2'], label: 'Ligue 2' },
+  N1: { countries: ['netherlands'], leagues: ['eredivisie'], label: 'Eredivisie' },
+  B1: { countries: ['belgium'], leagues: ['pro league', 'jupiler pro league', 'first division a'], label: 'Pro League' },
+  P1: { countries: ['portugal'], leagues: ['primeira liga', 'liga portugal'], label: 'Primeira Liga' },
+  T1: { countries: ['turkey'], leagues: ['super lig', 'super league'], label: 'Süper Lig' },
+  G1: { countries: ['greece'], leagues: ['super league'], label: 'Super League' }
 };
+
+// Une equipe promue ou relegue n'a aucun match dans sa division actuelle :
+// tout son historique est dans la division voisine (Wolfsburg en D1 alors
+// qu'il joue en D2, Hull en E1 alors qu'il joue en E0...). On l'y cherche
+// plutot que de ne rien renvoyer — en signalant d'ou vient la donnee, jamais
+// en la faisant passer pour la division du match.
+const NEIGHBOUR_CODES = {
+  E0: ['E1'],
+  E1: ['E0'],
+  D1: ['D2'],
+  D2: ['D1'],
+  I1: ['I2'],
+  I2: ['I1'],
+  SP1: ['SP2'],
+  SP2: ['SP1'],
+  F1: ['F2'],
+  F2: ['F1']
+};
+
+function describeDivision(code, primaryCode) {
+  return {
+    leagueCode: code,
+    division: code === primaryCode ? 'same' : 'other',
+    divisionLabel: LEAGUE_CODES[code]?.label ?? code
+  };
+}
 
 function normalize(text) {
   return (text ?? '')
@@ -216,13 +242,16 @@ function resolveCsvTeamName(code, teamName) {
   return findBestTeamNameMatch(teamName, names);
 }
 
-function recentMatchesForTeam(code, teamName) {
-  const csvName = resolveCsvTeamName(code, teamName);
-  if (!csvName) return { csvName: null, matches: [] };
-  const matches = (getIndex()[code] ?? [])
-    .filter((m) => m.homeTeam === csvName || m.awayTeam === csvName)
-    .sort((a, b) => (b.date?.getTime() ?? 0) - (a.date?.getTime() ?? 0));
-  return { csvName, matches };
+function recentMatchesForTeam(primaryCode, teamName) {
+  for (const code of [primaryCode, ...(NEIGHBOUR_CODES[primaryCode] ?? [])]) {
+    const csvName = resolveCsvTeamName(code, teamName);
+    if (!csvName) continue;
+    const matches = (getIndex()[code] ?? [])
+      .filter((m) => m.homeTeam === csvName || m.awayTeam === csvName)
+      .sort((a, b) => (b.date?.getTime() ?? 0) - (a.date?.getTime() ?? 0));
+    if (matches.length) return { code, csvName, matches };
+  }
+  return { code: null, csvName: null, matches: [] };
 }
 
 function average(values) {
@@ -243,7 +272,7 @@ export function resolveHistoricalStatsByName(teamName, leagueLabel, sampleSize =
   const code = resolveLeagueCode(leagueLabel);
   if (!code || !teamName) return null;
 
-  const { csvName, matches } = recentMatchesForTeam(code, teamName);
+  const { code: foundCode, csvName, matches } = recentMatchesForTeam(code, teamName);
   const recent = matches.slice(0, sampleSize);
   if (!recent.length) return null;
 
@@ -257,14 +286,14 @@ export function resolveHistoricalStatsByName(teamName, leagueLabel, sampleSize =
     yellowCards: average(recent.map((m) => (isHome(m) ? m.homeYellowCards : m.awayYellowCards)))
   };
 
-  return { sampleSize: recent.length, averages };
+  return { sampleSize: recent.length, averages, ...describeDivision(foundCode, code) };
 }
 
 export function resolveHistoricalFormByName(teamName, leagueLabel, sampleSize = 5) {
   const code = resolveLeagueCode(leagueLabel);
   if (!code || !teamName) return null;
 
-  const { csvName, matches } = recentMatchesForTeam(code, teamName);
+  const { code: foundCode, csvName, matches } = recentMatchesForTeam(code, teamName);
   const recent = matches.slice(0, sampleSize);
   if (!recent.length) return null;
 
@@ -275,7 +304,7 @@ export function resolveHistoricalFormByName(teamName, leagueLabel, sampleSize = 
     return won ? 'V' : 'D';
   });
 
-  return { sampleSize: recent.length, results };
+  return { sampleSize: recent.length, results, ...describeDivision(foundCode, code) };
 }
 
 /**
@@ -285,10 +314,7 @@ export function resolveHistoricalFormByName(teamName, leagueLabel, sampleSize = 
  * hors couverture du plan gratuit, coupe...), jamais un remplacement quand la
  * source live a déjà répondu.
  */
-export function resolveHistoricalStandingRow(teamName, leagueLabel) {
-  const code = resolveLeagueCode(leagueLabel);
-  if (!code || !teamName) return null;
-
+function standingRowForCode(code, teamName) {
   const leagueDir = path.join(DATA_DIR, code);
   if (!fs.existsSync(leagueDir)) return null;
 
@@ -298,19 +324,31 @@ export function resolveHistoricalStandingRow(teamName, leagueLabel) {
 
   const rows = rowsToObjects(parseCsvText(fs.readFileSync(path.join(leagueDir, latestFile), 'utf8'))).map((r) => ({ ...r, Equipe: fixTeamName(r.Equipe) }));
   const row = findBestTeamNameMatch(teamName, rows, (r) => r.Equipe);
-  if (!row) return null;
+  return row ? { row, season: latestFile.replace('-classement.csv', '') } : null;
+}
 
-  return {
-    source: 'football-data.co.uk (historique)',
-    season: latestFile.replace('-classement.csv', ''),
-    rank: Number(row.Rang),
-    played: Number(row.J),
-    won: Number(row.V),
-    drawn: Number(row.N),
-    lost: Number(row.D),
-    goalsFor: Number(row.BP),
-    goalsAgainst: Number(row.BC),
-    goalDiff: Number(row.Diff),
-    points: Number(row.Pts)
-  };
+export function resolveHistoricalStandingRow(teamName, leagueLabel) {
+  const code = resolveLeagueCode(leagueLabel);
+  if (!code || !teamName) return null;
+
+  for (const candidate of [code, ...(NEIGHBOUR_CODES[code] ?? [])]) {
+    const found = standingRowForCode(candidate, teamName);
+    if (!found) continue;
+    const { row, season } = found;
+    return {
+      source: 'football-data.co.uk (historique)',
+      season,
+      ...describeDivision(candidate, code),
+      rank: Number(row.Rang),
+      played: Number(row.J),
+      won: Number(row.V),
+      drawn: Number(row.N),
+      lost: Number(row.D),
+      goalsFor: Number(row.BP),
+      goalsAgainst: Number(row.BC),
+      goalDiff: Number(row.Diff),
+      points: Number(row.Pts)
+    };
+  }
+  return null;
 }
