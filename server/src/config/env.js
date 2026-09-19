@@ -23,5 +23,9 @@ export const env = {
     apiKey: process.env.ANTHROPIC_API_KEY || '',
     model: process.env.ANTHROPIC_MODEL || '',
     workspaceId: process.env.ANTHROPIC_WORKSPACE_ID || ''
+  },
+  apify: {
+    apiToken: process.env.APIFY_API_TOKEN || '',
+    flashscoreActor: process.env.APIFY_FLASHSCORE_ACTOR || 'statanow/flashscore-scraper-live'
   }
 };
