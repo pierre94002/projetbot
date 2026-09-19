@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import { useMatchesStore } from '@/stores/matchesStore.js';
 import { useToastStore } from '@/stores/toastStore.js';
+import { useDataVersionStore } from '@/stores/dataVersionStore.js';
 import { standingsApi } from '@/services/standingsApi.js';
 import { teamStatsApi } from '@/services/teamStatsApi.js';
 import AppCard from '@/components/common/AppCard.vue';
@@ -61,6 +62,31 @@ async function loadAverages() {
 }
 
 watch(selectedLeague, loadAverages);
+
+/**
+ * Rechargement du seul classement quand les données changent côté serveur.
+ *
+ * Volontairement PAS `loadAverages()` : celui-ci vide `fullStatsByTeam`, or ce
+ * détail complet a coûté un appel par équipe que l'utilisateur a déclenché
+ * explicitement. On rafraîchit donc les lignes (lecture d'un fichier local,
+ * gratuite) et on laisse le détail en place — le bouton "Charger le détail
+ * complet" reste là pour le recalculer si besoin.
+ */
+const dataVersionStore = useDataVersionStore();
+watch(
+  () => dataVersionStore.version,
+  async (next, previous) => {
+    if (!previous || !next || next === previous) return;
+    if (!selectedLeague.value || standings.value.loading) return;
+    try {
+      const result = await standingsApi.get(selectedLeague.value);
+      standings.value = { loading: false, error: null, rows: result.rows };
+    } catch {
+      // Silencieux : rafraîchissement d'arrière-plan, on garde l'affichage
+      // précédent plutôt que d'alerter sur une opération non demandée.
+    }
+  }
+);
 
 /**
  * Boucle sur toutes les équipes du championnat par petits lots (pas toutes

@@ -7,6 +7,7 @@ import { useSourcesStore } from '@/stores/sourcesStore.js';
 import { useToastStore } from '@/stores/toastStore.js';
 import { useAiAnalysisStore } from '@/stores/aiAnalysisStore.js';
 import { useMatchAiAnalysisStore } from '@/stores/matchAiAnalysisStore.js';
+import { useDataVersionStore } from '@/stores/dataVersionStore.js';
 import AppCard from '@/components/common/AppCard.vue';
 import AppSelect from '@/components/common/AppSelect.vue';
 import AppTextField from '@/components/common/AppTextField.vue';
@@ -38,6 +39,7 @@ const analysisStore = useAnalysisStore();
 const sourcesStore = useSourcesStore();
 const toastStore = useToastStore();
 const teamStatsModalStore = useTeamStatsModalStore();
+const dataVersionStore = useDataVersionStore();
 const aiAnalysisStore = useAiAnalysisStore();
 const matchAiAnalysisStore = useMatchAiAnalysisStore();
 
@@ -213,14 +215,27 @@ function handleDeselect() {
 }
 
 async function handleViewStandings(league) {
-  standings.value = { league, loading: true, error: null, rows: [] };
+  // `key` conserve le libellé demandé : `league` affiché peut être réécrit par
+  // le serveur (leagueName), et c'est `key` qu'il faut réutiliser pour
+  // recharger le même classement.
+  standings.value = { key: league, league, loading: true, error: null, rows: [] };
   try {
     const result = await standingsApi.get(league);
-    standings.value = { league: result.leagueName ?? league, loading: false, error: null, rows: result.rows };
+    standings.value = { key: league, league: result.leagueName ?? league, loading: false, error: null, rows: result.rows };
   } catch (error) {
-    standings.value = { league, loading: false, error: error.message, rows: [] };
+    standings.value = { key: league, league, loading: false, error: error.message, rows: [] };
   }
 }
+
+// Le classement affiché dans la modale vit en local (pas dans un store), donc
+// le rafraîchissement automatique global ne le couvre pas : on le recharge si
+// la modale est ouverte au moment où les données changent côté serveur.
+watch(
+  () => dataVersionStore.version,
+  (next, previous) => {
+    if (previous && next && next !== previous && standings.value?.key) handleViewStandings(standings.value.key);
+  }
+);
 
 watch(
   () => matchesStore.source,

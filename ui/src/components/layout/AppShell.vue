@@ -3,6 +3,11 @@ import AppSidebar from './AppSidebar.vue';
 import AppTopbar from './AppTopbar.vue';
 import ToastStack from '@/components/common/ToastStack.vue';
 import TeamStatsModal from '@/components/matches/TeamStatsModal.vue';
+import { useDataAutoRefresh } from '@/composables/useDataAutoRefresh.js';
+
+// Monté ici parce que AppShell enveloppe toute l'appli et n'est jamais démonté :
+// la surveillance tourne donc quelle que soit la page affichée.
+useDataAutoRefresh();
 </script>
 
 <template>

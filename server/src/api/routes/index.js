@@ -15,6 +15,7 @@ import matchAiAnalysisRoutes from './matchAiAnalysis.routes.js';
 import flashscoreRoutes from './flashscore.routes.js';
 import seasonCalendarRoutes from './seasonCalendar.routes.js';
 import matchStatsRoutes from './matchStats.routes.js';
+import dataVersionRoutes from './dataVersion.routes.js';
 
 const router = Router();
 
@@ -36,5 +37,6 @@ router.use('/match-ai-analysis', matchAiAnalysisRoutes);
 router.use('/flashscore', flashscoreRoutes);
 router.use('/season-calendar', seasonCalendarRoutes);
 router.use('/match-stats', matchStatsRoutes);
+router.use('/data-version', dataVersionRoutes);
 
 export default router;
