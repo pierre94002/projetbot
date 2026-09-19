@@ -13,10 +13,16 @@ export const teamStatsApi = {
     httpClient.get(
       `/team-stats/average-stats-by-name?name=${encodeURIComponent(name)}&league=${encodeURIComponent(league)}&sampleSize=${sampleSize}`
     ),
-  getLineupsByName: (name, commenceTime) =>
-    httpClient.get(`/team-stats/lineups-by-name?name=${encodeURIComponent(name)}&commenceTime=${encodeURIComponent(commenceTime)}`),
+  getLineupsByName: (name, commenceTime, away, league) =>
+    httpClient.get(
+      `/team-stats/lineups-by-name?name=${encodeURIComponent(name)}&commenceTime=${encodeURIComponent(commenceTime)}` +
+        (away ? `&away=${encodeURIComponent(away)}` : '') +
+        (league ? `&league=${encodeURIComponent(league)}` : '')
+    ),
   getLiveMatchByName: (name, commenceTime) =>
     httpClient.get(`/team-stats/live-match-by-name?name=${encodeURIComponent(name)}&commenceTime=${encodeURIComponent(commenceTime)}`),
-  getPlayersByName: (name, season) =>
-    httpClient.get(`/team-stats/players-by-name?name=${encodeURIComponent(name)}${season ? `&season=${season}` : ''}`)
+  getPlayersByName: (name, season, league) =>
+    httpClient.get(
+      `/team-stats/players-by-name?name=${encodeURIComponent(name)}${season ? `&season=${season}` : ''}${league ? `&league=${encodeURIComponent(league)}` : ''}`
+    )
 };

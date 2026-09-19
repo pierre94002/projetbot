@@ -23,8 +23,10 @@ import MatchesFilterBar from '@/components/matches/MatchesFilterBar.vue';
 import StandingsTable from '@/components/matches/StandingsTable.vue';
 import TeamStatsView from '@/views/TeamStatsView.vue';
 import TeamSquadView from '@/views/TeamSquadView.vue';
+import SeasonCalendarView from '@/views/SeasonCalendarView.vue';
 import { teamStatsApi } from '@/services/teamStatsApi.js';
 import { standingsApi } from '@/services/standingsApi.js';
+import { resolveTeamAverages } from '@/utils/resolveTeamAverages.js';
 import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
 
 const props = defineProps({ matchId: { type: String, default: null } });
@@ -45,6 +47,7 @@ const matchAiAnalysisStore = useMatchAiAnalysisStore();
 // matchs/statistiques à un seul endroit.
 const TABS = [
   { value: 'matches', label: 'Matchs' },
+  { value: 'calendar', label: 'Calendrier saison' },
   { value: 'stats', label: 'Statistiques ligue' },
   { value: 'squad', label: 'Compo & joueurs' }
 ];
@@ -160,8 +163,8 @@ async function handleCompareAverages({ homeName, awayName, league }) {
   averagesComparison.value = { homeName, awayName, homeTeamId: null, loading: true, error: null, teams: [] };
 
   const [homeResult, awayResult] = await Promise.allSettled([
-    teamStatsApi.getAverageStatsByName(homeName, league),
-    teamStatsApi.getAverageStatsByName(awayName, league)
+    resolveTeamAverages(homeName, league),
+    resolveTeamAverages(awayName, league)
   ]);
 
   const teams = [];
@@ -243,6 +246,7 @@ onMounted(() => {
     <Transition name="view" mode="out-in">
     <TeamStatsView v-if="activeTab === 'stats'" key="stats" />
     <TeamSquadView v-else-if="activeTab === 'squad'" key="squad" />
+    <SeasonCalendarView v-else-if="activeTab === 'calendar'" key="calendar" />
 
     <div v-else key="matches" class="matches-view__default">
     <AppCard padded>
@@ -299,13 +303,6 @@ onMounted(() => {
             @deselect="handleDeselect"
           />
         </AppCard>
-
-        <SafestPicksSummary
-          v-if="analysisStore.result"
-          :result="analysisStore.result"
-          :averages-comparison="averagesComparison"
-          @compare-averages-click="handleCompareAverages"
-        />
       </div>
 
       <AppCard title="Analyse du match" class="matches-view__detail">
@@ -316,17 +313,23 @@ onMounted(() => {
           title="Sélectionnez un match"
           description="Choisissez une rencontre dans la liste pour voir l'analyse complète du moteur."
         />
-        <AnalysisResultPanel
-          v-else
-          :result="analysisStore.result"
-          :averages-comparison="averagesComparison"
-          :live-match-details="liveMatchDetails"
-          :match-ai="{ connected: aiAnalysisStore.status?.connected ?? false, running: matchAiAnalysisStore.running, entry: matchAiAnalysisStore.byMatchId[analysisStore.result.matchId] ?? null }"
-          @compare-averages-click="handleCompareAverages"
-          @show-live-match-click="handleShowLiveMatch"
-          @run-pre-match-ai-click="handleRunPreMatchAi"
-          @run-post-match-ai-click="handleRunPostMatchAi"
-        />
+        <div v-else class="matches-view__detail-stack">
+          <SafestPicksSummary
+            :result="analysisStore.result"
+            :averages-comparison="averagesComparison"
+            @compare-averages-click="handleCompareAverages"
+          />
+          <AnalysisResultPanel
+            :result="analysisStore.result"
+            :averages-comparison="averagesComparison"
+            :live-match-details="liveMatchDetails"
+            :match-ai="{ connected: aiAnalysisStore.status?.connected ?? false, running: matchAiAnalysisStore.running, entry: matchAiAnalysisStore.byMatchId[analysisStore.result.matchId] ?? null }"
+            @compare-averages-click="handleCompareAverages"
+            @show-live-match-click="handleShowLiveMatch"
+            @run-pre-match-ai-click="handleRunPreMatchAi"
+            @run-post-match-ai-click="handleRunPostMatchAi"
+          />
+        </div>
       </AppCard>
     </div>
 
@@ -384,6 +387,12 @@ onMounted(() => {
 }
 
 .matches-view__list-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.matches-view__detail-stack {
   display: flex;
   flex-direction: column;
   gap: 16px;

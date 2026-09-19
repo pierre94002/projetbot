@@ -34,7 +34,7 @@ const safestPicks = computed(() => computeSafestPicks(props.result, props.averag
             })
           "
         >
-          Lancer (inclure tirs &amp; tirs cadrés)
+          Lancer (inclure tirs, tirs cadrés &amp; corners)
         </AppButton>
       </div>
     </template>

@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
 import { teamStatsApi } from '@/services/teamStatsApi.js';
 import { matchResultsApi } from '@/services/matchResultsApi.js';
+import { matchStatsApi } from '@/services/matchStatsApi.js';
+import { resolveTeamAverages } from '@/utils/resolveTeamAverages.js';
 import { useMatchesStore } from './matchesStore.js';
 
 /**
@@ -26,11 +28,46 @@ async function buildLocalHistoryEntries(teamName) {
         result: goalsFor > goalsAgainst ? 'V' : goalsFor < goalsAgainst ? 'D' : 'N',
         opponent: isHome ? r.awayName : r.homeName,
         score: `${goalsFor}-${goalsAgainst}`,
-        date: r.settledAt,
+        // Les résultats importés (web-<date>-…) n'ont que la date d'import
+        // dans settledAt : la date du match est celle encodée dans l'id.
+        date: typeof r.matchId === 'string' && /^web-\d{4}-\d{2}-\d{2}-/.test(r.matchId) ? r.matchId.slice(4, 14) : r.settledAt,
         home: isHome,
-        local: true
+        local: true,
+        // Même clé que les stats importées (date + équipes) pour les
+        // résultats web — sert à ne pas afficher deux fois le même match.
+        matchKey: typeof r.matchId === 'string' && r.matchId.startsWith('web-') ? r.matchId.slice(4) : null
       };
     });
+}
+
+/**
+ * Matchs de la saison en cours avec stats d'équipe complètes + stats de
+ * chaque joueur, importés chaque matin (tâche de 7h30). Dépliables comme
+ * les matchs API-Football, mais sans nouvel appel réseau : tout le détail
+ * est déjà dans la réponse.
+ */
+async function buildWebStatsEntries(teamName) {
+  const { matches } = await matchStatsApi.listByTeam(teamName).catch(() => ({ matches: [] }));
+  return matches.map((m) => ({
+    fixtureId: m.matchId,
+    matchKey: m.matchKey,
+    result: m.result,
+    opponent: m.opponent,
+    score: m.score ?? '—',
+    date: m.date,
+    home: m.home,
+    league: m.league,
+    web: true,
+    teams: m.teams,
+    players: m.players,
+    sources: m.sources
+  }));
+}
+
+function mergeHistory(apiMatches, localMatches, webMatches) {
+  const webKeys = new Set(webMatches.map((m) => m.matchKey));
+  const locals = localMatches.filter((m) => !m.matchKey || !webKeys.has(m.matchKey));
+  return [...webMatches, ...locals, ...apiMatches].sort((a, b) => new Date(b.date) - new Date(a.date));
 }
 
 // Modal globale montée une seule fois dans AppShell — n'importe quel
@@ -47,6 +84,7 @@ export const useTeamStatsModalStore = defineStore('teamStatsModal', {
     averagesLoading: false,
     averagesError: null,
     averages: null,
+    averagesInfo: null, // { source: 'web'|'api-football', sampleSize, firstDate, lastDate }
 
     playersLoading: false,
     playersError: null,
@@ -76,6 +114,7 @@ export const useTeamStatsModalStore = defineStore('teamStatsModal', {
       this.averagesLoading = true;
       this.averagesError = null;
       this.averages = null;
+      this.averagesInfo = null;
 
       this.playersLoading = true;
       this.playersError = null;
@@ -90,15 +129,20 @@ export const useTeamStatsModalStore = defineStore('teamStatsModal', {
       this.lineupsError = null;
       this.lineups = null;
 
-      const commenceTime = matchId ? useMatchesStore().matches.find((m) => m.matchId === matchId)?.commenceTime ?? null : null;
+      const match = matchId ? useMatchesStore().matches.find((m) => m.matchId === matchId) ?? null : null;
 
       await Promise.all([
-        teamStatsApi
-          .getAverageStatsByName(teamName, league)
+        resolveTeamAverages(teamName, league)
           .then((result) => {
             this.teamId = result.teamId ?? this.teamId;
             this.teamName = result.teamName ?? this.teamName;
             this.averages = result.stats?.averages ?? {};
+            this.averagesInfo = {
+              source: result.stats?.source ?? 'api-football',
+              sampleSize: result.stats?.sampleSize ?? null,
+              firstDate: result.stats?.firstDate ?? null,
+              lastDate: result.stats?.lastDate ?? null
+            };
           })
           .catch((error) => {
             this.averagesError = error.message;
@@ -125,17 +169,18 @@ export const useTeamStatsModalStore = defineStore('teamStatsModal', {
             this.teamId = result.teamId ?? this.teamId;
             this.teamName = result.teamName ?? this.teamName;
             const apiMatches = result.form?.matches ?? [];
-            const localMatches = await buildLocalHistoryEntries(teamName);
-            const matches = [...localMatches, ...apiMatches].sort((a, b) => new Date(b.date) - new Date(a.date));
+            const [localMatches, webMatches] = await Promise.all([buildLocalHistoryEntries(teamName), buildWebStatsEntries(teamName)]);
+            const matches = mergeHistory(apiMatches, localMatches, webMatches);
             this.history = { teamId: result.teamId ?? null, teamName: result.teamName ?? teamName, matches };
           })
           .catch(async (error) => {
             // L'historique API a échoué (quota, équipe introuvable…) : les
             // matchs saisis localement restent affichables quand même,
             // plutôt que de tout perdre pour une source en panne.
-            const localMatches = await buildLocalHistoryEntries(teamName);
-            if (localMatches.length > 0) {
-              this.history = { teamId: null, teamName, matches: localMatches };
+            const [localMatches, webMatches] = await Promise.all([buildLocalHistoryEntries(teamName), buildWebStatsEntries(teamName)]);
+            const matches = mergeHistory([], localMatches, webMatches);
+            if (matches.length > 0) {
+              this.history = { teamId: null, teamName, matches };
             } else {
               this.historyError = error.message;
             }
@@ -143,12 +188,15 @@ export const useTeamStatsModalStore = defineStore('teamStatsModal', {
           .finally(() => {
             this.historyLoading = false;
           }),
-        commenceTime
+        match
           ? (() => {
-              this.lineupsContext = { commenceTime };
+              this.lineupsContext = { commenceTime: match.commenceTime };
               this.lineupsLoading = true;
+              // L'endpoint résout le match par son équipe à domicile ; sans
+              // adversaire ni ligue, le repli recherche web (saison hors plan
+              // API-Football) ne se déclenche pas.
               return teamStatsApi
-                .getLineupsByName(teamName, commenceTime)
+                .getLineupsByName(match.home, match.commenceTime, match.away, match.league)
                 .then((result) => {
                   this.lineups = result;
                 })

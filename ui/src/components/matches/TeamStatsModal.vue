@@ -25,11 +25,11 @@ const averagesTeams = computed(() => (store.averages ? [{ teamId: store.teamId, 
       <LoadingSpinner v-else-if="store.lineupsLoading" label="Récupération de la composition…" />
       <p v-else-if="store.lineupsError" class="cm-text-muted team-modal__note">Erreur : {{ store.lineupsError }}</p>
       <p v-else-if="store.lineups && !store.lineups.available" class="cm-text-muted team-modal__note">
-        {{ LINEUP_UNAVAILABLE_MESSAGES[store.lineups.reason] ?? 'Composition introuvable pour ce match.' }}
+        {{ describeLineupUnavailable(store.lineups) }}
       </p>
 
       <div v-else-if="store.lineups?.available" class="team-modal__lineups">
-        <TeamLineup v-for="team in store.lineups.teams" :key="team.teamId" :team="team" />
+        <TeamLineup v-for="(team, index) in store.lineups.teams" :key="team.teamId ?? `${team.teamName}-${index}`" :team="team" />
       </div>
     </section>
 
@@ -83,6 +83,12 @@ const averagesTeams = computed(() => (store.averages ? [{ teamId: store.teamId, 
 
     <section class="team-modal__section">
       <h4 class="team-modal__section-title">Détail complet des statistiques (34 champs)</h4>
+      <p v-if="store.averagesInfo" class="cm-text-muted team-modal__note">
+        <template v-if="store.averagesInfo.source === 'web'">
+          Moyenne sur les {{ store.averagesInfo.sampleSize }} derniers matchs importés (saison en cours, du {{ store.averagesInfo.firstDate }} au {{ store.averagesInfo.lastDate }}) — détail match par match et joueurs dans « Historique ».
+        </template>
+        <template v-else>Moyenne API-Football (saison 2024, plan gratuit) — aucun match de la saison en cours importé pour cette équipe pour l'instant.</template>
+      </p>
       <MatchStatsPanel
         single-team
         :loading="store.averagesLoading"

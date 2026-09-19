@@ -4,6 +4,7 @@ import { useConfigStore } from '@/stores/configStore.js';
 import { useSourcesStore } from '@/stores/sourcesStore.js';
 import { useToastStore } from '@/stores/toastStore.js';
 import { useAiAnalysisStore } from '@/stores/aiAnalysisStore.js';
+import { useFlashscoreStore } from '@/stores/flashscoreStore.js';
 import { generatorApi } from '@/services/generatorApi.js';
 import AppCard from '@/components/common/AppCard.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
@@ -17,6 +18,7 @@ const configStore = useConfigStore();
 const sourcesStore = useSourcesStore();
 const toastStore = useToastStore();
 const aiAnalysisStore = useAiAnalysisStore();
+const flashscoreStore = useFlashscoreStore();
 
 const saving = ref(false);
 const generating = ref(false);
@@ -32,6 +34,7 @@ onMounted(() => {
   sourcesStore.fetchSources();
   aiAnalysisStore.fetchStatus();
   aiAnalysisStore.fetchHistory();
+  flashscoreStore.fetchStatus();
 });
 
 async function handleSaveConfig(partialConfig) {
@@ -104,6 +107,16 @@ async function handleRefreshCompetitions() {
   }
 }
 
+async function handleRefreshFlashscore() {
+  if (!window.confirm('Lancer une actualisation FlashScore ? Chaque exécution est facturée sur ton compte Apify (~2-3 $ pour une journée de football).')) return;
+  try {
+    const status = await flashscoreStore.refresh();
+    toastStore.success(`${status.teamCount} équipe(s) avec stats sur ${status.matchCount} match(s) FlashScore scannés.`);
+  } catch (error) {
+    toastStore.error(`Actualisation FlashScore impossible : ${error.message}`);
+  }
+}
+
 async function handleConnectAi(apiKey, model, workspaceId) {
   try {
     await aiAnalysisStore.connect(apiKey, model, workspaceId);
@@ -157,9 +170,12 @@ async function handleRunAiAnalysis(limit) {
             :refreshing-odds="sourcesStore.refreshingOdds"
             :refreshing-competitions="sourcesStore.refreshingCompetitions"
             :last-odds-quota="sourcesStore.lastOddsQuota"
+            :flashscore-status="flashscoreStore.status"
+            :refreshing-flashscore="flashscoreStore.refreshing"
             @generate="handleGenerate"
             @refresh-odds="handleRefreshOdds"
             @refresh-competitions="handleRefreshCompetitions"
+            @refresh-flashscore="handleRefreshFlashscore"
           />
         </AppCard>
       </div>

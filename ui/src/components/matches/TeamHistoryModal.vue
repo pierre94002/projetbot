@@ -6,6 +6,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
 import MatchStatsPanel from './MatchStatsPanel.vue';
+import MatchPlayersTable from './MatchPlayersTable.vue';
 import { formatDateTime } from '@/utils/format.js';
 import { teamStatsApi } from '@/services/teamStatsApi.js';
 
@@ -25,9 +26,17 @@ function isExpanded(fixtureId) {
   return Boolean(statsByFixture[fixtureId]);
 }
 
-async function toggleStats(fixtureId) {
+async function toggleStats(match) {
+  const { fixtureId } = match;
   if (statsByFixture[fixtureId]) {
     statsByFixture[fixtureId] = null;
+    return;
+  }
+
+  // Match importé par la tâche de 7h30 : stats équipe + joueurs déjà dans
+  // l'entrée d'historique, aucun appel réseau à faire.
+  if (match.web) {
+    statsByFixture[fixtureId] = { loading: false, error: null, teams: match.teams ?? [], players: match.players ?? null };
     return;
   }
 
@@ -53,7 +62,7 @@ async function toggleStats(fixtureId) {
     />
 
     <template v-else>
-      <p class="cm-text-muted team-history__count">{{ matches.length }} rencontres jouées (saison 2024 + résultats saisis manuellement)</p>
+      <p class="cm-text-muted team-history__count">{{ matches.length }} rencontres jouées (saison en cours importée chaque matin + saison 2024 API + résultats saisis manuellement)</p>
 
       <div class="team-history__list">
         <div v-for="match in matches" :key="match.fixtureId" class="team-history__match">
@@ -61,7 +70,7 @@ async function toggleStats(fixtureId) {
             type="button"
             class="team-history__row"
             :class="{ 'team-history__row--static': match.local }"
-            @click="!match.local && toggleStats(match.fixtureId)"
+            @click="!match.local && toggleStats(match)"
           >
             <TeamAvatar :name="teamName" />
             <div class="team-history__info">
@@ -69,7 +78,10 @@ async function toggleStats(fixtureId) {
               <p class="cm-text-muted team-history__date">{{ formatDateTime(match.date) }}</p>
             </div>
             <span class="team-history__score cm-numeric">{{ match.score }}</span>
-            <MatchResultBadge :result="match.result" />
+            <MatchResultBadge v-if="match.result" :result="match.result" />
+            <span v-if="match.web" class="team-history__web-tag" title="Stats d'équipe complètes et stats joueurs importées par la tâche quotidienne de 7h30.">
+              Stats + joueurs
+            </span>
             <span v-if="match.local" class="cm-text-muted team-history__local-tag" title="Score saisi manuellement dans Historique moteur — pas de détail statistique disponible pour ce match.">
               Saisi
             </span>
@@ -87,9 +99,15 @@ async function toggleStats(fixtureId) {
               :loading="statsByFixture[match.fixtureId].loading"
               :error="statsByFixture[match.fixtureId].error"
               :teams="statsByFixture[match.fixtureId].teams"
-              :primary-team-id="teamId"
+              :primary-team-id="match.web ? null : teamId"
               :fallback-primary-name="teamName"
               :fallback-opponent-name="match.opponent"
+            />
+            <MatchPlayersTable
+              v-if="match.web"
+              :team-name="match.teams?.[0]?.teamName ?? teamName"
+              :opponent-name="match.opponent"
+              :players="statsByFixture[match.fixtureId].players ?? { team: [], opponent: [] }"
             />
           </div>
         </div>
@@ -147,6 +165,16 @@ async function toggleStats(fixtureId) {
   padding: 2px 7px;
   border-radius: 999px;
   border: 1px solid var(--cm-border);
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.team-history__web-tag {
+  flex-shrink: 0;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--cm-accent);
+  color: #fff;
   font-size: 10px;
   font-weight: 600;
 }

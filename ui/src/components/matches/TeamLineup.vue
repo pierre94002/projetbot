@@ -17,7 +17,7 @@ defineProps({
 
     <p class="team-lineup__subhead cm-text-muted">Titulaires</p>
     <ul class="team-lineup__player-list">
-      <li v-for="p in team.startXI" :key="p.id" class="team-lineup__player">
+      <li v-for="(p, index) in team.startXI" :key="p.id ?? `xi-${index}-${p.name}`" class="team-lineup__player">
         <span class="cm-numeric team-lineup__player-number">{{ p.number ?? '—' }}</span>
         <span class="cm-truncate">{{ p.name }}</span>
         <span class="cm-text-muted">{{ p.position }}</span>
@@ -26,7 +26,7 @@ defineProps({
 
     <p class="team-lineup__subhead cm-text-muted">Remplaçants</p>
     <ul class="team-lineup__player-list">
-      <li v-for="p in team.substitutes" :key="p.id" class="team-lineup__player">
+      <li v-for="(p, index) in team.substitutes" :key="p.id ?? `sub-${index}-${p.name}`" class="team-lineup__player">
         <span class="cm-numeric team-lineup__player-number">{{ p.number ?? '—' }}</span>
         <span class="cm-truncate">{{ p.name }}</span>
         <span class="cm-text-muted">{{ p.position }}</span>

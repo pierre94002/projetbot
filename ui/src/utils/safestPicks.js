@@ -1,5 +1,5 @@
-import { TEAM_GOAL_LINES, teamGoalsLineOdds } from './betTrends.js';
-import { compareTeamsPoisson, teamLineOddsPoisson, TOTAL_SHOTS_LINES } from './shotsModel.js';
+import { TEAM_GOAL_LINES, SHOTS_ON_TARGET_LINES, CORNER_LINES, teamGoalsLineOdds } from './betTrends.js';
+import { compareTeamsPoisson, teamLineOddsPoisson, TOTAL_SHOTS_LINES, SHOTS_ON_TARGET_TEAM_LINES } from './shotsModel.js';
 
 function resultAndTotalLabels(line) {
   return {
@@ -38,6 +38,18 @@ function lowestAbove(candidates, minOdds) {
   return best;
 }
 
+// "Plus de X" sur la somme des deux moyennes équipe (lambda combiné) — le
+// pendant "tirs cadrés"/"corners" du total buts, via le même Poisson simple
+// que compareTeamsPoisson/teamLineOddsPoisson (la somme de deux Poisson
+// indépendants est elle-même Poisson(lambdaHome + lambdaAway)).
+function combinedOverPicks(homeValue, awayValue, lines) {
+  const homeNum = Number(homeValue);
+  const awayNum = Number(awayValue);
+  if (!Number.isFinite(homeNum) || !Number.isFinite(awayNum)) return [];
+  const lambda = homeNum + awayNum;
+  return lines.map((line) => ({ line, odds: teamLineOddsPoisson(lambda, line)?.overOdds ?? null }));
+}
+
 /**
  * Récapitulatif "meilleures chances" : pour CHAQUE marché déjà calculé
  * ailleurs dans l'app, le pari le plus sûr qui reste au moins à
@@ -54,6 +66,22 @@ export function computeSafestPicks(result, averagesComparison) {
   const homeName = result.teamStats?.home?.name ?? 'Domicile';
   const awayName = result.teamStats?.away?.name ?? 'Extérieur';
   const picks = [];
+
+  // Résultat (1N2) — seul marché où l'app dispose d'une vraie cote
+  // bookmaker (cf. deriveMarketPredictions côté serveur), mais absent ici
+  // jusque-là alors que c'est LE marché principal étudié partout ailleurs.
+  const resultBest = lowestAbove(
+    [
+      { side: 'home', odds: trueOdds?.home },
+      { side: 'draw', odds: trueOdds?.draw },
+      { side: 'away', odds: trueOdds?.away }
+    ],
+    MIN_PICK_ODDS
+  );
+  if (resultBest) {
+    const label = resultBest.side === 'home' ? `${homeName} gagne` : resultBest.side === 'away' ? `${awayName} gagne` : 'Match nul';
+    picks.push({ market: 'Résultat', pick: label, odds: resultBest.odds });
+  }
 
   // Total buts (Plus de X, pas de "Moins" calculé au niveau du match).
   const totalGoalsBest = lowestAbove(
@@ -136,25 +164,61 @@ export function computeSafestPicks(result, averagesComparison) {
       );
       if (best) picks.push({ market: 'Qui fait le plus de tirs cadrés', pick: best.pick, odds: best.odds });
     }
+
+    // Total tirs cadrés (Plus de X, sur la somme des deux lambdas — même
+    // principe que le total buts, juste porté sur "Shots on Goal").
+    const totalShotsOnTargetBest = lowestAbove(combinedOverPicks(homeStats['Shots on Goal'], awayStats['Shots on Goal'], SHOTS_ON_TARGET_LINES), MIN_PICK_ODDS);
+    if (totalShotsOnTargetBest) picks.push({ market: 'Total tirs cadrés', pick: `Plus de ${totalShotsOnTargetBest.line} tirs cadrés`, odds: totalShotsOnTargetBest.odds });
+
+    const cornersHeadToHead = compareTeamsPoisson(Number(homeStats['Corner Kicks']), Number(awayStats['Corner Kicks']));
+    if (cornersHeadToHead) {
+      const best = lowestAbove(
+        [
+          { pick: homeName, odds: cornersHeadToHead.home > 0 ? Number((1 / cornersHeadToHead.home).toFixed(2)) : null },
+          { pick: 'Égalité', odds: cornersHeadToHead.equal > 0 ? Number((1 / cornersHeadToHead.equal).toFixed(2)) : null },
+          { pick: awayName, odds: cornersHeadToHead.away > 0 ? Number((1 / cornersHeadToHead.away).toFixed(2)) : null }
+        ],
+        MIN_PICK_ODDS
+      );
+      if (best) picks.push({ market: 'Qui fait le plus de corners', pick: best.pick, odds: best.odds });
+    }
+
+    // Total corners (Plus de X, même principe que le total tirs cadrés).
+    const totalCornersBest = lowestAbove(combinedOverPicks(homeStats['Corner Kicks'], awayStats['Corner Kicks'], CORNER_LINES), MIN_PICK_ODDS);
+    if (totalCornersBest) picks.push({ market: 'Total corners', pick: `Plus de ${totalCornersBest.line} corners`, odds: totalCornersBest.odds });
   }
 
-  // Tirs par équipe (les 4 lignes × Plus/Moins, pour chaque équipe).
+  // Tirs / tirs cadrés par équipe (les 4 lignes × Plus/Moins, pour chaque équipe).
   for (const [stats, teamName] of [
     [homeStats, homeName],
     [awayStats, awayName]
   ]) {
     if (!stats) continue;
-    const candidates = TOTAL_SHOTS_LINES.flatMap((line) => {
+
+    const shotsCandidates = TOTAL_SHOTS_LINES.flatMap((line) => {
       const lineOdds = teamLineOddsPoisson(Number(stats['Total Shots']), line);
       return [
         { odds: lineOdds?.overOdds, side: 'over', line },
         { odds: lineOdds?.underOdds, side: 'under', line }
       ];
     });
-    const best = lowestAbove(candidates, MIN_PICK_ODDS);
-    if (best) {
-      const side = best.side === 'over' ? 'Plus de' : 'Moins de';
-      picks.push({ market: 'Tirs par équipe', pick: `${teamName} — ${side} ${best.line} tirs`, odds: best.odds });
+    const bestShots = lowestAbove(shotsCandidates, MIN_PICK_ODDS);
+    if (bestShots) {
+      const side = bestShots.side === 'over' ? 'Plus de' : 'Moins de';
+      picks.push({ market: 'Tirs par équipe', pick: `${teamName} — ${side} ${bestShots.line} tirs`, odds: bestShots.odds });
+    }
+
+    const shotsOnTargetCandidates = SHOTS_ON_TARGET_TEAM_LINES.flatMap((line) => {
+      const lineOdds = teamLineOddsPoisson(Number(stats['Shots on Goal']), line);
+      return [
+        { odds: lineOdds?.overOdds, side: 'over', line },
+        { odds: lineOdds?.underOdds, side: 'under', line }
+      ];
+    });
+    const bestShotsOnTarget = lowestAbove(shotsOnTargetCandidates, MIN_PICK_ODDS);
+    if (bestShotsOnTarget) {
+      const side = bestShotsOnTarget.side === 'over' ? 'Plus de' : 'Moins de';
+      picks.push({ market: 'Tirs cadrés par équipe', pick: `${teamName} — ${side} ${bestShotsOnTarget.line} tirs cadrés`, odds: bestShotsOnTarget.odds });
     }
   }
 
