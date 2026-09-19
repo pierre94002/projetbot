@@ -514,5 +514,803 @@
     },
     "updatedAt": "2026-09-13T11:27:47.136Z",
     "createdAt": "2026-09-13T11:27:47.136Z"
+  },
+  {
+    "matchId": "14e37b5aaf6fec05a01f7e1309025a66",
+    "homeName": "Real Sociedad",
+    "awayName": "Atlético Madrid",
+    "league": "La Liga - Spain",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Real Sociedad vs Atlético Madrid",
+      "expectedGoals": {
+        "home": 0.8,
+        "away": 1.06,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 3.47,
+        "draw": 3.48,
+        "away": 2.35
+      },
+      "market": {
+        "odds1": 3.07,
+        "oddsDraw": 3.47,
+        "odds2": 2.11
+      },
+      "edgePercent": -3.88,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 2108,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1096,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Match entre une Real Sociedad qui termine la saison passée à la 11e place (46 pts, différence de buts négative -11) et un Atlético Madrid dont le classement n'est pas fourni mais dont les statistiques moyennes récentes sont nettement supérieures. Les xG moyens sur les 10 derniers matchs (1.26 pour la Sociedad contre 1.97 pour l'Atlético) et la forme récente confirment une dynamique plutôt favorable aux visiteurs, cohérente avec l'edge légèrement négatif calculé par le moteur sur le succès à domicile.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Real Sociedad a un bilan domicile équilibré en buts mais un bilan extérieur très déficitaire, illustrant une équipe globalement moyenne cette saison.",
+          "evidence": "11e place, 46 pts, 13V-7N-18D, à domicile 20 buts pour/20 contre sur 19 matchs, à l'extérieur seulement 15 pour/26 contre."
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Atlético Madrid affiche des indicateurs offensifs et de possession supérieurs à ceux de la Real Sociedad sur les 10 derniers matchs.",
+          "evidence": "xG moyen 1.97 (Atlético) vs 1.26 (Sociedad), tirs cadrés 5.9 vs 3.7, possession 56.4% vs 52.4%."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "L'Atlético présente une forme plus solide avec davantage de victoires que la Real Sociedad sur les 5 derniers matchs.",
+          "evidence": "Forme Atlético: V,V,D,V,N (3 victoires) contre Real Sociedad: D,V,D,D,N (1 victoire)."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur ne détecte pas de valeur suffisante sur ce match et recommande de passer.",
+          "evidence": "edgePercent à -3.88%, staking action PASS."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif va globalement dans le même sens que le chiffrage du moteur : les statistiques offensives moyennes (xG, tirs cadrés, possession) et la forme récente penchent plutôt en faveur de l'Atlético Madrid, ce qui est cohérent avec des cotes vraies plus favorables à la victoire visiteuse (2.35) qu'au succès de la Real Sociedad (3.47). Cela renforce l'idée que le marché ne surestime pas franchement les chances domicile, expliquant l'absence d'edge significatif et la recommandation de passer.",
+      "caveats": "Le classement complet de l'Atlético Madrid n'est pas fourni (standings.away est null), ce qui empêche une comparaison directe des positions au classement. Les statistiques FlashScore (home et away) sont également absentes, limitant la validation croisée des données statistiques utilisées."
+    },
+    "updatedAt": "2026-09-13T21:23:54.898Z",
+    "createdAt": "2026-09-13T21:23:54.898Z"
+  },
+  {
+    "matchId": "aa0e2541144928205ab6d870953d42c2",
+    "homeName": "Villarreal",
+    "awayName": "Real Betis",
+    "league": "La Liga - Spain",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Villarreal vs Real Betis",
+      "expectedGoals": {
+        "home": 1.981,
+        "away": 1.043,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 1.9,
+        "draw": 4.1,
+        "away": 4.35
+      },
+      "market": {
+        "odds1": 1.81,
+        "oddsDraw": 3.64,
+        "odds2": 3.66
+      },
+      "edgePercent": 4.93,
+      "staking": {
+        "action": "RECOMMENDED",
+        "stake": 61.68
+      }
+    },
+    "usage": {
+      "input_tokens": 2386,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1435,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Villarreal, 5e avec 70 points et une saison solide à domicile (43 buts marqués/27 encaissés en 19 matchs), aborde ce match dans une forme étincelante (5 victoires de suite). Le Real Betis, 6e avec 60 points, affiche une forme plus irrégulière (1V-3N-1D sur les 5 derniers matchs) et une défense à l'extérieur plus friable (25 marqués/29 encaissés en 19 matchs). Les statistiques récentes sur 10 matchs confirment une meilleure efficacité offensive de Villarreal (xG 1.64) que Betis (xG 1.07), malgré une possession et un volume de tirs légèrement supérieurs côté andalou.",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Villarreal est sur une dynamique excellente à l'inverse de Betis qui peine à enchaîner les victoires.",
+          "evidence": "Villarreal 5V/5V sur les 5 derniers matchs ; Betis 1V-3N-1D sur les 5 derniers matchs."
+        },
+        {
+          "factor": "classement et bilan domicile/extérieur",
+          "observation": "Villarreal se classe juste devant Betis et possède un net avantage à domicile, alors que Betis est moins performant à l'extérieur.",
+          "evidence": "Villarreal 5e (70 pts, 20V-10N-8D) avec bilan domicile 43 BP/27 BC en 19 matchs ; Betis 6e (60 pts, 16V-12N-10D) avec bilan extérieur 25 BP/29 BC en 19 matchs."
+        },
+        {
+          "factor": "statistiques moyennes (10 derniers matchs)",
+          "observation": "Villarreal génère plus d'expected goals malgré moins de possession et de tirs, signe d'une efficacité offensive supérieure ; Betis domine les indicateurs de volume mais convertit moins.",
+          "evidence": "Villarreal: xG 1.64, 4.4 tirs cadrés, 12.3 tirs totaux, 44.0% possession, 4.6 corners. Betis: xG 1.07, 5.4 tirs cadrés, 14 tirs totaux, 52.9% possession, 5 corners."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur identifie un edge de 4.93% sur la victoire à domicile avec une cote vraie de 1.90 contre une cote marché de 1.81, et recommande une mise.",
+          "evidence": "expectedGoals home 1.981 vs away 1.043 ; trueOdds home 1.90 vs market odds1 1.81 ; edgePercent 4.93% ; staking action RECOMMENDED, stake 61.68."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif renforce clairement l'edge chiffré par le moteur en faveur de Villarreal. La forme excellente, le solide bilan domicile et l'efficacité offensive supérieure (xG) de Villarreal, combinés à l'irrégularité et à la fragilité défensive extérieure de Betis, convergent avec l'expected goals du modèle (1.981 vs 1.043) et son edge positif sur la victoire à domicile. Aucun signal qualitatif ne vient contredire ou nuancer significativement cette tendance.\nLa source secondaire FlashScore pour Villarreal (homeFlashscoreStats) semble concerner une autre équipe ('Villa Mitre') et non Villarreal FC, ses statistiques (possession, tirs, forme) diffèrent nettement de homeStats et de homeForm fournis par ailleurs — donnée à traiter avec grande prudence, possible erreur d'association. Aucune donnée FlashScore n'est disponible pour Real Betis (awayFlashscoreStats null). Les statistiques moyennes homeStats/awayStats portent sur un échantillon de seulement 10 matchs, ce qui limite leur robustesse."
+    },
+    "updatedAt": "2026-09-13T21:49:42.389Z",
+    "createdAt": "2026-09-13T21:49:42.389Z"
+  },
+  {
+    "matchId": "b9a6e597fd597637efa24b92d51dda62",
+    "homeName": "Rayo Vallecano",
+    "awayName": "Espanyol",
+    "league": "La Liga - Spain",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Rayo Vallecano vs Espanyol",
+      "expectedGoals": {
+        "home": 1.853,
+        "away": 0.768,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 2.05,
+        "draw": 3.76,
+        "away": 4.07
+      },
+      "market": {
+        "odds1": 2.21,
+        "oddsDraw": 3.4,
+        "odds2": 3.27
+      },
+      "edgePercent": 13.47,
+      "staking": {
+        "action": "RECOMMENDED",
+        "stake": 168.37
+      }
+    },
+    "usage": {
+      "input_tokens": 2555,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1309,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Rayo Vallecano reçoit un Espanyol qui occupe une meilleure position au classement (8e, 7 pts) que Rayo (16e, 4 pts), mais les dynamiques récentes racontent une histoire différente : Rayo est sur une série encourageante (N-V-N-V-V) tandis qu'Espanyol traverse une mauvaise passe (V-D-D-D-D, quatre défaites de suite). Les statistiques moyennes de tirs et de possession favorisent nettement Rayo à domicile.",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Tendance inverse au classement : Rayo invaincu sur ses 5 derniers matchs contre Espanyol en pleine série négative.",
+          "evidence": "Rayo: N-V-N-V-V (3V, 2N, 0D) ; Espanyol: V-D-D-D-D (1V, 0N, 4D)"
+        },
+        {
+          "factor": "classement",
+          "observation": "Espanyol est mieux classé et a une meilleure différence de buts globale, mais cela contraste avec sa forme récente.",
+          "evidence": "Rayo 16e (4 pts, 8-14, diff -6) ; Espanyol 8e (7 pts, 8-5, diff +3) sur 5 matchs joués"
+        },
+        {
+          "factor": "statistiques offensives/défensives moyennes",
+          "observation": "Rayo domine en volume de jeu et tirs cadrés sur ses 10 derniers matchs, avec une possession largement supérieure.",
+          "evidence": "Rayo: 5.1 tirs cadrés, 14.4 tirs, 54.1% possession, xG 1.11 ; Espanyol: 3.8 tirs cadrés, 10.5 tirs, 42.5% possession, xG 1.27 (sur 10 matchs)"
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur identifie un edge de 13.47% sur la victoire de Rayo, avec une valeur nettement supérieure à la cote du marché.",
+          "evidence": "trueOdds home 2.05 vs cote marché 2.21, edge 13.47%, xG attendus 1.853 (Rayo) vs 0.768 (Espanyol)"
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif renforce globalement l'edge identifié par le moteur sur la victoire de Rayo : la forme récente très favorable à domicile et les statistiques de tirs/possession supérieures vont dans le même sens que l'écart de expected goals calculé (1.853 contre 0.768). Le seul élément qui nuance ce alignement est le classement général, plus favorable à Espanyol, mais celui-ci semble davantage refléter un début de saison ancien que la dynamique actuelle des deux équipes.",
+      "caveats": "Les données FlashScore (homeFlashscoreStats/awayFlashscoreStats) sont absentes pour ce match. Les statistiques historiques locales (football-data.co.uk) ne sont disponibles que pour Rayo (homeHistoricalStats et homeHistoricalForm), aucune donnée équivalente pour Espanyol (awayHistoricalStats et awayHistoricalForm manquantes), ce qui empêche une comparaison symétrique sur cette source secondaire. Les statistiques 'home'/'away' détaillées (played, goalsFor, goalsAgainst) au sein des standings sont à zéro, donc aucune performance spécifique à domicile pour Rayo ou à l'extérieur pour Espanyol n'a pu être isolée. L'échantillon de forme récente reste limité à 5 matchs."
+    },
+    "updatedAt": "2026-09-14T21:50:08.702Z",
+    "createdAt": "2026-09-14T21:50:08.702Z"
+  },
+  {
+    "matchId": "8bc1f4d74cf888c97c0216fd26c4ece7",
+    "homeName": "Monza",
+    "awayName": "Sassuolo",
+    "league": "Serie A - Italy",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Monza vs Sassuolo",
+      "expectedGoals": {
+        "home": 0.5,
+        "away": 0.5,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 3.28,
+        "draw": 2.94,
+        "away": 2.81
+      },
+      "market": {
+        "odds1": 2.93,
+        "oddsDraw": 3.38,
+        "odds2": 2.39
+      },
+      "edgePercent": -5.87,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 2703,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1380,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Monza occupe la 18e place avec seulement 1 point en 4 matches (0V-1N-3D, -5 de différence de buts), tandis que Sassuolo pointe 9e avec 7 points (2V-1N-1D, +1 de différence). Les statistiques FlashScore récentes montrent des attaques comparables en xG (1.41 pour les deux) mais Sassuolo produit un peu plus de tirs et de tirs cadrés. L'écart de classement et de dynamique récente favorise nettement Sassuolo sur le papier, ce qui contraste avec un marché qui ne surcote pas franchement l'extérieur.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Écart important entre les deux équipes, Sassuolo largement devant",
+          "evidence": "Monza 18e (1 pt, 4 matchs) vs Sassuolo 9e (7 pts, 4 matchs), diff de buts -5 contre +1"
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Monza n'enchaîne que des nuls et défaites, Sassuolo alterne victoires et nuls",
+          "evidence": "Forme officielle Monza: D-D-V-D-D (1 victoire sur 5) ; forme FlashScore Sassuolo: N-N-V-D-V (2 victoires, 0 défaite sur les 4 derniers avant la dernière D)"
+        },
+        {
+          "factor": "statistiques offensives/défensives",
+          "observation": "Sassuolo légèrement plus productif en tirs et tirs cadrés selon FlashScore, et l'historique sur 5 saisons confirme une meilleure efficacité offensive et défensive de Sassuolo",
+          "evidence": "FlashScore: xG identique 1.41 des deux côtés, mais Sassuolo 11.68 tirs/4.37 cadrés vs Monza 13.95 tirs/5.05 cadrés (plus de volume mais moins efficace) ; historique: Sassuolo 1.1 buts marqués/1.2 encaissés vs Monza 0.5 marqués/2.1 encaissés"
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur affiche un edge négatif et recommande de passer, le marché semblant déjà bien aligné voire légèrement en faveur du marché sur ce match",
+          "evidence": "edgePercent: -5.87%, staking action: PASS"
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif (classement, forme, historique) dessine un avantage assez net pour Sassuolo, ce qui pourrait suggérer une sous-évaluation du visiteur par le modèle. Cependant, l'edge négatif calculé par le moteur et sa recommandation de passer indiquent que le marché intègre déjà correctement, voire surestime légèrement, cet avantage perçu de Sassuolo. Le contexte ne contredit donc pas la prudence du moteur mais souligne que si un pari devait être envisagé malgré le PASS, la dynamique favoriserait plutôt l'extérieur que Monza.",
+      "caveats": "Aucune statistique moyenne directe homeStats/awayStats disponible (valeurs nulles), l'analyse s'appuie donc sur FlashScore et l'historique football-data.co.uk, deux sources secondaires. La forme officielle awayForm est vide (sampleSize 0), obligeant à se référer uniquement à la forme FlashScore et historique pour Sassuolo. Le classement fourni n'est pas issu de football-data.co.uk donc il s'agit bien d'un classement en direct de la saison en cours, mais à seulement 4 matchs joués, l'échantillon reste réduit. Les données historiques (5 dernières saisons) et FlashScore concordent globalement sur un léger avantage à Sassuolo, sans contradiction majeure notée."
+    },
+    "updatedAt": "2026-09-15T21:00:48.231Z",
+    "createdAt": "2026-09-15T21:00:48.231Z"
+  },
+  {
+    "matchId": "4283f064a57c57a3515d04eceead72d6",
+    "homeName": "Sunderland",
+    "awayName": "AZ Alkmaar",
+    "league": "UEFA Europa League",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Sunderland vs AZ Alkmaar",
+      "expectedGoals": {
+        "home": 0.5,
+        "away": 0.5,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 2.09,
+        "draw": 3.24,
+        "away": 4.71
+      },
+      "market": {
+        "odds1": 1.65,
+        "oddsDraw": 4.02,
+        "odds2": 4.92
+      },
+      "edgePercent": -16.37,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 2166,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1291,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Les données qualitatives disponibles sont très déséquilibrées : aucune information n'existe côté Sunderland (classement, forme, stats), tandis qu'AZ Alkmaar dispose d'un classement (19e, Europa League) et d'une forme récente sur 5 matches. AZ affiche un profil moyen, avec un net déséquilibre entre performances à domicile et à l'extérieur.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "AZ Alkmaar occupe une position modeste en phase de championnat/Europa League, avec un bilan équilibré en buts marqués/encaissés sur l'ensemble de la saison.",
+          "evidence": "AZ: 8 matches joués, 3V/2N/3D, 13 buts pour, 13 contre, 11 points, 19e place."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "La forme d'AZ sur les 5 derniers matches est mitigée, sans dynamique nette dans un sens ou l'autre.",
+          "evidence": "Forme AZ (5 derniers): D, V, N, V, D."
+        },
+        {
+          "factor": "écart domicile/extérieur",
+          "observation": "AZ montre une nette différence de rendement selon le lieu : solide à domicile, plus fragile à l'extérieur, ce qui est pertinent puisque ce match se joue chez Sunderland.",
+          "evidence": "AZ à domicile: 4 matches, 8 buts pour, 4 contre. AZ à l'extérieur: 4 matches, 5 buts pour, 9 contre."
+        },
+        {
+          "factor": "données manquantes côté Sunderland",
+          "observation": "Impossible d'évaluer la forme ou le classement de Sunderland faute de données, ce qui limite la portée de toute comparaison qualitative.",
+          "evidence": "homeStats: null, homeForm: sampleSize 0, standings.home: null."
+        }
+      ],
+      "alignmentWithModel": "Le modèle attend un match très serré (0.5 xG de chaque côté, cotes vraies proches entre victoire à domicile et match nul) et recommande de passer en raison d'un edge négatif marqué sur les cotes du marché. Le contexte qualitatif ne permet pas de trancher clairement dans un sens ou dans l'autre : l'absence totale de données sur Sunderland empêche de confirmer ou nuancer l'avantage à domicile implicite dans le chiffrage, tandis que le profil extérieur plus fragile d'AZ (5 buts pour, 9 contre en 4 matches à l'extérieur) pourrait plutôt aller dans le sens d'une prudence supplémentaire côté visiteur, cohérente avec la faible cote attribuée à leur victoire. Globalement, rien dans les éléments qualitatifs disponibles ne contredit fortement la décision de passer recommandée par le moteur.",
+      "caveats": "Aucune donnée disponible pour Sunderland : classement (standings.home), statistiques (homeStats), forme récente (homeForm avec sampleSize 0) et stats FlashScore/historiques sont toutes absentes ou nulles. Les stats FlashScore et historiques pour AZ sont également absentes (homeFlashscoreStats, awayFlashscoreStats, homeHistoricalStats, awayHistoricalStats, homeHistoricalForm, awayHistoricalForm tous null), donc aucune source secondaire n'est disponible pour croiser ou nuancer les données de classement/forme d'AZ. L'analyse repose uniquement sur un classement partiel et une forme limitée à 5 matches côté AZ."
+    },
+    "updatedAt": "2026-09-16T20:43:49.047Z",
+    "createdAt": "2026-09-16T20:43:49.047Z"
+  },
+  {
+    "matchId": "923b87c9f2ccf67f9db1897dd6d71415",
+    "homeName": "AC Milan",
+    "awayName": "Benfica",
+    "league": "UEFA Europa League",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "AC Milan vs Benfica",
+      "expectedGoals": {
+        "home": 0.5,
+        "away": 0.5,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 2.55,
+        "draw": 3.03,
+        "away": 3.6
+      },
+      "market": {
+        "odds1": 2.11,
+        "oddsDraw": 3.57,
+        "odds2": 3.33
+      },
+      "edgePercent": -12.63,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 1947,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 852,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Aucune donnée qualitative n'est disponible pour ce match AC Milan vs Benfica : ni classement, ni statistiques moyennes, ni forme récente pour l'une ou l'autre équipe. Le moteur CôteMaster projette un match très fermé (0.5 xG de chaque côté) et recommande de passer (PASS) au vu d'un edge négatif de -12.63% sur le marché. En l'absence totale de contexte, il n'est pas possible d'apporter un éclairage qualitatif supplémentaire sur ce match.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Aucune information de classement disponible pour Milan ou Benfica.",
+          "evidence": "standings.home = null, standings.away = null"
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Aucun résultat récent recensé pour les deux équipes.",
+          "evidence": "homeForm.sampleSize = 0, awayForm.sampleSize = 0"
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Aucune statistique (FlashScore ou historique) disponible pour appuyer ou nuancer l'attente de buts.",
+          "evidence": "homeStats, awayStats, homeFlashscoreStats, awayFlashscoreStats, homeHistoricalStats, awayHistoricalStats tous null"
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur affiche un edge négatif significatif et recommande de ne pas miser.",
+          "evidence": "edgePercent: -12.63%, staking.action: PASS"
+        }
+      ],
+      "alignmentWithModel": "Sans aucune donnée qualitative pour confronter ou nuancer le chiffrage, il est impossible de dire si le contexte va dans le sens de l'edge négatif du modèle ou le contredit. La recommandation PASS du moteur ne peut être ni renforcée ni remise en question faute d'éléments contextuels.\nToutes les sources de contexte sont vides ou nulles pour ce match : classement (home/away), statistiques moyennes (source principale et FlashScore), forme récente (home/away), et données historiques football-data.co.uk. Aucune analyse qualitative fiable ne peut donc être formulée ; seule la sortie chiffrée du moteur est disponible pour ce match."
+    },
+    "updatedAt": "2026-09-16T20:44:11.617Z",
+    "createdAt": "2026-09-16T20:44:11.617Z"
+  },
+  {
+    "matchId": "4a3400b0763bcc367171537f40b27a4f",
+    "homeName": "Barcelona",
+    "awayName": "Real Racing Club de Santander",
+    "league": "La Liga - Spain",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Barcelona vs Real Racing Club de Santander",
+      "expectedGoals": {
+        "home": 2.8,
+        "away": 0.798,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 1.15,
+        "draw": 11.74,
+        "away": 21.53
+      },
+      "market": {
+        "odds1": 1.06,
+        "oddsDraw": 15.71,
+        "odds2": 27.92
+      },
+      "edgePercent": -4.04,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 2551,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1478,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Toutes les données disponibles convergent vers un très large favori à domicile : Barcelona est leader avec un bilan parfait (5V/5), une différence de buts impressionnante (+17) et une forme récente excellente sur plusieurs échantillons. Aucune donnée n'est disponible côté Real Racing Club de Santander, ce qui empêche toute analyse comparative sur l'adversaire. Le moteur affiche d'ailleurs un edge négatif, suggérant que le marché a déjà pleinement intégré cette domination.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Barcelona est leader incontesté avec un bilan parfait sur les 5 premières journées.",
+          "evidence": "Rang 1, 5 matchs joués, 5V/0N/0D, 21 buts marqués contre 4 encaissés (diff +17), 15 points."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Toutes les sources s'accordent sur une série de victoires quasi ininterrompue pour Barcelona.",
+          "evidence": "homeForm: V-D-V-V-V (4V/1D sur 5) ; homeFlashscoreStats.recentForm: 5V/5 ; homeTeamProfile.recentForm: 6V/6 ; seule homeHistoricalForm indique D-V-D-V-V (3V/2D sur 5), plus mitigée."
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Barcelona affiche une nette domination offensive et de possession sur l'ensemble des échantillons récents.",
+          "evidence": "homeStats (10 matchs): xG 2.3, 20 tirs, 72.2% possession, 6.8 tirs cadrés ; homeFlashscoreStats (25 matchs, collecté le 07/09/2026): xG 2.41, possession 66.68%, 16 tirs, 6.64 tirs cadrés ; homeHistoricalStats (5 saisons, échantillon 10): 1.8 but marqué / 0.8 encaissé en moyenne, plus modeste que les autres sources."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur signale un edge négatif malgré la domination écrasante de Barcelona, ce qui traduit une cote marché déjà très resserrée sur le favori.",
+          "evidence": "edgePercent: -4.04, trueOdds home 1.15 vs odds1 marché 1.06, action de staking: PASS."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif confirme sans ambiguïté la domination attendue de Barcelona (classement parfait, forme excellente sur plusieurs sources, statistiques offensives élevées), ce qui va dans le même sens que l'expected goals élevé du moteur (2.8 vs 0.798). Cependant, l'absence totale de données sur l'adversaire ne permet pas de nuancer ou d'enrichir la lecture de ce côté. L'edge négatif du moteur n'est pas contredit par le contexte : il illustre simplement que le marché a déjà pleinement anticipé cette suprématie, sans qu'aucune information qualitative ne suggère une valeur cachée sur l'issue domicile.",
+      "caveats": "Aucune donnée disponible pour Real Racing Club de Santander (awayStats, awayForm, awayFlashscoreStats, awayHistoricalStats, awayHistoricalForm, awayTeamProfile tous null), ce qui limite fortement l'analyse à un seul côté du match. Le classement fourni ne concerne que Barcelona (aucun classement pour l'adversaire). Par ailleurs, les sources sur la forme de Barcelona divergent légèrement entre elles : homeHistoricalForm (D-V-D-V-V) est nettement moins flatteuse que homeForm, homeFlashscoreStats et homeTeamProfile (qui affichent 4 à 6 victoires consécutives), tout comme homeHistoricalStats montre des moyennes de buts plus modestes que homeStats et homeFlashscoreStats — à interpréter avec prudence, sans trancher entre ces sources."
+    },
+    "updatedAt": "2026-09-16T21:18:28.734Z",
+    "createdAt": "2026-09-16T21:18:28.734Z"
+  },
+  {
+    "matchId": "82d8b6a005d78bac0b1508abc17a7d39",
+    "homeName": "Brentford",
+    "awayName": "Chelsea",
+    "league": "EPL",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Brentford vs Chelsea",
+      "expectedGoals": {
+        "home": 2.432,
+        "away": 1.646,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 2.53,
+        "draw": 4.24,
+        "away": 2.71
+      },
+      "market": {
+        "odds1": 2.87,
+        "oddsDraw": 3.79,
+        "odds2": 2.26
+      },
+      "edgePercent": 19.58,
+      "staking": {
+        "action": "RECOMMENDED",
+        "stake": 200
+      }
+    },
+    "usage": {
+      "input_tokens": 2698,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1651,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Brentford (7e, 6 pts en 4 matchs) reçoit Chelsea (6e, 7 pts en 4 matchs) dans un contexte de forme récente favorable aux deux équipes, mais avec des échantillons de données très hétérogènes. Brentford affiche une forme solide (4V-N-D sur 5) et des standings actuels invaincus, tandis que Chelsea reste également performant (4V-1D-1N sur 5) malgré une défense qui concède plus de buts. Les stats FlashScore actuelles montrent une dominance offensive marquée de Brentford à domicile, mais sur un échantillon minuscule (1 match), ce qui limite leur fiabilité.\n[{\"factor\":\"classement et points\",\"observation\":\"Chelsea légèrement devant au classement actuel malgré une défaite\",\"evidence\":\"Brentford: 7e, 6 pts (1V-3N-0D, 7 buts marqués, 4 encaissés) ; Chelsea: 6e, 7 pts (2V-1N-1D, 10 buts marqués, 9 encaissés)\"},{\"factor\":\"forme récente (5 derniers matchs)\",\"observation\":\"Les deux équipes sont en bonne dynamique actuelle, Chelsea légèrement plus régulier\",\"evidence\":\"Brentford: N-D-V-V-V ; Chelsea: V-V-D-V-V\"},{\"factor\":\"statistiques FlashScore (échantillon limité)\",\"observation\":\"Brentford affiche une possession et un volume de tirs élevés à domicile, mais sur un seul match observé, donc peu représentatif\",\"evidence\":\"Brentford: 71% possession, 11 tirs dont 8 cadrés, xG 3.21 (sample=1) ; Chelsea: 54.1% possession, 14.1 tirs dont 5.1 cadrés, xG 1.25 (sample=10)\"},{\"factor\":\"statistiques historiques (5 dernières saisons, football-data.co.uk)\",\"observation\":\"Sur le long terme, Chelsea a un volume de tirs et de corners supérieur mais une défense plus perméable que Brentford, tandis que Brentford marque et encaisse peu en moyenne\",\"evidence\":\"Brentford (10 matchs): 1.1 but marqué/match, 1.2 encaissé, 10.6 tirs ; Chelsea (10 matchs): 0.9 but marqué/match, 1.9 encaissé, 13.4 tirs, 2.4 cartons jaunes/match\"},{\"factor\":\"forme historique (5 dernières saisons)\",\"observation\":\"Les tendances historiques de forme sont nettement plus mitigées que la forme actuelle pour les deux clubs, ce qui contraste avec la dynamique récente\",\"evidence\":\"Forme historique Brentford: N-N-D-V-D ; Forme historique Chelsea: D-V-N-D-D\"}]\nLe contexte qualitatif va globalement dans le sens de l'edge identifié par le moteur en faveur de Brentford : la forme actuelle solide du club (V-V-V-N-D) et un classement légèrement inférieur mais compétitif face à Chelsea appuient l'idée d'une équipe à domicile en confiance. Toutefois, les statistiques historiques nuancent ce tableau, montrant une défense Chelsea plus friable sur le long terme mais aussi une attaque Brentford historiquement modeste (1.1 but/match), ce qui contraste avec l'expected_goals élevé (2.432) attribué par le moteur pour ce match précis. La disparité entre les stats FlashScore (échantillon d'1 match seulement pour Brentford) et les moyennes historiques invite à une lecture prudente du contexte qualitatif, sans remettre en cause le chiffrage du moteur.\nLes statistiques FlashScore de Brentford (homeStats) reposent sur un échantillon d'un seul match, ce qui limite fortement leur représentativité et contraste nettement avec les moyennes historiques sur 10 matchs (xG 3.21 vs des moyennes historiques bien plus modestes de 1.1 but/match). Les champs homeFlashscoreStats et awayFlashscoreStats sont absents. Le classement fourni (standings) semble être un classement de saison en cours basé sur seulement 4 matchs joués, et non un historique football-data.co.uk, mais aucune répartition domicile/extérieur n'est disponible (played=0 pour home/away). Aucun profil d'équipe (homeTeamProfile/awayTeamProfile) n'est disponible pour un contexte européen ou de forme plus récente issu du web."
+    },
+    "updatedAt": "2026-09-18T16:50:40.206Z",
+    "createdAt": "2026-09-18T16:50:40.206Z"
+  },
+  {
+    "matchId": "b2d41e20e9485a8ad28e7534d389a37d",
+    "homeName": "Bayern Munich",
+    "awayName": "Union Berlin",
+    "league": "Bundesliga - Germany",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Bayern Munich vs Union Berlin",
+      "expectedGoals": {
+        "home": 2.187,
+        "away": 0.825,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 1.22,
+        "draw": 8.81,
+        "away": 15.32
+      },
+      "market": {
+        "odds1": 1.08,
+        "oddsDraw": 12.46,
+        "odds2": 23.11
+      },
+      "edgePercent": -6.95,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 2781,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1421,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Bayern Munich, 4e avec 7 points en 3 matches (7 buts pour, 2 contre), aborde cette réception d'Union Berlin (16e, 1 point, -6 de différence de buts) en net favori sur le papier. Les données FlashScore et historiques convergent pour souligner la domination offensive et la possession écrasante du Bayern, tandis qu'Union Berlin affiche des stats de production offensive et défensive bien plus modestes. Le moteur reflète cette hiérarchie avec un edge négatif qui pousse à un PASS malgré la cote très basse sur le Bayern.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Écart de classement très marqué en faveur du Bayern dès le début de saison.",
+          "evidence": "Bayern 4e avec 7 pts (2V,1N,0D, 7 buts pour/2 contre) vs Union Berlin 16e avec 1 pt (0V,1N,2D, 4 buts pour/10 contre) après 3 journées."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Le Bayern affiche une forme quasi parfaite, Union Berlin est plus irrégulier avec des nuls et défaites récentes.",
+          "evidence": "FlashScore recentForm Bayern: N,V,V,V,V ; profil équipe Bayern: V,V,N,V,V,V,V. Historique local: V,V,N,V,V. Profil Union Berlin: V,V,V,V,N,D,V,N."
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Le Bayern surclasse Union Berlin sur la production offensive et la possession selon plusieurs sources secondaires convergentes.",
+          "evidence": "FlashScore Bayern: xG 2.72, possession 66%, 18.71 tirs, 7.54 tirs cadrés. Historique Bayern: 3.4 buts pour/1.3 contre, 19.8 tirs. Historique Union Berlin: 1.5 buts pour/2 contre, 12.5 tirs, 4.7 tirs cadrés."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur chiffre un edge négatif malgré la domination attendue du Bayern, en raison d'une cote marché déjà très basse.",
+          "evidence": "Expected goals 2.187 (Bayern) vs 0.825 (Union), true odds 1.22/8.81/15.32 contre cotes marché 1.08/12.46/23.11, edge -6.95%, action PASS."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif confirme sans ambiguïté la supériorité attendue du Bayern (classement, forme, statistiques offensives et de possession toutes favorables), ce qui va dans le même sens que l'expected goals élevé du moteur pour le Bayern. Toutefois, cette domination qualitative ne contredit pas le PASS du moteur : l'écart favorable au Bayern est déjà largement intégré dans une cote marché très basse, ce qui explique l'edge négatif malgré un contexte sportif clairement en sa faveur.",
+      "caveats": "Les statistiques directes homeStats/awayStats et la forme homeForm/awayForm structurées ne sont pas disponibles (null ou vides) ; l'analyse repose donc sur des sources secondaires (FlashScore, historique football-data.co.uk 5 dernières saisons, profils équipes web). awayFlashscoreStats est totalement absent, limitant la comparaison directe sur les statistiques récentes d'Union Berlin. Les données de classement (played=3) sont très récentes en début de saison, ce qui limite la portée de l'échantillon. Les profils d'équipes (homeTeamProfile/awayTeamProfile) présentent des formes légèrement différentes des autres sources selon la fenêtre temporelle considérée, sans contradiction majeure mais à interpréter avec prudence vu leur origine web périodique."
+    },
+    "updatedAt": "2026-09-18T16:55:55.127Z",
+    "createdAt": "2026-09-18T16:55:55.127Z"
+  },
+  {
+    "matchId": "da3d3fec3e0b6b939910427a76ecfb76",
+    "homeName": "Espanyol",
+    "awayName": "Elche CF",
+    "league": "La Liga - Spain",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Espanyol vs Elche CF",
+      "expectedGoals": {
+        "home": 1.753,
+        "away": 0.798,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 1.86,
+        "draw": 3.76,
+        "away": 5.05
+      },
+      "market": {
+        "odds1": 1.85,
+        "oddsDraw": 3.46,
+        "odds2": 4.4
+      },
+      "edgePercent": 4.74,
+      "staking": {
+        "action": "RECOMMENDED",
+        "stake": 59.23
+      }
+    },
+    "usage": {
+      "input_tokens": 2417,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1528,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Espanyol occupe la 8e place avec 7 points en 6 matchs (2V, 1N, 3D), mais affiche une forme récente inquiétante avec 4 défaites sur les 5 derniers matchs. Elche CF ne dispose pas de classement en direct ni de forme récente confirmée dans les données actuelles, seules des données historiques (5 saisons football-data.co.uk) sont disponibles et suggèrent une équipe moyenne offensivement et défensivement. Les échantillons statistiques sont très limités (1 match chacun côté stats principales), ce qui réduit la robustesse du contexte qualitatif.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Espanyol est 8e avec un bilan équilibré mais une différence de buts faible.",
+          "evidence": "8e place, 6 joués, 2V-1N-3D, 9 buts pour, 7 contre, diff +2, 7 points."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "La forme actuelle d'Espanyol est très négative malgré son classement, avec quatre défaites sur les cinq derniers matchs.",
+          "evidence": "Forme homeForm: V, D, D, D, D (5 derniers matchs)."
+        },
+        {
+          "factor": "statistiques offensives/défensives (échantillon réduit)",
+          "observation": "Sur le seul match recensé, Espanyol a généré plus de tirs et un xG légèrement supérieur au chiffrage du moteur, tandis qu'Elche a eu plus de possession mais moins d'occasions dangereuses.",
+          "evidence": "Espanyol: 19 tirs dont 5 cadrés, xG 1.65, possession 45%. Elche: 11 tirs dont 3 cadrés, xG 0.78, possession 56%."
+        },
+        {
+          "factor": "données historiques Elche (secondaires)",
+          "observation": "Sur 5 saisons, Elche affiche une moyenne offensive et défensive assez équilibrée, cohérente avec un profil d'équipe modeste, mais ces données sont anciennes et à traiter avec prudence.",
+          "evidence": "Historique Elche (10 matchs agrégés sur 5 saisons): 1.3 but marqué, 1.2 encaissé, 10 tirs, 3.5 cadrés, 4 corners en moyenne."
+        },
+        {
+          "factor": "forme historique Elche (secondaire)",
+          "observation": "La forme historique récente d'Elche sur les données football-data.co.uk montre un équilibre entre nuls et défaites, sans dominante claire.",
+          "evidence": "Forme historique Elche: N, V, D, N, D (5 derniers matchs recensés)."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif nuance partiellement l'edge du moteur en faveur d'Espanyol : le classement et les statistiques du seul match observé (tirs, xG) soutiennent une supériorité offensive à domicile cohérente avec les xG du moteur (1.753 vs 0.798), mais la forme très négative d'Espanyol (4 défaites sur 5) introduit une incertitude que le modèle ne capture pas nécessairement dans le détail. Côté Elche, l'absence de classement et de forme récente en direct empêche de confirmer ou contredire fermement l'écart attendu par le moteur, les seules données disponibles (historiques sur 5 saisons) esquissant un profil modeste sans signal fort dans un sens ou l'autre.",
+      "caveats": "Classement d'Elche CF totalement indisponible (standings.away = null). Forme récente directe d'Elche (awayForm) absente ; seule une forme historique ancienne (football-data.co.uk, 5 saisons) est fournie, à traiter comme secondaire et non représentative de la forme actuelle. Statistiques principales homeStats/awayStats basées sur un échantillon d'un seul match chacun (sampleSize:1), donc peu fiables statistiquement. Aucune donnée FlashScore ni profil d'équipe (homeTeamProfile/awayTeamProfile) disponible pour compléter ou vérifier ces informations. Les statistiques 'home' et 'away' détaillées dans standings.home (played/goalsFor/goalsAgainst à domicile) sont à 0, donc non renseignées."
+    },
+    "updatedAt": "2026-09-18T17:01:22.722Z",
+    "createdAt": "2026-09-18T17:01:22.722Z"
+  },
+  {
+    "matchId": "f6d8ec3ecfba4947770ddd7d391c8c73",
+    "homeName": "AS Monaco",
+    "awayName": "RC Lens",
+    "league": "Ligue 1 - France",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "AS Monaco vs RC Lens",
+      "expectedGoals": {
+        "home": 2.187,
+        "away": 0.825,
+        "source": "league-baseline"
+      },
+      "trueOdds": {
+        "home": 1.96,
+        "draw": 4.16,
+        "away": 4.02
+      },
+      "market": {
+        "odds1": 2.14,
+        "oddsDraw": 3.65,
+        "odds2": 3.1
+      },
+      "edgePercent": 16.26,
+      "staking": {
+        "action": "RECOMMENDED",
+        "stake": 200
+      }
+    },
+    "usage": {
+      "input_tokens": 2403,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1583,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Les données directes (classement, forme et stats en direct de Monaco, forme en direct de Lens) sont indisponibles, ce qui limite la lecture qualitative. Les sources secondaires disponibles pour Lens dressent un profil offensif solide (xG ~2.18, possession ~52.6%, ~18 tirs/match) mais une forme récente FlashScore mitigée (D,D,V,V,D), alors qu'un autre profil (awayTeamProfile) donne une série plus équilibrée (N,V,D,D,V,V,D). Les historiques locaux (5 dernières saisons) montrent des moyennes assez proches entre les deux équipes en buts marqués (Monaco 2, Lens 2.1) mais Lens y encaisse moins (1.4 vs 1.8) et produit davantage de tirs (21 vs 13.4), ce qui suggère un profil offensif légèrement supérieur pour Lens sur le temps long, malgré l'expected goals du moteur nettement favorable à Monaco pour ce match précis.",
+      "keyFactors": [
+        {
+          "factor": "forme récente (Lens)",
+          "observation": "Deux sources de forme pour Lens divergent légèrement, sans données équivalentes pour Monaco.",
+          "evidence": "FlashScore recentForm: D,D,V,V,D (25 matchs échantillon) vs awayTeamProfile recentForm: N,V,D,D,V,V,D"
+        },
+        {
+          "factor": "statistiques moyennes en match (Lens, FlashScore)",
+          "observation": "Lens affiche un profil offensif actif avec possession majoritaire.",
+          "evidence": "xG 2.18, possession 52.65%, 18.12 tirs/match, 6.35 tirs cadrés, 6.94 corners sur 25 matchs (donnée du 07/09/2026)"
+        },
+        {
+          "factor": "historique 5 saisons (football-data.co.uk)",
+          "observation": "Sur le long terme, Lens produit plus de tirs et encaisse moins que Monaco, mais les buts marqués sont comparables.",
+          "evidence": "Monaco: 2 buts marqués/1.8 encaissés/13.4 tirs; Lens: 2.1 buts marqués/1.4 encaissés/21 tirs (10 matchs chacun)"
+        },
+        {
+          "factor": "forme historique 5 saisons",
+          "observation": "Les deux équipes affichent des séries mêlant victoires et nuls, sans nette domination historique pour l'une ou l'autre.",
+          "evidence": "Monaco: D,D,V,N,N; Lens: V,D,V,N,N (5 matchs chacun)"
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur identifie un edge important en faveur de Monaco à domicile, appuyé par un différentiel d'expected goals marqué.",
+          "evidence": "xG 2.187 (Monaco) vs 0.825 (Lens), edge 16.26%, cote vraie 1.96 vs cote marché 2.14"
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif nuance partiellement l'edge du moteur plutôt que de le confirmer pleinement : les données FlashScore et historiques disponibles positionnent Lens comme une équipe à profil offensif solide (bonne possession, volume de tirs élevé, défense historique plus économe), ce qui contraste avec l'écart très marqué en expected goals du moteur en faveur de Monaco. L'absence totale de données directes sur Monaco (classement, forme, stats) empêche cependant de confirmer ou d'infirmer solidement la supériorité domiciliaire suggérée par le modèle ; le contexte disponible invite donc à une lecture prudente plutôt qu'à un renforcement du signal.",
+      "caveats": "Aucune donnée directe disponible pour Monaco (classement, stats, forme) ni pour la forme FlashScore en direct — seules des sources secondaires existent pour Lens. Le classement (standings) est totalement absent pour les deux équipes, aucune indication football-data.co.uk n'étant fournie ici. Deux sources de forme pour Lens (FlashScore et profil équipe) présentent des séquences différentes sur des périodes non alignées, ce qui empêche de trancher sur la forme réelle actuelle. Les données FlashScore datent du 07/09/2026 et le profil d'équipe du 16/09/2026, avec un décalage temporel entre les deux sources à noter."
+    },
+    "updatedAt": "2026-09-18T17:07:44.435Z",
+    "createdAt": "2026-09-18T17:07:44.435Z"
   }
 ]
