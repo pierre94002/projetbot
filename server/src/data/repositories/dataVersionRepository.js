@@ -8,6 +8,17 @@ const RUNTIME_DIR = path.resolve(__dirname, '../../../data/runtime');
 const ODDS_SNAPSHOT_PATH = path.resolve(__dirname, '../../../data/fixtures/odds/odds-snapshot.json');
 
 /**
+ * Fichiers de RÉGLAGES, exclus de l'empreinte : ils ne sont écrits que depuis
+ * l'écran Réglages, et le rafraîchissement automatique ne recharge de toute
+ * façon pas la configuration. Les inclure ferait apparaître un toast
+ * "nouvelles données" dans l'onglet de celui qui vient simplement
+ * d'enregistrer un réglage, sans rien lui apporter. Les fichiers écrits par
+ * l'utilisateur qui, eux, DOIVENT se propager (paris, pronostics) restent
+ * dans l'empreinte : c'est ce qui les synchronise entre deux onglets.
+ */
+const SETTINGS_FILES = new Set(['engine-config.json', 'ai-config.json']);
+
+/**
  * Empreinte de l'état des fichiers de données, SANS les lire : seuls les
  * métadonnées (chemin, date de modification, taille) entrent dans le calcul.
  * Le coût est donc celui de quelques `stat`, ce qui permet au front d'appeler
@@ -44,7 +55,9 @@ function walk(dir, baseDir, parts, state) {
   for (const entry of [...entries].sort((a, b) => a.name.localeCompare(b.name))) {
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory()) walk(fullPath, baseDir, parts, state);
-    else if (entry.isFile()) collectFile(fullPath, path.relative(baseDir, fullPath).replace(/\\/g, '/'), parts, state);
+    else if (entry.isFile() && !SETTINGS_FILES.has(entry.name)) {
+      collectFile(fullPath, path.relative(baseDir, fullPath).replace(/\\/g, '/'), parts, state);
+    }
   }
 }
 
