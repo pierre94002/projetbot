@@ -11,10 +11,12 @@ const props = defineProps({
   generating: { type: Boolean, default: false },
   refreshingOdds: { type: Boolean, default: false },
   refreshingCompetitions: { type: Boolean, default: false },
-  lastOddsQuota: { type: Object, default: null }
+  lastOddsQuota: { type: Object, default: null },
+  flashscoreStatus: { type: Object, default: null },
+  refreshingFlashscore: { type: Boolean, default: false }
 });
 
-const emit = defineEmits(['generate', 'refresh-odds', 'refresh-competitions']);
+const emit = defineEmits(['generate', 'refresh-odds', 'refresh-competitions', 'refresh-flashscore']);
 
 const count = ref(60);
 </script>
@@ -61,6 +63,27 @@ const count = ref(60);
         <span>Jeu de données de test</span>
         <StatusBadge :status="fixtures.sampleMatches ? 'analyzed' : 'rejected'" />
       </div>
+
+      <div class="generator-panel__status-row">
+        <div>
+          <span>Statistiques FlashScore (Apify, complément IA)</span>
+          <p v-if="flashscoreStatus?.fetchedAt" class="cm-text-muted generator-panel__timestamp">
+            Actualisé le {{ formatDateTime(flashscoreStatus.fetchedAt) }} — {{ flashscoreStatus.teamCount }} équipe(s) sur
+            {{ flashscoreStatus.matchCount }} match(s) scanné(s)
+          </p>
+        </div>
+        <div class="generator-panel__status-actions">
+          <StatusBadge :status="flashscoreStatus ? 'analyzed' : 'rejected'" />
+          <AppButton variant="ghost" size="sm" :loading="refreshingFlashscore" @click="emit('refresh-flashscore')">
+            <template #icon><AppIcon name="refresh" :size="13" /></template>
+            Actualiser
+          </AppButton>
+        </div>
+      </div>
+      <p class="cm-text-muted generator-panel__quota">
+        Chaque actualisation appelle une API tierce payante (~2-3 $ pour une journée de football, plan Apify) — à ne
+        déclencher qu'à la main quand tu veux rafraîchir le contexte IA (forme, xG, possession).
+      </p>
     </div>
 
     <div class="generator-panel__form">

@@ -5,8 +5,6 @@ import AppButton from '@/components/common/AppButton.vue';
 import CollapsibleSection from '@/components/common/CollapsibleSection.vue';
 import MatchStatsPanel from '@/components/matches/MatchStatsPanel.vue';
 import MatchAiAnalysisPanel from './MatchAiAnalysisPanel.vue';
-import { formatOdds } from '@/utils/format.js';
-import { SHOTS_ON_TARGET_LINES, CORNER_LINES, combinedLinesFromValues, goalLinesWithOdds, bothTeamsScorePercentFromOdds } from '@/utils/betTrends.js';
 import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
 import { useMatchStatus } from '@/composables/useMatchStatus.js';
 import { LIVE_MATCH_UNAVAILABLE_MESSAGES } from '@/utils/lineupMessages.js';
@@ -26,33 +24,6 @@ defineEmits(['compare-averages-click', 'show-live-match-click', 'run-pre-match-a
 // coup d'envoi est passée depuis moins de 130 min (cf. matchStatus.js) —
 // aucun intérêt à proposer ça pour un match pas encore joué ou déjà terminé.
 const matchStatus = useMatchStatus(() => props.result.commenceTime);
-
-const goalLinesSuggestion = computed(() =>
-  goalLinesWithOdds(props.result.teamStats?.home?.goals?.for?.total, props.result.teamStats?.away?.goals?.for?.total, props.result.trueOdds)
-);
-
-const bothTeamsScorePercent = computed(() => bothTeamsScorePercentFromOdds(props.result.trueOdds?.bothTeamsScore));
-
-// Tirs cadrés et corners ne sont pas fournis automatiquement (contrairement
-// aux buts) : ils viennent des moyennes 34 champs, coûteuses en appels API,
-// donc chargées seulement quand l'utilisateur clique "Moyennes des deux
-// équipes". Tant que ce n'est pas fait, ces deux tendances restent masquées.
-const averagesTeamsStats = computed(() => {
-  const teams = props.averagesComparison?.teams;
-  return teams?.length === 2 ? teams : null;
-});
-
-const shotsOnTargetSuggestion = computed(() => {
-  const teams = averagesTeamsStats.value;
-  if (!teams) return null;
-  return combinedLinesFromValues(teams[0].stats?.['Shots on Goal'], teams[1].stats?.['Shots on Goal'], SHOTS_ON_TARGET_LINES);
-});
-
-const cornersLinesSuggestion = computed(() => {
-  const teams = averagesTeamsStats.value;
-  if (!teams) return null;
-  return combinedLinesFromValues(teams[0].stats?.['Corner Kicks'], teams[1].stats?.['Corner Kicks'], CORNER_LINES);
-});
 </script>
 
 <template>
@@ -146,66 +117,6 @@ const cornersLinesSuggestion = computed(() => {
         :fallback-opponent-name="averagesComparison.awayName"
       />
     </CollapsibleSection>
-
-    <CollapsibleSection v-if="goalLinesSuggestion || shotsOnTargetSuggestion || cornersLinesSuggestion" default-open class="analysis__goal-lines">
-      <template #header>
-        <p class="analysis__odds-1x2-head">Tendances <span class="cm-text-muted">(buts, tirs cadrés, corners)</span></p>
-      </template>
-      <div v-if="goalLinesSuggestion" class="analysis__goal-lines-row">
-        <div class="analysis__goal-lines-head">
-          <span>Tendance buts</span>
-          <span class="cm-numeric">Σ {{ goalLinesSuggestion.combined }} buts/match estimés</span>
-        </div>
-        <div class="analysis__goal-lines-tags">
-          <span v-for="item in goalLinesSuggestion.favorable" :key="item.line" class="analysis__goal-line-tag">
-            <AppIcon name="trendUp" :size="11" />
-            Plus de {{ item.line }} buts
-            <span v-if="item.odds" class="analysis__goal-line-odds">@ {{ formatOdds(item.odds) }}</span>
-          </span>
-          <span v-if="bothTeamsScorePercent !== null" class="analysis__goal-line-tag analysis__goal-line-tag--info">
-            Les 2 équipes marquent : {{ bothTeamsScorePercent }}% <span class="cm-text-muted">(modèle)</span>
-            <span class="analysis__goal-line-odds">@ {{ formatOdds(result.trueOdds.bothTeamsScore) }}</span>
-          </span>
-        </div>
-        <p class="cm-text-muted analysis__goal-lines-note">
-          Cotes calculées par le modèle (Poisson + Dixon-Coles) — une estimation, pas une garantie de résultat.
-        </p>
-      </div>
-
-      <div v-if="shotsOnTargetSuggestion" class="analysis__goal-lines-row">
-        <div class="analysis__goal-lines-head">
-          <span>Tendance tirs cadrés</span>
-          <span class="cm-numeric">Σ {{ shotsOnTargetSuggestion.combined }} tirs cadrés/match estimés</span>
-        </div>
-        <div class="analysis__goal-lines-tags">
-          <span v-for="line in shotsOnTargetSuggestion.favorable" :key="line" class="analysis__goal-line-tag">
-            <AppIcon name="trendUp" :size="11" />
-            Plus de {{ line }} tirs cadrés
-          </span>
-        </div>
-      </div>
-
-      <div v-if="cornersLinesSuggestion" class="analysis__goal-lines-row">
-        <div class="analysis__goal-lines-head">
-          <span>Tendance corners</span>
-          <span class="cm-numeric">Σ {{ cornersLinesSuggestion.combined }} corners/match estimés</span>
-        </div>
-        <div class="analysis__goal-lines-tags">
-          <span v-for="line in cornersLinesSuggestion.favorable" :key="line" class="analysis__goal-line-tag">
-            <AppIcon name="trendUp" :size="11" />
-            Plus de {{ line }} corners
-          </span>
-        </div>
-      </div>
-
-      <p v-if="cornersLinesSuggestion" class="cm-text-muted analysis__goal-lines-note">
-        Corners : pas de cote calculée — aucun marché ni modèle de probabilité dédié dans l'app pour cette statistique,
-        seulement la tendance basée sur la moyenne saison.
-      </p>
-      <p v-if="!averagesTeamsStats" class="cm-text-muted analysis__goal-lines-note">
-        Clique sur "Moyennes des deux équipes" pour débloquer les tendances tirs cadrés et corners.
-      </p>
-    </CollapsibleSection>
   </div>
 </template>
 
@@ -237,60 +148,6 @@ const cornersLinesSuggestion = computed(() => {
   padding: 12px 14px;
   background: var(--cm-surface-alt);
   border-radius: var(--cm-radius);
-}
-
-.analysis__goal-lines {
-  padding: 12px 14px;
-  background: var(--cm-surface-alt);
-  border-radius: var(--cm-radius);
-}
-
-.analysis__goal-lines-row + .analysis__goal-lines-row {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--cm-border-soft);
-}
-
-.analysis__goal-lines-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  font-size: 12.5px;
-  font-weight: 600;
-}
-
-.analysis__goal-lines-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 8px;
-}
-
-.analysis__goal-line-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 9px;
-  border-radius: 999px;
-  background: var(--cm-accent-soft);
-  color: var(--cm-accent);
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.analysis__goal-line-odds {
-  font-weight: 700;
-  opacity: 0.85;
-}
-
-.analysis__goal-line-tag--info {
-  background: var(--cm-info-soft);
-  color: var(--cm-info);
-}
-
-.analysis__goal-lines-note {
-  font-size: 11px;
-  margin-top: 8px;
 }
 
 .analysis__tabs-row {

@@ -36,7 +36,7 @@ async function loadLineups() {
 
   lineups.value = { loading: true, error: null, result: null };
   try {
-    const result = await teamStatsApi.getLineupsByName(match.home, match.commenceTime);
+    const result = await teamStatsApi.getLineupsByName(match.home, match.commenceTime, match.away, match.league);
     lineups.value = { loading: false, error: null, result };
   } catch (error) {
     lineups.value = { loading: false, error: error.message, result: null };
@@ -54,7 +54,12 @@ async function loadPlayers() {
 
   players.value = { loading: true, error: null, result: null };
   try {
-    const result = await teamStatsApi.getPlayersByName(name);
+    // Saison réelle en cours (pas resolveCurrentSeason()/2024 côté serveur,
+    // qui n'est qu'un repli quand la vraie saison échoue) — même logique que
+    // les compositions (getLineupsByName), pour obtenir l'effectif actuel
+    // par défaut plutôt que des stats figées de 2024, avec repli recherche
+    // web automatique si l'API-Football ne couvre pas cette saison.
+    const result = await teamStatsApi.getPlayersByName(name, new Date().getFullYear());
     players.value = { loading: false, error: null, result };
   } catch (error) {
     players.value = { loading: false, error: error.message, result: null };
@@ -80,14 +85,19 @@ async function loadPlayers() {
         v-else-if="lineups?.result && !lineups.result.available"
         icon="target"
         title="Composition indisponible"
-        :description="LINEUP_UNAVAILABLE_MESSAGES[lineups.result.reason] ?? 'Composition introuvable pour ce match.'"
+        :description="describeLineupUnavailable(lineups.result)"
       />
 
       <EmptyState v-else-if="lineups?.error" icon="alert" title="Erreur" :description="lineups.error" />
 
-      <div v-else-if="lineups?.result?.available" class="team-squad__lineups">
-        <TeamLineup v-for="team in lineups.result.teams" :key="team.teamId" :team="team" />
-      </div>
+      <template v-else-if="lineups?.result?.available">
+        <p v-if="lineups.result.source === 'web'" class="cm-text-muted team-squad__web-source">
+          Composition {{ lineups.result.officialOrProbable === 'official' ? 'officielle' : 'probable' }} trouvée via recherche web{{ lineups.result.sourceUrl ? ` (${lineups.result.sourceUrl})` : '' }} — pas depuis API-Football.
+        </p>
+        <div class="team-squad__lineups">
+          <TeamLineup v-for="(team, index) in lineups.result.teams" :key="team.teamId ?? `${team.teamName}-${index}`" :team="team" />
+        </div>
+      </template>
 
       <EmptyState
         v-else
@@ -118,6 +128,7 @@ async function loadPlayers() {
       <div v-else-if="players?.result" class="team-squad__players-table-wrap">
         <p class="cm-text-muted team-squad__players-season">
           {{ players.result.teamName }} — saison {{ players.result.season }} ({{ players.result.players.length }} joueurs)
+          <template v-if="players.result.source === 'web'"> — trouvé via recherche web, pas depuis API-Football</template>
         </p>
         <table class="team-squad__players-table">
           <thead>
@@ -178,6 +189,11 @@ async function loadPlayers() {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+}
+
+.team-squad__web-source {
+  font-size: 11px;
+  margin-bottom: 10px;
 }
 
 .team-squad__players-season {

@@ -72,7 +72,7 @@ const opponentName = computed(() => opponent.value?.teamName ?? props.fallbackOp
     </div>
 
     <p class="cm-text-muted match-stats__footnote">
-      Les lignes affichant "—" attendent une source de données qui les couvre (ex. xGOT, expected assists, grosses occasions, duels, tacles) — non fournies par le plan API-Football actuel.
+      Saison en cours : stats importées chaque matin à 7h30 depuis des sources web confirmées. Un "—" signifie qu'aucune source fiable ne donnait ce chiffre pour ce match (jamais estimé).
     </p>
   </div>
 </template>
