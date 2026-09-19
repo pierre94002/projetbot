@@ -22,7 +22,12 @@ const LINEUPS_CACHE_TTL_MS = 5 * 60 * 1000;
 // de plusieurs minutes ici resservirait un score périmé.
 const LIVE_MATCH_CACHE_TTL_MS = 60 * 1000;
 const PLAYERS_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
-const MAX_PLAYERS_PAGES = 5; // garde-fou : un effectif de club tient sur 1-2 pages de 20
+// Le plan gratuit API-Football rejette toute page > 3 ("Free plans are
+// limited to a maximum value of 3 for the Page parameter") — observé le
+// 2026-09-14 sur une équipe dont l'effectif (saisonnier + prêts) dépasse les
+// 40 joueurs. Plafonné ici plutôt qu'au-dessus de la vraie limite du plan,
+// pour renvoyer les 60 premiers joueurs plutôt que de tout faire échouer.
+const MAX_PLAYERS_PAGES = 3;
 export const DEFAULT_CORNERS_SAMPLE_SIZE = 5;
 export const DEFAULT_FORM_SAMPLE_SIZE = 5;
 export const DEFAULT_AVERAGE_STATS_SAMPLE_SIZE = 10;
@@ -356,7 +361,17 @@ export async function getTeamPlayers(teamId, season) {
   let page = 1;
   let totalPages = 1;
   do {
-    const body = await getPlayersRaw(teamId, season, page);
+    let body;
+    try {
+      body = await getPlayersRaw(teamId, season, page);
+    } catch (error) {
+      // Une erreur en cours de pagination (limite de débit, panne ponctuelle)
+      // ne doit pas effacer les joueurs déjà récupérés — mais un échec dès la
+      // première page reste une erreur, sinon un effectif vide serait mis en
+      // cache 24h.
+      if (page === 1) throw error;
+      break;
+    }
     for (const entry of body.response ?? []) {
       const stats = entry.statistics?.[0] ?? null;
       players.push({
@@ -380,6 +395,7 @@ export async function getTeamPlayers(teamId, season) {
   } while (page <= totalPages && page <= MAX_PLAYERS_PAGES);
 
   const result = { players: players.sort((a, b) => (b.appearances ?? 0) - (a.appearances ?? 0)), season };
+  if (!players.length) return result;
   return setCachedValue(cacheKey, result);
 }
 

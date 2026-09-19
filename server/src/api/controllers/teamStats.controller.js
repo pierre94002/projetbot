@@ -10,9 +10,10 @@ import {
 import { ApiError } from '../middlewares/errorHandler.js';
 
 export async function getSearchTeams(req, res) {
+  // API-Football rejette toute recherche de moins de 3 caractères.
   const query = req.query.query;
-  if (!query || query.trim().length < 2) {
-    throw new ApiError(400, 'Le paramètre "query" doit contenir au moins 2 caractères.');
+  if (typeof query !== 'string' || query.trim().length < 3) {
+    throw new ApiError(400, 'Le paramètre "query" doit contenir au moins 3 caractères.');
   }
   const teams = await searchTeams(query.trim());
   res.json({ teams });
@@ -112,9 +113,11 @@ export async function getTeamAverageStatsByName(req, res) {
 export async function getLineupsByName(req, res) {
   const name = req.query.name;
   const commenceTime = req.query.commenceTime;
+  const away = req.query.away;
+  const league = req.query.league;
   if (!name || !commenceTime) throw new ApiError(400, 'Les paramètres "name" et "commenceTime" sont requis.');
 
-  const result = await resolveLiveLineups(name, commenceTime);
+  const result = await resolveLiveLineups(name, commenceTime, away, league);
   res.json(result);
 }
 
@@ -137,9 +140,10 @@ export async function getLiveMatchByName(req, res) {
 export async function getPlayersByName(req, res) {
   const name = req.query.name;
   const season = req.query.season ? Number(req.query.season) : undefined;
+  const league = req.query.league;
   if (!name) throw new ApiError(400, 'Le paramètre "name" est requis.');
 
-  const result = await resolvePlayersByName(name, season);
+  const result = await resolvePlayersByName(name, season, league);
   if (!result) throw new ApiError(404, `Équipe introuvable pour "${name}".`);
 
   res.json(result);

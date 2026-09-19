@@ -10,6 +10,9 @@ import {
 } from './teamStatsService.js';
 import { resolveLeagueId, resolveCurrentSeason } from './leagueRegistry.js';
 import { getResultsForTeam } from '../repositories/matchResultsRepository.js';
+import { getTeamWebAverages } from '../repositories/matchStatsWebRepository.js';
+import { resolveLineupViaWeb, resolvePlayersViaWeb } from '../../core/ai/webLookupService.js';
+import { getTeamProfile } from '../repositories/teamProfileRepository.js';
 
 /**
  * Enrichit un match adapté (cf. matchSources.js) avec les moyennes réelles
@@ -203,6 +206,12 @@ async function resolveSingleTeamForm(request, sampleSize) {
  * équipe par son nom (ex. clic sur une équipe dans le panneau d'analyse).
  */
 export async function resolveAverageStatsByName(name, league, sampleSize) {
+  // Priorité aux stats importées chaque matin (saison EN COURS, cf.
+  // matchStatsWebRepository.js) : API-Football gratuit s'arrête à 2024.
+  // Repli API-Football uniquement si aucun match n'a encore été importé.
+  const web = getTeamWebAverages(name, sampleSize);
+  if (web) return { teamId: null, teamName: name, stats: web, source: 'web' };
+
   const leagueId = await resolveLeagueId(league);
   if (!leagueId) return null;
 
@@ -216,15 +225,24 @@ export async function resolveAverageStatsByName(name, league, sampleSize) {
 /**
  * Composition en direct d'un match réel, par nom d'équipe domicile + date de
  * coup d'envoi (ex. clic sur un match dans la liste). Ne dépend pas de la
- * ligue : `/fixtures` filtre déjà par équipe + date + saison.
+ * ligue pour la résolution API-Football : `/fixtures` filtre déjà par équipe
+ * + date + saison — `awayName`/`league` ne servent qu'au REPLI web ci-dessous
+ * (recherche "X vs Y", pas juste "X").
+ *
+ * Repli recherche web (webLookupService.js) UNIQUEMENT quand la saison
+ * demandée est hors couverture du plan gratuit API-Football
+ * (`season_not_available`) — jamais pour `fixture_not_found`/`not_published_yet`,
+ * qui ne sont pas des questions de couverture de plan et où une recherche web
+ * n'a pas de raison de réussir là où l'API a échoué.
  */
-export async function resolveLiveLineups(homeName, commenceTimeIso) {
+export async function resolveLiveLineups(homeName, commenceTimeIso, awayName, league) {
   const team = await findBestTeamMatch(homeName).catch(() => null);
-  if (!team) return { available: false, reason: 'team_not_found' };
+  const primary = team ? await getLiveLineups(team.id, commenceTimeIso.slice(0, 10), new Date(commenceTimeIso).getFullYear()) : { available: false, reason: 'team_not_found' };
 
-  const date = commenceTimeIso.slice(0, 10);
-  const season = new Date(commenceTimeIso).getFullYear();
-  return getLiveLineups(team.id, date, season);
+  if (primary.available || primary.reason !== 'season_not_available') return primary;
+  if (!awayName) return primary;
+
+  return resolveLineupViaWeb({ home: homeName, away: awayName, league, commenceTimeIso });
 }
 
 /**
@@ -242,14 +260,42 @@ export async function resolveLiveMatchDetails(homeName, commenceTimeIso) {
 
 /**
  * Effectif + stats individuelles des joueurs d'une équipe par son nom. Pas
- * de dépendance à la ligue non plus (`/players` ne filtre que par équipe +
- * saison) — saison par défaut = la plus récente disponible sur le plan
- * actuel (2024), ajustable via le paramètre.
+ * de dépendance à la ligue côté API-Football (`/players` ne filtre que par
+ * équipe + saison) — saison par défaut = la plus récente disponible sur le
+ * plan actuel (2024), ajustable via le paramètre. `league` ne sert qu'au
+ * REPLI web ci-dessous (désambiguïser un nom d'équipe partagé entre pays).
+ *
+ * Repli en deux temps quand l'équipe n'est pas résolue OU que l'effectif
+ * revient vide (ex. plan gratuit limité en pages de résultats, cf.
+ * teamStatsService.js#getTeamPlayers) — jamais un remplacement d'un effectif
+ * déjà obtenu avec succès : (1) le cache local team-profiles.json, peuplé par
+ * la tâche planifiée pour les équipes des coupes européennes (gratuit, déjà
+ * là) ; (2) sinon, recherche web à la demande (webLookupService.js).
  */
-export async function resolvePlayersByName(name, season) {
-  const team = await findBestTeamMatch(name).catch(() => null);
-  if (!team) return null;
+export async function resolvePlayersByName(name, season, league) {
+  let apiFootballError = null;
+  const team = await findBestTeamMatch(name).catch((error) => {
+    apiFootballError = error;
+    return null;
+  });
+  if (team) {
+    const result = await getTeamPlayers(team.id, season ?? resolveCurrentSeason()).catch((error) => {
+      apiFootballError = error;
+      return null;
+    });
+    if (result?.players?.length) return { teamId: team.id, teamName: team.name, ...result };
+  }
 
-  const result = await getTeamPlayers(team.id, season ?? resolveCurrentSeason());
-  return { teamId: team.id, teamName: team.name, ...result };
+  const cached = getTeamProfile(name);
+  if (cached?.players?.length) return cached;
+
+  const web = await resolvePlayersViaWeb({ teamName: name, league });
+  if (web) return web;
+
+  // Sans aucune source, un échec API-Football (quota journalier, clé) ne
+  // doit pas se présenter comme "équipe introuvable".
+  if (apiFootballError) {
+    throw Object.assign(new Error(`Effectif indisponible : API-Football a échoué (${apiFootballError.message}) et aucune autre source n'a de données pour "${name}".`), { status: 502 });
+  }
+  return null;
 }
