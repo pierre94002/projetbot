@@ -27,6 +27,12 @@
  * Levante - Athletic Club, reporté du 16 septembre au 21 octobre 2026 pour
  * cause de pelouse inondée. L'opération est idempotente : relancée, elle ne
  * retrouve plus rien à l'ancienne date et se contente de vérifier la nouvelle.
+ *
+ * SCORE DÉJÀ CONNU — un score enregistré n'est jamais remplacé en silence par
+ * un score différent : l'entrée est refusée, signalée sur stderr et comptée
+ * dans `conflicts`. Un score identique passe normalement, et un match encore
+ * annoncé "à venir" n'efface pas un résultat acquis. Pour corriger sciemment
+ * une valeur erronée, ajoute "correctsScore": true à CETTE entrée.
  * -----------------------------------------------------------------------
  */
 
@@ -60,6 +66,20 @@ function readJson(p, fallback) {
   return fallback;
 }
 
+/**
+ * Score réellement connu d'une entrée, ou null. Attention au piège :
+ * `Number(null)` vaut 0 et passe `Number.isFinite` — un match sans score
+ * serait alors lu « 0-0 » et un vrai 0-0 deviendrait indistinguable d'une
+ * absence. D'où le test explicite de null/undefined AVANT toute conversion.
+ */
+function scoreOf(homeGoalsValue, awayGoalsValue) {
+  if (homeGoalsValue === null || homeGoalsValue === undefined) return null;
+  if (awayGoalsValue === null || awayGoalsValue === undefined) return null;
+  const numHome = Number(homeGoalsValue);
+  const numAway = Number(awayGoalsValue);
+  return Number.isFinite(numHome) && Number.isFinite(numAway) ? [numHome, numAway] : null;
+}
+
 const calendar = readJson(calendarPath, []);
 const newMatches = readJson(newMatchesPath, []);
 
@@ -68,10 +88,11 @@ let updated = 0;
 let skipped = 0;
 let moved = 0;
 let removed = 0;
+let conflicts = 0;
 const now = new Date().toISOString();
 
 for (const m of newMatches) {
-  const { date, league, homeName, awayName, status, homeGoals, awayGoals, round, source, postponedTo } = m;
+  const { date, league, homeName, awayName, status, homeGoals, awayGoals, round, source, postponedTo, correctsScore } = m;
 
   if (!date || !homeName || !awayName || !league) {
     console.error(`Ignoré (données incomplètes) : ${JSON.stringify(m)}`);
@@ -181,6 +202,27 @@ for (const m of newMatches) {
   const incomingHasScore = incomingHomeGoals !== null && incomingAwayGoals !== null;
 
   if (existing) {
+    // Garde-fou : un score déjà connu n'est pas non plus remplacé en silence
+    // par un score DIFFÉRENT. La règle juste en dessous ne protégeait que
+    // contre l'effacement par une source en retard (score -> null) ; elle
+    // laissait passer 1-1 -> 3-0, ce qui est arrivé a Getafe - Deportivo le
+    // 13 septembre 2026. On refuse l'entrée entière : un score qui change,
+    // c'est la source qu'il faut regarder, pas la date ou la journée.
+    // "correctsScore": true sur l'entrée force la correction.
+    const knownScore = scoreOf(existing.homeGoals, existing.awayGoals);
+    if (
+      knownScore &&
+      incomingHasScore &&
+      (knownScore[0] !== Number(incomingHomeGoals) || knownScore[1] !== Number(incomingAwayGoals)) &&
+      correctsScore !== true
+    ) {
+      console.error(
+        `Conflit de score, rien n'est écrasé : ${existing.matchId} — connu ${knownScore[0]}-${knownScore[1]}, ` +
+        `source ${incomingHomeGoals}-${incomingAwayGoals}. Ajoute "correctsScore": true pour forcer la correction.`
+      );
+      conflicts++;
+      continue;
+    }
     // Un score déjà connu n'est jamais effacé par une source en retard qui
     // annonce encore le match "à venir".
     if (incomingHasScore || existing.homeGoals === null || existing.homeGoals === undefined) {
@@ -231,4 +273,4 @@ for (const m of newMatches) {
 fs.mkdirSync(path.dirname(calendarPath), { recursive: true });
 fs.writeFileSync(calendarPath, JSON.stringify(calendar, null, 2), 'utf8');
 
-console.log(JSON.stringify({ created, updated, skipped, moved, removed, total: calendar.length }));
+console.log(JSON.stringify({ created, updated, skipped, moved, removed, conflicts, total: calendar.length }));
