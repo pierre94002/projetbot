@@ -29,10 +29,27 @@ function currentSeasonStart(now = new Date()) {
   return `${year}-07-01`;
 }
 
-export function listSeasonCalendar({ league, allSeasons = false } = {}) {
+/** Saison d'une date, sous la forme "2024-25". */
+function seasonOf(date) {
+  const year = Number(String(date).slice(0, 4));
+  const month = Number(String(date).slice(5, 7));
+  const start = month >= 7 ? year : year - 1;
+  return `${start}-${String(start + 1).slice(2)}`;
+}
+
+/**
+ * `season` ("2024-25") restreint à une saison précise ; `allSeasons` les
+ * renvoie toutes. Sans l'un ni l'autre, seule la saison en cours — le
+ * calendrier compte plusieurs saisons d'historique depuis l'import ESPN, et
+ * les servir d'un bloc par défaut noierait la journée du jour.
+ */
+export function listSeasonCalendar({ league, allSeasons = false, season = null } = {}) {
   const seasonStart = currentSeasonStart();
   const filtered = readCalendar().filter((m) => {
-    if (!allSeasons && (m.date ?? '') < seasonStart) return false;
+    const date = m.date ?? '';
+    if (season) {
+      if (seasonOf(date) !== season) return false;
+    } else if (!allSeasons && date < seasonStart) return false;
     return league ? (m.league ?? '').toLowerCase().includes(league.trim().toLowerCase()) : true;
   });
   return filtered.sort((a, b) => (a.date ?? '').localeCompare(b.date ?? ''));
@@ -40,9 +57,23 @@ export function listSeasonCalendar({ league, allSeasons = false } = {}) {
 
 export function getSeasonCalendarStatus() {
   const all = readCalendar();
+  const bySeason = new Map();
+  for (const match of all) {
+    if (!match?.date) continue;
+    const label = seasonOf(match.date);
+    if (!bySeason.has(label)) bySeason.set(label, { season: label, matches: 0, finished: 0 });
+    const row = bySeason.get(label);
+    row.matches++;
+    if (match.homeGoals !== null && match.homeGoals !== undefined) row.finished++;
+  }
+
   return {
     count: all.length,
     leagues: [...new Set(all.map((m) => m.league).filter(Boolean))].sort(),
+    // Saisons présentes, de la plus récente à la plus ancienne : c'est ce
+    // qui alimente le sélecteur de saison côté interface.
+    seasons: [...bySeason.values()].sort((a, b) => b.season.localeCompare(a.season)),
+    currentSeason: seasonOf(currentSeasonStart()),
     lastUpdatedAt: all.reduce((latest, m) => (m.updatedAt && (!latest || m.updatedAt > latest) ? m.updatedAt : latest), null)
   };
 }

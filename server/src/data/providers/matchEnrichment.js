@@ -278,7 +278,12 @@ export async function resolvePlayersByName(name, season, league) {
   // elle est locale, gratuite et rafraîchie toute seule. API-Football ne
   // couvre que 2022-2024 sur ce plan et consomme un quota journalier ; les
   // fiches club, elles, ne listent que les buteurs et les passeurs.
-  const fromMatchSheets = getTeamSquad(name);
+  // `season` est une année de DÉBUT de saison (2024 = 2024-25), comme chez
+  // API-Football. Le magasin, lui, est daté au jour : on convertit.
+  const window = Number.isFinite(Number(season))
+    ? { since: `${Number(season)}-07-01`, until: `${Number(season) + 1}-06-30` }
+    : {};
+  const fromMatchSheets = getTeamSquad(name, window);
   if (fromMatchSheets?.players?.length) return fromMatchSheets;
 
   let apiFootballError = null;

@@ -24,8 +24,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { ESPN_LEAGUE_SLUGS, fetchFinishedEvents, fetchMatchStats } from './espnMatchStatsProvider.js';
-import { teamNamesLikelyMatch } from '../../utils/teamNameMatch.js';
+import { ESPN_LEAGUE_SLUGS, fetchFinishedEvents, fetchMatchStats, fetchSeasonMatchDays } from './espnMatchStatsProvider.js';
+import { teamNamesLikelyMatch, findBestTeamNameMatch } from '../../utils/teamNameMatch.js';
 // Le contrat de fusion (clés acceptées, upsert, format des fichiers mensuels)
 // n'existe qu'à un seul endroit : scripts/merge-match-stats.mjs. La ligne de
 // commande et le serveur l'appellent tous deux plutôt que d'en tenir deux
@@ -38,6 +38,9 @@ const MATCH_STATS_DIR = path.join(RUNTIME_DIR, 'match-stats');
 const CALENDAR_FILE = path.join(RUNTIME_DIR, 'season-calendar.json');
 const STATUS_FILE = path.join(RUNTIME_DIR, 'espn-refresh-status.json');
 const LOCK_FILE = path.join(RUNTIME_DIR, 'espn-refresh.lock');
+// Journees de match par (championnat, saison), decouvertes chez ESPN. Le
+// calendrier d'une saison terminee ne change plus : on evite de le redemander.
+const SEASON_DAYS_FILE = path.join(RUNTIME_DIR, 'espn-season-days.json');
 
 /** Au-delà, un verrou est tenu pour abandonné (processus tué, coupure). */
 const LOCK_STALE_MINUTES = 60;
@@ -164,7 +167,36 @@ export function getCoverage() {
   );
   totals.coverage = totals.finished ? Math.round((100 * totals.withStats) / totals.finished) : 0;
 
-  return { totals, leagues };
+  return { totals, leagues, seasons: summariseSeasons(stored) };
+}
+
+/**
+ * Ce que contient le magasin, saison par saison — y compris les saisons
+ * passées, qui ne figurent pas au calendrier local et resteraient donc
+ * invisibles dans le tableau de couverture ci-dessus.
+ *
+ * Une saison va de juillet à juin ; les championnats russe et chinois, qui
+ * suivent l'année civile, s'y rangent par leur année de début.
+ */
+function summariseSeasons(stored) {
+  const bySeason = new Map();
+  for (const entry of stored.values()) {
+    if (!entry?.date) continue;
+    const year = Number(entry.date.slice(0, 4));
+    const month = Number(entry.date.slice(5, 7));
+    const start = month >= 7 ? year : year - 1;
+    const label = `${start}-${String(start + 1).slice(2)}`;
+    if (!bySeason.has(label)) bySeason.set(label, { season: label, matches: 0, withPlayers: 0, playerRows: 0, leagues: new Set() });
+    const row = bySeason.get(label);
+    row.matches++;
+    if (entry.league) row.leagues.add(entry.league);
+    const players = (entry.players?.home?.length ?? 0) + (entry.players?.away?.length ?? 0);
+    row.playerRows += players;
+    if (players) row.withPlayers++;
+  }
+  return [...bySeason.values()]
+    .map(({ leagues, ...row }) => ({ ...row, leagues: leagues.size }))
+    .sort((a, b) => a.season.localeCompare(b.season));
 }
 
 /** Exécute `worker` sur `items` avec au plus `size` tâches en vol. */
@@ -335,11 +367,27 @@ export async function refreshMatchStats(options = {}) {
  * prise de verrou atomique. Un verrou plus vieux que LOCK_STALE_MINUTES est
  * considéré comme abandonné (processus tué avant d'avoir pu le retirer).
  */
+/** Le processus qui détient le verrou tourne-t-il encore ? */
+function pidAlive(pid) {
+  if (!Number.isInteger(pid) || pid <= 0) return false;
+  try {
+    // Signal 0 ne fait rien : il ne sert qu'à tester l'existence du processus.
+    process.kill(pid, 0);
+    return true;
+  } catch (error) {
+    // EPERM = le processus existe mais appartient à un autre utilisateur.
+    return error.code === 'EPERM';
+  }
+}
+
 function acquireLock() {
   try {
     const previous = JSON.parse(fs.readFileSync(LOCK_FILE, 'utf8'));
     const ageMinutes = (Date.now() - new Date(previous.startedAt).getTime()) / 60_000;
-    if (ageMinutes < LOCK_STALE_MINUTES) return false;
+    // Un verrou dont le détenteur n'existe plus est abandonné, quel que soit
+    // son âge : un processus tué (arrêt du serveur, délai dépassé) laisse
+    // sinon le verrou en place une heure durant, pour rien.
+    if (ageMinutes < LOCK_STALE_MINUTES && pidAlive(previous.pid)) return false;
     fs.rmSync(LOCK_FILE, { force: true });
   } catch {
     // Pas de verrou, ou verrou illisible : on tente de le prendre.
@@ -369,21 +417,183 @@ let inFlight = null;
  * qu'utilisent la route HTTP et la tâche périodique.
  */
 export function refreshMatchStatsExclusive(options = {}) {
+  return withRefreshLock(() => refreshMatchStats(options));
+}
+
+/**
+ * Exécute `task` sous le verrou, en garantissant qu'un seul rafraîchissement
+ * touche les fichiers mensuels à la fois — ici comme dans un autre processus.
+ *
+ * Permet d'enchaîner plusieurs passes (ESPN puis FotMob) sous UN seul verrou :
+ * les prendre à tour de rôle laisserait une fenêtre entre les deux où la
+ * ligne de commande pourrait s'intercaler.
+ */
+export function withRefreshLock(task) {
   if (inFlight) return inFlight;
   if (!acquireLock()) {
     // Un autre processus travaille déjà : on ne fait rien plutôt que d'aller
     // écraser ses écritures.
     return Promise.resolve({ skipped: 'verrou détenu par un autre processus', considered: 0, merged: 0, playersMerged: 0, unmatched: 0, failed: 0 });
   }
-  inFlight = refreshMatchStats(options).finally(() => {
-    releaseLock();
-    inFlight = null;
-  });
+  inFlight = Promise.resolve()
+    .then(task)
+    .finally(() => {
+      releaseLock();
+      inFlight = null;
+    });
   return inFlight;
 }
 
 export function isRefreshRunning() {
   return inFlight !== null;
+}
+
+/**
+ * Noms d'équipe déjà employés par le projet, par championnat. Les saisons
+ * passées arrivent avec l'orthographe d'ESPN ("Manchester City") alors que le
+ * reste du magasin emploie celle du calendrier ("Man City") : sans
+ * harmonisation, une même équipe aurait deux séries de statistiques.
+ */
+function buildKnownNames() {
+  const byLeague = new Map();
+  const add = (league, name) => {
+    if (!league || !name) return;
+    if (!byLeague.has(league)) byLeague.set(league, new Set());
+    byLeague.get(league).add(name);
+  };
+  for (const fixture of readJson(CALENDAR_FILE, [])) add(fixture?.league, fixture?.homeName), add(fixture?.league, fixture?.awayName);
+  for (const entry of readStoredEntries().values()) add(entry?.league, entry?.homeName), add(entry?.league, entry?.awayName);
+  return byLeague;
+}
+
+/** Nom canonique du projet pour une équipe ESPN, ou le nom ESPN à défaut. */
+function canonicalName(espnName, league, known) {
+  const candidates = known.get(league);
+  if (!candidates?.size) return espnName;
+  return findBestTeamNameMatch(espnName, [...candidates]) ?? espnName;
+}
+
+/**
+ * Importe des saisons entières sans passer par le calendrier local, qui ne
+ * remonte pas au-delà de la saison précédente. Les journées de match sont
+ * découvertes chez ESPN (cf. fetchSeasonMatchDays).
+ *
+ * `seasons` est une liste d'années de DÉBUT de saison : 2024 désigne
+ * 2024-25.
+ */
+export async function importSeasons({ seasons, leagues = null, concurrency = DEFAULT_CONCURRENCY, onProgress = null } = {}) {
+  const startedAt = new Date().toISOString();
+  const wanted = leagues ? Object.entries(ESPN_LEAGUE_SLUGS).filter(([name]) => leagues.includes(name)) : Object.entries(ESPN_LEAGUE_SLUGS);
+  const known = buildKnownNames();
+  const already = new Set(readStoredEntries().keys());
+
+  const report = { startedAt, finishedAt: null, seasons, days: 0, discovered: 0, skipped: 0, fetched: 0, merged: 0, playersMerged: 0, noStats: 0, failed: 0, unavailable: [], samples: { failed: [] } };
+
+  // Étape 1 : les journées à interroger, championnat par championnat.
+  // Mises en cache : le calendrier d'une saison terminée ne bouge plus, et
+  // sans cela une reprise après incident réinterrogerait des milliers de
+  // journées avant d'atteindre les rencontres qui manquent encore.
+  const dayCache = readJson(SEASON_DAYS_FILE, {});
+  let cacheChanged = false;
+  const dayTasks = [];
+  for (const season of seasons) {
+    for (const [leagueName, slug] of wanted) {
+      const key = `${slug}|${season}`;
+      let days = dayCache[key];
+      if (!days) {
+        days = await fetchSeasonMatchDays(slug, season).catch(() => null);
+        if (days?.length) {
+          dayCache[key] = days;
+          cacheChanged = true;
+        }
+      }
+      if (!days?.length) {
+        report.unavailable.push(`${leagueName} ${season}-${String(season + 1).slice(2)}`);
+        continue;
+      }
+      for (const date of days) dayTasks.push({ leagueName, slug, date });
+    }
+  }
+  if (cacheChanged) {
+    try {
+      fs.writeFileSync(SEASON_DAYS_FILE, `${JSON.stringify(dayCache, null, 2)}\n`, 'utf8');
+    } catch {
+      // Le cache n'est qu'un raccourci : son échec ne doit pas arrêter l'import.
+    }
+  }
+  report.days = dayTasks.length;
+  onProgress?.({ phase: 'days', days: report.days });
+
+  // Étape 2 : les rencontres de chaque journée.
+  const events = [];
+  let daysDone = 0;
+  await pool(dayTasks, concurrency, async ({ leagueName, slug, date }) => {
+    const found = await fetchFinishedEvents(slug, date).catch(() => []);
+    for (const event of found) events.push({ ...event, leagueName });
+    daysDone++;
+    if (onProgress && daysDone % 100 === 0) onProgress({ phase: 'scanning', done: daysDone, total: dayTasks.length, found: events.length });
+  });
+
+  // Une rencontre peut apparaître sur deux journées voisines (fuseaux) : on
+  // ne la retient qu'une fois.
+  const uniqueEvents = [...new Map(events.map((e) => [e.gameId, e])).values()];
+  report.discovered = uniqueEvents.length;
+
+  const pending = [];
+  for (const event of uniqueEvents) {
+    const homeName = canonicalName(event.homeName, event.leagueName, known);
+    const awayName = canonicalName(event.awayName, event.leagueName, known);
+    const matchKey = `${event.date}-${slug(homeName)}-${slug(awayName)}`;
+    if (already.has(matchKey)) {
+      report.skipped++;
+      continue;
+    }
+    pending.push({ event, homeName, awayName });
+  }
+  onProgress?.({ phase: 'discovered', discovered: report.discovered, pending: pending.length, skipped: report.skipped });
+
+  // Étape 3 : le détail, fusionné par lots.
+  let batch = [];
+  const flush = () => {
+    if (!batch.length) return;
+    const summary = mergeMatchStats(MATCH_STATS_DIR, batch);
+    report.merged += summary.created + summary.updated;
+    report.playersMerged += summary.playersMerged;
+    batch = [];
+  };
+
+  let done = 0;
+  await pool(pending, concurrency, async ({ event, homeName, awayName }) => {
+    try {
+      const stats = await fetchMatchStats(event.gameId);
+      if (!stats) report.noStats++;
+      else {
+        report.fetched++;
+        batch.push({
+          date: event.date,
+          league: event.leagueName,
+          homeName,
+          awayName,
+          homeGoals: event.homeGoals,
+          awayGoals: event.awayGoals,
+          teamStats: stats.teamStats,
+          players: stats.players,
+          sources: stats.sources
+        });
+      }
+    } catch (error) {
+      report.failed++;
+      if (report.samples.failed.length < 20) report.samples.failed.push(`${event.date} ${homeName}-${awayName} : ${error.message}`);
+    }
+    done++;
+    if (batch.length >= FLUSH_EVERY) flush();
+    if (onProgress && done % 50 === 0) onProgress({ phase: 'fetching', done, total: pending.length, merged: report.merged });
+  });
+
+  flush();
+  report.finishedAt = new Date().toISOString();
+  onProgress?.({ phase: 'done', ...report });
+  return report;
 }
 
 function writeStatus(report) {

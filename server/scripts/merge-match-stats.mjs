@@ -60,15 +60,24 @@ export const PLAYER_STAT_KEYS = [
   'minutes', 'rating', 'goals', 'assists', 'shots', 'shotsOnTarget', 'xg', 'xa', 'keyPasses',
   'passes', 'passesAccurate', 'crosses', 'dribblesWon', 'touches', 'tackles', 'interceptions',
   'clearances', 'duelsWon', 'duelsTotal', 'foulsCommitted', 'foulsSuffered', 'offsides',
-  'yellowCards', 'redCards', 'saves', 'goalsConceded'
+  'yellowCards', 'redCards', 'saves', 'goalsConceded',
+  // Détail supplémentaire publié par FotMob, nécessaire pour reproduire ses
+  // onglets Attaque / Passes / Défense / Duels / Gardien.
+  'xgot', 'xgotFaced', 'goalsPrevented', 'bigChancesMissed', 'touchesOppBox',
+  'blocks', 'recoveries', 'dribbledPast', 'dispossessed',
+  'groundDuelsWon', 'groundDuelsTotal', 'aerialsWon', 'aerialsTotal',
+  'longBalls', 'longBallsAccurate', 'crossesAccurate', 'finalThirdPasses',
+  'ownHalfPasses', 'oppHalfPasses', 'ownGoals'
 ];
-const PLAYER_TEXT_KEYS = ['name', 'position', 'number'];
+const PLAYER_TEXT_KEYS = ['name', 'position', 'number', 'playerId'];
 /**
  * Booléens de feuille de match. `starter` dit qui a débuté, `subbedIn` qui
  * est entré depuis le banc : les deux ensemble disent qui a joué, ce dont
  * dépend toute moyenne « par match ».
  */
 const PLAYER_FLAG_KEYS = ['starter', 'subbedIn'];
+/** Placement sur le terrain et minutes d entree/sortie, pour la composition. */
+const PLAYER_META_KEYS = ['side', 'x', 'y', 'subInMinute', 'subOutMinute'];
 
 function slug(text) {
   return (text ?? '')
@@ -117,15 +126,22 @@ function cleanPlayer(raw, warnings, label) {
   const out = { name: String(raw.name).trim() };
   if (raw.position != null) out.position = String(raw.position);
   if (raw.number != null) out.number = raw.number;
+  // Identifiant de la source : seule clé vraiment fiable pour reconnaître un
+  // joueur d'un passage à l'autre. Les noms, eux, changent de forme selon la
+  // source — « Wu Xi » / « Xi Wu », « Jinghang Hu » / « Jing Hu ».
+  if (raw.playerId != null) out.playerId = String(raw.playerId);
   for (const key of PLAYER_FLAG_KEYS) {
     if (typeof raw[key] === 'boolean') out[key] = raw[key];
+  }
+  for (const key of PLAYER_META_KEYS) {
+    if (raw[key] !== null && raw[key] !== undefined) out[key] = raw[key];
   }
   for (const key of PLAYER_STAT_KEYS) {
     const n = toNumber(raw[key]);
     if (n !== null) out[key] = n;
   }
   for (const key of Object.keys(raw)) {
-    if (!PLAYER_STAT_KEYS.includes(key) && !PLAYER_TEXT_KEYS.includes(key) && !PLAYER_FLAG_KEYS.includes(key)) {
+    if (!PLAYER_STAT_KEYS.includes(key) && !PLAYER_TEXT_KEYS.includes(key) && !PLAYER_FLAG_KEYS.includes(key) && !PLAYER_META_KEYS.includes(key)) {
       warnings.push(`${label} : clé joueur inconnue ignorée "${key}"`);
     }
   }
@@ -156,39 +172,73 @@ function fillStats(target, incoming) {
  * Le nom déjà stocké est conservé : c'est celui auquel le reste des données
  * fait référence.
  */
+function nameTokens(name) {
+  return String(name ?? '')
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[đð]/gi, 'd')
+    .replace(/[øœ]/gi, 'o')
+    .replace(/ł/gi, 'l')
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter(Boolean);
+}
+
+/**
+ * Deux écritures désignent-elles le même joueur ?
+ *
+ * Les sources ne s'accordent ni sur l'ordre des noms chinois (« Wu Xi » /
+ * « Xi Wu »), ni sur la translittération (« Jinghang Hu » / « Jing Hu »), ni
+ * sur les formes courtes. On accepte donc : mêmes mots dans n'importe quel
+ * ordre, l'un contenu dans l'autre, un mot long partagé, ou un mot qui
+ * préfixe l'autre — ce dernier cas borné à 4 lettres d'écart, sinon
+ * « Wu » vaudrait « Wuhan ».
+ */
 function sharesNameToken(a, b) {
-  const tokens = (name) =>
-    new Set(
-      String(name ?? '')
-        .normalize('NFD')
-        .replace(/[̀-ͯ]/g, '')
-        .toLowerCase()
-        .split(/[^a-z0-9]+/)
-        .filter((t) => t.length >= 3)
-    );
-  const left = tokens(a);
-  return [...tokens(b)].some((t) => left.has(t));
+  const left = nameTokens(a);
+  const right = nameTokens(b);
+  if (!left.length || !right.length) return false;
+
+  const leftSet = new Set(left);
+  const rightSet = new Set(right);
+  const sameSet = left.length === right.length && left.every((t) => rightSet.has(t));
+  if (sameSet) return true; // ordre inversé
+  if (left.every((t) => rightSet.has(t)) || right.every((t) => leftSet.has(t))) return true; // sous-ensemble
+  if (right.some((t) => t.length >= 3 && leftSet.has(t))) return true; // mot long commun
+
+  return left.some((x) =>
+    right.some((y) => {
+      const [short, long] = x.length <= y.length ? [x, y] : [y, x];
+      return short.length >= 3 && long.startsWith(short) && long.length - short.length <= 4;
+    })
+  );
 }
 
 function mergePlayers(existing = [], incoming = []) {
   const ordered = [...existing];
+  const byId = new Map();
   const byNumber = new Map();
   const byName = new Map();
   for (const p of ordered) {
+    if (p.playerId != null && !byId.has(p.playerId)) byId.set(String(p.playerId), p);
     if (p.number != null && !byNumber.has(p.number)) byNumber.set(p.number, p);
     const key = slug(p.name);
     if (!byName.has(key)) byName.set(key, p);
   }
 
   for (const player of incoming) {
+    // Par ordre de fiabilité : identifiant de la source, puis numéro de
+    // maillot corroboré par le nom, puis le nom seul.
+    const sameId = player.playerId != null ? byId.get(String(player.playerId)) : null;
     const sameNumber = player.number != null ? byNumber.get(player.number) : null;
-    const target = (sameNumber && sharesNameToken(sameNumber.name, player.name) ? sameNumber : null) ?? byName.get(slug(player.name));
+    const target = sameId ?? (sameNumber && sharesNameToken(sameNumber.name, player.name) ? sameNumber : null) ?? byName.get(slug(player.name));
     if (target) {
       const { name, ...rest } = player; // on garde l'orthographe déjà stockée (accents…)
       fillStats(target, rest);
       continue;
     }
     ordered.push(player);
+    if (player.playerId != null && !byId.has(String(player.playerId))) byId.set(String(player.playerId), player);
     if (player.number != null && !byNumber.has(player.number)) byNumber.set(player.number, player);
     byName.set(slug(player.name), player);
   }
@@ -264,6 +314,14 @@ export function mergeMatchStats(statsDir, incoming) {
       fillStats(existing.teamStats.away, awayStats);
       existing.players.home = mergePlayers(existing.players.home, homePlayers);
       existing.players.away = mergePlayers(existing.players.away, awayPlayers);
+      // Déroulé du match et compositions : remplacés en bloc plutôt que
+      // complétés champ par champ. Ce sont des listes ordonnées — les fondre
+      // ligne à ligne produirait un déroulé incohérent — et la source les
+      // publie entières ou pas du tout.
+      if (Array.isArray(m.events) && m.events.length) existing.events = m.events;
+      if (m.lineups && (m.lineups.home || m.lineups.away)) existing.lineups = m.lineups;
+      if (m.meta && Object.keys(m.meta).length) existing.meta = { ...(existing.meta ?? {}), ...m.meta };
+      if (Array.isArray(m.shotmap) && m.shotmap.length) existing.shotmap = m.shotmap;
       existing.sources = [...new Set([...(existing.sources ?? []), ...sources])];
       existing.updatedAt = now;
       updated++;
@@ -279,6 +337,10 @@ export function mergeMatchStats(statsDir, incoming) {
         awayGoals: toNumber(m.awayGoals),
         teamStats: { home: homeStats, away: awayStats },
         players: { home: homePlayers, away: awayPlayers },
+        ...(Array.isArray(m.events) && m.events.length ? { events: m.events } : {}),
+        ...(m.lineups && (m.lineups.home || m.lineups.away) ? { lineups: m.lineups } : {}),
+        ...(m.meta && Object.keys(m.meta).length ? { meta: m.meta } : {}),
+        ...(Array.isArray(m.shotmap) && m.shotmap.length ? { shotmap: m.shotmap } : {}),
         sources,
         updatedAt: now
       });

@@ -38,6 +38,11 @@ export function formatTime(isoString) {
 }
 
 /** Jour complet ("lundi 7 septembre") — pour les en-têtes de regroupement par jour. */
-export function formatDay(dayKey) {
-  return new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(`${dayKey}T00:00:00`));
+/**
+ * `withYear` pour les saisons passées : sans l'année, « samedi 17 mai » est
+ * ambigu dès que le calendrier couvre plusieurs saisons.
+ */
+export function formatDay(dayKey, { withYear = false } = {}) {
+  const options = { weekday: 'long', day: 'numeric', month: 'long', ...(withYear ? { year: 'numeric' } : {}) };
+  return new Intl.DateTimeFormat('fr-FR', options).format(new Date(`${dayKey}T00:00:00`));
 }

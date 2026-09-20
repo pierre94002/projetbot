@@ -52,6 +52,14 @@ function toneOf(percent) {
         </li>
       </ul>
 
+      <div v-if="coverage.seasons?.length" class="stats-coverage__seasons">
+        <span class="stats-coverage__seasons-label">Historique en base</span>
+        <span v-for="s in coverage.seasons" :key="s.season" class="stats-coverage__season">
+          <strong>{{ s.season }}</strong>
+          {{ s.matches.toLocaleString('fr-FR') }} matchs · {{ s.leagues }} champ.
+        </span>
+      </div>
+
       <p v-if="coverage.refresh?.last?.finishedAt" class="cm-text-muted stats-coverage__hint">
         Dernier passage le {{ formatDateTime(coverage.refresh.last.finishedAt) }} :
         {{ coverage.refresh.last.merged }} match(s) complété(s).
@@ -159,5 +167,25 @@ function toneOf(percent) {
 .stats-coverage__hint {
   font-size: 11.5px;
   margin: 0;
+}
+
+.stats-coverage__seasons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 14px;
+  padding-top: 10px;
+  border-top: 1px solid var(--cm-border-soft);
+  font-size: 11.5px;
+  color: var(--cm-text-secondary);
+}
+
+.stats-coverage__seasons-label {
+  color: var(--cm-text-muted);
+}
+
+.stats-coverage__season strong {
+  font-family: var(--cm-font-mono);
+  margin-right: 4px;
 }
 </style>
