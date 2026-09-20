@@ -281,10 +281,11 @@ export function getTeamSquad(teamName, { since = CURRENT_SEASON_START, until = n
     })
     .sort((a, b) => b.appearances - a.appearances || b.starts - a.starts || a.name.localeCompare(b.name));
 
+  const seasonStart = since ? Number(since.slice(0, 4)) : null;
   return {
     teamId: null,
     teamName: matches[0].teamName,
-    season: since ? Number(since.slice(0, 4)) : null,
+    season: seasonStart === null ? null : `${seasonStart}-${String(seasonStart + 1).slice(2)}`,
     players,
     matchesCounted: matchesWithPlayers,
     firstDate: matches[matches.length - 1].date,

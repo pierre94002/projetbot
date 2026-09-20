@@ -29,6 +29,15 @@ const routes = [
     meta: { title: 'Historique moteur' }
   },
   {
+    // Page de match detaillee (resume, evenements, compositions,
+    // statistiques d equipe et de joueurs), alimentee par match-stats.
+    path: '/match/:matchId',
+    name: 'match-detail',
+    component: () => import('@/views/MatchDetailView.vue'),
+    props: true,
+    meta: { title: 'Match' }
+  },
+  {
     path: '/historique-moteur/:matchId',
     name: 'prediction-match-detail',
     component: () => import('@/views/PredictionMatchDetailView.vue'),

@@ -12,17 +12,27 @@
  *   node import-espn-match-stats.mjs --since 2026-08-01   # à partir d'une date
  *   node import-espn-match-stats.mjs --coverage           # état des lieux seul
  *   node import-espn-match-stats.mjs --force              # repasse sur tout
+ *   node import-espn-match-stats.mjs --season 2024        # une saison passee
  *
  * Le même travail tourne tout seul dans le serveur (cf.
  * src/data/providers/espnMatchStatsRefresh.js) ; cette commande sert au
  * premier rattrapage et au dépannage.
+ *
+ * REPRISE — sur un très gros lot, Node peut s'arrêter net sur
+ * `AssertionError: assert(!this.paused)` (analyseur HTTP d'undici, quand une
+ * connexion se ferme pendant une pause). L'erreur naît dans un événement de
+ * socket : aucun try/catch autour de fetch ne peut l'intercepter. Il suffit
+ * de RELANCER la même commande — les rencontres déjà enregistrées sont
+ * sautées, et les résultats sont écrits tous les 150 matchs, donc on ne perd
+ * au pire que le lot en cours. Baisser --concurrency espace les connexions
+ * et rend l'incident plus rare.
  * -----------------------------------------------------------------------
  */
 
-import { refreshMatchStatsExclusive, getCoverage, listMissing } from '../src/data/providers/espnMatchStatsRefresh.js';
+import { refreshMatchStatsExclusive, importSeasons, getCoverage, listMissing } from '../src/data/providers/espnMatchStatsRefresh.js';
 
 function parseArgs(argv) {
-  const options = { leagues: null, since: null, until: null, limit: null, concurrency: 4, coverage: false, dryRun: false, force: false };
+  const options = { leagues: null, since: null, until: null, limit: null, concurrency: 4, coverage: false, dryRun: false, force: false, seasons: null };
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
     const next = () => argv[++i];
@@ -34,6 +44,7 @@ function parseArgs(argv) {
     else if (arg === '--coverage') options.coverage = true;
     else if (arg === '--dry-run') options.dryRun = true;
     else if (arg === '--force') options.force = true;
+    else if (arg === '--season') (options.seasons ??= []).push(Number(next()));
     else {
       console.error(`Option inconnue : ${arg}`);
       process.exit(1);
@@ -43,7 +54,7 @@ function parseArgs(argv) {
 }
 
 function printCoverage(title) {
-  const { totals, leagues } = getCoverage();
+  const { totals, leagues, seasons } = getCoverage();
   console.log(`\n${title}`);
   console.log(`${'championnat'.padEnd(32)}${'term.'.padStart(6)}${'stats'.padStart(7)}${'%'.padStart(5)}${'joueurs'.padStart(9)}${'champs'.padStart(8)}`);
   for (const row of leagues) {
@@ -53,6 +64,14 @@ function printCoverage(title) {
     );
   }
   console.log(`${'TOTAL'.padEnd(32)}${String(totals.finished).padStart(6)}${String(totals.withStats).padStart(7)}${String(`${totals.coverage}%`).padStart(5)}${String(totals.withPlayers).padStart(9)}`);
+
+  if (seasons?.length) {
+    console.log('\nContenu du magasin, par saison (calendrier local ou non)');
+    console.log(`${'saison'.padEnd(12)}${'matchs'.padStart(8)}${'joueurs'.padStart(9)}${'lignes'.padStart(10)}${'champ.'.padStart(8)}`);
+    for (const s of seasons) {
+      console.log(`${s.season.padEnd(12)}${String(s.matches).padStart(8)}${String(s.withPlayers).padStart(9)}${String(s.playerRows).padStart(10)}${String(s.leagues).padStart(8)}`);
+    }
+  }
 }
 
 async function main() {
@@ -60,6 +79,33 @@ async function main() {
 
   if (options.coverage) {
     printCoverage('Couverture actuelle');
+    return;
+  }
+
+  // Saisons passées : le calendrier local ne remonte pas au-delà de la saison
+  // precedente, les journees sont donc decouvertes chez ESPN.
+  if (options.seasons?.length) {
+    const started = Date.now();
+    const report = await importSeasons({
+      seasons: options.seasons,
+      leagues: options.leagues,
+      concurrency: options.concurrency,
+      onProgress: (info) => {
+        if (info.phase === 'days') console.log(`${info.days} journee(s) de match a interroger.`);
+        else if (info.phase === 'scanning') console.log(`  balayage ${info.done}/${info.total} — ${info.found} rencontre(s) reperee(s)`);
+        else if (info.phase === 'discovered') console.log(`${info.discovered} rencontre(s) terminee(s) : ${info.pending} a importer, ${info.skipped} deja en base.`);
+        else if (info.phase === 'fetching') {
+          const elapsed = (Date.now() - started) / 1000;
+          const eta = Math.round((elapsed / info.done) * (info.total - info.done));
+          console.log(`  ${info.done}/${info.total} — ${info.merged} fusionnes — reste ~${Math.floor(eta / 60)} min ${eta % 60} s`);
+        }
+      }
+    });
+    console.log(`\nRecuperes : ${report.fetched} | fusionnes : ${report.merged} | joueurs : ${report.playersMerged}`);
+    console.log(`Sans statistiques : ${report.noStats} | echecs : ${report.failed}`);
+    if (report.unavailable.length) console.log(`Saisons non couvertes par la source : ${report.unavailable.join(', ')}`);
+    for (const s of report.samples.failed) console.log(`  echec : ${s}`);
+    console.log(`Duree : ${Math.round((Date.now() - started) / 1000)} s`);
     return;
   }
 

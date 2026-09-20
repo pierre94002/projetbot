@@ -172,6 +172,117 @@ export async function fetchFinishedEvents(leagueSlug, isoDate) {
 }
 
 /**
+ * TOUTES les rencontres d'une journée, jouées comme à venir — contrairement à
+ * fetchFinishedEvents(), qui ne retient que les rencontres terminées parce
+ * qu'elle sert à récupérer des statistiques définitives.
+ *
+ * Sert à construire le calendrier de saison : une rencontre programmée n'a
+ * pas de score, mais elle a une date, une heure et deux équipes.
+ */
+export async function fetchEvents(leagueSlug, isoDate) {
+  const url = `${BASE}/scoreboard?xhr=1&league=${encodeURIComponent(leagueSlug)}&date=${toEspnDate(isoDate)}`;
+  const payload = await fetchJson(url);
+  const events = payload?.content?.sbData?.events ?? payload?.events ?? [];
+  const out = [];
+  for (const event of events) {
+    const competition = event?.competitions?.[0];
+    const home = competition?.competitors?.find((c) => c.homeAway === 'home');
+    const away = competition?.competitors?.find((c) => c.homeAway === 'away');
+    if (!home || !away) continue;
+    const finished = Boolean(competition.status?.type?.completed);
+    out.push({
+      gameId: String(event.id),
+      // La date du coup d'envoi fait foi : le tableau d'une journée peut
+      // contenir une rencontre qui bascule au lendemain selon le fuseau.
+      date: (event.date ?? `${isoDate}T12:00Z`).slice(0, 10),
+      kickoff: event.date ?? null,
+      homeName: home.team?.displayName ?? home.team?.name ?? null,
+      awayName: away.team?.displayName ?? away.team?.name ?? null,
+      homeGoals: finished ? numberOrNull(home.score) : null,
+      awayGoals: finished ? numberOrNull(away.score) : null,
+      status: finished ? 'finished' : 'scheduled',
+      statusName: competition.status?.type?.name ?? null
+    });
+  }
+  return out;
+}
+
+/**
+ * Classement d'un championnat, tel qu'ESPN le publie.
+ *
+ * Attention : ce tableau accuse quelques heures de retard sur les rencontres
+ * du jour — vérifié le 2026-09-20, où il ignorait encore des matchs terminés
+ * depuis le matin. À ne pas prendre comme vérité instantanée.
+ */
+export async function fetchStandings(leagueSlug) {
+  const payload = await fetchJson(`${BASE}/table?xhr=1&league=${encodeURIComponent(leagueSlug)}`);
+  const entries = payload?.content?.standings?.groups?.[0]?.standings?.entries;
+  if (!Array.isArray(entries)) return null;
+
+  const rows = [];
+  for (const entry of entries) {
+    const stat = (name) => {
+      const found = entry.stats?.find((s) => s.name === name);
+      return found ? numberOrNull(found.value ?? found.displayValue) : null;
+    };
+    const teamName = entry.team?.displayName ?? entry.team?.name;
+    if (!teamName) continue;
+    rows.push({
+      teamName,
+      played: stat('gamesPlayed'),
+      won: stat('wins'),
+      drawn: stat('ties'),
+      lost: stat('losses'),
+      goalsFor: stat('pointsFor'),
+      goalsAgainst: stat('pointsAgainst'),
+      points: stat('points')
+    });
+  }
+  return rows.length ? rows : null;
+}
+
+function enumerateDays(startIso, endIso) {
+  const days = [];
+  const end = new Date(endIso);
+  for (let d = new Date(startIso); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
+    days.push(d.toISOString().slice(0, 10));
+  }
+  return days;
+}
+
+/**
+ * Journées de match d'une saison passée, pour importer un historique sans
+ * calendrier local.
+ *
+ * ESPN publie dans chaque tableau des scores le calendrier de la saison
+ * (`leagues[0].calendar`). Pour un championnat c'est la liste EXACTE des
+ * jours où l'on joue — une centaine de dates plutôt que 365, ce qui divise
+ * par trois le nombre d'appels. Pour une coupe ce champ ne porte pas de
+ * dates : on retombe alors sur la fenêtre déclarée, balayée jour par jour.
+ *
+ * `null` si ESPN ne couvre pas cette saison pour ce championnat. On le
+ * détecte en comparant la saison renvoyée à celle demandée : interrogée sur
+ * une date qu'elle ignore, la source répond silencieusement avec la saison
+ * en cours, et on importerait alors deux fois la même année.
+ */
+export async function fetchSeasonMatchDays(leagueSlug, seasonYear) {
+  // Mi-octobre : à l'intérieur de toutes les saisons européennes comme des
+  // calendriers russe et chinois, qui suivent l'année civile.
+  const url = `${BASE}/scoreboard?xhr=1&league=${encodeURIComponent(leagueSlug)}&date=${seasonYear}1015`;
+  const payload = await fetchJson(url);
+  const league = payload?.content?.sbData?.leagues?.[0];
+  if (!league || league.season?.year !== seasonYear) return null;
+
+  const calendar = Array.isArray(league.calendar) ? league.calendar.filter((x) => typeof x === 'string') : [];
+  if (calendar.length > 1) return [...new Set(calendar.map((x) => x.slice(0, 10)))].sort();
+
+  if (league.calendarStartDate && league.calendarEndDate) {
+    return enumerateDays(league.calendarStartDate.slice(0, 10), league.calendarEndDate.slice(0, 10));
+  }
+  return null;
+}
+
+/**
  * Ramène la position ESPN aux quatre familles utilisées dans le stockage.
  *
  * Deux particularités de la source :

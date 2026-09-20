@@ -1,8 +1,9 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useMatchesStore } from '@/stores/matchesStore.js';
 import { useToastStore } from '@/stores/toastStore.js';
 import { teamStatsApi } from '@/services/teamStatsApi.js';
+import { matchStatsApi } from '@/services/matchStatsApi.js';
 import AppCard from '@/components/common/AppCard.vue';
 import AppSelect from '@/components/common/AppSelect.vue';
 import AppTextField from '@/components/common/AppTextField.vue';
@@ -52,6 +53,30 @@ const players = ref(null); // { loading, error, result }
 /** « Σ Totaux » (cumul de la saison) ou « ⌀ Par match » (par match joué). */
 const playerMode = ref('totals');
 
+// Saison consultée. Les feuilles de match remontent plusieurs saisons : on
+// peut donc afficher l'effectif d'une saison passée, pas seulement l'actuelle.
+const squadSeason = ref(null);
+const squadSeasons = ref([]);
+
+const seasonOptions = computed(() =>
+  squadSeasons.value.map((s) => ({ value: seasonStartYear(s.season), label: `${s.season} — ${s.matches.toLocaleString('fr-FR')} matchs` }))
+);
+
+/** "2024-25" -> 2024, l'année de début, telle que l'attend l'API. */
+function seasonStartYear(label) {
+  return Number(String(label).slice(0, 4));
+}
+
+async function loadSquadSeasons() {
+  try {
+    const coverage = await matchStatsApi.coverage();
+    squadSeasons.value = [...(coverage.seasons ?? [])].sort((a, b) => b.season.localeCompare(a.season));
+    if (squadSeason.value === null) squadSeason.value = seasonStartYear(squadSeasons.value[0]?.season ?? '');
+  } catch {
+    squadSeasons.value = []; // Le sélecteur disparaît ; la saison en cours reste servie par défaut.
+  }
+}
+
 /**
  * Colonnes chiffrées du tableau d'effectif. Seules celles qu'au moins un
  * joueur renseigne sont affichées : la source ne publie ni minutes ni note,
@@ -95,18 +120,19 @@ function playerCell(player, key) {
   return Number.isFinite(Number(value)) ? Number(value) : '—';
 }
 
+onMounted(loadSquadSeasons);
+
 async function loadPlayers() {
   const name = playersTeamQuery.value.trim();
   if (!name) return;
 
   players.value = { loading: true, error: null, result: null };
   try {
-    // Saison réelle en cours (pas resolveCurrentSeason()/2024 côté serveur,
-    // qui n'est qu'un repli quand la vraie saison échoue) — même logique que
-    // les compositions (getLineupsByName), pour obtenir l'effectif actuel
-    // par défaut plutôt que des stats figées de 2024, avec repli recherche
-    // web automatique si l'API-Football ne couvre pas cette saison.
-    const result = await teamStatsApi.getPlayersByName(name, new Date().getFullYear());
+    // Saison choisie, ou la plus récente du magasin à défaut — jamais
+    // resolveCurrentSeason()/2024 côté serveur, qui n'est qu'un repli quand
+    // la vraie saison échoue. Le repli recherche web reste actif si aucune
+    // source ne couvre la saison demandée.
+    const result = await teamStatsApi.getPlayersByName(name, squadSeason.value ?? undefined);
     players.value = { loading: false, error: null, result };
   } catch (error) {
     players.value = { loading: false, error: error.message, result: null };
@@ -158,8 +184,9 @@ async function loadPlayers() {
       title="Statistiques individuelles des joueurs"
       subtitle="Effectif complet reconstitué depuis les feuilles de match — totaux de la saison ou moyennes par match joué"
     >
-      <div class="team-squad__controls">
+      <div class="team-squad__controls team-squad__controls--squad">
         <AppTextField v-model="playersTeamQuery" label="Équipe" placeholder="Ex. Real Madrid…" @keyup.enter="loadPlayers" />
+        <AppSelect v-if="seasonOptions.length > 1" v-model="squadSeason" label="Saison" :options="seasonOptions" />
         <AppButton variant="primary" :loading="players?.loading" :disabled="!playersTeamQuery.trim()" @click="loadPlayers">
           <template #icon><AppIcon name="bolt" :size="15" /></template>
           Charger l'effectif
@@ -236,6 +263,11 @@ async function loadPlayers() {
   gap: 14px;
   align-items: end;
   margin-bottom: 16px;
+}
+
+/* Carte effectif : un champ de plus, le sélecteur de saison. */
+.team-squad__controls--squad {
+  grid-template-columns: 1.4fr 1fr auto;
 }
 
 .team-squad__lineups {

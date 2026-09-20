@@ -11,6 +11,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import LeagueBadge from '@/components/matches/LeagueBadge.vue';
 import { formatDay } from '@/utils/format.js';
+import { useRouter } from 'vue-router';
 
 // Calendrier de saison (joués + à venir), alimenté chaque jour par la tâche
 // planifiée (recherche web, cf. server/scripts/merge-season-calendar.mjs) —
@@ -28,11 +29,39 @@ const STATUS_OPTIONS = [
   { value: 'finished', label: 'Terminés' }
 ];
 
+// Saison consultée. Le calendrier contient désormais plusieurs saisons
+// d'historique : on en charge une à la fois plutôt que des dizaines de
+// milliers de rencontres d'un bloc.
+const season = ref('');
+const seasons = ref([]);
+const currentSeason = ref('');
+
+/** Hors saison en cours, les en-têtes de jour portent l’année. */
+const isCurrentSeason = computed(() => !season.value || season.value === currentSeason.value);
+
+const seasonOptions = computed(() =>
+  seasons.value.map((s) => ({
+    value: s.season,
+    label: `${s.season} — ${s.matches.toLocaleString('fr-FR')} rencontres`
+  }))
+);
+
+async function loadSeasons() {
+  try {
+    const status = await seasonCalendarApi.status();
+    seasons.value = status.seasons ?? [];
+    currentSeason.value = status.currentSeason ?? '';
+    if (!season.value) season.value = status.currentSeason ?? seasons.value[0]?.season ?? '';
+  } catch {
+    seasons.value = []; // Le sélecteur disparaît, la saison en cours reste servie par défaut.
+  }
+}
+
 async function load() {
   loading.value = true;
   error.value = null;
   try {
-    const result = await seasonCalendarApi.list();
+    const result = await seasonCalendarApi.list(undefined, season.value || undefined);
     matches.value = result.matches ?? [];
   } catch (e) {
     error.value = e.message;
@@ -41,6 +70,8 @@ async function load() {
     loading.value = false;
   }
 }
+
+watch(season, load);
 
 const filteredMatches = computed(() => {
   const query = leagueQuery.value.trim().toLowerCase();
@@ -68,13 +99,35 @@ const lastUpdatedAt = computed(() => {
   return dates.length ? dates[dates.length - 1] : null;
 });
 
-onMounted(load);
+onMounted(async () => {
+  await loadSeasons();
+  await load();
+});
 
 // Cette vue garde son calendrier en local (pas dans un store Pinia), donc le
 // rafraîchissement automatique global ne peut pas le remettre à jour à sa
 // place : on recharge dès que l'empreinte des données côté serveur change.
 // C'est la vue la plus concernée, puisqu'elle affiche exactement ce que la
 // tâche planifiée réécrit chaque jour.
+const router = useRouter();
+
+/** Identifiant de la fiche statistiques, construit comme cote serveur. */
+function statsId(match) {
+  const slug = (t) =>
+    String(t ?? "")
+      .normalize("NFD")
+      .replace(/[̀-ͯ]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+  return `stats-${match.date}-${slug(match.homeName)}-${slug(match.awayName)}`;
+}
+
+function openMatch(match) {
+  if (match.status !== "finished") return; // Rien a montrer avant le coup denvoi.
+  router.push({ name: "match-detail", params: { matchId: statsId(match) } });
+}
+
 const dataVersion = useDataVersionStore();
 watch(
   () => dataVersion.version,
@@ -91,6 +144,7 @@ watch(
         <AppTextField v-model="leagueQuery" label="Championnat ou équipe" placeholder="Ex. Ligue 1, PSG…">
           <template #icon><AppIcon name="search" :size="15" /></template>
         </AppTextField>
+        <AppSelect v-if="seasonOptions.length > 1" v-model="season" label="Saison" :options="seasonOptions" />
         <AppSelect v-model="statusFilter" label="Statut" :options="STATUS_OPTIONS" />
         <AppButton variant="secondary" :loading="loading" @click="load">
           <template #icon><AppIcon name="refresh" :size="15" /></template>
@@ -113,8 +167,14 @@ watch(
 
     <AppCard v-else :padded="false">
       <div v-for="[day, dayMatches] in groupedByDay" :key="day" class="season-calendar__day">
-        <div class="season-calendar__day-header">{{ formatDay(day) }}</div>
-        <div v-for="match in dayMatches" :key="match.matchId" class="season-calendar__row">
+        <div class="season-calendar__day-header">{{ formatDay(day, { withYear: !isCurrentSeason }) }}</div>
+        <div
+          v-for="match in dayMatches"
+          :key="match.matchId"
+          class="season-calendar__row"
+          :class="{ 'season-calendar__row--clickable': match.status === 'finished' }"
+          @click="openMatch(match)"
+        >
           <LeagueBadge :league="match.league" class="season-calendar__league" />
           <div class="season-calendar__teams">
             <span class="cm-truncate">{{ match.homeName }}</span>
@@ -144,7 +204,7 @@ watch(
 
 .season-calendar__controls {
   display: grid;
-  grid-template-columns: 1.6fr 1fr auto;
+  grid-template-columns: 1.6fr 1fr 1fr auto;
   gap: 14px;
   align-items: end;
 }
@@ -162,6 +222,14 @@ watch(
   color: var(--cm-text-muted);
   background: var(--cm-surface-hover);
   border-bottom: 1px solid var(--cm-border-soft);
+}
+
+.season-calendar__row--clickable {
+  cursor: pointer;
+}
+
+.season-calendar__row--clickable:hover {
+  background: var(--cm-surface-hover);
 }
 
 .season-calendar__row {

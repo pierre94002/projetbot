@@ -1,0 +1,212 @@
+/**
+ * fotMobRefresh.js
+ * -----------------------------------------------------------------------
+ * Complète les entrées déjà constituées par ESPN avec ce que FotMob publie
+ * en plus : expected goals, xGOT, grosses occasions, duels, touches dans la
+ * surface — et, par joueur, la note, les minutes, les passes et les duels.
+ *
+ * Purement additif. La fusion ne remplace jamais une valeur absente par un
+ * vide, et ESPN reste maître des scores et des feuilles de match : FotMob ne
+ * fait que remplir des cases restées vides.
+ *
+ * Appariement en trois conditions — championnat correspondant, DEUX noms
+ * d'équipe concordants, ET score identique. Un seul candidat doit convenir ;
+ * dans le doute on n'écrit rien, plutôt que d'attribuer à une rencontre les
+ * statistiques d'une autre.
+ * -----------------------------------------------------------------------
+ */
+
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { FOTMOB_LEAGUES, fetchMatchesByDate, fetchMatchStats } from './fotMobProvider.js';
+import { teamNamesLikelyMatch } from '../../utils/teamNameMatch.js';
+import { mergeMatchStats } from '../../../scripts/merge-match-stats.mjs';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const RUNTIME_DIR = path.resolve(__dirname, '../../../data/runtime');
+const MATCH_STATS_DIR = path.join(RUNTIME_DIR, 'match-stats');
+
+/** Témoin de reprise : une entrée déjà enrichie porte cette marque. */
+const FOTMOB_SOURCE_MARK = 'fotmob.com/api/data/matchDetails';
+
+const DEFAULT_CONCURRENCY = 3;
+const FLUSH_EVERY = 120;
+
+function readJson(file, fallback) {
+  try {
+    return JSON.parse(fs.readFileSync(file, 'utf8'));
+  } catch {
+    return fallback;
+  }
+}
+
+function readStoredEntries() {
+  const out = [];
+  let files = [];
+  try {
+    files = fs.readdirSync(MATCH_STATS_DIR).filter((f) => /^\d{4}-\d{2}\.json$/.test(f));
+  } catch {
+    return out;
+  }
+  for (const file of files) {
+    const entries = readJson(path.join(MATCH_STATS_DIR, file), []);
+    if (Array.isArray(entries)) out.push(...entries);
+  }
+  return out;
+}
+
+async function pool(items, size, worker) {
+  let cursor = 0;
+  const runners = Array.from({ length: Math.max(1, Math.min(size, items.length)) }, async () => {
+    while (cursor < items.length) {
+      const index = cursor++;
+      await worker(items[index], index);
+    }
+  });
+  await Promise.all(runners);
+}
+
+/** Entrées auxquelles FotMob pourrait encore apporter quelque chose. */
+export function listPending({ leagues = null, since = null, until = null, force = false } = {}) {
+  const wanted = leagues ? new Set(leagues) : null;
+  return readStoredEntries().filter((entry) => {
+    if (!entry?.date || !entry.league || !entry.homeName || !entry.awayName) return false;
+    if (!FOTMOB_LEAGUES[entry.league]) return false;
+    if (wanted && !wanted.has(entry.league)) return false;
+    if (since && entry.date < since) return false;
+    if (until && entry.date > until) return false;
+    if (entry.homeGoals === null || entry.homeGoals === undefined) return false;
+    const done = (entry.sources ?? []).some((s) => String(s).includes(FOTMOB_SOURCE_MARK));
+    return force || !done;
+  });
+}
+
+/**
+ * Apparie une de nos entrées à une rencontre FotMob du même jour. Refuse dès
+ * que plusieurs candidats conviennent, ou que le score diverge — le score est
+ * le garde-fou le plus sûr contre un mauvais appariement.
+ */
+function matchEntry(entry, dayMatches) {
+  const leagueKey = FOTMOB_LEAGUES[entry.league];
+  const candidates = dayMatches.filter(
+    (m) =>
+      m.leagueKey === leagueKey &&
+      teamNamesLikelyMatch(m.homeName, entry.homeName) &&
+      teamNamesLikelyMatch(m.awayName, entry.awayName)
+  );
+  if (candidates.length !== 1) return null;
+  const found = candidates[0];
+  if (found.homeGoals !== entry.homeGoals || found.awayGoals !== entry.awayGoals) return null;
+  return found;
+}
+
+/**
+ * Enrichit les entrées depuis FotMob.
+ *
+ * Une journée est demandée une seule fois : l'appel « matchs du jour » couvre
+ * toutes les compétitions d'un coup, contrairement à ESPN qui en exige un par
+ * championnat.
+ */
+export async function refreshFromFotMob(options = {}) {
+  const { concurrency = DEFAULT_CONCURRENCY, limit = null, onProgress = null } = options;
+  const startedAt = new Date().toISOString();
+
+  let pending = listPending(options);
+  if (limit) pending = pending.slice(0, limit);
+
+  const report = {
+    startedAt,
+    finishedAt: null,
+    considered: pending.length,
+    days: 0,
+    matched: 0,
+    unmatched: 0,
+    fetched: 0,
+    merged: 0,
+    playersMerged: 0,
+    noStats: 0,
+    failed: 0,
+    samples: { unmatched: [], failed: [] }
+  };
+  if (!pending.length) {
+    report.finishedAt = new Date().toISOString();
+    return report;
+  }
+
+  const byDate = new Map();
+  for (const entry of pending) {
+    if (!byDate.has(entry.date)) byDate.set(entry.date, []);
+    byDate.get(entry.date).push(entry);
+  }
+  report.days = byDate.size;
+
+  // Étape 1 : apparier, jour par jour.
+  const pairs = [];
+  let daysDone = 0;
+  await pool([...byDate.entries()], concurrency, async ([date, entries]) => {
+    const dayMatches = await fetchMatchesByDate(date).catch(() => []);
+    for (const entry of entries) {
+      const found = matchEntry(entry, dayMatches);
+      if (found) pairs.push({ entry, fotMobId: found.matchId });
+      else {
+        report.unmatched++;
+        if (report.samples.unmatched.length < 20) report.samples.unmatched.push(`${entry.date} ${entry.league} ${entry.homeName}-${entry.awayName}`);
+      }
+    }
+    daysDone++;
+    if (onProgress && daysDone % 50 === 0) onProgress({ phase: 'matching', done: daysDone, total: byDate.size, matched: pairs.length });
+  });
+  report.matched = pairs.length;
+  onProgress?.({ phase: 'matched', matched: report.matched, unmatched: report.unmatched });
+
+  // Étape 2 : récupérer et fusionner par lots.
+  let batch = [];
+  const flush = () => {
+    if (!batch.length) return;
+    const summary = mergeMatchStats(MATCH_STATS_DIR, batch);
+    report.merged += summary.created + summary.updated;
+    report.playersMerged += summary.playersMerged;
+    batch = [];
+  };
+
+  let done = 0;
+  await pool(pairs, concurrency, async ({ entry, fotMobId }) => {
+    try {
+      const stats = await fetchMatchStats(fotMobId);
+      if (!stats) report.noStats++;
+      else {
+        report.fetched++;
+        batch.push({
+          date: entry.date,
+          league: entry.league,
+          // Les noms déjà stockés font foi : FotMob ne sert qu'à compléter.
+          homeName: entry.homeName,
+          awayName: entry.awayName,
+          homeGoals: entry.homeGoals,
+          awayGoals: entry.awayGoals,
+          teamStats: stats.teamStats,
+          players: stats.players,
+          // Déroulé, composition, cadre de la rencontre et carte des tirs :
+          // ce qui permet à la page de match de reproduire la source.
+          events: stats.events,
+          lineups: stats.lineups,
+          meta: stats.meta,
+          shotmap: stats.shotmap,
+          sources: stats.sources
+        });
+      }
+    } catch (error) {
+      report.failed++;
+      if (report.samples.failed.length < 20) report.samples.failed.push(`${entry.date} ${entry.homeName}-${entry.awayName} : ${error.message}`);
+    }
+    done++;
+    if (batch.length >= FLUSH_EVERY) flush();
+    if (onProgress && done % 50 === 0) onProgress({ phase: 'fetching', done, total: pairs.length, merged: report.merged });
+  });
+
+  flush();
+  report.finishedAt = new Date().toISOString();
+  onProgress?.({ phase: 'done', ...report });
+  return report;
+}

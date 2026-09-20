@@ -46,3 +46,7 @@ server/data/fixtures/historique/
 # server/src/data/providers/espnMatchStatsRefresh.js) : état d'un processus
 # en cours, propre à la machine, sans valeur d'historique.
 server/data/runtime/espn-refresh.lock
+
+# Journees de match par saison decouvertes chez ESPN (cache de l'import
+# historique) : se reconstruit tout seul, sans valeur d'historique.
+server/data/runtime/espn-season-days.json
