@@ -67,7 +67,11 @@ export const PLAYER_STAT_KEYS = [
   'blocks', 'recoveries', 'dribbledPast', 'dispossessed',
   'groundDuelsWon', 'groundDuelsTotal', 'aerialsWon', 'aerialsTotal',
   'longBalls', 'longBallsAccurate', 'crossesAccurate', 'finalThirdPasses',
-  'ownHalfPasses', 'oppHalfPasses', 'ownGoals'
+  'ownHalfPasses', 'oppHalfPasses', 'ownGoals',
+  // Mesures supplementaires du releve joueur FotMob.
+  'shotsOffTarget', 'xgNonPenalty', 'duelsLost', 'throwIns', 'cornersTaken', 'woodwork',
+  'defensiveActions', 'bigChancesCreated', 'headedClearances', 'clearancesOffLine', 'lastManTackles',
+  'divingSaves', 'highClaims', 'sweeperActions', 'savesInsideBox', 'punches'
 ];
 const PLAYER_TEXT_KEYS = ['name', 'position', 'number', 'playerId'];
 /**
@@ -104,21 +108,32 @@ function readJson(p, fallback) {
  * EBUSY, EPERM ou un UNKNOWN opaque. Attendre quelques centaines de
  * millisecondes suffit ; échouer ferait perdre tout un lot d'import.
  */
-function writeWithRetry(file, contents, attempts = 6) {
+function writeWithRetry(file, contents, attempts = 14) {
+  let lastError = null;
   for (let attempt = 1; attempt <= attempts; attempt++) {
     try {
-      fs.writeFileSync(file, contents, 'utf8');
+      // Écriture en deux temps : un fichier temporaire, puis un renommage.
+      // Le renommage est atomique, donc un lecteur ne voit jamais un fichier
+      // à moitié écrit — et la fenêtre pendant laquelle le fichier final est
+      // ouvert en écriture, celle que OneDrive verrouille, disparaît.
+      const temp = `${file}.tmp`;
+      fs.writeFileSync(temp, contents, 'utf8');
+      fs.renameSync(temp, file);
       return;
     } catch (error) {
-      const retryable = ['EBUSY', 'EPERM', 'UNKNOWN', 'EACCES'].includes(error.code);
+      lastError = error;
+      const retryable = ['EBUSY', 'EPERM', 'UNKNOWN', 'EACCES', 'ENOENT'].includes(error.code);
       if (!retryable || attempt === attempts) throw error;
-      // Attente active : le script est synchrone, et la pause doit l'être aussi.
-      const until = Date.now() + attempt * 250;
+      // Attente active : le script est synchrone, la pause doit l'être aussi.
+      // Progression jusqu'à 2 s par tentative, soit une vingtaine de secondes
+      // au total — largement de quoi laisser passer une synchronisation.
+      const until = Date.now() + Math.min(2000, attempt * 200);
       while (Date.now() < until) {
         /* on patiente */
       }
     }
   }
+  throw lastError;
 }
 
 function toNumber(raw) {
