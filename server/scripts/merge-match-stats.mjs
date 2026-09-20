@@ -98,6 +98,29 @@ function readJson(p, fallback) {
   return fallback;
 }
 
+/**
+ * Écrit en réessayant : sous Windows, la synchronisation OneDrive verrouille
+ * un instant le fichier qu'elle envoie, et l'écriture échoue alors avec
+ * EBUSY, EPERM ou un UNKNOWN opaque. Attendre quelques centaines de
+ * millisecondes suffit ; échouer ferait perdre tout un lot d'import.
+ */
+function writeWithRetry(file, contents, attempts = 6) {
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      fs.writeFileSync(file, contents, 'utf8');
+      return;
+    } catch (error) {
+      const retryable = ['EBUSY', 'EPERM', 'UNKNOWN', 'EACCES'].includes(error.code);
+      if (!retryable || attempt === attempts) throw error;
+      // Attente active : le script est synchrone, et la pause doit l'être aussi.
+      const until = Date.now() + attempt * 250;
+      while (Date.now() < until) {
+        /* on patiente */
+      }
+    }
+  }
+}
+
 function toNumber(raw) {
   if (raw === null || raw === undefined || raw === '' || raw === '—' || raw === '-') return null;
   const n = typeof raw === 'number' ? raw : Number(String(raw).replace('%', '').replace(',', '.').trim());
@@ -356,7 +379,11 @@ export function mergeMatchStats(statsDir, incoming) {
     const shard = shards.get(month).sort((a, b) => a.date.localeCompare(b.date) || a.matchKey.localeCompare(b.matchKey));
     const file = path.join(statsDir, `${month}.json`);
     // JSON compact (pas d'indentation) : les stats joueurs pèsent lourd.
-    fs.writeFileSync(file, JSON.stringify(shard), 'utf8');
+    // Réessais : le projet vit dans un dossier OneDrive, dont la
+    // synchronisation verrouille brièvement un fichier qu'elle envoie
+    // (EBUSY, EPERM, ou un UNKNOWN sous Windows). Abandonner à la première
+    // tentative faisait perdre tout un lot d'import.
+    writeWithRetry(file, JSON.stringify(shard));
     written.push(file);
   }
 

@@ -19,7 +19,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { FOTMOB_LEAGUES, fetchMatchesByDate, fetchMatchStats } from './fotMobProvider.js';
+import { FOTMOB_LEAGUES, leagueKeyMatches, fetchMatchesByDate, fetchMatchStats } from './fotMobProvider.js';
 import { teamNamesLikelyMatch } from '../../utils/teamNameMatch.js';
 import { mergeMatchStats } from '../../../scripts/merge-match-stats.mjs';
 
@@ -67,6 +67,101 @@ async function pool(items, size, worker) {
   await Promise.all(runners);
 }
 
+/**
+ * Importe des rencontres que le magasin ne connaît pas encore, en balayant
+ * les journées d'une période.
+ *
+ * Sert aux championnats-saisons qu'ESPN n'a pas fournis — Serie B et Ligue 2
+ * 2023-24, par exemple, dont il ne publie pas le calendrier. Un seul appel
+ * par journée couvre toutes les compétitions, ce qui rend le balayage
+ * abordable.
+ */
+export async function importMissingFromFotMob({ from, to, leagues = null, concurrency = DEFAULT_CONCURRENCY, onProgress = null } = {}) {
+  const wanted = leagues ? Object.entries(FOTMOB_LEAGUES).filter(([name]) => leagues.includes(name)) : Object.entries(FOTMOB_LEAGUES);
+  const known = new Set(readStoredEntries().map((e) => e.matchKey));
+  const report = { days: 0, discovered: 0, skipped: 0, fetched: 0, merged: 0, playersMerged: 0, noStats: 0, failed: 0 };
+
+  const days = [];
+  for (let d = new Date(`${from}T12:00:00Z`); d <= new Date(`${to}T12:00:00Z`); d.setUTCDate(d.getUTCDate() + 1)) {
+    days.push(d.toISOString().slice(0, 10));
+  }
+  report.days = days.length;
+
+  const pending = [];
+  let scanned = 0;
+  await pool(days, concurrency, async (date) => {
+    const dayMatches = await fetchMatchesByDate(date).catch(() => []);
+    for (const match of dayMatches) {
+      if (!match.finished || match.homeGoals === null || match.awayGoals === null) continue;
+      const league = wanted.find(([, matcher]) => leagueKeyMatches(matcher, match.leagueKey))?.[0];
+      if (!league) continue;
+      report.discovered++;
+      const matchKey = `${match.date}-${slugify(match.homeName)}-${slugify(match.awayName)}`;
+      if (known.has(matchKey)) {
+        report.skipped++;
+        continue;
+      }
+      pending.push({ league, match });
+    }
+    scanned++;
+    if (onProgress && scanned % 50 === 0) onProgress({ phase: 'scanning', done: scanned, total: days.length, found: pending.length });
+  });
+  onProgress?.({ phase: 'discovered', discovered: report.discovered, pending: pending.length, skipped: report.skipped });
+
+  let batch = [];
+  const flush = () => {
+    if (!batch.length) return;
+    const summary = mergeMatchStats(MATCH_STATS_DIR, batch);
+    report.merged += summary.created + summary.updated;
+    report.playersMerged += summary.playersMerged;
+    batch = [];
+  };
+
+  let done = 0;
+  await pool(pending, concurrency, async ({ league, match }) => {
+    try {
+      const stats = await fetchMatchStats(match.matchId);
+      if (!stats) report.noStats++;
+      else {
+        report.fetched++;
+        batch.push({
+          date: match.date,
+          league,
+          homeName: match.homeName,
+          awayName: match.awayName,
+          homeGoals: match.homeGoals,
+          awayGoals: match.awayGoals,
+          teamStats: stats.teamStats,
+          players: stats.players,
+          events: stats.events,
+          lineups: stats.lineups,
+          meta: stats.meta,
+          shotmap: stats.shotmap,
+          sources: stats.sources
+        });
+      }
+    } catch {
+      report.failed++;
+    }
+    done++;
+    if (batch.length >= FLUSH_EVERY) flush();
+    if (onProgress && done % 50 === 0) onProgress({ phase: 'fetching', done, total: pending.length, merged: report.merged });
+  });
+
+  flush();
+  onProgress?.({ phase: 'done', ...report });
+  return report;
+}
+
+function slugify(text) {
+  return String(text ?? '')
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
 /** Entrées auxquelles FotMob pourrait encore apporter quelque chose. */
 export function listPending({ leagues = null, since = null, until = null, force = false } = {}) {
   const wanted = leagues ? new Set(leagues) : null;
@@ -77,8 +172,14 @@ export function listPending({ leagues = null, since = null, until = null, force 
     if (since && entry.date < since) return false;
     if (until && entry.date > until) return false;
     if (entry.homeGoals === null || entry.homeGoals === undefined) return false;
-    const done = (entry.sources ?? []).some((s) => String(s).includes(FOTMOB_SOURCE_MARK));
-    return force || !done;
+    const fetched = (entry.sources ?? []).some((s) => String(s).includes(FOTMOB_SOURCE_MARK));
+    // `meta` n'apparaît qu'avec la version enrichie de la lecture (déroulé,
+    // composition, cadre de la rencontre, carte des tirs). Une entrée qui
+    // porte la source FotMob sans ce bloc vient d'un passage antérieur et
+    // reste donc à reprendre — ce qui rend l'import reprenable après un
+    // incident sans avoir à tout refaire avec --force.
+    const complete = fetched && entry.meta;
+    return force || !complete;
   });
 }
 
@@ -91,7 +192,7 @@ function matchEntry(entry, dayMatches) {
   const leagueKey = FOTMOB_LEAGUES[entry.league];
   const candidates = dayMatches.filter(
     (m) =>
-      m.leagueKey === leagueKey &&
+      leagueKeyMatches(leagueKey, m.leagueKey) &&
       teamNamesLikelyMatch(m.homeName, entry.homeName) &&
       teamNamesLikelyMatch(m.awayName, entry.awayName)
   );

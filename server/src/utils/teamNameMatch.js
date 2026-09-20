@@ -70,8 +70,10 @@ const TEAM_ALIASES = {
   rennes: ['stade rennais', 'stade rennais fc'],
   // Nom trop court pour le rapprochement par tokens (moins de 3 lettres).
   'az alkmaar': ['az'],
-  // Translitterations du russe : chaque source coupe les voyelles autrement.
-  'krylia sovetov': ['kryliya sovetov', 'krylya sovetov', 'krylia sovetov samara'],
+  // Translitterations du russe : chaque source coupe les voyelles autrement,
+  // et certaines ajoutent la ville au nom du club.
+  'krylia sovetov': ['kryliya sovetov', 'krylya sovetov', 'krylia sovetov samara', 'krylya sovetov samara'],
+  'akron togliatti': ['akron tolyatti', 'fc akron tolyatti', 'akron toljatti'],
   // Super League chinoise : plusieurs clubs ont change de nom ou sont connus
   // sous leur ancienne raison sociale selon la source.
   'shanghai port': ['shanghai sipg', 'shanghai sipg fc', 'shanghai port fc'],

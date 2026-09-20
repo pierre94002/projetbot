@@ -46,10 +46,20 @@ export const FOTMOB_LEAGUES = {
   'Ligue 2 - France': 'FRA|Ligue 2',
   'Premier League - Russia': 'RUS|Premier League',
   'Super League - China': 'CHN|Super League',
-  'UEFA Champions League': 'INT|Champions League',
-  'UEFA Europa League': 'INT|Europa League',
-  'UEFA Europa Conference League': 'INT|Europa Conference League'
+  // Les coupes d'Europe sont découpées par phase — « Champions League »,
+  // « Champions League Grp. E », « Champions League Final Stage » — donc un
+  // motif plutôt qu'un intitulé exact. L'ancrage en début de chaîne écarte
+  // l'AFC Champions League, compétition asiatique sans rapport.
+  'UEFA Champions League': /^INT\|Champions League(\s|$)/,
+  'UEFA Europa League': /^INT\|Europa League(\s|$)/,
+  'UEFA Europa Conference League': /^INT\|(Europa )?Conference League(\s|$)/
 };
+
+/** Une compétition FotMob correspond-elle à ce championnat ? */
+export function leagueKeyMatches(matcher, leagueKey) {
+  if (!matcher || !leagueKey) return false;
+  return matcher instanceof RegExp ? matcher.test(leagueKey) : matcher === leagueKey;
+}
 
 /** Intitulé FotMob -> clé du référentiel (ui/src/constants/matchStatFields.js). */
 const TEAM_STAT_MAP = {
@@ -233,6 +243,17 @@ function mapPlayer(entry) {
   // passage à l'autre, les noms variant d'une source à l'autre.
   if (entry.id != null) player.playerId = `fotmob-${entry.id}`;
   if (entry.shirtNumber != null) player.number = firstNumber(entry.shirtNumber);
+  // Le poste conditionne plusieurs lectures du magasin — les buts encaissés
+  // n'y valent que pour un gardien. FotMob le donne par un drapeau dédié et
+  // par la position habituelle du joueur.
+  if (entry.isGoalkeeper) player.position = 'Goalkeeper';
+  else {
+    const usual = String(entry.usualPosition ?? '');
+    if (/keeper|^gk$/i.test(usual)) player.position = 'Goalkeeper';
+    else if (/defend|back/i.test(usual)) player.position = 'Defender';
+    else if (/midfield/i.test(usual)) player.position = 'Midfielder';
+    else if (/forward|strik|wing|attack/i.test(usual)) player.position = 'Forward';
+  }
 
   for (const group of entry.stats ?? []) {
     for (const [, stat] of Object.entries(group.stats ?? {})) {
