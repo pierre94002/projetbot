@@ -21,6 +21,13 @@
  * -----------------------------------------------------------------------
  */
 
+/**
+ * Revision de la lecture. A incrementer des que la table de correspondance
+ * change : les entrees portant une revision anterieure sont alors reprises,
+ * sans avoir a tout refaire avec --force.
+ */
+export const FOTMOB_REV = 2;
+
 const BASE = 'https://www.fotmob.com/api/data';
 const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36';
 
@@ -126,7 +133,37 @@ const PLAYER_STAT_MAP = {
   opp_half_passes: 'oppHalfPasses',
   own_goals: 'ownGoals',
   total_shots: 'shots',
-  shots_on_target: 'shotsOnTarget'
+  shots_on_target: 'shotsOnTarget',
+
+  // FotMob publie plusieurs orthographes pour une même mesure, selon le
+  // match et la version du relevé. Les ignorer revenait à perdre les tacles
+  // sur 99 % des lignes et le xG sur les trois quarts.
+  'matchstats.headers.tackles': 'tackles',
+  ShotsOnTarget: 'shotsOnTarget',
+  ShotsOffTarget: 'shotsOffTarget',
+  blocked_shots: 'blocks',
+  owngoal: 'ownGoals',
+  expected_goals_on_target_variant: 'xgot',
+  expected_goals_on_target_faced: 'xgotFaced',
+  expected_goals_non_penalty: 'xgNonPenalty',
+
+  // Mesures supplémentaires du relevé joueur.
+  duel_lost: 'duelsLost',
+  player_throws: 'throwIns',
+  corners: 'cornersTaken',
+  shots_woodwork: 'woodwork',
+  defensive_actions: 'defensiveActions',
+  big_chance_created_team_title: 'bigChancesCreated',
+  headed_clearance: 'headedClearances',
+  clearance_off_the_line: 'clearancesOffLine',
+  last_man_tackle: 'lastManTackles',
+
+  // Gardiens.
+  keeper_diving_save: 'divingSaves',
+  keeper_high_claim: 'highClaims',
+  keeper_sweeper: 'sweeperActions',
+  saves_inside_box: 'savesInsideBox',
+  punches: 'punches'
 };
 
 /**
@@ -138,6 +175,8 @@ const PLAYER_FRACTION_MAP = {
   ground_duels_won: ['groundDuelsWon', 'groundDuelsTotal'],
   aerials_won: ['aerialsWon', 'aerialsTotal'],
   accurate_long_balls: ['longBallsAccurate', 'longBalls'],
+  long_balls_accurate: ['longBallsAccurate', 'longBalls'],
+  shot_accuracy: ['shotsOnTarget', 'shots'],
   accurate_crosses: ['crossesAccurate', 'crosses']
 };
 
@@ -350,10 +389,11 @@ function mapLineups(payload) {
  * Ce sont les informations d'en-tête de la page de match.
  */
 function mapMeta(payload) {
+  const meta0 = { rev: FOTMOB_REV };
   const general = payload?.general ?? {};
   const facts = payload?.content?.matchFacts ?? {};
   const info = facts.infoBox ?? {};
-  const meta = {};
+  const meta = meta0;
 
   const round = general.leagueRoundName ?? info.Tournament?.roundName;
   if (round) meta.round = String(round);

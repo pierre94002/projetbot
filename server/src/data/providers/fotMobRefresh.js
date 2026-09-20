@@ -19,7 +19,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { FOTMOB_LEAGUES, leagueKeyMatches, fetchMatchesByDate, fetchMatchStats } from './fotMobProvider.js';
+import { FOTMOB_LEAGUES, FOTMOB_REV, leagueKeyMatches, fetchMatchesByDate, fetchMatchStats } from './fotMobProvider.js';
 import { teamNamesLikelyMatch } from '../../utils/teamNameMatch.js';
 import { mergeMatchStats } from '../../../scripts/merge-match-stats.mjs';
 
@@ -178,7 +178,10 @@ export function listPending({ leagues = null, since = null, until = null, force 
     // porte la source FotMob sans ce bloc vient d'un passage antérieur et
     // reste donc à reprendre — ce qui rend l'import reprenable après un
     // incident sans avoir à tout refaire avec --force.
-    const complete = fetched && entry.meta;
+    // La revision dit si l entree a ete lue avec la table de correspondance
+    // courante : une mise a jour de celle-ci rend caduques les entrees plus
+    // anciennes, qui sont alors reprises sans repasser sur tout le reste.
+    const complete = fetched && entry.meta && entry.meta.rev === FOTMOB_REV;
     return force || !complete;
   });
 }
