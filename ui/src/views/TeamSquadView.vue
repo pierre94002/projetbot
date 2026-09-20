@@ -58,9 +58,15 @@ const playerMode = ref('totals');
 const squadSeason = ref(null);
 const squadSeasons = ref([]);
 
-const seasonOptions = computed(() =>
-  squadSeasons.value.map((s) => ({ value: seasonStartYear(s.season), label: `${s.season} — ${s.matches.toLocaleString('fr-FR')} matchs` }))
-);
+const seasonOptions = computed(() => [
+  // Toutes saisons confondues : la carrière du joueur dans le magasin, et
+  // donc des moyennes assises sur bien plus de rencontres.
+  { value: 'all', label: 'Toutes les saisons' },
+  ...squadSeasons.value.map((s) => ({
+    value: seasonStartYear(s.season),
+    label: `${s.season} — ${s.matches.toLocaleString('fr-FR')} matchs`
+  }))
+]);
 
 /** "2024-25" -> 2024, l'année de début, telle que l'attend l'API. */
 function seasonStartYear(label) {
@@ -84,10 +90,22 @@ async function loadSquadSeasons() {
  * vides n'apprendraient rien.
  */
 const PLAYER_COLUMNS = [
+  { key: 'rating', label: 'Note', title: 'Note moyenne', decimals: 2, averageOnly: true },
+  { key: 'minutes', label: 'Min.', title: 'Minutes jouées' },
   { key: 'goals', label: 'Buts', title: 'Buts marqués' },
   { key: 'assists', label: 'Passes D.', title: 'Passes décisives' },
+  { key: 'xg', label: 'xG', title: 'Buts attendus', decimals: 2 },
+  { key: 'xa', label: 'xA', title: 'Passes décisives attendues', decimals: 2 },
   { key: 'shots', label: 'Tirs', title: 'Tirs tentés' },
   { key: 'shotsOnTarget', label: 'Cadrés', title: 'Tirs cadrés' },
+  { key: 'touches', label: 'Touches', title: 'Ballons touchés' },
+  { key: 'passes', label: 'Passes', title: 'Passes tentées' },
+  { key: 'passesAccurate', label: 'Réussies', title: 'Passes réussies' },
+  { key: 'keyPasses', label: 'Occasions', title: 'Occasions créées' },
+  { key: 'duelsWon', label: 'Duels', title: 'Duels remportés' },
+  { key: 'tackles', label: 'Tacles', title: 'Tacles' },
+  { key: 'interceptions', label: 'Interc.', title: 'Interceptions' },
+  { key: 'clearances', label: 'Dégag.', title: 'Dégagements' },
   { key: 'foulsCommitted', label: 'Fautes', title: 'Fautes commises' },
   { key: 'foulsSuffered', label: 'Subies', title: 'Fautes subies' },
   { key: 'offsides', label: 'H-J', title: 'Hors-jeu' },
@@ -101,9 +119,11 @@ const squadPlayers = computed(() => players.value?.result?.players ?? []);
 const hasAverages = computed(() => squadPlayers.value.some((p) => p.averages && Object.keys(p.averages).length));
 
 const playerColumns = computed(() =>
-  PLAYER_COLUMNS.filter((col) =>
-    squadPlayers.value.some((p) => Number.isFinite(Number(p.totals?.[col.key] ?? p[col.key])))
-  )
+  PLAYER_COLUMNS.filter((col) => {
+    // Une note ne s'additionne pas : sa colonne n'a de sens qu'en moyenne.
+    if (col.averageOnly && playerMode.value === 'totals') return false;
+    return squadPlayers.value.some((p) => Number.isFinite(Number(p.totals?.[col.key] ?? p[col.key])));
+  })
 );
 
 /**
@@ -111,13 +131,19 @@ const playerColumns = computed(() =>
  * statistique ne le concerne pas. Distinguer les deux évite de laisser croire
  * à une donnée mesurée là où il n'y en a pas.
  */
-function playerCell(player, key) {
+function playerCell(player, col) {
+  const { key, decimals } = col;
   if (playerMode.value === 'averages') {
     const value = player.averages?.[key];
-    return Number.isFinite(value) ? value.toFixed(2).replace(/\.00$/, '') : '—';
+    if (!Number.isFinite(value)) return '—';
+    // Deux décimales pour les mesures fines (note, xG), une seule sinon —
+    // « 4,5 tirs par match » se lit mieux que « 4,50 ».
+    return value.toFixed(decimals ?? 1).replace('.', ',');
   }
   const value = player.totals?.[key] ?? player[key];
-  return Number.isFinite(Number(value)) ? Number(value) : '—';
+  if (!Number.isFinite(Number(value))) return '—';
+  const total = Number(value);
+  return decimals ? total.toFixed(decimals).replace('.', ',') : String(total);
 }
 
 onMounted(loadSquadSeasons);
@@ -234,7 +260,7 @@ async function loadPlayers() {
               <td class="cm-numeric cm-text-muted">{{ p.onSheet ?? '—' }}</td>
               <td class="cm-numeric">{{ p.appearances ?? '—' }}</td>
               <td class="cm-numeric cm-text-muted">{{ p.starts ?? '—' }}</td>
-              <td v-for="col in playerColumns" :key="col.key" class="cm-numeric">{{ playerCell(p, col.key) }}</td>
+              <td v-for="col in playerColumns" :key="col.key" class="cm-numeric">{{ playerCell(p, col) }}</td>
             </tr>
           </tbody>
         </table>

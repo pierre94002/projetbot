@@ -172,8 +172,21 @@ const SUMMABLE_PLAYER_KEYS = [
   'minutes', 'goals', 'assists', 'shots', 'shotsOnTarget', 'xg', 'xa', 'keyPasses',
   'passes', 'passesAccurate', 'crosses', 'dribblesWon', 'touches', 'tackles', 'interceptions',
   'clearances', 'duelsWon', 'duelsTotal', 'foulsCommitted', 'foulsSuffered', 'offsides',
-  'yellowCards', 'redCards', 'saves', 'goalsConceded'
+  'yellowCards', 'redCards', 'saves', 'goalsConceded',
+  // Mesures détaillées relevées par FotMob.
+  'xgot', 'xgotFaced', 'goalsPrevented', 'bigChancesMissed', 'touchesOppBox',
+  'blocks', 'recoveries', 'dribbledPast', 'dispossessed', 'duelsLost',
+  'groundDuelsWon', 'groundDuelsTotal', 'aerialsWon', 'aerialsTotal',
+  'longBalls', 'longBallsAccurate', 'crossesAccurate', 'finalThirdPasses',
+  'defensiveActions', 'bigChancesCreated', 'divingSaves', 'savesInsideBox'
 ];
+
+/**
+ * Statistiques qui ne se cumulent pas : une note est déjà une synthèse, on
+ * n'en garde que la moyenne. Les additionner donnerait un nombre dénué de
+ * sens (« 968 de note sur la saison »).
+ */
+const AVERAGE_ONLY_PLAYER_KEYS = ['rating'];
 
 /** Début de la saison en cours, utilisé par défaut pour l'effectif. */
 const CURRENT_SEASON_START = '2026-07-01';
@@ -229,6 +242,7 @@ export function getTeamSquad(teamName, { since = CURRENT_SEASON_START, until = n
           appearances: 0,
           starts: 0,
           totals: {},
+          averageOnly: {},
           counted: {},
           lastDate: match.date
         };
@@ -256,13 +270,25 @@ export function getTeamSquad(teamName, { since = CURRENT_SEASON_START, until = n
         player.totals[key2] = (player.totals[key2] ?? 0) + value;
         player.counted[key2] = (player.counted[key2] ?? 0) + 1;
       }
+      // Cumulées pour pouvoir en tirer une moyenne, mais jamais exposées
+      // comme total : c'est la moyenne seule qui a un sens.
+      for (const key2 of AVERAGE_ONLY_PLAYER_KEYS) {
+        const value = Number(entry[key2]);
+        if (!Number.isFinite(value)) continue;
+        player.averageOnly[key2] = (player.averageOnly[key2] ?? 0) + value;
+        player.counted[key2] = (player.counted[key2] ?? 0) + 1;
+      }
     }
   }
 
   const players = [...squad.values()]
-    .map(({ counted, ...player }) => {
+    .map(({ counted, averageOnly, ...player }) => {
       const averages = {};
       for (const [key, total] of Object.entries(player.totals)) {
+        if (!counted[key]) continue;
+        averages[key] = Number((total / counted[key]).toFixed(2));
+      }
+      for (const [key, total] of Object.entries(averageOnly)) {
         if (!counted[key]) continue;
         averages[key] = Number((total / counted[key]).toFixed(2));
       }
@@ -285,7 +311,8 @@ export function getTeamSquad(teamName, { since = CURRENT_SEASON_START, until = n
   return {
     teamId: null,
     teamName: matches[0].teamName,
-    season: seasonStart === null ? null : `${seasonStart}-${String(seasonStart + 1).slice(2)}`,
+    // Sans borne basse, l'effectif couvre tout l'historique du magasin.
+    season: seasonStart === null ? 'toutes saisons' : `${seasonStart}-${String(seasonStart + 1).slice(2)}`,
     players,
     matchesCounted: matchesWithPlayers,
     firstDate: matches[matches.length - 1].date,
