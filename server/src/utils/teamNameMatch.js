@@ -101,7 +101,37 @@ const TEAM_ALIASES = {
   // simplement "Deportivo", ce qui recouvre le second par simple partage de
   // token. Les deux sont enregistres pour que le registre tranche.
   'deportivo alaves': ['alaves'],
-  'nottingham forest': ["nott'm forest", 'nottm forest']
+  'nottingham forest': ["nott'm forest", 'nottm forest'],
+
+  // Clubs dont le nom est entierement CONTENU dans celui d'un autre : le
+  // recouvrement de tokens les declare identiques a tort, seul le registre
+  // peut les separer. Sans cela "Celta" recuperait les matchs de sa reserve,
+  // et "Inter" ceux de l'Inter Club d'Escaldes.
+  'celta vigo': ['celta', 'rc celta', 'celta de vigo'],
+  'celta fortuna': ['rc celta fortuna', 'celta vigo b'],
+  'real sociedad': ['sociedad'],
+  'real sociedad b': ['sociedad b', 'real sociedad ii'],
+  'athletic club': ['athletic bilbao', 'ath bilbao'],
+  'charlton athletic': ['charlton'],
+  'oldham athletic': ['oldham'],
+  'wigan athletic': ['wigan'],
+  'red star fc': ['red star', 'red star fc 93'],
+  'red star belgrade': ['crvena zvezda', 'estrella roja'],
+  'inter club d escaldes': ['inter escaldes'],
+  'port vale': [],
+  portsmouth: [],
+  porto: ['fc porto'],
+  valencia: [],
+  'pau fc': ['pau'],
+  'st pauli': ['fc st pauli'],
+  'juve stabia': [],
+  juventus: ['juve'],
+  bromley: [],
+  'le mans': ['le mans fc'],
+  'mansfield town': ['mansfield'],
+  mantova: [],
+  hamburg: ['hamburger sv', 'hamburg sv'],
+  'west ham united': ['west ham']
 };
 
 const ALIAS_TO_CANONICAL = new Map();
@@ -148,17 +178,23 @@ const TOKEN_SYNONYMS = new Map([
 
 const canonicalToken = (token) => TOKEN_SYNONYMS.get(token) ?? token;
 
-// Un token en abrege ("man" -> manchester) ou une terminaison qui varie
-// ("karlsruhe" -> "karlsruher", "laval" -> "lavallois"). Au-dela de 4 lettres
-// d'ecart, deux mots qui commencent pareil sont deux mots differents
-// ("villa" n'est pas "villarreal").
+// Une terminaison qui varie ("karlsruhe" -> "karlsruher", "laval" ->
+// "lavallois"). Au-dela de 4 lettres d'ecart, deux mots qui commencent pareil
+// sont deux mots differents ("villa" n'est pas "villarreal").
+//
+// Cette borne vaut AUSSI pour les mots courts. L'exempter les concernant
+// revenait a confondre "port" avec "portsmouth" et "porto", "ham" avec
+// "hamburg", "man" avec "mansfield" et "mantova", "juve" avec "juventus" ou
+// "pau" avec "pauli" — le meme mot court ouvrant sur des clubs sans rapport.
+// Les vraies abreviations ("man city", "psg", "qpr") passent par le registre
+// d'alias ci-dessus, qui tranche fermement, plutot que par un prefixe.
 function tokensEquivalent(rawA, rawB) {
   const a = canonicalToken(rawA);
   const b = canonicalToken(rawB);
   if (a === b) return true;
   const [short, long] = a.length <= b.length ? [a, b] : [b, a];
   if (!long.startsWith(short)) return false;
-  return short.length <= 4 || long.length - short.length <= 4;
+  return long.length - short.length <= 4;
 }
 
 function overlap(tokensA, tokensB) {

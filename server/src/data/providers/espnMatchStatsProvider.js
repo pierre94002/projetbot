@@ -240,6 +240,10 @@ function mapRoster(rosterEntry) {
     if (position) player.position = position;
     if (entry.jersey != null) player.number = numberOrNull(entry.jersey);
     if (typeof entry.starter === 'boolean') player.starter = entry.starter;
+    // Seul indice fiable qu'un remplaçant a réellement joué : sans lui, un
+    // joueur resté sur le banc compterait comme une apparition et diluerait
+    // toutes ses moyennes par match.
+    if (typeof entry.subbedIn === 'boolean') player.subbedIn = entry.subbedIn;
     Object.assign(player, stats);
     players.push(player);
   }
