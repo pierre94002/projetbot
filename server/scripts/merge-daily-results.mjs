@@ -16,6 +16,11 @@
  *   [{ "date": "2026-09-13", "league": "Ligue 1 - France", "homeName": "Paris Saint Germain",
  *      "awayName": "Marseille", "homeGoals": 2, "awayGoals": 1, "source": "..." }, ...]
  *
+ * SCORE DÉJÀ CONNU — un score enregistré n'est jamais remplacé en silence par
+ * un score différent : le script refuse l'entrée, la signale sur stderr et la
+ * compte dans `conflicts`. Un score identique passe normalement. Pour corriger
+ * sciemment une valeur erronée, ajoute "correctsScore": true à CETTE entrée.
+ *
  * matchId est dérivé de façon stable (date + équipes) plutôt qu'un ID
  * externe (The Odds API), puisque cette source n'a pas d'ID d'API — un
  * même match rejoué le lendemain via ce script met donc à jour la même
@@ -43,6 +48,21 @@ function slug(text) {
     .replace(/^-+|-+$/g, '');
 }
 
+/**
+ * Score réellement connu d'une entrée, ou null. Attention au piège :
+ * `Number(null)` vaut 0 et passe `Number.isFinite` — un match sans score
+ * serait alors lu « 0-0 » et un vrai 0-0 deviendrait indistinguable d'une
+ * absence. D'où le test explicite de null/undefined AVANT toute conversion.
+ */
+function scoreOf(entry) {
+  const home = entry?.homeGoals;
+  const away = entry?.awayGoals;
+  if (home === null || home === undefined || away === null || away === undefined) return null;
+  const numHome = Number(home);
+  const numAway = Number(away);
+  return Number.isFinite(numHome) && Number.isFinite(numAway) ? [numHome, numAway] : null;
+}
+
 function readJson(path, fallback) {
   try {
     if (fs.existsSync(path)) return JSON.parse(fs.readFileSync(path, 'utf8'));
@@ -58,9 +78,10 @@ const newMatches = readJson(newMatchesPath, []);
 let created = 0;
 let updated = 0;
 let skipped = 0;
+let conflicts = 0;
 
 for (const m of newMatches) {
-  const { date, league, homeName, awayName, homeGoals, awayGoals, source } = m;
+  const { date, league, homeName, awayName, homeGoals, awayGoals, source, correctsScore } = m;
 
   if (!homeName || !awayName || !Number.isFinite(Number(homeGoals)) || !Number.isFinite(Number(awayGoals))) {
     console.error(`Ignoré (données incomplètes) : ${JSON.stringify(m)}`);
@@ -75,6 +96,22 @@ for (const m of newMatches) {
   const numAwayGoals = Number(awayGoals);
 
   if (existing) {
+    // Garde-fou : un score déjà enregistré n'est PAS remplacé en silence par
+    // un autre. Ce fichier alimente le moteur de prédiction et le règlement
+    // des paris ; une source qui se contredit doit être vue, pas appliquée.
+    // Cas réels : Getafe - Deportivo du 13 septembre 2026, enregistré 1-1 le
+    // soir même puis écrasé en 3-0 par un passage ultérieur, alors que les
+    // pronostics avaient déjà été réglés sur le 1-1 — le bon score.
+    // Pour corriger volontairement, ajoute "correctsScore": true à l'entrée.
+    const known = scoreOf(existing);
+    if (known && (known[0] !== numHomeGoals || known[1] !== numAwayGoals) && correctsScore !== true) {
+      console.error(
+        `Conflit de score, rien n'est écrasé : ${matchId} — connu ${known[0]}-${known[1]}, ` +
+        `source ${numHomeGoals}-${numAwayGoals}. Ajoute "correctsScore": true pour forcer la correction.`
+      );
+      conflicts++;
+      continue;
+    }
     existing.homeGoals = numHomeGoals;
     existing.awayGoals = numAwayGoals;
     existing.homeScore = numHomeGoals;
@@ -103,4 +140,4 @@ for (const m of newMatches) {
 fs.mkdirSync(path.dirname(resultsPath), { recursive: true });
 fs.writeFileSync(resultsPath, JSON.stringify(results, null, 2), 'utf8');
 
-console.log(JSON.stringify({ created, updated, skipped, total: results.length }));
+console.log(JSON.stringify({ created, updated, skipped, conflicts, total: results.length }));
