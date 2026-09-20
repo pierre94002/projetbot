@@ -1312,5 +1312,168 @@
     },
     "updatedAt": "2026-09-18T17:07:44.435Z",
     "createdAt": "2026-09-18T17:07:44.435Z"
+  },
+  {
+    "matchId": "784f777f5181e1efdad7a6ecb2cfde15",
+    "homeName": "Bournemouth",
+    "awayName": "Liverpool",
+    "league": "EPL",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Bournemouth vs Liverpool",
+      "expectedGoals": {
+        "home": 1.164,
+        "away": 1.216,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 3.18,
+        "draw": 3.77,
+        "away": 2.38
+      },
+      "market": {
+        "odds1": 3.14,
+        "oddsDraw": 3.79,
+        "odds2": 2.14
+      },
+      "edgePercent": 3.42,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 3237,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1706,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Match équilibré selon le classement actuel de saison (4 matchs joués) : Liverpool 10e avec 6 pts (1V-3N-0D), Bournemouth 16e avec 3 pts (0V-3N-1D). Liverpool affiche une meilleure discipline défensive (7 buts encaissés contre 4 pour Bournemouth) malgré un nombre de victoires limité. Les formes les plus récentes issues du web (recentForm) sont mitigées des deux côtés, sans dominance nette.",
+      "keyFactors": [
+        {
+          "factor": "classement (saison en cours)",
+          "observation": "Liverpool devance Bournemouth au classement, avec un bilan plus solide malgré peu de victoires.",
+          "evidence": "Bournemouth 16e (3 pts, 0V-3N-1D, 6-7), Liverpool 10e (6 pts, 1V-3N-0D, 6-4) sur 4 matchs joués."
+        },
+        {
+          "factor": "forme récente (API-Football, saison 2024)",
+          "observation": "Les deux équipes montrent une forme mitigée sur leurs 5 derniers matchs API-Football, mais ces dates (avril-mai 2025) sont antérieures à la saison en cours.",
+          "evidence": "Bournemouth: V-D-D-V-N ; Liverpool: N-D-N-D-V, dates du 27/04 au 25/05/2025."
+        },
+        {
+          "factor": "forme récente (web, plus actuelle)",
+          "observation": "Les profils web, plus récents, indiquent une forme légèrement plus favorable à Liverpool en termes de résultats positifs.",
+          "evidence": "Bournemouth recentForm: N-V-N-N-D ; Liverpool recentForm: V-N-V-V-N-N (updatedAt mi-septembre 2026)."
+        },
+        {
+          "factor": "statistiques moyennes (match analysé, sample=1)",
+          "observation": "Sur l'unique match statistique disponible, Liverpool a généré plus de tirs cadrés et un xG supérieur, avec plus de possession.",
+          "evidence": "Bournemouth: 3 tirs cadrés, 11 tirs, 38% possession, xG 0.74 ; Liverpool: 5 tirs cadrés, 12 tirs, 44% possession, xG 1.53 (sampleSize=1 chacun)."
+        },
+        {
+          "factor": "statistiques historiques (Premier League, même division)",
+          "observation": "Sur l'historique à 10 matchs, Liverpool marque et encaisse davantage, tandis que Bournemouth est plus solide défensivement mais moins prolifique offensivement.",
+          "evidence": "Bournemouth: 1.4 buts marqués, 0.8 encaissés, 14.1 tirs, 3.9 cadrés ; Liverpool: 1.6 buts marqués, 1.6 encaissés, 15 tirs, 5.1 cadrés (sampleSize=10 chacun, division identique)."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur détecte un edge de 3.42% mais recommande de passer (PASS), suggérant que l'avantage perçu reste marginal au regard du marché.",
+          "evidence": "trueOdds home 3.18 / draw 3.77 / away 2.38 vs odds marché 3.14/3.79/2.14, edgePercent 3.42, staking action PASS."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif va globalement dans le sens de la légère préférence du modèle pour Liverpool (xG away 1.216 > home 1.164), avec un classement, des statistiques historiques et une forme web plus récente qui penchent modestement en faveur des Reds. Cependant, la faible marge d'expected goals entre les deux équipes (1.164 vs 1.216) et l'écart resserré confirment la prudence du moteur (edge faible, action PASS) : rien dans les données qualitatives ne suggère un déséquilibre suffisant pour contredire cette recommandation de passer.",
+      "caveats": "La forme API-Football (homeForm/awayForm) date d'avril-mai 2025 et est donc antérieure à la saison en cours (4 matchs joués selon standings) ; les recentForm issus du web (updatedAt septembre 2026) sont plus récents et doivent être privilégiés comme indicateurs de forme actuelle, bien que leur origine et méthodologie restent moins précises. Les statistiques par match (homeStats/awayStats) reposent sur un échantillon d'un seul match (sampleSize=1), ce qui limite leur fiabilité. Le classement fourni ne précise pas de source \"historique\" et semble être en direct pour la saison en cours, mais reste basé sur seulement 4 matchs joués, un échantillon réduit. Aucune donnée FlashScore disponible pour ce match."
+    },
+    "updatedAt": "2026-09-20T10:53:19.623Z",
+    "createdAt": "2026-09-20T10:53:19.623Z"
+  },
+  {
+    "matchId": "58ed47e545ec3e4235ed8c1955cfdd42",
+    "homeName": "Juventus",
+    "awayName": "Atalanta BC",
+    "league": "Serie A - Italy",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Juventus vs Atalanta BC",
+      "expectedGoals": {
+        "home": 1.86,
+        "away": 0.729,
+        "source": "league-baseline"
+      },
+      "trueOdds": {
+        "home": 1.71,
+        "draw": 4.09,
+        "away": 5.82
+      },
+      "market": {
+        "odds1": 1.69,
+        "oddsDraw": 3.8,
+        "odds2": 5.04
+      },
+      "edgePercent": 3.93,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 3258,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1611,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Juventus (8e, 7 pts en 4 matchs) reçoit une Atalanta (11e, 6 pts) légèrement moins performante en classement et en statistiques offensives/défensives moyennes. Les données de forme récente sont toutefois disparates selon les sources et l'échantillon de championnat reste très réduit (4 matchs), ce qui limite la robustesse de la lecture qualitative.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Juventus devance légèrement Atalanta au classement, avec un bilan plus favorable et une meilleure différence de buts.",
+          "evidence": "Juventus 8e (2V-1N-1D, 6-4, +2, 7 pts) vs Atalanta 11e (2V-0N-2D, 5-5, 0, 6 pts) sur 4 matchs joués chacun."
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Juventus domine sur presque tous les indicateurs offensifs moyens (tirs, tirs cadrés, possession, corners) par rapport à Atalanta.",
+          "evidence": "homeStats: 15.9 tirs, 5.3 cadrés, 56.7% possession, 6.7 corners vs awayStats: 12.9 tirs, 4.2 cadrés, 52.1% possession, 3.4 corners (échantillons de 10 matchs chacun)."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Les indicateurs de forme sont contradictoires selon la source : certaines séries récentes montrent Juventus performante, d'autres plus mitigées, et Atalanta alterne victoires et défaites/nuls sans tendance claire.",
+          "evidence": "homeForm (API-Football, mai 2025): V,V,N,N,V. homeFlashscoreStats.recentForm (collecté sept. 2026): N,V,V,V,D. homeTeamProfile.recentForm (web, sept. 2026): D,N,V,V. awayTeamProfile.recentForm (web, sept. 2026): D,D,V,V,V,N. awayForm (API-Football) absent."
+        },
+        {
+          "factor": "statistiques historiques Serie A",
+          "observation": "Sur l'historique Serie A, Juventus affiche une meilleure solidité défensive (moins de buts encaissés) et une activité offensive légèrement supérieure en tirs, tandis qu'Atalanta marque un peu plus mais concède davantage.",
+          "evidence": "homeHistoricalStats: 1.1 buts pour, 0.6 contre, 17.4 tirs, 5.8 cadrés (10 matchs, Serie A). awayHistoricalStats: 1.2 buts pour, 1.0 contre, 13.8 tirs, 4.2 cadrés (10 matchs, Serie A)."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur identifie un edge positif mais modeste sur la victoire à domicile, insuffisant pour déclencher une mise selon ses propres critères.",
+          "evidence": "edgePercent: 3.93%, staking.action: PASS, cote vraie domicile 1.71 vs cote marché 1.69."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif va globalement dans le même sens que l'edge du modèle : Juventus présente un profil statistique et un classement légèrement supérieurs à Atalanta, ce qui soutient une issue favorable au domicile plutôt qu'elle ne la contredit. Cependant, la dispersion des indicateurs de forme récente selon les sources nuance cette lecture et invite à ne pas surinterpréter l'avantage, cohérent avec le caractère modeste de l'edge (3.93%) et la décision de passe du moteur.",
+      "caveats": "Classement basé sur seulement 4 matchs joués cette saison, échantillon très réduit. La forme récente (homeForm) provient d'API-Football et date de mai 2025, donc antérieure aux données plus récentes (homeFlashscoreStats collecté sept. 2026, homeTeamProfile/awayTeamProfile mis à jour sept. 2026) : ces dernières sont plus représentatives de l'état actuel des équipes, mais elles sont elles-mêmes contradictoires entre sources. awayForm (API-Football) et awayFlashscoreStats sont totalement indisponibles. Aucun détail domicile/extérieur (home/away splits) n'est fourni dans les standings (tous à 0). Pas de données sur les confrontations directes entre les deux équipes."
+    },
+    "updatedAt": "2026-09-20T16:17:34.732Z",
+    "createdAt": "2026-09-20T16:17:34.732Z"
   }
 ]
