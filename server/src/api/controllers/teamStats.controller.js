@@ -139,7 +139,9 @@ export async function getLiveMatchByName(req, res) {
 /** Effectif + stats individuelles des joueurs d'une équipe par son nom, pour une saison (défaut : la plus récente disponible). */
 export async function getPlayersByName(req, res) {
   const name = req.query.name;
-  const season = req.query.season ? Number(req.query.season) : undefined;
+  // "all" traverse tel quel : il demande toutes les saisons du magasin, et le
+  // convertir en nombre le rendrait indistinguable d'une valeur absente.
+  const season = req.query.season === 'all' ? 'all' : req.query.season ? Number(req.query.season) : undefined;
   const league = req.query.league;
   if (!name) throw new ApiError(400, 'Le paramètre "name" est requis.');
 
