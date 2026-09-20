@@ -60,7 +60,7 @@ const TEAM_ALIASES = {
   'west bromwich albion': ['west brom'],
   'wolverhampton wanderers': ['wolves'],
   'queens park rangers': ['qpr'],
-  'deportivo la coruna': ['dep a coruna', 'deportivo', 'dep la coruna'],
+  'deportivo la coruna': ['dep a coruna', 'deportivo', 'dep la coruna', 'la coruna', 'deportivo a coruna'],
   'athletic bilbao': ['ath bilbao', 'athletic club'],
   'atletico madrid': ['ath madrid', 'atl madrid'],
   espanyol: ['espanol', 'rcd espanyol'],
@@ -70,6 +70,14 @@ const TEAM_ALIASES = {
   rennes: ['stade rennais', 'stade rennais fc'],
   // Nom trop court pour le rapprochement par tokens (moins de 3 lettres).
   'az alkmaar': ['az'],
+  // Translitterations du russe : chaque source coupe les voyelles autrement.
+  'krylia sovetov': ['kryliya sovetov', 'krylya sovetov', 'krylia sovetov samara'],
+  // Super League chinoise : plusieurs clubs ont change de nom ou sont connus
+  // sous leur ancienne raison sociale selon la source.
+  'shanghai port': ['shanghai sipg', 'shanghai sipg fc', 'shanghai port fc'],
+  'shenzhen xinpengcheng': ['shenzhen peng city', 'shenzhen peng city fc', 'shenzhen xinpengcheng fc'],
+  'shandong taishan': ['shandong luneng taishan', 'shandong luneng taishan fc', 'shandong luneng'],
+  'beijing guoan': ['beijing fc', 'beijing guoan fc'],
 
   // Clubs DISTINCTS qui se ressemblent : chacun doit exister ici pour que le
   // registre puisse trancher entre eux.
@@ -89,6 +97,10 @@ const TEAM_ALIASES = {
   'manchester city': ['man city'],
   'real madrid': [],
   'real betis': ['betis'],
+  // Deux clubs espagnols portent "Deportivo" : ESPN appelle le premier
+  // simplement "Deportivo", ce qui recouvre le second par simple partage de
+  // token. Les deux sont enregistres pour que le registre tranche.
+  'deportivo alaves': ['alaves'],
   'nottingham forest': ["nott'm forest", 'nottm forest']
 };
 

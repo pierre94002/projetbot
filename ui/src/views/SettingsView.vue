@@ -1,11 +1,12 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { useConfigStore } from '@/stores/configStore.js';
 import { useSourcesStore } from '@/stores/sourcesStore.js';
 import { useToastStore } from '@/stores/toastStore.js';
 import { useAiAnalysisStore } from '@/stores/aiAnalysisStore.js';
 import { useFlashscoreStore } from '@/stores/flashscoreStore.js';
 import { generatorApi } from '@/services/generatorApi.js';
+import { matchStatsApi } from '@/services/matchStatsApi.js';
 import AppCard from '@/components/common/AppCard.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EngineConfigForm from '@/components/settings/EngineConfigForm.vue';
@@ -13,6 +14,7 @@ import RiskControlPanel from '@/components/settings/RiskControlPanel.vue';
 import DataGeneratorPanel from '@/components/settings/DataGeneratorPanel.vue';
 import AiConnectionForm from '@/components/settings/AiConnectionForm.vue';
 import AiAnalysisPanel from '@/components/settings/AiAnalysisPanel.vue';
+import MatchStatsCoveragePanel from '@/components/settings/MatchStatsCoveragePanel.vue';
 
 const configStore = useConfigStore();
 const sourcesStore = useSourcesStore();
@@ -22,6 +24,9 @@ const flashscoreStore = useFlashscoreStore();
 
 const saving = ref(false);
 const generating = ref(false);
+const statsCoverage = ref(null);
+const refreshingStats = ref(false);
+let statsPollTimer = null;
 
 const MODEL_WEIGHTS = [
   { key: 'market', label: 'Consensus marché', description: 'Moyenne des cotes bookmakers — le signal le plus fiable.' },
@@ -35,7 +40,40 @@ onMounted(() => {
   aiAnalysisStore.fetchStatus();
   aiAnalysisStore.fetchHistory();
   flashscoreStore.fetchStatus();
+  loadStatsCoverage();
 });
+
+onUnmounted(() => {
+  clearTimeout(statsPollTimer);
+});
+
+/**
+ * Relit la couverture. Tant qu'un rafraîchissement tourne (au démarrage du
+ * serveur ou déclenché ici), on repasse toutes les cinq secondes pour voir
+ * les barres progresser.
+ */
+async function loadStatsCoverage() {
+  try {
+    statsCoverage.value = await matchStatsApi.coverage();
+    clearTimeout(statsPollTimer);
+    if (statsCoverage.value?.refresh?.running) statsPollTimer = setTimeout(loadStatsCoverage, 5000);
+  } catch {
+    statsCoverage.value = null; // Le panneau affiche « indisponible ».
+  }
+}
+
+async function handleRefreshStats() {
+  refreshingStats.value = true;
+  try {
+    const result = await matchStatsApi.refresh();
+    toastStore.success(result.alreadyRunning ? 'Un rafraîchissement est déjà en cours.' : 'Rafraîchissement lancé en fond.');
+    await loadStatsCoverage();
+  } catch (error) {
+    toastStore.error(`Rafraîchissement impossible : ${error.message}`);
+  } finally {
+    refreshingStats.value = false;
+  }
+}
 
 async function handleSaveConfig(partialConfig) {
   saving.value = true;
@@ -179,6 +217,13 @@ async function handleRunAiAnalysis(limit) {
           />
         </AppCard>
       </div>
+
+      <AppCard
+        title="Couverture des statistiques"
+        subtitle="Statistiques d'équipe et de joueurs, complétées automatiquement en fond"
+      >
+        <MatchStatsCoveragePanel :coverage="statsCoverage" :refreshing="refreshingStats" @refresh="handleRefreshStats" />
+      </AppCard>
 
       <AppCard title="Connexion IA" subtitle="Connectez votre clé API Anthropic pour activer l'analyse">
         <AiConnectionForm :status="aiAnalysisStore.status" :connecting="aiAnalysisStore.connecting" @connect="handleConnectAi" @disconnect="handleDisconnectAi" />
