@@ -63,6 +63,12 @@ export const PLAYER_STAT_KEYS = [
   'yellowCards', 'redCards', 'saves', 'goalsConceded'
 ];
 const PLAYER_TEXT_KEYS = ['name', 'position', 'number'];
+/**
+ * Booléens de feuille de match. `starter` dit qui a débuté, `subbedIn` qui
+ * est entré depuis le banc : les deux ensemble disent qui a joué, ce dont
+ * dépend toute moyenne « par match ».
+ */
+const PLAYER_FLAG_KEYS = ['starter', 'subbedIn'];
 
 function slug(text) {
   return (text ?? '')
@@ -111,13 +117,15 @@ function cleanPlayer(raw, warnings, label) {
   const out = { name: String(raw.name).trim() };
   if (raw.position != null) out.position = String(raw.position);
   if (raw.number != null) out.number = raw.number;
-  if (typeof raw.starter === 'boolean') out.starter = raw.starter;
+  for (const key of PLAYER_FLAG_KEYS) {
+    if (typeof raw[key] === 'boolean') out[key] = raw[key];
+  }
   for (const key of PLAYER_STAT_KEYS) {
     const n = toNumber(raw[key]);
     if (n !== null) out[key] = n;
   }
   for (const key of Object.keys(raw)) {
-    if (!PLAYER_STAT_KEYS.includes(key) && !PLAYER_TEXT_KEYS.includes(key) && key !== 'starter') {
+    if (!PLAYER_STAT_KEYS.includes(key) && !PLAYER_TEXT_KEYS.includes(key) && !PLAYER_FLAG_KEYS.includes(key)) {
       warnings.push(`${label} : clé joueur inconnue ignorée "${key}"`);
     }
   }

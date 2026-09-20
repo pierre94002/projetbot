@@ -10,7 +10,7 @@ import {
 } from './teamStatsService.js';
 import { resolveLeagueId, resolveCurrentSeason } from './leagueRegistry.js';
 import { getResultsForTeam } from '../repositories/matchResultsRepository.js';
-import { getTeamWebAverages } from '../repositories/matchStatsWebRepository.js';
+import { getTeamWebAverages, getTeamSquad } from '../repositories/matchStatsWebRepository.js';
 import { resolveLineupViaWeb, resolvePlayersViaWeb } from '../../core/ai/webLookupService.js';
 import { getTeamProfile } from '../repositories/teamProfileRepository.js';
 
@@ -273,6 +273,14 @@ export async function resolveLiveMatchDetails(homeName, commenceTimeIso) {
  * là) ; (2) sinon, recherche web à la demande (webLookupService.js).
  */
 export async function resolvePlayersByName(name, season, league) {
+  // Les feuilles de match d'abord : c'est la seule source qui donne
+  // l'effectif ENTIER de la saison en cours, avec les moyennes par match, et
+  // elle est locale, gratuite et rafraîchie toute seule. API-Football ne
+  // couvre que 2022-2024 sur ce plan et consomme un quota journalier ; les
+  // fiches club, elles, ne listent que les buteurs et les passeurs.
+  const fromMatchSheets = getTeamSquad(name);
+  if (fromMatchSheets?.players?.length) return fromMatchSheets;
+
   let apiFootballError = null;
   const team = await findBestTeamMatch(name).catch((error) => {
     apiFootballError = error;

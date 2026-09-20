@@ -17,6 +17,7 @@ import { LINEUP_UNAVAILABLE_MESSAGES } from '@/utils/lineupMessages.js';
 const matchesStore = useMatchesStore();
 const toastStore = useToastStore();
 
+
 // --- Composition en direct ---------------------------------------------
 
 // Option vide en tête : sans elle, le <select> affiche visuellement le
@@ -47,6 +48,52 @@ async function loadLineups() {
 // --- Statistiques individuelles des joueurs ------------------------------
 const playersTeamQuery = ref('');
 const players = ref(null); // { loading, error, result }
+
+/** « Σ Totaux » (cumul de la saison) ou « ⌀ Par match » (par match joué). */
+const playerMode = ref('totals');
+
+/**
+ * Colonnes chiffrées du tableau d'effectif. Seules celles qu'au moins un
+ * joueur renseigne sont affichées : la source ne publie ni minutes ni note,
+ * et les arrêts ne concernent que les gardiens — des colonnes entièrement
+ * vides n'apprendraient rien.
+ */
+const PLAYER_COLUMNS = [
+  { key: 'goals', label: 'Buts', title: 'Buts marqués' },
+  { key: 'assists', label: 'Passes D.', title: 'Passes décisives' },
+  { key: 'shots', label: 'Tirs', title: 'Tirs tentés' },
+  { key: 'shotsOnTarget', label: 'Cadrés', title: 'Tirs cadrés' },
+  { key: 'foulsCommitted', label: 'Fautes', title: 'Fautes commises' },
+  { key: 'foulsSuffered', label: 'Subies', title: 'Fautes subies' },
+  { key: 'offsides', label: 'H-J', title: 'Hors-jeu' },
+  { key: 'saves', label: 'Arrêts', title: 'Arrêts (gardiens)' },
+  { key: 'goalsConceded', label: 'Encaissés', title: 'Buts encaissés (gardiens)' },
+  { key: 'yellowCards', label: 'Jaunes', title: 'Cartons jaunes' },
+  { key: 'redCards', label: 'Rouges', title: 'Cartons rouges' }
+];
+
+const squadPlayers = computed(() => players.value?.result?.players ?? []);
+const hasAverages = computed(() => squadPlayers.value.some((p) => p.averages && Object.keys(p.averages).length));
+
+const playerColumns = computed(() =>
+  PLAYER_COLUMNS.filter((col) =>
+    squadPlayers.value.some((p) => Number.isFinite(Number(p.totals?.[col.key] ?? p[col.key])))
+  )
+);
+
+/**
+ * Une case vide plutôt qu'un zéro : un gardien n'a pas « 0 hors-jeu », la
+ * statistique ne le concerne pas. Distinguer les deux évite de laisser croire
+ * à une donnée mesurée là où il n'y en a pas.
+ */
+function playerCell(player, key) {
+  if (playerMode.value === 'averages') {
+    const value = player.averages?.[key];
+    return Number.isFinite(value) ? value.toFixed(2).replace(/\.00$/, '') : '—';
+  }
+  const value = player.totals?.[key] ?? player[key];
+  return Number.isFinite(Number(value)) ? Number(value) : '—';
+}
 
 async function loadPlayers() {
   const name = playersTeamQuery.value.trim();
@@ -107,7 +154,10 @@ async function loadPlayers() {
       />
     </AppCard>
 
-    <AppCard title="Statistiques individuelles des joueurs" subtitle="Effectif d'une équipe — apparitions, buts, passes, cartons, note moyenne">
+    <AppCard
+      title="Statistiques individuelles des joueurs"
+      subtitle="Effectif complet reconstitué depuis les feuilles de match — totaux de la saison ou moyennes par match joué"
+    >
       <div class="team-squad__controls">
         <AppTextField v-model="playersTeamQuery" label="Équipe" placeholder="Ex. Real Madrid…" @keyup.enter="loadPlayers" />
         <AppButton variant="primary" :loading="players?.loading" :disabled="!playersTeamQuery.trim()" @click="loadPlayers">
@@ -126,35 +176,38 @@ async function loadPlayers() {
       />
 
       <div v-else-if="players?.result" class="team-squad__players-table-wrap">
-        <p class="cm-text-muted team-squad__players-season">
-          {{ players.result.teamName }} — saison {{ players.result.season }} ({{ players.result.players.length }} joueurs)
-          <template v-if="players.result.source === 'web'"> — trouvé via recherche web, pas depuis API-Football</template>
-        </p>
+        <div class="team-squad__players-head">
+          <p class="cm-text-muted team-squad__players-season">
+            {{ players.result.teamName }} — saison {{ players.result.season }} ({{ players.result.players.length }} joueurs)
+            <template v-if="players.result.source === 'match-stats'">
+              — reconstitué depuis {{ players.result.matchesCounted }} feuille(s) de match
+            </template>
+            <template v-else-if="players.result.source === 'web'"> — trouvé via recherche web, pas depuis API-Football</template>
+          </p>
+          <div v-if="hasAverages" class="team-squad__toggle">
+            <button type="button" :class="{ 'is-active': playerMode === 'totals' }" @click="playerMode = 'totals'">Σ Totaux</button>
+            <button type="button" :class="{ 'is-active': playerMode === 'averages' }" @click="playerMode = 'averages'">⌀ Par match</button>
+          </div>
+        </div>
         <table class="team-squad__players-table">
           <thead>
             <tr>
               <th>Joueur</th>
               <th>Poste</th>
-              <th>Apps</th>
-              <th>Min.</th>
-              <th>Note</th>
-              <th>Buts</th>
-              <th>Passes D.</th>
-              <th>Jaunes</th>
-              <th>Rouges</th>
+              <th title="Présences sur la feuille de match">Feuille</th>
+              <th title="Matchs réellement joués — titularisations et entrées en jeu">Joués</th>
+              <th>Titul.</th>
+              <th v-for="col in playerColumns" :key="col.key" :title="col.title">{{ col.label }}</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="p in players.result.players" :key="p.id">
               <td class="team-squad__players-name cm-truncate">{{ p.name }}</td>
               <td class="cm-text-muted">{{ p.position ?? '—' }}</td>
+              <td class="cm-numeric cm-text-muted">{{ p.onSheet ?? '—' }}</td>
               <td class="cm-numeric">{{ p.appearances ?? '—' }}</td>
-              <td class="cm-numeric">{{ p.minutes ?? '—' }}</td>
-              <td class="cm-numeric">{{ p.rating ? p.rating.toFixed(1) : '—' }}</td>
-              <td class="cm-numeric">{{ p.goals }}</td>
-              <td class="cm-numeric">{{ p.assists }}</td>
-              <td class="cm-numeric">{{ p.yellowCards }}</td>
-              <td class="cm-numeric">{{ p.redCards }}</td>
+              <td class="cm-numeric cm-text-muted">{{ p.starts ?? '—' }}</td>
+              <td v-for="col in playerColumns" :key="col.key" class="cm-numeric">{{ playerCell(p, col.key) }}</td>
             </tr>
           </tbody>
         </table>
@@ -199,6 +252,42 @@ async function loadPlayers() {
 .team-squad__players-season {
   font-size: 11.5px;
   margin-bottom: 10px;
+}
+
+.team-squad__players-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.team-squad__toggle {
+  display: inline-flex;
+  border: 1px solid var(--cm-border-soft);
+  border-radius: var(--cm-radius-sm);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.team-squad__toggle button {
+  border: 0;
+  background: transparent;
+  color: var(--cm-text-secondary);
+  font: inherit;
+  font-size: 12px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: background var(--cm-transition), color var(--cm-transition);
+}
+
+.team-squad__toggle button:hover {
+  background: var(--cm-surface-hover);
+}
+
+.team-squad__toggle button.is-active {
+  background: var(--cm-accent-soft);
+  color: var(--cm-text-primary);
 }
 
 .team-squad__players-table-wrap {

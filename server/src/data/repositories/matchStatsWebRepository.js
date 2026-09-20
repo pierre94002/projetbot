@@ -163,6 +163,136 @@ export function getTeamWebAverages(teamName, sampleSize = DEFAULT_WEB_AVERAGE_SA
   };
 }
 
+/**
+ * Statistiques de joueur cumulables sur une saison. Les notes et les
+ * pourcentages n'y figurent pas : une note ne s'additionne pas, et un
+ * pourcentage se recalcule à partir de ses deux comptes.
+ */
+const SUMMABLE_PLAYER_KEYS = [
+  'minutes', 'goals', 'assists', 'shots', 'shotsOnTarget', 'xg', 'xa', 'keyPasses',
+  'passes', 'passesAccurate', 'crosses', 'dribblesWon', 'touches', 'tackles', 'interceptions',
+  'clearances', 'duelsWon', 'duelsTotal', 'foulsCommitted', 'foulsSuffered', 'offsides',
+  'yellowCards', 'redCards', 'saves', 'goalsConceded'
+];
+
+/** Début de la saison en cours, utilisé par défaut pour l'effectif. */
+const CURRENT_SEASON_START = '2026-07-01';
+
+function normalizePlayerKey(name) {
+  return normalize(name).replace(/[^a-z0-9]+/g, ' ').trim();
+}
+
+/**
+ * Effectif d'une équipe reconstruit depuis ses feuilles de match, avec pour
+ * chaque joueur ses totaux de la saison et ses moyennes PAR MATCH JOUÉ.
+ *
+ * Deux précautions rendent ces moyennes justes :
+ *  - un joueur resté sur le banc (ni titulaire, ni entré en jeu) ne compte
+ *    pas comme une apparition : il figurerait sinon comme un match à zéro et
+ *    tirerait toutes ses moyennes vers le bas ;
+ *  - chaque moyenne est divisée par le nombre de matchs où SA statistique
+ *    était publiée, pas par le nombre d'apparitions. Les arrêts d'un gardien
+ *    ne sont renseignés que sur une partie des rencontres selon la source ;
+ *    diviser par le reste inventerait des zéros.
+ *
+ * C'est la seule source d'effectif complète du projet : les fiches club ne
+ * publient que les buteurs et les passeurs (cf. team-profiles.json), et le
+ * plan API-Football ne couvre pas la saison en cours.
+ */
+export function getTeamSquad(teamName, { since = CURRENT_SEASON_START, until = null } = {}) {
+  if (!teamName) return null;
+
+  const matches = listTeamMatchStats(teamName).filter(
+    (m) => (!since || m.date >= since) && (!until || m.date <= until)
+  );
+  if (!matches.length) return null;
+
+  const squad = new Map();
+  let matchesWithPlayers = 0;
+
+  for (const match of matches) {
+    const roster = match.players?.team ?? [];
+    if (!roster.length) continue;
+    matchesWithPlayers++;
+
+    for (const entry of roster) {
+      if (!entry?.name) continue;
+      const key = normalizePlayerKey(entry.name);
+      let player = squad.get(key);
+      if (!player) {
+        player = {
+          id: `web-${key.replace(/\s+/g, '-')}`,
+          name: entry.name,
+          position: null,
+          number: null,
+          onSheet: 0,
+          appearances: 0,
+          starts: 0,
+          totals: {},
+          counted: {},
+          lastDate: match.date
+        };
+        squad.set(key, player);
+      }
+
+      player.onSheet++;
+      if (entry.position && !player.position) player.position = entry.position;
+      if (entry.number != null && player.number == null) player.number = entry.number;
+
+      // Sans `subbedIn`, une ligne de banc est indiscernable d'une entrée en
+      // jeu : on retombe alors sur la présence d'une statistique non nulle,
+      // qui prouve que le joueur a foulé le terrain.
+      const played =
+        entry.starter === true ||
+        entry.subbedIn === true ||
+        (entry.subbedIn === undefined && entry.starter !== true && SUMMABLE_PLAYER_KEYS.some((k) => Number(entry[k]) > 0));
+      if (!played) continue;
+
+      player.appearances++;
+      if (entry.starter === true) player.starts++;
+      for (const key2 of SUMMABLE_PLAYER_KEYS) {
+        const value = Number(entry[key2]);
+        if (!Number.isFinite(value)) continue;
+        player.totals[key2] = (player.totals[key2] ?? 0) + value;
+        player.counted[key2] = (player.counted[key2] ?? 0) + 1;
+      }
+    }
+  }
+
+  const players = [...squad.values()]
+    .map(({ counted, ...player }) => {
+      const averages = {};
+      for (const [key, total] of Object.entries(player.totals)) {
+        if (!counted[key]) continue;
+        averages[key] = Number((total / counted[key]).toFixed(2));
+      }
+      return {
+        ...player,
+        averages,
+        // Champs repris tels quels par le tableau d'effectif, qui accepte
+        // aussi bien cette source qu'API-Football.
+        goals: player.totals.goals ?? 0,
+        assists: player.totals.assists ?? 0,
+        yellowCards: player.totals.yellowCards ?? 0,
+        redCards: player.totals.redCards ?? 0,
+        minutes: player.totals.minutes ?? null,
+        rating: null
+      };
+    })
+    .sort((a, b) => b.appearances - a.appearances || b.starts - a.starts || a.name.localeCompare(b.name));
+
+  return {
+    teamId: null,
+    teamName: matches[0].teamName,
+    season: since ? Number(since.slice(0, 4)) : null,
+    players,
+    matchesCounted: matchesWithPlayers,
+    firstDate: matches[matches.length - 1].date,
+    lastDate: matches[0].date,
+    source: 'match-stats'
+  };
+}
+
 export function getMatchStatsStatus() {
   const all = readAllEntries();
   return {
