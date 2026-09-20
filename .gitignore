@@ -41,3 +41,8 @@ server/data/runtime/_tmp-season-import/
 # Les donnees derivees qui comptent (calendrier, classements) sont versionnees,
 # elles, dans server/data/runtime/.
 server/data/fixtures/historique/
+
+# Verrou du rafraîchissement automatique des statistiques (cf.
+# server/src/data/providers/espnMatchStatsRefresh.js) : état d'un processus
+# en cours, propre à la machine, sans valeur d'historique.
+server/data/runtime/espn-refresh.lock

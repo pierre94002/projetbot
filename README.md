@@ -38,7 +38,8 @@ server/
 │   └── runtime/          Données et configuration vivantes de l'appli — paris, pronostics,
 │                          résultats saisis, config moteur... Versionné dans git comme filet
 │                          de sécurité, SAUF ai-config.json (clé API en clair, jamais commité)
-├── scripts/             Scripts de migration ponctuels, à lancer à la main une fois
+├── scripts/             Scripts de migration ponctuels, plus les imports de données
+│                          (fusion calendrier/classements/statistiques, rattrapage ESPN)
 └── src/
     ├── core/             Logique métier pure — sans dépendance HTTP, sans notion de sport
     │   ├── model/         Distribution de Poisson, correction Dixon-Coles
@@ -55,6 +56,8 @@ server/
     │   └── football/       Modèle, marchés, cotes et consensus bookmakers propres au foot
     ├── data/              Providers (API externes), adapters (normalisation), repositories (disque)
     ├── pipelines/         Génération de jeux de données de test
+    ├── jobs/             Tâches de fond démarrées avec le serveur (rafraîchissement
+    │                       automatique des statistiques de match)
     ├── api/               Couche HTTP : routes, contrôleurs, middlewares
     ├── config/            Variables d'environnement
     └── server.js          Point d'entrée
@@ -84,7 +87,27 @@ Thème sombre "flat glass blur" : flou et transparence ajoutés par-dessus l'est
 - **Matchs** (`/matches`) — parcourir les rencontres d'une source de données (Odds API ou jeu de test), lancer l'analyse du moteur sur l'une d'elles, comparer les moyennes des deux équipes, consulter le classement. Deux onglets complémentaires : **Statistiques ligue** (moyennes par équipe d'un championnat) et **Compo & joueurs** (composition en direct, effectif détaillé).
 - **Mes paris** (`/paris`) — scanner les matchs pour détecter les value bets et paris les plus probables selon le moteur, gérer le carnet de paris (simples et combinés), suivre bankroll, mise, retours et ROI.
 - **Historique moteur** (`/historique-moteur`) — taux de réussite du moteur par marché (résultat, total buts, etc.), avec deux onglets : **Performance paris** (rentabilité réelle des paris placés) et **Mes tickets** (paris déjà réglés, gagnés/perdus).
-- **Réglages** (`/reglages`) — seuils d'edge, fraction de Kelly, mise maximale, avantage terrain, corrélation du modèle, coupe-circuit manuel, génération de jeux de test, connexion et analyse IA des pronostics (clé API Anthropic).
+- **Réglages** (`/reglages`) — seuils d'edge, fraction de Kelly, mise maximale, avantage terrain, corrélation du modèle, coupe-circuit manuel, génération de jeux de test, couverture des statistiques de match, connexion et analyse IA des pronostics (clé API Anthropic).
+
+## Statistiques de match : mise à jour automatique
+
+Les statistiques détaillées (équipe et joueurs, match par match) se complètent toutes seules.
+Le serveur interroge périodiquement l'API JSON publique d'ESPN — gratuite, sans clé et sans
+quota — pour les rencontres terminées dont les statistiques manquent, puis les fusionne dans
+`server/data/runtime/match-stats/<AAAA-MM>.json`.
+
+- **En fond** : `src/jobs/matchStatsAutoRefresh.js`, démarré par `server.js`. Réglages via
+  `MATCH_STATS_AUTO_REFRESH`, `MATCH_STATS_REFRESH_INTERVAL_MIN` (défaut 180),
+  `MATCH_STATS_REFRESH_BATCH` (défaut 300).
+- **À la demande** : bouton « Compléter maintenant » dans *Réglages*, ou
+  `POST /api/match-stats/refresh`. L'état se lit sur `GET /api/match-stats/coverage`.
+- **En ligne de commande** : `node server/scripts/import-espn-match-stats.mjs`
+  (`--coverage`, `--league`, `--since`, `--limit`, `--dry-run`).
+
+Une rencontre déjà traitée porte l'URL ESPN dans ses `sources` : les passages suivants ne
+regardent que les nouvelles. La fusion complète sans jamais écraser une valeur déjà
+confirmée, et les champs qu'ESPN ne publie pas (xG, duels, grosses occasions) restent vides
+plutôt que d'être estimés.
 
 ## Architecture "Sport"
 

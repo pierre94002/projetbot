@@ -27,5 +27,15 @@ export const env = {
   apify: {
     apiToken: process.env.APIFY_API_TOKEN || '',
     flashscoreActor: process.env.APIFY_FLASHSCORE_ACTOR || 'statanow/flashscore-scraper-live'
+  },
+  // Rafraîchissement automatique des statistiques de match depuis l'API
+  // publique d'ESPN (cf. src/jobs/matchStatsAutoRefresh.js). Source gratuite
+  // et sans clé : activée par défaut, à l'inverse des fournisseurs payants.
+  matchStatsRefresh: {
+    enabled: process.env.MATCH_STATS_AUTO_REFRESH !== 'false',
+    intervalMinutes: Number(process.env.MATCH_STATS_REFRESH_INTERVAL_MIN) || 180,
+    startupDelayMinutes: Number(process.env.MATCH_STATS_REFRESH_DELAY_MIN ?? 2),
+    batchSize: Number(process.env.MATCH_STATS_REFRESH_BATCH) || 300,
+    concurrency: Number(process.env.MATCH_STATS_REFRESH_CONCURRENCY) || 4
   }
 };

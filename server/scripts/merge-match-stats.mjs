@@ -43,6 +43,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 export const TEAM_STAT_KEYS = [
   'expected_goals', 'xgot', 'Total Shots', 'Shots on Goal', 'Shots off Goal', 'Blocked Shots',
@@ -131,32 +132,71 @@ function fillStats(target, incoming) {
   return target;
 }
 
-function mergePlayers(existing = [], incoming = []) {
-  const byKey = new Map(existing.map((p) => [slug(p.name), p]));
-  for (const player of incoming) {
-    const key = slug(player.name);
-    if (byKey.has(key)) {
-      const { name, ...rest } = player; // on garde l'orthographe déjà stockée (accents…)
-      fillStats(byKey.get(key), rest);
-    }
-    else byKey.set(key, player);
-  }
-  return [...byKey.values()];
+/**
+ * Rapproche les joueurs d'une même feuille de match.
+ *
+ * Le numéro de maillot sert de clé de secours : les sources changent
+ * d'orthographe d'un passage à l'autre ("Pepe Carmona" devient "José Ángel
+ * Carmona"), et indexer par nom seul créait une seconde ligne pour le même
+ * joueur — donc des buts comptés deux fois.
+ *
+ * Mais le numéro seul ne suffit pas : en League 1 et League 2, la source
+ * attribue parfois le même numéro à deux joueurs distincts d'une même
+ * feuille. Le rapprochement par numéro exige donc en plus un mot de nom en
+ * commun, faute de quoi on préfère deux lignes séparées à une confusion.
+ *
+ * Le nom déjà stocké est conservé : c'est celui auquel le reste des données
+ * fait référence.
+ */
+function sharesNameToken(a, b) {
+  const tokens = (name) =>
+    new Set(
+      String(name ?? '')
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '')
+        .toLowerCase()
+        .split(/[^a-z0-9]+/)
+        .filter((t) => t.length >= 3)
+    );
+  const left = tokens(a);
+  return [...tokens(b)].some((t) => left.has(t));
 }
 
-function main() {
-  const [, , statsDir, newStatsPath] = process.argv;
-  if (!statsDir || !newStatsPath) {
-    console.error('Usage: node merge-match-stats.mjs <dossier-match-stats> <nouvelles-stats.json>');
-    process.exit(1);
+function mergePlayers(existing = [], incoming = []) {
+  const ordered = [...existing];
+  const byNumber = new Map();
+  const byName = new Map();
+  for (const p of ordered) {
+    if (p.number != null && !byNumber.has(p.number)) byNumber.set(p.number, p);
+    const key = slug(p.name);
+    if (!byName.has(key)) byName.set(key, p);
   }
 
-  const incoming = readJson(newStatsPath, []);
-  if (!Array.isArray(incoming)) {
-    console.error('Le fichier de nouvelles stats doit contenir un TABLEAU JSON.');
-    process.exit(1);
+  for (const player of incoming) {
+    const sameNumber = player.number != null ? byNumber.get(player.number) : null;
+    const target = (sameNumber && sharesNameToken(sameNumber.name, player.name) ? sameNumber : null) ?? byName.get(slug(player.name));
+    if (target) {
+      const { name, ...rest } = player; // on garde l'orthographe déjà stockée (accents…)
+      fillStats(target, rest);
+      continue;
+    }
+    ordered.push(player);
+    if (player.number != null && !byNumber.has(player.number)) byNumber.set(player.number, player);
+    byName.set(slug(player.name), player);
   }
+  return ordered;
+}
 
+/**
+ * Fusionne un tableau de statistiques dans <statsDir> et renvoie le bilan
+ * (dont les avertissements, que l'appelant affiche ou journalise).
+ *
+ * Extrait de la CLI pour que le serveur puisse rafraîchir ses statistiques
+ * en direct (cf. src/services/matchStatsRefreshService.js) sans relancer un
+ * processus : une seule implémentation du contrat de fusion, partagée par la
+ * ligne de commande et par l'application.
+ */
+export function mergeMatchStats(statsDir, incoming) {
   const shards = new Map(); // "AAAA-MM" -> tableau
   const touched = new Set();
   const warnings = [];
@@ -199,6 +239,16 @@ function main() {
     const existing = shard.find((e) => e.matchKey === matchKey);
 
     if (existing) {
+      // Une entrée écrite par un import plus ancien peut n'avoir ni bloc
+      // `players` ni bloc `teamStats` complet : on rétablit la forme attendue
+      // avant de compléter, plutôt que d'échouer sur toute la fusion.
+      existing.teamStats ??= {};
+      existing.teamStats.home ??= {};
+      existing.teamStats.away ??= {};
+      existing.players ??= {};
+      existing.players.home ??= [];
+      existing.players.away ??= [];
+
       existing.league = league ?? existing.league ?? null;
       if (toNumber(m.homeGoals) !== null) existing.homeGoals = toNumber(m.homeGoals);
       if (toNumber(m.awayGoals) !== null) existing.awayGoals = toNumber(m.awayGoals);
@@ -240,10 +290,28 @@ function main() {
     written.push(file);
   }
 
-  for (const w of warnings.slice(0, 30)) console.error(`Avertissement : ${w}`);
-  if (warnings.length > 30) console.error(`… ${warnings.length - 30} autres avertissements`);
-
-  console.log(JSON.stringify({ created, updated, skipped, playersMerged: playersCount, writtenFiles: written }));
+  return { created, updated, skipped, playersMerged: playersCount, writtenFiles: written, warnings };
 }
 
-main();
+function main() {
+  const [, , statsDir, newStatsPath] = process.argv;
+  if (!statsDir || !newStatsPath) {
+    console.error('Usage: node merge-match-stats.mjs <dossier-match-stats> <nouvelles-stats.json>');
+    process.exit(1);
+  }
+
+  const incoming = readJson(newStatsPath, []);
+  if (!Array.isArray(incoming)) {
+    console.error('Le fichier de nouvelles stats doit contenir un TABLEAU JSON.');
+    process.exit(1);
+  }
+
+  const { warnings, ...summary } = mergeMatchStats(statsDir, incoming);
+  for (const w of warnings.slice(0, 30)) console.error(`Avertissement : ${w}`);
+  if (warnings.length > 30) console.error(`… ${warnings.length - 30} autres avertissements`);
+  console.log(JSON.stringify(summary));
+}
+
+// Exécuté en ligne de commande seulement : importé comme module, ce fichier
+// n'a aucun effet de bord.
+if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) main();

@@ -7,5 +7,9 @@ export const matchStatsApi = {
   getTeamAverages: (name, sampleSize) =>
     httpClient.get(`/match-stats/team-averages?name=${encodeURIComponent(name)}${sampleSize ? `&sampleSize=${sampleSize}` : ''}`),
   get: (matchId) => httpClient.get(`/match-stats/${encodeURIComponent(matchId)}`),
-  status: () => httpClient.get('/match-stats/status')
+  status: () => httpClient.get('/match-stats/status'),
+  // Couverture par championnat et état du rafraîchissement automatique
+  // (cf. server/src/jobs/matchStatsAutoRefresh.js).
+  coverage: () => httpClient.get('/match-stats/coverage'),
+  refresh: (limit) => httpClient.post('/match-stats/refresh', limit ? { limit } : {})
 };
