@@ -160,6 +160,9 @@ export function openDb({ file = resolveDbPath(), readonly = false } = {}) {
   const ouverte = connexions.get(chemin);
   if (ouverte) return ouverte;
   fs.mkdirSync(path.dirname(chemin), { recursive: true });
+  // Avant toute ouverture : ouvrir puis fermer une base masquée suffit à la
+  // vider pour de bon.
+  assertNotMasked(chemin);
   const db = new DatabaseSync(chemin, { readOnly: readonly });
   // WAL : un lecteur n'attend plus un écrivain. busy_timeout : deux imports
   // simultanés patientent au lieu d'échouer.
@@ -172,9 +175,70 @@ export function openDb({ file = resolveDbPath(), readonly = false } = {}) {
   // plafond, le -wal grossit sans jamais redescendre. La limite le fait
   // retailler à chaque occasion où la troncature devient possible.
   db.exec('PRAGMA journal_size_limit = 67108864;');
+  // AVANT le DDL, impérativement : sur une base masquée, `CREATE TABLE IF
+  // NOT EXISTS` ne voit aucune table, recrée le schéma vide, et la fermeture
+  // du processus reporte ce schéma dans le fichier. Le garde-fou arriverait
+  // alors après la destruction qu'il est censé empêcher.
   if (!readonly) for (const sql of DDL) db.exec(sql);
   connexions.set(chemin, db);
   return db;
+}
+
+/**
+ * Refuse d'ouvrir une base que son journal masque.
+ *
+ * Un `-wal` périmé peut se retrouver à côté d'un fichier plein et décrire
+ * une base BEAUCOUP plus petite. Tout lecteur voit alors une base vide
+ * pendant que les données dorment intactes dans le fichier. C'est arrivé :
+ * l'API a servi `count: 0` sans un mot pendant que 366 Mo de statistiques
+ * attendaient à côté.
+ *
+ * Le contrôle se fait sur les OCTETS, sans jamais ouvrir la base — parce
+ * qu'ouvrir en écriture puis fermer suffit à reporter le journal dans le
+ * fichier, c'est-à-dire à consommer pour de bon la destruction qu'on veut
+ * empêcher. Mesuré : une base de 15 737 rencontres tombe à 0 par la seule
+ * ouverture-fermeture.
+ *
+ * L'en-tête d'une base SQLite annonce son nombre de pages (octets 28-31) ;
+ * la dernière trame de validation d'un journal annonce la taille de base
+ * après ce commit. Quand les deux divergent d'un ordre de grandeur, le
+ * journal ne décrit pas cette base-là.
+ */
+function assertNotMasked(chemin) {
+  let entete;
+  try {
+    const fd = fs.openSync(chemin, 'r');
+    entete = Buffer.alloc(100);
+    const lus = fs.readSync(fd, entete, 0, 100, 0);
+    fs.closeSync(fd);
+    if (lus < 100) return; // base neuve : rien à masquer
+  } catch { return; } // fichier absent : openDb va le créer
+  if (entete.toString('latin1', 0, 15) !== 'SQLite format 3') return;
+  const taillePage = entete.readUInt16BE(16) || 65536;
+  const pagesBase = entete.readUInt32BE(28);
+  if (pagesBase < 256) return; // base petite : rien qui vaille d'être masqué
+
+  const journal = `${chemin}-wal`;
+  let wal;
+  try { wal = fs.readFileSync(journal); } catch { return; }
+  if (wal.length < 32 || (wal.readUInt32BE(0) !== 0x377f0682 && wal.readUInt32BE(0) !== 0x377f0683)) return;
+  const taillePageWal = wal.readUInt32BE(8) || taillePage;
+
+  // Dernière trame de validation : celle qui fixe la taille vue par un lecteur.
+  let pagesJournal = null;
+  for (let pos = 32; pos + 24 + taillePageWal <= wal.length; pos += 24 + taillePageWal) {
+    const apres = wal.readUInt32BE(pos + 4);
+    if (apres > 0) pagesJournal = apres;
+  }
+  if (pagesJournal === null || pagesJournal * 8 >= pagesBase) return;
+
+  throw new Error(
+    `Base masquée par son journal : ${chemin} contient ${pagesBase} pages ` +
+    `(${((pagesBase * taillePage) / 1048576).toFixed(0)} Mo), mais ${journal} n'en décrit que ${pagesJournal}. ` +
+    "Les données sont intactes dans le fichier. Arrêtez ce qui utilise la base, DÉPLACEZ " +
+    `${journal} et ${chemin}-shm ailleurs (ne les laissez pas en place), puis rouvrez : le contenu réapparaît. ` +
+    "N'ouvrez surtout pas la base en écriture avant de les avoir écartés."
+  );
 }
 
 export function closeDb(file = null) {

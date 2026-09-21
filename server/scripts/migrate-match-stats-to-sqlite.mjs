@@ -49,8 +49,22 @@ function unpercent(value) {
 }
 
 export function migrate({ dir = MATCH_STATS_DIR, file = resolveDbPath(), fresh = false, limit = null, log = console.log } = {}) {
-  if (fresh) for (const suffix of ['', '-wal', '-shm']) {
-    try { fs.unlinkSync(file + suffix); } catch { /* absente : rien à supprimer */ }
+  // Le journal AVANT la base : l'ordre inverse peut laisser un `-wal`
+  // orphelin à côté d'une base neuve, et ce journal masque alors tout ce
+  // que la base contient. Et surtout, on n'avale plus l'échec : un fichier
+  // qu'on n'arrive pas à supprimer est un fichier encore ouvert par un
+  // autre processus — continuer produirait exactement ce mélange-là.
+  if (fresh) for (const suffix of ['-shm', '-wal', '']) {
+    const cible = file + suffix;
+    if (!fs.existsSync(cible)) continue;
+    try {
+      fs.unlinkSync(cible);
+    } catch (error) {
+      throw new Error(
+        `Impossible de supprimer ${cible} (${error.code ?? error.message}). ` +
+        'Un serveur ou un import tient sans doute la base ouverte : arrêtez-le avant de repartir à neuf.'
+      );
+    }
   }
   const db = openDb({ file });
   let files = shardFiles(dir);
