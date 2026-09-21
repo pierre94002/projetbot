@@ -90,6 +90,54 @@ export const FOTMOB_LEAGUES = {
   // groupes depuis 2021 — vérifié sur les fins de saison 2024, 2025 et 2026,
   // où aucune variante d'intitulé n'apparaît.
   'Ekstraklasa - Poland': 'POL|Ekstraklasa',
+
+  // ---------------------------------------------------------------------
+  // Reste de l'Europe, ajouté le 2026-09-21. Les 55 fédérations UEFA ont été
+  // passées en revue et chaque première division ÉCHANTILLONNÉE sur trois
+  // rencontres : quinze publient des relevés complets — 25 à 30 statistiques
+  // d'équipe, 38 à 45 joueurs notés — et dix-huit n'ont que le score.
+  //
+  // Seules les quinze premières figurent ici. Déclarer les autres aurait
+  // rempli l'interface de championnats dont deux écrans sur quatre —
+  // statistiques d'équipe et statistiques de joueurs — seraient restés
+  // vides, sans que rien ne dise pourquoi.
+  //
+  // Presque toutes se scindent en groupes après la phase régulière, d'où les
+  // motifs plutôt que des égalités. L'ancrage est indispensable dans les
+  // deux sens : sans `^`, « SWE|Damallsvenskan » (féminin) contiendrait
+  // « Allsvenskan » ; sans `$`, « SVK|1. Liga » ramasserait la 2. Liga.
+  // ---------------------------------------------------------------------
+  'Austrian Football Bundesliga': /^AUT\|Bundesliga($| (Championship|Relegation) Group$)/,
+  'HNL - Croatia': 'CRO|HNL',
+  // « FNL » est la deuxième division tchèque, et « Placement Matches » les
+  // barrages de fin de saison, qui appartiennent bien au championnat.
+  'First League - Czechia': /^CZE\|1\. Liga($| (Championship|Relegation) Group$| Placement Matches$)/,
+  'Denmark Superliga': /^DEN\|Superligaen($| (Championship|Relegation) Group$)/,
+  'Veikkausliiga - Finland': /^FIN\|Veikkausliiga($| (Championship|Relegation) Group$)/,
+  // L'Islande publie ses phases finales sous deux formes selon la saison,
+  // « Championship Group » et « - Championship Round ». Les deux sont
+  // acceptées ; « Besta deildin kvenna », le championnat féminin, ne l'est
+  // pas, l'ancrage de fin l'écartant.
+  'Besta deildin - Iceland': /^ISL\|Besta deildin($| (Championship|Relegation) Group$| - (Championship|Relegation) Round$)/,
+  // « Women's Premier Division » commence par un autre mot : l'ancrage suffit,
+  // et le garde-fou masculin/senior le refuserait de toute façon.
+  'League of Ireland': /^IRL\|Premier Division$/,
+  // Trois orthographes chez la source — « Ligat Ha'al », « Ligat ha'Al »,
+  // « Ligat HaAl » — dont une seule porte les phases finales. Insensible à la
+  // casse et à l'apostrophe ; « Leumit League » est la deuxième division.
+  "Ligat ha'Al - Israel": /^ISR\|Ligat ha'?al( (Championship|Relegation) Group)?$/i,
+  'Virsliga - Latvia': 'LVA|Virsliga',
+  // « Toppserien » est le championnat féminin norvégien : nom distinct, donc
+  // aucun risque de recouvrement ici.
+  'Eliteserien - Norway': /^NOR\|Eliteserien($| Qualification$)/,
+  'Superliga - Romania': /^ROU\|Superliga($| (Championship|Relegation) Group$| Qualification$)/,
+  'Super Liga - Serbia': /^SRB\|Super Liga($| (Championship|Relegation) Group$)/,
+  'Swiss Superleague': /^SUI\|Super League($| (Championship|Relegation) Group$)/,
+  // FotMob a renommé la première division slovaque « Super Liga » en cours de
+  // route, comme il l'avait fait pour la Belgique : les deux intitulés sont
+  // acceptés, sans quoi des saisons entières resteraient invisibles.
+  'Nike Liga - Slovakia': /^SVK\|(1\. Liga|Super Liga)($| (Championship|Relegation) Group$| Qualification$)/,
+  'Allsvenskan - Sweden': /^SWE\|Allsvenskan($| Qualification$)/,
   // Les coupes d'Europe sont découpées par phase — « Champions League »,
   // « Champions League Grp. E », « Champions League Final Stage » — donc un
   // motif plutôt qu'un intitulé exact. L'ancrage en début de chaîne écarte

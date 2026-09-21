@@ -30,13 +30,25 @@ const REAL_PLAYER_KEYS = new Set([
 ]);
 
 /**
- * Sept clés où ESPN renvoie 0 pour « non publié ». Quatre seulement reçoivent
- * la contrainte : sur les trois autres — passes décisives de centre, tacles
- * interceptés, dégagements — le magasin contient de vrais zéros (1 017, 33 et
- * 2 occurrences). Une contrainte qui refuserait une donnée authentique serait
- * un défaut, pas un garde-fou.
+ * AUCUNE contrainte « > 0 » sur les statistiques d'équipe, et c'est une
+ * décision, pas un oubli.
+ *
+ * ESPN renvoie 0 pour « non publié » sur sept clés. On avait donc posé
+ * `CHECK (x IS NULL OR x > 0)` sur les quatre dont le magasin ne contenait
+ * alors aucun zéro. C'était mesuré, et c'était faux : la mesure portait sur
+ * les championnats d'alors. L'arrivée de la Virsliga lettone a produit 668
+ * zéros authentiques sur `long_balls` — une équipe peut finir un match sans
+ * un seul long ballon.
+ *
+ * Le coût de l'erreur est sans commune mesure avec son bénéfice : une ligne
+ * refusée annule TOUTE la transaction, donc des centaines de rencontres
+ * n'atteignent jamais la base. 4 952 rencontres ont été perdues ainsi.
+ *
+ * Le tri des faux zéros se fait là où l'on connaît la source, dans
+ * `espnMatchStatsProvider.ZERO_MEANS_ABSENT`. Le magasin, lui, n'a pas à
+ * contredire une source qui publie légitimement un zéro.
  */
-export const POSITIVE_TEAM_KEYS = new Set(['Total passes', 'Passes accurate', 'tackles', 'long_balls']);
+export const POSITIVE_TEAM_KEYS = new Set();
 
 /** Les cinq familles de postes réellement publiées ; « Substitute » n'en est pas un. */
 export const POSITIONS = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward', 'Sweeper'];

@@ -333,14 +333,37 @@ export function mergeMatchStats(statsDir, incoming) {
   }
 
   // Double écriture : les fichiers JSON restent à jour pendant que la base
-  // SQLite, désormais lue par l'API, reçoit le même lot. Tant que les deux
-  // magasins coexistent, revenir en arrière ne coûte qu'un import à changer.
-  // L'échec de la base n'invalide pas l'import : le JSON, lui, est écrit.
+  // SQLite, désormais lue par l'API, reçoit le même lot.
+  //
+  // Une seule ligne refusée annulait AUTREFOIS toute la transaction, donc
+  // tout le lot — et l'erreur finissait dans `warnings`, que personne ne
+  // lit. 4 952 rencontres ont disparu de la base ainsi, présentes en JSON,
+  // sans un mot. Deux règles en découlent :
+  //   1. on réessaie rencontre par rencontre, pour ne perdre que ce qui est
+  //      réellement mauvais plutôt que ses 300 voisines ;
+  //   2. l'échec s'écrit sur la sortie d'erreur, pas dans un tableau.
   let dbReport = null;
   try {
     dbReport = upsertMatches(incoming);
   } catch (error) {
-    warnings.push(`Base SQLite non mise à jour (${error.message}) — les fichiers JSON, eux, sont écrits.`);
+    dbReport = { created: 0, updated: 0, skipped: 0, playersMerged: 0, warnings: [], rejected: [] };
+    for (const entry of incoming) {
+      try {
+        const un = upsertMatches([entry]);
+        dbReport.created += un.created;
+        dbReport.updated += un.updated;
+        dbReport.playersMerged += un.playersMerged;
+      } catch (err) {
+        dbReport.rejected.push({ matchKey: entry.matchKey ?? `${entry.date}-${entry.homeName}-${entry.awayName}`, reason: err.message });
+      }
+    }
+    const avis =
+      `Base SQLite : le lot a été refusé en bloc (${error.message}). ` +
+      `Repris une par une : ${dbReport.created + dbReport.updated} acceptées, ${dbReport.rejected.length} refusées.`;
+    warnings.push(avis);
+    console.error(`[base] ${avis}`);
+    for (const r of dbReport.rejected.slice(0, 10)) console.error(`[base]   ${r.matchKey} : ${r.reason}`);
+    if (dbReport.rejected.length > 10) console.error(`[base]   … et ${dbReport.rejected.length - 10} autres.`);
   }
 
   return { created, updated, skipped, playersMerged: playersCount, writtenFiles: written, warnings, db: dbReport };

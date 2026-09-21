@@ -112,3 +112,28 @@ fs.writeFileSync(tampon, JSON.stringify(sorties, null, 2));
 console.log(`\nFusion dans ${CALENDRIER}…`);
 console.log(execFileSync('node', [path.join(__dirname, 'merge-season-calendar.mjs'), CALENDRIER, tampon], { encoding: 'utf8' }));
 fs.rmSync(tampon, { force: true });
+
+/**
+ * Les rencontres terminées vont AUSSI dans match-results.json.
+ *
+ * Ce fichier-là est celui que lit le règlement des pronostics et des paris
+ * (settle-pending-outcomes.mjs). Le calendrier seul ne suffit donc pas : un
+ * pari resterait en attente indéfiniment sur un match dont le score est
+ * pourtant connu. `merge-daily-results.mjs` refuse de remplacer un score
+ * déjà enregistré par un autre, ce qui rend l'opération rejouable.
+ */
+const termines = sorties.filter((s) => s.status === 'finished' && s.homeGoals !== null && s.awayGoals !== null);
+if (termines.length) {
+  const RESULTATS = path.join(RUNTIME_DIR, 'match-results.json');
+  const tamponR = path.join(RUNTIME_DIR, 'resultats-fotmob.json');
+  fs.writeFileSync(tamponR, JSON.stringify(termines, null, 2));
+  console.log(`Fusion de ${termines.length} résultat(s) dans ${RESULTATS}…`);
+  try {
+    console.log(execFileSync('node', [path.join(__dirname, 'merge-daily-results.mjs'), RESULTATS, tamponR], { encoding: 'utf8' }));
+  } catch (error) {
+    // Un score divergent fait sortir le script en erreur : c'est un signal,
+    // pas une panne. Le calendrier, lui, est déjà écrit.
+    console.warn(`Résultats non fusionnés intégralement : ${error.stdout ?? ''}${error.stderr ?? error.message}`);
+  }
+  fs.rmSync(tamponR, { force: true });
+}

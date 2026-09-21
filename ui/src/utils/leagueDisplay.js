@@ -17,7 +17,26 @@ const COUNTRY_CODES = {
   scotland: 'SCO',
   greece: 'GRE',
   poland: 'POL',
-  usa: 'USA'
+  usa: 'USA',
+  // Le repli — trois premières lettres du pays — donne le bon code par
+  // hasard pour la Finlande ou la Norvège, mais se trompe partout où le code
+  // FIFA ne suit pas l'anglais : « Romania » donnerait ROM au lieu de ROU,
+  // « Serbia » SER au lieu de SRB, « Latvia » LAT au lieu de LVA.
+  finland: 'FIN',
+  norway: 'NOR',
+  sweden: 'SWE',
+  denmark: 'DEN',
+  austria: 'AUT',
+  switzerland: 'SUI',
+  croatia: 'CRO',
+  czechia: 'CZE',
+  iceland: 'ISL',
+  ireland: 'IRL',
+  israel: 'ISR',
+  latvia: 'LVA',
+  romania: 'ROU',
+  serbia: 'SRB',
+  slovakia: 'SVK'
 };
 
 /** Découpe "La Liga - Spain" en {name: "La Liga", country: "Spain"} ; "EFL Cup" reste tel quel, sans pays. */

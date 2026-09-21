@@ -69,20 +69,19 @@ export function backupTo(destination, { database = openDb() } = {}) {
 const quote = (c) => `"${c}"`;
 
 function teamDdl() {
-  const cols = TEAM_COLUMNS.map((c) => `  ${quote(c.column)} ${c.type}`);
-  // Sept clés où 0 veut dire « non publié ». Seules celles dont le magasin ne
-  // contient aucun zéro authentique reçoivent la contrainte.
-  const checks = TEAM_COLUMNS.filter((c) => POSITIVE_TEAM_KEYS.has(c.key))
-    .map((c) => `  CHECK (${quote(c.column)} IS NULL OR ${quote(c.column)} > 0)`);
-  return [
-    'CREATE TABLE IF NOT EXISTS team_stats (',
-    '  match_key TEXT NOT NULL REFERENCES matches(match_key) ON DELETE CASCADE,',
-    "  side TEXT NOT NULL CHECK (side IN ('home','away')),",
-    cols.join(',\n') + ',',
-    '  PRIMARY KEY (match_key, side),',
-    checks.join(',\n'),
-    ') WITHOUT ROWID;'
-  ].join('\n');
+  // Les clauses sont assemblées en liste puis jointes UNE fois : construire
+  // le corps par morceaux déjà suffixés de virgules laissait une virgule
+  // orpheline dès qu'une liste devenait vide — ce qui est arrivé le jour où
+  // les contraintes « > 0 » ont été retirées (voir POSITIVE_TEAM_KEYS).
+  const clauses = [
+    '  match_key TEXT NOT NULL REFERENCES matches(match_key) ON DELETE CASCADE',
+    "  side TEXT NOT NULL CHECK (side IN ('home','away'))",
+    ...TEAM_COLUMNS.map((c) => `  ${quote(c.column)} ${c.type}`),
+    '  PRIMARY KEY (match_key, side)',
+    ...TEAM_COLUMNS.filter((c) => POSITIVE_TEAM_KEYS.has(c.key))
+      .map((c) => `  CHECK (${quote(c.column)} IS NULL OR ${quote(c.column)} > 0)`)
+  ];
+  return `CREATE TABLE IF NOT EXISTS team_stats (\n${clauses.join(',\n')}\n) WITHOUT ROWID;`;
 }
 
 function playerDdl() {
@@ -237,6 +236,36 @@ function migrateSchema(db) {
   for (const [table, column, type] of ADDED_COLUMNS) {
     const existe = db.prepare(`SELECT COUNT(*) n FROM pragma_table_info(?) WHERE name = ?`).get(table, column).n;
     if (!existe) db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${type};`);
+  }
+  dropPositiveChecks(db);
+}
+
+/**
+ * Retire les contraintes « > 0 » des bases créées avant qu'on sache qu'elles
+ * étaient fausses (voir POSITIVE_TEAM_KEYS). SQLite ne sait pas supprimer un
+ * CHECK : il faut reconstruire la table. Sans cela, corriger le DDL ne change
+ * rien aux bases existantes — et c'est précisément là que 334 rencontres
+ * lettones continuaient d'être refusées.
+ */
+function dropPositiveChecks(db) {
+  const ligne = db.prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'team_stats'").get();
+  if (!ligne?.sql || !/IS NULL OR "[a-z_]+" > 0/.test(ligne.sql)) return;
+
+  const colonnes = db.prepare('SELECT name FROM pragma_table_info(?)').all('team_stats').map((r) => `"${r.name}"`).join(', ');
+  db.exec('PRAGMA foreign_keys = OFF;');
+  db.exec('BEGIN IMMEDIATE');
+  try {
+    db.exec(teamDdl().replace('CREATE TABLE IF NOT EXISTS team_stats', 'CREATE TABLE team_stats_migr'));
+    db.exec(`INSERT INTO team_stats_migr (${colonnes}) SELECT ${colonnes} FROM team_stats;`);
+    db.exec('DROP TABLE team_stats;');
+    db.exec('ALTER TABLE team_stats_migr RENAME TO team_stats;');
+    db.exec('COMMIT');
+    console.error('[base] contraintes « > 0 » retirées de team_stats : un zéro authentique ne fait plus rejeter son lot.');
+  } catch (error) {
+    try { db.exec('ROLLBACK'); } catch { /* déjà annulée */ }
+    throw error;
+  } finally {
+    db.exec('PRAGMA foreign_keys = ON;');
   }
 }
 

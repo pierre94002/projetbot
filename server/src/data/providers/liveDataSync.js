@@ -55,7 +55,20 @@ export const TRACKED_SPORT_KEYS = [
   // Ajoutée le 2026-09-21, également marquée « hors saison » par The Odds API :
   // la compétition existe bien côté cotes (`soccer_poland_ekstraklasa`), mais
   // aucune n'est ouverte pour l'instant. Elle apparaît par le calendrier.
-  'soccer_poland_ekstraklasa'
+  'soccer_poland_ekstraklasa',
+  // Reste de l'Europe, ajouté le 2026-09-21. Sur les quinze championnats
+  // ajoutés au magasin, sept seulement existent chez The Odds API — la
+  // Croatie, la Tchéquie, l'Islande, Israël, la Lettonie, la Roumanie, la
+  // Serbie et la Slovaquie n'y sont pas du tout. Ces huit-là vivent donc
+  // uniquement par le calendrier, comme la Pologne : le moteur voit
+  // `market.available: false` et neutralise edge et mise.
+  'soccer_austria_bundesliga',
+  'soccer_denmark_superliga',
+  'soccer_finland_veikkausliiga',
+  'soccer_league_of_ireland',
+  'soccer_norway_eliteserien',
+  'soccer_sweden_allsvenskan',
+  'soccer_switzerland_superleague'
 ];
 
 /**
