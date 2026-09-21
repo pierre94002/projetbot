@@ -22,11 +22,34 @@ const seasons = ref([]);
 const selectedLeague = ref('');
 const selectedSeason = ref('');
 const teamQuery = ref('');
+const role = ref('field');
 const sortKey = ref('goals');
 
 const state = ref({ loading: false, error: null, players: [] });
 
-const COLUMNS = [
+const ROLE_OPTIONS = [
+  { value: 'field', label: 'Joueurs de champ' },
+  { value: 'goalkeeper', label: 'Gardiens' }
+];
+
+// Colonnes distinctes selon le poste : afficher arrêts et buts encaissés sur
+// un attaquant — ou xG sur un gardien — remplirait le tableau de tirets.
+const GOALKEEPER_COLUMNS = [
+  { key: 'played', label: 'M', title: 'Matchs joués' },
+  { key: 'minutes', label: 'Min', title: 'Minutes jouées' },
+  { key: 'rating', label: 'Note', title: 'Note moyenne', decimals: 2 },
+  { key: 'cleanSheets', label: 'CS', title: 'Clean sheets — matchs joués sans encaisser' },
+  { key: 'saves', label: 'Arrêts', title: 'Arrêts' },
+  { key: 'goalsConceded', label: 'Enc.', title: 'Buts encaissés' },
+  { key: 'savePercent', label: '% arr.', title: "Part des tirs cadrés arrêtés", decimals: 1, suffix: '%' },
+  { key: 'xgotFaced', label: 'xGOTc', title: 'xG cadrés subis — qualité des tirs affrontés', decimals: 2 },
+  { key: 'goalsPrevented', label: 'Évités', title: 'Buts évités : xGOT subis moins buts encaissés. Positif = au-dessus de son niveau attendu', decimals: 2, signed: true },
+  { key: 'duelsWon', label: 'Duels', title: 'Duels gagnés' },
+  { key: 'yellowCards', label: 'CJ', title: 'Cartons jaunes' },
+  { key: 'redCards', label: 'CR', title: 'Cartons rouges' }
+];
+
+const FIELD_COLUMNS = [
   { key: 'played', label: 'M', title: 'Matchs joués' },
   { key: 'minutes', label: 'Min', title: 'Minutes jouées' },
   { key: 'rating', label: 'Note', title: 'Note moyenne', decimals: 2 },
@@ -43,6 +66,8 @@ const COLUMNS = [
   { key: 'redCards', label: 'CR', title: 'Cartons rouges' }
 ];
 
+const COLUMNS = computed(() => (role.value === 'goalkeeper' ? GOALKEEPER_COLUMNS : FIELD_COLUMNS));
+
 const leagueOptions = computed(() => leagues.value.map((l) => ({ value: l, label: formatLeagueOptionLabel(l) })));
 
 const seasonOptions = computed(() =>
@@ -51,19 +76,28 @@ const seasonOptions = computed(() =>
 
 // Filtrage par équipe côté navigateur : la liste renvoyée est déjà bornée,
 // un aller-retour serveur par frappe n'apporterait rien.
+// Le pourcentage d'arrêts se déduit des deux cumuls plutôt que d'être
+// calculé en base : moyenner des pourcentages match par match donnerait un
+// résultat faux (un match à un seul tir pèserait autant qu'un match à dix).
+function withSavePercent(player) {
+  const faced = (player.saves ?? 0) + (player.goalsConceded ?? 0);
+  return { ...player, savePercent: faced > 0 ? (player.saves / faced) * 100 : null };
+}
+
 const displayedPlayers = computed(() => {
   const query = teamQuery.value.trim().toLowerCase();
-  const filtered = query
-    ? state.value.players.filter((p) => p.team?.toLowerCase().includes(query) || p.name?.toLowerCase().includes(query))
-    : state.value.players;
+  const base = role.value === 'goalkeeper' ? state.value.players.map(withSavePercent) : state.value.players;
+  const filtered = query ? base.filter((p) => p.team?.toLowerCase().includes(query) || p.name?.toLowerCase().includes(query)) : base;
   const key = sortKey.value;
-  return [...filtered].sort((a, b) => (b[key] ?? 0) - (a[key] ?? 0));
+  return [...filtered].sort((a, b) => (b[key] ?? Number.NEGATIVE_INFINITY) - (a[key] ?? Number.NEGATIVE_INFINITY));
 });
 
 function cell(player, column) {
   const value = player[column.key];
   if (value === null || value === undefined) return '—';
-  return column.decimals ? Number(value).toFixed(column.decimals) : value;
+  const shown = column.decimals ? Number(value).toFixed(column.decimals) : value;
+  const signed = column.signed && Number(value) > 0 ? `+${shown}` : shown;
+  return column.suffix ? `${signed}${column.suffix}` : signed;
 }
 
 async function loadSeasons() {
@@ -83,7 +117,7 @@ async function loadPlayers() {
   if (!selectedLeague.value || !selectedSeason.value) return;
   state.value = { loading: true, error: null, players: [] };
   try {
-    const result = await matchStatsApi.players(selectedLeague.value, { season: selectedSeason.value, limit: 300 });
+    const result = await matchStatsApi.players(selectedLeague.value, { season: selectedSeason.value, role: role.value, limit: 300 });
     state.value = { loading: false, error: null, players: result.players ?? [] };
   } catch (error) {
     state.value = { loading: false, error: error.message, players: [] };
@@ -95,6 +129,11 @@ watch(selectedLeague, async () => {
   await loadPlayers();
 });
 watch(selectedSeason, loadPlayers);
+watch(role, () => {
+  // Le tri courant n'existe pas forcément dans l'autre jeu de colonnes.
+  sortKey.value = role.value === 'goalkeeper' ? 'cleanSheets' : 'goals';
+  loadPlayers();
+});
 
 onMounted(async () => {
   // Les championnats viennent du magasin lui-même : proposer une compétition
@@ -113,6 +152,7 @@ onMounted(async () => {
       <div class="player-stats__controls">
         <AppSelect v-model="selectedLeague" label="Compétition" :options="leagueOptions" />
         <AppSelect v-model="selectedSeason" label="Saison" :options="seasonOptions" :disabled="!seasonOptions.length" />
+        <AppSelect v-model="role" label="Poste" :options="ROLE_OPTIONS" />
         <AppTextField v-model="teamQuery" label="Équipe ou joueur" placeholder="Ex. Ajax, Ueda…">
           <template #icon><AppIcon name="search" :size="15" /></template>
         </AppTextField>
@@ -130,7 +170,11 @@ onMounted(async () => {
         v-else-if="!displayedPlayers.length"
         icon="target"
         title="Aucun joueur"
-        :description="teamQuery ? `Aucun joueur ne correspond à « ${teamQuery} ».` : 'Aucun joueur ne totalise assez de minutes sur cette saison.'"
+        :description="
+          teamQuery
+            ? `Aucun ${role === 'goalkeeper' ? 'gardien' : 'joueur'} ne correspond à « ${teamQuery} ».`
+            : `Aucun ${role === 'goalkeeper' ? 'gardien' : 'joueur'} ne totalise assez de minutes sur cette saison.`
+        "
       />
 
       <div v-else class="player-stats__wrap">
@@ -138,7 +182,7 @@ onMounted(async () => {
           <thead>
             <tr>
               <th class="player-stats__rank">#</th>
-              <th>Joueur</th>
+              <th>{{ role === 'goalkeeper' ? 'Gardien' : 'Joueur' }}</th>
               <th>Équipe</th>
               <th
                 v-for="col in COLUMNS"
@@ -166,7 +210,10 @@ onMounted(async () => {
       </div>
 
       <p v-if="displayedPlayers.length" class="cm-text-muted player-stats__note">
-        {{ displayedPlayers.length }} joueur(s) — au moins 180 minutes sur la saison. Clique sur une colonne pour trier.
+        {{ displayedPlayers.length }} {{ role === 'goalkeeper' ? 'gardien(s)' : 'joueur(s)' }} — au moins 180 minutes sur la saison. Clique sur une colonne pour trier.
+        <template v-if="role === 'goalkeeper'">
+          « Évités » compare les xG cadrés subis aux buts réellement encaissés : positif, le gardien a fait mieux que ce que les tirs laissaient attendre.
+        </template>
       </p>
     </AppCard>
   </div>

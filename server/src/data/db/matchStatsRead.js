@@ -155,10 +155,12 @@ export function playerSeasonStats({
   league,
   season = null,
   team = null,
+  role = 'field',
   minMinutes = 180,
   limit = 200,
   database = openDb()
 } = {}) {
+  const goalkeepers = role === 'goalkeeper';
   const where = ['m.league = ?'];
   const args = [league];
   if (season) {
@@ -198,7 +200,12 @@ export function playerSeasonStats({
          COALESCE(SUM(p.yellow_cards), 0) AS yellowCards,
          COALESCE(SUM(p.red_cards), 0) AS redCards,
          COALESCE(SUM(p.saves), 0) AS saves,
-         COALESCE(SUM(p.goals_conceded), 0) AS goalsConceded
+         COALESCE(SUM(p.goals_conceded), 0) AS goalsConceded,
+         -- Un match sans but encaisse ne compte que si la donnee est
+         -- RENSEIGNEE : un NULL veut dire "non releve", pas "zero".
+         SUM(CASE WHEN p.goals_conceded = 0 AND p.minutes > 0 THEN 1 ELSE 0 END) AS cleanSheets,
+         ROUND(SUM(p.xgot_faced), 2) AS xgotFaced,
+         ROUND(SUM(p.goals_prevented), 2) AS goalsPrevented
        FROM players p
        JOIN matches m ON m.match_key = p.match_key
        WHERE ${where.join(' AND ')}
@@ -206,8 +213,16 @@ export function playerSeasonStats({
        -- Agrégats répétés en toutes lettres : dans un HAVING/ORDER BY,
        -- SQLite résout un nom ambigu vers la COLONNE et non vers l'alias,
        -- et filtrait donc sur les minutes d'une ligne arbitraire du groupe.
-       HAVING COALESCE(SUM(p.minutes), 0) >= ?
-       ORDER BY COALESCE(SUM(p.goals), 0) DESC, COALESCE(SUM(p.assists), 0) DESC, AVG(p.rating) DESC
+       -- Le poste se juge sur le JOUEUR, pas sur la ligne : 53 % des lignes
+       -- n'en portent pas, donc un filtre ligne a ligne laisserait un gardien
+       -- reapparaitre parmi les joueurs de champ par ses lignes non taguees.
+       HAVING ${goalkeepers ? "MAX(p.position) = 'Goalkeeper'" : "(MAX(p.position) IS NULL OR MAX(p.position) <> 'Goalkeeper')"}
+          AND COALESCE(SUM(p.minutes), 0) >= ?
+       ORDER BY ${
+         goalkeepers
+           ? 'SUM(CASE WHEN p.goals_conceded = 0 AND p.minutes > 0 THEN 1 ELSE 0 END) DESC, SUM(p.goals_prevented) DESC, AVG(p.rating) DESC'
+           : 'COALESCE(SUM(p.goals), 0) DESC, COALESCE(SUM(p.assists), 0) DESC, AVG(p.rating) DESC'
+       }
        LIMIT ?`
     )
     .all(...args, minMinutes, limit);

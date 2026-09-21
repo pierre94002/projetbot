@@ -16,10 +16,11 @@ export const matchStatsApi = {
   // de teamStatsApi.getPlayersByName, qui interroge API-Football (plan
   // gratuit limité à 2024, et qui ne couvre pas tous les championnats).
   seasons: (league) => httpClient.get(`/match-stats/seasons?league=${encodeURIComponent(league)}`),
-  players: (league, { season = null, team = null, minMinutes = null, limit = null } = {}) => {
+  players: (league, { season = null, team = null, role = null, minMinutes = null, limit = null } = {}) => {
     const params = new URLSearchParams({ league });
     if (season) params.set('season', season);
     if (team) params.set('team', team);
+    if (role) params.set('role', role);
     if (minMinutes) params.set('minMinutes', minMinutes);
     if (limit) params.set('limit', limit);
     return httpClient.get(`/match-stats/players?${params}`);

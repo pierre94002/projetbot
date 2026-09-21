@@ -55,15 +55,17 @@ export function getPlayerStats(req, res) {
   const team = req.query.team === undefined || req.query.team === '' ? null : requireStringParam(req.query.team, 'team');
   const minMinutes = optionalPositiveInt(req.query.minMinutes, 'minMinutes');
   const limit = optionalPositiveInt(req.query.limit, 'limit');
+  const role = req.query.role === 'goalkeeper' ? 'goalkeeper' : 'field';
 
   const players = playerSeasonStats({
     league,
     season: season ?? null,
     team,
+    role,
     ...(minMinutes === undefined ? {} : { minMinutes }),
     ...(limit === undefined ? {} : { limit })
   });
-  res.json({ league, season: season ?? null, team, count: players.length, players });
+  res.json({ league, season: season ?? null, team, role, count: players.length, players });
 }
 
 /** Saisons disponibles pour une compétition, la plus récente d'abord. */
