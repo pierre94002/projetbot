@@ -126,7 +126,7 @@ export const FOTMOB_LEAGUES = {
   // « Ligat HaAl » — dont une seule porte les phases finales. Insensible à la
   // casse et à l'apostrophe ; « Leumit League » est la deuxième division.
   "Ligat ha'Al - Israel": /^ISR\|Ligat ha'?al( (Championship|Relegation) Group)?$/i,
-  'Virsliga - Latvia': 'LVA|Virsliga',
+  'Virsliga - Latvia': /^LVA\|Virsliga($| Qualification$)/,
   // « Toppserien » est le championnat féminin norvégien : nom distinct, donc
   // aucun risque de recouvrement ici.
   'Eliteserien - Norway': /^NOR\|Eliteserien($| Qualification$)/,

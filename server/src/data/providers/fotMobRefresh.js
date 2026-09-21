@@ -122,8 +122,28 @@ export async function importMissingFromFotMob({ from, to, leagues = null, concur
   await pool(pending, concurrency, async ({ league, match }) => {
     try {
       const stats = await fetchMatchStats(match.matchId);
-      if (!stats) report.noStats++;
-      else {
+      if (!stats) {
+        // Pas de feuille de match, mais une rencontre JOUÉE avec son score :
+        // elle entre quand même, sans relevé. La version qui la laissait
+        // tomber amputait des saisons entières — la Serbie et Israël 2023-24
+        // et 2024-25, que FotMob publie sans statistiques détaillées — et un
+        // classement calculé sur les matchs restants aurait été faux plutôt
+        // qu'absent. Les statistiques manquantes se voient ; des rencontres
+        // qui n'ont jamais existé, non.
+        report.noStats++;
+        batch.push({
+          date: match.date,
+          league,
+          homeName: match.homeName,
+          awayName: match.awayName,
+          homeId: match.homeId,
+          awayId: match.awayId,
+          fotmobId: String(match.matchId),
+          homeGoals: match.homeGoals,
+          awayGoals: match.awayGoals,
+          sources: [`https://www.fotmob.com/api/data/matchDetails?matchId=${match.matchId}`]
+        });
+      } else {
         report.fetched++;
         batch.push({
           date: match.date,
