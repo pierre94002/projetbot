@@ -164,7 +164,9 @@ export const FOTMOB_LEAGUES = {
   // « Northern Super League » est le championnat féminin canadien.
   'Canadian Premier League': /^CAN\|Premier League$/,
   'Primera División - Chile': /^CHI\|Primera Divisi[oó]n($| (Apertura|Clausura)$)/,
-  'Primera A - Colombia': /^COL\|Primera A($| (Apertura|Clausura)$)/,
+  // « Final Stage » est la phase finale du tournoi, celle qui désigne le
+  // champion : l'omettre amputait la Colombie de son dénouement.
+  'Primera A - Colombia': /^COL\|Primera A($| (Apertura|Clausura)( Final Stage)?$)/,
   'Serie A - Ecuador': /^ECU\|Serie A($| - (First|Second) Stage$| - (Championship|Relegation) Round$| - Copa Sudamericana Play-off$)/,
   // « Liga MX Femenil » est le championnat féminin et « Liga de Expansion
   // MX » la deuxième division : les deux commencent autrement, ou se
@@ -178,6 +180,45 @@ export const FOTMOB_LEAGUES = {
   // stage »). Un motif large, borné au nom de la division ; le garde-fou
   // masculin/senior écarte le championnat féminin.
   'Primera División - Venezuela': /^VEN\|Primera Divisi[oó]n( - .+)?$/i,
+
+  // ---------------------------------------------------------------------
+  // COUPES, ajoutées le 2026-09-21. Une coupe est une compétition comme une
+  // autre pour le magasin ; ce qui la distingue est le TOUR, que FotMob
+  // publie dans `meta.round` — « 1 », « 2 », « 1/4 », « 1/2 », « final » —
+  // et qui permet d'en dresser le tableau.
+  //
+  // PIÈGE MESURÉ : la couverture d'une coupe dépend du TOUR. Un premier
+  // échantillon de Copa del Rey, pris sur un tour préliminaire opposant des
+  // clubs amateurs, ne rendait aucune statistique ; un tour avancé en rend
+  // trente et quarante-trois joueurs. Juger une coupe sur un seul match la
+  // rejette à tort.
+  //
+  // FotMob suffixe l'intitulé par le tour à partir des phases finales
+  // (« - Quarter-finals », « Final Stage »), d'où le suffixe optionnel.
+  // Seules figurent ici les coupes dont la source publie réellement les
+  // relevés ; celles qui n'ont que le score — Belgique, Écosse, Grèce,
+  // Suisse, Autriche, Tchéquie, Pologne, Russie, Roumanie, Croatie,
+  // Slovaquie, Norvège, Suède, Irlande, Finlande, Islande — en sont
+  // écartées, faute de quoi l'onglet des buteurs resterait vide.
+  'FA Cup - England': /^ENG\|FA Cup($| - .+$| Final Stage$)/,
+  'Copa del Rey - Spain': /^ESP\|Copa del Rey($| - .+$| Final Stage$)/,
+  'DFB Pokal - Germany': /^GER\|DFB Pokal($| - .+$| Final Stage$)/,
+  'Coppa Italia - Italy': /^ITA\|Coppa Italia($| - .+$| Final Stage$)/,
+  // « Coupe de France Féminine » se poursuit autrement que ce motif
+  // n'accepte, et le garde-fou masculin/senior l'écarterait de toute façon.
+  'Coupe de France': /^FRA\|Coupe de France($| - .+$| Final Stage$)/,
+  'Taça de Portugal': /^POR\|Taca de Portugal($| - .+$| Final Stage$)/,
+  'Taça da Liga - Portugal': /^POR\|League Cup($| - .+$| Final Stage$)/,
+  'KNVB Cup - Netherlands': /^NED\|KNVB Cup($| - .+$| Final Stage$)/,
+  // La coupe de Turquie passe par des groupes et des qualifications, qui en
+  // font partie : le suffixe est donc large.
+  'Türkiye Kupası': /^TUR\|Cup($| .+$| - .+$)/,
+  'Copa do Brasil': /^BRA\|Copa do Brasil($| - .+$| Final Stage$)/,
+  'Copa Argentina': /^ARG\|Copa Argentina($| - .+$| Final Stage$)/,
+  'US Open Cup': /^USA\|US Open Cup($| - .+$| Final Stage$)/,
+  'Copa Libertadores': /^INT\|Copa Libertadores($| - .+$| Final Stage$)/,
+  'Copa Sudamericana': /^INT\|Copa Sudamericana($| - .+$| Final Stage$)/,
+  'Leagues Cup': /^INT\|Leagues Cup($| - .+$| Final Stage$)/,
   // Les coupes d'Europe sont découpées par phase — « Champions League »,
   // « Champions League Grp. E », « Champions League Final Stage » — donc un
   // motif plutôt qu'un intitulé exact. L'ancrage en début de chaîne écarte

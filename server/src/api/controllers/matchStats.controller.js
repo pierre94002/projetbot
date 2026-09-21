@@ -10,7 +10,8 @@ import {
   isRefreshRunning,
   refreshMatchStatsExclusive
 } from '../../data/providers/espnMatchStatsRefresh.js';
-import { playerSeasonStats, seasonsForLeague, leagueLeaders } from '../../data/db/matchStatsRead.js';
+import { playerSeasonStats, seasonsForLeague, leagueLeaders, cupBracket } from '../../data/db/matchStatsRead.js';
+import { cupsForLeague } from '../../data/providers/leagueCups.js';
 import { ApiError, requireStringParam, optionalPositiveInt } from '../middlewares/errorHandler.js';
 
 /** Matchs d'une équipe avec stats d'équipe complètes + stats joueurs, match par match (import quotidien 7h30). */
@@ -85,6 +86,31 @@ export function getLeagueLeaders(req, res) {
     season: season ?? null,
     ...(limit === undefined ? {} : { limit })
   }));
+}
+
+/**
+ * Coupes rattachées à un championnat, avec ce que le magasin en connaît.
+ *
+ * Ne rend que celles qui ont effectivement des rencontres : une coupe
+ * déclarée mais jamais importée donnerait un onglet vide, et l'utilisateur
+ * n'a aucun moyen de deviner que c'est l'import qui manque.
+ */
+export function getLeagueCups(req, res) {
+  const league = requireStringParam(req.query.league, 'league');
+  const cups = cupsForLeague(league)
+    .map((name) => ({ name, seasons: seasonsForLeague(name) }))
+    .filter((cup) => cup.seasons.length > 0);
+  res.json({ league, count: cups.length, cups });
+}
+
+/** Le tableau d'une coupe : ses rencontres groupées par tour. */
+export function getCupBracket(req, res) {
+  const league = requireStringParam(req.query.league, 'league');
+  const season = optionalPositiveInt(req.query.season, 'season');
+
+  const bracket = cupBracket(league, { season: season ?? null });
+  if (!bracket) throw new ApiError(404, `Aucune rencontre en magasin pour "${league}".`);
+  res.json(bracket);
 }
 
 /** Saisons disponibles pour une compétition, la plus récente d'abord. */

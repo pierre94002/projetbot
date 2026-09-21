@@ -9,7 +9,9 @@ import {
   postMatchStatsRefresh,
   getPlayerStats,
   getLeagueSeasons,
-  getLeagueLeaders
+  getLeagueLeaders,
+  getLeagueCups,
+  getCupBracket
 } from '../controllers/matchStats.controller.js';
 
 const router = Router();
@@ -22,6 +24,8 @@ router.get('/team-averages', asyncHandler(getTeamMatchStatsAverages));
 router.get('/players', asyncHandler(getPlayerStats));
 router.get('/seasons', asyncHandler(getLeagueSeasons));
 router.get('/leaders', asyncHandler(getLeagueLeaders));
+router.get('/cups', asyncHandler(getLeagueCups));
+router.get('/bracket', asyncHandler(getCupBracket));
 // En dernier : ce motif attrape tout ce qui précède s'il est déclaré avant.
 router.get('/:matchId', asyncHandler(getMatchStats));
 

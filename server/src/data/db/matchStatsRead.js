@@ -688,6 +688,75 @@ export function leagueLeaders(league, { season = null, limit = 20, database = op
   };
 }
 
+/**
+ * Ordre des tours d'une coupe.
+ *
+ * FotMob les note en clair — « 1 », « 2 », « 1/8 », « 1/4 », « 1/2 »,
+ * « final » — et l'ordre alphabétique les mettrait dans le désordre le plus
+ * complet : « final » avant « 1 », « 1/2 » avant « 1/4 ». D'où ce barème.
+ * Les tours numérotés viennent d'abord, dans l'ordre, puis les phases
+ * finales de la plus large à la plus étroite.
+ */
+const ORDRE_TOUR = { '1/16': 100, '1/8': 200, '1/4': 300, '1/2': 400, final: 500 };
+function rangDuTour(round) {
+  if (round === null || round === undefined) return 900;
+  const texte = String(round).trim().toLowerCase();
+  if (ORDRE_TOUR[texte] !== undefined) return ORDRE_TOUR[texte];
+  if (/^\d+$/.test(texte)) return Number(texte); // tours preliminaires
+  if (texte.includes('final') && !texte.includes('semi') && !texte.includes('quarter')) return 500;
+  if (texte.includes('semi')) return 400;
+  if (texte.includes('quarter')) return 300;
+  if (texte.includes('round of 16') || texte.includes('16')) return 200;
+  return 800; // groupe, barrage, intitule inconnu : range a la fin
+}
+
+/**
+ * Le tableau d'une coupe : ses rencontres groupées par tour, du premier au
+ * dernier.
+ *
+ * Aucune donnée nouvelle n'est nécessaire — le tour est déjà dans `meta`
+ * depuis le premier import. Il suffisait de le lire et de l'ordonner.
+ */
+export function cupBracket(league, { season = null, database = openDb() } = {}) {
+  ensureRegistries({ database });
+  const saison = season ?? seasonsForLeague(league, { database })[0]?.season ?? null;
+  const bornes = saison ? ' AND date >= ? AND date < ?' : '';
+  const args = saison ? [league, `${saison}-07-01`, `${Number(saison) + 1}-07-01`] : [league];
+
+  const canon = canonicalTeamNames({ database });
+  const rows = database.prepare(
+    `SELECT match_key, fotmob_id, date, home_name, away_name, home_id, away_id, home_goals, away_goals, meta
+     FROM matches WHERE league = ?${bornes} ORDER BY date`
+  ).all(...args);
+  if (!rows.length) return null;
+
+  const tours = new Map();
+  for (const r of rows) {
+    const round = parse(r.meta)?.round ?? null;
+    const cle = round === null ? 'Tour inconnu' : String(round);
+    if (!tours.has(cle)) tours.set(cle, { round: cle, rank: rangDuTour(round), matches: [] });
+    tours.get(cle).matches.push({
+      matchId: r.fotmob_id ?? r.match_key,
+      date: r.date,
+      home: canon.get(r.home_id) ?? r.home_name,
+      away: canon.get(r.away_id) ?? r.away_name,
+      homeId: r.home_id,
+      awayId: r.away_id,
+      homeGoals: r.home_goals,
+      awayGoals: r.away_goals,
+      played: r.home_goals !== null && r.away_goals !== null
+    });
+  }
+
+  return {
+    league,
+    season: saison,
+    rounds: [...tours.values()]
+      .sort((a, b) => a.rank - b.rank)
+      .map(({ round, matches }) => ({ round, count: matches.length, matches }))
+  };
+}
+
 /** Saisons couvertes par une compétition, la plus récente d'abord. */
 export function seasonsForLeague(league, { database = openDb() } = {}) {
   return database
