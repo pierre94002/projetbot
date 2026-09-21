@@ -32,6 +32,7 @@ import { teamNamesLikelyMatch, findBestTeamNameMatch } from '../../utils/teamNam
 // versions qui divergeraient.
 import { mergeMatchStats } from '../../../scripts/merge-match-stats.mjs';
 import { rebuildRegistries } from '../db/identityRegistry.js';
+import { coverageFacts, seasonSummary } from '../db/matchStatsRead.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const RUNTIME_DIR = path.resolve(__dirname, '../../../data/runtime');
@@ -147,7 +148,11 @@ export function listMissing({ leagues = null, since = null, until = null, force 
 /** Couverture actuelle, par championnat. */
 export function getCoverage() {
   const calendar = readJson(CALENDAR_FILE, []);
-  const stored = readStoredEntries();
+  // Les faits viennent de la base, pas d'une relecture des 482 Mo de JSON :
+  // celle-ci coûtait 17 s SYNCHRONES à chaque appel, pendant lesquelles tout
+  // le serveur restait bloqué — et la page Réglages renonçait avant la fin,
+  // affichant « Couverture indisponible » alors que la donnée était là.
+  const facts = coverageFacts();
   const byLeague = new Map();
 
   for (const fixture of Array.isArray(calendar) ? calendar : []) {
@@ -162,11 +167,11 @@ export function getCoverage() {
     const row = byLeague.get(league);
     row.finished++;
 
-    const entry = stored.get(`${date}-${slug(homeName)}-${slug(awayName)}`);
-    if (!entry) continue;
+    const fait = facts.get(`${date}-${slug(homeName)}-${slug(awayName)}`);
+    if (!fait) continue;
     row.withStats++;
-    row.fields += Object.keys(entry.teamStats?.home ?? {}).length;
-    if ((entry.players?.home ?? []).length) row.withPlayers++;
+    row.fields += fait.champs;
+    if (fait.joueursDomicile) row.withPlayers++;
   }
 
   const leagues = [...byLeague.values()]
@@ -183,7 +188,7 @@ export function getCoverage() {
   );
   totals.coverage = totals.finished ? Math.round((100 * totals.withStats) / totals.finished) : 0;
 
-  return { totals, leagues, seasons: summariseSeasons(stored) };
+  return { totals, leagues, seasons: seasonSummary() };
 }
 
 /**

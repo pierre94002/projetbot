@@ -207,6 +207,10 @@ const DDL = [
   'CREATE INDEX IF NOT EXISTS idx_matches_league_date ON matches(league, date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_home ON matches(home_name);',
   'CREATE INDEX IF NOT EXISTS idx_matches_away ON matches(away_name);',
+  // Index ÉTROIT pour compter les joueurs par rencontre : la table est
+  // WITHOUT ROWID, donc la parcourir lit ses 72 colonnes. Compter depuis
+  // cet index a ramené le calcul de couverture de 6 s à moins d'une.
+  'CREATE INDEX IF NOT EXISTS idx_players_match_side ON players(match_key, side);',
   'CREATE INDEX IF NOT EXISTS idx_players_name ON players(name);',
   'CREATE INDEX IF NOT EXISTS idx_players_id ON players(player_id) WHERE player_id IS NOT NULL;',
   // Index COUVRANT pour le poste d'un joueur (cf. playerSeasonStats) : le

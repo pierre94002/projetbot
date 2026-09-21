@@ -639,3 +639,59 @@ export function storeStatus({ database = openDb() } = {}) {
     lastUpdatedAt: m.lastUpdatedAt ?? null
   };
 }
+
+/**
+ * Faits nécessaires au calcul de couverture, par rencontre : combien de
+ * statistiques d'équipe sont renseignées côté domicile, et si la feuille
+ * porte des joueurs.
+ *
+ * Remplace un `readStoredEntries()` qui relisait et reparsait les 482 Mo du
+ * dossier JSON À CHAQUE APPEL — et `node:sqlite` comme `JSON.parse` étant
+ * synchrones, ces 17 secondes bloquaient TOUT le serveur, `/status` compris.
+ * La page Réglages, elle, renonçait avant la fin et affichait « Couverture
+ * indisponible » alors que la donnée était là.
+ */
+export function coverageFacts({ database = openDb() } = {}) {
+  const champs = TEAM_COLUMNS
+    .map((c) => `CASE WHEN "${c.column}" IS NOT NULL THEN 1 ELSE 0 END`)
+    .join(' + ');
+  // TROIS requêtes séparées, assemblées en JavaScript, plutôt qu'une seule
+  // avec jointures. Mesuré : chaque morceau coûte 100 à 300 ms, mais les
+  // laisser se joindre en SQL faisait 6 s — le planificateur s'y prend mal
+  // sur ces agrégats. Et comme node:sqlite est synchrone, ces secondes
+  // bloquaient tout le serveur.
+  const parCle = new Map();
+  for (const m of database.prepare('SELECT match_key, date, league FROM matches').all()) {
+    parCle.set(m.match_key, { ...m, champs: 0, joueursDomicile: 0, joueurs: 0 });
+  }
+  for (const t of database.prepare(`SELECT match_key, ${champs} AS champs FROM team_stats WHERE side = 'home'`).all()) {
+    const l = parCle.get(t.match_key);
+    if (l) l.champs = t.champs;
+  }
+  const sql = "SELECT match_key, SUM(CASE WHEN side = 'home' THEN 1 ELSE 0 END) domicile, COUNT(*) total FROM players GROUP BY match_key";
+  for (const j of database.prepare(sql).all()) {
+    const l = parCle.get(j.match_key);
+    if (l) { l.joueursDomicile = j.domicile; l.joueurs = j.total; }
+  }
+  return parCle;
+}
+
+/** Récapitulatif par saison, en une requête plutôt qu'en parcourant le magasin. */
+export function seasonSummary({ database = openDb() } = {}) {
+  // Une saison va de juillet à juin : le mois décide de l'année de départ.
+  return database.prepare(`
+    SELECT debut || '-' || substr(CAST(debut + 1 AS TEXT), 3) AS season,
+           COUNT(*) AS matches,
+           SUM(CASE WHEN joueurs > 0 THEN 1 ELSE 0 END) AS withPlayers,
+           SUM(joueurs) AS playerRows,
+           COUNT(DISTINCT league) AS leagues
+    FROM (
+      SELECT m.league,
+             CAST(substr(m.date, 1, 4) AS INTEGER)
+               - (CASE WHEN CAST(substr(m.date, 6, 2) AS INTEGER) >= 7 THEN 0 ELSE 1 END) AS debut,
+             (SELECT COUNT(*) FROM players p WHERE p.match_key = m.match_key) AS joueurs
+      FROM matches m
+    )
+    GROUP BY debut
+    ORDER BY debut`).all();
+}
