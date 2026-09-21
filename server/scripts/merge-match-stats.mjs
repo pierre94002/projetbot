@@ -255,8 +255,19 @@ export function mergeMatchStats(statsDir, incoming) {
     const homePlayers = (m.players?.home ?? []).map((p) => cleanPlayer(p, warnings, `${label} (dom.)`)).filter(Boolean);
     const awayPlayers = (m.players?.away ?? []).map((p) => cleanPlayer(p, warnings, `${label} (ext.)`)).filter(Boolean);
 
-    if (!Object.keys(homeStats).length && !Object.keys(awayStats).length && !homePlayers.length && !awayPlayers.length) {
-      console.error(`Ignoré (aucune statistique exploitable) : ${label}`);
+    // Aucune statistique — mais une rencontre JOUÉE, avec son score, reste
+    // une rencontre. La garde d'origine visait les entrées vides d'une
+    // recherche web ratée ; appliquée telle quelle à FotMob, elle écartait
+    // 1 378 matchs bien réels, dont les saisons 2023-24 et 2024-25 de Serbie
+    // et d'Israël, que la source publie sans feuille de match. Le classement
+    // de ces saisons se calculait alors sur les matchs restants : faux,
+    // plutôt qu'absent. On n'écarte donc que ce qui n'a NI relevé NI score.
+    const sansReleve = !Object.keys(homeStats).length && !Object.keys(awayStats).length
+      && !homePlayers.length && !awayPlayers.length;
+    const sansScore = m.homeGoals === null || m.homeGoals === undefined
+      || m.awayGoals === null || m.awayGoals === undefined;
+    if (sansReleve && sansScore) {
+      console.error(`Ignoré (ni statistique ni score) : ${label}`);
       skipped++;
       continue;
     }
