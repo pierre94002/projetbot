@@ -40,6 +40,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { teamNamesLikelyMatch, teamNamesEqual } from '../src/utils/teamNameMatch.js';
+import { writeWithRetry } from './merge-match-stats.mjs';
 
 const [, , calendarPath, newMatchesPath] = process.argv;
 if (!calendarPath || !newMatchesPath) {
@@ -271,6 +272,10 @@ for (const m of newMatches) {
 }
 
 fs.mkdirSync(path.dirname(calendarPath), { recursive: true });
-fs.writeFileSync(calendarPath, JSON.stringify(calendar, null, 2), 'utf8');
+// Écriture atomique et réessayée : ce fichier pèse 18 Mo, il vit dans un
+// dossier OneDrive, et un writeFileSync direct y échouait sur 'UNKNOWN'
+// (errno -4094) dès que la synchronisation le tenait. Un renommage ferme
+// aussi la fenêtre où un lecteur verrait un calendrier à moitié écrit.
+writeWithRetry(calendarPath, JSON.stringify(calendar, null, 2));
 
 console.log(JSON.stringify({ created, updated, skipped, moved, removed, conflicts, total: calendar.length }));

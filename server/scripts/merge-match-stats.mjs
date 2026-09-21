@@ -79,7 +79,7 @@ function readJson(p, fallback) {
  * EBUSY, EPERM ou un UNKNOWN opaque. Attendre quelques centaines de
  * millisecondes suffit ; échouer ferait perdre tout un lot d'import.
  */
-function writeWithRetry(file, contents, attempts = 14) {
+export function writeWithRetry(file, contents, attempts = 14) {
   let lastError = null;
   for (let attempt = 1; attempt <= attempts; attempt++) {
     try {
