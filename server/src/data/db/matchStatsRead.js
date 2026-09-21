@@ -177,19 +177,50 @@ export function playerSeasonStats({
 
   return database
     .prepare(
-      `WITH poste AS (
+      // MATERIALIZED, impérativement : la CTE est référencée trois fois
+      // (classement, poste, équipe dominante) et SQLite la recalculait à
+      // chaque fois — trois jointures complètes, 3,6 s au lieu de 300 ms.
+      `WITH lignes AS MATERIALIZED (
+         SELECT p.*, (CASE WHEN p.side = 'home' THEN m.home_name ELSE m.away_name END) AS team
+         FROM players p
+         JOIN matches m ON m.match_key = p.match_key
+         WHERE ${where.join(' AND ')}
+       ),
+       poste AS (
          -- Le poste n'est tagué que sur ~55 % des lignes, et pas forcément
          -- sur celles de la saison consultée : Ayase Ueda n'en a aucune en
-         -- 2025-26 alors qu'il est meilleur buteur. On le détermine donc sur
-         -- TOUT l'historique du joueur, sans quoi les classements par poste
-         -- perdraient leurs premiers noms.
-         SELECT name, MAX(position) AS position FROM players WHERE position IS NOT NULL GROUP BY name
+         -- 2025-26 alors qu'il est meilleur buteur. On le cherche donc dans
+         -- TOUT l'historique du joueur — mais seulement pour les joueurs du
+         -- championnat consulté, sinon on rebalaie les 810 000 lignes à
+         -- chaque écran (3,6 s mesurées).
+         --
+         -- Et on retient le poste le PLUS FRÉQUENT, pas MAX() : 37 % des
+         -- joueurs en portent plusieurs, et MAX trie alphabétiquement, donc
+         -- "Midfielder" l'emportait sur "Forward". Mbappé, tagué attaquant
+         -- 116 fois et milieu 4 fois, sortait ainsi dans les milieux.
+         SELECT name, position FROM (
+           SELECT name, position, ROW_NUMBER() OVER (PARTITION BY name ORDER BY COUNT(*) DESC, position) AS rang
+           FROM players
+           WHERE position IS NOT NULL AND name IN (SELECT DISTINCT name FROM lignes)
+           GROUP BY name, position
+         ) WHERE rang = 1
+       ),
+       equipe AS (
+         -- Un même club s'écrit parfois de deux façons selon la source
+         -- ("Atlético Madrid"/"Atletico Madrid", "Ajax"/"Ajax Amsterdam").
+         -- Grouper par (joueur, équipe) scindait donc le joueur en deux
+         -- lignes au classement — Dávid Hancko y figurait deux fois. On
+         -- regroupe par joueur seul, et on affiche son club dominant.
+         SELECT name, team FROM (
+           SELECT name, team, ROW_NUMBER() OVER (PARTITION BY name ORDER BY COUNT(*) DESC, team) AS rang
+           FROM lignes GROUP BY name, team
+         ) WHERE rang = 1
        )
        SELECT
          p.name AS name,
          MAX(p.player_id) AS playerId,
          MAX(poste.position) AS position,
-         (CASE WHEN p.side = 'home' THEN m.home_name ELSE m.away_name END) AS team,
+         MAX(equipe.team) AS team,
          COUNT(*) AS matches,
          SUM(CASE WHEN p.minutes > 0 THEN 1 ELSE 0 END) AS played,
          SUM(CASE WHEN p.starter = 1 THEN 1 ELSE 0 END) AS starts,
@@ -234,11 +265,10 @@ export function playerSeasonStats({
          SUM(CASE WHEN p.goals_conceded = 0 AND p.minutes > 0 THEN 1 ELSE 0 END) AS cleanSheets,
          ROUND(SUM(p.xgot_faced), 2) AS xgotFaced,
          ROUND(SUM(p.goals_prevented), 2) AS goalsPrevented
-       FROM players p
-       JOIN matches m ON m.match_key = p.match_key
+       FROM lignes p
+       JOIN equipe ON equipe.name = p.name
        LEFT JOIN poste ON poste.name = p.name
-       WHERE ${where.join(' AND ')}
-       GROUP BY p.name, team
+       GROUP BY p.name
        -- Agrégats répétés en toutes lettres : dans un HAVING/ORDER BY,
        -- SQLite résout un nom ambigu vers la COLONNE et non vers l'alias,
        -- et filtrait donc sur les minutes d'une ligne arbitraire du groupe.
