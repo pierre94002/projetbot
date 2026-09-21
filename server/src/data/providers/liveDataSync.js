@@ -42,7 +42,16 @@ export const TRACKED_SPORT_KEYS = [
   'soccer_uefa_europa_league',
   'soccer_uefa_europa_conference_league',
   'soccer_russia_premier_league',
-  'soccer_china_superleague'
+  'soccer_china_superleague',
+  // Ajoutés le 2026-09-21. Turquie, Portugal et Belgique sont marqués
+  // "hors saison" par The Odds API (aucune cote ouverte) : ils n'en
+  // apparaissent pas moins dans la page Matchs, via le calendrier.
+  'soccer_spl',
+  'soccer_greece_super_league',
+  'soccer_turkey_super_league',
+  'soccer_portugal_primeira_liga',
+  'soccer_belgium_first_div',
+  'soccer_netherlands_eredivisie'
 ];
 
 /**

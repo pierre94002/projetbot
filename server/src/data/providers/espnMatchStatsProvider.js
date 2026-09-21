@@ -47,7 +47,16 @@ export const ESPN_LEAGUE_SLUGS = {
   'Super League - China': 'chn.1',
   'UEFA Champions League': 'uefa.champions',
   'UEFA Europa League': 'uefa.europa',
-  'UEFA Europa Conference League': 'uefa.europa.conf'
+  'UEFA Europa Conference League': 'uefa.europa.conf',
+  // Ajoutés le 2026-09-21. Les libellés sont ceux de The Odds API (d'où
+  // "Belgium First Div" et "Dutch Eredivisie", peu orthodoxes mais c'est ce
+  // qui circule dans l'app) ; chaque slug a été vérifié en interrogeant ESPN.
+  'Premiership - Scotland': 'sco.1',
+  'Super League - Greece': 'gre.1',
+  'Turkey Super League': 'tur.1',
+  'Primeira Liga - Portugal': 'por.1',
+  'Belgium First Div': 'bel.1',
+  'Dutch Eredivisie': 'ned.1'
 };
 
 /** Statistique d'équipe ESPN -> clé du référentiel CôteMaster. */

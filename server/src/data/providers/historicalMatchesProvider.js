@@ -34,7 +34,9 @@ const LEAGUE_CODES = {
   F1: { countries: ['france'], leagues: ['ligue 1'], label: 'Ligue 1' },
   F2: { countries: ['france'], leagues: ['ligue 2'], label: 'Ligue 2' },
   N1: { countries: ['netherlands'], leagues: ['eredivisie'], label: 'Eredivisie' },
-  B1: { countries: ['belgium'], leagues: ['pro league', 'jupiler pro league', 'first division a'], label: 'Pro League' },
+  // "Belgium First Div" est l'intitulé de The Odds API : sans cet alias, le
+  // libellé qui circule dans l'app ne retrouvait pas ses CSV.
+  B1: { countries: ['belgium'], leagues: ['pro league', 'jupiler pro league', 'first division a', 'belgium first div', 'first div'], label: 'Pro League' },
   P1: { countries: ['portugal'], leagues: ['primeira liga', 'liga portugal'], label: 'Primeira Liga' },
   T1: { countries: ['turkey'], leagues: ['super lig', 'super league'], label: 'Süper Lig' },
   G1: { countries: ['greece'], leagues: ['super league'], label: 'Super League' }

@@ -53,6 +53,16 @@ export const FOTMOB_LEAGUES = {
   'Ligue 2 - France': 'FRA|Ligue 2',
   'Premier League - Russia': 'RUS|Premier League',
   'Super League - China': 'CHN|Super League',
+  // Ajoutés le 2026-09-21, relevés dans la réponse FotMob du jour. La
+  // comparaison est une ÉGALITÉ stricte (cf. leagueKeyMatches), ce qui est
+  // indispensable ici : "NED|Eredivisie Vrouwen" est le championnat féminin,
+  // "GRE|Super League 2" et "TUR|1. Lig" des divisions inférieures.
+  'Premiership - Scotland': 'SCO|Premiership',
+  'Super League - Greece': 'GRE|Super League',
+  'Turkey Super League': 'TUR|Super Lig',
+  'Primeira Liga - Portugal': 'POR|Liga Portugal',
+  'Belgium First Div': 'BEL|Belgian Pro League',
+  'Dutch Eredivisie': 'NED|Eredivisie',
   // Les coupes d'Europe sont découpées par phase — « Champions League »,
   // « Champions League Grp. E », « Champions League Final Stage » — donc un
   // motif plutôt qu'un intitulé exact. L'ancrage en début de chaîne écarte
@@ -63,8 +73,23 @@ export const FOTMOB_LEAGUES = {
 };
 
 /** Une compétition FotMob correspond-elle à ce championnat ? */
+/**
+ * CôteMaster ne traite que le football masculin senior. FotMob publie sous
+ * le même préfixe de pays les compétitions féminines et de jeunes —
+ * "NED|Eredivisie Vrouwen", "INT|Champions League Women", "INT|Champions
+ * League U19". Les trois motifs UEFA ci-dessus sont des expressions
+ * régulières se terminant par `(\s|$)` : sans ce garde-fou, elles
+ * capturaient ces compétitions et leurs statistiques seraient entrées dans
+ * le magasin comme celles de l'épreuve masculine.
+ *
+ * Filtré ici plutôt que dans chaque motif : un seul point de passage protège
+ * aussi les championnats ajoutés plus tard.
+ */
+const EXCLUDED_LEAGUE_KEY = /(\bwomen\b|\bwomens\b|\bwomen's\b|\bfeminin|\bfemenin|\bfrauen\b|\bdames\b|\bvrouwen\b|\bfemminile\b|\bu1\d\b|\bu2\d\b|\byouth\b|\bjunior|\bprimavera\b|\breserve|\bacademy\b)/i;
+
 export function leagueKeyMatches(matcher, leagueKey) {
   if (!matcher || !leagueKey) return false;
+  if (EXCLUDED_LEAGUE_KEY.test(leagueKey)) return false;
   return matcher instanceof RegExp ? matcher.test(leagueKey) : matcher === leagueKey;
 }
 
