@@ -280,7 +280,10 @@ function mapPlayer(entry) {
   if (!player.name) return null;
   // Identifiant FotMob : la seule clé stable pour reconnaître un joueur d'un
   // passage à l'autre, les noms variant d'une source à l'autre.
-  if (entry.id != null) player.playerId = `fotmob-${entry.id}`;
+  // L identifiant 0 est la valeur sentinelle de FotMob pour « joueur inconnu » :
+  // plusieurs hommes d une meme feuille la partagent, la prendre pour une
+  // identite les confondrait en une seule ligne.
+  if (entry.id != null && Number(entry.id) > 0) player.playerId = `fotmob-${entry.id}`;
   if (entry.shirtNumber != null) player.number = firstNumber(entry.shirtNumber);
   // Le poste conditionne plusieurs lectures du magasin — les buts encaissés
   // n'y valent que pour un gardien. FotMob le donne par un drapeau dédié et
@@ -499,14 +502,40 @@ export async function fetchMatchStats(matchId) {
   const teamStats = mapTeamStats(groups);
   if (!Object.keys(teamStats.home).length && !Object.keys(teamStats.away).length) return null;
 
-  const homeTeamId = payload?.general?.homeTeam?.id;
+  const lineup = payload?.content?.lineup;
+  const homeTeamId = payload?.general?.homeTeam?.id ?? lineup?.homeTeam?.id;
+  const awayTeamId = payload?.general?.awayTeam?.id ?? lineup?.awayTeam?.id;
+  /**
+   * Le camp d un joueur se lit d abord dans la composition, qui sépare
+   * explicitement homeTeam et awayTeam. `teamId` ne sert qu en secours :
+   * FotMob publie parfois un second identifiant de club dans playerStats
+   * (Reggiana vaut 6500 dans general, 959006 dans playerStats), et comparer
+   * au seul identifiant « domicile » versait alors toute l équipe à
+   * l extérieur — 31 feuilles de Serie B ainsi renversées.
+   */
+  const sideByPlayerId = new Map();
+  for (const [sideName, team] of [['home', lineup?.homeTeam], ['away', lineup?.awayTeam]]) {
+    for (const entry of [...(team?.starters ?? []), ...(team?.subs ?? [])]) {
+      if (entry?.id != null) sideByPlayerId.set(String(entry.id), sideName);
+    }
+  }
+  const sideOfEntry = (entry) => {
+    const fromLineup = sideByPlayerId.get(String(entry?.id));
+    if (fromLineup) return fromLineup;
+    const teamId = String(entry?.teamId ?? '');
+    if (homeTeamId != null && teamId === String(homeTeamId)) return 'home';
+    if (awayTeamId != null && teamId === String(awayTeamId)) return 'away';
+    return null;
+  };
+
   const players = { home: [], away: [] };
   // Trois champs d'équipe du référentiel n'existent que par joueur chez
   // FotMob : on les totalise plutôt que de les laisser vides. Ce sont des
   // sommes, pas des estimations — chaque terme vient de la source.
   const derived = { home: {}, away: {} };
   for (const entry of Object.values(payload?.content?.playerStats ?? {})) {
-    const side = String(entry.teamId) === String(homeTeamId) ? 'home' : 'away';
+    const side = sideOfEntry(entry);
+    if (!side) continue;
     for (const group of entry.stats ?? []) {
       for (const [, stat] of Object.entries(group.stats ?? {})) {
         const value = firstNumber(stat.stat?.value);
@@ -527,7 +556,6 @@ export async function fetchMatchStats(matchId) {
 
   // Placement sur le terrain et minute d'entrée ou de sortie : ce qui permet
   // de dessiner la composition plutôt que de la lister.
-  const lineup = payload?.content?.lineup;
   const byId = new Map(players.home.concat(players.away).map((p) => [p.playerId, p]));
   for (const [sideName, team] of [['home', lineup?.homeTeam], ['away', lineup?.awayTeam]]) {
     for (const entry of [...(team?.starters ?? []), ...(team?.subs ?? [])]) {

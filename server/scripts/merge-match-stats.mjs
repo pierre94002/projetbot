@@ -44,35 +44,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { slug, nameTokens, sharesNameToken } from '../src/utils/nameIdentity.js';
+import { TEAM_STAT_KEYS, PLAYER_STAT_KEYS } from '../src/utils/statVocabulary.js';
+import { upsertMatches } from '../src/data/db/matchStatsDb.js';
 
-export const TEAM_STAT_KEYS = [
-  'expected_goals', 'xgot', 'Total Shots', 'Shots on Goal', 'Shots off Goal', 'Blocked Shots',
-  'Shots insidebox', 'Shots outsidebox', 'woodwork',
-  'big_chances', 'Corner Kicks', 'touches_opponent_box', 'touches_six_yard_box', 'through_balls', 'Offsides', 'free_kicks',
-  'Ball Possession', 'Total passes', 'Passes accurate', 'Passes %', 'long_balls', 'final_third_passes', 'crosses', 'expected_assists',
-  'throw_ins', 'Fouls', 'tackles', 'duels_won', 'clearances', 'interceptions', 'errors_leading_to_shot', 'errors_leading_to_goal',
-  'Yellow Cards', 'Red Cards',
-  'Goalkeeper Saves', 'xgot_faced', 'goals_prevented'
-];
+// Re-exportes : plusieurs scripts les importent depuis ce module.
+export { slug, nameTokens, sharesNameToken, TEAM_STAT_KEYS, PLAYER_STAT_KEYS };
+
 const PERCENT_TEAM_KEYS = new Set(['Ball Possession', 'Passes %']);
 
-export const PLAYER_STAT_KEYS = [
-  'minutes', 'rating', 'goals', 'assists', 'shots', 'shotsOnTarget', 'xg', 'xa', 'keyPasses',
-  'passes', 'passesAccurate', 'crosses', 'dribblesWon', 'touches', 'tackles', 'interceptions',
-  'clearances', 'duelsWon', 'duelsTotal', 'foulsCommitted', 'foulsSuffered', 'offsides',
-  'yellowCards', 'redCards', 'saves', 'goalsConceded',
-  // Détail supplémentaire publié par FotMob, nécessaire pour reproduire ses
-  // onglets Attaque / Passes / Défense / Duels / Gardien.
-  'xgot', 'xgotFaced', 'goalsPrevented', 'bigChancesMissed', 'touchesOppBox',
-  'blocks', 'recoveries', 'dribbledPast', 'dispossessed',
-  'groundDuelsWon', 'groundDuelsTotal', 'aerialsWon', 'aerialsTotal',
-  'longBalls', 'longBallsAccurate', 'crossesAccurate', 'finalThirdPasses',
-  'ownHalfPasses', 'oppHalfPasses', 'ownGoals',
-  // Mesures supplementaires du releve joueur FotMob.
-  'shotsOffTarget', 'xgNonPenalty', 'duelsLost', 'throwIns', 'cornersTaken', 'woodwork',
-  'defensiveActions', 'bigChancesCreated', 'headedClearances', 'clearancesOffLine', 'lastManTackles',
-  'divingSaves', 'highClaims', 'sweeperActions', 'savesInsideBox', 'punches'
-];
 const PLAYER_TEXT_KEYS = ['name', 'position', 'number', 'playerId'];
 /**
  * Booléens de feuille de match. `starter` dit qui a débuté, `subbedIn` qui
@@ -83,15 +63,6 @@ const PLAYER_FLAG_KEYS = ['starter', 'subbedIn'];
 /** Placement sur le terrain et minutes d entree/sortie, pour la composition. */
 const PLAYER_META_KEYS = ['side', 'x', 'y', 'subInMinute', 'subOutMinute'];
 
-function slug(text) {
-  return (text ?? '')
-    .toString()
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
 
 function readJson(p, fallback) {
   try {
@@ -210,47 +181,6 @@ function fillStats(target, incoming) {
  * Le nom déjà stocké est conservé : c'est celui auquel le reste des données
  * fait référence.
  */
-function nameTokens(name) {
-  return String(name ?? '')
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .replace(/[đð]/gi, 'd')
-    .replace(/[øœ]/gi, 'o')
-    .replace(/ł/gi, 'l')
-    .toLowerCase()
-    .split(/[^a-z0-9]+/)
-    .filter(Boolean);
-}
-
-/**
- * Deux écritures désignent-elles le même joueur ?
- *
- * Les sources ne s'accordent ni sur l'ordre des noms chinois (« Wu Xi » /
- * « Xi Wu »), ni sur la translittération (« Jinghang Hu » / « Jing Hu »), ni
- * sur les formes courtes. On accepte donc : mêmes mots dans n'importe quel
- * ordre, l'un contenu dans l'autre, un mot long partagé, ou un mot qui
- * préfixe l'autre — ce dernier cas borné à 4 lettres d'écart, sinon
- * « Wu » vaudrait « Wuhan ».
- */
-function sharesNameToken(a, b) {
-  const left = nameTokens(a);
-  const right = nameTokens(b);
-  if (!left.length || !right.length) return false;
-
-  const leftSet = new Set(left);
-  const rightSet = new Set(right);
-  const sameSet = left.length === right.length && left.every((t) => rightSet.has(t));
-  if (sameSet) return true; // ordre inversé
-  if (left.every((t) => rightSet.has(t)) || right.every((t) => leftSet.has(t))) return true; // sous-ensemble
-  if (right.some((t) => t.length >= 3 && leftSet.has(t))) return true; // mot long commun
-
-  return left.some((x) =>
-    right.some((y) => {
-      const [short, long] = x.length <= y.length ? [x, y] : [y, x];
-      return short.length >= 3 && long.startsWith(short) && long.length - short.length <= 4;
-    })
-  );
-}
 
 function mergePlayers(existing = [], incoming = []) {
   const ordered = [...existing];
@@ -402,7 +332,18 @@ export function mergeMatchStats(statsDir, incoming) {
     written.push(file);
   }
 
-  return { created, updated, skipped, playersMerged: playersCount, writtenFiles: written, warnings };
+  // Double écriture : les fichiers JSON restent à jour pendant que la base
+  // SQLite, désormais lue par l'API, reçoit le même lot. Tant que les deux
+  // magasins coexistent, revenir en arrière ne coûte qu'un import à changer.
+  // L'échec de la base n'invalide pas l'import : le JSON, lui, est écrit.
+  let dbReport = null;
+  try {
+    dbReport = upsertMatches(incoming);
+  } catch (error) {
+    warnings.push(`Base SQLite non mise à jour (${error.message}) — les fichiers JSON, eux, sont écrits.`);
+  }
+
+  return { created, updated, skipped, playersMerged: playersCount, writtenFiles: written, warnings, db: dbReport };
 }
 
 function main() {

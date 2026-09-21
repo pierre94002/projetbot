@@ -293,14 +293,29 @@ export async function fetchSeasonMatchDays(leagueSlug, seasonYear) {
  *    La feuille ne donne `saves` qu'aux gardiens : c'est ce qui permet de le
  *    reconnaître, et sans quoi ses buts encaissés seraient écartés.
  */
+const POSITION_ABBREVIATIONS = {
+  G: 'Goalkeeper', GK: 'Goalkeeper',
+  D: 'Defender', DF: 'Defender', CB: 'Defender', LB: 'Defender', RB: 'Defender',
+  M: 'Midfielder', MF: 'Midfielder', CM: 'Midfielder', DM: 'Midfielder', AM: 'Midfielder',
+  F: 'Forward', FW: 'Forward', ST: 'Forward', CF: 'Forward', LW: 'Forward', RW: 'Forward'
+};
+
 function normalizePosition(position, hasSaves = false) {
   const label = position?.displayName ?? position?.name ?? '';
   if (hasSaves || /goalkeeper|keeper/i.test(label)) return 'Goalkeeper';
   if (/defender|back/i.test(label)) return 'Defender';
   if (/midfield/i.test(label)) return 'Midfielder';
   if (/forward|striker|wing/i.test(label)) return 'Forward';
+  if (/sweeper|libero/i.test(label)) return 'Sweeper';
   if (/substitut/i.test(label)) return null;
-  return label || null;
+  // ESPN publie tantot le libelle complet, tantot l abreviation. Sans cette
+  // table, « M » et « Midfielder » designaient le meme poste sous deux
+  // formes, et tout regroupement par poste se coupait en deux.
+  const abrege = POSITION_ABBREVIATIONS[label.trim().toUpperCase()];
+  if (abrege) return abrege;
+  // Vocabulaire ferme : un libelle inconnu n est pas un poste invente, c est
+  // un poste qu on ne connait pas.
+  return null;
 }
 
 function mapTeamStatistics(statistics = []) {

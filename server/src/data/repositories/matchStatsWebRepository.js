@@ -1,49 +1,11 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { teamNamesLikelyMatch } from '../../utils/teamNameMatch.js';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const MATCH_STATS_DIR = path.resolve(__dirname, '../../../data/runtime/match-stats');
+import { distinctTeamNames, matchKeysForNames, loadEntriesByKeys, loadEntry, storeStatus } from '../db/matchStatsRead.js';
 
 /** Champs renvoyés en pourcentage textuel ("55%"), comme /fixtures/statistics d'API-Football. */
 const PERCENTAGE_STAT_KEYS = new Set(['Ball Possession', 'Passes %']);
 /** Champs gardés à 2 décimales plutôt qu'arrondis au dixième. */
 const DECIMAL_STAT_KEYS = new Set(['expected_goals', 'xgot', 'expected_assists', 'xgot_faced', 'goals_prevented']);
 export const DEFAULT_WEB_AVERAGE_SAMPLE_SIZE = 10;
-
-// Cache mémoire invalidé par fichier (mtime) : les fichiers mensuels sont
-// réécrits une fois par jour par la tâche de 7h30, inutile de re-parser
-// plusieurs Mo à chaque clic sur une équipe.
-const shardCache = new Map(); // fichier -> { mtimeMs, entries }
-
-function readAllEntries() {
-  let files = [];
-  try {
-    files = fs.readdirSync(MATCH_STATS_DIR).filter((f) => /^\d{4}-\d{2}\.json$/.test(f));
-  } catch {
-    return []; // dossier pas encore créé : aucune stat importée pour l'instant.
-  }
-
-  const all = [];
-  for (const file of files) {
-    const fullPath = path.join(MATCH_STATS_DIR, file);
-    try {
-      const { mtimeMs } = fs.statSync(fullPath);
-      const cached = shardCache.get(fullPath);
-      if (cached && cached.mtimeMs === mtimeMs) {
-        all.push(...cached.entries);
-        continue;
-      }
-      const entries = JSON.parse(fs.readFileSync(fullPath, 'utf8'));
-      shardCache.set(fullPath, { mtimeMs, entries: Array.isArray(entries) ? entries : [] });
-      all.push(...(Array.isArray(entries) ? entries : []));
-    } catch {
-      // Fichier mensuel corrompu : on l'ignore plutôt que de faire échouer toute l'appli.
-    }
-  }
-  return all;
-}
 
 function normalize(name) {
   return (name ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
@@ -99,10 +61,25 @@ function toPerspective(entry, side) {
   };
 }
 
+/**
+ * Noms du magasin susceptibles de désigner l'équipe demandée. Le
+ * rapprochement flou ne dépend que des deux noms : l'appliquer une fois aux
+ * quelques centaines de noms distincts revient exactement au même que de le
+ * refaire sur chacune des 15 700 rencontres, mais laisse ensuite la base
+ * filtrer et trier.
+ */
+function candidateNames(teamName) {
+  return distinctTeamNames().filter((name) => normalize(name) === normalize(teamName) || teamNamesLikelyMatch(name, teamName));
+}
+
 /** Tous les matchs avec stats détaillées d'une équipe, du plus récent au plus ancien. */
 export function listTeamMatchStats(teamName, { limit } = {}) {
   if (!teamName) return [];
-  const matches = readAllEntries()
+  const names = candidateNames(teamName);
+  if (!names.length) return [];
+  const keys = matchKeysForNames(names);
+  if (!keys.length) return [];
+  const matches = loadEntriesByKeys(keys)
     .map((entry) => ({ entry, side: sideOf(entry, teamName) }))
     .filter(({ side }) => side)
     .sort((a, b) => b.entry.date.localeCompare(a.entry.date))
@@ -111,8 +88,7 @@ export function listTeamMatchStats(teamName, { limit } = {}) {
 }
 
 export function getMatchStatsById(matchId) {
-  const entry = readAllEntries().find((e) => e.matchId === matchId || e.matchKey === matchId);
-  return entry ?? null;
+  return loadEntry(matchId);
 }
 
 /**
@@ -322,12 +298,5 @@ export function getTeamSquad(teamName, { since = CURRENT_SEASON_START, until = n
 }
 
 export function getMatchStatsStatus() {
-  const all = readAllEntries();
-  return {
-    count: all.length,
-    playersCount: all.reduce((n, e) => n + (e.players?.home?.length ?? 0) + (e.players?.away?.length ?? 0), 0),
-    leagues: [...new Set(all.map((e) => e.league).filter(Boolean))].sort(),
-    lastMatchDate: all.reduce((latest, e) => (!latest || e.date > latest ? e.date : latest), null),
-    lastUpdatedAt: all.reduce((latest, e) => (e.updatedAt && (!latest || e.updatedAt > latest) ? e.updatedAt : latest), null)
-  };
+  return storeStatus();
 }
