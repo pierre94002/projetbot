@@ -63,7 +63,17 @@ export async function analyzeMatch(match, config, tiltState, sport) {
   const muExogenous = clamp(mu * exogenousFactor, EXPECTED_GOALS_BOUNDS.min, EXPECTED_GOALS_BOUNDS.max);
   const probabilitiesExogenous = sport.model.computeMarketProbabilities(lambdaExogenous, muExogenous, config);
 
-  // P_marché : cotes du marché, marge bookmaker retirée.
+  // P_marché : cotes du marché, marge bookmaker retirée. Faute de cotes
+  // réelles, on substitue nos propres probabilités structurelles majorées
+  // d'une marge type — utile pour continuer à produire des probabilités,
+  // MAIS l'edge qui en découlerait comparerait le modèle à lui-même. C'est
+  // pourquoi `marketOddsAvailable` est suivi jusqu'au DTO, et que l'edge
+  // comme la mise sont neutralisés plus bas quand il est faux : un match de
+  // calendrier sans cote ne doit jamais déclencher de recommandation.
+  const marketOddsAvailable =
+    Number.isFinite(match.marketOdds?.odds1) &&
+    Number.isFinite(match.marketOdds?.oddsDraw) &&
+    Number.isFinite(match.marketOdds?.odds2);
   const marketOdds = {
     odds1: match.marketOdds?.odds1 ?? (1 / probabilitiesStructural.home) * MARKET_OVERROUND_ESTIMATE,
     oddsDraw: match.marketOdds?.oddsDraw ?? (1 / probabilitiesStructural.draw) * MARKET_OVERROUND_ESTIMATE,
@@ -98,7 +108,9 @@ export async function analyzeMatch(match, config, tiltState, sport) {
   // notre propre modèle sur cette issue — l'inverse d'un vrai value bet.
   const edgeHome = probabilities.home / marketProbHome - 1;
 
-  const staking = evaluateStakingDecision(edgeHome, match.bankroll, lambda, mu, config, tiltState);
+  const staking = marketOddsAvailable
+    ? evaluateStakingDecision(edgeHome, match.bankroll, lambda, mu, config, tiltState)
+    : { action: 'PASS', stake: null, reason: 'no_market_odds' };
 
   const result = {
     matchId: match.matchId ?? null,
@@ -130,14 +142,17 @@ export async function analyzeMatch(match, config, tiltState, sport) {
       }
     },
     market: {
-      odds1: round(marketOdds.odds1, 2),
-      oddsDraw: round(marketOdds.oddsDraw, 2),
-      odds2: round(marketOdds.odds2, 2),
-      overroundPercent: netMarket.overroundPercent,
+      // Sans cote réelle, ces trois valeurs sont une reconstruction interne :
+      // les publier comme un prix de marché induirait en erreur.
+      available: marketOddsAvailable,
+      odds1: marketOddsAvailable ? round(marketOdds.odds1, 2) : null,
+      oddsDraw: marketOddsAvailable ? round(marketOdds.oddsDraw, 2) : null,
+      odds2: marketOddsAvailable ? round(marketOdds.odds2, 2) : null,
+      overroundPercent: marketOddsAvailable ? netMarket.overroundPercent : null,
       bookmakersCount: match.marketOdds?.bookmakersCount ?? null,
       byBookmaker: match.marketOdds?.byBookmaker ?? []
     },
-    edgePercent: round(edgeHome * 100, 2),
+    edgePercent: marketOddsAvailable ? round(edgeHome * 100, 2) : null,
     staking,
     corners
   };

@@ -204,7 +204,14 @@ function formatDayHeader(dayKey) {
                 </span>
               </span>
 
-              <span class="match-row__odds">
+              <!-- Rencontre connue par le calendrier mais pas encore cotée
+                   (divisions inférieures, Russie, Chine : les bookmakers
+                   n'ouvrent qu'à l'approche). Trois tirets se liraient comme
+                   un échec de chargement, d'où la mention explicite. -->
+              <span v-if="match.hasOdds === false" class="match-row__odds match-row__odds--none" title="Aucun bookmaker n'a encore publié de cote pour ce match">
+                pas encore coté
+              </span>
+              <span v-else class="match-row__odds">
                 <span class="match-row__odd">{{ formatOdds(match.marketOdds?.odds1) }}</span>
                 <span class="match-row__odd match-row__odd--draw">{{ formatOdds(match.marketOdds?.oddsDraw) }}</span>
                 <span class="match-row__odd">{{ formatOdds(match.marketOdds?.odds2) }}</span>
@@ -524,6 +531,13 @@ function formatDayHeader(dayKey) {
 .match-row__odds {
   display: flex;
   gap: 6px;
+}
+
+.match-row__odds--none {
+  align-items: center;
+  font-size: 10.5px;
+  color: var(--cm-text-muted);
+  white-space: nowrap;
 }
 
 .match-row__odd {
