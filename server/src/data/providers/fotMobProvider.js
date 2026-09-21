@@ -57,11 +57,20 @@ export const FOTMOB_LEAGUES = {
   // comparaison est une ÉGALITÉ stricte (cf. leagueKeyMatches), ce qui est
   // indispensable ici : "NED|Eredivisie Vrouwen" est le championnat féminin,
   // "GRE|Super League 2" et "TUR|1. Lig" des divisions inférieures.
-  'Premiership - Scotland': 'SCO|Premiership',
-  'Super League - Greece': 'GRE|Super League',
+  // Trois championnats se scindent en groupes apres la phase reguliere, et
+  // FotMob publie alors sous un intitule derive. Ces rencontres appartiennent
+  // bien a la competition : les ignorer amputait la saison de son tiers final.
+  // L'ancrage `$` ou " Playoff " est indispensable — "SCO|Championship",
+  // "GRE|Super League 2", "BEL|First Division B" et "BEL|Challenger Pro
+  // League" sont d'autres divisions.
+  'Premiership - Scotland': /^SCO\|Premiership($| Championship Group$| Relegation Group$)/,
+  'Super League - Greece': /^GRE\|Super League($| Championship Group$| Relegation Group$| Conference League Group$)/,
   'Turkey Super League': 'TUR|Super Lig',
   'Primeira Liga - Portugal': 'POR|Liga Portugal',
-  'Belgium First Div': 'BEL|Belgian Pro League',
+  // FotMob a renomme le championnat belge en octobre 2025 : "First Division
+  // A" auparavant, "Belgian Pro League" depuis. Les deux noms sont donc
+  // acceptes, sans quoi toute la saison 2024-25 restait invisible.
+  'Belgium First Div': /^BEL\|(Belgian Pro League|First Division A)($| Playoff .+$)/,
   'Dutch Eredivisie': 'NED|Eredivisie',
   // Les coupes d'Europe sont découpées par phase — « Champions League »,
   // « Champions League Grp. E », « Champions League Final Stage » — donc un
