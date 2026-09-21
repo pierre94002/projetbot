@@ -474,7 +474,11 @@ function prepared(database) {
     team: database.prepare(buildUpsert('team_stats', TEAM_COLUMNS, ['match_key', 'side'])),
     player: database.prepare(buildUpsert('players', PLAYER_COLUMNS, ['match_key', 'side', 'player_key'], ['ord'])),
     existingPlayers: database.prepare('SELECT player_key, player_id, name, shirt_number, ord FROM players WHERE match_key = ? AND side = ?'),
-    existingSources: database.prepare('SELECT sources FROM matches WHERE match_key = ?')
+    existingSources: database.prepare('SELECT sources FROM matches WHERE match_key = ?'),
+    // Une rencontre déjà connue, retrouvée par l'IDENTITÉ de ses deux clubs
+    // plutôt que par l'orthographe de leur nom. Voir resolveMatchKey.
+    byIdentity: database.prepare('SELECT match_key FROM matches WHERE date = ? AND home_id = ? AND away_id = ? LIMIT 1'),
+    byFotmobId: database.prepare('SELECT match_key FROM matches WHERE fotmob_id = ? LIMIT 1')
   };
   statements.set(database, jeu);
   return jeu;
@@ -485,6 +489,37 @@ function prepared(database) {
  * un chiffre déjà confirmé n'est jamais remplacé par une absence, et une
  * rencontre déjà connue est complétée, jamais dupliquée.
  */
+/**
+ * Clé d'une rencontre : l'identité de ses deux clubs d'abord, leur nom
+ * seulement à défaut.
+ *
+ * LA CAUSE DES DOUBLONS ÉTAIT ICI. La clé se fabriquait à partir du NOM des
+ * équipes, si bien qu'une source écrivant « Alavés » là où une autre écrit
+ * « Deportivo Alavés » créait une SECONDE rencontre, même date, même score,
+ * même adversaire. Toute la saison 2026-27 d'Alavés existait ainsi en
+ * double : quatorze matchs joués au classement au lieu de sept.
+ *
+ * Ce n'était pas un incident : le nom change d'un import à l'autre, donc les
+ * doublons revenaient à chaque passe. Les 311 déjà fusionnés n'étaient que
+ * la récolte du moment.
+ *
+ * L'identifiant de la rencontre chez la source tranche en premier ; à
+ * défaut, le triplet date + club à domicile + club à l'extérieur, qui
+ * désigne une rencontre sans ambiguïté. Le repli sur les noms ne sert plus
+ * qu'aux entrées sans identité — celles qu'aucune source moderne ne produit.
+ */
+function resolveMatchKey(st, entry, date, homeName, awayName) {
+  if (entry.fotmobId) {
+    const parId = st.byFotmobId.get(String(entry.fotmobId));
+    if (parId) return parId.match_key;
+  }
+  if (entry.homeId && entry.awayId) {
+    const parClubs = st.byIdentity.get(date, entry.homeId, entry.awayId);
+    if (parClubs) return parClubs.match_key;
+  }
+  return `${date}-${slug(homeName)}-${slug(awayName)}`;
+}
+
 export function upsertMatches(entries, { database = openDb() } = {}) {
   const st = prepared(database);
   const report = { created: 0, updated: 0, skipped: 0, playersMerged: 0, warnings: [] };
@@ -505,7 +540,7 @@ export function upsertMatches(entries, { database = openDb() } = {}) {
     for (const entry of entries) {
       const { date, homeName, awayName } = entry;
       if (!/^\d{4}-\d{2}-\d{2}$/.test(date ?? '') || !homeName || !awayName) { report.skipped++; continue; }
-      const matchKey = entry.matchKey ?? `${date}-${slug(homeName)}-${slug(awayName)}`;
+      const matchKey = entry.matchKey ?? resolveMatchKey(st, entry, date, homeName, awayName);
 
       const before = st.existingSources.get(matchKey);
       if (before) report.updated++; else report.created++;

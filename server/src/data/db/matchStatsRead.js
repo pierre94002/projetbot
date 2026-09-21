@@ -381,9 +381,26 @@ export function teamFormFromStore(teamName, { league = null, sampleSize = null, 
  * `null` quand l'équipe n'a aucune rencontre jouée en magasin — l'appelant
  * doit pouvoir distinguer « zéro but » de « on ne sait pas ».
  */
-export function teamGoalsFromStore(teamName, { league = null, sampleSize = null, database = openDb() } = {}) {
+export function teamGoalsFromStore(teamName, { league = null, sampleSize = null, season = null, database = openDb() } = {}) {
   const { teamId, rows } = rencontresJouees(teamName, { league, database });
-  const retenues = sampleSize ? rows.slice(0, sampleSize) : rows;
+
+  // LA SAISON EN COURS, pas tout l'historique. Le magasin garde trois ou
+  // quatre saisons, et les moyenner toutes donnait à l'IFK Göteborg
+  // « 1,27 but sur 204 matchs » — un chiffre juste, mais qui décrit un club
+  // d'il y a trois ans autant que celui d'aujourd'hui, et qui tire chaque
+  // équipe vers la moyenne générale. C'est ce que faisait l'appel
+  // API-Football remplacé ici, et le moteur a été réglé là-dessus.
+  //
+  // SAUF en début de saison : à cinq rencontres ou moins, une moyenne de
+  // saison est du bruit, et l'historique complet vaut mieux qu'un chiffre
+  // tiré de deux matchs.
+  const MINIMUM_SAISON = 6;
+  const debut = season ? `${season}-07-01` : null;
+  const fin = season ? `${Number(season) + 1}-07-01` : null;
+  const deLaSaison = season ? rows.filter((r) => r.date >= debut && r.date < fin) : rows;
+  const base = deLaSaison.length >= MINIMUM_SAISON ? deLaSaison : rows;
+
+  const retenues = sampleSize ? base.slice(0, sampleSize) : base;
   if (!retenues.length) return null;
 
   const cumul = { home: { pour: 0, contre: 0, n: 0 }, away: { pour: 0, contre: 0, n: 0 } };
@@ -408,7 +425,11 @@ export function teamGoalsFromStore(teamName, { league = null, sampleSize = null,
       total: moy(cumul.home.contre + cumul.away.contre, totalN)
     },
     fixturesPlayed: totalN,
-    teamId
+    teamId,
+    // Les dates déjà comptées, pour que l'appelant n'ajoute pas une seconde
+    // fois des rencontres que le magasin connaît (cf.
+    // blendGoalsWithLocalResults dans matchEnrichment.js).
+    dates: retenues.map((r) => r.date)
   };
 }
 

@@ -130,6 +130,19 @@ export function getResultsForTeam(teamName) {
     .filter((r) => r.homeName.toLowerCase() === normalized || r.awayName.toLowerCase() === normalized)
     .map((r) => {
       const isHome = r.homeName.toLowerCase() === normalized;
-      return { matchId: r.matchId, isHome, goalsFor: isHome ? r.homeGoals : r.awayGoals, goalsAgainst: isHome ? r.awayGoals : r.homeGoals };
+      // La date sert a NE PAS recompter une rencontre que le magasin
+      // connait deja : les deux sources sont alimentees par le meme import.
+      // Aucune des 38 354 entrees ne porte de champ `date` — elle est dans
+      // l'identifiant, sous la forme `<prefixe>-AAAA-MM-JJ-<equipes>`. On l'y
+      // lit plutot que d'ajouter un champ que les entrees existantes
+      // n'auraient pas.
+      return {
+        matchId: r.matchId,
+        league: r.league ?? null,
+        date: r.date ?? /(\d{4}-\d{2}-\d{2})/.exec(r.matchId ?? '')?.[1] ?? null,
+        isHome,
+        goalsFor: isHome ? r.homeGoals : r.awayGoals,
+        goalsAgainst: isHome ? r.awayGoals : r.homeGoals
+      };
     });
 }

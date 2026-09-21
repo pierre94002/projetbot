@@ -14,7 +14,7 @@ import { getResultsForTeam } from '../repositories/matchResultsRepository.js';
 import { getTeamWebAverages, getTeamSquad } from '../repositories/matchStatsWebRepository.js';
 import {
   teamFormFromStore, teamGoalsFromStore, teamCornersFromStore,
-  lineupsFromStore, matchDetailsFromStore
+  lineupsFromStore, matchDetailsFromStore, seasonsForLeague
 } from '../db/matchStatsRead.js';
 import { resolveLineupViaWeb, resolvePlayersViaWeb } from '../../core/ai/webLookupService.js';
 import { getTeamProfile } from '../repositories/teamProfileRepository.js';
@@ -79,9 +79,14 @@ export async function enrichMatchWithRealAverages(match, { includeCorners = fals
  * compétition n'était pas reconnue.
  */
 function resolveGoalsFromStore(match) {
+  // La saison en cours est celle que le magasin a de plus récent pour cette
+  // compétition, et non l'année civile : un championnat scandinave joue de
+  // mars à novembre, un championnat d'Europe de l'Ouest de juillet à mai.
+  const saison = seasonsForLeague(match.league)[0]?.season ?? null;
+
   const lire = (nom) => {
     try {
-      const buts = teamGoalsFromStore(nom, { league: match.league });
+      const buts = teamGoalsFromStore(nom, { league: match.league, season: saison });
       if (!buts) return null;
       const forme = teamFormFromStore(nom, { league: match.league, sampleSize: DEFAULT_FORM_SAMPLE_SIZE });
       return { team: { id: buts.teamId, name: nom }, goals: buts, form: forme };
@@ -95,13 +100,26 @@ function resolveGoalsFromStore(match) {
   const away = lire(match.away);
   if (!home && !away) return null;
 
+  /**
+   * La période que la moyenne du magasin a réellement couverte, telle
+   * qu'elle-même la rapporte — et non telle qu'on la suppose : elle élargit
+   * à tout l'historique quand la saison en cours compte trop peu de
+   * rencontres, et le mélange doit suivre cet élargissement.
+   */
+  const league = match.league;
+  const fenetreDe = (buts) => {
+    const dates = buts?.dates ?? [];
+    if (!dates.length) return null;
+    return { dejaComptees: new Set(dates), depuis: dates[dates.length - 1], jusqu: null, league };
+  };
+
   return {
     leagueId: null,
     season: null,
     homeTeam: home?.team ?? null,
     awayTeam: away?.team ?? null,
-    homeGoals: blendGoalsWithLocalResults(home?.goals ?? null, match.home),
-    awayGoals: blendGoalsWithLocalResults(away?.goals ?? null, match.away),
+    homeGoals: blendGoalsWithLocalResults(home?.goals ?? null, match.home, fenetreDe(home?.goals)),
+    awayGoals: blendGoalsWithLocalResults(away?.goals ?? null, match.away, fenetreDe(away?.goals)),
     homeForm: home?.form ?? null,
     awayForm: away?.form ?? null,
     source: 'store'
@@ -151,8 +169,33 @@ async function resolveGoalsEnrichment(match) {
  * et ne renvoie donc aucune moyenne : dans ce cas le résultat repose
  * uniquement sur les scores locaux plutôt que de rester vide.
  */
-function blendGoalsWithLocalResults(apiGoals, teamName) {
-  const localResults = getResultsForTeam(teamName);
+function blendGoalsWithLocalResults(apiGoals, teamName, fenetre = null) {
+  // Deux filtres, et il faut les deux.
+  //
+  // 1. Une rencontre que la moyenne a DÉJÀ comptée ne se rajoute pas.
+  //    `match-results.json` et le magasin sont désormais remplis par le même
+  //    import : sans ce filtre, l'IFK Göteborg sortait à 204 rencontres pour
+  //    100 jouées, chacune pesant deux fois.
+  // 2. Le mélange reste dans la MÊME fenêtre de temps que la moyenne. Sans
+  //    cela, les saisons passées que la moyenne venait d'écarter rentraient
+  //    par la fenêtre : le Real Madrid retombait à 2,17 but sur 172
+  //    rencontres alors que sa saison en cours en dit 2,57 sur 7.
+  //
+  // Les filtres ne vident pas la fonction de son sens : un score saisi à la
+  // main dans « Score final » pour une rencontre de la période que la source
+  // ne publie pas compte toujours, et c'est ce pour quoi elle a été écrite.
+  const localResults = getResultsForTeam(teamName).filter((r) => {
+    if (!fenetre) return true;
+    if (!r.date) return true;
+    if (fenetre.dejaComptees?.has(r.date)) return false;
+    if (fenetre.depuis && r.date < fenetre.depuis) return false;
+    if (fenetre.jusqu && r.date >= fenetre.jusqu) return false;
+    // MEME competition. Sans ce test, Barcelone - Feyenoord, un match de
+    // Coupe d'Europe, entrait dans la moyenne de Liga : les resultats
+    // locaux sont indexes par equipe, pas par championnat.
+    if (fenetre.league && r.league && r.league !== fenetre.league) return false;
+    return true;
+  });
   if (localResults.length === 0) return apiGoals;
 
   const apiFixturesPlayed = apiGoals?.fixturesPlayed ?? 0;
