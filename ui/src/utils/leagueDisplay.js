@@ -30,6 +30,17 @@ export function parseLeagueLabel(sportTitle) {
   return { name, country, countryCode: COUNTRY_CODES[country.toLowerCase()] ?? country.slice(0, 3).toUpperCase() };
 }
 
+/**
+ * Libellé lisible et NON AMBIGU, pour une liste où plusieurs pays coexistent :
+ * le nom seul ne suffit plus dès que le magasin contient la Russie et la Chine
+ * ("Premier League" et "Super League" se confondraient avec l'anglaise et la
+ * grecque). Le pays n'est ajouté que lorsqu'il existe.
+ */
+export function formatLeagueOptionLabel(sportTitle) {
+  const { name, countryCode } = parseLeagueLabel(sportTitle);
+  return countryCode ? `${name} (${countryCode})` : name;
+}
+
 /** Regroupe une liste de matchs adaptés par libellé de compétition, en conservant l'ordre d'apparition. */
 export function groupMatchesByLeague(matches) {
   const groups = new Map();

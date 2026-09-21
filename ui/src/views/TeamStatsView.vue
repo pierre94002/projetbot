@@ -12,7 +12,7 @@ import AppNumberField from '@/components/common/AppNumberField.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
-import { parseLeagueLabel } from '@/utils/leagueDisplay.js';
+import { formatLeagueOptionLabel } from '@/utils/leagueDisplay.js';
 import { MATCH_STAT_SECTIONS, parseNumeric } from '@/constants/matchStatFields.js';
 
 const matchesStore = useMatchesStore();
@@ -32,14 +32,17 @@ const fullStatsLoading = ref(false);
 const fullStatsLoadedFor = ref(null);
 const FULL_STATS_BATCH_SIZE = 3;
 
-// Championnats sourcés depuis les matchs déjà chargés (même source que le
-// bouton "Classement" de la page Matchs) — garantit que le libellé envoyé au
-// serveur est un format qu'il sait résoudre, plutôt qu'une liste de
-// compétitions saisie à la main qui pourrait ne correspondre à rien.
+// Championnats sourcés d'abord des CLASSEMENTS disponibles (clés du magasin
+// local, donc résolubles par le serveur par construction), complétés par ceux
+// des matchs chargés. Se limiter aux matchs cotés masquait les championnats
+// peuplés par la tâche quotidienne sans cotes — Russie, Chine, League One et
+// Two avaient classement et statistiques sans aucun écran pour les afficher.
+const standingsLeagues = ref([]);
+
 const leagueOptions = computed(() =>
-  [...new Set(matchesStore.matches.map((m) => m.league).filter(Boolean))]
+  [...new Set([...standingsLeagues.value, ...matchesStore.matches.map((m) => m.league)].filter(Boolean))]
     .sort()
-    .map((league) => ({ value: league, label: parseLeagueLabel(league).name }))
+    .map((league) => ({ value: league, label: formatLeagueOptionLabel(league) }))
 );
 
 // Équipes du championnat (classement déjà récupéré et caché 12h côté serveur
@@ -167,7 +170,15 @@ const leagueStatSections = computed(() => {
 });
 
 onMounted(async () => {
-  if (!matchesStore.matches.length) await matchesStore.fetchMatches();
+  // Les deux sources sont indépendantes : un échec des cotes ne doit pas
+  // priver l'écran des championnats qui ont un classement local, et
+  // inversement.
+  await Promise.allSettled([
+    standingsApi.listLeagues().then((result) => {
+      standingsLeagues.value = result.leagues ?? [];
+    }),
+    matchesStore.matches.length ? null : matchesStore.fetchMatches()
+  ]);
   if (!selectedLeague.value && leagueOptions.value.length) selectedLeague.value = leagueOptions.value[0].value;
 });
 </script>
@@ -191,7 +202,7 @@ onMounted(async () => {
         v-else-if="!leagueOptions.length"
         icon="matches"
         title="Aucun championnat chargé"
-        description="Va sur la page Matchs pour charger des cotes — les championnats disponibles apparaîtront ici."
+        description="Aucun classement en local et aucune cote chargée. Lance une actualisation depuis Réglages > Données, ou va sur la page Matchs charger des cotes."
       />
       <LoadingSpinner v-else-if="standings.loading" label="Récupération du classement…" />
       <EmptyState v-else-if="standings.error" icon="alert" title="Moyennes indisponibles" :description="standings.error" />
