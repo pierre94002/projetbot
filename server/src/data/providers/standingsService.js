@@ -2,6 +2,7 @@ import { getStandingsRaw } from './apiFootballClient.js';
 import { getCachedValue, setCachedValue } from '../repositories/statsCacheRepository.js';
 import { resolveLeagueId, resolveCurrentSeason } from './leagueRegistry.js';
 import { getWebStandings } from '../repositories/webStandingsRepository.js';
+import { standingsFromStore } from '../db/matchStatsRead.js';
 
 const STANDINGS_CACHE_TTL_MS = 12 * 60 * 60 * 1000;
 
@@ -44,12 +45,24 @@ async function getApiFootballStandings(leagueLabel) {
 
 /**
  * Classement complet d'une compétition, résolue par son libellé (ex. "La Liga - Spain").
- * Source web (recherche quotidienne, cf. server/scripts/merge-standings.mjs)
- * PRIORITAIRE — pas de quota ni de saison figée, contrairement à l'appel
- * API-Football, qui ne sert donc plus que de repli tant qu'aucune donnée web
- * n'existe encore pour cette compétition.
+ *
+ * CALCULÉ depuis le magasin en priorité : il contient tous les résultats, la
+ * déduction est donc exacte, sans quota ni clé, et elle couvre les
+ * championnats qu'aucune des deux autres sources ne connaît. Elle apporte en
+ * plus la répartition domicile/extérieur, absente du classement web.
+ *
+ * La recherche web quotidienne reste en second, et API-Football en dernier :
+ * tant qu'une compétition n'a pas de rencontre jouée en magasin — un
+ * championnat qui vient d'être ajouté, une coupe entre deux tours — mieux
+ * vaut un classement venu d'ailleurs que pas de classement.
  */
 export async function getStandingsByLeagueLabel(leagueLabel) {
+  try {
+    const local = standingsFromStore(leagueLabel);
+    if (local?.rows?.length) return local;
+  } catch (error) {
+    console.warn(`[classement] magasin indisponible pour ${leagueLabel} : ${error.message}`);
+  }
   return getWebStandings(leagueLabel) ?? getApiFootballStandings(leagueLabel);
 }
 

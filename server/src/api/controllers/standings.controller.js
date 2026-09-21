@@ -1,5 +1,6 @@
 import { getStandingsByLeagueLabel } from '../../data/providers/standingsService.js';
 import { listWebStandingsLeagues } from '../../data/repositories/webStandingsRepository.js';
+import { storeStatus } from '../../data/db/matchStatsRead.js';
 import { ApiError, requireStringParam } from '../middlewares/errorHandler.js';
 
 /**
@@ -11,9 +12,15 @@ import { ApiError, requireStringParam } from '../middlewares/errorHandler.js';
  * donc classement et statistiques sans qu'aucun écran ne permette d'y
  * accéder. Les libellés renvoyés sont les clés du magasin lui-même, donc
  * résolubles par `getStandings` par construction.
+ *
+ * Deux sources réunies depuis que le classement se CALCULE sur les résultats
+ * du magasin : s'en tenir au fichier de recherche web laissait hors de la
+ * liste tout championnat ajouté depuis la dernière passe — la Pologne n'y
+ * serait jamais apparue, alors que ses résultats sont là.
  */
 export function getStandingsLeagues(req, res) {
-  res.json({ leagues: listWebStandingsLeagues() });
+  const leagues = [...new Set([...listWebStandingsLeagues(), ...storeStatus().leagues])].sort();
+  res.json({ leagues });
 }
 
 export async function getStandings(req, res) {

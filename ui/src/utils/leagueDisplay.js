@@ -15,6 +15,8 @@ const COUNTRY_CODES = {
   belgium: 'BEL',
   turkey: 'TUR',
   scotland: 'SCO',
+  greece: 'GRE',
+  poland: 'POL',
   usa: 'USA'
 };
 

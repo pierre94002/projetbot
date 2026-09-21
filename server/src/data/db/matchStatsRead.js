@@ -538,6 +538,82 @@ export function matchDetailsFromStore(homeName, isoDate, { database = openDb() }
   };
 }
 
+/**
+ * Classement d'une compétition, CALCULÉ depuis les résultats du magasin.
+ *
+ * Le classement venait jusqu'ici d'une recherche web quotidienne, avec
+ * API-Football en repli. Or le magasin contient déjà tous les résultats :
+ * un classement s'en déduit exactement, sans quota, sans clé, et pour
+ * n'importe quelle saison conservée plutôt que la seule en cours.
+ *
+ * Il apporte en plus la répartition DOMICILE/EXTÉRIEUR, que le classement
+ * web ne publiait pas — c'est précisément ce qui manquait à
+ * `getLeagueGoalAverages()` et l'obligeait à retomber sur API-Football pour
+ * alimenter le calcul structurel de lambda/mu.
+ *
+ * `null` quand la compétition n'a aucune rencontre jouée : un classement
+ * vide et un classement inconnu ne sont pas la même chose.
+ */
+export function standingsFromStore(league, { season = null, database = openDb() } = {}) {
+  ensureRegistries({ database });
+  // La saison EN COURS par défaut. Sans cela, un championnat dont le magasin
+  // garde trois ans d'historique rendait un classement cumulé : le Lech
+  // Poznań y figurait avec 110 matchs et 202 points, ce qui n'est le
+  // classement d'aucune saison.
+  const saison = season ?? seasonsForLeague(league, { database })[0]?.season ?? null;
+  const bornes = saison ? ' AND date >= ? AND date < ?' : '';
+  const args = saison ? [league, `${saison}-07-01`, `${Number(saison) + 1}-07-01`] : [league];
+  const rows = database.prepare(
+    `SELECT home_id, away_id, home_name, away_name, home_goals, away_goals FROM matches
+     WHERE league = ? AND home_goals IS NOT NULL AND away_goals IS NOT NULL${bornes}`
+  ).all(...args);
+  if (!rows.length) return null;
+
+  const canon = canonicalTeamNames({ database });
+  const table = new Map();
+  const fiche = (id, nom) => {
+    const cle = id ?? `nom:${nom}`;
+    let t = table.get(cle);
+    if (!t) {
+      table.set(cle, (t = {
+        rank: 0, teamId: id ?? null, teamName: canon.get(id) ?? nom, teamLogo: null,
+        played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0, goalDiff: 0, points: 0,
+        description: null,
+        home: { played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0 },
+        away: { played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0 }
+      }));
+    }
+    return t;
+  };
+
+  for (const r of rows) {
+    for (const cote of ['home', 'away']) {
+      const t = fiche(cote === 'home' ? r.home_id : r.away_id, cote === 'home' ? r.home_name : r.away_name);
+      const pour = cote === 'home' ? r.home_goals : r.away_goals;
+      const contre = cote === 'home' ? r.away_goals : r.home_goals;
+      const issue = pour > contre ? 'won' : pour === contre ? 'drawn' : 'lost';
+      t.played++; t[issue]++; t.goalsFor += pour; t.goalsAgainst += contre;
+      t.points += issue === 'won' ? 3 : issue === 'drawn' ? 1 : 0;
+      const c = t[cote];
+      c.played++; c[issue]++; c.goalsFor += pour; c.goalsAgainst += contre;
+    }
+  }
+
+  // Points, puis différence de buts, puis buts marqués. Les départages
+  // propres à chaque fédération — confrontations directes en Italie, en
+  // Espagne — ne sont PAS reproduits : ils demanderaient de rejouer les
+  // face-à-face, et le classement servirait alors de source plutôt que
+  // d'aperçu. Deux équipes à égalité peuvent donc être interverties.
+  const classees = [...table.values()].sort((a, b) =>
+    b.points - a.points
+    || (b.goalsFor - b.goalsAgainst) - (a.goalsFor - a.goalsAgainst)
+    || b.goalsFor - a.goalsFor
+    || a.teamName.localeCompare(b.teamName));
+  classees.forEach((t, i) => { t.rank = i + 1; t.goalDiff = t.goalsFor - t.goalsAgainst; });
+
+  return { leagueName: league, season: saison, source: 'fotmob', rows: classees };
+}
+
 /** Saisons couvertes par une compétition, la plus récente d'abord. */
 export function seasonsForLeague(league, { database = openDb() } = {}) {
   return database

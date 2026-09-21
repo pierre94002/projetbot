@@ -84,6 +84,12 @@ export const FOTMOB_LEAGUES = {
   // acceptes, sans quoi toute la saison 2024-25 restait invisible.
   'Belgium First Div': /^BEL\|(Belgian Pro League|First Division A)($| Playoff .+$)/,
   'Dutch Eredivisie': 'NED|Eredivisie',
+  // Ajouté le 2026-09-21. Égalité stricte, indispensable ici : FotMob publie
+  // aussi "POL|I Liga" et "POL|II Liga", les deuxième et troisième divisions,
+  // qu'un motif un peu lâche ramasserait. L'Ekstraklasa ne se scinde plus en
+  // groupes depuis 2021 — vérifié sur les fins de saison 2024, 2025 et 2026,
+  // où aucune variante d'intitulé n'apparaît.
+  'Ekstraklasa - Poland': 'POL|Ekstraklasa',
   // Les coupes d'Europe sont découpées par phase — « Champions League »,
   // « Champions League Grp. E », « Champions League Final Stage » — donc un
   // motif plutôt qu'un intitulé exact. L'ancrage en début de chaîne écarte

@@ -315,12 +315,17 @@ export function findPeople(name, { database = openDb(), league = null } = {}) {
  * est le seul moment où ces noms changent.
  */
 const nomsEnCache = new Map();
+const NOMS_TTL_MS = 60_000;
 export function canonicalTeamNames({ database = openDb() } = {}) {
-  let table = nomsEnCache.get(database);
-  if (!table) {
-    table = new Map(database.prepare('SELECT team_id, name FROM teams').all().map((r) => [r.team_id, r.name]));
-    nomsEnCache.set(database, table);
-  }
+  const connu = nomsEnCache.get(database);
+  if (connu && Date.now() - connu.pose < NOMS_TTL_MS) return connu.table;
+  // Une péremption, et pas seulement l'invalidation faite par la
+  // reconstruction : celle-ci ne vide le cache que dans le PROCESSUS qui
+  // reconstruit. Un import lancé en ligne de commande laisserait donc le
+  // serveur afficher les anciens noms jusqu'à son redémarrage. Une minute
+  // de retard sur un nom de club ne coûte rien ; des mois, si.
+  const table = new Map(database.prepare('SELECT team_id, name FROM teams').all().map((r) => [r.team_id, r.name]));
+  nomsEnCache.set(database, { table, pose: Date.now() });
   return table;
 }
 

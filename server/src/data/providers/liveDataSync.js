@@ -51,7 +51,11 @@ export const TRACKED_SPORT_KEYS = [
   'soccer_turkey_super_league',
   'soccer_portugal_primeira_liga',
   'soccer_belgium_first_div',
-  'soccer_netherlands_eredivisie'
+  'soccer_netherlands_eredivisie',
+  // Ajoutée le 2026-09-21, également marquée « hors saison » par The Odds API :
+  // la compétition existe bien côté cotes (`soccer_poland_ekstraklasa`), mais
+  // aucune n'est ouverte pour l'instant. Elle apparaît par le calendrier.
+  'soccer_poland_ekstraklasa'
 ];
 
 /**
