@@ -730,12 +730,23 @@ export function cupBracket(league, { season = null, database = openDb() } = {}) 
   ).all(...args);
   if (!rows.length) return null;
 
-  const tours = new Map();
+  // Un tour est un BLOC CONTIGU de rencontres portant le même intitulé, et
+  // non simplement « toutes les rencontres portant cet intitulé ».
+  //
+  // La distinction n'est pas théorique : FotMob appelle « final » le dernier
+  // tour de QUALIFICATION d'août autant que la finale de mai. Regroupés par
+  // intitulé, les deux se retrouvaient ensemble — la Ligue des champions
+  // affichait « final : 15 matchs », dont quatorze barrages joués avant même
+  // la phase de ligue. Les rencontres étant lues par date, un nouveau bloc
+  // s'ouvre dès que l'intitulé change ; les tours intercalés séparent donc
+  // naturellement les deux « finales ».
+  const blocs = [];
   for (const r of rows) {
     const round = parse(r.meta)?.round ?? null;
     const cle = round === null ? 'Tour inconnu' : String(round);
-    if (!tours.has(cle)) tours.set(cle, { round: cle, rank: rangDuTour(round), matches: [] });
-    tours.get(cle).matches.push({
+    const dernier = blocs[blocs.length - 1];
+    const bloc = dernier && dernier.round === cle ? dernier : (blocs.push({ round: cle, from: r.date, matches: [] }), blocs[blocs.length - 1]);
+    bloc.matches.push({
       matchId: r.fotmob_id ?? r.match_key,
       date: r.date,
       home: canon.get(r.home_id) ?? r.home_name,
@@ -748,12 +759,25 @@ export function cupBracket(league, { season = null, database = openDb() } = {}) 
     });
   }
 
+  // Un intitulé qui revient est daté, sans quoi deux sections s'appelleraient
+  // « final » sans que rien ne les distingue à l'écran.
+  const MOIS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+  const occurrences = blocs.reduce((acc, b) => ({ ...acc, [b.round]: (acc[b.round] ?? 0) + 1 }), {});
+  const datation = (from) => `${MOIS[Number(from.slice(5, 7)) - 1]} ${from.slice(0, 4)}`;
+
   return {
     league,
     season: saison,
-    rounds: [...tours.values()]
-      .sort((a, b) => a.rank - b.rank)
-      .map(({ round, matches }) => ({ round, count: matches.length, matches }))
+    rounds: blocs
+      // Chronologie d'abord : c'est l'ordre réel des tours. Le barème ne
+      // départage que des blocs commençant le même jour.
+      .sort((a, b) => a.from.localeCompare(b.from) || rangDuTour(a.round) - rangDuTour(b.round))
+      .map(({ round, from, matches }) => ({
+        round: occurrences[round] > 1 ? `${round} — ${datation(from)}` : round,
+        from,
+        count: matches.length,
+        matches
+      }))
   };
 }
 
