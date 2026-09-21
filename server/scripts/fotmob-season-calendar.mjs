@@ -107,11 +107,17 @@ if (DRY || !sorties.length) {
   process.exit(0);
 }
 
+// Le tampon est supprimé QUOI QU'IL ARRIVE. Sans ce `finally`, un échec de
+// fusion le laissait sur le disque, où il ressemble à une donnée du projet :
+// 20 253 lignes de calendrier dupliqué sont ainsi parties dans un commit.
 const tampon = path.join(RUNTIME_DIR, 'calendrier-fotmob.json');
-fs.writeFileSync(tampon, JSON.stringify(sorties, null, 2));
-console.log(`\nFusion dans ${CALENDRIER}…`);
-console.log(execFileSync('node', [path.join(__dirname, 'merge-season-calendar.mjs'), CALENDRIER, tampon], { encoding: 'utf8' }));
-fs.rmSync(tampon, { force: true });
+try {
+  fs.writeFileSync(tampon, JSON.stringify(sorties, null, 2));
+  console.log(`\nFusion dans ${CALENDRIER}…`);
+  console.log(execFileSync('node', [path.join(__dirname, 'merge-season-calendar.mjs'), CALENDRIER, tampon], { encoding: 'utf8' }));
+} finally {
+  fs.rmSync(tampon, { force: true });
+}
 
 /**
  * Les rencontres terminées vont AUSSI dans match-results.json.
@@ -126,14 +132,15 @@ const termines = sorties.filter((s) => s.status === 'finished' && s.homeGoals !=
 if (termines.length) {
   const RESULTATS = path.join(RUNTIME_DIR, 'match-results.json');
   const tamponR = path.join(RUNTIME_DIR, 'resultats-fotmob.json');
-  fs.writeFileSync(tamponR, JSON.stringify(termines, null, 2));
-  console.log(`Fusion de ${termines.length} résultat(s) dans ${RESULTATS}…`);
   try {
+    fs.writeFileSync(tamponR, JSON.stringify(termines, null, 2));
+    console.log(`Fusion de ${termines.length} résultat(s) dans ${RESULTATS}…`);
     console.log(execFileSync('node', [path.join(__dirname, 'merge-daily-results.mjs'), RESULTATS, tamponR], { encoding: 'utf8' }));
   } catch (error) {
     // Un score divergent fait sortir le script en erreur : c'est un signal,
     // pas une panne. Le calendrier, lui, est déjà écrit.
     console.warn(`Résultats non fusionnés intégralement : ${error.stdout ?? ''}${error.stderr ?? error.message}`);
+  } finally {
+    fs.rmSync(tamponR, { force: true });
   }
-  fs.rmSync(tamponR, { force: true });
 }

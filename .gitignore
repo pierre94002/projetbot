@@ -32,6 +32,11 @@ Thumbs.db
 # Brut FlashScore (~110 Mo/journee) telecharge par scripts/import-flashscore-history.mjs
 server/data/runtime/flashscore-raw/
 server/data/runtime/_tmp-flashscore-import/
+# Tampons de fotmob-season-calendar.mjs : ecrits puis supprimes dans la
+# foulee. Un echec de fusion en laissait un derriere lui, et 20 253 lignes
+# de calendrier dupplique sont parties dans un commit.
+server/data/runtime/calendrier-fotmob.json
+server/data/runtime/resultats-fotmob.json
 # Fichiers intermediaires de scripts/csv-to-season-data.mjs (regeneres a chaque run)
 server/data/runtime/_tmp-season-import/
 
