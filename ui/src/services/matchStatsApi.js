@@ -32,5 +32,12 @@ export const matchStatsApi = {
     if (season) params.set('season', season);
     if (limit) params.set('limit', limit);
     return httpClient.get(`/match-stats/leaders?${params}`);
+  },
+  // Coupes rattachées à un championnat, et le tableau de l'une d'elles.
+  getLeagueCups: (league) => httpClient.get(`/match-stats/cups?league=${encodeURIComponent(league)}`),
+  getCupBracket: (league, { season = null } = {}) => {
+    const params = new URLSearchParams({ league });
+    if (season) params.set('season', season);
+    return httpClient.get(`/match-stats/bracket?${params}`);
   }
 };

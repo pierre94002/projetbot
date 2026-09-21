@@ -23,6 +23,7 @@ import TabbedView from '@/components/common/TabbedView.vue';
 import MatchesFilterBar from '@/components/matches/MatchesFilterBar.vue';
 import StandingsTable from '@/components/matches/StandingsTable.vue';
 import LeagueLeaders from '@/components/matches/LeagueLeaders.vue';
+import CupPanel from '@/components/matches/CupPanel.vue';
 import TeamStatsView from '@/views/TeamStatsView.vue';
 import TeamSquadView from '@/views/TeamSquadView.vue';
 import SeasonCalendarView from '@/views/SeasonCalendarView.vue';
@@ -227,7 +228,8 @@ const standingsTabs = computed(() => [
   { value: 'table', label: 'Classement' },
   { value: 'scorers', label: 'Buteurs', count: leaders.value?.scorers?.length },
   { value: 'assists', label: 'Passeurs', count: leaders.value?.assists?.length },
-  { value: 'cleanSheets', label: 'Clean sheets', count: leaders.value?.cleanSheets?.length }
+  { value: 'cleanSheets', label: 'Clean sheets', count: leaders.value?.cleanSheets?.length },
+  { value: 'cups', label: 'Coupes' }
 ]);
 
 /**
@@ -390,6 +392,7 @@ onMounted(() => {
         :error="standings.error"
         :rows="standings.rows"
       />
+      <CupPanel v-else-if="standingsTab === 'cups'" :league="standings.key" />
       <LeagueLeaders
         v-else
         :kind="standingsTab"
