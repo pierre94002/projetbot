@@ -120,6 +120,13 @@ const MATCHES_DDL = [
   '  league TEXT NOT NULL,',
   "  home_name TEXT NOT NULL CHECK (home_name <> ''),",
   "  away_name TEXT NOT NULL CHECK (away_name <> ''),",
+  '  -- Identifiants de la SOURCE, seule identité qui ne bouge pas. Le nom,',
+  "  -- lui, s'écrit de plusieurs façons — « Atlético Madrid » et « Atletico",
+  '  -- Madrid » désignaient deux clubs, et « Pedrinho » cinq joueurs. Ces',
+  '  -- colonnes sont ajoutées aux bases existantes par migrateSchema().',
+  '  home_id TEXT,',
+  '  away_id TEXT,',
+  '  fotmob_id TEXT,',
   '  home_goals INTEGER,',
   '  away_goals INTEGER,',
   '  updated_at TEXT,',
@@ -134,10 +141,64 @@ const MATCHES_DDL = [
   ') WITHOUT ROWID;'
 ].join('\n');
 
+/**
+ * Annuaires d'identités, reconstruits depuis les tables ci-dessus (voir
+ * identityRegistry.js). Ce sont des INDEX, pas des sources : tout ce qu'ils
+ * contiennent se recalcule à partir de `matches` et `players`.
+ *
+ * Les tables d'alias ont une clé composite (slug, identifiant), et non le
+ * seul slug : « Pedrinho » désigne cinq joueurs distincts, et une clé sur le
+ * seul nom aurait imposé d'en oublier quatre.
+ */
+const REGISTRY_DDL = [
+  `CREATE TABLE IF NOT EXISTS teams (
+  team_id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  slug TEXT NOT NULL,
+  league TEXT,
+  first_seen TEXT,
+  last_seen TEXT,
+  played INTEGER NOT NULL DEFAULT 0,
+  updated_at TEXT
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS team_aliases (
+  slug TEXT NOT NULL,
+  team_id TEXT NOT NULL REFERENCES teams(team_id) ON DELETE CASCADE,
+  alias TEXT NOT NULL,
+  seen INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (team_id, alias)
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS people (
+  player_id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  slug TEXT NOT NULL,
+  position TEXT,
+  team_id TEXT,
+  team_name TEXT,
+  first_seen TEXT,
+  last_seen TEXT,
+  appearances INTEGER NOT NULL DEFAULT 0,
+  updated_at TEXT
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS people_aliases (
+  slug TEXT NOT NULL,
+  player_id TEXT NOT NULL REFERENCES people(player_id) ON DELETE CASCADE,
+  alias TEXT NOT NULL,
+  seen INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (player_id, alias)
+) WITHOUT ROWID;`,
+  'CREATE INDEX IF NOT EXISTS idx_teams_slug ON teams(slug);',
+  'CREATE INDEX IF NOT EXISTS idx_team_aliases_slug ON team_aliases(slug);',
+  'CREATE INDEX IF NOT EXISTS idx_people_slug ON people(slug);',
+  'CREATE INDEX IF NOT EXISTS idx_people_team ON people(team_id) WHERE team_id IS NOT NULL;',
+  'CREATE INDEX IF NOT EXISTS idx_people_aliases_slug ON people_aliases(slug);'
+];
+
 const DDL = [
   MATCHES_DDL,
   teamDdl(),
   playerDdl(),
+  ...REGISTRY_DDL,
   'CREATE INDEX IF NOT EXISTS idx_matches_date ON matches(date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_league_date ON matches(league, date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_home ON matches(home_name);',
@@ -148,8 +209,31 @@ const DDL = [
   // poste n'étant tagué que sur la moitié des lignes, on le déduit de tout
   // l'historique du joueur, ce qui balayait les 810 000 lignes à chaque
   // classement — 12 s par écran. Avec cet index, SQLite lit l'index seul.
-  'CREATE INDEX IF NOT EXISTS idx_players_name_position ON players(name, position) WHERE position IS NOT NULL;'
+  'CREATE INDEX IF NOT EXISTS idx_players_name_position ON players(name, position) WHERE position IS NOT NULL;',
+  'CREATE INDEX IF NOT EXISTS idx_matches_home_id ON matches(home_id) WHERE home_id IS NOT NULL;',
+  'CREATE INDEX IF NOT EXISTS idx_matches_away_id ON matches(away_id) WHERE away_id IS NOT NULL;'
 ];
+
+/**
+ * Colonnes ajoutées après coup. `CREATE TABLE IF NOT EXISTS` ne voit rien
+ * d'une table déjà créée : sans ceci, une base existante garderait à jamais
+ * l'ancienne forme, et le DDL ci-dessus ne vaudrait que pour une base neuve.
+ *
+ * Élargir seulement, jamais rétrécir : une colonne ajoutée ne casse aucun
+ * lecteur en place, et une base plus récente que le code reste lisible.
+ */
+const ADDED_COLUMNS = [
+  ['matches', 'home_id', 'TEXT'],
+  ['matches', 'away_id', 'TEXT'],
+  ['matches', 'fotmob_id', 'TEXT']
+];
+
+function migrateSchema(db) {
+  for (const [table, column, type] of ADDED_COLUMNS) {
+    const existe = db.prepare(`SELECT COUNT(*) n FROM pragma_table_info(?) WHERE name = ?`).get(table, column).n;
+    if (!existe) db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${type};`);
+  }
+}
 
 /**
  * Une connexion par fichier. Un simple `let db` renvoyait la connexion déjà
@@ -184,7 +268,14 @@ export function openDb({ file = resolveDbPath(), readonly = false } = {}) {
   // NOT EXISTS` ne voit aucune table, recrée le schéma vide, et la fermeture
   // du processus reporte ce schéma dans le fichier. Le garde-fou arriverait
   // alors après la destruction qu'il est censé empêcher.
-  if (!readonly) for (const sql of DDL) db.exec(sql);
+  // Tables, PUIS colonnes ajoutées après coup, PUIS index. L'ordre compte :
+  // `idx_matches_home_id` porte sur une colonne que migrateSchema vient
+  // d'ajouter, et le créer avant l'aurait fait échouer sur une base existante.
+  if (!readonly) {
+    for (const sql of DDL) if (sql.startsWith('CREATE TABLE')) db.exec(sql);
+    migrateSchema(db);
+    for (const sql of DDL) if (!sql.startsWith('CREATE TABLE')) db.exec(sql);
+  }
   connexions.set(chemin, db);
   return db;
 }
@@ -317,9 +408,12 @@ function buildUpsert(table, columns, keyColumns, insertOnly = []) {
 }
 
 const MATCH_UPSERT = [
-  'INSERT INTO matches (match_key, match_id, date, league, home_name, away_name, home_goals, away_goals, updated_at, events, lineups, meta, shotmap, sources)',
-  'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+  'INSERT INTO matches (match_key, match_id, date, league, home_name, away_name, home_id, away_id, fotmob_id, home_goals, away_goals, updated_at, events, lineups, meta, shotmap, sources)',
+  'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
   'ON CONFLICT (match_key) DO UPDATE SET',
+  '  home_id   = COALESCE(excluded.home_id, home_id),',
+  '  away_id   = COALESCE(excluded.away_id, away_id),',
+  '  fotmob_id = COALESCE(excluded.fotmob_id, fotmob_id),',
   '  home_goals = COALESCE(excluded.home_goals, home_goals),',
   '  away_goals = COALESCE(excluded.away_goals, away_goals),',
   '  updated_at = excluded.updated_at,',
@@ -386,6 +480,7 @@ export function upsertMatches(entries, { database = openDb() } = {}) {
         return size ? JSON.stringify(value) : null;
       };
       st.match.run(matchKey, entry.matchId ?? `stats-${matchKey}`, date, entry.league ?? '', homeName, awayName,
+        entry.homeId ?? null, entry.awayId ?? null, entry.fotmobId ?? null,
         entry.homeGoals ?? null, entry.awayGoals ?? null, entry.updatedAt ?? now,
         json(entry.events), json(entry.lineups), json(entry.meta), json(entry.shotmap), JSON.stringify(sources));
 

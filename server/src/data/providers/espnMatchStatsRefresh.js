@@ -31,6 +31,7 @@ import { teamNamesLikelyMatch, findBestTeamNameMatch } from '../../utils/teamNam
 // commande et le serveur l'appellent tous deux plutôt que d'en tenir deux
 // versions qui divergeraient.
 import { mergeMatchStats } from '../../../scripts/merge-match-stats.mjs';
+import { rebuildRegistries } from '../db/identityRegistry.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const RUNTIME_DIR = path.resolve(__dirname, '../../../data/runtime');
@@ -97,6 +98,21 @@ function readStoredEntries() {
  * Rencontres terminées qui n'ont pas encore été confrontées à ESPN.
  * `leagues` limite le champ ; `since`/`until` bornent les dates.
  */
+/**
+ * Remet les annuaires d'identités en accord avec le magasin, une fois la
+ * passe terminée — même contrat que dans fotMobRefresh.js : à la fin et non
+ * par lot, et un échec est consigné sans faire perdre l'import.
+ */
+function refreshRegistries(report) {
+  try {
+    const debut = Date.now();
+    const bilan = rebuildRegistries();
+    report.registries = { ...bilan, ms: Date.now() - debut };
+  } catch (error) {
+    report.warnings = [...(report.warnings ?? []), ];
+  }
+}
+
 export function listMissing({ leagues = null, since = null, until = null, force = false } = {}) {
   const calendar = readJson(CALENDAR_FILE, []);
   const stored = readStoredEntries();
@@ -350,6 +366,7 @@ export async function refreshMatchStats(options = {}) {
   });
 
   flush();
+  refreshRegistries(report);
   report.finishedAt = new Date().toISOString();
   writeStatus(report);
   onProgress?.({ phase: 'done', ...report });
@@ -591,6 +608,7 @@ export async function importSeasons({ seasons, leagues = null, concurrency = DEF
   });
 
   flush();
+  refreshRegistries(report);
   report.finishedAt = new Date().toISOString();
   onProgress?.({ phase: 'done', ...report });
   return report;

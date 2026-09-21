@@ -29,6 +29,18 @@
 export const FOTMOB_REV = 2;
 
 const BASE = 'https://www.fotmob.com/api/data';
+
+/**
+ * Identifiant stable d'un club ou d'un joueur chez FotMob, préfixé pour que
+ * la source reste lisible dans le magasin.
+ *
+ * Le contrôle du signe n'est pas théorique : FotMob emploie des valeurs
+ * négatives comme bouchons pour un joueur non identifié, et le magasin
+ * contient six lignes marquées `fotmob--2` partagées par trois hommes
+ * différents. Un bouchon accepté comme identité fusionnerait des inconnus.
+ */
+export const fotMobIdOf = (id) => (Number(id) > 0 ? `fotmob-${Number(id)}` : null);
+const teamIdOf = fotMobIdOf;
 const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36';
 
 /**
@@ -271,9 +283,12 @@ export async function fetchMatchesByDate(isoDate) {
       out.push({
         matchId: String(match.id),
         leagueKey: key,
+        leagueId: match.leagueId ?? league.id ?? null,
         date: isoDate,
         homeName: match.home?.name ?? null,
         awayName: match.away?.name ?? null,
+        homeId: teamIdOf(match.home?.id),
+        awayId: teamIdOf(match.away?.id),
         homeGoals,
         awayGoals,
         finished: Boolean(match.status?.finished)
@@ -616,6 +631,13 @@ export async function fetchMatchStats(matchId) {
     matchId: String(matchId),
     homeName: payload?.general?.homeTeam?.name ?? null,
     awayName: payload?.general?.awayTeam?.name ?? null,
+    // L'identité des clubs, relevée en même temps que tout le reste. Elle
+    // était lue ici depuis toujours — pour départager les camps, quelques
+    // lignes plus haut — mais jetée aussitôt, ce qui obligeait à rapprocher
+    // les rencontres par ressemblance de nom jusque dans l'interface.
+    homeId: teamIdOf(payload?.general?.homeTeam?.id),
+    awayId: teamIdOf(payload?.general?.awayTeam?.id),
+    fotmobId: String(matchId),
     teamStats,
     players,
     events: mapEvents(payload),

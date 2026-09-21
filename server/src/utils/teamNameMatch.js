@@ -46,7 +46,9 @@ function normalizeTeamName(name) {
 const TEAM_ALIASES = {
   // Noms radicalement differents selon la source
   'borussia monchengladbach': ["m'gladbach", 'mgladbach', 'gladbach', 'borussia mgladbach'],
-  'crvena zvezda': ['red star belgrade', 'red star', 'fk crvena zvezda'],
+  // Une seule entrée : deux entrées canoniques se citant l'une l'autre se
+  // résolvaient vers deux canoniques DIFFÉRENTS, donc « pas le même club ».
+  'crvena zvezda': ['red star belgrade', 'fk crvena zvezda', 'estrella roja'],
   'sparta prague': ['sparta praha', 'ac sparta praha', 'ac sparta prague'],
   olympiakos: ['olympiacos', 'olympiakos piraeus', 'olympiacos piraeus', 'olympiacos fc'],
   omonia: ['omonoia', 'omonoia fc', 'omonia nicosia', 'ac omonia'],
@@ -62,6 +64,18 @@ const TEAM_ALIASES = {
   'queens park rangers': ['qpr'],
   'deportivo la coruna': ['dep a coruna', 'deportivo', 'dep la coruna', 'la coruna', 'deportivo a coruna'],
   'athletic bilbao': ['ath bilbao', 'athletic club'],
+  // « Eintracht Frankfurt » chez FotMob, « Ein Frankfurt » dans le magasin :
+  // seul « frankfurt » est commun, soit 1 token sur 2, sous le seuil du
+  // rapprochement flou. Trente-huit rencontres restaient non identifiées.
+  'eintracht frankfurt': ['ein frankfurt', 'eintracht frankfurt fc'],
+  // Deux clubs d'une même ville dont un seul mot distingue les noms, et ce
+  // mot — « Club » — est un sigle écarté comme non distinctif. Il ne restait
+  // que « brugge » de part et d'autre, donc un recouvrement parfait entre
+  // deux clubs différents. Chacun doit figurer pour que le registre tranche.
+  'club brugge': ['club brugge kv', 'fc brugge'],
+  'cercle brugge': ['cercle brugge ksv', 'cercle brugge kv'],
+  'rigas futbola skola': ['rfs', 'rigas fs', 'fk rfs'],
+  'the new saints': ['tns', 'new saints'],
   'atletico madrid': ['ath madrid', 'atl madrid'],
   espanyol: ['espanol', 'rcd espanyol'],
   'rayo vallecano': ['vallecano'],
@@ -111,14 +125,11 @@ const TEAM_ALIASES = {
   // et "Inter" ceux de l'Inter Club d'Escaldes.
   'celta vigo': ['celta', 'rc celta', 'celta de vigo'],
   'celta fortuna': ['rc celta fortuna', 'celta vigo b'],
-  'real sociedad': ['sociedad'],
   'real sociedad b': ['sociedad b', 'real sociedad ii'],
-  'athletic club': ['athletic bilbao', 'ath bilbao'],
   'charlton athletic': ['charlton'],
   'oldham athletic': ['oldham'],
   'wigan athletic': ['wigan'],
   'red star fc': ['red star', 'red star fc 93'],
-  'red star belgrade': ['crvena zvezda', 'estrella roja'],
   'inter club d escaldes': ['inter escaldes'],
   'port vale': [],
   portsmouth: [],
@@ -139,7 +150,21 @@ const TEAM_ALIASES = {
 const ALIAS_TO_CANONICAL = new Map();
 for (const [canonical, variants] of Object.entries(TEAM_ALIASES)) {
   ALIAS_TO_CANONICAL.set(normalizeTeamName(canonical), canonical);
-  for (const variant of variants) ALIAS_TO_CANONICAL.set(normalizeTeamName(variant), canonical);
+  for (const variant of variants) {
+    const cle = normalizeTeamName(variant);
+    // Un nom qui menerait a DEUX canoniques rend le registre pire qu'inutile :
+    // il donne un verdict ferme, et ce verdict est faux. C'est arrive trois
+    // fois — « crvena zvezda »/« red star belgrade » et « athletic bilbao »/
+    // « athletic club » etaient chacun deux entrees se citant mutuellement,
+    // si bien que les deux ecritures du MEME club se resolvaient vers deux
+    // canoniques differents, donc « pas le meme club ». Mieux vaut echouer au
+    // chargement du module que servir ce verdict-la.
+    const deja = ALIAS_TO_CANONICAL.get(cle);
+    if (deja && deja !== canonical && cle !== normalizeTeamName(deja)) {
+      throw new Error(`TEAM_ALIASES : « ${variant} » designe a la fois « ${deja} » et « ${canonical} ».`);
+    }
+    if (!ALIAS_TO_CANONICAL.has(cle) || cle !== normalizeTeamName(deja ?? '')) ALIAS_TO_CANONICAL.set(cle, canonical);
+  }
 }
 
 function canonicalTeamName(name) {

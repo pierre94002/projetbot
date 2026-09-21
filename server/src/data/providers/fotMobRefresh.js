@@ -22,6 +22,7 @@ import { fileURLToPath } from 'node:url';
 import { FOTMOB_LEAGUES, FOTMOB_REV, leagueKeyMatches, fetchMatchesByDate, fetchMatchStats } from './fotMobProvider.js';
 import { teamNamesLikelyMatch } from '../../utils/teamNameMatch.js';
 import { mergeMatchStats } from '../../../scripts/merge-match-stats.mjs';
+import { rebuildRegistries } from '../db/identityRegistry.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const RUNTIME_DIR = path.resolve(__dirname, '../../../data/runtime');
@@ -129,6 +130,13 @@ export async function importMissingFromFotMob({ from, to, leagues = null, concur
           league,
           homeName: match.homeName,
           awayName: match.awayName,
+          // L'identité que la source attache elle-même aux deux clubs et à
+          // la rencontre. Conservée ici, elle dispense tout le reste du projet
+          // de rapprocher des noms qui ne s'écrivent pas pareil d'une source
+          // à l'autre (cf. data/db/identityRegistry.js).
+          homeId: stats.homeId,
+          awayId: stats.awayId,
+          fotmobId: stats.fotmobId,
           homeGoals: match.homeGoals,
           awayGoals: match.awayGoals,
           teamStats: stats.teamStats,
@@ -149,8 +157,33 @@ export async function importMissingFromFotMob({ from, to, leagues = null, concur
   });
 
   flush();
+  refreshRegistries(report);
   onProgress?.({ phase: 'done', ...report });
   return report;
+}
+
+/**
+ * Remet les annuaires d'identités en accord avec le magasin, une fois la
+ * passe terminée.
+ *
+ * À la FIN, pas à chaque lot : la reconstruction est complète (huit secondes
+ * sur 810 000 lignes) et la rejouer tous les cinquante matchs coûterait
+ * davantage que l'import lui-même. Une reconstruction complète plutôt
+ * qu'incrémentale parce qu'un annuaire qui s'écarte de sa source est pire
+ * que pas d'annuaire du tout : ici, il ne peut pas s'en écarter.
+ *
+ * Un échec est consigné, jamais propagé : l'import, lui, a réussi, et
+ * perdre les statistiques importées parce qu'un index n'a pas pu se refaire
+ * serait une régression bien plus grave que l'index manquant.
+ */
+function refreshRegistries(report) {
+  try {
+    const debut = Date.now();
+    const bilan = rebuildRegistries();
+    report.registries = { ...bilan, ms: Date.now() - debut };
+  } catch (error) {
+    report.warnings = [...(report.warnings ?? []), `Annuaires d'identités non reconstruits : ${error.message}`];
+  }
 }
 
 function slugify(text) {
@@ -287,6 +320,13 @@ export async function refreshFromFotMob(options = {}) {
           // Les noms déjà stockés font foi : FotMob ne sert qu'à compléter.
           homeName: entry.homeName,
           awayName: entry.awayName,
+          // L'identité que la source attache elle-même aux deux clubs et à
+          // la rencontre. Conservée ici, elle dispense tout le reste du projet
+          // de rapprocher des noms qui ne s'écrivent pas pareil d'une source
+          // à l'autre (cf. data/db/identityRegistry.js).
+          homeId: stats.homeId,
+          awayId: stats.awayId,
+          fotmobId: stats.fotmobId,
           homeGoals: entry.homeGoals,
           awayGoals: entry.awayGoals,
           teamStats: stats.teamStats,
@@ -310,6 +350,7 @@ export async function refreshFromFotMob(options = {}) {
   });
 
   flush();
+  refreshRegistries(report);
   report.finishedAt = new Date().toISOString();
   onProgress?.({ phase: 'done', ...report });
   return report;
