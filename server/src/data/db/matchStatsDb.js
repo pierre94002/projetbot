@@ -11,8 +11,15 @@
  *     politique de cache ; l'un d'eux gardait tout le magasin en mémoire.
  *     Une requête indexée remplace le balayage.
  *   - Deux imports simultanés pouvaient se perdre un mois entier : le
- *     dernier à renommer le fichier gagnait. Les transactions et le mode WAL
- *     rendent ce cas impossible, et le verrou maison devient inutile.
+ *     dernier à renommer le fichier gagnait. Les transactions sérialisent
+ *     désormais les écrivains — à condition d'ouvrir en BEGIN IMMEDIATE,
+ *     voir upsertMatches : le BEGIN différé par défaut fait perdre, mesure
+ *     à l'appui, 69 % des transactions dès qu'un second écrivain travaille.
+ *
+ * Ce que cela ne résout PAS : node:sqlite est synchrone. Un écrivain qui
+ * patiente bloque la boucle d'événements exactement comme le faisait
+ * l'attente active de writeWithRetry. La granularité change — une ligne au
+ * lieu d'un mois de 21 Mo — pas la nature de l'attente.
  *
  * EMPLACEMENT — la base vit HORS du dossier OneDrive. Un fichier SQLite dans
  * un dossier synchronisé est plus risqué que des fichiers JSON : verrous,
@@ -30,10 +37,33 @@ import { TEAM_COLUMNS, PLAYER_COLUMNS, PERCENT_TEAM_KEYS, POSITIVE_TEAM_KEYS, PO
 
 export function resolveDbPath() {
   if (process.env.MATCH_STATS_DB) return process.env.MATCH_STATS_DB;
-  const base = process.env.LOCALAPPDATA
-    ? path.join(process.env.LOCALAPPDATA, 'CoteMaster')
-    : path.join(os.homedir(), '.cotemaster');
+  const local = process.env.LOCALAPPDATA;
+  // Une tâche planifiée lancée sous un autre compte (SYSTEM) voit un
+  // LOCALAPPDATA différent — C:\Windows\system32\config\systemprofile\… — et
+  // se créerait SA PROPRE base, à côté, sans que rien ne le signale. Mieux
+  // vaut s'arrêter et réclamer un chemin explicite que travailler des
+  // semaines sur deux magasins qu'on croit n'en faire qu'un.
+  if (local && /systemprofile|ServiceProfiles/i.test(local)) {
+    throw new Error(
+      "LOCALAPPDATA désigne un profil de service : la base serait créée à part. " +
+      'Définissez MATCH_STATS_DB sur le chemin de la base à utiliser.'
+    );
+  }
+  const base = local ? path.join(local, 'CoteMaster') : path.join(os.homedir(), '.cotemaster');
   return path.join(base, 'match-stats.db');
+}
+
+/**
+ * Copie cohérente de la base, même pendant que l'application écrit. Les 41
+ * fichiers JSON vivaient dans OneDrive, donc versionnés et restaurables ;
+ * sortir la base de OneDrive était juste, mais la prive de ce filet. Tant
+ * que la double écriture dure, le JSON reste ce filet — après, c'est ceci.
+ */
+export function backupTo(destination, { database = openDb() } = {}) {
+  fs.mkdirSync(path.dirname(path.resolve(destination)), { recursive: true });
+  fs.rmSync(destination, { force: true });
+  database.prepare('VACUUM INTO ?').run(path.resolve(destination));
+  return { file: path.resolve(destination), bytes: fs.statSync(destination).size };
 }
 
 const quote = (c) => `"${c}"`;
@@ -116,25 +146,46 @@ const DDL = [
   'CREATE INDEX IF NOT EXISTS idx_players_id ON players(player_id) WHERE player_id IS NOT NULL;'
 ];
 
-let db = null;
+/**
+ * Une connexion par fichier. Un simple `let db` renvoyait la connexion déjà
+ * ouverte SANS regarder le fichier demandé : `openDb({file: B})` après un
+ * `openDb({file: A})` rendait A, B n'était jamais créé, et tout ce qu'on
+ * croyait écrire dans B atterrissait dans A. L'option `--db` du script de
+ * migration était donc un piège silencieux.
+ */
+const connexions = new Map();
 
 export function openDb({ file = resolveDbPath(), readonly = false } = {}) {
-  if (db) return db;
-  fs.mkdirSync(path.dirname(file), { recursive: true });
-  db = new DatabaseSync(file, { readOnly: readonly });
+  const chemin = path.resolve(file);
+  const ouverte = connexions.get(chemin);
+  if (ouverte) return ouverte;
+  fs.mkdirSync(path.dirname(chemin), { recursive: true });
+  const db = new DatabaseSync(chemin, { readOnly: readonly });
   // WAL : un lecteur n'attend plus un écrivain. busy_timeout : deux imports
   // simultanés patientent au lieu d'échouer.
   db.exec('PRAGMA journal_mode = WAL;');
   db.exec('PRAGMA busy_timeout = 15000;');
   db.exec('PRAGMA foreign_keys = ON;');
   db.exec('PRAGMA synchronous = NORMAL;');
+  // Un lecteur qui tient une transaction empêche la troncature du journal,
+  // et /api/match-stats/coverage est réinterrogé toutes les 5 secondes : sans
+  // plafond, le -wal grossit sans jamais redescendre. La limite le fait
+  // retailler à chaque occasion où la troncature devient possible.
+  db.exec('PRAGMA journal_size_limit = 67108864;');
   if (!readonly) for (const sql of DDL) db.exec(sql);
+  connexions.set(chemin, db);
   return db;
 }
 
-export function closeDb() {
-  if (db) { db.close(); db = null; }
-  statements = null;
+export function closeDb(file = null) {
+  const cibles = file ? [path.resolve(file)] : [...connexions.keys()];
+  for (const chemin of cibles) {
+    const db = connexions.get(chemin);
+    if (!db) continue;
+    statements.delete(db);
+    db.close();
+    connexions.delete(chemin);
+  }
 }
 
 /** `55%` -> 55. Le pourcentage est un nombre ; le signe relève de l'affichage. */
@@ -210,17 +261,22 @@ const MATCH_UPSERT = [
   '  sources  = excluded.sources'
 ].join('\n');
 
-let statements = null;
+// Les requêtes préparées appartiennent à UNE connexion : les garder dans une
+// variable unique les aurait rejouées contre la mauvaise base dès qu'une
+// seconde s'ouvre (migration avec --db, tests en bac à sable).
+const statements = new Map();
 function prepared(database) {
-  if (statements) return statements;
-  statements = {
+  const connu = statements.get(database);
+  if (connu) return connu;
+  const jeu = {
     match: database.prepare(MATCH_UPSERT),
     team: database.prepare(buildUpsert('team_stats', TEAM_COLUMNS, ['match_key', 'side'])),
     player: database.prepare(buildUpsert('players', PLAYER_COLUMNS, ['match_key', 'side', 'player_key'], ['ord'])),
     existingPlayers: database.prepare('SELECT player_key, player_id, name, shirt_number, ord FROM players WHERE match_key = ? AND side = ?'),
     existingSources: database.prepare('SELECT sources FROM matches WHERE match_key = ?')
   };
-  return statements;
+  statements.set(database, jeu);
+  return jeu;
 }
 
 /**
@@ -233,7 +289,17 @@ export function upsertMatches(entries, { database = openDb() } = {}) {
   const report = { created: 0, updated: 0, skipped: 0, playersMerged: 0, warnings: [] };
   const now = new Date().toISOString();
 
-  database.exec('BEGIN');
+  // IMMEDIATE, et non le BEGIN différé par défaut. upsertMatches lit
+  // l'existant avant d'écrire ; une transaction différée prend d'abord un
+  // instantané de lecture, et si un autre écrivain valide entre-temps, le
+  // passage en écriture échoue AUSSITÔT sur SQLITE_BUSY_SNAPSHOT (517) —
+  // erreur sur laquelle busy_timeout n'a, par construction, aucun effet.
+  // Mesuré à trois processus concurrents : 249 transactions perdues sur 360
+  // en différé, aucune en IMMEDIATE. IMMEDIATE prend le verrou d'écriture
+  // dès le départ, ce qui rend l'attente réellement gouvernée par
+  // busy_timeout. Contrepartie assumée : node:sqlite étant synchrone, cette
+  // attente bloque la boucle d'événements, comme le faisait writeWithRetry.
+  database.exec('BEGIN IMMEDIATE');
   try {
     for (const entry of entries) {
       const { date, homeName, awayName } = entry;
@@ -300,7 +366,10 @@ export function upsertMatches(entries, { database = openDb() } = {}) {
     }
     database.exec('COMMIT');
   } catch (error) {
-    database.exec('ROLLBACK');
+    // Sur disque plein ou erreur d'E/S, SQLite a déjà annulé la transaction
+    // tout seul : le ROLLBACK explicite échoue alors à son tour et
+    // remplacerait la vraie cause par un « cannot rollback » sans intérêt.
+    try { database.exec('ROLLBACK'); } catch { /* déjà annulée */ }
     throw error;
   }
   return report;

@@ -21,12 +21,13 @@
  *   --verify-only  ne migre pas, vérifie seulement
  *   --db <chemin>  emplacement de la base (défaut : hors OneDrive)
  *   --limit <n>    ne traite que les n premiers fichiers (mise au point)
+ *   --backup <f>   copie coherente de la base (VACUUM INTO), sans rien migrer
  */
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { openDb, upsertMatches, closeDb, resolveDbPath } from '../src/data/db/matchStatsDb.js';
+import { openDb, upsertMatches, closeDb, resolveDbPath, backupTo } from '../src/data/db/matchStatsDb.js';
 import { TEAM_COLUMNS, PLAYER_COLUMNS, PERCENT_TEAM_KEYS } from '../src/data/db/columns.js';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -165,6 +166,15 @@ async function main() {
   const verifyOnly = flag('--verify-only');
 
   console.log(`Base : ${file}`);
+
+  // Copie cohérente, même pendant que l'application écrit.
+  const backup = value('--backup');
+  if (backup) {
+    const r = backupTo(backup, { database: openDb({ file }) });
+    console.log(`Sauvegarde : ${(r.bytes / 1024 / 1024).toFixed(1)} Mo -> ${r.file}`);
+    closeDb();
+    return;
+  }
   if (!verifyOnly) {
     console.log(`Source : ${MATCH_STATS_DIR}\n`);
     const { totals } = migrate({ file, fresh: flag('--fresh'), limit });
