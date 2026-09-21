@@ -257,10 +257,20 @@ export function ensureRegistries({ database = openDb() } = {}) {
 export function findTeams(name, { database = openDb() } = {}) {
   const cle = slug(name);
   if (!cle) return [];
+  // Un club par ligne, pas un ALIAS par ligne. La version qui ne groupait
+  // pas rendait deux lignes pour l'Atlético Madrid — « Atlético Madrid » et
+  // « Atletico Madrid », le même club — et tout appelant qui lisait cette
+  // liste comme « plusieurs candidats donc ambigu » retombait sur le nom
+  // exact. Cela désactivait silencieusement la recherche par identifiant
+  // pour les 164 clubs que les sources écrivent de plus d'une façon,
+  // c'est-à-dire précisément ceux pour lesquels elle sert.
   return database.prepare(`
-    SELECT t.team_id AS teamId, t.name, t.league, t.played, a.alias, a.seen
+    SELECT t.team_id AS teamId, t.name, t.league, t.played, SUM(a.seen) AS seen,
+           GROUP_CONCAT(a.alias, ' / ') AS aliases
     FROM team_aliases a JOIN teams t ON t.team_id = a.team_id
-    WHERE a.slug = ? ORDER BY a.seen DESC, t.played DESC
+    WHERE a.slug = ?
+    GROUP BY t.team_id
+    ORDER BY seen DESC, t.played DESC
   `).all(cle);
 }
 

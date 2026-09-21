@@ -11,6 +11,7 @@ import {
 import { resolveLeagueId, resolveCurrentSeason } from './leagueRegistry.js';
 import { getResultsForTeam } from '../repositories/matchResultsRepository.js';
 import { getTeamWebAverages, getTeamSquad } from '../repositories/matchStatsWebRepository.js';
+import { teamFormFromStore } from '../db/matchStatsRead.js';
 import { resolveLineupViaWeb, resolvePlayersViaWeb } from '../../core/ai/webLookupService.js';
 import { getTeamProfile } from '../repositories/teamProfileRepository.js';
 
@@ -187,6 +188,20 @@ export async function resolveTeamFormByName(name, league, sampleSize) {
 }
 
 async function resolveSingleTeamForm(request, sampleSize) {
+  // Le magasin local d'abord — il est alimenté par FotMob, couvre la saison
+  // EN COURS et les championnats hors plan API-Football. C'était le dernier
+  // point du projet à demander autre chose que des cotes à une API payante,
+  // et il partait une fois par équipe et par match de la liste.
+  try {
+    const local = teamFormFromStore(request.name, { league: request.league, sampleSize });
+    if (local.totalPlayed > 0) {
+      return { teamId: local.teamId, teamName: request.name, form: local, source: 'store' };
+    }
+  } catch (error) {
+    console.warn(`[forme] magasin indisponible pour ${request.name} : ${error.message}`);
+  }
+
+  // Repli, et seulement si le magasin ne connaît pas encore cette équipe.
   try {
     const leagueId = await resolveLeagueId(request.league);
     if (!leagueId) return null;
@@ -195,7 +210,7 @@ async function resolveSingleTeamForm(request, sampleSize) {
     if (!team) return null;
 
     const form = await getRecentForm(team.id, leagueId, resolveCurrentSeason(), sampleSize);
-    return { teamId: team.id, teamName: team.name, form };
+    return { teamId: team.id, teamName: team.name, form, source: 'api-football' };
   } catch {
     return null;
   }

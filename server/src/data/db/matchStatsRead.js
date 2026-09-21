@@ -307,6 +307,64 @@ export function playerSeasonStats({
     .all(...args, ...(position ? [position] : []), minMinutes, limit);
 }
 
+/**
+ * Forme récente d'une équipe, lue dans le magasin.
+ *
+ * Même forme de retour que `getRecentForm()` (teamStatsService.js), qui
+ * interrogeait API-Football : c'était le DERNIER point du projet à demander
+ * autre chose que des cotes à une API payante, et il était appelé pour
+ * chaque équipe de chaque match de la liste.
+ *
+ * Le magasin rend mieux que ce qu'il remplace : la saison en cours (le plan
+ * gratuit s'arrêtait à 2024) et les championnats ajoutés depuis, que le plan
+ * ne couvre pas du tout.
+ *
+ * L'équipe est désignée par son IDENTIFIANT dès que l'annuaire sait de qui
+ * il s'agit — sinon la comparaison retombe sur le nom, et une équipe dont la
+ * source varie l'orthographe perdait la moitié de ses rencontres.
+ */
+export function teamFormFromStore(teamName, { league = null, sampleSize = null, database = openDb() } = {}) {
+  ensureRegistries({ database });
+  const clubs = findTeams(teamName, { database });
+  const teamId = clubs.length === 1 ? clubs[0].teamId : null;
+
+  const COLONNES = 'match_key, fotmob_id, date, home_name, away_name, home_id, away_id, home_goals, away_goals';
+  // Un match sans score n'est pas un match joué : les rencontres à venir du
+  // calendrier vivent dans la même table.
+  const joue = 'home_goals IS NOT NULL AND away_goals IS NOT NULL';
+  const filtreLigue = league ? ' AND league = ?' : '';
+  const cote = (colonne) => `SELECT ${COLONNES} FROM matches WHERE ${colonne} = ? AND ${joue}${filtreLigue}`;
+
+  // Deux requêtes réunies plutôt qu'un OR : un OR sur deux colonnes
+  // différentes empêche SQLite d'utiliser l'un ou l'autre index et lui fait
+  // balayer le championnat entier — 137 ms contre 21 ms mesurées.
+  const [cleA, cleB] = teamId ? ['home_id', 'away_id'] : ['home_name', 'away_name'];
+  const valeur = teamId ?? teamName;
+  const args = league ? [valeur, league, valeur, league] : [valeur, valeur];
+  const rows = database.prepare(
+    `${cote(cleA)} UNION ALL ${cote(cleB)} ORDER BY date DESC`
+  ).all(...args);
+
+  const total = rows.length;
+  const retenues = sampleSize ? rows.slice(0, sampleSize) : rows;
+  const matches = retenues.map((r) => {
+    const home = teamId ? r.home_id === teamId : r.home_name === teamName;
+    const pour = home ? r.home_goals : r.away_goals;
+    const contre = home ? r.away_goals : r.home_goals;
+    return {
+      fixtureId: r.fotmob_id ?? r.match_key,
+      result: pour > contre ? 'V' : pour === contre ? 'N' : 'D',
+      opponent: home ? r.away_name : r.home_name,
+      opponentId: (home ? r.away_id : r.home_id) ?? null,
+      score: `${pour}-${contre}`,
+      date: r.date,
+      home
+    };
+  });
+
+  return { matches, sampleSize: matches.length, totalPlayed: total, requestedSampleSize: sampleSize, teamId };
+}
+
 /** Saisons couvertes par une compétition, la plus récente d'abord. */
 export function seasonsForLeague(league, { database = openDb() } = {}) {
   return database
