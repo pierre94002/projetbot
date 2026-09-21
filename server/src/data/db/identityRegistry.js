@@ -173,9 +173,17 @@ export function rebuildRegistries({ database = openDb() } = {}) {
     const insAliasEquipe = db.prepare(
       'INSERT INTO team_aliases (slug, team_id, alias, seen) VALUES (?,?,?,?)'
     );
+    // Le nom que FotMob emploie LUI-MÊME l'emporte sur le plus fréquent du
+    // magasin. Sans cela, l'Atlético Madrid s'affichait « Ath Madrid » :
+    // cette écriture vient des fichiers historiques de football-data.co.uk,
+    // qui pèsent plus lourd en nombre de lignes que les relevés FotMob, et
+    // la majorité désignait donc le nom le moins lisible des trois.
+    const nomSource = new Map(
+      db.prepare('SELECT team_id, name FROM team_source_names').all().map((r) => [r.team_id, r.name])
+    );
     const nomDuClub = new Map();
     for (const [id, c] of clubs) {
-      const nom = dominante(c.noms);
+      const nom = nomSource.get(id) ?? dominante(c.noms);
       nomDuClub.set(id, nom);
       // Le championnat RÉCENT, pas le plus fréquent : un promu appartient à
       // sa nouvelle division, même si son historique pèse encore l'ancienne.
@@ -210,6 +218,8 @@ export function rebuildRegistries({ database = openDb() } = {}) {
     try { db.exec('ROLLBACK'); } catch { /* déjà annulée */ }
     throw error;
   }
+
+  nomsEnCache.delete(db);
 
   return {
     teams: db.prepare('SELECT COUNT(*) n FROM teams').get().n,
@@ -291,6 +301,27 @@ export function findPeople(name, { database = openDb(), league = null } = {}) {
     WHERE a.slug = ?${league ? ' AND p.team_id IN (SELECT team_id FROM teams WHERE league = ?)' : ''}
     ORDER BY a.seen DESC, p.appearances DESC`;
   return league ? database.prepare(sql).all(cle, league) : database.prepare(sql).all(cle);
+}
+
+/**
+ * Table identifiant -> nom canonique, tenue en mémoire.
+ *
+ * Les colonnes `home_name`/`away_name` gardent l'écriture de la source qui a
+ * créé la rencontre : la feuille de match d'Eintracht Frankfurt s'y appelle
+ * encore « Ein Frankfurt ». Pour l'affichage, c'est l'annuaire qui fait foi.
+ *
+ * 519 clubs : le cache tient dans rien, et il évite une requête par ligne
+ * dans les listes de rencontres. Il est invalidé par la reconstruction, qui
+ * est le seul moment où ces noms changent.
+ */
+const nomsEnCache = new Map();
+export function canonicalTeamNames({ database = openDb() } = {}) {
+  let table = nomsEnCache.get(database);
+  if (!table) {
+    table = new Map(database.prepare('SELECT team_id, name FROM teams').all().map((r) => [r.team_id, r.name]));
+    nomsEnCache.set(database, table);
+  }
+  return table;
 }
 
 /** Fiche d'annuaire d'un club. */

@@ -187,6 +187,11 @@ const REGISTRY_DDL = [
   seen INTEGER NOT NULL DEFAULT 0,
   PRIMARY KEY (player_id, alias)
 ) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS team_source_names (
+  team_id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  updated_at TEXT
+) WITHOUT ROWID;`,
   'CREATE INDEX IF NOT EXISTS idx_teams_slug ON teams(slug);',
   'CREATE INDEX IF NOT EXISTS idx_team_aliases_slug ON team_aliases(slug);',
   'CREATE INDEX IF NOT EXISTS idx_people_slug ON people(slug);',

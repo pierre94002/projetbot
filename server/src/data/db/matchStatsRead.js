@@ -18,7 +18,7 @@
 
 import { openDb } from './matchStatsDb.js';
 import { TEAM_COLUMNS, PLAYER_COLUMNS, PERCENT_TEAM_KEYS } from './columns.js';
-import { IDENTITY_SQL, ensureRegistries, findTeams } from './identityRegistry.js';
+import { IDENTITY_SQL, ensureRegistries, findTeams, canonicalTeamNames } from './identityRegistry.js';
 
 const BOOLEAN_KEYS = new Set(['starter', 'subbedIn']);
 
@@ -307,33 +307,21 @@ export function playerSeasonStats({
     .all(...args, ...(position ? [position] : []), minMinutes, limit);
 }
 
+
 /**
- * Forme récente d'une équipe, lue dans le magasin.
- *
- * Même forme de retour que `getRecentForm()` (teamStatsService.js), qui
- * interrogeait API-Football : c'était le DERNIER point du projet à demander
- * autre chose que des cotes à une API payante, et il était appelé pour
- * chaque équipe de chaque match de la liste.
- *
- * Le magasin rend mieux que ce qu'il remplace : la saison en cours (le plan
- * gratuit s'arrêtait à 2024) et les championnats ajoutés depuis, que le plan
- * ne couvre pas du tout.
- *
- * L'équipe est désignée par son IDENTIFIANT dès que l'annuaire sait de qui
- * il s'agit — sinon la comparaison retombe sur le nom, et une équipe dont la
- * source varie l'orthographe perdait la moitié de ses rencontres.
+ * Rencontres jouées d'une équipe, de la plus récente à la plus ancienne,
+ * avec son camp. Socle commun aux moyennes de buts, de corners et à la forme
+ * — toutes trois partaient auparavant chacune vers API-Football.
  */
-export function teamFormFromStore(teamName, { league = null, sampleSize = null, database = openDb() } = {}) {
+function rencontresJouees(teamName, { league = null, database = openDb() } = {}) {
   ensureRegistries({ database });
   const clubs = findTeams(teamName, { database });
   const teamId = clubs.length === 1 ? clubs[0].teamId : null;
 
   const COLONNES = 'match_key, fotmob_id, date, home_name, away_name, home_id, away_id, home_goals, away_goals';
-  // Un match sans score n'est pas un match joué : les rencontres à venir du
-  // calendrier vivent dans la même table.
   const joue = 'home_goals IS NOT NULL AND away_goals IS NOT NULL';
   const filtreLigue = league ? ' AND league = ?' : '';
-  const cote = (colonne) => `SELECT ${COLONNES} FROM matches WHERE ${colonne} = ? AND ${joue}${filtreLigue}`;
+  const cote = (colonne, camp) => `SELECT ${COLONNES}, '${camp}' AS camp FROM matches WHERE ${colonne} = ? AND ${joue}${filtreLigue}`;
 
   // Deux requêtes réunies plutôt qu'un OR : un OR sur deux colonnes
   // différentes empêche SQLite d'utiliser l'un ou l'autre index et lui fait
@@ -341,28 +329,213 @@ export function teamFormFromStore(teamName, { league = null, sampleSize = null, 
   const [cleA, cleB] = teamId ? ['home_id', 'away_id'] : ['home_name', 'away_name'];
   const valeur = teamId ?? teamName;
   const args = league ? [valeur, league, valeur, league] : [valeur, valeur];
-  const rows = database.prepare(
-    `${cote(cleA)} UNION ALL ${cote(cleB)} ORDER BY date DESC`
-  ).all(...args);
+  const rows = database
+    .prepare(`${cote(cleA, 'home')} UNION ALL ${cote(cleB, 'away')} ORDER BY date DESC`)
+    .all(...args);
+  return { teamId, rows };
+}
 
-  const total = rows.length;
+/**
+ * Forme récente d'une équipe, lue dans le magasin.
+ *
+ * Même forme de retour que `getRecentForm()` (teamStatsService.js), qui
+ * interrogeait API-Football : c'était l'un des derniers points du projet à
+ * demander autre chose que des cotes à une API payante, et il était appelé
+ * pour chaque équipe de chaque match de la liste.
+ *
+ * Le magasin rend mieux que ce qu'il remplace : la saison en cours (le plan
+ * gratuit s'arrêtait à 2024) et les championnats ajoutés depuis, que le plan
+ * ne couvre pas du tout.
+ */
+export function teamFormFromStore(teamName, { league = null, sampleSize = null, database = openDb() } = {}) {
+  const { teamId, rows } = rencontresJouees(teamName, { league, database });
   const retenues = sampleSize ? rows.slice(0, sampleSize) : rows;
+  // Le nom de l'adversaire vient de l'annuaire : les colonnes gardent
+  // l'écriture de la source qui a créé la rencontre, et le même club y
+  // change de nom d'une ligne à l'autre.
+  const canon = canonicalTeamNames({ database });
   const matches = retenues.map((r) => {
-    const home = teamId ? r.home_id === teamId : r.home_name === teamName;
+    const home = r.camp === 'home';
     const pour = home ? r.home_goals : r.away_goals;
     const contre = home ? r.away_goals : r.home_goals;
     return {
       fixtureId: r.fotmob_id ?? r.match_key,
       result: pour > contre ? 'V' : pour === contre ? 'N' : 'D',
-      opponent: home ? r.away_name : r.home_name,
+      opponent: canon.get(home ? r.away_id : r.home_id) ?? (home ? r.away_name : r.home_name),
       opponentId: (home ? r.away_id : r.home_id) ?? null,
       score: `${pour}-${contre}`,
       date: r.date,
       home
     };
   });
+  return { matches, sampleSize: matches.length, totalPlayed: rows.length, requestedSampleSize: sampleSize, teamId };
+}
 
-  return { matches, sampleSize: matches.length, totalPlayed: total, requestedSampleSize: sampleSize, teamId };
+/**
+ * Moyennes de buts marqués et encaissés, au format de `getGoalsAverage()`.
+ *
+ * Calculées, et non recopiées : API-Football publiait des moyennes déjà
+ * faites, le magasin a les scores. La répartition domicile/extérieur est
+ * donc exacte plutôt qu'arrondie à deux décimales par la source.
+ *
+ * `null` quand l'équipe n'a aucune rencontre jouée en magasin — l'appelant
+ * doit pouvoir distinguer « zéro but » de « on ne sait pas ».
+ */
+export function teamGoalsFromStore(teamName, { league = null, sampleSize = null, database = openDb() } = {}) {
+  const { teamId, rows } = rencontresJouees(teamName, { league, database });
+  const retenues = sampleSize ? rows.slice(0, sampleSize) : rows;
+  if (!retenues.length) return null;
+
+  const cumul = { home: { pour: 0, contre: 0, n: 0 }, away: { pour: 0, contre: 0, n: 0 } };
+  for (const r of retenues) {
+    const c = cumul[r.camp];
+    c.pour += r.camp === 'home' ? r.home_goals : r.away_goals;
+    c.contre += r.camp === 'home' ? r.away_goals : r.home_goals;
+    c.n++;
+  }
+  const moy = (somme, n) => (n ? Number((somme / n).toFixed(2)) : null);
+  const totalN = cumul.home.n + cumul.away.n;
+
+  return {
+    for: {
+      home: moy(cumul.home.pour, cumul.home.n),
+      away: moy(cumul.away.pour, cumul.away.n),
+      total: moy(cumul.home.pour + cumul.away.pour, totalN)
+    },
+    against: {
+      home: moy(cumul.home.contre, cumul.home.n),
+      away: moy(cumul.away.contre, cumul.away.n),
+      total: moy(cumul.home.contre + cumul.away.contre, totalN)
+    },
+    fixturesPlayed: totalN,
+    teamId
+  };
+}
+
+/**
+ * Moyenne de corners, au format de `getCornersAverage()`.
+ *
+ * L'ancienne version coûtait un appel API PAR MATCH de l'échantillon, le
+ * détail d'une rencontre étant le seul endroit où API-Football publie les
+ * corners. Le magasin les a déjà, dans la colonne du relevé d'équipe.
+ */
+export function teamCornersFromStore(teamName, { league = null, sampleSize = 5, database = openDb() } = {}) {
+  const { rows } = rencontresJouees(teamName, { league, database });
+  const retenues = sampleSize ? rows.slice(0, sampleSize) : rows;
+  if (!retenues.length) return { average: null, sampleSize: 0, requestedSampleSize: sampleSize };
+
+  const valeurs = [];
+  const lire = database.prepare('SELECT "corner_kicks" AS c FROM team_stats WHERE match_key = ? AND side = ?');
+  for (const r of retenues) {
+    const v = lire.get(r.match_key, r.camp)?.c;
+    if (v !== null && v !== undefined) valeurs.push(Number(v));
+  }
+  return {
+    average: valeurs.length ? Number((valeurs.reduce((s, v) => s + v, 0) / valeurs.length).toFixed(2)) : null,
+    sampleSize: valeurs.length,
+    requestedSampleSize: sampleSize
+  };
+}
+
+/**
+ * Une rencontre du magasin par l'identifiant FotMob, la clé, ou le couple
+ * équipe à domicile + date. Trois entrées, une seule sortie.
+ */
+function rencontreParReference({ fixtureId = null, homeName = null, date = null, database = openDb() }) {
+  if (fixtureId != null) {
+    const m = database
+      .prepare('SELECT * FROM matches WHERE fotmob_id = ? OR match_key = ? OR match_id = ?')
+      .get(String(fixtureId), String(fixtureId), String(fixtureId));
+    if (m) return m;
+  }
+  if (homeName && date) {
+    ensureRegistries({ database });
+    const clubs = findTeams(homeName, { database });
+    const teamId = clubs.length === 1 ? clubs[0].teamId : null;
+    return teamId
+      ? database.prepare('SELECT * FROM matches WHERE home_id = ? AND date = ?').get(teamId, date)
+      : database.prepare('SELECT * FROM matches WHERE home_name = ? AND date = ?').get(homeName, date);
+  }
+  return null;
+}
+
+/**
+ * Statistiques détaillées d'une rencontre, au format de
+ * `getFixtureStatistics()` : une entrée par équipe.
+ *
+ * Devenu indispensable, et pas seulement souhaitable : la forme récente
+ * rend désormais l'identifiant FotMob de chaque rencontre, et le passer à
+ * API-Football n'aurait aucun sens — les deux sources ne numérotent pas les
+ * matchs pareil.
+ */
+export function fixtureStatsFromStore(fixtureId, { database = openDb() } = {}) {
+  const m = rencontreParReference({ fixtureId, database });
+  if (!m) return [];
+  const releves = database.prepare('SELECT * FROM team_stats WHERE match_key = ?').all(m.match_key);
+  const canon = canonicalTeamNames({ database });
+  return ['home', 'away'].map((side) => ({
+    teamId: (side === 'home' ? m.home_id : m.away_id) ?? null,
+    teamName: canon.get(side === 'home' ? m.home_id : m.away_id) ?? (side === 'home' ? m.home_name : m.away_name),
+    home: side === 'home',
+    goals: side === 'home' ? m.home_goals : m.away_goals,
+    stats: teamStatsFromRow(releves.find((r) => r.side === side))
+  })).filter((t) => Object.keys(t.stats).length || t.goals !== null);
+}
+
+/**
+ * Composition d'une rencontre, au format de `getLiveLineups()`.
+ *
+ * Le magasin porte la formation et l'entraîneur dans `lineups`, et le rang
+ * de chaque joueur sur la feuille dans `players.ord` — c'est-à-dire l'ordre
+ * publié par la source, que l'on ne saurait pas reconstituer autrement.
+ */
+export function lineupsFromStore(homeName, isoDate, { database = openDb() } = {}) {
+  const m = rencontreParReference({ homeName, date: String(isoDate).slice(0, 10), database });
+  if (!m) return { available: false, reason: 'fixture_not_found' };
+
+  const lignes = database
+    .prepare('SELECT * FROM players WHERE match_key = ? ORDER BY side, ord')
+    .all(m.match_key);
+  if (!lignes.length) return { available: false, reason: 'not_published_yet' };
+
+  const cadre = parse(m.lineups) ?? {};
+  const canon = canonicalTeamNames({ database });
+  const camp = (side) => {
+    const joueurs = lignes.filter((r) => r.side === side).map(playerFromRow);
+    return {
+      teamId: (side === 'home' ? m.home_id : m.away_id) ?? null,
+      teamName: canon.get(side === 'home' ? m.home_id : m.away_id) ?? (side === 'home' ? m.home_name : m.away_name),
+      formation: cadre[side]?.formation ?? null,
+      coach: cadre[side]?.coach ?? null,
+      startXI: joueurs.filter((p) => p.starter === true),
+      substitutes: joueurs.filter((p) => p.starter !== true)
+    };
+  };
+  return { available: true, source: 'fotmob', fixtureId: m.fotmob_id ?? m.match_key, date: m.date, home: camp('home'), away: camp('away') };
+}
+
+/**
+ * Score et statistiques d'une rencontre, au format de
+ * `getLiveMatchDetails()`.
+ */
+export function matchDetailsFromStore(homeName, isoDate, { database = openDb() } = {}) {
+  const m = rencontreParReference({ homeName, date: String(isoDate).slice(0, 10), database });
+  if (!m) return { available: false, reason: 'fixture_not_found' };
+  if (m.home_goals === null || m.away_goals === null) return { available: false, reason: 'not_played_yet' };
+
+  const [home, away] = fixtureStatsFromStore(m.fotmob_id ?? m.match_key, { database });
+  return {
+    available: true,
+    source: 'fotmob',
+    fixtureId: m.fotmob_id ?? m.match_key,
+    date: m.date,
+    league: m.league,
+    status: 'FT',
+    score: { home: m.home_goals, away: m.away_goals },
+    teams: { home: { name: home?.teamName ?? m.home_name, id: m.home_id }, away: { name: away?.teamName ?? m.away_name, id: m.away_id } },
+    stats: { home: home?.stats ?? {}, away: away?.stats ?? {} },
+    events: parse(m.events) ?? []
+  };
 }
 
 /** Saisons couvertes par une compétition, la plus récente d'abord. */

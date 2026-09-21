@@ -34,10 +34,83 @@ const flag = (name) => {
   return i >= 0 ? args[i + 1] : null;
 };
 const DRY = args.includes('--dry-run');
+const NOMS = args.includes('--names');
 const FROM = flag('--from');
 const TO = flag('--to');
 
 const db = openDb();
+
+/**
+ * Relève le nom que FotMob emploie lui-même pour chaque club.
+ *
+ * Le magasin retient l'écriture la plus fréquente, et la fréquence vient
+ * surtout des fichiers historiques de football-data.co.uk : l'Atlético
+ * Madrid s'y appelle « Ath Madrid ». Ce n'est pas le nom de FotMob, et
+ * puisque tout doit venir de FotMob, le nom aussi.
+ *
+ * On remonte le temps et on s'arrête dès que tous les clubs connus ont un
+ * nom — une saison suffit pour ceux qui jouent encore, inutile de refaire
+ * les 921 journées.
+ */
+async function releverLesNoms() {
+  const manquants = new Set(
+    db.prepare('SELECT team_id FROM teams WHERE team_id NOT IN (SELECT team_id FROM team_source_names)').all().map((r) => r.team_id)
+  );
+  console.log(`${manquants.size} club(s) sans nom de source.`);
+  if (!manquants.size) return;
+
+  const dates = db.prepare('SELECT DISTINCT date FROM matches ORDER BY date DESC').all().map((r) => r.date);
+  const poser = db.prepare('INSERT INTO team_source_names (team_id, name, updated_at) VALUES (?,?,?) ON CONFLICT (team_id) DO UPDATE SET name = excluded.name, updated_at = excluded.updated_at');
+  const maintenant = new Date().toISOString();
+  let journees = 0;
+
+  for (const date of dates) {
+    if (!manquants.size) break;
+    journees++;
+    let jour;
+    try {
+      jour = await fetchMatchesByDate(date);
+    } catch (error) {
+      console.warn(`  ${date} : ${error.message}`);
+      continue;
+    }
+    const lot = [];
+    for (const m of jour) {
+      for (const [id, nom] of [[m.homeId, m.homeName], [m.awayId, m.awayName]]) {
+        if (!id || !nom || !manquants.has(id)) continue;
+        lot.push([id, nom]);
+        manquants.delete(id);
+      }
+    }
+    if (lot.length && !DRY) {
+      db.exec('BEGIN IMMEDIATE');
+      try {
+        for (const [id, nom] of lot) poser.run(id, nom, maintenant);
+        db.exec('COMMIT');
+      } catch (error) {
+        try { db.exec('ROLLBACK'); } catch { /* déjà annulée */ }
+        throw error;
+      }
+    }
+    if (journees % 20 === 0) console.log(`  ${journees} journées remontées — ${manquants.size} club(s) encore sans nom`);
+  }
+
+  console.log(`${journees} journée(s) remontées. Clubs encore sans nom : ${manquants.size}`);
+  if (manquants.size) {
+    const restants = db.prepare(`SELECT name, league, last_seen FROM teams WHERE team_id IN (${[...manquants].map(() => '?').join(',')}) ORDER BY last_seen DESC LIMIT 10`).all(...manquants);
+    for (const r of restants) console.log(`    ${r.name} (${r.league}, vu jusqu'au ${r.last_seen})`);
+  }
+}
+
+if (NOMS) {
+  await releverLesNoms();
+  if (!DRY) {
+    console.log('\nReconstruction des annuaires…');
+    console.log(rebuildRegistries({ database: db }));
+  }
+  console.log('\nCouverture :', registryCoverage({ database: db }));
+  process.exit(0);
+}
 
 const dates = db.prepare(`
   SELECT DISTINCT date FROM matches

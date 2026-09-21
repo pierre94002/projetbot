@@ -6,12 +6,16 @@ import {
   getAverageMatchStats,
   getLiveLineups,
   getLiveMatchDetails,
-  getTeamPlayers
+  getTeamPlayers,
+  DEFAULT_FORM_SAMPLE_SIZE
 } from './teamStatsService.js';
 import { resolveLeagueId, resolveCurrentSeason } from './leagueRegistry.js';
 import { getResultsForTeam } from '../repositories/matchResultsRepository.js';
 import { getTeamWebAverages, getTeamSquad } from '../repositories/matchStatsWebRepository.js';
-import { teamFormFromStore } from '../db/matchStatsRead.js';
+import {
+  teamFormFromStore, teamGoalsFromStore, teamCornersFromStore,
+  lineupsFromStore, matchDetailsFromStore
+} from '../db/matchStatsRead.js';
 import { resolveLineupViaWeb, resolvePlayersViaWeb } from '../../core/ai/webLookupService.js';
 import { getTeamProfile } from '../repositories/teamProfileRepository.js';
 
@@ -39,19 +43,75 @@ export async function enrichMatchWithRealAverages(match, { includeCorners = fals
   const enrichedMatch = applyGoalsEnrichment(match, resolved);
   if (!includeCorners) return enrichedMatch;
 
-  const [homeCorners, awayCorners] = await Promise.all([
-    resolved.homeTeam
-      ? getCornersAverage(resolved.homeTeam.id, resolved.leagueId, resolved.season, cornersSampleSize)
-      : null,
-    resolved.awayTeam
-      ? getCornersAverage(resolved.awayTeam.id, resolved.leagueId, resolved.season, cornersSampleSize)
-      : null
-  ]);
+  // Le magasin a les corners dans le releve d'equipe de chaque rencontre.
+  // L'appel API en coutait UN PAR MATCH de l'echantillon, le detail d'une
+  // rencontre etant le seul endroit ou API-Football les publie.
+  const corners = (nom) =>
+    resolved.source === 'store'
+      ? teamCornersFromStore(nom, { league: match.league, sampleSize: cornersSampleSize ?? undefined })
+      : null;
+  const [homeCorners, awayCorners] = resolved.source === 'store'
+    ? [corners(match.home), corners(match.away)]
+    : await Promise.all([
+      resolved.homeTeam
+        ? getCornersAverage(resolved.homeTeam.id, resolved.leagueId, resolved.season, cornersSampleSize)
+        : null,
+      resolved.awayTeam
+        ? getCornersAverage(resolved.awayTeam.id, resolved.leagueId, resolved.season, cornersSampleSize)
+        : null
+    ]);
 
   return applyCornersEnrichment(enrichedMatch, homeCorners, awayCorners);
 }
 
+/**
+ * Moyennes de buts et forme des deux équipes, lues dans le magasin.
+ *
+ * C'est ici que le modèle prend ses entrées (`expectedGoals`), et c'était le
+ * dernier appel API-Football déclenché AUTOMATIQUEMENT, pour chaque match
+ * consulté. Le magasin est meilleur sur les trois points qui comptent : la
+ * saison en cours, les championnats hors plan gratuit, et la répartition
+ * domicile/extérieur, calculée sur les scores plutôt que recopiée d'une
+ * moyenne déjà arrondie.
+ *
+ * `null` si le magasin ne connaît NI l'une NI l'autre : le match repart
+ * alors inchangé sur la baseline de ligue, comme il le faisait quand la
+ * compétition n'était pas reconnue.
+ */
+function resolveGoalsFromStore(match) {
+  const lire = (nom) => {
+    try {
+      const buts = teamGoalsFromStore(nom, { league: match.league });
+      if (!buts) return null;
+      const forme = teamFormFromStore(nom, { league: match.league, sampleSize: DEFAULT_FORM_SAMPLE_SIZE });
+      return { team: { id: buts.teamId, name: nom }, goals: buts, form: forme };
+    } catch (error) {
+      console.warn(`[moyennes] magasin indisponible pour ${nom} : ${error.message}`);
+      return null;
+    }
+  };
+
+  const home = lire(match.home);
+  const away = lire(match.away);
+  if (!home && !away) return null;
+
+  return {
+    leagueId: null,
+    season: null,
+    homeTeam: home?.team ?? null,
+    awayTeam: away?.team ?? null,
+    homeGoals: blendGoalsWithLocalResults(home?.goals ?? null, match.home),
+    awayGoals: blendGoalsWithLocalResults(away?.goals ?? null, match.away),
+    homeForm: home?.form ?? null,
+    awayForm: away?.form ?? null,
+    source: 'store'
+  };
+}
+
 async function resolveGoalsEnrichment(match) {
+  const local = resolveGoalsFromStore(match);
+  if (local) return local;
+
   let leagueId;
   try {
     leagueId = await resolveLeagueId(match.league);
@@ -77,7 +137,7 @@ async function resolveGoalsEnrichment(match) {
   const homeGoals = blendGoalsWithLocalResults(homeGoalsRaw, match.home);
   const awayGoals = blendGoalsWithLocalResults(awayGoalsRaw, match.away);
 
-  return { leagueId, season, homeTeam, awayTeam, homeGoals, awayGoals, homeForm, awayForm };
+  return { leagueId, season, homeTeam, awayTeam, homeGoals, awayGoals, homeForm, awayForm, source: 'api-football' };
 }
 
 /**
@@ -123,7 +183,7 @@ function applyGoalsEnrichment(match, resolved) {
     ...match,
     expectedGoals:
       homeGoalsAvg != null && awayGoalsAvg != null
-        ? { home: homeGoalsAvg, away: awayGoalsAvg, provider: 'api-football' }
+        ? { home: homeGoalsAvg, away: awayGoalsAvg, provider: resolved.source === 'store' ? 'fotmob' : 'api-football' }
         : match.expectedGoals,
     teamStats: {
       home: { name: resolved.homeTeam?.name ?? match.home, goals: resolved.homeGoals, form: resolved.homeForm, corners: null },
@@ -251,6 +311,16 @@ export async function resolveAverageStatsByName(name, league, sampleSize) {
  * n'a pas de raison de réussir là où l'API a échoué.
  */
 export async function resolveLiveLineups(homeName, commenceTimeIso, awayName, league) {
+  // La feuille de match du magasin d'abord : elle porte la formation, le
+  // staff et le RANG de chaque joueur, c'est-à-dire l'ordre publié par la
+  // source, qu'on ne saurait pas reconstituer autrement.
+  try {
+    const local = lineupsFromStore(homeName, commenceTimeIso);
+    if (local.available) return local;
+  } catch (error) {
+    console.warn(`[compo] magasin indisponible pour ${homeName} : ${error.message}`);
+  }
+
   const team = await findBestTeamMatch(homeName).catch(() => null);
   const primary = team ? await getLiveLineups(team.id, commenceTimeIso.slice(0, 10), new Date(commenceTimeIso).getFullYear()) : { available: false, reason: 'team_not_found' };
 
@@ -265,6 +335,13 @@ export async function resolveLiveLineups(homeName, commenceTimeIso, awayName, le
  * date de coup d'envoi — même principe que resolveLiveLineups.
  */
 export async function resolveLiveMatchDetails(homeName, commenceTimeIso) {
+  try {
+    const local = matchDetailsFromStore(homeName, commenceTimeIso);
+    if (local.available) return local;
+  } catch (error) {
+    console.warn(`[match] magasin indisponible pour ${homeName} : ${error.message}`);
+  }
+
   const team = await findBestTeamMatch(homeName).catch(() => null);
   if (!team) return { available: false, reason: 'team_not_found' };
 

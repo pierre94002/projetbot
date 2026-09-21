@@ -7,6 +7,7 @@ import {
   resolveLiveMatchDetails,
   resolvePlayersByName
 } from '../../data/providers/matchEnrichment.js';
+import { fixtureStatsFromStore } from '../../data/db/matchStatsRead.js';
 import { ApiError } from '../middlewares/errorHandler.js';
 
 export async function getSearchTeams(req, res) {
@@ -153,11 +154,22 @@ export async function getPlayersByName(req, res) {
 
 /** Statistiques détaillées d'un match terminé (tirs, possession, corners, cartons, xG…). */
 export async function getFixtureStats(req, res) {
-  const fixtureId = Number(req.params.fixtureId);
+  const fixtureId = req.params.fixtureId;
   if (!fixtureId) throw new ApiError(400, 'Identifiant de match invalide.');
 
-  const teams = await getFixtureStatistics(fixtureId);
+  // Le magasin d'abord, et pas seulement par économie : la forme récente
+  // rend maintenant l'identifiant FotMob de chaque rencontre, et le passer à
+  // API-Football n'aurait aucun sens — les deux sources ne numérotent pas
+  // les matchs pareil. L'identifiant peut aussi être une clé de match.
+  const local = fixtureStatsFromStore(fixtureId);
+  if (local.length) return res.json({ fixtureId, teams: local, source: 'fotmob' });
+
+  // Repli : un identifiant API-Football, donc numérique.
+  const numerique = Number(fixtureId);
+  if (!numerique) throw new ApiError(404, `Statistiques introuvables pour le match ${fixtureId}.`);
+
+  const teams = await getFixtureStatistics(numerique);
   if (teams.length === 0) throw new ApiError(404, `Statistiques introuvables pour le match ${fixtureId}.`);
 
-  res.json({ fixtureId, teams });
+  res.json({ fixtureId, teams, source: 'api-football' });
 }
