@@ -1,7 +1,7 @@
 import { getStandingsByLeagueLabel } from '../../data/providers/standingsService.js';
 import { listWebStandingsLeagues } from '../../data/repositories/webStandingsRepository.js';
 import { storeStatus } from '../../data/db/matchStatsRead.js';
-import { ApiError, requireStringParam } from '../middlewares/errorHandler.js';
+import { ApiError, requireStringParam, optionalPositiveInt } from '../middlewares/errorHandler.js';
 
 /**
  * Compétitions dont un classement est réellement disponible en local.
@@ -23,11 +23,21 @@ export function getStandingsLeagues(req, res) {
   res.json({ leagues });
 }
 
+/**
+ * `season` est une année de DÉBUT de saison — 2023 désigne 2023-24. Absente,
+ * c'est la saison la plus récente du magasin. Une saison passée n'existe que
+ * là : les classements web et API-Football ne publient que celle en cours.
+ */
 export async function getStandings(req, res) {
   const league = requireStringParam(req.query.league, 'league');
+  const season = optionalPositiveInt(req.query.season, 'season');
 
-  const standings = await getStandingsByLeagueLabel(league);
-  if (!standings) throw new ApiError(404, `Compétition introuvable pour "${league}".`);
+  const standings = await getStandingsByLeagueLabel(league, { season: season ?? null });
+  if (!standings) {
+    throw new ApiError(404, season
+      ? `Aucun classement pour "${league}" en ${season}-${String(season + 1).slice(2)}.`
+      : `Compétition introuvable pour "${league}".`);
+  }
 
   res.json(standings);
 }

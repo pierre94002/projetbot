@@ -56,13 +56,17 @@ async function getApiFootballStandings(leagueLabel) {
  * championnat qui vient d'être ajouté, une coupe entre deux tours — mieux
  * vaut un classement venu d'ailleurs que pas de classement.
  */
-export async function getStandingsByLeagueLabel(leagueLabel) {
+export async function getStandingsByLeagueLabel(leagueLabel, { season = null } = {}) {
   try {
-    const local = standingsFromStore(leagueLabel);
+    const local = standingsFromStore(leagueLabel, { season });
     if (local?.rows?.length) return local;
   } catch (error) {
     console.warn(`[classement] magasin indisponible pour ${leagueLabel} : ${error.message}`);
   }
+  // Une saison PASSÉE ne se cherche que dans le magasin : les deux autres
+  // sources ne publient que la saison en cours, et leur répondre « voici le
+  // classement » pour une autre année serait un mensonge tranquille.
+  if (season) return null;
   return getWebStandings(leagueLabel) ?? getApiFootballStandings(leagueLabel);
 }
 
