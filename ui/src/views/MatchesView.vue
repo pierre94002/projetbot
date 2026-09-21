@@ -284,9 +284,9 @@ onMounted(() => {
       <div class="matches-view__secondary-actions">
         <AppButton variant="ghost" size="sm" :loading="matchesStore.loadingForm" @click="handleLoadForm">
           <template #icon><AppIcon name="trendUp" :size="14" /></template>
-          Charger les formes (API-Football)
+          Charger les formes
         </AppButton>
-        <span class="cm-text-muted matches-view__hint">Coûte jusqu'à 2 appels API par équipe unique de la liste — mis en cache.</span>
+        <span class="cm-text-muted matches-view__hint">Lu dans le magasin local (FotMob) — aucun appel facturé.</span>
       </div>
     </AppCard>
 
