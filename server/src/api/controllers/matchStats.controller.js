@@ -10,6 +10,7 @@ import {
   isRefreshRunning,
   refreshMatchStatsExclusive
 } from '../../data/providers/espnMatchStatsRefresh.js';
+import { playerSeasonStats, seasonsForLeague } from '../../data/db/matchStatsRead.js';
 import { ApiError, requireStringParam, optionalPositiveInt } from '../middlewares/errorHandler.js';
 
 /** Matchs d'une équipe avec stats d'équipe complètes + stats joueurs, match par match (import quotidien 7h30). */
@@ -39,6 +40,36 @@ export function getMatchStats(req, res) {
 
 export function getMatchStatsInfo(req, res) {
   res.json(getMatchStatsStatus());
+}
+
+/**
+ * Classement des joueurs d'une compétition, agrégé par la base.
+ *
+ * Distinct de `/team-stats/players-by-name`, qui interroge API-Football :
+ * celui-ci lit le magasin local (FotMob/ESPN), donc il couvre la saison en
+ * cours et les championnats hors plan gratuit.
+ */
+export function getPlayerStats(req, res) {
+  const league = requireStringParam(req.query.league, 'league');
+  const season = optionalPositiveInt(req.query.season, 'season');
+  const team = req.query.team === undefined || req.query.team === '' ? null : requireStringParam(req.query.team, 'team');
+  const minMinutes = optionalPositiveInt(req.query.minMinutes, 'minMinutes');
+  const limit = optionalPositiveInt(req.query.limit, 'limit');
+
+  const players = playerSeasonStats({
+    league,
+    season: season ?? null,
+    team,
+    ...(minMinutes === undefined ? {} : { minMinutes }),
+    ...(limit === undefined ? {} : { limit })
+  });
+  res.json({ league, season: season ?? null, team, count: players.length, players });
+}
+
+/** Saisons disponibles pour une compétition, la plus récente d'abord. */
+export function getLeagueSeasons(req, res) {
+  const league = requireStringParam(req.query.league, 'league');
+  res.json({ league, seasons: seasonsForLeague(league) });
 }
 
 /** Couverture des statistiques, championnat par championnat. */

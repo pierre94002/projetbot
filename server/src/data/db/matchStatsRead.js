@@ -139,6 +139,92 @@ export function loadEntry(id, { database = openDb() } = {}) {
   return buildEntry(match, teams, players);
 }
 
+/**
+ * Classement des joueurs d'une compétition, agrégé par la base.
+ *
+ * Les 810 000 lignes joueur du magasin n'étaient exposées nulle part : le
+ * seul écran joueurs de l'app passait par API-Football, dont le plan gratuit
+ * s'arrête à 2024 et ne couvre pas les championnats ajoutés depuis. Tout est
+ * calculé en SQL — remonter les lignes pour sommer en mémoire prendrait
+ * plusieurs secondes et autant de mégaoctets.
+ *
+ * `minMinutes` écarte les joueurs anecdotiques, sans quoi le classement par
+ * note moyenne est trusté par des entrants de fin de match.
+ */
+export function playerSeasonStats({
+  league,
+  season = null,
+  team = null,
+  minMinutes = 180,
+  limit = 200,
+  database = openDb()
+} = {}) {
+  const where = ['m.league = ?'];
+  const args = [league];
+  if (season) {
+    // Une saison va du 1er juillet au 30 juin : "2025" désigne 2025-26.
+    where.push('m.date >= ? AND m.date < ?');
+    args.push(`${season}-07-01`, `${Number(season) + 1}-07-01`);
+  }
+  if (team) {
+    where.push("(CASE WHEN p.side = 'home' THEN m.home_name ELSE m.away_name END) = ?");
+    args.push(team);
+  }
+
+  return database
+    .prepare(
+      `SELECT
+         p.name AS name,
+         MAX(p.player_id) AS playerId,
+         MAX(p.position) AS position,
+         (CASE WHEN p.side = 'home' THEN m.home_name ELSE m.away_name END) AS team,
+         COUNT(*) AS matches,
+         SUM(CASE WHEN p.minutes > 0 THEN 1 ELSE 0 END) AS played,
+         SUM(CASE WHEN p.starter = 1 THEN 1 ELSE 0 END) AS starts,
+         COALESCE(SUM(p.minutes), 0) AS minutes,
+         ROUND(AVG(p.rating), 2) AS rating,
+         COALESCE(SUM(p.goals), 0) AS goals,
+         COALESCE(SUM(p.assists), 0) AS assists,
+         COALESCE(SUM(p.shots), 0) AS shots,
+         COALESCE(SUM(p.shots_on_target), 0) AS shotsOnTarget,
+         ROUND(SUM(p.xg), 2) AS xg,
+         ROUND(SUM(p.xa), 2) AS xa,
+         COALESCE(SUM(p.key_passes), 0) AS keyPasses,
+         COALESCE(SUM(p.big_chances_created), 0) AS bigChancesCreated,
+         COALESCE(SUM(p.tackles), 0) AS tackles,
+         COALESCE(SUM(p.interceptions), 0) AS interceptions,
+         COALESCE(SUM(p.duels_won), 0) AS duelsWon,
+         COALESCE(SUM(p.duels_total), 0) AS duelsTotal,
+         COALESCE(SUM(p.yellow_cards), 0) AS yellowCards,
+         COALESCE(SUM(p.red_cards), 0) AS redCards,
+         COALESCE(SUM(p.saves), 0) AS saves,
+         COALESCE(SUM(p.goals_conceded), 0) AS goalsConceded
+       FROM players p
+       JOIN matches m ON m.match_key = p.match_key
+       WHERE ${where.join(' AND ')}
+       GROUP BY p.name, team
+       -- Agrégats répétés en toutes lettres : dans un HAVING/ORDER BY,
+       -- SQLite résout un nom ambigu vers la COLONNE et non vers l'alias,
+       -- et filtrait donc sur les minutes d'une ligne arbitraire du groupe.
+       HAVING COALESCE(SUM(p.minutes), 0) >= ?
+       ORDER BY COALESCE(SUM(p.goals), 0) DESC, COALESCE(SUM(p.assists), 0) DESC, AVG(p.rating) DESC
+       LIMIT ?`
+    )
+    .all(...args, minMinutes, limit);
+}
+
+/** Saisons couvertes par une compétition, la plus récente d'abord. */
+export function seasonsForLeague(league, { database = openDb() } = {}) {
+  return database
+    .prepare(
+      `SELECT CAST(strftime('%Y', date, CASE WHEN CAST(strftime('%m', date) AS INTEGER) >= 7 THEN '0 day' ELSE '-1 year' END) AS INTEGER) AS season,
+              COUNT(*) AS matches
+       FROM matches WHERE league = ? GROUP BY season ORDER BY season DESC`
+    )
+    .all(league)
+    .filter((r) => r.season !== null);
+}
+
 /** Comptes globaux du magasin, en une requête plutôt qu'un balayage. */
 export function storeStatus({ database = openDb() } = {}) {
   const m = database.prepare('SELECT COUNT(*) AS count, MAX(date) AS lastMatchDate, MAX(updated_at) AS lastUpdatedAt FROM matches').get();

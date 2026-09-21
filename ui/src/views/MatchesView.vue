@@ -25,6 +25,7 @@ import StandingsTable from '@/components/matches/StandingsTable.vue';
 import TeamStatsView from '@/views/TeamStatsView.vue';
 import TeamSquadView from '@/views/TeamSquadView.vue';
 import SeasonCalendarView from '@/views/SeasonCalendarView.vue';
+import PlayerStatsView from '@/views/PlayerStatsView.vue';
 import { teamStatsApi } from '@/services/teamStatsApi.js';
 import { standingsApi } from '@/services/standingsApi.js';
 import { resolveTeamAverages } from '@/utils/resolveTeamAverages.js';
@@ -51,6 +52,7 @@ const TABS = [
   { value: 'matches', label: 'Matchs' },
   { value: 'calendar', label: 'Calendrier saison' },
   { value: 'stats', label: 'Statistiques ligue' },
+  { value: 'players', label: 'Statistiques joueurs' },
   { value: 'squad', label: 'Compo & joueurs' }
 ];
 // Onglet initial lu depuis ?vue=... s'il est valide (lien partagé/rechargement
@@ -260,6 +262,7 @@ onMounted(() => {
 
     <Transition name="view" mode="out-in">
     <TeamStatsView v-if="activeTab === 'stats'" key="stats" />
+    <PlayerStatsView v-else-if="activeTab === 'players'" key="players" />
     <TeamSquadView v-else-if="activeTab === 'squad'" key="squad" />
     <SeasonCalendarView v-else-if="activeTab === 'calendar'" key="calendar" />
 
