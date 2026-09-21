@@ -143,7 +143,12 @@ const DDL = [
   'CREATE INDEX IF NOT EXISTS idx_matches_home ON matches(home_name);',
   'CREATE INDEX IF NOT EXISTS idx_matches_away ON matches(away_name);',
   'CREATE INDEX IF NOT EXISTS idx_players_name ON players(name);',
-  'CREATE INDEX IF NOT EXISTS idx_players_id ON players(player_id) WHERE player_id IS NOT NULL;'
+  'CREATE INDEX IF NOT EXISTS idx_players_id ON players(player_id) WHERE player_id IS NOT NULL;',
+  // Index COUVRANT pour le poste d'un joueur (cf. playerSeasonStats) : le
+  // poste n'étant tagué que sur la moitié des lignes, on le déduit de tout
+  // l'historique du joueur, ce qui balayait les 810 000 lignes à chaque
+  // classement — 12 s par écran. Avec cet index, SQLite lit l'index seul.
+  'CREATE INDEX IF NOT EXISTS idx_players_name_position ON players(name, position) WHERE position IS NOT NULL;'
 ];
 
 /**

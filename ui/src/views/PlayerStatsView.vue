@@ -28,8 +28,70 @@ const sortKey = ref('goals');
 const state = ref({ loading: false, error: null, players: [] });
 
 const ROLE_OPTIONS = [
-  { value: 'field', label: 'Joueurs de champ' },
+  { value: 'field', label: 'Tous les joueurs de champ' },
+  { value: 'forward', label: 'Attaquants' },
+  { value: 'midfielder', label: 'Milieux' },
+  { value: 'defender', label: 'Défenseurs' },
   { value: 'goalkeeper', label: 'Gardiens' }
+];
+
+/** Tri par défaut : ce qui définit le poste, pas ce qui flatte le buteur. */
+const DEFAULT_SORT = { field: 'goals', forward: 'goals', midfielder: 'rating', defender: 'rating', goalkeeper: 'cleanSheets' };
+
+const COMMON_HEAD = [
+  { key: 'played', label: 'M', title: 'Matchs joués' },
+  { key: 'minutes', label: 'Min', title: 'Minutes jouées' },
+  { key: 'rating', label: 'Note', title: 'Note moyenne', decimals: 2 }
+];
+
+const CARDS = [
+  { key: 'yellowCards', label: 'CJ', title: 'Cartons jaunes' },
+  { key: 'redCards', label: 'CR', title: 'Cartons rouges' }
+];
+
+const FORWARD_COLUMNS = [
+  ...COMMON_HEAD,
+  { key: 'goals', label: 'B', title: 'Buts' },
+  { key: 'assists', label: 'PD', title: 'Passes décisives' },
+  { key: 'xg', label: 'xG', title: 'Buts attendus cumulés', decimals: 2 },
+  { key: 'shots', label: 'Tirs', title: 'Tirs tentés' },
+  { key: 'shotsOnTarget', label: 'Cadrés', title: 'Tirs cadrés' },
+  { key: 'conversion', label: '% conv.', title: 'Part des tirs convertis en but', decimals: 1, suffix: '%' },
+  { key: 'touchesOppBox', label: 'Surf. adv.', title: 'Touches dans la surface adverse' },
+  { key: 'keyPasses', label: 'P. clés', title: 'Passes clés' },
+  { key: 'aerialPercent', label: '% aér.', title: 'Duels aériens gagnés', decimals: 1, suffix: '%' },
+  ...CARDS
+];
+
+const MIDFIELDER_COLUMNS = [
+  ...COMMON_HEAD,
+  { key: 'passes', label: 'Passes', title: 'Passes tentées' },
+  { key: 'passPercent', label: '% passes', title: 'Passes réussies', decimals: 1, suffix: '%' },
+  { key: 'keyPasses', label: 'P. clés', title: 'Passes clés' },
+  { key: 'assists', label: 'PD', title: 'Passes décisives' },
+  { key: 'xa', label: 'xA', title: 'Passes décisives attendues', decimals: 2 },
+  { key: 'finalThirdPasses', label: 'Dern. tiers', title: 'Passes dans le dernier tiers' },
+  { key: 'recoveries', label: 'Récup.', title: 'Ballons récupérés' },
+  { key: 'tackles', label: 'Tacles', title: 'Tacles' },
+  { key: 'interceptions', label: 'Interc.', title: 'Interceptions' },
+  { key: 'duelPercent', label: '% duels', title: 'Duels gagnés', decimals: 1, suffix: '%' },
+  { key: 'goals', label: 'B', title: 'Buts' },
+  ...CARDS
+];
+
+const DEFENDER_COLUMNS = [
+  ...COMMON_HEAD,
+  { key: 'clearances', label: 'Dégag.', title: 'Dégagements' },
+  { key: 'interceptions', label: 'Interc.', title: 'Interceptions' },
+  { key: 'tackles', label: 'Tacles', title: 'Tacles' },
+  { key: 'blocks', label: 'Blocs', title: 'Tirs contrés' },
+  { key: 'recoveries', label: 'Récup.', title: 'Ballons récupérés' },
+  { key: 'aerialPercent', label: '% aér.', title: 'Duels aériens gagnés', decimals: 1, suffix: '%' },
+  { key: 'duelPercent', label: '% duels', title: 'Duels gagnés', decimals: 1, suffix: '%' },
+  { key: 'dribbledPast', label: 'Dribblé', title: 'Nombre de fois dribblé — plus c’est bas, mieux c’est' },
+  { key: 'foulsCommitted', label: 'Fautes', title: 'Fautes commises' },
+  { key: 'goals', label: 'B', title: 'Buts' },
+  ...CARDS
 ];
 
 // Colonnes distinctes selon le poste : afficher arrêts et buts encaissés sur
@@ -66,7 +128,17 @@ const FIELD_COLUMNS = [
   { key: 'redCards', label: 'CR', title: 'Cartons rouges' }
 ];
 
-const COLUMNS = computed(() => (role.value === 'goalkeeper' ? GOALKEEPER_COLUMNS : FIELD_COLUMNS));
+const COLUMNS_BY_ROLE = {
+  goalkeeper: GOALKEEPER_COLUMNS,
+  forward: FORWARD_COLUMNS,
+  midfielder: MIDFIELDER_COLUMNS,
+  defender: DEFENDER_COLUMNS
+};
+
+const COLUMNS = computed(() => COLUMNS_BY_ROLE[role.value] ?? FIELD_COLUMNS);
+
+const ROLE_NOUN = { goalkeeper: 'gardien', forward: 'attaquant', midfielder: 'milieu', defender: 'défenseur' };
+const roleNoun = computed(() => ROLE_NOUN[role.value] ?? 'joueur');
 
 const leagueOptions = computed(() => leagues.value.map((l) => ({ value: l, label: formatLeagueOptionLabel(l) })));
 
@@ -76,17 +148,25 @@ const seasonOptions = computed(() =>
 
 // Filtrage par équipe côté navigateur : la liste renvoyée est déjà bornée,
 // un aller-retour serveur par frappe n'apporterait rien.
-// Le pourcentage d'arrêts se déduit des deux cumuls plutôt que d'être
-// calculé en base : moyenner des pourcentages match par match donnerait un
-// résultat faux (un match à un seul tir pèserait autant qu'un match à dix).
-function withSavePercent(player) {
-  const faced = (player.saves ?? 0) + (player.goalsConceded ?? 0);
-  return { ...player, savePercent: faced > 0 ? (player.saves / faced) * 100 : null };
+// Tous les pourcentages se déduisent des CUMULS, jamais d'une moyenne des
+// pourcentages match par match : un match à un seul duel pèserait alors
+// autant qu'un match à vingt.
+const ratio = (numerator, denominator) => (denominator > 0 ? (numerator / denominator) * 100 : null);
+
+function withRates(player) {
+  return {
+    ...player,
+    savePercent: ratio(player.saves, (player.saves ?? 0) + (player.goalsConceded ?? 0)),
+    passPercent: ratio(player.passesAccurate, player.passes),
+    duelPercent: ratio(player.duelsWon, player.duelsTotal),
+    aerialPercent: ratio(player.aerialsWon, player.aerialsTotal),
+    conversion: ratio(player.goals, player.shots)
+  };
 }
 
 const displayedPlayers = computed(() => {
   const query = teamQuery.value.trim().toLowerCase();
-  const base = role.value === 'goalkeeper' ? state.value.players.map(withSavePercent) : state.value.players;
+  const base = state.value.players.map(withRates);
   const filtered = query ? base.filter((p) => p.team?.toLowerCase().includes(query) || p.name?.toLowerCase().includes(query)) : base;
   const key = sortKey.value;
   return [...filtered].sort((a, b) => (b[key] ?? Number.NEGATIVE_INFINITY) - (a[key] ?? Number.NEGATIVE_INFINITY));
@@ -131,7 +211,7 @@ watch(selectedLeague, async () => {
 watch(selectedSeason, loadPlayers);
 watch(role, () => {
   // Le tri courant n'existe pas forcément dans l'autre jeu de colonnes.
-  sortKey.value = role.value === 'goalkeeper' ? 'cleanSheets' : 'goals';
+  sortKey.value = DEFAULT_SORT[role.value] ?? 'goals';
   loadPlayers();
 });
 
@@ -172,8 +252,8 @@ onMounted(async () => {
         title="Aucun joueur"
         :description="
           teamQuery
-            ? `Aucun ${role === 'goalkeeper' ? 'gardien' : 'joueur'} ne correspond à « ${teamQuery} ».`
-            : `Aucun ${role === 'goalkeeper' ? 'gardien' : 'joueur'} ne totalise assez de minutes sur cette saison.`
+            ? `Aucun ${roleNoun} ne correspond à « ${teamQuery} ».`
+            : `Aucun ${roleNoun} ne totalise assez de minutes sur cette saison.`
         "
       />
 
@@ -182,7 +262,7 @@ onMounted(async () => {
           <thead>
             <tr>
               <th class="player-stats__rank">#</th>
-              <th>{{ role === 'goalkeeper' ? 'Gardien' : 'Joueur' }}</th>
+              <th class="player-stats__head-name">{{ roleNoun }}</th>
               <th>Équipe</th>
               <th
                 v-for="col in COLUMNS"
@@ -210,9 +290,15 @@ onMounted(async () => {
       </div>
 
       <p v-if="displayedPlayers.length" class="cm-text-muted player-stats__note">
-        {{ displayedPlayers.length }} {{ role === 'goalkeeper' ? 'gardien(s)' : 'joueur(s)' }} — au moins 180 minutes sur la saison. Clique sur une colonne pour trier.
+        {{ displayedPlayers.length }} {{ roleNoun }}(s) — au moins 180 minutes sur la saison. Clique sur une colonne pour trier.
         <template v-if="role === 'goalkeeper'">
           « Évités » compare les xG cadrés subis aux buts réellement encaissés : positif, le gardien a fait mieux que ce que les tirs laissaient attendre.
+        </template>
+        <template v-else-if="role === 'defender'">
+          « Dribblé » se lit à l'envers des autres colonnes : plus le nombre est bas, moins le défenseur a été éliminé.
+        </template>
+        <template v-else-if="role !== 'field'">
+          Les pourcentages sont calculés sur les cumuls de la saison, jamais en moyennant les matchs entre eux.
         </template>
       </p>
     </AppCard>
@@ -266,6 +352,10 @@ onMounted(async () => {
 .player-stats__rank {
   color: var(--cm-text-muted);
   width: 34px;
+}
+
+.player-stats__head-name {
+  text-transform: capitalize;
 }
 
 .player-stats__name {

@@ -160,6 +160,8 @@ export function playerSeasonStats({
   limit = 200,
   database = openDb()
 } = {}) {
+  const POSITIONS = { goalkeeper: 'Goalkeeper', defender: 'Defender', midfielder: 'Midfielder', forward: 'Forward' };
+  const position = POSITIONS[role] ?? null;
   const goalkeepers = role === 'goalkeeper';
   const where = ['m.league = ?'];
   const args = [league];
@@ -175,10 +177,18 @@ export function playerSeasonStats({
 
   return database
     .prepare(
-      `SELECT
+      `WITH poste AS (
+         -- Le poste n'est tagué que sur ~55 % des lignes, et pas forcément
+         -- sur celles de la saison consultée : Ayase Ueda n'en a aucune en
+         -- 2025-26 alors qu'il est meilleur buteur. On le détermine donc sur
+         -- TOUT l'historique du joueur, sans quoi les classements par poste
+         -- perdraient leurs premiers noms.
+         SELECT name, MAX(position) AS position FROM players WHERE position IS NOT NULL GROUP BY name
+       )
+       SELECT
          p.name AS name,
          MAX(p.player_id) AS playerId,
-         MAX(p.position) AS position,
+         MAX(poste.position) AS position,
          (CASE WHEN p.side = 'home' THEN m.home_name ELSE m.away_name END) AS team,
          COUNT(*) AS matches,
          SUM(CASE WHEN p.minutes > 0 THEN 1 ELSE 0 END) AS played,
@@ -197,6 +207,24 @@ export function playerSeasonStats({
          COALESCE(SUM(p.interceptions), 0) AS interceptions,
          COALESCE(SUM(p.duels_won), 0) AS duelsWon,
          COALESCE(SUM(p.duels_total), 0) AS duelsTotal,
+         COALESCE(SUM(p.passes), 0) AS passes,
+         COALESCE(SUM(p.passes_accurate), 0) AS passesAccurate,
+         COALESCE(SUM(p.final_third_passes), 0) AS finalThirdPasses,
+         COALESCE(SUM(p.long_balls), 0) AS longBalls,
+         COALESCE(SUM(p.long_balls_accurate), 0) AS longBallsAccurate,
+         COALESCE(SUM(p.crosses), 0) AS crosses,
+         COALESCE(SUM(p.dribbles_won), 0) AS dribblesWon,
+         COALESCE(SUM(p.touches), 0) AS touches,
+         COALESCE(SUM(p.touches_opp_box), 0) AS touchesOppBox,
+         COALESCE(SUM(p.clearances), 0) AS clearances,
+         COALESCE(SUM(p.blocks), 0) AS blocks,
+         COALESCE(SUM(p.recoveries), 0) AS recoveries,
+         COALESCE(SUM(p.aerials_won), 0) AS aerialsWon,
+         COALESCE(SUM(p.aerials_total), 0) AS aerialsTotal,
+         COALESCE(SUM(p.dribbled_past), 0) AS dribbledPast,
+         COALESCE(SUM(p.dispossessed), 0) AS dispossessed,
+         COALESCE(SUM(p.fouls_committed), 0) AS foulsCommitted,
+         COALESCE(SUM(p.offsides), 0) AS offsides,
          COALESCE(SUM(p.yellow_cards), 0) AS yellowCards,
          COALESCE(SUM(p.red_cards), 0) AS redCards,
          COALESCE(SUM(p.saves), 0) AS saves,
@@ -208,6 +236,7 @@ export function playerSeasonStats({
          ROUND(SUM(p.goals_prevented), 2) AS goalsPrevented
        FROM players p
        JOIN matches m ON m.match_key = p.match_key
+       LEFT JOIN poste ON poste.name = p.name
        WHERE ${where.join(' AND ')}
        GROUP BY p.name, team
        -- Agrégats répétés en toutes lettres : dans un HAVING/ORDER BY,
@@ -216,16 +245,24 @@ export function playerSeasonStats({
        -- Le poste se juge sur le JOUEUR, pas sur la ligne : 53 % des lignes
        -- n'en portent pas, donc un filtre ligne a ligne laisserait un gardien
        -- reapparaitre parmi les joueurs de champ par ses lignes non taguees.
-       HAVING ${goalkeepers ? "MAX(p.position) = 'Goalkeeper'" : "(MAX(p.position) IS NULL OR MAX(p.position) <> 'Goalkeeper')"}
+       HAVING ${
+         position
+           ? 'MAX(poste.position) = ?'
+           : "(MAX(poste.position) IS NULL OR MAX(poste.position) <> 'Goalkeeper')"
+       }
           AND COALESCE(SUM(p.minutes), 0) >= ?
        ORDER BY ${
-         goalkeepers
-           ? 'SUM(CASE WHEN p.goals_conceded = 0 AND p.minutes > 0 THEN 1 ELSE 0 END) DESC, SUM(p.goals_prevented) DESC, AVG(p.rating) DESC'
-           : 'COALESCE(SUM(p.goals), 0) DESC, COALESCE(SUM(p.assists), 0) DESC, AVG(p.rating) DESC'
+         {
+           // Chaque poste se juge sur ce qui le définit : un défenseur classé
+           // par buts serait un classement de coups francs.
+           goalkeeper: 'SUM(CASE WHEN p.goals_conceded = 0 AND p.minutes > 0 THEN 1 ELSE 0 END) DESC, SUM(p.goals_prevented) DESC, AVG(p.rating) DESC',
+           defender: 'AVG(p.rating) DESC, COALESCE(SUM(p.tackles), 0) + COALESCE(SUM(p.interceptions), 0) + COALESCE(SUM(p.clearances), 0) DESC',
+           midfielder: 'AVG(p.rating) DESC, COALESCE(SUM(p.assists), 0) DESC, COALESCE(SUM(p.key_passes), 0) DESC'
+         }[role] ?? 'COALESCE(SUM(p.goals), 0) DESC, COALESCE(SUM(p.assists), 0) DESC, AVG(p.rating) DESC'
        }
        LIMIT ?`
     )
-    .all(...args, minMinutes, limit);
+    .all(...args, ...(position ? [position] : []), minMinutes, limit);
 }
 
 /** Saisons couvertes par une compétition, la plus récente d'abord. */

@@ -55,7 +55,8 @@ export function getPlayerStats(req, res) {
   const team = req.query.team === undefined || req.query.team === '' ? null : requireStringParam(req.query.team, 'team');
   const minMinutes = optionalPositiveInt(req.query.minMinutes, 'minMinutes');
   const limit = optionalPositiveInt(req.query.limit, 'limit');
-  const role = req.query.role === 'goalkeeper' ? 'goalkeeper' : 'field';
+  const ROLES = ['field', 'goalkeeper', 'defender', 'midfielder', 'forward'];
+  const role = ROLES.includes(req.query.role) ? req.query.role : 'field';
 
   const players = playerSeasonStats({
     league,
