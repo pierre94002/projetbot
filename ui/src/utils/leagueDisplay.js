@@ -36,7 +36,18 @@ const COUNTRY_CODES = {
   latvia: 'LVA',
   romania: 'ROU',
   serbia: 'SRB',
-  slovakia: 'SVK'
+  slovakia: 'SVK',
+  // Amériques.
+  argentina: 'ARG',
+  bolivia: 'BOL',
+  canada: 'CAN',
+  chile: 'CHI',
+  colombia: 'COL',
+  ecuador: 'ECU',
+  mexico: 'MEX',
+  paraguay: 'PAR',
+  peru: 'PER',
+  venezuela: 'VEN'
 };
 
 /** Découpe "La Liga - Spain" en {name: "La Liga", country: "Spain"} ; "EFL Cup" reste tel quel, sans pays. */

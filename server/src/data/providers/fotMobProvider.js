@@ -138,6 +138,46 @@ export const FOTMOB_LEAGUES = {
   // acceptés, sans quoi des saisons entières resteraient invisibles.
   'Nike Liga - Slovakia': /^SVK\|(1\. Liga|Super Liga)($| (Championship|Relegation) Group$| Qualification$)/,
   'Allsvenskan - Sweden': /^SWE\|Allsvenskan($| Qualification$)/,
+
+  // ---------------------------------------------------------------------
+  // Amériques, ajouté le 2026-09-21. Dix-huit pays passés en revue, chaque
+  // première division échantillonnée sur trois à cinq rencontres : douze
+  // publient des relevés complets, six n'ont que le score (Costa Rica,
+  // Guatemala, Honduras, Panama, Salvador et — c'est la surprise —
+  // l'Uruguay, vérifié sur cinq matchs).
+  //
+  // DIFFÉRENCE DE STRUCTURE avec l'Europe : la plupart de ces championnats
+  // se jouent en deux tournois par an, Apertura et Clausura, que FotMob
+  // publie sous des intitulés distincts. Les ignorer amputerait chaque
+  // saison de sa moitié, d'où les motifs ci-dessous. Certains pays ajoutent
+  // des phases finales, et l'Équateur découpe en First/Second Stage.
+  //
+  // Les accents varient d'une saison à l'autre chez la source — « Serie A »
+  // et « Série A », « Primera Division » et « Primera División » — d'où les
+  // classes de caractères. Ce n'est pas de la coquetterie : une saison
+  // entière disparaissait sur cette seule différence.
+  'Primera División - Argentina': /^ARG\|Liga Profesional($| (Apertura|Clausura)$)/,
+  'Primera División - Bolivia': /^BOL\|Primera Divisi[oó]n($| - (Apertura|Clausura)$)/,
+  // Serie B, C et D sont d'autres divisions : l'ancrage de fin est ce qui
+  // les écarte.
+  'Brazil Série A': /^BRA\|S[eé]rie A$/,
+  // « Northern Super League » est le championnat féminin canadien.
+  'Canadian Premier League': /^CAN\|Premier League$/,
+  'Primera División - Chile': /^CHI\|Primera Divisi[oó]n($| (Apertura|Clausura)$)/,
+  'Primera A - Colombia': /^COL\|Primera A($| (Apertura|Clausura)$)/,
+  'Serie A - Ecuador': /^ECU\|Serie A($| - (First|Second) Stage$| - (Championship|Relegation) Round$| - Copa Sudamericana Play-off$)/,
+  // « Liga MX Femenil » est le championnat féminin et « Liga de Expansion
+  // MX » la deuxième division : les deux commencent autrement, ou se
+  // poursuivent autrement, que ce que ce motif accepte.
+  'Liga MX': /^MEX\|Liga MX($| (Apertura|Clausura)$)/,
+  'División Profesional - Paraguay': /^PAR\|Division Profesional($| - (Apertura|Clausura)$)/,
+  'Liga 1 - Peru': /^PER\|Liga 1($| (Apertura|Clausura)$)/,
+  'MLS': /^USA\|Major League Soccer$/,
+  // Le Venezuela découpe ses deux tournois en étapes, jusqu'à quatre
+  // intitulés par saison, dont un avec une minuscule fautive (« First
+  // stage »). Un motif large, borné au nom de la division ; le garde-fou
+  // masculin/senior écarte le championnat féminin.
+  'Primera División - Venezuela': /^VEN\|Primera Divisi[oó]n( - .+)?$/i,
   // Les coupes d'Europe sont découpées par phase — « Champions League »,
   // « Champions League Grp. E », « Champions League Final Stage » — donc un
   // motif plutôt qu'un intitulé exact. L'ancrage en début de chaîne écarte

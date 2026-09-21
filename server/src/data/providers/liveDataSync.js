@@ -68,7 +68,16 @@ export const TRACKED_SPORT_KEYS = [
   'soccer_league_of_ireland',
   'soccer_norway_eliteserien',
   'soccer_sweden_allsvenskan',
-  'soccer_switzerland_superleague'
+  'soccer_switzerland_superleague',
+  // Amériques, 2026-09-21. Cinq des douze championnats ajoutés au magasin
+  // existent chez The Odds API ; la Bolivie, le Canada, la Colombie,
+  // l'Équateur, le Paraguay, le Pérou et le Venezuela n'y sont pas, et
+  // vivent donc par le calendrier.
+  'soccer_argentina_primera_division',
+  'soccer_brazil_campeonato',
+  'soccer_chile_campeonato',
+  'soccer_mexico_ligamx',
+  'soccer_usa_mls'
 ];
 
 /**

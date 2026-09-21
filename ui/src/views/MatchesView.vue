@@ -22,12 +22,14 @@ import AppModal from '@/components/common/AppModal.vue';
 import TabbedView from '@/components/common/TabbedView.vue';
 import MatchesFilterBar from '@/components/matches/MatchesFilterBar.vue';
 import StandingsTable from '@/components/matches/StandingsTable.vue';
+import LeagueLeaders from '@/components/matches/LeagueLeaders.vue';
 import TeamStatsView from '@/views/TeamStatsView.vue';
 import TeamSquadView from '@/views/TeamSquadView.vue';
 import SeasonCalendarView from '@/views/SeasonCalendarView.vue';
 import PlayerStatsView from '@/views/PlayerStatsView.vue';
 import { teamStatsApi } from '@/services/teamStatsApi.js';
 import { standingsApi } from '@/services/standingsApi.js';
+import { matchStatsApi } from '@/services/matchStatsApi.js';
 import { resolveTeamAverages } from '@/utils/resolveTeamAverages.js';
 import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
 
@@ -216,7 +218,36 @@ function handleDeselect() {
   router.replace({ path: '/matches', query: route.query });
 }
 
+// Onglet courant de la modale « Classement ». Remis sur le tableau a chaque
+// ouverture : c'est ce qu'on vient voir en cliquant sur « Classement ».
+const standingsTab = ref('table');
+const leaders = ref(null); // { loading, error, scorers, assists, cleanSheets }
+
+const standingsTabs = computed(() => [
+  { value: 'table', label: 'Classement' },
+  { value: 'scorers', label: 'Buteurs', count: leaders.value?.scorers?.length },
+  { value: 'assists', label: 'Passeurs', count: leaders.value?.assists?.length },
+  { value: 'cleanSheets', label: 'Clean sheets', count: leaders.value?.cleanSheets?.length }
+]);
+
+/**
+ * Les trois classements individuels sont charges EN MEME TEMPS que le
+ * tableau, pas au clic sur leur onglet : ils arrivent d'un seul appel, et
+ * les compteurs des onglets seraient vides jusqu'au premier clic sinon.
+ */
+async function loadLeaders(league) {
+  leaders.value = { loading: true, error: null, scorers: [], assists: [], cleanSheets: [] };
+  try {
+    const r = await matchStatsApi.getLeagueLeaders(league);
+    leaders.value = { loading: false, error: null, scorers: r.scorers ?? [], assists: r.assists ?? [], cleanSheets: r.cleanSheets ?? [] };
+  } catch (error) {
+    leaders.value = { loading: false, error: error.message, scorers: [], assists: [], cleanSheets: [] };
+  }
+}
+
 async function handleViewStandings(league) {
+  standingsTab.value = 'table';
+  loadLeaders(league);
   // `key` conserve le libellé demandé : `league` affiché peut être réécrit par
   // le serveur (leagueName), et c'est `key` qu'il faut réutiliser pour
   // recharger le même classement.
@@ -352,7 +383,20 @@ onMounted(() => {
     </div>
 
     <AppModal v-if="standings" :title="`Classement — ${standings.league}`" @close="standings = null">
-      <StandingsTable :loading="standings.loading" :error="standings.error" :rows="standings.rows" />
+      <TabbedView v-model="standingsTab" :tabs="standingsTabs" class="standings-modal__tabs" />
+      <StandingsTable
+        v-if="standingsTab === 'table'"
+        :loading="standings.loading"
+        :error="standings.error"
+        :rows="standings.rows"
+      />
+      <LeagueLeaders
+        v-else
+        :kind="standingsTab"
+        :rows="leaders?.[standingsTab] ?? []"
+        :loading="leaders?.loading ?? false"
+        :error="leaders?.error ?? null"
+      />
     </AppModal>
     </div>
     </Transition>
@@ -360,6 +404,10 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.standings-modal__tabs {
+  margin-bottom: 12px;
+}
+
 .matches-view {
   display: flex;
   flex-direction: column;

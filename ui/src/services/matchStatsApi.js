@@ -24,5 +24,13 @@ export const matchStatsApi = {
     if (minMinutes) params.set('minMinutes', minMinutes);
     if (limit) params.set('limit', limit);
     return httpClient.get(`/match-stats/players?${params}`);
+  },
+  // Buteurs, passeurs et clean sheets en UN appel : les trois listes
+  // s'affichent ensemble, dans les onglets d'un même panneau.
+  getLeagueLeaders: (league, { season = null, limit = null } = {}) => {
+    const params = new URLSearchParams({ league });
+    if (season) params.set('season', season);
+    if (limit) params.set('limit', limit);
+    return httpClient.get(`/match-stats/leaders?${params}`);
   }
 };

@@ -635,6 +635,59 @@ export function standingsFromStore(league, { season = null, database = openDb() 
   return { leagueName: league, season: saison, source: 'fotmob', rows: classees };
 }
 
+/**
+ * Les trois classements individuels d'une compétition : buteurs, passeurs,
+ * clean sheets.
+ *
+ * Trois requêtes courtes plutôt qu'un appel à `playerSeasonStats` filtré
+ * trois fois : celui-ci agrège les quarante colonnes du référentiel et trie
+ * selon le poste, alors qu'il ne s'agit ici que de sommer une colonne. La
+ * saison en cours par défaut, comme le classement d'équipes.
+ *
+ * Le regroupement se fait sur l'IDENTITÉ du joueur, jamais sur son nom —
+ * « Pedrinho » désigne cinq hommes, et un classement de buteurs groupé par
+ * nom leur additionnerait leurs buts.
+ */
+export function leagueLeaders(league, { season = null, limit = 20, database = openDb() } = {}) {
+  ensureRegistries({ database });
+  const saison = season ?? seasonsForLeague(league, { database })[0]?.season ?? null;
+  const bornes = saison ? ' AND m.date >= ? AND m.date < ?' : '';
+  const args = saison ? [league, `${saison}-07-01`, `${Number(saison) + 1}-07-01`] : [league];
+
+  const classement = (colonne, extra = '') => database.prepare(`
+    SELECT ${IDENTITY_SQL} AS playerId,
+           COALESCE(MAX(ident.name), MAX(p.name)) AS name,
+           MAX(ident.position) AS position,
+           COALESCE(MAX(tm.name), MAX(CASE WHEN p.side = 'home' THEN m.home_name ELSE m.away_name END)) AS team,
+           MAX(CASE WHEN p.side = 'home' THEN m.home_id ELSE m.away_id END) AS teamId,
+           SUM(CASE WHEN p.minutes > 0 THEN 1 ELSE 0 END) AS played,
+           COALESCE(SUM(p.minutes), 0) AS minutes,
+           ${colonne} AS value
+    FROM players p
+    JOIN matches m ON m.match_key = p.match_key
+    LEFT JOIN people ident ON ident.player_id = ${IDENTITY_SQL}
+    LEFT JOIN teams tm ON tm.team_id = (CASE WHEN p.side = 'home' THEN m.home_id ELSE m.away_id END)
+    WHERE m.league = ?${bornes}${extra}
+    GROUP BY ${IDENTITY_SQL}
+    HAVING value > 0
+    ORDER BY value DESC, COALESCE(SUM(p.minutes), 0) ASC
+    LIMIT ?`).all(...args, limit);
+
+  return {
+    league,
+    season: saison,
+    // Un match sans but encaissé ne compte que si la donnée est RENSEIGNÉE :
+    // un NULL veut dire « non relevé », pas « zéro encaissé ». Et seul un
+    // gardien ayant réellement joué peut en revendiquer un.
+    scorers: classement('COALESCE(SUM(p.goals), 0)'),
+    assists: classement('COALESCE(SUM(p.assists), 0)'),
+    cleanSheets: classement(
+      "SUM(CASE WHEN p.goals_conceded = 0 AND p.minutes > 0 THEN 1 ELSE 0 END)",
+      " AND p.position = 'Goalkeeper'"
+    )
+  };
+}
+
 /** Saisons couvertes par une compétition, la plus récente d'abord. */
 export function seasonsForLeague(league, { database = openDb() } = {}) {
   return database

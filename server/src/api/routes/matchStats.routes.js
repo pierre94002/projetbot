@@ -8,7 +8,8 @@ import {
   getMatchStatsCoverage,
   postMatchStatsRefresh,
   getPlayerStats,
-  getLeagueSeasons
+  getLeagueSeasons,
+  getLeagueLeaders
 } from '../controllers/matchStats.controller.js';
 
 const router = Router();
@@ -20,6 +21,7 @@ router.get('/team', asyncHandler(getTeamMatchStats));
 router.get('/team-averages', asyncHandler(getTeamMatchStatsAverages));
 router.get('/players', asyncHandler(getPlayerStats));
 router.get('/seasons', asyncHandler(getLeagueSeasons));
+router.get('/leaders', asyncHandler(getLeagueLeaders));
 // En dernier : ce motif attrape tout ce qui précède s'il est déclaré avant.
 router.get('/:matchId', asyncHandler(getMatchStats));
 

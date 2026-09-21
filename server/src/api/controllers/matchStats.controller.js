@@ -10,7 +10,7 @@ import {
   isRefreshRunning,
   refreshMatchStatsExclusive
 } from '../../data/providers/espnMatchStatsRefresh.js';
-import { playerSeasonStats, seasonsForLeague } from '../../data/db/matchStatsRead.js';
+import { playerSeasonStats, seasonsForLeague, leagueLeaders } from '../../data/db/matchStatsRead.js';
 import { ApiError, requireStringParam, optionalPositiveInt } from '../middlewares/errorHandler.js';
 
 /** Matchs d'une équipe avec stats d'équipe complètes + stats joueurs, match par match (import quotidien 7h30). */
@@ -67,6 +67,24 @@ export function getPlayerStats(req, res) {
     ...(limit === undefined ? {} : { limit })
   });
   res.json({ league, season: season ?? null, team, role, count: players.length, players });
+}
+
+/**
+ * Buteurs, passeurs et clean sheets d'une compétition, en un seul appel.
+ *
+ * Les trois listes voyagent ensemble parce qu'elles s'affichent ensemble —
+ * trois onglets d'un même panneau. Les séparer imposerait trois
+ * aller-retours pour un écran que l'utilisateur parcourt d'un coup d'œil.
+ */
+export function getLeagueLeaders(req, res) {
+  const league = requireStringParam(req.query.league, 'league');
+  const season = optionalPositiveInt(req.query.season, 'season');
+  const limit = optionalPositiveInt(req.query.limit, 'limit');
+
+  res.json(leagueLeaders(league, {
+    season: season ?? null,
+    ...(limit === undefined ? {} : { limit })
+  }));
 }
 
 /** Saisons disponibles pour une compétition, la plus récente d'abord. */
