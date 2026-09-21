@@ -8,22 +8,27 @@ import { saveOddsMatches, saveCompetitions } from '../repositories/fixturesRepos
  * européennes) — remplace un premier choix arbitraire (La Liga/EFL Cup/
  * Russie/Chine) qui ne correspondait à aucun besoin précis.
  *
- * Volontairement ABSENTS, faute de données exploitables :
- * - League One et League Two (3e et 4e divisions anglaises), retirées le
- *   2026-09-19 : les cotes existent, mais aucune source d'historique ni de
- *   statistiques ne les couvre (38 des 48 équipes n'avaient strictement
- *   aucune donnée), donc le moteur n'avait rien pour les analyser.
- * - La Serie C italienne, absente du catalogue de The Odds API (vérifié via
- *   GET /v4/sports).
+ * League One, League Two, la Russie et la Chine ont été retirées le
+ * 2026-09-19 faute de données exploitables, puis REMISES le 2026-09-21 : la
+ * tâche quotidienne les a depuis peuplées entièrement (calendrier, classement
+ * complet, 30 statistiques par équipe dans le magasin). Le motif du retrait —
+ * 38 des 48 équipes anglaises sans la moindre donnée — n'est plus vrai, et
+ * sans cotes ces championnats restaient invisibles sur la page Matchs, donc
+ * hors de portée du moteur.
  *
- * Chaque entrée consomme un crédit par appel (plan gratuit "Starter" :
- * 500/mois), sans rafraîchissement automatique ailleurs dans l'appli (cf.
- * oddsApiClient.js) — ajoutez-en ici si besoin, en gardant un œil sur le
- * quota restant renvoyé par chaque appel.
+ * La Serie C italienne reste absente : elle n'existe pas dans le catalogue de
+ * The Odds API (vérifié via GET /v4/sports).
+ *
+ * Chaque entrée consomme un crédit PAR ACTUALISATION (plan "Starter" :
+ * 500/mois) — 18 clés = 18 crédits à chaque clic sur "Actualiser", soit ~27
+ * actualisations par mois. Aucun rafraîchissement automatique ailleurs dans
+ * l'appli (cf. oddsApiClient.js) : c'est toujours une action explicite.
  */
 export const TRACKED_SPORT_KEYS = [
   'soccer_epl',
   'soccer_efl_champ',
+  'soccer_england_league1',
+  'soccer_england_league2',
   'soccer_england_efl_cup',
   'soccer_spain_la_liga',
   'soccer_spain_segunda_division',
@@ -35,7 +40,9 @@ export const TRACKED_SPORT_KEYS = [
   'soccer_france_ligue_two',
   'soccer_uefa_champs_league',
   'soccer_uefa_europa_league',
-  'soccer_uefa_europa_conference_league'
+  'soccer_uefa_europa_conference_league',
+  'soccer_russia_premier_league',
+  'soccer_china_superleague'
 ];
 
 /**
