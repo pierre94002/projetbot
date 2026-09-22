@@ -23,6 +23,7 @@ import { FOTMOB_LEAGUES, FOTMOB_REV, leagueKeyMatches, fetchMatchesByDate, fetch
 import { teamNamesLikelyMatch } from '../../utils/teamNameMatch.js';
 import { mergeMatchStats } from '../../../scripts/merge-match-stats.mjs';
 import { rebuildRegistries } from '../db/identityRegistry.js';
+import { storedEntriesIndex } from '../db/matchStatsRead.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const RUNTIME_DIR = path.resolve(__dirname, '../../../data/runtime');
@@ -42,20 +43,10 @@ function readJson(file, fallback) {
   }
 }
 
-function readStoredEntries() {
-  const out = [];
-  let files = [];
-  try {
-    files = fs.readdirSync(MATCH_STATS_DIR).filter((f) => /^\d{4}-\d{2}\.json$/.test(f));
-  } catch {
-    return out;
-  }
-  for (const file of files) {
-    const entries = readJson(path.join(MATCH_STATS_DIR, file), []);
-    if (Array.isArray(entries)) out.push(...entries);
-  }
-  return out;
-}
+// Les entrées déjà connues viennent de la base, plus des fichiers JSON
+// mensuels : ceux-ci pesaient 1,5 Go et étaient relus ENTIÈREMENT à chaque
+// appel — au démarrage d'un import, d'un relevé de retard, d'une reprise.
+// Une requête indexée rend la même chose en une seconde.
 
 async function pool(items, size, worker) {
   let cursor = 0;
@@ -79,7 +70,7 @@ async function pool(items, size, worker) {
  */
 export async function importMissingFromFotMob({ from, to, leagues = null, concurrency = DEFAULT_CONCURRENCY, onProgress = null } = {}) {
   const wanted = leagues ? Object.entries(FOTMOB_LEAGUES).filter(([name]) => leagues.includes(name)) : Object.entries(FOTMOB_LEAGUES);
-  const known = new Set(readStoredEntries().map((e) => e.matchKey));
+  const known = new Set(storedEntriesIndex().keys());
   const report = { days: 0, discovered: 0, skipped: 0, fetched: 0, merged: 0, playersMerged: 0, noStats: 0, failed: 0 };
 
   const days = [];
@@ -218,14 +209,14 @@ function slugify(text) {
 /** Entrées auxquelles FotMob pourrait encore apporter quelque chose. */
 export function listPending({ leagues = null, since = null, until = null, force = false } = {}) {
   const wanted = leagues ? new Set(leagues) : null;
-  return readStoredEntries().filter((entry) => {
+  return [...storedEntriesIndex().values()].filter((entry) => {
     if (!entry?.date || !entry.league || !entry.homeName || !entry.awayName) return false;
     if (!FOTMOB_LEAGUES[entry.league]) return false;
     if (wanted && !wanted.has(entry.league)) return false;
     if (since && entry.date < since) return false;
     if (until && entry.date > until) return false;
     if (entry.homeGoals === null || entry.homeGoals === undefined) return false;
-    const fetched = (entry.sources ?? []).some((s) => String(s).includes(FOTMOB_SOURCE_MARK));
+    const fetched = entry.fromFotmob;
     // `meta` n'apparaît qu'avec la version enrichie de la lecture (déroulé,
     // composition, cadre de la rencontre, carte des tirs). Une entrée qui
     // porte la source FotMob sans ce bloc vient d'un passage antérieur et
@@ -234,7 +225,7 @@ export function listPending({ leagues = null, since = null, until = null, force 
     // La revision dit si l entree a ete lue avec la table de correspondance
     // courante : une mise a jour de celle-ci rend caduques les entrees plus
     // anciennes, qui sont alors reprises sans repasser sur tout le reste.
-    const complete = fetched && entry.meta && entry.meta.rev === FOTMOB_REV;
+    const complete = fetched && entry.metaRev === FOTMOB_REV;
     return force || !complete;
   });
 }

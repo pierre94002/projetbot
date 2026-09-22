@@ -35,6 +35,11 @@ server/data/runtime/_tmp-flashscore-import/
 # Tampons de fotmob-season-calendar.mjs : ecrits puis supprimes dans la
 # foulee. Un echec de fusion en laissait un derriere lui, et 20 253 lignes
 # de calendrier dupplique sont parties dans un commit.
+# Miroir JSON du magasin SQLite, retire le 2026-09-22 : 1,5 Go pour un
+# contenu que la base porte deja, relu entierement a chaque import et
+# plus lu par l API depuis la migration. Le filet de secours est desormais
+# tenu par les sauvegardes de la base (backupTo, VACUUM INTO).
+server/data/runtime/match-stats/
 server/data/runtime/calendrier-fotmob.json
 server/data/runtime/resultats-fotmob.json
 # Fichiers intermediaires de scripts/csv-to-season-data.mjs (regeneres a chaque run)

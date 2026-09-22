@@ -32,6 +32,7 @@ import { teamNamesLikelyMatch, findBestTeamNameMatch } from '../../utils/teamNam
 // versions qui divergeraient.
 import { mergeMatchStats } from '../../../scripts/merge-match-stats.mjs';
 import { rebuildRegistries } from '../db/identityRegistry.js';
+import { storedEntriesIndex } from '../db/matchStatsRead.js';
 import { coverageFacts, seasonSummary } from '../db/matchStatsRead.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -78,22 +79,8 @@ function shiftDate(isoDate, days) {
   return d.toISOString().slice(0, 10);
 }
 
-/** Toutes les entrées déjà stockées, indexées par matchKey. */
-function readStoredEntries() {
-  const index = new Map();
-  let files = [];
-  try {
-    files = fs.readdirSync(MATCH_STATS_DIR).filter((f) => /^\d{4}-\d{2}\.json$/.test(f));
-  } catch {
-    return index;
-  }
-  for (const file of files) {
-    const entries = readJson(path.join(MATCH_STATS_DIR, file), []);
-    if (!Array.isArray(entries)) continue;
-    for (const entry of entries) if (entry?.matchKey) index.set(entry.matchKey, entry);
-  }
-  return index;
-}
+// L'index des entrées déjà stockées vient de la base (storedEntriesIndex),
+// plus d'une relecture des fichiers JSON mensuels.
 
 /**
  * Rencontres terminées qui n'ont pas encore été confrontées à ESPN.
@@ -116,7 +103,7 @@ function refreshRegistries(report) {
 
 export function listMissing({ leagues = null, since = null, until = null, force = false } = {}) {
   const calendar = readJson(CALENDAR_FILE, []);
-  const stored = readStoredEntries();
+  const stored = storedEntriesIndex();
   const wanted = leagues ? new Set(leagues) : null;
   const missing = [];
 
@@ -135,7 +122,7 @@ export function listMissing({ leagues = null, since = null, until = null, force 
     // `force` repasse sur les rencontres déjà récupérées : utile quand la
     // lecture de la source a été corrigée et qu'il faut compléter ce que
     // l'ancienne version avait écarté à tort.
-    const alreadyFetched = (entry?.sources ?? []).some((s) => String(s).includes(ESPN_SOURCE_MARK));
+    const alreadyFetched = entry?.fromEspn === true;
     if (alreadyFetched && !force) continue;
 
     missing.push({ date, league, homeName, awayName, homeGoals, awayGoals, matchKey });
@@ -476,7 +463,7 @@ export function isRefreshRunning() {
  * reste du magasin emploie celle du calendrier ("Man City") : sans
  * harmonisation, une même équipe aurait deux séries de statistiques.
  */
-function buildKnownNames() {
+function buildKnownNames(stored) {
   const byLeague = new Map();
   const add = (league, name) => {
     if (!league || !name) return;
@@ -484,7 +471,7 @@ function buildKnownNames() {
     byLeague.get(league).add(name);
   };
   for (const fixture of readJson(CALENDAR_FILE, [])) add(fixture?.league, fixture?.homeName), add(fixture?.league, fixture?.awayName);
-  for (const entry of readStoredEntries().values()) add(entry?.league, entry?.homeName), add(entry?.league, entry?.awayName);
+  for (const entry of stored.values()) add(entry?.league, entry?.homeName), add(entry?.league, entry?.awayName);
   return byLeague;
 }
 
@@ -506,8 +493,11 @@ function canonicalName(espnName, league, known) {
 export async function importSeasons({ seasons, leagues = null, concurrency = DEFAULT_CONCURRENCY, onProgress = null } = {}) {
   const startedAt = new Date().toISOString();
   const wanted = leagues ? Object.entries(ESPN_LEAGUE_SLUGS).filter(([name]) => leagues.includes(name)) : Object.entries(ESPN_LEAGUE_SLUGS);
-  const known = buildKnownNames();
-  const already = new Set(readStoredEntries().keys());
+  // Un seul parcours de la base pour les deux usages : le rapprochement
+  // des noms et la liste de ce qui est déjà là.
+  const stored = storedEntriesIndex();
+  const known = buildKnownNames(stored);
+  const already = new Set(stored.keys());
 
   const report = { startedAt, finishedAt: null, seasons, days: 0, discovered: 0, skipped: 0, fetched: 0, merged: 0, playersMerged: 0, noStats: 0, failed: 0, unavailable: [], samples: { failed: [] } };
 

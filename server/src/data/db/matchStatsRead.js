@@ -813,6 +813,53 @@ export function cupBracket(league, { season = null, database = openDb() } = {}) 
   };
 }
 
+/**
+ * Index léger de tout le magasin, par clé de rencontre.
+ *
+ * Remplace `readStoredEntries()`, qui relisait et analysait les 1,5 Go de
+ * fichiers JSON mensuels à chaque appel — au démarrage d'un import, d'un
+ * relevé de retard, d'une reprise. C'était la raison d'être de la double
+ * écriture, et la voici servie par une requête indexée.
+ *
+ * LÉGER, délibérément : ni statistiques d'équipe, ni lignes de joueurs, ni
+ * déroulé. Les appelants n'ont besoin que de savoir CE QUI EST DÉJÀ LÀ et
+ * D'OÙ ÇA VIENT. Charger le reste ferait revenir, sous une autre forme, le
+ * coût qu'on supprime.
+ *
+ * La PRÉSENCE de chaque source est calculée EN SQL, et rendue comme un
+ * booléen. Mesuré sur les 55 828 rencontres : remonter le texte des sources
+ * jusqu'à JavaScript coûte 13,4 s, le tester sur place 0,8 s — seize fois
+ * moins. Ce n'est pas la lecture des lignes qui coûte, c'est le transfert de
+ * 55 000 chaînes dont on ne veut qu'un oui ou non.
+ */
+const MARQUE_FOTMOB = 'fotmob.com/api/data/matchDetails';
+const MARQUE_ESPN = 'cdn.espn.com/core/soccer/match';
+
+export function storedEntriesIndex({ database = openDb() } = {}) {
+  const index = new Map();
+  for (const r of database.prepare(
+    `SELECT match_key, date, league, home_name, away_name, home_goals, away_goals,
+            sources LIKE '%' || ? || '%' AS from_fotmob,
+            sources LIKE '%' || ? || '%' AS from_espn,
+            json_extract(meta, '$.rev') AS meta_rev
+     FROM matches`
+  ).iterate(MARQUE_FOTMOB, MARQUE_ESPN)) {
+    index.set(r.match_key, {
+      matchKey: r.match_key,
+      date: r.date,
+      league: r.league,
+      homeName: r.home_name,
+      awayName: r.away_name,
+      homeGoals: r.home_goals,
+      awayGoals: r.away_goals,
+      fromFotmob: r.from_fotmob === 1,
+      fromEspn: r.from_espn === 1,
+      metaRev: r.meta_rev ?? null
+    });
+  }
+  return index;
+}
+
 /** Saisons couvertes par une compétition, la plus récente d'abord. */
 export function seasonsForLeague(league, { database = openDb() } = {}) {
   return database

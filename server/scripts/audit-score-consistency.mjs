@@ -44,11 +44,10 @@
  */
 
 import fs from 'node:fs';
-import path from 'node:path';
 import { teamNamesLikelyMatch } from '../src/utils/teamNameMatch.js';
+import { openDb } from '../src/data/db/matchStatsDb.js';
 
-const [, , statsDirArg, calendarPathArg, resultsPathArg] = process.argv;
-const statsDir = statsDirArg ?? 'data/runtime/match-stats';
+const [, , calendarPathArg, resultsPathArg] = process.argv;
 const calendarPath = calendarPathArg ?? 'data/runtime/season-calendar.json';
 const resultsPath = resultsPathArg ?? 'data/runtime/match-results.json';
 
@@ -86,18 +85,44 @@ function scoreOf(entry) {
   return Number.isFinite(numHome) && Number.isFinite(numAway) ? [numHome, numAway] : null;
 }
 
-function readStats(dir) {
-  if (!fs.existsSync(dir)) return [];
-  const out = [];
-  for (const file of fs.readdirSync(dir)) {
-    if (!file.endsWith('.json')) continue;
-    const shard = readJson(path.join(dir, file), []);
-    if (Array.isArray(shard)) out.push(...shard);
+/**
+ * Les rencontres du magasin, avec par camp ce que l'audit vérifie : combien
+ * de buts les gardiens encaissent et combien les joueurs en marquent.
+ *
+ * AGRÉGÉ EN SQL, et non chargé puis parcouru. Le magasin compte 1,95 million
+ * de lignes de joueurs ; les matérialiser en objets pour n'en tirer que deux
+ * sommes par camp coûterait plusieurs gigaoctets de mémoire, là où la base
+ * les additionne en place.
+ */
+function readStats() {
+  const db = openDb();
+  const parMatch = new Map();
+  for (const r of db.prepare(`
+    SELECT m.match_key, m.date, m.home_name, m.away_name, m.home_goals, m.away_goals, p.side,
+           SUM(COALESCE(p.goals_conceded, 0)) AS conceded,
+           SUM(CASE WHEN p.goals_conceded IS NOT NULL THEN 1 ELSE 0 END) AS keepers,
+           COALESCE(SUM(p.goals), 0) AS scored,
+           COUNT(*) AS lignes
+    FROM matches m JOIN players p ON p.match_key = m.match_key
+    GROUP BY m.match_key, p.side
+  `).iterate()) {
+    let e = parMatch.get(r.match_key);
+    if (!e) {
+      parMatch.set(r.match_key, (e = {
+        date: r.date,
+        homeName: r.home_name,
+        awayName: r.away_name,
+        homeGoals: r.home_goals,
+        awayGoals: r.away_goals,
+        sides: {}
+      }));
+    }
+    e.sides[r.side] = { conceded: r.conceded, keepers: r.keepers, scored: r.scored, lignes: r.lignes };
   }
-  return out;
+  return [...parMatch.values()];
 }
 
-const stats = readStats(statsDir);
+const stats = readStats();
 const calendar = readJson(calendarPath, []);
 const results = readJson(resultsPath, []);
 
@@ -157,19 +182,16 @@ let ownGoals = 0;
 for (const m of stats) {
   const score = scoreOf(m);
   const label = `${m.date} ${m.homeName} ${score ? `${score[0]}-${score[1]}` : '?-?'} ${m.awayName}`;
-  const players = m.players ?? {};
-
   for (const side of ['home', 'away']) {
-    const rows = players[side] ?? [];
-    if (!rows.length || !score) continue;
+    const agg = m.sides[side];
+    if (!agg || !agg.lignes || !score) continue;
     const own = side === 'home' ? score[0] : score[1];
     const opponent = side === 'home' ? score[1] : score[0];
 
     // 1. Gardiens : buts encaissés = score adverse.
-    const keepers = rows.filter((r) => r.goalsConceded !== null && r.goalsConceded !== undefined);
-    if (keepers.length) {
+    if (agg.keepers) {
       checkedGk++;
-      const conceded = keepers.reduce((total, r) => total + Number(r.goalsConceded), 0);
+      const conceded = agg.conceded;
       if (conceded !== opponent) {
         report(
           'gardien',
@@ -182,7 +204,7 @@ for (const m of stats) {
 
     // 2. Buteurs : somme des buts <= score, écart de 1 toléré (csc).
     checkedScorers++;
-    const scored = rows.reduce((total, r) => total + (Number(r.goals) || 0), 0);
+    const scored = agg.scored;
     if (scored > own) {
       report('buteurs', label, `${scored} buts crédités aux joueurs pour un score de ${own} — buteur en trop`);
     } else if (own - scored === 1) {

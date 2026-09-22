@@ -2,17 +2,23 @@
 /**
  * merge-match-stats.mjs
  * -----------------------------------------------------------------------
- * Fusionne les statistiques détaillées de matchs terminés (stats d'équipe
- * complètes + stats individuelles de chaque joueur, match par match) dans
- * server/data/runtime/match-stats/<AAAA-MM>.json, lus par
- * GET /api/match-stats/* (cf. matchStatsWebRepository.js).
+ * Contrôle puis enregistre les statistiques détaillées de matchs terminés
+ * (stats d'équipe complètes + stats individuelles de chaque joueur) dans le
+ * magasin SQLite, lu par GET /api/match-stats/*.
  *
- * Un fichier par mois plutôt qu'un seul gros fichier : une saison complète
- * (≈ 40 joueurs × 2 000 matchs) dépasserait vite la taille qu'on peut
- * transférer d'un coup vers le PC — seul le mois touché est réécrit.
+ * ÉCRITURE UNIQUE depuis le 2026-09-22. Ce module tenait en plus des
+ * fichiers mensuels <AAAA-MM>.json qui doublaient le magasin : 1,5 Go dans
+ * l'arbre de travail, relus ENTIÈREMENT à chaque démarrage d'import pour
+ * savoir ce qui était déjà là, et plus lus par l'API depuis la migration
+ * vers SQLite. Le filet de secours qu'ils constituaient est mieux tenu par
+ * les sauvegardes de la base (backupTo, VACUUM INTO).
+ *
+ * Le premier argument reste le dossier des anciens fichiers : il n'est plus
+ * utilisé, mais les appelants le passent encore et le retirer n'apporterait
+ * rien qu'une cascade de changements.
  *
  * Usage :
- *   node merge-match-stats.mjs <dossier-match-stats> <nouvelles-stats.json>
+ *   node merge-match-stats.mjs <dossier-ignoré> <nouvelles-stats.json>
  *
  * "nouvelles-stats.json" est un tableau d'objets :
  *   [{
@@ -42,7 +48,6 @@
  */
 
 import fs from 'node:fs';
-import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { slug, nameTokens, sharesNameToken } from '../src/utils/nameIdentity.js';
 import { TEAM_STAT_KEYS, PLAYER_STAT_KEYS } from '../src/utils/statVocabulary.js';
@@ -157,61 +162,7 @@ function cleanPlayer(raw, warnings, label) {
   return out;
 }
 
-/** Complète `target` avec `incoming` : un chiffre existant n'est remplacé que par un chiffre, jamais par une absence. */
-function fillStats(target, incoming) {
-  for (const [key, value] of Object.entries(incoming)) {
-    if (value !== null && value !== undefined) target[key] = value;
-  }
-  return target;
-}
 
-/**
- * Rapproche les joueurs d'une même feuille de match.
- *
- * Le numéro de maillot sert de clé de secours : les sources changent
- * d'orthographe d'un passage à l'autre ("Pepe Carmona" devient "José Ángel
- * Carmona"), et indexer par nom seul créait une seconde ligne pour le même
- * joueur — donc des buts comptés deux fois.
- *
- * Mais le numéro seul ne suffit pas : en League 1 et League 2, la source
- * attribue parfois le même numéro à deux joueurs distincts d'une même
- * feuille. Le rapprochement par numéro exige donc en plus un mot de nom en
- * commun, faute de quoi on préfère deux lignes séparées à une confusion.
- *
- * Le nom déjà stocké est conservé : c'est celui auquel le reste des données
- * fait référence.
- */
-
-function mergePlayers(existing = [], incoming = []) {
-  const ordered = [...existing];
-  const byId = new Map();
-  const byNumber = new Map();
-  const byName = new Map();
-  for (const p of ordered) {
-    if (p.playerId != null && !byId.has(p.playerId)) byId.set(String(p.playerId), p);
-    if (p.number != null && !byNumber.has(p.number)) byNumber.set(p.number, p);
-    const key = slug(p.name);
-    if (!byName.has(key)) byName.set(key, p);
-  }
-
-  for (const player of incoming) {
-    // Par ordre de fiabilité : identifiant de la source, puis numéro de
-    // maillot corroboré par le nom, puis le nom seul.
-    const sameId = player.playerId != null ? byId.get(String(player.playerId)) : null;
-    const sameNumber = player.number != null ? byNumber.get(player.number) : null;
-    const target = sameId ?? (sameNumber && sharesNameToken(sameNumber.name, player.name) ? sameNumber : null) ?? byName.get(slug(player.name));
-    if (target) {
-      const { name, ...rest } = player; // on garde l'orthographe déjà stockée (accents…)
-      fillStats(target, rest);
-      continue;
-    }
-    ordered.push(player);
-    if (player.playerId != null && !byId.has(String(player.playerId))) byId.set(String(player.playerId), player);
-    if (player.number != null && !byNumber.has(player.number)) byNumber.set(player.number, player);
-    byName.set(slug(player.name), player);
-  }
-  return ordered;
-}
 
 /**
  * Fusionne un tableau de statistiques dans <statsDir> et renvoie le bilan
@@ -223,19 +174,13 @@ function mergePlayers(existing = [], incoming = []) {
  * ligne de commande et par l'application.
  */
 export function mergeMatchStats(statsDir, incoming) {
-  const shards = new Map(); // "AAAA-MM" -> tableau
-  const touched = new Set();
   const warnings = [];
-  let created = 0;
-  let updated = 0;
   let skipped = 0;
   let playersCount = 0;
-  const now = new Date().toISOString();
-
-  const loadShard = (month) => {
-    if (!shards.has(month)) shards.set(month, readJson(path.join(statsDir, `${month}.json`), []));
-    return shards.get(month);
-  };
+  // Les rencontres qui passent le contrôle. Celles qu'on écarte n'allaient
+  // AUTREFOIS pas dans le JSON mais partaient quand même vers la base, qui
+  // recevait alors des rencontres sans rien dedans.
+  const retenues = [];
 
   for (const m of incoming) {
     const { date, league, homeName, awayName } = m ?? {};
@@ -246,9 +191,6 @@ export function mergeMatchStats(statsDir, incoming) {
     }
 
     const label = `${date} ${homeName}-${awayName}`;
-    const matchKey = `${date}-${slug(homeName)}-${slug(awayName)}`;
-    const month = date.slice(0, 7);
-    const shard = loadShard(month);
 
     const homeStats = cleanTeamStats(m.teamStats?.home, warnings, `${label} (dom.)`);
     const awayStats = cleanTeamStats(m.teamStats?.away, warnings, `${label} (ext.)`);
@@ -272,79 +214,18 @@ export function mergeMatchStats(statsDir, incoming) {
       continue;
     }
 
-    const sources = [...new Set([...(Array.isArray(m.sources) ? m.sources : []), ...(m.source ? [m.source] : [])])];
-    const existing = shard.find((e) => e.matchKey === matchKey);
-
-    if (existing) {
-      // Une entrée écrite par un import plus ancien peut n'avoir ni bloc
-      // `players` ni bloc `teamStats` complet : on rétablit la forme attendue
-      // avant de compléter, plutôt que d'échouer sur toute la fusion.
-      existing.teamStats ??= {};
-      existing.teamStats.home ??= {};
-      existing.teamStats.away ??= {};
-      existing.players ??= {};
-      existing.players.home ??= [];
-      existing.players.away ??= [];
-
-      existing.league = league ?? existing.league ?? null;
-      if (toNumber(m.homeGoals) !== null) existing.homeGoals = toNumber(m.homeGoals);
-      if (toNumber(m.awayGoals) !== null) existing.awayGoals = toNumber(m.awayGoals);
-      fillStats(existing.teamStats.home, homeStats);
-      fillStats(existing.teamStats.away, awayStats);
-      existing.players.home = mergePlayers(existing.players.home, homePlayers);
-      existing.players.away = mergePlayers(existing.players.away, awayPlayers);
-      // Déroulé du match et compositions : remplacés en bloc plutôt que
-      // complétés champ par champ. Ce sont des listes ordonnées — les fondre
-      // ligne à ligne produirait un déroulé incohérent — et la source les
-      // publie entières ou pas du tout.
-      if (Array.isArray(m.events) && m.events.length) existing.events = m.events;
-      if (m.lineups && (m.lineups.home || m.lineups.away)) existing.lineups = m.lineups;
-      if (m.meta && Object.keys(m.meta).length) existing.meta = { ...(existing.meta ?? {}), ...m.meta };
-      if (Array.isArray(m.shotmap) && m.shotmap.length) existing.shotmap = m.shotmap;
-      existing.sources = [...new Set([...(existing.sources ?? []), ...sources])];
-      existing.updatedAt = now;
-      updated++;
-    } else {
-      shard.push({
-        matchId: `stats-${matchKey}`,
-        matchKey,
-        date,
-        league: league ?? null,
-        homeName,
-        awayName,
-        homeGoals: toNumber(m.homeGoals),
-        awayGoals: toNumber(m.awayGoals),
-        teamStats: { home: homeStats, away: awayStats },
-        players: { home: homePlayers, away: awayPlayers },
-        ...(Array.isArray(m.events) && m.events.length ? { events: m.events } : {}),
-        ...(m.lineups && (m.lineups.home || m.lineups.away) ? { lineups: m.lineups } : {}),
-        ...(m.meta && Object.keys(m.meta).length ? { meta: m.meta } : {}),
-        ...(Array.isArray(m.shotmap) && m.shotmap.length ? { shotmap: m.shotmap } : {}),
-        sources,
-        updatedAt: now
-      });
-      created++;
-    }
     playersCount += homePlayers.length + awayPlayers.length;
-    touched.add(month);
+    retenues.push(m);
   }
 
-  fs.mkdirSync(statsDir, { recursive: true });
-  const written = [];
-  for (const month of touched) {
-    const shard = shards.get(month).sort((a, b) => a.date.localeCompare(b.date) || a.matchKey.localeCompare(b.matchKey));
-    const file = path.join(statsDir, `${month}.json`);
-    // JSON compact (pas d'indentation) : les stats joueurs pèsent lourd.
-    // Réessais : le projet vit dans un dossier OneDrive, dont la
-    // synchronisation verrouille brièvement un fichier qu'elle envoie
-    // (EBUSY, EPERM, ou un UNKNOWN sous Windows). Abandonner à la première
-    // tentative faisait perdre tout un lot d'import.
-    writeWithRetry(file, JSON.stringify(shard));
-    written.push(file);
-  }
 
-  // Double écriture : les fichiers JSON restent à jour pendant que la base
-  // SQLite, désormais lue par l'API, reçoit le même lot.
+
+  // Le magasin SQLite est désormais la seule écriture. Les fichiers JSON
+  // mensuels qui le doublaient ont été retirés : 1,5 Go dans l'arbre de
+  // travail, relus ENTIÈREMENT à chaque démarrage d'import, pour un contenu
+  // que la base porte déjà — et que l'API ne lisait plus depuis la
+  // migration. Leur seul rôle restant était d'être un filet de secours, que
+  // les sauvegardes de la base (backupTo) remplissent mieux.
   //
   // Une seule ligne refusée annulait AUTREFOIS toute la transaction, donc
   // tout le lot — et l'erreur finissait dans `warnings`, que personne ne
@@ -355,7 +236,7 @@ export function mergeMatchStats(statsDir, incoming) {
   //   2. l'échec s'écrit sur la sortie d'erreur, pas dans un tableau.
   let dbReport = null;
   try {
-    dbReport = upsertMatches(incoming);
+    dbReport = upsertMatches(retenues);
   } catch (error) {
     dbReport = { created: 0, updated: 0, skipped: 0, playersMerged: 0, warnings: [], rejected: [] };
     for (const entry of incoming) {
@@ -377,7 +258,16 @@ export function mergeMatchStats(statsDir, incoming) {
     if (dbReport.rejected.length > 10) console.error(`[base]   … et ${dbReport.rejected.length - 10} autres.`);
   }
 
-  return { created, updated, skipped, playersMerged: playersCount, writtenFiles: written, warnings, db: dbReport };
+  // « créé » et « mis à jour » viennent de la base : c'est elle qui sait
+  // désormais si une rencontre existait déjà.
+  return {
+    created: dbReport?.created ?? 0,
+    updated: dbReport?.updated ?? 0,
+    skipped,
+    playersMerged: playersCount,
+    warnings,
+    db: dbReport
+  };
 }
 
 function main() {
