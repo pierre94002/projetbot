@@ -740,13 +740,45 @@ export function cupBracket(league, { season = null, database = openDb() } = {}) 
   // la phase de ligue. Les rencontres étant lues par date, un nouveau bloc
   // s'ouvre dès que l'intitulé change ; les tours intercalés séparent donc
   // naturellement les deux « finales ».
-  const blocs = [];
+  // Un tour est un ensemble de rencontres portant le même intitulé ET
+  // rapprochées dans le temps — pas simplement « toutes celles qui portent
+  // cet intitulé », ni « celles qui se suivent sans interruption ».
+  //
+  // Les deux règles naïves échouent, chacune à sa façon. Regrouper par le
+  // seul intitulé mettait ensemble le dernier tour de QUALIFICATION d'août,
+  // que FotMob appelle « final », et la finale de mai : la Ligue des
+  // champions affichait « final : 15 matchs ». Exiger des rencontres
+  // strictement consécutives découpait au contraire le premier tour de FA
+  // Cup en quatre morceaux, les rejouages et les matchs sans tour
+  // s'intercalant entre ses rencontres.
+  //
+  // Le critère qui tient est l'ÉCART : un tour se joue sur quelques jours,
+  // parfois quelques semaines avec les rejouages, jamais au-delà. Deux
+  // rencontres de même intitulé séparées de plus de quarante jours
+  // appartiennent à deux tours différents.
+  const ECART_MAX_JOURS = 40;
+  const JOUR = 86_400_000;
+  const parIntitule = new Map();
   for (const r of rows) {
     const round = parse(r.meta)?.round ?? null;
     const cle = round === null ? 'Tour inconnu' : String(round);
-    const dernier = blocs[blocs.length - 1];
-    const bloc = dernier && dernier.round === cle ? dernier : (blocs.push({ round: cle, from: r.date, matches: [] }), blocs[blocs.length - 1]);
-    bloc.matches.push({
+    if (!parIntitule.has(cle)) parIntitule.set(cle, []);
+    parIntitule.get(cle).push(r);
+  }
+
+  const blocs = [];
+  for (const [cle, rencontres] of parIntitule) {
+    let bloc = null;
+    for (const r of rencontres) {
+      const ecart = bloc ? (Date.parse(r.date) - Date.parse(bloc.last)) / JOUR : Infinity;
+      if (!bloc || ecart > ECART_MAX_JOURS) blocs.push((bloc = { round: cle, from: r.date, last: r.date, matches: [] }));
+      bloc.last = r.date;
+      bloc.matches.push(ligne(r));
+    }
+  }
+
+  function ligne(r) {
+    return {
       matchId: r.fotmob_id ?? r.match_key,
       date: r.date,
       home: canon.get(r.home_id) ?? r.home_name,
@@ -756,7 +788,7 @@ export function cupBracket(league, { season = null, database = openDb() } = {}) 
       homeGoals: r.home_goals,
       awayGoals: r.away_goals,
       played: r.home_goals !== null && r.away_goals !== null
-    });
+    };
   }
 
   // Un intitulé qui revient est daté, sans quoi deux sections s'appelleraient

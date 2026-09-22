@@ -213,8 +213,13 @@ export const FOTMOB_LEAGUES = {
   // La coupe de Turquie passe par des groupes et des qualifications, qui en
   // font partie : le suffixe est donc large.
   'Türkiye Kupası': /^TUR\|Cup($| .+$| - .+$)/,
-  'Copa do Brasil': /^BRA\|Copa do Brasil($| - .+$| Final Stage$)/,
-  'Copa Argentina': /^ARG\|Copa Argentina($| - .+$| Final Stage$)/,
+  // FotMob publie ces deux coupes tantôt sous leur nom, tantôt sous le seul
+  // « Cup » — et le second domine largement. Ne retenir que le nom complet
+  // amputait la Copa do Brasil de trois saisons sur quatre. Les coupes
+  // régionales brésiliennes (Copa do Nordeste, Recopa Gaúcha) portent un
+  // autre nom et restent donc dehors.
+  'Copa do Brasil': /^BRA\|(Copa do Brasil|Cup)($| - .+$| Final Stage$)/,
+  'Copa Argentina': /^ARG\|(Copa Argentina|Cup)($| - .+$| Final Stage$)/,
   'US Open Cup': /^USA\|US Open Cup($| - .+$| Final Stage$)/,
   'Copa Libertadores': /^INT\|Copa Libertadores($| - .+$| Final Stage$)/,
   'Copa Sudamericana': /^INT\|Copa Sudamericana($| - .+$| Final Stage$)/,
