@@ -1,6 +1,7 @@
 import { getStandingsByLeagueLabel } from '../../data/providers/standingsService.js';
 import { listWebStandingsLeagues } from '../../data/repositories/webStandingsRepository.js';
 import { storeStatus } from '../../data/db/matchStatsRead.js';
+import { hasStandings } from '../../data/providers/leagueCups.js';
 import { ApiError, requireStringParam, optionalPositiveInt } from '../middlewares/errorHandler.js';
 
 /**
@@ -19,7 +20,13 @@ import { ApiError, requireStringParam, optionalPositiveInt } from '../middleware
  * serait jamais apparue, alors que ses résultats sont là.
  */
 export function getStandingsLeagues(req, res) {
-  const leagues = [...new Set([...listWebStandingsLeagues(), ...storeStatus().leagues])].sort();
+  const leagues = [...new Set([...listWebStandingsLeagues(), ...storeStatus().leagues])]
+    // Une coupe à élimination directe n'a pas de classement. Sans ce filtre,
+    // la FA Cup en produisait un de 124 équipes, Port Vale troisième — une
+    // table qui n'existe pas. Elle se consulte par son tableau, dans
+    // l'onglet Coupes. Les compétitions à phase de groupes, elles, restent.
+    .filter(hasStandings)
+    .sort();
   res.json({ leagues });
 }
 

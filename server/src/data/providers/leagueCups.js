@@ -86,8 +86,31 @@ export function cupsForLeague(league) {
   return CUPS_BY_LEAGUE[league] ?? [];
 }
 
-/** Une compétition est-elle une coupe ? Sert à masquer le classement. */
+/** Une compétition est-elle une coupe ? */
 const TOUTES_LES_COUPES = new Set(Object.values(CUPS_BY_LEAGUE).flat());
 export function isCup(league) {
   return TOUTES_LES_COUPES.has(league);
+}
+
+/**
+ * Coupes qui comportent une phase de groupes ou de ligue, donc un classement
+ * qui veut dire quelque chose.
+ *
+ * Toutes les autres sont à élimination directe, et leur « classement »
+ * calculé sur les points est une table qui n'existe pas : la FA Cup sortait
+ * un tableau de 124 équipes avec Port Vale troisième. Mieux vaut ne rien
+ * proposer que proposer cela.
+ */
+const COUPES_AVEC_CLASSEMENT = new Set([
+  'UEFA Champions League',
+  'UEFA Europa League',
+  'UEFA Europa Conference League',
+  'Copa Libertadores',
+  'Copa Sudamericana',
+  'Leagues Cup'
+]);
+
+/** Un classement d'équipes a-t-il un sens pour cette compétition ? */
+export function hasStandings(league) {
+  return !isCup(league) || COUPES_AVEC_CLASSEMENT.has(league);
 }
