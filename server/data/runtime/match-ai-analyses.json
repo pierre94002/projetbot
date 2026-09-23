@@ -1554,5 +1554,237 @@
     },
     "updatedAt": "2026-09-20T19:02:53.686Z",
     "createdAt": "2026-09-20T19:02:53.686Z"
+  },
+  {
+    "matchId": "b870dcfba5e5920d3f1551a3aa1ea435",
+    "homeName": "Arsenal",
+    "awayName": "Leeds United",
+    "league": "EPL",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Arsenal vs Leeds United",
+      "expectedGoals": {
+        "home": 1.019,
+        "away": 0.5,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 1.59,
+        "draw": 4.14,
+        "away": 7.65
+      },
+      "market": {
+        "odds1": 1.35,
+        "oddsDraw": 4.95,
+        "odds2": 8.24
+      },
+      "edgePercent": -9.83,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 3286,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1495,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Arsenal aborde ce match en confiance : 2e du championnat, invaincu à domicile (2 victoires en 2 matchs, 5 buts marqués pour 1 encaissé) et sur une série de forme très solide. Leeds, 5e avec un bilan surprenant de 0 défaite (2V, 3N) en championnat, reste un adversaire coriace mais moins prolifique offensivement, avec une possession largement inférieure dans ses matchs de référence (42,4% vs 59% pour Arsenal). Le moteur, malgré cet écart de forme et de classement en faveur d'Arsenal, juge la cote du marché sur la victoire à domicile trop chère par rapport à sa probabilité calculée, d'où le PASS.",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Arsenal traverse une période nettement plus dominante que Leeds, avec une série de victoires quasi ininterrompue selon plusieurs sources.",
+          "evidence": "homeForm: D,V,V,V,V (5 derniers) et homeHistoricalForm/homeTeamProfile: V,V,V,V,V ; awayForm: N,V,N,N,V et awayHistoricalForm: D,V,N,V,N"
+        },
+        {
+          "factor": "classement",
+          "observation": "Arsenal occupe la 2e place avec un meilleur ratio victoires/points, Leeds est 5e mais reste invaincu, ce qui nuance l'écart apparent.",
+          "evidence": "Arsenal: 4V-0N-1D, 12 pts, +4 diff ; Leeds: 2V-3N-0D, 9 pts, +4 diff (même différentiel de buts malgré moins de victoires)"
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Arsenal domine nettement en possession et volume de jeu à domicile, cohérent avec un xG domicile supérieur ; Leeds affiche des moyennes de tirs et de buts plus modestes en historique.",
+          "evidence": "homeStats: 59% possession, 14.7 tirs, 4.7 tirs cadrés ; awayStats: 42.4% possession, 13.9 tirs ; homeHistoricalStats: 1.5 buts pour/0.6 encaissés en moyenne ; awayHistoricalStats: 1.2 buts pour/0.9 encaissés"
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Malgré un contexte qualitatif clairement favorable à Arsenal, le moteur ne détecte pas de valeur suffisante sur le marché proposé et recommande de ne pas miser.",
+          "evidence": "edgePercent: -9.83%, staking.action: PASS"
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif (forme, classement, possession, moyennes offensives) va globalement dans le sens d'une supériorité d'Arsenal, ce qui est cohérent avec la cote domicile la plus faible du modèle. Cependant, cette supériorité qualitative ne suffit pas à justifier une prise de position selon le moteur : l'écart entre la cote réelle estimée et celle du marché reste insuffisant, donc le contexte confirme la hiérarchie mais ne contredit ni ne renforce la décision de passer.",
+      "caveats": "Le classement fourni (rank, played, points) ne précise pas sa source ni s'il s'agit d'un classement en direct de la saison en cours ; à traiter avec prudence. Les dates de homeForm/awayForm (2026) semblent incohérentes ou anticipées par rapport à la saison réelle, mais elles sont plus récentes que d'autres sources et donc utilisées comme référence de forme actuelle. homeHistoricalForm et homeTeamProfile.recentForm convergent parfaitement (5V/5), renforçant la fiabilité de cette série pour Arsenal. Pour Leeds, awayTeamProfile est absent (null), donc aucune confirmation web récente de sa forme n'est disponible au-delà d'awayForm et awayHistoricalForm, qui divergent légèrement entre elles. homeFlashscoreStats et awayFlashscoreStats sont également absents."
+    },
+    "updatedAt": "2026-09-23T16:53:22.682Z",
+    "createdAt": "2026-09-23T16:53:22.682Z"
+  },
+  {
+    "matchId": "02e6c0ccb11bb7ce78989ce49d67110b",
+    "homeName": "Aston Villa",
+    "awayName": "Brentford",
+    "league": "EPL",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Aston Villa vs Brentford",
+      "expectedGoals": {
+        "home": 0.612,
+        "away": 1.48,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 3.41,
+        "draw": 3.65,
+        "away": 2.31
+      },
+      "market": {
+        "odds1": 2.63,
+        "oddsDraw": 3.46,
+        "odds2": 2.53
+      },
+      "edgePercent": -17.85,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 3248,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1606,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Aston Villa traverse une période délicate à domicile (16e, 0V-0N-2D à domicile cette saison, -5 de différence de buts) tandis que Brentford affiche un début de saison solide (4e, invaincu en 5 matchs, en course pour une place européenne). Les statistiques offensives moyennes et le xG favorisent nettement les visiteurs, cohérent avec un classement et une forme récente qui penchent clairement du côté de Brentford.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Écart important au classement actuel entre les deux équipes",
+          "evidence": "Aston Villa 16e (4 pts, 1V-1N-3D, -5 diff.) vs Brentford 4e (9 pts, 2V-3N-0D, +6 diff., invaincu)"
+        },
+        {
+          "factor": "forme à domicile/extérieur",
+          "observation": "Aston Villa est en grande difficulté à domicile alors que Brentford performe bien à l'extérieur cette saison",
+          "evidence": "Villa à domicile: 0V-0N-2D, 1 but marqué / 3 encaissés sur 2 matchs ; Brentford à l'extérieur: 0V-2N-0D mais invaincu, 3 buts marqués / 3 encaissés sur 2 matchs"
+        },
+        {
+          "factor": "forme récente (5 derniers matchs)",
+          "observation": "Brentford plus régulier avec une série sans défaite, Villa plus irrégulier avec plusieurs défaites/nuls",
+          "evidence": "Forme API-Football Villa: V-D-N-D-D ; Brentford: V-N-N-N-V. Le profil web de Villa (plus récent, updatedAt 2026-09-16) indique D-V-D-N-D, confirmant l'instabilité"
+        },
+        {
+          "factor": "statistiques moyennes / xG",
+          "observation": "Brentford supérieur sur quasiment tous les indicateurs offensifs et défensifs",
+          "evidence": "xG saison: Villa 0.612 vs Brentford 1.48 (moteur) ; moyennes historiques Premier League: Villa 1.8 buts marqués/1.9 encaissés vs Brentford 1.1/1.2 mais avec plus de tirs cadrés (5.6 vs 4.3) et plus de possession (52.1% vs 46.1%) sur l'échantillon de 7 matchs"
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur ne détecte pas de valeur sur ce match malgré le déséquilibre apparent en faveur de Brentford",
+          "evidence": "Edge de -17.85%, action PASS, cotes marché (2.63/3.46/2.53) jugées trop généreuses sur Villa/nul par rapport aux vraies cotes calculées (3.41/3.65/2.31)"
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif (classement, forme, statistiques) va globalement dans le même sens que l'edge chiffré du moteur en pointant une nette supériorité de Brentford, notamment à l'extérieur où les Bees restent invaincus. Cependant, le moteur juge que le marché a déjà surestimé cet écart (cotes 1 et nul trop généreuses côté marché par rapport à son propre calcul), d'où le PASS malgré un contexte qui semble a priori favorable à Brentford. La faiblesse marquée de Villa à domicile (0 victoire, 1 seul but marqué en 2 matchs) est un facteur qui pourrait nuancer légèrement cette prudence du modèle, sans pour autant remettre en cause la décision de passer sur ce match.\nLes données de forme API-Football (season 2024, dates du 22 août au 19 septembre 2026) semblent porter sur une saison/period différente ou avec des dates incohérentes ; le profil web d'Aston Villa (updatedAt 2026-09-16) offre une forme plus fraîche mais légèrement contradictoire (D-V-D-N-D) par rapport à la forme API-Football (V-D-N-D-D) — à traiter avec prudence. Le classement fourni ne précise pas explicitement s'il s'agit d'un classement en direct (pas de mention de source historique), donc considéré comme actuel. Aucune donnée FlashScore disponible pour affiner davantage. Le profil équipe de Brentford (awayTeamProfile) est absent, limitant la vision qualitative récente côté visiteurs au-delà des formes chiffrées."
+    },
+    "updatedAt": "2026-09-23T16:55:53.357Z",
+    "createdAt": "2026-09-23T16:55:53.357Z"
+  },
+  {
+    "matchId": "cal-2026-09-25-luqueno-guarani",
+    "homeName": "Luqueño",
+    "awayName": "Guaraní",
+    "league": "División Profesional - Paraguay",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Luqueño vs Guaraní",
+      "expectedGoals": {
+        "home": 1.163,
+        "away": 1.184,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 3.12,
+        "draw": 3.59,
+        "away": 3.03
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds"
+      }
+    },
+    "usage": {
+      "input_tokens": 2924,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1397,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Match équilibré sur le papier entre un Luqueño 9e (13 pts) en délicatesse défensive et un Guaraní 6e (17 pts) plus solide et régulier. Guaraní affiche une meilleure dynamique globale (moins de défaites, meilleure différence de buts) et surtout une invincibilité totale à l'extérieur cette saison, ce qui contraste avec la faiblesse défensive de Luqueño à domicile.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Guaraní devance nettement Luqueño au classement, avec une différence de buts positive contre une différence négative pour Luqueño.",
+          "evidence": "Luqueño 9e, 13 pts, 4V-1N-6D, diff -8 ; Guaraní 6e, 17 pts, 4V-5N-2D, diff +3"
+        },
+        {
+          "factor": "forme récente (5 derniers matchs)",
+          "observation": "Les deux équipes ont un profil de forme proche (1 victoire nette de plus pour Luqueño sur l'échantillon), mais Guaraní n'a perdu aucun de ses 5 derniers matchs référencés contre 2 défaites pour Luqueño.",
+          "evidence": "Luqueño: V-D-D-N-V ; Guaraní: V-N-V-N-N, aucune défaite sur les 5 derniers"
+        },
+        {
+          "factor": "performance à domicile/extérieur",
+          "observation": "Luqueño est fragile à domicile avec plus de buts encaissés que marqués, alors que Guaraní est invaincu à l'extérieur cette saison avec une défense très solide.",
+          "evidence": "Luqueño à domicile: 5 matchs, 2V-0N-3D, 6 buts pour / 9 contre ; Guaraní à l'extérieur: 5 matchs, 2V-3N-0D, 3 buts pour / 1 seul encaissé"
+        },
+        {
+          "factor": "statistiques offensives moyennes",
+          "observation": "Les deux équipes ont des profils offensifs très similaires en tirs et possession, sans avantage marqué pour l'une ou l'autre.",
+          "evidence": "Luqueño: 3.9 tirs cadrés, 12.5 tirs total, 47.3% possession ; Guaraní: 4.2 tirs cadrés, 13.5 tirs total, 47.5% possession, sur 10 matchs chacun"
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur ne dispose pas de cotes de marché pour ce match et reste donc en position d'attente (PASS), sans edge exploitable identifié.",
+          "evidence": "trueOdds calculées (1: 3.12 / N: 3.59 / 2: 3.03) mais market odds1/oddsDraw/odds2 = null, staking action = PASS"
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif est cohérent avec les probabilités très serrées calculées par le moteur (cotes vraies proches entre les trois issues). Le classement et la solidité défensive de Guaraní à l'extérieur pourraient légèrement nuancer en sa faveur par rapport à un pur 50/50, mais rien dans les données ne contredit fondamentalement l'équilibre affiché par le modèle. L'absence de cotes de marché empêche de toute façon toute exploitation, ce qui rend cette lecture qualitative purement informative.",
+      "caveats": "Aucune donnée FlashScore ni historique (division inférieure ou autre saison) disponible pour confirmer ou nuancer ces chiffres. La forme récente provient d'API-Football pour la saison 2024 avec des dates en 2026, ce qui est incohérent en l'état et suggère un possible souci de millésime dans la source ; à interpréter avec prudence. Aucun profil web (recentForm) n'est disponible pour confirmer l'état de forme le plus actuel des deux équipes."
+    },
+    "updatedAt": "2026-09-23T16:58:09.273Z",
+    "createdAt": "2026-09-23T16:58:09.273Z"
   }
 ]
