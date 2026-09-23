@@ -94,7 +94,10 @@ export function countsForTable(meta) {
  * part de ses classements individuels (la C3 2026-27 comptait ici les buts
  * des tours préliminaires d'août, pas la source).
  */
-const HORS_QUALIFICATION = "COALESCE(json_extract(m.meta, '$.leagueKey'), '') NOT LIKE '% Qualification'";
+// Sauf pour les coupes CONMEBOL : Libertadores et Sudamericana comptent
+// leurs tours préliminaires dans leurs listes officielles (Fydriszewski 4 =
+// 2 en préliminaires + 2 en groupes), là où l'UEFA les tient à part.
+const HORS_QUALIFICATION = "NOT (COALESCE(json_extract(m.meta, '$.leagueKey'), '') LIKE '% Qualification' AND COALESCE(json_extract(m.meta, '$.leagueKey'), '') NOT LIKE 'INT|Copa %')";
 
 /**
  * Clean sheet : gardien sur le terrain TOUT le match, sans but encaissé —
