@@ -228,14 +228,14 @@ function leagueKeysByLeagueId({ database = openDb() } = {}) {
  * entrent.
  */
 export async function importFotmobIds(ids, { league, concurrency = DEFAULT_CONCURRENCY, onProgress = null } = {}) {
-  const report = { requested: ids.length, fetched: 0, noStats: 0, notFinished: 0, failed: 0, merged: 0, playersMerged: 0, samples: { failed: [] } };
+  const report = { requested: ids.length, fetched: 0, noStats: 0, notFinished: 0, idReused: 0, failed: 0, merged: 0, playersMerged: 0, samples: { failed: [] } };
   if (!ids.length) return report;
   const phases = leagueKeysByLeagueId();
   // L'intitulé de phase DÉJÀ stocké fait foi pour une rencontre connue : la
   // phase la plus fréquente d'un identifiant est fausse dès que playoffs et
   // saison régulière partagent cet identifiant (MLS) — une relecture avait
   // rendu la finale de la MLS Cup 2024 « saison régulière ».
-  const cleConnue = openDb().prepare("SELECT json_extract(meta, '$.leagueKey') AS k FROM matches WHERE fotmob_id = ? LIMIT 1");
+  const cleConnue = openDb().prepare("SELECT date, json_extract(meta, '$.leagueKey') AS k FROM matches WHERE fotmob_id = ? LIMIT 1");
   let batch = [];
   const flush = () => {
     if (!batch.length) return;
@@ -255,8 +255,18 @@ export async function importFotmobIds(ids, { league, concurrency = DEFAULT_CONCU
         return;
       }
       if (!stats.finished) { report.notFinished++; return; }
+      const connue = cleConnue.get(String(id));
+      // Identifiant RÉATTRIBUÉ par FotMob (Mirassol - Vasco 2025 → 2026) : la
+      // page décrit un match à des mois de la rencontre connue sous cet
+      // identifiant. Sans cette garde, la rencontre 2025 était effacée et
+      // fondue dans celle de 2026.
+      if (connue?.date && Math.abs(Date.parse(date) - Date.parse(connue.date)) > 45 * 86_400_000) {
+        report.idReused++;
+        if (report.samples.failed.length < 20) report.samples.failed.push(`${id} : identifiant réattribué (${connue.date} → ${date})`);
+        return;
+      }
       if (stats.noSheet) report.noStats++; else report.fetched++;
-      const leagueKey = cleConnue.get(String(id))?.k ?? phases.get(Number(stats.meta?.leagueId)) ?? null;
+      const leagueKey = connue?.k ?? phases.get(Number(stats.meta?.leagueId)) ?? null;
       batch.push(entreeDepuis(stats, { date, league, fotmobId: String(id), leagueKey }));
     } catch (error) {
       report.failed++;
