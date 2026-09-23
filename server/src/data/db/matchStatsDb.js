@@ -191,6 +191,20 @@ const REGISTRY_DDL = [
   name TEXT NOT NULL,
   updated_at TEXT
 ) WITHOUT ROWID;`,
+  // Équivalences de joueurs : FotMob publie parfois le même homme sous DEUX
+  // identifiants — l'un dans playerStats, l'autre dans la composition d'une
+  // même feuille (Matheus Albino 1461840 / 1204392), ou l'un après l'autre
+  // au fil des saisons (Luis Pavez 491925 / 50552, même club, même date de
+  // naissance). L'annuaire scindait alors une carrière en deux fiches. Une
+  // équivalence s'applique aux lignes existantes (player_id réécrit) et à
+  // tout ce qui entre ensuite (upsertMatches). `evidence` dit pourquoi :
+  // « meme-feuille » ou « meme-naissance ».
+  `CREATE TABLE IF NOT EXISTS people_merges (
+  from_id TEXT PRIMARY KEY,
+  to_id TEXT NOT NULL,
+  evidence TEXT NOT NULL,
+  created_at TEXT NOT NULL
+) WITHOUT ROWID;`,
   // Classements OFFICIELS, tels que FotMob les publie, par compétition,
   // saison et table — une compétition peut en avoir plusieurs pour une même
   // saison (conférences MLS, Apertura/Clausura). Les lignes sont gardées en
@@ -455,18 +469,29 @@ export function playerKeyOf(player) {
  */
 function resolvePlayerKey(player, existing) {
   if (player.playerId != null) {
-    const byId = existing.find((e) => e.player_id != null && String(e.player_id) === String(player.playerId));
+    const id = String(player.playerId);
+    // La ligne qui porte cet identifiant pour CLÉ d'abord : c'est son
+    // identité d'origine. Puis une ligne identifiée ensuite sous cet
+    // identifiant à partir d'une clé sans identité (ligne ESPN « name: »).
+    // Jamais une ligne dont la clé est un AUTRE identifiant FotMob : deux
+    // homonymes d'une même équipe s'écrivaient l'un sur l'autre.
+    const byKey = existing.find((e) => String(e.player_key) === id);
+    if (byKey) return byKey.player_key;
+    const byId = existing.find((e) => e.player_id != null && String(e.player_id) === id && !/^fotmob-/.test(String(e.player_key)));
     if (byId) return byId.player_key;
   }
+  // Les rapprochements par numéro ou par nom ne valent que pour une ligne
+  // qui n'a pas encore d'identité, ou qui porte déjà celle-ci.
+  const memeIdentite = (e) => e.player_id == null || player.playerId == null || String(e.player_id) === String(player.playerId);
   if (player.number != null) {
-    const byNumber = existing.find((e) => e.shirt_number === player.number && sharesNameToken(e.name, player.name));
+    const byNumber = existing.find((e) => memeIdentite(e) && e.shirt_number === player.number && sharesNameToken(e.name, player.name));
     if (byNumber) return byNumber.player_key;
   }
   const jetons = jetonsDuNom(player.name);
-  const byTokens = existing.find((e) => jetonsDuNom(e.name) === jetons);
+  const byTokens = existing.find((e) => memeIdentite(e) && jetonsDuNom(e.name) === jetons);
   if (byTokens) return byTokens.player_key;
   const wanted = slug(player.name);
-  const byName = existing.find((e) => slug(e.name) === wanted);
+  const byName = existing.find((e) => memeIdentite(e) && slug(e.name) === wanted);
   if (byName) return byName.player_key;
   return playerKeyOf(player);
 }
@@ -679,6 +704,9 @@ export function markNoSheet(matchKeys, rev, { database = openDb() } = {}) {
 export function upsertMatches(entries, { database = openDb() } = {}) {
   const st = prepared(database);
   const report = { created: 0, updated: 0, skipped: 0, rekeyed: 0, playersMerged: 0, playersPruned: 0, warnings: [] };
+  // Un identifiant fusionné (people_merges) est remplacé à l'entrée : une
+  // équivalence décidée une fois vaut pour toutes les lectures suivantes.
+  const fusions = new Map(database.prepare('SELECT from_id, to_id FROM people_merges').all().map((r) => [r.from_id, r.to_id]));
   const now = new Date().toISOString();
 
   // IMMEDIATE, et non le BEGIN différé par défaut. upsertMatches lit
@@ -735,6 +763,7 @@ export function upsertMatches(entries, { database = openDb() } = {}) {
         let prochainRang = existing.reduce((max, e) => Math.max(max, e.ord ?? 0), -1) + 1;
         for (const player of incoming) {
           if (!player?.name) continue;
+          if (player.playerId != null && fusions.has(String(player.playerId))) player.playerId = fusions.get(String(player.playerId));
           let key = resolvePlayerKey(player, existing);
           // Deux inconnus d'une même feuille ne doivent pas se confondre : si
           // la clé est déjà prise par un autre homme du même lot, on la suffixe.

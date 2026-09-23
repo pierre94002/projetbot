@@ -111,6 +111,8 @@ de contrôle.
   `node scripts/import-fotmob-stats.mjs` (`--from/--to` pour constituer, sans argument pour
   compléter), `node scripts/fotmob-standings.mjs` (`--all` pour l'historique),
   `node scripts/fotmob-fixtures-gaps.mjs --apply` (ce que la liste du jour a omis, depuis 2023).
+  `node scripts/merge-player-identities.mjs --apply` fusionne les joueurs que FotMob publie sous
+  deux identifiants, sur preuve (même date de naissance chez la source).
 - **Contrôles** : `verify-standings.mjs` (table officielle contre calcul), `verify-sample.mjs`
   (relecture d'un échantillon chez la source), `verify-leaders.mjs` (buteurs, passeurs et
   clean sheets contre les listes officielles), `audit-score-consistency.mjs`.

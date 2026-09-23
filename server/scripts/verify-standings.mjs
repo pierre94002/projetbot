@@ -35,14 +35,21 @@ import { openDb } from '../src/data/db/matchStatsDb.js';
 import { standingsFromStore, officialStandings, seasonsForLeague } from '../src/data/db/matchStatsRead.js';
 import { hasStandings } from '../src/data/providers/leagueCups.js';
 import { FOTMOB_LEAGUES } from '../src/data/providers/fotMobProvider.js';
-import { seasonLabel } from '../src/data/providers/seasonWindows.js';
+import { seasonLabel, seasonBounds } from '../src/data/providers/seasonWindows.js';
 
 const argv = process.argv.slice(2);
 const leagues = argv.reduce((acc, a, i) => (a === '--league' ? [...acc, argv[i + 1]] : acc), []);
 const db = openDb();
 
 const cibles = Object.keys(FOTMOB_LEAGUES).filter((l) => hasStandings(l) && (!leagues.length || leagues.includes(l)));
-const resume = { leagues: 0, seasons: 0, withOfficial: 0, tables: 0, teamsOnlyOfficial: 0, teamsOnlyComputed: 0, playedMismatch: 0, recordMismatch: 0, exact: 0, details: [] };
+const resume = { leagues: 0, seasons: 0, withOfficial: 0, tables: 0, teamsOnlyOfficial: 0, teamsOnlyComputed: 0, playedMismatch: 0, recordMismatch: 0, awardedExplained: 0, exact: 0, exactOrExplained: 0, details: [] };
+
+// Un match ATTRIBUÉ sur tapis vert n'est pas toujours appliqué par la
+// fédération comme FotMob l'écrit en en-tête (Mannucci - Municipal 0-0
+// « awarded_win », Bastia - Red Star 0-3 sans buts dans la table) : un
+// bilan qui diverge pour un club ayant un tel match dans la saison est un
+// écart de la source, pas du magasin.
+const matchsAttribues = db.prepare(`SELECT COUNT(*) n FROM matches WHERE league = ? AND date >= ? AND date < ? AND (home_id = ? OR away_id = ?) AND json_extract(meta, '$.awarded') = 1`);
 
 const CHAMPS = ['played', 'won', 'drawn', 'lost', 'goalsFor', 'goalsAgainst'];
 const vide = (teamName) => ({ teamName, played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0 });
@@ -96,7 +103,8 @@ for (const league of cibles) {
     }
     resume.tables += nonDoublon.length;
 
-    const detail = { league, season: seasonLabel(league, season), tables: nonDoublon.map((t) => t.name), onlyOfficial: [], onlyComputed: [], played: [], record: [] };
+    const detail = { league, season: seasonLabel(league, season), tables: nonDoublon.map((t) => t.name), onlyOfficial: [], onlyComputed: [], played: [], record: [], awarded: [] };
+    const bornes = seasonBounds(league, season);
     for (const [teamId, o] of toutes) {
       const c = parId.get(teamId);
       // Un club de la table à zéro match (phase de ligue non commencée) n'est
@@ -107,7 +115,9 @@ for (const league of cibles) {
       if (!memesJ.length) {
         detail.played.push(`${o.teamName} : officiel ${[...new Set(lectures.map((l) => l.played))].join('/')} J, magasin ${c.played} J`);
       } else if (!memesJ.some((l) => memeBilan(l, c))) {
-        detail.record.push(`${o.teamName} : officiel ${[...new Set(memesJ.map(bilan))].join(' | ')}, magasin ${bilan(c)}`);
+        const ligne = `${o.teamName} : officiel ${[...new Set(memesJ.map(bilan))].join(' | ')}, magasin ${bilan(c)}`;
+        if (matchsAttribues.get(league, bornes[0], bornes[1], teamId, teamId).n > 0) detail.awarded.push(ligne);
+        else detail.record.push(ligne);
       }
     }
     for (const [teamId, c] of parId) if (!toutes.has(teamId)) detail.onlyComputed.push(`${c.teamName} (${c.played} J)`);
@@ -116,19 +126,22 @@ for (const league of cibles) {
     resume.teamsOnlyComputed += detail.onlyComputed.length;
     resume.playedMismatch += detail.played.length;
     resume.recordMismatch += detail.record.length;
+    resume.awardedExplained += detail.awarded.length;
     const propre = !detail.onlyOfficial.length && !detail.onlyComputed.length && !detail.played.length && !detail.record.length;
-    if (propre) resume.exact++;
-    else {
+    if (propre) resume.exactOrExplained++;
+    if (propre && !detail.awarded.length) resume.exact++;
+    if (!propre || detail.awarded.length) {
       resume.details.push(detail);
-      console.error(`\n${league} ${detail.season} [${detail.tables.join(' + ')}]`);
+      console.error(`\n${league} ${detail.season} [${detail.tables.join(' + ')}]${propre ? ' — écart expliqué par un résultat attribué' : ''}`);
       if (detail.onlyOfficial.length) console.error(`  seulement officiel : ${detail.onlyOfficial.join(' ; ')}`);
       if (detail.onlyComputed.length) console.error(`  seulement magasin  : ${detail.onlyComputed.join(' ; ')}`);
       for (const p of detail.played) console.error(`  J : ${p}`);
       for (const p of detail.record) console.error(`  bilan : ${p}`);
+      for (const p of detail.awarded) console.error(`  attribué : ${p}`);
     }
   }
 }
 
 const { details, ...synthese } = resume;
-console.error(`\n${synthese.seasons} saison(s) sur ${synthese.leagues} compétition(s) ; ${synthese.withOfficial} avec table officielle ; ${synthese.exact} concordent exactement (clubs, matchs joués, victoires, nuls, défaites, buts).`);
+console.error(`\n${synthese.seasons} saison(s) sur ${synthese.leagues} compétition(s) ; ${synthese.withOfficial} avec table officielle ; ${synthese.exact} concordent exactement (clubs, matchs joués, victoires, nuls, défaites, buts), ${synthese.exactOrExplained - synthese.exact} de plus à un résultat attribué près (${synthese.awardedExplained} club(s)).`);
 console.log(JSON.stringify({ ...synthese, details }));
