@@ -1,23 +1,25 @@
 /**
  * fotMobProvider.js
  * -----------------------------------------------------------------------
- * Complète les statistiques que l'API d'ESPN ne publie pas : expected
- * goals, xGOT, grosses occasions, duels, touches dans la surface, tirs
- * dedans/dehors, poteaux — et, côté joueurs, la note, les minutes, les
- * passes, les occasions créées et les duels.
+ * LA source du magasin : rencontres, scores, statistiques d'équipe et de
+ * joueurs, déroulé, compositions, cadre de la rencontre, et — depuis le
+ * 2026-09-22 — les CLASSEMENTS OFFICIELS, saison par saison.
  *
- * ESPN couvre 10 des 34 champs du référentiel à 100 % et 5 autres à 61 % ;
- * FotMob en apporte une vingtaine de plus, et un seul appel par rencontre
- * suffit (`showAllPlayerStats=true` renvoie équipe ET joueurs).
- *
- * Complémentaire, jamais substitut : ESPN reste la source des scores et des
- * feuilles de match, parce que sa liste d'événements permet de trancher les
- * incohérences (cf. espnMatchStatsProvider.js). FotMob ne sert qu'à REMPLIR
- * des cases vides.
+ * Ce module a d'abord complété ESPN, qui restait la source des scores et
+ * des feuilles de match. Ce n'est plus le cas : hors cotes, tout vient
+ * d'ici, sur décision de l'utilisateur. Un seul appel par rencontre suffit
+ * (`showAllPlayerStats=true` renvoie équipe ET joueurs), et un seul appel
+ * par journée couvre toutes les compétitions.
  *
  * Source publique, sans clé ni authentification. C'est une API interne non
  * documentée : elle peut changer ou se fermer sans préavis, et l'import doit
  * donc tolérer qu'une rencontre ne réponde pas.
+ *
+ * NIVEAU DE COUVERTURE. Chaque feuille porte `general.coverageLevel` —
+ * « xG », « ratings », « lower ». En couverture « lower » (Lettonie,
+ * Venezuela), FotMob publie des lignes de joueurs sans note et des
+ * gardiens à « 0 but encaissé » quel que soit le score : ce zéro n'est pas
+ * une mesure, c'est une case jamais remplie. Voir reconcileGoalsConceded.
  * -----------------------------------------------------------------------
  */
 
@@ -26,7 +28,7 @@
  * change : les entrees portant une revision anterieure sont alors reprises,
  * sans avoir a tout refaire avec --force.
  */
-export const FOTMOB_REV = 2;
+export const FOTMOB_REV = 5;
 
 const BASE = 'https://www.fotmob.com/api/data';
 
@@ -40,7 +42,16 @@ const BASE = 'https://www.fotmob.com/api/data';
  * différents. Un bouchon accepté comme identité fusionnerait des inconnus.
  */
 export const fotMobIdOf = (id) => (Number(id) > 0 ? `fotmob-${Number(id)}` : null);
-const teamIdOf = fotMobIdOf;
+/**
+ * Un même club sous DEUX identifiants chez FotMob : la Reggiana a joué la
+ * première moitié de la Serie B 2023-24 (et sa Coppa Italia) sous 959006,
+ * puis sous 6500, l'identifiant de la table officielle — deux lignes au
+ * classement calculé, deux fiches à l'annuaire. L'équivalence s'applique à
+ * l'entrée, partout où un identifiant de club est lu : liste du jour,
+ * feuille de match, table officielle, calendrier.
+ */
+const TEAM_ID_MERGES = { 959006: 6500 };
+const teamIdOf = (id) => fotMobIdOf(TEAM_ID_MERGES[Number(id)] ?? id);
 const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36';
 
 /**
@@ -49,21 +60,49 @@ const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
  * divisions inférieures (893033 puis 938218 pour la Championship) ; le
  * couple pays/nom, lui, reste stable.
  */
+/**
+ * PHASES, relevées le 2026-09-22 sur l'INVENTAIRE COMPLET des intitulés
+ * FotMob — 1 656 intitulés distincts sur 1 361 journées, du 2023-01-01 à
+ * aujourd'hui. Juger un championnat sur les intitulés d'une semaine ne
+ * suffit pas : la plupart des phases finales ne durent que quelques jours et
+ * portent un intitulé dérivé, publié nulle part ailleurs.
+ *
+ * Ce que l'inventaire a montré absent du magasin, et que les motifs
+ * acceptent désormais :
+ *   - « Playoff » : les playoffs de promotion anglais et espagnols (les
+ *     36 matchs qui ne tenaient que par ESPN), la Liguilla mexicaine, les
+ *     cuadrangulares colombiens (« Playoff Grp. A/B »), les playoffs de
+ *     la MLS, de l'Argentine et du Canada (« Final Stage ») ;
+ *   - « Championship Playoff » : le TOUR FINAL danois, 120 rencontres sur
+ *     trois saisons, que le motif « Championship Group » ne voyait pas ;
+ *   - « Qualification » : les barrages de maintien (Allemagne, France,
+ *     Russie, Suisse, Serbie, Écosse, Portugal, Irlande, Pays-Bas) ;
+ *   - « ECL Playoff » : le barrage pour la Conference League joué en fin
+ *     de saison dans une dizaine de championnats ;
+ *   - la Copa de la Liga Profesional argentine, tournoi officiel du premier
+ *     semestre 2023 et 2024, 394 rencontres ;
+ *   - les phases de groupes et de qualification de la Libertadores et de
+ *     la Sudamericana, dont seul le « Final Stage » entrait.
+ *
+ * Volontairement dehors : « FA Cup Qualification » (FotMob n'en publie
+ * qu'une fraction des rencontres, un tableau partiel serait faux), les
+ * Supercoupes (une rencontre par an) et l'EFL Trophy (équipes U21).
+ */
 export const FOTMOB_LEAGUES = {
   EPL: 'ENG|Premier League',
-  Championship: 'ENG|Championship',
-  'League 1': 'ENG|League One',
-  'League 2': 'ENG|League Two',
-  'EFL Cup': 'ENG|EFL Cup',
+  Championship: /^ENG\|Championship($| Playoff$)/,
+  'League 1': /^ENG\|League One($| Playoff$)/,
+  'League 2': /^ENG\|League Two($| Playoff$)/,
+  'EFL Cup': /^ENG\|EFL Cup($| Qualification$)/,
   'La Liga - Spain': 'ESP|LaLiga',
-  'La Liga 2 - Spain': 'ESP|LaLiga2',
-  'Serie A - Italy': 'ITA|Serie A',
-  'Serie B - Italy': 'ITA|Serie B',
-  'Bundesliga - Germany': 'GER|Bundesliga',
-  'Bundesliga 2 - Germany': 'GER|2. Bundesliga',
-  'Ligue 1 - France': 'FRA|Ligue 1',
-  'Ligue 2 - France': 'FRA|Ligue 2',
-  'Premier League - Russia': 'RUS|Premier League',
+  'La Liga 2 - Spain': /^ESP\|LaLiga2($| Playoff$)/,
+  'Serie A - Italy': /^ITA\|Serie A($| Relegation Playoff$)/,
+  'Serie B - Italy': /^ITA\|Serie B($| (Promotion|Relegation) Playoff$)/,
+  'Bundesliga - Germany': /^GER\|(1\. )?Bundesliga($| Qualification$)/,
+  'Bundesliga 2 - Germany': /^GER\|2\. Bundesliga($| Qualification$)/,
+  'Ligue 1 - France': /^FRA\|Ligue 1($| Qualification$)/,
+  'Ligue 2 - France': /^FRA\|Ligue 2($| Qualification$)/,
+  'Premier League - Russia': /^RUS\|Premier League($| Qualification$)/,
   'Super League - China': 'CHN|Super League',
   // Ajoutés le 2026-09-21, relevés dans la réponse FotMob du jour. La
   // comparaison est une ÉGALITÉ stricte (cf. leagueKeyMatches), ce qui est
@@ -75,15 +114,15 @@ export const FOTMOB_LEAGUES = {
   // L'ancrage `$` ou " Playoff " est indispensable — "SCO|Championship",
   // "GRE|Super League 2", "BEL|First Division B" et "BEL|Challenger Pro
   // League" sont d'autres divisions.
-  'Premiership - Scotland': /^SCO\|Premiership($| Championship Group$| Relegation Group$)/,
+  'Premiership - Scotland': /^SCO\|Premiership($| Championship Group$| Relegation Group$| Qualification$)/,
   'Super League - Greece': /^GRE\|Super League($| Championship Group$| Relegation Group$| Conference League Group$)/,
   'Turkey Super League': 'TUR|Super Lig',
-  'Primeira Liga - Portugal': 'POR|Liga Portugal',
+  'Primeira Liga - Portugal': /^POR\|Liga Portugal($| Qualification$)/,
   // FotMob a renomme le championnat belge en octobre 2025 : "First Division
   // A" auparavant, "Belgian Pro League" depuis. Les deux noms sont donc
   // acceptes, sans quoi toute la saison 2024-25 restait invisible.
-  'Belgium First Div': /^BEL\|(Belgian Pro League|First Division A)($| Playoff .+$)/,
-  'Dutch Eredivisie': 'NED|Eredivisie',
+  'Belgium First Div': /^BEL\|(Belgian Pro League|First Division A)($| Playoff .+$| ECL Playoff$| Qualification$)/,
+  'Dutch Eredivisie': /^NED\|Eredivisie($| Qualification$| ECL Playoff$)/,
   // Ajouté le 2026-09-21. Égalité stricte, indispensable ici : FotMob publie
   // aussi "POL|I Liga" et "POL|II Liga", les deuxième et troisième divisions,
   // qu'un motif un peu lâche ramasserait. L'Ekstraklasa ne se scinde plus en
@@ -107,13 +146,13 @@ export const FOTMOB_LEAGUES = {
   // deux sens : sans `^`, « SWE|Damallsvenskan » (féminin) contiendrait
   // « Allsvenskan » ; sans `$`, « SVK|1. Liga » ramasserait la 2. Liga.
   // ---------------------------------------------------------------------
-  'Austrian Football Bundesliga': /^AUT\|Bundesliga($| (Championship|Relegation) Group$)/,
+  'Austrian Football Bundesliga': /^AUT\|Bundesliga($| (Championship|Relegation) Group$| ECL Playoff$)/,
   'HNL - Croatia': 'CRO|HNL',
   // « FNL » est la deuxième division tchèque, et « Placement Matches » les
   // barrages de fin de saison, qui appartiennent bien au championnat.
-  'First League - Czechia': /^CZE\|1\. Liga($| (Championship|Relegation) Group$| Placement Matches$)/,
-  'Denmark Superliga': /^DEN\|Superligaen($| (Championship|Relegation) Group$)/,
-  'Veikkausliiga - Finland': /^FIN\|Veikkausliiga($| (Championship|Relegation) Group$)/,
+  'First League - Czechia': /^CZE\|1\. Liga($| (Championship|Relegation) Group$| Placement Matches$| Qualification$)/,
+  'Denmark Superliga': /^DEN\|Superligaen($| (Championship|Relegation) Group$| Championship Playoff$| ECL Playoff$)/,
+  'Veikkausliiga - Finland': /^FIN\|Veikkausliiga($| (Championship|Relegation) Group$| ECL Playoff$| Qualification$)/,
   // L'Islande publie ses phases finales sous deux formes selon la saison,
   // « Championship Group » et « - Championship Round ». Les deux sont
   // acceptées ; « Besta deildin kvenna », le championnat féminin, ne l'est
@@ -121,7 +160,7 @@ export const FOTMOB_LEAGUES = {
   'Besta deildin - Iceland': /^ISL\|Besta deildin($| (Championship|Relegation) Group$| - (Championship|Relegation) Round$)/,
   // « Women's Premier Division » commence par un autre mot : l'ancrage suffit,
   // et le garde-fou masculin/senior le refuserait de toute façon.
-  'League of Ireland': /^IRL\|Premier Division$/,
+  'League of Ireland': /^IRL\|Premier Division($| Qualification$)/,
   // Trois orthographes chez la source — « Ligat Ha'al », « Ligat ha'Al »,
   // « Ligat HaAl » — dont une seule porte les phases finales. Insensible à la
   // casse et à l'apostrophe ; « Leumit League » est la deuxième division.
@@ -130,13 +169,13 @@ export const FOTMOB_LEAGUES = {
   // « Toppserien » est le championnat féminin norvégien : nom distinct, donc
   // aucun risque de recouvrement ici.
   'Eliteserien - Norway': /^NOR\|Eliteserien($| Qualification$)/,
-  'Superliga - Romania': /^ROU\|Superliga($| (Championship|Relegation) Group$| Qualification$)/,
-  'Super Liga - Serbia': /^SRB\|Super Liga($| (Championship|Relegation) Group$)/,
-  'Swiss Superleague': /^SUI\|Super League($| (Championship|Relegation) Group$)/,
+  'Superliga - Romania': /^ROU\|Superliga($| (Championship|Relegation) Group$| Qualification$| ECL Playoff$)/,
+  'Super Liga - Serbia': /^SRB\|Super Liga($| (Championship|Relegation) Group$| Qualification$)/,
+  'Swiss Superleague': /^SUI\|Super League($| (Championship|Relegation) Group$| Qualification$)/,
   // FotMob a renommé la première division slovaque « Super Liga » en cours de
   // route, comme il l'avait fait pour la Belgique : les deux intitulés sont
   // acceptés, sans quoi des saisons entières resteraient invisibles.
-  'Nike Liga - Slovakia': /^SVK\|(1\. Liga|Super Liga)($| (Championship|Relegation) Group$| Qualification$)/,
+  'Nike Liga - Slovakia': /^SVK\|(1\. Liga|Super Liga)($| (Championship|Relegation) Group$| Qualification$| ECL Playoff$)/,
   'Allsvenskan - Sweden': /^SWE\|Allsvenskan($| Qualification$)/,
 
   // ---------------------------------------------------------------------
@@ -156,30 +195,30 @@ export const FOTMOB_LEAGUES = {
   // et « Série A », « Primera Division » et « Primera División » — d'où les
   // classes de caractères. Ce n'est pas de la coquetterie : une saison
   // entière disparaissait sur cette seule différence.
-  'Primera División - Argentina': /^ARG\|Liga Profesional($| (Apertura|Clausura)$)/,
-  'Primera División - Bolivia': /^BOL\|Primera Divisi[oó]n($| - (Apertura|Clausura)$)/,
+  'Primera División - Argentina': /^ARG\|(Liga Profesional|Copa de la Liga Profesional)($| (Apertura|Clausura)$| (Apertura |Clausura )?Playoff$| Relegation Playoff$)/,
+  'Primera División - Bolivia': /^BOL\|Primera Divisi[oó]n($| - (Apertura|Clausura)( Final Stage)?$| Qualification$| Championship Playoff$)/,
   // Serie B, C et D sont d'autres divisions : l'ancrage de fin est ce qui
   // les écarte.
   'Brazil Série A': /^BRA\|S[eé]rie A$/,
   // « Northern Super League » est le championnat féminin canadien.
-  'Canadian Premier League': /^CAN\|Premier League$/,
+  'Canadian Premier League': /^CAN\|Premier League($| Final Stage$)/,
   'Primera División - Chile': /^CHI\|Primera Divisi[oó]n($| (Apertura|Clausura)$)/,
   // « Final Stage » est la phase finale du tournoi, celle qui désigne le
   // champion : l'omettre amputait la Colombie de son dénouement.
-  'Primera A - Colombia': /^COL\|Primera A($| (Apertura|Clausura)( Final Stage)?$)/,
-  'Serie A - Ecuador': /^ECU\|Serie A($| - (First|Second) Stage$| - (Championship|Relegation) Round$| - Copa Sudamericana Play-off$)/,
+  'Primera A - Colombia': /^COL\|Primera A($| (Apertura|Clausura)( Final Stage| Playoff Grp\. [A-Z])?$)/,
+  'Serie A - Ecuador': /^ECU\|Serie A($| Final Stage$| - (First|Second) Stage$| - (Championship|Relegation) Round$| - Copa Sudamericana Play-off$)/,
   // « Liga MX Femenil » est le championnat féminin et « Liga de Expansion
   // MX » la deuxième division : les deux commencent autrement, ou se
   // poursuivent autrement, que ce que ce motif accepte.
-  'Liga MX': /^MEX\|Liga MX($| (Apertura|Clausura)$)/,
+  'Liga MX': /^MEX\|Liga MX($| (Apertura|Clausura)( Playoff| Play-In Stage)?$)/,
   'División Profesional - Paraguay': /^PAR\|Division Profesional($| - (Apertura|Clausura)$)/,
-  'Liga 1 - Peru': /^PER\|Liga 1($| (Apertura|Clausura)$)/,
-  'MLS': /^USA\|Major League Soccer$/,
+  'Liga 1 - Peru': /^PER\|Liga 1($| (Apertura|Clausura)$| Final Stage$| Placement Playoff$)/,
+  'MLS': /^USA\|Major League Soccer($| Playoff$)/,
   // Le Venezuela découpe ses deux tournois en étapes, jusqu'à quatre
   // intitulés par saison, dont un avec une minuscule fautive (« First
   // stage »). Un motif large, borné au nom de la division ; le garde-fou
   // masculin/senior écarte le championnat féminin.
-  'Primera División - Venezuela': /^VEN\|Primera Divisi[oó]n( - .+)?$/i,
+  'Primera División - Venezuela': /^VEN\|Primera Divisi[oó]n($| - .+$| Fase Final .+$| Final Stage$| Super Final$)/i,
 
   // ---------------------------------------------------------------------
   // COUPES, ajoutées le 2026-09-21. Une coupe est une compétition comme une
@@ -208,7 +247,7 @@ export const FOTMOB_LEAGUES = {
   // n'accepte, et le garde-fou masculin/senior l'écarterait de toute façon.
   'Coupe de France': /^FRA\|Coupe de France($| - .+$| Final Stage$)/,
   'Taça de Portugal': /^POR\|Taca de Portugal($| - .+$| Final Stage$)/,
-  'Taça da Liga - Portugal': /^POR\|League Cup($| - .+$| Final Stage$)/,
+  'Taça da Liga - Portugal': /^POR\|League Cup($| - .+$| Final Stage$| Grp\. [A-Z]$)/,
   'KNVB Cup - Netherlands': /^NED\|KNVB Cup($| - .+$| Final Stage$)/,
   // La coupe de Turquie passe par des groupes et des qualifications, qui en
   // font partie : le suffixe est donc large.
@@ -221,16 +260,38 @@ export const FOTMOB_LEAGUES = {
   'Copa do Brasil': /^BRA\|(Copa do Brasil|Cup)($| - .+$| Final Stage$)/,
   'Copa Argentina': /^ARG\|(Copa Argentina|Cup)($| - .+$| Final Stage$)/,
   'US Open Cup': /^USA\|US Open Cup($| - .+$| Final Stage$)/,
-  'Copa Libertadores': /^INT\|Copa Libertadores($| - .+$| Final Stage$)/,
-  'Copa Sudamericana': /^INT\|Copa Sudamericana($| - .+$| Final Stage$)/,
-  'Leagues Cup': /^INT\|Leagues Cup($| - .+$| Final Stage$)/,
+  'Copa Libertadores': /^INT\|Copa Libertadores($| .+$)/,
+  'Copa Sudamericana': /^INT\|Copa Sudamericana($| .+$)/,
+  'Leagues Cup': /^INT\|Leagues Cup($| .+$)/,
   // Les coupes d'Europe sont découpées par phase — « Champions League »,
   // « Champions League Grp. E », « Champions League Final Stage » — donc un
   // motif plutôt qu'un intitulé exact. L'ancrage en début de chaîne écarte
   // l'AFC Champions League, compétition asiatique sans rapport.
   'UEFA Champions League': /^INT\|Champions League(\s|$)/,
   'UEFA Europa League': /^INT\|Europa League(\s|$)/,
-  'UEFA Europa Conference League': /^INT\|(Europa )?Conference League(\s|$)/
+  'UEFA Europa Conference League': /^INT\|(Europa )?Conference League(\s|$)/,
+
+  // ---------------------------------------------------------------------
+  // Coupes nationales ajoutées le 2026-09-22 après une MESURE CONTRADICTOIRE :
+  // vingt-six coupes non suivies, chacune échantillonnée par deux agents
+  // indépendants sur six rencontres au moins, tours avancés et préliminaires,
+  // plusieurs saisons. Deux sont complètes sur tout l'historique — la Copa
+  // Chile et le Championnat canadien (27 statistiques d'équipe, 36 à 46
+  // joueurs notés, sur chaque rencontre sondée). Trois le sont depuis la fin
+  // 2025 seulement, FotMob ayant relevé sa couverture entre-temps : Grèce
+  // (demi-finales de février 2026 et phase de groupes 2026-27), Belgique
+  // (quarts et demies de janvier-février 2026), Chine (finale 2025, quarts
+  // 2026). Leur historique antérieur n'a que le score : le tableau s'affiche,
+  // les buteurs commencent en 2026.
+  //
+  // Les vingt et une autres n'ont que le score, finales comprises — la
+  // Suisse, jugée « partielle » sur sa seule finale 2026, a été réfutée sur
+  // ses quarts de finale. Elles ne sont pas déclarées.
+  'Copa Chile': /^CHI\|Cup($| Grp\. [A-Z]$| - .+$| Final Stage$)/,
+  'Canadian Championship': /^CAN\|Canadian Championship($| - .+$| Final Stage$)/,
+  'Coupe de Grèce': /^GRE\|Cup($| Preliminary Round$| Group Stage$| Final Stage$| - .+$)/,
+  'Coupe de Belgique': /^BEL\|Cup($| - .+$| Final Stage$)/,
+  'Coupe de Chine': /^CHN\|Cup($| - .+$| Final Stage$)/
 };
 
 /** Une compétition FotMob correspond-elle à ce championnat ? */
@@ -407,6 +468,203 @@ function fractionTotal(raw) {
   return null;
 }
 
+/** Score « 2 - 1 » -> [2, 1] ; tout le reste -> [null, null]. */
+function scoreOf(raw) {
+  const m = String(raw ?? '').match(/(\d+)\s*-\s*(\d+)/);
+  return m ? [Number(m[1]), Number(m[2])] : [null, null];
+}
+
+/**
+ * Poste d'un joueur.
+ *
+ * FotMob le code en NOMBRE — `usualPosition` et `usualPlayingPositionId`
+ * valent 0 (gardien), 1 (défenseur), 2 (milieu) ou 3 (attaquant). Ce module
+ * attendait un libellé (« Goalkeeper », « Defender »…) : la comparaison ne
+ * trouvait jamais rien, seul le drapeau `isGoalkeeper` passait, et 74 % des
+ * lignes du magasin sont entrées SANS poste. Un classement de défenseurs
+ * ou de milieux n'y trouvait donc personne pour les championnats que seul
+ * FotMob alimente.
+ */
+const ROLE_BY_CODE = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
+function roleOfUsualPosition(raw) {
+  if (raw === null || raw === undefined || raw === '') return null;
+  const n = Number(raw);
+  if (Number.isInteger(n)) return ROLE_BY_CODE[n] ?? null;
+  const texte = String(raw);
+  if (/keeper|^gk$/i.test(texte)) return 'Goalkeeper';
+  if (/defend|back/i.test(texte)) return 'Defender';
+  if (/midfield/i.test(texte)) return 'Midfielder';
+  if (/forward|strik|wing|attack/i.test(texte)) return 'Forward';
+  return null;
+}
+
+/**
+ * Poste TENU dans la rencontre, lu sur la grille de composition. FotMob
+ * numérote les cases par ligne, du gardien vers l'attaque : 11 le gardien,
+ * 31 à 39 la défense, 41 à 89 les lignes de milieu, 91 et au-delà
+ * l'attaque. Relevé sur une composition en 4-3-3 : 11 / 32-34-36-38 /
+ * 73-75-77 / 103-105-107. Un latéral aligné au milieu est donc « milieu »
+ * ce jour-là, ce qui est exactement ce qu'une statistique de match veut.
+ */
+function roleOfGridPosition(positionId) {
+  const n = Number(positionId);
+  if (!Number.isInteger(n) || n <= 0) return null;
+  if (n < 20) return 'Goalkeeper';
+  if (n < 40) return 'Defender';
+  if (n < 90) return 'Midfielder';
+  return 'Forward';
+}
+
+/**
+ * Nom réduit à ses mots, sans diacritiques ni ordre : « Zhang Hui » et
+ * « Hui Zhang », « Álvaro Vallés » et « Alvaro Valles » désignent le même
+ * homme d'une écriture à l'autre de la même source.
+ */
+function nomNormalise(name) {
+  return String(name ?? '')
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+    .split(' ')
+    .filter(Boolean)
+    .sort()
+    .join(' ');
+}
+
+/**
+ * Deux formats de composition chez FotMob. Le format GRILLE numérote les
+ * cases (11 le gardien, 3x la défense…). Le format CODE DE RÔLE — coupes
+ * d'Amérique du Sud, Islande 2023, une feuille de Serie B — écrit 0 gardien,
+ * 1 défenseur, 2 milieu, 3 attaquant, 4 remplaçant. Lus comme des cases de
+ * grille, où tout ce qui est inférieur à 20 est « gardien », les codes 1 à 4
+ * faisaient une équipe ENTIÈRE de gardiens, et chacun recevait le score
+ * adverse en buts encaissés : 226 camps à onze gardiens ou plus. Le format
+ * se reconnaît sur le onze de départ : tous ses codes sont inférieurs ou
+ * égaux à 4.
+ */
+function lineupUsesRoleCodes(starters) {
+  const codes = (starters ?? []).map((e) => Number(e?.positionId)).filter(Number.isInteger);
+  return codes.length >= 5 && codes.every((n) => n <= 4);
+}
+
+function roleOfLineupEntry(entry, { starter, roleCodes, gardiensCode0 }) {
+  if (!roleCodes) return roleOfGridPosition(entry?.positionId);
+  const code = Number(entry?.positionId);
+  // Le code 0 vaut aussi « inconnu » (Copa Chile 2023 : -1 et 0 partout) :
+  // il ne désigne le gardien que s'il est SEUL dans le onze de départ.
+  if (code === 0) return starter && gardiensCode0 === 1 ? 'Goalkeeper' : null;
+  return code >= 1 && code <= 3 ? ROLE_BY_CODE[code] : null;
+}
+
+/** Durée réglementaire : 120 minutes dès qu'un événement dépasse la 90e. */
+function matchDuration(events) {
+  return events.some((e) => (e.minute ?? 0) > 90) ? 120 : 90;
+}
+
+/**
+ * Le même homme écrit plus ou moins long : « Arnar Ólafsson » dans playerStats,
+ * « Arnar Freyr Olafsson » dans la composition. Les mots de l'un sont tous dans
+ * l'autre, et ils en partagent au moins deux — sans quoi « Pedro Alves » et
+ * « Pedro Silva » se confondraient.
+ */
+function memeHommeInclus(a, b) {
+  const ta = nomNormalise(a).split(' ').filter(Boolean);
+  const tb = nomNormalise(b).split(' ').filter(Boolean);
+  if (ta.length < 2 || tb.length < 2) return false;
+  const [court, long] = ta.length <= tb.length ? [ta, tb] : [tb, ta];
+  return court.every((t) => long.includes(t));
+}
+
+/** Un mot de trois lettres au moins en commun : ce qui corrobore un numéro de maillot. */
+function partagentUnMot(a, b) {
+  const ta = new Set(nomNormalise(a).split(' ').filter((t) => t.length >= 3));
+  return nomNormalise(b).split(' ').some((t) => t.length >= 3 && ta.has(t));
+}
+
+/**
+ * Buts encaissés des gardiens, confrontés au score.
+ *
+ * Le contrôle de cohérence du magasin (audit-score-consistency.mjs) repose
+ * sur une identité simple : les buts encaissés par les gardiens d'une
+ * équipe égalent le score de l'adversaire. Or FotMob la viole lui-même
+ * dans les championnats à couverture réduite — 493 feuilles lettones et
+ * 271 vénézuéliennes où le gardien a joué 90 minutes, « 0 but encaissé »,
+ * et l'adversaire a marqué. Ce zéro entrait tel quel, puis comptait comme
+ * un clean sheet au classement des gardiens.
+ *
+ * Le score, lui, est toujours renseigné, et c'est la donnée officielle. Un
+ * gardien qui joue le match entier a encaissé exactement le score adverse ;
+ * un gardien remplacé, les buts adverses marqués pendant qu'il était sur le
+ * terrain, que le déroulé permet de compter dès qu'il est complet. Dans les
+ * deux cas, la valeur publiée est remplacée si elle diverge : la déduction
+ * vient de deux données officielles, la valeur publiée d'une case que la
+ * source n'a pas remplie.
+ */
+function reconcileGoalsConceded(players, events, [homeGoals, awayGoals]) {
+  if (homeGoals === null || awayGoals === null) return;
+  const buts = events.filter((e) => e.type === 'goal' && e.minute !== null);
+  const derouleComplet = buts.length === homeGoals + awayGoals;
+  const duree = matchDuration(events);
+  const rouges = events.filter((e) => e.type === 'card' && /red/.test(e.card ?? ''));
+  const memeHomme = (a, b) => nomNormalise(a) === nomNormalise(b);
+  for (const side of ['home', 'away']) {
+    const adverse = side === 'home' ? awayGoals : homeGoals;
+    const gardiens = players[side].filter(
+      (p) => p.position === 'Goalkeeper' && (p.starter === true || p.subInMinute != null || (p.minutes ?? 0) > 0)
+    );
+    if (!gardiens.length) continue;
+    const rougeDe = (p) => rouges.find((r) => r.side === side && memeHomme(r.player, p.name));
+    // Un gardien resté SEUL sur le terrain a encaissé le score adverse, quoi
+    // que dise la case publiée.
+    if (gardiens.length === 1 && gardiens[0].subInMinute == null && gardiens[0].subOutMinute == null && !rougeDe(gardiens[0])) {
+      const seul = gardiens[0];
+      // Sorti avant la fin sans changement enregistré (blessé, un joueur de
+      // champ dans les buts) : ses minutes bornent ce qu'il a encaissé, dès
+      // que le déroulé est complet.
+      const sortiAvant = derouleComplet && seul.minutes != null && seul.minutes < duree;
+      seul.goalsConceded = sortiAvant ? buts.filter((g) => g.side !== side && g.minute <= seul.minutes).length : adverse;
+      continue;
+    }
+    if (!derouleComplet) continue;
+    // Intervalle de présence de chaque gardien. Un gardien EXCLU n'a pas de
+    // minute de sortie : son carton la donne (Paes, St. Louis - Dallas :
+    // exclu à la 12e, et les deux buts de Maurer comptés deux fois). Un
+    // gardien blessé remplacé par un joueur de champ non plus : l'entrée du
+    // relayeur la donne. Et quand la feuille ne porte aucun changement mais
+    // deux gardiens avec leurs minutes (Sutton - Cambridge, 45 et 45), ce
+    // sont les minutes qui découpent le match.
+    const plusDeMinutes = Math.max(...gardiens.map((q) => q.minutes ?? 0));
+    const premierAuxMinutes = gardiens.find((q) => (q.minutes ?? 0) > 0 && q.minutes === plusDeMinutes) ?? null;
+    const titulaire = (p) => p.starter === true || (p.starter == null && p === premierAuxMinutes);
+    const relayeur = gardiens.find((p) => p.subInMinute != null);
+    // Deux titulaires sans relayeur : la feuille se contredit, on ne tranche pas.
+    if (gardiens.filter(titulaire).length !== 1 && !relayeur) continue;
+    const bornes = gardiens.map((p) => {
+      let de = p.subInMinute ?? null;
+      let a = p.subOutMinute ?? null;
+      const rouge = rougeDe(p);
+      if (a == null && rouge?.minute != null) a = rouge.minute;
+      if (a == null && de == null && titulaire(p) && relayeur && relayeur !== p) a = relayeur.subInMinute;
+      if (de == null && !titulaire(p) && (p.minutes ?? 0) > 0) de = duree - p.minutes;
+      if (a == null && titulaire(p) && !relayeur) {
+        const autre = gardiens.find((q) => q !== p && (q.minutes ?? 0) > 0);
+        if (autre) a = duree - autre.minutes;
+      }
+      return { p, de, a };
+    });
+    for (const { p, de, a } of bornes) {
+      // Un but à la minute même du changement va au gardien qui SORT — il
+      // était sur le terrain quand la minute a commencé — et jamais aux deux :
+      // l'intervalle est fermé en sortie, ouvert en entrée. Midtjylland 5-1
+      // Viborg, changement à la 45e et but à la 45e : 7 encaissés pour 5.
+      const attendu = buts.filter((g) => g.side !== side && (de == null || g.minute > de) && (a == null || g.minute <= a)).length;
+      if (p.goalsConceded !== attendu) p.goalsConceded = attendu;
+    }
+  }
+}
+
 /**
  * Toutes les rencontres d'une journée, toutes compétitions confondues — un
  * seul appel couvre les 18 championnats suivis, là où ESPN en demande un par
@@ -431,7 +689,17 @@ export async function fetchMatchesByDate(isoDate) {
         awayId: teamIdOf(match.away?.id),
         homeGoals,
         awayGoals,
-        finished: Boolean(match.status?.finished)
+        // « finished » ne suffit pas : un match ABANDONNÉ est publié
+        // `finished: true` ET `cancelled: true`, motif « Abandoned », avec le
+        // score au moment de l'arrêt. Sans `cancelled`, Fiorentina - Inter
+        // entrait à 0-0 (arrêt du 1er décembre) en plus du 3-0 de la reprise,
+        // et l'Inter gagnait au classement un point qui n'existe pas. Une
+        // rencontre n'est JOUÉE que si elle est terminée sans être annulée.
+        finished: Boolean(match.status?.finished),
+        cancelled: Boolean(match.status?.cancelled),
+        awarded: Boolean(match.status?.awarded),
+        reason: match.status?.reason?.short ?? null,
+        played: Boolean(match.status?.finished) && !match.status?.cancelled
       });
     }
   }
@@ -476,14 +744,16 @@ function mapPlayer(entry) {
   if (entry.shirtNumber != null) player.number = firstNumber(entry.shirtNumber);
   // Le poste conditionne plusieurs lectures du magasin — les buts encaissés
   // n'y valent que pour un gardien. FotMob le donne par un drapeau dédié et
-  // par la position habituelle du joueur.
+  // par le poste habituel du joueur, codé en nombre (cf. roleOfUsualPosition).
+  // Le poste tenu DANS la rencontre, lu sur la composition, prend le dessus
+  // plus bas quand il est connu.
+  // Gardien SEULEMENT par le drapeau : `usualPosition` vaut aussi 0 pour un
+  // joueur dont FotMob ignore le poste, et le code 0 lu comme « gardien »
+  // faisait vingt et un gardiens sur une feuille de coupe américaine.
   if (entry.isGoalkeeper) player.position = 'Goalkeeper';
   else {
-    const usual = String(entry.usualPosition ?? '');
-    if (/keeper|^gk$/i.test(usual)) player.position = 'Goalkeeper';
-    else if (/defend|back/i.test(usual)) player.position = 'Defender';
-    else if (/midfield/i.test(usual)) player.position = 'Midfielder';
-    else if (/forward|strik|wing|attack/i.test(usual)) player.position = 'Forward';
+    const usuel = roleOfUsualPosition(entry.usualPosition ?? entry.usualPlayingPositionId);
+    if (usuel && usuel !== 'Goalkeeper') player.position = usuel;
   }
 
   for (const group of entry.stats ?? []) {
@@ -543,11 +813,15 @@ function mapEvents(payload) {
     if (event.overloadTime != null) entry.addedTime = firstNumber(event.overloadTime);
     if (type === 'Goal') {
       entry.player = event.player?.name ?? event.nameStr ?? null;
+      const acteur = fotMobIdOf(event.player?.id ?? event.playerId);
+      if (acteur) entry.playerId = acteur;
       if (event.assistStr) entry.assist = String(event.assistStr).replace(/^.*?by\s+/i, '');
       if (event.ownGoal) entry.ownGoal = true;
       if (event.goalDescription) entry.detail = event.goalDescription;
     } else if (type === 'Card') {
       entry.player = event.player?.name ?? event.nameStr ?? null;
+      const acteur = fotMobIdOf(event.player?.id ?? event.playerId);
+      if (acteur) entry.playerId = acteur;
       entry.card = event.card ? String(event.card).toLowerCase() : 'yellow';
     } else if (type === 'Substitution' && Array.isArray(event.swap)) {
       entry.playerIn = event.swap[0]?.name ?? null;
@@ -590,6 +864,22 @@ function mapMeta(payload) {
   const round = general.leagueRoundName ?? info.Tournament?.roundName;
   if (round) meta.round = String(round);
   if (general.matchTimeUTCDate) meta.kickoff = general.matchTimeUTCDate;
+  // La phase (identifiant de saison chez FotMob), la compétition mère et le
+  // niveau de couverture : ce qui dit d'où vient une feuille et ce qu'on
+  // peut en attendre. `leagueKey`, l'intitulé pays|nom de la phase, est
+  // ajouté par l'appelant qui l'a lu dans la liste du jour.
+  if (general.leagueId != null) meta.leagueId = Number(general.leagueId);
+  if (general.parentLeagueId != null) meta.parentLeagueId = Number(general.parentLeagueId);
+  if (general.coverageLevel) meta.coverage = String(general.coverageLevel);
+  // Résultat décidé hors du terrain (« Awarded win ») : le score de
+  // l'en-tête est celui de la fédération, pas celui du jeu, et la feuille —
+  // quand elle existe — décrit un autre match (Union Berlin - Bochum, joué
+  // 1-1, attribué 0-2). Conservé pour que les contrôles sachent ne pas
+  // confronter l'un à l'autre.
+  const statut = payload?.header?.status ?? {};
+  if (statut.awarded) meta.awarded = true;
+  const motif = statut.reason?.longKey;
+  if (motif && motif !== 'finished') meta.reason = String(motif);
 
   const stadium = info.Stadium ?? {};
   if (stadium.name) meta.stadium = stadium.name;
@@ -681,15 +971,22 @@ function mapShotmap(payload) {
 
 /**
  * Statistiques complètes d'une rencontre, au format attendu par
- * mergeMatchStats(). `null` si FotMob n'a pas de relevé pour ce match.
+ * mergeMatchStats(). `noSheet: true` si FotMob n'a pas de relevé pour ce
+ * match — la page dit encore le score, la journée, la composition et les
+ * buteurs — et `null` si la page n'existe pas.
  */
 export async function fetchMatchStats(matchId) {
   const payload = await fetchJson(`${BASE}/matchDetails?matchId=${encodeURIComponent(matchId)}&showAllPlayerStats=true`);
-  const groups = payload?.content?.stats?.Periods?.All?.stats;
-  if (!groups?.length) return null;
-
+  // Sans page, rien à dire. Sans RELEVÉ (statistiques d'équipe), la page dit
+  // encore l'essentiel — score, clubs, journée, phase, statut, composition,
+  // buteurs — et la rencontre entre avec, marquée `noSheet` : 5 462 étaient
+  // entrées nues, sans journée ni buteur (Serbie, Israël, Bolivie, coupes).
+  if (!payload?.general?.homeTeam?.id || !payload?.general?.awayTeam?.id) return null;
+  const groups = payload?.content?.stats?.Periods?.All?.stats ?? [];
   const teamStats = mapTeamStats(groups);
-  if (!Object.keys(teamStats.home).length && !Object.keys(teamStats.away).length) return null;
+  const noSheet = !Object.keys(teamStats.home).length && !Object.keys(teamStats.away).length;
+  const statut = payload?.header?.status ?? {};
+  const awarded = Boolean(statut.awarded);
 
   const lineup = payload?.content?.lineup;
   const homeTeamId = payload?.general?.homeTeam?.id ?? lineup?.homeTeam?.id;
@@ -705,7 +1002,11 @@ export async function fetchMatchStats(matchId) {
   const sideByPlayerId = new Map();
   for (const [sideName, team] of [['home', lineup?.homeTeam], ['away', lineup?.awayTeam]]) {
     for (const entry of [...(team?.starters ?? []), ...(team?.subs ?? [])]) {
-      if (entry?.id != null) sideByPlayerId.set(String(entry.id), sideName);
+      // Jamais l'identifiant 0 : partagé par tous les inconnus d'une feuille,
+      // il rangeait chacun d'eux dans le DERNIER camp lu — buteurs « du
+      // mauvais camp », deux gardiens à 90 minutes à l'extérieur. Pour eux,
+      // `teamId` fait foi (juste dans tous les échantillons relus).
+      if (Number(entry?.id) > 0) sideByPlayerId.set(String(entry.id), sideName);
     }
   }
   const sideOfEntry = (entry) => {
@@ -743,14 +1044,91 @@ export async function fetchMatchStats(matchId) {
     }
   }
 
-  // Placement sur le terrain et minute d'entrée ou de sortie : ce qui permet
-  // de dessiner la composition plutôt que de la lister.
-  const byId = new Map(players.home.concat(players.away).map((p) => [p.playerId, p]));
+  // Placement sur le terrain, titularisation, poste tenu et minute d'entrée
+  // ou de sortie : ce qui permet de dessiner la composition plutôt que de la
+  // lister. La composition sépare explicitement titulaires et remplaçants.
+  //
+  // Un joueur de playerStats se retrouve par identifiant ; SANS identifiant
+  // (id 0 chez FotMob : clubs amateurs, divisions inférieures), par camp et
+  // nom normalisé — auparavant ces lignes n'étaient jamais rapprochées de la
+  // composition : ni titularisation ni minute de changement, et deux
+  // gardiens à 90 minutes sur le même camp.
+  //
+  // Un joueur de la composition ABSENT de playerStats reçoit sa ligne : six
+  // feuilles vénézuéliennes de 2026 n'avaient aucun playerStats (buts et
+  // passes de Miku, Pollero, Cañete perdus), Thiago Borbas manquait des 45
+  // entrées de Bragantino - Criciúma avec deux buts au déroulé. Pas pour un
+  // match ATTRIBUÉ : la composition y est celle d'un match qui n'a pas
+  // compté.
+  const events = mapEvents(payload);
+  const duree = matchDuration(events);
+  const byId = new Map(players.home.concat(players.away).filter((p) => p.playerId).map((p) => [p.playerId, p]));
+  const byName = new Map();
+  const byNumber = new Map();
+  for (const side of ['home', 'away']) {
+    for (const p of players[side]) {
+      if (p.playerId) continue;
+      byName.set(`${side}|${nomNormalise(p.name)}`, p);
+      if (p.number != null) byNumber.set(`${side}|${p.number}`, p);
+    }
+  }
+  // Tous les numéros, identifiés ou non : FotMob publie parfois le même
+  // homme sous DEUX identifiants, l'un dans playerStats, l'autre dans la
+  // composition (« Daniel Lafferty » 193501 et « Danny Lafferty » 1086943,
+  // Sligo Rovers). Un numéro de maillot est unique dans un camp : avec un
+  // mot du nom en commun, c'est le même joueur, pas une ligne de plus.
+  const byNumberAll = new Map();
+  for (const side of ['home', 'away']) for (const p of players[side]) if (p.number != null) byNumberAll.set(`${side}|${p.number}`, p);
+  const dejaPris = new Set();
+  const gardiensConfirmes = new Set();
+  const depuisComposition = new Set();
   for (const [sideName, team] of [['home', lineup?.homeTeam], ['away', lineup?.awayTeam]]) {
-    for (const entry of [...(team?.starters ?? []), ...(team?.subs ?? [])]) {
-      const target = byId.get(`fotmob-${entry.id}`);
-      if (!target) continue;
+    const titulaires = team?.starters ?? [];
+    const roleCodes = lineupUsesRoleCodes(titulaires);
+    const gardiensCode0 = roleCodes ? titulaires.filter((e) => Number(e?.positionId) === 0).length : 0;
+    for (const [index, entry] of [...titulaires, ...(team?.subs ?? [])].entries()) {
+      const starter = index < titulaires.length;
+      let target = Number(entry?.id) > 0 ? byId.get(`fotmob-${entry.id}`) : null;
+      // Sans identifiant commun : le nom exact, puis le numéro de maillot
+      // corroboré par un mot du nom, puis un nom inclus dans l'autre.
+      const libre = (p) => (p && !dejaPris.has(p) ? p : null);
+      if (!target && entry?.name) target = libre(byName.get(`${sideName}|${nomNormalise(entry.name)}`));
+      if (!target && entry?.name && entry.shirtNumber != null) {
+        const parNumero = libre(byNumber.get(`${sideName}|${firstNumber(entry.shirtNumber)}`));
+        if (parNumero && partagentUnMot(parNumero.name, entry.name)) target = parNumero;
+      }
+      if (!target && entry?.name) target = players[sideName].find((p) => !p.playerId && !dejaPris.has(p) && memeHommeInclus(p.name, entry.name)) ?? null;
+      if (!target && entry?.name && entry.shirtNumber != null) {
+        const memeNumero = libre(byNumberAll.get(`${sideName}|${firstNumber(entry.shirtNumber)}`));
+        // Un joueur SANS identifiant dans playerStats (id 0) s'appelle souvent
+        // par son surnom (« Josema », « Deco ») là où la composition écrit
+        // le nom complet : le numéro seul suffit alors. Entre deux hommes
+        // identifiés, il faut aussi un mot en commun.
+        if (memeNumero && (!memeNumero.playerId || partagentUnMot(memeNumero.name, entry.name))) target = memeNumero;
+      }
+      if (target) {
+        dejaPris.add(target);
+        // L'identité que la composition connaît et que playerStats ignorait.
+        if (!target.playerId && Number(entry?.id) > 0) target.playerId = `fotmob-${entry.id}`;
+      }
+      if (!target) {
+        if (!entry?.name || awarded) continue;
+        target = { name: String(entry.name).trim() };
+        if (Number(entry.id) > 0) target.playerId = `fotmob-${entry.id}`;
+        if (entry.shirtNumber != null) target.number = firstNumber(entry.shirtNumber);
+        players[sideName].push(target);
+        depuisComposition.add(target);
+      }
       target.side = sideName;
+      target.starter = starter;
+      const tenu = roleOfLineupEntry(entry, { starter, roleCodes, gardiensCode0 });
+      if (tenu) target.position = tenu;
+      else if (!target.position) {
+        // Même réserve que dans mapPlayer : le code 0 ne prouve pas un gardien.
+        const usuel = roleOfUsualPosition(entry.usualPlayingPositionId);
+        if (usuel && usuel !== 'Goalkeeper') target.position = usuel;
+      }
+      if (tenu === 'Goalkeeper') gardiensConfirmes.add(target);
       if (entry.horizontalLayout) {
         const x = firstNumber(entry.horizontalLayout.x);
         const y = firstNumber(entry.horizontalLayout.y);
@@ -763,8 +1141,69 @@ export async function fetchMatchStats(matchId) {
         if (sub.type === 'subIn') target.subInMinute = minute;
         if (sub.type === 'subOut') target.subOutMinute = minute;
       }
+      if (!target.starter) target.subbedIn = target.subInMinute != null;
     }
   }
+
+  // Le drapeau isGoalkeeper posé sur toute une équipe — seize « gardiens »
+  // sur Cobresal - Copiapó, Copa Chile 2023 : au-delà de deux gardiens dans
+  // un camp, ne le restent que ceux que la composition ou une statistique
+  // d'arrêts confirme.
+  for (const side of ['home', 'away']) {
+    const gardiens = players[side].filter((p) => p.position === 'Goalkeeper');
+    if (gardiens.length <= 2) continue;
+    const confirmes = gardiens.filter((p) => gardiensConfirmes.has(p) || p.saves !== undefined);
+    for (const p of gardiens) if (!confirmes.includes(p) || confirmes.length > 2) p.position = null;
+  }
+
+  // Le relayeur d'un gardien sorti, quand la composition ne dit pas son
+  // poste (Munera, Bucaramanga - América : entré à la 12e à la place de
+  // Quintero, absent de playerStats) : celui qui entre à la minute même où
+  // le gardien sort prend les buts.
+  for (const side of ['home', 'away']) {
+    const sorties = players[side].filter((p) => p.position === 'Goalkeeper' && p.subOutMinute != null).map((p) => p.subOutMinute);
+    for (const p of players[side]) {
+      if (p.position || p.subInMinute == null || !sorties.includes(p.subInMinute)) continue;
+      if (players[side].some((q) => q !== p && q.position === 'Goalkeeper' && q.subInMinute === p.subInMinute)) continue;
+      p.position = 'Goalkeeper';
+    }
+  }
+
+  // Minutes des lignes venues de la composition, déduites du déroulé ; buts,
+  // passes et csc lus au déroulé pour toute ligne dont la case manque —
+  // Vorlicky, Slavia - Karviná : présent dans playerStats sans « buts »,
+  // deux buts au déroulé. Une case renseignée, même à zéro, n'est jamais
+  // contredite.
+  const joue = Boolean(statut.finished) && !awarded;
+  for (const side of ['home', 'away']) {
+    for (const p of players[side]) {
+      if (depuisComposition.has(p) && joue) {
+        if (p.starter) p.minutes = p.subOutMinute ?? duree;
+        else if (p.subInMinute != null) p.minutes = Math.max(0, duree - p.subInMinute);
+      }
+      const lui = (g) => (p.playerId && g.playerId ? g.playerId === p.playerId : nomNormalise(g.player) === nomNormalise(p.name));
+      const butsDe = events.filter((g) => g.type === 'goal' && g.side === side && !g.ownGoal && lui(g)).length;
+      const cscDe = events.filter((g) => g.type === 'goal' && g.side !== side && g.ownGoal && lui(g)).length;
+      const passesDe = events.filter((g) => g.type === 'goal' && g.side === side && g.assist && nomNormalise(g.assist) === nomNormalise(p.name)).length;
+      if (p.goals === undefined && butsDe) p.goals = butsDe;
+      if (p.assists === undefined && passesDe) p.assists = passesDe;
+      if (p.ownGoals === undefined && cscDe) p.ownGoals = cscDe;
+    }
+  }
+
+  // Les buts encaissés ne valent que pour un gardien — c'est une contrainte
+  // du magasin. FotMob publie pourtant « goals conceded » sur des joueurs de
+  // champ dans certaines feuilles à couverture réduite ; laissé tel quel, le
+  // lot entier était refusé à l'écriture (283 feuilles bloquées le
+  // 2026-09-22 sur cette seule ligne).
+  for (const side of ['home', 'away']) {
+    for (const p of players[side]) if (p.position !== 'Goalkeeper') delete p.goalsConceded;
+  }
+
+  // Un match attribué porte le score de la fédération : le confronter aux
+  // gardiens d'un match qui n'a pas compté n'aurait pas de sens.
+  const score = scoreOf(statut.scoreStr);
+  if (statut.finished && !awarded) reconcileGoalsConceded(players, events, score);
 
   const shotmap = mapShotmap(payload);
   return {
@@ -778,9 +1217,16 @@ export async function fetchMatchStats(matchId) {
     homeId: teamIdOf(payload?.general?.homeTeam?.id),
     awayId: teamIdOf(payload?.general?.awayTeam?.id),
     fotmobId: String(matchId),
+    finished: Boolean(statut.finished),
+    awarded,
+    noSheet,
+    // Le score de la source elle-même, pour que l'appelant puisse le
+    // confronter à celui qu'il tient d'ailleurs.
+    homeGoals: score[0],
+    awayGoals: score[1],
     teamStats,
     players,
-    events: mapEvents(payload),
+    events,
     lineups: mapLineups(payload),
     meta: mapMeta(payload),
     ...(shotmap ? { shotmap } : {}),
@@ -788,4 +1234,127 @@ export async function fetchMatchStats(matchId) {
   };
 }
 
-export const __testing = { firstNumber, mapTeamStats, mapPlayer, TEAM_STAT_MAP, PLAYER_STAT_MAP };
+/**
+ * Classement(s) OFFICIEL(S) d'une compétition, tels que FotMob les publie.
+ *
+ * `leagueId` est l'identifiant STABLE de la compétition (cf.
+ * fotMobLeagueIds.js), `season` un libellé de `allAvailableSeasons` —
+ * « 2025/2026 », « 2025 », « 2025 - Clausura », « 2025/2026 - Apertura ».
+ * Sans saison, FotMob rend la saison en cours.
+ *
+ * Pourquoi lire le classement chez la source plutôt que le recalculer sur
+ * les résultats du magasin : le calcul ignore les pénalités de points, les
+ * départages propres à chaque fédération, les points conservés ou divisés
+ * par deux à l'entrée des playoffs (Danemark, Belgique), et les
+ * conférences. Le calcul reste utile comme contrôle et comme repli.
+ *
+ * Une compétition peut publier PLUSIEURS tables pour une même saison — les
+ * conférences de la MLS, l'Apertura et la Clausura colombiennes, les zones
+ * argentines. Toutes sont rendues, dans l'ordre de la source.
+ */
+export async function fetchLeagueTables(leagueId, season = null) {
+  const url = `${BASE}/leagues?id=${encodeURIComponent(leagueId)}${season ? `&season=${encodeURIComponent(season)}` : ''}`;
+  const payload = await fetchJson(url);
+  const details = payload?.details ?? {};
+  const tables = [];
+  for (const bloc of payload?.table ?? []) {
+    const data = bloc?.data;
+    if (!data) continue;
+    const legende = data.legend ?? [];
+    if (Array.isArray(data.tables)) {
+      for (const t of data.tables) if (t?.table) tables.push(mapTable(t.leagueName ?? details.name, t.table, t.legend ?? legende));
+    } else if (data.table) {
+      tables.push(mapTable(data.leagueName ?? details.name, data.table, legende));
+    }
+  }
+  return {
+    leagueId: Number(leagueId),
+    name: details.name ?? null,
+    country: details.country ?? null,
+    selectedSeason: details.selectedSeason ?? null,
+    seasons: Array.isArray(payload?.allAvailableSeasons) ? payload.allAvailableSeasons.map(String) : [],
+    tables
+  };
+}
+
+/**
+ * Calendrier COMPLET d'une compétition pour une saison, tel que sa page le
+ * publie (`fixtures.allMatches`). C'est le contrôle de complétude qui
+ * manquait : la liste du jour omet parfois des rencontres entières — trois
+ * journées d'Amérique du Sud les 18-20 juillet 2025, trois matchs brésiliens
+ * de mars 2026, huit rencontres canadiennes — que cette page, elle, connaît.
+ * Même paramètre `season` que fetchLeagueTables.
+ */
+export async function fetchLeagueFixtures(leagueId, season = null) {
+  const url = `${BASE}/leagues?id=${encodeURIComponent(leagueId)}${season ? `&season=${encodeURIComponent(season)}` : ''}`;
+  const payload = await fetchJson(url);
+  const fixtures = (payload?.fixtures?.allMatches ?? []).map((m) => {
+    const [homeGoals, awayGoals] = scoreOf(m.status?.scoreStr);
+    return {
+      matchId: String(m.id),
+      // La date du magasin est celle du coup d'envoi en UTC.
+      date: m.status?.utcTime ? String(m.status.utcTime).slice(0, 10) : null,
+      round: m.round != null ? String(m.round) : null,
+      homeId: teamIdOf(m.home?.id),
+      awayId: teamIdOf(m.away?.id),
+      homeName: m.home?.name ?? null,
+      awayName: m.away?.name ?? null,
+      homeGoals,
+      awayGoals,
+      finished: Boolean(m.status?.finished),
+      cancelled: Boolean(m.status?.cancelled),
+      awarded: Boolean(m.status?.awarded),
+      reason: m.status?.reason?.short ?? null,
+      played: Boolean(m.status?.finished) && !m.status?.cancelled
+    };
+  });
+  return {
+    leagueId: Number(leagueId),
+    selectedSeason: payload?.details?.selectedSeason ?? null,
+    seasons: Array.isArray(payload?.allAvailableSeasons) ? payload.allAvailableSeasons.map(String) : [],
+    fixtures
+  };
+}
+
+function mapTable(name, table, legende) {
+  // La zone (Ligue des champions, relégation…) se lit par la couleur de la
+  // ligne, que la légende nomme ; à défaut par l'index de ligne qu'elle
+  // liste.
+  const zone = (row) =>
+    legende.find((l) => l.color && row.qualColor && l.color === row.qualColor)?.title ??
+    legende.find((l) => Array.isArray(l.indices) && l.indices.includes(Number(row.idx) - 1))?.title ??
+    null;
+  const parId = (rows) => new Map((rows ?? []).map((r) => [String(r.id), r]));
+  const domicile = parId(table.home);
+  const exterieur = parId(table.away);
+  const camp = (r) => {
+    if (!r) return null;
+    const [pour, contre] = scoreOf(r.scoresStr);
+    return { played: r.played ?? 0, won: r.wins ?? 0, drawn: r.draws ?? 0, lost: r.losses ?? 0, goalsFor: pour ?? 0, goalsAgainst: contre ?? 0 };
+  };
+  const rows = (table.all ?? []).map((r) => {
+    const [pour, contre] = scoreOf(r.scoresStr);
+    return {
+      rank: Number(r.idx),
+      teamId: teamIdOf(r.id),
+      teamName: r.name,
+      shortName: r.shortName ?? null,
+      teamLogo: null,
+      played: r.played ?? 0,
+      won: r.wins ?? 0,
+      drawn: r.draws ?? 0,
+      lost: r.losses ?? 0,
+      goalsFor: pour ?? 0,
+      goalsAgainst: contre ?? 0,
+      goalDiff: Number.isFinite(r.goalConDiff) ? r.goalConDiff : (pour ?? 0) - (contre ?? 0),
+      points: r.pts ?? 0,
+      deduction: r.deduction ?? null,
+      description: zone(r),
+      home: camp(domicile.get(String(r.id))),
+      away: camp(exterieur.get(String(r.id)))
+    };
+  });
+  return { name: String(name ?? ''), rows };
+}
+
+export const __testing = { firstNumber, mapTeamStats, mapPlayer, TEAM_STAT_MAP, PLAYER_STAT_MAP, roleOfGridPosition, roleOfUsualPosition, roleOfLineupEntry, lineupUsesRoleCodes, nomNormalise, reconcileGoalsConceded, scoreOf };

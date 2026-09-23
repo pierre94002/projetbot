@@ -55,7 +55,7 @@ const averagesTeams = computed(() => (store.averages ? [{ teamId: store.teamId, 
         description="Aucune statistique disponible pour cette équipe sur la saison consultée."
       />
       <div v-else-if="store.players" class="team-modal__players-table-wrap">
-        <p class="cm-text-muted team-modal__note">Saison {{ store.players.season }} — {{ store.players.players.length }} joueurs</p>
+        <p class="cm-text-muted team-modal__note">Saison {{ store.players.seasonLabel ?? store.players.season ?? 'en cours' }} — {{ store.players.players.length }} joueurs</p>
         <table class="team-modal__players-table">
           <thead>
             <tr>

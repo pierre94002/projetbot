@@ -22,6 +22,7 @@ import { fileURLToPath } from 'node:url';
 import { FOTMOB_LEAGUES, FOTMOB_REV, leagueKeyMatches, fetchMatchesByDate, fetchMatchStats } from './fotMobProvider.js';
 import { teamNamesLikelyMatch } from '../../utils/teamNameMatch.js';
 import { mergeMatchStats } from '../../../scripts/merge-match-stats.mjs';
+import { markNoSheet, openDb } from '../db/matchStatsDb.js';
 import { rebuildRegistries } from '../db/identityRegistry.js';
 import { storedEntriesIndex } from '../db/matchStatsRead.js';
 
@@ -84,7 +85,9 @@ export async function importMissingFromFotMob({ from, to, leagues = null, concur
   await pool(days, concurrency, async (date) => {
     const dayMatches = await fetchMatchesByDate(date).catch(() => []);
     for (const match of dayMatches) {
-      if (!match.finished || match.homeGoals === null || match.awayGoals === null) continue;
+      // Terminée SANS être annulée : une rencontre abandonnée est publiée
+      // « finished » avec son score provisoire (cf. fetchMatchesByDate).
+      if (!match.played || match.homeGoals === null || match.awayGoals === null) continue;
       const league = wanted.find(([, matcher]) => leagueKeyMatches(matcher, match.leagueKey))?.[0];
       if (!league) continue;
       report.discovered++;
@@ -113,52 +116,27 @@ export async function importMissingFromFotMob({ from, to, leagues = null, concur
   await pool(pending, concurrency, async ({ league, match }) => {
     try {
       const stats = await fetchMatchStats(match.matchId);
-      if (!stats) {
-        // Pas de feuille de match, mais une rencontre JOUÉE avec son score :
-        // elle entre quand même, sans relevé. La version qui la laissait
-        // tomber amputait des saisons entières — la Serbie et Israël 2023-24
-        // et 2024-25, que FotMob publie sans statistiques détaillées — et un
-        // classement calculé sur les matchs restants aurait été faux plutôt
-        // qu'absent. Les statistiques manquantes se voient ; des rencontres
-        // qui n'ont jamais existé, non.
-        report.noStats++;
-        batch.push({
-          date: match.date,
-          league,
-          homeName: match.homeName,
-          awayName: match.awayName,
-          homeId: match.homeId,
-          awayId: match.awayId,
-          fotmobId: String(match.matchId),
-          homeGoals: match.homeGoals,
-          awayGoals: match.awayGoals,
-          sources: [`https://www.fotmob.com/api/data/matchDetails?matchId=${match.matchId}`]
-        });
-      } else {
-        report.fetched++;
-        batch.push({
-          date: match.date,
-          league,
-          homeName: match.homeName,
-          awayName: match.awayName,
-          // L'identité que la source attache elle-même aux deux clubs et à
-          // la rencontre. Conservée ici, elle dispense tout le reste du projet
-          // de rapprocher des noms qui ne s'écrivent pas pareil d'une source
-          // à l'autre (cf. data/db/identityRegistry.js).
-          homeId: stats.homeId,
-          awayId: stats.awayId,
-          fotmobId: stats.fotmobId,
-          homeGoals: match.homeGoals,
-          awayGoals: match.awayGoals,
-          teamStats: stats.teamStats,
-          players: stats.players,
-          events: stats.events,
-          lineups: stats.lineups,
-          meta: stats.meta,
-          shotmap: stats.shotmap,
-          sources: stats.sources
-        });
-      }
+      // Pas de feuille de match, mais une rencontre JOUÉE avec son score :
+      // elle entre quand même, sans relevé — avec ce que la page dit encore
+      // (journée, phase, composition, buteurs). La version qui la laissait
+      // tomber amputait des saisons entières — la Serbie et Israël 2023-24
+      // et 2024-25, que FotMob publie sans statistiques détaillées — et un
+      // classement calculé sur les matchs restants aurait été faux plutôt
+      // qu'absent. Les statistiques manquantes se voient ; des rencontres
+      // qui n'ont jamais existé, non.
+      if (!stats || stats.noSheet) report.noStats++; else report.fetched++;
+      batch.push(entreeDepuis(stats, {
+        date: match.date,
+        league,
+        homeName: match.homeName,
+        awayName: match.awayName,
+        homeId: match.homeId,
+        awayId: match.awayId,
+        fotmobId: String(match.matchId),
+        homeGoals: match.homeGoals,
+        awayGoals: match.awayGoals,
+        leagueKey: match.leagueKey
+      }));
     } catch {
       report.failed++;
     }
@@ -168,8 +146,123 @@ export async function importMissingFromFotMob({ from, to, leagues = null, concur
   });
 
   flush();
-  refreshRegistries(report);
+  // Les annuaires ne se reconstruisent que si quelque chose est entré : la
+  // reconstruction est complète (huit secondes, bloquantes) et une passe
+  // périodique qui n'a rien trouvé n'a rien à y changer.
+  if (report.merged) refreshRegistries(report);
   onProgress?.({ phase: 'done', ...report });
+  return report;
+}
+
+/**
+ * Une entrée du magasin à partir d'une page FotMob — ou de la seule liste du
+ * jour quand la page manque. Le score de la PAGE d'abord : celui d'un match
+ * repris porte le résultat final, celui d'un match attribué le résultat de
+ * la fédération, là où la liste du jour garde le score du terrain.
+ *
+ * `replacePlayers` : une feuille complète fait foi sur les lignes joueur du
+ * match. Ce qu'elle ne porte plus est retiré — identité provisoire que
+ * FotMob a fusionnée depuis (Cherif sous « Mohamed Bangoura » pendant trois
+ * journées), ligne ESPN sous une autre graphie du même homme (« Jojo
+ * Wollacott » à côté de « Joseph Wollacott » : deux gardiens pour un, 7 961
+ * lignes dans 902 rencontres). Sans relevé, rien n'est retiré : on n'a pas
+ * de quoi trancher.
+ */
+function entreeDepuis(stats, base) {
+  const sansReleve = !stats || stats.noSheet;
+  const entree = {
+    date: base.date,
+    league: base.league,
+    homeName: base.homeName ?? stats?.homeName,
+    awayName: base.awayName ?? stats?.awayName,
+    homeId: stats?.homeId ?? base.homeId ?? null,
+    awayId: stats?.awayId ?? base.awayId ?? null,
+    fotmobId: stats?.fotmobId ?? base.fotmobId,
+    homeGoals: stats?.homeGoals ?? base.homeGoals ?? null,
+    awayGoals: stats?.awayGoals ?? base.awayGoals ?? null,
+    meta: {
+      ...(stats?.meta ?? {}),
+      rev: FOTMOB_REV,
+      ...(sansReleve ? { noSheet: true } : {}),
+      // L'intitulé exact de la PHASE chez FotMob (« MEX|Liga MX Apertura
+      // Playoff »), lu dans la liste du jour : c'est lui qui distingue un
+      // tournoi d'ouverture d'un tournoi de clôture, une phase régulière de
+      // ses playoffs ou de ses barrages.
+      ...(base.leagueKey ? { leagueKey: base.leagueKey } : {})
+    },
+    replacePlayers: !sansReleve,
+    sources: stats?.sources ?? [`https://www.fotmob.com/api/data/matchDetails?matchId=${base.fotmobId}`]
+  };
+  if (stats) Object.assign(entree, { teamStats: stats.teamStats, players: stats.players, events: stats.events, lineups: stats.lineups, shotmap: stats.shotmap });
+  return entree;
+}
+
+/**
+ * L'intitulé de phase le plus fréquent du magasin pour chaque identifiant de
+ * phase FotMob : ce qui permet d'étiqueter une rencontre importée par
+ * identifiant, sans liste du jour — puisque c'est précisément la liste du
+ * jour qui l'avait omise.
+ */
+function leagueKeysByLeagueId({ database = openDb() } = {}) {
+  const parPhase = new Map();
+  const rows = database.prepare(
+    `SELECT json_extract(meta, '$.leagueId') AS lid, json_extract(meta, '$.leagueKey') AS k, COUNT(*) AS n
+     FROM matches
+     WHERE json_extract(meta, '$.leagueId') IS NOT NULL AND json_extract(meta, '$.leagueKey') IS NOT NULL
+     GROUP BY lid, k`
+  ).all();
+  for (const r of rows) {
+    const connu = parPhase.get(Number(r.lid));
+    if (!connu || connu.n < r.n) parPhase.set(Number(r.lid), { k: r.k, n: r.n });
+  }
+  return new Map([...parPhase].map(([lid, v]) => [lid, v.k]));
+}
+
+/**
+ * Importe des rencontres par IDENTIFIANT FotMob, quand la liste du jour les
+ * a omises : trois journées entières de Bolivie, d'Équateur et du Paraguay
+ * (18-20 juillet 2025), trois matchs brésiliens de mars 2026, huit
+ * rencontres canadiennes — la page de la compétition les connaît, la liste
+ * du jour non (cf. fotMobFixtureGaps.js). La date est celle du coup d'envoi
+ * UTC, comme partout dans le magasin ; seules les rencontres TERMINÉES
+ * entrent.
+ */
+export async function importFotmobIds(ids, { league, concurrency = DEFAULT_CONCURRENCY, onProgress = null } = {}) {
+  const report = { requested: ids.length, fetched: 0, noStats: 0, notFinished: 0, failed: 0, merged: 0, playersMerged: 0, samples: { failed: [] } };
+  if (!ids.length) return report;
+  const phases = leagueKeysByLeagueId();
+  let batch = [];
+  const flush = () => {
+    if (!batch.length) return;
+    const summary = mergeMatchStats(MATCH_STATS_DIR, batch);
+    report.merged += summary.created + summary.updated;
+    report.playersMerged += summary.playersMerged;
+    batch = [];
+  };
+  let done = 0;
+  await pool(ids, concurrency, async (id) => {
+    try {
+      const stats = await fetchMatchStats(id);
+      const date = stats?.meta?.kickoff ? String(stats.meta.kickoff).slice(0, 10) : null;
+      if (!stats || !date) {
+        report.failed++;
+        if (report.samples.failed.length < 20) report.samples.failed.push(`${id} : page absente`);
+        return;
+      }
+      if (!stats.finished) { report.notFinished++; return; }
+      if (stats.noSheet) report.noStats++; else report.fetched++;
+      batch.push(entreeDepuis(stats, { date, league, fotmobId: String(id), leagueKey: phases.get(Number(stats.meta?.leagueId)) ?? null }));
+    } catch (error) {
+      report.failed++;
+      if (report.samples.failed.length < 20) report.samples.failed.push(`${id} : ${error.message}`);
+    } finally {
+      done++;
+      if (batch.length >= FLUSH_EVERY) flush();
+      if (onProgress && done % 50 === 0) onProgress({ phase: 'fetching', done, total: ids.length, merged: report.merged });
+    }
+  });
+  flush();
+  if (report.merged) refreshRegistries(report);
   return report;
 }
 
@@ -295,8 +388,12 @@ export async function refreshFromFotMob(options = {}) {
   await pool([...byDate.entries()], concurrency, async ([date, entries]) => {
     const dayMatches = await fetchMatchesByDate(date).catch(() => []);
     for (const entry of entries) {
-      const found = matchEntry(entry, dayMatches);
-      if (found) pairs.push({ entry, fotMobId: found.matchId });
+      // Par IDENTIFIANT quand l'entrée en porte déjà un : c'est exact, là où
+      // le rapprochement par les noms refuse « Man United » contre
+      // « Manchester United » et laissait ces feuilles à jamais incomplètes.
+      // La liste du jour reste lue pour l'intitulé de la phase.
+      const found = (entry.fotmobId && dayMatches.find((m) => m.matchId === String(entry.fotmobId))) || matchEntry(entry, dayMatches);
+      if (found) pairs.push({ entry, fotMobId: found.matchId, leagueKey: found.leagueKey });
       else {
         report.unmatched++;
         if (report.samples.unmatched.length < 20) report.samples.unmatched.push(`${entry.date} ${entry.league} ${entry.homeName}-${entry.awayName}`);
@@ -319,37 +416,28 @@ export async function refreshFromFotMob(options = {}) {
   };
 
   let done = 0;
-  await pool(pairs, concurrency, async ({ entry, fotMobId }) => {
+  // Les rencontres que la source publie sans relevé : marquées comme telles
+  // à la fin, pour ne pas être redemandées à chaque passe (cf. markNoSheet).
+  const sansFeuille = [];
+  await pool(pairs, concurrency, async ({ entry, fotMobId, leagueKey }) => {
     try {
       const stats = await fetchMatchStats(fotMobId);
-      if (!stats) report.noStats++;
-      else {
-        report.fetched++;
-        batch.push({
+      if (!stats || stats.noSheet) {
+        report.noStats++;
+        sansFeuille.push(entry.matchKey);
+      } else report.fetched++;
+      if (stats) {
+        batch.push(entreeDepuis(stats, {
           date: entry.date,
           league: entry.league,
           // Les noms déjà stockés font foi : FotMob ne sert qu'à compléter.
           homeName: entry.homeName,
           awayName: entry.awayName,
-          // L'identité que la source attache elle-même aux deux clubs et à
-          // la rencontre. Conservée ici, elle dispense tout le reste du projet
-          // de rapprocher des noms qui ne s'écrivent pas pareil d'une source
-          // à l'autre (cf. data/db/identityRegistry.js).
-          homeId: stats.homeId,
-          awayId: stats.awayId,
-          fotmobId: stats.fotmobId,
+          fotmobId: String(fotMobId),
           homeGoals: entry.homeGoals,
           awayGoals: entry.awayGoals,
-          teamStats: stats.teamStats,
-          players: stats.players,
-          // Déroulé, composition, cadre de la rencontre et carte des tirs :
-          // ce qui permet à la page de match de reproduire la source.
-          events: stats.events,
-          lineups: stats.lineups,
-          meta: stats.meta,
-          shotmap: stats.shotmap,
-          sources: stats.sources
-        });
+          leagueKey
+        }));
       }
     } catch (error) {
       report.failed++;
@@ -361,7 +449,17 @@ export async function refreshFromFotMob(options = {}) {
   });
 
   flush();
-  refreshRegistries(report);
+  if (sansFeuille.length) {
+    try {
+      report.markedNoSheet = markNoSheet(sansFeuille, FOTMOB_REV);
+    } catch (error) {
+      report.warnings = [...(report.warnings ?? []), `Rencontres sans feuille non marquées : ${error.message}`];
+    }
+  }
+  // Les annuaires ne se reconstruisent que si quelque chose est entré : la
+  // reconstruction est complète (huit secondes, bloquantes) et une passe
+  // périodique qui n'a rien trouvé n'a rien à y changer.
+  if (report.merged) refreshRegistries(report);
   report.finishedAt = new Date().toISOString();
   onProgress?.({ phase: 'done', ...report });
   return report;

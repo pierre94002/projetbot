@@ -1,73 +1,59 @@
-import { getStandingsRaw } from './apiFootballClient.js';
-import { getCachedValue, setCachedValue } from '../repositories/statsCacheRepository.js';
-import { resolveLeagueId, resolveCurrentSeason } from './leagueRegistry.js';
-import { getWebStandings } from '../repositories/webStandingsRepository.js';
-import { standingsFromStore } from '../db/matchStatsRead.js';
-
-const STANDINGS_CACHE_TTL_MS = 12 * 60 * 60 * 1000;
-
-async function getApiFootballStandings(leagueLabel) {
-  const leagueId = await resolveLeagueId(leagueLabel);
-  if (!leagueId) return null;
-
-  const season = resolveCurrentSeason();
-  const cacheKey = `standings:${leagueId}:${season}`;
-  const cached = getCachedValue(cacheKey, STANDINGS_CACHE_TTL_MS);
-  if (cached) return cached;
-
-  const raw = await getStandingsRaw(leagueId, season);
-  const table = raw?.[0]?.league?.standings?.[0] ?? [];
-
-  const standings = {
-    leagueName: raw?.[0]?.league?.name ?? leagueLabel,
-    season,
-    rows: table.map((entry) => ({
-      rank: entry.rank,
-      teamId: entry.team.id,
-      teamName: entry.team.name,
-      teamLogo: entry.team.logo,
-      played: entry.all.played,
-      won: entry.all.win,
-      drawn: entry.all.draw,
-      lost: entry.all.lose,
-      goalsFor: entry.all.goals.for,
-      goalsAgainst: entry.all.goals.against,
-      goalDiff: entry.goalsDiff,
-      points: entry.points,
-      description: entry.description,
-      home: { played: entry.home?.played ?? 0, goalsFor: entry.home?.goals?.for ?? 0, goalsAgainst: entry.home?.goals?.against ?? 0 },
-      away: { played: entry.away?.played ?? 0, goalsFor: entry.away?.goals?.for ?? 0, goalsAgainst: entry.away?.goals?.against ?? 0 }
-    }))
-  };
-
-  return setCachedValue(cacheKey, standings);
-}
+import { standingsFromStore, officialStandings, seasonsForLeague } from '../db/matchStatsRead.js';
+import { seasonLabel } from './seasonWindows.js';
 
 /**
- * Classement complet d'une compétition, résolue par son libellé (ex. "La Liga - Spain").
+ * Classement complet d'une compétition, résolue par son libellé (ex. "La
+ * Liga - Spain"), pour une saison (année de début ; la plus récente du
+ * magasin par défaut).
  *
- * CALCULÉ depuis le magasin en priorité : il contient tous les résultats, la
- * déduction est donc exacte, sans quota ni clé, et elle couvre les
- * championnats qu'aucune des deux autres sources ne connaît. Elle apporte en
- * plus la répartition domicile/extérieur, absente du classement web.
+ * OFFICIEL d'abord : la table que FotMob publie pour cette saison, relevée
+ * par fotMobStandingsRefresh.js. Elle seule connaît les pénalités de
+ * points, les points divisés ou conservés à l'entrée des playoffs, les
+ * conférences et les départages de chaque fédération. Quand une
+ * compétition en publie plusieurs — conférences MLS, Apertura/Clausura,
+ * zones argentines — `table` choisit laquelle, la première de la source
+ * sinon, et la réponse liste les autres.
  *
- * La recherche web quotidienne reste en second, et API-Football en dernier :
- * tant qu'une compétition n'a pas de rencontre jouée en magasin — un
- * championnat qui vient d'être ajouté, une coupe entre deux tours — mieux
- * vaut un classement venu d'ailleurs que pas de classement.
+ * CALCULÉ ensuite : déduit des résultats du magasin. Exact pour les points
+ * bruts, aveugle au règlement ; il sert de repli tant que la table
+ * officielle n'a pas été relevée, et de contrôle de l'autre.
+ *
+ * Plus aucune source hors magasin. La recherche web quotidienne et
+ * API-Football servaient de repli : elles ne viennent pas de FotMob, et la
+ * règle est qu'hors cotes, tout en vienne. Une compétition sans rencontre
+ * ni table relevée n'a donc pas de classement — ce qui est vrai.
  */
-export async function getStandingsByLeagueLabel(leagueLabel, { season = null } = {}) {
-  try {
-    const local = standingsFromStore(leagueLabel, { season });
-    if (local?.rows?.length) return local;
-  } catch (error) {
-    console.warn(`[classement] magasin indisponible pour ${leagueLabel} : ${error.message}`);
+export async function getStandingsByLeagueLabel(leagueLabel, { season = null, table = null } = {}) {
+  const saison = season ?? seasonsForLeague(leagueLabel)[0]?.season ?? null;
+
+  const officiel = officialStandings(leagueLabel, { season: saison });
+  if (officiel?.tables?.length) {
+    const choisie = (table && officiel.tables.find((t) => t.name === table)) ?? officiel.tables[0];
+    return {
+      leagueName: leagueLabel,
+      season: officiel.season,
+      seasonLabel: officiel.seasonLabel,
+      source: 'fotmob',
+      official: true,
+      fetchedAt: officiel.fetchedAt,
+      table: choisie.name,
+      tables: officiel.tables.map((t) => t.name),
+      rows: choisie.rows
+    };
   }
-  // Une saison PASSÉE ne se cherche que dans le magasin : les deux autres
-  // sources ne publient que la saison en cours, et leur répondre « voici le
-  // classement » pour une autre année serait un mensonge tranquille.
-  if (season) return null;
-  return getWebStandings(leagueLabel) ?? getApiFootballStandings(leagueLabel);
+
+  const local = standingsFromStore(leagueLabel, { season: saison });
+  if (local?.rows?.length) {
+    return {
+      ...local,
+      seasonLabel: seasonLabel(leagueLabel, local.season),
+      official: false,
+      fetchedAt: null,
+      table: 'Calculé sur les résultats',
+      tables: ['Calculé sur les résultats']
+    };
+  }
+  return null;
 }
 
 function splitAverages(standings) {
@@ -96,22 +82,26 @@ function splitAverages(standings) {
  * Moyenne réelle de buts marqués à domicile/à l'extérieur sur toute la ligue
  * (Σ buts / Σ matchs joués sur chaque équipe du classement), utilisée comme
  * leagueHomeAvg/leagueAwayAvg dans le calcul structurel de lambda/mu
- * (cf. xgStructural.js). Le classement web n'a pas de répartition
- * domicile/extérieur : on prend alors celle du classement API-Football
- * (cache 12h, saison la plus récente du plan), et à défaut la moyenne
- * globale par équipe et par match, identique des deux côtés.
+ * (cf. xgStructural.js).
+ *
+ * Le classement CALCULÉ porte toujours la répartition domicile/extérieur,
+ * puisqu'il vient des rencontres ; la table officielle la porte quand FotMob
+ * la publie. À défaut des deux, la moyenne globale par équipe et par match,
+ * identique des deux côtés.
  */
 export async function getLeagueGoalAverages(leagueLabel) {
-  const webStandings = getWebStandings(leagueLabel);
-  const fromWeb = splitAverages(webStandings);
-  if (fromWeb) return fromWeb;
+  const calcule = standingsFromStore(leagueLabel);
+  const fromStore = splitAverages(calcule);
+  if (fromStore) return fromStore;
 
-  const fromApi = splitAverages(await getApiFootballStandings(leagueLabel).catch(() => null));
-  if (fromApi) return fromApi;
+  const officiel = await getStandingsByLeagueLabel(leagueLabel).catch(() => null);
+  const fromOfficial = splitAverages(officiel);
+  if (fromOfficial) return fromOfficial;
 
-  if (!webStandings?.rows?.length) return null;
-  const goals = webStandings.rows.reduce((sum, row) => sum + (row.goalsFor ?? 0), 0);
-  const played = webStandings.rows.reduce((sum, row) => sum + (row.played ?? 0), 0);
+  const table = officiel ?? calcule;
+  if (!table?.rows?.length) return null;
+  const goals = table.rows.reduce((sum, row) => sum + (row.goalsFor ?? 0), 0);
+  const played = table.rows.reduce((sum, row) => sum + (row.played ?? 0), 0);
   if (!played) return null;
   const perTeamMatch = Number((goals / played).toFixed(3));
   return { home: perTeamMatch, away: perTeamMatch };

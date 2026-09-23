@@ -31,7 +31,9 @@ const leaders = ref(null);
 const cupOptions = computed(() => cups.value.list.map((c) => ({ value: c.name, label: c.name })));
 const seasonOptions = computed(() => {
   const cup = cups.value.list.find((c) => c.name === selectedCup.value);
-  return (cup?.seasons ?? []).map((s) => ({ value: s.season, label: `${s.season}-${String(s.season + 1).slice(2)} (${s.matches} matchs)` }));
+  // Le libellé vient du serveur : « 2025 » pour une coupe d'année civile
+  // (Copa do Brasil, US Open Cup), « 2025-26 » pour les autres.
+  return (cup?.seasons ?? []).map((s) => ({ value: s.season, label: `${s.label ?? s.season} (${s.matches} matchs)` }));
 });
 
 const tabs = computed(() => [

@@ -4,14 +4,15 @@ import {
   getTeamWebAverages,
   getMatchStatsStatus
 } from '../../data/repositories/matchStatsWebRepository.js';
-import {
-  getCoverage,
-  getRefreshStatus,
-  isRefreshRunning,
-  refreshMatchStatsExclusive
-} from '../../data/providers/espnMatchStatsRefresh.js';
+import { getCoverage, getRefreshStatus } from '../../data/providers/espnMatchStatsRefresh.js';
+import { isRefreshRunning } from '../../data/providers/refreshLock.js';
+// La passe manuelle est LA MÊME que la passe automatique : FotMob seul,
+// calendrier, classements officiels, rencontres nouvelles puis feuilles
+// manquantes. Elle relançait autrefois ESPN.
+import { refreshNow } from '../../jobs/matchStatsAutoRefresh.js';
 import { playerSeasonStats, seasonsForLeague, leagueLeaders, cupBracket } from '../../data/db/matchStatsRead.js';
 import { cupsForLeague } from '../../data/providers/leagueCups.js';
+import { seasonLabel } from '../../data/providers/seasonWindows.js';
 import { ApiError, requireStringParam, optionalPositiveInt } from '../middlewares/errorHandler.js';
 
 /** Matchs d'une équipe avec stats d'équipe complètes + stats joueurs, match par match (import quotidien 7h30). */
@@ -67,7 +68,10 @@ export function getPlayerStats(req, res) {
     ...(minMinutes === undefined ? {} : { minMinutes }),
     ...(limit === undefined ? {} : { limit })
   });
-  res.json({ league, season: season ?? null, team, role, count: players.length, players });
+  // Le libellé de saison dépend de la compétition — « 2025 » pour un
+  // championnat d'année civile, « 2025-26 » ailleurs — et c'est au serveur
+  // de le dire : l'interface ne sait pas quel championnat est lequel.
+  res.json({ league, season: season ?? null, seasonLabel: season ? seasonLabel(league, season) : null, team, role, count: players.length, players });
 }
 
 /**
@@ -134,8 +138,7 @@ export function getMatchStatsCoverage(req, res) {
 export function postMatchStatsRefresh(req, res) {
   const alreadyRunning = isRefreshRunning();
   if (!alreadyRunning) {
-    const limit = optionalPositiveInt(req.body?.limit, 'limit');
-    refreshMatchStatsExclusive(limit ? { limit } : {}).catch((error) => {
+    refreshNow().catch((error) => {
       console.error(`[stats] rafraîchissement manuel en échec : ${error.message}`);
     });
   }

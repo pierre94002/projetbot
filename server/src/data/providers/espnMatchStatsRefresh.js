@@ -34,6 +34,7 @@ import { mergeMatchStats } from '../../../scripts/merge-match-stats.mjs';
 import { rebuildRegistries } from '../db/identityRegistry.js';
 import { storedEntriesIndex } from '../db/matchStatsRead.js';
 import { coverageFacts, seasonSummary } from '../db/matchStatsRead.js';
+import { withRefreshLock } from './refreshLock.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const RUNTIME_DIR = path.resolve(__dirname, '../../../data/runtime');
@@ -366,95 +367,21 @@ export async function refreshMatchStats(options = {}) {
 }
 
 /**
- * Verrou sur disque : la garde mémoire ci-dessous ne protège que d'un second
- * appel dans le même processus. Or le serveur et la commande de rattrapage
- * sont deux processus distincts qui écrivent les mêmes fichiers mensuels —
- * chacun les lit en entier puis les réécrit, donc deux passages simultanés
- * feraient perdre le travail de l'un des deux.
- *
- * `wx` échoue si le fichier existe déjà : la création fait donc office de
- * prise de verrou atomique. Un verrou plus vieux que LOCK_STALE_MINUTES est
- * considéré comme abandonné (processus tué avant d'avoir pu le retirer).
+ * Le verrou de rafraîchissement vit désormais dans refreshLock.js : il n'a
+ * rien d'ESPN, et FotMob — seule source depuis le 2026-09-22 — en a besoin
+ * sans avoir à passer par ce module. Réexporté ici pour les appelants
+ * historiques.
  */
-/** Le processus qui détient le verrou tourne-t-il encore ? */
-function pidAlive(pid) {
-  if (!Number.isInteger(pid) || pid <= 0) return false;
-  try {
-    // Signal 0 ne fait rien : il ne sert qu'à tester l'existence du processus.
-    process.kill(pid, 0);
-    return true;
-  } catch (error) {
-    // EPERM = le processus existe mais appartient à un autre utilisateur.
-    return error.code === 'EPERM';
-  }
-}
-
-function acquireLock() {
-  try {
-    const previous = JSON.parse(fs.readFileSync(LOCK_FILE, 'utf8'));
-    const ageMinutes = (Date.now() - new Date(previous.startedAt).getTime()) / 60_000;
-    // Un verrou dont le détenteur n'existe plus est abandonné, quel que soit
-    // son âge : un processus tué (arrêt du serveur, délai dépassé) laisse
-    // sinon le verrou en place une heure durant, pour rien.
-    if (ageMinutes < LOCK_STALE_MINUTES && pidAlive(previous.pid)) return false;
-    fs.rmSync(LOCK_FILE, { force: true });
-  } catch {
-    // Pas de verrou, ou verrou illisible : on tente de le prendre.
-  }
-  try {
-    fs.writeFileSync(LOCK_FILE, JSON.stringify({ pid: process.pid, startedAt: new Date().toISOString() }), { flag: 'wx' });
-    return true;
-  } catch {
-    return false; // Un autre processus l'a pris entre-temps.
-  }
-}
-
-function releaseLock() {
-  try {
-    fs.rmSync(LOCK_FILE, { force: true });
-  } catch {
-    // Rien à faire : le prochain passage le traitera comme périmé.
-  }
-}
-
-// Un seul rafraîchissement à la fois dans ce processus.
-let inFlight = null;
+export { withRefreshLock, isRefreshRunning } from './refreshLock.js';
 
 /**
  * Comme refreshMatchStats(), mais si un rafraîchissement est déjà en cours,
- * renvoie celui-là au lieu d'en lancer un second. C'est le point d'entrée
- * qu'utilisent la route HTTP et la tâche périodique.
+ * renvoie celui-là au lieu d'en lancer un second. Conservé pour la ligne de
+ * commande ESPN ; ni la route HTTP ni la tâche périodique ne l'appellent
+ * plus.
  */
 export function refreshMatchStatsExclusive(options = {}) {
   return withRefreshLock(() => refreshMatchStats(options));
-}
-
-/**
- * Exécute `task` sous le verrou, en garantissant qu'un seul rafraîchissement
- * touche les fichiers mensuels à la fois — ici comme dans un autre processus.
- *
- * Permet d'enchaîner plusieurs passes (ESPN puis FotMob) sous UN seul verrou :
- * les prendre à tour de rôle laisserait une fenêtre entre les deux où la
- * ligne de commande pourrait s'intercaler.
- */
-export function withRefreshLock(task) {
-  if (inFlight) return inFlight;
-  if (!acquireLock()) {
-    // Un autre processus travaille déjà : on ne fait rien plutôt que d'aller
-    // écraser ses écritures.
-    return Promise.resolve({ skipped: 'verrou détenu par un autre processus', considered: 0, merged: 0, playersMerged: 0, unmatched: 0, failed: 0 });
-  }
-  inFlight = Promise.resolve()
-    .then(task)
-    .finally(() => {
-      releaseLock();
-      inFlight = null;
-    });
-  return inFlight;
-}
-
-export function isRefreshRunning() {
-  return inFlight !== null;
 }
 
 /**

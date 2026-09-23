@@ -101,7 +101,16 @@ function readStats() {
     SELECT m.match_key, m.date, m.home_name, m.away_name, m.home_goals, m.away_goals, p.side,
            SUM(COALESCE(p.goals_conceded, 0)) AS conceded,
            SUM(CASE WHEN p.goals_conceded IS NOT NULL THEN 1 ELSE 0 END) AS keepers,
+           SUM(CASE WHEN p.position = 'Goalkeeper' AND p.minutes > 0 THEN 1 ELSE 0 END) AS gkJoue,
+           SUM(CASE WHEN p.position = 'Goalkeeper' AND (
+                 COALESCE(p.red_cards, 0) > 0
+                 OR (p.starter = 1 AND p.minutes < 90 AND p.sub_out_minute IS NULL)
+                 OR EXISTS (SELECT 1 FROM json_each(m.events) e WHERE json_extract(e.value, '$.type') = 'card'
+                            AND json_extract(e.value, '$.card') IN ('red', 'yellowred') AND json_extract(e.value, '$.player') = p.name)
+               ) THEN 1 ELSE 0 END) AS gkSorti,
            COALESCE(SUM(p.goals), 0) AS scored,
+           COALESCE(SUM(p.own_goals), 0) AS ownGoals,
+           json_extract(m.meta, '$.awarded') AS awarded,
            COUNT(*) AS lignes
     FROM matches m JOIN players p ON p.match_key = m.match_key
     GROUP BY m.match_key, p.side
@@ -114,10 +123,13 @@ function readStats() {
         awayName: r.away_name,
         homeGoals: r.home_goals,
         awayGoals: r.away_goals,
+        // Résultat attribué par la fédération : le score n'est pas celui du
+        // jeu, les feuilles décrivent un autre match — rien à confronter.
+        awarded: Boolean(r.awarded),
         sides: {}
       }));
     }
-    e.sides[r.side] = { conceded: r.conceded, keepers: r.keepers, scored: r.scored, lignes: r.lignes };
+    e.sides[r.side] = { conceded: r.conceded, keepers: r.keepers, scored: r.scored, ownGoals: r.ownGoals, lignes: r.lignes, gkJoue: r.gkJoue, gkSorti: r.gkSorti };
   }
   return [...parMatch.values()];
 }
@@ -178,10 +190,13 @@ let checkedGk = 0;
 let checkedScorers = 0;
 let checkedCrossFile = 0;
 let ownGoals = 0;
+let attribues = 0;
+let sansGardien = 0;
 
 for (const m of stats) {
   const score = scoreOf(m);
   const label = `${m.date} ${m.homeName} ${score ? `${score[0]}-${score[1]}` : '?-?'} ${m.awayName}`;
+  if (m.awarded) { attribues++; continue; }
   for (const side of ['home', 'away']) {
     const agg = m.sides[side];
     if (!agg || !agg.lignes || !score) continue;
@@ -192,7 +207,11 @@ for (const m of stats) {
     if (agg.keepers) {
       checkedGk++;
       const conceded = agg.conceded;
-      if (conceded !== opponent) {
+      // Gardien exclu ou sorti blessé sans relayeur (Lanús - San Lorenzo :
+      // Morales expulsé à la 81e, but à la 90e) : personne n'encaisse.
+      if (conceded < opponent && agg.gkSorti > 0 && agg.gkJoue <= 1) {
+        sansGardien++;
+      } else if (conceded !== opponent) {
         report(
           'gardien',
           label,
@@ -202,15 +221,20 @@ for (const m of stats) {
       }
     }
 
-    // 2. Buteurs : somme des buts <= score, écart de 1 toléré (csc).
+    // 2. Buteurs : buts des joueurs + csc de l'ADVERSAIRE = score. Un écart
+    // de 1 en dessous reste toléré (csc non relevé sur les feuilles anciennes) ;
+    // deux csc dans le même match (Rijnvogels 0-7 Eindhoven) ne sont plus
+    // « deux buteurs manquants ».
     checkedScorers++;
     const scored = agg.scored;
-    if (scored > own) {
-      report('buteurs', label, `${scored} buts crédités aux joueurs pour un score de ${own} — buteur en trop`);
-    } else if (own - scored === 1) {
+    const csc = m.sides[side === 'home' ? 'away' : 'home']?.ownGoals ?? 0;
+    const manque = own - scored - csc;
+    if (manque < 0) {
+      report('buteurs', label, `${scored} buts crédités aux joueurs (+ ${csc} csc adverses) pour un score de ${own} — buteur en trop`);
+    } else if (manque === 1) {
       ownGoals++;
-    } else if (own - scored >= 2) {
-      report('buteurs', label, `${scored} buts crédités aux joueurs pour un score de ${own} — ${own - scored} buteurs manquants`);
+    } else if (manque >= 2) {
+      report('buteurs', label, `${scored} buts crédités aux joueurs (+ ${csc} csc adverses) pour un score de ${own} — ${manque} buteurs manquants`);
     }
   }
 
@@ -259,6 +283,8 @@ console.log(
     controlesButeurs: checkedScorers,
     controlesEntreFichiers: checkedCrossFile + checkedCalendarResults,
     butsContreSonCamp: ownGoals,
+    resultatsAttribues: attribues,
+    gardienSortiSansRelayeur: sansGardien,
     anomalies: anomalies.length,
     parType: byKind
   })

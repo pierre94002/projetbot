@@ -1,21 +1,21 @@
 {
-  "lastImportDate": "2026-09-20",
-  "finishedAt": "2026-09-20T21:50:00.000Z",
-  "inProgressDate": "2026-09-21",
-  "startedAt": "2026-09-21T19:33:47.000Z",
+  "lastImportDate": "2026-09-22",
+  "finishedAt": "2026-09-22T06:39:27.000Z",
+  "inProgressDate": null,
+  "startedAt": null,
   "summary": {
-    "resultsCatchupWindow": "2026-09-13..2026-09-19",
-    "resultsRecorded": 202,
+    "resultsCatchupWindow": "2026-09-15..2026-09-21",
     "resultsCreatedThisRun": 0,
-    "resultsAlreadyPresentVerifiedOk": true,
-    "calendarTrackedCompetitions": 16,
-    "calendarTotalEntries": 20138,
-    "standingsCompetitionsUpdated": 15,
-    "standingsUpdatedAt": "2026-09-20T21:02:17.967Z",
-    "standingsSpotCheckedAgainst": ["laliga.com official standings (exact match)", "ESPN/Sky Sports (Brighton 3-0 Arsenal result)"],
-    "matchesWithFullStatsCatchupWindow": 171,
-    "playerRowsCatchupWindow": 7496,
-    "matchesMissingPlayerStats": [],
-    "note": "Verrou precedent perime (demarre a 15:34:27 UTC, > 3h) sans que lastImportDate ait ete mis a 2026-09-21 ; reprise de l'import pour le 2026-09-21."
+    "resultsNote": "Trêve internationale FIFA débutée le 2026-09-21 : les 14 compétitions suivies avaient toutes déjà bouclé leur dernière journée au 2026-09-20 (ou avant). Confirmé sur 2+ sources par compétition (aucun match trouvé = aucun match joué, pas un échec de recherche). Prochaine reprise probable : journées d'octobre.",
+    "calendarSkippedThisRun": true,
+    "calendarSkippedReason": "Recalcul complet de la saison pour 16 compétitions non refait cette exécution (coût trop élevé pour un passage horaire) ; season-calendar.json inchangé depuis le 2026-09-20. A reprendre lors d'un prochain passage, notamment avant le redémarrage des championnats début octobre.",
+    "standingsCompetitionsUpdated": 14,
+    "standingsUpdatedAt": "2026-09-22T06:39:05.503Z",
+    "standingsSources": "Sites officiels de ligue (laliga.com, legaseriea.it, bundesliga.com, lfp.fr/ligue1.com, uefa.com, footballwebpages.co.uk) croisés avec Sky Sports pour EPL/Championship/League1/League2/La Liga/Serie A/Bundesliga ; La Liga 2, Serie B, Bundesliga 2, Ligue 2 sur source officielle unique faute de temps pour un 2e croisement ; UEFA Europa League recalculé manuellement à partir des 18 résultats officiels journée 1 (aucune table prête trouvée) ; UEFA Europa Conference League omise (phase de ligue démarre le 2026-10-15, rien à classer).",
+    "standingsHomeAwaySplits": "omis partout (non trouvés de façon fiable dans le temps imparti), jamais mis à 0 par défaut",
+    "matchesWithFullStatsThisRun": 0,
+    "playerRowsThisRun": 0,
+    "matchStatsNote": "Aucun match joué le 2026-09-21 dans les 14 compétitions (trêve internationale) : rien à collecter. IMPORTANT — le pipeline de stats de match a migré vers SQLite (server/scripts/merge-match-stats.mjs, commentaire daté du 2026-09-22) : la base vit hors OneDrive (%LOCALAPPDATA%\\CoteMaster\\match-stats.db), plus dans server/data/runtime/match-stats/*.json. Cette session cloud n'a pas d'outil d'exécution de commande sur le PC (pas de device_bash), seulement des outils de fichiers : elle ne peut donc plus injecter les stats de match de façon sûre tant que ce point n'est pas réglé avec Pierre. Voir message de fin d'exécution.",
+    "note": "Import repris le 2026-09-22 après verrou du 2026-09-21 jamais libéré (voir entrée précédente)."
   }
 }

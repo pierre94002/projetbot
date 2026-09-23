@@ -33,7 +33,7 @@
  */
 
 import { refreshFromFotMob, importMissingFromFotMob, listPending } from '../src/data/providers/fotMobRefresh.js';
-import { withRefreshLock } from '../src/data/providers/espnMatchStatsRefresh.js';
+import { withRefreshLock } from '../src/data/providers/refreshLock.js';
 
 function parseArgs(argv) {
   const options = { leagues: null, since: null, until: null, from: null, to: null, limit: null, concurrency: 3, dryRun: false, force: false };

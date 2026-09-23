@@ -191,6 +191,24 @@ const REGISTRY_DDL = [
   name TEXT NOT NULL,
   updated_at TEXT
 ) WITHOUT ROWID;`,
+  // Classements OFFICIELS, tels que FotMob les publie, par compétition,
+  // saison et table — une compétition peut en avoir plusieurs pour une même
+  // saison (conférences MLS, Apertura/Clausura). Les lignes sont gardées en
+  // JSON : elles se lisent toujours entières, jamais colonne par colonne.
+  // Ce n'est PAS un index dérivé des rencontres : c'est une donnée de la
+  // source, que le calcul sur les résultats ne sait pas reproduire
+  // (pénalités de points, points divisés par deux, départages).
+  `CREATE TABLE IF NOT EXISTS standings_official (
+  league TEXT NOT NULL,
+  season INTEGER NOT NULL,
+  table_name TEXT NOT NULL,
+  ord INTEGER NOT NULL DEFAULT 0,
+  fotmob_league_id INTEGER,
+  fotmob_season TEXT,
+  fetched_at TEXT NOT NULL,
+  rows TEXT NOT NULL,
+  PRIMARY KEY (league, season, table_name)
+) WITHOUT ROWID;`,
   'CREATE INDEX IF NOT EXISTS idx_teams_slug ON teams(slug);',
   'CREATE INDEX IF NOT EXISTS idx_team_aliases_slug ON team_aliases(slug);',
   'CREATE INDEX IF NOT EXISTS idx_people_slug ON people(slug);',
@@ -219,7 +237,15 @@ const DDL = [
   // classement — 12 s par écran. Avec cet index, SQLite lit l'index seul.
   'CREATE INDEX IF NOT EXISTS idx_players_name_position ON players(name, position) WHERE position IS NOT NULL;',
   'CREATE INDEX IF NOT EXISTS idx_matches_home_id ON matches(home_id) WHERE home_id IS NOT NULL;',
-  'CREATE INDEX IF NOT EXISTS idx_matches_away_id ON matches(away_id) WHERE away_id IS NOT NULL;'
+  'CREATE INDEX IF NOT EXISTS idx_matches_away_id ON matches(away_id) WHERE away_id IS NOT NULL;',
+  // L'identifiant FotMob est la PREMIÈRE clé consultée par resolveMatchKey,
+  // pour chaque rencontre de chaque lot. Sans cet index, chaque consultation
+  // balayait la table entière — 55 000 lignes dont les colonnes JSON
+  // (déroulé, composition, carte des tirs) font 1,3 Go — et l'import
+  // plafonnait à une rencontre toutes les trois secondes au lieu de dix par
+  // seconde. Mesuré le 2026-09-22 ; c'était aussi ce qui faisait durer
+  // quatre minutes vingt recherches de doublons.
+  'CREATE INDEX IF NOT EXISTS idx_matches_fotmob_id ON matches(fotmob_id) WHERE fotmob_id IS NOT NULL;'
 ];
 
 /**
@@ -357,10 +383,22 @@ function assertNotMasked(chemin) {
   try { wal = fs.readFileSync(journal); } catch { return; }
   if (wal.length < 32 || (wal.readUInt32BE(0) !== 0x377f0682 && wal.readUInt32BE(0) !== 0x377f0683)) return;
   const taillePageWal = wal.readUInt32BE(8) || taillePage;
+  // Les deux sels de l'en-tête signent les trames VALIDES du journal. Après
+  // un point de reprise, SQLite réécrit l'en-tête avec de nouveaux sels et
+  // repart du début du fichier, sans le tronquer : au-delà de la dernière
+  // trame valide restent des trames PÉRIMÉES d'une vie antérieure du
+  // journal, aux anciens sels. Les lire comme si elles comptaient donnait un
+  // faux positif — « le journal ne décrit que 29 pages » sur une base de
+  // 1,7 Go — qui a refusé d'ouvrir une base parfaitement saine pendant que
+  // le serveur, connecté avant, la servait sans peine.
+  const sel1 = wal.readUInt32BE(16);
+  const sel2 = wal.readUInt32BE(20);
 
-  // Dernière trame de validation : celle qui fixe la taille vue par un lecteur.
+  // Dernière trame de validation VALIDE : celle qui fixe la taille vue par un
+  // lecteur. Une trame aux sels étrangers clôt la lecture.
   let pagesJournal = null;
   for (let pos = 32; pos + 24 + taillePageWal <= wal.length; pos += 24 + taillePageWal) {
+    if (wal.readUInt32BE(pos + 8) !== sel1 || wal.readUInt32BE(pos + 12) !== sel2) break;
     const apres = wal.readUInt32BE(pos + 4);
     if (apres > 0) pagesJournal = apres;
   }
@@ -396,6 +434,15 @@ function unpercent(value) {
 const toBit = (value) => (typeof value === 'boolean' ? (value ? 1 : 0) : null);
 
 /** Identité d'un joueur dans une feuille : l'identifiant de la source, sinon le nom. */
+/**
+ * Les mots du nom, sans diacritiques ni ordre : « Zhang Hui » (ESPN) et
+ * « Hui Zhang » (FotMob), « Alvaro Valles » et « Álvaro Vallés » — le même
+ * homme, que le slug seul ne rapprochait pas.
+ */
+function jetonsDuNom(name) {
+  return String(name ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().split(' ').filter(Boolean).sort().join(' ');
+}
+
 export function playerKeyOf(player) {
   return player.playerId != null ? String(player.playerId) : `name:${slug(player.name)}`;
 }
@@ -415,6 +462,9 @@ function resolvePlayerKey(player, existing) {
     const byNumber = existing.find((e) => e.shirt_number === player.number && sharesNameToken(e.name, player.name));
     if (byNumber) return byNumber.player_key;
   }
+  const jetons = jetonsDuNom(player.name);
+  const byTokens = existing.find((e) => jetonsDuNom(e.name) === jetons);
+  if (byTokens) return byTokens.player_key;
   const wanted = slug(player.name);
   const byName = existing.find((e) => slug(e.name) === wanted);
   if (byName) return byName.player_key;
@@ -428,15 +478,23 @@ function resolvePlayerKey(player, existing) {
  */
 function buildUpsert(table, columns, keyColumns, insertOnly = []) {
   const all = [...keyColumns, ...insertOnly, ...columns.map((c) => c.column)];
-  const set = columns.map((c) => (
+  const set = columns.map((c) => {
     // Le nom déjà stocké fait foi : c'est celui auquel le reste des données
     // fait référence, et l'orthographe varie d'une source à l'autre
     // (Wu Xi / Xi Wu, Pepe Carmona / José Ángel Carmona). Partout ailleurs,
     // un chiffre n'est remplacé que par un chiffre, jamais par une absence.
-    c.column === 'name'
-      ? `${quote(c.column)} = COALESCE(${quote(c.column)}, excluded.${quote(c.column)})`
-      : `${quote(c.column)} = COALESCE(excluded.${quote(c.column)}, ${quote(c.column)})`
-  ));
+    if (c.column === 'name') return `${quote(c.column)} = COALESCE(${quote(c.column)}, excluded.${quote(c.column)})`;
+    // EXCEPTION aux buts encaissés : ils ne valent que pour un gardien (CHECK
+    // de la table). Quand la source dit d'un homme qu'il est milieu là où
+    // une lecture antérieure l'avait pris pour un gardien — ESPN tenait onze
+    // joueurs de Derby pour des gardiens à deux buts encaissés — garder
+    // l'ancien chiffre violait la contrainte, et le lot ENTIER était refusé :
+    // 384 feuilles sont restées à la révision précédente pour cette raison.
+    if (c.column === 'goals_conceded') {
+      return `"goals_conceded" = CASE WHEN excluded."position" IS NOT NULL AND excluded."position" <> 'Goalkeeper' THEN NULL ELSE COALESCE(excluded."goals_conceded", "goals_conceded") END`;
+    }
+    return `${quote(c.column)} = COALESCE(excluded.${quote(c.column)}, ${quote(c.column)})`;
+  });
   return [
     `INSERT INTO ${table} (${all.map(quote).join(', ')})`,
     `VALUES (${all.map(() => '?').join(', ')})`,
@@ -478,7 +536,24 @@ function prepared(database) {
     // Une rencontre déjà connue, retrouvée par l'IDENTITÉ de ses deux clubs
     // plutôt que par l'orthographe de leur nom. Voir resolveMatchKey.
     byIdentity: database.prepare('SELECT match_key FROM matches WHERE date = ? AND home_id = ? AND away_id = ? LIMIT 1'),
-    byFotmobId: database.prepare('SELECT match_key FROM matches WHERE fotmob_id = ? LIMIT 1')
+    byFotmobId: database.prepare('SELECT match_key, date FROM matches WHERE fotmob_id = ? LIMIT 1'),
+    deleteMatch: database.prepare('DELETE FROM matches WHERE match_key = ?'),
+    // Les lignes joueur d'un camp que la feuille relue ne porte plus (cf.
+    // `replacePlayers`, fotMobRefresh.js).
+    prunePlayers: database.prepare('DELETE FROM players WHERE match_key = ? AND side = ? AND player_key NOT IN (SELECT value FROM json_each(?))'),
+    // Un poste que la feuille relue ne confirme plus. COALESCE ne remplace
+    // jamais une valeur par une absence — juste pour une statistique, faux
+    // pour un poste que la lecture précédente avait inventé : seize
+    // « gardiens » de Copa Chile 2023 restaient gardiens, avec leurs buts
+    // encaissés, alors que la relecture ne leur trouvait plus de poste.
+    clearPosition: database.prepare('UPDATE players SET position = NULL, goals_conceded = NULL WHERE match_key = ? AND side = ? AND player_key = ? AND position IS NOT NULL'),
+    standings: database.prepare(
+      `INSERT INTO standings_official (league, season, table_name, ord, fotmob_league_id, fotmob_season, fetched_at, rows)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+       ON CONFLICT (league, season, table_name) DO UPDATE SET
+         ord = excluded.ord, fotmob_league_id = excluded.fotmob_league_id, fotmob_season = excluded.fotmob_season,
+         fetched_at = excluded.fetched_at, rows = excluded.rows`
+    )
   };
   statements.set(database, jeu);
   return jeu;
@@ -508,10 +583,21 @@ function prepared(database) {
  * désigne une rencontre sans ambiguïté. Le repli sur les noms ne sert plus
  * qu'aux entrées sans identité — celles qu'aucune source moderne ne produit.
  */
-function resolveMatchKey(st, entry, date, homeName, awayName) {
+function resolveMatchKey(st, entry, date, homeName, awayName, report) {
   if (entry.fotmobId) {
     const parId = st.byFotmobId.get(String(entry.fotmobId));
-    if (parId) return parId.match_key;
+    // Même rencontre, autre DATE : un match reporté ou interrompu puis
+    // rejoué. La clé porte la date, donc la ligne existante est fausse dans
+    // sa clé même, et la garder en créant la nouvelle à côté comptait la
+    // rencontre deux fois — parfois avec deux scores, Fiorentina - Inter
+    // valant 0-0 en décembre et 3-0 en février. La ligne périmée s'efface
+    // (ses joueurs et relevés suivent, par cascade) et la rencontre
+    // reprend sa place à sa vraie date.
+    if (parId && parId.date === date) return parId.match_key;
+    if (parId) {
+      st.deleteMatch.run(parId.match_key);
+      if (report) report.rekeyed++;
+    }
   }
   if (entry.homeId && entry.awayId) {
     const parClubs = st.byIdentity.get(date, entry.homeId, entry.awayId);
@@ -520,9 +606,59 @@ function resolveMatchKey(st, entry, date, homeName, awayName) {
   return `${date}-${slug(homeName)}-${slug(awayName)}`;
 }
 
+/**
+ * Enregistre des classements officiels (cf. fotMobStandingsRefresh.js).
+ * Chaque entrée : { league, season, tableName, ord, fotmobLeagueId,
+ * fotmobSeason, rows }. Une table déjà connue est remplacée entière : un
+ * classement n'a pas de « cases vides » à préserver, il est vrai ou périmé.
+ */
+export function upsertOfficialStandings(entries, { database = openDb() } = {}) {
+  const st = prepared(database);
+  const now = new Date().toISOString();
+  let count = 0;
+  database.exec('BEGIN IMMEDIATE');
+  try {
+    for (const e of entries) {
+      if (!e?.league || !Number.isInteger(Number(e.season)) || !Array.isArray(e.rows)) continue;
+      st.standings.run(e.league, Number(e.season), String(e.tableName ?? ''), Number(e.ord ?? 0),
+        e.fotmobLeagueId ?? null, e.fotmobSeason ?? null, now, JSON.stringify(e.rows));
+      count++;
+    }
+    database.exec('COMMIT');
+  } catch (error) {
+    try { database.exec('ROLLBACK'); } catch { /* déjà annulée */ }
+    throw error;
+  }
+  return { tables: count };
+}
+
+/**
+ * Marque des rencontres comme SANS FEUILLE chez la source, à la révision de
+ * lecture courante. Sans cette marque, une rencontre que FotMob publie sans
+ * relevé — 5 462 au 2026-09-22, Israël et Serbie 2023-25, tours préliminaires
+ * de coupes — restait « à compléter » pour toujours, et chaque passe
+ * automatique dépensait son budget de 300 feuilles à les redemander. Le
+ * reste de `meta` est conservé (json_set), et la marque tombe d'elle-même
+ * à la prochaine révision de la table de correspondance.
+ */
+export function markNoSheet(matchKeys, rev, { database = openDb() } = {}) {
+  if (!matchKeys.length) return 0;
+  const st = database.prepare("UPDATE matches SET meta = json_set(COALESCE(meta, '{}'), '$.rev', ?, '$.noSheet', 1) WHERE match_key = ?");
+  let n = 0;
+  database.exec('BEGIN IMMEDIATE');
+  try {
+    for (const key of matchKeys) n += st.run(rev, key).changes;
+    database.exec('COMMIT');
+  } catch (error) {
+    try { database.exec('ROLLBACK'); } catch { /* déjà annulée */ }
+    throw error;
+  }
+  return n;
+}
+
 export function upsertMatches(entries, { database = openDb() } = {}) {
   const st = prepared(database);
-  const report = { created: 0, updated: 0, skipped: 0, playersMerged: 0, warnings: [] };
+  const report = { created: 0, updated: 0, skipped: 0, rekeyed: 0, playersMerged: 0, playersPruned: 0, warnings: [] };
   const now = new Date().toISOString();
 
   // IMMEDIATE, et non le BEGIN différé par défaut. upsertMatches lit
@@ -540,7 +676,7 @@ export function upsertMatches(entries, { database = openDb() } = {}) {
     for (const entry of entries) {
       const { date, homeName, awayName } = entry;
       if (!/^\d{4}-\d{2}-\d{2}$/.test(date ?? '') || !homeName || !awayName) { report.skipped++; continue; }
-      const matchKey = entry.matchKey ?? resolveMatchKey(st, entry, date, homeName, awayName);
+      const matchKey = entry.matchKey ?? resolveMatchKey(st, entry, date, homeName, awayName, report);
 
       const before = st.existingSources.get(matchKey);
       if (before) report.updated++; else report.created++;
@@ -573,6 +709,7 @@ export function upsertMatches(entries, { database = openDb() } = {}) {
         if (!incoming.length) continue;
         const existing = st.existingPlayers.all(matchKey, side);
         const used = new Set(existing.map((e) => e.player_key));
+        const ecrits = new Set();
         // Un joueur déjà présent garde son rang ; un nouveau venu se range à
         // la suite, comme mergePlayers ajoutait en fin de tableau.
         let prochainRang = existing.reduce((max, e) => Math.max(max, e.ord ?? 0), -1) + 1;
@@ -598,7 +735,11 @@ export function upsertMatches(entries, { database = openDb() } = {}) {
           });
           st.player.run(matchKey, side, key, rang, ...values);
           report.playersMerged++;
+          ecrits.add(key);
+          if (entry.replacePlayers && player.position == null) st.clearPosition.run(matchKey, side, key);
         }
+        // Une feuille qui fait foi retire ce qu'elle ne porte plus.
+        if (entry.replacePlayers && ecrits.size) report.playersPruned += st.prunePlayers.run(matchKey, side, JSON.stringify([...ecrits])).changes;
       }
     }
     database.exec('COMMIT');

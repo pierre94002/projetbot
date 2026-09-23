@@ -39,12 +39,18 @@ export const CUPS_BY_LEAGUE = {
   'Dutch Eredivisie': ['KNVB Cup - Netherlands', ...EUROPE],
   'Turkey Super League': ['Türkiye Kupası', ...EUROPE],
 
+  // Coupes nationales complètes chez FotMob depuis la fin 2025 seulement
+  // (mesure contradictoire du 2026-09-22, cf. fotMobProvider.js) : le
+  // tableau des saisons antérieures n'a que les scores.
+  'Belgium First Div': ['Coupe de Belgique', ...EUROPE],
+  'Super League - Greece': ['Coupe de Grèce', ...EUROPE],
+
   // Championnats européens sans coupe nationale exploitable : FotMob n'en
-  // publie que les scores. Ils gardent les compétitions continentales, qui
-  // sont celles où leurs clubs jouent avec des relevés complets.
-  'Belgium First Div': EUROPE,
+  // publie que les scores, finales comprises — vérifié sur deux
+  // échantillons indépendants par coupe le 2026-09-22. Ils gardent les
+  // compétitions continentales, qui sont celles où leurs clubs jouent avec
+  // des relevés complets.
   'Premiership - Scotland': EUROPE,
-  'Super League - Greece': EUROPE,
   'Swiss Superleague': EUROPE,
   'Austrian Football Bundesliga': EUROPE,
   'First League - Czechia': EUROPE,
@@ -66,7 +72,7 @@ export const CUPS_BY_LEAGUE = {
   // Amériques.
   'Brazil Série A': ['Copa do Brasil', ...SUD_AMERIQUE],
   'Primera División - Argentina': ['Copa Argentina', ...SUD_AMERIQUE],
-  'Primera División - Chile': SUD_AMERIQUE,
+  'Primera División - Chile': ['Copa Chile', ...SUD_AMERIQUE],
   'Primera A - Colombia': SUD_AMERIQUE,
   'Serie A - Ecuador': SUD_AMERIQUE,
   'Primera División - Bolivia': SUD_AMERIQUE,
@@ -75,10 +81,10 @@ export const CUPS_BY_LEAGUE = {
   'Primera División - Venezuela': SUD_AMERIQUE,
   MLS: ['US Open Cup', 'Leagues Cup'],
   'Liga MX': ['Leagues Cup'],
-  'Canadian Premier League': [],
+  'Canadian Premier League': ['Canadian Championship'],
 
-  // La Chine n'a pas de coupe publiée avec des relevés chez FotMob.
-  'Super League - China': []
+  // Complète chez FotMob depuis la finale 2025 ; score seul auparavant.
+  'Super League - China': ['Coupe de Chine']
 };
 
 /** Coupes rattachées à un championnat, liste vide s'il n'en a aucune. */

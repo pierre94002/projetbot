@@ -143,7 +143,9 @@ const roleNoun = computed(() => ROLE_NOUN[role.value] ?? 'joueur');
 const leagueOptions = computed(() => leagues.value.map((l) => ({ value: l, label: formatLeagueOptionLabel(l) })));
 
 const seasonOptions = computed(() =>
-  seasons.value.map((s) => ({ value: String(s.season), label: `${s.season}-${String(s.season + 1).slice(2)} (${s.matches} matchs)` }))
+  // Le libellé vient du serveur : « 2025 » pour un championnat d'année
+  // civile (Suède, MLS, Brésil…), « 2025-26 » pour les autres.
+  seasons.value.map((s) => ({ value: String(s.season), label: `${s.label ?? s.season} (${s.matches} matchs)` }))
 );
 
 // Filtrage par équipe côté navigateur : la liste renvoyée est déjà bornée,

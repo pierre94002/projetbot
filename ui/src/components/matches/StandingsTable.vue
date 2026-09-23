@@ -1,21 +1,40 @@
 <script setup>
+import { computed } from 'vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 
-defineProps({
+const props = defineProps({
   loading: { type: Boolean, default: false },
   error: { type: String, default: null },
-  rows: { type: Array, default: () => [] }
+  rows: { type: Array, default: () => [] },
+  // Table officielle relevée chez FotMob, ou calculée sur les résultats du
+  // magasin. La différence se dit : seule l'officielle porte les pénalités
+  // de points et les départages du règlement.
+  official: { type: Boolean, default: false },
+  fetchedAt: { type: String, default: null },
+  seasonLabel: { type: String, default: null }
 });
 
 function zoneClass(description) {
   if (!description) return '';
   const text = description.toLowerCase();
-  if (text.includes('champions league')) return 'standings-row--ucl';
-  if (text.includes('europa') || text.includes('conference')) return 'standings-row--uel';
+  if (text.includes('champions league') || text.includes('libertadores')) return 'standings-row--ucl';
+  if (text.includes('europa') || text.includes('conference') || text.includes('sudamericana')) return 'standings-row--uel';
   if (text.includes('relegation')) return 'standings-row--relegation';
+  if (text.includes('playoff') || text.includes('promotion') || text.includes('championship')) return 'standings-row--playoff';
   return '';
 }
+
+const hasDeductions = computed(() => props.rows.some((row) => row.deduction));
+
+const sourceLine = computed(() => {
+  const saison = props.seasonLabel ? ` — saison ${props.seasonLabel}` : '';
+  if (props.official) {
+    const quand = props.fetchedAt ? `, relevé le ${new Date(props.fetchedAt).toLocaleDateString('fr-FR')}` : '';
+    return `Classement officiel (FotMob)${saison}${quand}`;
+  }
+  return `Classement calculé sur les résultats du magasin${saison} — sans pénalités ni départages du règlement`;
+});
 </script>
 
 <template>
@@ -24,6 +43,7 @@ function zoneClass(description) {
   <EmptyState v-else-if="rows.length === 0" icon="matches" title="Aucun classement trouvé" />
 
   <div v-else class="standings">
+    <p class="standings__source cm-text-muted">{{ sourceLine }}</p>
     <div class="standings__head">
       <span class="standings__rank">#</span>
       <span class="standings__team">Équipe</span>
@@ -35,9 +55,12 @@ function zoneClass(description) {
       <span>Pts</span>
     </div>
     <div class="standings__body">
-      <div v-for="row in rows" :key="row.teamId" class="standings-row" :class="zoneClass(row.description)">
+      <div v-for="row in rows" :key="row.teamId ?? row.teamName" class="standings-row" :class="zoneClass(row.description)" :title="row.description ?? ''">
         <span class="standings__rank cm-numeric">{{ row.rank }}</span>
-        <span class="standings__team cm-truncate">{{ row.teamName }}</span>
+        <span class="standings__team cm-truncate">
+          {{ row.teamName }}
+          <span v-if="row.deduction" class="standings__deduction" :title="`Pénalité de ${Math.abs(row.deduction)} point(s)`">{{ row.deduction > 0 ? '−' : '' }}{{ Math.abs(row.deduction) }}</span>
+        </span>
         <span class="cm-numeric">{{ row.played }}</span>
         <span class="cm-numeric">{{ row.won }}</span>
         <span class="cm-numeric">{{ row.drawn }}</span>
@@ -47,14 +70,22 @@ function zoneClass(description) {
       </div>
     </div>
     <div class="standings__legend">
-      <span><i class="standings__dot standings__dot--ucl" />Ligue des Champions</span>
-      <span><i class="standings__dot standings__dot--uel" />Coupe d'Europe</span>
+      <span><i class="standings__dot standings__dot--ucl" />Compétition continentale majeure</span>
+      <span><i class="standings__dot standings__dot--uel" />Autre coupe continentale</span>
+      <span><i class="standings__dot standings__dot--playoff" />Playoffs / promotion</span>
       <span><i class="standings__dot standings__dot--relegation" />Relégation</span>
+      <span v-if="hasDeductions">−N : pénalité de points appliquée par la fédération</span>
     </div>
   </div>
 </template>
 
 <style scoped>
+.standings__source {
+  margin: 0 0 8px;
+  padding: 0 10px;
+  font-size: 11px;
+}
+
 .standings__head {
   display: grid;
   grid-template-columns: 28px 1fr repeat(4, 24px) 44px 40px;
@@ -97,12 +128,22 @@ function zoneClass(description) {
 .standings-row--uel {
   border-left-color: var(--cm-info);
 }
+.standings-row--playoff {
+  border-left-color: var(--cm-success, #2ad572);
+}
 .standings-row--relegation {
   border-left-color: var(--cm-danger);
 }
 
 .standings__team {
   font-weight: 500;
+}
+
+.standings__deduction {
+  margin-left: 6px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--cm-danger);
 }
 
 .standings__points {
@@ -119,25 +160,7 @@ function zoneClass(description) {
   color: var(--cm-text-muted);
 }
 
-.standings__legend span {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.standings__dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 2px;
-  display: inline-block;
-}
-.standings__dot--ucl {
-  background: var(--cm-accent);
-}
-.standings__dot--uel {
-  background: var(--cm-info);
-}
-.standings__dot--relegation {
-  background: var(--cm-danger);
+.standings__dot--playoff {
+  background: var(--cm-success, #2ad572);
 }
 </style>

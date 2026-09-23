@@ -247,20 +247,83 @@ async function loadLeaders(league) {
   }
 }
 
-async function handleViewStandings(league) {
-  standingsTab.value = 'table';
-  loadLeaders(league);
+/**
+ * Ouvre (ou recharge) le classement d'une compétition.
+ *
+ * `season` et `table` sont ce que l'utilisateur a choisi dans la modale :
+ * une compétition garde plusieurs saisons en magasin, et certaines publient
+ * plusieurs tables pour une même saison (conférences MLS, Apertura /
+ * Clausura). Les saisons disponibles ne sont demandées qu'à l'ouverture,
+ * pas à chaque changement de table.
+ */
+async function handleViewStandings(league, { season = null, table = null } = {}) {
+  const memeLigue = standings.value?.key === league;
+  if (!memeLigue) {
+    standingsTab.value = 'table';
+    loadLeaders(league);
+  }
   // `key` conserve le libellé demandé : `league` affiché peut être réécrit par
   // le serveur (leagueName), et c'est `key` qu'il faut réutiliser pour
   // recharger le même classement.
-  standings.value = { key: league, league, loading: true, error: null, rows: [] };
+  const precedent = memeLigue ? standings.value : null;
+  standings.value = {
+    key: league,
+    league,
+    loading: true,
+    error: null,
+    rows: [],
+    seasons: precedent?.seasons ?? [],
+    season: season ?? precedent?.season ?? null,
+    tables: [],
+    table: table ?? null,
+    official: false,
+    fetchedAt: null,
+    seasonLabel: null
+  };
   try {
-    const result = await standingsApi.get(league);
-    standings.value = { key: league, league: result.leagueName ?? league, loading: false, error: null, rows: result.rows };
+    const [result, saisons] = await Promise.all([
+      standingsApi.get(league, { season, table }),
+      memeLigue && precedent?.seasons?.length ? Promise.resolve(null) : matchStatsApi.seasons(league).catch(() => null)
+    ]);
+    standings.value = {
+      key: league,
+      league: result.leagueName ?? league,
+      loading: false,
+      error: null,
+      rows: result.rows,
+      seasons: saisons?.seasons ?? precedent?.seasons ?? [],
+      season: result.season ?? season ?? null,
+      seasonLabel: result.seasonLabel ?? null,
+      tables: result.tables ?? [],
+      table: result.table ?? null,
+      official: Boolean(result.official),
+      fetchedAt: result.fetchedAt ?? null
+    };
   } catch (error) {
-    standings.value = { key: league, league, loading: false, error: error.message, rows: [] };
+    standings.value = { ...standings.value, loading: false, error: error.message, rows: [] };
   }
 }
+
+const standingsSeasonOptions = computed(() =>
+  (standings.value?.seasons ?? []).map((s) => ({ value: s.season, label: s.label ?? String(s.season) }))
+);
+const standingsTableOptions = computed(() =>
+  (standings.value?.tables ?? []).map((name) => ({ value: name, label: name }))
+);
+// Une saison ou une table choisie dans la modale recharge le classement ;
+// les classements individuels et les coupes suivent la saison, pas la table.
+const standingsSeason = computed({
+  get: () => standings.value?.season ?? null,
+  set: (value) => {
+    if (standings.value?.key && value !== standings.value.season) handleViewStandings(standings.value.key, { season: value });
+  }
+});
+const standingsTable = computed({
+  get: () => standings.value?.table ?? null,
+  set: (value) => {
+    if (standings.value?.key && value !== standings.value.table) handleViewStandings(standings.value.key, { season: standings.value.season, table: value });
+  }
+});
 
 // Le classement affiché dans la modale vit en local (pas dans un store), donc
 // le rafraîchissement automatique global ne le couvre pas : on le recharge si
@@ -386,12 +449,20 @@ onMounted(() => {
 
     <AppModal v-if="standings" :title="`Classement — ${standings.league}`" @close="standings = null">
       <TabbedView v-model="standingsTab" :tabs="standingsTabs" class="standings-modal__tabs" />
-      <StandingsTable
-        v-if="standingsTab === 'table'"
-        :loading="standings.loading"
-        :error="standings.error"
-        :rows="standings.rows"
-      />
+      <template v-if="standingsTab === 'table'">
+        <div v-if="standingsSeasonOptions.length > 1 || standingsTableOptions.length > 1" class="standings-modal__filters">
+          <AppSelect v-if="standingsSeasonOptions.length > 1" v-model="standingsSeason" label="Saison" :options="standingsSeasonOptions" />
+          <AppSelect v-if="standingsTableOptions.length > 1" v-model="standingsTable" label="Table" :options="standingsTableOptions" />
+        </div>
+        <StandingsTable
+          :loading="standings.loading"
+          :error="standings.error"
+          :rows="standings.rows"
+          :official="standings.official"
+          :fetched-at="standings.fetchedAt"
+          :season-label="standings.seasonLabel"
+        />
+      </template>
       <CupPanel v-else-if="standingsTab === 'cups'" :league="standings.key" />
       <LeagueLeaders
         v-else
@@ -408,6 +479,13 @@ onMounted(() => {
 
 <style scoped>
 .standings-modal__tabs {
+  margin-bottom: 12px;
+}
+
+.standings-modal__filters {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
   margin-bottom: 12px;
 }
 

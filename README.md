@@ -39,7 +39,8 @@ server/
 │                          résultats saisis, config moteur... Versionné dans git comme filet
 │                          de sécurité, SAUF ai-config.json (clé API en clair, jamais commité)
 ├── scripts/             Scripts de migration ponctuels, plus les imports de données
-│                          (fusion calendrier/classements/statistiques, rattrapage ESPN)
+│                          (imports FotMob : calendrier, feuilles de match, classements
+│                          officiels ; contrôles verify-*.mjs et audit-score-consistency.mjs)
 └── src/
     ├── core/             Logique métier pure — sans dépendance HTTP, sans notion de sport
     │   ├── model/         Distribution de Poisson, correction Dixon-Coles
@@ -89,25 +90,33 @@ Thème sombre "flat glass blur" : flou et transparence ajoutés par-dessus l'est
 - **Historique moteur** (`/historique-moteur`) — taux de réussite du moteur par marché (résultat, total buts, etc.), avec deux onglets : **Performance paris** (rentabilité réelle des paris placés) et **Mes tickets** (paris déjà réglés, gagnés/perdus).
 - **Réglages** (`/reglages`) — seuils d'edge, fraction de Kelly, mise maximale, avantage terrain, corrélation du modèle, coupe-circuit manuel, génération de jeux de test, couverture des statistiques de match, connexion et analyse IA des pronostics (clé API Anthropic).
 
-## Statistiques de match : mise à jour automatique
+## Données de match : une seule source, FotMob
 
-Les statistiques détaillées (équipe et joueurs, match par match) se complètent toutes seules.
-Le serveur interroge périodiquement l'API JSON publique d'ESPN — gratuite, sans clé et sans
-quota — pour les rencontres terminées dont les statistiques manquent, puis les fusionne dans
-`server/data/runtime/match-stats/<AAAA-MM>.json`.
+Hors cotes (The Odds API), tout vient de FotMob — API publique, gratuite, sans clé — et vit
+dans une base SQLite hors du dépôt (`%LOCALAPPDATA%\CoteMaster\match-stats.db`) : rencontres
+et scores, statistiques d'équipe et de joueurs match par match, déroulé, compositions,
+annuaires d'identités (clubs et joueurs par identifiant FotMob), et **classements officiels**
+saison par saison (table `standings_official`, avec pénalités de points, conférences et
+tournois Apertura/Clausura). Le classement calculé sur les résultats ne sert que de repli et
+de contrôle.
 
-- **En fond** : `src/jobs/matchStatsAutoRefresh.js`, démarré par `server.js`. Réglages via
-  `MATCH_STATS_AUTO_REFRESH`, `MATCH_STATS_REFRESH_INTERVAL_MIN` (défaut 180),
-  `MATCH_STATS_REFRESH_BATCH` (défaut 300).
+- **En fond** : `src/jobs/matchStatsAutoRefresh.js`, démarré par `server.js`, enchaîne toutes
+  les 180 min calendrier, classements officiels, rencontres nouvelles des dix derniers jours,
+  rencontres omises par la liste du jour (relevées sur la page de chaque compétition) et
+  feuilles manquantes. Réglages via `MATCH_STATS_AUTO_REFRESH`,
+  `MATCH_STATS_REFRESH_INTERVAL_MIN`, `MATCH_STATS_REFRESH_BATCH`.
 - **À la demande** : bouton « Compléter maintenant » dans *Réglages*, ou
   `POST /api/match-stats/refresh`. L'état se lit sur `GET /api/match-stats/coverage`.
-- **En ligne de commande** : `node server/scripts/import-espn-match-stats.mjs`
-  (`--coverage`, `--league`, `--since`, `--limit`, `--dry-run`).
+- **En ligne de commande**, depuis `server/` : `node scripts/fotmob-season-calendar.mjs`,
+  `node scripts/import-fotmob-stats.mjs` (`--from/--to` pour constituer, sans argument pour
+  compléter), `node scripts/fotmob-standings.mjs` (`--all` pour l'historique),
+  `node scripts/fotmob-fixtures-gaps.mjs --apply` (ce que la liste du jour a omis, depuis 2023).
+- **Contrôles** : `verify-standings.mjs` (table officielle contre calcul), `verify-sample.mjs`
+  (relecture d'un échantillon chez la source), `verify-leaders.mjs` (buteurs, passeurs et
+  clean sheets contre les listes officielles), `audit-score-consistency.mjs`.
 
-Une rencontre déjà traitée porte l'URL ESPN dans ses `sources` : les passages suivants ne
-regardent que les nouvelles. La fusion complète sans jamais écraser une valeur déjà
-confirmée, et les champs qu'ESPN ne publie pas (xG, duels, grosses occasions) restent vides
-plutôt que d'être estimés.
+Les saisons sont bornées par compétition (`seasonWindows.js`) : juillet-juin en Europe,
+année civile pour les pays nordiques, les Amériques (sauf Liga MX) et la Chine.
 
 ## Architecture "Sport"
 

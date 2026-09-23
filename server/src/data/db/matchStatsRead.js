@@ -19,6 +19,10 @@
 import { openDb } from './matchStatsDb.js';
 import { TEAM_COLUMNS, PLAYER_COLUMNS, PERCENT_TEAM_KEYS } from './columns.js';
 import { IDENTITY_SQL, ensureRegistries, findTeams, canonicalTeamNames } from './identityRegistry.js';
+// Les bornes d'une saison dépendent de la compétition : juillet-juin en
+// Europe, janvier-décembre dans les pays nordiques et les Amériques. Un seul
+// point de vérité pour tous les lecteurs de ce fichier.
+import { seasonBounds, seasonStartMonth, seasonLabel } from '../providers/seasonWindows.js';
 
 const BOOLEAN_KEYS = new Set(['starter', 'subbedIn']);
 
@@ -54,6 +58,52 @@ const parse = (text) => {
   if (!text) return undefined;
   try { return JSON.parse(text); } catch { return undefined; }
 };
+
+/**
+ * Une rencontre COMPTE-T-ELLE au classement ? Pas si elle appartient à une
+ * phase à élimination : barrages (« … Qualification »), tours finals (1/8,
+ * 1/4, 1/2, final, bronze, play-off), tours préliminaires — ni la Copa de
+ * la Liga Profesional, tournoi argentin sans table chez FotMob. Le
+ * classement calculé cumulait tout : Ligue 1 à 21 clubs (Metz 36 matchs,
+ * Rodez 2), Middlesbrough à 49 matchs, l'Ajax à 36. Les journées se
+ * reconnaissent à leur numéro (« 12 », « Clausura - Round 5 », « Group
+ * Stage - Round 4 ») ; les tours de playoffs danois ou belges, numérotés eux
+ * aussi, comptent — la table officielle les compte. Une journée inconnue
+ * (feuille sans en-tête) compte : on n'a rien pour l'écarter.
+ */
+export function countsForTable(meta) {
+  const key = String(meta?.leagueKey ?? '');
+  if (/ (Qualification|Preliminary Round|Knockout Round Play-offs)$/i.test(key)) return false;
+  if (/^ARG\|Copa de la Liga/.test(key)) return false;
+  const round = meta?.round;
+  const journee = round !== null && round !== undefined && (/^\d+$/.test(String(round)) || /- Round \d+$/i.test(String(round)));
+  // Une phase « Playoff » ne compte que si ses tours sont des journées
+  // numérotées (Danemark : la table du tour final les compte) ; les
+  // playoffs de la MLS n'ont pas d'intitulé de tour du tout, et cumulaient
+  // jusqu'à six matchs de plus par club.
+  if (/ Playoff$/.test(key)) return journee;
+  if (round === null || round === undefined) return true;
+  return journee;
+}
+
+/**
+ * Hors barrages et tours de qualification : FotMob lui-même les tient à
+ * part de ses classements individuels (la C3 2026-27 comptait ici les buts
+ * des tours préliminaires d'août, pas la source).
+ */
+const HORS_QUALIFICATION = "COALESCE(json_extract(m.meta, '$.leagueKey'), '') NOT LIKE '% Qualification'";
+
+/**
+ * Clean sheet : gardien sur le terrain TOUT le match, sans but encaissé —
+ * la règle de FotMob/Opta. Entré à la 90e (Gallon, Le Havre - Brest), sorti
+ * à la 41e (Mihelak) ou exclu à la 88e d'un 0-0 (Paunio) : aucun n'en a un
+ * chez la source, tous en avaient un ici (22 gardiens du top 10 sur 16
+ * compétitions). Un NULL veut dire « non relevé », pas zéro.
+ */
+const CLEAN_SHEET = `p.goals_conceded = 0 AND p.minutes >= 90 AND p.sub_in_minute IS NULL AND p.sub_out_minute IS NULL
+  AND COALESCE(p.red_cards, 0) = 0
+  AND NOT EXISTS (SELECT 1 FROM json_each(m.events) e WHERE json_extract(e.value, '$.type') = 'card'
+                  AND json_extract(e.value, '$.card') IN ('red', 'yellowred') AND json_extract(e.value, '$.player') = p.name)`;
 
 /** Une entrée au format JSON d'origine, à partir de ses trois lignes SQL. */
 function buildEntry(match, teamRows, playerRows) {
@@ -165,12 +215,13 @@ export function playerSeasonStats({
   const POSITIONS = { goalkeeper: 'Goalkeeper', defender: 'Defender', midfielder: 'Midfielder', forward: 'Forward' };
   const position = POSITIONS[role] ?? null;
   const goalkeepers = role === 'goalkeeper';
-  const where = ['m.league = ?'];
+  const where = ['m.league = ?', HORS_QUALIFICATION];
   const args = [league];
   if (season) {
-    // Une saison va du 1er juillet au 30 juin : "2025" désigne 2025-26.
+    // "2025" désigne 2025-26 en Europe, l'année civile 2025 ailleurs (cf.
+    // seasonWindows.js).
     where.push('m.date >= ? AND m.date < ?');
-    args.push(`${season}-07-01`, `${Number(season) + 1}-07-01`);
+    args.push(...seasonBounds(league, season));
   }
   if (team) {
     // Par identifiant dès que l'annuaire sait de quel club il s'agit : un
@@ -195,6 +246,7 @@ export function playerSeasonStats({
       // fois — deux jointures complètes, 3,6 s au lieu de 300 ms.
       `WITH lignes AS MATERIALIZED (
          SELECT p.*, ${IDENTITY_SQL} AS pid, m.date AS match_date,
+                (CASE WHEN ${CLEAN_SHEET} THEN 1 ELSE 0 END) AS clean_sheet,
                 (CASE WHEN p.side = 'home' THEN m.home_id ELSE m.away_id END) AS team_id,
                 (CASE WHEN p.side = 'home' THEN m.home_name ELSE m.away_name END) AS team_name
          FROM players p
@@ -270,7 +322,7 @@ export function playerSeasonStats({
          COALESCE(SUM(p.goals_conceded), 0) AS goalsConceded,
          -- Un match sans but encaisse ne compte que si la donnee est
          -- RENSEIGNEE : un NULL veut dire "non releve", pas "zero".
-         SUM(CASE WHEN p.goals_conceded = 0 AND p.minutes > 0 THEN 1 ELSE 0 END) AS cleanSheets,
+         COALESCE(SUM(p.clean_sheet), 0) AS cleanSheets,
          ROUND(SUM(p.xgot_faced), 2) AS xgotFaced,
          ROUND(SUM(p.goals_prevented), 2) AS goalsPrevented
        FROM lignes p
@@ -297,7 +349,7 @@ export function playerSeasonStats({
          {
            // Chaque poste se juge sur ce qui le définit : un défenseur classé
            // par buts serait un classement de coups francs.
-           goalkeeper: 'SUM(CASE WHEN p.goals_conceded = 0 AND p.minutes > 0 THEN 1 ELSE 0 END) DESC, SUM(p.goals_prevented) DESC, AVG(p.rating) DESC',
+           goalkeeper: 'SUM(p.clean_sheet) DESC, SUM(p.goals_prevented) DESC, AVG(p.rating) DESC',
            defender: 'AVG(p.rating) DESC, COALESCE(SUM(p.tackles), 0) + COALESCE(SUM(p.interceptions), 0) + COALESCE(SUM(p.clearances), 0) DESC',
            midfielder: 'AVG(p.rating) DESC, COALESCE(SUM(p.assists), 0) DESC, COALESCE(SUM(p.key_passes), 0) DESC'
          }[role] ?? 'COALESCE(SUM(p.goals), 0) DESC, COALESCE(SUM(p.assists), 0) DESC, AVG(p.rating) DESC'
@@ -395,8 +447,7 @@ export function teamGoalsFromStore(teamName, { league = null, sampleSize = null,
   // saison est du bruit, et l'historique complet vaut mieux qu'un chiffre
   // tiré de deux matchs.
   const MINIMUM_SAISON = 6;
-  const debut = season ? `${season}-07-01` : null;
-  const fin = season ? `${Number(season) + 1}-07-01` : null;
+  const [debut, fin] = season ? seasonBounds(league ?? '', season) : [null, null];
   const deLaSaison = season ? rows.filter((r) => r.date >= debut && r.date < fin) : rows;
   const base = deLaSaison.length >= MINIMUM_SAISON ? deLaSaison : rows;
 
@@ -583,11 +634,11 @@ export function standingsFromStore(league, { season = null, database = openDb() 
   // classement d'aucune saison.
   const saison = season ?? seasonsForLeague(league, { database })[0]?.season ?? null;
   const bornes = saison ? ' AND date >= ? AND date < ?' : '';
-  const args = saison ? [league, `${saison}-07-01`, `${Number(saison) + 1}-07-01`] : [league];
+  const args = saison ? [league, ...seasonBounds(league, saison)] : [league];
   const rows = database.prepare(
-    `SELECT home_id, away_id, home_name, away_name, home_goals, away_goals FROM matches
+    `SELECT home_id, away_id, home_name, away_name, home_goals, away_goals, meta FROM matches
      WHERE league = ? AND home_goals IS NOT NULL AND away_goals IS NOT NULL${bornes}`
-  ).all(...args);
+  ).all(...args).filter((r) => countsForTable(parse(r.meta)));
   if (!rows.length) return null;
 
   const canon = canonicalTeamNames({ database });
@@ -652,7 +703,7 @@ export function leagueLeaders(league, { season = null, limit = 20, database = op
   ensureRegistries({ database });
   const saison = season ?? seasonsForLeague(league, { database })[0]?.season ?? null;
   const bornes = saison ? ' AND m.date >= ? AND m.date < ?' : '';
-  const args = saison ? [league, `${saison}-07-01`, `${Number(saison) + 1}-07-01`] : [league];
+  const args = saison ? [league, ...seasonBounds(league, saison)] : [league];
 
   const classement = (colonne, extra = '') => database.prepare(`
     SELECT ${IDENTITY_SQL} AS playerId,
@@ -667,7 +718,7 @@ export function leagueLeaders(league, { season = null, limit = 20, database = op
     JOIN matches m ON m.match_key = p.match_key
     LEFT JOIN people ident ON ident.player_id = ${IDENTITY_SQL}
     LEFT JOIN teams tm ON tm.team_id = (CASE WHEN p.side = 'home' THEN m.home_id ELSE m.away_id END)
-    WHERE m.league = ?${bornes}${extra}
+    WHERE m.league = ? AND ${HORS_QUALIFICATION}${bornes}${extra}
     GROUP BY ${IDENTITY_SQL}
     HAVING value > 0
     ORDER BY value DESC, COALESCE(SUM(p.minutes), 0) ASC
@@ -682,7 +733,7 @@ export function leagueLeaders(league, { season = null, limit = 20, database = op
     scorers: classement('COALESCE(SUM(p.goals), 0)'),
     assists: classement('COALESCE(SUM(p.assists), 0)'),
     cleanSheets: classement(
-      "SUM(CASE WHEN p.goals_conceded = 0 AND p.minutes > 0 THEN 1 ELSE 0 END)",
+      `SUM(CASE WHEN ${CLEAN_SHEET} THEN 1 ELSE 0 END)`,
       " AND p.position = 'Goalkeeper'"
     )
   };
@@ -721,7 +772,7 @@ export function cupBracket(league, { season = null, database = openDb() } = {}) 
   ensureRegistries({ database });
   const saison = season ?? seasonsForLeague(league, { database })[0]?.season ?? null;
   const bornes = saison ? ' AND date >= ? AND date < ?' : '';
-  const args = saison ? [league, `${saison}-07-01`, `${Number(saison) + 1}-07-01`] : [league];
+  const args = saison ? [league, ...seasonBounds(league, saison)] : [league];
 
   const canon = canonicalTeamNames({ database });
   const rows = database.prepare(
@@ -838,7 +889,7 @@ const MARQUE_ESPN = 'cdn.espn.com/core/soccer/match';
 export function storedEntriesIndex({ database = openDb() } = {}) {
   const index = new Map();
   for (const r of database.prepare(
-    `SELECT match_key, date, league, home_name, away_name, home_goals, away_goals,
+    `SELECT match_key, date, league, home_name, away_name, home_goals, away_goals, fotmob_id,
             sources LIKE '%' || ? || '%' AS from_fotmob,
             sources LIKE '%' || ? || '%' AS from_espn,
             json_extract(meta, '$.rev') AS meta_rev
@@ -852,6 +903,9 @@ export function storedEntriesIndex({ database = openDb() } = {}) {
       awayName: r.away_name,
       homeGoals: r.home_goals,
       awayGoals: r.away_goals,
+      // L'identifiant de la rencontre chez la source : ce qui permet de la
+      // reprendre par identité plutôt que par rapprochement de noms.
+      fotmobId: r.fotmob_id ?? null,
       fromFotmob: r.from_fotmob === 1,
       fromEspn: r.from_espn === 1,
       metaRev: r.meta_rev ?? null
@@ -860,16 +914,47 @@ export function storedEntriesIndex({ database = openDb() } = {}) {
   return index;
 }
 
-/** Saisons couvertes par une compétition, la plus récente d'abord. */
+/**
+ * Saisons couvertes par une compétition, la plus récente d'abord, avec leur
+ * libellé (« 2025-26 » ou « 2025 »). Le mois de début vient de la
+ * compétition : juillet en Europe, janvier ailleurs — voir seasonWindows.js.
+ */
 export function seasonsForLeague(league, { database = openDb() } = {}) {
+  const debut = seasonStartMonth(league);
   return database
     .prepare(
-      `SELECT CAST(strftime('%Y', date, CASE WHEN CAST(strftime('%m', date) AS INTEGER) >= 7 THEN '0 day' ELSE '-1 year' END) AS INTEGER) AS season,
+      `SELECT CAST(strftime('%Y', date, CASE WHEN CAST(strftime('%m', date) AS INTEGER) >= ? THEN '0 day' ELSE '-1 year' END) AS INTEGER) AS season,
               COUNT(*) AS matches
        FROM matches WHERE league = ? GROUP BY season ORDER BY season DESC`
     )
-    .all(league)
-    .filter((r) => r.season !== null);
+    .all(debut, league)
+    .filter((r) => r.season !== null)
+    .map((r) => ({ ...r, label: seasonLabel(league, r.season) }));
+}
+
+/**
+ * Classement OFFICIEL d'une compétition pour une saison, tel que FotMob le
+ * publie (cf. fotMobStandingsRefresh.js). Plusieurs tables possibles —
+ * conférences, Apertura/Clausura, zones — dans l'ordre de la source. Sans
+ * saison, la plus récente enregistrée. `null` si rien n'a été relevé.
+ */
+export function officialStandings(league, { season = null, database = openDb() } = {}) {
+  const saison = season ?? database.prepare('SELECT MAX(season) AS s FROM standings_official WHERE league = ?').get(league)?.s ?? null;
+  if (saison === null) return null;
+  const rows = database
+    .prepare('SELECT table_name, ord, fotmob_league_id, fotmob_season, fetched_at, rows FROM standings_official WHERE league = ? AND season = ? ORDER BY ord, table_name')
+    .all(league, Number(saison));
+  if (!rows.length) return null;
+  return {
+    leagueName: league,
+    season: Number(saison),
+    seasonLabel: seasonLabel(league, saison),
+    source: 'fotmob',
+    official: true,
+    fetchedAt: rows.reduce((max, r) => (r.fetched_at > max ? r.fetched_at : max), ''),
+    fotmobLeagueId: rows[0].fotmob_league_id,
+    tables: rows.map((r) => ({ name: r.table_name, fotmobSeason: r.fotmob_season, rows: JSON.parse(r.rows) }))
+  };
 }
 
 /** Comptes globaux du magasin, en une requête plutôt qu'un balayage. */
