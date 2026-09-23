@@ -1,21 +1,19 @@
 {
-  "lastImportDate": "2026-09-22",
-  "finishedAt": "2026-09-22T06:39:27.000Z",
+  "lastImportDate": "2026-09-23",
+  "finishedAt": "2026-09-23T06:35:00.000Z",
   "inProgressDate": null,
   "startedAt": null,
   "summary": {
-    "resultsCatchupWindow": "2026-09-15..2026-09-21",
+    "resultsCatchupWindow": "2026-09-16..2026-09-22",
     "resultsCreatedThisRun": 0,
-    "resultsNote": "Trêve internationale FIFA débutée le 2026-09-21 : les 14 compétitions suivies avaient toutes déjà bouclé leur dernière journée au 2026-09-20 (ou avant). Confirmé sur 2+ sources par compétition (aucun match trouvé = aucun match joué, pas un échec de recherche). Prochaine reprise probable : journées d'octobre.",
+    "resultsNote": "Trêve internationale FIFA « XL » confirmée sur 3 sources indépendantes (premierleague.com : pause du 21 sept. au 6 oct. après la journée 5 du 20 sept., reprise journée 6 le 10 oct. ; bundesliga.com : pause du 18-20 sept. au 9-11 oct., même mécanisme pour tous les grands championnats européens ; footballwebpages.co.uk Championship : dernier match le 20 sept., rien ensuite). Vérifié aussi sur les données déjà en base (match-results.json) : les 16 compétitions suivies n'ont plus aucun résultat depuis le 20/09, alors que 16 autres compétitions non suivies (Liga MX, Argentine, Roumanie, etc., non concernées par la trêve FIFA européenne) continuent de jouer normalement les 21-23/09 — confirme qu'il s'agit bien d'une pause et non d'un échec de collecte. Ligue des Champions journée 2 le 13-14/10 (donc rien non plus sur cette fenêtre). Aucun résultat à injecter cette exécution.",
     "calendarSkippedThisRun": true,
-    "calendarSkippedReason": "Recalcul complet de la saison pour 16 compétitions non refait cette exécution (coût trop élevé pour un passage horaire) ; season-calendar.json inchangé depuis le 2026-09-20. A reprendre lors d'un prochain passage, notamment avant le redémarrage des championnats début octobre.",
-    "standingsCompetitionsUpdated": 14,
-    "standingsUpdatedAt": "2026-09-22T06:39:05.503Z",
-    "standingsSources": "Sites officiels de ligue (laliga.com, legaseriea.it, bundesliga.com, lfp.fr/ligue1.com, uefa.com, footballwebpages.co.uk) croisés avec Sky Sports pour EPL/Championship/League1/League2/La Liga/Serie A/Bundesliga ; La Liga 2, Serie B, Bundesliga 2, Ligue 2 sur source officielle unique faute de temps pour un 2e croisement ; UEFA Europa League recalculé manuellement à partir des 18 résultats officiels journée 1 (aucune table prête trouvée) ; UEFA Europa Conference League omise (phase de ligue démarre le 2026-10-15, rien à classer).",
-    "standingsHomeAwaySplits": "omis partout (non trouvés de façon fiable dans le temps imparti), jamais mis à 0 par défaut",
+    "calendarSkippedReason": "Recalcul complet de la saison pour 16 compétitions non refait cette exécution (coût trop élevé pour un passage horaire) ; season-calendar.json inchangé depuis le 2026-09-20. Fenêtre de trêve (jusqu'au 9-11/10) idéale pour un recalcul complet, mais celui-ci dépasse le format d'un passage horaire automatique — nécessiterait une session dédiée plus longue.",
+    "standingsCompetitionsUpdated": 0,
+    "standingsNote": "Aucune mise à jour nécessaire : classements déjà recalculés le 2026-09-22 à partir des résultats du 20/09, et aucun match des 16 compétitions suivies n'a eu lieu depuis (trêve internationale, cf. resultsNote). standings-web.json inchangé.",
     "matchesWithFullStatsThisRun": 0,
     "playerRowsThisRun": 0,
-    "matchStatsNote": "Aucun match joué le 2026-09-21 dans les 14 compétitions (trêve internationale) : rien à collecter. IMPORTANT — le pipeline de stats de match a migré vers SQLite (server/scripts/merge-match-stats.mjs, commentaire daté du 2026-09-22) : la base vit hors OneDrive (%LOCALAPPDATA%\\CoteMaster\\match-stats.db), plus dans server/data/runtime/match-stats/*.json. Cette session cloud n'a pas d'outil d'exécution de commande sur le PC (pas de device_bash), seulement des outils de fichiers : elle ne peut donc plus injecter les stats de match de façon sûre tant que ce point n'est pas réglé avec Pierre. Voir message de fin d'exécution.",
-    "note": "Import repris le 2026-09-22 après verrou du 2026-09-21 jamais libéré (voir entrée précédente)."
+    "matchStatsNote": "BLOQUÉ pour la 2e exécution consécutive (déjà signalé le 2026-09-22). Le pipeline de stats de match a migré au SQLite le 2026-09-22 (server/scripts/merge-match-stats.mjs écrit désormais exclusivement dans %LOCALAPPDATA%\\CoteMaster\\match-stats.db via node:sqlite, hors du dossier OneDrive connecté à cette session). Cette session cloud n'a pas d'outil d'exécution de commande sur le PC (pas de device_bash) et %LOCALAPPDATA% n'est pas un dossier connecté ; une demande d'accès nécessiterait une approbation en direct sur le PC, absente lors d'un passage horaire non surveillé. Aucun match dans les compétitions suivies depuis le 20/09 de toute façon (trêve), donc pas de perte de données cette fois, mais le blocage structurel demeure pour la reprise début octobre. À régler avec Pierre : soit connecter le dossier %LOCALAPPDATA%\\CoteMaster à la session, soit faire écrire par le script un export JSON complémentaire lisible par cette session, soit accepter que cet objectif D se fasse uniquement en local sur le PC.",
+    "note": "Aucune trêve information nouvelle : import du 2026-09-23 confirmé sans delta, trêve FIFA en cours jusqu'au 9-11 octobre 2026."
   }
 }

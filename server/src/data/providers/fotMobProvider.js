@@ -28,7 +28,7 @@
  * change : les entrees portant une revision anterieure sont alors reprises,
  * sans avoir a tout refaire avec --force.
  */
-export const FOTMOB_REV = 5;
+export const FOTMOB_REV = 6;
 
 const BASE = 'https://www.fotmob.com/api/data';
 
@@ -574,7 +574,9 @@ function memeHommeInclus(a, b) {
   const tb = nomNormalise(b).split(' ').filter(Boolean);
   if (ta.length < 2 || tb.length < 2) return false;
   const [court, long] = ta.length <= tb.length ? [ta, tb] : [tb, ta];
-  return court.every((t) => long.includes(t));
+  // Chaque mot du nom court est un mot du long, ou en est le début sur trois
+  // lettres au moins : « Zac Ashworth » et « Zachary Ashworth ».
+  return court.every((t) => long.includes(t) || (t.length >= 3 && long.some((u) => u.startsWith(t))));
 }
 
 /** Un mot de trois lettres au moins en commun : ce qui corrobore un numéro de maillot. */
@@ -1112,7 +1114,12 @@ export async function fetchMatchStats(matchId) {
         if (!target.playerId && Number(entry?.id) > 0) target.playerId = `fotmob-${entry.id}`;
       }
       if (!target) {
-        if (!entry?.name || awarded) continue;
+        // Seulement pour qui a JOUÉ : un remplaçant resté sur le banc, absent
+        // de playerStats, n'a ni statistique ni poste tenu — sa ligne vide
+        // (11 072 gardiens de banc sans poste) faisait basculer le poste
+        // dominant d'un gardien remplaçant dans l'annuaire.
+        const entre = (entry?.performance?.substitutionEvents ?? []).some((sub) => sub.type === 'subIn');
+        if (!entry?.name || awarded || (!starter && !entre)) continue;
         target = { name: String(entry.name).trim() };
         if (Number(entry.id) > 0) target.playerId = `fotmob-${entry.id}`;
         if (entry.shirtNumber != null) target.number = firstNumber(entry.shirtNumber);
@@ -1150,7 +1157,12 @@ export async function fetchMatchStats(matchId) {
   // un camp, ne le restent que ceux que la composition ou une statistique
   // d'arrêts confirme.
   for (const side of ['home', 'away']) {
-    const gardiens = players[side].filter((p) => p.position === 'Goalkeeper');
+    // Seuls les gardiens qui ont JOUÉ entrent dans ce compte : un banc à
+    // deux gardiens — trois par camp avec le titulaire — est la règle des
+    // grands championnats (Utrecht - PSV, Cittadella - Palermo), pas un
+    // drapeau posé sur toute l'équipe.
+    const aJoue = (p) => p.starter === true || p.subInMinute != null || (p.minutes ?? 0) > 0;
+    const gardiens = players[side].filter((p) => p.position === 'Goalkeeper' && aJoue(p));
     if (gardiens.length <= 2) continue;
     const confirmes = gardiens.filter((p) => gardiensConfirmes.has(p) || p.saves !== undefined);
     for (const p of gardiens) if (!confirmes.includes(p) || confirmes.length > 2) p.position = null;
@@ -1218,6 +1230,7 @@ export async function fetchMatchStats(matchId) {
     awayId: teamIdOf(payload?.general?.awayTeam?.id),
     fotmobId: String(matchId),
     finished: Boolean(statut.finished),
+    cancelled: Boolean(statut.cancelled),
     awarded,
     noSheet,
     // Le score de la source elle-même, pour que l'appelant puisse le

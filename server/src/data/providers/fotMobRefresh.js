@@ -22,7 +22,7 @@ import { fileURLToPath } from 'node:url';
 import { FOTMOB_LEAGUES, FOTMOB_REV, leagueKeyMatches, fetchMatchesByDate, fetchMatchStats } from './fotMobProvider.js';
 import { teamNamesLikelyMatch } from '../../utils/teamNameMatch.js';
 import { mergeMatchStats } from '../../../scripts/merge-match-stats.mjs';
-import { markNoSheet, openDb } from '../db/matchStatsDb.js';
+import { markNoSheet, openDb, deleteMatches } from '../db/matchStatsDb.js';
 import { rebuildRegistries } from '../db/identityRegistry.js';
 import { storedEntriesIndex } from '../db/matchStatsRead.js';
 
@@ -231,6 +231,11 @@ export async function importFotmobIds(ids, { league, concurrency = DEFAULT_CONCU
   const report = { requested: ids.length, fetched: 0, noStats: 0, notFinished: 0, failed: 0, merged: 0, playersMerged: 0, samples: { failed: [] } };
   if (!ids.length) return report;
   const phases = leagueKeysByLeagueId();
+  // L'intitulé de phase DÉJÀ stocké fait foi pour une rencontre connue : la
+  // phase la plus fréquente d'un identifiant est fausse dès que playoffs et
+  // saison régulière partagent cet identifiant (MLS) — une relecture avait
+  // rendu la finale de la MLS Cup 2024 « saison régulière ».
+  const cleConnue = openDb().prepare("SELECT json_extract(meta, '$.leagueKey') AS k FROM matches WHERE fotmob_id = ? LIMIT 1");
   let batch = [];
   const flush = () => {
     if (!batch.length) return;
@@ -251,7 +256,8 @@ export async function importFotmobIds(ids, { league, concurrency = DEFAULT_CONCU
       }
       if (!stats.finished) { report.notFinished++; return; }
       if (stats.noSheet) report.noStats++; else report.fetched++;
-      batch.push(entreeDepuis(stats, { date, league, fotmobId: String(id), leagueKey: phases.get(Number(stats.meta?.leagueId)) ?? null }));
+      const leagueKey = cleConnue.get(String(id))?.k ?? phases.get(Number(stats.meta?.leagueId)) ?? null;
+      batch.push(entreeDepuis(stats, { date, league, fotmobId: String(id), leagueKey }));
     } catch (error) {
       report.failed++;
       if (report.samples.failed.length < 20) report.samples.failed.push(`${id} : ${error.message}`);
@@ -368,6 +374,8 @@ export async function refreshFromFotMob(options = {}) {
     playersMerged: 0,
     noStats: 0,
     failed: 0,
+    cancelled: 0,
+    idReused: 0,
     samples: { unmatched: [], failed: [] }
   };
   if (!pending.length) {
@@ -419,14 +427,30 @@ export async function refreshFromFotMob(options = {}) {
   // Les rencontres que la source publie sans relevé : marquées comme telles
   // à la fin, pour ne pas être redemandées à chaque passe (cf. markNoSheet).
   const sansFeuille = [];
+  const annulees = [];
   await pool(pairs, concurrency, async ({ entry, fotMobId, leagueKey }) => {
     try {
       const stats = await fetchMatchStats(fotMobId);
-      if (!stats || stats.noSheet) {
+      // Annulée chez FotMob (finished=false, cancelled=true) : Binacional
+      // exclu de la Liga 1 péruvienne 2025, ses matchs de Clausura effacés —
+      // la page garde le score et la feuille, mais ce n'est plus un résultat.
+      const annulee = Boolean(stats?.cancelled) && !stats?.awarded;
+      // Identifiant RÉATTRIBUÉ par FotMob à une autre rencontre (Mirassol -
+      // Vasco 2025 → 2026, même identifiant) : la page décrit un match à des
+      // mois de la date du magasin. On ne l'applique pas.
+      const kickoff = stats?.meta?.kickoff ? String(stats.meta.kickoff).slice(0, 10) : null;
+      const reattribue = Boolean(kickoff) && Math.abs(Date.parse(kickoff) - Date.parse(entry.date)) > 45 * 86_400_000;
+      if (annulee) {
+        report.cancelled++;
+        annulees.push(entry.matchKey);
+      } else if (reattribue) {
+        report.idReused++;
+        if (report.samples.failed.length < 20) report.samples.failed.push(`${entry.date} ${entry.homeName}-${entry.awayName} : identifiant ${fotMobId} réattribué (coup d'envoi ${kickoff})`);
+      } else if (!stats || stats.noSheet) {
         report.noStats++;
         sansFeuille.push(entry.matchKey);
       } else report.fetched++;
-      if (stats) {
+      if (stats && !annulee && !reattribue) {
         batch.push(entreeDepuis(stats, {
           date: entry.date,
           league: entry.league,
@@ -449,6 +473,13 @@ export async function refreshFromFotMob(options = {}) {
   });
 
   flush();
+  if (annulees.length) {
+    try {
+      deleteMatches(annulees);
+    } catch (error) {
+      report.warnings = [...(report.warnings ?? []), `Rencontres annulées non retirées : ${error.message}`];
+    }
+  }
   if (sansFeuille.length) {
     try {
       report.markedNoSheet = markNoSheet(sansFeuille, FOTMOB_REV);

@@ -72,6 +72,9 @@ const parse = (text) => {
  * (feuille sans en-tête) compte : on n'a rien pour l'écarter.
  */
 export function countsForTable(meta) {
+  // Annulée, abandonnée, reportée : ce n'est pas un résultat, quel que soit
+  // le score que la page a gardé.
+  if (/^(cancelled|abandoned|postponed)$/.test(String(meta?.reason ?? ''))) return false;
   const key = String(meta?.leagueKey ?? '');
   if (/ (Qualification|Preliminary Round|Knockout Round Play-offs)$/i.test(key)) return false;
   if (/^ARG\|Copa de la Liga/.test(key)) return false;

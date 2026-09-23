@@ -10,10 +10,19 @@
  *     une phase entière absente du magasin ;
  *   - un nombre de matchs joués différent : des rencontres manquent (ou
  *     sont en double) dans le magasin ;
- *   - des points différents à matchs égaux, non expliqués par une pénalité :
- *     un score faux, ou une règle du championnat (points divisés, conservés)
- *     que le calcul ne connaît pas — ce qui est précisément pourquoi la
- *     table officielle est celle qu'on affiche.
+ *   - un bilan différent à matchs égaux (victoires, nuls, défaites, buts) :
+ *     un score faux, ou un résultat décidé hors du terrain (match attribué,
+ *     annulé) que la source ne publie pas comme la fédération l'applique —
+ *     ce qui est précisément pourquoi la table officielle est celle qu'on
+ *     affiche.
+ *
+ * Le bilan se compare en victoires, nuls, défaites, buts pour et contre —
+ * jamais en points : les pénalités et les points divisés par deux à
+ * l'entrée des playoffs ne sont pas des erreurs de résultat. Une première
+ * version ne comparait les points que sur les saisons à table unique et
+ * jamais les buts : 84 saisons à plusieurs tables (Apertura/Clausura,
+ * conférences, groupes) passaient sans contrôle du bilan, et deux scores
+ * brésiliens faux sont restés invisibles.
  *
  * Ne corrige rien. Le résumé JSON part sur stdout, le détail sur stderr.
  *
@@ -33,7 +42,12 @@ const leagues = argv.reduce((acc, a, i) => (a === '--league' ? [...acc, argv[i +
 const db = openDb();
 
 const cibles = Object.keys(FOTMOB_LEAGUES).filter((l) => hasStandings(l) && (!leagues.length || leagues.includes(l)));
-const resume = { leagues: 0, seasons: 0, withOfficial: 0, tables: 0, teamsOnlyOfficial: 0, teamsOnlyComputed: 0, playedMismatch: 0, pointsMismatch: 0, exact: 0, details: [] };
+const resume = { leagues: 0, seasons: 0, withOfficial: 0, tables: 0, teamsOnlyOfficial: 0, teamsOnlyComputed: 0, playedMismatch: 0, recordMismatch: 0, exact: 0, details: [] };
+
+const CHAMPS = ['played', 'won', 'drawn', 'lost', 'goalsFor', 'goalsAgainst'];
+const vide = (teamName) => ({ teamName, played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0 });
+const bilan = (r) => `${r.played} J ${r.won}V ${r.drawn}N ${r.lost}D ${r.goalsFor}-${r.goalsAgainst}`;
+const memeBilan = (a, b) => CHAMPS.every((c) => (a[c] ?? 0) === (b[c] ?? 0));
 
 for (const league of cibles) {
   resume.leagues++;
@@ -53,11 +67,10 @@ for (const league of cibles) {
     // Colombie, Apertura, Clausura et groupes de playoffs sont DISJOINTS et
     // s'additionnent ; au Danemark, la table du tour final REPREND les
     // matchs de la phase régulière, et c'est son total qui vaut ; en MLS, le
-    // Supporters' Shield répète les conférences. Le nombre de matchs joués
-    // est donc tenu pour exact s'il vaut l'une des trois lectures : les
-    // seules tables régulières, la somme de toutes (sans les doublons), ou
-    // le maximum d'une table. Les points ne se comparent que sur la table
-    // régulière unique, où ils sont sans ambiguïté.
+    // Supporters' Shield répète les conférences. Le bilan est donc tenu pour
+    // exact s'il vaut l'une des trois lectures : les seules tables
+    // régulières, la somme de toutes (sans les doublons), ou la table où le
+    // club a le plus de matchs.
     const nonDoublon = officiel.tables.filter((t) => !/shield|annual|overall|aggregate/i.test(t.name));
     const regulieres = nonDoublon.filter((t) => !/playoff|final stage|championship group|relegation group/i.test(t.name));
     const tablesDeBase = regulieres.length ? regulieres : nonDoublon;
@@ -65,9 +78,8 @@ for (const league of cibles) {
       const cumul = new Map();
       for (const t of tables) {
         for (const r of t.rows) {
-          const c = cumul.get(r.teamId) ?? { teamName: r.teamName, played: 0, max: 0, points: 0, deduction: 0, won: 0, drawn: 0, goalsFor: 0, goalsAgainst: 0 };
-          c.played += r.played; c.max = Math.max(c.max, r.played); c.points += r.points; c.deduction += r.deduction ?? 0; c.won += r.won; c.drawn += r.drawn;
-          c.goalsFor += r.goalsFor; c.goalsAgainst += r.goalsAgainst;
+          const c = cumul.get(r.teamId) ?? vide(r.teamName);
+          for (const champ of CHAMPS) c[champ] += r[champ] ?? 0;
           cumul.set(r.teamId, c);
         }
       }
@@ -75,26 +87,27 @@ for (const league of cibles) {
     };
     const base = cumuler(tablesDeBase);
     const toutes = cumuler(nonDoublon);
+    const maxTable = new Map();
+    for (const t of nonDoublon) {
+      for (const r of t.rows) {
+        const connu = maxTable.get(r.teamId);
+        if (!connu || (r.played ?? 0) > connu.played) maxTable.set(r.teamId, { ...vide(r.teamName), ...Object.fromEntries(CHAMPS.map((c) => [c, r[c] ?? 0])) });
+      }
+    }
     resume.tables += nonDoublon.length;
 
-    const detail = { league, season: seasonLabel(league, season), tables: nonDoublon.map((t) => t.name), onlyOfficial: [], onlyComputed: [], played: [], points: [] };
+    const detail = { league, season: seasonLabel(league, season), tables: nonDoublon.map((t) => t.name), onlyOfficial: [], onlyComputed: [], played: [], record: [] };
     for (const [teamId, o] of toutes) {
       const c = parId.get(teamId);
       // Un club de la table à zéro match (phase de ligue non commencée) n'est
       // pas un club que le magasin ignore.
       if (!c) { if (o.played > 0) detail.onlyOfficial.push(`${o.teamName} (${o.played} J)`); continue; }
-      const b = base.get(teamId);
-      const lectures = new Set([b?.played, o.played, o.max].filter((n) => Number.isFinite(n)));
-      if (!lectures.has(c.played)) detail.played.push(`${o.teamName} : officiel ${[...lectures].join('/')} J, magasin ${c.played} J`);
-      // Points bruts attendus : V×3 + N, sur ce que le magasin a vu. Comparés
-      // aux points officiels corrigés de la pénalité déclarée, sur la seule
-      // table régulière, quand elle est unique.
-      if (tablesDeBase.length === 1 && b && c.played === b.played) {
-        // FotMob écrit la pénalité tantôt négative (Everton, -8), tantôt
-        // positive (Ironi Tiberias, 6) : seule sa valeur absolue compte.
-        const attendus = b.points + Math.abs(b.deduction);
-        const bruts = c.won * 3 + c.drawn;
-        if (attendus !== bruts) detail.points.push(`${o.teamName} : officiel ${b.points}${b.deduction ? ` (pénalité ${b.deduction})` : ''}, calculé ${c.points}, buts ${b.goalsFor}-${b.goalsAgainst} vs ${c.goalsFor}-${c.goalsAgainst}`);
+      const lectures = [base.get(teamId), toutes.get(teamId), maxTable.get(teamId)].filter(Boolean);
+      const memesJ = lectures.filter((l) => l.played === c.played);
+      if (!memesJ.length) {
+        detail.played.push(`${o.teamName} : officiel ${[...new Set(lectures.map((l) => l.played))].join('/')} J, magasin ${c.played} J`);
+      } else if (!memesJ.some((l) => memeBilan(l, c))) {
+        detail.record.push(`${o.teamName} : officiel ${[...new Set(memesJ.map(bilan))].join(' | ')}, magasin ${bilan(c)}`);
       }
     }
     for (const [teamId, c] of parId) if (!toutes.has(teamId)) detail.onlyComputed.push(`${c.teamName} (${c.played} J)`);
@@ -102,8 +115,8 @@ for (const league of cibles) {
     resume.teamsOnlyOfficial += detail.onlyOfficial.length;
     resume.teamsOnlyComputed += detail.onlyComputed.length;
     resume.playedMismatch += detail.played.length;
-    resume.pointsMismatch += detail.points.length;
-    const propre = !detail.onlyOfficial.length && !detail.onlyComputed.length && !detail.played.length && !detail.points.length;
+    resume.recordMismatch += detail.record.length;
+    const propre = !detail.onlyOfficial.length && !detail.onlyComputed.length && !detail.played.length && !detail.record.length;
     if (propre) resume.exact++;
     else {
       resume.details.push(detail);
@@ -111,11 +124,11 @@ for (const league of cibles) {
       if (detail.onlyOfficial.length) console.error(`  seulement officiel : ${detail.onlyOfficial.join(' ; ')}`);
       if (detail.onlyComputed.length) console.error(`  seulement magasin  : ${detail.onlyComputed.join(' ; ')}`);
       for (const p of detail.played) console.error(`  J : ${p}`);
-      for (const p of detail.points) console.error(`  pts : ${p}`);
+      for (const p of detail.record) console.error(`  bilan : ${p}`);
     }
   }
 }
 
 const { details, ...synthese } = resume;
-console.error(`\n${synthese.seasons} saison(s) sur ${synthese.leagues} compétition(s) ; ${synthese.withOfficial} avec table officielle ; ${synthese.exact} concordent exactement.`);
+console.error(`\n${synthese.seasons} saison(s) sur ${synthese.leagues} compétition(s) ; ${synthese.withOfficial} avec table officielle ; ${synthese.exact} concordent exactement (clubs, matchs joués, victoires, nuls, défaites, buts).`);
 console.log(JSON.stringify({ ...synthese, details }));

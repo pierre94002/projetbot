@@ -641,6 +641,26 @@ export function upsertOfficialStandings(entries, { database = openDb() } = {}) {
  * reste de `meta` est conservé (json_set), et la marque tombe d'elle-même
  * à la prochaine révision de la table de correspondance.
  */
+/**
+ * Retire des rencontres du magasin (les lignes joueur et les statistiques
+ * d'équipe suivent, par la clé étrangère en cascade) : ce que FotMob a
+ * ANNULÉ après coup — résultats effacés par une fédération — n'est plus un
+ * résultat.
+ */
+export function deleteMatches(matchKeys, { database = openDb() } = {}) {
+  const st = prepared(database);
+  let retirees = 0;
+  database.exec('BEGIN IMMEDIATE');
+  try {
+    for (const key of matchKeys) retirees += st.deleteMatch.run(key).changes;
+    database.exec('COMMIT');
+  } catch (error) {
+    try { database.exec('ROLLBACK'); } catch { /* déjà annulée */ }
+    throw error;
+  }
+  return retirees;
+}
+
 export function markNoSheet(matchKeys, rev, { database = openDb() } = {}) {
   if (!matchKeys.length) return 0;
   const st = database.prepare("UPDATE matches SET meta = json_set(COALESCE(meta, '{}'), '$.rev', ?, '$.noSheet', 1) WHERE match_key = ?");
