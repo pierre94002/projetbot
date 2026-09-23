@@ -24,8 +24,9 @@
  * EMPLACEMENT — la base vit HORS du dossier OneDrive. Un fichier SQLite dans
  * un dossier synchronisé est plus risqué que des fichiers JSON : verrous,
  * journal WAL et fichiers annexes se prêtent mal à la synchronisation, et
- * une corruption emporterait tout au lieu d'un seul mois. `MATCH_STATS_DB`
- * permet d'en changer.
+ * une corruption emporterait tout au lieu d'un seul mois. Elle vit dans le
+ * dossier personnel (`C:\Users\<nom>\CoteMaster`), jamais sous AppData :
+ * voir resolveDbPath. `MATCH_STATS_DB` permet d'en changer.
  */
 
 import fs from 'node:fs';
@@ -37,20 +38,28 @@ import { TEAM_COLUMNS, PLAYER_COLUMNS, PERCENT_TEAM_KEYS, POSITIVE_TEAM_KEYS, PO
 
 export function resolveDbPath() {
   if (process.env.MATCH_STATS_DB) return process.env.MATCH_STATS_DB;
-  const local = process.env.LOCALAPPDATA;
-  // Une tâche planifiée lancée sous un autre compte (SYSTEM) voit un
-  // LOCALAPPDATA différent — C:\Windows\system32\config\systemprofile\… — et
-  // se créerait SA PROPRE base, à côté, sans que rien ne le signale. Mieux
+  const home = os.homedir();
+  // Une tâche planifiée lancée sous un autre compte (SYSTEM) a un autre
+  // dossier personnel — C:\Windows\system32\config\systemprofile — et se
+  // créerait SA PROPRE base, à côté, sans que rien ne le signale. Mieux
   // vaut s'arrêter et réclamer un chemin explicite que travailler des
   // semaines sur deux magasins qu'on croit n'en faire qu'un.
-  if (local && /systemprofile|ServiceProfiles/i.test(local)) {
+  if (/systemprofile|ServiceProfiles/i.test(home)) {
     throw new Error(
-      "LOCALAPPDATA désigne un profil de service : la base serait créée à part. " +
+      "Le dossier personnel est celui d'un profil de service : la base serait créée à part. " +
       'Définissez MATCH_STATS_DB sur le chemin de la base à utiliser.'
     );
   }
-  const base = local ? path.join(local, 'CoteMaster') : path.join(os.homedir(), '.cotemaster');
-  return path.join(base, 'match-stats.db');
+  // Le dossier personnel, et SURTOUT pas %LOCALAPPDATA%. L'appli de bureau
+  // Claude est empaquetée (MSIX) : Windows redirige tout ce que ses
+  // processus écrivent sous AppData vers un dossier privé
+  // (…\Packages\Claude_…\LocalCache\Local). L'appli lancée par
+  // demarrer-cotemaster.bat et celle lancée depuis Claude lisaient donc deux
+  // bases différentes au même chemin : 6 494 rencontres d'un côté, 60 055 de
+  // l'autre, le 23/09/2026. Et déplacer les fichiers -wal/-shm d'un côté
+  // faisait apparaître le journal de l'autre base : les « incidents de
+  // journal » des 22 et 23/09. Le dossier personnel n'est pas redirigé.
+  return path.join(home, 'CoteMaster', 'match-stats.db');
 }
 
 /**

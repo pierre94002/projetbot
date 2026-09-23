@@ -93,7 +93,8 @@ Thème sombre "flat glass blur" : flou et transparence ajoutés par-dessus l'est
 ## Données de match : une seule source, FotMob
 
 Hors cotes (The Odds API), tout vient de FotMob — API publique, gratuite, sans clé — et vit
-dans une base SQLite hors du dépôt (`%LOCALAPPDATA%\CoteMaster\match-stats.db`) : rencontres
+dans une base SQLite hors du dépôt (`%USERPROFILE%\CoteMaster\match-stats.db`, jamais sous
+AppData, que Windows cloisonne pour les processus lancés depuis Claude) : rencontres
 et scores, statistiques d'équipe et de joueurs match par match, déroulé, compositions,
 annuaires d'identités (clubs et joueurs par identifiant FotMob), et **classements officiels**
 saison par saison (table `standings_official`, avec pénalités de points, conférences et
