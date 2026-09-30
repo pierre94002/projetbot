@@ -1784,7 +1784,1033 @@
       "alignmentWithModel": "Le contexte qualitatif est cohérent avec les probabilités très serrées calculées par le moteur (cotes vraies proches entre les trois issues). Le classement et la solidité défensive de Guaraní à l'extérieur pourraient légèrement nuancer en sa faveur par rapport à un pur 50/50, mais rien dans les données ne contredit fondamentalement l'équilibre affiché par le modèle. L'absence de cotes de marché empêche de toute façon toute exploitation, ce qui rend cette lecture qualitative purement informative.",
       "caveats": "Aucune donnée FlashScore ni historique (division inférieure ou autre saison) disponible pour confirmer ou nuancer ces chiffres. La forme récente provient d'API-Football pour la saison 2024 avec des dates en 2026, ce qui est incohérent en l'état et suggère un possible souci de millésime dans la source ; à interpréter avec prudence. Aucun profil web (recentForm) n'est disponible pour confirmer l'état de forme le plus actuel des deux équipes."
     },
-    "updatedAt": "2026-09-23T16:58:09.273Z",
-    "createdAt": "2026-09-23T16:58:09.273Z"
+    "updatedAt": "2026-09-30T17:48:04.475Z",
+    "createdAt": "2026-09-23T16:58:09.273Z",
+    "postMatchReview": {
+      "summary": "Guaraní s'est imposé 1-0 à l'extérieur. Ma lecture qualitative penchait légèrement vers Guaraní (solidité défensive en déplacement, meilleur classement), tout en reconnaissant l'équilibre du modèle. Le résultat va dans ce sens nuancé, sans pouvoir trancher sur la justesse des probabilités sur un seul match.",
+      "whatWasRight": "J'avais souligné la solidité défensive de Guaraní à l'extérieur (1 seul but encaissé en 5 matchs, invaincu) et la fragilité défensive de Luqueño à domicile : Guaraní gagne sans encaisser, ce qui colle à ce profil. Le score serré et à faible total était aussi cohérent avec des xG proches et modestes (environ 1,16 contre 1,18) et avec des profils offensifs similaires. J'avais également signalé que le classement et la forme pouvaient légèrement favoriser Guaraní par rapport à un 50/50.",
+      "whatWasMissed": "Je n'avais pas anticipé que Luqueño ne marquerait pas du tout, alors que l'équipe n'était pas réputée stérile à domicile (6 buts en 5 matchs). Rien dans mes données n'expliquait la manière du résultat (dynamique du match, éventuelles cartes, blessures, composition). Je n'avais pas non plus de contexte actuel de forme, vu les incohérences de millésime de la source.",
+      "outcomeVsEngine": "Le résultat n'est pas contradictoire avec le moteur : la victoire visiteuse correspond à une issue qu'il jugeait plausible (cote vraie extérieur autour de 3,03, très proche des autres issues). Il n'y avait aucun edge ni mise, car pas de cotes de marché (PASS). Le résultat ne valide ni n'invalide donc économiquement le moteur. Il est simplement compatible avec une légère préférence pour Guaraní plus nette que celle du modèle, mais c'est un échantillon unique.",
+      "caveats": "Un seul match : une victoire 1-0 peut tenir à la variance (un but, une occasion) et ne permet pas d'évaluer la calibration du modèle. Je ne dispose ni des statistiques du match (tirs, xG réel, cartons) ni de la compo, donc je ne peux pas vérifier si le score reflète la domination réelle. Les données de forme d'avant-match étaient entachées d'un doute de millésime.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2347,
+        "cache_read_input_tokens": 704,
+        "output_tokens": 963,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 2347,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 963,
+            "cache_read_input_tokens": 704,
+            "cache_creation_input_tokens": 2347,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2347
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0191628,
+      "createdAt": "2026-09-30T17:48:04.472Z"
+    }
+  },
+  {
+    "matchId": "dfd5d6648be46426e418801584d46a68",
+    "homeName": "Bournemouth",
+    "awayName": "Sunderland",
+    "league": "EPL",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Bournemouth vs Sunderland",
+      "expectedGoals": {
+        "home": 1.478,
+        "away": 0.869,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 2.05,
+        "draw": 3.84,
+        "away": 3.97
+      },
+      "market": {
+        "odds1": 1.95,
+        "oddsDraw": 3.58,
+        "odds2": 3.63
+      },
+      "edgePercent": -2.34,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "pas_de_value",
+        "candidates": [
+          {
+            "outcome": "home",
+            "label": "Bournemouth gagne",
+            "odds": 2,
+            "displayedOdds": 2,
+            "bookmaker": "unibet_nl",
+            "bookmakerTitle": "Unibet (NL)",
+            "fairOdds": 2.05,
+            "ev": -0.0241,
+            "exclusion": "sous_le_seuil"
+          },
+          {
+            "outcome": "draw",
+            "label": "Match nul",
+            "odds": 3.75,
+            "displayedOdds": 3.75,
+            "bookmaker": "unibet_nl",
+            "bookmakerTitle": "Unibet (NL)",
+            "fairOdds": 3.84,
+            "ev": -0.0234,
+            "exclusion": "sous_le_seuil"
+          },
+          {
+            "outcome": "away",
+            "label": "Sunderland gagne",
+            "odds": 3.8,
+            "displayedOdds": 3.8,
+            "bookmaker": "tipico_de",
+            "bookmakerTitle": "Tipico",
+            "fairOdds": 3.97,
+            "ev": -0.0439,
+            "exclusion": "sous_le_seuil"
+          }
+        ],
+        "limits": {
+          "edgeThresholdMin": 0.02,
+          "edgeThresholdMax": 0.25,
+          "maxValueOdds": 5
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 3741,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1622,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Match entre deux équipes du bas de tableau à la dynamique fragile. Bournemouth (17e, 3 pts en 5 matchs) reste invaincu sur ses 3 derniers résultats mais n'a toujours pas gagné cette saison, avec un profil très nul-heavy (3 nuls sur 5). Sunderland (14e, 4 pts) affiche un bilan légèrement supérieur avec une victoire et une défense plus perméable à l'extérieur (5 buts encaissés en 3 matchs away). Les statistiques moyennes sous-jacentes sont assez proches entre les deux équipes, ce qui colle avec un match serré sans favori marqué.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Les deux équipes évoluent dans le bas du tableau avec un écart de points limité, Sunderland devançant légèrement Bournemouth.",
+          "evidence": "Bournemouth 17e (3 pts, 0V-3N-2D, diff -2) vs Sunderland 14e (4 pts, 1V-1N-3D, diff -4) sur 5 matchs."
+        },
+        {
+          "factor": "forme récente (API-Football, saison en cours)",
+          "observation": "Bournemouth enchaîne les nuls sans perdre récemment, Sunderland alterne victoires et défaites de façon plus irrégulière.",
+          "evidence": "Forme Bournemouth (5 derniers, du 23/08 au 20/09) : D-N-N-N-D. Forme Sunderland (même période) : D-D-N-V-D."
+        },
+        {
+          "factor": "statistiques offensives/défensives moyennes",
+          "observation": "Les deux équipes ont un volume de jeu très similaire (tirs, possession), Sunderland légèrement plus prolifique en expected_goals sur l'échantillon mais aussi plus fébrile défensivement.",
+          "evidence": "Bournemouth : 15.2 tirs/match, 4.8 tirs cadrés, xG 1.4, possession 48.5%. Sunderland : 14.2 tirs/match, 4.6 tirs cadrés, xG 1.74, possession 48.5%."
+        },
+        {
+          "factor": "performances à domicile/extérieur",
+          "observation": "Bournemouth reste solide à domicile sans gagner, Sunderland a un bilan mitigé à l'extérieur avec une défense friable.",
+          "evidence": "Bournemouth à domicile : 0V-2N-1D, 3 buts marqués/4 encaissés. Sunderland à l'extérieur : 0V-1N-2D, 5 buts marqués/8 encaissés."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur ne détecte de value sur aucune issue, les cotes de marché étant globalement alignées avec les probabilités calculées.",
+          "evidence": "Edge global -2.34%, EV négatif sur les trois issues (home -2.41%, nul -2.34%, away -4.39%), staking en PASS."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif renforce l'absence de value identifiée par le moteur : les deux équipes présentent des profils statistiques et de forme très proches, sans avantage tranché en faveur de l'un ou l'autre camp. La légère supériorité de Bournemouth à domicile est contrebalancée par l'instabilité défensive à l'extérieur de Sunderland, ce qui colle avec un marché jugé globalement bien pricé par le modèle (pas d'écart suffisant pour justifier une mise).",
+      "caveats": "Le classement fourni (standings) semble basé sur seulement 5 matchs joués, échantillon réduit pour juger de la forme de fond des deux équipes. Les données homeHistoricalForm/awayHistoricalForm et homeTeamProfile/awayTeamProfile (recherche web) présentent des résultats différents de la forme API-Football sur des périodes qui se chevauchent partiellement ; en l'absence de dates précises pour homeHistoricalForm/awayHistoricalForm et homeTeamProfile.recentForm, il n'est pas possible de déterminer laquelle est la plus récente par rapport aux dates du 20/09/2026 fournies par homeForm/awayForm — ces divergences doivent être considérées avec prudence. Aucune donnée FlashScore disponible (homeFlashscoreStats/awayFlashscoreStats null). Les historicalAverages de homeTeamProfile (buts pour/contre) diffèrent nettement des homeHistoricalStats, sans indication claire de la période couverte."
+    },
+    "updatedAt": "2026-09-24T20:01:57.832Z",
+    "createdAt": "2026-09-24T20:01:57.832Z"
+  },
+  {
+    "matchId": "9fc08b390a49c4434f7cf631a0bb88fb",
+    "homeName": "Brighton and Hove Albion",
+    "awayName": "Crystal Palace",
+    "league": "EPL",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Brighton and Hove Albion vs Crystal Palace",
+      "expectedGoals": {
+        "home": 1.48,
+        "away": 1.2,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 1.57,
+        "draw": 5.03,
+        "away": 6.07
+      },
+      "market": {
+        "odds1": 1.54,
+        "oddsDraw": 4.33,
+        "odds2": 5.19
+      },
+      "edgePercent": 3.73,
+      "staking": {
+        "action": "RECOMMENDED",
+        "stake": 74.01,
+        "outcome": "home",
+        "label": "Brighton and Hove Albion gagne",
+        "odds": 1.63,
+        "displayedOdds": 1.63,
+        "bookmaker": "unibet_se",
+        "bookmakerTitle": "Unibet (SE)",
+        "fairOdds": 1.57,
+        "ev": 0.0373,
+        "exclusion": null,
+        "candidates": [
+          {
+            "outcome": "home",
+            "label": "Brighton and Hove Albion gagne",
+            "odds": 1.63,
+            "displayedOdds": 1.63,
+            "bookmaker": "unibet_se",
+            "bookmakerTitle": "Unibet (SE)",
+            "fairOdds": 1.57,
+            "ev": 0.0373,
+            "exclusion": null
+          },
+          {
+            "outcome": "draw",
+            "label": "Match nul",
+            "odds": 4.6,
+            "displayedOdds": 4.6,
+            "bookmaker": "tipico_de",
+            "bookmakerTitle": "Tipico",
+            "fairOdds": 5.03,
+            "ev": -0.0849,
+            "exclusion": "sous_le_seuil"
+          },
+          {
+            "outcome": "away",
+            "label": "Crystal Palace gagne",
+            "odds": 5,
+            "displayedOdds": 5,
+            "bookmaker": "leovegas_se",
+            "bookmakerTitle": "LeoVegas (SE)",
+            "fairOdds": 6.07,
+            "ev": -0.1767,
+            "exclusion": "sous_le_seuil"
+          }
+        ],
+        "limits": {
+          "edgeThresholdMin": 0.02,
+          "edgeThresholdMax": 0.25,
+          "maxValueOdds": 5
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 3859,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1786,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Brighton, 3e de Premier League avec un excellent bilan à domicile (2V 1N 0D, 8 buts marqués pour 1 encaissé), reçoit un Crystal Palace en difficulté (15e, 1V 1N 3D, -5 de différence de buts) et particulièrement friable à l'extérieur cette saison. Les statistiques moyennes confirment une nette supériorité de Brighton en volume offensif et en possession, tandis que Palace affiche des standards défensifs plus fragiles. Le contexte qualitatif va globalement dans le sens d'une domination des Seagulls, cohérent avec l'edge identifié par le modèle sur la victoire à domicile.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Brighton nettement mieux classé et surtout intraitable à domicile, Palace en méforme générale et très faible à l'extérieur.",
+          "evidence": "Brighton 3e (10 pts, 3V-1N-1D) avec bilan domicile 2V-1N-0D (8 buts pour, 1 contre) ; Palace 15e (4 pts, 1V-1N-3D) avec bilan extérieur 1V-1N-1D (3 buts pour, 4 contre) et bilan domicile catastrophique 0V sur 2 matchs (mais ce n'est pas pertinent ici puisque Palace joue à l'extérieur)."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Les sources de forme récente divergent quelque peu mais convergent globalement vers un Brighton solide et un Palace irrégulier voire en délicatesse selon la donnée API-Football, bien que des sources plus fraîches (web) suggèrent un Palace en regain de forme sur ses tout derniers matchs.",
+          "evidence": "API-Football (5 derniers, dates fin août-sept 2026) donne Palace N-D-V-D-D ; FlashScore (25 matchs) donne Brighton N-D-V-V-N ; historique local donne Brighton D-D-V-D-V et Palace D-N-D-N-D ; recherche web plus récente indique Brighton V-V-N-D-V-V-N (7 derniers) et Palace D-V-V (3 derniers, plus favorable)."
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Sur l'échantillon fourni, Brighton domine largement en création offensive et en possession, avec un xG moyen supérieur à celui de Palace, ce qui appuie la logique d'une équipe génératrice de plus d'occasions à domicile.",
+          "evidence": "Brighton : 19.1 tirs/match, 5.8 tirs cadrés, 63.8% possession, xG 2.19 (10 matchs) ; Palace : 11.2 tirs/match, 4 tirs cadrés, 43.5% possession, xG 1.49 (10 matchs). Historique complémentaire : Brighton 1.4 buts pour / 1.1 contre en moyenne, Palace 1.1 buts pour / 1.7 contre."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur identifie une valeur positive sur la victoire de Brighton, ce que le contexte qualitatif (classement, forme à domicile, volume de jeu) tend globalement à corroborer sans le contredire.",
+          "evidence": "Cote vraie modèle 1.57 vs cote marché 1.63 (Unibet SE), edge +3.73%, mise recommandée sur 'Brighton gagne'."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif renforce globalement l'edge identifié par le modèle sur la victoire de Brighton : la position au classement, le très bon bilan domestique des Seagulls et leur supériorité statistique en volume de jeu vont dans le même sens que le chiffrage. Une nuance existe toutefois : certaines données de forme plus récentes (recherche web) suggèrent un Palace en regain sur ses trois derniers matchs, ce qui invite à ne pas surestimer l'écart au-delà de ce que le modèle indique déjà.",
+      "caveats": "Les indicateurs de forme récente sont contradictoires selon la source : l'API-Football (period allant jusqu'au 20/09/2026) montre un Palace en méforme, alors que le profil web plus récent (updatedAt 16/09/2026 pour Palace, 19/09/2026 pour Brighton) suggère un Palace en léger regain (D-V-V sur ses 3 derniers) et un Brighton globalement performant mais avec une forme mitigée sur son tout dernier match. Le champ homeForm est absent (null). Le classement fourni est en direct (fotmob), mais les données historiques (football-data.co.uk) portent sur un classement non actualisé et ne doivent pas être confondues avec la position actuelle. Les FlashScore stats de Brighton datent du 07/09/2026 et n'incluent pas les tout derniers matchs ; aucune donnée FlashScore n'est disponible pour Palace."
+    },
+    "updatedAt": "2026-09-24T20:48:24.906Z",
+    "createdAt": "2026-09-24T20:48:24.906Z"
+  },
+  {
+    "matchId": "cal-2026-10-01-atletico-nacional-junior-fc",
+    "homeName": "Atlético Nacional",
+    "awayName": "Junior FC",
+    "league": "Primera A - Colombia",
+    "commenceTime": "2026-10-01T12:00:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Atlético Nacional vs Junior FC",
+      "expectedGoals": {
+        "home": 2.092,
+        "away": 0.64,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 1.7,
+        "draw": 4.38,
+        "away": 5.42
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds",
+        "candidates": []
+      }
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 4374,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 1412,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 4374,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1412,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 4374,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 4374
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.03162,
+    "analysis": {
+      "summary": "Atlético Nacional (6e, 19 pts en 9 matchs, différence de buts +9) reçoit un Junior FC en difficulté (16e, 9 pts, différence de buts 0). Nacional affiche une meilleure forme récente et un meilleur bilan à domicile (2V 1N 0D). Les deux équipes ont toutefois plusieurs absences, surtout Nacional dans l'attaque et le milieu.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Nacional nettement devant Junior, dans la zone de qualification.",
+          "evidence": "Nacional 6e, 19 pts (6V 1N 2D, buts 18-9). Junior 16e, 9 pts (2V 3N 4D, buts 14-14)."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Nacional sur une série plutôt positive, Junior en dents de scie avec deux victoires récentes.",
+          "evidence": "Nacional (API-Football) : N, D, V, V, V. Junior : V, V, D, N, N (du plus récent au plus ancien)."
+        },
+        {
+          "factor": "rendement domicile/extérieur",
+          "observation": "Nacional est invaincu à domicile. Junior est fragile à l'extérieur.",
+          "evidence": "Nacional à domicile : 3 matchs, 2V 1N, buts 5-2. Junior à l'extérieur : 4 matchs, 1V 3D, buts 7-8."
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Nacional produit un peu plus de tirs et de corners. Les xG moyens sont proches.",
+          "evidence": "Nacional : 16,7 tirs, 5,9 cadrés, xG 1,58, 7,2 corners. Junior : 13,2 tirs, 4,7 cadrés, xG 1,49, 4,9 corners."
+        },
+        {
+          "factor": "absences et entraîneurs",
+          "observation": "Nacional compte 7 absents, dont des offensifs. Junior en compte 4, dont Muriel. Les deux équipes ont changé d'entraîneur cette saison.",
+          "evidence": "Nacional : Morelos, Cardona, Arango, Uribe, etc. ; Lucas González depuis le 2026-06-08. Junior : Muriel, Canchimbo, Correa, Pérez ; Sebastián Viera depuis le 2026-08-29."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur voit Nacional nettement favori, en cohérence avec le classement. Aucune cote de marché n'est disponible, donc pas d'edge calculable.",
+          "evidence": "xG moteur 2,09 contre 0,64 ; staking PASS (no_market_odds)."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif va dans le sens du moteur : Nacional est mieux classé, plus solide à domicile et en meilleure forme. Les nombreuses absences côté Nacional, notamment offensives, et les xG moyens proches des deux équipes nuancent toutefois l'écart important d'xG retenu par le moteur. Sans cote de marché, aucun edge ne peut être commenté.",
+      "caveats": "La forme API-Football est étiquetée saison 2024 alors que les dates sont en septembre 2026, donc l'étiquette de saison est incohérente. Je l'ai utilisée telle quelle, faute de forme historique ou web plus récente. Les stats FlashScore de Nacional portent le nom « Atletico GO » (collectées le 2026-09-07) : elles pourraient concerner une autre équipe, donc je les ignore. Aucune donnée FlashScore pour Junior. Les stats de Junior reposent sur 10 matchs, contre 9 pour Nacional. Les dates de changement d'entraîneur sont approximatives. Aucune note utilisateur n'est fournie. Les cotes de marché sont absentes."
+    },
+    "updatedAt": "2026-09-30T17:46:02.071Z",
+    "createdAt": "2026-09-30T17:46:02.071Z"
+  },
+  {
+    "matchId": "cal-2026-10-02-club-atletico-platense-estudiantes",
+    "homeName": "Club Atlético Platense",
+    "awayName": "Estudiantes",
+    "league": "Copa Argentina",
+    "commenceTime": "2026-10-02T12:00:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Club Atlético Platense vs Estudiantes",
+      "expectedGoals": {
+        "home": 0.5,
+        "away": 0.594,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 3.02,
+        "draw": 2.7,
+        "away": 3.35
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds",
+        "candidates": []
+      }
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 3229,
+      "cache_read_input_tokens": 774,
+      "output_tokens": 1407,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3229,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1407,
+          "cache_read_input_tokens": 774,
+          "cache_creation_input_tokens": 3229,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 3229
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.027144800000000004,
+    "analysis": {
+      "summary": "Match de Copa Argentina entre Platense et Estudiantes, sans classement disponible. Les moyennes montrent un Estudiantes un peu plus productif en tirs et en possession, alors que Platense est en phase de transition avec un nouvel entraîneur (Martín Palermo) et cinq blessés de longue durée. Les deux formes récentes FlashScore sont mitigées.",
+      "keyFactors": [
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Estudiantes présente un volume offensif supérieur à Platense, avec un xG moyen un peu plus faible.",
+          "evidence": "Platense : 12,4 tirs, 4 cadrés, 51,6 % de possession, xG 1,27 (9 matchs). Estudiantes : 16,7 tirs, 5,8 cadrés, 55,3 % de possession, xG 1,02 (10 matchs)."
+        },
+        {
+          "factor": "forme récente (FlashScore)",
+          "observation": "Platense a une forme légèrement meilleure qu'Estudiantes, qui reste sur plusieurs défaites sur ses 5 derniers matchs.",
+          "evidence": "Platense : N, V, V, N, D. Estudiantes : D, N, D, V, D."
+        },
+        {
+          "factor": "forme API-Football",
+          "observation": "Forme ancienne (saison 2024, dates listées de 2025 à août 2026), donc peu représentative de l'état actuel. Elle est plus favorable à Estudiantes.",
+          "evidence": "Platense : N, N, V, N, V. Estudiantes : V, V, V, N, V."
+        },
+        {
+          "factor": "effectif et banc",
+          "observation": "Platense compte cinq blessés de longue durée et a changé d'entraîneur. Estudiantes a six absents, dont deux de retour attendu sous 1-2 semaines.",
+          "evidence": "Platense : Quirós, Giménez, Bobadilla, Nasif, Goñi ; coach Zunino remplacé par Palermo depuis 2026-08-03. Estudiantes : Carrillo, Elías, Neves, Correa, Palacios, Arzamendia (de retour à l'entraînement)."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur voit un match très fermé et équilibré, avec peu de buts attendus. Aucune cote de marché n'est fournie, donc pas d'edge calculé.",
+          "evidence": "xG 0,5 vs 0,594 ; action PASS (no_market_odds)."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : une rencontre serrée et peu prolifique, avec un léger avantage à Estudiantes sur le volume de jeu (tirs, possession). La meilleure forme récente de Platense et son changement d'entraîneur nuancent cette lecture. Sans cote de marché, le moteur n'identifie aucun edge et le contexte ne justifie pas de le remettre en cause.",
+      "caveats": "Classement indisponible (coupe). Les statistiques homeStats/awayStats reposent sur des échantillons de 9 et 10 matchs. Les données FlashScore (25 matchs) mentionnent \"Atletico GO\" pour l'équipe à domicile, un nom qui ne correspond pas clairement à Platense. Cette source est donc à prendre avec prudence. Elle se contredit aussi sur les chiffres d'Estudiantes (8,04 tirs en moyenne contre 16,7 pour l'autre source), sans qu'on puisse trancher. La forme API-Football est étiquetée saison 2024 avec des dates incohérentes, donc peu fiable, et aucun historique local ni profil web n'est disponible. Le changement d'entraîneur de Platense est déduit des compositions, et l'absence de coachChange côté Estudiantes ne prouve rien. Aucune note utilisateur fournie."
+    },
+    "updatedAt": "2026-09-30T17:46:30.096Z",
+    "createdAt": "2026-09-30T17:46:30.096Z"
+  },
+  {
+    "matchId": "cal-2026-10-02-seattle-sounders-fc-sporting-kansas-city",
+    "homeName": "Seattle Sounders FC",
+    "awayName": "Sporting Kansas City",
+    "league": "MLS",
+    "commenceTime": "2026-10-02T12:00:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Seattle Sounders FC vs Sporting Kansas City",
+      "expectedGoals": {
+        "home": 2.515,
+        "away": 1.052,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 1.74,
+        "draw": 4.58,
+        "away": 4.86
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds",
+        "candidates": []
+      }
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 2877,
+      "cache_read_input_tokens": 774,
+      "output_tokens": 1371,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2877,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1371,
+          "cache_read_input_tokens": 774,
+          "cache_creation_input_tokens": 2877,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 2877
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.025376799999999998,
+    "analysis": {
+      "summary": "Seattle reçoit un Sporting KC dont les statistiques moyennes sont légèrement supérieures sur les 10 derniers matchs (xG, tirs, possession), alors que le moteur attend nettement plus de buts côté Seattle. Seattle reste invaincu sur ses 5 derniers matchs (2 V, 3 N), tandis que Kansas City alterne avec 2 V et 3 D. Seattle compte plusieurs absents de longue durée. Aucun classement n'est disponible.",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Seattle est invaincu sur ses 5 derniers matchs, mais avec beaucoup de nuls. Kansas City est irrégulier sur la même période.",
+          "evidence": "Seattle : V, V, N, N, N (du 06/09 au 27/09). Kansas City : V, D, V, D, D (du 30/08 au 27/09)."
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Sur 10 matchs, Kansas City affiche de meilleures moyennes offensives que Seattle, ce qui nuance la domination attendue par le moteur pour les locaux.",
+          "evidence": "xG 1,81 contre 1,41 ; tirs cadrés 5,6 contre 4,7 ; tirs totaux 14 contre 13,3 ; possession 52,6 % contre 45,3 % ; corners 4,3 contre 5,1."
+        },
+        {
+          "factor": "absences",
+          "observation": "Seattle perd quatre joueurs sur blessure de longue durée, dont une absence pour la saison. Kansas City en compte trois.",
+          "evidence": "Seattle : Rothrock et Ferreira (fin octobre), De la Vega (out for season), Petković (inconnu). Kansas City : Capita et Davis (fin octobre), Blorian (mi-octobre)."
+        },
+        {
+          "factor": "profil de forme web (Kansas City)",
+          "observation": "La recherche web décrit un Kansas City en bonne dynamique, ce qui contredit la série API-Football. Cette recherche date du 16/09 et n'inclut donc pas les derniers matchs.",
+          "evidence": "Forme : N, V, V, V, V, V, N. Moyennes historiques : 2,67 buts marqués et 1,67 encaissés."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur attend un net avantage offensif pour Seattle (xG issus de FotMob). Sans cote de marché, aucun edge n'est calculé et le staking est PASS.",
+          "evidence": "xG attendus : 2,515 contre 1,052."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif ne confirme que partiellement le moteur. La série invaincue de Seattle va dans son sens. En revanche, les moyennes de xG, de tirs et de possession de Kansas City, ainsi que les quatre absents longue durée côté Seattle, nuancent l'écart très marqué attendu en faveur des locaux. Les sources se contredisent sur la forme de Kansas City.",
+      "caveats": "Classement indisponible. La forme API-Football est étiquetée saison 2024 alors que ses dates vont de fin août à fin septembre 2026, donc la saison est à prendre avec prudence. Aucun historique plus récent n'existe pour Seattle (pas de profil web, FlashScore ni historique). La forme web de Kansas City date du 16/09 et contredit la série API-Football (2 V, 3 D). Les statistiques moyennes reposent sur 10 matchs. Aucun changement d'entraîneur n'est signalé, mais l'historique peut être incomplet. Aucune note utilisateur. Les cotes de marché sont absentes, donc aucun edge n'est mesurable."
+    },
+    "updatedAt": "2026-09-30T17:46:45.883Z",
+    "createdAt": "2026-09-30T17:46:45.883Z"
+  },
+  {
+    "matchId": "cal-2026-10-02-independiente-instituto",
+    "homeName": "Independiente",
+    "awayName": "Instituto",
+    "league": "Primera División - Argentina",
+    "commenceTime": "2026-10-02T12:00:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Independiente vs Instituto",
+      "expectedGoals": {
+        "home": 1.099,
+        "away": 0.898,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 2.42,
+        "draw": 3.35,
+        "away": 3.47
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds",
+        "candidates": []
+      }
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 3250,
+      "cache_read_input_tokens": 774,
+      "output_tokens": 1537,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3250,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1537,
+          "cache_read_input_tokens": 774,
+          "cache_creation_input_tokens": 3250,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 3250
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.0285288,
+    "analysis": {
+      "summary": "Instituto est 1er (22 pts en 10 matchs) contre un Independiente 6e (17 pts). Instituto est intraitable à domicile (5 victoires sur 5), mais ce match se joue chez Independiente, qui a pris seulement 5 pts sur 15 à domicile pour 8 pts/12 à l'extérieur... en réalité 12 pts sur 15 à l'extérieur. Independiente a un nouvel entraîneur depuis mi-août. Les moyennes de tirs sont proches, avec un léger avantage en xG pour Instituto.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Instituto devance Independiente de 5 points et a la meilleure différence de buts.",
+          "evidence": "Instituto 1er : 7V 1N 2D, 22 pts, diff +6. Independiente 6e : 5V 2N 3D, 17 pts, diff +2."
+        },
+        {
+          "factor": "rendement domicile/extérieur",
+          "observation": "Independiente est faible à domicile mais performant dehors ; Instituto est moins solide à l'extérieur, sa force étant chez lui. Le match a lieu chez Independiente.",
+          "evidence": "Independiente à domicile : 1V 2N 2D, 2 buts marqués, 5 encaissés. Instituto à l'extérieur : 2V 1N 2D, 4 buts marqués, 4 encaissés."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Formes API-Football comparables, légèrement meilleure pour Instituto. La forme FlashScore d'Independiente (collectée le 07/09) est plus ancienne et moins favorable.",
+          "evidence": "Independiente : V N V D N ; Instituto : V V D V N (dates jusqu'au 19-20/09/2026). FlashScore Independiente : V D N V D."
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Volume de jeu proche ; Instituto a un xG moyen un peu plus haut, Independiente a plus de possession et de tirs cadrés.",
+          "evidence": "Independiente : xG 1.22, 14.3 tirs, 5 cadrés, 50.9 % de possession. Instituto : xG 1.43, 13.8 tirs, 4.7 cadrés, 47.5 %."
+        },
+        {
+          "factor": "effectif et banc",
+          "observation": "Independiente est dirigé par un nouvel entraîneur et compte deux blessés de longue durée. Instituto n'a qu'une absence longue.",
+          "evidence": "Jádson Viera succède à Carlos Matheu (depuis env. 17/08/2026). Absents : Ávila (incertain), De Irastorza (out for season). Instituto : Rafaelli (retour mi-octobre)."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur voit un match serré, avec un léger avantage à Independiente à domicile et peu de buts attendus. Aucune cote de marché n'est disponible, donc aucun edge n'est calculé.",
+          "evidence": "xG 1.099 contre 0.898 ; le staking est PASS (no_market_odds)."
+        }
+      ],
+      "alignmentWithModel": "Le contexte nuance le modèle. Celui-ci donne un léger avantage à Independiente grâce à l'effet domicile. Or le classement, le xG moyen et la forme favorisent plutôt Instituto, même si ses résultats à l'extérieur sont moyens et que les faibles résultats d'Independiente à domicile sont peu encourageants. Le tableau est équilibré et reste cohérent avec un match serré et peu prolifique.",
+      "caveats": "La forme API-Football est étiquetée saison 2024 mais datée de fin août à septembre 2026. Aucune forme plus récente n'est disponible pour la comparer. Il n'y a pas de FlashScore pour Instituto, pas d'historique local ni de profil web, et pas de note utilisateur. La forme FlashScore d'Independiente date du 07/09 et diffère de la forme API-Football. Aucune cote de marché n'est fournie. L'absence de coachChange pour Instituto ne prouve rien. Échantillon de 10 matchs seulement par équipe, donc les splits domicile/extérieur reposent sur 5 matchs."
+    },
+    "updatedAt": "2026-09-30T17:47:04.143Z",
+    "createdAt": "2026-09-30T17:47:04.143Z"
+  },
+  {
+    "matchId": "cal-2026-10-02-internacional-de-bogota-once-caldas",
+    "homeName": "Internacional de Bogotá",
+    "awayName": "Once Caldas",
+    "league": "Primera A - Colombia",
+    "commenceTime": "2026-10-02T12:00:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Internacional de Bogotá vs Once Caldas",
+      "expectedGoals": {
+        "home": 1.283,
+        "away": 1.475,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 2.67,
+        "draw": 3.73,
+        "away": 2.8
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds",
+        "candidates": []
+      }
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 3003,
+      "cache_read_input_tokens": 774,
+      "output_tokens": 1498,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3003,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1498,
+          "cache_read_input_tokens": 774,
+          "cache_creation_input_tokens": 3003,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 3003
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.027150800000000003,
+    "analysis": {
+      "summary": "Match entre deux équipes de milieu de tableau à égalité de points (12 chacune) : Internacional de Bogotá 11e, Once Caldas 10e. Les deux sont peu prolifiques (13 et 14 buts marqués) et en forme mitigée. Internacional tient beaucoup de nuls (6 sur 12), Once Caldas aligne plusieurs défaites récentes.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Deux équipes voisines, à égalité de points ; Once Caldas devant grâce à une meilleure différence de buts et un match de moins.",
+          "evidence": "Internacional 11e : 12 pts en 12 matchs (2V 6N 4D, diff -4). Once Caldas 10e : 12 pts en 11 matchs (3V 3N 5D, diff -1)."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Internacional est plus régulier, avec des nuls et une victoire ; Once Caldas est en difficulté avec 4 défaites sur ses 5 derniers matchs.",
+          "evidence": "Internacional (API-Football) : N, D, D, V, N. Once Caldas : D, D, V, D, D."
+        },
+        {
+          "factor": "domicile/extérieur",
+          "observation": "Internacional est plus solide à domicile qu'à l'extérieur. Once Caldas n'a gagné qu'une fois en 6 déplacements et reste peu fiable dehors.",
+          "evidence": "Internacional à domicile : 2V 2N 2D, 9 buts marqués, 10 encaissés. Once Caldas à l'extérieur : 1V 3N 2D, 6 marqués, 8 encaissés."
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Once Caldas produit plus de tirs et a davantage le ballon, mais ses xG moyens restent proches de ceux d'Internacional.",
+          "evidence": "Tirs : 18,7 (Once Caldas) contre 13,2 ; possession 55,2 % contre 45,4 % ; xG 1,17 contre 1,06 ; tirs cadrés 6,5 contre 4,2 (10 matchs chacun)."
+        },
+        {
+          "factor": "absences",
+          "observation": "Internacional compte une absence de longue durée, Yulián Gómez (blessé). Rien n'est renseigné pour Once Caldas.",
+          "evidence": "Retour de Yulián Gómez attendu fin octobre 2026."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur voit un match très équilibré, avec un léger avantage en buts attendus pour Once Caldas. Aucune cote de marché n'est disponible, donc pas d'edge calculable.",
+          "evidence": "xG 1,283 contre 1,475 (FotMob) ; staking PASS, raison no_market_odds."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : deux équipes proches au classement et en stats, avec un léger ascendant offensif pour Once Caldas (tirs, possession, xG). Ce léger avantage est nuancé par la mauvaise forme récente de Once Caldas et sa fragilité à l'extérieur, alors qu'Internacional est plus solide à domicile. Le caractère indécis du match, avec beaucoup de nuls côté Internacional, reste cohérent avec le PASS du moteur, qui n'a de toute façon pas de cote de marché.",
+      "caveats": "Les cotes de marché sont absentes, donc pas d'edge. La forme API-Football est étiquetée saison 2024 alors que ses dates vont de début à fin septembre 2026 ; aucune forme plus récente n'est disponible (historique et recherche web absents), donc la cohérence de cette forme n'est pas garantie. FlashScore, historique, profils d'équipe et note de Pierre sont absents. Aucune info sur les absences ni sur un éventuel changement d'entraîneur pour Once Caldas, et pas de coachChange pour Internacional (l'historique peut simplement manquer). Les moyennes reposent sur 10 matchs par équipe et la forme sur 5 seulement."
+    },
+    "updatedAt": "2026-09-30T17:47:20.203Z",
+    "createdAt": "2026-09-30T17:47:20.203Z"
+  },
+  {
+    "matchId": "cal-2026-10-02-universidad-de-concepcion-huachipato",
+    "homeName": "Universidad de Concepción",
+    "awayName": "Huachipato",
+    "league": "Primera División - Chile",
+    "commenceTime": "2026-10-02T12:00:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Universidad de Concepción vs Huachipato",
+      "expectedGoals": {
+        "home": 0.764,
+        "away": 0.67,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 2.63,
+        "draw": 2.97,
+        "away": 3.53
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds",
+        "candidates": []
+      }
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 3076,
+      "cache_read_input_tokens": 774,
+      "output_tokens": 1486,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3076,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1486,
+          "cache_read_input_tokens": 774,
+          "cache_creation_input_tokens": 3076,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 3076
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.0273228,
+    "analysis": {
+      "summary": "Universidad de Concepción (15e, 22 pts, zone de relégation) reçoit Huachipato (12e, 28 pts). Les deux équipes sont en difficulté offensive et défensive, avec une différence de buts négative. Concepción est solide à domicile (5V en 10) mais très fragile à l'extérieur. Huachipato est nettement moins performant hors de ses bases.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Huachipato devance Concepción de 6 points, mais les deux sont dans le bas de tableau. Concepción est dans la zone de relégation.",
+          "evidence": "Concepción 15e, 22 pts, différence -20 ; Huachipato 12e, 28 pts, différence -9."
+        },
+        {
+          "factor": "rendement à domicile / à l'extérieur",
+          "observation": "Concepción obtient l'essentiel de ses points chez lui. Huachipato marque bien moins à l'extérieur qu'à domicile.",
+          "evidence": "Concepción à domicile : 5V 1N 4D, 8 buts pour, 10 contre. Huachipato à l'extérieur : 3V 2N 6D, 9 buts pour, 17 contre (à domicile 21 buts pour)."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Concepción est en méforme, avec une seule victoire sur ses 5 derniers matchs. Huachipato est aussi irrégulier, avec une victoire récente.",
+          "evidence": "Concepción : D D V D D (dernier match le 2026-09-06). Huachipato : V N D D D (dernier match le 2026-09-16)."
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Concepción est un peu plus présent dans le jeu et tire davantage. Huachipato a moins le ballon et cadre moins.",
+          "evidence": "Tirs cadrés 4,4 contre 3 ; tirs 11 contre 10,7 ; possession 48,4 % contre 39,4 % ; corners 5 contre 3,3 (échantillon de 7 matchs)."
+        },
+        {
+          "factor": "actualité des effectifs",
+          "observation": "Concepción a changé d'entraîneur récemment. Huachipato compte deux blessés de longue durée, sans date de retour connue.",
+          "evidence": "Cristián Muñoz a remplacé Ricardo Viveros (depuis environ le 2026-08-01). Absents côté Huachipato : Rodrigo Odriozola et José Castro, retour inconnu."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur prévoit un match fermé avec peu de buts attendus et un léger avantage pour l'équipe à domicile. Aucune cote de marché n'est fournie, donc aucun edge n'est calculable et le moteur indique PASS.",
+          "evidence": "xG 0,764 contre 0,67 ; cotes justes 2,63 / 2,97 / 3,53 ; edge null ; raison : no_market_odds."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif va globalement dans le sens du moteur. Un match serré et peu prolifique est probable, avec un léger avantage pour Concepción grâce à son rendement à domicile et à ses statistiques de tirs et de possession. Ce constat est nuancé par la méforme récente de Concepción et par son classement inférieur à celui de Huachipato. Comme aucune cote de marché n'est disponible, ce contexte ne permet pas de juger d'une éventuelle valeur.",
+      "caveats": "La forme API-Football est étiquetée saison 2024 alors que les dates des matchs sont en août et septembre 2026. Ces données sont donc à prendre avec prudence. Aucune forme plus récente n'est disponible (historique, profil web et FlashScore sont absents). Les cotes de marché manquent. Les statistiques moyennes reposent sur seulement 7 matchs. Aucune note utilisateur n'est fournie. Le changement d'entraîneur de Huachipato n'est pas documenté : l'absence de `coachChange` ne prouve rien. Le classement vient de FotMob."
+    },
+    "updatedAt": "2026-09-30T17:47:35.523Z",
+    "createdAt": "2026-09-30T17:47:35.523Z"
+  },
+  {
+    "matchId": "cal-2026-10-02-sao-paulo-santos",
+    "homeName": "São Paulo",
+    "awayName": "Santos",
+    "league": "Brazil Série A",
+    "commenceTime": "2026-10-02T12:00:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "São Paulo vs Santos",
+      "expectedGoals": {
+        "home": 1.801,
+        "away": 1.087,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 2.03,
+        "draw": 3.92,
+        "away": 3.95
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds",
+        "candidates": []
+      }
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 3671,
+      "cache_read_input_tokens": 774,
+      "output_tokens": 1649,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3671,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1649,
+          "cache_read_input_tokens": 774,
+          "cache_creation_input_tokens": 3671,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 3671
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.0313328,
+    "analysis": {
+      "summary": "São Paulo (11e, 36 pts) reçoit Santos (8e, 38 pts), deux équipes proches au classement. São Paulo est très solide à domicile (8V 3N 2D) mais fragile à l'extérieur, alors que Santos est plus équilibré dehors (4V 4N 5D). Santos arrive en meilleure dynamique récente, tandis que les deux effectifs sont touchés par de nombreuses absences.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Santos est légèrement devant São Paulo, avec un écart de 2 points.",
+          "evidence": "Santos 8e, 38 pts (10V 8N 9D, diff +1) ; São Paulo 11e, 36 pts (10V 6N 11D, diff +2)."
+        },
+        {
+          "factor": "rendement domicile/extérieur",
+          "observation": "São Paulo est nettement plus performant à domicile qu'à l'extérieur, ce qui joue en sa faveur ici. Santos est plus constant en déplacement.",
+          "evidence": "São Paulo à domicile : 8V 3N 2D, 21 buts pour, 10 contre. Santos à l'extérieur : 4V 4N 5D, 21 buts pour, 22 contre."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Santos affiche la meilleure série récente selon API-Football. São Paulo est plus irrégulier. La forme API-Football date d'avant le 20 septembre, ce qui reste récent. FlashScore, collecté le 7 septembre, est plus ancien.",
+          "evidence": "API-Football : Santos V V V V N (19/09 au 23/08) ; São Paulo V D V V D (20/09 au 23/08). FlashScore : São Paulo V V D V N ; Santos V N V D N."
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Les xG moyens sont proches. Santos tire davantage cadré, São Paulo obtient plus de corners. Les sources FlashScore donnent un léger avantage offensif à Santos.",
+          "evidence": "xG São Paulo 1,78 (10 matchs) contre Santos 1,60 (9 matchs). Tirs cadrés 4,6 contre 5,3. FlashScore xG : São Paulo 1,26 contre Santos 1,61."
+        },
+        {
+          "factor": "absences",
+          "observation": "Les deux équipes sont diminuées. São Paulo perd son attaquant Calleri (suspendu) et Lucas Moura. Santos est privé de Luan Peres, Bontempo (suspendus) et Brazão. Neymar est annoncé de retour dans 1 à 2 semaines, et Coutinho et Barreal sont incertains.",
+          "evidence": "São Paulo : 6 absents, dont Calleri (suspension, retour début octobre) et Lucas Moura (fin octobre). Santos : 7 absents, dont Neymar (environ 1-2 semaines)."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur voit São Paulo favori, avec un avantage offensif attendu à domicile. Aucune cote de marché n'est disponible, donc pas d'edge calculable.",
+          "evidence": "xG attendus 1,80 contre 1,09 ; cotes justes 2,03 / 3,92 / 3,95 ; staking PASS (no_market_odds)."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur sur un point : la solidité de São Paulo à domicile, contre la fragilité de ses résultats à l'extérieur, soutient son statut de favori. Il nuance toutefois l'ampleur de cet avantage : Santos est mieux classé, en meilleure forme récente et avec des xG moyens comparables, voire supérieurs selon FlashScore. Les absences touchent les deux camps, dont l'attaquant Calleri côté São Paulo.",
+      "caveats": "Aucune cote de marché n'est fournie, donc aucun edge n'est calculable. La forme API-Football porte l'étiquette de saison 2024 mais ses dates vont d'août à septembre 2026. Aucun historique local ni profil web n'est disponible pour comparer. Les données FlashScore datent du 7 septembre. Les deux équipes affichent des échantillons de xG différents selon les sources (1,78 contre 1,26 pour São Paulo), ce qui montre une divergence à interpréter avec prudence. Aucun changement d'entraîneur n'est signalé, mais l'historique peut être incomplet. Aucune note utilisateur n'a été fournie."
+    },
+    "updatedAt": "2026-09-30T17:47:54.254Z",
+    "createdAt": "2026-09-30T17:47:54.254Z"
   }
 ]

@@ -1,7 +1,20 @@
 {
   "football": {
-    "edgeThresholdMin": 0.04,
+    "edgeThresholdMin": 0.02,
     "edgeThresholdMax": 0.25,
+    "valueBookmakers": [
+      "williamhill",
+      "sport888",
+      "betsson",
+      "nordicbet",
+      "unibet_nl",
+      "unibet_se",
+      "leovegas_se",
+      "tipico_de",
+      "coolbet",
+      "codere_it"
+    ],
+    "maxValueOdds": 5,
     "defaultCorrelation": -0.075,
     "kellyFraction": 0.125,
     "maxStakePercent": 0.02,
@@ -9,9 +22,9 @@
     "cornersAdjustmentMax": 0.08,
     "maxExpectedRateGap": 0.4,
     "weights": {
-      "market": 0.7,
-      "structural": 0.2,
-      "exogenous": 0.1
+      "market": 1,
+      "structural": 0,
+      "exogenous": 0
     }
   }
 }
