@@ -1,7 +1,9 @@
 import { getStandingsByLeagueLabel } from '../../data/providers/standingsService.js';
 import { storeStatus } from '../../data/db/matchStatsRead.js';
 import { hasStandings } from '../../data/providers/leagueCups.js';
-import { seasonLabel } from '../../data/providers/seasonWindows.js';
+import { seasonLabel, seasonBounds, currentSeason } from '../../data/providers/seasonWindows.js';
+import { listPendingPostponements } from '../../data/repositories/seasonCalendarRepository.js';
+import { teamNamesLikelyMatch } from '../../utils/teamNameMatch.js';
 import { ApiError, requireStringParam, optionalPositiveInt } from '../middlewares/errorHandler.js';
 
 /**
@@ -42,5 +44,14 @@ export async function getStandings(req, res) {
       : `Compétition introuvable pour "${league}".`);
   }
 
-  res.json(standings);
+  // Matchs reportés de la saison affichée, encore à jouer : les équipes
+  // concernées ont un match de moins, le tableau le dit.
+  const [from, to] = seasonBounds(league, standings.season ?? season ?? currentSeason(league));
+  const postponed = listPendingPostponements(league, { from, to });
+  const concerne = (row) => (p) => teamNamesLikelyMatch(row.teamName, p.homeName) || teamNamesLikelyMatch(row.teamName, p.awayName);
+  res.json({
+    ...standings,
+    rows: (standings.rows ?? []).map((row) => ({ ...row, postponedMatches: postponed.filter(concerne(row)).length })),
+    postponed
+  });
 }

@@ -78,6 +78,26 @@ export function listSeasonCalendar({ league, allSeasons = false, season = null }
   return filtered.sort((a, b) => (a.date ?? '').localeCompare(b.date ?? ''));
 }
 
+/**
+ * Matchs reportés d'une compétition qui restent à jouer : ceux qui attendent
+ * une nouvelle date (statut « postponed », à leur date d'origine) et ceux
+ * déjà re-programmés (`postponedFrom`) mais pas encore joués. Le classement
+ * les signale : les équipes concernées comptent un match de moins.
+ * `from`/`to` (AAAA-MM-JJ, `to` exclu) bornent la date d'origine à une saison.
+ */
+export function listPendingPostponements(league, { from = null, to = null } = {}) {
+  return readCalendar()
+    .filter((m) => m.league === league && (m.status === 'postponed' || (m.postponedFrom && m.status !== 'finished')))
+    .map((m) => ({
+      homeName: m.homeName,
+      awayName: m.awayName,
+      originalDate: m.status === 'postponed' ? m.date : m.postponedFrom,
+      newDate: m.status === 'postponed' ? null : m.date
+    }))
+    .filter((p) => (!from || p.originalDate >= from) && (!to || p.originalDate < to))
+    .sort((a, b) => a.originalDate.localeCompare(b.originalDate));
+}
+
 export function getSeasonCalendarStatus() {
   const all = readCalendar();
   const bySeason = new Map();

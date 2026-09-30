@@ -40,6 +40,8 @@ export function adaptSeasonCalendarMatch(entry, bankroll) {
     bankroll,
     hasOdds: false,
     round: entry.round ?? null,
+    // Match reporté puis re-programmé : sa date d'origine, affichée à côté.
+    postponedFrom: entry.postponedFrom ?? null,
     expectedGoals: {
       home: baselineXg.xgHome,
       away: baselineXg.xgAway,

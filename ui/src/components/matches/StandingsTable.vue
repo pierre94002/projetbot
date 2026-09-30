@@ -2,6 +2,8 @@
 import { computed } from 'vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
+import AppIcon from '@/components/common/AppIcon.vue';
+import { formatShortDay } from '@/utils/format.js';
 
 const props = defineProps({
   loading: { type: Boolean, default: false },
@@ -12,7 +14,11 @@ const props = defineProps({
   // de points et les départages du règlement.
   official: { type: Boolean, default: false },
   fetchedAt: { type: String, default: null },
-  seasonLabel: { type: String, default: null }
+  seasonLabel: { type: String, default: null },
+  // Matchs reportés de la saison, pas encore joués (cf. standings.controller.js) :
+  // { homeName, awayName, originalDate, newDate|null }. Chaque ligne porte en
+  // plus `postponedMatches`, le nombre de ceux qui concernent l'équipe.
+  postponed: { type: Array, default: () => [] }
 });
 
 function zoneClass(description) {
@@ -57,9 +63,14 @@ const sourceLine = computed(() => {
     <div class="standings__body">
       <div v-for="row in rows" :key="row.teamId ?? row.teamName" class="standings-row" :class="zoneClass(row.description)" :title="row.description ?? ''">
         <span class="standings__rank cm-numeric">{{ row.rank }}</span>
-        <span class="standings__team cm-truncate">
-          {{ row.teamName }}
+        <span class="standings__team">
+          <span class="cm-truncate">{{ row.teamName }}</span>
           <span v-if="row.deduction" class="standings__deduction" :title="`Pénalité de ${Math.abs(row.deduction)} point(s)`">{{ row.deduction > 0 ? '−' : '' }}{{ Math.abs(row.deduction) }}</span>
+          <span
+            v-if="row.postponedMatches"
+            class="standings__postponed"
+            :title="`${row.postponedMatches} match(s) en retard : reporté(s), pas encore joué(s) (détail sous le tableau)`"
+          ><AppIcon name="clock" :size="10" />{{ row.postponedMatches }}</span>
         </span>
         <span class="cm-numeric">{{ row.played }}</span>
         <span class="cm-numeric">{{ row.won }}</span>
@@ -69,12 +80,23 @@ const sourceLine = computed(() => {
         <span class="cm-numeric standings__points">{{ row.points }}</span>
       </div>
     </div>
+    <div v-if="postponed.length" class="standings__postponed-list">
+      <p class="standings__postponed-title">Matchs reportés, pas encore joués</p>
+      <ul>
+        <li v-for="p in postponed" :key="`${p.originalDate}-${p.homeName}-${p.awayName}`">
+          <span class="cm-numeric standings__postponed-date">{{ formatShortDay(p.originalDate) }}</span>
+          <span>{{ p.homeName }} - {{ p.awayName }}</span>
+          <span class="cm-text-muted">{{ p.newDate ? `re-programmé le ${formatShortDay(p.newDate)}` : 'nouvelle date à venir' }}</span>
+        </li>
+      </ul>
+    </div>
     <div class="standings__legend">
       <span><i class="standings__dot standings__dot--ucl" />Compétition continentale majeure</span>
       <span><i class="standings__dot standings__dot--uel" />Autre coupe continentale</span>
       <span><i class="standings__dot standings__dot--playoff" />Playoffs / promotion</span>
       <span><i class="standings__dot standings__dot--relegation" />Relégation</span>
       <span v-if="hasDeductions">−N : pénalité de points appliquée par la fédération</span>
+      <span v-if="postponed.length" class="standings__legend-postponed"><AppIcon name="clock" :size="11" />N : match(s) en retard, reporté(s) et pas encore joué(s)</span>
     </div>
   </div>
 </template>
@@ -135,11 +157,20 @@ const sourceLine = computed(() => {
   border-left-color: var(--cm-danger);
 }
 
-.standings__team {
+/* Le nom se tronque, jamais les pastilles qui le suivent (pénalité, match en retard). */
+.standings-row .standings__team {
+  display: flex;
+  align-items: center;
+  min-width: 0;
   font-weight: 500;
 }
 
+.standings-row .standings__team > span {
+  text-align: left;
+}
+
 .standings__deduction {
+  flex-shrink: 0;
   margin-left: 6px;
   font-size: 10.5px;
   font-weight: 600;
@@ -149,6 +180,61 @@ const sourceLine = computed(() => {
 .standings__points {
   font-weight: 700;
   color: var(--cm-text-primary);
+}
+
+.standings__postponed {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 6px;
+  padding: 1px 5px;
+  border-radius: 999px;
+  background: var(--cm-warning-soft);
+  color: var(--cm-warning);
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.standings__legend-postponed {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--cm-warning);
+}
+
+.standings__postponed-list {
+  margin: 10px 10px 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--cm-warning-soft);
+  font-size: 11.5px;
+}
+
+.standings__postponed-title {
+  margin: 0 0 4px;
+  font-weight: 600;
+  color: var(--cm-warning);
+}
+
+.standings__postponed-list ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.standings__postponed-list li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.standings__postponed-date {
+  font-weight: 600;
 }
 
 .standings__legend {

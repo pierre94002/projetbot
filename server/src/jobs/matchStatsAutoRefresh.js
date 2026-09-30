@@ -188,14 +188,14 @@ const ETAPES = [
       return {
         status: toutEnEchec || r.resultsError || r.mergeError ? 'error' : points.length ? 'warn' : 'ok',
         summary:
-          `Du ${from} à J+45 : ${pluriel(m.created ?? 0, 'rencontre ajoutée', 'rencontres ajoutées')}, ${pluriel(m.updated ?? 0, 'modifiée', 'modifiées')}${m.moved ? `, ${pluriel(m.moved, 'déplacée', 'déplacées')}` : ''} au calendrier ; ` +
+          `Du ${from} à J+45 : ${pluriel(m.created ?? 0, 'rencontre ajoutée', 'rencontres ajoutées')}, ${pluriel(m.updated ?? 0, 'modifiée', 'modifiées')}${m.moved ? `, ${pluriel(m.moved, 'déplacée', 'déplacées')}` : ''}${m.postponed ? `, ${pluriel(m.postponed, 'reportée', 'reportées')}` : ''} au calendrier ; ` +
           `${pluriel(res.created ?? 0, 'résultat nouveau', 'résultats nouveaux')}` +
           (points.length ? `. ${points.join(' ; ')}.` : '.'),
         details: { from: r.from, to: r.to, days: r.days, failures: r.failures, failedDates: r.failedDates ?? [], matches: r.matches, merge: r.merge, mergeError: r.mergeError ?? null, results: res, resultsError: r.resultsError ?? null },
         // Des journées en échec : le repère n'avance que jusqu'à la première,
         // que la passe suivante relira.
         resumeFrom: r.failedDates?.length ? r.failedDates[0] : undefined,
-        changed: Boolean(m.created || m.updated || m.moved || m.removed || res.created || res.updated)
+        changed: Boolean(m.created || m.updated || m.moved || m.removed || m.postponed || res.created || res.updated)
       };
     }
   },

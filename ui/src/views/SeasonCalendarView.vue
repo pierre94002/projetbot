@@ -10,7 +10,7 @@ import AppIcon from '@/components/common/AppIcon.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import LeagueBadge from '@/components/matches/LeagueBadge.vue';
-import { formatDay } from '@/utils/format.js';
+import { formatDay, formatShortDay } from '@/utils/format.js';
 import { useRouter } from 'vue-router';
 
 // Calendrier de saison (joués + à venir), alimenté depuis FotMob par
@@ -26,7 +26,8 @@ const statusFilter = ref('all');
 const STATUS_OPTIONS = [
   { value: 'all', label: 'Tous les statuts' },
   { value: 'scheduled', label: 'À venir' },
-  { value: 'finished', label: 'Terminés' }
+  { value: 'finished', label: 'Terminés' },
+  { value: 'postponed', label: 'Reportés' }
 ];
 
 // Saison consultée. Le calendrier contient désormais plusieurs saisons
@@ -123,6 +124,21 @@ function statsId(match) {
   return `stats-${match.date}-${slug(match.homeName)}-${slug(match.awayName)}`;
 }
 
+// « Reporté » : FotMob a reporté le match et ne donne pas encore de nouvelle
+// date (cf. merge-season-calendar.mjs). Re-programmé, il redevient « À venir »
+// à sa nouvelle date, sa date d'origine en dessous.
+function statusLabel(match) {
+  if (match.status === 'finished') return 'Terminé';
+  if (match.status === 'postponed') return 'Reporté';
+  return 'À venir';
+}
+
+function statusClass(match) {
+  if (match.status === 'finished') return 'season-calendar__status--finished';
+  if (match.status === 'postponed') return 'season-calendar__status--postponed';
+  return 'season-calendar__status--scheduled';
+}
+
 function openMatch(match) {
   if (match.status !== "finished") return; // Rien a montrer avant le coup denvoi.
   router.push({ name: "match-detail", params: { matchId: statsId(match) } });
@@ -183,12 +199,10 @@ watch(
             </span>
             <span class="cm-truncate">{{ match.awayName }}</span>
           </div>
-          <span
-            class="season-calendar__status"
-            :class="match.status === 'finished' ? 'season-calendar__status--finished' : 'season-calendar__status--scheduled'"
-          >
-            {{ match.status === 'finished' ? 'Terminé' : 'À venir' }}
-          </span>
+          <div class="season-calendar__state">
+            <span class="season-calendar__status" :class="statusClass(match)">{{ statusLabel(match) }}</span>
+            <span v-if="match.postponedFrom" class="season-calendar__postponed-from">reporté du {{ formatShortDay(match.postponedFrom) }}</span>
+          </div>
         </div>
       </div>
     </AppCard>
@@ -269,6 +283,21 @@ watch(
   color: var(--cm-text-muted);
 }
 
+.season-calendar__state {
+  justify-self: end;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.season-calendar__postponed-from {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--cm-warning);
+  white-space: nowrap;
+}
+
 .season-calendar__status {
   justify-self: end;
   padding: 2px 8px;
@@ -289,6 +318,11 @@ watch(
   color: var(--cm-text-muted);
 }
 
+.season-calendar__status--postponed {
+  background: var(--cm-danger-soft);
+  color: var(--cm-danger);
+}
+
 @media (max-width: 720px) {
   .season-calendar__controls {
     grid-template-columns: 1fr;
@@ -297,8 +331,9 @@ watch(
     grid-template-columns: 1fr;
     justify-items: start;
   }
-  .season-calendar__status {
+  .season-calendar__state {
     justify-self: start;
+    align-items: flex-start;
   }
 }
 </style>

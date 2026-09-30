@@ -120,10 +120,18 @@ export async function refreshCalendarFromFotMob({
     for (const m of rencontres) {
       const league = voulus.find(([, motif]) => leagueKeyMatches(motif, m.leagueKey))?.[0];
       if (!league || !m.homeName || !m.awayName) continue;
-      // Un match abandonné n'entre pas au calendrier : son score est celui de
-      // l'arrêt, et le règlement des paris le lirait comme un résultat. La
-      // reprise ou le match rejoué, eux, sont des rencontres ordinaires.
-      if (m.cancelled) continue;
+      // Un match REPORTÉ (motif « PP ») reste publié à sa date d'origine, sans
+      // score. Il entre au calendrier comme tel : la page Matchs le retire,
+      // le calendrier et le classement le signalent, et il suit la rencontre
+      // à sa nouvelle date dès que FotMob la publie (cf.
+      // merge-season-calendar.mjs). Ignoré, il restait « à venir » à une date
+      // passée, et la page Matchs le disait « Terminé » : sept rencontres de
+      // League One et League Two le 26/09/2026.
+      const reporte = m.cancelled && m.reason === 'PP' && !m.finished;
+      // Un match abandonné, lui, n'entre pas au calendrier : son score est
+      // celui de l'arrêt, et le règlement des paris le lirait comme un
+      // résultat. La reprise ou le match rejoué sont des rencontres ordinaires.
+      if (m.cancelled && !reporte) continue;
       sorties.push({
         date: m.date,
         league,
@@ -131,7 +139,7 @@ export async function refreshCalendarFromFotMob({
         awayName: m.awayName,
         // « terminé » se lit sur le drapeau de la source, pas sur la présence
         // d'un score : un match arrêté ou en cours en affiche un aussi.
-        status: m.played ? 'finished' : 'scheduled',
+        status: reporte ? 'postponed' : m.played ? 'finished' : 'scheduled',
         homeGoals: m.played ? m.homeGoals : null,
         awayGoals: m.played ? m.awayGoals : null,
         round: null,

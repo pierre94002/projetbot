@@ -311,7 +311,8 @@ async function handleViewStandings(league, { season = null, table = null } = {})
     table: table ?? null,
     official: false,
     fetchedAt: null,
-    seasonLabel: null
+    seasonLabel: null,
+    postponed: []
   };
   try {
     const [result, saisons] = await Promise.all([
@@ -330,7 +331,8 @@ async function handleViewStandings(league, { season = null, table = null } = {})
       tables: result.tables ?? [],
       table: result.table ?? null,
       official: Boolean(result.official),
-      fetchedAt: result.fetchedAt ?? null
+      fetchedAt: result.fetchedAt ?? null,
+      postponed: result.postponed ?? []
     };
   } catch (error) {
     standings.value = { ...standings.value, loading: false, error: error.message, rows: [] };
@@ -520,6 +522,7 @@ onMounted(() => {
           :official="standings.official"
           :fetched-at="standings.fetchedAt"
           :season-label="standings.seasonLabel"
+          :postponed="standings.postponed"
         />
       </template>
       <CupPanel v-else-if="standingsTab === 'cups'" :league="standings.key" />

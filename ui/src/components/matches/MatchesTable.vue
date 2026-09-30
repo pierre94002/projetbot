@@ -4,7 +4,7 @@ import AppIcon from '@/components/common/AppIcon.vue';
 import TeamAvatar from './TeamAvatar.vue';
 import FormBadges from './FormBadges.vue';
 import LeagueBadge from './LeagueBadge.vue';
-import { formatOdds, formatTime, formatDay } from '@/utils/format.js';
+import { formatOdds, formatTime, formatDay, formatShortDay } from '@/utils/format.js';
 import { groupMatchesByLeague, groupMatchesByDate } from '@/utils/leagueDisplay.js';
 import { liveNow } from '@/utils/liveClock.js';
 import { computeMatchStatus } from '@/utils/matchStatus.js';
@@ -220,6 +220,13 @@ function formatDayHeader(dayKey) {
                   Heure à confirmer
                 </span>
                 <template v-else>{{ formatTime(match.commenceTime) }}</template>
+                <span
+                  v-if="match.postponedFrom"
+                  class="match-row__postponed"
+                  :title="`Match reporté : il était prévu le ${formatShortDay(match.postponedFrom)}`"
+                >
+                  Reporté du {{ formatShortDay(match.postponedFrom) }}
+                </span>
                 <span v-if="aiAnalysisByMatchId[match.matchId]" class="match-row__ai-badge" title="Analyse IA disponible pour ce match">
                   <AppIcon name="bolt" :size="9" />IA
                 </span>
@@ -511,6 +518,14 @@ function formatDayHeader(dayKey) {
   line-height: 1.3;
   color: var(--cm-text-muted);
   font-style: italic;
+}
+
+.match-row__postponed {
+  font-size: 9.5px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--cm-warning);
+  white-space: nowrap;
 }
 
 .match-row__ai-badge {

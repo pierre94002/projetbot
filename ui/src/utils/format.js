@@ -37,6 +37,12 @@ export function formatTime(isoString) {
   return new Intl.DateTimeFormat('fr-FR', { timeStyle: 'short' }).format(new Date(isoString));
 }
 
+/** Jour court (« 26/09 ») d'une date AAAA-MM-JJ — pour les mentions en marge, comme la date d'origine d'un match reporté. */
+export function formatShortDay(dayKey) {
+  if (!dayKey) return '—';
+  return new Intl.DateTimeFormat('fr-FR', { day: '2-digit', month: '2-digit' }).format(new Date(`${dayKey}T00:00:00`));
+}
+
 /** Jour complet ("lundi 7 septembre") — pour les en-têtes de regroupement par jour. */
 /**
  * `withYear` pour les saisons passées : sans l'année, « samedi 17 mai » est

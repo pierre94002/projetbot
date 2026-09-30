@@ -28,6 +28,14 @@
  * cause de pelouse inondée. L'opération est idempotente : relancée, elle ne
  * retrouve plus rien à l'ancienne date et se contente de vérifier la nouvelle.
  *
+ * REPORT SANS NOUVELLE DATE — "status": "postponed" (FotMob publie le match à
+ * sa date d'origine, motif « PP », tant qu'il n'est pas re-programmé).
+ * L'entrée de cette date passe en "postponed" (créée si besoin, jamais sur un
+ * score connu). Quand la rencontre réapparaît plus tard, "à venir" ou jouée,
+ * l'entrée la SUIT à sa nouvelle date, quel que soit l'écart, et garde la
+ * date d'origine dans "postponedFrom" — la page Matchs, le calendrier et le
+ * classement le signalent.
+ *
  * SCORE DÉJÀ CONNU — un score enregistré n'est jamais remplacé en silence par
  * un score différent : l'entrée est refusée, signalée sur stderr et comptée
  * dans `conflicts`. Un score identique passe normalement, et un match encore
@@ -104,7 +112,17 @@ let moved = 0;
 let removed = 0;
 let conflicts = 0;
 let unchanged = 0;
+let postponed = 0;
 const now = new Date().toISOString();
+
+/**
+ * Écart maximal entre la date d'origine d'un match reporté et sa nouvelle
+ * date. Les reports se re-programment souvent des semaines plus tard (26/09 →
+ * 15/12 en League One) ; au-delà, une même affiche dans le même championnat
+ * est plutôt la rencontre suivante (championnats à trois ou quatre
+ * confrontations).
+ */
+const REPORT_MAX_DAYS = 120;
 
 for (const m of newMatches) {
   const { date, league, homeName, awayName, status, homeGoals, awayGoals, round, source, postponedTo, correctsScore } = m;
@@ -155,11 +173,27 @@ for (const m of newMatches) {
         samePairing(e)
     );
 
-  const existing =
+  const memeJour =
     calendar.find((e) => e.matchId === matchId) ??
     calendar.find((e) => sameDay(e) && sameOrientation(e)) ??
-    calendar.find((e) => sameDay(e) && swappedOrientation(e)) ??
-    rescheduled();
+    calendar.find((e) => sameDay(e) && swappedOrientation(e));
+  // Match REPORTÉ puis re-programmé : l'entrée « postponed » restée à la date
+  // d'origine suit la rencontre à sa nouvelle date, quel que soit l'écart —
+  // des semaines le plus souvent, bien au-delà de NEARBY_DAYS. Seulement
+  // quand rien n'est encore au calendrier à la nouvelle date (cf. l'ordre de
+  // recherche) : une affiche déjà connue plus tard est une autre rencontre.
+  const repriseApresReport = () =>
+    calendar.find(
+      (e) =>
+        e.league === league &&
+        e.status === 'postponed' &&
+        e.date < date &&
+        (Date.parse(date) - Date.parse(e.date)) / 86400000 <= REPORT_MAX_DAYS &&
+        samePairing(e)
+    );
+  // Un report annoncé ne cherche l'entrée qu'à SA date : il ne doit pas
+  // attraper la rencontre re-programmée quelques jours plus loin.
+  const existing = status === 'postponed' ? memeJour : memeJour ?? rescheduled() ?? repriseApresReport();
   // Report : on déplace l'entrée d'origine plutôt que d'en créer une seconde.
   if (postponedTo) {
     const targetId = `cal-${postponedTo}-${slug(homeName)}-${slug(awayName)}`;
@@ -177,6 +211,7 @@ for (const m of newMatches) {
       calendar.splice(calendar.indexOf(existing), 1); // La nouvelle date est déjà au calendrier : l'ancienne fait doublon.
       removed++;
     } else if (existing) {
+      existing.postponedFrom = existing.postponedFrom ?? existing.date;
       existing.date = postponedTo;
       // Recalculé sur SES noms, pas ceux de la source entrante : l'entrée
       // garde son identité, seule la date change (cf. invariant plus bas).
@@ -203,10 +238,68 @@ for (const m of newMatches) {
         awayGoals: null,
         round: round ?? null,
         source: source ?? 'web',
+        postponedFrom: date,
         updatedAt: now
       });
       created++;
     }
+    continue;
+  }
+
+  // Report annoncé à la date d'origine, sans nouvelle date.
+  if (status === 'postponed') {
+    if (existing) {
+      if (scoreOf(existing.homeGoals, existing.awayGoals)) {
+        // Un score connu dit que la rencontre a eu lieu : on ne le détruit pas.
+        console.error(`Report ignoré, score déjà connu : ${date} ${homeName}-${awayName} (${existing.homeGoals}-${existing.awayGoals})`);
+        skipped++;
+      } else if (existing.status === 'postponed') {
+        unchanged++;
+      } else {
+        existing.status = 'postponed';
+        existing.round = round ?? existing.round ?? null;
+        existing.source = source ?? existing.source ?? 'web';
+        existing.updatedAt = now;
+        postponed++;
+      }
+      continue;
+    }
+    // Déjà re-programmé : la source montre encore le report à la date
+    // d'origine alors que la rencontre est au calendrier plus tard. On note
+    // d'où elle vient plutôt que de recréer un fantôme à l'ancienne date.
+    const reprogramme = calendar.find(
+      (e) =>
+        e.league === league &&
+        e.date > date &&
+        (Date.parse(e.date) - Date.parse(date)) / 86400000 <= REPORT_MAX_DAYS &&
+        (!e.postponedFrom || e.postponedFrom === date) &&
+        samePairing(e)
+    );
+    if (reprogramme) {
+      if (reprogramme.postponedFrom === date) {
+        unchanged++;
+      } else {
+        reprogramme.postponedFrom = date;
+        reprogramme.updatedAt = now;
+        updated++;
+      }
+      continue;
+    }
+    calendar.push({
+      id: crypto.randomUUID(),
+      matchId,
+      date,
+      league,
+      homeName,
+      awayName,
+      status: 'postponed',
+      homeGoals: null,
+      awayGoals: null,
+      round: round ?? null,
+      source: source ?? 'web',
+      updatedAt: now
+    });
+    postponed++;
     continue;
   }
 
@@ -220,6 +313,7 @@ for (const m of newMatches) {
     // n'est ni comptée « mise à jour » ni réhorodatée (le fichier n'était
     // réécrit que pour changer updatedAt, toutes les trois heures).
     const avant = JSON.stringify([existing.status, existing.homeGoals ?? null, existing.awayGoals ?? null, existing.round ?? null, existing.source ?? null, existing.date]);
+    const etaitReporte = existing.status === 'postponed';
     // Garde-fou : un score déjà connu n'est pas non plus remplacé en silence
     // par un score DIFFÉRENT. La règle juste en dessous ne protégeait que
     // contre l'effacement par une source en retard (score -> null) ; elle
@@ -252,6 +346,8 @@ for (const m of newMatches) {
     // lieu de laisser un fantôme derrière elle.
     const deplacee = existing.date !== date;
     if (deplacee) {
+      // Report re-programmé : la date d'origine reste lisible.
+      if (etaitReporte && !existing.postponedFrom) existing.postponedFrom = existing.date;
       existing.date = date;
       existing.matchId = `cal-${date}-${slug(existing.homeName)}-${slug(existing.awayName)}`;
       moved++;
@@ -299,6 +395,6 @@ fs.mkdirSync(path.dirname(calendarPath), { recursive: true });
 // (errno -4094) dès que la synchronisation le tenait. Un renommage ferme
 // aussi la fenêtre où un lecteur verrait un calendrier à moitié écrit.
 // Rien de nouveau : le fichier reste tel quel.
-if (created || updated || moved || removed) writeWithRetry(calendarPath, JSON.stringify(calendar, null, 2));
+if (created || updated || moved || removed || postponed) writeWithRetry(calendarPath, JSON.stringify(calendar, null, 2));
 
-console.log(JSON.stringify({ created, updated, unchanged, skipped, moved, removed, conflicts, total: calendar.length }));
+console.log(JSON.stringify({ created, updated, unchanged, skipped, moved, removed, conflicts, postponed, total: calendar.length }));
