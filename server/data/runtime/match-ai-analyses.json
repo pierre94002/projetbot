@@ -2812,5 +2812,107 @@
     },
     "updatedAt": "2026-09-30T17:47:54.254Z",
     "createdAt": "2026-09-30T17:47:54.254Z"
+  },
+  {
+    "matchId": "cal-2026-09-30-red-bull-new-york-st-louis-city",
+    "homeName": "Red Bull New York",
+    "awayName": "St. Louis City",
+    "league": "MLS",
+    "commenceTime": "2026-09-30T12:00:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Red Bull New York vs St. Louis City",
+      "expectedGoals": {
+        "home": 1.193,
+        "away": 1.812,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 3.01,
+        "draw": 3.93,
+        "away": 2.42
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds",
+        "candidates": []
+      }
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 3829,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 1307,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3829,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1307,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 3829,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 3829
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.02839,
+    "analysis": {
+      "summary": "Red Bull New York est 8e (33 pts en 26 matchs) avec une différence de buts de -14 (34 marqués, 48 encaissés), en position de playoff. La forme récente est contrastée (2V, 1N, 2D sur 5). St. Louis City affiche une meilleure forme (3V, 2N, sans défaite) et des moyennes offensives supérieures (xG 1,98 contre 1,16). Le contexte penche du côté des visiteurs, comme les xG du moteur.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "NY Red Bulls 8e, en zone de playoff, avec un bilan défensif fragile. Le classement de St. Louis n'est pas disponible.",
+          "evidence": "26 matchs : 9V 6N 11D, 34 buts pour, 48 contre, -14 de différence, 33 pts. À domicile : 4V 3N 5D, 18-23."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "St. Louis est invaincu sur ses 5 derniers matchs, New York est irrégulier.",
+          "evidence": "NY : V V D N D. St. Louis : V V N V N. Dates de fin de série : 18/09 (NY) et 20/09 (St. Louis)."
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "St. Louis produit plus de tirs et de tirs cadrés, avec un xG moyen nettement plus élevé. NY est plus limité offensivement.",
+          "evidence": "Tirs cadrés 3,5 (NY) contre 5,3 (STL). Tirs 10,4 contre 12,1. xG 1,16 contre 1,98. Possession 49,6 % contre 53,0 %. Échantillon de 10 matchs."
+        },
+        {
+          "factor": "absences",
+          "observation": "Les deux équipes ont quatre blessés de longue durée, presque tous d'un retour incertain.",
+          "evidence": "NY : Harper, Marshall-Rutty, Che (Doubtful), Marcucci (Unknown). STL : Ault, McSorley (Doubtful), Hiebert (début octobre 2026), Pompeu (Unknown)."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur donne l'avantage aux visiteurs en xG, ce qui correspond au contexte. Aucune cote de marché n'est fournie, donc aucun edge n'est calculé.",
+          "evidence": "xG moteur : 1,193 (domicile) contre 1,812 (extérieur). Décision : PASS, raison no_market_odds."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif va dans le même sens que le moteur. St. Louis a une meilleure forme récente et de meilleures moyennes offensives, alors que NY a une défense perméable. Le facteur domicile de NY et les absences des deux côtés nuancent un peu ce constat. Faute de cotes de marché, il n'y a pas d'edge à confirmer ou à infirmer.",
+      "caveats": "Le classement de St. Louis City est indisponible (standings.away nul). La forme API-Football est étiquetée saison 2024 alors que les dates sont en 2026, donc cette incohérence est à prendre avec prudence. Aucune source plus récente (historique, recherche web, FlashScore) n'est disponible pour la recouper. Il n'y a pas de cotes de marché, pas de changement d'entraîneur connu (l'historique peut être incomplet) et pas de note utilisateur. Les moyennes reposent sur 10 matchs et la forme sur 5 matchs seulement."
+    },
+    "updatedAt": "2026-09-30T19:17:12.797Z",
+    "createdAt": "2026-09-30T19:17:12.797Z"
   }
 ]
