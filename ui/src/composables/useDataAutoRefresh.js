@@ -9,7 +9,8 @@ import { useSourcesStore } from '@/stores/sourcesStore.js';
 import { useToastStore } from '@/stores/toastStore.js';
 
 // 30 s : l'appel ne fait que quelques `stat` côté serveur, et les données ne
-// changent en pratique qu'une fois par jour (tâche planifiée). L'intérêt n'est
+// changent à chaque passe de l'actualisation automatique (toutes les trois
+// heures), et l'empreinte ne bouge qu'une fois par passe. L'intérêt n'est
 // pas la réactivité à la seconde mais qu'un onglet laissé ouvert la nuit ne
 // montre pas des données de la veille au matin.
 const POLL_INTERVAL_MS = 30000;

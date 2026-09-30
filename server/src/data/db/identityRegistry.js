@@ -315,6 +315,16 @@ export function findPeople(name, { database = openDb(), league = null } = {}) {
  * est le seul moment où ces noms changent.
  */
 const nomsEnCache = new Map();
+
+/**
+ * Oublie les noms canoniques gardés en cache : à appeler quand les annuaires
+ * ont été reconstruits par un AUTRE processus (l'actualisation le fait à
+ * part du serveur), sans quoi le serveur servirait les anciens noms jusqu'à
+ * la fin de la minute de cache.
+ */
+export function invalidateRegistryCaches() {
+  nomsEnCache.clear();
+}
 const NOMS_TTL_MS = 60_000;
 export function canonicalTeamNames({ database = openDb() } = {}) {
   const connu = nomsEnCache.get(database);

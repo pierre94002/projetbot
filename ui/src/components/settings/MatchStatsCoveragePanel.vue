@@ -1,14 +1,7 @@
 <script setup>
-import AppButton from '@/components/common/AppButton.vue';
-import AppIcon from '@/components/common/AppIcon.vue';
-import { formatDateTime } from '@/utils/format.js';
-
-const props = defineProps({
-  coverage: { type: Object, default: null },
-  refreshing: { type: Boolean, default: false }
+defineProps({
+  coverage: { type: Object, default: null }
 });
-
-const emit = defineEmits(['refresh']);
 
 /** Vert au-delà de 90 %, orange à partir de 50 %, rouge en dessous. */
 function toneOf(percent) {
@@ -32,10 +25,6 @@ function toneOf(percent) {
             dont {{ coverage.totals.withPlayers.toLocaleString('fr-FR') }} avec les statistiques individuelles des joueurs
           </p>
         </div>
-        <AppButton variant="ghost" size="sm" :loading="refreshing || coverage.refresh?.running" @click="emit('refresh')">
-          <template #icon><AppIcon name="refresh" :size="13" /></template>
-          {{ coverage.refresh?.running ? 'En cours…' : 'Compléter maintenant' }}
-        </AppButton>
       </div>
 
       <ul class="stats-coverage__list">
@@ -48,7 +37,7 @@ function toneOf(percent) {
             {{ row.withStats }}/{{ row.finished }}
             <span class="cm-text-muted">· {{ row.averageFields }} champs</span>
           </span>
-          <span v-if="!row.supported" class="stats-coverage__flag" title="Championnat absent de la source ESPN">hors source</span>
+          <span v-if="!row.supported" class="stats-coverage__flag" title="Compétition que FotMob ne suit pas pour l'appli">hors source</span>
         </li>
       </ul>
 
@@ -60,17 +49,10 @@ function toneOf(percent) {
         </span>
       </div>
 
-      <p v-if="coverage.refresh?.last?.finishedAt" class="cm-text-muted stats-coverage__hint">
-        Dernier passage le {{ formatDateTime(coverage.refresh.last.finishedAt) }} :
-        {{ coverage.refresh.last.merged }} match(s) complété(s).
-        <template v-if="coverage.refresh.last.unmatched">
-          {{ coverage.refresh.last.unmatched }} rencontre(s) introuvable(s) chez la source.
-        </template>
-      </p>
       <p class="cm-text-muted stats-coverage__hint">
-        Complété automatiquement en fond depuis l'API publique d'ESPN — source gratuite, sans clé ni quota, donc aucun
-        coût à l'actualisation. Les champs que la source ne publie pas (xG, duels, grosses occasions) restent vides
-        plutôt que d'être estimés.
+        Complété par l'actualisation automatique depuis FotMob, source gratuite et sans clé. Les champs que la source ne publie pas
+        pour un match restent vides plutôt que d'être estimés. Calculé sur le calendrier de saison : une compétition ajoutée
+        récemment n'y compte que les journées vues depuis son ajout.
       </p>
     </template>
 

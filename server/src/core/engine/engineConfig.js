@@ -1,14 +1,41 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readJsonFile, writeJsonAtomic } from '../../utils/atomicJson.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CONFIG_FILE_PATH = path.resolve(__dirname, '../../../data/runtime/engine-config.json');
 
 export const DEFAULT_ENGINE_CONFIG_BY_SPORT = {
   football: {
-    edgeThresholdMin: 0.04,
+    // Avantage minimum d'un pari sur la probabilité juste du marché (cf.
+    // valueFinder.js). 2 % : sur l'historique, 278 paris, +14,9 % de retour
+    // et +2,9 % face à la cote de clôture. Au-delà de 25 %, c'est une cote
+    // périmée ou une erreur, pas une value.
+    edgeThresholdMin: 0.02,
     edgeThresholdMax: 0.25,
+    // Bookmakers où un pari peut être recommandé, choisis par Pierre le
+    // 23/09/2026 : les plus fiables HORS bookmakers français (dont la marge
+    // de 11 à 15 % sur le 1N2 ne laisse jamais de value). Tous réglementés
+    // par une autorité européenne ; aucun n'est agréé en France. Les sites
+    // offshore (1xBet, MyBookie, BetOnline, GTbets…) n'y figurent pas. La
+    // cote juste, elle, vient des paliers de fiabilité (cf. valueFinder.js),
+    // et un bookmaker qui l'a fixée n'est jamais recommandé pour ce match.
+    valueBookmakers: [
+      'williamhill',
+      'sport888',
+      'betsson',
+      'nordicbet',
+      'unibet_nl',
+      'unibet_se',
+      'leovegas_se',
+      'tipico_de',
+      'coolbet',
+      'codere_it'
+    ],
+    // Pas de recommandation au-delà de cette cote : sur les outsiders, les
+    // résultats du test étaient instables.
+    maxValueOdds: 5,
     defaultCorrelation: -0.075,
     kellyFraction: 0.125,
     maxStakePercent: 0.02,
@@ -18,10 +45,15 @@ export const DEFAULT_ENGINE_CONFIG_BY_SPORT = {
     // écart de taux domicile/extérieur, on ne recommande pas de mise. Sorti
     // du fichier générique vers la config du sport qui l'utilise.
     maxExpectedRateGap: 0.4,
+    // 100 % marché pour le résultat : testé sur 12 943 matchs de
+    // vérification, chaque point donné au modèle de buts ou à l'ajustement
+    // météo dégradait la prévision (l'ancien 70/20/10 comme le 80/20
+    // proposé). Le modèle de buts reste la source des marchés sans cote
+    // (plus/moins, les deux équipes marquent) et des matchs sans cote.
     weights: {
-      market: 0.7,
-      structural: 0.2,
-      exogenous: 0.1
+      market: 1,
+      structural: 0,
+      exogenous: 0
     }
   }
 };
@@ -39,17 +71,9 @@ function migrateToSportKeyed(raw) {
   return looksAlreadySportKeyed ? raw : { football: raw };
 }
 
+// Absent : valeurs par défaut. Présent mais illisible : erreur, cf. getConfigBySport.
 function loadPersistedConfig() {
-  let raw = null;
-  try {
-    if (fs.existsSync(CONFIG_FILE_PATH)) {
-      raw = JSON.parse(fs.readFileSync(CONFIG_FILE_PATH, 'utf8'));
-    }
-  } catch {
-    // Fichier corrompu ou illisible : on repart de la configuration par défaut.
-    raw = null;
-  }
-
+  const raw = readJsonFile(CONFIG_FILE_PATH, null);
   const migrated = migrateToSportKeyed(raw);
   const result = {};
   for (const sportId of Object.keys(DEFAULT_ENGINE_CONFIG_BY_SPORT)) {
@@ -84,13 +108,22 @@ function currentMtimeMs() {
 function getConfigBySport() {
   const mtimeMs = currentMtimeMs();
   if (cache.configBySport && cache.mtimeMs === mtimeMs) return cache.configBySport;
-  cache = { mtimeMs, configBySport: loadPersistedConfig() };
+  try {
+    cache = { mtimeMs, configBySport: loadPersistedConfig() };
+  } catch (error) {
+    // Illisible (OneDrive le tient) : la dernière configuration lue, retentée
+    // à l'appel suivant — jamais les valeurs par défaut. Elles restaient en
+    // cache jusqu'à la modification suivante du fichier, le moteur misait
+    // avec, et le prochain réglage enregistré les écrivait par-dessus ceux de
+    // l'utilisateur.
+    if (!cache.configBySport) throw error;
+    console.warn(`[moteur] ${error.message} — dernière configuration lue conservée.`);
+  }
   return cache.configBySport;
 }
 
 function persistConfig(configBySport) {
-  fs.mkdirSync(path.dirname(CONFIG_FILE_PATH), { recursive: true });
-  fs.writeFileSync(CONFIG_FILE_PATH, JSON.stringify(configBySport, null, 2), 'utf8');
+  writeJsonAtomic(CONFIG_FILE_PATH, configBySport);
   // On réaligne le cache sur le fichier qu'on vient d'écrire, sinon le
   // prochain appel le relirait pour rien.
   cache = { mtimeMs: currentMtimeMs(), configBySport };

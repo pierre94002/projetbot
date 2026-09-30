@@ -1,11 +1,12 @@
 import { computeStructuralFactor } from '../risk/structuralFactors.js';
 import { computeExogenousFactor } from '../risk/exogenousFactors.js';
 import { removeMargin } from '../market/marginRemoval.js';
-import { evaluateStakingDecision } from '../risk/staking.js';
 import { computeCornersAdjustment } from '../signals/cornersSignal.js';
+import { predictResult, temperer } from './resultPrediction.js';
+import { findValueBet, fairFromBookmakers, fairFromAllValid } from './valueFinder.js';
+import { predictScore } from './scorePrediction.js';
 
 const EXPECTED_GOALS_BOUNDS = { min: 0.5, max: 2.8 };
-const MARKET_OVERROUND_ESTIMATE = 1.05;
 
 /**
  * Analyse un match unique en fusionnant trois signaux indépendants :
@@ -15,10 +16,14 @@ const MARKET_OVERROUND_ESTIMATE = 1.05;
  * du terrain (poids faible). Les poids et rho viennent de engineConfig.js.
  * Le signal croisé corners, quand disponible, est calculé et renvoyé pour
  * affichage mais n'influence plus lambda/mu (lien buts futurs pas assez
- * établi pour justifier d'agir sur des mises réelles). L'edge et la mise
- * conseillée se basent sur la probabilité fusionnée, pas sur un modèle isolé du
- * marché : ancrer 70% du poids au marché rend l'edge mécaniquement plus
- * conservateur qu'un modèle 100% indépendant — c'est voulu.
+ * établi pour justifier d'agir sur des mises réelles).
+ *
+ * Refondu le 23/09/2026 après un test sur 24 000 matchs passés : le résultat
+ * se prédit par les cotes (100 % marché par défaut, modèle de buts tempéré
+ * quand il n'y a pas de cote — cf. resultPrediction.js), et un pari n'est
+ * recommandé que si un bookmaker autorisé paie au-dessus de la probabilité
+ * juste du marché (cf. valueFinder.js). L'ancien réglage 70/20/10 et son
+ * « edge » à domicile perdaient 5 à 8 % des mises.
  *
  * Orchestrateur sport-agnostique : toute la résolution du taux de base
  * (lambda/mu) et le modèle de probabilités par score viennent de `sport`
@@ -63,29 +68,43 @@ export async function analyzeMatch(match, config, tiltState, sport) {
   const muExogenous = clamp(mu * exogenousFactor, EXPECTED_GOALS_BOUNDS.min, EXPECTED_GOALS_BOUNDS.max);
   const probabilitiesExogenous = sport.model.computeMarketProbabilities(lambdaExogenous, muExogenous, config);
 
-  // P_marché : cotes du marché, marge bookmaker retirée. Faute de cotes
-  // réelles, on substitue nos propres probabilités structurelles majorées
-  // d'une marge type — utile pour continuer à produire des probabilités,
-  // MAIS l'edge qui en découlerait comparerait le modèle à lui-même. C'est
-  // pourquoi `marketOddsAvailable` est suivi jusqu'au DTO, et que l'edge
-  // comme la mise sont neutralisés plus bas quand il est faux : un match de
-  // calendrier sans cote ne doit jamais déclencher de recommandation.
+  // P_marché : cotes du marché (moyenne des bookmakers), marge retirée par
+  // la méthode puissance. C'est ce qui prédit le mieux le résultat : 50,3 %
+  // de résultats justes sur 13 052 matchs de vérification, avec des
+  // probabilités honnêtes (cf. resultPrediction.js). Faute de cote, le
+  // modèle de buts prend sa place, TEMPÉRÉ : seul, il annonçait 74 % pour
+  // 59 % réalisés. `marketOddsAvailable` reste suivi jusqu'au DTO : un match
+  // sans cote ne déclenche jamais de recommandation de pari.
   const marketOddsAvailable =
     Number.isFinite(match.marketOdds?.odds1) &&
     Number.isFinite(match.marketOdds?.oddsDraw) &&
     Number.isFinite(match.marketOdds?.odds2);
-  const marketOdds = {
-    odds1: match.marketOdds?.odds1 ?? (1 / probabilitiesStructural.home) * MARKET_OVERROUND_ESTIMATE,
-    oddsDraw: match.marketOdds?.oddsDraw ?? (1 / probabilitiesStructural.draw) * MARKET_OVERROUND_ESTIMATE,
-    odds2: match.marketOdds?.odds2 ?? (1 / probabilitiesStructural.away) * MARKET_OVERROUND_ESTIMATE
-  };
-  const netMarket = removeMargin([marketOdds.odds1, marketOdds.oddsDraw, marketOdds.odds2]);
-  const [marketProbHome, marketProbDraw, marketProbAway] = netMarket.probabilities;
+  const marketOdds = marketOddsAvailable
+    ? { odds1: match.marketOdds.odds1, oddsDraw: match.marketOdds.oddsDraw, odds2: match.marketOdds.odds2 }
+    : null;
+  const netMarket = marketOddsAvailable ? removeMargin([marketOdds.odds1, marketOdds.oddsDraw, marketOdds.odds2]) : null;
+  // La cote juste vient des bookmakers les plus FIABLES quand ils cotent le
+  // match (cf. fairFromBookmakers) ; la moyenne de tous ne sert qu'en repli.
+  const reference = marketOddsAvailable ? fairFromBookmakers(match.marketOdds?.byBookmaker ?? [], config) : null;
+  // Repli pour le PRONOSTIC seulement : la moyenne des lignes saines (jamais
+  // une ligne incohérente ni une bourse à carnet vide) ; à défaut, la
+  // moyenne transmise si elle est cohérente ; sinon, les statistiques.
+  const repli = marketOddsAvailable && !reference
+    ? (match.marketOdds?.byBookmaker?.length
+        ? fairFromAllValid(match.marketOdds.byBookmaker)?.probabilities
+        : !netMarket.anomaly ? netMarket.probabilities : null) ?? null
+    : null;
+  const sansCotes = temperer(probabilitiesStructural);
+  const [marketProbHome, marketProbDraw, marketProbAway] = reference
+    ? reference.probabilities
+    : repli ?? [sansCotes.home, sansCotes.draw, sansCotes.away];
+  const pronosticSurCotes = Boolean(reference || repli);
 
   // Fusion pondérée : P_final = poids.marché·P_marché + poids.structurel·P_structurel + poids.exogène·P_exogène.
-  // Over 2.5 / BTTS n'ont pas d'équivalent marché dans cette app (seules les
-  // cotes 1N2 sont ingérées) : dérivés de P_exogène, la vue la plus complète
-  // disponible sans marché.
+  // Par défaut 100 % marché (cf. engineConfig.js) : sur l'historique, chaque
+  // point donné au modèle de buts dégradait la prévision. Over 2.5 / BTTS
+  // n'ont pas d'équivalent marché dans cette app (seules les cotes 1N2 sont
+  // ingérées) : dérivés de P_exogène, le modèle de buts corrigé.
   const weights = config.weights;
   const probabilities = {
     home: weights.market * marketProbHome + weights.structural * probabilitiesStructural.home + weights.exogenous * probabilitiesExogenous.home,
@@ -101,16 +120,56 @@ export async function analyzeMatch(match, config, tiltState, sport) {
     resultAndTotal: probabilitiesExogenous.resultAndTotal
   };
 
-  // Edge positif = notre probabilité fusionnée DÉPASSE celle du marché (mise à
-  // l'unité : p_modèle × cote_marché − 1 > 0, équivalent à p_modèle/p_marché
-  // − 1). Avant, la division était inversée (p_marché/p_modèle − 1) : ça
-  // recommandait un pari précisément quand le marché est PLUS confiant que
-  // notre propre modèle sur cette issue — l'inverse d'un vrai value bet.
-  const edgeHome = probabilities.home / marketProbHome - 1;
+  // Pronostic du résultat : l'issue la plus probable, sa fiabilité mesurée,
+  // et d'où elle vient.
+  const prediction = predictResult({
+    probabilities: { home: probabilities.home, draw: probabilities.draw, away: probabilities.away },
+    source: pronosticSurCotes ? 'cotes' : 'statistiques',
+    homeName: match.home,
+    awayName: match.away,
+    bookmakersCount: match.marketOdds?.bookmakersCount ?? null,
+    referenceBooks: reference ? reference.books : null
+  });
 
-  const staking = marketOddsAvailable
-    ? evaluateStakingDecision(edgeHome, match.bankroll, lambda, mu, config, tiltState)
-    : { action: 'PASS', stake: null, reason: 'no_market_odds' };
+  // Pronostic du score : les buts attendus que fixent les cotes justes,
+  // mélangés à la forme des cinq derniers matchs et à la saison (cf.
+  // scorePrediction.js) ; sans cote, la forme et la saison seules. Il se
+  // cale sur les MÊMES probabilités justes que le pronostic du résultat.
+  let scorePrediction = null;
+  try {
+    scorePrediction = predictScore({
+      inputs: match.scoreInputs ?? null,
+      fair: pronosticSurCotes ? [marketProbHome, marketProbDraw, marketProbAway] : null,
+      predictedOutcome: prediction?.outcome ?? null
+    });
+  } catch (error) {
+    console.warn(`[score] pronostic impossible pour ${match.home} - ${match.away} : ${error.message}`);
+  }
+
+  // Recommandation de pari : uniquement quand un bookmaker autorisé paie
+  // au-dessus de la cote juste des bookmakers de RÉFÉRENCE (cf.
+  // valueFinder.js). Le moteur précédent comparait son propre modèle au
+  // marché, à domicile seulement, et perdait 5 à 8 % de ses mises sur
+  // l'historique. Sans bookmaker de référence, aucune recommandation.
+  const staking = marketOddsAvailable && !reference
+    ? { action: 'PASS', stake: null, reason: 'trop_peu_de_bookmakers', candidates: [] }
+    : marketOddsAvailable
+    ? findValueBet({
+        byBookmaker: match.marketOdds?.byBookmaker ?? [],
+        fair: reference.probabilities,
+        referenceKeys: reference.keys,
+        config,
+        tiltState,
+        bankroll: match.bankroll,
+        labels: { home: `${match.home ?? 'Domicile'} gagne`, draw: 'Match nul', away: `${match.away ?? 'Extérieur'} gagne` }
+      })
+    : { action: 'PASS', stake: null, reason: 'no_market_odds', candidates: [] };
+  // Avantage du meilleur pari JOUABLE (dans les limites), recommandé ou non.
+  const meilleurAvantage = staking.action === 'RECOMMENDED'
+    ? staking.ev
+    : (staking.candidates ?? [])
+        .filter((c) => c.exclusion !== 'cote_trop_haute' && c.exclusion !== 'avantage_invraisemblable')
+        .reduce((m, c) => (m === null || c.ev > m ? c.ev : m), null);
 
   const result = {
     matchId: match.matchId ?? null,
@@ -149,10 +208,14 @@ export async function analyzeMatch(match, config, tiltState, sport) {
       oddsDraw: marketOddsAvailable ? round(marketOdds.oddsDraw, 2) : null,
       odds2: marketOddsAvailable ? round(marketOdds.odds2, 2) : null,
       overroundPercent: marketOddsAvailable ? netMarket.overroundPercent : null,
+      anomaly: marketOddsAvailable ? netMarket.anomaly : false,
       bookmakersCount: match.marketOdds?.bookmakersCount ?? null,
       byBookmaker: match.marketOdds?.byBookmaker ?? []
     },
-    edgePercent: marketOddsAvailable ? round(edgeHome * 100, 2) : null,
+    prediction,
+    scorePrediction,
+    // Avantage du meilleur pari trouvé (recommandé ou non), en pour cent.
+    edgePercent: meilleurAvantage === null ? null : round(meilleurAvantage * 100, 2),
     staking,
     corners
   };

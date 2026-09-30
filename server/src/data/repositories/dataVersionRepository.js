@@ -19,6 +19,30 @@ const ODDS_SNAPSHOT_PATH = path.resolve(__dirname, '../../../data/fixtures/odds/
 const SETTINGS_FILES = new Set(['engine-config.json', 'ai-config.json']);
 
 /**
+ * Fichiers de TRAVAIL de l'actualisation, exclus eux aussi : le verrou, les
+ * tampons de fusion, les fichiers temporaires d'écriture et l'état de la
+ * passe. Ils changeaient l'empreinte au début, au milieu et à la fin de
+ * chaque passe, et l'interface annonçait « nouvelles données » même quand
+ * rien n'avait bougé. À la place, UNE marque : la dernière passe qui a
+ * réellement écrit des données (dataChangedAt), qui couvre aussi ce qui
+ * n'est écrit que dans la base SQLite, que ce parcours ne voit pas. Les
+ * imports lancés en ligne de commande posent la leur (data-stamp.json, cf.
+ * refreshLock.js), qui, elle, est suivie comme un fichier ordinaire.
+ */
+const WORK_FILES = new Set(['refresh-status.json', 'espn-refresh.lock', 'calendrier-fotmob.json', 'resultats-fotmob.json']);
+const isWorkFile = (name) =>
+  WORK_FILES.has(name) || name.startsWith('refresh-status.') || name.startsWith('espn-refresh.lock') || name.endsWith('.tmp') || name.endsWith('.abandonne') || name.endsWith('.new');
+const REFRESH_STATUS_PATH = path.join(RUNTIME_DIR, 'refresh-status.json');
+
+function lastRefreshMark() {
+  try {
+    return JSON.parse(fs.readFileSync(REFRESH_STATUS_PATH, 'utf8')).dataChangedAt ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Empreinte de l'état des fichiers de données, SANS les lire : seuls les
  * métadonnées (chemin, date de modification, taille) entrent dans le calcul.
  * Le coût est donc celui de quelques `stat`, ce qui permet au front d'appeler
@@ -55,7 +79,7 @@ function walk(dir, baseDir, parts, state) {
   for (const entry of [...entries].sort((a, b) => a.name.localeCompare(b.name))) {
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory()) walk(fullPath, baseDir, parts, state);
-    else if (entry.isFile() && !SETTINGS_FILES.has(entry.name)) {
+    else if (entry.isFile() && !SETTINGS_FILES.has(entry.name) && !isWorkFile(entry.name)) {
       collectFile(fullPath, path.relative(baseDir, fullPath).replace(/\\/g, '/'), parts, state);
     }
   }
@@ -72,6 +96,12 @@ export function getDataVersion() {
 
   walk(RUNTIME_DIR, RUNTIME_DIR, parts, state);
   collectFile(ODDS_SNAPSHOT_PATH, 'fixtures/odds-snapshot.json', parts, state);
+  const marque = lastRefreshMark();
+  if (marque) {
+    parts.push(`refresh:${marque}`);
+    const ms = Date.parse(marque);
+    if (Number.isFinite(ms) && ms > state.latestMs) state.latestMs = ms;
+  }
 
   return {
     version: crypto.createHash('sha1').update(parts.join('|')).digest('hex').slice(0, 16),

@@ -11,7 +11,8 @@ import {
   getLeagueSeasons,
   getLeagueLeaders,
   getLeagueCups,
-  getCupBracket
+  getCupBracket,
+  getOddsProfile
 } from '../controllers/matchStats.controller.js';
 
 const router = Router();
@@ -26,6 +27,7 @@ router.get('/seasons', asyncHandler(getLeagueSeasons));
 router.get('/leaders', asyncHandler(getLeagueLeaders));
 router.get('/cups', asyncHandler(getLeagueCups));
 router.get('/bracket', asyncHandler(getCupBracket));
+router.get('/odds-profile', asyncHandler(getOddsProfile));
 // En dernier : ce motif attrape tout ce qui précède s'il est déclaré avant.
 router.get('/:matchId', asyncHandler(getMatchStats));
 

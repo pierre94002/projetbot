@@ -71,8 +71,15 @@ async function pool(items, size, worker) {
  */
 export async function importMissingFromFotMob({ from, to, leagues = null, concurrency = DEFAULT_CONCURRENCY, onProgress = null } = {}) {
   const wanted = leagues ? Object.entries(FOTMOB_LEAGUES).filter(([name]) => leagues.includes(name)) : Object.entries(FOTMOB_LEAGUES);
-  const known = new Set(storedEntriesIndex().keys());
-  const report = { days: 0, discovered: 0, skipped: 0, fetched: 0, merged: 0, playersMerged: 0, noStats: 0, failed: 0 };
+  const index = storedEntriesIndex();
+  const known = new Set(index.keys());
+  // Par identifiant FotMob AUSSI : une rencontre dont la clé de noms a changé
+  // (club renommé chez la source, annuaire qui unifie une graphie) n'est plus
+  // relue à chaque passe — 92 l'étaient, pour rien, à chaque passage.
+  // L'identifiant 0 est partagé par plusieurs rencontres chez FotMob : il
+  // n'identifie rien.
+  const knownIds = new Set([...index.values()].map((e) => e.fotmobId).filter((id) => id && String(id) !== '0').map(String));
+  const report = { days: 0, dayFailures: 0, failedDates: [], discovered: 0, skipped: 0, fetched: 0, merged: 0, created: 0, updated: 0, playersMerged: 0, noStats: 0, failed: 0 };
 
   const days = [];
   for (let d = new Date(`${from}T12:00:00Z`); d <= new Date(`${to}T12:00:00Z`); d.setUTCDate(d.getUTCDate() + 1)) {
@@ -83,7 +90,13 @@ export async function importMissingFromFotMob({ from, to, leagues = null, concur
   const pending = [];
   let scanned = 0;
   await pool(days, concurrency, async (date) => {
-    const dayMatches = await fetchMatchesByDate(date).catch(() => []);
+    // Une journée en échec est COMPTÉE : avalée sans trace, une panne de la
+    // source passait pour une journée sans match.
+    const dayMatches = await fetchMatchesByDate(date).catch(() => {
+      report.dayFailures++;
+      report.failedDates.push(date);
+      return [];
+    });
     for (const match of dayMatches) {
       // Terminée SANS être annulée : une rencontre abandonnée est publiée
       // « finished » avec son score provisoire (cf. fetchMatchesByDate).
@@ -92,7 +105,7 @@ export async function importMissingFromFotMob({ from, to, leagues = null, concur
       if (!league) continue;
       report.discovered++;
       const matchKey = `${match.date}-${slugify(match.homeName)}-${slugify(match.awayName)}`;
-      if (known.has(matchKey)) {
+      if (known.has(matchKey) || (match.matchId && String(match.matchId) !== '0' && knownIds.has(String(match.matchId)))) {
         report.skipped++;
         continue;
       }
@@ -108,6 +121,8 @@ export async function importMissingFromFotMob({ from, to, leagues = null, concur
     if (!batch.length) return;
     const summary = mergeMatchStats(MATCH_STATS_DIR, batch);
     report.merged += summary.created + summary.updated;
+    report.created += summary.created;
+    report.updated += summary.updated;
     report.playersMerged += summary.playersMerged;
     batch = [];
   };
@@ -296,7 +311,52 @@ export async function importFotmobIds(ids, { league, concurrency = DEFAULT_CONCU
  * perdre les statistiques importées parce qu'un index n'a pas pu se refaire
  * serait une régression bien plus grave que l'index manquant.
  */
-function refreshRegistries(report) {
+/**
+ * Reconstruction des annuaires DIFFÉRÉE. Chaque import en déclenchait une
+ * (8 à 18 s, bloquantes) : après l'import de la liste du jour, après CHAQUE
+ * compétition de l'étape des omissions, puis après la complétion des
+ * feuilles — jusqu'à 2 + 67 reconstructions pour une passe de rattrapage.
+ * L'actualisation de l'appli les diffère toutes et n'en fait qu'une, en fin
+ * de passe, dans un processus à part (takeDeferredRegistryRebuild). La
+ * ligne de commande, qui ne diffère rien, garde le comportement d'origine.
+ */
+let differer = false;
+let reconstructionDue = false;
+
+export function deferRegistryRebuilds(actif) {
+  differer = Boolean(actif);
+}
+
+/**
+ * Une reconstruction différée est-elle due ? Consomme la demande : c'est à
+ * l'appelant de la faire (l'actualisation la lance dans un processus à part).
+ */
+/** Redemande une reconstruction (celle qu'on vient de prendre a échoué). */
+export function requestRegistryRebuild() {
+  reconstructionDue = true;
+}
+
+export function takeDeferredRegistryRebuild() {
+  const due = reconstructionDue;
+  reconstructionDue = false;
+  return due;
+}
+
+/** Reconstruit les annuaires si un import différé l'a demandé ; null sinon. */
+export function flushDeferredRegistries() {
+  if (!reconstructionDue) return null;
+  reconstructionDue = false;
+  const report = {};
+  refreshRegistries(report, { force: true });
+  return report;
+}
+
+function refreshRegistries(report, { force = false } = {}) {
+  if (differer && !force) {
+    reconstructionDue = true;
+    report.registries = { deferred: true };
+    return;
+  }
   try {
     const debut = Date.now();
     const bilan = rebuildRegistries();

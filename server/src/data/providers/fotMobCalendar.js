@@ -18,6 +18,7 @@
  */
 
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFile } from 'node:child_process';
@@ -33,12 +34,30 @@ const RESULTATS = path.join(RUNTIME_DIR, 'match-results.json');
 
 const jour = (d) => d.toISOString().slice(0, 10);
 
+/**
+ * Vrai pendant que le script enfant fusionne match-results.json : il lit le
+ * fichier, calcule, puis le remplace. Un score saisi à la main pendant ce
+ * temps serait écrasé par son remplacement ; la route de saisie attend donc
+ * la fin de la fusion (quelques secondes).
+ */
+let fusionResultats = false;
+export const isResultsMergeRunning = () => fusionResultats;
+
 async function pool(items, size, worker) {
   let index = 0;
   const runners = Array.from({ length: Math.max(1, size) }, async () => {
     while (index < items.length) await worker(items[index++]);
   });
   await Promise.all(runners);
+}
+
+/** Supprime un tampon de fusion ; s'il résiste, il reste dans le dossier temporaire du système, sans conséquence. */
+function supprimerTampon(fichier) {
+  try {
+    fs.rmSync(fichier, { force: true });
+  } catch {
+    // Nom unique, hors du projet : rien ne le relira.
+  }
 }
 
 /** Dernière ligne JSON d'une sortie de script, ou le texte brut. */
@@ -82,6 +101,9 @@ export async function refreshCalendarFromFotMob({
 
   const sorties = [];
   let echecs = 0;
+  // Les journées en échec sont gardées : l'actualisation repartira de la
+  // première d'entre elles au lieu de les perdre (cf. matchStatsAutoRefresh.js).
+  const joursEnEchec = [];
   let faites = 0;
   await pool(dates, concurrency, async (date) => {
     let rencontres;
@@ -89,6 +111,7 @@ export async function refreshCalendarFromFotMob({
       rencontres = await fetchMatchesByDate(date);
     } catch {
       echecs++;
+      joursEnEchec.push(date);
       return;
     } finally {
       faites++;
@@ -129,41 +152,53 @@ export async function refreshCalendarFromFotMob({
     to: fin,
     days: dates.length,
     failures: echecs,
+    failedDates: joursEnEchec.sort(),
     matches: sorties.length,
     upcoming: sorties.filter((s) => s.status === 'scheduled').length,
     byLeague,
     merge: null,
+    mergeError: null,
     results: null,
     resultsError: null
   };
   if (dryRun || !sorties.length) return report;
 
-  // Les tampons sont supprimés QUOI QU'IL ARRIVE : laissés sur le disque, ils
-  // ressemblent à des données du projet, et 20 253 lignes de calendrier
-  // dupliqué sont ainsi parties dans un commit.
-  fs.mkdirSync(RUNTIME_DIR, { recursive: true });
-  const tampon = path.join(RUNTIME_DIR, 'calendrier-fotmob.json');
+  // Les tampons vivent dans le dossier temporaire du système, hors du projet :
+  // laissés dans data/runtime, ils ressemblaient à des données (20 253 lignes
+  // de calendrier dupliqué sont ainsi parties dans un commit), et OneDrive,
+  // qui envoie chaque fichier qui y apparaît, pouvait en refuser la
+  // suppression — l'exception faisait alors échouer toute l'étape. Toujours
+  // supprimés, mais sans conséquence si l'un résiste.
+  const tampon = path.join(os.tmpdir(), `cotemaster-calendrier-fotmob-${process.pid}-${Date.now()}.json`);
   try {
     fs.writeFileSync(tampon, JSON.stringify(sorties));
     const { stdout } = await execFileAsync(process.execPath, [path.join(SCRIPTS_DIR, 'merge-season-calendar.mjs'), CALENDRIER, tampon], { maxBuffer: 64 * 1024 * 1024 });
     report.merge = bilanDe(stdout);
+  } catch (error) {
+    // Calendrier illisible (le script refuse alors d'écrire) : signalé, et
+    // les résultats sont quand même fusionnés, ils ne dépendent pas de lui.
+    report.mergeError = `${error.stdout ?? ''}${error.stderr ?? error.message}`.trim().slice(-2000);
   } finally {
-    fs.rmSync(tampon, { force: true });
+    supprimerTampon(tampon);
   }
 
   const termines = sorties.filter((s) => s.status === 'finished' && s.homeGoals !== null && s.awayGoals !== null);
   if (termines.length) {
-    const tamponR = path.join(RUNTIME_DIR, 'resultats-fotmob.json');
+    const tamponR = path.join(os.tmpdir(), `cotemaster-resultats-fotmob-${process.pid}-${Date.now()}.json`);
     try {
       fs.writeFileSync(tamponR, JSON.stringify(termines));
+      fusionResultats = true;
       const { stdout } = await execFileAsync(process.execPath, [path.join(SCRIPTS_DIR, 'merge-daily-results.mjs'), RESULTATS, tamponR], { maxBuffer: 64 * 1024 * 1024 });
       report.results = bilanDe(stdout);
     } catch (error) {
-      // Un score divergent fait sortir le script en erreur : c'est un signal,
-      // pas une panne. Le calendrier, lui, est déjà écrit.
-      report.resultsError = `${error.stdout ?? ''}${error.stderr ?? error.message}`.trim();
+      // Le script ne sort en erreur que s'il n'a PAS pu écrire (fichier
+      // illisible, disque) ; un score divergent, lui, est compté dans
+      // `results.conflicts` et détaillé dans `results.conflictsList`. Le
+      // calendrier est déjà écrit.
+      report.resultsError = `${error.stdout ?? ''}${error.stderr ?? error.message}`.trim().slice(-2000);
     } finally {
-      fs.rmSync(tamponR, { force: true });
+      fusionResultats = false;
+      supprimerTampon(tamponR);
     }
   }
   onProgress?.({ phase: 'done', ...report });

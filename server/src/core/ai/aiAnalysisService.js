@@ -5,6 +5,7 @@ import { callAnthropicMessages } from './anthropicClient.js';
 import { buildAnalysisRequest, SUBMIT_ANALYSIS_TOOL, SUBMIT_ANALYSIS_TOOL_CHOICE } from './aiAnalysisPrompt.js';
 import { getEngineConfig } from '../engine/engineConfig.js';
 import { saveAnalysisResult } from '../../data/repositories/aiAnalysisHistoryRepository.js';
+import { enregistrerSansPerdre } from '../../utils/atomicJson.js';
 import { DomainError } from '../errors.js';
 
 const MAX_RESPONSE_TOKENS = 4096; // garde-fou coût sur la réponse
@@ -52,5 +53,6 @@ export async function runAnalysis({ limit } = {}) {
     analysis: toolUse.input
   };
 
-  return saveAnalysisResult(result);
+  // Réponse payée sur la clé API : jamais jetée sur un blocage OneDrive.
+  return enregistrerSansPerdre(() => saveAnalysisResult(result), 'audit IA');
 }

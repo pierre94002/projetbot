@@ -63,13 +63,45 @@ function scoreOf(entry) {
   return Number.isFinite(numHome) && Number.isFinite(numAway) ? [numHome, numAway] : null;
 }
 
-function readJson(path, fallback) {
-  try {
-    if (fs.existsSync(path)) return JSON.parse(fs.readFileSync(path, 'utf8'));
-  } catch (e) {
-    console.error(`Attention : ${path} illisible/corrompu (${e.message}), on repart de la valeur par défaut.`);
+/**
+ * Un fichier absent vaut `fallback` ; un fichier PRÉSENT mais illisible
+ * arrête tout (code 2). Repartir d'un tableau vide, comme autrefois, aurait
+ * réécrit les 38 000 résultats connus avec le seul lot du jour — un fichier
+ * lu pendant qu'OneDrive le tient suffisait.
+ */
+function readJson(p, fallback) {
+  if (!fs.existsSync(p)) return fallback;
+  for (let essai = 1; essai <= 3; essai++) {
+    try {
+      return JSON.parse(fs.readFileSync(p, 'utf8'));
+    } catch (e) {
+      if (essai === 3) {
+        console.error(`${p} illisible (${e.message}) : rien n'est écrit.`);
+        process.exit(2);
+      }
+      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 200 * essai);
+    }
   }
   return fallback;
+}
+
+/** Écriture d'un bloc : fichier temporaire puis renommage, avec réessais (OneDrive). */
+function writeAtomic(p, data) {
+  fs.mkdirSync(path.dirname(p), { recursive: true });
+  const tmp = `${p}.${process.pid}.tmp`;
+  fs.writeFileSync(tmp, JSON.stringify(data, null, 2), 'utf8');
+  let derniere;
+  for (let essai = 1; essai <= 5; essai++) {
+    try {
+      fs.renameSync(tmp, p);
+      return;
+    } catch (e) {
+      derniere = e;
+      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 150 * essai);
+    }
+  }
+  fs.rmSync(tmp, { force: true });
+  throw derniere;
 }
 
 const results = readJson(resultsPath, []);
@@ -77,8 +109,10 @@ const newMatches = readJson(newMatchesPath, []);
 
 let created = 0;
 let updated = 0;
+let unchanged = 0;
 let skipped = 0;
 let conflicts = 0;
+const conflictsList = [];
 
 for (const m of newMatches) {
   const { date, league, homeName, awayName, homeGoals, awayGoals, source, correctsScore } = m;
@@ -110,6 +144,16 @@ for (const m of newMatches) {
         `source ${numHomeGoals}-${numAwayGoals}. Ajoute "correctsScore": true pour forcer la correction.`
       );
       conflicts++;
+      if (conflictsList.length < 50) {
+        conflictsList.push({ matchId, homeName, awayName, known: `${known[0]}-${known[1]}`, source: `${numHomeGoals}-${numAwayGoals}` });
+      }
+      continue;
+    }
+    // Même score : rien à écrire. Réécrire `settledAt` à chaque passage lui
+    // faisait perdre son sens (« devenu connu le ») et forçait la réécriture
+    // des 14 Mo du fichier toutes les trois heures.
+    if (known && known[0] === numHomeGoals && known[1] === numAwayGoals && (existing.source ?? null) === (source ?? existing.source ?? null)) {
+      unchanged++;
       continue;
     }
     existing.homeGoals = numHomeGoals;
@@ -137,7 +181,7 @@ for (const m of newMatches) {
   }
 }
 
-fs.mkdirSync(path.dirname(resultsPath), { recursive: true });
-fs.writeFileSync(resultsPath, JSON.stringify(results, null, 2), 'utf8');
+// Rien de nouveau : le fichier reste tel quel.
+if (created || updated) writeAtomic(resultsPath, results);
 
-console.log(JSON.stringify({ created, updated, skipped, conflicts, total: results.length }));
+console.log(JSON.stringify({ created, updated, unchanged, skipped, conflicts, conflictsList, total: results.length }));

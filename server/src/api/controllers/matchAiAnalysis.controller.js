@@ -1,5 +1,11 @@
 import { runPreMatchAnalysis, runPostMatchAnalysis } from '../../core/ai/matchAiAnalysisService.js';
+import { isClaudeCodeAuthenticated } from '../../core/ai/claudeCodeClient.js';
 import { getByMatchId, listAll } from '../../data/repositories/matchAiAnalysisRepository.js';
+
+/** Claude Code (headless) connecté sur ce poste — remplace la clé API pour l'analyse par match, cf. claudeCodeClient.js. */
+export async function getStatus(req, res) {
+  res.json({ connected: await isClaudeCodeAuthenticated() });
+}
 
 export function getForMatch(req, res) {
   res.json({ entry: getByMatchId(req.params.matchId) ?? null });

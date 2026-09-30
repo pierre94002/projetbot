@@ -16,6 +16,8 @@ import {
   teamFormFromStore, teamGoalsFromStore, teamCornersFromStore,
   lineupsFromStore, matchDetailsFromStore, seasonsForLeague
 } from '../db/matchStatsRead.js';
+import { scoreInputsFromStore } from '../db/scoreFormRead.js';
+import { resolveFotMobLineup } from './lineupPrefetch.js';
 import { resolveLineupViaWeb, resolvePlayersViaWeb } from '../../core/ai/webLookupService.js';
 import { getTeamProfile } from '../repositories/teamProfileRepository.js';
 
@@ -36,11 +38,12 @@ import { getTeamProfile } from '../repositories/teamProfileRepository.js';
  * bouton pour l'obtenir et doit savoir si ça a échoué — sans pour autant
  * perdre les buts déjà résolus avec succès.
  */
-export async function enrichMatchWithRealAverages(match, { includeCorners = false, cornersSampleSize } = {}) {
-  const resolved = await resolveGoalsEnrichment(match);
-  if (!resolved) return match;
+export async function enrichMatchWithRealAverages(match, { includeCorners = false, cornersSampleSize, sansRepliPayant = false } = {}) {
+  const avecScore = { ...match, scoreInputs: resolveScoreInputs(match) };
+  const resolved = await resolveGoalsEnrichment(avecScore, { sansRepliPayant });
+  if (!resolved) return avecScore;
 
-  const enrichedMatch = applyGoalsEnrichment(match, resolved);
+  const enrichedMatch = applyGoalsEnrichment(avecScore, resolved);
   if (!includeCorners) return enrichedMatch;
 
   // Le magasin a les corners dans le releve d'equipe de chaque rencontre.
@@ -62,6 +65,24 @@ export async function enrichMatchWithRealAverages(match, { includeCorners = fals
     ]);
 
   return applyCornersEnrichment(enrichedMatch, homeCorners, awayCorners);
+}
+
+/**
+ * Entrées du pronostic du score (cf. core/engine/scorePrediction.js) : les
+ * cinq derniers matchs de chaque équipe, toutes compétitions, leur saison
+ * et les moyennes du championnat, lus dans le magasin avant le jour du
+ * match. `null` si le magasin ne répond pas : le score se pronostique
+ * alors sur les seules cotes.
+ */
+function resolveScoreInputs(match) {
+  try {
+    const coupDEnvoi = match.commenceTime ? new Date(match.commenceTime) : new Date();
+    const date = Number.isNaN(coupDEnvoi.getTime()) ? new Date().toISOString() : coupDEnvoi.toISOString();
+    return scoreInputsFromStore({ league: match.league, home: match.home, away: match.away, date: date.slice(0, 10) });
+  } catch (error) {
+    console.warn(`[score] magasin indisponible pour ${match.home} - ${match.away} : ${error.message}`);
+    return null;
+  }
 }
 
 /**
@@ -126,9 +147,16 @@ function resolveGoalsFromStore(match) {
   };
 }
 
-async function resolveGoalsEnrichment(match) {
+/**
+ * `sansRepliPayant` : pour les appelants AUTOMATIQUES (cf. autoMatchAiTrigger.js)
+ * — le repli API-Football ci-dessous coûte jusqu'à 7 requêtes d'un quota de
+ * 100/jour pour une équipe que le magasin ne connaît pas, sur un plan qui ne
+ * couvre même pas la saison en cours. Seul un clic de l'utilisateur y a droit.
+ */
+async function resolveGoalsEnrichment(match, { sansRepliPayant = false } = {}) {
   const local = resolveGoalsFromStore(match);
   if (local) return local;
+  if (sansRepliPayant) return null;
 
   let leagueId;
   try {
@@ -286,11 +314,11 @@ export async function resolveFormForTeams(teamRequests) {
  * Résout la forme récente d'une seule équipe par son nom (ex. clic sur un
  * nom d'équipe dans la liste des matchs, pour voir son historique complet).
  */
-export async function resolveTeamFormByName(name, league, sampleSize) {
-  return resolveSingleTeamForm({ name, league }, sampleSize);
+export async function resolveTeamFormByName(name, league, sampleSize, { sansRepliPayant = false } = {}) {
+  return resolveSingleTeamForm({ name, league }, sampleSize, { sansRepliPayant });
 }
 
-async function resolveSingleTeamForm(request, sampleSize) {
+async function resolveSingleTeamForm(request, sampleSize, { sansRepliPayant = false } = {}) {
   // Le magasin local d'abord — il est alimenté par FotMob, couvre la saison
   // EN COURS et les championnats hors plan API-Football. C'était le dernier
   // point du projet à demander autre chose que des cotes à une API payante,
@@ -304,7 +332,9 @@ async function resolveSingleTeamForm(request, sampleSize) {
     console.warn(`[forme] magasin indisponible pour ${request.name} : ${error.message}`);
   }
 
-  // Repli, et seulement si le magasin ne connaît pas encore cette équipe.
+  // Repli, et seulement si le magasin ne connaît pas encore cette équipe —
+  // jamais pour un appelant automatique (cf. resolveGoalsEnrichment).
+  if (sansRepliPayant) return null;
   try {
     const leagueId = await resolveLeagueId(request.league);
     if (!leagueId) return null;
@@ -323,12 +353,14 @@ async function resolveSingleTeamForm(request, sampleSize) {
  * Moyennes de toutes les statistiques détaillées disponibles pour une
  * équipe par son nom (ex. clic sur une équipe dans le panneau d'analyse).
  */
-export async function resolveAverageStatsByName(name, league, sampleSize) {
+export async function resolveAverageStatsByName(name, league, sampleSize, { sansRepliPayant = false } = {}) {
   // Priorité aux stats importées chaque matin (saison EN COURS, cf.
   // matchStatsWebRepository.js) : API-Football gratuit s'arrête à 2024.
-  // Repli API-Football uniquement si aucun match n'a encore été importé.
+  // Repli API-Football uniquement si aucun match n'a encore été importé, et
+  // jamais pour un appelant automatique (cf. resolveGoalsEnrichment).
   const web = getTeamWebAverages(name, sampleSize);
   if (web) return { teamId: null, teamName: name, stats: web, source: 'web' };
+  if (sansRepliPayant) return null;
 
   const leagueId = await resolveLeagueId(league);
   if (!leagueId) return null;
@@ -356,12 +388,25 @@ export async function resolveAverageStatsByName(name, league, sampleSize) {
 export async function resolveLiveLineups(homeName, commenceTimeIso, awayName, league) {
   // La feuille de match du magasin d'abord : elle porte la formation, le
   // staff et le RANG de chaque joueur, c'est-à-dire l'ordre publié par la
-  // source, qu'on ne saurait pas reconstituer autrement.
+  // source, qu'on ne saurait pas reconstituer autrement. Ne répond que pour
+  // un match déjà entré au magasin (donc terminé, ou importé par ailleurs) —
+  // jamais pour un match encore à venir, l'étape suivante s'en charge.
   try {
     const local = lineupsFromStore(homeName, commenceTimeIso);
     if (local.available) return local;
   } catch (error) {
     console.warn(`[compo] magasin indisponible pour ${homeName} : ${error.message}`);
+  }
+
+  // FotMob, gratuit, pour un match PAS ENCORE joué : le pré-chargement
+  // (lineupPrefetch.js) l'a peut-être déjà mise en cache à l'approche du
+  // coup d'envoi ; sinon un appel FotMob immédiat, jamais payant, avant
+  // d'aller chercher plus loin.
+  try {
+    const fotmob = await resolveFotMobLineup({ homeName, awayName, commenceTimeIso, league });
+    if (fotmob.available) return fotmob;
+  } catch (error) {
+    console.warn(`[compo] FotMob indisponible pour ${homeName} : ${error.message}`);
   }
 
   const team = await findBestTeamMatch(homeName).catch(() => null);

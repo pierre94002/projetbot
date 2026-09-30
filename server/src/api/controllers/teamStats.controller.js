@@ -7,6 +7,7 @@ import {
   resolveLiveMatchDetails,
   resolvePlayersByName
 } from '../../data/providers/matchEnrichment.js';
+import { resolveTeamNews } from '../../data/providers/teamNewsResolver.js';
 import { fixtureStatsFromStore } from '../../data/db/matchStatsRead.js';
 import { ApiError } from '../middlewares/errorHandler.js';
 
@@ -119,6 +120,23 @@ export async function getLineupsByName(req, res) {
   if (!name || !commenceTime) throw new ApiError(400, 'Les paramètres "name" et "commenceTime" sont requis.');
 
   const result = await resolveLiveLineups(name, commenceTime, away, league);
+  res.json(result);
+}
+
+/**
+ * Blessures, suspensions et changement d'entraîneur (FotMob, gratuit) —
+ * cf. teamNewsResolver.js. `home`/`away` valent `null` chacun dès qu'il n'y a
+ * rien à signaler pour cette équipe (jamais une absence à cause d'une
+ * erreur : resolveTeamNews avale les siennes).
+ */
+export async function getTeamNews(req, res) {
+  const name = req.query.name;
+  const commenceTime = req.query.commenceTime;
+  const away = req.query.away;
+  const league = req.query.league;
+  if (!name || !commenceTime) throw new ApiError(400, 'Les paramètres "name" et "commenceTime" sont requis.');
+
+  const result = await resolveTeamNews({ homeName: name, awayName: away, commenceTimeIso: commenceTime, league });
   res.json(result);
 }
 

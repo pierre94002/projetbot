@@ -10,9 +10,19 @@ import { ApiError } from '../middlewares/errorHandler.js';
  * donc de lire `settled`.
  */
 function withSettledFlag(matches) {
-  const findResult = createResultLookup();
+  // Un fichier de résultats illisible ne doit pas faire tomber la liste des
+  // matchs : elle s'affiche alors sans marquer les matchs terminés.
+  let findResult;
+  try {
+    findResult = createResultLookup();
+  } catch (error) {
+    console.warn(`[matchs] résultats illisibles, matchs non marqués : ${error.message}`);
+    findResult = () => null;
+  }
   return matches.map((match) => {
-    const result = findResult(match.matchId, (match.commenceTime ?? '').slice(0, 10), match.home, match.away);
+    // Même compétition : un match de coupe n'est pas « joué » parce que les
+    // deux clubs se sont croisés en championnat la veille.
+    const result = findResult(match.matchId, (match.commenceTime ?? '').slice(0, 10), match.home, match.away, { league: match.league ?? null });
     return {
       ...match,
       settled: Boolean(result),

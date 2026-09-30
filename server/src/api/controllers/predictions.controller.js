@@ -32,6 +32,9 @@ function validateEntry(entry, index) {
     predictedOdds: numericOdds,
     action: action ?? null,
     edgePercent: Number(entry.edgePercent) || 0,
+    // Coup d'envoi : c'est lui qui permet au règlement automatique de
+    // retrouver le résultat d'un match scanné plusieurs jours à l'avance.
+    commenceTime: typeof entry.commenceTime === 'string' && !Number.isNaN(Date.parse(entry.commenceTime)) ? entry.commenceTime : null,
     // Identifiant de marché structuré + paramètres (cf. sports/football/markets.js)
     // — optionnels : absents pour tout ce qui a été journalisé avant la
     // migration, jamais requis ici pour ne pas casser un futur sport qui

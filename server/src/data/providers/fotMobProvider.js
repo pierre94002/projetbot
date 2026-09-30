@@ -701,7 +701,12 @@ export async function fetchMatchesByDate(isoDate) {
         cancelled: Boolean(match.status?.cancelled),
         awarded: Boolean(match.status?.awarded),
         reason: match.status?.reason?.short ?? null,
-        played: Boolean(match.status?.finished) && !match.status?.cancelled
+        played: Boolean(match.status?.finished) && !match.status?.cancelled,
+        // Coup d'envoi exact (ISO) et démarré ou non : sert au pré-chargement
+        // des compositions avant le coup d'envoi (cf. lineupPrefetch.js). La
+        // liste du jour le publie déjà ; il ne manquait qu'à le lire.
+        kickoff: match.status?.utcTime ?? null,
+        started: Boolean(match.status?.started)
       });
     }
   }
@@ -969,6 +974,96 @@ function mapShotmap(payload) {
       return out;
     })
     .filter((s) => s.player);
+}
+
+/**
+ * Composition connue d'un match, AVANT même sa feuille de statistiques —
+ * même endpoint que fetchMatchStats, mais sans rien de ce qui suppose un
+ * match joué (fusion aux statistiques individuelles, buts encaissés…).
+ * Sert au pré-chargement des compositions avant le coup d'envoi
+ * (cf. lineupPrefetch.js) et au dépannage à la demande dans matchEnrichment.js.
+ *
+ * FotMob ne dit pas si la composition qu'il publie est officielle ou encore
+ * une prévision — aucun champ du genre « confirmed » dans la réponse. Elle
+ * peut apparaître près d'un jour à l'avance pour une affiche importante, ou
+ * seulement dans l'heure qui précède un match de division inférieure ; elle
+ * peut aussi changer d'un appel à l'autre tant que le coup d'envoi n'est pas
+ * donné. C'est pour ça que le pré-chargement continue de vérifier à
+ * l'approche du coup d'envoi plutôt que de s'arrêter au premier succès.
+ *
+ * Réutilise le décodage des postes de fetchMatchStats (roleOfLineupEntry,
+ * roleOfUsualPosition) : FotMob les code en NOMBRE, sous deux formats
+ * différents selon la compétition (cf. lineupUsesRoleCodes) — mêmes pièges,
+ * même code, pas une seconde version à tenir synchronisée.
+ *
+ * `home`/`away` portent aussi `coach` et `unavailable` (blessures,
+ * suspensions, sélection nationale) même quand le onze n'est PAS encore
+ * publié : c'est une donnée de effectif, pas de match — FotMob la montre
+ * dès trois jours avant le coup d'envoi, vérifié le 24/09/2026 (cf.
+ * teamNewsResolver.js, qui s'en sert). `available` ne porte que sur le onze.
+ *
+ * @returns {{available:false, reason:string} | {available:boolean, source:'fotmob', fixtureId:string, home:object|null, away:object|null, teams:object[]}}
+ */
+export async function fetchProbableLineup(matchId) {
+  const payload = await fetchJson(`${BASE}/matchDetails?matchId=${encodeURIComponent(matchId)}`);
+  const lineup = payload?.content?.lineup;
+  if (!lineup?.homeTeam && !lineup?.awayTeam) return { available: false, reason: 'not_published_yet' };
+
+  const absence = (entry) => {
+    const u = entry?.unavailability ?? {};
+    return {
+      id: fotMobIdOf(entry?.id),
+      name: String(entry?.name ?? '').trim(),
+      // 'injury' | 'suspension' | 'internationalDuty' | autre — passé tel
+      // quel, traduit et filtré par le consommateur (teamNewsResolver.js) :
+      // une sélection nationale n'est pas une actualité, une blessure l'est.
+      type: u.type ?? null,
+      expectedReturn: u.expectedReturn ?? null,
+      expectedReturnDate: u.expectedReturnDate ?? null
+    };
+  };
+
+  const side = (team) => {
+    if (!team) return null;
+    const titulaires = team.starters ?? [];
+    // Même calcul que dans fetchMatchStats : le format se reconnaît sur le
+    // onze de départ, et le code 0 n'est un gardien que s'il y en a un seul.
+    const roleCodes = lineupUsesRoleCodes(titulaires);
+    const gardiensCode0 = roleCodes ? titulaires.filter((e) => Number(e?.positionId) === 0).length : 0;
+    const joueur = (entry, starter) => {
+      const tenu = roleOfLineupEntry(entry, { starter, roleCodes, gardiensCode0 });
+      return {
+        id: fotMobIdOf(entry?.id),
+        name: String(entry?.name ?? '').trim(),
+        number: entry?.shirtNumber != null ? firstNumber(entry.shirtNumber) : null,
+        // Le banc n'a pas de positionId (pas de case sur la grille) : son
+        // poste habituel, codé pareil (0 gardien à 3 attaquant), en tient lieu.
+        position: tenu ?? roleOfUsualPosition(entry?.usualPlayingPositionId) ?? null
+      };
+    };
+    return {
+      teamId: fotMobIdOf(team.id),
+      teamName: team.name ?? null,
+      formation: team.formation ? String(team.formation) : null,
+      coach: (Array.isArray(team.coach) ? team.coach[0] : team.coach)?.name ?? null,
+      startXI: titulaires.map((e) => joueur(e, true)),
+      substitutes: (team.subs ?? []).map((e) => joueur(e, false)),
+      unavailable: (team.unavailable ?? []).map(absence)
+    };
+  };
+
+  const home = side(lineup.homeTeam);
+  const away = side(lineup.awayTeam);
+  const auMoinsUnOnze = Boolean(home?.startXI?.length || away?.startXI?.length);
+  return {
+    available: auMoinsUnOnze,
+    reason: auMoinsUnOnze ? undefined : 'not_published_yet',
+    source: 'fotmob',
+    fixtureId: String(matchId),
+    home,
+    away,
+    teams: [home, away].filter(Boolean)
+  };
 }
 
 /**

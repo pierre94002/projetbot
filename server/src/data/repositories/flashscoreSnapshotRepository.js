@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { findBestTeamNameMatch } from '../../utils/teamNameMatch.js';
+import { writeJsonAtomic } from '../../utils/atomicJson.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SNAPSHOT_FILE_PATH = path.resolve(__dirname, '../../../data/runtime/flashscore-snapshot.json');
@@ -23,9 +24,9 @@ function readSnapshot() {
 // Ko, ce qui reste raisonnable à versionner comme les autres fichiers de
 // server/data/runtime/.
 export function saveFlashscoreSnapshot({ matchCount, teams }) {
-  fs.mkdirSync(path.dirname(SNAPSHOT_FILE_PATH), { recursive: true });
   const snapshot = { fetchedAt: new Date().toISOString(), matchCount, teamCount: teams.length, teams };
-  fs.writeFileSync(SNAPSHOT_FILE_PATH, JSON.stringify(snapshot, null, 2), 'utf8');
+  // Atomique et réessayée : un instantané Apify (payant) refusé par OneDrive était perdu.
+  writeJsonAtomic(SNAPSHOT_FILE_PATH, snapshot);
   return snapshot;
 }
 

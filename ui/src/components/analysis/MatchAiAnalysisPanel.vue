@@ -20,7 +20,9 @@ defineEmits(['run-pre-match', 'run-post-match']);
 
 <template>
   <div class="match-ai">
-    <p v-if="!connected" class="cm-text-muted match-ai__hint">Connectez une clé API Anthropic depuis Réglages > Connexion IA pour activer l'analyse IA.</p>
+    <p v-if="!connected" class="cm-text-muted match-ai__hint">
+      Claude Code n'est pas configuré — il manque le jeton <code>CLAUDE_CODE_OAUTH_TOKEN</code> dans <code>server/.env</code> (obtenu une fois via <code>claude setup-token</code>). Inclus dans votre abonnement, sans coût supplémentaire.
+    </p>
 
     <template v-else-if="!entry?.analysis">
       <template v-if="allowPreMatch">
@@ -28,7 +30,7 @@ defineEmits(['run-pre-match', 'run-post-match']);
           <template #icon><AppIcon name="bolt" :size="14" /></template>
           Lancer l'analyse IA
         </AppButton>
-        <p class="cm-text-muted match-ai__hint">Commentaire qualitatif de Claude en complément du chiffrage du moteur — coût de quelques centimes.</p>
+        <p class="cm-text-muted match-ai__hint">Commentaire qualitatif de Claude en complément du chiffrage du moteur — via Claude Code, inclus dans l'abonnement.</p>
       </template>
       <p v-else class="cm-text-muted match-ai__hint">
         Aucune analyse avant-match n'a été faite pour ce match — l'analyse après-match nécessite une analyse avant-match préalable.

@@ -23,6 +23,7 @@ import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import { ESPN_LEAGUE_SLUGS, fetchEvents, fetchSeasonMatchDays, fetchStandings } from './espnMatchStatsProvider.js';
 import { findBestTeamNameMatch } from '../../utils/teamNameMatch.js';
+import { readJsonFile, writeJsonAtomic } from '../../utils/atomicJson.js';
 
 const execFileAsync = promisify(execFile);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -32,14 +33,6 @@ const STANDINGS_FILE = path.join(RUNTIME_DIR, 'standings-web.json');
 const MERGE_CALENDAR_SCRIPT = path.resolve(__dirname, '../../../scripts/merge-season-calendar.mjs');
 
 const DEFAULT_CONCURRENCY = 4;
-
-function readJson(file, fallback) {
-  try {
-    return JSON.parse(fs.readFileSync(file, 'utf8'));
-  } catch {
-    return fallback;
-  }
-}
 
 async function pool(items, size, worker) {
   let cursor = 0;
@@ -62,10 +55,15 @@ function currentSeasonYear(now = new Date()) {
   return now.getUTCMonth() >= 6 ? now.getUTCFullYear() : now.getUTCFullYear() - 1;
 }
 
-/** Noms d'équipe déjà employés par le projet, pour éviter les doublons. */
+/**
+ * Noms d'équipe déjà employés par le projet, pour éviter les doublons. Lu tel
+ * quel ou pas du tout (cf. utils/atomicJson.js) : lu « vide » pendant
+ * qu'OneDrive le tenait, le calendrier laissait passer les noms d'ESPN tels
+ * quels, donc des doublons.
+ */
 function knownNamesByLeague() {
   const byLeague = new Map();
-  for (const fixture of readJson(CALENDAR_FILE, [])) {
+  for (const fixture of readJsonFile(CALENDAR_FILE, [])) {
     if (!fixture?.league) continue;
     if (!byLeague.has(fixture.league)) byLeague.set(fixture.league, new Set());
     byLeague.get(fixture.league).add(fixture.homeName);
@@ -174,7 +172,10 @@ export async function refreshCalendarFromEspn({
  */
 export async function refreshStandingsFromEspn({ leagues = null, onProgress = null } = {}) {
   const wanted = leagues ? Object.entries(ESPN_LEAGUE_SLUGS).filter(([name]) => leagues.includes(name)) : Object.entries(ESPN_LEAGUE_SLUGS);
-  const stored = readJson(STANDINGS_FILE, {});
+  // Illisible = erreur, jamais table vide : réécrit en fin de passe, le
+  // fichier n'aurait plus gardé que les championnats de cette passe, et les
+  // pénalités de points reportées d'une fois sur l'autre auraient disparu.
+  const stored = readJsonFile(STANDINGS_FILE, {});
   const report = { leagues: 0, rows: 0, unavailable: [], deductionsKept: [], staleKept: [], anomalies: [] };
   const now = new Date().toISOString();
 
@@ -253,7 +254,7 @@ export async function refreshStandingsFromEspn({ leagues = null, onProgress = nu
     onProgress?.({ phase: 'league', league: leagueName, rows: merged.length });
   }
 
-  if (report.leagues) fs.writeFileSync(STANDINGS_FILE, `${JSON.stringify(stored, null, 2)}\n`, 'utf8');
+  if (report.leagues) writeJsonAtomic(STANDINGS_FILE, stored, { finalNewline: true });
   return report;
 }
 

@@ -1,6 +1,6 @@
-import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readJsonFile, writeJsonAtomic } from '../../utils/atomicJson.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CACHE_FILE_PATH = path.resolve(__dirname, '../../../data/runtime/team-stats-cache.json');
@@ -8,32 +8,39 @@ const CACHE_FILE_PATH = path.resolve(__dirname, '../../../data/runtime/team-stat
 /**
  * Cache disque simple pour les statistiques d'équipes (API externe payante
  * et limitée en volume) : chaque entrée expire après sa propre durée de vie.
+ *
+ * Illisible (OneDrive l'envoie juste après chaque écriture, et une analyse en
+ * enchaîne plusieurs) : en LECTURE, c'est un cache manquant, la donnée est
+ * redemandée à sa source. Il n'est en revanche jamais relu comme vide avant
+ * une écriture : tout le cache y passait, soit autant de requêtes à refaire
+ * sur un quota limité.
  */
-function readCache() {
+function readCacheOrEmpty() {
   try {
-    if (fs.existsSync(CACHE_FILE_PATH)) return JSON.parse(fs.readFileSync(CACHE_FILE_PATH, 'utf8'));
-  } catch {
-    // Cache corrompu : on repart d'un cache vide plutôt que de faire échouer l'appli.
+    return readJsonFile(CACHE_FILE_PATH, {});
+  } catch (error) {
+    console.warn(`[cache stats] ${error.message}`);
+    return {};
   }
-  return {};
-}
-
-function writeCache(cache) {
-  fs.mkdirSync(path.dirname(CACHE_FILE_PATH), { recursive: true });
-  fs.writeFileSync(CACHE_FILE_PATH, JSON.stringify(cache, null, 2), 'utf8');
 }
 
 export function getCachedValue(key, ttlMs) {
-  const entry = readCache()[key];
+  const entry = readCacheOrEmpty()[key];
   if (!entry) return null;
   if (Date.now() - entry.cachedAt > ttlMs) return null;
   return entry.value;
 }
 
 export function setCachedValue(key, value) {
-  const cache = readCache();
-  cache[key] = { value, cachedAt: Date.now() };
-  writeCache(cache);
+  try {
+    const cache = readJsonFile(CACHE_FILE_PATH, {});
+    cache[key] = { value, cachedAt: Date.now() };
+    writeJsonAtomic(CACHE_FILE_PATH, cache);
+  } catch (error) {
+    // Pas mis en cache cette fois : l'appelant a sa valeur, elle sera
+    // simplement redemandée la prochaine fois.
+    console.warn(`[cache stats] ${key} non enregistré : ${error.message}`);
+  }
   return value;
 }
 
@@ -45,7 +52,7 @@ export function setCachedValue(key, value) {
  * saison que getCachedValue protège par fraîcheur.
  */
 export function getCachedEntriesByPrefix(prefix) {
-  const cache = readCache();
+  const cache = readCacheOrEmpty();
   return Object.entries(cache)
     .filter(([key]) => key.startsWith(prefix))
     .map(([key, entry]) => ({ key, value: entry.value, cachedAt: entry.cachedAt }));

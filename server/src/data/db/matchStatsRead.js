@@ -589,7 +589,12 @@ export function lineupsFromStore(homeName, isoDate, { database = openDb() } = {}
       substitutes: joueurs.filter((p) => p.starter !== true)
     };
   };
-  return { available: true, source: 'fotmob', fixtureId: m.fotmob_id ?? m.match_key, date: m.date, home: camp('home'), away: camp('away') };
+  const home = camp('home');
+  const away = camp('away');
+  // `teams` EN PLUS de `home`/`away` : c'est ce tableau que l'écran de compo
+  // parcourt (TeamStatsModal.vue) — sans lui, un match déjà en magasin
+  // répondait `available: true` et n'affichait pourtant aucune équipe.
+  return { available: true, source: 'fotmob', fixtureId: m.fotmob_id ?? m.match_key, date: m.date, home, away, teams: [home, away] };
 }
 
 /**
@@ -963,6 +968,31 @@ export function officialStandings(league, { season = null, database = openDb() }
   };
 }
 
+/**
+ * Championnats dont les rencontres jouées récemment n'ont PAS de statistiques
+ * d'équipe (corners, tirs, cartons…) dans `team_stats` — certaines coupes
+ * (Taça de Portugal, Copa Chile…) ne sont couvertes que sur le score, jamais
+ * sur le détail, alors que le reste du magasin est quasi entièrement à 100 %.
+ * Fenêtre glissante plutôt que la saison complète par compétition (bornes
+ * différentes selon seasonWindows.js) : on veut savoir si la couverture est
+ * bonne EN CE MOMENT, pas historiquement. `minPlayed` évite qu'une coupe qui
+ * vient de commencer (1 ou 2 matchs joués) ressorte sur un simple hasard.
+ */
+export function leaguesWithIncompleteStats({ database = openDb(), sinceDate = null, threshold = 0.9, minPlayed = 5 } = {}) {
+  const depuis = sinceDate ?? new Date(Date.now() - 120 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  const rows = database
+    .prepare(
+      `SELECT m.league AS league, COUNT(*) AS joues,
+         SUM(CASE WHEN t.match_key IS NOT NULL THEN 1 ELSE 0 END) AS avecStats
+       FROM matches m
+       LEFT JOIN team_stats t ON t.match_key = m.match_key AND t.side = 'home'
+       WHERE m.date >= @depuis AND m.home_goals IS NOT NULL AND m.league <> ''
+       GROUP BY m.league`
+    )
+    .all({ depuis });
+  return rows.filter((r) => r.joues >= minPlayed && r.avecStats / r.joues < threshold).map((r) => r.league);
+}
+
 /** Comptes globaux du magasin, en une requête plutôt qu'un balayage. */
 export function storeStatus({ database = openDb() } = {}) {
   const m = database.prepare('SELECT COUNT(*) AS count, MAX(date) AS lastMatchDate, MAX(updated_at) AS lastUpdatedAt FROM matches').get();
@@ -972,6 +1002,7 @@ export function storeStatus({ database = openDb() } = {}) {
     count: m.count,
     playersCount: p.playersCount,
     leagues,
+    incompleteStatsLeagues: leaguesWithIncompleteStats({ database }),
     lastMatchDate: m.lastMatchDate ?? null,
     lastUpdatedAt: m.lastUpdatedAt ?? null
   };

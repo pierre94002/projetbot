@@ -4,7 +4,8 @@ import {
   getTeamWebAverages,
   getMatchStatsStatus
 } from '../../data/repositories/matchStatsWebRepository.js';
-import { getCoverage, getRefreshStatus } from '../../data/providers/espnMatchStatsRefresh.js';
+import { getCoverage } from '../../data/providers/espnMatchStatsRefresh.js';
+import { readRefreshStatus } from '../../data/repositories/refreshStatusRepository.js';
 import { isRefreshRunning } from '../../data/providers/refreshLock.js';
 // La passe manuelle est LA MÊME que la passe automatique : FotMob seul,
 // calendrier, classements officiels, rencontres nouvelles puis feuilles
@@ -13,7 +14,44 @@ import { refreshNow } from '../../jobs/matchStatsAutoRefresh.js';
 import { playerSeasonStats, seasonsForLeague, leagueLeaders, cupBracket } from '../../data/db/matchStatsRead.js';
 import { cupsForLeague } from '../../data/providers/leagueCups.js';
 import { seasonLabel } from '../../data/providers/seasonWindows.js';
+import { oddsProfile } from '../../data/db/oddsProfileRead.js';
 import { ApiError, requireStringParam, optionalPositiveInt } from '../middlewares/errorHandler.js';
+
+/**
+ * Profilage de cotes d'un match à venir : les matchs passés dont les cotes
+ * ressemblaient aux siennes, et comment ils ont fini (oddsProfileRead.js).
+ * Les cotes du jour viennent de l'appelant, qui les tient de The Odds API.
+ */
+export function getOddsProfile(req, res) {
+  const league = requireStringParam(req.query.league, 'league');
+  const cote = (valeur, nom, requise) => {
+    if (valeur === undefined || valeur === '') {
+      if (requise) throw new ApiError(400, `Le paramètre "${nom}" est requis (cote décimale).`);
+      return null;
+    }
+    const n = Number(valeur);
+    if (!Number.isFinite(n) || n <= 1) throw new ApiError(400, `Le paramètre "${nom}" doit être une cote décimale supérieure à 1.`);
+    return n;
+  };
+  const odds = {
+    home: cote(req.query.odds1, 'odds1', true),
+    draw: cote(req.query.oddsDraw, 'oddsDraw', false),
+    away: cote(req.query.odds2, 'odds2', true)
+  };
+  const tolerance = req.query.tolerance === undefined ? 13 : Number(req.query.tolerance);
+  res.json(
+    oddsProfile({
+      league,
+      home: req.query.home ?? null,
+      away: req.query.away ?? null,
+      kickoff: req.query.kickoff ?? null,
+      odds,
+      scope: req.query.scope,
+      segment: req.query.segment,
+      tolerance
+    })
+  );
+}
 
 /** Matchs d'une équipe avec stats d'équipe complètes + stats joueurs, match par match (import quotidien 7h30). */
 export function getTeamMatchStats(req, res) {
@@ -125,7 +163,11 @@ export function getLeagueSeasons(req, res) {
 
 /** Couverture des statistiques, championnat par championnat. */
 export function getMatchStatsCoverage(req, res) {
-  res.json({ ...getCoverage(), refresh: { running: isRefreshRunning(), last: getRefreshStatus() } });
+  // « Dernier passage » : la dernière passe de l'actualisation complète
+  // (refresh-status.json), et non plus le témoin figé de l'ancien
+  // rafraîchissement ESPN.
+  const etat = readRefreshStatus();
+  res.json({ ...getCoverage(), refresh: { running: isRefreshRunning(), last: etat.history?.[0] ?? null } });
 }
 
 /**
@@ -136,6 +178,7 @@ export function getMatchStatsCoverage(req, res) {
  * sur GET /api/match-stats/coverage.
  */
 export function postMatchStatsRefresh(req, res) {
+  // Même passe que POST /api/refresh ; le verrou est lu entre processus.
   const alreadyRunning = isRefreshRunning();
   if (!alreadyRunning) {
     refreshNow().catch((error) => {

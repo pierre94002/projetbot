@@ -174,12 +174,12 @@ async function remove(bet) {
   }
 }
 
-// --- Value bets : matchs où la cote de notre moteur (marché + structurel +
-// exogène fusionnés) paie mieux que ce que le marché propose réellement sur
-// l'issue domicile (seul marché où la mise Kelly conseillée est calculée —
-// cf. evaluateStakingDecision côté serveur). Filtré par date comme la page
-// Matchs, pour ne scanner que "aujourd'hui / cette semaine / etc." plutôt
-// que tout charger d'un coup.
+// --- Value bets : matchs où l'un de VOS bookmakers paie une issue 1N2
+// au-dessus de sa probabilité juste, fixée par les bookmakers de référence
+// (Pinnacle s'il cote le match, sinon les paliers suivants), marge retirée
+// (cf. fairFromBookmakers dans valueFinder.js côté serveur). Filtré par date comme la page Matchs,
+// pour ne scanner que "aujourd'hui / cette semaine / etc." plutôt que tout
+// charger d'un coup.
 function toDateKey(isoString) {
   return isoString?.slice(0, 10) ?? null;
 }
@@ -220,13 +220,13 @@ const scanned = ref(false);
 // Un seul scan alimente TROIS listes distinctes et indépendamment
 // cherchables, plutôt qu'une liste unique qui bascule entre value bets et
 // repli sur les paris sûrs :
-// - valueBets : edge positif détecté par le moteur (issue domicile — seul
-//   marché évalué par evaluateStakingDecision).
+// - valueBets : une issue 1N2 que l'un de vos bookmakers paie au-dessus de
+//   sa probabilité juste (cf. valueFinder.js côté serveur).
 // - safestPicksPool : le pari le plus sûr par marché et par match (≥ 1.35,
 //   cf. safestPicks.js) — "les plus probables" au sens intéressant à jouer.
 // - allPicksPool : TOUS les pronostics du moteur, sans filtre de seuil —
 //   pour parier sur autre chose que ce que les deux listes ci-dessus retiennent.
-const valueBets = ref([]); // [{ matchId, homeName, awayName, league, commenceTime, market, pick, odds, modelOdds, edgePercent, recommendedStake }]
+const valueBets = ref([]); // [{ matchId, homeName, awayName, league, commenceTime, market, pick, odds, modelOdds, edgePercent, recommendedStake, bookmaker, oddsField }]
 const safestPicksPool = ref([]); // même forme, sans modelOdds/edgePercent/recommendedStake
 const allPicksPool = ref([]); // même forme que safestPicksPool
 const selectedByMatch = ref(new Map()); // matchId -> candidate sélectionné (1 max par match)
@@ -277,7 +277,10 @@ async function scanMatches() {
       const data = result.value;
       const base = { matchId: match.matchId, homeName: match.home, awayName: match.away, league: match.league, commenceTime: match.commenceTime };
 
-      if (data.staking?.action === 'RECOMMENDED' && data.market.odds1 >= MIN_DISPLAYED_ODDS) {
+      const pari = data.staking;
+      if (pari?.action === 'RECOMMENDED' && (pari.displayedOdds ?? pari.odds) >= MIN_DISPLAYED_ODDS) {
+        const CHAMPS = { home: 'odds1', draw: 'oddsDraw', away: 'odds2' };
+        const LIBELLES = { home: `${match.home} gagne`, draw: 'Match nul', away: `${match.away} gagne` };
         foundValue.push({
           ...base,
           // Même marché que la prédiction "Résultat" ci-dessous (issue 1X2) —
@@ -286,12 +289,15 @@ async function scanMatches() {
           // ('1N2' vs 'Résultat' coexistaient avant, bug confirmé en prod).
           market: 'Résultat',
           marketId: 'result',
-          params: { outcome: 'home' },
-          pick: `${match.home} gagne`,
-          odds: data.market.odds1,
-          modelOdds: data.trueOdds.home,
+          params: { outcome: pari.outcome },
+          pick: LIBELLES[pari.outcome],
+          // La cote du bookmaker qui paie le mieux, telle qu'il l'affiche.
+          odds: pari.displayedOdds ?? pari.odds,
+          bookmaker: pari.bookmakerTitle,
+          modelOdds: pari.fairOdds,
           edgePercent: data.edgePercent,
-          recommendedStake: data.staking.stake,
+          recommendedStake: pari.stake,
+          oddsField: CHAMPS[pari.outcome],
           byBookmaker: data.market.byBookmaker ?? []
         });
       }
@@ -316,14 +322,24 @@ async function scanMatches() {
           params: p.params ?? null
         });
       }
+      // Le marqueur « value bet » et l'avantage ne vont qu'au pronostic
+      // « Résultat » qui porte sur l'issue réellement pariée : le pari value
+      // peut viser le nul ou l'extérieur quand le pronostic dit domicile.
       for (const marketPrediction of marketPredictions) {
+        const estResultat = marketPrediction.marketId === 'result';
+        const issue = marketPrediction.predictedOutcome;
+        const candidat = estResultat ? (pari?.candidates ?? []).find((c) => c.outcome === issue) : null;
+        const surLePari = estResultat && pari?.action === 'RECOMMENDED' && pari.outcome === issue;
         predictionEntries.push({
           matchId: match.matchId,
           homeName: match.home,
           awayName: match.away,
           league: match.league,
-          action: data.staking?.action ?? null,
-          edgePercent: data.edgePercent,
+          // Coup d'envoi : le règlement automatique retrouve ainsi le résultat
+          // d'un match scanné plusieurs jours avant d'être joué.
+          commenceTime: match.commenceTime ?? null,
+          action: surLePari ? 'RECOMMENDED' : pari?.action === 'RECOMMENDED' ? 'PASS' : pari?.action ?? null,
+          edgePercent: candidat ? Number((candidat.ev * 100).toFixed(2)) : null,
           ...marketPrediction
         });
       }
@@ -379,8 +395,8 @@ const filteredValueBets = computed(() => {
 });
 
 // Rangé par ligue plutôt qu'en liste plate — un value bet est toujours 1 par
-// match (seule l'issue domicile est évaluée), donc pas besoin d'un
-// sous-regroupement par rencontre en plus.
+// match (le moteur ne retient que l'issue au meilleur avantage), donc pas
+// besoin d'un sous-regroupement par rencontre en plus.
 const groupedValueBets = computed(() => {
   const byLeague = new Map();
   for (const c of filteredValueBets.value) {
@@ -717,7 +733,7 @@ onMounted(() => {
     </AppCard>
     </div>
 
-    <AppCard v-else-if="activeTab === 'value'" key="value" title="Value bets détectées" subtitle="Cote de notre moteur vs cote du marché — edge positif sur l'issue domicile">
+    <AppCard v-else-if="activeTab === 'value'" key="value" title="Value bets détectées" subtitle="Cote de vos bookmakers face à la cote juste des bookmakers de référence, Pinnacle d'abord, marge retirée">
       <AppTextField v-model="valueBetsSearchQuery" placeholder="Rechercher (équipe, marché, pick)…" class="value-bets__search">
         <template #icon><AppIcon name="search" :size="14" /></template>
       </AppTextField>
@@ -739,7 +755,7 @@ onMounted(() => {
         v-else-if="filteredValueBets.length === 0"
         icon="target"
         title="Aucun value bet détecté"
-        description="Aucun edge positif sur la période choisie pour l'instant."
+        description="Aucun de vos bookmakers ne paie au-dessus de la cote juste sur la période choisie."
       />
 
       <div v-else class="value-bets-list">
@@ -769,8 +785,8 @@ onMounted(() => {
                 </p>
               </div>
               <div class="value-bet-row__figures">
-                <span class="cm-text-muted">modèle <span class="cm-numeric">{{ formatOdds(c.modelOdds) }}</span></span>
-                <span class="cm-text-muted">marché <span class="cm-numeric">{{ formatOdds(c.odds) }}</span></span>
+                <span class="cm-text-muted">juste <span class="cm-numeric">{{ formatOdds(c.modelOdds) }}</span></span>
+                <span class="cm-text-muted">{{ c.bookmaker ?? 'marché' }} <span class="cm-numeric">{{ formatOdds(c.odds) }}</span></span>
                 <span class="cm-numeric cm-positive value-bet-row__edge">{{ c.edgePercent == null ? '—' : `+${c.edgePercent.toFixed(1)}%` }}</span>
                 <span class="cm-text-muted">Kelly <span class="cm-numeric">{{ formatCurrency(c.recommendedStake) }}</span></span>
                 <button
@@ -792,7 +808,7 @@ onMounted(() => {
 
             <div v-if="expandedBookmakers.has(c.matchId) && c.byBookmaker?.length" class="bookmaker-detail">
               <span v-for="bk in c.byBookmaker" :key="bk.key" class="bookmaker-detail__item">
-                {{ bk.title }} <span class="cm-numeric">{{ formatOdds(bk.odds1) }}</span>
+                {{ bk.title }} <span class="cm-numeric">{{ formatOdds(bk[c.oddsField ?? 'odds1']) }}</span>
               </span>
             </div>
           </div>

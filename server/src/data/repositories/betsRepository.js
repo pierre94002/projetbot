@@ -1,23 +1,20 @@
-import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import crypto from 'node:crypto';
+import { readJsonFile, writeJsonAtomic } from '../../utils/atomicJson.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const BETS_FILE_PATH = path.resolve(__dirname, '../../../data/runtime/bets.json');
 
+// Un carnet illisible fait échouer la lecture au lieu de passer pour un
+// carnet vide : un pari saisi à ce moment-là l'aurait réécrit avec ce seul
+// pari (cf. utils/atomicJson.js).
 function readBets() {
-  try {
-    if (fs.existsSync(BETS_FILE_PATH)) return JSON.parse(fs.readFileSync(BETS_FILE_PATH, 'utf8'));
-  } catch {
-    // Fichier corrompu : on repart d'un carnet vide plutôt que de faire échouer l'appli.
-  }
-  return [];
+  return readJsonFile(BETS_FILE_PATH, []);
 }
 
 function writeBets(bets) {
-  fs.mkdirSync(path.dirname(BETS_FILE_PATH), { recursive: true });
-  fs.writeFileSync(BETS_FILE_PATH, JSON.stringify(bets, null, 2), 'utf8');
+  writeJsonAtomic(BETS_FILE_PATH, bets);
 }
 
 export function listBets() {
@@ -61,20 +58,67 @@ function deriveBetStatus(legs) {
   return 'won';
 }
 
+/**
+ * Sélections créées avant le suivi par sélection : un ticket à une seule
+ * sélection porte son statut au niveau du ticket. On le reporte sur la
+ * sélection plutôt que de la tenir pour « en attente », ce qui rouvrirait un
+ * ticket déjà réglé.
+ */
+function completerStatuts(bet) {
+  for (const l of bet.legs) {
+    if (!l.status) l.status = bet.legs.length === 1 && bet.status && bet.status !== 'pending' ? bet.status : 'pending';
+  }
+}
+
+/** Statut posé à la main (Mes paris) : le règlement automatique n'y reviendra pas. */
 export function updateBetLegStatus(id, legIndex, status) {
   const bets = readBets();
   const bet = bets.find((b) => b.id === id);
   if (!bet) return null;
   const leg = bet.legs[legIndex];
   if (!leg) return null;
+  completerStatuts(bet);
   leg.status = status;
-  // Paris créés avant le suivi par sélection : les autres jambes sans statut
-  // sont traitées comme "en attente" plutôt que de bloquer le calcul.
-  for (const l of bet.legs) if (!l.status) l.status = 'pending';
+  leg.settledBy = status === 'pending' ? null : 'manual';
+  leg.settledScore = null;
   bet.status = deriveBetStatus(bet.legs);
   bet.settledAt = bet.status === 'pending' ? null : new Date().toISOString();
   writeBets(bets);
   return bet;
+}
+
+/**
+ * Règlements AUTOMATIQUES de sélections, d'une seule lecture et d'une seule
+ * écriture du carnet. Chaque sélection garde le score qui l'a réglée.
+ *
+ * @param {{ betId: string, legIndex: number, status: string, score: string, resultId: string|null }[]} settlements
+ * @returns {number} sélections modifiées
+ */
+export function applyBetLegSettlements(settlements) {
+  if (!settlements.length) return 0;
+  const bets = readBets();
+  const byId = new Map(bets.map((b) => [b.id, b]));
+  const touches = new Set();
+  let n = 0;
+  for (const s of settlements) {
+    const bet = byId.get(s.betId);
+    const leg = bet?.legs[s.legIndex];
+    if (!leg) continue;
+    completerStatuts(bet);
+    leg.status = s.status;
+    leg.settledBy = 'auto';
+    leg.settledScore = s.score;
+    leg.settledResultId = s.resultId ?? null;
+    touches.add(bet);
+    n++;
+  }
+  const now = new Date().toISOString();
+  for (const bet of touches) {
+    bet.status = deriveBetStatus(bet.legs);
+    bet.settledAt = bet.status === 'pending' ? null : now;
+  }
+  if (n) writeBets(bets);
+  return n;
 }
 
 export function deleteBet(id) {

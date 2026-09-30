@@ -19,6 +19,7 @@ import { resolveTeamProfileViaWeb, WEB_LOOKUP_INCOMPLETE } from '../src/core/ai/
 import { saveTeamProfile, listTeamProfileFreshness } from '../src/data/repositories/teamProfileRepository.js';
 import { getWebStandings } from '../src/data/repositories/webStandingsRepository.js';
 import { findBestTeamNameMatch } from '../src/utils/teamNameMatch.js';
+import { enregistrerSansPerdre } from '../src/utils/atomicJson.js';
 
 const CL_LABEL = 'UEFA Champions League';
 const EL_LABEL = 'UEFA Europa League';
@@ -82,7 +83,8 @@ async function main() {
       const profile = await resolveTeamProfileViaWeb({ teamName, league });
       consecutiveFailures = 0;
       if (profile) {
-        saveTeamProfile(teamName, profile);
+        // Recherche web payée : jamais jetée parce qu'OneDrive envoie encore le profil précédent.
+        await enregistrerSansPerdre(() => saveTeamProfile(teamName, profile), 'profils d\'équipe');
         done++;
         console.log(`[${index}/${todo.length}] OK  ${teamName} (${league}) — ${profile.players.length} joueurs, ${((Date.now() - startedAt) / 1000).toFixed(1)}s`);
       } else {

@@ -16,6 +16,8 @@ import flashscoreRoutes from './flashscore.routes.js';
 import seasonCalendarRoutes from './seasonCalendar.routes.js';
 import matchStatsRoutes from './matchStats.routes.js';
 import dataVersionRoutes from './dataVersion.routes.js';
+import refreshRoutes from './refresh.routes.js';
+import matchNotesRoutes from './matchNotes.routes.js';
 
 const router = Router();
 
@@ -38,5 +40,7 @@ router.use('/flashscore', flashscoreRoutes);
 router.use('/season-calendar', seasonCalendarRoutes);
 router.use('/match-stats', matchStatsRoutes);
 router.use('/data-version', dataVersionRoutes);
+router.use('/refresh', refreshRoutes);
+router.use('/match-notes', matchNotesRoutes);
 
 export default router;

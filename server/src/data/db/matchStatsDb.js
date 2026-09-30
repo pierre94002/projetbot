@@ -232,6 +232,22 @@ const REGISTRY_DDL = [
   rows TEXT NOT NULL,
   PRIMARY KEY (league, season, table_name)
 ) WITHOUT ROWID;`,
+  // Cotes d'AVANT-MATCH d'une rencontre du magasin (1X2, plus ou moins 2,5
+  // buts). FotMob n'en publie pas : elles viennent de football-data.co.uk,
+  // rattachées à la rencontre FotMob dont le score fait foi (voir
+  // footballDataOdds.js). `basis` dit lesquelles : « moyenne clôture »,
+  // « Pinnacle clôture »… Elles servent au profilage de cotes.
+  `CREATE TABLE IF NOT EXISTS match_odds (
+  match_key TEXT PRIMARY KEY REFERENCES matches(match_key) ON DELETE CASCADE,
+  source TEXT NOT NULL,
+  basis TEXT NOT NULL,
+  home REAL NOT NULL,
+  draw REAL,
+  away REAL NOT NULL,
+  over25 REAL,
+  under25 REAL,
+  fetched_at TEXT NOT NULL
+) WITHOUT ROWID;`,
   'CREATE INDEX IF NOT EXISTS idx_teams_slug ON teams(slug);',
   'CREATE INDEX IF NOT EXISTS idx_team_aliases_slug ON team_aliases(slug);',
   'CREATE INDEX IF NOT EXISTS idx_people_slug ON people(slug);',
@@ -239,10 +255,34 @@ const REGISTRY_DDL = [
   'CREATE INDEX IF NOT EXISTS idx_people_aliases_slug ON people_aliases(slug);'
 ];
 
+/**
+ * Compositions AVANT match, table à part de `matches`. Une rencontre non
+ * encore jouée n'y entre JAMAIS : `matches`/`storedEntriesIndex` servent à
+ * reconnaître les rencontres déjà en magasin (`known.has(matchKey)` dans
+ * fotMobRefresh.js), et une ligne posée là avant le coup d'envoi ferait
+ * croire au reste de l'import que la rencontre est déjà connue — elle ne
+ * recevrait alors jamais son vrai score. `fotmob_id` seul identifie la
+ * ligne : simple à écrire à chaque passage du pré-chargement (cf.
+ * lineupPrefetch.js), une ligne remplace l'ancienne, purgée après le match.
+ */
+const UPCOMING_LINEUPS_DDL = `CREATE TABLE IF NOT EXISTS upcoming_lineups (
+  fotmob_id TEXT PRIMARY KEY,
+  date TEXT NOT NULL,
+  kickoff TEXT,
+  league TEXT,
+  home_id TEXT,
+  away_id TEXT,
+  home_name TEXT NOT NULL,
+  away_name TEXT NOT NULL,
+  payload TEXT NOT NULL,
+  fetched_at TEXT NOT NULL
+) WITHOUT ROWID;`;
+
 const DDL = [
   MATCHES_DDL,
   teamDdl(),
   playerDdl(),
+  UPCOMING_LINEUPS_DDL,
   ...REGISTRY_DDL,
   'CREATE INDEX IF NOT EXISTS idx_matches_date ON matches(date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_league_date ON matches(league, date);',
@@ -268,7 +308,9 @@ const DDL = [
   // plafonnait à une rencontre toutes les trois secondes au lieu de dix par
   // seconde. Mesuré le 2026-09-22 ; c'était aussi ce qui faisait durer
   // quatre minutes vingt recherches de doublons.
-  'CREATE INDEX IF NOT EXISTS idx_matches_fotmob_id ON matches(fotmob_id) WHERE fotmob_id IS NOT NULL;'
+  'CREATE INDEX IF NOT EXISTS idx_matches_fotmob_id ON matches(fotmob_id) WHERE fotmob_id IS NOT NULL;',
+  'CREATE INDEX IF NOT EXISTS idx_upcoming_lineups_date ON upcoming_lineups(date);',
+  'CREATE INDEX IF NOT EXISTS idx_upcoming_lineups_home ON upcoming_lineups(home_id, date);'
 ];
 
 /**
@@ -708,6 +750,90 @@ export function markNoSheet(matchKeys, rev, { database = openDb() } = {}) {
     throw error;
   }
   return n;
+}
+
+/**
+ * Rencontres récentes marquées « sans feuille » qu'on peut redemander à la
+ * source par leur identifiant : une feuille publiée par FotMob quelques
+ * heures APRÈS notre relevé n'était jamais relue (39 rencontres de septembre
+ * 2026 dans ce cas). L'identifiant 0, partagé par plusieurs rencontres chez
+ * FotMob, n'identifie rien : exclu.
+ *
+ * @returns {{ fotmobId: string, league: string }[]}
+ */
+export function recentNoSheet({ since, database = openDb() }) {
+  return database
+    .prepare(`SELECT fotmob_id AS fotmobId, league FROM matches
+              WHERE date >= ? AND json_extract(meta, '$.noSheet') = 1
+                AND fotmob_id IS NOT NULL AND fotmob_id <> '' AND fotmob_id <> '0'`)
+    .all(since)
+    .map((r) => ({ fotmobId: String(r.fotmobId), league: r.league }));
+}
+
+/**
+ * Rencontres terminées récemment (score connu), pour l'analyse IA après-match
+ * automatique (cf. autoMatchAiTrigger.js) — équipes, championnat, jour et
+ * score : de quoi retrouver l'analyse avant-match par équipes (jamais par
+ * matchId, cf. matchAiAnalysisRepository.findPreMatchAnalysisByTeams) et
+ * construire la revue sans passer par match-results.json.
+ */
+export function recentlyFinished({ since, database = openDb() }) {
+  return database
+    .prepare(
+      `SELECT date, league, home_name AS homeName, away_name AS awayName, home_goals AS homeGoals, away_goals AS awayGoals
+       FROM matches
+       WHERE date >= ? AND home_goals IS NOT NULL AND away_goals IS NOT NULL
+       ORDER BY date ASC`
+    )
+    .all(since);
+}
+
+/**
+ * Enregistre la composition d'un match à venir (cf. lineupPrefetch.js).
+ * Une ligne par match, remplacée entière à chaque passage — jamais fusionnée
+ * avec l'ancienne : une composition qui change avant le coup d'envoi doit
+ * effacer la précédente, pas s'y mélanger.
+ */
+export function upsertUpcomingLineup(entry, { database = openDb() } = {}) {
+  database
+    .prepare(`INSERT INTO upcoming_lineups (fotmob_id, date, kickoff, league, home_id, away_id, home_name, away_name, payload, fetched_at)
+              VALUES (@fotmobId, @date, @kickoff, @league, @homeId, @awayId, @homeName, @awayName, @payload, @fetchedAt)
+              ON CONFLICT(fotmob_id) DO UPDATE SET
+                date = excluded.date, kickoff = excluded.kickoff, league = excluded.league,
+                home_id = excluded.home_id, away_id = excluded.away_id,
+                home_name = excluded.home_name, away_name = excluded.away_name,
+                payload = excluded.payload, fetched_at = excluded.fetched_at`)
+    .run({
+      fotmobId: String(entry.fotmobId),
+      date: entry.date,
+      kickoff: entry.kickoff ?? null,
+      league: entry.league ?? null,
+      homeId: entry.homeId ?? null,
+      awayId: entry.awayId ?? null,
+      homeName: entry.homeName,
+      awayName: entry.awayName,
+      payload: JSON.stringify(entry.payload),
+      fetchedAt: entry.fetchedAt ?? new Date().toISOString()
+    });
+}
+
+/** La composition déjà enregistrée pour ce match, `null` si aucune. */
+export function upcomingLineupByFotmobId(fotmobId, { database = openDb() } = {}) {
+  const row = database.prepare('SELECT payload, fetched_at AS fetchedAt FROM upcoming_lineups WHERE fotmob_id = ?').get(String(fotmobId));
+  return row ? { ...JSON.parse(row.payload), fetchedAt: row.fetchedAt } : null;
+}
+
+/** La composition déjà enregistrée pour l'équipe qui reçoit, à cette date (jour). */
+export function upcomingLineupByHome(homeId, date, { database = openDb() } = {}) {
+  const row = database
+    .prepare('SELECT payload, fetched_at AS fetchedAt FROM upcoming_lineups WHERE home_id = ? AND date = ?')
+    .get(homeId, date);
+  return row ? { ...JSON.parse(row.payload), fetchedAt: row.fetchedAt } : null;
+}
+
+/** Retire les lignes dont le jour est trop ancien pour compter encore. */
+export function pruneUpcomingLineups(before, { database = openDb() } = {}) {
+  return database.prepare('DELETE FROM upcoming_lineups WHERE date < ?').run(before).changes;
 }
 
 export function upsertMatches(entries, { database = openDb() } = {}) {

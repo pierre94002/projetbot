@@ -35,7 +35,7 @@ const FULL_STATS_BATCH_SIZE = 3;
 // Championnats sourcés d'abord des CLASSEMENTS disponibles (clés du magasin
 // local, donc résolubles par le serveur par construction), complétés par ceux
 // des matchs chargés. Se limiter aux matchs cotés masquait les championnats
-// peuplés par la tâche quotidienne sans cotes — Russie, Chine, League One et
+// peuplés par l'actualisation automatique sans cotes — Russie, Chine, League One et
 // Two avaient classement et statistiques sans aucun écran pour les afficher.
 const standingsLeagues = ref([]);
 

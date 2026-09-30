@@ -5,9 +5,15 @@ export const useMatchAiAnalysisStore = defineStore('matchAiAnalysis', {
   state: () => ({
     byMatchId: {}, // matchId -> entry | null
     loading: false,
-    running: false
+    running: false,
+    connected: false // Claude Code (headless) connecté sur ce poste — cf. claudeCodeClient.js
   }),
   actions: {
+    async fetchStatus() {
+      const { connected } = await matchAiAnalysisApi.getStatus();
+      this.connected = connected;
+      return connected;
+    },
     // Un seul appel pour peupler byMatchId pour TOUS les matchs déjà
     // analysés — sert aux badges "analyse IA disponible" dans les listes
     // (Matchs, Historique moteur), plutôt qu'un fetchForMatch par match visible.

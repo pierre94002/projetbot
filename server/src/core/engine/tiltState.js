@@ -1,6 +1,6 @@
-import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readJsonFile, writeJsonAtomic } from '../../utils/atomicJson.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const STATE_FILE_PATH = path.resolve(__dirname, '../../../data/runtime/tilt-state.json');
@@ -18,21 +18,17 @@ const DEFAULT_STATE = { currentDownswing: 0, circuitBreakerActive: false };
 
 function loadPersistedState() {
   try {
-    if (fs.existsSync(STATE_FILE_PATH)) {
-      const persisted = JSON.parse(fs.readFileSync(STATE_FILE_PATH, 'utf8'));
-      return { ...DEFAULT_STATE, ...persisted };
-    }
+    return { ...DEFAULT_STATE, ...readJsonFile(STATE_FILE_PATH, {}) };
   } catch {
-    // Fichier corrompu ou illisible : repli sur l'état par défaut.
+    // Illisible malgré les nouvelles tentatives (fichier corrompu) : repli sur l'état par défaut.
+    return { ...DEFAULT_STATE };
   }
-  return { ...DEFAULT_STATE };
 }
 
 let state = loadPersistedState();
 
 function persistState() {
-  fs.mkdirSync(path.dirname(STATE_FILE_PATH), { recursive: true });
-  fs.writeFileSync(STATE_FILE_PATH, JSON.stringify(state, null, 2), 'utf8');
+  writeJsonAtomic(STATE_FILE_PATH, state);
 }
 
 export function getTiltState() {

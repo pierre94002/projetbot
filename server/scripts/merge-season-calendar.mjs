@@ -58,11 +58,24 @@ function slug(text) {
     .replace(/^-+|-+$/g, '');
 }
 
+/**
+ * Un fichier absent vaut `fallback` ; un fichier PRÉSENT mais illisible
+ * arrête tout (code 2). Repartir d'un tableau vide, comme autrefois, aurait
+ * réécrit le calendrier de la saison avec la seule fenêtre du jour — il
+ * suffisait qu'OneDrive tienne le fichier au moment de la lecture.
+ */
 function readJson(p, fallback) {
-  try {
-    if (fs.existsSync(p)) return JSON.parse(fs.readFileSync(p, 'utf8'));
-  } catch (e) {
-    console.error(`Attention : ${p} illisible/corrompu (${e.message}), on repart de la valeur par défaut.`);
+  if (!fs.existsSync(p)) return fallback;
+  for (let essai = 1; essai <= 3; essai++) {
+    try {
+      return JSON.parse(fs.readFileSync(p, 'utf8'));
+    } catch (e) {
+      if (essai === 3) {
+        console.error(`${p} illisible (${e.message}) : rien n'est écrit.`);
+        process.exit(2);
+      }
+      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 200 * essai);
+    }
   }
   return fallback;
 }
@@ -90,6 +103,7 @@ let skipped = 0;
 let moved = 0;
 let removed = 0;
 let conflicts = 0;
+let unchanged = 0;
 const now = new Date().toISOString();
 
 for (const m of newMatches) {
@@ -175,8 +189,7 @@ for (const m of newMatches) {
       existing.updatedAt = now;
       moved++;
     } else if (atNewDate) {
-      atNewDate.updatedAt = now; // Déjà déplacé lors d'une exécution précédente.
-      updated++;
+      unchanged++; // Déjà déplacé lors d'une exécution précédente : rien à changer.
     } else {
       calendar.push({
         id: crypto.randomUUID(),
@@ -203,6 +216,10 @@ for (const m of newMatches) {
   const incomingHasScore = incomingHomeGoals !== null && incomingAwayGoals !== null;
 
   if (existing) {
+    // Empreinte avant fusion : une entrée que la source redit à l'identique
+    // n'est ni comptée « mise à jour » ni réhorodatée (le fichier n'était
+    // réécrit que pour changer updatedAt, toutes les trois heures).
+    const avant = JSON.stringify([existing.status, existing.homeGoals ?? null, existing.awayGoals ?? null, existing.round ?? null, existing.source ?? null, existing.date]);
     // Garde-fou : un score déjà connu n'est pas non plus remplacé en silence
     // par un score DIFFÉRENT. La règle juste en dessous ne protégeait que
     // contre l'effacement par une source en retard (score -> null) ; elle
@@ -233,16 +250,21 @@ for (const m of newMatches) {
     }
     // Entrée retrouvée à une autre date (re-programmation) : on la déplace au
     // lieu de laisser un fantôme derrière elle.
-    if (existing.date !== date) {
+    const deplacee = existing.date !== date;
+    if (deplacee) {
       existing.date = date;
       existing.matchId = `cal-${date}-${slug(existing.homeName)}-${slug(existing.awayName)}`;
       moved++;
-    } else {
-      updated++;
     }
     existing.round = round ?? existing.round ?? null;
     existing.source = source ?? existing.source ?? 'web';
-    existing.updatedAt = now;
+    const apres = JSON.stringify([existing.status, existing.homeGoals ?? null, existing.awayGoals ?? null, existing.round ?? null, existing.source ?? null, existing.date]);
+    if (apres === avant) {
+      unchanged++;
+    } else {
+      if (!deplacee) updated++;
+      existing.updatedAt = now;
+    }
   } else if (
     // La même affiche a DÉJÀ été jouée à quelques jours près : une source en
     // retard la réannonce "à venir" à une date décalée. Créer l'entrée
@@ -276,6 +298,7 @@ fs.mkdirSync(path.dirname(calendarPath), { recursive: true });
 // dossier OneDrive, et un writeFileSync direct y échouait sur 'UNKNOWN'
 // (errno -4094) dès que la synchronisation le tenait. Un renommage ferme
 // aussi la fenêtre où un lecteur verrait un calendrier à moitié écrit.
-writeWithRetry(calendarPath, JSON.stringify(calendar, null, 2));
+// Rien de nouveau : le fichier reste tel quel.
+if (created || updated || moved || removed) writeWithRetry(calendarPath, JSON.stringify(calendar, null, 2));
 
-console.log(JSON.stringify({ created, updated, skipped, moved, removed, conflicts, total: calendar.length }));
+console.log(JSON.stringify({ created, updated, unchanged, skipped, moved, removed, conflicts, total: calendar.length }));

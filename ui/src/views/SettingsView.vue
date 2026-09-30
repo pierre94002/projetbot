@@ -7,6 +7,7 @@ import { useAiAnalysisStore } from '@/stores/aiAnalysisStore.js';
 import { useFlashscoreStore } from '@/stores/flashscoreStore.js';
 import { generatorApi } from '@/services/generatorApi.js';
 import { matchStatsApi } from '@/services/matchStatsApi.js';
+import { refreshApi } from '@/services/refreshApi.js';
 import AppCard from '@/components/common/AppCard.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EngineConfigForm from '@/components/settings/EngineConfigForm.vue';
@@ -15,6 +16,7 @@ import DataGeneratorPanel from '@/components/settings/DataGeneratorPanel.vue';
 import AiConnectionForm from '@/components/settings/AiConnectionForm.vue';
 import AiAnalysisPanel from '@/components/settings/AiAnalysisPanel.vue';
 import MatchStatsCoveragePanel from '@/components/settings/MatchStatsCoveragePanel.vue';
+import RefreshStatusPanel from '@/components/settings/RefreshStatusPanel.vue';
 
 const configStore = useConfigStore();
 const sourcesStore = useSourcesStore();
@@ -25,8 +27,13 @@ const flashscoreStore = useFlashscoreStore();
 const saving = ref(false);
 const generating = ref(false);
 const statsCoverage = ref(null);
-const refreshingStats = ref(false);
-let statsPollTimer = null;
+const refreshOverview = ref(null);
+const startingRefresh = ref(false);
+const resettling = ref(false);
+let refreshPollTimer = null;
+// Faux une fois la page quittée : une réponse arrivée après ne réarme plus
+// de minuteur, que plus personne n'annulerait.
+let pageOuverte = true;
 
 const MODEL_WEIGHTS = [
   { key: 'market', label: 'Consensus marché', description: 'Moyenne des cotes bookmakers — le signal le plus fiable.' },
@@ -41,37 +48,72 @@ onMounted(() => {
   aiAnalysisStore.fetchHistory();
   flashscoreStore.fetchStatus();
   loadStatsCoverage();
+  loadRefreshOverview();
 });
 
 onUnmounted(() => {
-  clearTimeout(statsPollTimer);
+  pageOuverte = false;
+  clearTimeout(refreshPollTimer);
 });
 
-/**
- * Relit la couverture. Tant qu'un rafraîchissement tourne (au démarrage du
- * serveur ou déclenché ici), on repasse toutes les cinq secondes pour voir
- * les barres progresser.
- */
+/** Couverture des statistiques, championnat par championnat. */
 async function loadStatsCoverage() {
   try {
     statsCoverage.value = await matchStatsApi.coverage();
-    clearTimeout(statsPollTimer);
-    if (statsCoverage.value?.refresh?.running) statsPollTimer = setTimeout(loadStatsCoverage, 5000);
   } catch {
     statsCoverage.value = null; // Le panneau affiche « indisponible ».
   }
 }
 
-async function handleRefreshStats() {
-  refreshingStats.value = true;
+/**
+ * État de l'actualisation automatique. Pendant une passe, relu toutes les
+ * quatre secondes pour suivre les étapes ; sinon chaque minute, pour voir
+ * arriver la passe automatique suivante. À la fin d'une passe, la
+ * couverture est relue elle aussi.
+ */
+async function loadRefreshOverview() {
+  clearTimeout(refreshPollTimer);
+  const enCours = Boolean(refreshOverview.value?.running);
   try {
-    const result = await matchStatsApi.refresh();
-    toastStore.success(result.alreadyRunning ? 'Un rafraîchissement est déjà en cours.' : 'Rafraîchissement lancé en fond.');
-    await loadStatsCoverage();
+    refreshOverview.value = await refreshApi.overview();
+  } catch {
+    refreshOverview.value = null;
+  }
+  if (!pageOuverte) return;
+  clearTimeout(refreshPollTimer);
+  if (enCours && !refreshOverview.value?.running) loadStatsCoverage();
+  refreshPollTimer = setTimeout(loadRefreshOverview, refreshOverview.value?.running ? 4000 : 60000);
+}
+
+async function handleRunRefresh() {
+  startingRefresh.value = true;
+  try {
+    const result = await refreshApi.run();
+    toastStore.success(result.alreadyRunning ? 'Une actualisation est déjà en cours.' : 'Actualisation lancée.');
+    await loadRefreshOverview();
   } catch (error) {
-    toastStore.error(`Rafraîchissement impossible : ${error.message}`);
+    toastStore.error(`Actualisation impossible : ${error.message}`);
   } finally {
-    refreshingStats.value = false;
+    startingRefresh.value = false;
+  }
+}
+
+async function handleResettle(keys) {
+  if (!keys?.length) return;
+  const ok = window.confirm(
+    `Remplacer ${keys.length} statut(s) par ce que dit le score final ?\n\n` +
+      "Seules les lignes affichées sont touchées. Un statut posé à la main parce que le bookmaker a payé autrement serait écrasé."
+  );
+  if (!ok) return;
+  resettling.value = true;
+  try {
+    const r = await refreshApi.resettle(keys);
+    toastStore.success(`${r.predictions} pronostic(s) et ${r.betLegs} sélection(s) corrigés d'après le score final.`);
+    await loadRefreshOverview();
+  } catch (error) {
+    toastStore.error(`Correction impossible : ${error.message}`);
+  } finally {
+    resettling.value = false;
   }
 }
 
@@ -219,10 +261,20 @@ async function handleRunAiAnalysis(limit) {
       </div>
 
       <AppCard
-        title="Couverture des statistiques"
-        subtitle="Statistiques d'équipe et de joueurs, complétées automatiquement en fond"
+        title="Actualisation automatique"
+        subtitle="Calendrier, résultats, classements, statistiques, règlement des paris : tout se met à jour seul"
       >
-        <MatchStatsCoveragePanel :coverage="statsCoverage" :refreshing="refreshingStats" @refresh="handleRefreshStats" />
+        <RefreshStatusPanel
+          :overview="refreshOverview"
+          :starting="startingRefresh"
+          :resettling="resettling"
+          @run="handleRunRefresh"
+          @resettle="handleResettle"
+        />
+      </AppCard>
+
+      <AppCard title="Couverture des statistiques" subtitle="Statistiques d'équipe et de joueurs, par championnat">
+        <MatchStatsCoveragePanel :coverage="statsCoverage" />
       </AppCard>
 
       <AppCard title="Connexion IA" subtitle="Connectez votre clé API Anthropic pour activer l'analyse">

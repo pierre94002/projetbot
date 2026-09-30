@@ -72,7 +72,7 @@ const opponentName = computed(() => opponent.value?.teamName ?? props.fallbackOp
     </div>
 
     <p class="cm-text-muted match-stats__footnote">
-      Saison en cours : stats importées chaque matin à 7h30 depuis des sources web confirmées. Un "—" signifie qu'aucune source fiable ne donnait ce chiffre pour ce match (jamais estimé).
+      Stats importées depuis FotMob par l'actualisation automatique de l'appli. Un "—" signifie que la source ne publie pas ce chiffre pour ce match (jamais estimé).
     </p>
   </div>
 </template>

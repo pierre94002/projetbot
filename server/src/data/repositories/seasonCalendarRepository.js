@@ -1,17 +1,40 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readJsonFile } from '../../utils/atomicJson.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CALENDAR_FILE_PATH = path.resolve(__dirname, '../../../data/runtime/season-calendar.json');
 
-function readCalendar() {
+// Cache invalidé par date de modification du fichier (même principe que
+// engineConfig.js) : ce fichier ne grossit que dans un sens (tout l'historique
+// de saison, ~18 Mo) et ne change jamais depuis ce process — seulement via
+// merge-season-calendar.mjs, lancé à côté — donc le reparser à chaque appel
+// (calendrier ET moyennes) coûtait cher pour rien.
+let cache = { mtimeMs: undefined, calendrier: null };
+
+function currentMtimeMs() {
   try {
-    if (fs.existsSync(CALENDAR_FILE_PATH)) return JSON.parse(fs.readFileSync(CALENDAR_FILE_PATH, 'utf8'));
+    return fs.statSync(CALENDAR_FILE_PATH).mtimeMs;
   } catch {
-    // Fichier corrompu : on repart d'un calendrier vide plutôt que de faire échouer l'appli.
+    return null; // Fichier absent : état légitime, calendrier vide.
   }
-  return [];
+}
+
+function readCalendar() {
+  const mtimeMs = currentMtimeMs();
+  if (cache.calendrier && cache.mtimeMs === mtimeMs) return cache.calendrier;
+  try {
+    cache = { mtimeMs, calendrier: readJsonFile(CALENDAR_FILE_PATH, []) };
+  } catch (error) {
+    // Illisible (OneDrive l'envoie juste après la fusion de chaque passe) :
+    // la dernière version lue, retentée à l'appel suivant. Un calendrier vide
+    // gardé en cache restait affiché jusqu'à la modification suivante du
+    // fichier, soit jusqu'à la passe d'après.
+    if (!cache.calendrier) throw error;
+    console.warn(`[calendrier] ${error.message} — dernière version lue conservée.`);
+  }
+  return cache.calendrier;
 }
 
 /**

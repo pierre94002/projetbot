@@ -9,6 +9,7 @@ import {
   getTeamAverageStatsByName,
   getFixtureStats,
   getLineupsByName,
+  getTeamNews,
   getLiveMatchByName,
   getPlayersByName
 } from '../controllers/teamStats.controller.js';
@@ -20,6 +21,7 @@ router.post('/form/bulk', asyncHandler(postBulkForm));
 router.get('/form-by-name', asyncHandler(getTeamFormByName));
 router.get('/average-stats-by-name', asyncHandler(getTeamAverageStatsByName));
 router.get('/lineups-by-name', asyncHandler(getLineupsByName));
+router.get('/team-news', asyncHandler(getTeamNews));
 router.get('/live-match-by-name', asyncHandler(getLiveMatchByName));
 router.get('/players-by-name', asyncHandler(getPlayersByName));
 router.get('/fixtures/:fixtureId/statistics', asyncHandler(getFixtureStats));

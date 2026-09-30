@@ -13,8 +13,8 @@ import LeagueBadge from '@/components/matches/LeagueBadge.vue';
 import { formatDay } from '@/utils/format.js';
 import { useRouter } from 'vue-router';
 
-// Calendrier de saison (joués + à venir), alimenté chaque jour par la tâche
-// planifiée (recherche web, cf. server/scripts/merge-season-calendar.mjs) —
+// Calendrier de saison (joués + à venir), alimenté depuis FotMob par
+// l'actualisation automatique de l'appli (server/src/jobs/matchStatsAutoRefresh.js) —
 // distinct de l'onglet "Matchs" (proche du coup d'envoi seulement, via
 // l'API de cotes).
 const matches = ref([]);
@@ -108,7 +108,7 @@ onMounted(async () => {
 // rafraîchissement automatique global ne peut pas le remettre à jour à sa
 // place : on recharge dès que l'empreinte des données côté serveur change.
 // C'est la vue la plus concernée, puisqu'elle affiche exactement ce que la
-// tâche planifiée réécrit chaque jour.
+// l'actualisation automatique réécrit à chaque passe.
 const router = useRouter();
 
 /** Identifiant de la fiche statistiques, construit comme cote serveur. */
@@ -152,7 +152,7 @@ watch(
         </AppButton>
       </div>
       <p v-if="lastUpdatedAt" class="season-calendar__hint cm-text-muted">
-        Dernière mise à jour de ce calendrier : {{ new Date(lastUpdatedAt).toLocaleString('fr-FR') }} — actualisé automatiquement chaque jour.
+        Dernière mise à jour de ce calendrier : {{ new Date(lastUpdatedAt).toLocaleString('fr-FR') }} — actualisé automatiquement par l'appli, au démarrage puis toutes les trois heures.
       </p>
     </AppCard>
 
@@ -162,7 +162,7 @@ watch(
       v-else-if="filteredMatches.length === 0"
       icon="matches"
       title="Aucun match trouvé"
-      description="Le calendrier se remplit progressivement, jour après jour, via la tâche planifiée. Revenez un peu plus tard s'il vient d'être activé."
+      description="Le calendrier se remplit tout seul : l'actualisation automatique de l'appli le complète au démarrage puis toutes les trois heures. Revenez un peu plus tard s'il vient d'être activé."
     />
 
     <AppCard v-else :padded="false">

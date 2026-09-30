@@ -33,7 +33,7 @@ async function toggleStats(match) {
     return;
   }
 
-  // Match importé par la tâche de 7h30 : stats équipe + joueurs déjà dans
+  // Match importé par l'actualisation automatique : stats équipe + joueurs déjà dans
   // l'entrée d'historique, aucun appel réseau à faire.
   if (match.web) {
     statsByFixture[fixtureId] = { loading: false, error: null, teams: match.teams ?? [], players: match.players ?? null };
@@ -79,7 +79,7 @@ async function toggleStats(match) {
             </div>
             <span class="team-history__score cm-numeric">{{ match.score }}</span>
             <MatchResultBadge v-if="match.result" :result="match.result" />
-            <span v-if="match.web" class="team-history__web-tag" title="Stats d'équipe complètes et stats joueurs importées par la tâche quotidienne de 7h30.">
+            <span v-if="match.web" class="team-history__web-tag" title="Stats d'équipe complètes et stats joueurs importées depuis FotMob par l'actualisation automatique.">
               Stats + joueurs
             </span>
             <span v-if="match.local" class="cm-text-muted team-history__local-tag" title="Score saisi manuellement dans Historique moteur — pas de détail statistique disponible pour ce match.">

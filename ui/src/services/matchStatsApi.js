@@ -1,7 +1,7 @@
 import { httpClient } from './httpClient.js';
 
-// Stats complètes d'équipe + stats joueurs match par match, importées chaque
-// matin à 7h30 (cf. server/scripts/merge-match-stats.mjs).
+// Stats complètes d'équipe + stats joueurs match par match, importées depuis
+// FotMob par l'actualisation automatique (server/src/jobs/matchStatsAutoRefresh.js).
 export const matchStatsApi = {
   listByTeam: (name, limit) => httpClient.get(`/match-stats/team?name=${encodeURIComponent(name)}${limit ? `&limit=${limit}` : ''}`),
   getTeamAverages: (name, sampleSize) =>
@@ -16,6 +16,13 @@ export const matchStatsApi = {
   // de teamStatsApi.getPlayersByName, qui interroge API-Football (plan
   // gratuit limité à 2024, et qui ne couvre pas tous les championnats).
   seasons: (league) => httpClient.get(`/match-stats/seasons?league=${encodeURIComponent(league)}`),
+  // Profilage de cotes d'un match à venir : les matchs passés aux cotes
+  // semblables et comment ils ont fini (server/src/data/db/oddsProfileRead.js).
+  oddsProfile: ({ league, home, away, kickoff, odds1, oddsDraw, odds2, scope, segment, tolerance }) => {
+    const params = new URLSearchParams({ league, home, away, kickoff, odds1, odds2, scope, segment, tolerance });
+    if (oddsDraw) params.set('oddsDraw', oddsDraw);
+    return httpClient.get(`/match-stats/odds-profile?${params}`);
+  },
   players: (league, { season = null, team = null, role = null, minMinutes = null, limit = null } = {}) => {
     const params = new URLSearchParams({ league });
     if (season) params.set('season', season);

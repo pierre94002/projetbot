@@ -1,6 +1,7 @@
 import { httpClient } from './httpClient.js';
 
 export const matchAiAnalysisApi = {
+  getStatus: () => httpClient.get('/match-ai-analysis/status'),
   getAll: () => httpClient.get('/match-ai-analysis'),
   getForMatch: (matchId) => httpClient.get(`/match-ai-analysis/match/${encodeURIComponent(matchId)}`),
   runPreMatch: (matchId, { home, away, league, engineResult }) =>

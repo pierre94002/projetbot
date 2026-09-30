@@ -13,10 +13,25 @@ const props = defineProps({
   matches: { type: Array, required: true },
   selectedMatchId: { type: String, default: null },
   formByMatchId: { type: Object, default: () => ({}) },
-  aiAnalysisByMatchId: { type: Object, default: () => ({}) }
+  aiAnalysisByMatchId: { type: Object, default: () => ({}) },
+  incompleteStatsLeagues: { type: Array, default: () => [] }
 });
 
 const emit = defineEmits(['select', 'team-click', 'view-standings', 'deselect']);
+
+// Championnats sans statistiques d'équipe complètes en base (cf.
+// matchStatsRead.js leaguesWithIncompleteStats) — un Set pour un test
+// d'appartenance en O(1) plutôt qu'un .includes() par ligne affichée.
+const incompleteStatsSet = computed(() => new Set(props.incompleteStatsLeagues));
+
+// Calendrier de repli (hasOdds: false, cf. seasonCalendarAdapter.js) : seule
+// la DATE est connue, l'heure "12:00:00Z" n'est qu'un repère technique pour
+// que le match ne bascule pas de jour selon le fuseau — jamais une vraie
+// heure de coup d'envoi. Un calcul dessus déclarait "en direct" un match dont
+// on ne sait rien, chaque jour vers midi UTC.
+function heureConnue(match) {
+  return match.hasOdds !== false;
+}
 
 // Statut estimé par l'heure du coup d'envoi (cf. matchStatus.js) — aucun flux
 // de score en direct dans l'app. `liveNow` (partagée, un seul timer pour
@@ -24,6 +39,7 @@ const emit = defineEmits(['select', 'team-click', 'view-standings', 'deselect'])
 // page (ex. la ligue chinoise qui se joue à une heure décalée passait
 // inaperçue, repliée dans une ligue fermée).
 function matchStatus(match) {
+  if (!heureConnue(match)) return 'upcoming';
   return computeMatchStatus(match.commenceTime, liveNow.value);
 }
 function isLive(match) {
@@ -31,6 +47,15 @@ function isLive(match) {
 }
 function isFinished(match) {
   return matchStatus(match) === 'finished';
+}
+
+// Recalculé via `liveNow` (même horloge partagée que isLive/isFinished) pour
+// que le badge change de jour tout seul à minuit sans recharger la page.
+const todayKey = computed(() => new Date(liveNow.value).toISOString().slice(0, 10));
+// "Aujourd'hui" exclut live/terminé : ces deux badges le disent déjà, sans
+// quoi un match en direct afficherait trois pastilles pour la même information.
+function isUpcomingToday(match) {
+  return matchDayKey(match) === todayKey.value && !isLive(match) && !isFinished(match);
 }
 
 // Ensemble des championnats OUVERTS (pas fermés) : vide par défaut, donc
@@ -122,6 +147,13 @@ function formatDayHeader(dayKey) {
         @keydown.enter="toggleCollapse(group.league)"
       >
         <LeagueBadge :league="group.league" />
+        <span
+          v-if="incompleteStatsSet.has(group.league)"
+          class="league-group__incomplete"
+          title="Corners, tirs, cartons… incomplets ou absents pour ce championnat — le score reste fiable"
+        >
+          stats incomplètes
+        </span>
         <button
           v-if="group.matches.some(isLive)"
           type="button"
@@ -131,6 +163,9 @@ function formatDayHeader(dayKey) {
         >
           <span class="league-group__live-dot"></span>{{ group.matches.filter(isLive).length }} en direct
         </button>
+        <span v-if="group.matches.some(isUpcomingToday)" class="league-group__today">
+          {{ group.matches.filter(isUpcomingToday).length }} aujourd'hui
+        </span>
         <span v-if="group.matches.some(isFinished)" class="league-group__finished">
           {{ group.matches.filter(isFinished).length }} terminé(s)
         </span>
@@ -181,6 +216,9 @@ function formatDayHeader(dayKey) {
                   <span class="match-row__live-dot"></span>DIRECT
                 </span>
                 <span v-else-if="isFinished(match)" class="match-row__finished">TERMINÉ</span>
+                <span v-else-if="!heureConnue(match)" class="match-row__time-unknown" title="Le calendrier de repli ne connaît que la date, pas l'heure exacte du coup d'envoi">
+                  Heure à confirmer
+                </span>
                 <template v-else>{{ formatTime(match.commenceTime) }}</template>
                 <span v-if="aiAnalysisByMatchId[match.matchId]" class="match-row__ai-badge" title="Analyse IA disponible pour ce match">
                   <AppIcon name="bolt" :size="9" />IA
@@ -285,6 +323,30 @@ function formatDayHeader(dayKey) {
   border-radius: 50%;
   background: var(--cm-danger);
   animation: cm-live-pulse 1.4s ease-in-out infinite;
+}
+
+.league-group__today {
+  flex-shrink: 0;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--cm-accent-soft);
+  color: var(--cm-accent);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Mise en garde sur la donnée, pas un statut de match : pas de majuscules,
+   pour rester visuellement en retrait des pastilles direct/aujourd'hui/terminé. */
+.league-group__incomplete {
+  flex-shrink: 0;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--cm-info-soft);
+  color: var(--cm-info);
+  font-size: 10px;
+  font-weight: 600;
 }
 
 .league-group__finished {
@@ -441,6 +503,14 @@ function formatDayHeader(dayKey) {
   align-items: flex-start;
   gap: 3px;
   font-size: 11px;
+}
+
+.match-row__time-unknown {
+  font-size: 9.5px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--cm-text-muted);
+  font-style: italic;
 }
 
 .match-row__ai-badge {

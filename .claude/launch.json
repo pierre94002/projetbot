@@ -4,14 +4,42 @@
     {
       "name": "cotemaster-ui",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--prefix", "ui"],
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--prefix",
+        "ui"
+      ],
       "port": 5173
     },
     {
       "name": "cotemaster-server",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--prefix", "server"],
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--prefix",
+        "server"
+      ],
       "port": 4000
+    },
+    {
+      "name": "cotemaster-server-test",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": [
+        "/c",
+        "cd server && set PORT=4001&& set MATCH_STATS_AUTO_REFRESH=false&& set CORS_ORIGIN=http://localhost:5174&& node src/server.js"
+      ],
+      "port": 4001
+    },
+    {
+      "name": "cotemaster-ui-test",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": [
+        "/c",
+        "cd ui && set VITE_API_URL=http://localhost:4001/api&& npx vite --port 5174 --strictPort"
+      ],
+      "port": 5174
     }
   ]
 }

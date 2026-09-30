@@ -52,10 +52,21 @@ server/data/runtime/_tmp-season-import/
 # elles, dans server/data/runtime/.
 server/data/fixtures/historique/
 
-# Verrou du rafraîchissement automatique des statistiques (cf.
-# server/src/data/providers/espnMatchStatsRefresh.js) : état d'un processus
-# en cours, propre à la machine, sans valeur d'historique.
+# Verrou de l'actualisation (cf. server/src/data/providers/refreshLock.js) et
+# état de ses passes (refresh-status.json) : propres à la machine, réécrits
+# à chaque passe, sans valeur d'historique. Idem pour les fichiers
+# temporaires des écritures atomiques et les verrous écartés.
 server/data/runtime/espn-refresh.lock
+server/data/runtime/espn-refresh.lock.*
+server/data/runtime/refresh-status.json
+server/data/runtime/refresh-status.illisible-*.json
+server/data/runtime/data-stamp.json
+server/data/runtime/*.tmp
+server/data/runtime/*.new
+server/data/runtime/*.abandonne
+# Compteur quotidien de l'analyse IA automatique (plafond du jour) : propre à
+# la machine, remis à zéro chaque jour, sans valeur d'historique.
+server/data/runtime/auto-ai-analysis-status.json
 
 # Journees de match par saison decouvertes chez ESPN (cache de l'import
 # historique) : se reconstruit tout seul, sans valeur d'historique.

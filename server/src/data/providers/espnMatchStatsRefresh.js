@@ -21,9 +21,9 @@
  * -----------------------------------------------------------------------
  */
 
-import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readJsonFile, writeJsonAtomic } from '../../utils/atomicJson.js';
 import { ESPN_LEAGUE_SLUGS, fetchFinishedEvents, fetchMatchStats, fetchSeasonMatchDays } from './espnMatchStatsProvider.js';
 import { teamNamesLikelyMatch, findBestTeamNameMatch } from '../../utils/teamNameMatch.js';
 // Le contrat de fusion (clés acceptées, upsert, format des fichiers mensuels)
@@ -35,6 +35,7 @@ import { rebuildRegistries } from '../db/identityRegistry.js';
 import { storedEntriesIndex } from '../db/matchStatsRead.js';
 import { coverageFacts, seasonSummary } from '../db/matchStatsRead.js';
 import { withRefreshLock } from './refreshLock.js';
+import { FOTMOB_LEAGUES } from './fotMobProvider.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const RUNTIME_DIR = path.resolve(__dirname, '../../../data/runtime');
@@ -66,12 +67,12 @@ function slug(text) {
     .replace(/^-|-$/g, '');
 }
 
-function readJson(file, fallback) {
-  try {
-    return JSON.parse(fs.readFileSync(file, 'utf8'));
-  } catch {
-    return fallback;
-  }
+// Lu tel quel ou pas du tout (cf. utils/atomicJson.js) : lu « vide » pendant
+// qu'OneDrive le tenait, le calendrier faisait passer un import pour terminé
+// sans rien faire, et privait l'harmonisation des noms de ses références —
+// les statistiques seraient entrées sous l'orthographe d'ESPN, en double.
+function readCalendar() {
+  return readJsonFile(CALENDAR_FILE, []);
 }
 
 function shiftDate(isoDate, days) {
@@ -103,7 +104,7 @@ function refreshRegistries(report) {
 }
 
 export function listMissing({ leagues = null, since = null, until = null, force = false } = {}) {
-  const calendar = readJson(CALENDAR_FILE, []);
+  const calendar = readCalendar();
   const stored = storedEntriesIndex();
   const wanted = leagues ? new Set(leagues) : null;
   const missing = [];
@@ -135,7 +136,7 @@ export function listMissing({ leagues = null, since = null, until = null, force 
 
 /** Couverture actuelle, par championnat. */
 export function getCoverage() {
-  const calendar = readJson(CALENDAR_FILE, []);
+  const calendar = readCalendar();
   // Les faits viennent de la base, pas d'une relecture des 482 Mo de JSON :
   // celle-ci coûtait 17 s SYNCHRONES à chaque appel, pendant lesquelles tout
   // le serveur restait bloqué — et la page Réglages renonçait avant la fin,
@@ -150,7 +151,9 @@ export function getCoverage() {
     if (!date || !league || !homeName || !awayName) continue;
 
     if (!byLeague.has(league)) {
-      byLeague.set(league, { league, supported: Boolean(ESPN_LEAGUE_SLUGS[league]), finished: 0, withStats: 0, withPlayers: 0, fields: 0 });
+      // « Suivi » = la compétition est relevée chez FotMob, la seule source
+      // hors cotes ; ESPN n'est plus lu.
+      byLeague.set(league, { league, supported: Boolean(FOTMOB_LEAGUES[league]), finished: 0, withStats: 0, withPlayers: 0, fields: 0 });
     }
     const row = byLeague.get(league);
     row.finished++;
@@ -397,7 +400,7 @@ function buildKnownNames(stored) {
     if (!byLeague.has(league)) byLeague.set(league, new Set());
     byLeague.get(league).add(name);
   };
-  for (const fixture of readJson(CALENDAR_FILE, [])) add(fixture?.league, fixture?.homeName), add(fixture?.league, fixture?.awayName);
+  for (const fixture of readCalendar()) add(fixture?.league, fixture?.homeName), add(fixture?.league, fixture?.awayName);
   for (const entry of stored.values()) add(entry?.league, entry?.homeName), add(entry?.league, entry?.awayName);
   return byLeague;
 }
@@ -432,7 +435,15 @@ export async function importSeasons({ seasons, leagues = null, concurrency = DEF
   // Mises en cache : le calendrier d'une saison terminée ne bouge plus, et
   // sans cela une reprise après incident réinterrogerait des milliers de
   // journées avant d'atteindre les rencontres qui manquent encore.
-  const dayCache = readJson(SEASON_DAYS_FILE, {});
+  // Facultatif : illisible, l'import s'en passe. Mais il n'est alors pas
+  // réécrit, il y perdrait toutes les saisons que cette passe ne redemande pas.
+  let dayCache = {};
+  let dayCacheLisible = true;
+  try {
+    dayCache = readJsonFile(SEASON_DAYS_FILE, {});
+  } catch {
+    dayCacheLisible = false;
+  }
   let cacheChanged = false;
   const dayTasks = [];
   for (const season of seasons) {
@@ -453,9 +464,9 @@ export async function importSeasons({ seasons, leagues = null, concurrency = DEF
       for (const date of days) dayTasks.push({ leagueName, slug, date });
     }
   }
-  if (cacheChanged) {
+  if (cacheChanged && dayCacheLisible) {
     try {
-      fs.writeFileSync(SEASON_DAYS_FILE, `${JSON.stringify(dayCache, null, 2)}\n`, 'utf8');
+      writeJsonAtomic(SEASON_DAYS_FILE, dayCache, { finalNewline: true });
     } catch {
       // Le cache n'est qu'un raccourci : son échec ne doit pas arrêter l'import.
     }
@@ -539,7 +550,7 @@ export async function importSeasons({ seasons, leagues = null, concurrency = DEF
 function writeStatus(report) {
   try {
     const status = { ...report, coverage: getCoverage().totals };
-    fs.writeFileSync(STATUS_FILE, `${JSON.stringify(status, null, 2)}\n`, 'utf8');
+    writeJsonAtomic(STATUS_FILE, status, { finalNewline: true });
   } catch {
     // Le témoin d'état est un confort : son échec ne doit pas faire échouer
     // un rafraîchissement par ailleurs réussi.
@@ -548,7 +559,11 @@ function writeStatus(report) {
 
 /** Dernier rafraîchissement connu, pour l'API d'état. */
 export function getRefreshStatus() {
-  return readJson(STATUS_FILE, null);
+  try {
+    return readJsonFile(STATUS_FILE, null);
+  } catch {
+    return null;
+  }
 }
 
 export const __testing = { matchEvent, shiftDate, slug };

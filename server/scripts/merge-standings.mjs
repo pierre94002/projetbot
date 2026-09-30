@@ -38,7 +38,7 @@
  */
 
 import fs from 'node:fs';
-import path from 'node:path';
+import { readJsonFile, writeJsonAtomic } from '../src/utils/atomicJson.js';
 
 const [, , standingsPath, newStandingsPath] = process.argv;
 if (!standingsPath || !newStandingsPath) {
@@ -85,7 +85,16 @@ function normalizeRow(row) {
   };
 }
 
-const standings = readJson(standingsPath, {});
+// Le classement stocké est lu tel quel ou pas du tout (cf.
+// src/utils/atomicJson.js) : lu « vide » pendant qu'OneDrive le tenait, il
+// était réécrit avec les seules compétitions du fichier d'entrée.
+let standings;
+try {
+  standings = readJsonFile(standingsPath, {});
+} catch (error) {
+  console.error(error.message);
+  process.exit(2);
+}
 const newStandings = readJson(newStandingsPath, {});
 
 let leaguesUpdated = 0;
@@ -104,7 +113,6 @@ for (const [leagueLabel, data] of Object.entries(newStandings)) {
   leaguesUpdated++;
 }
 
-fs.mkdirSync(path.dirname(standingsPath), { recursive: true });
-fs.writeFileSync(standingsPath, JSON.stringify(standings, null, 2), 'utf8');
+writeJsonAtomic(standingsPath, standings);
 
 console.log(JSON.stringify({ leaguesUpdated, totalLeaguesStored: Object.keys(standings).length }));

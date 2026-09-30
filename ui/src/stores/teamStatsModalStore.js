@@ -42,7 +42,7 @@ async function buildLocalHistoryEntries(teamName) {
 
 /**
  * Matchs de la saison en cours avec stats d'équipe complètes + stats de
- * chaque joueur, importés chaque matin (tâche de 7h30). Dépliables comme
+ * chaque joueur, importés par l'actualisation automatique. Dépliables comme
  * les matchs API-Football, mais sans nouvel appel réseau : tout le détail
  * est déjà dans la réponse.
  */

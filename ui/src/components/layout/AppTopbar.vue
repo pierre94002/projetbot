@@ -1,11 +1,62 @@
 <script setup>
-import { computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { useApiHealth } from '@/composables/useApiHealth.js';
+import { refreshApi } from '@/services/refreshApi.js';
 
 const route = useRoute();
+const router = useRouter();
 const title = computed(() => route.meta?.title ?? 'CôteMaster');
 const { isOnline } = useApiHealth();
+
+// Repère de l'actualisation automatique : une passe en cours, ou l'heure de
+// la dernière. Relu toutes les minutes, toutes les cinq secondes pendant
+// une passe.
+const refresh = ref(null);
+let refreshTimer = null;
+async function loadRefresh() {
+  clearTimeout(refreshTimer);
+  try {
+    refresh.value = await refreshApi.overview();
+  } catch {
+    refresh.value = null;
+  }
+  refreshTimer = setTimeout(loadRefresh, refresh.value?.running ? 5000 : 60000);
+}
+onMounted(loadRefresh);
+onUnmounted(() => clearTimeout(refreshTimer));
+
+const quandCourt = (iso) => {
+  const d = new Date(iso);
+  const heure = d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  return d.toDateString() === new Date().toDateString() ? heure : `${d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })} ${heure}`;
+};
+/** Des alertes durables (contradictions, anomalies du contrôle) sont en cours. */
+const alertes = computed(() => Boolean(refresh.value?.alerts?.contradictions?.count || refresh.value?.alerts?.audit?.anomalies));
+/** Dernière passe trop ancienne : plus de deux intervalles et une heure. */
+const ancienne = computed(() => {
+  const r = refresh.value;
+  if (!r?.lastPass) return false;
+  return Date.now() - Date.parse(r.lastPass.finishedAt) > (2 * (r.intervalMinutes ?? 180) + 60) * 60_000;
+});
+const refreshLabel = computed(() => {
+  const r = refresh.value;
+  if (!r) return null;
+  if (r.running) return r.running.stepLabel ? `Actualisation : ${r.running.stepLabel.toLowerCase()}…` : 'Actualisation…';
+  if (!r.enabled) return 'Actualisation automatique désactivée';
+  if (!r.lastPass) return null;
+  const quand = quandCourt(r.lastPass.finishedAt);
+  if (r.lastPass.outcome === 'error') return `Actualisation en échec · ${quand}`;
+  if (ancienne.value) return `Dernière actualisation · ${quand}`;
+  if (r.lastPass.outcome !== 'ok' || alertes.value) return `Actualisé · ${quand} · à vérifier`;
+  return `Données à jour · ${quand}`;
+});
+const refreshTone = computed(() => {
+  const r = refresh.value;
+  if (r?.running) return 'running';
+  if (!r?.enabled || r?.lastPass?.outcome === 'error') return 'error';
+  return r?.lastPass?.outcome === 'ok' && !alertes.value && !ancienne.value ? 'ok' : 'warn';
+});
 
 const statusLabel = computed(() => {
   if (isOnline.value === null) return 'Vérification…';
@@ -17,9 +68,21 @@ const statusLabel = computed(() => {
   <header class="topbar">
     <h1 class="topbar__title">{{ title }}</h1>
 
-    <div class="topbar__status" :class="{ 'topbar__status--online': isOnline, 'topbar__status--offline': isOnline === false }">
-      <span class="topbar__dot" />
-      {{ statusLabel }}
+    <div class="topbar__right">
+      <button
+        v-if="refreshLabel && isOnline"
+        type="button"
+        class="topbar__refresh"
+        :class="`topbar__refresh--${refreshTone}`"
+        title="Actualisation automatique — détails dans Réglages"
+        @click="router.push({ name: 'settings' }).catch(() => {})"
+      >
+        {{ refreshLabel }}
+      </button>
+      <div class="topbar__status" :class="{ 'topbar__status--online': isOnline, 'topbar__status--offline': isOnline === false }">
+        <span class="topbar__dot" />
+        {{ statusLabel }}
+      </div>
     </div>
   </header>
 </template>
@@ -42,6 +105,37 @@ const statusLabel = computed(() => {
 .topbar__title {
   font-size: 16px;
   font-weight: 600;
+}
+
+.topbar__right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.topbar__refresh {
+  padding: 3px 10px;
+  border: 1px solid var(--cm-border-soft);
+  border-radius: 999px;
+  background: none;
+  font: inherit;
+  font-size: 11.5px;
+  color: var(--cm-text-muted);
+  cursor: pointer;
+}
+
+.topbar__refresh--running {
+  color: var(--cm-warning);
+  border-color: var(--cm-warning-soft);
+}
+
+.topbar__refresh--warn {
+  color: var(--cm-warning);
+}
+
+.topbar__refresh--error {
+  color: var(--cm-danger);
+  border-color: var(--cm-danger-soft);
 }
 
 .topbar__status {

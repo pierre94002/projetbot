@@ -1,7 +1,7 @@
-import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { env } from '../../config/env.js';
+import { readJsonFile, writeJsonAtomic, removeFileWithRetry } from '../../utils/atomicJson.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const AI_CONFIG_FILE_PATH = path.resolve(__dirname, '../../../data/runtime/ai-config.json');
@@ -10,24 +10,24 @@ export const DEFAULT_ANTHROPIC_MODEL = 'claude-sonnet-5';
 
 function loadPersistedConfig() {
   try {
-    if (fs.existsSync(AI_CONFIG_FILE_PATH)) {
-      return JSON.parse(fs.readFileSync(AI_CONFIG_FILE_PATH, 'utf8'));
-    }
+    return readJsonFile(AI_CONFIG_FILE_PATH, null);
   } catch {
-    // Fichier corrompu ou illisible : on retombe sur aucune connexion persistée.
+    // Illisible malgré les nouvelles tentatives : aucune connexion persistée
+    // pour cette session, le fichier reste tel quel. Sans le message
+    // d'erreur, qui peut citer le début du fichier, donc de la clé.
+    console.warn('[connexion IA] ai-config.json illisible : aucune connexion persistée pour cette session.');
+    return null;
   }
-  return null;
 }
 
 let persistedConfig = loadPersistedConfig(); // { provider: 'anthropic', apiKey, model, connectedAt } | null
 
-function persist() {
-  fs.mkdirSync(path.dirname(AI_CONFIG_FILE_PATH), { recursive: true });
-  if (persistedConfig) {
-    fs.writeFileSync(AI_CONFIG_FILE_PATH, JSON.stringify(persistedConfig, null, 2), 'utf8');
-  } else if (fs.existsSync(AI_CONFIG_FILE_PATH)) {
-    fs.unlinkSync(AI_CONFIG_FILE_PATH);
-  }
+// Appelé AVANT de changer l'état en mémoire : si OneDrive refuse l'écriture
+// malgré les nouvelles tentatives, l'erreur remonte et rien ne change — plutôt
+// qu'une clé active jusqu'au redémarrage mais absente du disque.
+function persist(config) {
+  if (config) writeJsonAtomic(AI_CONFIG_FILE_PATH, config);
+  else removeFileWithRetry(AI_CONFIG_FILE_PATH);
 }
 
 /**
@@ -55,14 +55,15 @@ export function getAiConnectionStatus() {
 }
 
 export function connectAi({ apiKey, model, workspaceId }) {
-  persistedConfig = {
+  const config = {
     provider: 'anthropic',
     apiKey,
     model: model || DEFAULT_ANTHROPIC_MODEL,
     workspaceId: workspaceId || '',
     connectedAt: new Date().toISOString()
   };
-  persist();
+  persist(config);
+  persistedConfig = config;
   return getAiConnectionStatus();
 }
 
@@ -72,7 +73,7 @@ export function connectAi({ apiKey, model, workspaceId }) {
  * après, ce qui est voulu (cf. AiConnectionForm.vue pour le texte associé).
  */
 export function disconnectAi() {
+  persist(null);
   persistedConfig = null;
-  persist();
   return getAiConnectionStatus();
 }

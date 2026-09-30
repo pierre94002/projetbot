@@ -1,23 +1,21 @@
-import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { findBestTeamNameMatch } from '../../utils/teamNameMatch.js';
+import { readJsonFile, writeJsonAtomic } from '../../utils/atomicJson.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FILE_PATH = path.resolve(__dirname, '../../../data/runtime/team-profiles.json');
 
+// Illisible = erreur, jamais table vide : scripts/populate-team-profiles.mjs
+// enregistre les profils un par un, et une relecture tombée pendant
+// qu'OneDrive envoyait le précédent réécrivait le fichier avec ce seul
+// profil (cf. utils/atomicJson.js).
 function readAll() {
-  try {
-    if (fs.existsSync(FILE_PATH)) return JSON.parse(fs.readFileSync(FILE_PATH, 'utf8'));
-  } catch {
-    // Fichier corrompu : on repart d'une table vide plutôt que de faire échouer l'appli.
-  }
-  return {};
+  return readJsonFile(FILE_PATH, {});
 }
 
 function writeAll(data) {
-  fs.mkdirSync(path.dirname(FILE_PATH), { recursive: true });
-  fs.writeFileSync(FILE_PATH, JSON.stringify(data, null, 2), 'utf8');
+  writeJsonAtomic(FILE_PATH, data);
 }
 
 /**
@@ -33,7 +31,14 @@ function writeAll(data) {
  */
 export function getTeamProfile(teamName) {
   if (!teamName) return null;
-  const all = readAll();
+  let all;
+  try {
+    all = readAll();
+  } catch (error) {
+    // Lecture seule : un profil illisible manque, sans faire échouer l'analyse.
+    console.warn(`[profils d'équipe] ${error.message}`);
+    return null;
+  }
   const key = findBestTeamNameMatch(teamName, Object.keys(all));
   return key ? all[key] : null;
 }

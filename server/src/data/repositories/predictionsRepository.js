@@ -1,23 +1,20 @@
-import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import crypto from 'node:crypto';
+import { readJsonFile, writeJsonAtomic } from '../../utils/atomicJson.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PREDICTIONS_FILE_PATH = path.resolve(__dirname, '../../../data/runtime/predictions.json');
 
+// Un fichier illisible fait échouer la lecture au lieu de passer pour un
+// journal vide : l'écriture suivante l'aurait sinon réécrit à partir de rien
+// (cf. utils/atomicJson.js).
 function readPredictions() {
-  try {
-    if (fs.existsSync(PREDICTIONS_FILE_PATH)) return JSON.parse(fs.readFileSync(PREDICTIONS_FILE_PATH, 'utf8'));
-  } catch {
-    // Fichier corrompu : on repart d'un journal vide plutôt que de faire échouer l'appli.
-  }
-  return [];
+  return readJsonFile(PREDICTIONS_FILE_PATH, []);
 }
 
 function writePredictions(entries) {
-  fs.mkdirSync(path.dirname(PREDICTIONS_FILE_PATH), { recursive: true });
-  fs.writeFileSync(PREDICTIONS_FILE_PATH, JSON.stringify(entries, null, 2), 'utf8');
+  writeJsonAtomic(PREDICTIONS_FILE_PATH, entries);
 }
 
 export function listPredictions() {
@@ -34,6 +31,10 @@ export function listPredictions() {
  * seconde. `day` reste celui du tout premier scan (aligné sur firstSeenAt) et
  * ne bouge plus ensuite, pour que le tableau jour-par-jour ne "déménage" pas
  * une prédiction déjà journalisée.
+ *
+ * `commenceTime` (coup d'envoi) est gardé : c'est lui qui permet au
+ * règlement automatique de retrouver le résultat d'un match scanné plusieurs
+ * jours avant d'être joué — `day` n'est que la date du premier scan.
  */
 export function upsertPredictions(entries) {
   const log = readPredictions();
@@ -49,6 +50,7 @@ export function upsertPredictions(entries) {
       existing.action = entry.action;
       existing.edgePercent = entry.edgePercent;
       existing.lastSeenAt = now;
+      if (entry.commenceTime) existing.commenceTime = entry.commenceTime;
       // Un rescan d'un match déjà journalisé AVANT la migration vers le
       // marché structuré (cf. sports/football/markets.js) le fait passer au
       // nouveau format à cette occasion, sans script à relancer.
@@ -62,6 +64,7 @@ export function upsertPredictions(entries) {
         homeName: entry.homeName,
         awayName: entry.awayName,
         league: entry.league ?? null,
+        commenceTime: entry.commenceTime ?? null,
         market: entry.market,
         marketId: entry.marketId ?? null,
         params: entry.params ?? null,
@@ -82,14 +85,50 @@ export function upsertPredictions(entries) {
   return log;
 }
 
+/**
+ * Statut posé À LA MAIN (Historique moteur, fiche d'un match) : il est
+ * marqué comme tel, et le règlement automatique n'y touchera plus — même si
+ * le score connu change ensuite.
+ */
 export function updatePredictionStatus(id, status) {
   const log = readPredictions();
   const entry = log.find((e) => e.id === id);
   if (!entry) return null;
   entry.status = status;
   entry.settledAt = status === 'pending' ? null : new Date().toISOString();
+  entry.settledBy = status === 'pending' ? null : 'manual';
+  entry.settledScore = null;
   writePredictions(log);
   return entry;
+}
+
+/**
+ * Règlements AUTOMATIQUES, d'une seule lecture et d'une seule écriture du
+ * journal (une réécriture complète par entrée coûtait 450 Ko à chaque fois).
+ * Chaque entrée garde le score qui l'a réglée, pour pouvoir la revoir si ce
+ * score est corrigé plus tard.
+ *
+ * @param {{ id: string, status: string, score: string, resultId: string|null }[]} settlements
+ * @returns {number} entrées modifiées
+ */
+export function applyPredictionSettlements(settlements) {
+  if (!settlements.length) return 0;
+  const log = readPredictions();
+  const byId = new Map(log.map((e) => [e.id, e]));
+  const now = new Date().toISOString();
+  let n = 0;
+  for (const s of settlements) {
+    const entry = byId.get(s.id);
+    if (!entry) continue;
+    entry.status = s.status;
+    entry.settledAt = now;
+    entry.settledBy = 'auto';
+    entry.settledScore = s.score;
+    entry.settledResultId = s.resultId ?? null;
+    n++;
+  }
+  if (n) writePredictions(log);
+  return n;
 }
 
 export function deletePrediction(id) {

@@ -21,6 +21,14 @@ export const teamStatsApi = {
     ),
   getLiveMatchByName: (name, commenceTime) =>
     httpClient.get(`/team-stats/live-match-by-name?name=${encodeURIComponent(name)}&commenceTime=${encodeURIComponent(commenceTime)}`),
+  // Blessures, suspensions, changement d'entraîneur (FotMob, gratuit) —
+  // cf. server/src/data/providers/teamNewsResolver.js.
+  getTeamNews: (name, commenceTime, away, league) =>
+    httpClient.get(
+      `/team-stats/team-news?name=${encodeURIComponent(name)}&commenceTime=${encodeURIComponent(commenceTime)}` +
+        (away ? `&away=${encodeURIComponent(away)}` : '') +
+        (league ? `&league=${encodeURIComponent(league)}` : '')
+    ),
   getPlayersByName: (name, season, league) =>
     httpClient.get(
       `/team-stats/players-by-name?name=${encodeURIComponent(name)}${season ? `&season=${season}` : ''}${league ? `&league=${encodeURIComponent(league)}` : ''}`

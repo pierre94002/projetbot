@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readJsonFile, writeJsonAtomic } from '../../utils/atomicJson.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FIXTURES_ROOT = path.resolve(__dirname, '../../../data/fixtures');
@@ -11,9 +12,11 @@ const PATHS = {
   sampleMatches: path.join(FIXTURES_ROOT, 'sample-matches.json')
 };
 
+// Lectures et écritures réessayées quand OneDrive tient le fichier, écritures
+// atomiques (cf. utils/atomicJson.js) : ces instantanés viennent d'API
+// payantes, une écriture refusée les perdait.
 function readJson(filePath) {
-  if (!fs.existsSync(filePath)) return null;
-  return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  return readJsonFile(filePath, null);
 }
 
 /** Liste des matchs bruts au format "The Odds API". */
@@ -24,8 +27,7 @@ export function loadOddsMatches() {
 
 /** Remplace l'instantané de cotes par des données fraîchement récupérées en direct. */
 export function saveOddsMatches(matches) {
-  fs.mkdirSync(path.dirname(PATHS.odds), { recursive: true });
-  fs.writeFileSync(PATHS.odds, JSON.stringify([{ data: matches }], null, 2), 'utf8');
+  writeJsonAtomic(PATHS.odds, [{ data: matches }]);
 }
 
 /** Liste des compétitions et de leurs métadonnées (format football-data.org). */
@@ -36,8 +38,7 @@ export function loadCompetitions() {
 
 /** Remplace l'instantané de compétitions par des données fraîchement récupérées en direct. */
 export function saveCompetitions(competitions) {
-  fs.mkdirSync(path.dirname(PATHS.competitions), { recursive: true });
-  fs.writeFileSync(PATHS.competitions, JSON.stringify([{ data: { competitions } }], null, 2), 'utf8');
+  writeJsonAtomic(PATHS.competitions, [{ data: { competitions } }]);
 }
 
 /** Jeu de matchs de test générés localement (cf. testDataGenerator.js). */
@@ -46,8 +47,7 @@ export function loadSampleMatches() {
 }
 
 export function saveSampleMatches(matches) {
-  fs.mkdirSync(path.dirname(PATHS.sampleMatches), { recursive: true });
-  fs.writeFileSync(PATHS.sampleMatches, JSON.stringify(matches, null, 2), 'utf8');
+  writeJsonAtomic(PATHS.sampleMatches, matches);
 }
 
 export function getFixturesStatus() {

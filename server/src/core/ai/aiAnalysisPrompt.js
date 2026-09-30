@@ -35,7 +35,7 @@ export const SUBMIT_ANALYSIS_TOOL = {
 export const SUBMIT_ANALYSIS_TOOL_CHOICE = { type: 'tool', name: 'submit_analysis' };
 
 const ENGINE_LEVERS =
-  'edgeThresholdMin/Max, defaultCorrelation (Dixon-Coles), kellyFraction, maxStakePercent, homeAdvantage, cornersAdjustmentMax, weights.market/structural/exogenous';
+  'edgeThresholdMin/Max, maxValueOdds, valueBookmakers (bookmakers où un pari peut être recommandé), defaultCorrelation (Dixon-Coles, marchés de buts), kellyFraction, maxStakePercent, cornersAdjustmentMax, weights.market/structural/exogenous (pronostic 1N2 affiché ; la cote juste des paris vient toujours des bookmakers de référence)';
 
 export function buildAnalysisRequest(datasetRecords, engineConfigSnapshot) {
   const system = [

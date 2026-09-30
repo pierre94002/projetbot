@@ -7,7 +7,7 @@ import EmptyState from '@/components/common/EmptyState.vue';
 import MatchStatsPanel from './MatchStatsPanel.vue';
 import TeamHistoryModal from './TeamHistoryModal.vue';
 import TeamLineup from './TeamLineup.vue';
-import { LINEUP_UNAVAILABLE_MESSAGES } from '@/utils/lineupMessages.js';
+import { describeLineupUnavailable } from '@/utils/lineupMessages.js';
 
 const store = useTeamStatsModalStore();
 

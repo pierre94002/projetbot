@@ -18,6 +18,10 @@ import EmptyState from '@/components/common/EmptyState.vue';
 import MatchesTable from '@/components/matches/MatchesTable.vue';
 import AnalysisResultPanel from '@/components/analysis/AnalysisResultPanel.vue';
 import SafestPicksSummary from '@/components/analysis/SafestPicksSummary.vue';
+import OddsProfilePanel from '@/components/analysis/OddsProfilePanel.vue';
+import ResultPredictionCard from '@/components/analysis/ResultPredictionCard.vue';
+import ScorePredictionCard from '@/components/analysis/ScorePredictionCard.vue';
+import TeamNewsCard from '@/components/analysis/TeamNewsCard.vue';
 import AppModal from '@/components/common/AppModal.vue';
 import TabbedView from '@/components/common/TabbedView.vue';
 import MatchesFilterBar from '@/components/matches/MatchesFilterBar.vue';
@@ -66,8 +70,37 @@ const searchQuery = ref('');
 const leagueQuery = ref('');
 const dateFilter = ref('all'); // 'all' | 'today' | 'week' | 'YYYY-MM-DD'
 const standings = ref(null); // { league, loading, error, rows }
+// Championnats sans statistiques d'équipe complètes (cf. matchStatsRead.js
+// leaguesWithIncompleteStats) — chargé une fois, affiché en petit badge par
+// championnat dans MatchesTable plutôt que découvert en creux dans l'analyse.
+const incompleteStatsLeagues = ref([]);
 const averagesComparison = ref(null); // { homeName, awayName, homeTeamId, loading, error, teams }
 const liveMatchDetails = ref(null); // { loading, error, data }
+
+// Panneau d'analyse : le moteur (« Analyse mathématique ») ou le profilage
+// de cotes. Le choix est retenu pour ce navigateur.
+const ANALYSIS_MODES = [
+  { value: 'math', label: 'Analyse mathématique' },
+  { value: 'profile', label: 'Profilage de cotes' }
+];
+const CLE_MODE = 'cotemaster.analysisMode';
+function lireMode() {
+  try {
+    const mode = localStorage.getItem(CLE_MODE);
+    return ANALYSIS_MODES.some((m) => m.value === mode) ? mode : 'math';
+  } catch {
+    return 'math';
+  }
+}
+const analysisMode = ref(lireMode());
+watch(analysisMode, (mode) => {
+  try {
+    localStorage.setItem(CLE_MODE, mode);
+  } catch {
+    /* stockage indisponible : le choix ne sera pas retenu */
+  }
+});
+const selectedMatch = computed(() => matchesStore.matches.find((m) => m.matchId === analysisStore.result?.matchId) ?? null);
 
 function toDateKey(isoString) {
   return isoString?.slice(0, 10) ?? null;
@@ -348,7 +381,12 @@ onMounted(() => {
   if (!sourcesStore.sources.length) sourcesStore.fetchSources();
   if (!aiAnalysisStore.status) aiAnalysisStore.fetchStatus();
   matchAiAnalysisStore.fetchAll();
+  matchAiAnalysisStore.fetchStatus();
   loadMatches();
+  matchStatsApi
+    .status()
+    .then((r) => { incompleteStatsLeagues.value = r?.incompleteStatsLeagues ?? []; })
+    .catch(() => {}); // Purement informatif : une erreur ne prive que du petit badge, pas de la liste des matchs.
 });
 </script>
 
@@ -411,6 +449,7 @@ onMounted(() => {
             :selected-match-id="props.matchId"
             :form-by-match-id="matchesStore.formByMatchId"
             :ai-analysis-by-match-id="matchAiAnalysisStore.byMatchId"
+            :incomplete-stats-leagues="incompleteStatsLeagues"
             @select="(match) => selectMatch(match.matchId)"
             @team-click="handleTeamClick"
             @view-standings="handleViewStandings"
@@ -428,21 +467,41 @@ onMounted(() => {
           description="Choisissez une rencontre dans la liste pour voir l'analyse complète du moteur."
         />
         <div v-else class="matches-view__detail-stack">
-          <SafestPicksSummary
-            :result="analysisStore.result"
-            :averages-comparison="averagesComparison"
-            @compare-averages-click="handleCompareAverages"
-          />
-          <AnalysisResultPanel
-            :result="analysisStore.result"
-            :averages-comparison="averagesComparison"
-            :live-match-details="liveMatchDetails"
-            :match-ai="{ connected: aiAnalysisStore.status?.connected ?? false, running: matchAiAnalysisStore.running, entry: matchAiAnalysisStore.byMatchId[analysisStore.result.matchId] ?? null }"
-            @compare-averages-click="handleCompareAverages"
-            @show-live-match-click="handleShowLiveMatch"
-            @run-pre-match-ai-click="handleRunPreMatchAi"
-            @run-post-match-ai-click="handleRunPostMatchAi"
-          />
+          <div class="matches-view__modes" role="tablist" aria-label="Type d'analyse">
+            <button
+              v-for="mode in ANALYSIS_MODES"
+              :key="mode.value"
+              type="button"
+              role="tab"
+              class="matches-view__mode"
+              :class="{ 'matches-view__mode--active': analysisMode === mode.value }"
+              :aria-selected="analysisMode === mode.value"
+              @click="analysisMode = mode.value"
+            >
+              {{ mode.label }}
+            </button>
+          </div>
+          <template v-if="analysisMode === 'math'">
+            <ResultPredictionCard :result="analysisStore.result" />
+            <ScorePredictionCard :result="analysisStore.result" />
+            <TeamNewsCard :result="analysisStore.result" />
+            <SafestPicksSummary
+              :result="analysisStore.result"
+              :averages-comparison="averagesComparison"
+              @compare-averages-click="handleCompareAverages"
+            />
+            <AnalysisResultPanel
+              :result="analysisStore.result"
+              :averages-comparison="averagesComparison"
+              :live-match-details="liveMatchDetails"
+              :match-ai="{ connected: matchAiAnalysisStore.connected, running: matchAiAnalysisStore.running, entry: matchAiAnalysisStore.byMatchId[analysisStore.result.matchId] ?? null }"
+              @compare-averages-click="handleCompareAverages"
+              @show-live-match-click="handleShowLiveMatch"
+              @run-pre-match-ai-click="handleRunPreMatchAi"
+              @run-post-match-ai-click="handleRunPostMatchAi"
+            />
+          </template>
+          <OddsProfilePanel v-else :match="selectedMatch" />
         </div>
       </AppCard>
     </div>
@@ -543,6 +602,41 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.matches-view__modes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--cm-border);
+  border-radius: 999px;
+  background: var(--cm-surface-alt);
+}
+
+.matches-view__mode {
+  padding: 7px 10px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--cm-text-secondary);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--cm-transition), color var(--cm-transition);
+}
+
+.matches-view__mode:hover {
+  color: var(--cm-text-primary);
+}
+
+.matches-view__mode--active {
+  background: var(--cm-accent);
+  color: #06251b;
+}
+
+.matches-view__mode--active:hover {
+  color: #06251b;
 }
 
 @media (max-width: 960px) {

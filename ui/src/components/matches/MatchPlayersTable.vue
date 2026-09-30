@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue';
 
 /**
- * Stats individuelles des joueurs sur UN match (import quotidien 7h30, cf.
+ * Stats individuelles des joueurs sur UN match (actualisation automatique FotMob, cf.
  * server/scripts/merge-match-stats.mjs). Une colonne sans aucune valeur pour
  * l'équipe affichée est masquée plutôt que remplie de "—" : une trentaine de
  * colonnes vides rendrait le tableau illisible dans la modale.

@@ -3,22 +3,47 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import crypto from 'node:crypto';
 import { teamNamesLikelyMatch } from '../../utils/teamNameMatch.js';
+import { readJsonFile, writeJsonAtomic } from '../../utils/atomicJson.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const RESULTS_FILE_PATH = path.resolve(__dirname, '../../../data/runtime/match-results.json');
 
-function readResults() {
+// Cache invalidé par date de modification du fichier (même principe que
+// engineConfig.js) : relu à chaque enrichissement de moyennes, au moins une
+// fois par équipe et par analyse — reparser les 38 000+ entrées (~14 Mo) à
+// chaque appel coûtait cher pour rien. Reste à jour si le fichier change
+// depuis un autre processus (script de fusion lancé à côté).
+let cache = { mtimeMs: undefined, results: null };
+
+function currentMtimeMs() {
   try {
-    if (fs.existsSync(RESULTS_FILE_PATH)) return JSON.parse(fs.readFileSync(RESULTS_FILE_PATH, 'utf8'));
+    return fs.statSync(RESULTS_FILE_PATH).mtimeMs;
   } catch {
-    // Fichier corrompu : on repart d'un journal vide plutôt que de faire échouer l'appli.
+    return null; // Fichier absent : état légitime, liste vide.
   }
-  return [];
+}
+
+// Illisible = erreur, pas journal vide : un score saisi à ce moment-là
+// aurait réécrit les 38 000 résultats avec ce seul score (cf.
+// utils/atomicJson.js).
+function readResults() {
+  const mtimeMs = currentMtimeMs();
+  if (cache.results && cache.mtimeMs === mtimeMs) return cache.results;
+  cache = { mtimeMs, results: readJsonFile(RESULTS_FILE_PATH, []) };
+  return cache.results;
 }
 
 function writeResults(results) {
-  fs.mkdirSync(path.dirname(RESULTS_FILE_PATH), { recursive: true });
-  fs.writeFileSync(RESULTS_FILE_PATH, JSON.stringify(results, null, 2), 'utf8');
+  try {
+    writeJsonAtomic(RESULTS_FILE_PATH, results);
+  } catch (error) {
+    // L'appelant a déjà modifié la liste en cache : on l'oublie, la prochaine
+    // lecture repart du fichier, resté tel quel.
+    cache = { mtimeMs: undefined, results: null };
+    throw error;
+  }
+  // Réaligné sur le fichier qu'on vient d'écrire, sinon le prochain appel le relirait pour rien.
+  cache = { mtimeMs: currentMtimeMs(), results };
 }
 
 // `homeGoals`/`awayGoals` sont le nom historique (football) du champ ; un
@@ -59,27 +84,59 @@ const WEB_RESULT_ID = /^web-\d{4}-\d{2}-\d{2}-/;
  * les décalages de fuseau entre le coup d'envoi UTC et la date du résultat) et
  * par noms d'équipe via le registre partagé.
  *
- * @returns {(matchId: string, day: string, homeName: string, awayName: string) => object|null}
+ * Le règlement automatique élargit la fenêtre vers l'AVANT (`after`) pour
+ * un pronostic dont on ne connaît que le jour du premier scan : le match a
+ * pu être joué plusieurs jours plus tard. Parmi les candidats, le plus
+ * proche du jour donné l'emporte, et à égalité un résultat FotMob — deux
+ * graphies d'un même match (« Paris SG », « Paris Saint-Germain ») coexistent
+ * dans le fichier.
+ *
+ * @returns {(matchId: string, day: string, homeName: string, awayName: string, window?: { before?: number, after?: number }) => object|null}
  */
 export function createResultLookup(results = listMatchResults()) {
   const byMatchId = new Map(results.map((r) => [r.matchId, r]));
-  const webResults = results.filter((r) => typeof r.matchId === 'string' && WEB_RESULT_ID.test(r.matchId));
+  // Indexés par jour : une recherche ne parcourt que les jours de sa fenêtre,
+  // et non les 38 000 résultats connus.
+  const byDay = new Map();
+  for (const r of results) {
+    if (typeof r.matchId !== 'string' || !WEB_RESULT_ID.test(r.matchId)) continue;
+    const jour = r.matchId.slice(4, 14);
+    const liste = byDay.get(jour) ?? [];
+    liste.push(r);
+    byDay.set(jour, liste);
+  }
+  // Plusieurs marchés d'un même match cherchent le même résultat.
+  const deja = new Map();
 
-  return (matchId, day, homeName, awayName) => {
+  // `league` : quand il est connu des deux côtés, un résultat d'une AUTRE
+  // compétition est écarté — les mêmes clubs se croisent en coupe et en
+  // championnat à quelques jours d'écart (Nottingham Forest - Leeds, EPL le
+  // 22/08 puis EFL Cup le 25/08).
+  return (matchId, day, homeName, awayName, { before = 1, after = 1, league = null } = {}) => {
     const direct = byMatchId.get(matchId);
     if (direct) return direct;
 
-    const dayMs = Date.parse(day ?? '');
+    const dayMs = Date.parse(String(day ?? '').slice(0, 10));
     if (!Number.isFinite(dayMs)) return null;
 
-    return (
-      webResults.find(
-        (r) =>
-          Math.abs(Date.parse(r.matchId.slice(4, 14)) - dayMs) <= ONE_DAY_MS &&
-          teamNamesLikelyMatch(r.homeName, homeName) &&
-          teamNamesLikelyMatch(r.awayName, awayName)
-      ) ?? null
-    );
+    const cle = `${String(day).slice(0, 10)}|${before}|${after}|${homeName}|${awayName}|${league ?? ''}`;
+    if (deja.has(cle)) return deja.get(cle);
+
+    let meilleur = null;
+    for (let i = -before; i <= after; i++) {
+      const jour = new Date(dayMs + i * ONE_DAY_MS).toISOString().slice(0, 10);
+      for (const r of byDay.get(jour) ?? []) {
+        if (league && r.league && r.league !== league) continue;
+        if (!teamNamesLikelyMatch(r.homeName, homeName) || !teamNamesLikelyMatch(r.awayName, awayName)) continue;
+        const rang = [Math.abs(i), r.source === 'fotmob' ? 0 : 1];
+        if (!meilleur || rang[0] < meilleur.rang[0] || (rang[0] === meilleur.rang[0] && rang[1] < meilleur.rang[1])) {
+          meilleur = { r, rang };
+        }
+      }
+    }
+    const trouve = meilleur?.r ?? null;
+    deja.set(cle, trouve);
+    return trouve;
   };
 }
 
@@ -126,7 +183,16 @@ export function recordMatchResult({ matchId, homeName, awayName, league, homeGoa
  */
 export function getResultsForTeam(teamName) {
   const normalized = teamName.trim().toLowerCase();
-  return readResults()
+  // Lecture seule, pour enrichir des moyennes : un fichier illisible ne doit
+  // pas faire échouer l'analyse d'un match, seulement la priver de ce complément.
+  let resultats;
+  try {
+    resultats = readResults();
+  } catch (error) {
+    console.warn(`[résultats] illisibles, moyennes sans les scores saisis : ${error.message}`);
+    return [];
+  }
+  return resultats
     .filter((r) => r.homeName.toLowerCase() === normalized || r.awayName.toLowerCase() === normalized)
     .map((r) => {
       const isHome = r.homeName.toLowerCase() === normalized;
