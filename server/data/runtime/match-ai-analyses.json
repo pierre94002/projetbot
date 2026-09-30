@@ -2914,5 +2914,214 @@
     },
     "updatedAt": "2026-09-30T19:17:12.797Z",
     "createdAt": "2026-09-30T19:17:12.797Z"
+  },
+  {
+    "matchId": "cal-2026-10-02-dundalk-bohemian-fc",
+    "homeName": "Dundalk",
+    "awayName": "Bohemian FC",
+    "league": "League of Ireland",
+    "commenceTime": "2026-10-02T12:00:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Dundalk vs Bohemian FC",
+      "expectedGoals": {
+        "home": 1.261,
+        "away": 2.274,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 3.26,
+        "draw": 4.28,
+        "away": 2.18
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds",
+        "candidates": []
+      }
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 3295,
+      "cache_read_input_tokens": 774,
+      "output_tokens": 1350,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3295,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1350,
+          "cache_read_input_tokens": 774,
+          "cache_creation_input_tokens": 3295,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 3295
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.026838800000000003,
+    "analysis": {
+      "summary": "Bohemian FC (3e, 56 pts en 31 matchs, différence de buts +18) aborde le match avec un net avantage au classement et en forme sur Dundalk (5e, 41 pts en 32 matchs, -4). Bohemian a gagné 4 de ses 5 derniers matchs connus, Dundalk n'en a gagné qu'un. Dundalk a en outre plusieurs absents, dont un suspendu jusqu'à début octobre.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Bohemian est nettement mieux classé, en position de qualification pour la Conference League ; Dundalk est à 15 points derrière.",
+          "evidence": "Bohemian 3e, 56 pts, 16V-8N-7D, buts 55-37 ; Dundalk 5e, 41 pts, 10V-11N-11D, buts 49-53."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Série très favorable à Bohemian, forme hésitante pour Dundalk (beaucoup de nuls/défaites).",
+          "evidence": "Bohemian V-V-V-V-D ; Dundalk D-D-N-V-D (données API-Football, saison 2024 indiquée, dates au 18/09 au plus tard)."
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Bohemian crée des occasions plus dangereuses (tirs cadrés, xG supérieurs) ; possession comparable.",
+          "evidence": "Tirs cadrés 5,7 vs 3,4 ; xG 1,88 vs 1,46 ; possession 54,8% vs 56,0% ; tirs 16,6 vs 15,5 (10 matchs)."
+        },
+        {
+          "factor": "rendement extérieur/domicile",
+          "observation": "Bohemian est très solide à l'extérieur ; Dundalk est irrégulier à domicile.",
+          "evidence": "Bohemian à l'extérieur : 9V-2N-4D, 28-18 ; Dundalk à domicile : 6V-3N-7D, 25-25."
+        },
+        {
+          "factor": "absences",
+          "observation": "Dundalk est plus touché, avec 7 indisponibles contre 2 pour Bohemian, dont certains avec retour incertain.",
+          "evidence": "Dundalk : Tracey (suspendu, retour début octobre 2026), Cornwall et Wilson (incertains), 4 autres blessés ; Bohemian : Rooney (de retour à l'entraînement), Todd (quelques jours)."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur voit Bohemian favori sur la base des xG attendus, cohérent avec le contexte. Aucune cote de marché n'est fournie, donc pas d'edge calculable.",
+          "evidence": "xG moteur 1,261 vs 2,274 ; action PASS (no_market_odds)."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif va dans le même sens que le moteur : Bohemian est supérieur au classement, en forme, dans les statistiques offensives, et Dundalk est plus diminué par les absences. Sans cote de marché, aucune lecture d'edge n'est possible.",
+      "caveats": "La forme API-Football est étiquetée saison 2024 alors que les dates sont en 2026 ; aucune forme historique ou web plus récente n'est disponible pour la comparer. Pas de données FlashScore, d'historique ni de profil d'équipe. Aucun changement d'entraîneur n'est signalé, mais l'historique peut manquer. Pas de note utilisateur. Dundalk a joué un match de plus que Bohemian au classement. Échantillon de statistiques limité à 10 matchs et 5 pour la forme."
+    },
+    "updatedAt": "2026-09-30T19:36:35.937Z",
+    "createdAt": "2026-09-30T19:36:35.937Z"
+  },
+  {
+    "matchId": "cal-2026-10-02-eldense-oviedo",
+    "homeName": "Eldense",
+    "awayName": "Oviedo",
+    "league": "La Liga 2 - Spain",
+    "commenceTime": "2026-10-02T12:00:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Eldense vs Oviedo",
+      "expectedGoals": {
+        "home": 0.726,
+        "away": 1.966,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 3.76,
+        "draw": 4.17,
+        "away": 2.02
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds",
+        "candidates": []
+      }
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 3161,
+      "cache_read_input_tokens": 774,
+      "output_tokens": 1171,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3161,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1171,
+          "cache_read_input_tokens": 774,
+          "cache_creation_input_tokens": 3161,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 3161
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.0245128,
+    "analysis": {
+      "summary": "Eldense est 19e (zone de relégation) avec 5 points en 7 matchs et une différence de buts de -5, tandis qu'Oviedo est 8e avec 11 points (+3). La forme récente penche nettement pour Oviedo. Les moyennes statistiques sont proches en volume de tirs, mais Oviedo est plus solide défensivement.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Oviedo nettement mieux classé ; Eldense en zone de relégation.",
+          "evidence": "Eldense 19e, 5 pts (1V 2N 4D, 4 buts pour, 9 contre). Oviedo 8e, 11 pts (3V 2N 2D, 7 buts pour, 4 contre)."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Eldense peine à gagner, Oviedo alterne mais reste devant. L'historique local confirme la tendance.",
+          "evidence": "Eldense (API) D-D-V-N-D ; historique D-N-N-V-D. Oviedo (API) V-D-V-N-V ; historique V-V-V-N-V."
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Volume de tirs comparable, xG légèrement en faveur d'Oviedo ; Oviedo concède très peu dans l'historique.",
+          "evidence": "xG moyen 0.89 (Eldense) vs 1.02 (Oviedo) ; tirs 12 vs 12.4. Historique buts encaissés 1.6 (Eldense) vs 0.5 (Oviedo) ; buts marqués 1.0 vs 1.4."
+        },
+        {
+          "factor": "domicile/extérieur",
+          "observation": "Eldense n'a pas gagné à domicile ; Oviedo a bien marqué à l'extérieur.",
+          "evidence": "Eldense dom. : 0V 2N 1D (3-4). Oviedo ext. : 2V 0N 1D (5-3)."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur voit Oviedo favori avec un xG nettement supérieur.",
+          "evidence": "xG 0.726 vs 1.966 ; cotes justes 3.76 / 4.17 / 2.02. Aucune cote de marché fournie, donc pas d'edge, action PASS."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif va dans le même sens que le moteur : Oviedo est mieux classé, en meilleure forme et plus solide défensivement. L'écart des xG du modèle paraît toutefois plus marqué que celui des xG moyens, très proches (0.89 contre 1.02). Sans cotes de marché, aucun edge n'est mesurable.",
+      "caveats": "La forme API-Football est étiquetée saison 2024 mais ses dates (août-septembre 2026) sont récentes et cohérentes avec l'historique local, sans contradiction notable. Les classements reposent sur seulement 7 matchs, ce qui donne un petit échantillon. Les stats FlashScore, les profils d'équipe, les actualités (blessures, entraîneur) et la note utilisateur sont absents. Aucune cote de marché n'est disponible."
+    },
+    "updatedAt": "2026-09-30T19:59:09.999Z",
+    "createdAt": "2026-09-30T19:59:09.999Z"
   }
 ]
