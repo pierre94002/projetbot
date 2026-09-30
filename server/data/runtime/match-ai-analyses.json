@@ -65,8 +65,120 @@
       "alignmentWithModel": "Les quelques données qualitatives disponibles sur Alavés (xG modeste, possession inférieure à 50%, forme sans victoire nette dominante) ne contredisent pas l'edge du moteur en faveur du Racing Santander à domicile ; elles vont plutôt dans le même sens, sans toutefois pouvoir être confirmées faute de données sur le Racing lui-même.",
       "caveats": "Classement des deux équipes indisponible. Aucune statistique moyenne ni forme récente disponible pour le Racing Santander (équipe à domicile), ce qui limite fortement la portée du contexte qualitatif fourni ici, basé uniquement sur les données d'Alavés."
     },
-    "updatedAt": "2026-09-12T13:24:20.405Z",
-    "createdAt": "2026-09-12T13:24:20.405Z"
+    "updatedAt": "2026-09-30T21:00:01.870Z",
+    "createdAt": "2026-09-12T13:24:20.405Z",
+    "postMatchReview": {
+      "summary": "Le Racing Santander s'est imposé 2-1 à domicile, dans le sens de l'edge du moteur (xG 2,11 vs 1,04) et de ma lecture prudente. Tous les marchés joués sont justes, mais l'analyse reposait sur des données très partielles (rien sur le Racing). Le score est serré, donc la confirmation reste modeste.",
+      "whatWasRight": "J'avais jugé que les données d'Alavés (xG modeste de 1,09, possession de 45,5 %) ne contredisaient pas l'avantage du Racing. La victoire 2-1 du Racing le confirme. Le moteur attendait aussi un Alavés capable de marquer (xG 1,04), et c'est ce qui s'est produit avec un but adverse.",
+      "whatWasMissed": "Je n'avais pas de donnée sur le Racing et je n'ai pas évalué le risque de match serré. Le 2-1 montre une marge d'un seul but, et le xG moteur de 2,11 pour le Racing était un peu au-dessus des 2 buts inscrits. Aucune statistique de match (tirs, xG réel, minutes des buts) n'a été fournie pour juger du déroulé.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur : victoire du Racing, les deux équipes marquent, et un total de buts supérieur à 0,5. Un seul match ne valide toutefois pas l'edge de 16 %. Le Racing a gagné avec seulement un but d'écart, et la cote « true » de 2,17 laissait une vraie part d'incertitude.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Real Racing Club de Santander gagne",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le Racing a gagné 2-1, conforme à l'avantage xG (2,11 contre 1,04) attendu par le moteur. La marge est d'un seul but. Les minutes des buts ne sont pas fournies.",
+          "lesson": "Garder la confiance dans l'edge du moteur à domicile, sans surinterpréter un succès d'un but d'écart. Un avis basé uniquement sur les données de l'adversaire reste fragile."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Trois buts ont été marqués au total, donc plus de 0,5 est validé sans difficulté. Le xG cumulé attendu était d'environ 3,2.",
+          "lesson": "Un seuil de 0,5 but est très peu informatif : il est presque toujours atteint. Il ne confirme pas la qualité de l'analyse et ne doit pas servir de preuve."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Alavés a marqué une fois malgré un profil offensif modeste, et le Racing deux fois. Le xG moteur de 1,04 pour Alavés rendait le « oui » plausible.",
+          "lesson": "Un xG visiteur proche de 1 suffit à soutenir un « oui » pour les deux équipes. Ce point du moteur est à conserver, même si un échantillon unique ne le prouve pas."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Real Racing Club de Santander & Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Marché combiné validé : victoire du Racing et 3 buts au total. Il dépend surtout du résultat 1X2, le seuil de 0,5 étant quasi acquis.",
+          "lesson": "Ce combiné ne vaut que par son volet résultat. Le juger sur la justesse du 1X2, pas sur celle du total."
+        },
+        {
+          "market": "Buts — Real Racing Club de Santander",
+          "marketId": "teamGoals",
+          "pick": "Real Racing Club de Santander — Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le Racing a marqué deux fois, donc plus de 0,5 est validé. Son xG moteur de 2,11 rendait ce résultat très probable.",
+          "lesson": "Un xG domicile supérieur à 2 rend un seuil de 0,5 but très sûr, mais le marché n'apporte que peu de valeur."
+        },
+        {
+          "market": "Buts — Alavés",
+          "marketId": "teamGoals",
+          "pick": "Alavés — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Alavés a marqué un seul but, bien sous le seuil de 3,5. Son profil offensif modeste (xG 1,09, 3,5 tirs cadrés) allait dans ce sens.",
+          "lesson": "Pour une équipe à faible production offensive, une limite haute comme moins de 3,5 est fiable mais peu informative."
+        }
+      ],
+      "caveats": "Un seul match, donc un échantillon insuffisant. Aucune statistique détaillée du match (xG réel, tirs, possession, minutes des buts) n'a été fournie. Aucune donnée sur le Racing avant le match. Je n'avais pas d'avis nuancé par marché (aiVerdict nul), donc je ne peux pas juger mon avis marché par marché.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2712,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 1693,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 2712,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1693,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 2712,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2712
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.027989200000000002,
+      "createdAt": "2026-09-30T21:00:01.870Z"
+    }
   },
   {
     "matchId": "5a4aaa142d12a350f302f2fb62fef0b3",
@@ -137,31 +249,119 @@
       "alignmentWithModel": "Le contexte qualitatif va globalement dans le sens de l'edge identifié par le modèle sur l'issue extérieure : classement, forme récente et statistiques offensives moyennes favorisent Celta Vigo. Toutefois, le bilan plus faible de Celta en déplacement et la solidité relative de la Sociedad à domicile apportent une nuance qui rejoint la prudence du moteur, celui-ci ne recommandant pas de mise malgré l'edge détecté.",
       "caveats": "Les statistiques moyennes (tirs, xG, possession) proviennent d'un échantillon réduit de 10 matchs et ne précisent pas s'il s'agit de matchs à domicile ou à l'extérieur spécifiquement. La forme récente sur 5 matchs n'indique pas non plus le lieu (domicile/extérieur) de chaque rencontre."
     },
-    "updatedAt": "2026-09-12T13:28:16.638Z",
+    "updatedAt": "2026-09-30T21:00:18.734Z",
     "createdAt": "2026-09-12T13:26:52.707Z",
     "postMatchReview": {
-      "summary": "Le match s'est soldé par un score nul et vierge (0-0), un résultat qui ne favorise clairement ni l'analyse qualitative ni le chiffrage du moteur, tous deux orientés vers un avantage Celta Vigo (edge à l'extérieur, xG moteur légèrement supérieur pour Sociedad à domicile mais probabilités \"away\" les plus hautes du marché théorique). Le nul reflète en réalité un match fermé, sans doute proche du scénario neutre que le modèle plaçait à 3.3 (cote true odds draw), donc pas totalement hors radar mais pas la tendance principale identifiée.",
-      "whatWasRight": "L'analyse avait bien identifié une équilibre relatif malgré l'avantage Celta : la nuance apportée sur le bilan extérieur fragile de Celta (27 marqués/36 encaissés à l'extérieur) et la solidité de la Sociedad à domicile (20/20) laissait présager un match plus serré qu'un simple différentiel de classement ne le suggérait. Le fait que le moteur n'ait pas recommandé de mise (staking recommended:false) malgré l'edge de 5.2% converge avec cette prudence, et le résultat nul confirme qu'aucune issue nette ne s'est dégagée.",
-      "whatWasMissed": "L'analyse et le moteur tablaient tous deux sur un match avec des buts (expectedGoals 1.4 et 1.1, soit un total attendu proche de 2.5), alors que le résultat réel (0-0) montre une rencontre beaucoup plus fermée et improductive que prévu par les statistiques offensives moyennes de Celta (xG 1.55, 6.2 tirs cadrés en moyenne). Ni la forme récente ni les chiffres offensifs n'ont anticipé cette stérilité collective, ce qui suggère un facteur non capté par l'échantillon (approche tactique prudente des deux équipes, enjeu de fin de saison, ou méforme ponctuelle des attaques ce jour-là).",
-      "outcomeVsEngine": "Le résultat contredit à la fois l'edge du moteur (qui penchait pour une victoire extérieure de Celta avec la cote true odds la plus favorable à 3.4 contre 3.6 marché) et l'analyse qualitative qui privilégiait clairement Celta sur la base du classement et de la forme. Cependant, comme le moteur n'avait pas recommandé de mise sur cet edge modeste (5.2%), le nul valide indirectement la prudence du système plutôt que sa prédiction directionnelle.",
-      "caveats": "Confrontation basée sur un seul match, ce qui ne permet aucune généralisation sur la fiabilité du modèle ou de l'analyse qualitative. Aucune donnée in-match (xG réel du match, tirs cadrés, possession) n'a été fournie pour expliquer pourquoi les deux attaques, statistiquement productives en moyenne, n'ont inscrit aucun but ce jour-là.",
-      "model": "claude-sonnet-5",
-      "usage": {
-        "input_tokens": 2550,
-        "cache_creation_input_tokens": 0,
-        "cache_read_input_tokens": 0,
-        "cache_creation": {
-          "ephemeral_5m_input_tokens": 0,
-          "ephemeral_1h_input_tokens": 0
+      "summary": "Le 0-0 contredit à la fois le penchant du moteur (victoire de la Sociedad, xG 1,4 contre 1,1) et ma lecture d'avant-match, qui penchait pour Celta. Seule la prudence sur le résultat s'est révélée utile. Le match est resté fermé, sans but.",
+      "whatWasRight": "J'avais nuancé l'avantage de Celta par sa fragilité à l'extérieur (36 buts encaissés en 19 matchs) et par la solidité relative de la Sociedad à domicile (20 buts encaissés en 19 matchs). Cette prudence, alignée sur l'absence de mise recommandée, était justifiée : Celta n'a pas gagné. Les deux marchés « moins de 3,5 buts par équipe » étaient très probables et sont passés, ce qui reste cohérent avec des xG modérés (1,4 et 1,1).",
+      "whatWasMissed": "J'ai surpondéré le classement, la forme récente et les tirs moyens de Celta sans envisager un match fermé à faible score. Le 0-0 montre que la supériorité statistique de Celta ne s'est pas traduite par des buts. Je n'ai pas non plus distingué le risque de match sans but, que l'écart de xG d'environ 2,5 buts au total ne permettait pas d'écarter. Les données de match (tirs, xG réalisés) ne m'ont pas été fournies, donc je ne peux pas dire qui a dominé.",
+      "outcomeVsEngine": "Le résultat contredit le moteur : il donnait la victoire locale, le nul n'a pas été retenu, et les marchés de buts (plus de 0,5 but, les deux équipes marquent) supposaient au moins un but. Il contredit aussi mon penchant pour Celta. Un seul match ne suffit pas pour conclure à un défaut du modèle, mais le 0-0 met en évidence la probabilité non négligeable d'un match sans but.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Real Sociedad gagne",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le moteur choisissait la victoire de la Sociedad, mais le match s'est terminé 0-0, donc un nul. Le nul était coté 3,3 en cote juste, une issue plausible. Je n'avais pas d'avis tranché sur ce marché.",
+          "lesson": "Quand les cotes de victoire locale et de nul sont proches (2,1 contre 3,3) et que l'attaque adverse est en forme, le nul mérite d'être pesé sérieusement. Un choix du moteur sans mise recommandée reste fragile."
         },
-        "output_tokens": 1130,
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le pari « plus de 0,5 but » a échoué : aucun but n'a été marqué. C'est un événement rare, mais il arrive, surtout entre deux équipes qui se neutralisent.",
+          "lesson": "Même un seuil très bas n'est pas garanti. Il faut vérifier les tendances de 0-0 et la solidité défensive à domicile avant de traiter ce marché comme quasi acquis."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le « Oui » a échoué, aucune équipe n'ayant marqué. Celta, pourtant meilleure attaque, n'a pas trouvé le chemin des filets à l'extérieur, et la Sociedad non plus.",
+          "lesson": "Le marché des deux équipes qui marquent dépend des deux attaques. Une attaque moyenne ou en méforme côté Sociedad (xG 1,26, 3,7 tirs cadrés) suffit à le fragiliser. Il faut examiner chaque camp séparément."
+        },
+        {
+          "market": "Buts — Real Sociedad",
+          "marketId": "teamGoals",
+          "pick": "Real Sociedad — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "La Sociedad a marqué 0 but, donc « moins de 3,5 » est passé sans difficulté. Le seuil était très haut pour une équipe à 1,4 xG attendu.",
+          "lesson": "Ce type de seuil élevé est presque toujours gagnant, mais il apporte peu de valeur informative. Il ne confirme pas à lui seul la qualité de l'analyse."
+        },
+        {
+          "market": "Buts — Celta Vigo",
+          "marketId": "teamGoals",
+          "pick": "Celta Vigo — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Celta a marqué 0 but, donc « moins de 3,5 » est passé. Avec 1,1 xG attendu, le risque était déjà très faible.",
+          "lesson": "Même remarque : un seuil haut est gagné de façon quasi mécanique. Il faut le traiter comme un pari de faible valeur et non comme une confirmation de la lecture du match."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Real Sociedad & Plus de 0.5 buts",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le combiné « Sociedad & plus de 0,5 but » a échoué sur les deux jambes : pas de victoire locale et pas de but. Le 0-0 invalide les deux conditions.",
+          "lesson": "Un combiné cumule les risques des deux jambes. Quand la jambe « résultat » est fragile et que le nul est plausible, le combiné l'est aussi. Il ne faut pas le considérer comme une simple variante du pari sur le résultat."
+        }
+      ],
+      "caveats": "Il s'agit d'un seul match, dont l'issue (0-0) peut tenir à la variance. Je n'ai reçu ni xG réel, ni tirs, ni possession, ni compositions, donc je ne peux pas dire si le nul traduit une vraie fermeture du jeu ou un manque d'efficacité. Aucune conclusion solide sur le modèle ne peut être tirée d'un échantillon unique.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2895,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 1993,
         "output_tokens_details": {
           "thinking_tokens": 0
         },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
         "service_tier": "standard",
-        "inference_geo": "global"
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 2895,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1993,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 2895,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2895
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
       },
-      "createdAt": "2026-09-12T13:28:16.637Z"
+      "costUsd": 0.031721200000000005,
+      "createdAt": "2026-09-30T21:00:18.733Z"
     }
   },
   {
@@ -211,8 +411,120 @@
     "analysis": {
       "summary": "Aucune donnée qualitative n'est disponible pour ce match (ni classement, ni forme récente, ni statistiques moyennes des deux équipes). Le seul élément exploitable reste donc le chiffrage du moteur CôteMaster, qui attribue un xG nettement supérieur à Athletic Bilbao (1.919) par rapport à Elche CF (0.936), suggérant une domination attendue à domicile.\n[{\"factor\":\"expected goals (modèle)\",\"observation\":\"Le modèle attribue un avantage offensif clair à Athletic Bilbao à domicile face à Elche CF.\",\"evidence\":\"xG domicile 1.919 vs xG extérieur 0.936\"},{\"factor\":\"edge du modèle\",\"observation\":\"L'écart entre la cote juste calculée et la cote du marché est très faible, ce qui a conduit le moteur à ne recommander aucune mise.\",\"evidence\":\"edgePercent: -0.2%, staking.action: PASS\"}]\n<alignmentWithModel\">En l'absence totale de contexte qualitatif (classement, forme, statistiques), il n'est pas possible de confirmer, nuancer ou contredire l'edge chiffré du moteur. L'analyse qualitative ne peut donc ni renforcer ni tempérer la position de \"PASS\" retenue par le modèle ; elle reste neutre faute de données.\nClassement des deux équipes non disponible. Statistiques moyennes (homeStats/awayStats) absentes. Forme récente (homeForm/awayForm) non renseignée. L'analyse qualitative repose donc uniquement sur les chiffres du moteur, sans validation contextuelle externe."
     },
-    "updatedAt": "2026-09-12T17:57:33.279Z",
-    "createdAt": "2026-09-12T17:57:33.279Z"
+    "updatedAt": "2026-09-30T21:00:33.436Z",
+    "createdAt": "2026-09-12T17:57:33.279Z",
+    "postMatchReview": {
+      "summary": "Le moteur voyait Bilbao favori (xG 1.919 contre 0.936), et mon analyse était neutre faute de données. Le match s'est terminé sur un nul 1-1. Le favori n'a pas gagné, mais les marchés de buts (plus de 0.5, les 2 marquent, moins de 3.5) sont passés. Le PASS du moteur (edge -0.2%) s'est révélé prudent.",
+      "whatWasRight": "Le PASS était cohérent : l'edge était quasi nul, et le pick Résultat a échoué sans conséquence de mise. Le profil de buts était plausible : les deux équipes ont marqué, ce qui correspond à un xG extérieur non négligeable (0.936) et à un total modéré, sans explosion offensive.",
+      "whatWasMissed": "Je n'avais aucune donnée contextuelle (forme, classement, enjeu), donc je n'ai pas pu repérer le risque de nul ni la résistance d'Elche. Le résultat montre que le nul, coté 4.02 au marché, était un scénario bien réel pour un favori à 1.56. Je n'ai pas non plus de stats du match (xG réel, tirs, minutes des buts), donc je ne peux pas dire si le nul est mérité.",
+      "outcomeVsEngine": "Le résultat contredit partiellement le moteur : le favori à domicile n'a pas gagné, mais un seul match ne permet pas de conclure sur la calibration. Les marchés de buts vont dans le sens du chiffrage. Le PASS est validé par l'absence d'edge.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Athletic Bilbao gagne",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le nul 1-1 a invalidé la victoire de Bilbao. Le moteur donnait environ 60% à Bilbao (cote juste 1.67) et environ 23% au nul (4.29), donc le nul restait tout à fait possible. Je n'ai pas de stats de match pour juger la domination.",
+          "lesson": "Pour un favori à cote basse, le nul pèse lourd quand l'équipe adverse a un xG autour de 0.9. Sans contexte qualitatif, rester neutre était correct, et il ne faut pas surpondérer le xG seul."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Avec 2 buts au total (1-1), plus de 0.5 est passé facilement. C'était un pick à très forte probabilité, avec un xG cumulé d'environ 2.85.",
+          "lesson": "Les seuils bas comme 0.5 sont quasi acquis et n'apportent pas d'information. Ils ne doivent pas être pris pour une preuve de la qualité du modèle."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Bilbao et Elche ont chacun marqué une fois. Le xG extérieur de 0.936 laissait une chance réelle à Elche de marquer.",
+          "lesson": "Un xG extérieur proche de 1 rend le Oui crédible même contre un gros favori. C'est un signal à garder pour ce marché."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Athletic Bilbao & Plus de 0.5 buts",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le pick combiné dépendait de la victoire de Bilbao, qui n'est pas venue. La partie « plus de 0.5 » était bonne, mais c'est le volet résultat qui a fait échouer le combiné.",
+          "lesson": "Un marché combiné hérite de l'incertitude de son composant le plus fragile, ici le résultat. Les risques ne se compensent pas."
+        },
+        {
+          "market": "Buts — Athletic Bilbao",
+          "marketId": "teamGoals",
+          "pick": "Athletic Bilbao — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Bilbao n'a marqué qu'un but, donc moins de 3.5 est passé sans difficulté, loin du seuil.",
+          "lesson": "Un seuil de 3.5 buts pour une équipe est très peu exigeant face à un xG de 1.9. Ce pick est sûr mais peu informatif."
+        },
+        {
+          "market": "Buts — Elche CF",
+          "marketId": "teamGoals",
+          "pick": "Elche CF — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Elche a marqué un but, très loin de 3.5. Le pick est passé sans difficulté.",
+          "lesson": "Même remarque : un seuil de 3.5 buts pour l'équipe la plus faible offensivement est presque toujours atteint sans qu'on en apprenne quelque chose sur le modèle."
+        }
+      ],
+      "caveats": "C'est un échantillon d'un seul match, sans statistiques détaillées (xG réel, tirs, possession, minutes des buts). Aucune donnée qualitative n'était disponible avant le match. Aucune conclusion solide sur la calibration du moteur n'est donc possible.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2477,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 1673,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 2477,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1673,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 2477,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2477
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.026849200000000004,
+      "createdAt": "2026-09-30T21:00:33.436Z"
+    }
   },
   {
     "matchId": "fc0154734861d4a222bdb50e15d2bee2",
@@ -290,8 +602,120 @@
       "alignmentWithModel": "Le contexte qualitatif renforce clairement la logique du moteur sur la supériorité globale du Real Madrid (classement, forme, statistiques offensives et bilan domicile/extérieur), ce qui confirme l'issue la plus probable identifiée par le modèle. Cependant, ces éléments ne changent rien au constat du moteur selon lequel le marché a déjà intégré cette domination de façon excessive, d'où l'edge négatif et la recommandation de passer sur ce match.",
       "caveats": "Aucune donnée sur les confrontations directes (head-to-head) entre les deux équipes n'est fournie. Les échantillons de forme (5 matchs) et de statistiques moyennes (10 matchs) restent limités pour capter d'éventuelles fluctuations récentes (blessures, rotation d'effectif en fin de saison, enjeu sportif résiduel)."
     },
-    "updatedAt": "2026-09-12T20:02:31.887Z",
-    "createdAt": "2026-09-12T20:02:31.887Z"
+    "updatedAt": "2026-09-30T21:00:53.590Z",
+    "createdAt": "2026-09-12T20:02:31.887Z",
+    "postMatchReview": {
+      "summary": "Le Real Madrid a gagné 4-1, ce qui va dans le sens de la hiérarchie annoncée avant le match (xG 2,18 contre 0,62). Les six marchés du moteur sont justes. Le score est plus large et le but de Rayo plus fréquent que le modèle ne le laissait attendre. Le PASS venait d'un prix de marché trop bas (1,13), pas d'un doute sur le vainqueur, et le résultat ne contredit pas ce point.",
+      "whatWasRight": "J'avais identifié le Real comme l'issue la plus probable, en m'appuyant sur le classement, la forme, le volume offensif et le bilan à domicile. Le 4-1 le confirme. J'avais aussi relevé que l'edge négatif venait d'une cote déjà très basse et non d'un doute sur la supériorité du Real. Cette distinction entre « favori probable » et « pari rentable » reste valable.",
+      "whatWasMissed": "Je n'ai pas anticipé l'ampleur du score. Le Real a marqué 4 buts alors que son xG attendu était d'environ 2,2. Rayo a aussi marqué, alors que son xG était d'environ 0,6 et que je le décrivais comme faible à l'extérieur (17 buts marqués en 19 matchs). Je n'avais aucune donnée sur les confrontations directes ni sur l'enjeu de fin de saison. Les minutes des buts et les statistiques du match ne m'ont pas été fournies, donc je ne peux pas dire comment le match s'est déroulé.",
+      "outcomeVsEngine": "Le résultat va dans le sens des probabilités du moteur, car le Real gagne comme prévu. Il ne dit rien sur l'edge négatif : un seul match ne permet pas de juger un écart de prix de quelques points. Le PASS n'est ni validé ni invalidé par cette victoire.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Real Madrid gagne",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le Real gagne 4-1. Il confirme sa supériorité annoncée (xG 2,18 contre 0,62, meilleure forme et bilan à domicile).",
+          "lesson": "Garder la lecture « Real très favori à domicile contre une équipe moyenne à l'extérieur ». Le pronostic était juste, mais la cote de 1,13 laissait peu de valeur, donc je reste prudent sur le prix même quand l'issue est probable."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Cinq buts au total (4-1), donc largement plus de 0,5. Le marché était presque acquis d'avance, car il suffisait d'un seul but.",
+          "lesson": "Un marché « plus de 0,5 » est très probable par nature et rapporte peu. Il confirme surtout le profil offensif du Real, sans apporter d'information propre."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Rayo a marqué une fois malgré un xG attendu faible (0,62), et le Real a marqué 4 fois. Le oui passe.",
+          "lesson": "Contre le Real, le modèle sous-estime peut-être la chance qu'un adversaire marque au moins une fois. Un xG d'environ 0,6 laisse une probabilité non négligeable de but, et un oui a pu passer ici. Il faut regarder ce marché de près pour les gros favoris à domicile, sans conclure sur un seul match."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Real Madrid & Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "La victoire du Real et plus de 0,5 but sont tous deux validés par le 4-1. Ce marché combiné ne dépend que de la victoire.",
+          "lesson": "Quand la seconde condition est quasi certaine, ce combiné ne fait que répéter le marché du résultat. Il n'apporte pas de valeur supplémentaire."
+        },
+        {
+          "market": "Buts — Real Madrid",
+          "marketId": "teamGoals",
+          "pick": "Real Madrid — Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le Real a marqué 4 fois, donc plus de 0,5 est validé. Son xG attendu (2,18) rendait cet événement très probable.",
+          "lesson": "Le niveau offensif du Real à domicile (45 buts en 19 matchs) est fiable. Le 4-1 montre aussi que le total réel peut dépasser nettement l'attendu."
+        },
+        {
+          "market": "Buts — Rayo Vallecano",
+          "marketId": "teamGoals",
+          "pick": "Rayo Vallecano — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Rayo n'a marqué qu'un but, donc moins de 3,5 est validé sans difficulté. Son faible xG attendu (0,62) allait dans ce sens.",
+          "lesson": "Le plafond de buts de Rayo à l'extérieur est bien lu. Ce marché est sûr, mais sa cote devait être très basse, donc il reste peu intéressant."
+        }
+      ],
+      "caveats": "Il s'agit d'un seul match, donc on ne peut pas juger la qualité du modèle ni de l'edge. Je n'ai reçu ni les minutes des buts, ni les tirs, ni le xG réel, ni la possession. Je ne peux donc pas dire si le 4-1 reflète la domination du Real ou un surcroît de réussite, ni dans quel ordre les buts sont tombés. Les blessures, les rotations et l'enjeu de fin de saison ne sont pas connus non plus.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2933,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 1898,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 2933,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1898,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 2933,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2933
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0309232,
+      "createdAt": "2026-09-30T21:00:53.590Z"
+    }
   },
   {
     "matchId": "0eba3c2d3bcf1d1fe4ab3180a3d03152",
@@ -369,8 +793,120 @@
       "alignmentWithModel": "Le contexte qualitatif disponible sur Celta (forme correcte, solidité à domicile, volume offensif notable) pourrait sembler favorable à l'équipe locale, mais l'absence totale de données sur Málaga empêche toute mise en perspective comparative fiable. Ce déséquilibre informationnel renforce plutôt la prudence du moteur, qui recommande de passer sur ce match plutôt que de le nuancer.",
       "caveats": "Aucune donnée disponible pour Málaga : classement, forme récente et statistiques moyennes sont absents. Le xG affiché par le moteur (0.5/0.5) contraste avec le xG moyen de Celta sur 10 matchs (1.55), sans qu'il soit possible d'expliquer cet écart faute de données comparatives sur l'adversaire."
     },
-    "updatedAt": "2026-09-12T23:15:09.480Z",
-    "createdAt": "2026-09-12T23:15:09.480Z"
+    "updatedAt": "2026-09-30T21:01:09.110Z",
+    "createdAt": "2026-09-12T23:15:09.480Z",
+    "postMatchReview": {
+      "summary": "Le match nul 1-1 contredit le pick « Celta gagne » du moteur, mais valide la prudence du PASS pré-match (edge -15,29 %). Le nul était proche du xG 0,5/0,5 du moteur et de sa cote vraie du nul (3,03). Mon analyse, centrée sur Celta sans aucune donnée sur Málaga, penchait trop vers le local.",
+      "whatWasRight": "Le PASS était justifié : le favori Celta (cote marché 1,71 contre 2,22 de cote vraie) était surévalué, et il n'a pas gagné. J'avais aussi signalé l'écart entre le xG moteur (0,5/0,5) et le xG moyen de Celta (1,55), ce qui indiquait un modèle prudent et non un avantage net du local. Les marchés de buts (plus de 0,5, les deux équipes marquent, moins de 3,5) se sont réalisés avec 1-1.",
+      "whatWasMissed": "J'ai laissé le contexte favorable à Celta (forme à domicile, volume de tirs) suggérer un avantage local, alors que Málaga n'était pas évalué. J'ai aussi sous-estimé le scénario du nul, que la cote vraie de 3,03 rendait plausible, et le fait que les deux équipes marquent. Un xG moteur de 0,5 par équipe est faible face à un 1-1 : soit le xG est peu fiable, soit le résultat est à l'inverse de la tendance.",
+      "outcomeVsEngine": "Résultat mixte. Le pick 1X2 du moteur (Celta gagne) est faux, mais son edge négatif et son PASS sont confirmés. Les marchés de buts allaient dans le sens du moteur. Le nul était cohérent avec ses probabilités, qui donnaient une cote vraie du nul plus basse que celle du marché.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Celta Vigo gagne",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "1-1 : Celta n'a pas gagné. Le moteur voyait le local favori, mais sa cote vraie (2,22) laissait une vraie place au nul (3,03) et au nul ou à l'extérieur.",
+          "lesson": "Quand l'edge est négatif et que l'adversaire est inconnu, ne pas transformer une bonne forme à domicile en avantage net ; le nul reste un scénario à garder en tête. Un pick favori sans edge est fragile."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Deux buts au total, donc plus de 0,5 est validé. Seul un 0-0 l'aurait fait échouer.",
+          "lesson": "Plus de 0,5 est un pick presque toujours juste. Il confirme peu de choses sur la qualité du modèle, il ne faut pas lui accorder de valeur informative."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Chaque équipe a marqué une fois. Málaga a marqué malgré l'absence de données sur lui, et Celta a marqué à domicile.",
+          "lesson": "Malgré un xG moteur bas (0,5 chacun), le oui a été validé. Attention toutefois à ne pas en tirer une règle avec un seul match ; ce marché dépend des deux défenses, dont une était inconnue."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Celta Vigo & Plus de 0.5 buts",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Échec car la composante résultat (victoire Celta) est fausse, alors que plus de 0,5 but était acquis.",
+          "lesson": "Un marché combiné n'est jamais plus fiable que sa jambe la plus fragile : ici le 1X2. Ne pas le considérer tant que le résultat seul est sans edge."
+        },
+        {
+          "market": "Buts — Celta Vigo",
+          "marketId": "teamGoals",
+          "pick": "Celta Vigo — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Celta a marqué un but, loin de 3,5. Le xG de 0,5 du moteur pointait vers un faible total.",
+          "lesson": "Les seuils hauts (moins de 3,5) sont très probables dans la plupart des matchs. Ils confirment le calibrage du xG moteur, mais apportent peu de valeur."
+        },
+        {
+          "market": "Buts — Málaga",
+          "marketId": "teamGoals",
+          "pick": "Málaga — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Málaga a marqué un but, donc moins de 3,5 est validé. Le match est resté fermé.",
+          "lesson": "Même en l'absence de données sur l'équipe, un seuil de 3,5 buts est peu risqué. Il ne dit rien sur sa force."
+        }
+      ],
+      "caveats": "Un seul match, avec aucune donnée sur Málaga et aucune statistique de match (xG réel, tirs, possession, minutes des buts) fournie. Le 1-1 peut venir de la variance, donc on ne peut pas juger la qualité du modèle sur ce résultat.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2787,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 1714,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 2787,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1714,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 2787,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2787
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.028499200000000002,
+      "createdAt": "2026-09-30T21:01:09.109Z"
+    }
   },
   {
     "matchId": "6406438af00a2a42a81d6b2f1656d474",
@@ -443,8 +979,120 @@
       "alignmentWithModel": "Le contexte qualitatif renforce clairement le sens de l'edge chiffré par le moteur en faveur de Barcelone : classement, forme et statistiques offensives convergent vers une nette supériorité de l'équipe visiteuse. Cela dit, ces éléments ne permettent pas d'évaluer si l'ampleur de l'edge (47.4%) est justifiée, la décision de staking (PASS) relevant uniquement du calibrage du moteur.",
       "caveats": "Aucune donnée de classement disponible pour Levante (standings.home = null). Aucune statistique moyenne disponible pour Levante (homeStats = null). Aucune forme récente disponible pour Levante (homeForm.results vide, sampleSize=0), ce qui empêche toute comparaison directe entre les deux équipes sur ces critères."
     },
-    "updatedAt": "2026-09-13T00:13:20.861Z",
-    "createdAt": "2026-09-13T00:13:20.861Z"
+    "updatedAt": "2026-09-30T21:01:24.029Z",
+    "createdAt": "2026-09-13T00:13:20.861Z",
+    "postMatchReview": {
+      "summary": "Barcelone s'est imposé 4-2 à Levante, ce qui confirme le sens de ma lecture pré-match (supériorité nette du visiteur). Le match a été bien plus ouvert que le xG de 0.5 par équipe fourni au moteur ne le laissait penser : six buts au total. Le moteur a la bonne direction sur le 1X2 mais était mal calibré sur le volume de buts.",
+      "whatWasRight": "La domination de Barcelone (leader, 88 pts, bilan extérieur très offensif avec 50 buts en 19 matches, xG récent 2.3) a été confirmée par la victoire et par les 4 buts inscrits. Le profil offensif que j'avais relevé se retrouve dans le score. Le fait de ne pas pouvoir juger l'ampleur de l'edge (47.4 %) était aussi une réserve prudente.",
+      "whatWasMissed": "Je n'ai pas relevé l'incohérence entre les xG du moteur (0.5 / 0.5) et le profil réel de Barcelone (xG moyen 2.3, 50 buts à l'extérieur) : ces xG étaient très bas et ont produit des picks de type Nul & Moins de 2.5 buts, démentis par 6 buts. J'ai aussi sous-estimé la capacité de Levante à marquer (2 buts), faute de données sur lui, sans signaler explicitement le risque d'un match ouvert.",
+      "outcomeVsEngine": "Sur le 1X2, le résultat va dans le sens du moteur (victoire de Barcelone, cote vraie 1.66 contre 1.26 du marché). En revanche, les marchés dérivés du xG très faible (nul, moins de 2.5 buts, Barcelone moins de 3.5) sont contredits par le score 2-4. Le staking PASS s'est montré prudent, sans conséquence à juger ici.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Barcelona gagne",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Barcelone a gagné 4-2 à l'extérieur, conforme à sa supériorité de classement et de forme.",
+          "lesson": "Le favori écrasant en déplacement reste fiable sur le 1X2 quand classement, forme et stats convergent ; à garder."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Six buts ont été marqués, donc plus de 0.5 est largement passé.",
+          "lesson": "Ce seuil très bas est quasi certain ; il n'apporte que peu d'information, à ne pas surinterpréter comme validation du modèle."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Levante a marqué 2 fois malgré un xG moteur de 0.5, et Barcelone 4 : le Oui est passé.",
+          "lesson": "Face à un Barcelone qui encaisse ponctuellement (19 buts en 19 matchs à l'extérieur), le Oui reste plausible ; ne pas fermer l'équipe à domicile avec un xG de 0.5."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Nul & Moins de 2.5 buts",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le pick Nul & Moins de 2.5 est incohérent avec le contexte : Barcelone a gagné et il y a eu 6 buts. Faux sur les deux composantes.",
+          "lesson": "Un pick combiné contredisant le favori net et le profil offensif doit être signalé comme incohérent ; les xG trop bas du moteur produisent des combinés erronés."
+        },
+        {
+          "market": "Buts — Levante",
+          "marketId": "teamGoals",
+          "pick": "Levante — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Levante a marqué 2 buts, soit moins de 3.5 : pick juste.",
+          "lesson": "Plafond de buts d'un outsider à domicile face à un gros : le seuil de 3.5 est sûr, mais la valeur informationnelle est faible."
+        },
+        {
+          "market": "Buts — Barcelona",
+          "marketId": "teamGoals",
+          "pick": "Barcelona — Moins de 3.5 buts",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Barcelone a marqué 4 buts, donc dépassé 3.5 : pick faux. Cela colle à son xG récent de 2.3 et ses 20 tirs par match, que le xG moteur de 0.5 ignorait.",
+          "lesson": "Pour Barcelone, ne pas plafonner les buts avec un xG moteur de 0.5 ; croiser avec ses moyennes récentes (xG 2.3, 50 buts à l'extérieur) avant de valider un Moins de 3.5."
+        }
+      ],
+      "caveats": "Un seul match, donc échantillon minimal. Aucune donnée sur Levante ni détail des minutes de buts, tirs ou xG réels du match, donc l'analyse du déroulé reste limitée. Un score de 4-2 peut aussi tenir à la variance.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 3825,
+        "output_tokens": 1687,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1687,
+            "cache_read_input_tokens": 3825,
+            "cache_creation_input_tokens": 0,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 0
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.017639000000000002,
+      "createdAt": "2026-09-30T21:01:24.029Z"
+    }
   },
   {
     "matchId": "15e3bf25540c88237a06c03df1cb334b",
@@ -512,8 +1160,120 @@
       "alignmentWithModel": "Le moteur affiche un edge négatif (-12.01%) et recommande de passer sur ce match, ce qui est cohérent avec le contexte qualitatif disponible : la forme récente très négative de Getafe (4 défaites sur 5) ne plaide pas en faveur d'une confiance accrue sur le favori supposé du marché, et l'absence totale de données sur Deportivo empêche de contrebalancer ou de nuancer ce signal. Le contexte qualitatif ne contredit donc pas la prudence du modèle, sans pour autant permettre de la renforcer davantage faute d'informations sur l'adversaire.",
       "caveats": "Aucune donnée de classement, de forme récente ni de statistiques moyennes n'est disponible pour le Deportivo La Coruña, ce qui limite fortement l'analyse comparative. L'échantillon de forme de Getafe (5 matchs) et de statistiques (10 matchs) reste par ailleurs limité."
     },
-    "updatedAt": "2026-09-13T11:27:47.136Z",
-    "createdAt": "2026-09-13T11:27:47.136Z"
+    "updatedAt": "2026-09-30T21:01:39.546Z",
+    "createdAt": "2026-09-13T11:27:47.136Z",
+    "postMatchReview": {
+      "summary": "Le match nul 1-1 a validé la prudence pré-match : le moteur passait (edge -12 %) et l'analyse jugeait la forme de Getafe fragile. Le pick « Getafe gagne » du moteur est faux. Les marchés de buts (plus de 0,5, BTTS oui, moins de 3,5 par équipe) sont justes, mais ce sont des issues peu contraignantes.",
+      "whatWasRight": "Le PASS était cohérent : Getafe n'a pas gagné, malgré un statut de favori du marché (cote 2,08). La forme récente très négative (4 défaites sur 5) n'incitait pas à faire confiance au favori, et le nul, que le moteur valorisait (vraie cote 2,69 contre 2,77 au marché), s'est produit. Le profil de contre-attaque de Getafe (possession 39,8 %) allait aussi dans le sens d'un match serré.",
+      "whatWasMissed": "Je n'avais aucune donnée sur le Deportivo et je n'ai pas pu évaluer sa capacité à marquer. Son but a pourtant rendu le BTTS juste. Je n'ai pas non plus mentionné explicitement le nul comme issue probable. Mon analyse restait centrée sur Getafe, sans lecture du marché des buts.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur : le PASS était justifié, car le favori du marché n'a pas gagné et le prix du nul était le plus proche de la valeur estimée. Les xG du moteur de 0,5 contre 0,5 étaient toutefois très bas pour un match qui a compté deux buts, donc la partie sur les buts reste mal calibrée.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Getafe gagne",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le 1-1 invalide « Getafe gagne ». Getafe, en mauvaise forme et avec peu de possession, n'a pas su faire la différence face à un adversaire dont on ignorait tout.",
+          "lesson": "Ne pas suivre le favori du marché quand sa forme récente est mauvaise et qu'on n'a rien sur l'adversaire. Le nul doit être considéré comme une issue sérieuse dans les matchs équilibrés, avec des xG moteur proches."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Deux buts ont été marqués (1-1), donc plus de 0,5 est largement atteint.",
+          "lesson": "Ce seuil est presque toujours atteint et n'apporte quasiment aucune information. Il ne faut pas le compter comme une réussite de l'analyse."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Chaque équipe a marqué une fois. Getafe génère du volume (11,6 tirs, xG 1,14 en moyenne), et le Deportivo a trouvé la faille.",
+          "lesson": "Un volume de tirs correct de la part de Getafe suggère qu'il marque. Il faudrait des données sur la défense adverse pour évaluer le BTTS. Les xG du moteur de 0,5 étaient sans doute trop bas."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Getafe & Plus de 0.5 buts",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le pari combiné échoue à cause de la composante résultat : il n'y a pas eu de victoire de Getafe, même si le volet buts est validé.",
+          "lesson": "Un combiné hérite de l'incertitude de sa composante la plus fragile. Le volet résultat ne se sauve pas grâce au volet buts, quasi acquis."
+        },
+        {
+          "market": "Buts — Getafe",
+          "marketId": "teamGoals",
+          "pick": "Getafe — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Getafe n'a marqué qu'un but, très en dessous du seuil de 3,5.",
+          "lesson": "Une ligne de 3,5 buts pour une équipe est très rarement dépassée, surtout avec une moyenne de xG de 1,14. Ce marché est peu informatif."
+        },
+        {
+          "market": "Buts — Deportivo La Coruña",
+          "marketId": "teamGoals",
+          "pick": "Deportivo La Coruña — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le Deportivo n'a marqué qu'un but, largement sous 3,5.",
+          "lesson": "Cette ligne est très rarement dépassée, même sans donnée sur l'équipe. Elle n'apporte quasiment rien comme signal."
+        }
+      ],
+      "caveats": "Il s'agit d'un seul match, et un nul 1-1 peut tenir à la variance. Aucune statistique de match (xG réel, tirs, minutes des buts) n'était fournie, donc les explications restent limitées. Il n'y avait aucune donnée sur le Deportivo et aucun avis d'avant-match sur les marchés individuels, donc aucun aiWasRight n'est évaluable.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2754,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 1693,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 2754,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1693,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 2754,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2754
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0281572,
+      "createdAt": "2026-09-30T21:01:39.546Z"
+    }
   },
   {
     "matchId": "14e37b5aaf6fec05a01f7e1309025a66",
@@ -586,8 +1346,120 @@
       "alignmentWithModel": "Le contexte qualitatif va globalement dans le même sens que le chiffrage du moteur : les statistiques offensives moyennes (xG, tirs cadrés, possession) et la forme récente penchent plutôt en faveur de l'Atlético Madrid, ce qui est cohérent avec des cotes vraies plus favorables à la victoire visiteuse (2.35) qu'au succès de la Real Sociedad (3.47). Cela renforce l'idée que le marché ne surestime pas franchement les chances domicile, expliquant l'absence d'edge significatif et la recommandation de passer.",
       "caveats": "Le classement complet de l'Atlético Madrid n'est pas fourni (standings.away est null), ce qui empêche une comparaison directe des positions au classement. Les statistiques FlashScore (home et away) sont également absentes, limitant la validation croisée des données statistiques utilisées."
     },
-    "updatedAt": "2026-09-13T21:23:54.898Z",
-    "createdAt": "2026-09-13T21:23:54.898Z"
+    "updatedAt": "2026-09-30T21:01:57.368Z",
+    "createdAt": "2026-09-13T21:23:54.898Z",
+    "postMatchReview": {
+      "summary": "L'Atlético a gagné 3-0 à Saint-Sébastien. Ma lecture pré-match penchait côté visiteurs (xG, forme, tirs cadrés) et conseillait de passer faute d'edge ; le résultat va dans le sens de la lecture qualitative, mais l'ampleur de la victoire dépasse ce que les xG du moteur (0.8 contre 1.06) laissaient attendre.",
+      "whatWasRight": "J'avais bien identifié l'Atlético comme favori : meilleurs xG moyens (1.97 contre 1.26), meilleurs tirs cadrés, meilleure forme récente. La Sociedad est restée muette à domicile, ce qui correspond à sa faiblesse offensive relative. Le 'PASS' était aussi cohérent : la cote marché de l'Atlético (2.11) était plus basse que la cote vraie (2.35), donc pas de valeur à la prendre malgré la victoire.",
+      "whatWasMissed": "Je n'avais pas anticipé un écart aussi net : 3-0 contre un xG modèle de 0.8 pour la Sociedad et 1.06 pour l'Atlético. Les xG du moteur, très bas et serrés, sous-estimaient l'Atlético, alors que mes propres indicateurs récents (1.97) le plaçaient bien plus haut. Je n'ai pas relevé cette contradiction. Je ne dispose pas du détail du match (minutes des buts, tirs, xG réel), donc je ne peux pas dire si le score reflète la domination ou l'efficacité.",
+      "outcomeVsEngine": "Le résultat confirme la direction du moteur, qui donnait l'Atlético favori (cote vraie 2.35). Il contredit toutefois l'idée d'un match serré et peu prolifique suggérée par les xG (0.8 / 1.06). L'absence d'edge ne dit rien ici : le moteur a bien classé le favori, mais le marché le payait moins cher.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Atlético Madrid gagne",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Victoire 3-0 de l'Atlético, conforme au pick. La supériorité offensive récente des visiteurs et la pauvreté de la Sociedad se sont confirmées. Sur ce marché, je n'avais pas d'avis tranché.",
+          "lesson": "Quand xG récents, tirs cadrés et forme convergent vers le même côté, le favori du moteur mérite d'être suivi comme lecture directionnelle. Ce n'est pas une raison de jouer si la cote marché est plus basse que la cote vraie."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Trois buts au total, donc Plus de 0.5 largement atteint. Ce seuil était quasi certain et n'apporte aucune information sur le rythme du match.",
+          "lesson": "Un seuil de 0.5 but se valide presque toujours. Il ne prouve pas la qualité du modèle ; il faut juger les totaux sur des seuils plus discriminants (1.5, 2.5)."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le pick Oui était faux : la Sociedad n'a pas marqué (0-3). Son attaque faible (xG moyen 1.26, 3.7 tirs cadrés) et un adversaire plus solide rendaient cette issue plausible. Mon analyse ne prenait pas position sur ce marché.",
+          "lesson": "Quand une équipe est nettement plus faible offensivement, le pick Oui est fragile : le risque de blanchissage de l'outsider doit être pesé, surtout face à un favori solide. À garder en tête pour les prochains marchés BTTS."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Atlético Madrid & Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Victoire de l'Atlético et plus de 0.5 but : combiné validé dès que l'Atlético gagne, puisque le seuil est trivial.",
+          "lesson": "Ce combiné se réduit au marché Résultat quand le seuil est de 0.5 but. Il n'ajoute aucune validation indépendante."
+        },
+        {
+          "market": "Buts — Real Sociedad",
+          "marketId": "teamGoals",
+          "pick": "Real Sociedad — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "La Sociedad a marqué 0 but, donc Moins de 3.5 est très largement atteint. Son attaque était déjà la plus faible des deux.",
+          "lesson": "Un plafond de 3.5 buts pour l'équipe la plus faible offensivement est très sûr. Il n'a donc que peu de valeur informative."
+        },
+        {
+          "market": "Buts — Atlético Madrid",
+          "marketId": "teamGoals",
+          "pick": "Atlético Madrid — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "L'Atlético a marqué 3 buts, soit juste sous le seuil de 3.5. Le pick a tenu de peu, alors que le modèle n'attendait qu'environ 1.06 but.",
+          "lesson": "Le 3-0 montre que les xG du moteur peuvent sous-estimer un attaquant fort. Les plafonds proches du nombre de buts possible restent fragiles quand un favori déroule."
+        }
+      ],
+      "caveats": "Un seul match ne valide ni ne réfute un modèle. Je n'ai pas les statistiques du match (minutes des buts, tirs, xG, possession), donc je ne peux pas expliquer le déroulé. Un 3-0 peut venir d'un facteur que le modèle ne capte pas (carton rouge, efficacité inhabituelle). Je n'avais pas d'avis d'avant-match sur les marchés détaillés. Le classement de l'Atlético manquait avant le match.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2894,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 1983,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 2894,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1983,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 2894,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2894
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0316172,
+      "createdAt": "2026-09-30T21:01:57.368Z"
+    }
   },
   {
     "matchId": "aa0e2541144928205ab6d870953d42c2",
@@ -659,8 +1531,120 @@
       ],
       "alignmentWithModel": "Le contexte qualitatif renforce clairement l'edge chiffré par le moteur en faveur de Villarreal. La forme excellente, le solide bilan domicile et l'efficacité offensive supérieure (xG) de Villarreal, combinés à l'irrégularité et à la fragilité défensive extérieure de Betis, convergent avec l'expected goals du modèle (1.981 vs 1.043) et son edge positif sur la victoire à domicile. Aucun signal qualitatif ne vient contredire ou nuancer significativement cette tendance.\nLa source secondaire FlashScore pour Villarreal (homeFlashscoreStats) semble concerner une autre équipe ('Villa Mitre') et non Villarreal FC, ses statistiques (possession, tirs, forme) diffèrent nettement de homeStats et de homeForm fournis par ailleurs — donnée à traiter avec grande prudence, possible erreur d'association. Aucune donnée FlashScore n'est disponible pour Real Betis (awayFlashscoreStats null). Les statistiques moyennes homeStats/awayStats portent sur un échantillon de seulement 10 matchs, ce qui limite leur robustesse."
     },
-    "updatedAt": "2026-09-13T21:49:42.389Z",
-    "createdAt": "2026-09-13T21:49:42.389Z"
+    "updatedAt": "2026-09-30T21:02:14.779Z",
+    "createdAt": "2026-09-13T21:49:42.389Z",
+    "postMatchReview": {
+      "summary": "Villarreal a perdu 1-2 à domicile contre le Betis. Ma lecture pré-match allait dans le sens du moteur (victoire locale, edge de 4,93 %) et elle a été contredite sur le résultat 1X2. Les marchés de buts (les deux équipes marquent, buts par équipe) se sont bien déroulés, mais ce sont des marchés peu risqués.",
+      "whatWasRight": "Le scénario d'un match ouvert où les deux équipes marquent était cohérent avec le xG du moteur (1,98 contre 1,04) et avec l'efficacité offensive de Villarreal. Villarreal a marqué, le Betis aussi, et le total de 3 buts dépasse largement 0,5. Le Betis, qui a marqué 2 buts, a montré la fragilité défensive attendue de Villarreal mais pas celle de l'extérieur du Betis.",
+      "whatWasMissed": "J'ai jugé que rien ne nuançait le pari sur Villarreal. Je me suis appuyé sur la série de 5 victoires et sur des moyennes calculées sur seulement 10 matchs. J'ai sous-estimé la capacité du Betis, avec plus de possession et de tirs dans ces moyennes, à battre une équipe en forme. Le résultat montre aussi que la variance d'un seul match pèse lourd : une cote vraie de 1,90 laisse environ 47 % de chances à la victoire locale, donc une défaite est loin d'être anormale.",
+      "outcomeVsEngine": "Le résultat contredit le pronostic du moteur sur le 1X2 et sur la combinaison résultat + total, mais il confirme les marchés de buts. Un seul match ne suffit pas à invalider un edge de 4,93 %. Le moteur voyait bien un match où les deux équipes marquent, mais il a surestimé l'avantage de Villarreal sur le vainqueur. Villarreal a marqué moins que son xG de 1,98 attendu.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Villarreal gagne",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Villarreal n'a pas gagné : défaite 1-2 à domicile. Je n'avais pas de minutes de buts ni de statistiques de match, donc je ne peux pas dire comment le match a basculé. Le Betis a marqué deux fois, plus que sa moyenne habituelle.",
+          "lesson": "Mon avis pré-match, favorable à Villarreal, s'est trompé. Il faut tempérer une série de victoires et des bilans domicile/extérieur quand l'adversaire est proche au classement (5e contre 6e) et que l'edge est faible (moins de 5 %). Dans ce cas, le nul ou l'outsider restent des issues fréquentes."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "3 buts (1-2), donc plus de 0,5 est largement atteint. Le pari n'était à risque que dans le cas d'un 0-0.",
+          "lesson": "Cette sélection est presque sans risque (un seul score, 0-0, la fait perdre) et ne valide pas le modèle : ce marché ne mérite pas d'être cité comme preuve de justesse de la lecture."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Villarreal a marqué une fois et le Betis deux fois, donc les deux équipes ont marqué. Cela va dans le sens d'un Betis qui trouve le chemin du but malgré sa défense extérieure friable.",
+          "lesson": "Ce marché correspondait bien au profil des deux équipes (attaque de Villarreal, Betis qui tire plus). Il est à garder comme lecture pour ce type de match, avec prudence sur un échantillon d'un match."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Villarreal & Plus de 0.5 buts",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "La partie Plus de 0,5 but est gagnée (3 buts), mais la partie Villarreal gagne est perdue : le pari combiné échoue.",
+          "lesson": "Un pari combiné hérite du risque du marché le plus fragile. Ici, le total était quasi certain, donc cette combinaison revenait simplement à parier sur le 1X2 et a subi la même erreur."
+        },
+        {
+          "market": "Buts — Villarreal",
+          "marketId": "teamGoals",
+          "pick": "Villarreal — Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Villarreal a marqué 1 but, donc plus de 0,5 est atteint. Son attaque a fonctionné au moins une fois, même sans suffire à gagner.",
+          "lesson": "Le raisonnement sur l'efficacité offensive de Villarreal à domicile tient pour la marque d'au moins un but. Il ne permet pas d'en déduire la victoire."
+        },
+        {
+          "market": "Buts — Real Betis",
+          "marketId": "teamGoals",
+          "pick": "Real Betis — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le Betis a marqué 2 buts, donc moins de 3,5 est atteint. Il a néanmoins dépassé son xG attendu de 1,04.",
+          "lesson": "La ligne de 3,5 buts laissait une grande marge. Le Betis a marqué 2 fois, près du seuil, ce qui rappelle de ne pas sous-estimer son attaque sur un seul match."
+        }
+      ],
+      "caveats": "Il s'agit d'un seul match, sans minutes de buts, xG réel, tirs ni possession fournis dans ce bilan. Je ne peux donc pas expliquer précisément le déroulé. Le résultat peut tenir à la variance. Les données FlashScore de Villarreal étaient suspectes avant le match, et les statistiques ne portaient que sur 10 matchs.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3202,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 1980,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3202,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1980,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 3202,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3202
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0328192,
+      "createdAt": "2026-09-30T21:02:14.779Z"
+    }
   },
   {
     "matchId": "b9a6e597fd597637efa24b92d51dda62",
@@ -733,8 +1717,53 @@
       "alignmentWithModel": "Le contexte qualitatif renforce globalement l'edge identifié par le moteur sur la victoire de Rayo : la forme récente très favorable à domicile et les statistiques de tirs/possession supérieures vont dans le même sens que l'écart de expected goals calculé (1.853 contre 0.768). Le seul élément qui nuance ce alignement est le classement général, plus favorable à Espanyol, mais celui-ci semble davantage refléter un début de saison ancien que la dynamique actuelle des deux équipes.",
       "caveats": "Les données FlashScore (homeFlashscoreStats/awayFlashscoreStats) sont absentes pour ce match. Les statistiques historiques locales (football-data.co.uk) ne sont disponibles que pour Rayo (homeHistoricalStats et homeHistoricalForm), aucune donnée équivalente pour Espanyol (awayHistoricalStats et awayHistoricalForm manquantes), ce qui empêche une comparaison symétrique sur cette source secondaire. Les statistiques 'home'/'away' détaillées (played, goalsFor, goalsAgainst) au sein des standings sont à zéro, donc aucune performance spécifique à domicile pour Rayo ou à l'extérieur pour Espanyol n'a pu être isolée. L'échantillon de forme récente reste limité à 5 matchs."
     },
-    "updatedAt": "2026-09-14T21:50:08.702Z",
-    "createdAt": "2026-09-14T21:50:08.702Z"
+    "updatedAt": "2026-09-30T21:02:26.329Z",
+    "createdAt": "2026-09-14T21:50:08.702Z",
+    "postMatchReview": {
+      "summary": "Rayo a gagné 2-1, ce qui va dans le sens de la lecture pré-match (victoire de Rayo, edge du moteur). Le match a pourtant été plus disputé que prévu : Espanyol a fini avec plus de tirs (19 contre 16), plus de tirs cadrés (5 contre 2) et un xG quasi égal (1,65 contre 1,71). Rayo a marqué tôt (3e, 26e) puis a dû tenir.",
+      "whatWasRight": "Le vainqueur : Rayo a gagné à domicile, comme le laissaient attendre la forme récente (N-V-N-V-V contre V-D-D-D-D pour Espanyol) et l'avantage du moteur. La possession supérieure (55% contre 45%) est cohérente avec les moyennes citées (54% contre 42,5%). L'idée que le classement d'Espanyol, établi sur 5 matchs, pesait peu face à la dynamique était la bonne : Rayo a marqué dès la 3e minute et a doublé la mise à la 26e.",
+      "whatWasMissed": "L'écart de xG attendu (1,85 contre 0,77) était trop large. Le xG réel est quasi équilibré (1,71 contre 1,65), et Espanyol a dominé les tirs (19 contre 16) et les tirs cadrés (5 contre 2). J'ai sous-estimé la capacité offensive d'Espanyol malgré sa série de défaites. Je n'avais pas non plus anticipé que l'avantage de Rayo viendrait d'une efficacité élevée (2 buts pour 2 tirs cadrés) plutôt que d'une domination du volume. Le score de 2-1, avec un but d'Espanyol à la 54e et un match serré jusqu'au bout, montre que la marge était mince.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le vainqueur, puisque Rayo a gagné. Il contredit en partie le chiffrage des xG, car le contenu du match était beaucoup plus équilibré que l'écart attendu. Un seul match ne valide pas un edge de 13,47%. Le pari a pu être gagnant en partie grâce à l'efficacité de Rayo devant le but.",
+      "marketReviews": [],
+      "caveats": "Il s'agit d'un seul match, et la victoire 2-1 n'est pas une preuve de la justesse de l'edge. Aucun marché joué n'était fourni (marketOutcomes vide), d'où l'absence de bilan par marché. Les données FlashScore et l'historique d'Espanyol manquaient avant le match. Les stats fournies ne donnent pas le contexte des tirs, comme l'état du score ou le rythme après l'ouverture du score.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2990,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 1073,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 2990,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1073,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 2990,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2990
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0229012,
+      "createdAt": "2026-09-30T21:02:26.329Z"
+    }
   },
   {
     "matchId": "8bc1f4d74cf888c97c0216fd26c4ece7",
@@ -807,8 +1836,120 @@
       "alignmentWithModel": "Le contexte qualitatif (classement, forme, historique) dessine un avantage assez net pour Sassuolo, ce qui pourrait suggérer une sous-évaluation du visiteur par le modèle. Cependant, l'edge négatif calculé par le moteur et sa recommandation de passer indiquent que le marché intègre déjà correctement, voire surestime légèrement, cet avantage perçu de Sassuolo. Le contexte ne contredit donc pas la prudence du moteur mais souligne que si un pari devait être envisagé malgré le PASS, la dynamique favoriserait plutôt l'extérieur que Monza.",
       "caveats": "Aucune statistique moyenne directe homeStats/awayStats disponible (valeurs nulles), l'analyse s'appuie donc sur FlashScore et l'historique football-data.co.uk, deux sources secondaires. La forme officielle awayForm est vide (sampleSize 0), obligeant à se référer uniquement à la forme FlashScore et historique pour Sassuolo. Le classement fourni n'est pas issu de football-data.co.uk donc il s'agit bien d'un classement en direct de la saison en cours, mais à seulement 4 matchs joués, l'échantillon reste réduit. Les données historiques (5 dernières saisons) et FlashScore concordent globalement sur un léger avantage à Sassuolo, sans contradiction majeure notée."
     },
-    "updatedAt": "2026-09-15T21:00:48.231Z",
-    "createdAt": "2026-09-15T21:00:48.231Z"
+    "updatedAt": "2026-09-30T21:02:43.802Z",
+    "createdAt": "2026-09-15T21:00:48.231Z",
+    "postMatchReview": {
+      "summary": "Monza a gagné 2-1 (Varela 51e et 63e, Adžić 88e pour Sassuolo). Ma lecture penchait pour Sassuolo et elle était contredite sur le résultat. Sassuolo a pourtant dominé (20 tirs contre 15, 65 % de possession, xG 1,47 contre 1,51, 6 grosses occasions contre 3). Le moteur avait recommandé de passer (PASS) et cette prudence était justifiée.",
+      "whatWasRight": "Le sens du jeu était bon : Sassuolo a eu plus de tirs (20 contre 15), plus de tirs cadrés (8 contre 6) et plus de grosses occasions (6 contre 3). Le constat d'un marché déjà bien calé, sans valeur sur l'extérieur, s'est vérifié : le PASS a évité une perte. Les deux équipes ont marqué et aucune n'a atteint 3,5 buts.",
+      "whatWasMissed": "J'ai trop pesé le classement (18e contre 9e) et la forme sur 4 matchs, un échantillon trop court. J'ai sous-estimé le fait que Monza à domicile pouvait être aussi dangereux (xG 1,51, plus que Sassuolo). Je n'ai pas anticipé l'efficacité de Varela, auteur d'un doublé en 12 minutes, ni la finition : 2 buts pour Monza sur 6 tirs cadrés. Le xG de 0,5 par équipe du moteur était très bas face à un match à 2,98 xG cumulés.",
+      "outcomeVsEngine": "Le résultat contredit le pick du moteur (victoire de Sassuolo), mais pas sa décision de ne pas parier. Le match a été très ouvert, à l'opposé du scénario « nul et moins de 2,5 buts » et de ses xG de 0,5 par équipe. Monza a gagné malgré une possession de 35 %.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Sassuolo gagne",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Sassuolo a dominé les statistiques, mais Monza a marqué deux fois entre la 51e et la 63e minute par Varela. Le but de Sassuolo est arrivé trop tard, à la 88e, et le pick « Sassuolo gagne » était faux.",
+          "lesson": "Une domination en tirs et en possession ne garantit pas la victoire. À 4 journées, classement et forme pèsent peu. Ne pas faire d'un écart de classement précoce un avantage net du visiteur."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "3 buts (51e, 63e, 88e). Plus de 0,5 but était une évidence avec deux équipes à environ 1,5 xG chacune.",
+          "lesson": "Ce marché est très peu risqué. Il confirme que les deux équipes produisent des occasions. Ce n'est pas un signal fort pour choisir un camp."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Monza a marqué deux fois et Sassuolo une fois à la 88e. Avec 1,51 et 1,47 de xG, le « Oui » était cohérent avec le volume d'occasions (6 et 8 tirs cadrés).",
+          "lesson": "Quand les xG FlashScore des deux équipes sont proches de 1,4 et que les tirs cadrés dépassent 4 de chaque côté, « Oui » est à garder. Le xG de 0,5 du moteur sous-estimait ce profil."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Nul & Moins de 2.5 buts",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le pick « Nul & Moins de 2,5 buts » était faux : Monza a gagné 2-1 avec 3 buts. Les deux conditions ont échoué. Le match s'est ouvert après la pause, avec deux buts en 12 minutes.",
+          "lesson": "Méfiance envers les combinés fondés sur un xG de 0,5 par équipe, peu crédible face à des xG de 1,4 par ailleurs. Une source xG aberrante doit invalider le combiné nul + under."
+        },
+        {
+          "market": "Buts — Monza",
+          "marketId": "teamGoals",
+          "pick": "Monza — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Monza a marqué 2 buts, donc moins de 3,5 buts. C'était un seuil très large.",
+          "lesson": "Une ligne de 3,5 buts par équipe est presque toujours gagnante. Elle ne mesure pas la qualité de l'analyse."
+        },
+        {
+          "market": "Buts — Sassuolo",
+          "marketId": "teamGoals",
+          "pick": "Sassuolo — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Sassuolo n'a marqué qu'un but, à la 88e, malgré 20 tirs et 6 grosses occasions. Moins de 3,5 buts est passé sans difficulté.",
+          "lesson": "Même logique : seuil trop large pour être informatif. La sous-finition de Sassuolo (1 but pour 1,47 xG) rappelle qu'un volume de tirs ne fait pas un score."
+        }
+      ],
+      "caveats": "Un seul match, avec un résultat très marqué par la variance : le doublé de Varela et un but tardif. Je n'ai ni les compositions, ni les blessures, ni le contexte tactique. Les xG du moteur (0,5 pour les deux) et ceux de FlashScore ne coïncident pas, donc la qualité de la source est incertaine. On ne peut pas tirer de conclusion générale sur Monza ou Sassuolo.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3488,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 1931,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3488,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1931,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 3488,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3488
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0334732,
+      "createdAt": "2026-09-30T21:02:43.802Z"
+    }
   },
   {
     "matchId": "4283f064a57c57a3515d04eceead72d6",
@@ -881,8 +2022,53 @@
       "alignmentWithModel": "Le modèle attend un match très serré (0.5 xG de chaque côté, cotes vraies proches entre victoire à domicile et match nul) et recommande de passer en raison d'un edge négatif marqué sur les cotes du marché. Le contexte qualitatif ne permet pas de trancher clairement dans un sens ou dans l'autre : l'absence totale de données sur Sunderland empêche de confirmer ou nuancer l'avantage à domicile implicite dans le chiffrage, tandis que le profil extérieur plus fragile d'AZ (5 buts pour, 9 contre en 4 matches à l'extérieur) pourrait plutôt aller dans le sens d'une prudence supplémentaire côté visiteur, cohérente avec la faible cote attribuée à leur victoire. Globalement, rien dans les éléments qualitatifs disponibles ne contredit fortement la décision de passer recommandée par le moteur.",
       "caveats": "Aucune donnée disponible pour Sunderland : classement (standings.home), statistiques (homeStats), forme récente (homeForm avec sampleSize 0) et stats FlashScore/historiques sont toutes absentes ou nulles. Les stats FlashScore et historiques pour AZ sont également absentes (homeFlashscoreStats, awayFlashscoreStats, homeHistoricalStats, awayHistoricalStats, homeHistoricalForm, awayHistoricalForm tous null), donc aucune source secondaire n'est disponible pour croiser ou nuancer les données de classement/forme d'AZ. L'analyse repose uniquement sur un classement partiel et une forme limitée à 5 matches côté AZ."
     },
-    "updatedAt": "2026-09-16T20:43:49.047Z",
-    "createdAt": "2026-09-16T20:43:49.047Z"
+    "updatedAt": "2026-09-30T21:02:54.317Z",
+    "createdAt": "2026-09-16T20:43:49.047Z",
+    "postMatchReview": {
+      "summary": "Sunderland a gagné 1-0 (Le Fée, 66e) en dominant nettement les occasions (xG 2,96 contre 1,32, 20 tirs contre 11). Le moteur voyait un match serré à 0,5 xG partout et passait (PASS) ; la lecture qualitative prudente était cohérente avec cette décision. Le résultat valide la fragilité d'AZ à l'extérieur, mais le niveau de xG réel dépasse largement l'attendu.",
+      "whatWasRight": "La fragilité d'AZ à l'extérieur (5 buts pour, 9 contre en 4 matches) s'est confirmée : défaite sans marquer, seulement 2 tirs cadrés. Le moteur donnait aussi l'avantage au domicile (cote vraie 2,09 contre 4,71), et Sunderland a gagné. Le choix de passer était défendable vu l'incertitude.",
+      "whatWasMissed": "J'ai sous-estimé la supériorité de Sunderland : xG 2,96 contre 1,32, 12 corners contre 5, alors que le moteur annonçait 0,5 xG partout. Ce xG de 0,5 pour chaque équipe semble être une donnée très faible ou peu fiable, que je n'ai pas remise en cause. L'absence de données sur Sunderland m'a fait rester neutre au lieu de relever que le profil extérieur d'AZ penchait vers le domicile. Le score serré (1-0, but tardif à la 66e) montre aussi que la domination pouvait ne pas se traduire.",
+      "outcomeVsEngine": "Le résultat va dans le sens de la tendance domicile du moteur (favori Sunderland), mais contredit son profil de match fermé à 0,5 xG par équipe. L'edge négatif de -16,37 % portait sur la cote du marché, à 1,65 pour Sunderland. La victoire de ce favori ne rend pas la décision de passer fausse, car aucun pari n'a été pris.",
+      "marketReviews": [],
+      "caveats": "Un seul match : un 1-0 avec un but à la 66e tient en partie à la variance. Aucun marché n'a été joué (marketOutcomes vide), donc aucune évaluation marché par marché n'est possible. Aucune donnée sur Sunderland avant le match, et on ignore ce qui explique le xG de 0,5 (source api-football) côté moteur.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2858,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 953,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 2858,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 953,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 2858,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2858
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0211732,
+      "createdAt": "2026-09-30T21:02:54.316Z"
+    }
   },
   {
     "matchId": "923b87c9f2ccf67f9db1897dd6d71415",
@@ -954,8 +2140,53 @@
       ],
       "alignmentWithModel": "Sans aucune donnée qualitative pour confronter ou nuancer le chiffrage, il est impossible de dire si le contexte va dans le sens de l'edge négatif du modèle ou le contredit. La recommandation PASS du moteur ne peut être ni renforcée ni remise en question faute d'éléments contextuels.\nToutes les sources de contexte sont vides ou nulles pour ce match : classement (home/away), statistiques moyennes (source principale et FlashScore), forme récente (home/away), et données historiques football-data.co.uk. Aucune analyse qualitative fiable ne peut donc être formulée ; seule la sortie chiffrée du moteur est disponible pour ce match."
     },
-    "updatedAt": "2026-09-16T20:44:11.617Z",
-    "createdAt": "2026-09-16T20:44:11.617Z"
+    "updatedAt": "2026-09-30T21:03:04.215Z",
+    "createdAt": "2026-09-16T20:44:11.617Z",
+    "postMatchReview": {
+      "summary": "Ma lecture d'avant-match était vide de contexte et s'en remettait au PASS du moteur. Benfica a gagné 2-0 à Milan (buts de Lukébakio à la 16e et de Kamiński à la 53e) alors que Milan dominait les statistiques. Le PASS n'a donc pas été contredit, mais l'absence d'analyse qualitative ne nous a rien appris sur ce scénario.",
+      "whatWasRight": "Le PASS était prudent : Milan, favori du marché à 2.11, a perdu. Le moteur jugeait la cote de Milan peu attractive (edge négatif), et le résultat va dans ce sens. Un match plutôt fermé en buts (2 buts au total, xG cumulés d'environ 1.66) n'est pas non plus incompatible avec la projection basse du moteur.",
+      "whatWasMissed": "Je n'avais aucun contexte (forme, classement, statistiques) et je n'ai donc rien anticipé. Les xG de 0.5 par équipe étaient trop bas : Milan a produit 1.03 xG et 17 tirs, 10 corners et 60% de possession. Benfica, avec 0.63 xG et une seule grosse occasion, a été plus efficace que ses chiffres (2 buts pour 0.63 xG). Le scénario d'un but précoce suivi d'un match où l'adversaire domine sans concrétiser n'était pas envisagé.",
+      "outcomeVsEngine": "Le résultat va plutôt dans le sens du moteur sur le fond : l'edge négatif sur Milan est confirmé par sa défaite. En revanche, les xG du moteur (0.5-0.5) sous-estimaient le volume de jeu de Milan, et Benfica a nettement surperformé ses xG. Le résultat reste en partie dû à l'efficacité, non modélisable.",
+      "marketReviews": [],
+      "caveats": "Un seul match, sans aucun marché joué (marketOutcomes vide), donc aucune évaluation marché par marché n'est possible. Aucune donnée de contexte d'avant-match n'était disponible. Le score tient en partie à l'efficacité de Benfica (2 buts pour 0.63 xG), ce qu'on ne peut pas généraliser.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2447,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 902,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 2447,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 902,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 2447,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2447
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0190192,
+      "createdAt": "2026-09-30T21:03:04.214Z"
+    }
   },
   {
     "matchId": "4a3400b0763bcc367171537f40b27a4f",
@@ -1028,8 +2259,53 @@
       "alignmentWithModel": "Le contexte qualitatif confirme sans ambiguïté la domination attendue de Barcelona (classement parfait, forme excellente sur plusieurs sources, statistiques offensives élevées), ce qui va dans le même sens que l'expected goals élevé du moteur (2.8 vs 0.798). Cependant, l'absence totale de données sur l'adversaire ne permet pas de nuancer ou d'enrichir la lecture de ce côté. L'edge négatif du moteur n'est pas contredit par le contexte : il illustre simplement que le marché a déjà pleinement anticipé cette suprématie, sans qu'aucune information qualitative ne suggère une valeur cachée sur l'issue domicile.",
       "caveats": "Aucune donnée disponible pour Real Racing Club de Santander (awayStats, awayForm, awayFlashscoreStats, awayHistoricalStats, awayHistoricalForm, awayTeamProfile tous null), ce qui limite fortement l'analyse à un seul côté du match. Le classement fourni ne concerne que Barcelona (aucun classement pour l'adversaire). Par ailleurs, les sources sur la forme de Barcelona divergent légèrement entre elles : homeHistoricalForm (D-V-D-V-V) est nettement moins flatteuse que homeForm, homeFlashscoreStats et homeTeamProfile (qui affichent 4 à 6 victoires consécutives), tout comme homeHistoricalStats montre des moyennes de buts plus modestes que homeStats et homeFlashscoreStats — à interpréter avec prudence, sans trancher entre ces sources."
     },
-    "updatedAt": "2026-09-16T21:18:28.734Z",
-    "createdAt": "2026-09-16T21:18:28.734Z"
+    "updatedAt": "2026-09-30T21:03:14.453Z",
+    "createdAt": "2026-09-16T21:18:28.734Z",
+    "postMatchReview": {
+      "summary": "Barcelona a battu Racing Santander 7-2, ce qui confirme la lecture d'avant-match d'une domination écrasante à domicile. L'ampleur du score (xG 6,74 contre 1,98, 30 tirs contre 5) dépasse même les attentes du moteur (2,8 contre 0,80). L'adversaire, sur lequel nous n'avions aucune donnée, a marqué deux fois, ce que le moteur sous-estimait.",
+      "whatWasRight": "Le favori était le bon : Barcelona a gagné largement, avec 69 % de possession, 30 tirs dont 9 cadrés, 13 grosses occasions et 18 corners contre 0. Le constat que le marché avait déjà intégré cette supériorité (edge négatif, PASS) reste cohérent, car le résultat 1X2 domicile était très probable et la cote de 1,06 n'offrait aucune marge.",
+      "whatWasMissed": "L'analyse n'a pas envisagé l'ampleur de la victoire, ni le fait que l'adversaire marquerait deux fois. Les xG du moteur (2,8 et 0,80) étaient bien inférieurs à la réalité (6,74 et 1,98). Un but contre son camp (36e) et un triplé de Raphinha (25e, 42e, 67e) ont amplifié le score. L'absence de données sur Racing est restée une zone aveugle : elle n'a pas été traitée comme un facteur d'incertitude sur le nombre de buts encaissés.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le vainqueur (la victoire à domicile, probabilité la plus élevée) et l'excède largement sur les buts. Avec 9 buts au total, 7 pour Barcelona et 2 pour Racing, les xG du moteur étaient trop prudents. L'edge négatif portait sur le prix, pas sur la direction, et le match ne le contredit pas : le PASS n'a rien fait perdre, mais rien non plus n'est démontré sur la valeur.",
+      "marketReviews": [],
+      "caveats": "Un seul match, donc peu de valeur statistique. Aucun marché joué n'était listé, donc pas de revue marché par marché. Le but contre son camp et la série de grosses occasions ont pu gonfler le score. Aucune donnée sur Racing, ni sur la compo ou le contexte du match, n'était disponible.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3359,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 959,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3359,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 959,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 3359,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3359
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0232372,
+      "createdAt": "2026-09-30T21:03:14.453Z"
+    }
   },
   {
     "matchId": "82d8b6a005d78bac0b1508abc17a7d39",
@@ -1078,8 +2354,120 @@
     "analysis": {
       "summary": "Brentford (7e, 6 pts en 4 matchs) reçoit Chelsea (6e, 7 pts en 4 matchs) dans un contexte de forme récente favorable aux deux équipes, mais avec des échantillons de données très hétérogènes. Brentford affiche une forme solide (4V-N-D sur 5) et des standings actuels invaincus, tandis que Chelsea reste également performant (4V-1D-1N sur 5) malgré une défense qui concède plus de buts. Les stats FlashScore actuelles montrent une dominance offensive marquée de Brentford à domicile, mais sur un échantillon minuscule (1 match), ce qui limite leur fiabilité.\n[{\"factor\":\"classement et points\",\"observation\":\"Chelsea légèrement devant au classement actuel malgré une défaite\",\"evidence\":\"Brentford: 7e, 6 pts (1V-3N-0D, 7 buts marqués, 4 encaissés) ; Chelsea: 6e, 7 pts (2V-1N-1D, 10 buts marqués, 9 encaissés)\"},{\"factor\":\"forme récente (5 derniers matchs)\",\"observation\":\"Les deux équipes sont en bonne dynamique actuelle, Chelsea légèrement plus régulier\",\"evidence\":\"Brentford: N-D-V-V-V ; Chelsea: V-V-D-V-V\"},{\"factor\":\"statistiques FlashScore (échantillon limité)\",\"observation\":\"Brentford affiche une possession et un volume de tirs élevés à domicile, mais sur un seul match observé, donc peu représentatif\",\"evidence\":\"Brentford: 71% possession, 11 tirs dont 8 cadrés, xG 3.21 (sample=1) ; Chelsea: 54.1% possession, 14.1 tirs dont 5.1 cadrés, xG 1.25 (sample=10)\"},{\"factor\":\"statistiques historiques (5 dernières saisons, football-data.co.uk)\",\"observation\":\"Sur le long terme, Chelsea a un volume de tirs et de corners supérieur mais une défense plus perméable que Brentford, tandis que Brentford marque et encaisse peu en moyenne\",\"evidence\":\"Brentford (10 matchs): 1.1 but marqué/match, 1.2 encaissé, 10.6 tirs ; Chelsea (10 matchs): 0.9 but marqué/match, 1.9 encaissé, 13.4 tirs, 2.4 cartons jaunes/match\"},{\"factor\":\"forme historique (5 dernières saisons)\",\"observation\":\"Les tendances historiques de forme sont nettement plus mitigées que la forme actuelle pour les deux clubs, ce qui contraste avec la dynamique récente\",\"evidence\":\"Forme historique Brentford: N-N-D-V-D ; Forme historique Chelsea: D-V-N-D-D\"}]\nLe contexte qualitatif va globalement dans le sens de l'edge identifié par le moteur en faveur de Brentford : la forme actuelle solide du club (V-V-V-N-D) et un classement légèrement inférieur mais compétitif face à Chelsea appuient l'idée d'une équipe à domicile en confiance. Toutefois, les statistiques historiques nuancent ce tableau, montrant une défense Chelsea plus friable sur le long terme mais aussi une attaque Brentford historiquement modeste (1.1 but/match), ce qui contraste avec l'expected_goals élevé (2.432) attribué par le moteur pour ce match précis. La disparité entre les stats FlashScore (échantillon d'1 match seulement pour Brentford) et les moyennes historiques invite à une lecture prudente du contexte qualitatif, sans remettre en cause le chiffrage du moteur.\nLes statistiques FlashScore de Brentford (homeStats) reposent sur un échantillon d'un seul match, ce qui limite fortement leur représentativité et contraste nettement avec les moyennes historiques sur 10 matchs (xG 3.21 vs des moyennes historiques bien plus modestes de 1.1 but/match). Les champs homeFlashscoreStats et awayFlashscoreStats sont absents. Le classement fourni (standings) semble être un classement de saison en cours basé sur seulement 4 matchs joués, et non un historique football-data.co.uk, mais aucune répartition domicile/extérieur n'est disponible (played=0 pour home/away). Aucun profil d'équipe (homeTeamProfile/awayTeamProfile) n'est disponible pour un contexte européen ou de forme plus récente issu du web."
     },
-    "updatedAt": "2026-09-18T16:50:40.206Z",
-    "createdAt": "2026-09-18T16:50:40.206Z"
+    "updatedAt": "2026-09-30T21:03:31.205Z",
+    "createdAt": "2026-09-18T16:50:40.206Z",
+    "postMatchReview": {
+      "summary": "Brentford a battu Chelsea 3-0, ce qui va dans le sens de l'edge du moteur sur le côté domicile. Mon analyse pré-match était prudente et sans avis tranché. Le scénario (xG 2.65 contre 0.83) confirme la supériorité de Brentford en occasions malgré 40% de possession. Les trois buts sont tombés tard (61e, 83e, 90e), donc le score final est plus large que le jeu ne le laissait voir jusqu'à l'heure de jeu.",
+      "whatWasRight": "J'avais noté que les stats FlashScore de Brentford (1 match) étaient peu fiables, et la possession de 71% annoncée s'est inversée (40% réel). J'avais aussi relevé que l'attaque de Brentford était modeste sur le long terme et la défense de Chelsea friable. Le résultat valide ce dernier point : Chelsea a peu cadré (2 tirs) et a encaissé 3 fois. Le xG du moteur pour Brentford (2.432) était proche du xG réel (2.65).",
+      "whatWasMissed": "Je n'ai pas anticipé le profil du match : Chelsea dominant la possession (60%) et les corners (12 contre 4) sans créer de danger, contre un Brentford efficace en contre (4 grosses occasions, 6 tirs cadrés sur 13). Le xG de Chelsea du moteur (1.646) était trop élevé par rapport au 0.83 réel. Mon avis sur la forme récente, qui mettait Chelsea légèrement devant, n'a pas pesé dans le bon sens.",
+      "outcomeVsEngine": "Le résultat confirme le moteur sur le marché principal : victoire de Brentford, cote marché 2.87 face à une vraie cote estimée de 2.53. Le seul pronostic raté, les deux équipes marquent, vient d'une surestimation de l'attaque de Chelsea (xG du moteur 1.646 contre 0.83 réel).",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Brentford gagne",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Brentford a gagné 3-0 avec un xG de 2.65 contre 0.83 et 6 tirs cadrés contre 2. Les buts à la 61e, 83e et 90e ont transformé une domination d'occasions en victoire nette.",
+          "lesson": "L'edge du moteur en faveur de Brentford à domicile est confirmé. À garder : quand le moteur voit de la valeur sur l'équipe à domicile contre un adversaire défensivement fragile, ne pas se laisser freiner par des stats de possession ou de forme ambiguës. Un seul match ne valide pas la méthode."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Trois buts au total, donc le plus de 0.5 est largement passé. Le premier but est arrivé tard (61e), ce qui montre que ce seuil ne tenait pas à un début de match rapide.",
+          "lesson": "Un seuil aussi bas est quasi acquis et porte peu d'information. Il ne dit rien sur la qualité de l'analyse."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Chelsea n'a pas marqué : 2 tirs cadrés seulement, 1 grosse occasion et xG de 0.83, malgré 60% de possession et 12 corners. Le moteur attendait 1.646 de xG.",
+          "lesson": "Corriger : la possession et les corners de Chelsea gonflent son volume sans produire de danger. Pour un 'Oui' sur les deux équipes, vérifier la qualité des tirs (cadrés, grosses occasions) plutôt que le volume. Une défaite à l'extérieur peut facilement être un zéro de but."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Brentford & Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Brentford a gagné et il y a eu plus de 0.5 but, donc la combinaison est passée mécaniquement avec le résultat.",
+          "lesson": "Ce marché dépend entièrement du 1X2, le volet buts étant quasi acquis. Il n'apporte pas d'information supplémentaire."
+        },
+        {
+          "market": "Buts — Brentford",
+          "marketId": "teamGoals",
+          "pick": "Brentford — Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Brentford a marqué 3 fois (Anthony 61e, Thiago 83e, Carvalho 90e) avec 6 tirs cadrés et 4 grosses occasions.",
+          "lesson": "L'attaque de Brentford à domicile a dépassé sa moyenne historique de 1.1 but par match. À garder : le xG du moteur (2.432) était plus fiable que les moyennes historiques de 10 matchs."
+        },
+        {
+          "market": "Buts — Chelsea",
+          "marketId": "teamGoals",
+          "pick": "Chelsea — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Chelsea n'a marqué aucun but, donc moins de 3.5 est passé sans difficulté.",
+          "lesson": "Seuil très large, peu informatif. Il est en accord avec un xG réel de Chelsea à 0.83, inférieur aux 1.646 du moteur."
+        }
+      ],
+      "caveats": "Un seul match : impossible de dire si l'analyse était bonne ou si c'est de la variance. Deux buts sont tombés dans les sept dernières minutes et le score ne reflète pas forcément l'équilibre du jeu avant la 61e. Je n'ai pas les données sur les compositions, les blessures ni le contexte tactique. Je n'avais pas d'avis chiffré par marché, donc aucune vérification d'avis n'est possible.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3839,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 1964,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3839,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1964,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 3839,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3839
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0352072,
+      "createdAt": "2026-09-30T21:03:31.204Z"
+    }
   },
   {
     "matchId": "b2d41e20e9485a8ad28e7534d389a37d",
@@ -1152,8 +2540,120 @@
       "alignmentWithModel": "Le contexte qualitatif confirme sans ambiguïté la supériorité attendue du Bayern (classement, forme, statistiques offensives et de possession toutes favorables), ce qui va dans le même sens que l'expected goals élevé du moteur pour le Bayern. Toutefois, cette domination qualitative ne contredit pas le PASS du moteur : l'écart favorable au Bayern est déjà largement intégré dans une cote marché très basse, ce qui explique l'edge négatif malgré un contexte sportif clairement en sa faveur.",
       "caveats": "Les statistiques directes homeStats/awayStats et la forme homeForm/awayForm structurées ne sont pas disponibles (null ou vides) ; l'analyse repose donc sur des sources secondaires (FlashScore, historique football-data.co.uk 5 dernières saisons, profils équipes web). awayFlashscoreStats est totalement absent, limitant la comparaison directe sur les statistiques récentes d'Union Berlin. Les données de classement (played=3) sont très récentes en début de saison, ce qui limite la portée de l'échantillon. Les profils d'équipes (homeTeamProfile/awayTeamProfile) présentent des formes légèrement différentes des autres sources selon la fenêtre temporelle considérée, sans contradiction majeure mais à interpréter avec prudence vu leur origine web périodique."
     },
-    "updatedAt": "2026-09-18T16:55:55.127Z",
-    "createdAt": "2026-09-18T16:55:55.127Z"
+    "updatedAt": "2026-09-30T21:03:56.583Z",
+    "createdAt": "2026-09-18T16:55:55.127Z",
+    "postMatchReview": {
+      "summary": "Le Bayern a écrasé Union Berlin 7-0. La lecture pré-match (supériorité nette du Bayern, PASS dû à une cote déjà très basse) était juste sur le sens, mais l'ampleur a été largement sous-estimée. Le match a été à sens unique (xG 3.71 contre 0.34, 23 tirs contre 3).",
+      "whatWasRight": "La hiérarchie a été bien lue : classement, forme, possession (68 % réalisée contre 66 % de moyenne) et production offensive. Le Bayern a gagné avec un xG de 3.71, supérieur aux 2.187 du moteur. Union n'a pas marqué (3 tirs, xG 0.34), cohérent avec son profil offensif modeste (xG moteur 0.825). Le PASS lié à l'edge négatif n'a pas été contredit : aucune valeur sur un favori à 1.08.",
+      "whatWasMissed": "L'ampleur du score n'a pas été anticipée. L'historique du Bayern (3.4 buts par match) et son xG FlashScore de 2.72 suggéraient un plafond plus haut que 2.19. Le déséquilibre défensif d'Union (10 buts encaissés en 3 matchs) a été sous-pesé. Trois buts sont tombés entre la 70e et la 76e minute, ce qui montre la variance haussière d'un favori qui domine.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le vainqueur et la faiblesse d'Union, mais le contredit sur le volume de buts. Les picks nul, moins de 2.5 buts, BTTS oui et moins de 3.5 buts pour le Bayern ont tous été démentis par le 7-0.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Bayern Munich gagne",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le Bayern a mené dès la 18e (Musiala) et n'a jamais été inquiété : 7-0, xG 3.71 contre 0.34.",
+          "lesson": "Garder la lecture du favori net à domicile contre une équipe faible. Un bon pick de résultat ne crée pas de valeur quand la cote est de 1.08."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Sept buts, donc plus de 0.5 atteint dès la 18e minute.",
+          "lesson": "Ce seuil est quasi certain dans un match de ce profil. Il apporte peu d'information, la valeur éventuelle est ailleurs."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Union n'a cadré que 2 tirs sur 3, sans grosse occasion (xG 0.34) : le BTTS oui est faux.",
+          "lesson": "Face à un Bayern dominant à domicile, l'adversaire faible marque rarement. Pondérer davantage la faiblesse offensive d'Union (1.5 but, 4.7 tirs cadrés) que la défense du Bayern."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Nul & Moins de 2.5 buts",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le pick Nul et moins de 2.5 buts était incohérent avec la domination attendue. Le Bayern a gagné 7-0.",
+          "lesson": "Un pick de nul contre un favori à 1.08 est à rejeter. Vérifier la cohérence des picks combinés avec le scénario dominant du modèle."
+        },
+        {
+          "market": "Buts — Bayern Munich",
+          "marketId": "teamGoals",
+          "pick": "Bayern Munich — Moins de 3.5 buts",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le Bayern a marqué 7 buts (Kane 2, Olise 3, Musiala, Saibari) avec 23 tirs dont 15 cadrés et 6 grosses occasions. Moins de 3.5 est donc faux.",
+          "lesson": "Pour un grand favori à domicile en forme offensive, les lignes basses de buts par équipe sont risquées : la variance à la hausse est forte."
+        },
+        {
+          "market": "Buts — Union Berlin",
+          "marketId": "teamGoals",
+          "pick": "Union Berlin — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Union est resté à 0 but avec 3 tirs et un xG de 0.34, donc moins de 3.5 est juste.",
+          "lesson": "Pick juste mais peu informatif : la ligne est très haute pour une équipe limitée offensivement."
+        }
+      ],
+      "caveats": "Un seul match : un 7-0 est un résultat extrême, en partie dû à la variance. Les avis d'avant-match par marché (aiVerdict) étaient absents, donc l'évaluation marché par marché repose surtout sur les picks du moteur. Aucune donnée de composition ou de contexte du match n'était fournie.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 5856,
+        "cache_read_input_tokens": 5769,
+        "output_tokens": 3458,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5856,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1637,
+            "cache_read_input_tokens": 4733,
+            "cache_creation_input_tokens": 2159,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2159
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0591658,
+      "createdAt": "2026-09-30T21:03:56.583Z"
+    }
   },
   {
     "matchId": "da3d3fec3e0b6b939910427a76ecfb76",
@@ -1231,8 +2731,120 @@
       "alignmentWithModel": "Le contexte qualitatif nuance partiellement l'edge du moteur en faveur d'Espanyol : le classement et les statistiques du seul match observé (tirs, xG) soutiennent une supériorité offensive à domicile cohérente avec les xG du moteur (1.753 vs 0.798), mais la forme très négative d'Espanyol (4 défaites sur 5) introduit une incertitude que le modèle ne capture pas nécessairement dans le détail. Côté Elche, l'absence de classement et de forme récente en direct empêche de confirmer ou contredire fermement l'écart attendu par le moteur, les seules données disponibles (historiques sur 5 saisons) esquissant un profil modeste sans signal fort dans un sens ou l'autre.",
       "caveats": "Classement d'Elche CF totalement indisponible (standings.away = null). Forme récente directe d'Elche (awayForm) absente ; seule une forme historique ancienne (football-data.co.uk, 5 saisons) est fournie, à traiter comme secondaire et non représentative de la forme actuelle. Statistiques principales homeStats/awayStats basées sur un échantillon d'un seul match chacun (sampleSize:1), donc peu fiables statistiquement. Aucune donnée FlashScore ni profil d'équipe (homeTeamProfile/awayTeamProfile) disponible pour compléter ou vérifier ces informations. Les statistiques 'home' et 'away' détaillées dans standings.home (played/goalsFor/goalsAgainst à domicile) sont à 0, donc non renseignées."
     },
-    "updatedAt": "2026-09-18T17:01:22.722Z",
-    "createdAt": "2026-09-18T17:01:22.722Z"
+    "updatedAt": "2026-09-30T21:04:17.319Z",
+    "createdAt": "2026-09-18T17:01:22.722Z",
+    "postMatchReview": {
+      "summary": "Le moteur et ma lecture privilégiaient Espanyol à domicile ; Elche a gagné 3-1 malgré un carton rouge dès la 6e minute. Le résultat contredit l'edge sur le 1X2, mais les marchés de buts (BTTS, plus de 0.5, moins de 3.5 par équipe) étaient justes. Ma lecture avait surtout signalé l'incertitude liée à la forme d'Espanyol et à la faiblesse de l'échantillon.",
+      "whatWasRight": "J'avais noté la forme très négative d'Espanyol (4 défaites sur 5) comme un risque que le modèle capte mal : cela s'est confirmé par la défaite. Espanyol a dominé le volume (23 tirs contre 9, 66 % de possession), dans le sens de la supériorité offensive que j'attendais. Les marchés de buts sont passés : les deux équipes ont marqué et aucune n'a atteint 3.5 buts.",
+      "whatWasMissed": "Je n'ai pas pesé la variance d'un match à faible échantillon ni l'efficacité d'Elche en contre. Malgré un carton rouge à la 6e minute, Elche a marqué 3 fois sur 9 tirs, avec un xG de 1.61 contre 1.05 pour Espanyol. Le xG de 1.65 d'Espanyol, tiré d'un seul match, était surévalué pour ce match. Fer Niño a marqué deux buts en trois minutes (26e et 29e). Le but d'Espanyol est un csc (72e). Aucun signal pré-match ne permettait d'anticiper le rouge.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1X2 : Espanyol favori (1.86 vrai, edge de 4.74 %) a perdu. Le xG d'Elche (1.61) dépasse celui attendu par le moteur (0.80), et celui d'Espanyol (1.05) est inférieur à l'attendu (1.75). Une seule issue ne dit pas si l'edge était mauvais ; la faible couverture des données d'Elche limitait déjà la confiance.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Espanyol gagne",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Espanyol a perdu 1-3. Elche a marqué à la 26e et à la 29e (Fer Niño), puis à la 78e (Valera). Le seul but d'Espanyol est un csc de Chust à la 72e. Espanyol a dominé sans efficacité (23 tirs, 4 cadrés, xG 1.05), alors qu'Elche a cadré 6 tirs sur 9 en étant à 10 dès la 6e minute.",
+          "lesson": "Ne pas traiter un favori à domicile comme solide quand sa forme récente est mauvaise et que les données adverses manquent. Le volume de tirs d'Espanyol n'a pas produit de buts. Il faut peser la qualité des tirs (cadrés, grosses occasions) plus que leur nombre."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "4 buts au total (1-3), donc plus de 0.5 est largement passé. Les buts sont tombés aux 26e, 29e, 72e et 78e minutes.",
+          "lesson": "Ce seuil très bas est quasi acquis dans un match de ce profil. Il apporte peu d'information et ne valide pas la lecture sur le vainqueur."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Les deux équipes ont marqué : Elche trois fois, Espanyol une fois, sur csc à la 72e. Sans ce csc, Espanyol aurait sans doute fini sans but malgré 23 tirs, donc le « Oui » a été juste de peu.",
+          "lesson": "Le BTTS était cohérent avec des xG autour de 1.75 et 0.80. Mais il a tenu sur un csc, pas sur une finition d'Espanyol : le garder avec prudence quand l'attaque domine sans cadrer."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Espanyol & Plus de 0.5 buts",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le pari combiné dépendait d'une victoire d'Espanyol, qui n'a pas eu lieu. Le volet buts était juste, mais la défaite du pick l'a fait échouer.",
+          "lesson": "Un combiné hérite de l'erreur du marché 1X2. Quand le vainqueur est incertain, éviter de le coupler à un marché de buts qui ne le renforce pas."
+        },
+        {
+          "market": "Buts — Espanyol",
+          "marketId": "teamGoals",
+          "pick": "Espanyol — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Espanyol n'a marqué qu'un but (csc), largement sous 3.5, malgré 23 tirs.",
+          "lesson": "Un seuil de 3.5 est très sûr pour une équipe moyenne. Il a été juste, mais ne prouve pas la qualité de l'analyse."
+        },
+        {
+          "market": "Buts — Elche CF",
+          "marketId": "teamGoals",
+          "pick": "Elche CF — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Elche a marqué 3 buts, donc moins de 3.5 est passé de justesse. Deux buts en trois minutes de Fer Niño ont rendu le match ouvert malgré le rouge à la 6e minute.",
+          "lesson": "Elche a été plus efficace que prévu (xG 1.61 contre 0.80 attendu) : un seuil de 3.5 est resté juste, mais la marge était faible. Ne pas sous-estimer un adversaire dont on ne connaît pas la forme actuelle."
+        }
+      ],
+      "caveats": "Un seul match : le résultat peut tenir à la variance (efficacité d'Elche, csc, rouge à la 6e). Je n'ai pas le détail des blessures ni la forme actuelle d'Elche. Les statistiques pré-match reposaient sur un échantillon d'un match. Il n'y a pas d'avis d'avant-match par marché (aiVerdict nul), donc je ne peux juger que la lecture globale.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3704,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 2119,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3704,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2119,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 3704,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3704
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0362172,
+      "createdAt": "2026-09-30T21:04:17.319Z"
+    }
   },
   {
     "matchId": "f6d8ec3ecfba4947770ddd7d391c8c73",
@@ -1310,8 +2922,120 @@
       "alignmentWithModel": "Le contexte qualitatif nuance partiellement l'edge du moteur plutôt que de le confirmer pleinement : les données FlashScore et historiques disponibles positionnent Lens comme une équipe à profil offensif solide (bonne possession, volume de tirs élevé, défense historique plus économe), ce qui contraste avec l'écart très marqué en expected goals du moteur en faveur de Monaco. L'absence totale de données directes sur Monaco (classement, forme, stats) empêche cependant de confirmer ou d'infirmer solidement la supériorité domiciliaire suggérée par le modèle ; le contexte disponible invite donc à une lecture prudente plutôt qu'à un renforcement du signal.",
       "caveats": "Aucune donnée directe disponible pour Monaco (classement, stats, forme) ni pour la forme FlashScore en direct — seules des sources secondaires existent pour Lens. Le classement (standings) est totalement absent pour les deux équipes, aucune indication football-data.co.uk n'étant fournie ici. Deux sources de forme pour Lens (FlashScore et profil équipe) présentent des séquences différentes sur des périodes non alignées, ce qui empêche de trancher sur la forme réelle actuelle. Les données FlashScore datent du 07/09/2026 et le profil d'équipe du 16/09/2026, avec un décalage temporel entre les deux sources à noter."
     },
-    "updatedAt": "2026-09-18T17:07:44.435Z",
-    "createdAt": "2026-09-18T17:07:44.435Z"
+    "updatedAt": "2026-09-30T21:04:36.143Z",
+    "createdAt": "2026-09-18T17:07:44.435Z",
+    "postMatchReview": {
+      "summary": "Monaco a gagné 2-1, dans le sens du moteur (favori à domicile, edge 16,26 %). Ma lecture prudente, qui nuançait l'écart d'xG en faveur de Monaco, était trop sceptique sur le résultat. Elle avait cependant vu juste sur un Lens offensivement actif : Lens a marqué, a tiré plus (12 tirs contre 9) et a obtenu 8 corners contre 2. Le score final doit beaucoup à un csc tardif (84e), donc la marge reste mince.",
+      "whatWasRight": "J'avais pointé le profil offensif de Lens (volume de tirs, possession). Il s'est confirmé : 12 tirs contre 9, 8 corners contre 2, un xG de 1,19 et un but de Udol à la 57e. Cela invalidait l'idée d'un xG Lens de 0,825 jugé très faible. Le refus de surévaluer l'écart entre les équipes était donc justifié sur le déroulé : possession égale (50 %), match ouvert et serré.",
+      "whatWasMissed": "J'ai laissé trop de poids à l'absence de données sur Monaco et à la forme de Lens, sans tirer de conclusion sur l'issue. Monaco a produit la meilleure qualité de tirs (6 cadrés sur 9, 3 grosses occasions, xG 1,75 contre 1,19), proche des 2,19 attendus par le moteur. Je n'ai pas non plus anticipé que le match serait à la fois ouvert et gagné par Monaco. Le csc de Gradit à la 84e a fait basculer le score : c'est un facteur de chance non modélisable.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur la victoire de Monaco et sur le xG de Monaco (1,75 réel contre 2,19 attendu). Il le contredit partiellement sur Lens, dont le xG réel (1,19) dépasse nettement les 0,83 prévus. Le pronostic est juste, mais le 2-1 avec un csc tardif ne prouve pas un écart aussi net que celui du chiffrage.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "AS Monaco gagne",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Monaco a ouvert le score à la 32e (Brunner), Lens a égalisé à la 57e (Udol), puis le csc de Gradit à la 84e a donné la victoire. Monaco a eu plus de tirs cadrés (6 contre 4) et un meilleur xG (1,75 contre 1,19).",
+          "lesson": "Le favori à domicile s'est imposé, ce qui confirme la direction du moteur. Mais la victoire s'est jouée sur un csc tardif : ne pas lire un pari juste comme une preuve d'écart net. Garder un doute sur l'ampleur de l'avantage quand les stats du match sont proches."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Trois buts ont été marqués (32e, 57e, 84e), donc le plus de 0,5 but était acquis dès la 32e minute.",
+          "lesson": "Un seuil aussi bas est presque toujours validé dans un match entre deux équipes offensives. Il apporte peu d'information : ne pas le compter comme une preuve de la qualité de l'analyse."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Lens a marqué à la 57e par Udol, avec 12 tirs, 4 cadrés et 2 grosses occasions. Monaco avait marqué dès la 32e.",
+          "lesson": "Mon analyse avait vu juste sur le profil offensif de Lens : xG moyen de 2,18 et 18 tirs par match. Le xG moteur de 0,825 pour Lens semblait trop bas face à ce profil. À garder : croiser l'xG du moteur avec le volume de tirs pour juger si l'adversaire peut marquer."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "AS Monaco & Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Les deux conditions sont réunies : victoire de Monaco et trois buts au total.",
+          "lesson": "Ce marché combiné dépend surtout de la victoire du favori, car le plus de 0,5 but était quasi acquis. Sa fiabilité est celle du marché Résultat, avec le même risque lié à un but chanceux."
+        },
+        {
+          "market": "Buts — AS Monaco",
+          "marketId": "teamGoals",
+          "pick": "AS Monaco — Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Monaco a marqué dès la 32e par Brunner, avec 6 tirs cadrés, 3 grosses occasions et un xG de 1,75. Le csc de la 84e s'ajoute au total.",
+          "lesson": "Le xG moteur de 2,19 pour Monaco était cohérent avec sa production réelle. Ce seuil bas est logique pour une équipe jugée nettement supérieure à domicile."
+        },
+        {
+          "market": "Buts — RC Lens",
+          "marketId": "teamGoals",
+          "pick": "RC Lens — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Lens n'a marqué qu'un but (Udol, 57e), donc moins de 3,5 buts, malgré 12 tirs et 8 corners.",
+          "lesson": "Un plafond aussi haut était très sûr, car un total de 4 buts ou plus est rare. Il n'indique pas de valeur : les probabilités y sont déjà fortes. La pression de Lens (8 corners) n'a produit qu'un seul but."
+        }
+      ],
+      "caveats": "Un seul match : le résultat ne valide ni n'invalide le modèle. Le csc tardif (84e) a pesé sur le score final. Je n'avais aucune donnée directe sur Monaco avant le match, donc l'évaluation de ma lecture reste partielle. Les stats réelles ne donnent ni la compo, ni le contexte tactique, ni les absences.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3708,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 2051,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3708,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2051,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 3708,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3708
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0355532,
+      "createdAt": "2026-09-30T21:04:36.143Z"
+    }
   },
   {
     "matchId": "784f777f5181e1efdad7a6ecb2cfde15",
@@ -1394,8 +3118,120 @@
       "alignmentWithModel": "Le contexte qualitatif va globalement dans le sens de la légère préférence du modèle pour Liverpool (xG away 1.216 > home 1.164), avec un classement, des statistiques historiques et une forme web plus récente qui penchent modestement en faveur des Reds. Cependant, la faible marge d'expected goals entre les deux équipes (1.164 vs 1.216) et l'écart resserré confirment la prudence du moteur (edge faible, action PASS) : rien dans les données qualitatives ne suggère un déséquilibre suffisant pour contredire cette recommandation de passer.",
       "caveats": "La forme API-Football (homeForm/awayForm) date d'avril-mai 2025 et est donc antérieure à la saison en cours (4 matchs joués selon standings) ; les recentForm issus du web (updatedAt septembre 2026) sont plus récents et doivent être privilégiés comme indicateurs de forme actuelle, bien que leur origine et méthodologie restent moins précises. Les statistiques par match (homeStats/awayStats) reposent sur un échantillon d'un seul match (sampleSize=1), ce qui limite leur fiabilité. Le classement fourni ne précise pas de source \"historique\" et semble être en direct pour la saison en cours, mais reste basé sur seulement 4 matchs joués, un échantillon réduit. Aucune donnée FlashScore disponible pour ce match."
     },
-    "updatedAt": "2026-09-20T10:53:19.623Z",
-    "createdAt": "2026-09-20T10:53:19.623Z"
+    "updatedAt": "2026-09-30T21:04:52.872Z",
+    "createdAt": "2026-09-20T10:53:19.623Z",
+    "postMatchReview": {
+      "summary": "Liverpool a gagné 1-0 à Bournemouth grâce à un but d'Isak à la 57e. Ma lecture d'avant-match (léger avantage aux Reds, rien de net, cohérent avec le PASS du moteur) est globalement confirmée. L'xG du match (1.65 contre 0.79) donne raison à l'avantage de Liverpool, plus marqué que dans les xG prévus (1.216 contre 1.164). Le marché BTTS « Oui » du moteur s'est trompé.",
+      "whatWasRight": "J'avais vu un petit avantage pour Liverpool (classement, stats historiques, forme web plus récente, xG du match unique plus élevé). Le résultat l'a confirmé : victoire 1-0, 12 tirs contre 9, 54% de possession, xG 1.65 contre 0.79. J'avais aussi jugé l'écart trop mince pour sortir du PASS, et ce match serré, décidé par un seul but, le confirme.",
+      "whatWasMissed": "Je n'ai pas anticipé un match fermé avec un seul but. Les moyennes de Liverpool (1.6 marqués, 1.6 encaissés) poussaient vers un match ouvert, et le BTTS s'est pourtant soldé par un clean sheet. Je n'ai pas non plus vu que le xG de Bournemouth (0.79) resterait nettement sous sa moyenne historique. Seul un tir cadré de plus a fait la différence : 3 contre 2, avec une grosse occasion de chaque côté.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le 1X2 : il penchait légèrement pour Liverpool et les Reds ont gagné. Il le contredit sur le BTTS « Oui », faux. Le PASS reste cohérent : l'edge était faible et le match s'est joué sur un seul but.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Liverpool gagne",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Isak marque à la 57e et Liverpool tient jusqu'au bout. Les Reds ont dominé aux tirs (12 contre 9), à la possession (54%) et à l'xG (1.65 contre 0.79).",
+          "lesson": "Garder l'idée d'un léger avantage à Liverpool quand xG et forme convergent. Sur un échantillon de 4 matchs et un edge de 3%, cela reste une lecture nuancée, pas une conviction forte."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Un seul but, à la 57e, suffit pour Plus de 0.5. Les deux équipes ont créé des occasions (21 tirs au total, xG cumulé de 2.44).",
+          "lesson": "Ce seuil très bas est quasi sûr avec des xG proches de 1.2 de part et d'autre. Il a peu de valeur informative, car il ne dit rien sur le rythme du match."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Bournemouth n'a pas marqué (0 but malgré 9 tirs, 2 cadrés, xG 0.79). Liverpool a marqué seul, tard, à la 57e.",
+          "lesson": "Le BTTS « Oui » s'est trompé. Avec des xG prévus voisins de 1.2, il ne faut pas le déduire d'une symétrie offensive : le xG de Bournemouth était bien inférieur à sa moyenne et seule une grosse occasion a été créée. Pour l'avenir, tempérer ce marché quand le domicile a peu de tirs cadrés (3.9 en moyenne)."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Liverpool & Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Victoire de Liverpool plus au moins un but : le 1-0 valide les deux conditions.",
+          "lesson": "Ce combiné n'a de valeur que par la composante résultat. Sa réussite vient de la victoire de Liverpool, pas du total de buts."
+        },
+        {
+          "market": "Buts — Bournemouth",
+          "marketId": "teamGoals",
+          "pick": "Bournemouth — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Bournemouth a marqué 0 but, très loin du seuil de 3.5.",
+          "lesson": "Un seuil de 3.5 pour une équipe à 1.4 but en moyenne est presque automatique. Il ne mérite aucune attention particulière."
+        },
+        {
+          "market": "Buts — Liverpool",
+          "marketId": "teamGoals",
+          "pick": "Liverpool — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Liverpool a marqué 1 but, sous le seuil de 3.5.",
+          "lesson": "Même remarque : un 3.5 pour une équipe à 1.6 but de moyenne est peu discriminant. Ne pas y voir de signal sur la qualité de l'analyse."
+        }
+      ],
+      "caveats": "Un seul match, décidé par un but à la 57e : une seule occasion convertie ou manquée change le récit. Les moyennes d'avant-match reposaient sur de petits échantillons (4 matchs de saison, une seule statistique de match). Aucun avis chiffré d'avant-match sur les marchés individuels, donc l'évaluation reste qualitative.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3737,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 1808,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3737,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1808,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 3737,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3737
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.033239199999999997,
+      "createdAt": "2026-09-30T21:04:52.872Z"
+    }
   },
   {
     "matchId": "58ed47e545ec3e4235ed8c1955cfdd42",
@@ -1473,8 +3309,120 @@
       "alignmentWithModel": "Le contexte qualitatif va globalement dans le même sens que l'edge du modèle : Juventus présente un profil statistique et un classement légèrement supérieurs à Atalanta, ce qui soutient une issue favorable au domicile plutôt qu'elle ne la contredit. Cependant, la dispersion des indicateurs de forme récente selon les sources nuance cette lecture et invite à ne pas surinterpréter l'avantage, cohérent avec le caractère modeste de l'edge (3.93%) et la décision de passe du moteur.",
       "caveats": "Classement basé sur seulement 4 matchs joués cette saison, échantillon très réduit. La forme récente (homeForm) provient d'API-Football et date de mai 2025, donc antérieure aux données plus récentes (homeFlashscoreStats collecté sept. 2026, homeTeamProfile/awayTeamProfile mis à jour sept. 2026) : ces dernières sont plus représentatives de l'état actuel des équipes, mais elles sont elles-mêmes contradictoires entre sources. awayForm (API-Football) et awayFlashscoreStats sont totalement indisponibles. Aucun détail domicile/extérieur (home/away splits) n'est fourni dans les standings (tous à 0). Pas de données sur les confrontations directes entre les deux équipes."
     },
-    "updatedAt": "2026-09-20T16:17:34.732Z",
-    "createdAt": "2026-09-20T16:17:34.732Z"
+    "updatedAt": "2026-09-30T21:05:10.172Z",
+    "createdAt": "2026-09-20T16:17:34.732Z",
+    "postMatchReview": {
+      "summary": "La Juventus a gagné 2-0, dans le sens de la lecture pré-match (léger avantage domicile) et du moteur (xG 1,86 contre 0,73). Le score, les xG (1,31 contre 0,60) et les tirs cadrés (5 contre 2) confirment la supériorité locale. Le seul pick du moteur démenti est « les 2 équipes marquent : oui », car Atalanta n'a pas marqué.",
+      "whatWasRight": "La Juventus était légèrement favorite. Elle a gagné avec plus de tirs (14 contre 11), plus de tirs cadrés (5 contre 2) et 4 grosses occasions contre 0. J'avais noté qu'elle était plus solide défensivement (0,6 but encaissé en moyenne en historique Serie A). Atalanta n'a fait que 0,6 xG et n'a pas marqué. J'avais aussi gardé une prudence sur l'ampleur de l'avantage, cohérente avec la décision PASS pour un edge de 3,93 %.",
+      "whatWasMissed": "Je n'avais pas vu que le match serait aussi fermé côté Atalanta, alors que le pick « les 2 équipes marquent » supposait qu'elle marque. Sa défense a été jugée plus perméable (1,0 but encaissé en historique), mais elle n'a pas pesé dans ce match. L'analyse était trop générale et ne traitait pas les marchés de buts. La possession (52 % contre 56,7 % de moyenne) était plus équilibrée qu'attendu, sans effet sur le résultat.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le 1X2 et les totaux : la victoire de la Juventus et un nombre de buts faible à modéré, avec un xG domicile proche du xG réel de 1,31. Il contredit le moteur sur « les 2 équipes marquent ». L'edge de 3,93 % était faible et le moteur avait décidé de passer, donc le résultat ne valide ni n'invalide vraiment ce choix.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Juventus gagne",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "La Juventus a gagné 2-0, avec des buts de Conceição (28e) et de Bremer (77e). Elle a été devant sur les xG (1,31 contre 0,60), les tirs cadrés et les grosses occasions (4 contre 0).",
+          "lesson": "Garder la lecture d'un léger avantage à domicile quand classement, tirs et solidité défensive vont dans le même sens. Un seul match ne suffit pas pour conclure."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Avec 2 buts (28e et 77e), plus de 0,5 but est largement atteint. Le pick était très peu risqué.",
+          "lesson": "Un seuil aussi bas est presque toujours atteint et apprend peu. Il faut regarder les seuils plus serrés pour mesurer le rythme du match."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Atalanta n'a marqué aucun but : 2 tirs cadrés, 0 grosse occasion, 0,6 xG. La Juventus a pris le contrôle en concédant peu.",
+          "lesson": "Ne pas retenir « oui » seulement parce que l'équipe extérieure marque en moyenne 1,2 but. Avec un xG extérieur de 0,73 et une équipe à domicile défensivement solide, un blanchissage était très plausible."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Juventus & Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "La victoire de la Juventus et plus de 0,5 but sont tous deux réalisés, avec le 2-0. Ce marché ne dépend en pratique que du résultat.",
+          "lesson": "Ce marché combiné dépend surtout du résultat. Sa qualité suit celle du 1X2, le seuil bas n'apporte aucune information."
+        },
+        {
+          "market": "Buts — Juventus",
+          "marketId": "teamGoals",
+          "pick": "Juventus — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "La Juventus a marqué 2 buts, sous le seuil de 3,5, malgré 14 tirs et 4 grosses occasions. Le xG de 1,31 indiquait un total modéré.",
+          "lesson": "Un seuil de 3,5 buts pour une équipe est rarement dépassé. Un xG d'environ 1,3 à 1,9 pointe plutôt vers 1 à 2 buts."
+        },
+        {
+          "market": "Buts — Atalanta BC",
+          "marketId": "teamGoals",
+          "pick": "Atalanta BC — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Atalanta a marqué 0 but, bien sous 3,5. Elle a tiré 11 fois mais seulement 2 fois cadré, pour 0,6 xG.",
+          "lesson": "Pour une équipe extérieure à faible xG, le seuil de 3,5 buts est très sûr. Il faut regarder la qualité des tirs, pas seulement leur volume."
+        }
+      ],
+      "caveats": "Il s'agit d'un seul match, donc l'échantillon est minuscule. Une victoire 2-0 peut venir de la variance (un but à la 77e). Les données de forme étaient contradictoires selon les sources et les stats ne donnent ni les compositions ni le contexte du match, donc je ne peux pas expliquer le blanchissage d'Atalanta au-delà des xG et des tirs.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3686,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 1903,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3686,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1903,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 3686,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3686
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0339852,
+      "createdAt": "2026-09-30T21:05:10.172Z"
+    }
   },
   {
     "matchId": "d05fb9feb5722b2f2cedb8bbe7c33a1d",
@@ -1552,8 +3500,120 @@
       "alignmentWithModel": "Le contexte qualitatif nuance sensiblement l'edge chiffré par le moteur. Le modèle projette un net avantage offensif pour Valencia (xG 1.782 contre 0.606), mais les données de classement et de forme disponibles décrivent plutôt une équipe valencienne en délicatesse (19e, seulement 2 buts marqués en 6 matchs) face à une Real Sociedad légèrement mieux classée et plus prolifique cette saison. Les statistiques moyennes de tirs et possession penchent même en faveur des Basques. Ce contraste entre les chiffres bruts du moteur et le contexte qualitatif renforce la prudence déjà signalée par l'action PASS du moteur, sans que cela ne remette en cause son chiffrage.",
       "caveats": "Le classement fourni provient de la saison en cours mais sans détail domicile/extérieur (0 matchs joués renseignés dans standings.home/away, données incomplètes). Les champs homeForm/awayForm (API-Football) datent de mai 2025 et sont donc bien plus anciens que awayFlashscoreStats.recentForm et awayTeamProfile.recentForm (collectés en septembre 2026) : ces deux dernières sources, plus récentes, devraient être privilégiées pour la Real Sociedad, mais elles se contredisent légèrement entre elles sur l'ordre des résultats. Aucune forme récente équivalente n'est disponible pour Valencia (homeTeamProfile est null), ce qui limite l'évaluation de sa dynamique actuelle. Les statistiques historiques (football-data.co.uk) sont bien en \"same division\" mais restent des moyennes sur des échantillons passés, non garanties représentatives de la forme actuelle."
     },
-    "updatedAt": "2026-09-20T19:02:53.686Z",
-    "createdAt": "2026-09-20T19:02:53.686Z"
+    "updatedAt": "2026-09-30T21:05:29.384Z",
+    "createdAt": "2026-09-20T19:02:53.686Z",
+    "postMatchReview": {
+      "summary": "Valencia a perdu 2-3 à domicile, contre le pick du moteur (victoire Valencia, xG 1.78 contre 0.61). Ma lecture qualitative, prudente face à l'edge de 26 %, était la bonne : la Real Sociedad a dominé les occasions (xG 2.71 contre 1.59). Le match a été ouvert, avec des buts des deux côtés, et le xG du moteur sous-estimait nettement la Sociedad.",
+      "whatWasRight": "J'avais signalé le contraste entre l'xG du moteur et le contexte (Valencia 19e, 2 buts en 6 matchs, Sociedad devant sur les tirs et la possession moyens). Le résultat le confirme : la Sociedad gagne avec plus de grosses occasions (5 contre 3) et un xG supérieur. La prudence (PASS) était justifiée. Les marchés de buts (BTTS oui, moins de 3.5 par équipe) se sont vérifiés dans un match ouvert.",
+      "whatWasMissed": "Je n'ai pas anticipé que la Sociedad serait aussi dangereuse : xG réel 2.71 contre 0.61 prévu par le moteur. Le potentiel de match ouvert n'était pas assez pris en compte. Les deux buts tardifs (84e csc, 90e) montrent aussi un scénario dur à modéliser.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1X2 : l'edge de 26 % sur Valencia ne s'est pas concrétisé, et l'xG attendu de la Sociedad (0.61) était très éloigné du réel. Il va dans son sens sur le volume de buts et le BTTS. L'action PASS a évité une perte.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Valencia gagne",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Valencia menait au volume (22 tirs, 54 % de possession) mais a encaissé d'abord à la 26e (Sučić), puis à la 75e (Soler) et à la 90e (Barrenetxea). Les 5 grosses occasions de la Sociedad contre 3 pour Valencia et son xG de 2.71 expliquent la défaite de Valencia.",
+          "lesson": "Un edge 1X2 très élevé (26 %) fondé sur un xG moteur très déséquilibré doit être traité avec scepticisme quand le classement et les stats de tirs le contredisent. Je gardais raison de me méfier : rester prudent (PASS) dans ce cas."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "5 buts au total (2-3), donc plus de 0.5 est largement atteint dès la 26e.",
+          "lesson": "Marché très peu informatif (seuil trivial). À ne pas compter comme une validation du modèle."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Les deux équipes ont marqué : Valencia à la 57e (Mayol) et sur csc à la 84e attribué à la Sociedad côté Valencia, la Sociedad à la 26e, 75e et 90e. Les xG cumulés de 4.3 et les 43 tirs annonçaient un match ouvert.",
+          "lesson": "Même avec un xG moteur de 0.61 pour l'extérieur, le BTTS était juste. Le moteur sous-estime les buts de l'extérieur. Pour un match aux deux attaques actives, le BTTS mérite d'être pris au sérieux."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Valencia & Plus de 0.5 buts",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le combiné dépend du succès de Valencia, qui a perdu. Le volet plus de 0.5 buts était acquis mais n'a pas compensé.",
+          "lesson": "Un combiné hérite du risque du 1X2, le marché le plus fragile ici. Ne pas y voir un pari plus sûr à cause d'un volet trivial."
+        },
+        {
+          "market": "Buts — Valencia",
+          "marketId": "teamGoals",
+          "pick": "Valencia — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Valencia termine à 2 buts (un but de Mayol et un csc) malgré 22 tirs et 1.59 xG, donc sous 3.5.",
+          "lesson": "Le seuil de 3.5 est peu discriminant pour une équipe à 2 buts en 6 matchs. Valider, mais sans surévaluer cette issue."
+        },
+        {
+          "market": "Buts — Real Sociedad",
+          "marketId": "teamGoals",
+          "pick": "Real Sociedad — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "La Sociedad marque 3 buts (26e, 75e, 90e) : sous 3.5, mais de justesse, avec un xG de 2.71 bien au-dessus de la prévision de 0.61.",
+          "lesson": "Ce marché est passé avec une marge faible : l'xG moteur de 0.61 était très sous-évalué. Méfiance sur les seuils de buts quand la défense adverse est fragile (10 buts encaissés en 6 matchs pour Valencia)."
+        }
+      ],
+      "caveats": "Un seul match : le résultat peut tenir à la variance (buts tardifs, csc à la 84e, finition) et pas seulement au niveau des équipes. Mes analyses d'avant-match n'avaient pas d'avis marché par marché (aiVerdict nul), donc l'évaluation porte sur ma lecture globale. Je n'ai pas de données sur les compositions ni sur le carton rouge de la Sociedad (minute inconnue).",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3975,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 2163,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3975,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2163,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 3975,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3975
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0377412,
+      "createdAt": "2026-09-30T21:05:29.384Z"
+    }
   },
   {
     "matchId": "b870dcfba5e5920d3f1551a3aa1ea435",
@@ -1784,20 +3844,21 @@
       "alignmentWithModel": "Le contexte qualitatif est cohérent avec les probabilités très serrées calculées par le moteur (cotes vraies proches entre les trois issues). Le classement et la solidité défensive de Guaraní à l'extérieur pourraient légèrement nuancer en sa faveur par rapport à un pur 50/50, mais rien dans les données ne contredit fondamentalement l'équilibre affiché par le modèle. L'absence de cotes de marché empêche de toute façon toute exploitation, ce qui rend cette lecture qualitative purement informative.",
       "caveats": "Aucune donnée FlashScore ni historique (division inférieure ou autre saison) disponible pour confirmer ou nuancer ces chiffres. La forme récente provient d'API-Football pour la saison 2024 avec des dates en 2026, ce qui est incohérent en l'état et suggère un possible souci de millésime dans la source ; à interpréter avec prudence. Aucun profil web (recentForm) n'est disponible pour confirmer l'état de forme le plus actuel des deux équipes."
     },
-    "updatedAt": "2026-09-30T17:48:04.475Z",
+    "updatedAt": "2026-09-30T21:05:40.259Z",
     "createdAt": "2026-09-23T16:58:09.273Z",
     "postMatchReview": {
-      "summary": "Guaraní s'est imposé 1-0 à l'extérieur. Ma lecture qualitative penchait légèrement vers Guaraní (solidité défensive en déplacement, meilleur classement), tout en reconnaissant l'équilibre du modèle. Le résultat va dans ce sens nuancé, sans pouvoir trancher sur la justesse des probabilités sur un seul match.",
-      "whatWasRight": "J'avais souligné la solidité défensive de Guaraní à l'extérieur (1 seul but encaissé en 5 matchs, invaincu) et la fragilité défensive de Luqueño à domicile : Guaraní gagne sans encaisser, ce qui colle à ce profil. Le score serré et à faible total était aussi cohérent avec des xG proches et modestes (environ 1,16 contre 1,18) et avec des profils offensifs similaires. J'avais également signalé que le classement et la forme pouvaient légèrement favoriser Guaraní par rapport à un 50/50.",
-      "whatWasMissed": "Je n'avais pas anticipé que Luqueño ne marquerait pas du tout, alors que l'équipe n'était pas réputée stérile à domicile (6 buts en 5 matchs). Rien dans mes données n'expliquait la manière du résultat (dynamique du match, éventuelles cartes, blessures, composition). Je n'avais pas non plus de contexte actuel de forme, vu les incohérences de millésime de la source.",
-      "outcomeVsEngine": "Le résultat n'est pas contradictoire avec le moteur : la victoire visiteuse correspond à une issue qu'il jugeait plausible (cote vraie extérieur autour de 3,03, très proche des autres issues). Il n'y avait aucun edge ni mise, car pas de cotes de marché (PASS). Le résultat ne valide ni n'invalide donc économiquement le moteur. Il est simplement compatible avec une légère préférence pour Guaraní plus nette que celle du modèle, mais c'est un échantillon unique.",
-      "caveats": "Un seul match : une victoire 1-0 peut tenir à la variance (un but, une occasion) et ne permet pas d'évaluer la calibration du modèle. Je ne dispose ni des statistiques du match (tirs, xG réel, cartons) ni de la compo, donc je ne peux pas vérifier si le score reflète la domination réelle. Les données de forme d'avant-match étaient entachées d'un doute de millésime.",
+      "summary": "Guaraní a gagné 1-0 à l'extérieur sur un but tardif (87e). Ma lecture penchait légèrement vers Guaraní (solidité à l'extérieur, invincibilité, meilleure différence de buts) tout en restant proche d'un équilibre ; le résultat va dans ce sens, mais le match est resté très serré, décidé par un seul but à trois minutes de la fin.",
+      "whatWasRight": "J'avais souligné la solidité défensive de Guaraní en déplacement (1 seul but encaissé en 5 sorties) : il garde sa cage inviolée et poursuit son invincibilité extérieure. J'avais aussi jugé les profils proches en tirs (8 tirs partout, 5 corners partout), ce qui s'est confirmé, et j'avais nuancé en faveur de Guaraní par rapport à un pur 50/50. Le faible total de buts (1) est cohérent avec des xG autour de 1,16 et 1,18 et avec la faible production offensive de Guaraní à l'extérieur (3 buts en 5 matchs).",
+      "whatWasMissed": "Je n'ai pas anticipé la domination de la possession par Guaraní (60 % contre une moyenne de 47,5 %). Luqueño a créé les meilleures occasions (2 grosses occasions contre 0, 3 tirs cadrés contre 2) sans marquer. Le vainqueur n'a donc pas été le plus dangereux, et un but à la 87e montre que l'issue tenait à peu de chose. Mon avantage léger à Guaraní reposait sur des tendances de saison, non sur la qualité des occasions.",
+      "outcomeVsEngine": "Le moteur donnait un match quasi trois issues (cotes vraies 3,12 / 3,59 / 3,03), avec Guaraní à peine plus probable que Luqueño. La victoire de Guaraní est compatible avec cet équilibre et ne le contredit pas. Un seul résultat ne valide pas le chiffrage. Sans cotes de marché, le PASS était logique : aucun pari n'a été placé.",
+      "marketReviews": [],
+      "caveats": "Il s'agit d'un seul match, décidé par un but tardif. Le résultat peut tenir à la variance : Luqueño avait les meilleures occasions. Aucun marché n'a été joué (marketOutcomes est vide), donc il n'y a pas de bilan par marché. Les xG réels du match ne sont pas fournis. Les données de forme présentaient une incohérence de millésime signalée avant le match.",
       "model": "claude-code:sonnet",
       "usage": {
         "input_tokens": 2,
-        "cache_creation_input_tokens": 2347,
-        "cache_read_input_tokens": 704,
-        "output_tokens": 963,
+        "cache_creation_input_tokens": 2941,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 1004,
         "output_tokens_details": {
           "thinking_tokens": 0
         },
@@ -1807,19 +3868,19 @@
         },
         "service_tier": "standard",
         "cache_creation": {
-          "ephemeral_1h_input_tokens": 2347,
+          "ephemeral_1h_input_tokens": 2941,
           "ephemeral_5m_input_tokens": 0
         },
         "inference_geo": "not_available",
         "iterations": [
           {
             "input_tokens": 2,
-            "output_tokens": 963,
-            "cache_read_input_tokens": 704,
-            "cache_creation_input_tokens": 2347,
+            "output_tokens": 1004,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 2941,
             "cache_creation": {
               "ephemeral_5m_input_tokens": 0,
-              "ephemeral_1h_input_tokens": 2347
+              "ephemeral_1h_input_tokens": 2941
             },
             "type": "message"
           }
@@ -1827,8 +3888,8 @@
         "speed": "standard",
         "fallback_credit": null
       },
-      "costUsd": 0.0191628,
-      "createdAt": "2026-09-30T17:48:04.472Z"
+      "costUsd": 0.0220152,
+      "createdAt": "2026-09-30T21:05:40.259Z"
     }
   },
   {
