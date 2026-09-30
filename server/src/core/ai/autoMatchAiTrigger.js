@@ -116,7 +116,8 @@ export async function runAutoPostMatchReviews({ limit }) {
   const candidats = [];
   for (const m of recentlyFinished({ since })) {
     const prior = findPreMatchAnalysisByTeams({ homeName: m.homeName, awayName: m.awayName, league: m.league, day: m.date });
-    if (prior) candidats.push({ prior, resultat: { homeGoals: m.homeGoals, awayGoals: m.awayGoals } });
+    // Date et nom FotMob : l'analyse après-match relit les buts et statistiques du match dans le magasin.
+    if (prior) candidats.push({ prior, resultat: { homeGoals: m.homeGoals, awayGoals: m.awayGoals, date: m.date, homeName: m.homeName } });
   }
 
   return analyserEnSerie(

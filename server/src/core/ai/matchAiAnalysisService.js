@@ -8,8 +8,11 @@ import { resolveHistoricalStatsByName, resolveHistoricalFormByName, resolveHisto
 import { getTeamProfile } from '../../data/repositories/teamProfileRepository.js';
 import { getMatchNote } from '../../data/repositories/matchNotesRepository.js';
 import { resolveTeamNews } from '../../data/providers/teamNewsResolver.js';
-import { getByMatchId, savePreMatchAnalysis, savePostMatchReview } from '../../data/repositories/matchAiAnalysisRepository.js';
+import { getByMatchId, savePreMatchAnalysis, savePostMatchReview, aiMarketExperience } from '../../data/repositories/matchAiAnalysisRepository.js';
 import { createResultLookup } from '../../data/repositories/matchResultsRepository.js';
+import { listPredictions } from '../../data/repositories/predictionsRepository.js';
+import { matchDetailsFromStore } from '../../data/db/matchStatsRead.js';
+import { deriveActualOutcome } from '../settlement/settlementRules.js';
 import { resolveCurrentSeason } from '../../data/providers/leagueRegistry.js';
 import { findBestTeamNameMatch } from '../../utils/teamNameMatch.js';
 import { enregistrerSansPerdre } from '../../utils/atomicJson.js';
@@ -82,8 +85,106 @@ function curateEngineSummary(engineResult) {
     trueOdds: { home: engineResult.trueOdds?.home, draw: engineResult.trueOdds?.draw, away: engineResult.trueOdds?.away },
     market: { odds1: engineResult.market?.odds1, oddsDraw: engineResult.market?.oddsDraw, odds2: engineResult.market?.odds2 },
     edgePercent: engineResult.edgePercent ?? null,
-    staking: engineResult.staking ?? null
+    staking: engineResult.staking ?? null,
+    // Le pronostic du moteur sur CHAQUE marché joué (cf. sports/football/markets.js) :
+    // l'IA donne un avis sur chacun, et la revue après-match les reprend.
+    marketPredictions: (engineResult.marketPredictions ?? []).map(({ marketId, params, market, predictedOutcome, predictedLabel, predictedOdds, minOdds }) => ({
+      marketId,
+      params,
+      market,
+      predictedOutcome,
+      predictedLabel,
+      predictedOdds,
+      minOdds: minOdds ?? null
+    }))
   };
+}
+
+/** Libellé de marché comparable : l'IA recopie parfois « Buts — X » avec un autre tiret ou sans accent. */
+const cleMarche = (libelle) =>
+  String(libelle ?? '')
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[‐-―-]+/g, '-')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+
+/**
+ * Chaque élément écrit par l'IA (avis ou bilan) rattaché au marché du moteur
+ * qu'il commente : par libellé, à défaut par position (le schéma exige le
+ * même ordre) quand l'IA en a rendu autant.
+ */
+function rattacherAuxMarches(ecrits = [], marches = []) {
+  const parCle = new Map(ecrits.map((e) => [cleMarche(e.market), e]));
+  return marches.map((m, i) => parCle.get(cleMarche(m.market)) ?? (ecrits.length === marches.length ? ecrits[i] : null));
+}
+
+/**
+ * Pronostics du moteur sur chaque marché pour une analyse enregistrée : ceux
+ * figés avec elle, ou, pour une analyse antérieure à ce figeage, ceux du
+ * journal des pronostics sous le même identifiant de match.
+ */
+function pronosticsDeMarches(prior) {
+  const figes = prior.engineSnapshot?.marketPredictions;
+  if (Array.isArray(figes) && figes.length) return figes;
+  try {
+    return listPredictions()
+      .filter((p) => p.matchId === prior.matchId)
+      .map(({ marketId, params, market, predictedOutcome, predictedLabel, predictedOdds }) => ({ marketId, params, market, predictedOutcome, predictedLabel, predictedOdds }));
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Issue réelle de chaque marché (mêmes règles que le règlement des
+ * pronostics) et, si l'IA avait donné un avis avant le match, s'il a tenu :
+ * confirmer un pronostic juste ou contredire un pronostic faux, c'est avoir
+ * eu raison. Calculé ici, jamais laissé à l'IA : son expérience se compte
+ * sur des faits.
+ */
+function issuesDesMarches(prior, pronostics, result) {
+  const avisParMarche = rattacherAuxMarches(prior.analysis?.marketViews ?? [], pronostics);
+  return pronostics.map((p, i) => {
+    const reel = deriveActualOutcome({ ...p, homeName: prior.homeName, awayName: prior.awayName }, result.homeGoals, result.awayGoals);
+    const juste = reel === null ? null : reel === p.predictedOutcome;
+    const avis = avisParMarche[i];
+    const aiWasRight = juste === null || !avis ? null : avis.verdict === 'confirme' ? juste : avis.verdict === 'contredit' ? !juste : null;
+    return {
+      market: p.market,
+      marketId: p.marketId ?? null,
+      pick: p.predictedLabel,
+      // Plancher de cote sous lequel le pronostic a été choisi (absent avant la règle du 30/09/2026).
+      minOdds: p.minOdds ?? null,
+      outcome: juste === null ? 'indéterminé' : juste ? 'juste' : 'faux',
+      aiVerdict: avis?.verdict ?? null,
+      aiConfidence: avis?.confidence ?? null,
+      aiWasRight
+    };
+  });
+}
+
+const STATS_CLES = ['expected_goals', 'Total Shots', 'Shots on Goal', 'big_chances', 'Ball Possession', 'Corner Kicks', 'Yellow Cards', 'Red Cards'];
+
+/** Faits du match dans le magasin FotMob (buts et leurs minutes, cartons rouges, statistiques clés), pour expliquer chaque marché. */
+function faitsDuMatch(homeName, date) {
+  if (!date) return null;
+  try {
+    const d = matchDetailsFromStore(homeName, date);
+    if (!d?.available) return null;
+    const garder = (stats) => Object.fromEntries(STATS_CLES.filter((k) => stats?.[k] !== undefined && stats?.[k] !== null).map((k) => [k, stats[k]]));
+    return {
+      score: d.score,
+      goals: (d.events ?? [])
+        .filter((e) => e.type === 'goal')
+        .map((e) => ({ minute: e.minute, side: e.side, player: e.player, ownGoal: Boolean(e.ownGoal), penalty: Boolean(e.penalty) })),
+      redCards: (d.events ?? []).filter((e) => e.type === 'card' && e.card === 'red').map((e) => ({ minute: e.minute, side: e.side, player: e.player })),
+      stats: { home: garder(d.stats?.home), away: garder(d.stats?.away) }
+    };
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -239,13 +340,27 @@ export async function runPreMatchAnalysis({ matchId, home, away, league, engineR
 
   const engineSummary = curateEngineSummary(engineResult);
   const context = await gatherQualitativeContext(home, away, league, { matchId, commenceTime: engineResult.commenceTime, sansRepliPayant });
-  const { system, messages } = buildPreMatchAnalysisRequest({ home, away, league, engineSummary, context });
+  let experience = [];
+  try {
+    experience = aiMarketExperience();
+  } catch {
+    // Analyses illisibles à cet instant : l'avis se donne sans le bilan passé.
+  }
+  const { system, messages } = buildPreMatchAnalysisRequest({ home, away, league, engineSummary, context, experience });
 
   let reponse;
   try {
     reponse = await callClaudeCode({ system, userMessage: messages[0].content, jsonSchema: SUBMIT_PRE_MATCH_ANALYSIS_TOOL.input_schema });
   } catch (error) {
     throw echecAppel('Analyse IA pré-match impossible', error);
+  }
+
+  const analysis = sanitizeToolInput(reponse.structuredOutput);
+  // Chaque avis sous le libellé exact du marché du moteur, pour que l'onglet
+  // et la revue après-match le retrouvent.
+  if (engineSummary.marketPredictions.length && Array.isArray(analysis.marketViews)) {
+    const rattaches = rattacherAuxMarches(analysis.marketViews, engineSummary.marketPredictions);
+    analysis.marketViews = engineSummary.marketPredictions.flatMap((m, i) => (rattaches[i] ? [{ ...rattaches[i], market: m.market }] : []));
   }
 
   const entree = {
@@ -261,7 +376,7 @@ export async function runPreMatchAnalysis({ matchId, home, away, league, engineR
     engineSnapshot: engineSummary,
     usage: reponse.usage ?? null,
     costUsd: reponse.costUsd,
-    analysis: sanitizeToolInput(reponse.structuredOutput)
+    analysis
   };
   // Une analyse vient de coûter ~10 s de quota Claude : jamais jetée sur un blocage OneDrive.
   return enregistrerSansPerdre(() => savePreMatchAnalysis(entree), 'analyse IA');
@@ -296,13 +411,19 @@ export async function runPostMatchAnalysis({ matchId, result: resultFourni = nul
     throw new DomainError("Le résultat de ce match n'a pas encore été saisi (Historique moteur > Score final).", { status: 400 });
   }
 
+  // Date réelle du match : fournie (automatique), lue dans l'identifiant du
+  // résultat (« web-AAAA-MM-JJ-… »), ou à défaut le coup d'envoi enregistré.
+  const dateMatch = result.date ?? /(\d{4}-\d{2}-\d{2})/.exec(String(result.matchId ?? ''))?.[1] ?? prior.commenceTime?.slice(0, 10) ?? null;
+  const marketOutcomes = issuesDesMarches(prior, pronosticsDeMarches(prior), result);
   const { system, messages } = buildPostMatchReviewRequest({
     home: prior.homeName,
     away: prior.awayName,
     league: prior.league,
     priorAnalysis: prior.analysis,
     engineSummary: prior.engineSnapshot,
-    result: { homeGoals: result.homeGoals, awayGoals: result.awayGoals }
+    result: { homeGoals: result.homeGoals, awayGoals: result.awayGoals },
+    marketOutcomes,
+    matchStats: faitsDuMatch(result.homeName ?? prior.homeName, dateMatch)
   });
 
   let reponse;
@@ -312,8 +433,14 @@ export async function runPostMatchAnalysis({ matchId, result: resultFourni = nul
     throw echecAppel('Analyse IA après-match impossible', error);
   }
 
+  // Le bilan de chaque marché : l'issue et la tenue de l'avis (calculées
+  // ici), l'explication et la leçon (écrites par l'IA).
+  const brut = sanitizeToolInput(reponse.structuredOutput);
+  const ecrites = rattacherAuxMarches(brut.marketReviews ?? [], marketOutcomes);
+  const marketReviews = marketOutcomes.map((o, i) => ({ ...o, explanation: ecrites[i]?.explanation ?? null, lesson: ecrites[i]?.lesson ?? null }));
   const revue = {
-    ...sanitizeToolInput(reponse.structuredOutput),
+    ...brut,
+    marketReviews,
     model: 'claude-code:sonnet',
     usage: reponse.usage ?? null,
     costUsd: reponse.costUsd,

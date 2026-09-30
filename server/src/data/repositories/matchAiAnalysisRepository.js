@@ -70,6 +70,99 @@ export function findPreMatchAnalysisByTeams({ homeName, awayName, league, day = 
   );
 }
 
+const JOUR_MS = 86_400_000;
+
+const TYPES_DE_MARCHE = {
+  result: 'Résultat',
+  totalGoals: 'Total buts',
+  bothTeamsScore: 'Les 2 équipes marquent',
+  resultAndTotal: 'Résultat + Total buts',
+  teamGoals: "Buts d'une équipe"
+};
+
+/** Type d'un marché : son identifiant structuré, ou à défaut son libellé (« Buts — X » regroupés). */
+function typeDeMarche(revue) {
+  if (revue.marketId && TYPES_DE_MARCHE[revue.marketId]) return revue.marketId;
+  if (String(revue.market ?? '').startsWith('Buts — ')) return 'teamGoals';
+  return Object.keys(TYPES_DE_MARCHE).find((k) => TYPES_DE_MARCHE[k] === revue.market) ?? null;
+}
+
+/**
+ * L'EXPÉRIENCE de l'IA, par type de marché, tirée de ses revues après-match :
+ * combien de pronostics du moteur elle a vus tomber justes ; combien de ses
+ * avis d'avant-match (confirmer ou contredire) ont tenu, en tout et par niveau
+ * de confiance annoncé ; ses dernières leçons. Redonnée à l'IA avant chaque
+ * nouveau match pour qu'elle calibre sa confiance, et affichée pour jauger
+ * chaque marché. Jamais transmise au moteur chiffré.
+ *
+ * Seuls comptent les pronostics choisis sous la cote minimale (`minOdds`,
+ * cf. sports/football/markets.js) : avant elle, « Plus de 0.5 buts » à 1,05
+ * tombait juste 94 fois sur 100 et aurait faussé chaque bilan.
+ */
+export function aiMarketExperience({ lessonsPerType = 3 } = {}) {
+  const revues = readAll()
+    .filter((e) => e.postMatchReview?.marketReviews?.length)
+    .sort((a, b) => String(b.postMatchReview.createdAt ?? '').localeCompare(String(a.postMatchReview.createdAt ?? '')));
+  const parType = new Map();
+  for (const e of revues) {
+    for (const r of e.postMatchReview.marketReviews) {
+      const type = typeDeMarche(r);
+      if (!type || !r.minOdds) continue;
+      if (!parType.has(type)) {
+        parType.set(type, { marketType: type, label: TYPES_DE_MARCHE[type], matches: 0, engineRight: 0, aiVerdicts: 0, aiRight: 0, byConfidence: {}, recentLessons: [] });
+      }
+      const t = parType.get(type);
+      if (r.outcome === 'juste' || r.outcome === 'faux') {
+        t.matches++;
+        if (r.outcome === 'juste') t.engineRight++;
+      }
+      if (r.aiWasRight === true || r.aiWasRight === false) {
+        t.aiVerdicts++;
+        if (r.aiWasRight) t.aiRight++;
+        if (r.aiConfidence) {
+          const c = (t.byConfidence[r.aiConfidence] ??= { verdicts: 0, right: 0 });
+          c.verdicts++;
+          if (r.aiWasRight) c.right++;
+        }
+      }
+      if (r.lesson && t.recentLessons.length < lessonsPerType) {
+        t.recentLessons.push({ match: `${e.homeName} - ${e.awayName}`, pick: r.pick ?? null, outcome: r.outcome ?? null, aiVerdict: r.aiVerdict ?? null, lesson: r.lesson });
+      }
+    }
+  }
+  return Object.keys(TYPES_DE_MARCHE).filter((k) => parType.has(k)).map((k) => parType.get(k));
+}
+
+/**
+ * L'analyse (avant ET après-match) d'une rencontre vue depuis la page de
+ * match, qui ne connaît que les équipes, la compétition et la date : l'analyse
+ * est rangée sous l'identifiant de cotes, jamais sous celui du magasin FotMob.
+ * Coup d'envoi connu : à un jour près (fuseaux). Sinon (analyses antérieures à
+ * l'ajout de `commenceTime`), le match suit l'analyse de quelques jours à
+ * quelques semaines ; la même affiche dans le même sens ne revient pas dans
+ * ce délai. La plus proche l'emporte.
+ */
+export function findAnalysisForFixture({ homeName, awayName, league = null, date }) {
+  const jour = Date.parse(String(date ?? '').slice(0, 10));
+  if (!Number.isFinite(jour)) return null;
+  let meilleur = null;
+  for (const e of readAll()) {
+    if (!teamNamesLikelyMatch(e.homeName, homeName) || !teamNamesLikelyMatch(e.awayName, awayName)) continue;
+    if (league && e.league && e.league !== league) continue;
+    let ecart;
+    if (e.commenceTime) {
+      ecart = Math.abs(Date.parse(e.commenceTime.slice(0, 10)) - jour) / JOUR_MS;
+      if (!(ecart <= 1)) continue;
+    } else {
+      const avance = (jour - Date.parse(String(e.createdAt ?? '').slice(0, 10))) / JOUR_MS;
+      if (!(avance >= -1 && avance <= 30)) continue;
+      ecart = Math.abs(avance);
+    }
+    if (!meilleur || ecart < meilleur.ecart) meilleur = { e, ecart };
+  }
+  return meilleur?.e ?? null;
+}
+
 // Un seul enregistrement par match : une nouvelle analyse avant-match sur le
 // même matchId remplace la précédente plutôt que d'empiler des doublons
 // (cohérent avec matchResultsRepository.js). `postMatchReview` n'est jamais

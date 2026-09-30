@@ -106,10 +106,13 @@ export async function analyzeMatch(match, config, tiltState, sport) {
   // n'ont pas d'équivalent marché dans cette app (seules les cotes 1N2 sont
   // ingérées) : dérivés de P_exogène, le modèle de buts corrigé.
   const weights = config.weights;
-  const probabilities = {
+  const resultat = {
     home: weights.market * marketProbHome + weights.structural * probabilitiesStructural.home + weights.exogenous * probabilitiesExogenous.home,
     draw: weights.market * marketProbDraw + weights.structural * probabilitiesStructural.draw + weights.exogenous * probabilitiesExogenous.draw,
-    away: weights.market * marketProbAway + weights.structural * probabilitiesStructural.away + weights.exogenous * probabilitiesExogenous.away,
+    away: weights.market * marketProbAway + weights.structural * probabilitiesStructural.away + weights.exogenous * probabilitiesExogenous.away
+  };
+  const probabilities = {
+    ...resultat,
     over05: probabilitiesExogenous.over05,
     over15: probabilitiesExogenous.over15,
     over25: probabilitiesExogenous.over25,
@@ -117,7 +120,7 @@ export async function analyzeMatch(match, config, tiltState, sport) {
     homeTeamGoals: probabilitiesExogenous.homeTeamGoals,
     awayTeamGoals: probabilitiesExogenous.awayTeamGoals,
     bothTeamsScore: probabilitiesExogenous.bothTeamsScore,
-    resultAndTotal: probabilitiesExogenous.resultAndTotal
+    resultAndTotal: alignResultAndTotal(probabilitiesExogenous.resultAndTotal, resultat)
   };
 
   // Pronostic du résultat : l'issue la plus probable, sa fiabilité mesurée,
@@ -190,9 +193,16 @@ export async function analyzeMatch(match, config, tiltState, sport) {
       over15: round(1 / probabilities.over15, 2),
       over25: round(1 / probabilities.over25, 2),
       over35: round(1 / probabilities.over35, 2),
+      // Les issues contraires, pour que chaque marché puisse aussi pronostiquer
+      // « Moins de » et « Non » (cf. markets.js, cote minimale).
+      under05: round(1 / (1 - probabilities.over05), 2),
+      under15: round(1 / (1 - probabilities.over15), 2),
+      under25: round(1 / (1 - probabilities.over25), 2),
+      under35: round(1 / (1 - probabilities.over35), 2),
       homeTeamGoals: roundTeamGoals(probabilities.homeTeamGoals),
       awayTeamGoals: roundTeamGoals(probabilities.awayTeamGoals),
       bothTeamsScore: round(1 / probabilities.bothTeamsScore, 2),
+      bothTeamsScoreNo: round(1 / (1 - probabilities.bothTeamsScore), 2),
       resultAndTotal: {
         0.5: roundResultAndTotal(probabilities.resultAndTotal[0.5]),
         1.5: roundResultAndTotal(probabilities.resultAndTotal[1.5]),
@@ -229,6 +239,29 @@ export async function analyzeMatch(match, config, tiltState, sport) {
   }
 
   return result;
+}
+
+/**
+ * Le combiné « Résultat + Total buts » vient du modèle de buts, le résultat
+ * des cotes des bookmakers : sans alignement, le moteur annonçait par exemple
+ * « Sampdoria gagne » ET « Avellino & Plus de 0.5 buts » sur le même match
+ * (relevé par l'IA le 30/09/2026). Chaque issue du combiné garde la
+ * répartition des buts du modèle À RÉSULTAT DONNÉ, mais pèse la probabilité
+ * finale de ce résultat.
+ */
+function alignResultAndTotal(resultAndTotal, resultat) {
+  const aligned = {};
+  for (const [line, bucket] of Object.entries(resultAndTotal)) {
+    const out = { ...bucket };
+    for (const side of ['home', 'draw', 'away']) {
+      const model = bucket[`${side}Over`] + bucket[`${side}Under`];
+      if (!(model > 0)) continue;
+      out[`${side}Over`] = (bucket[`${side}Over`] * resultat[side]) / model;
+      out[`${side}Under`] = (bucket[`${side}Under`] * resultat[side]) / model;
+    }
+    aligned[line] = out;
+  }
+  return aligned;
 }
 
 function clamp(value, min, max) {

@@ -1,6 +1,9 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue';
 import { matchStatsApi } from '@/services/matchStatsApi.js';
+import { matchAiAnalysisApi } from '@/services/matchAiAnalysisApi.js';
+import { useMatchAiAnalysisStore } from '@/stores/matchAiAnalysisStore.js';
+import MatchAiReviewPanel from '@/components/analysis/MatchAiReviewPanel.vue';
 import AppCard from '@/components/common/AppCard.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
@@ -24,8 +27,51 @@ const TABS = [
   { id: 'events', label: 'Fil du match' },
   { id: 'lineups', label: 'Compositions' },
   { id: 'stats', label: 'Statistiques' },
-  { id: 'players', label: 'Stats joueurs' }
+  { id: 'players', label: 'Stats joueurs' },
+  { id: 'ai', label: 'Analyse IA' }
 ];
+
+// Onglet « Analyse IA » : chargé au premier affichage de l'onglet, une fois
+// par match (l'analyse est retrouvée par équipes, compétition et date).
+const aiStore = useMatchAiAnalysisStore();
+const ai = ref({ loading: false, error: null, entry: null, predictions: [], experience: [], loadedFor: null });
+const aiRunning = ref(false);
+
+async function loadAi({ force = false } = {}) {
+  const match = entry.value;
+  if (!match) return;
+  // Clé du match AFFICHÉ, pas de l'adresse : pendant un changement de match,
+  // l'ancien reste affiché le temps que le nouveau arrive.
+  const cle = `${match.date}|${match.homeName}|${match.awayName}`;
+  if (!force && ai.value.loadedFor === cle) return;
+  ai.value = { ...ai.value, loading: true, error: null };
+  try {
+    const [r] = await Promise.all([
+      matchAiAnalysisApi.getForFixture({ home: match.homeName, away: match.awayName, league: match.league, date: match.date }),
+      aiStore.fetchStatus().catch(() => false)
+    ]);
+    ai.value = { loading: false, error: null, entry: r.entry ?? null, predictions: r.predictions ?? [], experience: r.experience ?? [], loadedFor: cle };
+  } catch (e) {
+    ai.value = { loading: false, error: e.message, entry: null, predictions: [], experience: [], loadedFor: null };
+  }
+}
+
+async function runPostMatchAi() {
+  if (!ai.value.entry?.matchId) return;
+  aiRunning.value = true;
+  try {
+    await matchAiAnalysisApi.runPostMatch(ai.value.entry.matchId);
+    await loadAi({ force: true });
+  } catch (e) {
+    ai.value = { ...ai.value, error: e.message };
+  } finally {
+    aiRunning.value = false;
+  }
+}
+
+watch([tab, entry], ([t]) => {
+  if (t === 'ai') loadAi();
+});
 
 async function load() {
   loading.value = true;
@@ -135,6 +181,21 @@ const topStats = computed(() => TEAM_STAT_GROUPS[0]);
 
       <AppCard v-else-if="tab === 'players'" title="Stats joueurs">
         <MatchPlayerStats :entry="entry" />
+      </AppCard>
+
+      <AppCard v-else-if="tab === 'ai'" title="Analyse IA">
+        <LoadingSpinner v-if="ai.loading" label="Chargement de l'analyse IA…" />
+        <EmptyState v-else-if="ai.error" icon="alert" title="Analyse IA indisponible" :description="ai.error" />
+        <MatchAiReviewPanel
+          v-else
+          :match="entry"
+          :entry="ai.entry"
+          :predictions="ai.predictions"
+          :experience="ai.experience"
+          :connected="aiStore.connected"
+          :running="aiRunning"
+          @run-post-match="runPostMatchAi"
+        />
       </AppCard>
     </template>
   </div>
