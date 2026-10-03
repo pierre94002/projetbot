@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { readJsonFile } from '../../utils/atomicJson.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const CALENDAR_FILE_PATH = path.resolve(__dirname, '../../../data/runtime/season-calendar.json');
+export const CALENDAR_FILE_PATH = path.resolve(__dirname, '../../../data/runtime/season-calendar.json');
 
 // Cache invalidé par date de modification du fichier (même principe que
 // engineConfig.js) : ce fichier ne grossit que dans un sens (tout l'historique
@@ -76,6 +76,22 @@ export function listSeasonCalendar({ league, allSeasons = false, season = null }
     return league ? (m.league ?? '').toLowerCase().includes(league.trim().toLowerCase()) : true;
   });
   return filtered.sort((a, b) => (a.date ?? '').localeCompare(b.date ?? ''));
+}
+
+/**
+ * Matchs à venir à partir de `from` (AAAA-MM-JJ), toutes compétitions, dont
+ * un camp est le club : `estLeClub(nom, competition)` en décide — le
+ * calendrier ne porte que des noms (cf. db/teamUpcomingRead.js). Les matchs
+ * de la saison reportés sans nouvelle date en font partie : ils restent à
+ * jouer, mais à leur date d'origine, déjà passée.
+ */
+export function listTeamUpcoming(estLeClub, { from } = {}) {
+  const debutSaison = currentSeasonStart();
+  return readCalendar()
+    .filter((m) => m.status !== 'finished' && m.homeGoals == null)
+    .filter((m) => (m.date ?? '') >= from || (m.status === 'postponed' && (m.date ?? '') >= debutSaison))
+    .filter((m) => estLeClub(m.homeName, m.league) || estLeClub(m.awayName, m.league))
+    .sort((a, b) => (a.date ?? '').localeCompare(b.date ?? ''));
 }
 
 /**

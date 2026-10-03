@@ -21,6 +21,17 @@ const FILE_PATH = path.resolve(__dirname, '../../../data/runtime/auto-ai-analysi
 
 const vide = (jour) => ({ day: jour, count: 0, preMatch: 0, postMatch: 0, skippedPreMatch: 0, skippedPostMatch: 0 });
 
+/** Jour civil à Paris (« AAAA-MM-JJ ») : celui du compteur. */
+export const jourParis = (d = new Date()) => new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Paris' }).format(d);
+
+/** Instant (ms) où commence le jour suivant à Paris, heure d'été comprise. */
+export function finDuJourParis(maintenant = Date.now()) {
+  const jour = jourParis(new Date(maintenant));
+  let t = Date.parse(`${jour}T21:00:00Z`);
+  while (jourParis(new Date(t)) === jour) t += 15 * 60_000;
+  return t;
+}
+
 function lire(jour) {
   const etat = readJsonFile(FILE_PATH, null);
   if (!etat || etat.day !== jour) return vide(jour);

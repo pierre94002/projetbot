@@ -16,6 +16,8 @@ import { deriveActualOutcome } from '../settlement/settlementRules.js';
 import { resolveCurrentSeason } from '../../data/providers/leagueRegistry.js';
 import { findBestTeamNameMatch } from '../../utils/teamNameMatch.js';
 import { enregistrerSansPerdre } from '../../utils/atomicJson.js';
+import { listTeamMatchStats } from '../../data/repositories/matchStatsWebRepository.js';
+import { compositionPourAnalyseIA } from '../../data/providers/lineupContext.js';
 import { DomainError } from '../errors.js';
 
 // Même sous-ensemble ciblé que l'audit par lot (aiDatasetBuilder.js), pour
@@ -37,15 +39,104 @@ function findStandingRow(standings, teamName) {
   return findBestTeamNameMatch(teamName, standings?.rows ?? [], (row) => row.teamName);
 }
 
-// La forme API-Football porte la saison du plan (2024) : sans dates, l'IA
-// la prendrait pour la forme actuelle.
+// La forme : celle du magasin (FotMob, saison en cours) avec chaque match
+// — date, adversaire, lieu, score —, la référence ; celle d'API-Football
+// (repli d'un clic, jamais en automatique) porte la saison du plan (2024),
+// et l'IA, voyant des dates de 2026 sous « 2024 », les croyait incohérentes.
 function describeForm(form) {
   if (!form) return null;
+  if (form.source === 'store') {
+    return {
+      source: 'FotMob (magasin)',
+      matches: form.form.matches.map((m) => ({
+        date: typeof m.date === 'string' ? m.date.slice(0, 10) : null,
+        opponent: m.opponent,
+        venue: m.home ? 'domicile' : 'extérieur',
+        score: m.score,
+        result: m.result
+      })),
+      sampleSize: form.form.sampleSize
+    };
+  }
   return {
+    source: 'API-Football',
     season: resolveCurrentSeason(),
     results: form.form.matches.map((m) => m.result),
     dates: form.form.matches.map((m) => (typeof m.date === 'string' ? m.date.slice(0, 10) : null)),
     sampleSize: form.form.sampleSize
+  };
+}
+
+// Statistiques d'équipe lues par l'IA (01/10/2026, Pierre : « il faut que
+// l'IA analyse les formes des équipes, les statistiques et les moyennes ») :
+// ce que l'équipe produit ET ce qu'elle concède, par match.
+const STATS_POUR_IA = [
+  ['expected_goals', 'xg', 2],
+  ['Total Shots', 'shots', 1],
+  ['Shots on Goal', 'shotsOnTarget', 1],
+  ['big_chances', 'bigChances', 1],
+  ['Corner Kicks', 'corners', 1],
+  ['Ball Possession', 'possession', 1],
+  ['Yellow Cards', 'yellowCards', 1]
+];
+
+const nombreStat = (v) => {
+  const n = typeof v === 'number' ? v : Number(String(v ?? '').replace('%', '').replace(',', '.'));
+  return Number.isFinite(n) ? n : null;
+};
+
+/**
+ * Les moyennes d'une équipe sur ses 10 derniers matchs du magasin (FotMob,
+ * toutes compétitions), puis sur ceux joués au lieu de CE match (à domicile
+ * pour l'équipe qui reçoit, à l'extérieur pour l'autre) : buts marqués et
+ * encaissés, puis, pour l'équipe (`for`) et ses adversaires (`against`),
+ * xG, tirs, tirs cadrés, grosses occasions, corners, possession, cartons.
+ * Une statistique à zéro pour les deux équipes d'un match n'a pas été
+ * relevée : elle ne compte pas. `null` si le magasin ne connaît pas l'équipe.
+ */
+function moyennesPourIA(teamName, league, venue) {
+  let matchs;
+  try {
+    matchs = listTeamMatchStats(teamName, { limit: 10, league }).filter((m) => m.score);
+  } catch {
+    return null;
+  }
+  if (!matchs.length) return null;
+  const moyenne = (valeurs, decimales) => {
+    const ok = valeurs.filter((v) => v !== null);
+    return ok.length ? Number((ok.reduce((s, v) => s + v, 0) / ok.length).toFixed(decimales)) : null;
+  };
+  const camp = (liste, i) =>
+    Object.fromEntries(
+      STATS_POUR_IA.map(([cle, nom, decimales]) => {
+        const valeurs = liste.map((m) => {
+          const a = nombreStat(m.teams[0]?.stats?.[cle]);
+          const b = nombreStat(m.teams[1]?.stats?.[cle]);
+          if (a === null || b === null || (a === 0 && b === 0)) return null;
+          return i === 0 ? a : b;
+        });
+        return [nom, moyenne(valeurs, decimales)];
+      }).filter(([, v]) => v !== null)
+    );
+  const bloc = (liste) => {
+    if (!liste.length) return null;
+    const buts = (m, i) => Number(String(m.score).split('-')[i]);
+    return {
+      matches: liste.length,
+      results: liste.map((m) => m.result).join(''),
+      goalsFor: moyenne(liste.map((m) => buts(m, 0)), 2),
+      goalsAgainst: moyenne(liste.map((m) => buts(m, 1)), 2),
+      for: camp(liste, 0),
+      against: camp(liste, 1)
+    };
+  };
+  const auLieu = matchs.filter((m) => m.home === (venue === 'home'));
+  return {
+    source: 'FotMob (magasin)',
+    from: matchs.at(-1).date,
+    to: matchs[0].date,
+    last10: bloc(matchs),
+    [venue === 'home' ? 'atHome' : 'away']: bloc(auLieu)
   };
 }
 
@@ -86,6 +177,8 @@ function curateEngineSummary(engineResult) {
     market: { odds1: engineResult.market?.odds1, oddsDraw: engineResult.market?.oddsDraw, odds2: engineResult.market?.odds2 },
     edgePercent: engineResult.edgePercent ?? null,
     staking: engineResult.staking ?? null,
+    // Corners, tirs et tirs cadrés attendus de chaque équipe (cf. sports/football/statMarkets.js).
+    statExpectations: engineResult.statExpectations ?? null,
     // Le pronostic du moteur sur CHAQUE marché joué (cf. sports/football/markets.js) :
     // l'IA donne un avis sur chacun, et la revue après-match les reprend.
     marketPredictions: (engineResult.marketPredictions ?? []).map(({ marketId, params, market, predictedOutcome, predictedLabel, predictedOdds, minOdds }) => ({
@@ -95,6 +188,9 @@ function curateEngineSummary(engineResult) {
       predictedOutcome,
       predictedLabel,
       predictedOdds,
+      // Le pourcentage affiché à côté du pronostic (1 / cote juste), que
+      // l'IA explique en une phrase (demande de Pierre le 01/10/2026).
+      probability: Number(predictedOdds) > 1 ? Math.round(100 / Number(predictedOdds)) : null,
       minOdds: minOdds ?? null
     }))
   };
@@ -144,10 +240,10 @@ function pronosticsDeMarches(prior) {
  * eu raison. Calculé ici, jamais laissé à l'IA : son expérience se compte
  * sur des faits.
  */
-function issuesDesMarches(prior, pronostics, result) {
+function issuesDesMarches(prior, pronostics, result, stats = null) {
   const avisParMarche = rattacherAuxMarches(prior.analysis?.marketViews ?? [], pronostics);
   return pronostics.map((p, i) => {
-    const reel = deriveActualOutcome({ ...p, homeName: prior.homeName, awayName: prior.awayName }, result.homeGoals, result.awayGoals);
+    const reel = deriveActualOutcome({ ...p, homeName: prior.homeName, awayName: prior.awayName }, result.homeGoals, result.awayGoals, stats);
     const juste = reel === null ? null : reel === p.predictedOutcome;
     const avis = avisParMarche[i];
     const aiWasRight = juste === null || !avis ? null : avis.verdict === 'confirme' ? juste : avis.verdict === 'contredit' ? !juste : null;
@@ -188,6 +284,22 @@ function faitsDuMatch(homeName, date) {
 }
 
 /**
+ * Les statistiques du match au format du règlement (cf. settlementRules.js),
+ * pour juger les marchés de corners et de tirs. Un 0 des deux côtés veut dire
+ * « non relevé » (cf. settlementService.js), jamais zéro.
+ */
+function statsPourReglement(faits) {
+  if (!faits?.stats) return null;
+  const lire = (s) => ({ corners: s?.['Corner Kicks'] ?? null, shots: s?.['Total Shots'] ?? null, shotsOnTarget: s?.['Shots on Goal'] ?? null });
+  const home = lire(faits.stats.home);
+  const away = lire(faits.stats.away);
+  for (const k of Object.keys(home)) {
+    if (Number(home[k]) === 0 && Number(away[k]) === 0) home[k] = away[k] = null;
+  }
+  return { home, away };
+}
+
+/**
  * Contexte qualitatif best-effort — chaque appel échoue indépendamment
  * (Promise.allSettled), même philosophie que enrichMatchWithRealAverages :
  * un classement absent (coupe) ou une équipe non résolue ne doit jamais faire
@@ -195,10 +307,14 @@ function faitsDuMatch(homeName, date) {
  */
 async function gatherQualitativeContext(home, away, league, { matchId, commenceTime, sansRepliPayant = false } = {}) {
   const options = { sansRepliPayant };
+  // Les moyennes du magasin (FotMob) d'abord ; API-Football seulement pour
+  // une équipe qu'il ne connaît pas, et jamais en automatique.
+  const homeMoyennes = moyennesPourIA(home, league, 'home');
+  const awayMoyennes = moyennesPourIA(away, league, 'away');
   const [standingsR, homeStatsR, awayStatsR, homeFormR, awayFormR, teamNewsR] = await Promise.allSettled([
     getStandingsByLeagueLabel(league),
-    resolveAverageStatsByName(home, league, undefined, options),
-    resolveAverageStatsByName(away, league, undefined, options),
+    homeMoyennes ? Promise.resolve(null) : resolveAverageStatsByName(home, league, undefined, options),
+    awayMoyennes ? Promise.resolve(null) : resolveAverageStatsByName(away, league, undefined, options),
     resolveTeamFormByName(home, league, DEFAULT_FORM_SAMPLE_SIZE, options),
     resolveTeamFormByName(away, league, DEFAULT_FORM_SAMPLE_SIZE, options),
     // Blessures, suspensions, changement d'entraîneur (FotMob, gratuit) —
@@ -278,28 +394,31 @@ async function gatherQualitativeContext(home, away, league, { matchId, commenceT
     // Cache absent/corrompu : ignoré, le contexte reste utilisable sans.
   }
 
+  // Les sources secondaires (FlashScore, historique football-data.co.uk,
+  // profils web) ne servent plus qu'à une équipe que le magasin ne connaît
+  // pas : plus anciennes, elles contredisaient la forme et les moyennes
+  // actuelles et l'IA passait ses réserves à les départager (01/10/2026).
+  const formeHome = homeForm?.source === 'store';
+  const formeAway = awayForm?.source === 'store';
+  const profil = (p) => (p ? { recentForm: p.recentForm, historicalAverages: p.historicalAverages, updatedAt: p.updatedAt } : null);
   return {
     standings: homeStandingRow || awayStandingRow ? { home: homeStandingRow, away: awayStandingRow } : null,
-    homeStats: homeStatsPicked ? { stats: homeStatsPicked, sampleSize: homeStats.stats.sampleSize } : null,
-    awayStats: awayStatsPicked ? { stats: awayStatsPicked, sampleSize: awayStats.stats.sampleSize } : null,
+    homeStats: homeMoyennes ?? (homeStatsPicked ? { source: 'API-Football', stats: homeStatsPicked, sampleSize: homeStats.stats.sampleSize } : null),
+    awayStats: awayMoyennes ?? (awayStatsPicked ? { source: 'API-Football', stats: awayStatsPicked, sampleSize: awayStats.stats.sampleSize } : null),
     homeForm: describeForm(homeForm),
     awayForm: describeForm(awayForm),
     // Source secondaire (FlashScore via Apify) — cf. flashscoreEnrichment.js :
-    // peut dater de plusieurs jours (`collectedAt`), jamais traitée comme plus
-    // fiable que homeStats/awayStats ci-dessus dans le prompt (matchAiAnalysisPrompt.js).
-    homeFlashscoreStats,
-    awayFlashscoreStats,
-    // Troisième source, locale et gratuite (football-data.co.uk) — moyennes
-    // sur les 5 dernières saisons, sans limite de requêtes. Même statut que
-    // homeFlashscoreStats : jamais plus fiable que homeStats/awayStats.
-    homeHistoricalStats,
-    awayHistoricalStats,
-    homeHistoricalForm: homeHistoricalForm ? { results: homeHistoricalForm.results, sampleSize: homeHistoricalForm.sampleSize } : null,
-    awayHistoricalForm: awayHistoricalForm ? { results: awayHistoricalForm.results, sampleSize: awayHistoricalForm.sampleSize } : null,
-    // Quatrième source, locale (coupes européennes, cf. teamProfileRepository.js)
-    // — mêmes garanties que les deux sources secondaires précédentes.
-    homeTeamProfile: homeTeamProfile ? { recentForm: homeTeamProfile.recentForm, historicalAverages: homeTeamProfile.historicalAverages, updatedAt: homeTeamProfile.updatedAt } : null,
-    awayTeamProfile: awayTeamProfile ? { recentForm: awayTeamProfile.recentForm, historicalAverages: awayTeamProfile.historicalAverages, updatedAt: awayTeamProfile.updatedAt } : null,
+    // peut dater de plusieurs jours (`collectedAt`).
+    homeFlashscoreStats: homeMoyennes ? null : homeFlashscoreStats,
+    awayFlashscoreStats: awayMoyennes ? null : awayFlashscoreStats,
+    // Locale et gratuite (football-data.co.uk) — moyennes sur les 5 dernières saisons.
+    homeHistoricalStats: homeMoyennes ? null : homeHistoricalStats,
+    awayHistoricalStats: awayMoyennes ? null : awayHistoricalStats,
+    homeHistoricalForm: !formeHome && homeHistoricalForm ? { results: homeHistoricalForm.results, sampleSize: homeHistoricalForm.sampleSize } : null,
+    awayHistoricalForm: !formeAway && awayHistoricalForm ? { results: awayHistoricalForm.results, sampleSize: awayHistoricalForm.sampleSize } : null,
+    // Locale (coupes européennes, cf. teamProfileRepository.js).
+    homeTeamProfile: formeHome && homeMoyennes ? null : profil(homeTeamProfile),
+    awayTeamProfile: formeAway && awayMoyennes ? null : profil(awayTeamProfile),
     // Cinquième source, gratuite (FotMob) — blessures/suspensions et
     // changement d'entraîneur déduit des compositions déjà vues.
     teamNews: teamNews && (teamNews.home || teamNews.away) ? teamNews : null,
@@ -322,12 +441,84 @@ function echecAppel(prefixe, error) {
 }
 
 /**
+ * La composition telle que l'IA la lit : sans identifiants, numéros ni
+ * minutes, qui ne lui disent rien, et seulement les remplaçants qui ont
+ * compté cette saison — les 24 du banc pesaient 40 % de la composition
+ * (mesuré le 01/10/2026, São Paulo - Santos).
+ */
+function compositionPourIA(lineups) {
+  if (!lineups) return null;
+  const joueur = ({ name, position, stats }) => ({
+    name,
+    position,
+    stats: stats
+      ? {
+          apps: stats.apps,
+          starts: stats.starts,
+          goals: stats.goals,
+          assists: stats.assists,
+          ...(stats.xg != null ? { xg: stats.xg } : {}),
+          ...(stats.rating != null ? { rating: stats.rating } : {})
+        }
+      : null
+  });
+  const aCompte = (j) => j.stats && (j.stats.starts >= 3 || j.stats.goals > 0 || j.stats.assists > 0);
+  const equipe = (t) =>
+    t && {
+      team: t.team,
+      formation: t.formation,
+      coach: t.coach,
+      statsSince: t.statsSince,
+      teamMatches: t.teamMatches,
+      startXI: t.startXI.map(joueur),
+      bench: t.bench.filter(aCompte).map(joueur),
+      // Les champs d'avant le 01/10/2026, nommés : identifiant, âge et
+      // nationalité servent à l'affichage, pas à l'IA.
+      unavailable: (t.unavailable ?? []).map(({ name, reason, expectedReturn }) => ({ name, reason, expectedReturn })),
+      usualStartersMissing: (t.usualStartersMissing ?? []).map(({ name, position, starts, goals, assists, status }) => ({
+        name,
+        position,
+        starts,
+        goals,
+        assists,
+        status
+      })),
+      // Dernière composition alignée (`source: 'magasin'`) : le match d'où vient ce onze.
+      ...(t.lastMatch
+        ? {
+            lastMatch: {
+              date: t.lastMatch.date,
+              league: t.lastMatch.league,
+              home: t.lastMatch.home,
+              away: t.lastMatch.away,
+              homeGoals: t.lastMatch.homeGoals,
+              awayGoals: t.lastMatch.awayGoals
+            }
+          }
+        : {})
+    };
+  return {
+    source: lineups.source,
+    minutesBeforeKickoff: lineups.minutesBeforeKickoff,
+    home: equipe(lineups.home),
+    away: equipe(lineups.away),
+    matchInfo: lineups.matchInfo ?? null
+  };
+}
+
+/**
  * `sansRepliPayant` : vrai pour le déclenchement AUTOMATIQUE — le contexte ne
  * se complète jamais par API-Football (quota payant de 100/jour) quand le
  * magasin ne connaît pas une équipe ; la donnée manque, c'est tout. Un clic
  * de l'utilisateur garde le repli.
+ *
+ * `timing` : 'avance' (jusqu'à 48 h avant, ou un clic) ou 'coup-d-envoi'
+ * (environ une heure avant, cf. autoMatchAiTrigger.js), avec `lineups` (cf.
+ * lineupContext.js) quand FotMob a publié la composition. L'analyse d'avant
+ * coup d'envoi devient celle de référence (écran, revue après-match,
+ * expérience de l'IA) ; celle de la veille reste consultable.
  */
-export async function runPreMatchAnalysis({ matchId, home, away, league, engineResult, sansRepliPayant = false }) {
+export async function runPreMatchAnalysis({ matchId, home, away, league, engineResult, sansRepliPayant = false, lineups = null, timing = 'avance' }) {
   if (!isClaudeCodeAuthenticated()) {
     throw new DomainError(CLAUDE_CODE_NON_CONNECTE, { status: 400, code: CODE_CLAUDE_CODE_INDISPONIBLE });
   }
@@ -340,6 +531,19 @@ export async function runPreMatchAnalysis({ matchId, home, away, league, engineR
 
   const engineSummary = curateEngineSummary(engineResult);
   const context = await gatherQualitativeContext(home, away, league, { matchId, commenceTime: engineResult.commenceTime, sansRepliPayant });
+  // Sans composition fournie (analyse de la veille, ou d'un clic) : celle que
+  // FotMob a publiée, sinon la dernière alignée par chaque équipe — l'IA juge
+  // toujours sur QUI joue (01/10/2026). Lecture FotMob gratuite ; un échec ne
+  // bloque jamais l'analyse.
+  let compo = lineups;
+  if (!compo) {
+    try {
+      compo = await compositionPourAnalyseIA({ homeName: home, awayName: away, commenceTimeIso: engineResult.commenceTime, league });
+    } catch {
+      compo = null;
+    }
+  }
+  if (compo) context.lineups = compositionPourIA(compo);
   let experience = [];
   try {
     experience = aiMarketExperience();
@@ -360,9 +564,13 @@ export async function runPreMatchAnalysis({ matchId, home, away, league, engineR
   // et la revue après-match le retrouvent.
   if (engineSummary.marketPredictions.length && Array.isArray(analysis.marketViews)) {
     const rattaches = rattacherAuxMarches(analysis.marketViews, engineSummary.marketPredictions);
-    analysis.marketViews = engineSummary.marketPredictions.flatMap((m, i) => (rattaches[i] ? [{ ...rattaches[i], market: m.market }] : []));
+    // Avec le pourcentage que l'explication commente (il bouge avec les cotes).
+    analysis.marketViews = engineSummary.marketPredictions.flatMap((m, i) =>
+      rattaches[i] ? [{ ...rattaches[i], market: m.market, probability: m.probability ?? null }] : []
+    );
   }
 
+  const existante = getByMatchId(matchId);
   const entree = {
     matchId,
     homeName: home,
@@ -376,8 +584,29 @@ export async function runPreMatchAnalysis({ matchId, home, away, league, engineR
     engineSnapshot: engineSummary,
     usage: reponse.usage ?? null,
     costUsd: reponse.costUsd,
+    // `createdAt` reste celui de la toute première analyse du match.
+    analysedAt: new Date().toISOString(),
+    timing,
+    lineupSnapshot: compo ?? null,
     analysis
   };
+  if (timing === 'coup-d-envoi') {
+    // Une analyse « d'avant coup d'envoi » faite plus de 70 min avant le vrai
+    // coup d'envoi (heure fictive d'un match du calendrier, cf.
+    // autoMatchAiTrigger.js) ne compte pas comme telle.
+    const kickoffMs = Date.parse(engineResult.commenceTime ?? '');
+    const dejaAuCoupDEnvoi = existante?.timing === 'coup-d-envoi' && !(kickoffMs - Date.parse(existante.analysedAt ?? 0) > 70 * 60_000);
+    entree.kickoffRuns = dejaAuCoupDEnvoi ? (existante.kickoffRuns ?? 1) + 1 : 1;
+    // L'analyse de la veille, remplacée, reste consultable (une seule : la
+    // première d'avance, jamais une analyse d'avant coup d'envoi refaite).
+    if (existante?.analysis && !dejaAuCoupDEnvoi && !existante.earlierAnalysis) {
+      entree.earlierAnalysis = {
+        analysis: existante.analysis,
+        engineSnapshot: existante.engineSnapshot ?? null,
+        analysedAt: existante.analysedAt ?? existante.updatedAt ?? existante.createdAt ?? null
+      };
+    }
+  }
   // Une analyse vient de coûter ~10 s de quota Claude : jamais jetée sur un blocage OneDrive.
   return enregistrerSansPerdre(() => savePreMatchAnalysis(entree), 'analyse IA');
 }
@@ -414,7 +643,9 @@ export async function runPostMatchAnalysis({ matchId, result: resultFourni = nul
   // Date réelle du match : fournie (automatique), lue dans l'identifiant du
   // résultat (« web-AAAA-MM-JJ-… »), ou à défaut le coup d'envoi enregistré.
   const dateMatch = result.date ?? /(\d{4}-\d{2}-\d{2})/.exec(String(result.matchId ?? ''))?.[1] ?? prior.commenceTime?.slice(0, 10) ?? null;
-  const marketOutcomes = issuesDesMarches(prior, pronosticsDeMarches(prior), result);
+  // Les faits du match d'abord : ils jugent aussi les marchés de corners et de tirs.
+  const matchStats = faitsDuMatch(result.homeName ?? prior.homeName, dateMatch);
+  const marketOutcomes = issuesDesMarches(prior, pronosticsDeMarches(prior), result, statsPourReglement(matchStats));
   const { system, messages } = buildPostMatchReviewRequest({
     home: prior.homeName,
     away: prior.awayName,
@@ -423,7 +654,7 @@ export async function runPostMatchAnalysis({ matchId, result: resultFourni = nul
     engineSummary: prior.engineSnapshot,
     result: { homeGoals: result.homeGoals, awayGoals: result.awayGoals },
     marketOutcomes,
-    matchStats: faitsDuMatch(result.homeName ?? prior.homeName, dateMatch)
+    matchStats
   });
 
   let reponse;

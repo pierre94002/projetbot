@@ -76,8 +76,12 @@ export const env = {
   // différent, cf. memory apis) : une fois atteint, le reste attend le
   // lendemain (compteur remis à zéro à minuit Paris), plutôt que de déborder
   // sur la passe suivante le même jour.
+  // Plafond relevé de 50 à 150 par Pierre le 01/10/2026, avec l'analyse de
+  // chaque match une heure avant son coup d'envoi (compositions). Mesuré :
+  // ~5 300 tokens pour une analyse sans composition, ~13 000 avec (São
+  // Paulo - Santos, 01/10/2026), soit au plus 1,5 à 2 millions par jour.
   autoAiAnalysis: {
     enabled: process.env.AUTO_AI_ANALYSIS !== 'false',
-    dailyLimit: Number(process.env.AUTO_AI_ANALYSIS_DAILY_LIMIT) || 50
+    dailyLimit: Number(process.env.AUTO_AI_ANALYSIS_DAILY_LIMIT) || 150
   }
 };

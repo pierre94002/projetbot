@@ -31,10 +31,15 @@ const TYPES_IGNORES = new Set(['internationalDuty']);
 
 const LABEL_TYPE = { injury: 'blessure', suspension: 'suspension' };
 
-function traduireAbsences(liste) {
+function traduireAbsences(liste, { identifiants = false } = {}) {
   return (liste ?? [])
     .filter((a) => !TYPES_IGNORES.has(a.type))
-    .map((a) => ({ name: a.name, type: LABEL_TYPE[a.type] ?? a.type ?? 'indisponible', expectedReturn: a.expectedReturn ?? null }));
+    .map((a) => ({
+      name: a.name,
+      type: LABEL_TYPE[a.type] ?? a.type ?? 'indisponible',
+      expectedReturn: a.expectedReturn ?? null,
+      ...(identifiants ? { id: a.id ?? null } : {})
+    }));
 }
 
 /**
@@ -90,9 +95,13 @@ function detecterChangement(teamId, coachActuel, avant, database) {
  * `null` par équipe si le match n'est pas identifiable chez FotMob — jamais
  * une erreur qui ferait échouer l'analyse IA autour.
  *
+ * `identifiants` : ajoute l'identifiant du club (`teamId`) et de chaque
+ * absent (`id`), pour le logo et le drapeau affichés par l'interface
+ * (01/10/2026). L'analyse IA ne le demande pas : ce qu'elle reçoit ne change pas.
+ *
  * @returns {{home: object|null, away: object|null}}
  */
-export async function resolveTeamNews({ homeName, awayName, commenceTimeIso, league, database = openDb() }) {
+export async function resolveTeamNews({ homeName, awayName, commenceTimeIso, league, identifiants = false, database = openDb() }) {
   const vide = { home: null, away: null };
   if (!commenceTimeIso) return vide;
 
@@ -110,11 +119,12 @@ export async function resolveTeamNews({ homeName, awayName, commenceTimeIso, lea
   const jour = String(commenceTimeIso).slice(0, 10);
   const cote = (team, teamName) => {
     if (!team) return null;
-    const absences = traduireAbsences(team.unavailable);
+    const absences = traduireAbsences(team.unavailable, { identifiants });
     const changement = detecterChangement(team.teamId, team.coach, jour, database);
     if (!absences.length && !changement) return null;
     return {
       teamName: team.teamName ?? teamName,
+      ...(identifiants ? { teamId: team.teamId ?? null } : {}),
       longTermAbsences: absences,
       coachChange: changement
     };

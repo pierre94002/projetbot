@@ -354,7 +354,6 @@ const PLAYER_STAT_MAP = {
   assists: 'assists',
   chances_created: 'keyPasses',
   touches: 'touches',
-  dribbles_succeeded: 'dribblesWon',
   Offsides: 'offsides',
   clearances: 'clearances',
   interceptions: 'interceptions',
@@ -424,7 +423,10 @@ const PLAYER_FRACTION_MAP = {
   accurate_long_balls: ['longBallsAccurate', 'longBalls'],
   long_balls_accurate: ['longBallsAccurate', 'longBalls'],
   shot_accuracy: ['shotsOnTarget', 'shots'],
-  accurate_crosses: ['crossesAccurate', 'crosses']
+  accurate_crosses: ['crossesAccurate', 'crosses'],
+  // « Successful dribbles » : { value: réussis, total: tentés } (01/10/2026 —
+  // les tentés étaient perdus, la fiche d'un joueur les affiche).
+  dribbles_succeeded: ['dribblesWon', 'dribblesAttempted']
 };
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -1004,10 +1006,47 @@ function mapShotmap(payload) {
  *
  * @returns {{available:false, reason:string} | {available:boolean, source:'fotmob', fixtureId:string, home:object|null, away:object|null, teams:object[]}}
  */
+/**
+ * Dates de naissance de l'effectif d'un club (page équipe FotMob : chaque
+ * membre porte `dateOfBirth`) : [{ id: 'fotmob-<n>', birthDate }] — pour
+ * l'âge des joueurs (cf. playerBirthdates.js).
+ */
+export async function fetchSquadBirthdates(teamId) {
+  const n = String(teamId).replace('fotmob-', '');
+  const payload = await fetchJson(`${BASE}/teams?id=${encodeURIComponent(n)}`, { retries: 1, timeoutMs: 15000 });
+  return (payload?.squad?.squad ?? [])
+    .flatMap((groupe) => groupe?.members ?? [])
+    .map((m) => ({
+      id: fotMobIdOf(m?.id),
+      birthDate: /^\d{4}-\d{2}-\d{2}$/.test(String(m?.dateOfBirth ?? '')) ? m.dateOfBirth : null,
+      // Nationalité : code à trois lettres de FotMob (ESP, ENG…) et nom anglais.
+      countryCode: m?.ccode ? String(m.ccode) : null,
+      countryName: m?.cname ? String(m.cname) : null
+    }))
+    .filter((m) => m.id);
+}
+
+/** Date de naissance et nationalité d'un joueur (page joueur FotMob) : { birthDate, countryCode, countryName }. */
+export async function fetchPlayerBirthdate(playerId) {
+  const n = String(playerId).replace('fotmob-', '');
+  const payload = await fetchJson(`${BASE}/playerData?id=${encodeURIComponent(n)}`, { retries: 1, timeoutMs: 15000 });
+  const iso = payload?.birthDate?.utcTime;
+  const pays = (payload?.playerInformation ?? []).find((info) => info?.title === 'Country');
+  return {
+    birthDate: iso ? String(iso).slice(0, 10) : null,
+    countryCode: pays?.countryCode ?? pays?.icon?.id ?? null,
+    countryName: pays?.value?.fallback ?? null
+  };
+}
+
 export async function fetchProbableLineup(matchId) {
   const payload = await fetchJson(`${BASE}/matchDetails?matchId=${encodeURIComponent(matchId)}`);
+  // Le cadre du match (stade, pelouse, météo, arbitre et ses moyennes,
+  // journée, coup d'envoi exact) est sur la même page : lu au passage, sans
+  // appel en plus, pour la page d'un match à venir et l'analyse IA.
+  const meta = mapMeta(payload);
   const lineup = payload?.content?.lineup;
-  if (!lineup?.homeTeam && !lineup?.awayTeam) return { available: false, reason: 'not_published_yet' };
+  if (!lineup?.homeTeam && !lineup?.awayTeam) return { available: false, reason: 'not_published_yet', meta };
 
   const absence = (entry) => {
     const u = entry?.unavailability ?? {};
@@ -1038,7 +1077,17 @@ export async function fetchProbableLineup(matchId) {
         number: entry?.shirtNumber != null ? firstNumber(entry.shirtNumber) : null,
         // Le banc n'a pas de positionId (pas de case sur la grille) : son
         // poste habituel, codé pareil (0 gardien à 3 attaquant), en tient lieu.
-        position: tenu ?? roleOfUsualPosition(entry?.usualPlayingPositionId) ?? null
+        position: tenu ?? roleOfUsualPosition(entry?.usualPlayingPositionId) ?? null,
+        // Âge publié par FotMob dans la composition : repli quand on ne
+        // connaît pas encore sa date de naissance (cf. playerBirthdates.js).
+        age: Number.isFinite(Number(entry?.age)) && entry?.age !== null ? Number(entry.age) : null,
+        countryCode: entry?.countryCode ?? null,
+        countryName: entry?.countryName ?? null,
+        // Sa case sur le terrain (même grille que les feuilles du magasin,
+        // cf. fetchMatchStats) : le dessin de la composition (01/10/2026).
+        ...(starter && entry?.horizontalLayout
+          ? { x: firstNumber(entry.horizontalLayout.x), y: firstNumber(entry.horizontalLayout.y) }
+          : {})
       };
     };
     return {
@@ -1062,7 +1111,8 @@ export async function fetchProbableLineup(matchId) {
     fixtureId: String(matchId),
     home,
     away,
-    teams: [home, away].filter(Boolean)
+    teams: [home, away].filter(Boolean),
+    meta
   };
 }
 

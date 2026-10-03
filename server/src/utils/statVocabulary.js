@@ -36,5 +36,8 @@ export const PLAYER_STAT_KEYS = [
   // Mesures supplementaires du releve joueur FotMob.
   'shotsOffTarget', 'xgNonPenalty', 'duelsLost', 'throwIns', 'cornersTaken', 'woodwork',
   'defensiveActions', 'bigChancesCreated', 'headedClearances', 'clearancesOffLine', 'lastManTackles',
-  'divingSaves', 'highClaims', 'sweeperActions', 'savesInsideBox', 'punches'
+  'divingSaves', 'highClaims', 'sweeperActions', 'savesInsideBox', 'punches',
+  // Dribbles TENTÉS (01/10/2026) : FotMob publie « réussis sur tentés », seuls
+  // les réussis étaient gardés.
+  'dribblesAttempted'
 ];

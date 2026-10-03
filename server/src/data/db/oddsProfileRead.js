@@ -228,9 +228,14 @@ export function oddsProfile({ league, home, away, kickoff, odds, scope = 'champi
 
   const noms = canonicalTeamNames({ database });
   const matches = retenus.slice(0, LIMITE_LISTE).map((r) => ({
+    matchKey: r.match_key ?? null,
     date: r.date,
     home: noms.get(r.home_id) ?? r.home_name,
     away: noms.get(r.away_id) ?? r.away_name,
+    homeId: r.home_id ?? null,
+    awayId: r.away_id ?? null,
+    homeGoals: r.home_goals,
+    awayGoals: r.away_goals,
     score: `${r.home_goals}-${r.away_goals}`,
     segmentScore: seg === 'complet' ? null : `${r.buts[0]}-${r.buts[1]}`,
     odds: { home: r.oh, draw: r.od, away: r.oa }

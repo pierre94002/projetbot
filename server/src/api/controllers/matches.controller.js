@@ -1,4 +1,4 @@
-import { listAdaptedMatches, DATA_SOURCE_KEYS } from '../../data/matchSources.js';
+import { listAdaptedMatches, findAdaptedMatch, DATA_SOURCE_KEYS } from '../../data/matchSources.js';
 import { createResultLookup } from '../../data/repositories/matchResultsRepository.js';
 import { ApiError } from '../middlewares/errorHandler.js';
 
@@ -49,7 +49,7 @@ export function listMatches(req, res) {
 export function getMatch(req, res) {
   const source = resolveSource(req);
   const bankroll = Number(req.query.bankroll) || 10000;
-  const match = listAdaptedMatches(source, bankroll).find((m) => m.matchId === req.params.matchId);
+  const match = findAdaptedMatch(source, req.params.matchId, bankroll);
 
   if (!match) throw new ApiError(404, `Match introuvable : ${req.params.matchId}`);
   // Annoté mais jamais filtré ici : ouvrir le détail d'un match terminé reste

@@ -9,12 +9,28 @@
 // libellé français `market`/`predictedLabel` (jamais à la place) — ce sont
 // ces deux champs que la migration de bets.json/predictions.json vient
 // ajouter aux enregistrements existants (cf. server/scripts/migrate-market-shape.js).
+import { STAT_KINDS, lineCandidates } from './statMarkets.js';
+
 export const MARKET_LABELS = {
   result: 'Résultat',
   totalGoals: 'Total buts',
   bothTeamsScore: 'Les 2 équipes marquent',
   resultAndTotal: 'Résultat + Total buts',
-  teamGoals: (teamName) => `Buts — ${teamName}`
+  teamGoals: (teamName) => `Buts — ${teamName}`,
+  // Corners, tirs et tirs cadrés (cf. statMarkets.js), depuis le 01/10/2026.
+  totalCorners: 'Total corners',
+  totalShots: 'Total tirs',
+  totalShotsOnTarget: 'Total tirs cadrés',
+  teamCorners: (teamName) => `Corners — ${teamName}`,
+  teamShots: (teamName) => `Tirs — ${teamName}`,
+  teamShotsOnTarget: (teamName) => `Tirs cadrés — ${teamName}`
+};
+
+/** Identifiants de marché par statistique : au total, puis par équipe. */
+const STAT_MARKET_IDS = {
+  corners: { total: 'totalCorners', team: 'teamCorners' },
+  shots: { total: 'totalShots', team: 'teamShots' },
+  shotsOnTarget: { total: 'totalShotsOnTarget', team: 'teamShotsOnTarget' }
 };
 
 /**
@@ -200,6 +216,43 @@ export function deriveMarketPredictions(match, analysisResult) {
         market: MARKET_LABELS.teamGoals(teamName),
         predictedOutcome: best.side,
         predictedLabel: `${teamName} — ${sideLabel} ${best.line} buts`,
+        predictedOdds: best.odds
+      });
+    }
+  }
+
+  // Corners, tirs et tirs cadrés : au total puis par équipe, quand le magasin
+  // a assez de relevés pour les deux équipes (cf. statMarkets.js).
+  const attendus = analysisResult.statExpectations ?? null;
+  for (const [kind, ids] of Object.entries(STAT_MARKET_IDS)) {
+    const e = attendus?.[kind];
+    if (!e) continue;
+    const { unit, invKTeam, invKTotal } = STAT_KINDS[kind];
+    const sens = (side) => (side === 'over' ? 'Plus de' : 'Moins de');
+
+    const total = lowestOddsAbove(lineCandidates(e.total, invKTotal));
+    if (total) {
+      push({
+        marketId: ids.total,
+        params: { line: total.line, side: total.side },
+        market: MARKET_LABELS[ids.total],
+        predictedOutcome: total.side,
+        predictedLabel: `${sens(total.side)} ${total.line} ${unit}`,
+        predictedOdds: total.odds
+      });
+    }
+    for (const [side, teamName] of [
+      ['home', match.home],
+      ['away', match.away]
+    ]) {
+      const best = lowestOddsAbove(lineCandidates(e[side], invKTeam));
+      if (!best) continue;
+      push({
+        marketId: ids.team,
+        params: { team: side, line: best.line, side: best.side },
+        market: MARKET_LABELS[ids.team](teamName),
+        predictedOutcome: best.side,
+        predictedLabel: `${teamName} — ${sens(best.side)} ${best.line} ${unit}`,
         predictedOdds: best.odds
       });
     }

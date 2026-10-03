@@ -58,7 +58,7 @@ import { refreshCurrentOdds } from '../data/providers/footballDataOdds.js';
 import { settlePending } from '../data/providers/settlementService.js';
 import { recentNoSheet } from '../data/db/matchStatsDb.js';
 import { markRunning, markStep, recordPass, readRefreshStatus, clearStaleRunning } from '../data/repositories/refreshStatusRepository.js';
-import { runAutoPreMatchAnalyses, runAutoPostMatchReviews } from '../core/ai/autoMatchAiTrigger.js';
+import { runAutoPreMatchAnalyses, runAutoPostMatchReviews, reserveCoupDEnvoi } from '../core/ai/autoMatchAiTrigger.js';
 import { budgetRestant, enregistrerUsage } from '../data/repositories/autoAiAnalysisRepository.js';
 import { env } from '../config/env.js';
 
@@ -137,9 +137,26 @@ function jsonDe(stdout) {
 async function passeIaAuto(ctx, { lancer, usage, candidats, faits }) {
   const jour = jourParis();
   const plafond = env.autoAiAnalysis.dailyLimit;
-  const restant = budgetRestant(jour, plafond);
-  if (restant === 0) {
+  const disponible = budgetRestant(jour, plafond);
+  if (disponible === 0) {
     return { status: 'ok', summary: `Plafond quotidien (${plafond}) atteint : rien lancé à cette passe, reprise demain.`, details: { plafond } };
+  }
+  // Priorité aux analyses d'avant coup d'envoi du reste de la journée (cf.
+  // jobs/kickoffAiAnalysis.js) : leur part du plafond est mise de côté, les
+  // analyses d'avance et les revues après-match peuvent attendre, elles non.
+  let reserve = 0;
+  try {
+    reserve = await reserveCoupDEnvoi();
+  } catch {
+    // Liste des matchs illisible à cet instant : rien de mis de côté.
+  }
+  const restant = Math.max(0, disponible - reserve);
+  if (restant === 0) {
+    return {
+      status: 'ok',
+      summary: `${nombre(disponible)} analyse(s) encore permise(s) aujourd'hui, toutes gardées pour les ${nombre(reserve)} match(s) du jour à analyser une heure avant leur coup d'envoi : rien lancé à cette passe.`,
+      details: { plafond, disponible, reserve }
+    };
   }
 
   const r = await lancer({ limit: restant });
@@ -366,7 +383,7 @@ const ETAPES = [
   },
   {
     key: 'iaAutoAvantMatch',
-    label: 'Analyse IA automatique — avant-match',
+    label: "Analyse IA automatique — avant-match (d'avance)",
     // Interrupteur pur : contrairement aux étapes "une fois par jour"
     // ci-dessus, `manuel` ne doit JAMAIS forcer cette étape quand elle est
     // désactivée (AUTO_AI_ANALYSIS=false) — c'est le coupe-circuit du quota
@@ -376,7 +393,7 @@ const ETAPES = [
       passeIaAuto(ctx, {
         lancer: runAutoPreMatchAnalyses,
         usage: (ok, skipped) => ({ preMatch: ok, skippedPreMatch: skipped }),
-        candidats: ['rencontre à venir sous 48 h sans analyse', 'rencontres à venir sous 48 h sans analyse'],
+        candidats: ['rencontre à venir entre 3 h et 48 h sans analyse', 'rencontres à venir entre 3 h et 48 h sans analyse'],
         faits: ['analysée', 'analysées']
       })
   },

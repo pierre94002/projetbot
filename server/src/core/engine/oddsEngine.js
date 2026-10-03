@@ -234,6 +234,11 @@ export async function analyzeMatch(match, config, tiltState, sport) {
   // besoin du DTO déjà construit (trueOdds/market), donc calculée ici plutôt
   // que par sport.model. Optionnelle : un sport peut ne pas encore implémenter
   // markets.deriveMarketPredictions sans casser le reste de l'analyse.
+  // Corners, tirs et tirs cadrés attendus (cf. sports/football/statMarkets.js) :
+  // affichés et donnés à l'IA, et base des marchés correspondants ci-dessous.
+  if (typeof sport.markets?.statExpectations === 'function') {
+    result.statExpectations = sport.markets.statExpectations(match);
+  }
   if (typeof sport.markets?.deriveMarketPredictions === 'function') {
     result.marketPredictions = sport.markets.deriveMarketPredictions(match, result);
   }

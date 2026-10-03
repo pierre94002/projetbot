@@ -136,7 +136,8 @@ export async function getTeamNews(req, res) {
   const league = req.query.league;
   if (!name || !commenceTime) throw new ApiError(400, 'Les paramètres "name" et "commenceTime" sont requis.');
 
-  const result = await resolveTeamNews({ homeName: name, awayName: away, commenceTimeIso: commenceTime, league });
+  // Identifiants en plus pour l'interface (logo du club, drapeau des absents).
+  const result = await resolveTeamNews({ homeName: name, awayName: away, commenceTimeIso: commenceTime, league, identifiants: true });
   res.json(result);
 }
 

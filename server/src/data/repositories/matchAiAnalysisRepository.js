@@ -64,7 +64,9 @@ export function findPreMatchAnalysisByTeams({ homeName, awayName, league, day = 
       if (e.postMatchReview) return false;
       if (!teamNamesLikelyMatch(e.homeName, homeName) || !teamNamesLikelyMatch(e.awayName, awayName)) return false;
       if (league && e.league && e.league !== league) return false;
-      if (day && e.commenceTime) return e.commenceTime.slice(0, 10) === day;
+      // À un jour près : le coup d'envoi exact (UTC) d'un match du soir peut
+      // tomber la veille ou le lendemain du jour noté par le magasin.
+      if (day && e.commenceTime) return Math.abs(Date.parse(e.commenceTime.slice(0, 10)) - Date.parse(day)) <= JOUR_MS;
       return true;
     }) ?? null
   );
@@ -77,13 +79,29 @@ const TYPES_DE_MARCHE = {
   totalGoals: 'Total buts',
   bothTeamsScore: 'Les 2 équipes marquent',
   resultAndTotal: 'Résultat + Total buts',
-  teamGoals: "Buts d'une équipe"
+  teamGoals: "Buts d'une équipe",
+  totalCorners: 'Total corners',
+  teamCorners: "Corners d'une équipe",
+  totalShots: 'Total tirs',
+  teamShots: "Tirs d'une équipe",
+  totalShotsOnTarget: 'Total tirs cadrés',
+  teamShotsOnTarget: "Tirs cadrés d'une équipe"
 };
+
+/** Préfixes des marchés « par équipe » (le plus long d'abord : « Tirs cadrés — » avant « Tirs — »). */
+const PREFIXES_PAR_EQUIPE = [
+  ['Tirs cadrés — ', 'teamShotsOnTarget'],
+  ['Corners — ', 'teamCorners'],
+  ['Tirs — ', 'teamShots'],
+  ['Buts — ', 'teamGoals']
+];
 
 /** Type d'un marché : son identifiant structuré, ou à défaut son libellé (« Buts — X » regroupés). */
 function typeDeMarche(revue) {
   if (revue.marketId && TYPES_DE_MARCHE[revue.marketId]) return revue.marketId;
-  if (String(revue.market ?? '').startsWith('Buts — ')) return 'teamGoals';
+  const libelle = String(revue.market ?? '');
+  const parEquipe = PREFIXES_PAR_EQUIPE.find(([prefixe]) => libelle.startsWith(prefixe));
+  if (parEquipe) return parEquipe[1];
   return Object.keys(TYPES_DE_MARCHE).find((k) => TYPES_DE_MARCHE[k] === revue.market) ?? null;
 }
 

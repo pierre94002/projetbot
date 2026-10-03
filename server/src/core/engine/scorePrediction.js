@@ -295,7 +295,10 @@ function resumeForme(equipe) {
   };
   return {
     name: equipe?.name ?? null,
+    teamId: equipe?.teamId ?? null,
     matches: last.map((m) => ({
+      matchKey: m.matchKey ?? null,
+      opponentId: m.opponentId ?? null,
       date: m.date,
       competition: m.league,
       home: m.home,

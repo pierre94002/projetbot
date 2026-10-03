@@ -278,11 +278,34 @@ const UPCOMING_LINEUPS_DDL = `CREATE TABLE IF NOT EXISTS upcoming_lineups (
   fetched_at TEXT NOT NULL
 ) WITHOUT ROWID;`;
 
+/**
+ * Dates de naissance des joueurs (01/10/2026, pour leur âge), lues chez
+ * FotMob (cf. playerBirthdates.js). Tables À PART : `people` est reconstruite
+ * après chaque import et perdrait ce qu'on y ajouterait. `team_squad_reads`
+ * date la dernière lecture de l'effectif de chaque club.
+ */
+const BIRTHDATES_DDL = [
+  `CREATE TABLE IF NOT EXISTS player_birthdates (
+  player_id TEXT PRIMARY KEY,
+  birth_date TEXT,
+  country_code TEXT,
+  country_name TEXT,
+  source TEXT,
+  fetched_at TEXT NOT NULL
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS team_squad_reads (
+  team_id TEXT PRIMARY KEY,
+  fetched_at TEXT NOT NULL,
+  version INTEGER
+) WITHOUT ROWID;`
+];
+
 const DDL = [
   MATCHES_DDL,
   teamDdl(),
   playerDdl(),
   UPCOMING_LINEUPS_DDL,
+  ...BIRTHDATES_DDL,
   ...REGISTRY_DDL,
   'CREATE INDEX IF NOT EXISTS idx_matches_date ON matches(date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_league_date ON matches(league, date);',
@@ -324,13 +347,25 @@ const DDL = [
 const ADDED_COLUMNS = [
   ['matches', 'home_id', 'TEXT'],
   ['matches', 'away_id', 'TEXT'],
-  ['matches', 'fotmob_id', 'TEXT']
+  ['matches', 'fotmob_id', 'TEXT'],
+  // Dribbles tentés (01/10/2026), à côté des réussis (dribbles_won).
+  ['players', 'dribbles_attempted', 'INTEGER'],
+  // Nationalité des joueurs (01/10/2026), à côté de leur date de naissance.
+  ['player_birthdates', 'country_code', 'TEXT'],
+  ['player_birthdates', 'country_name', 'TEXT'],
+  ['team_squad_reads', 'version', 'INTEGER']
 ];
 
 function migrateSchema(db) {
   for (const [table, column, type] of ADDED_COLUMNS) {
     const existe = db.prepare(`SELECT COUNT(*) n FROM pragma_table_info(?) WHERE name = ?`).get(table, column).n;
-    if (!existe) db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${type};`);
+    if (existe) continue;
+    try {
+      db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${type};`);
+    } catch (error) {
+      // Un autre processus (serveur, import) l'a ajoutée entre-temps.
+      if (!/duplicate column name/i.test(error.message)) throw error;
+    }
   }
   dropPositiveChecks(db);
 }

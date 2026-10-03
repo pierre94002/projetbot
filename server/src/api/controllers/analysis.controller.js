@@ -1,7 +1,7 @@
 import { analyzeMatch } from '../../core/engine/oddsEngine.js';
 import { getEngineConfig } from '../../core/engine/engineConfig.js';
 import { getTiltState } from '../../core/engine/tiltState.js';
-import { listAdaptedMatches } from '../../data/matchSources.js';
+import { findAdaptedMatch } from '../../data/matchSources.js';
 import { enrichMatchWithRealAverages } from '../../data/providers/matchEnrichment.js';
 import { getSport } from '../../sports/index.js';
 import { ApiError } from '../middlewares/errorHandler.js';
@@ -21,7 +21,7 @@ export async function analyzeMatchById(req, res) {
   const includeCorners = req.query.includeCorners === 'true';
   const cornersSampleSize = req.query.cornersSampleSize ? Number(req.query.cornersSampleSize) : undefined;
 
-  const match = listAdaptedMatches(source, bankroll).find((m) => m.matchId === req.params.matchId);
+  const match = findAdaptedMatch(source, req.params.matchId, bankroll);
   if (!match) throw new ApiError(404, `Match introuvable : ${req.params.matchId}`);
 
   const finalMatch = shouldEnrich

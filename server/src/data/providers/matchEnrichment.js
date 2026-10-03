@@ -17,6 +17,7 @@ import {
   lineupsFromStore, matchDetailsFromStore, seasonsForLeague
 } from '../db/matchStatsRead.js';
 import { scoreInputsFromStore } from '../db/scoreFormRead.js';
+import { statInputsFromStore } from '../db/statInputsRead.js';
 import { resolveFotMobLineup } from './lineupPrefetch.js';
 import { resolveLineupViaWeb, resolvePlayersViaWeb } from '../../core/ai/webLookupService.js';
 import { getTeamProfile } from '../repositories/teamProfileRepository.js';
@@ -39,7 +40,7 @@ import { getTeamProfile } from '../repositories/teamProfileRepository.js';
  * perdre les buts déjà résolus avec succès.
  */
 export async function enrichMatchWithRealAverages(match, { includeCorners = false, cornersSampleSize, sansRepliPayant = false } = {}) {
-  const avecScore = { ...match, scoreInputs: resolveScoreInputs(match) };
+  const avecScore = { ...match, scoreInputs: resolveScoreInputs(match), statInputs: resolveStatInputs(match) };
   const resolved = await resolveGoalsEnrichment(avecScore, { sansRepliPayant });
   if (!resolved) return avecScore;
 
@@ -81,6 +82,24 @@ function resolveScoreInputs(match) {
     return scoreInputsFromStore({ league: match.league, home: match.home, away: match.away, date: date.slice(0, 10) });
   } catch (error) {
     console.warn(`[score] magasin indisponible pour ${match.home} - ${match.away} : ${error.message}`);
+    return null;
+  }
+}
+
+/**
+ * Entrées des marchés de corners, tirs et tirs cadrés (cf.
+ * sports/football/statMarkets.js) : ce que chaque équipe produit et concède
+ * sur ses 10 derniers matchs avant celui-ci, lu dans le magasin (gratuit).
+ * `null` si l'une des équipes y est inconnue : ces marchés n'ont alors pas
+ * de pronostic, le reste de l'analyse n'en dépend pas.
+ */
+function resolveStatInputs(match) {
+  try {
+    const coupDEnvoi = match.commenceTime ? new Date(match.commenceTime) : new Date();
+    const jour = (Number.isNaN(coupDEnvoi.getTime()) ? new Date() : coupDEnvoi).toISOString().slice(0, 10);
+    return statInputsFromStore({ homeName: match.home, awayName: match.away, league: match.league ?? null, beforeDate: jour });
+  } catch (error) {
+    console.warn(`[stats] magasin indisponible pour ${match.home} - ${match.away} : ${error.message}`);
     return null;
   }
 }
@@ -358,7 +377,7 @@ export async function resolveAverageStatsByName(name, league, sampleSize, { sans
   // matchStatsWebRepository.js) : API-Football gratuit s'arrête à 2024.
   // Repli API-Football uniquement si aucun match n'a encore été importé, et
   // jamais pour un appelant automatique (cf. resolveGoalsEnrichment).
-  const web = getTeamWebAverages(name, sampleSize);
+  const web = getTeamWebAverages(name, sampleSize, { league });
   if (web) return { teamId: null, teamName: name, stats: web, source: 'web' };
   if (sansRepliPayant) return null;
 

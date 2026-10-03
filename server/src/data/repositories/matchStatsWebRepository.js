@@ -1,5 +1,8 @@
 import { teamNamesLikelyMatch } from '../../utils/teamNameMatch.js';
 import { distinctTeamNames, matchKeysForNames, loadEntriesByKeys, loadEntry, storeStatus } from '../db/matchStatsRead.js';
+import { openDb } from '../db/matchStatsDb.js';
+import { findTeams, ensureRegistries } from '../db/identityRegistry.js';
+import { clubDuMagasin } from '../db/oddsProfileRead.js';
 
 /** Champs renvoyés en pourcentage textuel ("55%"), comme /fixtures/statistics d'API-Football. */
 const PERCENTAGE_STAT_KEYS = new Set(['Ball Possession', 'Passes %']);
@@ -46,11 +49,19 @@ function toPerspective(entry, side) {
     opponent: opponentName,
     score: hasScore ? `${goalsFor}-${goalsAgainst}` : null,
     result: !hasScore ? null : goalsFor > goalsAgainst ? 'V' : goalsFor < goalsAgainst ? 'D' : 'N',
+    // La rencontre telle quelle (domicile à gauche), pour la carte de
+    // rencontre commune de l'interface (MatchCard.vue, 01/10/2026).
+    homeName: entry.homeName,
+    awayName: entry.awayName,
+    homeGoals: entry.homeGoals ?? null,
+    awayGoals: entry.awayGoals ?? null,
+    homeId: entry.homeId ?? null,
+    awayId: entry.awayId ?? null,
     // Ordre [équipe consultée, adversaire] : même forme que les stats
     // API-Football consommées par MatchStatsPanel ({ teamId, teamName, stats }).
     teams: [
-      { teamId: null, teamName, side, stats: entry.teamStats?.[side] ?? {} },
-      { teamId: null, teamName: opponentName, side: other, stats: entry.teamStats?.[other] ?? {} }
+      { teamId: (side === 'home' ? entry.homeId : entry.awayId) ?? null, teamName, side, stats: entry.teamStats?.[side] ?? {} },
+      { teamId: (side === 'home' ? entry.awayId : entry.homeId) ?? null, teamName: opponentName, side: other, stats: entry.teamStats?.[other] ?? {} }
     ],
     players: {
       team: entry.players?.[side] ?? [],
@@ -73,8 +84,50 @@ function candidateNames(teamName) {
 }
 
 /** Tous les matchs avec stats détaillées d'une équipe, du plus récent au plus ancien. */
-export function listTeamMatchStats(teamName, { limit } = {}) {
+/**
+ * Le club par son identifiant FotMob quand l'annuaire le reconnaît : dans
+ * sa compétition si on la connaît (homonymes, écritures des bookmakers comme
+ * « Leeds United » pour « Leeds »), sinon s'il est le seul de ce nom. Le
+ * rapprochement flou par nom donnait à « Leeds United » les matchs de
+ * D.C. United, mot commun « United » (constaté le 01/10/2026 sur la page d'un
+ * match : la forme de Leeds montrait des matchs de MLS) ; il ne sert plus
+ * qu'en dernier recours.
+ */
+function clubParIdentifiant(teamName, league) {
+  try {
+    const database = openDb();
+    if (league) {
+      const id = clubDuMagasin(teamName, league, database);
+      if (id) return id;
+    }
+    ensureRegistries({ database });
+    const clubs = findTeams(teamName, { database });
+    return clubs.length === 1 ? clubs[0].teamId : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Clés des rencontres d'un club, de la plus récente à la plus ancienne (deux requêtes indexées). */
+function matchKeysForTeamId(teamId) {
+  return openDb()
+    .prepare('SELECT match_key AS cle, date FROM matches WHERE home_id = ? UNION ALL SELECT match_key, date FROM matches WHERE away_id = ? ORDER BY date DESC')
+    .all(teamId, teamId)
+    .map((r) => r.cle);
+}
+
+export function listTeamMatchStats(teamName, { limit, league = null } = {}) {
   if (!teamName) return [];
+  const teamId = clubParIdentifiant(teamName, league);
+  if (teamId) {
+    const toutes = matchKeysForTeamId(teamId);
+    const cles = Number.isFinite(limit) && limit > 0 ? toutes.slice(0, limit) : toutes;
+    return loadEntriesByKeys(cles)
+      .map((entry) => ({ entry, side: entry.homeId === teamId ? 'home' : entry.awayId === teamId ? 'away' : null }))
+      .filter(({ side }) => side)
+      .sort((a, b) => b.entry.date.localeCompare(a.entry.date))
+      .map(({ entry, side }) => toPerspective(entry, side));
+  }
   const names = candidateNames(teamName);
   if (!names.length) return [];
   const keys = matchKeysForNames(names);
@@ -97,8 +150,8 @@ export function getMatchStatsById(matchId) {
  * équipe d'afficher la saison EN COURS plutôt que la saison 2024 du plan
  * gratuit API-Football. `null` si aucun match importé pour cette équipe.
  */
-export function getTeamWebAverages(teamName, sampleSize = DEFAULT_WEB_AVERAGE_SAMPLE_SIZE) {
-  const matches = listTeamMatchStats(teamName, { limit: sampleSize });
+export function getTeamWebAverages(teamName, sampleSize = DEFAULT_WEB_AVERAGE_SAMPLE_SIZE, { league = null } = {}) {
+  const matches = listTeamMatchStats(teamName, { limit: sampleSize, league });
   const withStats = matches.filter((m) => Object.keys(m.teams[0].stats).length > 0);
   if (withStats.length === 0) return null;
 
@@ -154,7 +207,7 @@ const SUMMABLE_PLAYER_KEYS = [
   'blocks', 'recoveries', 'dribbledPast', 'dispossessed', 'duelsLost',
   'groundDuelsWon', 'groundDuelsTotal', 'aerialsWon', 'aerialsTotal',
   'longBalls', 'longBallsAccurate', 'crossesAccurate', 'finalThirdPasses',
-  'defensiveActions', 'bigChancesCreated', 'divingSaves', 'savesInsideBox'
+  'defensiveActions', 'bigChancesCreated', 'divingSaves', 'savesInsideBox', 'dribblesAttempted'
 ];
 
 /**

@@ -2,6 +2,7 @@ import { listAdaptedMatches } from '../../data/matchSources.js';
 import { enrichMatchWithRealAverages } from '../../data/providers/matchEnrichment.js';
 import { resolveBaseRates, computeMarketProbabilities } from './model.js';
 import { deriveMarketPredictions, MARKET_LABELS } from './markets.js';
+import { statExpectations } from './statMarkets.js';
 
 /**
  * Façade uniquement — aucun fichier de data/providers ni data/adapters n'a
@@ -18,6 +19,7 @@ export const football = {
   },
   markets: {
     deriveMarketPredictions,
+    statExpectations,
     labels: MARKET_LABELS
   },
   provider: {

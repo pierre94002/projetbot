@@ -31,8 +31,23 @@ export function namesMatch(pick, teamName) {
   return normalize(pick).startsWith(normalize(teamName));
 }
 
-/** Issue d'un marché journalisé par le moteur (Historique moteur). */
-export function deriveActualOutcome(entry, homeGoals, awayGoals) {
+/** Statistique de chaque marché de corners/tirs du moteur (cf. sports/football/markets.js). */
+const STAT_DES_MARCHES = {
+  totalCorners: 'corners',
+  teamCorners: 'corners',
+  totalShots: 'shots',
+  teamShots: 'shots',
+  totalShotsOnTarget: 'shotsOnTarget',
+  teamShotsOnTarget: 'shotsOnTarget'
+};
+
+/**
+ * Issue d'un marché journalisé par le moteur (Historique moteur).
+ *
+ * @param {object|null} stats  { home: { corners, shots, shotsOnTarget }, away: {...} } du magasin,
+ *   pour les seuls marchés de corners et de tirs — sans elles, pas de règle (null).
+ */
+export function deriveActualOutcome(entry, homeGoals, awayGoals, stats = null) {
   const total = homeGoals + awayGoals;
   const resultSide = homeGoals > awayGoals ? 'home' : homeGoals < awayGoals ? 'away' : 'draw';
 
@@ -67,6 +82,21 @@ export function deriveActualOutcome(entry, homeGoals, awayGoals) {
   }
   if (entry.marketId === 'totalGoals' && Number.isFinite(Number(p.line))) {
     return total > Number(p.line) ? 'over' : 'under';
+  }
+
+  // Corners, tirs et tirs cadrés (ajout du 01/10/2026) : par identifiant et
+  // paramètres, avec les statistiques du match — jamais devinés sans elles.
+  const stat = STAT_DES_MARCHES[entry.marketId];
+  if (stat && Number.isFinite(Number(p.line))) {
+    const nombre = (v) => (v === null || v === undefined || !Number.isFinite(Number(v)) ? null : Number(v));
+    const h = nombre(stats?.home?.[stat]);
+    const a = nombre(stats?.away?.[stat]);
+    const valeur = entry.marketId.startsWith('team')
+      ? (p.team === 'home' ? h : p.team === 'away' ? a : null)
+      : h === null || a === null
+        ? null
+        : h + a;
+    return valeur === null ? null : valeur > Number(p.line) ? 'over' : 'under';
   }
   return null;
 }

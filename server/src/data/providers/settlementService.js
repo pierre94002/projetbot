@@ -212,8 +212,8 @@ function dateSure(result, reference, matchId) {
   return Math.abs(Date.parse(d) - Date.parse(reference)) <= JOUR_MS;
 }
 
-const statutPronostic = (entry, result) => {
-  const actual = deriveActualOutcome(entry, result.homeGoals, result.awayGoals);
+const statutPronostic = (entry, result, stats = null) => {
+  const actual = deriveActualOutcome(entry, result.homeGoals, result.awayGoals, stats);
   return actual === null ? null : actual === entry.predictedOutcome ? 'correct' : 'incorrect';
 };
 
@@ -275,14 +275,16 @@ function analyser(database) {
     // Un score saisi à la main (même identifiant) fait foi tel quel ; un
     // résultat importé d'un match prolongé ne dit rien des 90 minutes.
     const saisieMain = result.matchId === entry.matchId;
-    if (!saisieMain && PROLONGATION.has(rencontreDe(result, entry.homeName, entry.awayName, entry.league)?.reason)) {
+    const rencontre = rencontreDe(result, entry.homeName, entry.awayName, entry.league);
+    if (!saisieMain && PROLONGATION.has(rencontre?.reason)) {
       if (enAttente) {
         rapport.predictions.extraTime++;
         if (rapport.extraTime.length < ECHANTILLONS) rapport.extraTime.push({ kind: 'pronostic', label: libelle });
       }
       continue;
     }
-    const statut = statutPronostic(entry, result);
+    // Les statistiques du match (corners, tirs) servent aux seuls marchés qui en ont besoin.
+    const statut = statutPronostic(entry, result, rencontre?.stats ?? null);
     if (statut === null) {
       if (enAttente) rapport.predictions.noRule++;
       continue;

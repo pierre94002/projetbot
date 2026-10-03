@@ -173,3 +173,19 @@ export function listAdaptedMatches(source, bankroll = 10000) {
   }
   throw new Error(`Source de données inconnue : ${source}`);
 }
+
+/**
+ * Un match par son identifiant : d'abord la liste des matchs (cotes, puis
+ * prochaine journée du calendrier), puis — pour un identifiant `cal-…` —
+ * tout le calendrier à venir. La page d'une équipe montre ses matchs des
+ * semaines suivantes (01/10/2026) : chacun doit ouvrir sa page, même hors de
+ * la prochaine journée affichée sur la page Matchs. Sans cotes, comme tout
+ * match du calendrier : le moteur neutralise edge et mise.
+ */
+export function findAdaptedMatch(source, matchId, bankroll = 10000) {
+  const listed = listAdaptedMatches(source, bankroll).find((m) => m.matchId === matchId);
+  if (listed || source !== 'odds-api' || !String(matchId).startsWith('cal-')) return listed ?? null;
+  const entry = listSeasonCalendar({ allSeasons: true }).find((e) => e.matchId === matchId && e.status !== 'finished' && e.homeGoals == null);
+  const adapted = entry ? adaptSeasonCalendarMatch(entry, bankroll) : null;
+  return adapted ? { ...adapted, postponed: entry.status === 'postponed' } : null;
+}

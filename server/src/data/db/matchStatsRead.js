@@ -22,7 +22,7 @@ import { IDENTITY_SQL, ensureRegistries, findTeams, canonicalTeamNames } from '.
 // Les bornes d'une saison dépendent de la compétition : juillet-juin en
 // Europe, janvier-décembre dans les pays nordiques et les Amériques. Un seul
 // point de vérité pour tous les lecteurs de ce fichier.
-import { seasonBounds, seasonStartMonth, seasonLabel } from '../providers/seasonWindows.js';
+import { seasonBounds, seasonStartMonth, seasonLabel, seasonOf, currentSeason } from '../providers/seasonWindows.js';
 
 const BOOLEAN_KEYS = new Set(['starter', 'subbedIn']);
 
@@ -120,6 +120,9 @@ function buildEntry(match, teamRows, playerRows) {
     league: match.league,
     homeName: match.home_name,
     awayName: match.away_name,
+    // Identifiants FotMob des clubs : leur logo sur le dessin des compositions.
+    homeId: match.home_id ?? null,
+    awayId: match.away_id ?? null,
     homeGoals: match.home_goals,
     awayGoals: match.away_goals,
     teamStats: {
@@ -365,6 +368,169 @@ export function playerSeasonStats({
     .all(...args, ...(position ? [position] : []), minMinutes, limit);
 }
 
+
+/** Bilan d'un ensemble de lignes joueur (une par match) — mêmes définitions que playerSeasonStats. */
+function bilanJoueur(lignes) {
+  const somme = (k) => lignes.reduce((s, r) => s + (Number(r[k]) || 0), 0);
+  const arrondi = (x) => Math.round(x * 100) / 100;
+  const notes = lignes.map((r) => r.rating).filter((v) => v !== null && v !== undefined).map(Number);
+  return {
+    // Sur la feuille (remplaçant non entré compris), joués, titularisations.
+    onSheet: lignes.length,
+    played: lignes.filter((r) => Number(r.minutes) > 0).length,
+    starts: lignes.filter((r) => Number(r.starter) === 1).length,
+    minutes: somme('minutes'),
+    rating: notes.length ? arrondi(notes.reduce((s, n) => s + n, 0) / notes.length) : null,
+    goals: somme('goals'),
+    assists: somme('assists'),
+    xg: arrondi(somme('xg')),
+    xa: arrondi(somme('xa')),
+    shots: somme('shots'),
+    shotsOnTarget: somme('shots_on_target'),
+    keyPasses: somme('key_passes'),
+    bigChancesCreated: somme('big_chances_created'),
+    passes: somme('passes'),
+    passesAccurate: somme('passes_accurate'),
+    dribblesWon: somme('dribbles_won'),
+    // Tentés : seulement sur les feuilles relues depuis qu'on les garde
+    // (`dribbles_suivi`, cf. playerProfile) — FotMob n'écrit rien pour un
+    // joueur qui n'en a tenté aucun, d'où 0 et non « inconnu » sur ces
+    // feuilles. `dribblesTracked` matchs joués en ont, sur `played` ;
+    // `dribblesWonTracked`, les réussis de ces mêmes matchs, pour un taux qui
+    // compare ce qui est comparable.
+    dribblesAttempted: lignes.filter((r) => r.dribbles_suivi).reduce((s, r) => s + (Number(r.dribbles_attempted) || 0), 0),
+    dribblesWonTracked: lignes.filter((r) => r.dribbles_suivi).reduce((s, r) => s + (Number(r.dribbles_won) || 0), 0),
+    dribblesTracked: lignes.filter((r) => r.dribbles_suivi && Number(r.minutes) > 0).length,
+    tackles: somme('tackles'),
+    interceptions: somme('interceptions'),
+    duelsWon: somme('duels_won'),
+    duelsTotal: somme('duels_total'),
+    yellowCards: somme('yellow_cards'),
+    redCards: somme('red_cards'),
+    saves: somme('saves'),
+    goalsConceded: somme('goals_conceded'),
+    cleanSheets: somme('clean_sheet'),
+    goalsPrevented: arrondi(somme('goals_prevented'))
+  };
+}
+
+/**
+ * Fiche d'un joueur, par identifiant FotMob — demande de Pierre le
+ * 01/10/2026 : « si on clique sur le joueur, qu'on puisse aller à ses
+ * statistiques individuelles ». Identité lue dans l'annuaire ; une saison
+ * (celle demandée, sinon la saison en cours s'il y a joué, sinon sa dernière),
+ * toutes compétitions, puis par compétition et match par match.
+ *
+ * La saison suit le calendrier du championnat de son club : juillet-juin en
+ * Europe, année civile au Brésil ou en MLS (cf. seasonWindows.js). Les
+ * qualifications comptent : ce sont des matchs qu'il a joués. `null` si le
+ * magasin ne connaît pas ce joueur.
+ */
+export function playerProfile(playerId, { season = null, database = openDb() } = {}) {
+  ensureRegistries({ database });
+  const ident = database
+    .prepare(
+      `SELECT pe.name, pe.position, pe.team_id AS teamId, COALESCE(t.name, pe.team_name) AS team, t.league AS teamLeague
+       FROM people pe LEFT JOIN teams t ON t.team_id = pe.team_id
+       WHERE pe.player_id = ?`
+    )
+    .get(playerId);
+  const lignes = database
+    .prepare(
+      `SELECT p.*, m.match_key AS cle, m.date, m.league, m.home_name, m.away_name, m.home_id, m.away_id, m.home_goals, m.away_goals,
+              (CASE WHEN ${CLEAN_SHEET} THEN 1 ELSE 0 END) AS clean_sheet
+       FROM players p JOIN matches m ON m.match_key = p.match_key
+       WHERE p.player_id = ?
+       ORDER BY m.date DESC`
+    )
+    .all(playerId);
+  if (!ident && !lignes.length) return null;
+
+  const derniere = lignes[0] ?? null;
+  const camp = (r) => (r.side === 'home' ? { team: r.home_name, teamId: r.home_id } : { team: r.away_name, teamId: r.away_id });
+  const ligue = ident?.teamLeague ?? derniere?.league ?? null;
+  const saisons = [...new Set(lignes.map((r) => seasonOf(ligue, r.date)))].sort((a, b) => b - a);
+  const enCours = currentSeason(ligue);
+  const choisie =
+    season !== null && season !== undefined && saisons.includes(Number(season))
+      ? Number(season)
+      : saisons.includes(enCours)
+        ? enCours
+        : (saisons[0] ?? enCours);
+  const [debut, fin] = seasonBounds(ligue, choisie);
+  const delaSaison = lignes.filter((r) => r.date >= debut && r.date < fin);
+
+  // Feuilles qui portent les dribbles tentés (relues depuis le 01/10/2026) :
+  // celles où au moins un joueur en a — FotMob omet les zéros.
+  const cles = [...new Set(delaSaison.map((r) => r.cle))];
+  const suivies = new Set();
+  for (let i = 0; i < cles.length; i += 500) {
+    const lot = cles.slice(i, i + 500);
+    for (const r of database
+      .prepare(`SELECT DISTINCT match_key AS cle FROM players WHERE match_key IN (${placeholders(lot.length)}) AND dribbles_attempted IS NOT NULL`)
+      .all(...lot)) {
+      suivies.add(r.cle);
+    }
+  }
+  for (const r of delaSaison) r.dribbles_suivi = suivies.has(r.cle);
+
+  const parCompetition = new Map();
+  for (const r of delaSaison) {
+    if (!parCompetition.has(r.league)) parCompetition.set(r.league, []);
+    parCompetition.get(r.league).push(r);
+  }
+
+  return {
+    playerId,
+    name: ident?.name ?? derniere?.name ?? null,
+    position: ident?.position ?? lignes.find((r) => r.position)?.position ?? null,
+    number: lignes.find((r) => r.shirt_number !== null && r.shirt_number !== undefined)?.shirt_number ?? null,
+    team: ident?.team ?? (derniere ? camp(derniere).team : null),
+    teamId: ident?.teamId ?? (derniere ? camp(derniere).teamId : null),
+    league: ligue,
+    season: choisie,
+    seasonLabel: seasonLabel(ligue, choisie),
+    seasons: saisons.map((s) => ({ season: s, label: seasonLabel(ligue, s) })),
+    totals: bilanJoueur(delaSaison),
+    byCompetition: [...parCompetition.entries()]
+      .map(([league, rows]) => ({ league, ...bilanJoueur(rows) }))
+      .sort((a, b) => b.played - a.played || b.onSheet - a.onSheet),
+    matches: delaSaison.map((r) => {
+      const domicile = r.side === 'home';
+      const pour = domicile ? r.home_goals : r.away_goals;
+      const contre = domicile ? r.away_goals : r.home_goals;
+      const joue = pour !== null && pour !== undefined && contre !== null && contre !== undefined;
+      return {
+        matchKey: r.cle,
+        date: r.date,
+        league: r.league,
+        home: domicile,
+        team: camp(r).team,
+        opponent: domicile ? r.away_name : r.home_name,
+        score: joue ? `${pour}-${contre}` : null,
+        result: joue ? (pour > contre ? 'V' : pour < contre ? 'D' : 'N') : null,
+        // La rencontre telle quelle, pour la carte de rencontre commune de l'interface.
+        homeName: r.home_name,
+        awayName: r.away_name,
+        homeGoals: r.home_goals ?? null,
+        awayGoals: r.away_goals ?? null,
+        homeId: r.home_id ?? null,
+        awayId: r.away_id ?? null,
+        starter: Number(r.starter) === 1,
+        minutes: r.minutes ?? null,
+        subIn: r.sub_in_minute ?? null,
+        subOut: r.sub_out_minute ?? null,
+        rating: r.rating ?? null,
+        goals: r.goals ?? 0,
+        assists: r.assists ?? 0,
+        yellowCards: r.yellow_cards ?? 0,
+        redCards: r.red_cards ?? 0,
+        saves: r.saves ?? null,
+        goalsConceded: r.goals_conceded ?? null
+      };
+    })
+  };
+}
 
 /**
  * Rencontres jouées d'une équipe, de la plus récente à la plus ancienne,

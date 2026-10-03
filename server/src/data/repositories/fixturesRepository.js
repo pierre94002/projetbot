@@ -50,6 +50,11 @@ export function saveSampleMatches(matches) {
   writeJsonAtomic(PATHS.sampleMatches, matches);
 }
 
+/** Les chemins absolus des instantanés (cf. contrôleur des sources : « le vrai endroit des données »). */
+export function getFixturePaths() {
+  return { ...PATHS };
+}
+
 export function getFixturesStatus() {
   return {
     odds: fs.existsSync(PATHS.odds),
