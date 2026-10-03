@@ -3,6 +3,7 @@ import { asyncHandler } from '../middlewares/asyncHandler.js';
 import {
   getTeamMatchStats,
   getTeamMatchStatsAverages,
+  getLeagueAverages,
   getMatchStats,
   getMatchStatsInfo,
   getMatchStatsCoverage,
@@ -26,6 +27,8 @@ router.get('/coverage', asyncHandler(getMatchStatsCoverage));
 router.post('/refresh', asyncHandler(postMatchStatsRefresh));
 router.get('/team', asyncHandler(getTeamMatchStats));
 router.get('/team-averages', asyncHandler(getTeamMatchStatsAverages));
+// Les moyennes de toutes les équipes d'un championnat, depuis le magasin (FotMob).
+router.get('/league-averages', asyncHandler(getLeagueAverages));
 router.get('/players', asyncHandler(getPlayerStats));
 router.get('/player/:playerId', asyncHandler(getPlayerProfile));
 // Identifiants de clubs par nom et compétition : leurs logos dans les listes de rencontres.

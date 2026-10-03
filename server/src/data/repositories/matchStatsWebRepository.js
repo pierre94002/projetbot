@@ -153,6 +153,16 @@ export function getMatchStatsById(matchId) {
 export function getTeamWebAverages(teamName, sampleSize = DEFAULT_WEB_AVERAGE_SAMPLE_SIZE, { league = null } = {}) {
   const matches = listTeamMatchStats(teamName, { limit: sampleSize, league });
   const withStats = matches.filter((m) => Object.keys(m.teams[0].stats).length > 0);
+  return moyennesDesMatchs(withStats, sampleSize);
+}
+
+/**
+ * Les moyennes (toutes rencontres, domicile, extérieur) d'une liste de matchs
+ * vus du côté d'une équipe, les plus récents d'abord — au format de
+ * /fixtures/statistics d'API-Football, que l'interface sait lire. Null sans
+ * match qui porte des statistiques.
+ */
+function moyennesDesMatchs(withStats, sampleSize) {
   if (withStats.length === 0) return null;
 
   const buckets = { total: {}, home: {}, away: {} };
@@ -190,6 +200,63 @@ export function getTeamWebAverages(teamName, sampleSize = DEFAULT_WEB_AVERAGE_SA
     lastDate: withStats[0].date,
     source: 'web'
   };
+}
+
+/**
+ * Les moyennes de chaque équipe d'un championnat, sur SES matchs DE CE
+ * championnat (03/10/2026, Pierre : « il faut rechercher les statistiques
+ * avec FotMob ») : lues dans le magasin, que l'actualisation automatique
+ * remplit depuis FotMob — aucun appel, rien de payant.
+ *
+ * `teams` : [{ teamName, teamId? }] (les lignes du classement ; l'identifiant
+ * FotMob évite tout rapprochement par nom). `from` / `to` bornent la saison
+ * (fin exclue) ; `limit` garde les N plus récents. Un match oppose deux
+ * équipes du championnat : il n'est chargé qu'une fois.
+ * Renvoie { teams: [{ teamName, teamId, ...moyennes }], missing: [noms] }.
+ */
+export function getLeagueTeamAverages(league, teams, { limit = null, from = null, to = null } = {}) {
+  const database = openDb();
+  const parEquipe = teams.map((team) => ({
+    team,
+    teamId: (typeof team.teamId === 'string' && /^fotmob-\d+$/.test(team.teamId) && team.teamId) || clubParIdentifiant(team.teamName, league),
+    cles: []
+  }));
+  const parId = new Map(parEquipe.filter((e) => e.teamId).map((e) => [e.teamId, e]));
+
+  // UNE lecture des matchs du championnat, du plus récent au plus ancien (index
+  // league + date), répartie entre les équipes, arrêtée dès que chacune a son
+  // compte. Une requête par équipe parcourait tout l'historique du championnat
+  // à chaque fois (6 s pour « 10 derniers » ; ceci : 0,15 s). Sans saison, trois
+  // ans au plus : une équipe promue n'aura jamais N matchs de ce championnat.
+  // Quelques matchs de réserve, au cas où une feuille n'aurait pas de statistiques.
+  const besoin = Number.isFinite(limit) && limit > 0 ? limit + 4 : Infinity;
+  const debut = from ?? new Date(Date.now() - 3 * 365 * 86_400_000).toISOString().slice(0, 10);
+  const fin = to ?? '9999-12-31';
+  const requete = database.prepare('SELECT match_key AS cle, home_id AS h, away_id AS a FROM matches WHERE league = ? AND date >= ? AND date < ? ORDER BY date DESC');
+  for (const ligne of requete.iterate(league, debut, fin)) {
+    for (const id of [ligne.h, ligne.a]) {
+      const equipe = parId.get(id);
+      if (equipe && equipe.cles.length < besoin) equipe.cles.push(ligne.cle);
+    }
+    if (besoin !== Infinity && [...parId.values()].every((e) => e.cles.length >= besoin)) break;
+  }
+
+  const entrees = new Map(loadEntriesByKeys([...new Set(parEquipe.flatMap((e) => e.cles))], { database }).map((entry) => [entry.matchKey, entry]));
+  const resultat = { teams: [], missing: [] };
+  for (const { team, teamId, cles } of parEquipe) {
+    const matchs = cles
+      .map((cle) => entrees.get(cle))
+      .filter(Boolean)
+      .map((entry) => ({ entry, side: entry.homeId === teamId ? 'home' : entry.awayId === teamId ? 'away' : null }))
+      .filter(({ side }) => side)
+      .map(({ entry, side }) => toPerspective(entry, side))
+      .filter((m) => Object.keys(m.teams[0].stats).length > 0);
+    const retenus = Number.isFinite(limit) && limit > 0 ? matchs.slice(0, limit) : matchs;
+    const moyennes = moyennesDesMatchs(retenus, limit ?? retenus.length);
+    if (moyennes) resultat.teams.push({ ...moyennes, teamName: team.teamName, teamId });
+    else resultat.missing.push(team.teamName);
+  }
+  return resultat;
 }
 
 /**

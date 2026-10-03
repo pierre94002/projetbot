@@ -2,8 +2,10 @@ import {
   listTeamMatchStats,
   getMatchStatsById,
   getTeamWebAverages,
+  getLeagueTeamAverages,
   getMatchStatsStatus
 } from '../../data/repositories/matchStatsWebRepository.js';
+import { getStandingsByLeagueLabel } from '../../data/providers/standingsService.js';
 import { getCoverage } from '../../data/providers/espnMatchStatsRefresh.js';
 import { readRefreshStatus } from '../../data/repositories/refreshStatusRepository.js';
 import { isRefreshRunning } from '../../data/providers/refreshLock.js';
@@ -13,7 +15,7 @@ import { isRefreshRunning } from '../../data/providers/refreshLock.js';
 import { refreshNow } from '../../jobs/matchStatsAutoRefresh.js';
 import { playerSeasonStats, playerProfile, seasonsForLeague, leagueLeaders, cupBracket } from '../../data/db/matchStatsRead.js';
 import { cupsForLeague } from '../../data/providers/leagueCups.js';
-import { seasonLabel } from '../../data/providers/seasonWindows.js';
+import { seasonLabel, seasonBounds } from '../../data/providers/seasonWindows.js';
 import { oddsProfile } from '../../data/db/oddsProfileRead.js';
 import { buildMatchPreview } from '../../data/providers/lineupContext.js';
 import { ageAt, birthdatesOf, infosOf, ensurePlayerBirthdate, ensureSquadBirthdates, ensureSquadsBirthdates, ensurePlayersInfo } from '../../data/db/playerBirthdates.js';
@@ -76,6 +78,42 @@ export function getTeamMatchStatsAverages(req, res) {
   const stats = getTeamWebAverages(name, sampleSize, { league });
   if (!stats) throw new ApiError(404, `Aucune statistique importée pour "${name}".`);
   res.json({ teamId: null, teamName: stats.teamName, stats });
+}
+
+/**
+ * Statistiques d'un championnat (onglet « Statistiques ligue », 03/10/2026 :
+ * « il faut rechercher les statistiques avec FotMob »). Les équipes du
+ * classement, chacune avec ses moyennes sur ses matchs de CE championnat,
+ * lues dans le magasin (FotMob) : un seul appel, gratuit, au lieu d'un appel
+ * par équipe et d'un repli payant.
+ * `periode` : 'saison' (défaut, la saison du classement) ou un nombre N
+ * (les N derniers matchs de championnat de chaque équipe, sur trois ans au plus).
+ */
+export async function getLeagueAverages(req, res) {
+  const league = requireStringParam(req.query.league, 'league');
+  const brute = typeof req.query.periode === 'string' ? req.query.periode.trim() : 'saison';
+  const periode = brute === '' || brute === 'saison' ? 'saison' : optionalPositiveInt(brute, 'periode');
+
+  const classement = await getStandingsByLeagueLabel(league);
+  const lignes = classement?.rows ?? [];
+  if (!lignes.length) throw new ApiError(404, `Aucun classement en magasin pour « ${league} » : pas d'équipes à moyenner.`);
+
+  const saison = classement.season ?? null;
+  const [from, to] = periode === 'saison' && saison != null ? seasonBounds(league, saison) : [null, null];
+  const { teams, missing } = getLeagueTeamAverages(
+    league,
+    lignes.map((r) => ({ teamName: r.teamName, teamId: r.teamId ?? null })),
+    { limit: periode === 'saison' ? null : periode, from, to }
+  );
+  res.json({
+    league,
+    season: saison,
+    seasonLabel: classement.seasonLabel ?? (saison != null ? seasonLabel(league, saison) : null),
+    period: periode,
+    source: 'FotMob',
+    teams,
+    missing
+  });
 }
 
 /**

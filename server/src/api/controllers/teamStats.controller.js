@@ -99,8 +99,10 @@ export async function getTeamAverageStatsByName(req, res) {
   const sampleSize = req.query.sampleSize ? Number(req.query.sampleSize) : undefined;
   if (!name || !league) throw new ApiError(400, 'Les paramètres "name" et "league" sont requis.');
 
-  const result = await resolveAverageStatsByName(name, league, sampleSize);
-  if (!result) throw new ApiError(404, `Équipe ou compétition introuvable pour "${name}" / "${league}".`);
+  // FotMob seulement (magasin local) : le repli API-Football payant est fermé
+  // ici depuis le 03/10/2026 (« il faut rechercher les statistiques avec FotMob »).
+  const result = await resolveAverageStatsByName(name, league, sampleSize, { sansRepliPayant: true });
+  if (!result) throw new ApiError(404, `Aucune statistique FotMob en magasin pour "${name}" / "${league}".`);
 
   res.json(result);
 }

@@ -18,6 +18,7 @@ import matchStatsRoutes from './matchStats.routes.js';
 import dataVersionRoutes from './dataVersion.routes.js';
 import refreshRoutes from './refresh.routes.js';
 import matchNotesRoutes from './matchNotes.routes.js';
+import favoritesRoutes from './favorites.routes.js';
 
 const router = Router();
 
@@ -42,5 +43,6 @@ router.use('/match-stats', matchStatsRoutes);
 router.use('/data-version', dataVersionRoutes);
 router.use('/refresh', refreshRoutes);
 router.use('/match-notes', matchNotesRoutes);
+router.use('/favorites', favoritesRoutes);
 
 export default router;

@@ -16,7 +16,9 @@ const ODDS_SNAPSHOT_PATH = path.resolve(__dirname, '../../../data/fixtures/odds/
  * l'utilisateur qui, eux, DOIVENT se propager (paris, pronostics) restent
  * dans l'empreinte : c'est ce qui les synchronise entre deux onglets.
  */
-const SETTINGS_FILES = new Set(['engine-config.json', 'ai-config.json']);
+// favorites.json (03/10/2026) : cocher une étoile ne doit pas faire recharger
+// toutes les pages comme une vraie nouvelle donnée.
+const SETTINGS_FILES = new Set(['engine-config.json', 'ai-config.json', 'favorites.json']);
 
 /**
  * Fichiers de TRAVAIL de l'actualisation, exclus eux aussi : le verrou, les
