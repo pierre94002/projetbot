@@ -21,7 +21,6 @@ import StandingsTable from '@/components/matches/StandingsTable.vue';
 import LeagueLeaders from '@/components/matches/LeagueLeaders.vue';
 import CupPanel from '@/components/matches/CupPanel.vue';
 import TeamStatsView from '@/views/TeamStatsView.vue';
-import TeamSquadView from '@/views/TeamSquadView.vue';
 import SeasonCalendarView from '@/views/SeasonCalendarView.vue';
 import PlayerStatsView from '@/views/PlayerStatsView.vue';
 import { standingsApi } from '@/services/standingsApi.js';
@@ -51,16 +50,17 @@ const dataVersionStore = useDataVersionStore();
 const aiAnalysisStore = useAiAnalysisStore();
 const matchAiAnalysisStore = useMatchAiAnalysisStore();
 
-// "Statistiques ligue" et "Compo & joueurs" sont des modules autonomes
+// "Statistiques ligue" et "Statistiques joueurs" sont des modules autonomes
 // (store/API/état propres) — intégrés ici comme de simples onglets plutôt
 // que des pages séparées, pour regrouper tout ce qui concerne les
-// matchs/statistiques à un seul endroit.
+// matchs/statistiques à un seul endroit. L'onglet « Compo & joueurs » a été
+// retiré le 03/10/2026 (demande de Pierre) : la composition d'un match est
+// sur sa page, l'effectif d'un club et ses joueurs sur la page du club.
 const TABS = [
   { value: 'matches', label: 'Matchs' },
   { value: 'calendar', label: 'Calendrier saison' },
   { value: 'stats', label: 'Statistiques ligue' },
-  { value: 'players', label: 'Statistiques joueurs' },
-  { value: 'squad', label: 'Compo & joueurs' }
+  { value: 'players', label: 'Statistiques joueurs' }
 ];
 // Onglet initial lu depuis ?vue=... s'il est valide (lien partagé/rechargement
 // de page) — sinon "Matchs" par défaut, comme avant l'ajout du reflet d'URL.
@@ -313,7 +313,6 @@ onMounted(() => {
     <Transition name="view" mode="out-in">
     <TeamStatsView v-if="activeTab === 'stats'" key="stats" />
     <PlayerStatsView v-else-if="activeTab === 'players'" key="players" />
-    <TeamSquadView v-else-if="activeTab === 'squad'" key="squad" />
     <SeasonCalendarView v-else-if="activeTab === 'calendar'" key="calendar" />
 
     <div v-else key="matches" class="matches-view__default cm-page">

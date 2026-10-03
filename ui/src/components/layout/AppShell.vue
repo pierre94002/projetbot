@@ -5,10 +5,15 @@ import AppSidebar from './AppSidebar.vue';
 import AppTopbar from './AppTopbar.vue';
 import ToastStack from '@/components/common/ToastStack.vue';
 import { useDataAutoRefresh } from '@/composables/useDataAutoRefresh.js';
+import { useFavoritesStore } from '@/stores/favoritesStore.js';
 
 // Monté ici parce que AppShell enveloppe toute l'appli et n'est jamais démonté :
 // la surveillance tourne donc quelle que soit la page affichée.
 useDataAutoRefresh();
+
+// Les équipes et championnats favoris (03/10/2026) : chargés une fois, lus
+// par toutes les pages qui rangent des matchs ou des championnats.
+useFavoritesStore().fetch();
 
 // La section de la page (cf. router meta.section) : elle choisit la couleur
 // d'ambiance de toute l'interface via [data-section] (tokens.css) — demande

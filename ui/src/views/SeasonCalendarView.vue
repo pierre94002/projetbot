@@ -1,7 +1,9 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue';
 import { seasonCalendarApi } from '@/services/seasonCalendarApi.js';
+import { standingsApi } from '@/services/standingsApi.js';
 import { useDataVersionStore } from '@/stores/dataVersionStore.js';
+import { useFavoritesStore } from '@/stores/favoritesStore.js';
 import AppCard from '@/components/common/AppCard.vue';
 import AppTextField from '@/components/common/AppTextField.vue';
 import AppSelect from '@/components/common/AppSelect.vue';
@@ -10,7 +12,9 @@ import AppIcon from '@/components/common/AppIcon.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import MatchCard from '@/components/matches/MatchCard.vue';
+import LeagueStandingsPanel from '@/components/matches/LeagueStandingsPanel.vue';
 import { formatDay, formatShortDay } from '@/utils/format.js';
+import { formatLeagueOptionLabel, parseLeagueLabel } from '@/utils/leagueDisplay.js';
 
 // Calendrier de saison (joués + à venir), alimenté depuis FotMob par
 // l'actualisation automatique de l'appli (server/src/jobs/matchStatsAutoRefresh.js) —
@@ -32,9 +36,78 @@ const STATUS_OPTIONS = [
 // Saison consultée. Le calendrier contient désormais plusieurs saisons
 // d'historique : on en charge une à la fois plutôt que des dizaines de
 // milliers de rencontres d'un bloc.
+// Favoris (03/10/2026) : dans chaque jour, leurs matchs d'abord.
+const favoris = useFavoritesStore();
+
 const season = ref('');
 const seasons = ref([]);
 const currentSeason = ref('');
+
+// La compétition regardée (03/10/2026, Pierre : « dans l'onglet calendrier de
+// saison, rajoute-moi le classement aussi, avec quelques informations sur le
+// classement »). Choisie, elle filtre le calendrier et affiche son classement
+// à côté (LeagueStandingsPanel). Par défaut, le premier championnat favori
+// présent dans la saison — tant que l'utilisateur n'a rien choisi lui-même.
+const competition = ref('');
+let competitionChoisieALaMain = false;
+
+/** Les compétitions de la saison chargée, avec leur drapeau ; les favorites d'abord. */
+const competitionOptions = computed(() => {
+  const ligues = [...new Set(matches.value.map((m) => m.league).filter(Boolean))].sort((a, b) =>
+    formatLeagueOptionLabel(a).localeCompare(formatLeagueOptionLabel(b), 'fr')
+  );
+  const avecFavoris = favoris.leagues.length > 0;
+  return [
+    { value: '', label: 'Toutes les compétitions', icon: 'layers' },
+    ...favoris.favoritesFirst(ligues, { league: (l) => l }).map((l) => {
+      const favorite = favoris.isFavoriteLeague(l);
+      return {
+        value: l,
+        label: formatLeagueOptionLabel(l),
+        league: l,
+        favorite,
+        group: avecFavoris ? (favorite ? 'Favoris' : 'Autres compétitions') : undefined
+      };
+    })
+  ];
+});
+
+function choisirCompetition(valeur) {
+  competitionChoisieALaMain = true;
+  competition.value = valeur;
+}
+
+// Les compétitions qui ont un vrai classement : celles de /standings/leagues
+// (le magasin moins les coupes à élimination directe). Une coupe n'a pas de
+// table — demandée quand même, le serveur en calcule une fausse (l'EFL Cup en
+// 90 lignes) ou répond « introuvable ». null tant que la liste n'est pas
+// arrivée ; 'inconnue' si elle n'a pas pu l'être (on tente alors le classement).
+const liguesAvecClassement = ref(null);
+
+async function chargerLiguesAvecClassement() {
+  try {
+    const { leagues = [] } = await standingsApi.listLeagues();
+    liguesAvecClassement.value = new Set(leagues);
+  } catch {
+    liguesAvecClassement.value = 'inconnue';
+  }
+}
+
+/** Le classement de la compétition choisie s'affiche-t-il ? */
+const avecClassement = computed(() => {
+  if (!competition.value) return false;
+  const liste = liguesAvecClassement.value;
+  return liste === 'inconnue' || Boolean(liste?.has(competition.value));
+});
+
+/** Une coupe à élimination directe est choisie : pas de classement, et on le dit. */
+const coupeSansClassement = computed(() => Boolean(competition.value) && liguesAvecClassement.value instanceof Set && !avecClassement.value);
+
+/** Le premier championnat favori de la saison, tant qu'aucun choix n'a été fait à la main. */
+function competitionParDefaut() {
+  if (competitionChoisieALaMain) return;
+  competition.value = competitionOptions.value.find((o) => o.favorite)?.value ?? '';
+}
 
 /** Hors saison en cours, les en-têtes de jour portent l’année. */
 const isCurrentSeason = computed(() => !season.value || season.value === currentSeason.value);
@@ -42,7 +115,8 @@ const isCurrentSeason = computed(() => !season.value || season.value === current
 const seasonOptions = computed(() =>
   seasons.value.map((s) => ({
     value: s.season,
-    label: `${s.season} — ${s.matches.toLocaleString('fr-FR')} rencontres`
+    label: s.season,
+    hint: `${s.matches.toLocaleString('fr-FR')} matchs`
   }))
 );
 
@@ -76,11 +150,20 @@ watch(season, load);
 const filteredMatches = computed(() => {
   const query = leagueQuery.value.trim().toLowerCase();
   return matches.value.filter((m) => {
+    if (competition.value && m.league !== competition.value) return false;
     if (statusFilter.value !== 'all' && m.status !== statusFilter.value) return false;
     if (!query) return true;
     return (m.league ?? '').toLowerCase().includes(query) || m.homeName.toLowerCase().includes(query) || m.awayName.toLowerCase().includes(query);
   });
 });
+
+// Toutes les rencontres de la compétition choisie dans la saison, quels que
+// soient les autres filtres : la forme des équipes et l'avancement de la
+// saison du classement se calculent dessus.
+const matchsDeLaCompetition = computed(() => (competition.value ? matches.value.filter((m) => m.league === competition.value) : []));
+
+// Le choix par défaut suit l'arrivée du calendrier et des favoris.
+watch(() => [matches.value.length, favoris.leagues.map((l) => l.name).join('|')], competitionParDefaut);
 
 // Regroupement par jour — le calendrier couvre toute la saison, un simple
 // tableau plat serait illisible sur autant de lignes.
@@ -113,7 +196,14 @@ function recentrer() {
   finFenetre.value = debut + PAS_JOURS;
 }
 watch(groupedByDay, recentrer, { immediate: true });
-const joursAffiches = computed(() => groupedByDay.value.slice(debutFenetre.value, finFenetre.value));
+// Dans chaque jour affiché, les matchs des équipes favorites, puis ceux des
+// championnats favoris, puis les autres (03/10/2026). Seulement les jours
+// affichés : une saison entière, ce sont des milliers de clubs à reconnaître.
+const joursAffiches = computed(() =>
+  groupedByDay.value
+    .slice(debutFenetre.value, finFenetre.value)
+    .map(([jour, rencontres]) => [jour, favoris.favoritesFirst(rencontres, { league: (m) => m.league, teams: (m) => [[m.homeName, m.league], [m.awayName, m.league]] })])
+);
 const joursAvant = computed(() => debutFenetre.value);
 const joursApres = computed(() => Math.max(0, groupedByDay.value.length - finFenetre.value));
 function plusTot() {
@@ -145,6 +235,7 @@ const lastUpdatedAt = computed(() => {
 });
 
 onMounted(async () => {
+  chargerLiguesAvecClassement();
   await loadSeasons();
   await load();
 });
@@ -227,7 +318,8 @@ watch(
       </div>
 
       <div class="cm-toolbar calendar__filters">
-        <AppTextField v-model="leagueQuery" label="Championnat ou équipe" placeholder="Ex. Ligue 1, PSG…">
+        <AppSelect :model-value="competition" class="calendar__filter-competition" label="Compétition" :options="competitionOptions" @update:model-value="choisirCompetition" />
+        <AppTextField v-model="leagueQuery" class="calendar__filter-search" label="Championnat ou équipe" placeholder="Ex. Ligue 1, PSG…">
           <template #icon><AppIcon name="search" :size="15" /></template>
         </AppTextField>
         <AppSelect v-if="seasonOptions.length > 1" v-model="season" label="Saison" :options="seasonOptions" />
@@ -238,6 +330,14 @@ watch(
         </AppButton>
       </div>
 
+      <p v-if="!competition && competitionOptions.length > 1" class="calendar__hint">
+        <AppIcon name="award" :size="12" />
+        <span>Choisissez une compétition pour afficher son classement à côté du calendrier.</span>
+      </p>
+      <p v-if="coupeSansClassement" class="calendar__hint">
+        <AppIcon name="info" :size="12" />
+        <span>{{ parseLeagueLabel(competition).name }} se joue à élimination directe : pas de classement, le calendrier s'affiche seul.</span>
+      </p>
       <p v-if="lastUpdatedAt" class="calendar__hint">
         <AppIcon name="clock" :size="12" />
         <span>
@@ -246,6 +346,8 @@ watch(
       </p>
     </section>
 
+    <div class="calendar__body" :class="{ 'has-standings': avecClassement }">
+    <div class="calendar__main">
     <LoadingSpinner v-if="loading" label="Chargement du calendrier…" />
     <EmptyState v-else-if="error" icon="alert" title="Calendrier indisponible" :description="error" />
     <EmptyState
@@ -269,7 +371,8 @@ watch(
             <span class="calendar__day-count cm-numeric" :title="`${dayMatches.length} rencontre(s) ce jour`">{{ dayMatches.length }}</span>
           </h3>
           <div class="calendar__cards cm-stagger">
-            <MatchCard v-for="match in dayMatches" :key="match.matchId" :match="versCarte(match)" :to="lienMatch(match)" date-display="none" />
+            <!-- Une seule compétition affichée : son nom ne se répète pas sous chaque carte. -->
+            <MatchCard v-for="match in dayMatches" :key="match.matchId" :match="versCarte(match)" :to="lienMatch(match)" date-display="none" :show-competition="!competition" />
           </div>
         </section>
       </div>
@@ -278,6 +381,18 @@ watch(
         Afficher les jours suivants <span class="cm-text-muted">({{ joursApres }} jour{{ joursApres > 1 ? 's' : '' }} de matchs après)</span>
       </button>
     </AppCard>
+    </div>
+
+    <!-- Le classement de la compétition choisie, avec ses informations clés. -->
+    <LeagueStandingsPanel
+      v-if="avecClassement"
+      :league="competition"
+      :season="season || null"
+      :current-season="isCurrentSeason"
+      :matches="matchsDeLaCompetition"
+      class="calendar__standings"
+    />
+    </div>
   </div>
 </template>
 
@@ -292,14 +407,18 @@ watch(
   gap: 16px;
 }
 
-/* Les filtres : le champ de recherche prend le plus de place, les sélecteurs
-   se partagent le reste, le bouton garde sa largeur. */
+/* Les filtres : la recherche et la compétition prennent le plus de place,
+   les autres sélecteurs se partagent le reste, le bouton garde sa largeur. */
 .calendar__filters > * {
-  flex: 1 1 170px;
+  flex: 1 1 190px;
 }
 
-.calendar__filters > :first-child {
-  flex: 2 1 240px;
+.calendar__filters > .calendar__filter-search {
+  flex: 1.6 1 200px;
+}
+
+.calendar__filters > .calendar__filter-competition {
+  flex: 1.3 1 200px;
 }
 
 .calendar__filters > :last-child {
@@ -417,10 +536,43 @@ watch(
   gap: 8px;
 }
 
+/* ------------------------------------------------- calendrier + classement */
+.calendar__body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Une compétition choisie : le calendrier à gauche, son classement à droite. */
+.calendar__body.has-standings {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(380px, 0.85fr);
+  align-items: start;
+}
+
+.calendar__main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+/* Plus étroit : le classement passe au-dessus du calendrier. */
+@container calendar (max-width: 980px) {
+  .calendar__body.has-standings {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .calendar__standings {
+    order: -1;
+  }
+}
+
 /* Étroit : chaque filtre sur sa ligne, le bouton aussi. */
 @container calendar (max-width: 720px) {
   .calendar__filters > *,
-  .calendar__filters > :first-child,
+  .calendar__filters > .calendar__filter-search,
+  .calendar__filters > .calendar__filter-competition,
   .calendar__filters > :last-child {
     flex: 1 1 100%;
   }

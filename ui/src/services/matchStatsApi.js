@@ -10,6 +10,10 @@ export const matchStatsApi = {
     httpClient.get(
       `/match-stats/team-averages?name=${encodeURIComponent(name)}${sampleSize ? `&sampleSize=${sampleSize}` : ''}${league ? `&league=${encodeURIComponent(league)}` : ''}`
     ),
+  // Les moyennes de chaque équipe d'un championnat sur ses matchs de ce
+  // championnat (FotMob, magasin local) : `periode` = 'saison' ou un nombre N.
+  leagueAverages: (league, periode = 'saison') =>
+    httpClient.get(`/match-stats/league-averages?league=${encodeURIComponent(league)}&periode=${encodeURIComponent(periode)}`),
   get: (matchId) => httpClient.get(`/match-stats/${encodeURIComponent(matchId)}`),
   // Page d'un match à venir : coup d'envoi exact, stade, météo, arbitre et
   // composition décrite (FotMob, gratuit — cf. lineupContext.js côté serveur).
@@ -24,9 +28,9 @@ export const matchStatsApi = {
   // (cf. server/src/jobs/matchStatsAutoRefresh.js).
   coverage: () => httpClient.get('/match-stats/coverage'),
   refresh: (limit) => httpClient.post('/match-stats/refresh', limit ? { limit } : {}),
-  // Classement des joueurs d'une compétition, agrégé par la base — distinct
-  // de teamStatsApi.getPlayersByName, qui interroge API-Football (plan
-  // gratuit limité à 2024, et qui ne couvre pas tous les championnats).
+  // Classement des joueurs d'une compétition, agrégé par la base (FotMob),
+  // sans API-Football (plan gratuit limité à 2024, qui ne couvrait pas tous
+  // les championnats).
   seasons: (league) => httpClient.get(`/match-stats/seasons?league=${encodeURIComponent(league)}`),
   // Profilage de cotes d'un match à venir : les matchs passés aux cotes
   // semblables et comment ils ont fini (server/src/data/db/oddsProfileRead.js).

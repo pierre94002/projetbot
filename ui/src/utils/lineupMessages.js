@@ -1,6 +1,7 @@
-// Raisons de "compo indisponible" de TeamSquadView.vue (cf. getLiveLineups
-// côté serveur). Le panneau TeamStatsModal qui les partageait a été remplacé
-// par la page d'équipe (views/TeamView.vue) le 01/10/2026.
+// Raisons de "compo indisponible" (cf. getLiveLineups côté serveur), lues
+// par Mes paris. L'onglet « Compo & joueurs » qui les partageait a été
+// retiré le 03/10/2026, le panneau TeamStatsModal le 01/10/2026 (remplacé
+// par la page d'équipe, views/TeamView.vue).
 export const LINEUP_UNAVAILABLE_MESSAGES = {
   not_published_yet: "Compo pas encore publiée par les clubs — généralement disponible dans l'heure précédant le coup d'envoi.",
   fixture_not_found: "Rencontre introuvable dans les données API-Football (nom d'équipe non reconnu ou match trop éloigné dans le temps).",

@@ -6,6 +6,7 @@ import { useSourcesStore } from '@/stores/sourcesStore.js';
 import { useBetsStore } from '@/stores/betsStore.js';
 import { usePredictionsStore } from '@/stores/predictionsStore.js';
 import { useToastStore } from '@/stores/toastStore.js';
+import { useFavoritesStore } from '@/stores/favoritesStore.js';
 import { analysisApi } from '@/services/analysisApi.js';
 import { teamStatsApi } from '@/services/teamStatsApi.js';
 import { computeSafestPicks } from '@/utils/safestPicks.js';
@@ -47,6 +48,8 @@ const route = useRoute();
 const matchesStore = useMatchesStore();
 const sourcesStore = useSourcesStore();
 const betsStore = useBetsStore();
+// Favoris (03/10/2026) : leurs championnats et leurs matchs d'abord.
+const favoris = useFavoritesStore();
 const predictionsStore = usePredictionsStore();
 const toastStore = useToastStore();
 const teamStatsModalStore = useTeamStatsModalStore();
@@ -107,11 +110,12 @@ const groupedBets = computed(() => {
     }
     byMatch.get(matchKey).bets.push(bet);
   }
-  return [...byLeague.entries()].map(([league, byMatch]) => ({
+  const groupes = [...byLeague.entries()].map(([league, byMatch]) => ({
     league,
     count: [...byMatch.values()].reduce((sum, m) => sum + m.bets.length, 0),
-    matches: [...byMatch.values()]
+    matches: favoris.favoritesFirst([...byMatch.values()], { teams: (m) => [[m.homeName, league], [m.awayName, league]] })
   }));
+  return favoris.favoritesFirst(groupes, { league: (g) => g.league, teams: (g) => g.matches.flatMap((m) => [[m.homeName, g.league], [m.awayName, g.league]]) });
 });
 
 // Vide par défaut : tous les championnats démarrent fermés, comme ailleurs.
@@ -433,7 +437,11 @@ const groupedValueBets = computed(() => {
     if (!byLeague.has(leagueKey)) byLeague.set(leagueKey, []);
     byLeague.get(leagueKey).push(c);
   }
-  return [...byLeague.entries()].map(([league, bets]) => ({ league, bets }));
+  const groupes = [...byLeague.entries()].map(([league, bets]) => ({
+    league,
+    bets: favoris.favoritesFirst(bets, { teams: (c) => [[c.homeName, league], [c.awayName, league]] })
+  }));
+  return favoris.favoritesFirst(groupes, { league: (g) => g.league, teams: (g) => g.bets.flatMap((c) => [[c.homeName, g.league], [c.awayName, g.league]]) });
 });
 
 // Une seule sélection PAR MATCH sur le ticket — indexé par matchId (pas par

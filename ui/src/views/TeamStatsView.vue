@@ -2,13 +2,13 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import { useMatchesStore } from '@/stores/matchesStore.js';
 import { useToastStore } from '@/stores/toastStore.js';
+import { useFavoritesStore } from '@/stores/favoritesStore.js';
 import { useDataVersionStore } from '@/stores/dataVersionStore.js';
 import { standingsApi } from '@/services/standingsApi.js';
-import { teamStatsApi } from '@/services/teamStatsApi.js';
+import { matchStatsApi } from '@/services/matchStatsApi.js';
 import AppCard from '@/components/common/AppCard.vue';
 import AppSelect from '@/components/common/AppSelect.vue';
 import AppButton from '@/components/common/AppButton.vue';
-import AppNumberField from '@/components/common/AppNumberField.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
@@ -17,20 +17,55 @@ import { MATCH_STAT_SECTIONS, parseNumeric } from '@/constants/matchStatFields.j
 
 const matchesStore = useMatchesStore();
 const toastStore = useToastStore();
+const favoris = useFavoritesStore();
 
 const selectedLeague = ref('');
 const standings = ref({ loading: false, error: null, rows: [] });
 
-// Détail complet (34 champs) par équipe — à la demande seulement : contrairement
-// aux buts (dérivés gratuitement du classement), chaque champ vient d'une
-// moyenne sur les N derniers matchs de l'équipe, donc jusqu'à N appels API
-// PAR ÉQUIPE. Un échantillon réduit par défaut (3) garde ça praticable pour
-// un championnat entier (~20 équipes) face au quota gratuit de 100/jour.
-const fullStatsSampleSize = ref(3);
-const fullStatsByTeam = ref({});
-const fullStatsLoading = ref(false);
-const fullStatsLoadedFor = ref(null);
-const FULL_STATS_BATCH_SIZE = 3;
+// Les statistiques du championnat (03/10/2026, Pierre : « il faut rechercher
+// les statistiques avec FotMob »). Avant : un appel par équipe, par lots de
+// trois, avec un repli payant (API-Football) et un échantillon réduit à 3
+// matchs pour ménager un quota. Maintenant : UN appel, lu dans le magasin
+// local que l'actualisation automatique remplit depuis FotMob — gratuit, donc
+// chargé tout seul dès qu'on choisit une compétition, sur la saison en cours
+// ou les N derniers matchs DE CE championnat de chaque équipe.
+const PERIODES = [
+  { value: 'saison', label: 'Saison en cours' },
+  { value: '5', label: '5 derniers matchs' },
+  { value: '10', label: '10 derniers matchs' },
+  { value: '20', label: '20 derniers matchs' }
+];
+const periode = ref('saison');
+const moyennes = ref({ loading: false, error: null, data: null });
+
+// Par équipe, { total, home, away } : le format que lit computeLeagueStat.
+const fullStatsByTeam = computed(() =>
+  Object.fromEntries(
+    (moyennes.value.data?.teams ?? []).map((t) => [t.teamId ?? t.teamName, { total: t.averages ?? {}, home: t.homeAverages ?? {}, away: t.awayAverages ?? {} }])
+  )
+);
+const fullStatsLoading = computed(() => moyennes.value.loading);
+const fullStatsLoadedFor = computed(() => moyennes.value.data?.league ?? null);
+
+/**
+ * Charge les moyennes du championnat choisi. Une réponse arrivée après un
+ * changement de compétition ou de période est ignorée. `silencieux` : le
+ * rafraîchissement d'arrière-plan garde l'affichage en place, sans alerte.
+ */
+async function chargerMoyennes({ silencieux = false } = {}) {
+  const ligue = selectedLeague.value;
+  const choix = periode.value;
+  if (!ligue) return;
+  if (!silencieux) moyennes.value = { loading: true, error: null, data: null };
+  try {
+    const data = await matchStatsApi.leagueAverages(ligue, choix);
+    if (selectedLeague.value === ligue && periode.value === choix) moyennes.value = { loading: false, error: null, data };
+  } catch (error) {
+    if (selectedLeague.value === ligue && periode.value === choix && !silencieux) moyennes.value = { loading: false, error: error.message, data: null };
+  }
+}
+
+watch(periode, () => chargerMoyennes());
 
 // Championnats sourcés d'abord des CLASSEMENTS disponibles (clés du magasin
 // local, donc résolubles par le serveur par construction), complétés par ceux
@@ -39,10 +74,21 @@ const FULL_STATS_BATCH_SIZE = 3;
 // Two avaient classement et statistiques sans aucun écran pour les afficher.
 const standingsLeagues = ref([]);
 
+// Les championnats favoris d'abord (03/10/2026), marqués d'une étoile : le
+// premier de la liste est celui qu'on ouvre par défaut.
 const leagueOptions = computed(() =>
-  [...new Set([...standingsLeagues.value, ...matchesStore.matches.map((m) => m.league)].filter(Boolean))]
-    .sort()
-    .map((league) => ({ value: league, label: formatLeagueOptionLabel(league) }))
+  favoris
+    .favoritesFirst([...new Set([...standingsLeagues.value, ...matchesStore.matches.map((m) => m.league)].filter(Boolean))].sort(), { league: (l) => l })
+    .map((league) => {
+      const favori = favoris.isFavoriteLeague(league);
+      return {
+        value: league,
+        label: formatLeagueOptionLabel(league),
+        league,
+        favorite: favori,
+        group: favoris.leagues.length ? (favori ? 'Favoris' : 'Toutes les compétitions') : undefined
+      };
+    })
 );
 
 // Équipes du championnat (classement déjà récupéré et caché 12h côté serveur
@@ -53,8 +99,7 @@ const rows = computed(() => standings.value.rows);
 async function loadAverages() {
   if (!selectedLeague.value) return;
   standings.value = { loading: true, error: null, rows: [] };
-  fullStatsByTeam.value = {};
-  fullStatsLoadedFor.value = null;
+  chargerMoyennes();
   try {
     const result = await standingsApi.get(selectedLeague.value);
     standings.value = { loading: false, error: null, rows: result.rows };
@@ -67,13 +112,9 @@ async function loadAverages() {
 watch(selectedLeague, loadAverages);
 
 /**
- * Rechargement du seul classement quand les données changent côté serveur.
- *
- * Volontairement PAS `loadAverages()` : celui-ci vide `fullStatsByTeam`, or ce
- * détail complet a coûté un appel par équipe que l'utilisateur a déclenché
- * explicitement. On rafraîchit donc les lignes (lecture d'un fichier local,
- * gratuite) et on laisse le détail en place — le bouton "Charger le détail
- * complet" reste là pour le recalculer si besoin.
+ * Rechargement quand les données changent côté serveur : le classement et
+ * les moyennes, tous deux lus en local (FotMob), sans vider l'affichage en
+ * attendant ni alerter sur une opération non demandée.
  */
 const dataVersionStore = useDataVersionStore();
 watch(
@@ -81,6 +122,7 @@ watch(
   async (next, previous) => {
     if (!previous || !next || next === previous) return;
     if (!selectedLeague.value || standings.value.loading) return;
+    chargerMoyennes({ silencieux: true });
     try {
       const result = await standingsApi.get(selectedLeague.value);
       standings.value = { loading: false, error: null, rows: result.rows };
@@ -91,46 +133,25 @@ watch(
   }
 );
 
-/**
- * Boucle sur toutes les équipes du championnat par petits lots (pas toutes
- * en même temps, pour rester raisonnable vis-à-vis du débit API) — chaque
- * équipe est résolue indépendamment (Promise.allSettled) : l'échec d'une
- * seule (ex. quota épuisé en cours de route) laisse les autres déjà
- * chargées à l'écran plutôt que de tout effacer.
- */
-async function loadFullStats() {
-  if (!rows.value.length) return;
-  fullStatsLoading.value = true;
-  fullStatsByTeam.value = {};
-  const teams = rows.value;
-
-  for (let i = 0; i < teams.length; i += FULL_STATS_BATCH_SIZE) {
-    const batch = teams.slice(i, i + FULL_STATS_BATCH_SIZE);
-    const results = await Promise.allSettled(
-      batch.map((team) => teamStatsApi.getAverageStatsByName(team.teamName, selectedLeague.value, fullStatsSampleSize.value))
-    );
-    const updates = {};
-    results.forEach((result, index) => {
-      const teamId = batch[index].teamId;
-      if (result.status !== 'fulfilled') {
-        updates[teamId] = null;
-        return;
-      }
-      const stats = result.value.stats ?? {};
-      updates[teamId] = { total: stats.averages ?? {}, home: stats.homeAverages ?? {}, away: stats.awayAverages ?? {} };
-    });
-    fullStatsByTeam.value = { ...fullStatsByTeam.value, ...updates };
-  }
-
-  fullStatsLoadedFor.value = selectedLeague.value;
-  fullStatsLoading.value = false;
-}
-
-// Présentation : avancement du détail complet (équipes résolues sur le total
-// du classement) et équipes restées sans détail (appel en échec, quota…).
-const fullStatsProgress = computed(() => {
-  const resolved = Object.values(fullStatsByTeam.value);
-  return { done: resolved.length, failed: resolved.filter((t) => !t).length, total: rows.value.length };
+// Présentation : ce que couvrent les moyennes — combien d'équipes, combien de
+// matchs par équipe, entre quelles dates, et les équipes sans statistiques.
+const formatJour = (iso) => new Intl.DateTimeFormat('fr-FR', { day: '2-digit', month: '2-digit' }).format(new Date(`${iso}T12:00:00Z`));
+const couverture = computed(() => {
+  const d = moyennes.value.data;
+  if (!d || d.league !== selectedLeague.value) return null;
+  const equipes = d.teams ?? [];
+  const tailles = equipes.map((t) => t.sampleSize ?? 0);
+  const dates = equipes.flatMap((t) => [t.firstDate, t.lastDate]).filter(Boolean).sort();
+  const min = tailles.length ? Math.min(...tailles) : 0;
+  const max = tailles.length ? Math.max(...tailles) : 0;
+  return {
+    equipes: equipes.length,
+    parEquipe: min === max ? `${max} match${max > 1 ? 's' : ''} par équipe` : `${min} à ${max} matchs par équipe`,
+    debut: dates[0] ? formatJour(dates[0]) : null,
+    fin: dates.length ? formatJour(dates[dates.length - 1]) : null,
+    saison: d.seasonLabel ?? null,
+    manquantes: d.missing ?? []
+  };
 });
 
 // Présentation : l'icône de chaque famille de statistiques (titres de MATCH_STAT_SECTIONS).
@@ -189,8 +210,20 @@ onMounted(async () => {
     }),
     matchesStore.matches.length ? null : matchesStore.fetchMatches()
   ]);
-  if (!selectedLeague.value && leagueOptions.value.length) selectedLeague.value = leagueOptions.value[0].value;
+  choisirParDefaut();
 });
+
+// Le choix par défaut (le premier de la liste, donc le premier favori) suit
+// l'arrivée des favoris, tant que la compétition affichée est ce choix
+// automatique et non un choix de l'utilisateur.
+let choixAutomatique = null;
+function choisirParDefaut() {
+  const premier = leagueOptions.value[0]?.value;
+  if (!premier || (selectedLeague.value && selectedLeague.value !== choixAutomatique)) return;
+  choixAutomatique = premier;
+  selectedLeague.value = premier;
+}
+watch(() => favoris.leagues.map((l) => l.name).join('|'), choisirParDefaut);
 </script>
 
 <template>
@@ -206,6 +239,7 @@ onMounted(async () => {
           <span class="cm-chip is-section"><AppIcon name="trophy" :size="11" />{{ leagueOptions.length }} compétition(s)</span>
           <span v-if="rows.length" class="cm-chip"><AppIcon name="users" :size="11" />{{ rows.length }} équipes</span>
           <span class="cm-chip"><AppIcon name="layers" :size="11" />34 champs</span>
+          <span class="cm-chip is-accent" title="Lu dans le magasin local, alimenté par FotMob : aucun appel facturé"><AppIcon name="database" :size="11" />FotMob</span>
         </span>
       </div>
       <p class="cm-hero__subtitle">
@@ -232,40 +266,30 @@ onMounted(async () => {
     <EmptyState v-else-if="!rows.length" icon="database" title="Choisis un championnat" description="Sélectionne une compétition ci-dessus pour voir le détail des statistiques." />
 
     <template v-else>
-      <!-- 1. LE DÉTAIL COMPLET, À LA DEMANDE (il coûte des appels API) -->
+      <!-- 1. LA SOURCE ET LA PÉRIODE : FotMob, lu en local, gratuit (03/10/2026). -->
       <AppCard
-        icon="bolt"
-        eyebrow="À la demande"
-        title="Charger le détail complet"
-        subtitle="Chaque champ est une moyenne sur les derniers matchs de chaque équipe du classement — un appel API par match et par équipe."
+        icon="database"
+        eyebrow="Source : FotMob"
+        title="Statistiques du championnat"
+        subtitle="Chaque champ est la moyenne, pour chaque équipe du classement, de ses matchs de ce championnat, lus dans le magasin local que l'actualisation automatique remplit depuis FotMob — aucun appel facturé."
       >
         <div class="team-stats__body">
-          <div class="cm-toolbar">
-            <AppNumberField v-model="fullStatsSampleSize" label="Échantillon par équipe (derniers matchs)" :min="1" :max="10" class="team-stats__sample" />
-            <AppButton variant="secondary" :loading="fullStatsLoading" @click="loadFullStats">
-              <template #icon><AppIcon name="bolt" :size="14" /></template>
-              Charger le détail complet (34 champs)
-            </AppButton>
-          </div>
-
-          <div class="cm-note is-warning">
-            <span class="cm-icon-box is-warning"><AppIcon name="alert" :size="16" /></span>
-            <div>
-              <p class="cm-note__title">Coût des appels API</p>
-              <p class="cm-note__text">
-                Coûte jusqu'à {{ fullStatsSampleSize }} appel(s) API par équipe ({{ rows.length }} équipes) — mis en cache.
-              </p>
+          <div class="cm-toolbar team-stats__source">
+            <AppSelect v-model="periode" label="Période" :options="PERIODES" class="team-stats__sample" />
+            <div v-if="couverture" class="team-stats__coverage">
+              <span class="cm-chip is-section"><AppIcon name="users" :size="11" />{{ couverture.equipes }} équipes</span>
+              <span class="cm-chip"><AppIcon name="list" :size="11" />{{ couverture.parEquipe }}</span>
+              <span v-if="couverture.debut" class="cm-chip"><AppIcon name="calendar" :size="11" />du {{ couverture.debut }} au {{ couverture.fin }}</span>
+              <span v-if="periode === 'saison' && couverture.saison" class="cm-chip"><AppIcon name="trophy" :size="11" />saison {{ couverture.saison }}</span>
+              <span
+                v-if="couverture.manquantes.length"
+                class="cm-chip is-warning"
+                :title="`Aucune feuille de match avec statistiques en magasin pour : ${couverture.manquantes.join(', ')}. Elles ne comptent pas dans les moyennes.`"
+              >
+                <AppIcon name="alert" :size="11" />{{ couverture.manquantes.length }} équipe(s) sans statistiques
+              </span>
             </div>
           </div>
-
-          <!-- Avancement pendant le chargement, équipes sans détail après. -->
-          <div v-if="fullStatsLoading" class="team-stats__progress">
-            <div class="cm-bar"><span class="cm-bar__fill" :style="{ width: `${fullStatsProgress.total ? Math.round((fullStatsProgress.done / fullStatsProgress.total) * 100) : 0}%` }" /></div>
-            <span class="cm-numeric team-stats__progress-text">{{ fullStatsProgress.done }} / {{ fullStatsProgress.total }} équipes</span>
-          </div>
-          <span v-else-if="fullStatsProgress.failed" class="cm-chip is-warning team-stats__failed" title="Appel en échec pour ces équipes (quota épuisé, nom non reconnu…) : elles ne comptent pas dans les moyennes">
-            <AppIcon name="alert" :size="11" />{{ fullStatsProgress.failed }} équipe(s) sans détail
-          </span>
         </div>
       </AppCard>
 
@@ -307,12 +331,13 @@ onMounted(async () => {
           </section>
         </div>
       </AppCard>
-      <LoadingSpinner v-else-if="fullStatsLoading" label="Calcul des moyennes par équipe…" />
+      <LoadingSpinner v-else-if="fullStatsLoading" label="Lecture des statistiques FotMob…" />
+      <EmptyState v-else-if="moyennes.error" icon="alert" title="Statistiques indisponibles" :description="moyennes.error" />
       <EmptyState
         v-else
         icon="barChart"
-        title="Détail pas encore chargé"
-        description="Choisis un échantillon puis clique sur « Charger le détail complet » : les moyennes de la ligue, domicile face à extérieur, apparaîtront ici."
+        title="Aucune statistique en magasin"
+        description="FotMob n'a encore relevé aucune feuille de match de ce championnat sur cette période : choisissez une autre période, ou lancez une actualisation dans Réglages."
       />
     </template>
   </div>
@@ -339,23 +364,18 @@ onMounted(async () => {
   flex: 0 1 300px;
 }
 
-/* ----------------------------------------------------------- avancement */
-.team-stats__progress {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+/* ----------------------------------------------------------- couverture */
+.team-stats__source {
+  align-items: flex-end;
+}
+
+/* Ce que couvrent les moyennes, en puces, à côté de la période. */
+.team-stats__coverage {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
-}
-
-.team-stats__progress-text {
-  font-size: 11.5px;
-  font-weight: 600;
-  color: var(--cm-text-secondary);
-  white-space: nowrap;
-}
-
-.team-stats__failed {
-  align-self: flex-start;
+  gap: 6px;
+  padding-bottom: 6px;
 }
 
 /* --------------------------------------------------------------- légende */

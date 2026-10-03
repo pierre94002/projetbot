@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router';
 import { matchStatsApi } from '@/services/matchStatsApi.js';
 import AppCard from '@/components/common/AppCard.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
+import AppSelect from '@/components/common/AppSelect.vue';
 import BackButton from '@/components/common/BackButton.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
@@ -54,9 +55,13 @@ async function charger() {
 // Même composant d'un joueur à l'autre (la clé de vue est le nom de route) : on recharge.
 watch(() => [props.playerId, props.season], charger, { immediate: true });
 
-function changerSaison(event) {
-  router.replace({ query: { saison: event.target.value } });
+function changerSaison(saison) {
+  router.replace({ query: { saison } });
 }
+
+// Les saisons du joueur pour la liste de l'appli (valeurs en texte : la
+// saison lue dans l'adresse est du texte).
+const optionsSaisons = computed(() => (j.value?.seasons ?? []).map((s) => ({ value: String(s.season), label: s.label })));
 
 const POSTES = { Goalkeeper: 'Gardien', Defender: 'Défenseur', Midfielder: 'Milieu', Forward: 'Attaquant' };
 const j = computed(() => fiche.value.data);
@@ -158,15 +163,13 @@ const formeRecente = computed(() => (j.value?.matches ?? []).filter((m) => forma
           </div>
 
           <!-- La saison regardée : un sélecteur dessiné comme les champs de l'appli. -->
-          <div class="player__season">
-            <label class="player__season-label" for="player-season">Saison</label>
-            <span class="player__select-wrap">
-              <select id="player-season" class="player__select" :value="j.season" @change="changerSaison">
-                <option v-for="s in j.seasons" :key="s.season" :value="s.season">{{ s.label }}</option>
-              </select>
-              <AppIcon name="chevronDown" :size="14" class="player__select-chevron" />
-            </span>
-          </div>
+          <AppSelect
+            :model-value="String(j.season)"
+            label="Saison"
+            :options="optionsSaisons"
+            class="player__season"
+            @update:model-value="changerSaison"
+          />
         </div>
 
         <!-- Ses cinq dernières notes, de la plus ancienne à la plus récente. -->
@@ -368,61 +371,10 @@ const formeRecente = computed(() => (j.value?.matches ?? []).filter((m) => forma
   text-decoration: underline;
 }
 
-/* Le sélecteur de saison, dessiné comme les champs communs (AppSelect) :
-   libellé en petites capitales, anneau de focus couleur de section. */
+/* Le sélecteur de saison : la liste commune (AppSelect), en haut à droite. */
 .player__season {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
   align-self: flex-start;
   min-width: 150px;
-}
-
-.player__season-label {
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: var(--cm-text-muted);
-}
-
-.player__select-wrap {
-  position: relative;
-  display: flex;
-}
-
-.player__select {
-  width: 100%;
-  appearance: none;
-  -webkit-appearance: none;
-  padding: 9px 34px 9px 12px;
-  border-radius: var(--cm-radius-sm);
-  border: 1px solid var(--cm-border);
-  background: var(--cm-surface-alt);
-  color: var(--cm-text-primary);
-  font: inherit;
-  font-size: 13.5px;
-  outline: none;
-  cursor: pointer;
-  transition: border-color var(--cm-transition), box-shadow var(--cm-transition);
-}
-
-.player__select:hover {
-  border-color: var(--cm-border-strong);
-}
-
-.player__select:focus {
-  border-color: var(--cm-section);
-  box-shadow: 0 0 0 3px rgba(var(--cm-section-rgb) / 0.18);
-}
-
-.player__select-chevron {
-  position: absolute;
-  right: 11px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--cm-text-muted);
-  pointer-events: none;
 }
 
 /* Les dernières notes, sous un filet teinté. */

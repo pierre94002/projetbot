@@ -20,7 +20,7 @@ export const useMatchesStore = defineStore('matches', {
         const { matches } = await matchesApi.list(this.source, this.bankroll);
         // Un match dont le score est connu est terminé — il n'a plus rien à
         // faire dans la liste des matchs à analyser/parier, sur AUCUNE page
-        // (Matchs, Mes paris, Compo & joueurs partagent tous cette même
+        // (Matchs, Mes paris et les autres onglets partagent tous cette même
         // liste). Centralisé ici plutôt que filtré séparément par chaque vue.
         //
         // C'est le serveur qui pose `settled` : un score saisi à la main porte

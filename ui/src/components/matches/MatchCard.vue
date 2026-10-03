@@ -4,6 +4,8 @@ import { RouterLink } from 'vue-router';
 import LeagueBadge from '@/components/matches/LeagueBadge.vue';
 import TeamCrest from '@/components/matches/TeamCrest.vue';
 import MatchResultBadge from '@/components/matches/MatchResultBadge.vue';
+import FavoriteStar from '@/components/common/FavoriteStar.vue';
+import { useFavoritesStore } from '@/stores/favoritesStore.js';
 import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
 import { tour } from '@/utils/fotmobLabels.js';
 
@@ -23,6 +25,10 @@ import { tour } from '@/utils/fotmobLabels.js';
  *   jour : l'heure suffit). `teamLinks` : les noms ouvrent la page du club.
  * Emplacements : `info` (remplace la compétition), `aside` (à droite :
  * cotes, chiffres d'un joueur…), `home-extra` / `away-extra` (sous un nom).
+ * Favoris (03/10/2026) : un club favori porte son étoile dorée (sauf le club
+ * dont on lit la page, `side` : elle se répéterait sur chaque carte) ;
+ * `favoriteToggles` en fait un bouton, et montre au survol l'étoile des
+ * autres clubs pour les ajouter.
  */
 const props = defineProps({
   match: { type: Object, required: true },
@@ -32,7 +38,8 @@ const props = defineProps({
   dateDisplay: { type: String, default: 'block' }, // 'block' | 'none'
   showCompetition: { type: Boolean, default: true },
   teamLinks: { type: Boolean, default: false },
-  active: { type: Boolean, default: false }
+  active: { type: Boolean, default: false },
+  favoriteToggles: { type: Boolean, default: false }
 });
 const emit = defineEmits(['select']);
 const slots = useSlots();
@@ -102,6 +109,14 @@ function ouvrirEquipe(nom) {
 }
 
 const avecInfo = computed(() => props.showCompetition || Boolean(slots.info));
+
+// Favoris : l'identifiant du club s'il est donné, sinon demandé (cf. teamIds.js).
+const favoris = useFavoritesStore();
+const estFavori = (equipe) => favoris.isFavoriteTeam(equipe.nom, m.value.league ?? null, equipe.id ?? undefined);
+
+function basculerFavori(equipe) {
+  favoris.toggleTeam({ name: equipe.nom, league: m.value.league ?? null, id: equipe.id ?? undefined });
+}
 </script>
 
 <template>
@@ -133,17 +148,28 @@ const avecInfo = computed(() => props.showCompetition || Boolean(slots.info));
     <div class="mcard__match">
       <div class="mcard__side is-home">
         <span class="mcard__name-wrap">
-          <button
-            v-if="teamLinks"
-            type="button"
-            class="mcard__name mcard__name--link"
-            :class="{ 'is-club': equipes[0].club }"
-            :title="`Voir la page de ${equipes[0].nom}`"
-            @click.stop.prevent="ouvrirEquipe(equipes[0].nom)"
-          >
-            {{ equipes[0].nom }}
-          </button>
-          <span v-else class="mcard__name" :class="{ 'is-club': equipes[0].club }">{{ equipes[0].nom }}</span>
+          <span class="mcard__name-line">
+            <FavoriteStar
+              v-if="favoriteToggles || (estFavori(equipes[0]) && !equipes[0].club)"
+              :active="estFavori(equipes[0])"
+              :interactive="favoriteToggles"
+              :label="equipes[0].nom"
+              :size="12"
+              class="mcard__fav"
+              @toggle="basculerFavori(equipes[0])"
+            />
+            <button
+              v-if="teamLinks"
+              type="button"
+              class="mcard__name mcard__name--link"
+              :class="{ 'is-club': equipes[0].club }"
+              :title="`Voir la page de ${equipes[0].nom}`"
+              @click.stop.prevent="ouvrirEquipe(equipes[0].nom)"
+            >
+              {{ equipes[0].nom }}
+            </button>
+            <span v-else class="mcard__name" :class="{ 'is-club': equipes[0].club }">{{ equipes[0].nom }}</span>
+          </span>
           <slot name="home-extra" />
         </span>
         <TeamCrest :name="equipes[0].nom" :league="match.league" :team-id="equipes[0].id" :size="variant === 'compact' ? 24 : 30" />
@@ -156,17 +182,28 @@ const avecInfo = computed(() => props.showCompetition || Boolean(slots.info));
       <div class="mcard__side is-away">
         <TeamCrest :name="equipes[1].nom" :league="match.league" :team-id="equipes[1].id" :size="variant === 'compact' ? 24 : 30" />
         <span class="mcard__name-wrap">
-          <button
-            v-if="teamLinks"
-            type="button"
-            class="mcard__name mcard__name--link"
-            :class="{ 'is-club': equipes[1].club }"
-            :title="`Voir la page de ${equipes[1].nom}`"
-            @click.stop.prevent="ouvrirEquipe(equipes[1].nom)"
-          >
-            {{ equipes[1].nom }}
-          </button>
-          <span v-else class="mcard__name" :class="{ 'is-club': equipes[1].club }">{{ equipes[1].nom }}</span>
+          <span class="mcard__name-line">
+            <button
+              v-if="teamLinks"
+              type="button"
+              class="mcard__name mcard__name--link"
+              :class="{ 'is-club': equipes[1].club }"
+              :title="`Voir la page de ${equipes[1].nom}`"
+              @click.stop.prevent="ouvrirEquipe(equipes[1].nom)"
+            >
+              {{ equipes[1].nom }}
+            </button>
+            <span v-else class="mcard__name" :class="{ 'is-club': equipes[1].club }">{{ equipes[1].nom }}</span>
+            <FavoriteStar
+              v-if="favoriteToggles || (estFavori(equipes[1]) && !equipes[1].club)"
+              :active="estFavori(equipes[1])"
+              :interactive="favoriteToggles"
+              :label="equipes[1].nom"
+              :size="12"
+              class="mcard__fav"
+              @toggle="basculerFavori(equipes[1])"
+            />
+          </span>
           <slot name="away-extra" />
         </span>
       </div>
@@ -340,6 +377,39 @@ const avecInfo = computed(() => props.showCompetition || Boolean(slots.info));
 
 .mcard--compact .mcard__name {
   font-size: 12.5px;
+}
+
+/* Le nom et l'étoile de favori, côte à côte ; le nom garde ses points de suspension. */
+.mcard__name-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.mcard__name-line .mcard__name {
+  min-width: 0;
+}
+
+/* L'étoile d'un club : dorée et toujours là pour un favori ; pour les
+   autres, invisible tant qu'on ne survole pas la carte (place gardée, rien
+   ne bouge). */
+.mcard .mcard__fav {
+  width: 20px;
+  height: 20px;
+}
+
+.mcard .mcard__fav:not(.is-on) {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--cm-transition), background var(--cm-transition), color var(--cm-transition);
+}
+
+.mcard:hover .mcard__fav,
+.mcard:focus-within .mcard__fav {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* Le club de la page reste discret ; l'adversaire ressort. */

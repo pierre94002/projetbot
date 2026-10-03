@@ -58,6 +58,13 @@ jeton. Pour une teinte avec transparence : `rgba(var(--cm-section-rgb) / 0.2)`.
 - **`AppModal`** — panneau latéral droit ; `title`, `subtitle`.
 - **`AppSelect`, `AppTextField`, `AppNumberField`, `AppToggle`, `AppSlider`** — champs ; libellé
   en petites capitales, anneau de focus couleur de section. Les aligner dans une `.cm-toolbar`.
+- **`AppSelect`** (03/10/2026) — une liste DESSINÉE, jamais la liste native du navigateur : panneau
+  sombre posé dans `<body>` (il passe par-dessus cartes et fenêtres), recherche dès 9 options,
+  clavier complet, option choisie en couleur de section avec sa coche. Champs d'option facultatifs :
+  `league` (drapeau + nom), `favorite` (étoile dorée), `group` (sous-titre à chaque changement),
+  `hint` (précision grise à droite : une date, un compte ; dans le champ, c'est elle qui se
+  raccourcit quand la place manque, jamais la valeur choisie), `icon`. Un sélecteur de compétitions
+  passe `league` et `favorite`, avec les groupes « Favoris » / « Toutes les compétitions ».
 - **`EmptyState`** (icône ronde teintée, titre, description, `#action`), **`LoadingSpinner`**,
   **`StatusBadge`**, **`MatchStatusBadge`**, **`BackButton`**, **`CollapsibleSection`**.
 - **`AppIcon`** — traits fins. Noms disponibles : matches settings play pause refresh check x
@@ -77,7 +84,13 @@ recherche, la provenance des données, bouton principal en pilule, puis une seco
 pour les filtres ; **pas de carte-formulaire à libellés au-dessus d'une liste**),
 `DataOriginMenu` (la provenance : une pilule qui dit le vrai fournisseur et la date du dernier
 relevé, et un panneau qui détaille chaque donnée — fournisseur, fichier exact sur ce PC, date,
-nombre de rencontres fournies — avec le choix du jeu de données).
+nombre de rencontres fournies — avec le choix du jeu de données),
+`FavoriteStar` (l'étoile des favoris, un seul dessin : bouton contour gris → plein doré, ou simple
+marque dorée avec `:interactive="false"` ; `variant="pill"` avec son texte), `MatchListCard` (une
+ligne de la liste des matchs : carte + forme + badge IA + cotes), `LeagueStandingsPanel` (le
+classement d'une compétition et ses tuiles clés — en tête, saison, attaque, défense, forme,
+maintien — à côté du calendrier saison ; `StandingsTable` y reçoit `formOf`, qui ajoute la
+colonne Forme en pastilles).
 
 ## 4. Utilitaires (`src/assets/styles/utilities.css`, préfixe `cm-`)
 
@@ -118,6 +131,11 @@ Composer avec ces classes AVANT d'écrire du CSS propre :
   l'explication, le bouton d'enregistrement `variant="section"`.
 - **Statut d'un traitement** (actualisation, import, IA) → `.cm-chip` colorée + `.cm-bar`,
   les étapes en liste avec `.cm-icon-box.is-sm`.
+- **Favoris** → toute liste de matchs ou de championnats passe par `favoritesStore.favoritesFirst`
+  (équipes favorites, puis championnats favoris dans l'ordre d'ajout, puis le reste, ordre gardé dans
+  chaque bloc) ; un sélecteur préfixe ses favoris de « ★ ». Un CLASSEMENT ne se réordonne jamais : il
+  marque la ligne (fond doré léger + `FavoriteStar` non interactive). Couleur des favoris :
+  `--cm-gold`, jamais `--cm-section`.
 - **Pronostic / avis** → `AiMarketCard` ou le dessin de `MarketPicksBoard` (anneau, pronostic
   en gras, logo, pastilles).
 - **Erreur** → `.cm-note.is-danger` ; **avertissement** → `.cm-note.is-warning` ; **vide** →
@@ -133,6 +151,11 @@ Composer avec ces classes AVANT d'écrire du CSS propre :
 - Pas de texte en moins : on peut raccourcir un libellé d'en-tête de tableau si l'info-bulle
   (`title`) garde la version longue.
 - Pas de `!important`, pas de couleur en dur, pas de `px` de police sous 10 px.
+- Pas de `<select>` natif : toujours `AppSelect` (la liste native s'ouvre en blanc et bleu Windows).
+- Pas de classement pour une coupe à élimination directe : une compétition choisie librement
+  n'affiche sa table que si elle figure dans `standingsApi.listLeagues()` — sinon `/standings`
+  en calcule une fausse (l'EFL Cup en 90 lignes). Et pas de « sur N journées » tiré du
+  calendrier sans contrôle : il est souvent incomplet (voir `LeagueStandingsPanel`).
 - Les commentaires de code restent en français, dans le ton du projet (ils disent pourquoi).
 - Pas de source de données nommée par une API seule (« Cotes marché (Odds API) ») : on dit la
   vraie provenance — fournisseur, fichier sur ce PC, date du relevé (03/10/2026, Pierre : « le

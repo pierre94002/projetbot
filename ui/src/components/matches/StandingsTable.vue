@@ -4,6 +4,8 @@ import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
 import TeamCrest from '@/components/matches/TeamCrest.vue';
+import FavoriteStar from '@/components/common/FavoriteStar.vue';
+import { useFavoritesStore } from '@/stores/favoritesStore.js';
 import { formatShortDay } from '@/utils/format.js';
 
 const props = defineProps({
@@ -21,8 +23,16 @@ const props = defineProps({
   // Matchs reportés de la saison, pas encore joués (cf. standings.controller.js) :
   // { homeName, awayName, originalDate, newDate|null }. Chaque ligne porte en
   // plus `postponedMatches`, le nombre de ceux qui concernent l'équipe.
-  postponed: { type: Array, default: () => [] }
+  postponed: { type: Array, default: () => [] },
+  // La forme d'une équipe (03/10/2026, onglet Calendrier saison) : une
+  // fonction ligne -> ses derniers résultats, du plus récent au plus ancien,
+  // [{ result: V|N|D, opponent, score, date, home }]. Sans elle, pas de
+  // colonne « Forme » (la fenêtre « Classement » de la page Matchs).
+  formOf: { type: Function, default: null }
 });
+
+// Favoris (03/10/2026) : l'ordre du classement ne bouge pas, une équipe favorite porte son étoile.
+const favoris = useFavoritesStore();
 
 function zoneClass(description) {
   if (!description) return '';
@@ -35,6 +45,11 @@ function zoneClass(description) {
 }
 
 const hasDeductions = computed(() => props.rows.some((row) => row.deduction));
+
+/** La forme d'une ligne, de la plus ancienne à la plus récente (lecture de gauche à droite). */
+const formeChronologique = (row) => [...(props.formOf?.(row) ?? [])].reverse();
+const RESULTATS = { V: 'Victoire', N: 'Nul', D: 'Défaite' };
+const titreForme = (f) => `${RESULTATS[f.result] ?? f.result} ${f.score} ${f.home ? 'contre' : 'chez'} ${f.opponent} — ${formatShortDay(f.date)}`;
 
 const sourceLine = computed(() => {
   const saison = props.seasonLabel ? ` — saison ${props.seasonLabel}` : '';
@@ -75,15 +90,29 @@ const sourceLine = computed(() => {
             <th class="is-center standings__col-n" title="Perdus">P</th>
             <th class="standings__col-diff" title="Différence de buts">Diff</th>
             <th class="standings__col-pts" title="Points">Pts</th>
+            <th v-if="formOf" class="is-center standings__col-form" title="Cinq derniers matchs, du plus ancien au plus récent">Forme</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="row in rows" :key="row.teamId ?? row.teamName" class="standings-row" :class="zoneClass(row.description)" :title="row.description ?? ''">
+          <tr
+            v-for="row in rows"
+            :key="row.teamId ?? row.teamName"
+            class="standings-row"
+            :class="[zoneClass(row.description), { 'is-favorite': favoris.isFavoriteTeam(row.teamName, league, row.teamId ?? undefined) }]"
+            :title="row.description ?? ''"
+          >
             <td class="is-center standings__rank cm-numeric">{{ row.rank }}</td>
             <td class="is-left standings__team">
               <span class="standings__team-inner">
                 <TeamCrest :name="row.teamName" :league="league" :team-id="row.teamId ?? null" :size="22" class="standings__crest" />
                 <span class="standings__name cm-truncate">{{ row.teamName }}</span>
+                <FavoriteStar
+                  v-if="favoris.isFavoriteTeam(row.teamName, league, row.teamId ?? undefined)"
+                  active
+                  :interactive="false"
+                  :size="11"
+                  :label="row.teamName"
+                />
                 <span v-if="row.deduction" class="standings__deduction" :title="`Pénalité de ${Math.abs(row.deduction)} point(s)`">{{ row.deduction > 0 ? '−' : '' }}{{ Math.abs(row.deduction) }}</span>
                 <span
                   v-if="row.postponedMatches"
@@ -98,6 +127,17 @@ const sourceLine = computed(() => {
             <td class="is-center cm-numeric standings__lost">{{ row.lost }}</td>
             <td class="cm-numeric" :class="row.goalDiff >= 0 ? 'cm-positive' : 'cm-negative'">{{ row.goalDiff >= 0 ? '+' : '' }}{{ row.goalDiff }}</td>
             <td class="cm-numeric is-strong standings__points">{{ row.points }}</td>
+            <td v-if="formOf" class="is-center standings__form">
+              <span class="standings__form-dots">
+                <i
+                  v-for="(f, i) in formeChronologique(row)"
+                  :key="i"
+                  class="standings__form-dot"
+                  :class="`is-${f.result}`"
+                  :title="titreForme(f)"
+                />
+              </span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -126,6 +166,9 @@ const sourceLine = computed(() => {
       <span class="cm-chip"><i class="standings__dot standings__dot--uel" />Autre coupe continentale</span>
       <span class="cm-chip"><i class="standings__dot standings__dot--playoff" />Playoffs / promotion</span>
       <span class="cm-chip"><i class="standings__dot standings__dot--relegation" />Relégation</span>
+      <span v-if="formOf" class="cm-chip standings__legend-form">
+        <i class="standings__form-dot is-V" /><i class="standings__form-dot is-N" /><i class="standings__form-dot is-D" />Forme : victoire, nul, défaite (5 derniers)
+      </span>
       <span v-if="hasDeductions" class="cm-chip is-danger">−N : pénalité de points appliquée par la fédération</span>
       <span v-if="postponed.length" class="cm-chip is-warning standings__legend-postponed"><AppIcon name="clock" :size="11" />N : match(s) en retard, reporté(s) et pas encore joué(s)</span>
     </div>
@@ -401,6 +444,61 @@ th.standings__col-rank,
 
   .standings__points {
     font-size: 13px;
+  }
+}
+
+/* Une équipe favorite (03/10/2026) : sa ligne légèrement dorée, l'ordre ne change pas. */
+.standings-row.is-favorite > td {
+  background-color: rgba(var(--cm-gold-rgb) / 0.07);
+}
+
+/* ---------------------------------------------------------------- forme */
+th.standings__col-form {
+  width: 74px;
+}
+
+.standings__form-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.standings__form-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cm-surface-hover);
+}
+
+.standings__form-dot.is-V {
+  background: var(--cm-accent);
+}
+
+.standings__form-dot.is-N {
+  background: var(--cm-text-muted);
+}
+
+.standings__form-dot.is-D {
+  background: var(--cm-danger);
+}
+
+.standings__legend-form {
+  gap: 4px;
+}
+
+@container standings (max-width: 520px) {
+  th.standings__col-form {
+    width: 58px;
+  }
+
+  .standings__form-dots {
+    gap: 2px;
+  }
+
+  .standings__form-dot {
+    width: 7px;
+    height: 7px;
   }
 }
 </style>

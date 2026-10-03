@@ -10,6 +10,8 @@ import AppCard from '@/components/common/AppCard.vue';
 import BackButton from '@/components/common/BackButton.vue';
 import AppButton from '@/components/common/AppButton.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
+import FavoriteStar from '@/components/common/FavoriteStar.vue';
+import { useFavoritesStore } from '@/stores/favoritesStore.js';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import LeagueBadge from '@/components/matches/LeagueBadge.vue';
@@ -44,6 +46,10 @@ const props = defineProps({
 });
 
 const matchesStore = useMatchesStore();
+// Favoris (03/10/2026) : le bouton à côté du nom met le club en favori, par
+// son identifiant FotMob (porté par ses matchs) plutôt que par son nom.
+const favoris = useFavoritesStore();
+const idClub = computed(() => matchs.value.list.find((m) => m.teams?.[0]?.teamId)?.teams[0].teamId ?? undefined);
 
 const tab = ref('resume');
 const matchs = ref({ loading: false, error: null, teamName: null, list: [] });
@@ -293,7 +299,16 @@ watch(() => [props.name, props.league, props.matchId], load, { immediate: true }
       <div class="team__identity">
         <span class="team__crest"><TeamCrest :name="nom" :league="ligue" :size="72" /></span>
         <div class="team__titles">
-          <h2 class="cm-hero__title team__name">{{ nom }}</h2>
+          <div class="team__title-row">
+            <h2 class="cm-hero__title team__name">{{ nom }}</h2>
+            <FavoriteStar
+              variant="pill"
+              :active="favoris.isFavoriteTeam(nom, ligue, idClub)"
+              :label="nom"
+              :size="14"
+              @toggle="favoris.toggleTeam({ name: nom, league: ligue, id: idClub })"
+            />
+          </div>
           <div class="cm-hero__chips">
             <span v-if="ligue" class="cm-chip team__league"><LeagueBadge :league="ligue" /></span>
             <span v-if="joueurs.seasonLabel" class="cm-chip"><AppIcon name="calendar" :size="11" />Saison {{ joueurs.seasonLabel }}</span>
@@ -588,6 +603,15 @@ watch(() => [props.name, props.league, props.matchId], load, { immediate: true }
 .team__name {
   font-size: 26px;
   line-height: 1.1;
+}
+
+/* Le nom du club et son bouton de favori sur la même ligne. */
+.team__title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  min-width: 0;
 }
 
 /* La compétition dans une puce : son drapeau et son nom (LeagueBadge). */

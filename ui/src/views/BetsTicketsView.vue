@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue';
 import { useBetsStore } from '@/stores/betsStore.js';
+import { useFavoritesStore } from '@/stores/favoritesStore.js';
 import AppCard from '@/components/common/AppCard.vue';
 import AppTextField from '@/components/common/AppTextField.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
@@ -11,6 +12,8 @@ import LeagueBadge from '@/components/matches/LeagueBadge.vue';
 import { formatCurrency } from '@/utils/format.js';
 
 const betsStore = useBetsStore();
+// Favoris (03/10/2026) : leurs championnats d'abord.
+const favoris = useFavoritesStore();
 
 const searchQuery = ref('');
 
@@ -45,7 +48,12 @@ function groupByLeague(tickets) {
     if (!byLeague.has(leagueKey)) byLeague.set(leagueKey, []);
     byLeague.get(leagueKey).push(bet);
   }
-  return [...byLeague.entries()].map(([league, bets]) => ({ league, bets }));
+  // Les équipes d'un ticket : celles de toutes ses sélections.
+  const equipes = (bet) => (bet.legs ?? []).flatMap((leg) => [[leg.homeName, leg.league], [leg.awayName, leg.league]]);
+  return favoris.favoritesFirst(
+    [...byLeague.entries()].map(([league, bets]) => ({ league, bets: favoris.favoritesFirst(bets, { teams: equipes }) })),
+    { league: (g) => g.league, teams: (g) => g.bets.flatMap(equipes) }
+  );
 }
 
 const wonByLeague = computed(() => groupByLeague(wonTickets.value));

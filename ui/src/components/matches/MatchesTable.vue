@@ -1,10 +1,11 @@
 <script setup>
-import { computed, reactive, watch } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import AppIcon from '@/components/common/AppIcon.vue';
-import MatchCard from './MatchCard.vue';
-import FormBadges from './FormBadges.vue';
+import FavoriteStar from '@/components/common/FavoriteStar.vue';
+import MatchListCard from './MatchListCard.vue';
 import LeagueBadge from './LeagueBadge.vue';
-import { formatOdds, formatDay, formatShortDay } from '@/utils/format.js';
+import { useFavoritesStore } from '@/stores/favoritesStore.js';
+import { formatDay } from '@/utils/format.js';
 import { groupMatchesByLeague, groupMatchesByDate } from '@/utils/leagueDisplay.js';
 import { liveNow } from '@/utils/liveClock.js';
 import { computeMatchStatus } from '@/utils/matchStatus.js';
@@ -17,6 +18,13 @@ import { computeMatchStatus } from '@/utils/matchStatus.js';
  * reste collée en haut pendant qu'on fait défiler ses matchs ; dessous, les
  * jours en sous-titres, et une MatchCard par rencontre avec la forme, le
  * badge IA, le report et les cotes 1 / N / 2 à droite.
+ *
+ * Favoris (03/10/2026, Pierre : « toujours affichés en premier par rapport
+ * aux autres ») : en tête, un bloc « Mes équipes favorites » ouvert avec
+ * tous les matchs de ces équipes, toutes compétitions confondues ; puis les
+ * championnats favoris, dans l'ordre où ils ont été ajoutés ; puis les
+ * autres, dans leur ordre habituel. Une étoile sur chaque en-tête de
+ * championnat, et à côté de chaque club, ajoute ou retire un favori.
  */
 const props = defineProps({
   matches: { type: Array, required: true },
@@ -74,7 +82,41 @@ const expandedLeagues = reactive(new Set());
 // composite "championnat|jour" puisque la même date apparaît dans plusieurs
 // championnats et doit se replier indépendamment dans chacun.
 const expandedDates = reactive(new Set());
-const groupedMatches = computed(() => groupMatchesByLeague(props.matches));
+const favoris = useFavoritesStore();
+
+// Les championnats favoris d'abord, dans l'ordre des favoris ; les autres
+// gardent leur ordre (tri stable, rang égal pour tous les non-favoris).
+const groupedMatches = computed(() =>
+  [...groupMatchesByLeague(props.matches)].sort((a, b) => {
+    const ra = favoris.leagueRank(a.league);
+    const rb = favoris.leagueRank(b.league);
+    return ra === rb ? 0 : ra < rb ? -1 : 1;
+  })
+);
+
+// Les matchs des équipes favorites, toutes compétitions confondues, par coup
+// d'envoi : le bloc de tête. Ils restent aussi dans leur championnat. Rien à
+// calculer (ni identifiant à demander) tant qu'aucune équipe n'est favorite.
+const matchsDesFavoris = computed(() => {
+  if (!favoris.teams.length) return [];
+  return props.matches
+    .filter((m) => favoris.isFavoriteTeam(m.home, m.league) || favoris.isFavoriteTeam(m.away, m.league))
+    .sort((a, b) => String(a.commenceTime ?? '').localeCompare(String(b.commenceTime ?? '')));
+});
+
+// Les mêmes, rangés par compétition (championnats favoris d'abord, puis la
+// compétition du prochain match) : chaque carte porte sa date, et le nom de la
+// compétition passe en sous-titre au lieu d'une colonne qui tronquait les clubs.
+const favorisParCompetition = computed(() =>
+  [...groupMatchesByLeague(matchsDesFavoris.value)].sort((a, b) => {
+    const ra = favoris.leagueRank(a.league);
+    const rb = favoris.leagueRank(b.league);
+    return ra === rb ? 0 : ra < rb ? -1 : 1;
+  })
+);
+
+// Ouvert par défaut, contrairement aux championnats : c'est ce qu'on vient voir.
+const favorisOuverts = ref(true);
 
 function dateGroupKey(league, dayKey) {
   return `${league}|${dayKey}`;
@@ -164,27 +206,71 @@ function formatDayHeader(dayKey) {
   return dayKey === 'Date inconnue' ? dayKey : formatDay(dayKey);
 }
 
-// Présentation seulement : le favori des bookmakers (la cote 1X2 la plus
-// basse) ressort en couleur de section dans la carte. Rien n'est calculé
-// pour le moteur ici ; sans deux cotes valables, personne n'est mis en avant.
-function coteFavorite(match) {
-  const cotes = [
-    ['1', Number(match.marketOdds?.odds1)],
-    ['N', Number(match.marketOdds?.oddsDraw)],
-    ['2', Number(match.marketOdds?.odds2)]
-  ].filter(([, cote]) => Number.isFinite(cote) && cote > 1);
-  if (cotes.length < 2) return null;
-  return cotes.reduce((meilleure, c) => (c[1] < meilleure[1] ? c : meilleure))[0];
-}
 </script>
 
 <template>
   <div class="match-list">
+    <!-- Les matchs des équipes favorites, toutes compétitions confondues (03/10/2026). -->
+    <section
+      v-if="matchsDesFavoris.length"
+      class="league-group league-group--favoris"
+      :class="{ 'is-open': favorisOuverts, 'has-live': matchsDesFavoris.some(isLive) }"
+    >
+      <div
+        class="league-group__header"
+        role="button"
+        tabindex="0"
+        :aria-expanded="favorisOuverts"
+        @click="favorisOuverts = !favorisOuverts"
+        @keydown.enter="favorisOuverts = !favorisOuverts"
+      >
+        <span class="league-group__badge league-group__name league-group__favoris-title">
+          <FavoriteStar active :interactive="false" :size="15" label="Mes équipes" />
+          Mes équipes favorites
+        </span>
+        <div class="league-group__meta">
+          <span v-if="matchsDesFavoris.some(isLive)" class="cm-chip is-danger">
+            <span class="cm-live-dot league-group__live-dot"></span>{{ matchsDesFavoris.filter(isLive).length }} en direct
+          </span>
+          <span v-if="matchsDesFavoris.some(isUpcomingToday)" class="cm-chip is-accent league-group__today">
+            <AppIcon name="clock" :size="11" />{{ matchsDesFavoris.filter(isUpcomingToday).length }} aujourd'hui
+          </span>
+        </div>
+        <span class="league-group__count cm-text-muted cm-numeric" title="Rencontres de vos équipes favorites">{{ matchsDesFavoris.length }}</span>
+        <span class="league-group__toggle">
+          <AppIcon name="chevronRight" :size="14" class="league-group__chevron" :class="{ 'league-group__chevron--collapsed': favorisOuverts }" />
+        </span>
+      </div>
+      <div v-if="favorisOuverts" class="league-group__matches">
+        <template v-for="sousGroupe in favorisParCompetition" :key="sousGroupe.league">
+          <!-- La compétition en sous-titre : son drapeau, son nom, son nombre de matchs. -->
+          <div class="fav-group__league">
+            <LeagueBadge :league="sousGroupe.league" />
+            <span class="date-group__rule"></span>
+            <span class="date-group__count cm-text-muted cm-numeric">{{ sousGroupe.matches.length }} match{{ sousGroupe.matches.length > 1 ? 's' : '' }}</span>
+          </div>
+          <div class="date-group__cards cm-stagger">
+            <MatchListCard
+              v-for="match in sousGroupe.matches"
+              :key="match.matchId"
+              :match="match"
+              :carte="versCarte(match)"
+              :active="match.matchId === selectedMatchId"
+              :form="formByMatchId[match.matchId] ?? null"
+              :has-ai="Boolean(aiAnalysisByMatchId[match.matchId])"
+              date-display="block"
+              @select="$emit('select', match)"
+            />
+          </div>
+        </template>
+      </div>
+    </section>
+
     <section
       v-for="group in groupedMatches"
       :key="group.league"
       class="league-group"
-      :class="{ 'is-open': expandedLeagues.has(group.league), 'has-live': group.matches.some(isLive) }"
+      :class="{ 'is-open': expandedLeagues.has(group.league), 'has-live': group.matches.some(isLive), 'is-favorite': favoris.isFavoriteLeague(group.league) }"
     >
       <!-- La ligne d'en-tête de la compétition : drapeau et nom, l'état du jour
            en puces, le nombre de rencontres, le classement, le repli. Elle reste
@@ -197,7 +283,17 @@ function coteFavorite(match) {
         @click="toggleCollapse(group.league)"
         @keydown.enter="toggleCollapse(group.league)"
       >
-        <LeagueBadge :league="group.league" class="league-group__badge" />
+        <span class="league-group__badge league-group__name" :class="{ 'has-star': group.league !== 'Autres rencontres' }">
+          <FavoriteStar
+            v-if="group.league !== 'Autres rencontres'"
+            :active="favoris.isFavoriteLeague(group.league)"
+            kind="league"
+            :label="group.league"
+            :size="14"
+            @toggle="favoris.toggleLeague(group.league)"
+          />
+          <LeagueBadge :league="group.league" />
+        </span>
 
         <div class="league-group__meta">
           <span
@@ -262,50 +358,16 @@ function coteFavorite(match) {
             />
           </div>
           <div v-if="expandedDates.has(dateGroupKey(group.league, dateGroup.dayKey))" class="date-group__cards cm-stagger">
-            <MatchCard
+            <MatchListCard
               v-for="match in dateGroup.matches"
               :key="match.matchId"
-              :match="versCarte(match)"
-              clickable
+              :match="match"
+              :carte="versCarte(match)"
               :active="match.matchId === selectedMatchId"
-              date-display="none"
-              :show-competition="false"
-              team-links
-              class="match-list__card"
+              :form="formByMatchId[match.matchId] ?? null"
+              :has-ai="Boolean(aiAnalysisByMatchId[match.matchId])"
               @select="$emit('select', match)"
-            >
-              <template #home-extra>
-                <FormBadges v-if="formByMatchId[match.matchId]" :form="formByMatchId[match.matchId].home?.form" class="match-row__form" />
-              </template>
-              <template #away-extra>
-                <FormBadges v-if="formByMatchId[match.matchId]" :form="formByMatchId[match.matchId].away?.form" class="match-row__form" />
-              </template>
-              <template #aside>
-                <span v-if="aiAnalysisByMatchId[match.matchId]" class="match-row__ai-badge" title="Analyse IA disponible pour ce match">
-                  <AppIcon name="bolt" :size="9" />IA
-                </span>
-                <span
-                  v-if="match.postponedFrom"
-                  class="match-row__postponed"
-                  :title="`Match reporté : il était prévu le ${formatShortDay(match.postponedFrom)}`"
-                >
-                  Reporté du {{ formatShortDay(match.postponedFrom) }}
-                </span>
-                <!-- Rencontre connue par le calendrier mais pas encore cotée
-                     (divisions inférieures, Russie, Chine : les bookmakers
-                     n'ouvrent qu'à l'approche). Trois tirets se liraient comme
-                     un échec de chargement, d'où la mention explicite. -->
-                <span v-if="match.hasOdds === false" class="match-row__odds match-row__odds--none" title="Aucun bookmaker n'a encore publié de cote pour ce match">
-                  pas encore coté
-                </span>
-                <!-- Les trois cotes, chacune sous son repère 1 / N / 2 ; le favori en couleur de section. -->
-                <span v-else class="match-row__odds" title="Cotes 1 / N / 2">
-                  <span class="match-row__odd" :class="{ 'is-favori': coteFavorite(match) === '1' }"><i>1</i>{{ formatOdds(match.marketOdds?.odds1) }}</span>
-                  <span class="match-row__odd match-row__odd--draw" :class="{ 'is-favori': coteFavorite(match) === 'N' }"><i>N</i>{{ formatOdds(match.marketOdds?.oddsDraw) }}</span>
-                  <span class="match-row__odd" :class="{ 'is-favori': coteFavorite(match) === '2' }"><i>2</i>{{ formatOdds(match.marketOdds?.odds2) }}</span>
-                </span>
-              </template>
-            </MatchCard>
+            />
           </div>
         </template>
       </div>
@@ -575,95 +637,79 @@ function coteFavorite(match) {
   padding: 2px 0 8px;
 }
 
-/* --------------------------------------------------------- la carte */
-/* Cotes, badge IA et report à droite de la carte : colonne assez large. */
-.match-list__card {
-  --mcard-aside: 236px;
-}
-
-.match-row__form {
-  flex-shrink: 0;
-}
-
-.match-row__ai-badge {
+/* ------------------------------------------------------------ favoris */
+/* L'étoile et le nom du championnat, côte à côte. */
+.league-group__name {
   display: inline-flex;
+  flex: 1;
   align-items: center;
-  gap: 3px;
-  padding: 2px 7px;
-  border-radius: 999px;
-  background: var(--cm-info-soft);
-  color: var(--cm-info);
-  font-size: 10px;
+  gap: 4px;
+  min-width: 0;
+}
+
+/* L'étoile (bouton de 26 px) déborde à gauche : le drapeau reste aligné sur les autres en-têtes. */
+.league-group__name.has-star {
+  margin-left: -6px;
+}
+
+/* Un championnat favori : le liseré doré, même fermé. */
+.league-group.is-favorite .league-group__header::before {
+  background: var(--cm-gold);
+}
+
+.league-group.is-favorite.is-open .league-group__header::before {
+  background: linear-gradient(180deg, var(--cm-gold), var(--cm-section));
+}
+
+/* Le bloc « Mes équipes favorites » : doré, en tête. */
+.league-group--favoris {
+  border-color: rgba(var(--cm-gold-rgb) / 0.32);
+}
+
+.league-group--favoris.is-open {
+  border-color: rgba(var(--cm-gold-rgb) / 0.4);
+}
+
+.league-group--favoris .league-group__header::before,
+.league-group--favoris.is-open .league-group__header::before {
+  background: var(--cm-gold);
+}
+
+.league-group--favoris.is-open .league-group__header {
+  background: linear-gradient(90deg, rgba(var(--cm-gold-rgb) / 0.12), transparent 55%), var(--cm-surface-alt);
+}
+
+.league-group--favoris.is-open .league-group__toggle {
+  background: var(--cm-gold-soft);
+  color: var(--cm-gold);
+}
+
+/* Le rouge « en direct » passe avant le doré des favoris. */
+.league-group.is-favorite.has-live .league-group__header::before,
+.league-group.is-favorite.is-open.has-live .league-group__header::before,
+.league-group--favoris.has-live .league-group__header::before,
+.league-group--favoris.is-open.has-live .league-group__header::before {
+  background: var(--cm-danger);
+}
+
+/* Une compétition dans le bloc des favoris : un sous-titre discret, sans repli. */
+.fav-group__league {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 4px 2px;
+}
+
+.fav-group__league:first-child {
+  padding-top: 2px;
+}
+
+.league-group__favoris-title {
+  gap: 8px;
+  margin-left: 0;
+  font-size: 13.5px;
   font-weight: 800;
-  letter-spacing: 0.3px;
-  white-space: nowrap;
-}
-
-.match-row__postponed {
-  padding: 2px 7px;
-  border-radius: 999px;
-  background: var(--cm-warning-soft);
-  color: var(--cm-warning);
-  font-size: 10px;
-  font-weight: 700;
-  line-height: 1.4;
-  white-space: nowrap;
-}
-
-.match-row__odds {
-  display: inline-flex;
-  gap: 5px;
-}
-
-.match-row__odds--none {
-  align-items: center;
-  padding: 4px 9px;
-  border-radius: 999px;
-  border: 1px dashed var(--cm-border);
-  font-size: 10.5px;
-  color: var(--cm-text-muted);
-  white-space: nowrap;
-}
-
-/* Une cote : son repère (1, N, 2) en tout petit au-dessus du chiffre. */
-.match-row__odd {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-width: 46px;
-  padding: 3px 0 4px;
-  border-radius: var(--cm-radius-sm);
-  background: var(--cm-surface-hover);
-  font-size: 12.5px;
-  font-weight: 700;
-  line-height: 1.15;
-  font-variant-numeric: tabular-nums;
   color: var(--cm-text-primary);
-  transition: background var(--cm-transition), color var(--cm-transition);
-}
-
-.match-row__odd i {
-  font-style: normal;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.4px;
-  color: var(--cm-text-muted);
-}
-
-.match-row__odd--draw {
-  color: var(--cm-text-secondary);
-}
-
-/* Le favori des bookmakers (la cote la plus basse). */
-.match-row__odd.is-favori {
-  background: var(--cm-section-soft);
-  color: var(--cm-section);
-}
-
-.match-row__odd.is-favori i {
-  color: inherit;
-  opacity: 0.8;
 }
 
 /* Panneau étroit : l'en-tête sur deux lignes (compétition, compte et repli ;
@@ -698,14 +744,6 @@ function coteFavorite(match) {
   .league-group__standings-link {
     grid-area: link;
     justify-self: end;
-  }
-
-  .match-list__card {
-    --mcard-aside: auto;
-  }
-
-  .match-row__odd {
-    min-width: 40px;
   }
 }
 </style>

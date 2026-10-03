@@ -19,6 +19,7 @@ import { formatDay, formatPercent } from '@/utils/format.js';
 import { marketBreakdownLabel } from '@/utils/betTrends.js';
 import { matchResultsApi } from '@/services/matchResultsApi.js';
 import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
+import { useFavoritesStore } from '@/stores/favoritesStore.js';
 import { useMatchAiAnalysisStore } from '@/stores/matchAiAnalysisStore.js';
 import { usePredictionSettlement } from '@/composables/usePredictionSettlement.js';
 
@@ -26,6 +27,8 @@ const route = useRoute();
 const predictionsStore = usePredictionsStore();
 const betsStore = useBetsStore();
 const matchesStore = useMatchesStore();
+// Favoris (03/10/2026) : leurs championnats et leurs matchs d'abord.
+const favoris = useFavoritesStore();
 const teamStatsModalStore = useTeamStatsModalStore();
 const matchAiAnalysisStore = useMatchAiAnalysisStore();
 const { settling, settleMatch } = usePredictionSettlement();
@@ -205,7 +208,14 @@ const groupedByLeague = computed(() => {
     if (!byLeague.has(leagueKey)) byLeague.set(leagueKey, []);
     byLeague.get(leagueKey).push(group);
   }
-  return [...byLeague.entries()].map(([league, groups]) => ({ league, groups }));
+  const championnats = [...byLeague.entries()].map(([league, groups]) => ({
+    league,
+    groups: favoris.favoritesFirst(groups, { teams: (g) => [[g.homeName, g.league], [g.awayName, g.league]] })
+  }));
+  return favoris.favoritesFirst(championnats, {
+    league: (c) => c.league,
+    teams: (c) => c.groups.flatMap((g) => [[g.homeName, g.league], [g.awayName, g.league]])
+  });
 });
 
 // Ouverts par défaut (contrairement à Matchs/Mes paris) : le nombre de

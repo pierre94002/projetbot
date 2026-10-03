@@ -21,6 +21,8 @@ import AppCard from '@/components/common/AppCard.vue';
 import BackButton from '@/components/common/BackButton.vue';
 import AppButton from '@/components/common/AppButton.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
+import FavoriteStar from '@/components/common/FavoriteStar.vue';
+import { useFavoritesStore } from '@/stores/favoritesStore.js';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import LeagueBadge from '@/components/matches/LeagueBadge.vue';
@@ -58,6 +60,8 @@ const matchesStore = useMatchesStore();
 const aiStore = useMatchAiAnalysisStore();
 const toastStore = useToastStore();
 const teamStatsModalStore = useTeamStatsModalStore();
+// Favoris (03/10/2026) : une étoile à côté de chaque club et du championnat.
+const favoris = useFavoritesStore();
 
 const tab = ref('resume');
 const match = ref(null);
@@ -278,7 +282,16 @@ const issues = computed(() => ({ home: `${match.value?.home} gagne`, draw: 'Matc
         <div class="cm-hero__top">
           <span class="cm-hero__chips">
             <span class="cm-eyebrow upcoming__eyebrow"><AppIcon name="matches" :size="12" />Match à venir</span>
-            <span class="cm-chip upcoming__league"><LeagueBadge :league="match.league" /></span>
+            <span class="upcoming__league-wrap">
+              <span class="cm-chip upcoming__league"><LeagueBadge :league="match.league" /></span>
+              <FavoriteStar
+                :active="favoris.isFavoriteLeague(match.league)"
+                kind="league"
+                :label="match.league"
+                :size="13"
+                @toggle="favoris.toggleLeague(match.league)"
+              />
+            </span>
             <span v-if="journee" class="cm-chip"><AppIcon name="calendar" :size="11" />{{ journee }}</span>
           </span>
           <span v-if="matchStatus === 'live'" class="cm-chip is-danger upcoming__live"><span class="cm-live-dot"></span>En cours</span>
@@ -286,6 +299,13 @@ const issues = computed(() => ({ home: `${match.value?.home} gagne`, draw: 'Matc
 
         <div class="upcoming__matchup">
           <div class="upcoming__club is-home">
+            <FavoriteStar
+              :active="favoris.isFavoriteTeam(match.home, match.league)"
+              :label="match.home"
+              :size="16"
+              class="upcoming__fav"
+              @toggle="favoris.toggleTeam({ name: match.home, league: match.league })"
+            />
             <button type="button" class="cm-team-link upcoming__team" @click="teamStatsModalStore.openFor(match.home, match.league, match.matchId)">
               {{ match.home }}
             </button>
@@ -297,6 +317,13 @@ const issues = computed(() => ({ home: `${match.value?.home} gagne`, draw: 'Matc
             <button type="button" class="cm-team-link upcoming__team" @click="teamStatsModalStore.openFor(match.away, match.league, match.matchId)">
               {{ match.away }}
             </button>
+            <FavoriteStar
+              :active="favoris.isFavoriteTeam(match.away, match.league)"
+              :label="match.away"
+              :size="16"
+              class="upcoming__fav"
+              @toggle="favoris.toggleTeam({ name: match.away, league: match.league })"
+            />
           </div>
         </div>
 
@@ -543,6 +570,18 @@ const issues = computed(() => ({ home: `${match.value?.home} gagne`, draw: 'Matc
 /* La compétition (drapeau + nom) dans une puce : son nom au calibre des puces. */
 .upcoming__league {
   padding-left: 5px;
+}
+
+/* La puce du championnat et son étoile de favori. */
+.upcoming__league-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* L'étoile d'un club, contre son nom : le club et son étoile ne font qu'un. */
+.upcoming .upcoming__fav {
+  margin: 0 -8px;
 }
 
 .upcoming__league :deep(.league-badge__name) {

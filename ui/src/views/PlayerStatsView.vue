@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { matchStatsApi } from '@/services/matchStatsApi.js';
 import { standingsApi } from '@/services/standingsApi.js';
 import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
+import { useFavoritesStore } from '@/stores/favoritesStore.js';
 import AppCard from '@/components/common/AppCard.vue';
 import AppSelect from '@/components/common/AppSelect.vue';
 import AppTextField from '@/components/common/AppTextField.vue';
@@ -18,12 +19,14 @@ import PlayerFlag from '@/components/matches/PlayerFlag.vue';
 /**
  * Classement des joueurs d'un championnat, servi par le magasin local
  * (FotMob/ESPN). Les 810 000 lignes joueur collectées n'avaient aucun écran :
- * le seul existant, dans "Compo & joueurs", interroge API-Football, dont le
- * plan gratuit s'arrête à 2024 et ne couvre pas les championnats ajoutés
- * depuis (Écosse, Grèce, Turquie, Portugal, Belgique, Pays-Bas).
+ * le seul existant, dans l'ancien onglet "Compo & joueurs" (retiré le
+ * 03/10/2026), interrogeait API-Football, dont le plan gratuit s'arrête à
+ * 2024 et ne couvre pas les championnats ajoutés depuis (Écosse, Grèce,
+ * Turquie, Portugal, Belgique, Pays-Bas).
  */
 // Un clic sur l'équipe d'un joueur ouvre la page de l'équipe (cf. TeamView.vue).
 const teamStatsModalStore = useTeamStatsModalStore();
+const favoris = useFavoritesStore();
 
 // Compétition, saison et poste gardés dans l'adresse (?ligue=&saison=&poste=) :
 // « Retour » depuis la page d'une équipe ramène au même tableau, pas à la
@@ -172,7 +175,19 @@ const roleNoun = computed(() => ROLE_NOUN[role.value] ?? 'joueur');
 const roleLabel = computed(() => ROLE_OPTIONS.find((o) => o.value === role.value)?.label ?? 'Joueurs');
 const activeColumn = computed(() => COLUMNS.value.find((c) => c.key === sortKey.value) ?? null);
 
-const leagueOptions = computed(() => leagues.value.map((l) => ({ value: l, label: formatLeagueOptionLabel(l) })));
+// Les championnats favoris d'abord (03/10/2026), marqués d'une étoile.
+const leagueOptions = computed(() =>
+  favoris.favoritesFirst(leagues.value, { league: (l) => l }).map((l) => {
+    const favori = favoris.isFavoriteLeague(l);
+    return {
+      value: l,
+      label: formatLeagueOptionLabel(l),
+      league: l,
+      favorite: favori,
+      group: favoris.leagues.length ? (favori ? 'Favoris' : 'Toutes les compétitions') : undefined
+    };
+  })
+);
 
 const seasonOptions = computed(() =>
   // Le libellé vient du serveur : « 2025 » pour un championnat d'année
@@ -267,9 +282,22 @@ onMounted(async () => {
   if (ROLE_OPTIONS.some((o) => o.value === route.query.poste)) role.value = route.query.poste;
   const ligueDemandee = typeof route.query.ligue === 'string' ? route.query.ligue : null;
   if (!selectedLeague.value && leagues.value.length) {
-    selectedLeague.value = leagues.value.includes(ligueDemandee) ? ligueDemandee : leagues.value[0];
+    if (leagues.value.includes(ligueDemandee)) selectedLeague.value = ligueDemandee;
+    else choisirParDefaut();
   }
 });
+
+// Le choix par défaut (le premier favori) suit l'arrivée des favoris, tant
+// que la compétition affichée est ce choix automatique et non un choix de
+// l'utilisateur ou un lien (?ligue=).
+let choixAutomatique = null;
+function choisirParDefaut() {
+  const premier = leagueOptions.value[0]?.value;
+  if (!premier || (selectedLeague.value && selectedLeague.value !== choixAutomatique)) return;
+  choixAutomatique = premier;
+  selectedLeague.value = premier;
+}
+watch(() => favoris.leagues.map((l) => l.name).join('|'), choisirParDefaut);
 </script>
 
 <template>

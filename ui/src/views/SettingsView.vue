@@ -18,6 +18,7 @@ import AiConnectionForm from '@/components/settings/AiConnectionForm.vue';
 import AiAnalysisPanel from '@/components/settings/AiAnalysisPanel.vue';
 import MatchStatsCoveragePanel from '@/components/settings/MatchStatsCoveragePanel.vue';
 import RefreshStatusPanel from '@/components/settings/RefreshStatusPanel.vue';
+import FavoritesPanel from '@/components/settings/FavoritesPanel.vue';
 
 /**
  * Réglages — section cyan. Refonte visuelle du 01/10/2026 (guide ui/DESIGN.md) :
@@ -280,6 +281,16 @@ async function handleRunAiAnalysis(limit) {
           l'IA : tout ce qui se règle, au même endroit. Les poids du modèle se lisent à côté de la connexion IA, à titre indicatif.
         </p>
       </section>
+
+      <!-- Les favoris (03/10/2026) : équipes et championnats affichés en premier. -->
+      <AppCard
+        title="Favoris"
+        subtitle="Vos équipes et vos championnats, toujours affichés en premier"
+        eyebrow="Affichage"
+        icon="star"
+      >
+        <FavoritesPanel />
+      </AppCard>
 
       <AppCard
         title="Paramètres du moteur"
