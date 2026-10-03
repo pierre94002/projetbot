@@ -1,11 +1,16 @@
 <script setup>
 import { computed, ref } from 'vue';
+import AppIcon from '@/components/common/AppIcon.vue';
 
 /**
  * Stats individuelles des joueurs sur UN match (actualisation automatique FotMob, cf.
  * server/scripts/merge-match-stats.mjs). Une colonne sans aucune valeur pour
  * l'équipe affichée est masquée plutôt que remplie de "—" : une trentaine de
  * colonnes vides rendrait le tableau illisible dans la modale.
+ *
+ * Refonte du 01/10/2026 : titre en petites capitales, le choix de l'équipe en
+ * barre segmentée (l'actif en couleur de section), le tableau commun
+ * `.cm-table`, les remplaçants en grisé, la précision en note sous le tableau.
  */
 const props = defineProps({
   teamName: { type: String, required: true },
@@ -62,128 +67,156 @@ const hasStarterInfo = computed(() => displayedPlayers.value.some((p) => typeof 
 
 <template>
   <div class="match-players">
-    <p class="match-players__title">Statistiques des joueurs sur ce match</p>
+    <p class="cm-section-title match-players__title">
+      Statistiques des joueurs sur ce match
+      <span class="cm-section-title__hint">feuille de match FotMob</span>
+    </p>
 
     <p v-if="!hasAnyPlayers" class="cm-text-muted match-players__note">
-      Aucune statistique joueur confirmée pour ce match (source indisponible lors de l'import).
+      <AppIcon name="info" :size="12" />
+      <span>Aucune statistique joueur confirmée pour ce match (source indisponible lors de l'import).</span>
     </p>
 
     <template v-else>
-      <div class="match-players__tabs">
-        <button type="button" class="match-players__tab" :class="{ 'match-players__tab--active': activeSide === 'team' }" @click="activeSide = 'team'">
-          {{ teamName }} ({{ players.team?.length ?? 0 }})
+      <!-- Le choix de l'équipe : barre segmentée, même dessin que TabbedView. -->
+      <div class="match-players__tabs" role="tablist">
+        <button type="button" role="tab" class="match-players__tab" :class="{ 'match-players__tab--active': activeSide === 'team' }" :aria-selected="activeSide === 'team'" @click="activeSide = 'team'">
+          {{ teamName }} <span class="match-players__count cm-numeric">{{ players.team?.length ?? 0 }}</span>
         </button>
-        <button type="button" class="match-players__tab" :class="{ 'match-players__tab--active': activeSide === 'opponent' }" @click="activeSide = 'opponent'">
-          {{ opponentName }} ({{ players.opponent?.length ?? 0 }})
+        <button type="button" role="tab" class="match-players__tab" :class="{ 'match-players__tab--active': activeSide === 'opponent' }" :aria-selected="activeSide === 'opponent'" @click="activeSide = 'opponent'">
+          {{ opponentName }} <span class="match-players__count cm-numeric">{{ players.opponent?.length ?? 0 }}</span>
         </button>
       </div>
 
-      <p v-if="displayedPlayers.length === 0" class="cm-text-muted match-players__note">Aucun joueur importé pour cette équipe.</p>
+      <p v-if="displayedPlayers.length === 0" class="cm-text-muted match-players__note">
+        <AppIcon name="info" :size="12" />
+        <span>Aucun joueur importé pour cette équipe.</span>
+      </p>
 
-      <div v-else class="match-players__wrap">
-        <table class="match-players__table">
+      <div v-else class="cm-table-wrap match-players__wrap">
+        <table class="cm-table match-players__table">
           <thead>
             <tr>
               <th>Joueur</th>
-              <th>Poste</th>
+              <th class="is-left">Poste</th>
               <th v-for="col in visibleColumns" :key="col.key" :title="col.title ?? col.label">{{ col.label }}</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(p, index) in displayedPlayers" :key="`${activeSide}-${index}-${p.name}`" :class="{ 'match-players__sub': p.starter === false }">
               <td class="match-players__name cm-truncate" :title="p.name">{{ p.name }}</td>
-              <td class="cm-text-muted">{{ p.position ?? '—' }}</td>
+              <td class="is-left cm-text-muted">{{ p.position ?? '—' }}</td>
               <td v-for="col in visibleColumns" :key="col.key" class="cm-numeric">{{ cell(p, col) }}</td>
             </tr>
           </tbody>
         </table>
       </div>
-      <p class="cm-text-muted match-players__note"><template v-if="hasStarterInfo">Remplaçants en grisé · </template>colonnes sans aucune donnée masquées.</p>
+      <p class="cm-text-muted match-players__note">
+        <AppIcon name="info" :size="12" />
+        <span><template v-if="hasStarterInfo">Remplaçants en grisé · </template>colonnes sans aucune donnée masquées.</span>
+      </p>
     </template>
   </div>
 </template>
 
 <style scoped>
 .match-players {
-  padding: 10px 4px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 14px;
   border-top: 1px solid var(--cm-border-soft);
 }
 
 .match-players__title {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  color: var(--cm-text-muted);
-  margin-bottom: 8px;
+  margin: 0;
 }
 
+/* La barre segmentée : fond discret, l'équipe active en relief couleur de section. */
 .match-players__tabs {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 8px;
+  display: inline-flex;
   flex-wrap: wrap;
+  gap: 3px;
+  align-self: flex-start;
+  max-width: 100%;
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid var(--cm-border-soft);
+  background: rgb(var(--cm-glass-tint) / var(--cm-glass-alpha-1));
 }
 
 .match-players__tab {
-  padding: 4px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 13px;
   border-radius: 999px;
-  border: 1px solid var(--cm-border);
-  background: none;
+  border: 0;
+  background: transparent;
   color: var(--cm-text-secondary);
-  font-size: 11px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
   cursor: pointer;
+  transition: background var(--cm-transition), color var(--cm-transition), box-shadow var(--cm-transition);
+}
+
+.match-players__tab:hover {
+  color: var(--cm-text-primary);
+  background: rgb(var(--cm-glass-tint) / var(--cm-glass-alpha-2));
 }
 
 .match-players__tab--active {
-  background: var(--cm-accent);
-  border-color: var(--cm-accent);
-  color: #fff;
+  background: var(--cm-section);
+  color: var(--cm-section-on);
+  box-shadow: 0 4px 14px rgba(var(--cm-section-rgb) / 0.3);
 }
 
-.match-players__wrap {
-  overflow-x: auto;
+.match-players__count {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgb(var(--cm-glass-tint) / 0.08);
+  font-size: 10.5px;
+  font-weight: 700;
 }
 
+.match-players__tab--active .match-players__count {
+  background: rgb(var(--cm-glass-tint) / 0.22);
+}
+
+/* ----------------------------------------------------------- tableau */
 .match-players__table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .match-players__table th,
 .match-players__table td {
-  padding: 4px 6px;
-  text-align: right;
-  border-bottom: 1px solid var(--cm-border-soft);
-  white-space: nowrap;
-}
-
-.match-players__table th {
-  font-size: 9.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  color: var(--cm-text-muted);
-  font-weight: 600;
-}
-
-.match-players__table th:first-child,
-.match-players__table td:first-child,
-.match-players__table th:nth-child(2),
-.match-players__table td:nth-child(2) {
-  text-align: left;
+  padding: 7px 10px;
 }
 
 .match-players__name {
-  font-weight: 600;
-  max-width: 130px;
+  max-width: 160px;
+  font-weight: 700;
+  color: var(--cm-text-primary);
 }
 
+/* Les remplaçants en grisé : ils ont moins joué, ils pèsent moins. */
 .match-players__sub td {
-  opacity: 0.65;
+  opacity: 0.6;
 }
 
 .match-players__note {
-  font-size: 10.5px;
-  margin-top: 6px;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.match-players__note > :first-child {
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 </style>

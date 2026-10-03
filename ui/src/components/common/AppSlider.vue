@@ -43,44 +43,51 @@ const fillPercent = computed(() => ((model.value - props.min) / (props.max - pro
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  gap: 10px;
 }
 
 .field__label {
   font-size: 12.5px;
+  font-weight: 600;
   color: var(--cm-text-secondary);
 }
 
 .field__value {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--cm-accent);
+  padding: 1px 9px;
+  border-radius: 999px;
+  background: var(--cm-section-soft);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--cm-section);
 }
 
 .field__range {
   -webkit-appearance: none;
   width: 100%;
-  height: 5px;
+  height: 6px;
   border-radius: 3px;
-  background: linear-gradient(to right, var(--cm-accent) var(--fill), var(--cm-border) var(--fill));
+  background: linear-gradient(to right, var(--cm-section) var(--fill), var(--cm-border) var(--fill));
   outline: none;
 }
 
 .field__range::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 15px;
-  height: 15px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: var(--cm-text-primary);
-  border: 3px solid var(--cm-accent);
+  border: 3px solid var(--cm-section);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
   cursor: pointer;
 }
 
 .field__range::-moz-range-thumb {
-  width: 15px;
-  height: 15px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: var(--cm-text-primary);
-  border: 3px solid var(--cm-accent);
+  border: 3px solid var(--cm-section);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
   cursor: pointer;
 }
 </style>

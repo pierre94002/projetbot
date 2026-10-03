@@ -4,9 +4,19 @@
  * score le plus probable, les suivants, les buts attendus, la forme des
  * cinq derniers matchs de chaque équipe et ce que cette forme change, et
  * la fiabilité mesurée sur les matchs passés.
+ *
+ * Dessin (refonte du 01/10/2026) : une carte à icône ; le score le plus
+ * probable en très grand entre les deux logos ; les autres scores en
+ * pastilles ; les buts attendus en chiffres clés ; la forme de chaque équipe
+ * en bloc (cartes de rencontre), sur deux colonnes quand la place existe.
  */
 import { computed } from 'vue';
+import AppCard from '@/components/common/AppCard.vue';
+import AppIcon from '@/components/common/AppIcon.vue';
 import FormBadges from '@/components/matches/FormBadges.vue';
+import MatchCard from '@/components/matches/MatchCard.vue';
+import TeamCrest from '@/components/matches/TeamCrest.vue';
+import PickCrest from '@/components/matches/PickCrest.vue';
 
 const props = defineProps({
   result: { type: Object, required: true }
@@ -45,6 +55,29 @@ const equipes = computed(() => {
   ];
 });
 
+// Un match de la forme au format de la carte de rencontre commune
+// (MatchCard.vue, 01/10/2026) : domicile à gauche, score au centre.
+function versCarte(e, m) {
+  const [pour, contre] = String(m.score ?? '')
+    .split('-')
+    .map(Number);
+  const club = { nom: e.nom, id: e.forme.teamId ?? null };
+  const adversaire = { nom: m.opponent, id: m.opponentId ?? null };
+  const [dom, ext] = m.home ? [club, adversaire] : [adversaire, club];
+  return {
+    date: m.date,
+    league: m.competition,
+    homeName: dom.nom,
+    awayName: ext.nom,
+    homeId: dom.id,
+    awayId: ext.id,
+    homeGoals: m.home ? pour : contre,
+    awayGoals: m.home ? contre : pour,
+    status: 'finished',
+    side: m.home ? 'home' : 'away'
+  };
+}
+
 // L'effet porte sur les buts attendus de l'équipe : son attaque récente ET
 // la défense récente de l'adversaire (xG et tirs cadrés compris), d'où une
 // équipe qui marque peu mais crée assez, face à une défense qui prend
@@ -82,267 +115,317 @@ const note = computed(() =>
 </script>
 
 <template>
-  <section v-if="score" class="score">
-    <header class="score__head">
-      <span class="score__title">Pronostic du score</span>
-      <span class="score__source">{{ source }}</span>
-    </header>
+  <AppCard v-if="score" title="Pronostic du score" icon="ball" eyebrow="Le moteur" class="spc">
+    <template #actions>
+      <span class="cm-chip spc__source" title="Ce qui fonde le pronostic">{{ source }}</span>
+    </template>
 
-    <div class="score__main">
-      <div class="score__pick">
-        <span class="score__team cm-truncate">{{ home }}</span>
-        <span class="score__value">{{ score.mostLikely.home }} – {{ score.mostLikely.away }}</span>
-        <span class="score__team score__team--away cm-truncate">{{ away }}</span>
-      </div>
-      <span class="score__confidence">{{ pct(score.mostLikely.probability) }}</span>
-    </div>
-    <p v-if="dansIssue" class="score__outcome">
-      Si « {{ libelleIssue[dansIssue.outcome] }} » se confirme : {{ marque(dansIssue) }} ({{ pct(dansIssue.probability) }}).
-    </p>
-
-    <div class="score__others">
-      <span v-for="c in score.top.slice(1)" :key="marque(c)" class="score__chip">
-        {{ marque(c) }} <span class="score__chip-p">{{ pct(c.probability) }}</span>
-      </span>
-    </div>
-
-    <p class="score__xg">
-      Buts attendus : {{ home }} {{ virgule(score.expectedGoals.home, 2) }}, {{ away }} {{ virgule(score.expectedGoals.away, 2) }}.
-    </p>
-
-    <div v-if="equipes.length" class="score__form">
-      <span class="score__subtitle">Forme des 5 derniers matchs, toutes compétitions</span>
-      <div v-for="e in equipes" :key="e.cle" class="score__team-form">
-        <div class="score__team-line">
-          <span class="score__team-name cm-truncate">{{ e.nom }}</span>
-          <FormBadges :form="e.forme" />
+    <div class="spc__body">
+      <!-- Le score le plus probable, en très grand entre les deux logos. -->
+      <div class="spc__hero">
+        <div class="spc__club is-home">
+          <span class="spc__team cm-truncate">{{ home }}</span>
+          <TeamCrest :name="home" :league="result.league" :size="44" />
         </div>
-        <ul v-if="e.forme.matches.length" class="score__matches">
-          <li v-for="m in e.forme.matches" :key="m.date + m.opponent">
-            <span class="score__match-date">{{ new Date(`${m.date}T00:00:00Z`).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }) }}</span>
-            <span class="score__match-venue">{{ m.home ? 'dom.' : 'ext.' }}</span>
-            <span class="score__match-opp cm-truncate">{{ m.opponent }}</span>
-            <span class="score__match-score" :class="`score__match-score--${m.result}`">{{ m.score }}</span>
-            <span class="score__match-comp cm-truncate">{{ m.competition }}</span>
-          </li>
-        </ul>
-        <p class="score__team-note">
-          {{ moyennes(e.forme) }}
-          <template v-if="effet(e.effet)">Ici, {{ effet(e.effet) }}.</template>
-        </p>
+        <div class="spc__center">
+          <span class="spc__label">Score le plus probable</span>
+          <span class="spc__value cm-numeric">{{ score.mostLikely.home }} – {{ score.mostLikely.away }}</span>
+          <span class="cm-pill is-accent" title="Probabilité de ce score exact selon le moteur">{{ pct(score.mostLikely.probability) }}</span>
+        </div>
+        <div class="spc__club is-away">
+          <TeamCrest :name="away" :league="result.league" :size="44" />
+          <span class="spc__team cm-truncate">{{ away }}</span>
+        </div>
+      </div>
+
+      <div v-if="dansIssue" class="cm-note is-info">
+        <span class="cm-icon-box is-info is-sm"><AppIcon name="target" :size="14" /></span>
+        <div>
+          <p class="cm-note__title">Dans l'issue annoncée</p>
+          <p class="cm-note__text spc__outcome">
+            Si « <PickCrest :side="dansIssue.outcome" :home="home" :away="away" :league="result.league" :size="14" />{{ libelleIssue[dansIssue.outcome] }} » se confirme :
+            <strong class="cm-numeric">{{ marque(dansIssue) }}</strong> (<span class="cm-numeric">{{ pct(dansIssue.probability) }}</span>).
+          </p>
+        </div>
+      </div>
+
+      <!-- Les scores suivants, en pastilles. -->
+      <div class="spc__others">
+        <p class="cm-group-title">Autres scores probables</p>
+        <div class="spc__chips">
+          <span v-for="c in score.top.slice(1)" :key="marque(c)" class="cm-pill spc__chip" :title="`${marque(c)} : ${pct(c.probability)} de chances`">
+            {{ marque(c) }} <span class="spc__chip-p">{{ pct(c.probability) }}</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Les buts attendus de chaque équipe, en chiffres clés. -->
+      <div class="cm-kpis spc__xg">
+        <div class="cm-kpi">
+          <span class="cm-kpi__label">Buts attendus</span>
+          <span class="cm-kpi__value">{{ virgule(score.expectedGoals.home, 2) }}</span>
+          <span class="cm-kpi__detail spc__xg-team"><TeamCrest :name="home" :league="result.league" :size="14" /> <span class="cm-truncate">{{ home }}</span></span>
+        </div>
+        <div class="cm-kpi">
+          <span class="cm-kpi__label">Buts attendus</span>
+          <span class="cm-kpi__value">{{ virgule(score.expectedGoals.away, 2) }}</span>
+          <span class="cm-kpi__detail spc__xg-team"><TeamCrest :name="away" :league="result.league" :size="14" /> <span class="cm-truncate">{{ away }}</span></span>
+        </div>
+      </div>
+
+      <!-- La forme de chaque équipe : ses cinq derniers matchs en cartes de rencontre. -->
+      <div v-if="equipes.length" class="spc__form">
+        <p class="cm-group-title">Forme des 5 derniers matchs, toutes compétitions</p>
+        <div class="spc__teams">
+          <div v-for="e in equipes" :key="e.cle" class="cm-block spc__team-form">
+            <div class="spc__team-line">
+              <span class="spc__team-name cm-truncate">
+                <TeamCrest :name="e.nom" :league="result.league" :team-id="e.forme.teamId ?? null" :size="22" class="spc__crest" />{{ e.nom }}
+              </span>
+              <FormBadges :form="e.forme" />
+            </div>
+            <div v-if="e.forme.matches.length" class="spc__matches">
+              <MatchCard
+                v-for="m in e.forme.matches"
+                :key="m.date + m.opponent"
+                :match="versCarte(e, m)"
+                :to="m.matchKey ? `/match/${m.matchKey}` : null"
+                variant="compact"
+                :show-competition="false"
+              />
+            </div>
+            <p class="spc__team-note">
+              {{ moyennes(e.forme) }}
+              <template v-if="effet(e.effet)">Ici, {{ effet(e.effet) }}.</template>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cm-note spc__note">
+        <span class="cm-icon-box is-muted is-sm"><AppIcon name="info" :size="14" /></span>
+        <div>
+          <p class="cm-note__title">Le poids de la forme</p>
+          <p class="cm-note__text spc__note-text">{{ note }}</p>
+        </div>
+      </div>
+
+      <div v-if="fiabilite" class="cm-note spc__reliability">
+        <span class="cm-icon-box is-muted is-sm"><AppIcon name="history" :size="14" /></span>
+        <div>
+          <p class="cm-note__title">Fiabilité mesurée</p>
+          <p class="cm-note__text spc__note-text">{{ fiabilite }}</p>
+        </div>
       </div>
     </div>
-
-    <p class="score__note">{{ note }}</p>
-    <p v-if="fiabilite" class="score__reliability">{{ fiabilite }}</p>
-  </section>
+  </AppCard>
 </template>
 
 <style scoped>
-.score {
+.spc__body {
+  /* Se règle sur SA largeur : page large comme panneau étroit. */
+  container: spc / inline-size;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 14px 16px;
-  border: 1px solid var(--cm-border);
-  border-radius: var(--cm-radius);
-  background: var(--cm-surface-alt);
-}
-
-.score__head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 10px;
-}
-
-.score__title {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--cm-text-secondary);
-}
-
-.score__source {
-  font-size: 11.5px;
-  color: var(--cm-text-muted);
-  text-align: right;
-}
-
-.score__main {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   gap: 12px;
 }
 
-.score__pick {
+.spc__source {
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ------------------------------------------------- le score le plus probable */
+.spc__hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  gap: 12px;
-  flex: 1;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: var(--cm-radius-md);
+  border: 1px solid rgba(var(--cm-section-rgb) / 0.22);
+  background:
+    radial-gradient(120% 140% at 50% 0%, rgba(var(--cm-section-rgb) / 0.12), transparent 60%),
+    var(--cm-surface-alt);
+}
+
+.spc__club {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   min-width: 0;
 }
 
-.score__team {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--cm-text-primary);
+.spc__club.is-home {
+  justify-content: flex-end;
   text-align: right;
 }
 
-.score__team--away {
-  text-align: left;
-}
-
-.score__value {
-  font-size: 22px;
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
+.spc__team {
+  font-size: 14px;
+  font-weight: 700;
   color: var(--cm-text-primary);
 }
 
-.score__confidence {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--cm-accent);
-  font-variant-numeric: tabular-nums;
+.spc__center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
 }
 
-.score__outcome {
-  margin: 0;
-  font-size: 12.5px;
-  color: var(--cm-text-secondary);
+.spc__label {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--cm-section);
+  white-space: nowrap;
 }
 
-.score__others {
+.spc__value {
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--cm-text-primary);
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------ autres scores */
+.spc__others {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.spc__chips {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
 }
 
-.score__chip {
-  display: inline-flex;
-  gap: 5px;
-  padding: 3px 8px;
-  border-radius: 999px;
-  background: var(--cm-surface-hover);
-  font-size: 12px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
+.spc__chip {
+  gap: 6px;
   color: var(--cm-text-primary);
 }
 
-.score__chip-p {
-  font-weight: 400;
+.spc__chip-p {
+  font-weight: 500;
   color: var(--cm-text-muted);
 }
 
-.score__xg {
-  margin: 0;
-  font-size: 12.5px;
-  color: var(--cm-text-secondary);
+/* ------------------------------------------------------------ buts attendus */
+.spc__xg {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.score__form {
+.spc__xg-team {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+/* ------------------------------------------------------------------- forme */
+.spc__form {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding-top: 8px;
-  border-top: 1px solid var(--cm-border-soft);
 }
 
-.score__subtitle {
-  font-size: 11.5px;
-  font-weight: 600;
-  color: var(--cm-text-secondary);
+.spc__teams {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
 }
 
-.score__team-form {
+.spc__team-form {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
+  min-width: 0;
 }
 
-.score__team-line {
+.spc__team-line {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
 }
 
-.score__team-name {
-  font-size: 13px;
-  font-weight: 600;
+.spc__team-name {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  font-size: 13.5px;
+  font-weight: 700;
   color: var(--cm-text-primary);
 }
 
-.score__matches {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+.spc__crest {
+  margin-right: 8px;
+}
+
+.spc__matches {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-}
-
-.score__matches li {
-  display: grid;
-  grid-template-columns: 2.6rem 2.2rem minmax(0, 1fr) 2.6rem minmax(0, 0.8fr);
-  align-items: center;
   gap: 6px;
+}
+
+.spc__team-note {
+  margin: 0;
   font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--cm-text-muted);
+}
+
+/* ------------------------------------------------------------- notes finales */
+.spc__note-text {
+  font-size: 12px;
   color: var(--cm-text-secondary);
 }
 
-.score__match-date,
-.score__match-venue,
-.score__match-comp {
-  color: var(--cm-text-muted);
+/* Assez de place : la forme des deux équipes côte à côte. */
+@container spc (min-width: 640px) {
+  .spc__teams {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
-.score__match-score {
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  text-align: center;
-}
-
-.score__match-score--V {
-  color: var(--cm-accent);
-}
-
-.score__match-score--D {
-  color: var(--cm-danger);
-}
-
-.score__team-note {
-  margin: 0;
-  font-size: 11.5px;
-  color: var(--cm-text-muted);
-}
-
-.score__note {
-  margin: 0;
-  font-size: 11.5px;
-  color: var(--cm-text-secondary);
-}
-
-.score__reliability {
-  margin: 0;
-  font-size: 11.5px;
-  line-height: 1.45;
-  color: var(--cm-text-muted);
-}
-
-@media (max-width: 520px) {
-  .score__matches li {
-    grid-template-columns: 2.6rem 2.2rem minmax(0, 1fr) 2.6rem;
+/* Panneau étroit : chaque club en colonne (logo au-dessus du nom), le score plus petit. */
+@container spc (max-width: 420px) {
+  .spc__hero {
+    gap: 8px;
+    padding: 14px 12px;
   }
 
-  .score__match-comp {
-    display: none;
+  .spc__club,
+  .spc__club.is-home {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 6px;
+    text-align: center;
+  }
+
+  .spc__club.is-home {
+    flex-direction: column-reverse;
+  }
+
+  .spc__team {
+    max-width: 100%;
+    font-size: 12px;
+  }
+
+  .spc__value {
+    font-size: 30px;
+  }
+
+  .spc__xg {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 </style>

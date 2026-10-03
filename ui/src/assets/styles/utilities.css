@@ -1,3 +1,11 @@
+/* ==========================================================================
+   Utilitaires et motifs partagés (préfixe cm-) — le vocabulaire visuel commun
+   à toutes les pages depuis la refonte du 01/10/2026. Une page compose avec
+   ces classes AVANT d'écrire son propre CSS : c'est ce qui garde l'appli
+   cohérente d'une page à l'autre (cf. ui/DESIGN.md).
+   ========================================================================== */
+
+/* ---- texte ---------------------------------------------------------------- */
 .cm-numeric {
   font-variant-numeric: tabular-nums;
   font-feature-settings: 'tnum' 1;
@@ -37,6 +45,565 @@
 }
 
 .cm-team-link:hover {
-  color: var(--cm-accent);
+  color: var(--cm-section);
   text-decoration: underline;
+}
+
+/* ---- page ----------------------------------------------------------------- */
+/* Une page : une colonne de blocs espacés. */
+.cm-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Titre de section (dans une page ou une carte) : petites capitales
+   espacées, avec un commentaire facultatif à droite. */
+.cm-section-title {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--cm-text-secondary);
+}
+
+.cm-section-title__hint {
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--cm-text-muted);
+}
+
+/* Sous-titre de groupe, avec un filet qui court jusqu'au bord. */
+.cm-group-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--cm-text-muted);
+}
+
+.cm-group-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--cm-border-soft);
+}
+
+/* Surligné « de section » pour un mot-clé ou un sur-titre. */
+.cm-eyebrow {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  color: var(--cm-section);
+}
+
+/* ---- bandeau d'en-tête de page (le « hero ») ------------------------------- */
+/* Le bloc qui ouvre une page ou un onglet : titre, sous-titre, chiffres clés
+   ou puces, teinté de la couleur de la section. Même dessin que la « Lecture
+   de l'IA » de l'onglet Analyse IA. */
+.cm-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px 22px;
+  border-radius: var(--cm-radius-lg);
+  border: 1px solid rgba(var(--cm-section-rgb) / 0.22);
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(var(--cm-section-rgb) / 0.14), transparent 55%),
+    radial-gradient(120% 140% at 100% 100%, var(--cm-section-glow-2), transparent 55%),
+    var(--cm-surface-alt);
+  overflow: hidden;
+}
+
+.cm-hero__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+}
+
+.cm-hero__title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--cm-text-primary);
+}
+
+.cm-hero__subtitle {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--cm-text-secondary);
+}
+
+.cm-hero__chips {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* ---- puces, pastilles, badges --------------------------------------------- */
+.cm-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--cm-border-soft);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--cm-text-secondary);
+  white-space: nowrap;
+}
+
+.cm-chip.is-section {
+  background: var(--cm-section-soft);
+  border-color: transparent;
+  color: var(--cm-section);
+}
+
+.cm-chip.is-accent {
+  background: var(--cm-accent-soft);
+  border-color: transparent;
+  color: var(--cm-accent);
+}
+
+.cm-chip.is-warning {
+  background: var(--cm-warning-soft);
+  border-color: transparent;
+  color: var(--cm-warning);
+}
+
+.cm-chip.is-danger {
+  background: var(--cm-danger-soft);
+  border-color: transparent;
+  color: var(--cm-danger);
+}
+
+.cm-chip.is-info {
+  background: var(--cm-info-soft);
+  border-color: transparent;
+  color: var(--cm-info);
+}
+
+.cm-chip.is-violet {
+  background: var(--cm-violet-soft);
+  border-color: transparent;
+  color: var(--cm-violet);
+}
+
+/* Une pastille chiffrée (cote, score, pourcentage). */
+.cm-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 46px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: var(--cm-surface-hover);
+  font-size: 12.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.cm-pill.is-accent {
+  background: var(--cm-accent-soft);
+  color: var(--cm-accent);
+}
+
+.cm-pill.is-section {
+  background: var(--cm-section-soft);
+  color: var(--cm-section);
+}
+
+.cm-pill.is-strong {
+  background: var(--cm-text-primary);
+  color: var(--cm-bg);
+  font-weight: 800;
+}
+
+/* Carré d'icône teinté (en tête d'une carte, d'une clé, d'une note). */
+.cm-icon-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  background: var(--cm-section-soft);
+  color: var(--cm-section);
+}
+
+.cm-icon-box.is-accent {
+  background: var(--cm-accent-soft);
+  color: var(--cm-accent);
+}
+
+.cm-icon-box.is-info {
+  background: var(--cm-info-soft);
+  color: var(--cm-info);
+}
+
+.cm-icon-box.is-warning {
+  background: var(--cm-warning-soft);
+  color: var(--cm-warning);
+}
+
+.cm-icon-box.is-danger {
+  background: var(--cm-danger-soft);
+  color: var(--cm-danger);
+}
+
+.cm-icon-box.is-violet {
+  background: var(--cm-violet-soft);
+  color: var(--cm-violet);
+}
+
+.cm-icon-box.is-muted {
+  background: var(--cm-surface-hover);
+  color: var(--cm-text-secondary);
+}
+
+.cm-icon-box.is-sm {
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+}
+
+/* ---- tuiles de chiffres clés (KPI) ----------------------------------------- */
+.cm-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.cm-kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  border-radius: var(--cm-radius-md);
+  border: 1px solid var(--cm-border-soft);
+  background: var(--cm-surface-alt);
+  min-width: 0;
+}
+
+.cm-kpi__label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--cm-text-muted);
+}
+
+.cm-kpi__value {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--cm-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.cm-kpi__detail {
+  font-size: 11.5px;
+  color: var(--cm-text-muted);
+}
+
+.cm-kpi.is-section {
+  border-color: rgba(var(--cm-section-rgb) / 0.3);
+  background: linear-gradient(180deg, rgba(var(--cm-section-rgb) / 0.1), transparent), var(--cm-surface-alt);
+}
+
+.cm-kpi.is-section .cm-kpi__value {
+  color: var(--cm-section);
+}
+
+/* Les couleurs sémantiques gagnent toujours sur la couleur d'une tuile ou
+   d'une cellule en gras : un profit reste vert, une perte reste rouge. */
+.cm-kpi__value.cm-positive,
+.cm-kpi.is-section .cm-kpi__value.cm-positive,
+.cm-table .is-strong.cm-positive,
+.cm-table td.cm-positive {
+  color: var(--cm-accent);
+}
+
+.cm-kpi__value.cm-negative,
+.cm-kpi.is-section .cm-kpi__value.cm-negative,
+.cm-table .is-strong.cm-negative,
+.cm-table td.cm-negative {
+  color: var(--cm-danger);
+}
+
+/* ---- blocs et grilles ------------------------------------------------------ */
+/* Un bloc interne (dans une carte) : surface un cran plus claire. */
+.cm-block {
+  padding: 14px 16px;
+  border-radius: var(--cm-radius-md);
+  border: 1px solid var(--cm-border-soft);
+  background: var(--cm-surface-alt);
+}
+
+.cm-block.is-hover {
+  transition: border-color var(--cm-transition), background var(--cm-transition);
+}
+
+.cm-block.is-hover:hover {
+  border-color: var(--cm-border);
+  background: var(--cm-surface-hover);
+}
+
+/* Une note : icône à gauche, titre en petites capitales, texte. */
+.cm-note {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--cm-radius-md);
+  border: 1px solid var(--cm-border-soft);
+  background: var(--cm-surface-alt);
+}
+
+.cm-note__title {
+  margin: 0 0 3px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--cm-text-secondary);
+}
+
+.cm-note__text {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--cm-text-primary);
+}
+
+.cm-note.is-warning {
+  border-color: rgba(var(--cm-warning-rgb) / 0.28);
+  background: radial-gradient(120% 140% at 0% 0%, rgba(var(--cm-warning-rgb) / 0.09), transparent 55%), var(--cm-surface-alt);
+}
+
+.cm-note.is-danger {
+  border-color: rgba(var(--cm-danger-rgb) / 0.28);
+  background: radial-gradient(120% 140% at 0% 0%, rgba(var(--cm-danger-rgb) / 0.09), transparent 55%), var(--cm-surface-alt);
+}
+
+.cm-note.is-info {
+  border-color: rgba(var(--cm-info-rgb) / 0.28);
+  background: radial-gradient(120% 140% at 0% 0%, rgba(var(--cm-info-rgb) / 0.09), transparent 55%), var(--cm-surface-alt);
+}
+
+.cm-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.cm-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .cm-grid-2,
+  .cm-grid-3 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Une rangée de commandes (sélecteurs, champs, bouton) alignés en bas. */
+.cm-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.cm-toolbar > * {
+  min-width: 0;
+}
+
+/* ---- tableaux ------------------------------------------------------------- */
+/* Le tableau commun : en-tête en petites capitales collant en haut, lignes
+   séparées d'un filet, survol discret. Les chiffres à droite (.cm-numeric). */
+.cm-table-wrap {
+  overflow-x: auto;
+  border-radius: var(--cm-radius-md);
+  border: 1px solid var(--cm-border-soft);
+  background: var(--cm-surface-alt);
+}
+
+.cm-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 12.5px;
+}
+
+.cm-table th,
+.cm-table td {
+  padding: 9px 12px;
+  text-align: right;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.cm-table th:first-child,
+.cm-table td:first-child {
+  text-align: left;
+}
+
+.cm-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--cm-surface-raised);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--cm-text-muted);
+  border-bottom: 1px solid var(--cm-border);
+}
+
+.cm-table td {
+  border-bottom: 1px solid var(--cm-border-soft);
+}
+
+.cm-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.cm-table tbody tr {
+  transition: background var(--cm-transition);
+}
+
+.cm-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.cm-table .is-left {
+  text-align: left;
+}
+
+.cm-table .is-center {
+  text-align: center;
+}
+
+.cm-table .is-strong {
+  font-weight: 700;
+  color: var(--cm-text-primary);
+}
+
+/* ---- divers --------------------------------------------------------------- */
+/* Un lien discret en couleur de section (« Voir tout », « Classement »). */
+.cm-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cm-section);
+  cursor: pointer;
+}
+
+.cm-link:hover {
+  text-decoration: underline;
+}
+
+/* Barre de progression fine. */
+.cm-bar {
+  display: flex;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--cm-surface-hover);
+  overflow: hidden;
+}
+
+.cm-bar__fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--cm-section);
+  transition: width var(--cm-transition-slow);
+}
+
+/* Point « en direct » qui pulse. */
+.cm-live-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cm-danger);
+  box-shadow: 0 0 0 3px var(--cm-danger-soft);
+  animation: cm-live-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes cm-live-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* Apparition douce d'une liste (chaque enfant décalé). */
+.cm-stagger > * {
+  animation: cm-rise 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.cm-stagger > *:nth-child(2) {
+  animation-delay: 40ms;
+}
+.cm-stagger > *:nth-child(3) {
+  animation-delay: 80ms;
+}
+.cm-stagger > *:nth-child(4) {
+  animation-delay: 120ms;
+}
+.cm-stagger > *:nth-child(5) {
+  animation-delay: 160ms;
+}
+.cm-stagger > *:nth-child(n + 6) {
+  animation-delay: 200ms;
+}
+
+@keyframes cm-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

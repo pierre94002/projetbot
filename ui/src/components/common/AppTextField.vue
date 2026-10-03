@@ -23,11 +23,15 @@ const model = defineModel({ type: String, default: '' });
   display: flex;
   flex-direction: column;
   gap: 6px;
+  min-width: 0;
 }
 
 .field__label {
-  font-size: 12.5px;
-  color: var(--cm-text-secondary);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--cm-text-muted);
 }
 
 .field__input-wrap {
@@ -38,11 +42,16 @@ const model = defineModel({ type: String, default: '' });
   border: 1px solid var(--cm-border);
   border-radius: var(--cm-radius-sm);
   padding: 0 12px;
-  transition: border-color var(--cm-transition);
+  transition: border-color var(--cm-transition), box-shadow var(--cm-transition);
+}
+
+.field__input-wrap:hover {
+  border-color: var(--cm-border-strong);
 }
 
 .field__input-wrap:focus-within {
-  border-color: var(--cm-accent);
+  border-color: var(--cm-section);
+  box-shadow: 0 0 0 3px rgba(var(--cm-section-rgb) / 0.18);
 }
 
 .field__input-wrap :deep(svg) {
@@ -58,5 +67,9 @@ const model = defineModel({ type: String, default: '' });
   font-size: 13.5px;
   color: var(--cm-text-primary);
   outline: none;
+}
+
+.field__input::placeholder {
+  color: var(--cm-text-muted);
 }
 </style>

@@ -126,6 +126,16 @@ async function loadFullStats() {
   fullStatsLoading.value = false;
 }
 
+// Présentation : avancement du détail complet (équipes résolues sur le total
+// du classement) et équipes restées sans détail (appel en échec, quota…).
+const fullStatsProgress = computed(() => {
+  const resolved = Object.values(fullStatsByTeam.value);
+  return { done: resolved.length, failed: resolved.filter((t) => !t).length, total: rows.value.length };
+});
+
+// Présentation : l'icône de chaque famille de statistiques (titres de MATCH_STAT_SECTIONS).
+const SECTION_ICONS = { Tirs: 'target', Attaque: 'bolt', 'Possession & passes': 'swap', Défense: 'shield', Gardien: 'ball' };
+
 function meanOf(values) {
   return values.length ? values.reduce((a, b) => a + b, 0) / values.length : null;
 }
@@ -184,210 +194,309 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="team-stats-view">
-    <AppCard
-      title="Statistiques ligue"
-      subtitle="Détail complet des statistiques (34 champs) moyennées sur tout le championnat — toutes rencontres, domicile et extérieur"
-    >
-      <div class="team-stats-view__controls">
-        <AppSelect v-model="selectedLeague" label="Compétition" :options="leagueOptions" />
+  <div class="team-stats cm-page">
+    <!-- Le bandeau de l'onglet : ce qu'on regarde, et la compétition à choisir. -->
+    <section class="cm-hero">
+      <div class="cm-hero__top">
+        <h2 class="cm-hero__title">
+          <span class="cm-icon-box"><AppIcon name="barChart" :size="18" /></span>
+          Statistiques ligue
+        </h2>
+        <span class="cm-hero__chips">
+          <span class="cm-chip is-section"><AppIcon name="trophy" :size="11" />{{ leagueOptions.length }} compétition(s)</span>
+          <span v-if="rows.length" class="cm-chip"><AppIcon name="users" :size="11" />{{ rows.length }} équipes</span>
+          <span class="cm-chip"><AppIcon name="layers" :size="11" />34 champs</span>
+        </span>
+      </div>
+      <p class="cm-hero__subtitle">
+        Détail complet des statistiques (34 champs) moyennées sur tout le championnat — toutes rencontres, domicile et extérieur.
+      </p>
+      <div class="cm-toolbar team-stats__toolbar">
+        <AppSelect v-model="selectedLeague" label="Compétition" :options="leagueOptions" class="team-stats__grow" />
         <AppButton variant="secondary" :loading="standings.loading" :disabled="!selectedLeague" @click="loadAverages">
           <template #icon><AppIcon name="refresh" :size="15" /></template>
           Actualiser
         </AppButton>
       </div>
+    </section>
 
-      <LoadingSpinner v-if="matchesStore.loading && !leagueOptions.length" label="Chargement des championnats…" />
-      <EmptyState
-        v-else-if="!leagueOptions.length"
-        icon="matches"
-        title="Aucun championnat chargé"
-        description="Aucun classement en local et aucune cote chargée. Lance une actualisation depuis Réglages > Données, ou va sur la page Matchs charger des cotes."
-      />
-      <LoadingSpinner v-else-if="standings.loading" label="Récupération du classement…" />
-      <EmptyState v-else-if="standings.error" icon="alert" title="Moyennes indisponibles" :description="standings.error" />
-      <EmptyState v-else-if="!rows.length" icon="database" title="Choisis un championnat" description="Sélectionne une compétition ci-dessus pour voir le détail des statistiques." />
+    <LoadingSpinner v-if="matchesStore.loading && !leagueOptions.length" label="Chargement des championnats…" />
+    <EmptyState
+      v-else-if="!leagueOptions.length"
+      icon="matches"
+      title="Aucun championnat chargé"
+      description="Aucun classement en local et aucune cote chargée. Lance une actualisation depuis Réglages > Données, ou va sur la page Matchs charger des cotes."
+    />
+    <LoadingSpinner v-else-if="standings.loading" label="Récupération du classement…" />
+    <EmptyState v-else-if="standings.error" icon="alert" title="Moyennes indisponibles" :description="standings.error" />
+    <EmptyState v-else-if="!rows.length" icon="database" title="Choisis un championnat" description="Sélectionne une compétition ci-dessus pour voir le détail des statistiques." />
 
-      <template v-else>
-        <div class="team-stats-view__full-stats-bar">
-          <AppNumberField v-model="fullStatsSampleSize" label="Échantillon par équipe (derniers matchs)" :min="1" :max="10" />
-          <AppButton variant="secondary" :loading="fullStatsLoading" @click="loadFullStats">
-            <template #icon><AppIcon name="bolt" :size="14" /></template>
-            Charger le détail complet (34 champs)
-          </AppButton>
-          <span class="cm-text-muted team-stats-view__full-stats-hint">
-            Coûte jusqu'à {{ fullStatsSampleSize }} appel(s) API par équipe ({{ rows.length }} équipes) — mis en cache.
-          </span>
-        </div>
+    <template v-else>
+      <!-- 1. LE DÉTAIL COMPLET, À LA DEMANDE (il coûte des appels API) -->
+      <AppCard
+        icon="bolt"
+        eyebrow="À la demande"
+        title="Charger le détail complet"
+        subtitle="Chaque champ est une moyenne sur les derniers matchs de chaque équipe du classement — un appel API par match et par équipe."
+      >
+        <div class="team-stats__body">
+          <div class="cm-toolbar">
+            <AppNumberField v-model="fullStatsSampleSize" label="Échantillon par équipe (derniers matchs)" :min="1" :max="10" class="team-stats__sample" />
+            <AppButton variant="secondary" :loading="fullStatsLoading" @click="loadFullStats">
+              <template #icon><AppIcon name="bolt" :size="14" /></template>
+              Charger le détail complet (34 champs)
+            </AppButton>
+          </div>
 
-        <div v-if="leagueStatSections.length" class="league-bar-stats">
-          <div v-for="section in leagueStatSections" :key="section.title" class="league-bar-section">
-            <p class="league-bar-section__title cm-text-muted">{{ section.title }}</p>
-
-            <div v-for="stat in section.rows" :key="stat.key" class="league-bar-row">
-              <div class="league-bar-row__values">
-                <span class="cm-numeric league-bar-row__home-value">{{ stat.home }}</span>
-                <span class="league-bar-row__label">
-                  {{ stat.label }}
-                  <span class="cm-text-muted league-bar-row__total">toutes : {{ stat.total }}</span>
-                </span>
-                <span class="cm-numeric league-bar-row__away-value">{{ stat.away }}</span>
-              </div>
-              <div class="league-bar-row__bar">
-                <div class="league-bar-row__bar-home" :style="{ width: stat.homeSharePercent + '%' }"></div>
-                <div class="league-bar-row__bar-away" :style="{ width: stat.awaySharePercent + '%' }"></div>
-              </div>
+          <div class="cm-note is-warning">
+            <span class="cm-icon-box is-warning"><AppIcon name="alert" :size="16" /></span>
+            <div>
+              <p class="cm-note__title">Coût des appels API</p>
+              <p class="cm-note__text">
+                Coûte jusqu'à {{ fullStatsSampleSize }} appel(s) API par équipe ({{ rows.length }} équipes) — mis en cache.
+              </p>
             </div>
           </div>
-          <div class="league-bar-stats__legend">
-            <span><i class="league-bar-stats__dot league-bar-stats__dot--home" />Domicile</span>
-            <span><i class="league-bar-stats__dot league-bar-stats__dot--away" />Extérieur</span>
+
+          <!-- Avancement pendant le chargement, équipes sans détail après. -->
+          <div v-if="fullStatsLoading" class="team-stats__progress">
+            <div class="cm-bar"><span class="cm-bar__fill" :style="{ width: `${fullStatsProgress.total ? Math.round((fullStatsProgress.done / fullStatsProgress.total) * 100) : 0}%` }" /></div>
+            <span class="cm-numeric team-stats__progress-text">{{ fullStatsProgress.done }} / {{ fullStatsProgress.total }} équipes</span>
           </div>
+          <span v-else-if="fullStatsProgress.failed" class="cm-chip is-warning team-stats__failed" title="Appel en échec pour ces équipes (quota épuisé, nom non reconnu…) : elles ne comptent pas dans les moyennes">
+            <AppIcon name="alert" :size="11" />{{ fullStatsProgress.failed }} équipe(s) sans détail
+          </span>
         </div>
-      </template>
-    </AppCard>
+      </AppCard>
+
+      <!-- 2. LES MOYENNES DE LA LIGUE, FAMILLE PAR FAMILLE -->
+      <AppCard
+        v-if="leagueStatSections.length"
+        icon="pieChart"
+        eyebrow="Moyennes de la ligue"
+        title="Domicile face à extérieur"
+        subtitle="Moyenne des moyennes de chaque équipe chargée ; la barre partage l'intensité de chaque statistique entre les deux contextes."
+      >
+        <template #actions>
+          <div class="team-stats__legend">
+            <span><i class="team-stats__dot is-home" />Domicile</span>
+            <span><i class="team-stats__dot is-away" />Extérieur</span>
+          </div>
+        </template>
+        <div class="team-stats__sections cm-stagger">
+          <section v-for="section in leagueStatSections" :key="section.title" class="cm-block team-stats__section">
+            <p class="cm-group-title team-stats__section-title">
+              <span class="cm-icon-box is-sm"><AppIcon :name="SECTION_ICONS[section.title] ?? 'barChart'" :size="14" /></span>
+              {{ section.title }}
+            </p>
+
+            <div class="team-stats__rows">
+              <div v-for="stat in section.rows" :key="stat.key" class="team-stats__row">
+                <span class="cm-numeric team-stats__value is-home">{{ stat.home }}</span>
+                <span class="team-stats__label">
+                  {{ stat.label }}
+                  <span class="cm-text-muted team-stats__total">toutes : {{ stat.total }}</span>
+                </span>
+                <span class="cm-numeric team-stats__value is-away">{{ stat.away }}</span>
+                <div class="team-stats__track">
+                  <span class="team-stats__fill is-home" :style="{ width: stat.homeSharePercent + '%' }" />
+                  <span class="team-stats__fill is-away" :style="{ width: stat.awaySharePercent + '%' }" />
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </AppCard>
+      <LoadingSpinner v-else-if="fullStatsLoading" label="Calcul des moyennes par équipe…" />
+      <EmptyState
+        v-else
+        icon="barChart"
+        title="Détail pas encore chargé"
+        description="Choisis un échantillon puis clique sur « Charger le détail complet » : les moyennes de la ligue, domicile face à extérieur, apparaîtront ici."
+      />
+    </template>
   </div>
 </template>
 
 <style scoped>
-.team-stats-view {
+.team-stats {
+  /* Se règle sur SA largeur : les familles de statistiques passent sur deux colonnes dès que la place existe. */
+  container: teamstats / inline-size;
+}
+
+.team-stats__grow {
+  flex: 1 1 260px;
+}
+
+/* Le corps d'une carte : commandes, note, avancement, espacés. */
+.team-stats__body {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-}
-
-.team-stats-view__controls {
-  display: grid;
-  grid-template-columns: 1fr auto;
   gap: 14px;
-  align-items: end;
-  margin-bottom: 18px;
 }
 
-.team-stats-view__full-stats-bar {
+.team-stats__sample {
+  flex: 0 1 300px;
+}
+
+/* ----------------------------------------------------------- avancement */
+.team-stats__progress {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.team-stats__progress-text {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--cm-text-secondary);
+  white-space: nowrap;
+}
+
+.team-stats__failed {
+  align-self: flex-start;
+}
+
+/* --------------------------------------------------------------- légende */
+.team-stats__legend {
   display: flex;
-  align-items: end;
-  gap: 14px;
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid var(--cm-border-soft);
-}
-
-.team-stats-view__full-stats-hint {
+  flex-wrap: wrap;
+  gap: 6px 14px;
   font-size: 11px;
+  font-weight: 600;
+  color: var(--cm-text-secondary);
 }
 
-.league-bar-stats {
-  margin-top: 14px;
+.team-stats__legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
 }
 
-.league-bar-section {
-  margin-bottom: 14px;
+.team-stats__dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
 }
 
-.league-bar-section__title {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  margin-bottom: 8px;
-  padding-top: 10px;
-  border-top: 1px solid var(--cm-border-soft);
+.team-stats__dot.is-home,
+.team-stats__fill.is-home {
+  background: var(--cm-accent);
 }
 
-.league-bar-section:first-of-type .league-bar-section__title {
-  border-top: none;
-  padding-top: 0;
+.team-stats__dot.is-away,
+.team-stats__fill.is-away {
+  background: var(--cm-info);
 }
 
-.league-bar-row {
-  padding: 6px 0;
-}
-
-.league-bar-row__values {
+/* --------------------------------------------------- familles de stats */
+.team-stats__sections {
   display: grid;
-  grid-template-columns: 70px 1fr 70px;
-  align-items: baseline;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+
+.team-stats__section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.team-stats__section-title {
+  color: var(--cm-text-secondary);
+}
+
+.team-stats__rows {
+  display: flex;
+  flex-direction: column;
   gap: 10px;
-  font-size: 12.5px;
 }
 
-.league-bar-row__home-value {
+/* Une ligne : valeur domicile · libellé · valeur extérieur, puis la barre partagée. */
+.team-stats__row {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) 64px;
+  grid-template-rows: auto auto;
+  align-items: center;
+  gap: 5px 10px;
+  padding: 6px 8px;
+  border-radius: var(--cm-radius-sm);
+  transition: background var(--cm-transition);
+}
+
+.team-stats__row:hover {
+  background: var(--cm-surface-hover);
+}
+
+.team-stats__value {
+  font-size: 13px;
   font-weight: 700;
+}
+
+.team-stats__value.is-home {
   color: var(--cm-accent);
+  text-align: left;
 }
 
-.league-bar-row__away-value {
-  font-weight: 700;
+.team-stats__value.is-away {
   color: var(--cm-info);
   text-align: right;
 }
 
-.league-bar-row__label {
-  text-align: center;
-  font-size: 11.5px;
-}
-
-.league-bar-row__total {
-  display: block;
-  font-size: 10px;
-  margin-top: 1px;
-}
-
-.league-bar-row__bar {
+.team-stats__label {
   display: flex;
-  margin-top: 5px;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  min-width: 0;
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: center;
+  color: var(--cm-text-primary);
+}
+
+.team-stats__total {
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.team-stats__track {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 3px;
   height: 6px;
   border-radius: 999px;
   overflow: hidden;
   background: var(--cm-surface-hover);
 }
 
-.league-bar-row__bar-home {
-  background: var(--cm-accent);
+.team-stats__fill {
+  min-width: 2px;
+  border-radius: 999px;
+  transition: width var(--cm-transition-slow);
 }
 
-.league-bar-row__bar-away {
-  background: var(--cm-info);
-}
-
-.league-bar-stats__legend {
-  display: flex;
-  gap: 16px;
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--cm-border-soft);
-  font-size: 11px;
-  color: var(--cm-text-muted);
-}
-
-.league-bar-stats__legend span {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.league-bar-stats__dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 2px;
-  display: inline-block;
-}
-
-.league-bar-stats__dot--home {
-  background: var(--cm-accent);
-}
-
-.league-bar-stats__dot--away {
-  background: var(--cm-info);
-}
-
-@media (max-width: 860px) {
-  .team-stats-view__controls {
-    grid-template-columns: 1fr;
+/* Assez de place : deux familles côte à côte. */
+@container teamstats (min-width: 860px) {
+  .team-stats__sections {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .team-stats-view__full-stats-bar {
-    flex-direction: column;
-    align-items: stretch;
+}
+
+/* Panneau étroit : les commandes s'empilent, les valeurs se resserrent. */
+@container teamstats (max-width: 520px) {
+  .team-stats__grow,
+  .team-stats__sample {
+    flex-basis: 100%;
+  }
+
+  .team-stats__row {
+    grid-template-columns: 52px minmax(0, 1fr) 52px;
   }
 }
 </style>

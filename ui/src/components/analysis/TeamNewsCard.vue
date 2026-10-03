@@ -6,13 +6,25 @@
  * vestiaire, rumeur, finances du club, tout ce qu'aucune donnée mesurée ne
  * capture. Relu par l'analyse IA avant-match ; n'entre jamais dans le
  * pronostic chiffré ni dans la mise (cf. README, section moteur).
+ *
+ * Dessin (refonte du 01/10/2026) : une carte à icône ; chaque club dans un
+ * bloc avec son logo, ses absents en lignes (drapeau, étiquette blessé ou
+ * suspendu colorée), le changement d'entraîneur en note ; la note manuscrite
+ * dans un champ au dessin des champs communs (anneau de focus couleur de
+ * section), le bouton d'enregistrement en vert de la marque.
  */
 import { ref, computed, watch } from 'vue';
 import { teamStatsApi } from '@/services/teamStatsApi.js';
 import { matchNotesApi } from '@/services/matchNotesApi.js';
+import AppCard from '@/components/common/AppCard.vue';
 import AppButton from '@/components/common/AppButton.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
+import EmptyState from '@/components/common/EmptyState.vue';
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
+import TeamCrest from '@/components/matches/TeamCrest.vue';
+import PlayerFlag from '@/components/matches/PlayerFlag.vue';
 import { formatDateTime } from '@/utils/format.js';
+import { retourPrevu } from '@/utils/fotmobLabels.js';
 
 const props = defineProps({
   result: { type: Object, required: true }
@@ -95,208 +107,342 @@ const equipes = computed(() => {
     { cle: 'away', nom: away.value, actu: n.away }
   ].filter((e) => e.actu);
 });
+
+// ---- présentation ---------------------------------------------------------
+// Le nombre d'absents de chaque club, pour la pastille de son bloc.
+const nombreAbsents = (e) => e.actu.longTermAbsences?.length ?? 0;
 </script>
 
 <template>
-  <section class="team-news">
-    <header class="team-news__head">
-      <span class="team-news__title">Actualités d'équipe</span>
-      <span class="team-news__source">d'après FotMob, gratuit</span>
-    </header>
+  <AppCard title="Actualités d'équipe" subtitle="Blessures, suspensions et changement d'entraîneur d'après FotMob, gratuit." icon="userX" class="tnc">
+    <div class="tnc__body">
+      <LoadingSpinner v-if="newsLoading" label="Recherche des blessures et suspensions…" />
 
-    <div v-if="newsLoading" class="cm-text-muted team-news__loading">Recherche des blessures et suspensions…</div>
+      <!-- Chaque club dans son bloc : logo, nombre d'absents, entraîneur, absents. -->
+      <div v-else-if="equipes.length" class="tnc__teams">
+        <div v-for="e in equipes" :key="e.cle" class="cm-block tnc__team">
+          <p class="tnc__team-head">
+            <span class="tnc__team-name cm-truncate">
+              <TeamCrest :name="e.nom" :league="result.league" :team-id="e.actu.teamId ?? null" :size="26" class="tnc__crest" />{{ e.nom }}
+            </span>
+            <span class="cm-pill tnc__count" :class="nombreAbsents(e) ? 'is-danger' : ''" :title="`${nombreAbsents(e)} absent(s) de longue durée`">
+              {{ nombreAbsents(e) }} absent{{ nombreAbsents(e) > 1 ? 's' : '' }}
+            </span>
+          </p>
 
-    <div v-else-if="equipes.length" class="team-news__teams">
-      <div v-for="e in equipes" :key="e.cle" class="team-news__team">
-        <p class="team-news__team-name cm-truncate">{{ e.nom }}</p>
-        <p v-if="e.actu.coachChange" class="team-news__coach">
-          <AppIcon name="info" :size="13" />
-          Changement d'entraîneur : {{ e.actu.coachChange.previousCoach }} → {{ e.actu.coachChange.currentCoach }}
-          <span v-if="e.actu.coachChange.since" class="cm-text-muted">(dernier match connu avec l'ancien, le {{ formatDateTime(e.actu.coachChange.since) }})</span>
-        </p>
-        <ul v-if="e.actu.longTermAbsences?.length" class="team-news__absences">
-          <li v-for="a in e.actu.longTermAbsences" :key="a.name">
-            <span class="team-news__absence-tag" :class="`team-news__absence-tag--${a.type}`">{{ libelleType(a.type) }}</span>
-            <span class="cm-truncate">{{ a.name }}</span>
-            <span v-if="a.expectedReturn" class="cm-text-muted">— retour {{ a.expectedReturn }}</span>
-          </li>
-        </ul>
+          <div v-if="e.actu.coachChange" class="cm-note is-info tnc__coach">
+            <span class="cm-icon-box is-info is-sm"><AppIcon name="swap" :size="14" /></span>
+            <div>
+              <p class="cm-note__title">Changement d'entraîneur</p>
+              <p class="cm-note__text tnc__coach-text">
+                {{ e.actu.coachChange.previousCoach }} <span class="tnc__arrow">→</span> {{ e.actu.coachChange.currentCoach }}
+                <span v-if="e.actu.coachChange.since" class="cm-text-muted tnc__coach-since">(dernier match connu avec l'ancien, le {{ formatDateTime(e.actu.coachChange.since) }})</span>
+              </p>
+            </div>
+          </div>
+
+          <ul v-if="e.actu.longTermAbsences?.length" class="tnc__absences">
+            <li v-for="a in e.actu.longTermAbsences" :key="a.name" class="tnc__absence">
+              <PlayerFlag :player-id="a.id ?? null" :size="16" />
+              <span class="tnc__absence-name cm-truncate">{{ a.name }}</span>
+              <span v-if="a.expectedReturn" class="cm-text-muted tnc__absence-return">retour {{ retourPrevu(a.expectedReturn) }}</span>
+              <span class="tnc__tag" :class="`is-${a.type}`">{{ libelleType(a.type) }}</span>
+            </li>
+          </ul>
+          <p v-else class="tnc__none">Aucun absent de longue durée signalé.</p>
+        </div>
       </div>
-    </div>
 
-    <p v-else class="cm-text-muted team-news__empty">
-      Rien signalé par FotMob pour l'instant — jamais la preuve qu'il ne se passe rien, seulement que rien n'est publié.
-    </p>
-
-    <div class="team-news__note">
-      <label class="team-news__note-label" for="team-news-note">
-        Note pour l'IA <span class="cm-text-muted">— vestiaire, rumeur, finances du club… ce qu'aucune donnée ne capture</span>
-      </label>
-      <textarea
-        id="team-news-note"
-        v-model="noteText"
-        class="team-news__textarea"
-        rows="3"
-        placeholder="Écris ici ce que tu sais et qui ne figure dans aucune statistique…"
-        :disabled="!noteLoaded"
+      <EmptyState
+        v-else
+        icon="userX"
+        title="Rien signalé par FotMob pour l'instant"
+        description="Jamais la preuve qu'il ne se passe rien, seulement que rien n'est publié."
+        class="tnc__empty"
       />
-      <div class="team-news__note-actions">
-        <span class="cm-text-muted team-news__note-hint">
-          <template v-if="noteSaving">Enregistrement…</template>
-          <template v-else-if="noteChanged">Modifiée, pas encore enregistrée.</template>
-          <template v-else-if="noteSavedAt">Enregistrée le {{ formatDateTime(noteSavedAt) }}.</template>
-        </span>
-        <AppButton variant="ghost" size="sm" :loading="noteSaving" :disabled="!noteChanged" @click="enregistrerNote">
-          <template #icon><AppIcon name="check" :size="13" /></template>
-          Enregistrer la note
-        </AppButton>
+
+      <!-- La note manuscrite pour l'IA : un champ au dessin des champs communs. -->
+      <div class="tnc__note">
+        <label class="tnc__note-label" for="team-news-note">
+          <span class="tnc__note-title"><AppIcon name="edit" :size="12" />Note pour l'IA</span>
+          <span class="tnc__note-hint">vestiaire, rumeur, finances du club… ce qu'aucune donnée ne capture</span>
+        </label>
+        <textarea
+          id="team-news-note"
+          v-model="noteText"
+          class="tnc__textarea"
+          rows="3"
+          placeholder="Écris ici ce que tu sais et qui ne figure dans aucune statistique…"
+          :disabled="!noteLoaded"
+        />
+        <div class="tnc__note-actions">
+          <span class="tnc__note-status" :class="{ 'is-changed': noteChanged && !noteSaving }">
+            <template v-if="noteSaving">Enregistrement…</template>
+            <template v-else-if="noteChanged">Modifiée, pas encore enregistrée.</template>
+            <template v-else-if="noteSavedAt"><AppIcon name="check" :size="12" />Enregistrée le {{ formatDateTime(noteSavedAt) }}.</template>
+          </span>
+          <AppButton variant="section" size="sm" :loading="noteSaving" :disabled="!noteChanged" @click="enregistrerNote">
+            <template #icon><AppIcon name="check" :size="13" /></template>
+            Enregistrer la note
+          </AppButton>
+        </div>
       </div>
     </div>
-  </section>
+  </AppCard>
 </template>
 
 <style scoped>
-.team-news {
+.tnc__body {
+  /* Se règle sur SA largeur : les deux clubs côte à côte quand la place existe. */
+  container: tnc / inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* -------------------------------------------------------------- les clubs */
+.tnc__teams {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.tnc__team {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 14px 16px;
-  border: 1px solid var(--cm-border);
-  border-radius: var(--cm-radius);
-  background: var(--cm-surface-alt);
+  min-width: 0;
 }
 
-.team-news__head {
+.tnc__team-head {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: baseline;
   gap: 10px;
-}
-
-.team-news__title {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--cm-text-secondary);
-}
-
-.team-news__source {
-  font-size: 11.5px;
-  color: var(--cm-text-muted);
-}
-
-.team-news__loading,
-.team-news__empty {
   margin: 0;
-  font-size: 12px;
-  line-height: 1.45;
 }
 
-.team-news__teams {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.team-news__team-name {
-  margin: 0 0 4px;
-  font-size: 13px;
-  font-weight: 600;
+.tnc__team-name {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 700;
   color: var(--cm-text-primary);
 }
 
-.team-news__coach {
-  display: flex;
-  align-items: flex-start;
-  gap: 6px;
-  margin: 0 0 6px;
-  font-size: 12px;
+.tnc__crest {
+  margin-right: 9px;
+}
+
+.tnc__count {
+  font-size: 11px;
   color: var(--cm-text-secondary);
 }
 
-.team-news__coach :deep(svg) {
-  flex: none;
-  margin-top: 2px;
+.tnc__count.is-danger {
+  background: var(--cm-danger-soft);
+  color: var(--cm-danger);
 }
 
-.team-news__absences {
+.tnc__coach {
+  padding: 10px 12px;
+}
+
+.tnc__coach-text {
+  font-size: 12.5px;
+}
+
+.tnc__arrow {
+  color: var(--cm-text-muted);
+}
+
+.tnc__coach-since {
+  font-size: 11.5px;
+}
+
+/* Les absents : drapeau, nom, retour prévu, étiquette colorée à droite. */
+.tnc__absences {
   display: flex;
   flex-direction: column;
-  gap: 4px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.team-news__absences li {
-  display: flex;
+.tnc__absence {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
   align-items: center;
   gap: 8px;
+  padding: 7px 0;
+  border-top: 1px solid var(--cm-border-soft);
   font-size: 12.5px;
   color: var(--cm-text-secondary);
 }
 
-.team-news__absence-tag {
-  flex: none;
-  padding: 2px 7px;
-  border-radius: 999px;
-  font-size: 10.5px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
+.tnc__absence:first-child {
+  border-top: 0;
+  padding-top: 0;
 }
 
-.team-news__absence-tag--blessure {
+.tnc__absence:last-child {
+  padding-bottom: 0;
+}
+
+.tnc__absence-name {
+  font-weight: 600;
+  color: var(--cm-text-primary);
+}
+
+.tnc__absence-return {
+  font-size: 11.5px;
+  white-space: nowrap;
+}
+
+.tnc__tag {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Blessé en rouge, suspendu en ambre : des couleurs sémantiques, stables. */
+.tnc__tag.is-blessure {
   background: var(--cm-danger-soft);
   color: var(--cm-danger);
 }
 
-.team-news__absence-tag--suspension {
+.tnc__tag.is-suspension {
   background: var(--cm-warning-soft);
   color: var(--cm-warning);
 }
 
-.team-news__note {
+.tnc__none {
+  margin: 0;
+  font-size: 12px;
+  color: var(--cm-text-muted);
+}
+
+.tnc__empty {
+  padding: 22px 20px;
+}
+
+/* ----------------------------------------------------- la note manuscrite */
+.tnc__note {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding-top: 8px;
+  gap: 8px;
+  padding-top: 14px;
   border-top: 1px solid var(--cm-border-soft);
 }
 
-.team-news__note-label {
-  font-size: 11.5px;
-  font-weight: 600;
-  color: var(--cm-text-secondary);
+.tnc__note-label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
 }
 
-.team-news__textarea {
+.tnc__note-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--cm-text-muted);
+}
+
+.tnc__note-title :deep(svg) {
+  color: var(--cm-section);
+}
+
+.tnc__note-hint {
+  font-size: 11.5px;
+  color: var(--cm-text-muted);
+}
+
+/* Le même dessin que les champs communs (AppTextField) : surface, filet, anneau de focus couleur de section. */
+.tnc__textarea {
   width: 100%;
+  min-height: 72px;
   resize: vertical;
-  min-height: 60px;
-  padding: 8px 10px;
+  padding: 9px 12px;
   border: 1px solid var(--cm-border);
   border-radius: var(--cm-radius-sm);
-  background: var(--cm-surface);
+  background: var(--cm-surface-alt);
   color: var(--cm-text-primary);
   font: inherit;
-  font-size: 12.5px;
-  line-height: 1.45;
+  font-size: 13.5px;
+  line-height: 1.5;
+  outline: none;
+  transition: border-color var(--cm-transition), box-shadow var(--cm-transition);
 }
 
-.team-news__textarea:disabled {
+.tnc__textarea::placeholder {
+  color: var(--cm-text-muted);
+}
+
+.tnc__textarea:hover:not(:disabled) {
+  border-color: var(--cm-border-strong);
+}
+
+.tnc__textarea:focus {
+  border-color: var(--cm-section);
+  box-shadow: 0 0 0 3px rgba(var(--cm-section-rgb) / 0.18);
+}
+
+.tnc__textarea:disabled {
   opacity: 0.6;
+  cursor: not-allowed;
 }
 
-.team-news__note-actions {
+.tnc__note-actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 8px 12px;
 }
 
-.team-news__note-hint {
-  font-size: 11px;
+.tnc__note-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  color: var(--cm-text-muted);
+}
+
+.tnc__note-status :deep(svg) {
+  color: var(--cm-accent);
+}
+
+.tnc__note-status.is-changed {
+  color: var(--cm-warning);
+}
+
+/* Assez de place : les deux clubs côte à côte. */
+@container tnc (min-width: 620px) {
+  .tnc__teams {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Panneau étroit : le retour prévu passe sous le nom. */
+@container tnc (max-width: 360px) {
+  .tnc__absence {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .tnc__absence-return {
+    grid-column: 2;
+    white-space: normal;
+  }
 }
 </style>

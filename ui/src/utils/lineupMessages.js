@@ -1,5 +1,6 @@
-// Partagé entre TeamSquadView.vue et TeamStatsModal.vue — même API, mêmes
-// raisons de "compo indisponible" (cf. getLiveLineups côté serveur).
+// Raisons de "compo indisponible" de TeamSquadView.vue (cf. getLiveLineups
+// côté serveur). Le panneau TeamStatsModal qui les partageait a été remplacé
+// par la page d'équipe (views/TeamView.vue) le 01/10/2026.
 export const LINEUP_UNAVAILABLE_MESSAGES = {
   not_published_yet: "Compo pas encore publiée par les clubs — généralement disponible dans l'heure précédant le coup d'envoi.",
   fixture_not_found: "Rencontre introuvable dans les données API-Football (nom d'équipe non reconnu ou match trop éloigné dans le temps).",

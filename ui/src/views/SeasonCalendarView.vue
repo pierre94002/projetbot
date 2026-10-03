@@ -9,9 +9,8 @@ import AppButton from '@/components/common/AppButton.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
-import LeagueBadge from '@/components/matches/LeagueBadge.vue';
+import MatchCard from '@/components/matches/MatchCard.vue';
 import { formatDay, formatShortDay } from '@/utils/format.js';
-import { useRouter } from 'vue-router';
 
 // Calendrier de saison (joués + à venir), alimenté depuis FotMob par
 // l'actualisation automatique de l'appli (server/src/jobs/matchStatsAutoRefresh.js) —
@@ -95,6 +94,51 @@ const groupedByDay = computed(() => {
   return [...groups.entries()].sort(([a], [b]) => a.localeCompare(b));
 });
 
+// Une saison entière, c'est plus de 11 000 rencontres : les dessiner d'un
+// coup en cartes (MatchCard, 01/10/2026) figeait la page. On en montre une
+// fenêtre de jours — à partir d'avant-hier pour la saison en cours, du début
+// sinon — que deux boutons élargissent vers le passé ou vers l'avenir.
+const PAS_JOURS = 14;
+const debutFenetre = ref(0);
+const finFenetre = ref(PAS_JOURS);
+function recentrer() {
+  const jours = groupedByDay.value;
+  let debut = 0;
+  if (isCurrentSeason.value) {
+    const avantHier = new Date(Date.now() - 2 * 86_400_000).toISOString().slice(0, 10);
+    const i = jours.findIndex(([day]) => day >= avantHier);
+    debut = i < 0 ? Math.max(0, jours.length - PAS_JOURS) : i;
+  }
+  debutFenetre.value = debut;
+  finFenetre.value = debut + PAS_JOURS;
+}
+watch(groupedByDay, recentrer, { immediate: true });
+const joursAffiches = computed(() => groupedByDay.value.slice(debutFenetre.value, finFenetre.value));
+const joursAvant = computed(() => debutFenetre.value);
+const joursApres = computed(() => Math.max(0, groupedByDay.value.length - finFenetre.value));
+function plusTot() {
+  debutFenetre.value = Math.max(0, debutFenetre.value - PAS_JOURS);
+}
+function plusTard() {
+  finFenetre.value += PAS_JOURS;
+}
+
+// Présentation (refonte du 02/10/2026) : ce que le bandeau résume d'un coup
+// d'œil — le nombre de rencontres et de jours retenus par les filtres, et
+// les bornes de la fenêtre de jours à l'écran.
+const nbRencontres = computed(() => filteredMatches.value.length.toLocaleString('fr-FR'));
+const nbJours = computed(() => groupedByDay.value.length);
+const fenetre = computed(() => {
+  const jours = joursAffiches.value;
+  if (!jours.length) return null;
+  return {
+    jours: jours.length,
+    debut: jours[0][0],
+    fin: jours[jours.length - 1][0],
+    rencontres: jours.reduce((total, [, liste]) => total + liste.length, 0)
+  };
+});
+
 const lastUpdatedAt = computed(() => {
   const dates = matches.value.map((m) => m.updatedAt).filter(Boolean).sort();
   return dates.length ? dates[dates.length - 1] : null;
@@ -110,7 +154,6 @@ onMounted(async () => {
 // place : on recharge dès que l'empreinte des données côté serveur change.
 // C'est la vue la plus concernée, puisqu'elle affiche exactement ce que la
 // l'actualisation automatique réécrit à chaque passe.
-const router = useRouter();
 
 /** Identifiant de la fiche statistiques, construit comme cote serveur. */
 function statsId(match) {
@@ -125,23 +168,32 @@ function statsId(match) {
 }
 
 // « Reporté » : FotMob a reporté le match et ne donne pas encore de nouvelle
-// date (cf. merge-season-calendar.mjs). Re-programmé, il redevient « À venir »
-// à sa nouvelle date, sa date d'origine en dessous.
-function statusLabel(match) {
-  if (match.status === 'finished') return 'Terminé';
-  if (match.status === 'postponed') return 'Reporté';
-  return 'À venir';
+// date (cf. merge-season-calendar.mjs). Re-programmé, il redevient « à venir »
+// à sa nouvelle date, avec l'étiquette « Reprogrammé » (MatchCard.vue).
+// La page qu'ouvre une rencontre : celle du match joué, celle du match à
+// venir (retrouvée par son identifiant de calendrier), rien pour un reporté
+// sans date.
+function lienMatch(match) {
+  if (match.status === 'finished') return { name: 'match-detail', params: { matchId: statsId(match) } };
+  if (match.status === 'postponed' || !match.matchId) return null;
+  return `/match-a-venir/${match.matchId}`;
 }
 
-function statusClass(match) {
-  if (match.status === 'finished') return 'season-calendar__status--finished';
-  if (match.status === 'postponed') return 'season-calendar__status--postponed';
-  return 'season-calendar__status--scheduled';
-}
-
-function openMatch(match) {
-  if (match.status !== "finished") return; // Rien a montrer avant le coup denvoi.
-  router.push({ name: "match-detail", params: { matchId: statsId(match) } });
+// Une rencontre au format de la carte commune (MatchCard.vue, 01/10/2026).
+function versCarte(match) {
+  const joue = match.status === 'finished';
+  return {
+    matchId: match.matchId,
+    date: match.date,
+    league: match.league,
+    round: match.round ?? null,
+    homeName: match.homeName,
+    awayName: match.awayName,
+    homeGoals: joue ? match.homeGoals : null,
+    awayGoals: joue ? match.awayGoals : null,
+    status: match.status ?? 'scheduled',
+    postponedFrom: match.postponedFrom ?? null
+  };
 }
 
 const dataVersion = useDataVersionStore();
@@ -154,9 +206,27 @@ watch(
 </script>
 
 <template>
-  <div class="season-calendar">
-    <AppCard padded>
-      <div class="season-calendar__controls">
+  <div class="calendar cm-page">
+    <!-- Le bandeau : la saison regardée, ce qu'elle contient, la fenêtre de
+         jours à l'écran, et les filtres sur la même ligne. -->
+    <section class="cm-hero calendar__hero">
+      <div class="cm-hero__top">
+        <h2 class="cm-hero__title">
+          <span class="cm-icon-box"><AppIcon name="calendar" :size="18" /></span>
+          Calendrier de la saison
+        </h2>
+        <div class="cm-hero__chips">
+          <span v-if="season" class="cm-chip is-section"><AppIcon name="trophy" :size="11" />Saison {{ season }}</span>
+          <span class="cm-chip" title="Rencontres et jours de matchs retenus par les filtres">
+            <AppIcon name="matches" :size="11" />{{ nbRencontres }} rencontres · {{ nbJours }} jour{{ nbJours > 1 ? 's' : '' }}
+          </span>
+          <span v-if="fenetre" class="cm-chip is-info" title="La fenêtre de jours affichée ci-dessous">
+            <AppIcon name="eye" :size="11" />À l'écran : du {{ formatShortDay(fenetre.debut) }} au {{ formatShortDay(fenetre.fin) }} · {{ fenetre.rencontres }} rencontre{{ fenetre.rencontres > 1 ? 's' : '' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="cm-toolbar calendar__filters">
         <AppTextField v-model="leagueQuery" label="Championnat ou équipe" placeholder="Ex. Ligue 1, PSG…">
           <template #icon><AppIcon name="search" :size="15" /></template>
         </AppTextField>
@@ -167,10 +237,14 @@ watch(
           Actualiser
         </AppButton>
       </div>
-      <p v-if="lastUpdatedAt" class="season-calendar__hint cm-text-muted">
-        Dernière mise à jour de ce calendrier : {{ new Date(lastUpdatedAt).toLocaleString('fr-FR') }} — actualisé automatiquement par l'appli, au démarrage puis toutes les trois heures.
+
+      <p v-if="lastUpdatedAt" class="calendar__hint">
+        <AppIcon name="clock" :size="12" />
+        <span>
+          Dernière mise à jour de ce calendrier : {{ new Date(lastUpdatedAt).toLocaleString('fr-FR') }} — actualisé automatiquement par l'appli, au démarrage puis toutes les trois heures.
+        </span>
       </p>
-    </AppCard>
+    </section>
 
     <LoadingSpinner v-if="loading" label="Chargement du calendrier…" />
     <EmptyState v-else-if="error" icon="alert" title="Calendrier indisponible" :description="error" />
@@ -181,159 +255,182 @@ watch(
       description="Le calendrier se remplit tout seul : l'actualisation automatique de l'appli le complète au démarrage puis toutes les trois heures. Revenez un peu plus tard s'il vient d'être activé."
     />
 
-    <AppCard v-else :padded="false">
-      <div v-for="[day, dayMatches] in groupedByDay" :key="day" class="season-calendar__day">
-        <div class="season-calendar__day-header">{{ formatDay(day, { withYear: !isCurrentSeason }) }}</div>
-        <div
-          v-for="match in dayMatches"
-          :key="match.matchId"
-          class="season-calendar__row"
-          :class="{ 'season-calendar__row--clickable': match.status === 'finished' }"
-          @click="openMatch(match)"
-        >
-          <LeagueBadge :league="match.league" class="season-calendar__league" />
-          <div class="season-calendar__teams">
-            <span class="cm-truncate">{{ match.homeName }}</span>
-            <span class="season-calendar__score" :class="{ 'season-calendar__score--pending': match.status !== 'finished' }">
-              {{ match.status === 'finished' ? `${match.homeGoals} - ${match.awayGoals}` : 'vs' }}
-            </span>
-            <span class="cm-truncate">{{ match.awayName }}</span>
+    <!-- La fenêtre de jours : un bouton à chaque bout pour l'élargir, un
+         titre de groupe par jour, une colonne de cartes de rencontre. -->
+    <AppCard v-else :padded="false" class="calendar__list">
+      <button v-if="joursAvant" type="button" class="calendar__more" @click="plusTot">
+        <AppIcon name="chevronDown" :size="14" class="calendar__more-icon is-up" />
+        Afficher les jours précédents <span class="cm-text-muted">({{ joursAvant }} jour{{ joursAvant > 1 ? 's' : '' }} de matchs avant)</span>
+      </button>
+      <div class="calendar__days">
+        <section v-for="[day, dayMatches] in joursAffiches" :key="day" class="calendar__day">
+          <h3 class="cm-group-title calendar__day-title">
+            <span>{{ formatDay(day, { withYear: !isCurrentSeason }) }}</span>
+            <span class="calendar__day-count cm-numeric" :title="`${dayMatches.length} rencontre(s) ce jour`">{{ dayMatches.length }}</span>
+          </h3>
+          <div class="calendar__cards cm-stagger">
+            <MatchCard v-for="match in dayMatches" :key="match.matchId" :match="versCarte(match)" :to="lienMatch(match)" date-display="none" />
           </div>
-          <div class="season-calendar__state">
-            <span class="season-calendar__status" :class="statusClass(match)">{{ statusLabel(match) }}</span>
-            <span v-if="match.postponedFrom" class="season-calendar__postponed-from">reporté du {{ formatShortDay(match.postponedFrom) }}</span>
-          </div>
-        </div>
+        </section>
       </div>
+      <button v-if="joursApres" type="button" class="calendar__more" @click="plusTard">
+        <AppIcon name="chevronDown" :size="14" class="calendar__more-icon" />
+        Afficher les jours suivants <span class="cm-text-muted">({{ joursApres }} jour{{ joursApres > 1 ? 's' : '' }} de matchs après)</span>
+      </button>
     </AppCard>
   </div>
 </template>
 
 <style scoped>
-.season-calendar {
-  display: flex;
-  flex-direction: column;
+.calendar {
+  /* Se règle sur SA largeur : l'onglet vit dans la page Matchs, large ou non. */
+  container: calendar / inline-size;
+}
+
+/* ------------------------------------------------------------ bandeau */
+.calendar__hero {
   gap: 16px;
 }
 
-.season-calendar__controls {
-  display: grid;
-  grid-template-columns: 1.6fr 1fr 1fr auto;
-  gap: 14px;
-  align-items: end;
+/* Les filtres : le champ de recherche prend le plus de place, les sélecteurs
+   se partagent le reste, le bouton garde sa largeur. */
+.calendar__filters > * {
+  flex: 1 1 170px;
 }
 
-.season-calendar__hint {
-  margin: 12px 0 0;
-  font-size: 11.5px;
+.calendar__filters > :first-child {
+  flex: 2 1 240px;
 }
 
-.season-calendar__day-header {
-  padding: 10px 16px;
+.calendar__filters > :last-child {
+  flex: 0 0 auto;
+}
+
+.calendar__hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin: 0;
   font-size: 11.5px;
-  font-weight: 700;
-  text-transform: capitalize;
+  line-height: 1.5;
   color: var(--cm-text-muted);
-  background: var(--cm-surface-hover);
-  border-bottom: 1px solid var(--cm-border-soft);
 }
 
-.season-calendar__row--clickable {
-  cursor: pointer;
+.calendar__hint :deep(svg) {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--cm-section);
 }
 
-.season-calendar__row--clickable:hover {
-  background: var(--cm-surface-hover);
+/* ------------------------------------------------------------ fenêtre */
+/* La carte coupe ses enfants à ses coins arrondis : les boutons « plus de
+   jours » courent d'un bord à l'autre. */
+.calendar__list {
+  overflow: hidden;
 }
 
-.season-calendar__row {
-  display: grid;
-  grid-template-columns: 1fr 2fr auto;
-  gap: 12px;
+.calendar__more {
+  display: flex;
   align-items: center;
-  padding: 10px 16px;
-  border-bottom: 1px solid var(--cm-border-soft);
-  font-size: 12.5px;
-}
-
-.season-calendar__teams {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  justify-content: center;
   gap: 8px;
-  align-items: center;
-  text-align: center;
-}
-
-.season-calendar__teams span:first-child {
-  text-align: right;
-}
-
-.season-calendar__teams span:last-child {
-  text-align: left;
-}
-
-.season-calendar__score {
+  width: 100%;
+  padding: 12px 16px;
+  border: 0;
+  border-bottom: 1px solid var(--cm-border-soft);
+  background: rgb(var(--cm-glass-tint) / var(--cm-glass-alpha-1));
+  color: var(--cm-section);
+  font: inherit;
+  font-size: 12.5px;
   font-weight: 700;
-  color: var(--cm-text-primary);
-  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--cm-transition);
 }
 
-.season-calendar__score--pending {
-  font-weight: 500;
-  color: var(--cm-text-muted);
+.calendar__more:last-child {
+  border-bottom: 0;
+  border-top: 1px solid var(--cm-border-soft);
 }
 
-.season-calendar__state {
-  justify-self: end;
+.calendar__more:hover {
+  background: var(--cm-section-soft);
+}
+
+.calendar__more-icon {
+  flex-shrink: 0;
+  transition: transform var(--cm-transition);
+}
+
+.calendar__more-icon.is-up {
+  transform: rotate(180deg);
+}
+
+.calendar__more:hover .calendar__more-icon {
+  transform: translateY(2px);
+}
+
+.calendar__more:hover .calendar__more-icon.is-up {
+  transform: rotate(180deg) translateY(2px);
+}
+
+.calendar__days {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  gap: 3px;
 }
 
-.season-calendar__postponed-from {
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--cm-warning);
-  white-space: nowrap;
+.calendar__day {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px 16px;
 }
 
-.season-calendar__status {
-  justify-self: end;
-  padding: 2px 8px;
+.calendar__day + .calendar__day {
+  border-top: 1px solid var(--cm-border-soft);
+}
+
+/* Le jour : un titre de groupe un cran plus lisible que la norme, avec le
+   nombre de rencontres en pastille couleur de section. */
+.calendar__day-title {
+  font-size: 11px;
+  color: var(--cm-text-secondary);
+}
+
+.calendar__day-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 18px;
+  padding: 0 6px;
   border-radius: 999px;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  white-space: nowrap;
+  background: var(--cm-section-soft);
+  color: var(--cm-section);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0;
 }
 
-.season-calendar__status--finished {
-  background: var(--cm-warning-soft);
-  color: var(--cm-warning);
+.calendar__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.season-calendar__status--scheduled {
-  background: var(--cm-surface-hover);
-  color: var(--cm-text-muted);
-}
-
-.season-calendar__status--postponed {
-  background: var(--cm-danger-soft);
-  color: var(--cm-danger);
-}
-
-@media (max-width: 720px) {
-  .season-calendar__controls {
-    grid-template-columns: 1fr;
+/* Étroit : chaque filtre sur sa ligne, le bouton aussi. */
+@container calendar (max-width: 720px) {
+  .calendar__filters > *,
+  .calendar__filters > :first-child,
+  .calendar__filters > :last-child {
+    flex: 1 1 100%;
   }
-  .season-calendar__row {
-    grid-template-columns: 1fr;
-    justify-items: start;
+
+  .calendar__hero {
+    padding: 16px;
   }
-  .season-calendar__state {
-    justify-self: start;
-    align-items: flex-start;
+
+  .calendar__day {
+    padding: 12px;
   }
 }
 </style>

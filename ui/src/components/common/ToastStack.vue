@@ -4,15 +4,15 @@ import AppIcon from './AppIcon.vue';
 
 const toastStore = useToastStore();
 
-const ICON_BY_VARIANT = { success: 'check', error: 'alert', info: 'bolt' };
+const ICON_BY_VARIANT = { success: 'check', error: 'alert', info: 'sparkles' };
 </script>
 
 <template>
   <div class="toast-stack">
     <TransitionGroup name="toast">
       <div v-for="toast in toastStore.toasts" :key="toast.id" class="toast" :class="`toast--${toast.variant}`">
-        <AppIcon :name="ICON_BY_VARIANT[toast.variant] ?? 'bolt'" :size="15" />
-        <span>{{ toast.message }}</span>
+        <span class="toast__icon"><AppIcon :name="ICON_BY_VARIANT[toast.variant] ?? 'sparkles'" :size="14" /></span>
+        <span class="toast__text">{{ toast.message }}</span>
         <button class="toast__close" type="button" @click="toastStore.dismiss(toast.id)">
           <AppIcon name="x" :size="13" />
         </button>
@@ -30,58 +30,74 @@ const ICON_BY_VARIANT = { success: 'check', error: 'alert', info: 'bolt' };
   flex-direction: column;
   gap: 8px;
   z-index: 100;
-  max-width: 340px;
+  max-width: 360px;
 }
 
 .toast {
+  --ton: var(--cm-info);
+  --ton-rgb: var(--cm-info-rgb);
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 14px;
-  border-radius: var(--cm-radius);
-  background: var(--cm-surface-alt);
-  border: 1px solid var(--cm-border);
+  padding: 11px 12px 11px 11px;
+  border-radius: var(--cm-radius-md);
+  background: rgba(21, 26, 36, 0.92);
+  backdrop-filter: blur(var(--cm-elevation-3-blur));
+  -webkit-backdrop-filter: blur(var(--cm-elevation-3-blur));
+  border: 1px solid rgba(var(--ton-rgb) / 0.35);
   box-shadow: var(--cm-shadow);
   font-size: 13px;
   color: var(--cm-text-primary);
 }
 
 .toast--success {
-  border-color: rgba(52, 211, 153, 0.35);
-  color: var(--cm-accent);
+  --ton: var(--cm-accent);
+  --ton-rgb: var(--cm-accent-rgb);
 }
 .toast--error {
-  border-color: rgba(248, 113, 113, 0.35);
-  color: var(--cm-danger);
+  --ton: var(--cm-danger);
+  --ton-rgb: var(--cm-danger-rgb);
 }
 
-.toast span {
+.toast__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: rgba(var(--ton-rgb) / 0.15);
+  color: var(--ton);
+}
+
+.toast__text {
   flex: 1;
+  line-height: 1.4;
 }
 
 .toast__close {
   background: none;
   border: none;
   cursor: pointer;
-  color: inherit;
-  opacity: 0.6;
+  color: var(--cm-text-muted);
   display: flex;
   padding: 2px;
 }
 .toast__close:hover {
-  opacity: 1;
+  color: var(--cm-text-primary);
 }
 
 .toast-enter-active,
 .toast-leave-active {
-  transition: all 180ms ease;
+  transition: all 200ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 .toast-enter-from {
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(10px);
 }
 .toast-leave-to {
   opacity: 0;
-  transform: translateX(8px);
+  transform: translateX(10px);
 }
 </style>

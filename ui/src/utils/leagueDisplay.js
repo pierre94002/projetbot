@@ -50,12 +50,53 @@ const COUNTRY_CODES = {
   venezuela: 'VEN'
 };
 
-/** Découpe "La Liga - Spain" en {name: "La Liga", country: "Spain"} ; "EFL Cup" reste tel quel, sans pays. */
+// Compétitions dont le libellé ne porte pas de pays (The Odds API, FotMob) :
+// leur pays, pour le drapeau de LeagueBadge (01/10/2026). Les coupes
+// continentales (UEFA, Libertadores, Leagues Cup) n'en ont pas.
+const COMPETITION_COUNTRIES = {
+  epl: 'ENG',
+  championship: 'ENG',
+  'league 1': 'ENG',
+  'league 2': 'ENG',
+  'efl cup': 'ENG',
+  'fa cup': 'ENG',
+  'serie a': 'ITA',
+  'serie b': 'ITA',
+  'coppa italia': 'ITA',
+  bundesliga: 'GER',
+  'bundesliga 2': 'GER',
+  'dfb pokal': 'GER',
+  'ligue 1': 'FRA',
+  'ligue 2': 'FRA',
+  'coupe de france': 'FRA',
+  'la liga': 'ESP',
+  'la liga 2': 'ESP',
+  'copa del rey': 'ESP',
+  'austrian football bundesliga': 'AUT',
+  'belgium first div': 'BEL',
+  'brazil série a': 'BRA',
+  'brazil serie a': 'BRA',
+  'canadian premier league': 'CAN',
+  'denmark superliga': 'DEN',
+  'dutch eredivisie': 'NED',
+  'league of ireland': 'IRL',
+  'liga mx': 'MEX',
+  mls: 'USA',
+  'swiss superleague': 'SUI',
+  'turkey super league': 'TUR',
+  'primeira liga': 'POR',
+  'scottish premiership': 'SCO'
+};
+
+/** Découpe "La Liga - Spain" en {name: "La Liga", country: "Spain"} ; "EFL Cup" garde son nom, et son pays s'il est connu. */
 export function parseLeagueLabel(sportTitle) {
   if (!sportTitle) return { name: 'Compétition', country: null, countryCode: null };
 
   const separatorIndex = sportTitle.lastIndexOf(' - ');
-  if (separatorIndex === -1) return { name: sportTitle, country: null, countryCode: null };
+  if (separatorIndex === -1) {
+    const code = COMPETITION_COUNTRIES[sportTitle.trim().toLowerCase()] ?? null;
+    return { name: sportTitle, country: null, countryCode: code };
+  }
 
   const name = sportTitle.slice(0, separatorIndex);
   const country = sportTitle.slice(separatorIndex + 3);

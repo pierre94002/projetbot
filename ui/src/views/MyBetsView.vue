@@ -24,6 +24,9 @@ import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import MatchesFilterBar from '@/components/matches/MatchesFilterBar.vue';
 import PicksSearchCard from '@/components/matches/PicksSearchCard.vue';
+import MatchCard from '@/components/matches/MatchCard.vue';
+import TeamCrest from '@/components/matches/TeamCrest.vue';
+import PickCrest from '@/components/matches/PickCrest.vue';
 import MatchStatusBadge from '@/components/common/MatchStatusBadge.vue';
 import MatchStatsPanel from '@/components/matches/MatchStatsPanel.vue';
 import LeagueBadge from '@/components/matches/LeagueBadge.vue';
@@ -31,6 +34,15 @@ import TabbedView from '@/components/common/TabbedView.vue';
 import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
 import { formatOdds, formatCurrency, formatPercent, formatDateTime, formatKickoff } from '@/utils/format.js';
 
+/**
+ * Mes paris — refonte visuelle du 01/10/2026 (cf. ui/DESIGN.md) : un bandeau
+ * avec les chiffres de la bankroll, le bordereau de sélection en carte
+ * collante couleur de section, le scanner en rangée de commandes, puis les
+ * listes (carnet, value bets, paris probables, tous les paris) en cartes par
+ * championnat et par rencontre. La logique est strictement celle d'avant ;
+ * seuls deux calculs de présentation ont été ajoutés (compte des paris en
+ * attente, gain potentiel du bordereau).
+ */
 const route = useRoute();
 const matchesStore = useMatchesStore();
 const sourcesStore = useSourcesStore();
@@ -42,6 +54,9 @@ const teamStatsModalStore = useTeamStatsModalStore();
 const STATUS_LABELS = { pending: 'En attente', won: 'Gagné', lost: 'Perdu', void: 'Annulé' };
 
 const pendingStake = computed(() => betsStore.bets.filter((bet) => bet.status === 'pending').reduce((sum, bet) => sum + bet.stake, 0));
+
+// Présentation seulement : le nombre de paris en attente, pour la puce du bandeau.
+const pendingBetsCount = computed(() => betsStore.bets.filter((bet) => bet.status === 'pending').length);
 
 async function setLegStatus(bet, legIndex, status) {
   try {
@@ -133,6 +148,20 @@ function isBetMatchOpen(matchId) {
 // Même badge/statut qu'ailleurs (cf. matchStatus.js) — un match dont le coup
 // d'envoi est inconnu (très vieux pari, jamais recroisé avec matchesStore)
 // n'affiche simplement pas le badge plutôt qu'un statut deviné.
+// Le match d'un groupe de paris au format de la carte de rencontre commune
+// (MatchCard.vue, 01/10/2026) ; le clic sur la carte ouvre/ferme ses paris.
+function carteDuMatch(matchGroup, league) {
+  return {
+    matchId: matchGroup.matchId,
+    commenceTime: matchGroup.commenceTime ?? null,
+    date: matchGroup.commenceTime ? String(matchGroup.commenceTime).slice(0, 10) : null,
+    league,
+    homeName: matchGroup.homeName,
+    awayName: matchGroup.awayName,
+    status: isMatchGroupLive(matchGroup) ? 'live' : isMatchGroupFinished(matchGroup) ? 'finished' : 'scheduled'
+  };
+}
+
 function isMatchGroupLive(matchGroup) {
   return computeMatchStatus(matchGroup.commenceTime, liveNow.value) === 'live';
 }
@@ -446,6 +475,10 @@ const combinedOdds = computed(() => selectedLegs.value.reduce((product, leg) => 
 const slipStake = ref(10);
 const submittingSlip = ref(false);
 
+// Présentation seulement : ce que rapporterait le bordereau s'il passait
+// (mise × cote cumulée), affiché à côté du bouton de validation.
+const slipPotential = computed(() => (Number(slipStake.value) > 0 ? Number(slipStake.value) * combinedOdds.value : 0));
+
 // Kelly ne s'applique proprement qu'à UN pari indépendant à la fois — pour
 // une seule sélection avec une mise conseillée (value bet), on la propose en
 // mise par défaut ; pour un combiné ou un pari sûr sans mise Kelly, on laisse
@@ -490,877 +523,1132 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="my-bets-view">
+  <div class="my-bets-view cm-page">
+    <!-- 1. LE BANDEAU : la bankroll d'un coup d'œil, quel que soit l'onglet. -->
+    <section class="cm-hero bets-hero">
+      <div class="cm-hero__top">
+        <h2 class="cm-hero__title">
+          <span class="bets-hero__logo"><AppIcon name="wallet" :size="16" /></span>
+          Mes paris
+        </h2>
+        <div class="cm-hero__chips">
+          <span class="cm-chip is-section"><AppIcon name="clock" :size="11" />{{ pendingBetsCount }} en attente</span>
+          <span class="cm-chip"><AppIcon name="cards" :size="11" />{{ betsStore.bets.length }} paris au carnet</span>
+        </div>
+      </div>
+      <p class="cm-hero__subtitle">Carnet de paris — simples et combinés : ce qui est misé, ce qui est revenu, et le rendement des paris réglés.</p>
+
+      <div class="cm-kpis bets-hero__kpis">
+        <div class="cm-kpi">
+          <span class="cm-kpi__label">Misé (en attente)</span>
+          <span class="cm-kpi__value">{{ formatCurrency(pendingStake) }}</span>
+          <span class="cm-kpi__detail">paris non réglés</span>
+        </div>
+        <div class="cm-kpi">
+          <span class="cm-kpi__label">Misé (réglés)</span>
+          <span class="cm-kpi__value">{{ formatCurrency(betsStore.totalStaked) }}</span>
+          <span class="cm-kpi__detail">gagnés, perdus, annulés</span>
+        </div>
+        <div class="cm-kpi">
+          <span class="cm-kpi__label">Retours</span>
+          <span class="cm-kpi__value">{{ formatCurrency(betsStore.totalReturned) }}</span>
+          <span class="cm-kpi__detail">gains encaissés</span>
+        </div>
+        <div class="cm-kpi">
+          <span class="cm-kpi__label">Profit net</span>
+          <span class="cm-kpi__value" :class="betsStore.netProfit >= 0 ? 'cm-positive' : 'cm-negative'">
+            {{ formatCurrency(betsStore.netProfit) }}
+          </span>
+          <span class="cm-kpi__detail">retours − mises réglées</span>
+        </div>
+        <div class="cm-kpi is-section">
+          <span class="cm-kpi__label">ROI</span>
+          <span class="cm-kpi__value" :class="(betsStore.roiPercent ?? 0) >= 0 ? 'cm-positive' : 'cm-negative'">
+            {{ betsStore.roiPercent === null ? '—' : formatPercent(betsStore.roiPercent, { showSign: true }) }}
+          </span>
+          <span class="cm-kpi__detail">sur les paris réglés</span>
+        </div>
+      </div>
+    </section>
+
     <TabbedView v-model="activeTab" :tabs="TABS" query-param="onglet" />
 
+    <!-- 2. LE BORDEREAU : collant, couleur de section, visible depuis n'importe quel onglet. -->
     <div v-if="selectedLegs.length" class="bet-slip">
-      <p class="bet-slip__title">
-        {{ selectedLegs.length }} sélection{{ selectedLegs.length > 1 ? 's' : '' }}
-        <span v-if="selectedLegs.length > 1" class="cm-text-muted">— combiné, cote {{ formatOdds(combinedOdds) }}</span>
-      </p>
-      <AppNumberField v-model="slipStake" label="Mise (€)" :min="1" />
-      <AppButton variant="primary" :loading="submittingSlip" :disabled="!slipStake || slipStake <= 0" @click="submitSlip">
-        Valider {{ selectedLegs.length > 1 ? `le combiné (${selectedLegs.length})` : 'le pari' }}
-      </AppButton>
+      <div class="bet-slip__head">
+        <span class="bet-slip__icon"><AppIcon name="cards" :size="15" /></span>
+        <div class="bet-slip__titles">
+          <p class="bet-slip__title">
+            {{ selectedLegs.length }} sélection{{ selectedLegs.length > 1 ? 's' : '' }}
+            <span v-if="selectedLegs.length > 1" class="bet-slip__combo">— combiné, cote {{ formatOdds(combinedOdds) }}</span>
+          </p>
+          <p class="bet-slip__hint">Gain potentiel <span class="cm-numeric bet-slip__potential">{{ formatCurrency(slipPotential) }}</span> · un seul pari par match</p>
+        </div>
+      </div>
+
+      <div class="bet-slip__legs">
+        <span v-for="leg in selectedLegs" :key="legKey(leg)" class="cm-chip bet-slip__leg" :title="`${leg.homeName} vs ${leg.awayName} · ${leg.market}`">
+          <PickCrest :item="leg" :home="leg.homeName" :away="leg.awayName" :league="leg.league" :size="14" />
+          <span class="cm-truncate">{{ leg.pick }}</span>
+          <span class="cm-numeric bet-slip__leg-odds">@ {{ formatOdds(leg.odds) }}</span>
+        </span>
+      </div>
+
+      <div class="bet-slip__form">
+        <AppNumberField v-model="slipStake" label="Mise (€)" :min="1" class="bet-slip__stake" />
+        <AppButton variant="primary" :loading="submittingSlip" :disabled="!slipStake || slipStake <= 0" @click="submitSlip">
+          Valider {{ selectedLegs.length > 1 ? `le combiné (${selectedLegs.length})` : 'le pari' }}
+        </AppButton>
+      </div>
     </div>
 
     <Transition name="view" mode="out-in">
-    <div v-if="activeTab === 'bankroll'" key="bankroll" class="my-bets-view__bankroll">
-    <AppCard title="Mes paris" subtitle="Carnet de paris — simples et combinés">
-      <div class="my-bets-view__summary">
-        <div class="my-bets-view__stat">
-          <span class="cm-text-muted">Misé (en attente)</span>
-          <span class="cm-numeric">{{ formatCurrency(pendingStake) }}</span>
-        </div>
-        <div class="my-bets-view__stat">
-          <span class="cm-text-muted">Misé (réglés)</span>
-          <span class="cm-numeric">{{ formatCurrency(betsStore.totalStaked) }}</span>
-        </div>
-        <div class="my-bets-view__stat">
-          <span class="cm-text-muted">Retours</span>
-          <span class="cm-numeric">{{ formatCurrency(betsStore.totalReturned) }}</span>
-        </div>
-        <div class="my-bets-view__stat">
-          <span class="cm-text-muted">Profit net</span>
-          <span class="cm-numeric" :class="betsStore.netProfit >= 0 ? 'cm-positive' : 'cm-negative'">
-            {{ formatCurrency(betsStore.netProfit) }}
-          </span>
-        </div>
-        <div class="my-bets-view__stat">
-          <span class="cm-text-muted">ROI</span>
-          <span class="cm-numeric" :class="(betsStore.roiPercent ?? 0) >= 0 ? 'cm-positive' : 'cm-negative'">
-            {{ betsStore.roiPercent === null ? '—' : formatPercent(betsStore.roiPercent, { showSign: true }) }}
-          </span>
-        </div>
-      </div>
-    </AppCard>
+      <!-- 3. BANKROLL & CARNET : le scanner, puis les paris en cours. -->
+      <div v-if="activeTab === 'bankroll'" key="bankroll" class="bets-tab">
+        <AppCard icon="bolt" eyebrow="Scanner" title="Scanner les matchs" subtitle="Une seule analyse alimente les trois recherches : value bets, paris les plus probables, tous les paris">
+          <div class="scanner">
+            <div class="cm-toolbar scanner__toolbar">
+              <AppSelect v-model="matchesStore.source" label="Source de données" :options="sourcesStore.options" class="scanner__source" />
+              <AppNumberField v-model="matchesStore.bankroll" label="Bankroll" :min="0" :step="500" suffix="€" class="scanner__bankroll" />
+              <AppButton variant="primary" :loading="scanning" @click="scanMatches">
+                <template #icon><AppIcon name="bolt" :size="15" /></template>
+                Scanner les matchs
+              </AppButton>
+            </div>
 
-    <AppCard title="Scanner les matchs" subtitle="Alimente les trois recherches ci-dessous en une seule analyse">
-      <div class="value-bets__controls">
-        <AppSelect v-model="matchesStore.source" label="Source de données" :options="sourcesStore.options" />
-        <AppNumberField v-model="matchesStore.bankroll" label="Bankroll" :min="0" :step="500" suffix="€" />
-        <AppButton variant="primary" :loading="scanning" @click="scanMatches">
-          <template #icon><AppIcon name="bolt" :size="15" /></template>
-          Scanner les matchs
-        </AppButton>
-      </div>
-      <div class="value-bets__date-filter">
-        <MatchesFilterBar v-model="dateFilter" :available-dates="availableDates" />
-      </div>
-      <p class="cm-text-muted value-bets__kelly-hint">
-        Mise conseillée = critère de Kelly fractionné sur la bankroll ci-dessus. Fraction de Kelly, seuils d'edge et mise
-        max réglables dans <RouterLink to="/reglages">Réglages du moteur</RouterLink>.
-      </p>
-    </AppCard>
+            <div class="scanner__period">
+              <span class="scanner__period-label">Période</span>
+              <MatchesFilterBar v-model="dateFilter" :available-dates="availableDates" />
+            </div>
 
-    <AppCard :padded="false" title="">
-      <div class="bets-search">
-        <AppTextField v-model="betSearchQuery" placeholder="Rechercher un pari réglé (équipe, marché, pick)…">
-          <template #icon><AppIcon name="search" :size="15" /></template>
-        </AppTextField>
-      </div>
-
-      <LoadingSpinner v-if="betsStore.loading" />
-      <EmptyState v-else-if="betsStore.error" icon="alert" title="Impossible de charger le carnet" :description="betsStore.error" />
-      <EmptyState
-        v-else-if="visibleBets.length === 0 && betSearchQuery.trim()"
-        icon="search"
-        title="Aucun résultat"
-        :description="`Aucun pari ne correspond à «${betSearchQuery.trim()}».`"
-      />
-      <EmptyState
-        v-else-if="visibleBets.length === 0"
-        icon="target"
-        title="Aucun pari en attente"
-        description="Sélectionne un ou plusieurs value bets ci-dessus pour créer un pari, ou recherche un pari déjà réglé."
-      />
-      <div v-else class="bets-list">
-        <div v-for="leagueGroup in groupedBets" :key="leagueGroup.league" class="league-group">
-          <div
-            class="league-group__header"
-            role="button"
-            tabindex="0"
-            @click="toggleBetLeague(leagueGroup.league)"
-            @keydown.enter="toggleBetLeague(leagueGroup.league)"
-          >
-            <LeagueBadge :league="leagueGroup.league" />
-            <span v-if="leagueGroup.matches.some(isMatchGroupLive)" class="league-group__live">
-              <span class="league-group__live-dot"></span>{{ leagueGroup.matches.filter(isMatchGroupLive).length }} en direct
-            </span>
-            <span v-if="leagueGroup.matches.some(isMatchGroupFinished)" class="league-group__finished">
-              {{ leagueGroup.matches.filter(isMatchGroupFinished).length }} terminé(s)
-            </span>
-            <span class="cm-text-muted cm-numeric league-group__count">{{ leagueGroup.count }}</span>
-            <AppIcon
-              name="chevronRight"
-              :size="12"
-              class="league-group__chevron"
-              :class="{ 'league-group__chevron--open': isBetLeagueOpen(leagueGroup.league) }"
-            />
-          </div>
-
-          <template v-if="isBetLeagueOpen(leagueGroup.league)">
-        <div v-for="matchGroup in leagueGroup.matches" :key="matchGroup.matchId" class="bets-match-group">
-          <div
-            class="bets-match-group__header"
-            role="button"
-            tabindex="0"
-            @click="toggleBetMatch(matchGroup.matchId)"
-            @keydown.enter="toggleBetMatch(matchGroup.matchId)"
-          >
-            <p class="bets-match-group__title cm-truncate">
-              <button type="button" class="cm-team-link" @click.stop="teamStatsModalStore.openFor(matchGroup.homeName, leagueGroup.league, matchGroup.matchId)">{{ matchGroup.homeName }}</button>
-              vs
-              <button type="button" class="cm-team-link" @click.stop="teamStatsModalStore.openFor(matchGroup.awayName, leagueGroup.league, matchGroup.matchId)">{{ matchGroup.awayName }}</button>
-            </p>
-            <button
-              v-if="isMatchGroupLive(matchGroup)"
-              type="button"
-              class="bets-match-group__live"
-              title="Voir le score et les statistiques en direct"
-              @click.stop="showLiveMatchDetails(matchGroup)"
-            >
-              <span class="bets-match-group__live-dot"></span>DIRECT
-            </button>
-            <span v-else-if="isMatchGroupFinished(matchGroup)" class="bets-match-group__finished">TERMINÉ</span>
-            <span class="cm-text-muted cm-numeric">{{ matchGroup.bets.length }}</span>
-            <AppIcon
-              name="chevronRight"
-              :size="12"
-              class="bets-match-group__chevron"
-              :class="{ 'bets-match-group__chevron--open': isBetMatchOpen(matchGroup.matchId) }"
-            />
-          </div>
-
-          <div v-if="liveMatchDetailsByMatch[matchGroup.matchId]" class="bets-match-group__live-panel">
-            <p v-if="liveMatchDetailsByMatch[matchGroup.matchId].loading" class="cm-text-muted">Récupération du score et des statistiques…</p>
-            <p v-else-if="liveMatchDetailsByMatch[matchGroup.matchId].error" class="cm-text-muted">Erreur : {{ liveMatchDetailsByMatch[matchGroup.matchId].error }}</p>
-            <p v-else-if="liveMatchDetailsByMatch[matchGroup.matchId].data && !liveMatchDetailsByMatch[matchGroup.matchId].data.available" class="cm-text-muted">
-              {{ LIVE_MATCH_UNAVAILABLE_MESSAGES[liveMatchDetailsByMatch[matchGroup.matchId].data.reason] ?? 'Détails en direct indisponibles pour ce match.' }}
-            </p>
-            <template v-else-if="liveMatchDetailsByMatch[matchGroup.matchId].data?.available">
-              <p class="bets-match-group__live-score">
-                <span class="cm-numeric">{{ liveMatchDetailsByMatch[matchGroup.matchId].data.score.home ?? '—' }} - {{ liveMatchDetailsByMatch[matchGroup.matchId].data.score.away ?? '—' }}</span>
-                <span v-if="liveMatchDetailsByMatch[matchGroup.matchId].data.status?.elapsed" class="cm-text-muted"> · {{ liveMatchDetailsByMatch[matchGroup.matchId].data.status.elapsed }}'</span>
-                <span v-if="liveMatchDetailsByMatch[matchGroup.matchId].data.status?.long" class="cm-text-muted"> · {{ liveMatchDetailsByMatch[matchGroup.matchId].data.status.long }}</span>
-              </p>
-              <MatchStatsPanel
-                v-if="liveMatchDetailsByMatch[matchGroup.matchId].data.teams?.length"
-                :teams="liveMatchDetailsByMatch[matchGroup.matchId].data.teams"
-                :fallback-primary-name="matchGroup.homeName"
-                :fallback-opponent-name="matchGroup.awayName"
-              />
-              <p v-else class="cm-text-muted">Statistiques détaillées pas encore publiées pour ce match.</p>
-            </template>
-          </div>
-
-          <template v-if="isBetMatchOpen(matchGroup.matchId)">
-        <div v-for="bet in matchGroup.bets" :key="bet.id" class="bets-row" :class="`bets-row--${bet.status}`">
-          <div class="bets-row__main">
-            <template v-if="bet.legs.length === 1">
-              <p class="cm-text-muted bets-row__market cm-truncate">
-                {{ bet.legs[0].market }}
-              </p>
-              <p class="bets-row__pick cm-truncate">{{ bet.legs[0].pick }}</p>
-              <p v-if="matchKickoff(bet.legs[0])" class="cm-text-muted bets-row__date">
-                Match le {{ formatKickoff(matchKickoff(bet.legs[0])) }}
-                <MatchStatusBadge v-if="bet.status === 'pending'" :commence-time="matchKickoff(bet.legs[0])" class="bets-row__status-badge" />
-              </p>
-            </template>
-            <template v-else>
-              <p class="bets-row__match cm-truncate">Combiné — {{ bet.legs.length }} sélections</p>
-              <p class="cm-text-muted bets-row__combo-hint">Statut global déduit des sélections ci-dessous</p>
-            </template>
-            <p class="cm-text-muted bets-row__date">Pari créé le {{ formatDateTime(bet.createdAt) }}</p>
-          </div>
-
-          <div class="bets-row__figures">
-            <span class="cm-numeric">@ {{ formatOdds(bet.odds) }}</span>
-            <span class="cm-numeric">{{ formatCurrency(bet.stake) }}</span>
-            <span class="cm-numeric bets-row__potential">{{ formatCurrency(bet.stake * bet.odds) }}</span>
-          </div>
-
-          <span class="bets-row__status" :class="`bets-row__status--${bet.status}`">{{ STATUS_LABELS[bet.status] }}</span>
-
-          <div v-if="bet.legs.length === 1" class="bets-row__actions">
-            <template v-if="legStatus(bet, 0) === 'pending'">
-              <AppButton variant="ghost" size="sm" @click="setLegStatus(bet, 0, 'won')">Gagné</AppButton>
-              <AppButton variant="ghost" size="sm" @click="setLegStatus(bet, 0, 'lost')">Perdu</AppButton>
-              <AppButton variant="ghost" size="sm" @click="setLegStatus(bet, 0, 'void')">Annulé</AppButton>
-            </template>
-            <AppButton v-else variant="ghost" size="sm" @click="setLegStatus(bet, 0, 'pending')">Réouvrir</AppButton>
-            <button type="button" class="bets-row__delete" title="Supprimer" @click="remove(bet)">
-              <AppIcon name="x" :size="14" />
-            </button>
-          </div>
-          <div v-else class="bets-row__actions">
-            <button type="button" class="bets-row__delete" title="Supprimer" @click="remove(bet)">
-              <AppIcon name="x" :size="14" />
-            </button>
-          </div>
-
-          <div v-if="bet.legs.length > 1" class="bet-legs">
-            <div v-for="(leg, i) in bet.legs" :key="i" class="bet-leg">
-              <div class="bet-leg__main">
-                <p class="bet-leg__match cm-truncate">
-                  <button type="button" class="cm-team-link" @click.stop="teamStatsModalStore.openFor(leg.homeName, leg.league, leg.matchId)">{{ leg.homeName }}</button>
-                  vs
-                  <button type="button" class="cm-team-link" @click.stop="teamStatsModalStore.openFor(leg.awayName, leg.league, leg.matchId)">{{ leg.awayName }}</button>
+            <div class="cm-note">
+              <span class="cm-icon-box is-sm"><AppIcon name="percent" :size="14" /></span>
+              <div>
+                <p class="cm-note__title">Mise conseillée</p>
+                <p class="cm-note__text scanner__hint">
+                  Mise conseillée = critère de Kelly fractionné sur la bankroll ci-dessus. Fraction de Kelly, seuils d'edge et mise
+                  max réglables dans <RouterLink to="/reglages" class="scanner__link">Réglages du moteur</RouterLink>.
                 </p>
-                <p class="cm-text-muted bet-leg__market cm-truncate">
-                  {{ leg.market }} <span v-if="leg.league">· {{ leg.league }}</span><span v-if="matchKickoff(leg)"> · {{ formatKickoff(matchKickoff(leg)) }}</span>
-                  <MatchStatusBadge v-if="legStatus(bet, i) === 'pending'" :commence-time="matchKickoff(leg)" class="bets-row__status-badge" />
-                </p>
-                <p class="bet-leg__pick cm-truncate">{{ leg.pick }} <span class="cm-text-muted cm-numeric">@ {{ formatOdds(leg.odds) }}</span></p>
               </div>
-              <span class="bet-leg__status" :class="`bet-leg__status--${legStatus(bet, i)}`">{{ STATUS_LABELS[legStatus(bet, i)] }}</span>
-              <div class="bet-leg__actions">
-                <template v-if="legStatus(bet, i) === 'pending'">
-                  <AppButton variant="ghost" size="sm" @click="setLegStatus(bet, i, 'won')">Gagné</AppButton>
-                  <AppButton variant="ghost" size="sm" @click="setLegStatus(bet, i, 'lost')">Perdu</AppButton>
-                  <AppButton variant="ghost" size="sm" @click="setLegStatus(bet, i, 'void')">Annulé</AppButton>
-                </template>
-                <AppButton v-else variant="ghost" size="sm" @click="setLegStatus(bet, i, 'pending')">Réouvrir</AppButton>
+            </div>
+
+            <div v-if="predictionsStore.recordError" class="cm-note is-danger">
+              <span class="cm-icon-box is-sm is-danger"><AppIcon name="alert" :size="14" /></span>
+              <div>
+                <p class="cm-note__title">Historique moteur</p>
+                <p class="cm-note__text">Pronostics du scan non enregistrés dans l'Historique moteur : {{ predictionsStore.recordError }}</p>
               </div>
             </div>
           </div>
-        </div>
+
+          <!-- La puce de tête de carte (déclarée après le corps : sans incidence sur le rendu). -->
+          <template #actions>
+            <span class="cm-chip" title="Matchs à venir sur la période choisie"><AppIcon name="calendar" :size="11" />{{ dateFilteredMatches.length }} matchs sur la période</span>
           </template>
-        </div>
-          </template>
-        </div>
-      </div>
-    </AppCard>
-    </div>
+        </AppCard>
 
-    <AppCard v-else-if="activeTab === 'value'" key="value" title="Value bets détectées" subtitle="Cote de vos bookmakers face à la cote juste des bookmakers de référence, Pinnacle d'abord, marge retirée">
-      <AppTextField v-model="valueBetsSearchQuery" placeholder="Rechercher (équipe, marché, pick)…" class="value-bets__search">
-        <template #icon><AppIcon name="search" :size="14" /></template>
-      </AppTextField>
+        <AppCard icon="wallet" eyebrow="Carnet" title="Paris en cours" subtitle="Les paris en attente d'un résultat ; un pari déjà réglé se retrouve par la recherche">
+          <div class="ledger">
+            <AppTextField v-model="betSearchQuery" placeholder="Rechercher un pari réglé (équipe, marché, pick)…">
+              <template #icon><AppIcon name="search" :size="15" /></template>
+            </AppTextField>
 
-      <LoadingSpinner v-if="scanning && activeValueBets.length === 0" label="Analyse des matchs…" />
-      <EmptyState
-        v-else-if="!scanned"
-        icon="bolt"
-        title="Aucun scan encore lancé"
-        description="Choisis une période et clique sur « Scanner les matchs »."
-      />
-      <EmptyState
-        v-else-if="filteredValueBets.length === 0 && valueBetsSearchQuery.trim()"
-        icon="search"
-        title="Aucun résultat"
-        :description="`Aucun value bet ne correspond à «${valueBetsSearchQuery.trim()}».`"
-      />
-      <EmptyState
-        v-else-if="filteredValueBets.length === 0"
-        icon="target"
-        title="Aucun value bet détecté"
-        description="Aucun de vos bookmakers ne paie au-dessus de la cote juste sur la période choisie."
-      />
+            <LoadingSpinner v-if="betsStore.loading" />
+            <EmptyState v-else-if="betsStore.error" icon="alert" title="Impossible de charger le carnet" :description="betsStore.error" />
+            <EmptyState
+              v-else-if="visibleBets.length === 0 && betSearchQuery.trim()"
+              icon="search"
+              title="Aucun résultat"
+              :description="`Aucun pari ne correspond à «${betSearchQuery.trim()}».`"
+            />
+            <EmptyState
+              v-else-if="visibleBets.length === 0"
+              icon="target"
+              title="Aucun pari en attente"
+              description="Sélectionne un ou plusieurs value bets dans les onglets de recherche pour créer un pari, ou recherche un pari déjà réglé."
+            />
 
-      <div v-else class="value-bets-list">
-        <div v-for="group in groupedValueBets" :key="group.league" class="value-bets-league">
-          <p class="value-bets-league__header cm-truncate">
-            <span v-if="parseLeagueLabel(group.league).countryCode" class="value-bets-league__country">{{ parseLeagueLabel(group.league).countryCode }}</span>
-            {{ parseLeagueLabel(group.league).name }}
-            <span class="cm-text-muted cm-numeric">{{ group.bets.length }}</span>
-          </p>
-
-          <div v-for="c in group.bets" :key="legKey(c)" class="value-bet-row-wrap">
-            <label class="value-bet-row">
-              <input type="checkbox" :checked="isSelected(c)" @change="toggleSelect(c)" />
-              <div class="value-bet-row__main">
-                <p class="value-bet-row__match cm-truncate">
-                  <button type="button" class="cm-team-link" @click.stop.prevent="teamStatsModalStore.openFor(c.homeName, c.league, c.matchId)">{{ c.homeName }}</button>
-                  vs
-                  <button type="button" class="cm-team-link" @click.stop.prevent="teamStatsModalStore.openFor(c.awayName, c.league, c.matchId)">{{ c.awayName }}</button>
-                </p>
-                <p class="cm-text-muted value-bet-row__meta cm-truncate">
-                  {{ c.market }} · {{ formatKickoff(c.commenceTime) }}
-                  <MatchStatusBadge :commence-time="c.commenceTime" class="bets-row__status-badge" />
-                </p>
-                <p class="value-bet-row__pick cm-truncate">
-                  {{ c.pick }}
-                  <span class="value-bet-row__probability">{{ impliedProbability(c.modelOdds) }}%</span>
-                </p>
-              </div>
-              <div class="value-bet-row__figures">
-                <span class="cm-text-muted">juste <span class="cm-numeric">{{ formatOdds(c.modelOdds) }}</span></span>
-                <span class="cm-text-muted">{{ c.bookmaker ?? 'marché' }} <span class="cm-numeric">{{ formatOdds(c.odds) }}</span></span>
-                <span class="cm-numeric cm-positive value-bet-row__edge">{{ c.edgePercent == null ? '—' : `+${c.edgePercent.toFixed(1)}%` }}</span>
-                <span class="cm-text-muted">Kelly <span class="cm-numeric">{{ formatCurrency(c.recommendedStake) }}</span></span>
-                <button
-                  v-if="c.byBookmaker?.length"
-                  type="button"
-                  class="value-bet-row__toggle"
-                  @click.stop.prevent="toggleBookmakers(c.matchId)"
+            <div v-else class="ledger__list cm-stagger">
+              <section v-for="leagueGroup in groupedBets" :key="leagueGroup.league" class="league" :class="{ 'is-open': isBetLeagueOpen(leagueGroup.league) }">
+                <div
+                  class="league__header"
+                  role="button"
+                  tabindex="0"
+                  @click="toggleBetLeague(leagueGroup.league)"
+                  @keydown.enter="toggleBetLeague(leagueGroup.league)"
                 >
-                  {{ c.byBookmaker.length }} bookmakers
-                  <AppIcon
-                    name="chevronRight"
-                    :size="10"
-                    class="value-bet-row__toggle-icon"
-                    :class="{ 'value-bet-row__toggle-icon--open': expandedBookmakers.has(c.matchId) }"
-                  />
-                </button>
-              </div>
-            </label>
+                  <LeagueBadge :league="leagueGroup.league" />
+                  <span v-if="leagueGroup.matches.some(isMatchGroupLive)" class="cm-chip is-danger">
+                    <span class="cm-live-dot"></span>{{ leagueGroup.matches.filter(isMatchGroupLive).length }} en direct
+                  </span>
+                  <span v-if="leagueGroup.matches.some(isMatchGroupFinished)" class="cm-chip is-warning">
+                    {{ leagueGroup.matches.filter(isMatchGroupFinished).length }} terminé(s)
+                  </span>
+                  <span class="cm-pill league__count">{{ leagueGroup.count }}</span>
+                  <AppIcon name="chevronRight" :size="14" class="chevron" :class="{ 'is-open': isBetLeagueOpen(leagueGroup.league) }" />
+                </div>
 
-            <div v-if="expandedBookmakers.has(c.matchId) && c.byBookmaker?.length" class="bookmaker-detail">
-              <span v-for="bk in c.byBookmaker" :key="bk.key" class="bookmaker-detail__item">
-                {{ bk.title }} <span class="cm-numeric">{{ formatOdds(bk[c.oddsField ?? 'odds1']) }}</span>
-              </span>
+                <template v-if="isBetLeagueOpen(leagueGroup.league)">
+                <div class="league__body">
+                  <div v-for="matchGroup in leagueGroup.matches" :key="matchGroup.matchId" class="match-group" :class="{ 'is-open': isBetMatchOpen(matchGroup.matchId) }">
+                    <div
+                      class="match-group__header"
+                      role="button"
+                      tabindex="0"
+                      @click="toggleBetMatch(matchGroup.matchId)"
+                      @keydown.enter="toggleBetMatch(matchGroup.matchId)"
+                    >
+                      <MatchCard
+                        :match="carteDuMatch(matchGroup, leagueGroup.league)"
+                        variant="compact"
+                        :show-competition="false"
+                        team-links
+                        class="match-group__card"
+                      >
+                        <template #aside><span /></template>
+                      </MatchCard>
+                      <button
+                        v-if="isMatchGroupLive(matchGroup)"
+                        type="button"
+                        class="match-group__live"
+                        title="Voir le score et les statistiques en direct"
+                        @click.stop="showLiveMatchDetails(matchGroup)"
+                      >
+                        <span class="cm-live-dot"></span>DIRECT
+                      </button>
+                      <span v-else-if="isMatchGroupFinished(matchGroup)" class="cm-chip is-warning">TERMINÉ</span>
+                      <span class="cm-pill match-group__count" title="Paris sur ce match">{{ matchGroup.bets.length }}</span>
+                      <AppIcon name="chevronRight" :size="14" class="chevron" :class="{ 'is-open': isBetMatchOpen(matchGroup.matchId) }" />
+                    </div>
+
+                    <!-- Le direct : score et statistiques du match, à la demande. -->
+                    <div v-if="liveMatchDetailsByMatch[matchGroup.matchId]" class="live-panel">
+                      <p v-if="liveMatchDetailsByMatch[matchGroup.matchId].loading" class="live-panel__state">Récupération du score et des statistiques…</p>
+                      <p v-else-if="liveMatchDetailsByMatch[matchGroup.matchId].error" class="live-panel__state is-danger">Erreur : {{ liveMatchDetailsByMatch[matchGroup.matchId].error }}</p>
+                      <p v-else-if="liveMatchDetailsByMatch[matchGroup.matchId].data && !liveMatchDetailsByMatch[matchGroup.matchId].data.available" class="live-panel__state">
+                        {{ LIVE_MATCH_UNAVAILABLE_MESSAGES[liveMatchDetailsByMatch[matchGroup.matchId].data.reason] ?? 'Détails en direct indisponibles pour ce match.' }}
+                      </p>
+                      <template v-else-if="liveMatchDetailsByMatch[matchGroup.matchId].data?.available">
+                        <p class="live-panel__score">
+                          <span class="live-panel__pill cm-numeric">{{ liveMatchDetailsByMatch[matchGroup.matchId].data.score.home ?? '—' }} - {{ liveMatchDetailsByMatch[matchGroup.matchId].data.score.away ?? '—' }}</span>
+                          <span v-if="liveMatchDetailsByMatch[matchGroup.matchId].data.status?.elapsed" class="live-panel__clock"> · {{ liveMatchDetailsByMatch[matchGroup.matchId].data.status.elapsed }}'</span>
+                          <span v-if="liveMatchDetailsByMatch[matchGroup.matchId].data.status?.long" class="live-panel__clock"> · {{ liveMatchDetailsByMatch[matchGroup.matchId].data.status.long }}</span>
+                        </p>
+                        <MatchStatsPanel
+                          v-if="liveMatchDetailsByMatch[matchGroup.matchId].data.teams?.length"
+                          :teams="liveMatchDetailsByMatch[matchGroup.matchId].data.teams"
+                          :fallback-primary-name="matchGroup.homeName"
+                          :fallback-opponent-name="matchGroup.awayName"
+                          :league="leagueGroup.league"
+                        />
+                        <p v-else class="live-panel__state">Statistiques détaillées pas encore publiées pour ce match.</p>
+                      </template>
+                    </div>
+
+                    <template v-if="isBetMatchOpen(matchGroup.matchId)">
+                    <div class="match-group__bets">
+                      <article v-for="bet in matchGroup.bets" :key="bet.id" class="bet-card" :class="`is-${bet.status}`">
+                        <div class="bet-card__head">
+                          <div class="bet-card__main">
+                            <template v-if="bet.legs.length === 1">
+                              <p class="bet-card__market cm-truncate">{{ bet.legs[0].market }}</p>
+                              <p class="bet-card__pick cm-truncate"><PickCrest :item="bet.legs[0]" :home="bet.legs[0].homeName" :away="bet.legs[0].awayName" :league="bet.legs[0].league" :size="16" />{{ bet.legs[0].pick }}</p>
+                              <p v-if="matchKickoff(bet.legs[0])" class="bet-card__date">
+                                <AppIcon name="calendar" :size="11" />Match le {{ formatKickoff(matchKickoff(bet.legs[0])) }}
+                                <MatchStatusBadge v-if="bet.status === 'pending'" :commence-time="matchKickoff(bet.legs[0])" class="status-badge" />
+                              </p>
+                            </template>
+                            <template v-else>
+                              <p class="bet-card__market">Combiné</p>
+                              <p class="bet-card__pick cm-truncate">Combiné — {{ bet.legs.length }} sélections</p>
+                              <p class="bet-card__date">Statut global déduit des sélections ci-dessous</p>
+                            </template>
+                            <p class="bet-card__date"><AppIcon name="clock" :size="11" />Pari créé le {{ formatDateTime(bet.createdAt) }}</p>
+                          </div>
+
+                          <dl class="figures">
+                            <div class="figure">
+                              <dt>Cote</dt>
+                              <dd><span class="cm-pill">@ {{ formatOdds(bet.odds) }}</span></dd>
+                            </div>
+                            <div class="figure">
+                              <dt>Mise</dt>
+                              <dd class="cm-numeric">{{ formatCurrency(bet.stake) }}</dd>
+                            </div>
+                            <div class="figure">
+                              <dt>Gain potentiel</dt>
+                              <dd class="cm-numeric figure__potential">{{ formatCurrency(bet.stake * bet.odds) }}</dd>
+                            </div>
+                          </dl>
+
+                          <span class="bet-status" :class="`is-${bet.status}`">{{ STATUS_LABELS[bet.status] }}</span>
+
+                          <div v-if="bet.legs.length === 1" class="bet-card__actions">
+                            <template v-if="legStatus(bet, 0) === 'pending'">
+                              <AppButton variant="ghost" size="sm" class="bet-card__btn is-won" @click="setLegStatus(bet, 0, 'won')">Gagné</AppButton>
+                              <AppButton variant="ghost" size="sm" class="bet-card__btn is-lost" @click="setLegStatus(bet, 0, 'lost')">Perdu</AppButton>
+                              <AppButton variant="ghost" size="sm" class="bet-card__btn" @click="setLegStatus(bet, 0, 'void')">Annulé</AppButton>
+                            </template>
+                            <AppButton v-else variant="ghost" size="sm" class="bet-card__btn" @click="setLegStatus(bet, 0, 'pending')">Réouvrir</AppButton>
+                            <button type="button" class="bet-card__delete" title="Supprimer" @click="remove(bet)">
+                              <AppIcon name="x" :size="14" />
+                            </button>
+                          </div>
+                          <div v-else class="bet-card__actions">
+                            <button type="button" class="bet-card__delete" title="Supprimer" @click="remove(bet)">
+                              <AppIcon name="x" :size="14" />
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- Un combiné : ses sélections, chacune avec son statut et ses actions. -->
+                        <div v-if="bet.legs.length > 1" class="bet-card__legs">
+                          <div v-for="(leg, i) in bet.legs" :key="i" class="bet-leg" :class="`is-${legStatus(bet, i)}`">
+                            <div class="bet-leg__main">
+                              <p class="bet-leg__match">
+                                <TeamCrest :name="leg.homeName" :league="leg.league" :size="16" />
+                                <button type="button" class="cm-team-link team" @click.stop="teamStatsModalStore.openFor(leg.homeName, leg.league, leg.matchId)">{{ leg.homeName }}</button>
+                                <span class="vs">vs</span>
+                                <button type="button" class="cm-team-link team" @click.stop="teamStatsModalStore.openFor(leg.awayName, leg.league, leg.matchId)">{{ leg.awayName }}</button>
+                                <TeamCrest :name="leg.awayName" :league="leg.league" :size="16" />
+                              </p>
+                              <p class="bet-leg__market cm-truncate">
+                                {{ leg.market }} <span v-if="leg.league">· {{ leg.league }}</span><span v-if="matchKickoff(leg)"> · {{ formatKickoff(matchKickoff(leg)) }}</span>
+                                <MatchStatusBadge v-if="legStatus(bet, i) === 'pending'" :commence-time="matchKickoff(leg)" class="status-badge" />
+                              </p>
+                              <p class="bet-leg__pick cm-truncate">
+                                <PickCrest :item="leg" :home="leg.homeName" :away="leg.awayName" :league="leg.league" :size="14" />{{ leg.pick }}
+                                <span class="cm-pill bet-leg__odds">@ {{ formatOdds(leg.odds) }}</span>
+                              </p>
+                            </div>
+                            <span class="bet-status is-sm" :class="`is-${legStatus(bet, i)}`">{{ STATUS_LABELS[legStatus(bet, i)] }}</span>
+                            <div class="bet-leg__actions">
+                              <template v-if="legStatus(bet, i) === 'pending'">
+                                <AppButton variant="ghost" size="sm" class="bet-card__btn is-won" @click="setLegStatus(bet, i, 'won')">Gagné</AppButton>
+                                <AppButton variant="ghost" size="sm" class="bet-card__btn is-lost" @click="setLegStatus(bet, i, 'lost')">Perdu</AppButton>
+                                <AppButton variant="ghost" size="sm" class="bet-card__btn" @click="setLegStatus(bet, i, 'void')">Annulé</AppButton>
+                              </template>
+                              <AppButton v-else variant="ghost" size="sm" class="bet-card__btn" @click="setLegStatus(bet, i, 'pending')">Réouvrir</AppButton>
+                            </div>
+                          </div>
+                        </div>
+                      </article>
+                    </div>
+                    </template>
+                  </div>
+                </div>
+                </template>
+              </section>
             </div>
           </div>
-        </div>
+        </AppCard>
       </div>
-    </AppCard>
 
-    <PicksSearchCard
-      v-else-if="activeTab === 'safest'"
-      key="safest"
-      title="Paris les plus probables"
-      subtitle="Le pari le plus sûr (⌀ le plus bas ≥ 1.35) par marché et par match scanné"
-      search-placeholder="Rechercher (équipe, marché, pick)…"
-      :picks="activeSafestPicksPool"
-      :scanning="scanning"
-      :scanned="scanned"
-      :is-selected="isSelected"
-      :leg-key="legKey"
-      empty-description="Aucun pari assez sûr trouvé sur la période scannée."
-      @toggle="toggleSelect"
-    />
+      <!-- 4. VALUE BETS : une carte par pari, cote juste / cote du bookmaker / edge / Kelly. -->
+      <AppCard
+        v-else-if="activeTab === 'value'"
+        key="value"
+        icon="trendUp"
+        eyebrow="Value bets"
+        title="Value bets détectées"
+        subtitle="Cote de vos bookmakers face à la cote juste des bookmakers de référence, Pinnacle d'abord, marge retirée"
+      >
+        <template #actions>
+          <span v-if="scanned && filteredValueBets.length" class="cm-chip is-accent cm-numeric">{{ filteredValueBets.length }} value bets</span>
+        </template>
 
-    <PicksSearchCard
-      v-else-if="activeTab === 'all'"
-      key="all"
-      title="Tous les paris"
-      subtitle="Tous les pronostics du moteur, sans filtre — pour parier sur autre chose"
-      search-placeholder="Rechercher (équipe, marché, pick)…"
-      :picks="activeAllPicksPool"
-      :scanning="scanning"
-      :scanned="scanned"
-      :is-selected="isSelected"
-      :leg-key="legKey"
-      empty-description="Aucun pronostic trouvé sur la période scannée."
-      @toggle="toggleSelect"
-    />
+        <div class="picks">
+          <AppTextField v-model="valueBetsSearchQuery" placeholder="Rechercher (équipe, marché, pick)…">
+            <template #icon><AppIcon name="search" :size="14" /></template>
+          </AppTextField>
+
+          <LoadingSpinner v-if="scanning && activeValueBets.length === 0" label="Analyse des matchs…" />
+          <EmptyState
+            v-else-if="!scanned"
+            icon="bolt"
+            title="Aucun scan encore lancé"
+            description="Choisis une période et clique sur « Scanner les matchs »."
+          />
+          <EmptyState
+            v-else-if="filteredValueBets.length === 0 && valueBetsSearchQuery.trim()"
+            icon="search"
+            title="Aucun résultat"
+            :description="`Aucun value bet ne correspond à «${valueBetsSearchQuery.trim()}».`"
+          />
+          <EmptyState
+            v-else-if="filteredValueBets.length === 0"
+            icon="target"
+            title="Aucun value bet détecté"
+            description="Aucun de vos bookmakers ne paie au-dessus de la cote juste sur la période choisie."
+          />
+
+          <div v-else class="picks__list cm-stagger">
+            <section v-for="group in groupedValueBets" :key="group.league" class="league is-open">
+              <!-- En-tête de championnat : drapeau et nom (LeagueBadge lit le pays et le nom via parseLeagueLabel). -->
+              <p class="league__header is-static" :title="parseLeagueLabel(group.league).country ?? group.league">
+                <LeagueBadge :league="group.league" />
+                <span class="cm-pill league__count">{{ group.bets.length }}</span>
+              </p>
+
+              <div class="league__body">
+                <div v-for="c in group.bets" :key="legKey(c)" class="vb">
+                  <label class="vb-card" :class="{ 'is-selected': isSelected(c) }">
+                    <input type="checkbox" class="pick-check" :checked="isSelected(c)" @change="toggleSelect(c)" />
+                    <div class="vb-card__main">
+                      <p class="vb-card__match">
+                        <TeamCrest :name="c.homeName" :league="c.league" :size="18" />
+                        <button type="button" class="cm-team-link team" @click.stop.prevent="teamStatsModalStore.openFor(c.homeName, c.league, c.matchId)">{{ c.homeName }}</button>
+                        <span class="vs">vs</span>
+                        <button type="button" class="cm-team-link team" @click.stop.prevent="teamStatsModalStore.openFor(c.awayName, c.league, c.matchId)">{{ c.awayName }}</button>
+                        <TeamCrest :name="c.awayName" :league="c.league" :size="18" />
+                      </p>
+                      <p class="vb-card__meta cm-truncate">
+                        {{ c.market }} · {{ formatKickoff(c.commenceTime) }}
+                        <MatchStatusBadge :commence-time="c.commenceTime" class="status-badge" />
+                      </p>
+                      <p class="vb-card__pick cm-truncate">
+                        <PickCrest :item="c" :home="c.homeName" :away="c.awayName" :league="c.league" :size="16" />{{ c.pick }}
+                        <span class="probability" title="Probabilité juste de l'issue">{{ impliedProbability(c.modelOdds) }}%</span>
+                      </p>
+                    </div>
+
+                    <dl class="figures vb-card__figures">
+                      <div class="figure">
+                        <dt>Cote juste</dt>
+                        <dd><span class="cm-pill">{{ formatOdds(c.modelOdds) }}</span></dd>
+                      </div>
+                      <div class="figure">
+                        <dt class="cm-truncate" title="Le bookmaker qui paie le mieux cette issue">{{ c.bookmaker ?? 'marché' }}</dt>
+                        <dd><span class="cm-pill is-section">{{ formatOdds(c.odds) }}</span></dd>
+                      </div>
+                      <div class="figure">
+                        <dt>Edge</dt>
+                        <dd class="cm-numeric cm-positive figure__edge">{{ c.edgePercent == null ? '—' : `+${c.edgePercent.toFixed(1)}%` }}</dd>
+                      </div>
+                      <div class="figure">
+                        <dt>Kelly</dt>
+                        <dd class="cm-numeric">{{ formatCurrency(c.recommendedStake) }}</dd>
+                      </div>
+                    </dl>
+
+                    <button
+                      v-if="c.byBookmaker?.length"
+                      type="button"
+                      class="vb-card__toggle"
+                      title="Les cotes réelles de chaque bookmaker"
+                      @click.stop.prevent="toggleBookmakers(c.matchId)"
+                    >
+                      {{ c.byBookmaker.length }} bookmakers
+                      <AppIcon name="chevronRight" :size="10" class="chevron" :class="{ 'is-open': expandedBookmakers.has(c.matchId) }" />
+                    </button>
+                  </label>
+
+                  <div v-if="expandedBookmakers.has(c.matchId) && c.byBookmaker?.length" class="bookmakers">
+                    <span v-for="bk in c.byBookmaker" :key="bk.key" class="cm-chip bookmakers__item">
+                      {{ bk.title }} <span class="cm-numeric bookmakers__odds">{{ formatOdds(bk[c.oddsField ?? 'odds1']) }}</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </AppCard>
+
+      <!-- 5 & 6. PARIS LES PLUS PROBABLES, TOUS LES PARIS : même carte de recherche. -->
+      <PicksSearchCard
+        v-else-if="activeTab === 'safest'"
+        key="safest"
+        title="Paris les plus probables"
+        subtitle="Le pari le plus sûr (⌀ le plus bas ≥ 1.35) par marché et par match scanné"
+        search-placeholder="Rechercher (équipe, marché, pick)…"
+        :picks="activeSafestPicksPool"
+        :scanning="scanning"
+        :scanned="scanned"
+        :is-selected="isSelected"
+        :leg-key="legKey"
+        empty-description="Aucun pari assez sûr trouvé sur la période scannée."
+        @toggle="toggleSelect"
+      />
+
+      <PicksSearchCard
+        v-else-if="activeTab === 'all'"
+        key="all"
+        title="Tous les paris"
+        subtitle="Tous les pronostics du moteur, sans filtre — pour parier sur autre chose"
+        search-placeholder="Rechercher (équipe, marché, pick)…"
+        :picks="activeAllPicksPool"
+        :scanning="scanning"
+        :scanned="scanned"
+        :is-selected="isSelected"
+        :leg-key="legKey"
+        empty-description="Aucun pronostic trouvé sur la période scannée."
+        @toggle="toggleSelect"
+      />
     </Transition>
   </div>
 </template>
 
 <style scoped>
-.my-bets-view {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+/* ================================================================ bandeau */
+.bets-hero__logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--cm-section), rgba(var(--cm-section-rgb) / 0.6));
+  color: var(--cm-section-on);
+  box-shadow: var(--cm-shadow-section);
 }
 
-.my-bets-view__bankroll {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.bets-hero__kpis {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
 }
 
-.my-bets-view__summary {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 14px;
-}
-
-.my-bets-view__stat {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 10px 14px;
-  border-radius: var(--cm-radius);
-  background: var(--cm-surface-alt);
-  font-size: 12px;
-}
-
-.my-bets-view__stat .cm-numeric {
-  font-size: 15px;
-  font-weight: 700;
-}
-
-.value-bets__controls {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr auto;
-  gap: 14px;
-  align-items: end;
-}
-
-.value-bets__date-filter {
-  margin-top: 14px;
-}
-
-.value-bets__kelly-hint {
-  font-size: 11px;
-  margin-top: 12px;
-}
-
-.value-bets__kelly-hint :deep(a) {
+/* Le ROI est la tuile vedette (liseré de section), mais son chiffre garde sa
+   couleur sémantique : vert quand on gagne, rouge quand on perd. */
+.bets-hero .cm-kpi.is-section .cm-kpi__value.cm-positive {
   color: var(--cm-accent);
 }
 
-.value-bets__search {
-  margin-bottom: 14px;
+.bets-hero .cm-kpi.is-section .cm-kpi__value.cm-negative {
+  color: var(--cm-danger);
 }
 
-.value-bets-list {
+/* ============================================================== bordereau */
+/* Collant sous la barre du haut : il suit quand on fait défiler les listes. */
+.bet-slip {
+  position: sticky;
+  top: calc(var(--cm-topbar-height) + 10px);
+  z-index: 5;
   display: flex;
-  flex-direction: column;
-  max-height: 420px;
-  overflow-y: auto;
-}
-
-.value-bets-league {
-  border-bottom: 1px solid var(--cm-border-soft);
-}
-
-.value-bets-league:last-child {
-  border-bottom: none;
-}
-
-.value-bets-league__header {
-  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
-  padding: 8px;
-  background: var(--cm-surface-alt);
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
+  gap: 12px 20px;
+  padding: 14px 18px;
+  border-radius: var(--cm-radius-lg);
+  border: 1px solid rgba(var(--cm-section-rgb) / 0.5);
+  background:
+    radial-gradient(120% 160% at 0% 0%, rgba(var(--cm-section-rgb) / 0.2), transparent 55%),
+    var(--cm-surface-raised);
+  box-shadow: var(--cm-shadow-lg), var(--cm-shadow-section);
 }
 
-.value-bets-league__header .cm-numeric {
-  margin-left: auto;
-  font-size: 10.5px;
-  text-transform: none;
-  letter-spacing: normal;
-}
-
-.value-bets-league__country {
-  flex-shrink: 0;
-  padding: 1px 5px;
-  border-radius: 4px;
-  background: var(--cm-surface-hover);
-  color: var(--cm-text-muted);
-  font-size: 9.5px;
-}
-
-.value-bet-row-wrap {
-  border-bottom: 1px solid var(--cm-border-soft);
-}
-
-.value-bets-league .value-bet-row-wrap:last-child {
-  border-bottom: none;
-}
-
-.value-bet-row {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+.bet-slip__head {
+  display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 8px;
-  cursor: pointer;
-}
-
-.value-bet-row:hover {
-  background: var(--cm-surface-hover);
-}
-
-.value-bet-row input[type='checkbox'] {
-  width: 16px;
-  height: 16px;
-  accent-color: var(--cm-accent);
-  cursor: pointer;
-}
-
-.value-bet-row__main {
   min-width: 0;
 }
 
-.value-bet-row__match {
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.value-bet-row__meta {
-  font-size: 11px;
-  margin-top: 2px;
-}
-
-.value-bet-row__pick {
-  font-size: 12.5px;
-  font-weight: 600;
-  margin-top: 3px;
-}
-
-.value-bet-row__probability {
-  display: inline-block;
-  margin-left: 6px;
-  padding: 1px 6px;
-  border-radius: 999px;
-  background: var(--cm-accent-soft);
-  color: var(--cm-accent);
-  font-size: 10px;
-  font-weight: 700;
-  vertical-align: middle;
-}
-
-.value-bet-row__figures {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 4px 10px;
-  font-size: 11.5px;
+.bet-slip__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
-  max-width: 260px;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--cm-section), rgba(var(--cm-section-rgb) / 0.6));
+  color: var(--cm-section-on);
+  box-shadow: var(--cm-shadow-section);
 }
 
-.value-bet-row__edge {
-  font-weight: 700;
-}
-
-.value-bet-row__toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  padding: 1px 7px;
-  border: 1px solid var(--cm-border);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--cm-text-muted);
-  font-size: 10.5px;
-  cursor: pointer;
-}
-
-.value-bet-row__toggle:hover {
-  border-color: var(--cm-accent);
-  color: var(--cm-accent);
-}
-
-.value-bet-row__toggle-icon {
-  transform: rotate(90deg);
-  transition: transform var(--cm-transition);
-}
-
-.value-bet-row__toggle-icon--open {
-  transform: rotate(-90deg);
-}
-
-.bookmaker-detail {
+.bet-slip__titles {
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding: 0 8px 10px 38px;
-}
-
-.bookmaker-detail__item {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: var(--cm-surface-alt);
-  color: var(--cm-text-secondary);
-  font-size: 10.5px;
-}
-
-.bet-slip {
-  display: flex;
-  align-items: end;
-  gap: 14px;
-  padding: 14px 20px;
-  border-radius: var(--cm-radius-lg);
-  background: var(--cm-accent-soft);
-  border: 1px solid var(--cm-accent);
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
 }
 
 .bet-slip__title {
-  font-size: 12.5px;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--cm-text-primary);
+  white-space: nowrap;
+}
+
+.bet-slip__combo {
   font-weight: 600;
-  flex: 1;
+  color: var(--cm-section);
 }
 
-.bets-search {
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--cm-border-soft);
+.bet-slip__hint {
+  font-size: 11.5px;
+  color: var(--cm-text-secondary);
+  white-space: nowrap;
 }
 
-.bets-list {
+.bet-slip__potential {
+  font-weight: 700;
+  color: var(--cm-text-primary);
+}
+
+/* Les sélections cochées, en puces : logo, pronostic, cote. */
+.bet-slip__legs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.bet-slip__leg {
+  max-width: 100%;
+  background: rgba(var(--cm-section-rgb) / 0.08);
+  border-color: rgba(var(--cm-section-rgb) / 0.3);
+  color: var(--cm-text-primary);
+}
+
+/* Dans une puce (flex), un texte ne se tronque que s'il peut rétrécir. */
+.bet-slip__leg > .cm-truncate {
+  min-width: 0;
+}
+
+.bet-slip__leg-odds {
+  color: var(--cm-section);
+}
+
+.bet-slip__form {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.bet-slip__stake {
+  width: 120px;
+}
+
+/* ================================================================ onglets */
+.bets-tab {
   display: flex;
   flex-direction: column;
+  gap: 20px;
 }
 
-.league-group {
-  border-bottom: 1px solid var(--cm-border-soft);
-}
-
-.league-group:last-child {
-  border-bottom: none;
-}
-
-.league-group__header {
+/* ---------------------------------------------------------------- scanner */
+.scanner {
   display: flex;
-  align-items: center;
-  gap: 9px;
-  width: 100%;
-  padding: 8px 16px;
-  background: var(--cm-surface-alt);
-  border: none;
-  cursor: pointer;
-  text-align: left;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.league-group__count {
+.scanner__source {
+  flex: 1 1 240px;
+}
+
+.scanner__bankroll {
+  flex: 0 1 160px;
+}
+
+.scanner__period {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+}
+
+/* La barre de dates prend la place restante (ses raccourcis à gauche, la navigation par jour à droite). */
+.scanner__period > :last-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.scanner__period-label {
   font-size: 10.5px;
-  text-transform: none;
-  letter-spacing: normal;
-}
-
-.league-group__live {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 2px 7px;
-  border-radius: 999px;
-  background: var(--cm-danger-soft);
-  color: var(--cm-danger);
-  font-size: 10px;
   font-weight: 700;
-  text-transform: none;
-  letter-spacing: 0.3px;
-}
-
-.league-group__live-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--cm-danger);
-  animation: cm-live-pulse 1.4s ease-in-out infinite;
-}
-
-.league-group__finished {
-  flex-shrink: 0;
-  padding: 2px 7px;
-  border-radius: 999px;
-  background: var(--cm-warning-soft);
-  color: var(--cm-warning);
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: none;
-  letter-spacing: 0.3px;
-}
-
-.league-group__chevron {
-  flex-shrink: 0;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
   color: var(--cm-text-muted);
-  transform: rotate(90deg);
-  transition: transform var(--cm-transition);
 }
 
-.league-group__chevron--open {
-  transform: rotate(-90deg);
+.scanner__hint {
+  font-size: 12.5px;
 }
 
-.bets-match-group {
-  border-bottom: 1px solid var(--cm-border-soft);
+.scanner__link {
+  color: var(--cm-section);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
-.bets-match-group:last-child {
-  border-bottom: none;
+/* ------------------------------------------------------ carnet, value bets */
+/* Chaque liste se règle sur SA largeur. */
+.ledger,
+.picks {
+  container: liste / inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.bets-match-group__header {
+.ledger__list,
+.picks__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Un championnat : en-tête cliquable, corps en retrait. */
+.league {
+  border-radius: var(--cm-radius-md);
+  border: 1px solid var(--cm-border-soft);
+  background: var(--cm-surface-alt);
+  overflow: hidden;
+  transition: border-color var(--cm-transition);
+}
+
+.league.is-open {
+  border-color: rgba(var(--cm-section-rgb) / 0.3);
+}
+
+.league__header {
   display: flex;
   align-items: center;
   gap: 10px;
-  width: 100%;
-  padding: 9px 16px;
-  background: none;
-  border: none;
+  padding: 10px 14px;
   cursor: pointer;
-  text-align: left;
+  transition: background var(--cm-transition);
 }
 
-.bets-match-group__header:hover {
+.league__header:hover {
   background: var(--cm-surface-hover);
 }
 
-.bets-match-group__title {
-  flex: 1;
-  min-width: 0;
-  font-size: 13px;
-  font-weight: 600;
+.league__header.is-static {
+  cursor: default;
 }
 
-.bets-match-group__chevron {
+.league__header.is-static:hover {
+  background: none;
+}
+
+.league.is-open .league__header {
+  border-bottom: 1px solid var(--cm-border-soft);
+}
+
+.league__count {
+  margin-left: auto;
+  min-width: 34px;
+  padding: 2px 8px;
+  font-size: 11.5px;
+  color: var(--cm-text-secondary);
+}
+
+.league__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+}
+
+.chevron {
   flex-shrink: 0;
   color: var(--cm-text-muted);
+  transition: transform var(--cm-transition), color var(--cm-transition);
+}
+
+.chevron.is-open {
   transform: rotate(90deg);
-  transition: transform var(--cm-transition);
+  color: var(--cm-section);
 }
 
-.bets-match-group__chevron--open {
-  transform: rotate(-90deg);
+/* ---------------------------------------------------------- une rencontre */
+.match-group {
+  display: flex;
+  flex-direction: column;
 }
 
-.bets-match-group__live {
-  flex-shrink: 0;
+.match-group__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.match-group__card {
+  flex: 1;
+  min-width: 0;
+  --mcard-aside: 0px;
+}
+
+.match-group__count {
+  min-width: 30px;
+  padding: 2px 8px;
+  font-size: 11.5px;
+  color: var(--cm-text-secondary);
+}
+
+.match-group__live {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 2px 7px;
-  border: none;
+  gap: 6px;
+  padding: 3px 10px;
+  border: 1px solid transparent;
   border-radius: 999px;
   background: var(--cm-danger-soft);
   color: var(--cm-danger);
-  font-size: 10px;
-  font-family: inherit;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
   cursor: pointer;
+  transition: background var(--cm-transition), color var(--cm-transition);
 }
 
-.bets-match-group__live:hover {
+.match-group__live:hover {
   background: var(--cm-danger);
-  color: var(--cm-bg);
+  color: var(--cm-text-primary);
 }
 
-.bets-match-group__live:hover .bets-match-group__live-dot {
-  background: var(--cm-bg);
+.match-group__live:hover .cm-live-dot {
+  background: var(--cm-text-primary);
 }
 
-.bets-match-group__live-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--cm-danger);
-  animation: cm-live-pulse 1.4s ease-in-out infinite;
-}
-
-.bets-match-group__finished {
-  flex-shrink: 0;
-  padding: 2px 7px;
-  border-radius: 999px;
-  background: var(--cm-warning-soft);
-  color: var(--cm-warning);
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
-
-@keyframes cm-live-pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.35;
-  }
-}
-
-.bets-match-group__live-panel {
-  padding: 12px 16px 12px 28px;
-  background: var(--cm-surface-alt);
-  border-bottom: 1px solid var(--cm-border-soft);
-  font-size: 11.5px;
-}
-
-.bets-match-group__live-score {
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-
-.bets-row {
-  display: grid;
-  grid-template-columns: 1fr auto auto auto;
-  align-items: center;
-  gap: 8px 16px;
-  padding: 10px 16px 10px 28px;
-  border-bottom: 1px solid var(--cm-border-soft);
-  border-left: 3px solid transparent;
-}
-
-.bet-legs {
-  grid-column: 1 / -1;
+/* Les paris du match, reliés à sa carte par un filet couleur de section. */
+.match-group__bets {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-top: 4px;
-  padding-top: 10px;
-  border-top: 1px solid var(--cm-border-soft);
+  gap: 8px;
+  margin: 8px 0 2px 14px;
+  padding-left: 12px;
+  border-left: 2px solid rgba(var(--cm-section-rgb) / 0.25);
 }
 
-.bet-leg {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
+/* Le direct : teinté rouge comme tout ce qui est en cours. */
+.live-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 8px 0 2px 14px;
+  padding: 12px 14px;
+  border-radius: var(--cm-radius);
+  border: 1px solid rgba(var(--cm-danger-rgb) / 0.3);
+  background: radial-gradient(120% 140% at 0% 0%, rgba(var(--cm-danger-rgb) / 0.08), transparent 55%), var(--cm-surface);
+  font-size: 12px;
+}
+
+.live-panel__state {
+  font-size: 12px;
+  color: var(--cm-text-muted);
+}
+
+.live-panel__state.is-danger {
+  color: var(--cm-danger);
+}
+
+.live-panel__score {
+  display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 6px 10px;
-  border-radius: var(--cm-radius-sm);
-  background: var(--cm-surface-alt);
+  gap: 4px;
 }
 
-.bet-leg__main {
+.live-panel__pill {
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: var(--cm-danger);
+  color: var(--cm-text-primary);
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.live-panel__clock {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cm-text-secondary);
+}
+
+/* ------------------------------------------------------------ un pari */
+.bet-card {
+  --ton: var(--cm-border);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px 12px 16px;
+  border-radius: var(--cm-radius);
+  border: 1px solid var(--cm-border-soft);
+  border-left: 3px solid var(--ton);
+  background: var(--cm-surface);
+  transition: border-color var(--cm-transition), background var(--cm-transition);
+}
+
+.bet-card:hover {
+  border-color: var(--cm-border);
+  border-left-color: var(--ton);
+  background: var(--cm-surface-hover);
+}
+
+.bet-card.is-pending {
+  --ton: var(--cm-section);
+}
+
+.bet-card.is-won {
+  --ton: var(--cm-accent);
+}
+
+.bet-card.is-lost {
+  --ton: var(--cm-danger);
+}
+
+.bet-card__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto auto;
+  align-items: center;
+  gap: 10px 18px;
+}
+
+.bet-card__main {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
   min-width: 0;
 }
 
-.bet-leg__match {
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.bet-leg__market {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  margin-top: 2px;
-}
-
-.bet-leg__pick {
-  font-size: 11.5px;
-  font-weight: 600;
-  margin-top: 2px;
-  display: flex;
-  gap: 8px;
-}
-
-.bet-leg__status {
-  padding: 2px 9px;
-  border-radius: 999px;
+.bet-card__market {
   font-size: 10px;
   font-weight: 700;
-  text-align: center;
-  background: var(--cm-surface-hover);
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--cm-text-muted);
+}
+
+.bet-card__pick {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cm-text-primary);
+}
+
+.bet-card__date {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--cm-text-muted);
+}
+
+.status-badge {
+  margin-left: 4px;
+}
+
+/* Les chiffres étiquetés (cote, mise, gain ; cote juste, edge, Kelly). */
+.figures {
+  display: flex;
+  gap: 16px;
+  margin: 0;
+}
+
+.figure {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  min-width: 0;
+  max-width: 120px;
+}
+
+.figure dt {
+  max-width: 100%;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
   color: var(--cm-text-muted);
   white-space: nowrap;
 }
 
-.bet-leg__status--won {
+.figure dd {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--cm-text-primary);
+}
+
+.figure__potential {
+  font-size: 15px;
+  color: var(--cm-accent);
+}
+
+.figure__edge {
+  font-size: 15px;
+}
+
+/* Le statut d'un pari : pastille à point, couleurs sémantiques. */
+.bet-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--cm-surface-hover);
+  color: var(--cm-text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.bet-status::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.85;
+}
+
+.bet-status.is-pending {
+  background: var(--cm-section-soft);
+  color: var(--cm-section);
+}
+
+.bet-status.is-won {
   background: var(--cm-accent-soft);
   color: var(--cm-accent);
 }
 
-.bet-leg__status--lost {
+.bet-status.is-lost {
   background: var(--cm-danger-soft);
   color: var(--cm-danger);
 }
 
-.bet-leg__status--pending {
+.bet-status.is-sm {
+  padding: 2px 8px;
+  font-size: 10px;
+}
+
+.bet-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Les boutons fantômes prennent la couleur de leur verdict au survol. */
+.bet-card__btn.is-won:hover:not(:disabled) {
   background: var(--cm-accent-soft);
   color: var(--cm-accent);
+}
+
+.bet-card__btn.is-lost:hover:not(:disabled) {
+  background: var(--cm-danger-soft);
+  color: var(--cm-danger);
+}
+
+.bet-card__delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin-left: 4px;
+  border: none;
+  border-radius: var(--cm-radius-sm);
+  background: transparent;
+  color: var(--cm-text-muted);
+  cursor: pointer;
+  transition: background var(--cm-transition), color var(--cm-transition);
+}
+
+.bet-card__delete:hover {
+  background: var(--cm-danger-soft);
+  color: var(--cm-danger);
+}
+
+/* Les sélections d'un combiné. */
+.bet-card__legs {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--cm-border-soft);
+}
+
+.bet-leg {
+  --ton: var(--cm-border);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 8px 10px 8px 12px;
+  border-radius: var(--cm-radius-sm);
+  border: 1px solid var(--cm-border-soft);
+  border-left: 2px solid var(--ton);
+  background: var(--cm-surface-alt);
+}
+
+.bet-leg.is-pending {
+  --ton: var(--cm-section);
+}
+
+.bet-leg.is-won {
+  --ton: var(--cm-accent);
+}
+
+.bet-leg.is-lost {
+  --ton: var(--cm-danger);
+}
+
+.bet-leg__main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.bet-leg__match,
+.vb-card__match {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--cm-text-primary);
+}
+
+.vb-card__match {
+  font-size: 13.5px;
+}
+
+.team {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vs {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--cm-text-muted);
+}
+
+.bet-leg__market {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--cm-text-muted);
+}
+
+.bet-leg__pick {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cm-text-primary);
+}
+
+.bet-leg__odds {
+  min-width: 0;
+  margin-left: 6px;
+  padding: 1px 7px;
+  font-size: 11px;
+  vertical-align: middle;
 }
 
 .bet-leg__actions {
@@ -1369,134 +1657,202 @@ onMounted(() => {
   gap: 2px;
 }
 
-.bets-row:last-child {
-  border-bottom: none;
-}
-
-.bets-row--won {
-  border-left-color: var(--cm-accent);
-}
-
-.bets-row--lost {
-  border-left-color: var(--cm-danger);
-}
-
-.bets-row__main {
-  min-width: 0;
-}
-
-.bets-row__match {
-  font-size: 13.5px;
-  font-weight: 600;
-}
-
-.bets-row__market {
-  font-size: 10.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  margin-top: 3px;
-}
-
-.bets-row__pick {
-  font-size: 12.5px;
-  font-weight: 600;
-  margin-top: 3px;
-}
-
-.bets-row__combo-hint {
-  font-size: 11px;
-  margin-top: 4px;
-}
-
-.bets-row__date {
-  font-size: 10.5px;
-  margin-top: 2px;
-}
-
-.bets-row__status-badge {
-  margin-left: 6px;
-  vertical-align: middle;
-}
-
-.bets-row__figures {
+/* ----------------------------------------------------------- value bet */
+.vb {
   display: flex;
-  gap: 14px;
-  font-size: 12.5px;
-  min-width: 180px;
-  justify-content: flex-end;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.bets-row__potential {
-  color: var(--cm-accent);
-  font-weight: 700;
+.vb-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 10px 18px;
+  padding: 12px 14px;
+  border-radius: var(--cm-radius);
+  border: 1px solid var(--cm-border-soft);
+  background: var(--cm-surface);
+  cursor: pointer;
+  transition: border-color var(--cm-transition), background var(--cm-transition);
 }
 
-.bets-row__status {
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 10.5px;
-  font-weight: 700;
-  text-align: center;
+.vb-card:hover {
+  border-color: var(--cm-border);
   background: var(--cm-surface-hover);
-  color: var(--cm-text-muted);
 }
 
-.bets-row__status--won {
-  background: var(--cm-accent-soft);
-  color: var(--cm-accent);
+/* Coché : la carte prend la couleur de la section. */
+.vb-card.is-selected {
+  border-color: rgba(var(--cm-section-rgb) / 0.5);
+  background: linear-gradient(90deg, var(--cm-section-soft), transparent 70%), var(--cm-surface);
 }
 
-.bets-row__status--lost {
-  background: var(--cm-danger-soft);
-  color: var(--cm-danger);
-}
-
-.bets-row__status--pending {
-  background: var(--cm-accent-soft);
-  color: var(--cm-accent);
-}
-
-.bets-row__actions {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.bets-row__delete {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  border: none;
-  border-radius: var(--cm-radius-sm);
-  background: transparent;
-  color: var(--cm-text-muted);
+.pick-check {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  accent-color: var(--cm-section);
   cursor: pointer;
 }
 
-.bets-row__delete:hover {
-  background: var(--cm-danger-soft);
-  color: var(--cm-danger);
+.vb-card__main {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
 }
 
-@media (max-width: 960px) {
-  .my-bets-view__summary {
-    grid-template-columns: repeat(2, 1fr);
+.vb-card__meta {
+  font-size: 11px;
+  color: var(--cm-text-muted);
+}
+
+.vb-card__pick {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--cm-text-primary);
+}
+
+/* La probabilité juste, en vert comme l'anneau de l'onglet Analyse IA. */
+.probability {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--cm-accent-soft);
+  color: var(--cm-accent);
+  font-size: 10.5px;
+  font-weight: 700;
+  vertical-align: middle;
+}
+
+.vb-card__figures {
+  gap: 14px;
+}
+
+.vb-card__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border: 1px solid var(--cm-border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--cm-text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color var(--cm-transition), color var(--cm-transition), background var(--cm-transition);
+}
+
+.vb-card__toggle:hover {
+  border-color: var(--cm-section);
+  background: var(--cm-section-soft);
+  color: var(--cm-section);
+}
+
+/* Les cotes réelles de chaque bookmaker, en puces sous la carte. */
+.bookmakers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 4px 4px 41px;
+}
+
+.bookmakers__item {
+  background: var(--cm-surface);
+}
+
+.bookmakers__odds {
+  color: var(--cm-text-primary);
+}
+
+/* ======================================================== listes étroites */
+/* Dans un panneau étroit : chiffres et actions passent sous le pronostic. */
+@container liste (max-width: 760px) {
+  .bet-card__head {
+    grid-template-columns: minmax(0, 1fr) auto;
   }
-  .value-bets__controls {
-    grid-template-columns: 1fr;
+
+  .bet-status {
+    grid-column: 2;
+    grid-row: 1;
   }
-  .bets-row {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-  .bets-row__figures {
+
+  .bet-card__head .figures {
+    grid-column: 1 / -1;
+    grid-row: 2;
     justify-content: flex-start;
   }
+
+  .bet-card__head .figure {
+    align-items: flex-start;
+  }
+
+  .bet-card__actions {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    flex-wrap: wrap;
+    padding-top: 8px;
+    border-top: 1px dashed var(--cm-border-soft);
+  }
+
   .bet-leg {
-    grid-template-columns: 1fr;
-    gap: 6px;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .bet-leg__actions {
+    grid-column: 1 / -1;
+    flex-wrap: wrap;
+  }
+
+  .vb-card {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .vb-card__figures {
+    grid-column: 2;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .vb-card__figures .figure {
+    align-items: flex-start;
+  }
+
+  .vb-card__toggle {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .bookmakers {
+    padding-left: 4px;
+  }
+
+  .match-group__bets,
+  .live-panel {
+    margin-left: 6px;
+    padding-left: 8px;
+  }
+}
+
+/* Sur un petit écran, le bordereau empile ses trois parties. */
+@media (max-width: 720px) {
+  .bet-slip__form {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .bet-slip__stake {
+    flex: 1;
+    width: auto;
+  }
+
+  .bet-slip__title,
+  .bet-slip__hint {
+    white-space: normal;
   }
 }
 </style>

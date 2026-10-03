@@ -1,9 +1,16 @@
 <script setup>
-import { reactive, watch } from 'vue';
+import { computed, reactive, watch } from 'vue';
 import AppSlider from '@/components/common/AppSlider.vue';
 import AppButton from '@/components/common/AppButton.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
 
+/**
+ * Les réglages du moteur (seuils, Kelly, mise, corrélation, cote plafond) et
+ * les bookmakers où un pari peut être recommandé. Refonte visuelle du
+ * 01/10/2026 (guide ui/DESIGN.md) : curseurs sur deux colonnes, bookmakers
+ * en puces cochables, explication en note, enregistrement en vert de la
+ * marque. Aucune donnée ni action n'a bougé.
+ */
 const props = defineProps({
   config: { type: Object, required: true },
   saving: { type: Boolean, default: false }
@@ -44,6 +51,13 @@ const BOOKMAKERS = [
 ];
 const NOTES = { france: 'agréé en France, marge 11 à 15 %', autre: 'non retenu par défaut' };
 
+// Présentation seulement : combien de bookmakers sont cochés (aucun = tous).
+const selection = computed(() => {
+  const n = form.valueBookmakers.length;
+  if (!n) return 'Tous les bookmakers';
+  return `${n} bookmaker${n > 1 ? 's' : ''} retenu${n > 1 ? 's' : ''}`;
+});
+
 function basculer(key) {
   const i = form.valueBookmakers.indexOf(key);
   if (i >= 0) form.valueBookmakers.splice(i, 1);
@@ -68,39 +82,60 @@ const asPercent = (value) => `${(value * 100).toFixed(1)}%`;
 
 <template>
   <form class="config-form" @submit.prevent="handleSave">
-    <div class="config-form__grid">
-      <AppSlider v-model="form.edgeThresholdMin" label="Edge minimum requis" :min="0" :max="0.2" :step="0.005" :format-value="asPercent" />
-      <AppSlider v-model="form.edgeThresholdMax" label="Edge maximum accepté" :min="0.05" :max="0.6" :step="0.005" :format-value="asPercent" />
-      <AppSlider v-model="form.kellyFraction" label="Fraction de Kelly" :min="0" :max="1" :step="0.01" :format-value="(v) => v.toFixed(2)" />
-      <AppSlider v-model="form.maxStakePercent" label="Mise max (% bankroll)" :min="0" :max="0.1" :step="0.002" :format-value="asPercent" />
-      <AppSlider v-model="form.defaultCorrelation" label="Corrélation Dixon-Coles (rho)" :min="-0.3" :max="0" :step="0.005" :format-value="(v) => v.toFixed(3)" />
-      <AppSlider
-        v-model="form.cornersAdjustmentMax"
-        label="Écart max affiché signal corners (±, indicatif)"
-        :min="0"
-        :max="0.2"
-        :step="0.005"
-        :format-value="asPercent"
-      />
-      <AppSlider v-model="form.maxValueOdds" label="Cote maximale d'un pari recommandé" :min="1.5" :max="10" :step="0.25" :format-value="(v) => v.toFixed(2)" />
-    </div>
+    <!-- 1. Les seuils : un curseur par réglage, deux colonnes quand la place existe. -->
+    <section class="config-form__section">
+      <h4 class="cm-section-title">
+        Seuils et coefficients
+        <span class="cm-section-title__hint">edge, Kelly, mise, corrélation, corners, cote plafond</span>
+      </h4>
+      <div class="cm-grid-2 config-form__grid">
+        <AppSlider v-model="form.edgeThresholdMin" label="Edge minimum requis" :min="0" :max="0.2" :step="0.005" :format-value="asPercent" />
+        <AppSlider v-model="form.edgeThresholdMax" label="Edge maximum accepté" :min="0.05" :max="0.6" :step="0.005" :format-value="asPercent" />
+        <AppSlider v-model="form.kellyFraction" label="Fraction de Kelly" :min="0" :max="1" :step="0.01" :format-value="(v) => v.toFixed(2)" />
+        <AppSlider v-model="form.maxStakePercent" label="Mise max (% bankroll)" :min="0" :max="0.1" :step="0.002" :format-value="asPercent" />
+        <AppSlider v-model="form.defaultCorrelation" label="Corrélation Dixon-Coles (rho)" :min="-0.3" :max="0" :step="0.005" :format-value="(v) => v.toFixed(3)" />
+        <AppSlider
+          v-model="form.cornersAdjustmentMax"
+          label="Écart max affiché signal corners (±, indicatif)"
+          :min="0"
+          :max="0.2"
+          :step="0.005"
+          :format-value="asPercent"
+        />
+        <AppSlider v-model="form.maxValueOdds" label="Cote maximale d'un pari recommandé" :min="1.5" :max="10" :step="0.25" :format-value="(v) => v.toFixed(2)" />
+      </div>
+    </section>
 
-    <fieldset class="config-form__bookmakers">
-      <legend>Vos bookmakers : un pari n'est recommandé que chez eux</legend>
-      <label v-for="b in BOOKMAKERS" :key="b.key" class="config-form__bookmaker">
-        <input type="checkbox" :checked="form.valueBookmakers.includes(b.key)" @change="basculer(b.key)" />
-        {{ b.title }}
-        <span v-if="NOTES[b.groupe]" class="config-form__muted">{{ NOTES[b.groupe] }}</span>
-      </label>
-      <p class="config-form__muted config-form__hint">
-        Aucun coché : tous les bookmakers. Les bookmakers sans mention sont réglementés par une autorité européenne, mais aucun
-        n'est agréé en France. La cote juste vient toujours des bookmakers les plus justes, Pinnacle d'abord, et jamais du
-        bookmaker où l'on parie.
-      </p>
+    <!-- 2. Les bookmakers : une puce cochable par bookmaker, la note en petit. -->
+    <fieldset class="config-form__section config-form__bookmakers">
+      <legend class="cm-section-title config-form__legend">
+        Vos bookmakers : un pari n'est recommandé que chez eux
+        <span class="cm-chip is-section config-form__count">{{ selection }}</span>
+      </legend>
+      <div class="config-form__chips">
+        <label v-for="b in BOOKMAKERS" :key="b.key" class="bookmaker" :class="{ 'is-on': form.valueBookmakers.includes(b.key) }">
+          <input type="checkbox" class="cm-visually-hidden" :checked="form.valueBookmakers.includes(b.key)" @change="basculer(b.key)" />
+          <span class="bookmaker__check"><AppIcon name="check" :size="11" /></span>
+          <span class="bookmaker__name">{{ b.title }}</span>
+          <span v-if="NOTES[b.groupe]" class="bookmaker__note">{{ NOTES[b.groupe] }}</span>
+        </label>
+      </div>
+      <div class="cm-note">
+        <span class="cm-icon-box is-muted"><AppIcon name="info" :size="16" /></span>
+        <div>
+          <p class="cm-note__title">Comment la sélection est lue</p>
+          <p class="cm-note__text config-form__hint">
+            Aucun coché : tous les bookmakers. Les bookmakers sans mention sont réglementés par une autorité européenne, mais aucun
+            n'est agréé en France. La cote juste vient toujours des bookmakers les plus justes, Pinnacle d'abord, et jamais du
+            bookmaker où l'on parie.
+          </p>
+        </div>
+      </div>
     </fieldset>
 
+    <!-- 3. Enregistrer (vert de la marque) ou revenir aux valeurs par défaut. -->
     <div class="config-form__actions">
-      <AppButton type="submit" variant="primary" :loading="saving">
+      <AppButton type="submit" variant="section" :loading="saving">
         <template #icon><AppIcon name="check" :size="15" /></template>
         Enregistrer
       </AppButton>
@@ -113,58 +148,116 @@ const asPercent = (value) => `${(value * 100).toFixed(1)}%`;
 </template>
 
 <style scoped>
-.config-form__grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px 28px;
-  margin-bottom: 20px;
+.config-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
 }
 
+.config-form__section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+/* Les curseurs : un peu plus d'air entre les colonnes qu'entre les lignes. */
+.config-form__grid {
+  gap: 18px 28px;
+}
+
+/* ------------------------------------------------------------ bookmakers */
 .config-form__bookmakers {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.config-form__legend {
+  padding: 0;
+  margin-bottom: 14px;
+}
+
+.config-form__count {
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.config-form__chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 18px;
-  margin: 0 0 20px;
-  padding: 12px 14px;
-  border: 1px solid var(--cm-border-soft);
-  border-radius: var(--cm-radius-sm);
+  gap: 8px;
 }
 
-.config-form__bookmakers legend {
-  padding: 0 6px;
-  font-size: 12.5px;
-  color: var(--cm-text-secondary);
-}
-
-.config-form__bookmaker {
+/* Une puce cochable : filet discret, couleur de section quand elle est retenue. */
+.bookmaker {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  color: var(--cm-text-primary);
+  gap: 8px;
+  padding: 7px 12px 7px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--cm-border);
+  background: var(--cm-surface-alt);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--cm-text-secondary);
   cursor: pointer;
+  user-select: none;
+  transition: border-color var(--cm-transition), background var(--cm-transition), color var(--cm-transition);
 }
 
-.config-form__muted {
-  font-size: 11px;
+.bookmaker:hover {
+  border-color: var(--cm-border-strong);
+  color: var(--cm-text-primary);
+}
+
+.bookmaker.is-on {
+  border-color: rgba(var(--cm-section-rgb) / 0.45);
+  background: var(--cm-section-soft);
+  color: var(--cm-text-primary);
+}
+
+/* Le clavier reste visible : l'anneau de focus suit la case masquée. */
+.bookmaker:has(input:focus-visible) {
+  box-shadow: 0 0 0 3px rgba(var(--cm-section-rgb) / 0.25);
+}
+
+.bookmaker__check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  border: 1px solid var(--cm-border-strong);
+  background: var(--cm-surface);
+  color: transparent;
+  transition: background var(--cm-transition), border-color var(--cm-transition), color var(--cm-transition);
+}
+
+.bookmaker.is-on .bookmaker__check {
+  border-color: var(--cm-section);
+  background: var(--cm-section);
+  color: var(--cm-section-on);
+}
+
+.bookmaker__note {
+  font-size: 10.5px;
+  font-weight: 500;
   color: var(--cm-text-muted);
 }
 
 .config-form__hint {
-  flex-basis: 100%;
-  margin: 2px 0 0;
+  font-size: 12.5px;
+  color: var(--cm-text-secondary);
 }
 
+/* ---------------------------------------------------------------- actions */
 .config-form__actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   padding-top: 16px;
   border-top: 1px solid var(--cm-border-soft);
-}
-
-@media (max-width: 720px) {
-  .config-form__grid {
-    grid-template-columns: 1fr;
-  }
 }
 </style>

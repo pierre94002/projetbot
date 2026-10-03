@@ -5,7 +5,9 @@ export const usePredictionsStore = defineStore('predictions', {
   state: () => ({
     entries: [],
     loading: false,
-    error: null
+    error: null,
+    // Échec du dernier enregistrement d'un scan, affiché dans Mes paris.
+    recordError: null
   }),
   actions: {
     async fetchPredictions() {
@@ -21,15 +23,23 @@ export const usePredictionsStore = defineStore('predictions', {
       }
     },
 
-    // Silencieux à dessein : journaliser les pronostics ne doit jamais
-    // bloquer ni faire échouer le scan lui-même.
+    // Journaliser les pronostics ne doit jamais bloquer ni faire échouer le
+    // scan lui-même — mais un échec s'affiche (`recordError`) : avalé en
+    // silence, il a laissé l'historique vide du 20 au 30/09/2026 sans que
+    // personne ne le voie. Par paquets : le serveur refuse une requête de plus
+    // de 100 Ko (express.json), et un scan d'une semaine en envoie 200 Ko.
     async recordFindings(entries) {
       if (!entries.length) return;
+      const TAILLE_PAQUET = 100;
+      this.recordError = null;
       try {
-        const { entries: updated } = await predictionsApi.record(entries);
+        let updated = null;
+        for (let i = 0; i < entries.length; i += TAILLE_PAQUET) {
+          ({ entries: updated } = await predictionsApi.record(entries.slice(i, i + TAILLE_PAQUET)));
+        }
         this.entries = updated;
-      } catch {
-        // best-effort
+      } catch (error) {
+        this.recordError = error.message;
       }
     },
 

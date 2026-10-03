@@ -5,9 +5,13 @@ import { matchAiAnalysisApi } from '@/services/matchAiAnalysisApi.js';
 import { useMatchAiAnalysisStore } from '@/stores/matchAiAnalysisStore.js';
 import MatchAiReviewPanel from '@/components/analysis/MatchAiReviewPanel.vue';
 import AppCard from '@/components/common/AppCard.vue';
+import AppIcon from '@/components/common/AppIcon.vue';
+import BackButton from '@/components/common/BackButton.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import LeagueBadge from '@/components/matches/LeagueBadge.vue';
+import TeamCrest from '@/components/matches/TeamCrest.vue';
+import MatchupHeader from '@/components/matches/MatchupHeader.vue';
 import MatchStatBars from '@/components/matches/MatchStatBars.vue';
 import MatchEventList from '@/components/matches/MatchEventList.vue';
 import MatchPlayerStats from '@/components/matches/MatchPlayerStats.vue';
@@ -30,6 +34,10 @@ const TABS = [
   { id: 'players', label: 'Stats joueurs' },
   { id: 'ai', label: 'Analyse IA' }
 ];
+
+// Présentation seulement (refonte du 01/10/2026) : l'icône de chaque onglet
+// dans la barre segmentée, à part de TABS pour ne pas toucher à sa structure.
+const TAB_ICONS = { resume: 'list', events: 'clock', lineups: 'users', stats: 'barChart', players: 'activity', ai: 'sparkles' };
 
 // Onglet « Analyse IA » : chargé au premier affichage de l'onglet, une fois
 // par match (l'analyse est retrouvée par équipes, compétition et date).
@@ -115,75 +123,112 @@ const topStats = computed(() => TEAM_STAT_GROUPS[0]);
 </script>
 
 <template>
-  <div class="match-detail">
+  <div class="match-detail cm-page">
+    <BackButton fallback="/matches" />
     <LoadingSpinner v-if="loading" label="Chargement du match…" />
     <EmptyState v-else-if="error" icon="alert" title="Match introuvable" :description="error" />
 
     <template v-else-if="entry">
-      <AppCard padded>
-        <div class="match-detail__head">
-          <LeagueBadge :league="entry.league" />
-          <span v-if="entry.meta?.round" class="cm-text-muted">Journée {{ entry.meta.round }}</span>
+      <!-- 1. LE BANDEAU : compétition et journée en puces, la date et le stade, les deux
+           clubs face à face autour du score, les buteurs sous le score. -->
+      <section class="cm-hero match-detail__hero">
+        <div class="cm-hero__top">
+          <span class="cm-hero__chips">
+            <span class="cm-eyebrow match-detail__eyebrow"><AppIcon name="matches" :size="12" />Match joué</span>
+            <span class="cm-chip match-detail__league"><LeagueBadge :league="entry.league" /></span>
+            <span v-if="entry.meta?.round" class="cm-chip"><AppIcon name="calendar" :size="11" />Journée {{ entry.meta.round }}</span>
+          </span>
+          <p v-if="kickoff || entry.meta?.stadium" class="cm-hero__subtitle match-detail__when">
+            <AppIcon name="clock" :size="13" />
+            <span>
+              {{ kickoff }}<template v-if="entry.meta?.stadium"> · {{ entry.meta.stadium }}</template>
+              <template v-if="entry.meta?.attendance"> · {{ entry.meta.attendance.toLocaleString('fr-FR') }} spectateurs</template>
+            </span>
+          </p>
         </div>
-        <p v-if="kickoff || entry.meta?.stadium" class="cm-text-muted match-detail__when">
-          {{ kickoff }}<template v-if="entry.meta?.stadium"> · {{ entry.meta.stadium }}</template>
-          <template v-if="entry.meta?.attendance"> · {{ entry.meta.attendance.toLocaleString('fr-FR') }} spectateurs</template>
-        </p>
 
-        <div class="match-detail__score">
-          <span class="match-detail__team match-detail__team--home">{{ entry.homeName }}</span>
-          <span class="match-detail__goals">{{ entry.homeGoals }} - {{ entry.awayGoals }}</span>
-          <span class="match-detail__team">{{ entry.awayName }}</span>
+        <div class="match-detail__matchup">
+          <div class="match-detail__club is-home">
+            <span class="match-detail__team">{{ entry.homeName }}</span>
+            <TeamCrest :name="entry.homeName" :league="entry.league" :team-id="entry.homeId ?? null" :size="44" />
+          </div>
+          <span class="cm-pill is-strong cm-numeric match-detail__score">{{ entry.homeGoals }} - {{ entry.awayGoals }}</span>
+          <div class="match-detail__club is-away">
+            <TeamCrest :name="entry.awayName" :league="entry.league" :team-id="entry.awayId ?? null" :size="44" />
+            <span class="match-detail__team">{{ entry.awayName }}</span>
+          </div>
         </div>
 
         <div v-if="scorers.length" class="match-detail__scorers">
-          <div class="match-detail__scorers-side">
-            <span v-for="(g, i) in scorers.filter((s) => s.side === 'home')" :key="`h${i}`">
-              {{ g.player }} {{ g.minute }}'<template v-if="g.ownGoal"> (CSC)</template>
+          <div class="match-detail__scorers-side is-home">
+            <span v-for="(g, i) in scorers.filter((s) => s.side === 'home')" :key="`h${i}`" class="match-detail__scorer">
+              <span class="match-detail__scorer-name">{{ g.player }}<template v-if="g.ownGoal"> (CSC)</template></span>
+              <span class="match-detail__scorer-minute cm-numeric">{{ g.minute }}'</span>
+              <AppIcon name="ball" :size="12" class="match-detail__scorer-ball" />
             </span>
           </div>
-          <div class="match-detail__scorers-side match-detail__scorers-side--away">
-            <span v-for="(g, i) in scorers.filter((s) => s.side === 'away')" :key="`a${i}`">
-              {{ g.player }} {{ g.minute }}'<template v-if="g.ownGoal"> (CSC)</template>
+          <div class="match-detail__scorers-side is-away">
+            <span v-for="(g, i) in scorers.filter((s) => s.side === 'away')" :key="`a${i}`" class="match-detail__scorer">
+              <AppIcon name="ball" :size="12" class="match-detail__scorer-ball" />
+              <span class="match-detail__scorer-minute cm-numeric">{{ g.minute }}'</span>
+              <span class="match-detail__scorer-name">{{ g.player }}<template v-if="g.ownGoal"> (CSC)</template></span>
             </span>
           </div>
         </div>
+      </section>
 
-        <nav class="match-detail__tabs">
-          <button v-for="t in availableTabs" :key="t.id" type="button" :class="{ 'is-active': tab === t.id }" @click="tab = t.id">
-            {{ t.label }}
-          </button>
-        </nav>
-      </AppCard>
+      <!-- 2. LES ONGLETS : barre segmentée, l'actif en couleur de section (même dessin que TabbedView). -->
+      <nav class="match-detail__tabs" role="tablist">
+        <button
+          v-for="t in availableTabs"
+          :key="t.id"
+          type="button"
+          role="tab"
+          :class="{ 'is-active': tab === t.id }"
+          :aria-selected="tab === t.id"
+          @click="tab = t.id"
+        >
+          <AppIcon :name="TAB_ICONS[t.id] ?? 'list'" :size="13" />
+          {{ t.label }}
+        </button>
+      </nav>
 
-      <template v-if="tab === 'resume'">
-        <AppCard title="Meilleures statistiques">
+      <!-- RÉSUMÉ : les meilleures statistiques à gauche, le cadre de la rencontre à droite. -->
+      <div v-if="tab === 'resume'" class="match-detail__grid cm-stagger">
+        <AppCard title="Meilleures statistiques" subtitle="Les neuf chiffres qui résument la rencontre, comme sur la page source." icon="barChart">
+          <MatchupHeader :home="entry.homeName" :away="entry.awayName" :league="entry.league" :home-id="entry.homeId ?? null" :away-id="entry.awayId ?? null" :size="22" />
           <MatchStatBars :group="topStats" :home="entry.teamStats?.home" :away="entry.teamStats?.away" />
         </AppCard>
-        <AppCard v-if="entry.meta" title="Rencontre">
+        <AppCard v-if="entry.meta" title="Rencontre" subtitle="Stade, affluence, météo et arbitre publiés par FotMob." icon="mapPin">
           <MatchInfoPanel :meta="entry.meta" />
         </AppCard>
-      </template>
+      </div>
 
-      <AppCard v-else-if="tab === 'events'" title="Événements">
-        <MatchEventList :events="entry.events" :home-name="entry.homeName" :away-name="entry.awayName" />
+      <!-- FIL DU MATCH -->
+      <AppCard v-else-if="tab === 'events'" title="Événements" subtitle="Buts, cartons et remplacements, minute par minute, chaque camp de son côté." icon="clock">
+        <MatchEventList :events="entry.events" :home-name="entry.homeName" :away-name="entry.awayName" :players="entry.players" :league="entry.league" :home-id="entry.homeId ?? null" :away-id="entry.awayId ?? null" />
       </AppCard>
 
-      <AppCard v-else-if="tab === 'lineups'" title="Compositions">
+      <!-- COMPOSITIONS -->
+      <AppCard v-else-if="tab === 'lineups'" title="Compositions" subtitle="Les deux onzes sur le terrain avec leur note du match, puis les bancs." icon="users">
         <MatchLineups :entry="entry" />
       </AppCard>
 
-      <template v-else-if="tab === 'stats'">
-        <AppCard v-for="group in TEAM_STAT_GROUPS" :key="group.title" :title="group.title">
+      <!-- STATISTIQUES : un groupe par carte, les deux clubs en tête de chacune. -->
+      <div v-else-if="tab === 'stats'" class="match-detail__stats cm-stagger">
+        <AppCard v-for="group in TEAM_STAT_GROUPS" :key="group.title" :title="group.title" icon="barChart">
+          <MatchupHeader :home="entry.homeName" :away="entry.awayName" :league="entry.league" :home-id="entry.homeId ?? null" :away-id="entry.awayId ?? null" :size="22" />
           <MatchStatBars :group="group" :home="entry.teamStats?.home" :away="entry.teamStats?.away" />
         </AppCard>
-      </template>
+      </div>
 
-      <AppCard v-else-if="tab === 'players'" title="Stats joueurs">
+      <!-- STATS JOUEURS -->
+      <AppCard v-else-if="tab === 'players'" title="Stats joueurs" subtitle="Les statistiques individuelles de la feuille de match, par famille, comme chez FotMob." icon="activity">
         <MatchPlayerStats :entry="entry" />
       </AppCard>
 
-      <AppCard v-else-if="tab === 'ai'" title="Analyse IA">
+      <!-- ANALYSE IA -->
+      <AppCard v-else-if="tab === 'ai'" title="Analyse IA" subtitle="La lecture de l'IA avant le match, puis son bilan une fois le résultat connu." icon="sparkles">
         <LoadingSpinner v-if="ai.loading" label="Chargement de l'analyse IA…" />
         <EmptyState v-else-if="ai.error" icon="alert" title="Analyse IA indisponible" :description="ai.error" />
         <MatchAiReviewPanel
@@ -203,103 +248,228 @@ const topStats = computed(() => TEAM_STAT_GROUPS[0]);
 
 <style scoped>
 .match-detail {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  /* La page se règle sur SA largeur : deux colonnes seulement si la place existe. */
+  container: matchdetail / inline-size;
 }
 
-.match-detail__head {
-  display: flex;
+/* ------------------------------------------------------------ bandeau */
+.match-detail__hero {
+  container: mdhero / inline-size;
+  gap: 18px;
+}
+
+.match-detail__eyebrow {
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
-  font-size: 12px;
+  gap: 6px;
+  margin-right: 4px;
 }
 
-.match-detail__when {
-  margin: 6px 0 0;
+/* La compétition (drapeau + nom) dans une puce : son nom au calibre des puces. */
+.match-detail__league {
+  padding-left: 5px;
+}
+
+.match-detail__league :deep(.league-badge__name) {
   font-size: 11.5px;
 }
 
-.match-detail__score {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+/* La date, le stade et l'affluence : à droite des puces, l'horloge en couleur de section. */
+.match-detail__when {
+  display: inline-flex;
   align-items: center;
-  gap: 16px;
-  margin: 18px 0 4px;
+  gap: 7px;
+  min-width: 0;
 }
 
-.match-detail__team {
-  font-size: 16px;
-  font-weight: 600;
+.match-detail__when :deep(svg) {
+  flex-shrink: 0;
+  color: var(--cm-section);
 }
 
-.match-detail__team--home {
+/* Les deux clubs face à face, le score au centre. */
+.match-detail__matchup {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 18px;
+  padding: 4px 0;
+}
+
+.match-detail__club {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.match-detail__club.is-home {
+  justify-content: flex-end;
   text-align: right;
 }
 
-.match-detail__goals {
-  font-family: var(--cm-font-mono);
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: 1px;
+.match-detail__team {
+  min-width: 0;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--cm-text-primary);
+  overflow-wrap: anywhere;
 }
 
+/* Le score : la pastille forte, en très grand. */
+.match-detail__score {
+  min-width: 96px;
+  padding: 7px 20px;
+  font-size: 26px;
+  letter-spacing: 1px;
+  box-shadow: var(--cm-shadow-sm);
+}
+
+/* Les buteurs sous le score : ceux du club qui reçoit alignés à droite, les autres à gauche. */
 .match-detail__scorers {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  font-size: 11.5px;
-  color: var(--cm-text-secondary);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 6px 24px;
 }
 
 .match-detail__scorers-side {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
+  min-width: 0;
+}
+
+.match-detail__scorers-side.is-home {
+  align-items: flex-end;
   text-align: right;
 }
 
-.match-detail__scorers-side--away {
-  text-align: left;
+.match-detail__scorer {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font-size: 12px;
+  color: var(--cm-text-secondary);
 }
 
+.match-detail__scorer-name {
+  min-width: 0;
+  font-weight: 600;
+  color: var(--cm-text-primary);
+  overflow-wrap: anywhere;
+}
+
+.match-detail__scorer-minute {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--cm-text-muted);
+}
+
+.match-detail__scorer-ball {
+  flex-shrink: 0;
+  color: var(--cm-section);
+}
+
+/* ------------------------------------------------------------ onglets */
 .match-detail__tabs {
-  display: flex;
-  gap: 4px;
+  display: inline-flex;
   flex-wrap: wrap;
-  margin-top: 18px;
-  padding-top: 14px;
-  border-top: 1px solid var(--cm-border-soft);
+  gap: 3px;
+  max-width: 100%;
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid var(--cm-border-soft);
+  background: rgb(var(--cm-glass-tint) / var(--cm-glass-alpha-1));
 }
 
 .match-detail__tabs button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 15px;
+  border-radius: 999px;
   border: 0;
   background: transparent;
   color: var(--cm-text-secondary);
   font: inherit;
   font-size: 12.5px;
-  padding: 7px 14px;
-  border-radius: var(--cm-radius-sm);
+  font-weight: 600;
+  white-space: nowrap;
   cursor: pointer;
-  transition: background var(--cm-transition), color var(--cm-transition);
+  transition: background var(--cm-transition), color var(--cm-transition), box-shadow var(--cm-transition);
 }
 
 .match-detail__tabs button:hover {
-  background: var(--cm-surface-hover);
+  color: var(--cm-text-primary);
+  background: rgb(var(--cm-glass-tint) / var(--cm-glass-alpha-2));
 }
 
 .match-detail__tabs button.is-active {
-  background: var(--cm-accent-soft);
-  color: var(--cm-text-primary);
-  font-weight: 600;
+  background: var(--cm-section);
+  color: var(--cm-section-on);
+  box-shadow: 0 4px 14px rgba(var(--cm-section-rgb) / 0.3);
 }
 
-@media (max-width: 640px) {
-  .match-detail__team {
-    font-size: 13.5px;
+/* ------------------------------------------------------------ contenu */
+.match-detail__grid,
+.match-detail__stats {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+/* Assez de place : le résumé et les groupes de statistiques sur deux colonnes,
+   le premier groupe (« Meilleures statistiques ») en pleine largeur. */
+@container matchdetail (min-width: 900px) {
+  .match-detail__grid,
+  .match-detail__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .match-detail__goals {
-    font-size: 21px;
+
+  .match-detail__stats > :first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Bandeau étroit : chaque club en colonne (logo au-dessus du nom), le score entre les deux. */
+@container mdhero (max-width: 600px) {
+  .match-detail__matchup {
+    gap: 10px;
+  }
+
+  .match-detail__club,
+  .match-detail__club.is-home {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .match-detail__club.is-home {
+    flex-direction: column-reverse;
+  }
+
+  .match-detail__team {
+    font-size: 14.5px;
+  }
+
+  .match-detail__score {
+    min-width: 72px;
+    padding: 5px 12px;
+    font-size: 20px;
+  }
+
+  .match-detail__scorers {
+    gap: 6px 12px;
+  }
+
+  .match-detail__scorer {
+    flex-wrap: wrap;
+    justify-content: inherit;
   }
 }
 </style>

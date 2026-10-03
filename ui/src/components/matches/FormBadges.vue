@@ -34,16 +34,21 @@ function tooltipFor(match) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
-  border-radius: 4px;
-  font-size: 9px;
-  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  font-size: 9.5px;
+  font-weight: 800;
   cursor: default;
 }
 
+/* Le plus récent (à droite) ressort un peu plus. */
+.form-badges__item:last-child {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
 .form-badges__item--V {
-  background: var(--cm-accent-soft);
+  background: rgba(var(--cm-accent-rgb) / 0.22);
   color: var(--cm-accent);
 }
 .form-badges__item--N {
@@ -51,7 +56,7 @@ function tooltipFor(match) {
   color: var(--cm-text-secondary);
 }
 .form-badges__item--D {
-  background: var(--cm-danger-soft);
+  background: rgba(var(--cm-danger-rgb) / 0.2);
   color: var(--cm-danger);
 }
 

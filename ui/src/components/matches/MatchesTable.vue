@@ -1,14 +1,23 @@
 <script setup>
 import { computed, reactive, watch } from 'vue';
 import AppIcon from '@/components/common/AppIcon.vue';
-import TeamAvatar from './TeamAvatar.vue';
+import MatchCard from './MatchCard.vue';
 import FormBadges from './FormBadges.vue';
 import LeagueBadge from './LeagueBadge.vue';
-import { formatOdds, formatTime, formatDay, formatShortDay } from '@/utils/format.js';
+import { formatOdds, formatDay, formatShortDay } from '@/utils/format.js';
 import { groupMatchesByLeague, groupMatchesByDate } from '@/utils/leagueDisplay.js';
 import { liveNow } from '@/utils/liveClock.js';
 import { computeMatchStatus } from '@/utils/matchStatus.js';
 
+/**
+ * La liste des rencontres, rangée par compétition puis par jour (refonte
+ * visuelle du 01/10/2026) : chaque compétition est un bloc replié, avec une
+ * vraie ligne d'en-tête (drapeau et nom, l'état du jour en puces — en direct,
+ * aujourd'hui, terminés —, le nombre de rencontres, le lien Classement) qui
+ * reste collée en haut pendant qu'on fait défiler ses matchs ; dessous, les
+ * jours en sous-titres, et une MatchCard par rencontre avec la forme, le
+ * badge IA, le report et les cotes 1 / N / 2 à droite.
+ */
 const props = defineProps({
   matches: { type: Array, required: true },
   selectedMatchId: { type: String, default: null },
@@ -131,67 +140,120 @@ watch(
   { immediate: true }
 );
 
+// Une ligne de la liste au format de la carte de rencontre commune
+// (MatchCard.vue — 01/10/2026 : « ce design partout où il y a des
+// rencontres ») : domicile à gauche, heure ou score au centre.
+function versCarte(match) {
+  return {
+    matchId: match.matchId,
+    commenceTime: heureConnue(match) ? match.commenceTime : null,
+    date: match.commenceTime ? match.commenceTime.slice(0, 10) : null,
+    league: match.league,
+    round: match.round ?? null,
+    homeName: match.home,
+    awayName: match.away,
+    homeGoals: match.result?.homeGoals ?? null,
+    awayGoals: match.result?.awayGoals ?? null,
+    status: isLive(match) ? 'live' : isFinished(match) || match.settled ? 'finished' : 'scheduled',
+    hasOdds: match.hasOdds !== false,
+    postponedFrom: match.postponedFrom ?? null
+  };
+}
+
 function formatDayHeader(dayKey) {
   return dayKey === 'Date inconnue' ? dayKey : formatDay(dayKey);
+}
+
+// Présentation seulement : le favori des bookmakers (la cote 1X2 la plus
+// basse) ressort en couleur de section dans la carte. Rien n'est calculé
+// pour le moteur ici ; sans deux cotes valables, personne n'est mis en avant.
+function coteFavorite(match) {
+  const cotes = [
+    ['1', Number(match.marketOdds?.odds1)],
+    ['N', Number(match.marketOdds?.oddsDraw)],
+    ['2', Number(match.marketOdds?.odds2)]
+  ].filter(([, cote]) => Number.isFinite(cote) && cote > 1);
+  if (cotes.length < 2) return null;
+  return cotes.reduce((meilleure, c) => (c[1] < meilleure[1] ? c : meilleure))[0];
 }
 </script>
 
 <template>
   <div class="match-list">
-    <div v-for="group in groupedMatches" :key="group.league" class="league-group">
+    <section
+      v-for="group in groupedMatches"
+      :key="group.league"
+      class="league-group"
+      :class="{ 'is-open': expandedLeagues.has(group.league), 'has-live': group.matches.some(isLive) }"
+    >
+      <!-- La ligne d'en-tête de la compétition : drapeau et nom, l'état du jour
+           en puces, le nombre de rencontres, le classement, le repli. Elle reste
+           collée en haut de la liste pendant qu'on fait défiler ses matchs. -->
       <div
         class="league-group__header"
         role="button"
         tabindex="0"
+        :aria-expanded="expandedLeagues.has(group.league)"
         @click="toggleCollapse(group.league)"
         @keydown.enter="toggleCollapse(group.league)"
       >
-        <LeagueBadge :league="group.league" />
-        <span
-          v-if="incompleteStatsSet.has(group.league)"
-          class="league-group__incomplete"
-          title="Corners, tirs, cartons… incomplets ou absents pour ce championnat — le score reste fiable"
-        >
-          stats incomplètes
-        </span>
-        <button
-          v-if="group.matches.some(isLive)"
-          type="button"
-          class="league-group__live"
-          title="Voir le(s) match(s) en direct"
-          @click.stop="showLiveMatches(group)"
-        >
-          <span class="league-group__live-dot"></span>{{ group.matches.filter(isLive).length }} en direct
+        <LeagueBadge :league="group.league" class="league-group__badge" />
+
+        <div class="league-group__meta">
+          <span
+            v-if="incompleteStatsSet.has(group.league)"
+            class="cm-chip is-info league-group__incomplete"
+            title="Corners, tirs, cartons… incomplets ou absents pour ce championnat — le score reste fiable"
+          >
+            stats incomplètes
+          </span>
+          <button
+            v-if="group.matches.some(isLive)"
+            type="button"
+            class="cm-chip is-danger league-group__live"
+            title="Voir le(s) match(s) en direct"
+            @click.stop="showLiveMatches(group)"
+          >
+            <span class="cm-live-dot league-group__live-dot"></span>{{ group.matches.filter(isLive).length }} en direct
+          </button>
+          <span v-if="group.matches.some(isUpcomingToday)" class="cm-chip is-accent league-group__today">
+            <AppIcon name="clock" :size="11" />{{ group.matches.filter(isUpcomingToday).length }} aujourd'hui
+          </span>
+          <span v-if="group.matches.some(isFinished)" class="cm-chip is-warning league-group__finished">
+            <AppIcon name="check" :size="11" />{{ group.matches.filter(isFinished).length }} terminé(s)
+          </span>
+        </div>
+
+        <span class="league-group__count cm-text-muted cm-numeric" title="Rencontres dans ce championnat">{{ group.matches.length }}</span>
+        <button type="button" class="cm-link league-group__standings-link" @click.stop="$emit('view-standings', group.league)">
+          <AppIcon name="award" :size="13" />Classement
         </button>
-        <span v-if="group.matches.some(isUpcomingToday)" class="league-group__today">
-          {{ group.matches.filter(isUpcomingToday).length }} aujourd'hui
+        <span class="league-group__toggle">
+          <AppIcon
+            name="chevronRight"
+            :size="14"
+            class="league-group__chevron"
+            :class="{ 'league-group__chevron--collapsed': expandedLeagues.has(group.league) }"
+          />
         </span>
-        <span v-if="group.matches.some(isFinished)" class="league-group__finished">
-          {{ group.matches.filter(isFinished).length }} terminé(s)
-        </span>
-        <span class="league-group__count cm-text-muted cm-numeric">{{ group.matches.length }}</span>
-        <button type="button" class="league-group__standings-link" @click.stop="$emit('view-standings', group.league)">
-          Classement
-        </button>
-        <AppIcon
-          name="chevronRight"
-          :size="14"
-          class="league-group__chevron"
-          :class="{ 'league-group__chevron--collapsed': expandedLeagues.has(group.league) }"
-        />
       </div>
 
       <div v-if="expandedLeagues.has(group.league)" class="league-group__matches">
         <template v-for="dateGroup in groupMatchesByDate(group.matches)" :key="dateGroup.dayKey">
+          <!-- Le jour : un sous-titre avec son filet, le nombre de rencontres, le repli. -->
           <div
             class="date-group__header"
+            :class="{ 'is-open': expandedDates.has(dateGroupKey(group.league, dateGroup.dayKey)), 'is-today': dateGroup.dayKey === todayKey }"
             role="button"
             tabindex="0"
+            :aria-expanded="expandedDates.has(dateGroupKey(group.league, dateGroup.dayKey))"
             @click="toggleDateCollapse(group.league, dateGroup.dayKey, dateGroup.matches)"
             @keydown.enter="toggleDateCollapse(group.league, dateGroup.dayKey, dateGroup.matches)"
           >
             <span class="date-group__label cm-truncate">{{ formatDayHeader(dateGroup.dayKey) }}</span>
-            <span class="date-group__count cm-text-muted cm-numeric">{{ dateGroup.matches.length }}</span>
+            <span v-if="dateGroup.dayKey === todayKey" class="date-group__today">Aujourd'hui</span>
+            <span class="date-group__rule"></span>
+            <span class="date-group__count cm-text-muted cm-numeric">{{ dateGroup.matches.length }} match{{ dateGroup.matches.length > 1 ? 's' : '' }}</span>
             <AppIcon
               name="chevronRight"
               :size="12"
@@ -199,27 +261,29 @@ function formatDayHeader(dayKey) {
               :class="{ 'date-group__chevron--collapsed': expandedDates.has(dateGroupKey(group.league, dateGroup.dayKey)) }"
             />
           </div>
-          <template v-if="expandedDates.has(dateGroupKey(group.league, dateGroup.dayKey))">
-            <div
+          <div v-if="expandedDates.has(dateGroupKey(group.league, dateGroup.dayKey))" class="date-group__cards cm-stagger">
+            <MatchCard
               v-for="match in dateGroup.matches"
               :key="match.matchId"
-              class="match-row"
-              :class="{ 'match-row--active': match.matchId === selectedMatchId, 'match-row--live': isLive(match), 'match-row--finished': isFinished(match) }"
-              role="button"
-              tabindex="0"
-              @click="$emit('select', match)"
-              @keydown.enter="$emit('select', match)"
-              @keydown.space.prevent="$emit('select', match)"
+              :match="versCarte(match)"
+              clickable
+              :active="match.matchId === selectedMatchId"
+              date-display="none"
+              :show-competition="false"
+              team-links
+              class="match-list__card"
+              @select="$emit('select', match)"
             >
-              <span class="match-row__time cm-numeric" :class="{ 'cm-text-muted': !isLive(match) && !isFinished(match) }">
-                <span v-if="isLive(match)" class="match-row__live">
-                  <span class="match-row__live-dot"></span>DIRECT
+              <template #home-extra>
+                <FormBadges v-if="formByMatchId[match.matchId]" :form="formByMatchId[match.matchId].home?.form" class="match-row__form" />
+              </template>
+              <template #away-extra>
+                <FormBadges v-if="formByMatchId[match.matchId]" :form="formByMatchId[match.matchId].away?.form" class="match-row__form" />
+              </template>
+              <template #aside>
+                <span v-if="aiAnalysisByMatchId[match.matchId]" class="match-row__ai-badge" title="Analyse IA disponible pour ce match">
+                  <AppIcon name="bolt" :size="9" />IA
                 </span>
-                <span v-else-if="isFinished(match)" class="match-row__finished">TERMINÉ</span>
-                <span v-else-if="!heureConnue(match)" class="match-row__time-unknown" title="Le calendrier de repli ne connaît que la date, pas l'heure exacte du coup d'envoi">
-                  Heure à confirmer
-                </span>
-                <template v-else>{{ formatTime(match.commenceTime) }}</template>
                 <span
                   v-if="match.postponedFrom"
                   class="match-row__postponed"
@@ -227,171 +291,187 @@ function formatDayHeader(dayKey) {
                 >
                   Reporté du {{ formatShortDay(match.postponedFrom) }}
                 </span>
-                <span v-if="aiAnalysisByMatchId[match.matchId]" class="match-row__ai-badge" title="Analyse IA disponible pour ce match">
-                  <AppIcon name="bolt" :size="9" />IA
+                <!-- Rencontre connue par le calendrier mais pas encore cotée
+                     (divisions inférieures, Russie, Chine : les bookmakers
+                     n'ouvrent qu'à l'approche). Trois tirets se liraient comme
+                     un échec de chargement, d'où la mention explicite. -->
+                <span v-if="match.hasOdds === false" class="match-row__odds match-row__odds--none" title="Aucun bookmaker n'a encore publié de cote pour ce match">
+                  pas encore coté
                 </span>
-              </span>
-
-              <span class="match-row__teams">
-                <span class="match-row__team">
-                  <TeamAvatar :name="match.home" />
-                  <button type="button" class="match-row__team-name cm-truncate" @click.stop="$emit('team-click', { name: match.home, league: match.league, matchId: match.matchId })">
-                    {{ match.home }}
-                  </button>
-                  <FormBadges v-if="formByMatchId[match.matchId]" :form="formByMatchId[match.matchId].home?.form" class="match-row__form" />
+                <!-- Les trois cotes, chacune sous son repère 1 / N / 2 ; le favori en couleur de section. -->
+                <span v-else class="match-row__odds" title="Cotes 1 / N / 2">
+                  <span class="match-row__odd" :class="{ 'is-favori': coteFavorite(match) === '1' }"><i>1</i>{{ formatOdds(match.marketOdds?.odds1) }}</span>
+                  <span class="match-row__odd match-row__odd--draw" :class="{ 'is-favori': coteFavorite(match) === 'N' }"><i>N</i>{{ formatOdds(match.marketOdds?.oddsDraw) }}</span>
+                  <span class="match-row__odd" :class="{ 'is-favori': coteFavorite(match) === '2' }"><i>2</i>{{ formatOdds(match.marketOdds?.odds2) }}</span>
                 </span>
-                <span class="match-row__team">
-                  <TeamAvatar :name="match.away" />
-                  <button type="button" class="match-row__team-name cm-truncate" @click.stop="$emit('team-click', { name: match.away, league: match.league, matchId: match.matchId })">
-                    {{ match.away }}
-                  </button>
-                  <FormBadges v-if="formByMatchId[match.matchId]" :form="formByMatchId[match.matchId].away?.form" class="match-row__form" />
-                </span>
-              </span>
-
-              <!-- Rencontre connue par le calendrier mais pas encore cotée
-                   (divisions inférieures, Russie, Chine : les bookmakers
-                   n'ouvrent qu'à l'approche). Trois tirets se liraient comme
-                   un échec de chargement, d'où la mention explicite. -->
-              <span v-if="match.hasOdds === false" class="match-row__odds match-row__odds--none" title="Aucun bookmaker n'a encore publié de cote pour ce match">
-                pas encore coté
-              </span>
-              <span v-else class="match-row__odds">
-                <span class="match-row__odd">{{ formatOdds(match.marketOdds?.odds1) }}</span>
-                <span class="match-row__odd match-row__odd--draw">{{ formatOdds(match.marketOdds?.oddsDraw) }}</span>
-                <span class="match-row__odd">{{ formatOdds(match.marketOdds?.odds2) }}</span>
-              </span>
-            </div>
-          </template>
+              </template>
+            </MatchCard>
+          </div>
         </template>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 
 <style scoped>
 .match-list {
+  /* Se règle sur SA largeur : une page entière comme un panneau étroit. */
+  container: matchlist / inline-size;
   display: flex;
   flex-direction: column;
-  max-height: 600px;
+  gap: 10px;
+  padding: 12px;
+  /* La liste garde son propre défilement (les filtres restent visibles au-dessus),
+     mais prend la hauteur disponible plutôt qu'une boîte fixe. */
+  max-height: clamp(520px, 72vh, 1100px);
   overflow-y: auto;
+  scrollbar-gutter: stable;
 }
 
+/* ------------------------------------------------------ compétition */
 .league-group {
-  border-bottom: 1px solid var(--cm-border-soft);
+  border: 1px solid var(--cm-border-soft);
+  border-radius: var(--cm-radius-md);
+  background: var(--cm-surface);
+  transition: border-color var(--cm-transition);
 }
 
+.league-group.is-open {
+  border-color: rgba(var(--cm-section-rgb) / 0.24);
+}
+
+.league-group.has-live {
+  border-color: rgba(var(--cm-danger-rgb) / 0.3);
+}
+
+/* La ligne d'en-tête reste collée en haut de la liste pendant le défilement
+   de ses matchs : on sait toujours dans quel championnat on est. */
 .league-group__header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
   display: flex;
   align-items: center;
-  gap: 9px;
-  width: 100%;
-  padding: 10px 14px;
+  gap: 10px;
+  padding: 10px 12px 10px 16px;
+  border-radius: inherit;
   background: var(--cm-surface-alt);
-  border: none;
   cursor: pointer;
   text-align: left;
+  user-select: none;
+  transition: background var(--cm-transition);
 }
 
-.league-group__count {
-  font-size: 11px;
+/* Le liseré à gauche : couleur de section quand le bloc est ouvert, rouge
+   quand un match s'y joue en ce moment. */
+.league-group__header::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: transparent;
+  transition: background var(--cm-transition);
 }
 
-.league-group__live {
-  flex-shrink: 0;
+.league-group.is-open .league-group__header::before {
+  background: var(--cm-section);
+}
+
+.league-group.has-live .league-group__header::before {
+  background: var(--cm-danger);
+}
+
+.league-group__header:hover {
+  background: var(--cm-surface-hover);
+}
+
+.league-group.is-open .league-group__header {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: 1px solid var(--cm-border-soft);
+  background: linear-gradient(90deg, rgba(var(--cm-section-rgb) / 0.09), transparent 55%), var(--cm-surface-alt);
+}
+
+.league-group__header:focus-visible {
+  outline: 2px solid var(--cm-section);
+  outline-offset: -2px;
+}
+
+.league-group__meta {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 5px;
-  padding: 2px 7px;
-  border: none;
-  border-radius: 999px;
-  background: var(--cm-danger-soft);
-  color: var(--cm-danger);
-  font-size: 10px;
+  gap: 6px;
+}
+
+/* Une puce cliquable : même dessin que les autres, avec le curseur en plus. */
+.league-group__live {
   font-family: inherit;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
   cursor: pointer;
+  transition: background var(--cm-transition);
 }
 
 .league-group__live:hover {
-  background: var(--cm-danger);
-  color: var(--cm-bg);
-}
-
-.league-group__live:hover .league-group__live-dot {
-  background: var(--cm-bg);
+  background: rgba(var(--cm-danger-rgb) / 0.24);
 }
 
 .league-group__live-dot {
   width: 6px;
   height: 6px;
-  border-radius: 50%;
-  background: var(--cm-danger);
-  animation: cm-live-pulse 1.4s ease-in-out infinite;
+  box-shadow: 0 0 0 2px var(--cm-danger-soft);
 }
 
-.league-group__today {
-  flex-shrink: 0;
-  padding: 2px 7px;
-  border-radius: 999px;
-  background: var(--cm-accent-soft);
-  color: var(--cm-accent);
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
-
-/* Mise en garde sur la donnée, pas un statut de match : pas de majuscules,
-   pour rester visuellement en retrait des pastilles direct/aujourd'hui/terminé. */
+/* Mise en garde sur la donnée, pas un statut de match : elle reste en
+   minuscules, en retrait des puces direct / aujourd'hui / terminés. */
 .league-group__incomplete {
-  flex-shrink: 0;
-  padding: 2px 7px;
-  border-radius: 999px;
-  background: var(--cm-info-soft);
-  color: var(--cm-info);
-  font-size: 10px;
   font-weight: 600;
 }
 
-.league-group__finished {
+.league-group__count {
   flex-shrink: 0;
-  padding: 2px 7px;
+  padding: 2px 9px;
   border-radius: 999px;
-  background: var(--cm-warning-soft);
-  color: var(--cm-warning);
-  font-size: 10px;
+  background: var(--cm-surface-hover);
+  color: var(--cm-text-secondary);
+  font-size: 11px;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
 }
 
 .league-group__standings-link {
   flex-shrink: 0;
-  background: none;
-  border: none;
-  padding: 2px 4px;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--cm-accent);
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 2px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  transition: background var(--cm-transition);
 }
 
 .league-group__standings-link:hover {
-  color: var(--cm-accent-strong);
+  background: var(--cm-section-soft);
+  text-decoration: none;
 }
 
-.league-group__header:focus-visible {
-  outline: 2px solid var(--cm-accent);
-  outline-offset: -2px;
+.league-group__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--cm-surface-hover);
+  color: var(--cm-text-muted);
+  transition: background var(--cm-transition), color var(--cm-transition);
+}
+
+.league-group__header:hover .league-group__toggle,
+.league-group.is-open .league-group__toggle {
+  background: var(--cm-section-soft);
+  color: var(--cm-section);
 }
 
 .league-group__chevron {
-  color: var(--cm-text-muted);
   transform: rotate(90deg);
   transition: transform var(--cm-transition);
 }
@@ -403,23 +483,21 @@ function formatDayHeader(dayKey) {
 .league-group__matches {
   display: flex;
   flex-direction: column;
+  gap: 2px;
+  padding: 6px 10px 10px;
 }
 
+/* ------------------------------------------------------------- jour */
 .date-group__header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 7px 14px;
-  background: none;
-  border: none;
-  border-top: 1px solid var(--cm-border-soft);
+  gap: 10px;
+  padding: 8px 6px;
+  border-radius: var(--cm-radius-sm);
   cursor: pointer;
   text-align: left;
-}
-
-.league-group__matches .date-group__header:first-child {
-  border-top: none;
+  user-select: none;
+  transition: background var(--cm-transition);
 }
 
 .date-group__header:hover {
@@ -427,222 +505,207 @@ function formatDayHeader(dayKey) {
 }
 
 .date-group__header:focus-visible {
-  outline: 2px solid var(--cm-accent);
+  outline: 2px solid var(--cm-section);
   outline-offset: -2px;
 }
 
 .date-group__label {
+  flex-shrink: 1;
+  max-width: 60%;
   font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
   text-transform: uppercase;
-  letter-spacing: 0.4px;
-  font-weight: 600;
   color: var(--cm-text-muted);
+  transition: color var(--cm-transition);
+}
+
+.date-group__header:hover .date-group__label,
+.date-group__header.is-open .date-group__label {
+  color: var(--cm-text-secondary);
+}
+
+.date-group__header.is-today .date-group__label {
+  color: var(--cm-section);
+}
+
+.date-group__today {
+  flex-shrink: 0;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--cm-section-soft);
+  color: var(--cm-section);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.date-group__rule {
   flex: 1;
+  height: 1px;
+  background: var(--cm-border-soft);
 }
 
 .date-group__count {
+  flex-shrink: 0;
   font-size: 10.5px;
+  font-weight: 600;
 }
 
 .date-group__chevron {
+  flex-shrink: 0;
   color: var(--cm-text-muted);
   transform: rotate(90deg);
-  transition: transform var(--cm-transition);
+  transition: transform var(--cm-transition), color var(--cm-transition);
+}
+
+.date-group__header:hover .date-group__chevron {
+  color: var(--cm-section);
 }
 
 .date-group__chevron--collapsed {
   transform: rotate(-90deg);
 }
 
-.match-row {
-  display: grid;
-  grid-template-columns: 62px 1fr auto;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 9px 14px;
-  background: transparent;
-  border: none;
-  border-top: 1px solid var(--cm-border-soft);
-  cursor: pointer;
-  text-align: left;
-  transition: background var(--cm-transition);
-}
-
-.date-group__header + .match-row {
-  border-top: none;
-}
-
-.match-row:hover {
-  background: var(--cm-surface-hover);
-}
-
-.match-row:focus-visible {
-  outline: 2px solid var(--cm-accent);
-  outline-offset: -2px;
-}
-
-.match-row--active {
-  background: var(--cm-accent-soft);
-}
-
-.match-row--live {
-  background: var(--cm-danger-soft);
-}
-
-.match-row--live:hover {
-  background: var(--cm-danger-soft);
-  filter: brightness(1.15);
-}
-
-.match-row--finished {
-  background: var(--cm-warning-soft);
-}
-
-.match-row--finished:hover {
-  background: var(--cm-warning-soft);
-  filter: brightness(1.15);
-}
-
-.match-row__time {
+.date-group__cards {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 3px;
-  font-size: 11px;
-}
-
-.match-row__time-unknown {
-  font-size: 9.5px;
-  font-weight: 600;
-  line-height: 1.3;
-  color: var(--cm-text-muted);
-  font-style: italic;
-}
-
-.match-row__postponed {
-  font-size: 9.5px;
-  font-weight: 600;
-  line-height: 1.3;
-  color: var(--cm-warning);
-  white-space: nowrap;
-}
-
-.match-row__ai-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  padding: 1px 5px;
-  border-radius: 999px;
-  background: var(--cm-info-soft);
-  color: var(--cm-info);
-  font-size: 8.5px;
-  font-weight: 700;
-  letter-spacing: 0.2px;
-}
-
-.match-row__live {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 9.5px;
-  font-weight: 700;
-  color: var(--cm-danger);
-  letter-spacing: 0.2px;
-}
-
-.match-row__finished {
-  font-size: 9.5px;
-  font-weight: 700;
-  color: var(--cm-warning);
-  letter-spacing: 0.2px;
-}
-
-.match-row__live-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--cm-danger);
-  animation: cm-live-pulse 1.4s ease-in-out infinite;
-}
-
-@keyframes cm-live-pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.35;
-  }
-}
-
-.match-row__teams {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  min-width: 0;
-}
-
-.match-row__team {
-  display: flex;
-  align-items: center;
   gap: 8px;
-  font-size: 13px;
-  color: var(--cm-text-primary);
+  padding: 2px 0 8px;
 }
 
-.match-row__team-name {
-  flex: 1;
-  min-width: 0;
-  background: none;
-  border: none;
-  padding: 0;
-  margin: 0;
-  font: inherit;
-  color: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-
-.match-row__team-name:hover {
-  text-decoration: underline;
-  color: var(--cm-accent);
+/* --------------------------------------------------------- la carte */
+/* Cotes, badge IA et report à droite de la carte : colonne assez large. */
+.match-list__card {
+  --mcard-aside: 236px;
 }
 
 .match-row__form {
   flex-shrink: 0;
 }
 
+.match-row__ai-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--cm-info-soft);
+  color: var(--cm-info);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.match-row__postponed {
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--cm-warning-soft);
+  color: var(--cm-warning);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
 .match-row__odds {
-  display: flex;
-  gap: 6px;
+  display: inline-flex;
+  gap: 5px;
 }
 
 .match-row__odds--none {
   align-items: center;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px dashed var(--cm-border);
   font-size: 10.5px;
   color: var(--cm-text-muted);
   white-space: nowrap;
 }
 
+/* Une cote : son repère (1, N, 2) en tout petit au-dessus du chiffre. */
 .match-row__odd {
-  display: flex;
+  display: inline-flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 44px;
-  padding: 5px 0;
+  min-width: 46px;
+  padding: 3px 0 4px;
   border-radius: var(--cm-radius-sm);
-  background: var(--cm-surface-alt);
+  background: var(--cm-surface-hover);
   font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.15;
   font-variant-numeric: tabular-nums;
   color: var(--cm-text-primary);
+  transition: background var(--cm-transition), color var(--cm-transition);
+}
+
+.match-row__odd i {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: var(--cm-text-muted);
 }
 
 .match-row__odd--draw {
   color: var(--cm-text-secondary);
 }
 
-.match-row--active .match-row__odd {
-  background: var(--cm-surface);
+/* Le favori des bookmakers (la cote la plus basse). */
+.match-row__odd.is-favori {
+  background: var(--cm-section-soft);
+  color: var(--cm-section);
+}
+
+.match-row__odd.is-favori i {
+  color: inherit;
+  opacity: 0.8;
+}
+
+/* Panneau étroit : l'en-tête sur deux lignes (compétition, compte et repli ;
+   puis les puces et le classement), la colonne de droite de la carte à sa
+   largeur naturelle. */
+@container matchlist (max-width: 680px) {
+  .league-group__header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-areas:
+      'badge count toggle'
+      'meta meta link';
+    gap: 8px 10px;
+  }
+
+  .league-group__badge {
+    grid-area: badge;
+  }
+
+  .league-group__count {
+    grid-area: count;
+  }
+
+  .league-group__toggle {
+    grid-area: toggle;
+  }
+
+  .league-group__meta {
+    grid-area: meta;
+  }
+
+  .league-group__standings-link {
+    grid-area: link;
+    justify-self: end;
+  }
+
+  .match-list__card {
+    --mcard-aside: auto;
+  }
+
+  .match-row__odd {
+    min-width: 40px;
+  }
 }
 </style>

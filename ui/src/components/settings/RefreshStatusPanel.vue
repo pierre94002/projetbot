@@ -4,6 +4,11 @@
  * l'étape en cours, le bilan de la dernière passe étape par étape, les
  * passes précédentes, et les deux choses que l'appli ne fait pas seule —
  * relever les cotes à venir (payantes) et corriger un statut ancien.
+ *
+ * Refonte visuelle du 01/10/2026 (guide ui/DESIGN.md) : l'état en puce
+ * colorée et carré d'icône, la passe en cours avec sa barre, les étapes en
+ * liste à icônes, les alertes en notes, l'historique en tableau. Aucune
+ * donnée ni action n'a bougé.
  */
 import { computed, ref } from 'vue';
 import AppButton from '@/components/common/AppButton.vue';
@@ -26,6 +31,10 @@ const STATUTS = { won: 'gagné', lost: 'perdu', void: 'annulé', pending: 'en at
 const statut = (s) => STATUTS[s] ?? s;
 const ISSUES = { ok: 'réussie', partial: 'faite, avec des points à regarder', error: 'en échec' };
 
+// Présentation seulement : la teinte d'une étape ou d'une issue de passe.
+const TONS_ETAPE = { ok: 'is-accent', warn: 'is-warning', error: 'is-danger', skipped: 'is-muted' };
+const TONS_ISSUE = { ok: 'is-accent', partial: 'is-warning', error: 'is-danger' };
+
 const duree = (ms) => {
   const s = Math.round((ms ?? 0) / 1000);
   if (s < 60) return `${s} s`;
@@ -42,6 +51,24 @@ const etatCourant = computed(() => {
   const etape = r.stepLabel ? `étape ${r.stepIndex}/${r.steps} : ${r.stepLabel}` : 'démarrage';
   const qui = r.byThisServer === false ? ' (lancée par un autre processus)' : '';
   return `En cours depuis ${r.startedAt ? formatDateTime(r.startedAt) : '…'}${qui} — ${etape}.`;
+});
+
+// Présentation seulement : la puce d'état en tête du panneau.
+const etat = computed(() => {
+  if (running.value) return { ton: 'is-warning', icone: 'refresh', libelle: 'Passe en cours', tourne: true };
+  if (props.overview && !props.overview.enabled) return { ton: 'is-danger', icone: 'pause', libelle: 'Désactivée', tourne: false };
+  const issue = lastPass.value?.outcome;
+  if (!issue) return { ton: '', icone: 'clock', libelle: 'Aucune passe encore', tourne: false };
+  return { ton: TONS_ISSUE[issue] ?? '', icone: issue === 'ok' ? 'check' : 'alert', libelle: `Dernière passe ${ISSUES[issue] ?? issue}`, tourne: false };
+});
+
+// Présentation seulement : l'avancement de la passe en cours (l'étape en
+// cours compte pour moitié), pour la barre.
+const progression = computed(() => {
+  const r = running.value;
+  if (!r?.steps) return 0;
+  const faites = Math.max(0, (r.stepIndex ?? 0) - 0.5);
+  return Math.max(0, Math.min(100, Math.round((faites / r.steps) * 100)));
 });
 
 // Alertes DURABLES : gardées par le serveur jusqu'à ce qu'une passe ou une
@@ -70,10 +97,14 @@ const ageCotes = computed(() => {
 <template>
   <div class="refresh-panel">
     <template v-if="overview">
-      <div class="refresh-panel__header">
+      <!-- 1. L'état : la puce, la phrase, la prochaine passe, le bouton. -->
+      <header class="refresh-panel__header">
         <div class="refresh-panel__state">
-          <span class="refresh-panel__dot" :class="{ 'refresh-panel__dot--running': running, 'refresh-panel__dot--off': !overview.enabled }" />
-          <div>
+          <span class="cm-icon-box" :class="etat.ton">
+            <AppIcon :name="etat.icone" :size="18" :class="{ 'refresh-panel__spin': etat.tourne }" />
+          </span>
+          <div class="refresh-panel__text">
+            <span class="cm-chip" :class="etat.ton">{{ etat.libelle }}</span>
             <p v-if="etatCourant" class="refresh-panel__headline">{{ etatCourant }}</p>
             <p v-else-if="lastPass" class="refresh-panel__headline">
               Dernière passe le {{ formatDateTime(lastPass.finishedAt) }} : {{ ISSUES[lastPass.outcome] ?? lastPass.outcome }}, en {{ duree(lastPass.durationMs) }}.
@@ -85,315 +116,428 @@ const ageCotes = computed(() => {
             </p>
           </div>
         </div>
-        <AppButton variant="ghost" size="sm" :loading="starting || Boolean(running)" @click="emit('run')">
+        <AppButton variant="secondary" size="sm" :loading="starting || Boolean(running)" @click="emit('run')">
           <template #icon><AppIcon name="refresh" :size="13" /></template>
           {{ running ? 'En cours…' : 'Actualiser maintenant' }}
         </AppButton>
-      </div>
+      </header>
 
-      <div v-if="autreProcessus && !running" class="refresh-panel__notice refresh-panel__notice--warn">
-        <div>
-          <strong>Un import lancé à part tient le verrou</strong> (processus {{ autreProcessus.pid }}, depuis le
-          {{ autreProcessus.startedAt ? formatDateTime(autreProcessus.startedAt) : '…' }}). La passe automatique attendra qu'il ait fini.
+      <!-- 2. La passe en cours : sa barre d'avancement. -->
+      <div v-if="running" class="refresh-panel__progress">
+        <div class="refresh-panel__progress-top">
+          <span v-if="running.steps" class="cm-eyebrow">Étape {{ running.stepIndex ?? 0 }} sur {{ running.steps }}</span>
+          <span v-else class="cm-eyebrow">Démarrage</span>
+          <span class="cm-numeric cm-text-muted refresh-panel__progress-pct">{{ progression }} %</span>
+        </div>
+        <div class="cm-bar refresh-panel__bar">
+          <div class="cm-bar__fill" :style="{ width: progression + '%' }" />
         </div>
       </div>
 
-      <ol v-if="lastPass && !running" class="refresh-panel__steps">
-        <li v-for="step in lastPass.steps" :key="step.key" class="refresh-panel__step" :class="`refresh-panel__step--${step.status}`">
-          <AppIcon :name="ICONES[step.status] ?? 'info'" :size="13" class="refresh-panel__step-icon" />
-          <span class="refresh-panel__step-label">{{ step.label }}</span>
-          <span class="refresh-panel__step-summary">{{ step.summary }}</span>
-          <span v-if="step.status !== 'skipped'" class="cm-text-muted cm-numeric refresh-panel__step-time">{{ duree(step.durationMs) }}</span>
+      <div v-if="autreProcessus && !running" class="cm-note is-warning">
+        <span class="cm-icon-box is-warning"><AppIcon name="lock" :size="17" /></span>
+        <div>
+          <p class="cm-note__title refresh-panel__note-title--warning">Verrou tenu par un autre processus</p>
+          <p class="cm-note__text refresh-panel__note-text">
+            <strong>Un import lancé à part tient le verrou</strong> (processus {{ autreProcessus.pid }}, depuis le
+            {{ autreProcessus.startedAt ? formatDateTime(autreProcessus.startedAt) : '…' }}). La passe automatique attendra qu'il ait fini.
+          </p>
+        </div>
+      </div>
+
+      <!-- 3. Les étapes : celles de la dernière passe, ou celles de la passe en cours. -->
+      <ol v-if="lastPass && !running" class="refresh-panel__steps cm-stagger">
+        <li v-for="step in lastPass.steps" :key="step.key" class="step" :class="`is-${step.status}`">
+          <span class="cm-icon-box is-sm" :class="TONS_ETAPE[step.status] ?? 'is-muted'">
+            <AppIcon :name="ICONES[step.status] ?? 'info'" :size="13" />
+          </span>
+          <div class="step__body">
+            <span class="step__label">{{ step.label }}</span>
+            <span class="step__summary">{{ step.summary }}</span>
+          </div>
+          <span v-if="step.status !== 'skipped'" class="cm-text-muted cm-numeric step__time">{{ duree(step.durationMs) }}</span>
         </li>
       </ol>
-      <ol v-else-if="running" class="refresh-panel__steps">
+      <ol v-else-if="running" class="refresh-panel__steps cm-stagger">
         <li
           v-for="(step, index) in overview.steps"
           :key="step.key"
-          class="refresh-panel__step"
+          class="step"
           :class="{
-            'refresh-panel__step--done': index + 1 < running.stepIndex,
-            'refresh-panel__step--current': index + 1 === running.stepIndex
+            'is-done': index + 1 < running.stepIndex,
+            'is-current': index + 1 === running.stepIndex
           }"
         >
-          <AppIcon :name="index + 1 < running.stepIndex ? 'check' : index + 1 === running.stepIndex ? 'refresh' : 'info'" :size="13" class="refresh-panel__step-icon" />
-          <span class="refresh-panel__step-label">{{ step.label }}</span>
+          <span class="cm-icon-box is-sm" :class="index + 1 < running.stepIndex ? 'is-accent' : index + 1 === running.stepIndex ? 'is-warning' : 'is-muted'">
+            <AppIcon
+              :name="index + 1 < running.stepIndex ? 'check' : index + 1 === running.stepIndex ? 'refresh' : 'info'"
+              :size="13"
+              :class="{ 'refresh-panel__spin': index + 1 === running.stepIndex }"
+            />
+          </span>
+          <div class="step__body">
+            <span class="step__label">{{ step.label }}</span>
+          </div>
         </li>
       </ol>
 
-      <div v-if="contradictions?.count && !running" class="refresh-panel__notice refresh-panel__notice--warn">
-        <div>
-          <strong>{{ contradictions.count }} statut(s) posé(s) à la main ou avant l'actualisation automatique contredisent le score final.</strong>
-          Ils ne sont pas corrigés d'office : un statut posé à la main peut être juste (score de la source faux, pari payé autrement).
-          « Corriger » ne touche qu'aux lignes ci-dessous<template v-if="contradictions.count > clesAffichees.length"> (les {{ clesAffichees.length }} premières)</template>.
+      <!-- 4. Les alertes durables : contradictions, anomalies, cotes à relever. -->
+      <div v-if="contradictions?.count && !running" class="cm-note is-warning">
+        <span class="cm-icon-box is-warning"><AppIcon name="alert" :size="17" /></span>
+        <div class="refresh-panel__alert">
+          <p class="cm-note__title refresh-panel__note-title--warning">Statuts contredits par le score final</p>
+          <p class="cm-note__text refresh-panel__note-text">
+            <strong>{{ contradictions.count }} statut(s) posé(s) à la main ou avant l'actualisation automatique contredisent le score final.</strong>
+            Ils ne sont pas corrigés d'office : un statut posé à la main peut être juste (score de la source faux, pari payé autrement).
+            « Corriger » ne touche qu'aux lignes ci-dessous<template v-if="contradictions.count > clesAffichees.length"> (les {{ clesAffichees.length }} premières)</template>.
+          </p>
           <ul class="refresh-panel__list">
             <li v-for="c in contradictions.samples" :key="`${c.kind}-${c.id ?? c.betId}-${c.legIndex ?? ''}`">
               {{ c.label }} — noté « {{ statut(c.status) }} », le score dit « {{ statut(c.expected) }} »
             </li>
           </ul>
+          <div class="refresh-panel__alert-actions">
+            <AppButton variant="secondary" size="sm" :loading="resettling" :disabled="!clesAffichees.length" @click="emit('resettle', clesAffichees)">
+              <template #icon><AppIcon name="check" :size="13" /></template>
+              Corriger d'après le score
+            </AppButton>
+          </div>
         </div>
-        <AppButton variant="ghost" size="sm" :loading="resettling" :disabled="!clesAffichees.length" @click="emit('resettle', clesAffichees)">
-          <template #icon><AppIcon name="check" :size="13" /></template>
-          Corriger d'après le score
-        </AppButton>
       </div>
 
-      <div v-if="audit?.anomalies && !running" class="refresh-panel__notice">
-        <div>
-          <strong>Contrôle des scores du {{ formatDateTime(audit.updatedAt) }} : {{ audit.anomalies }} anomalie(s)</strong> depuis le
-          {{ audit.since }}. Rien n'est corrigé automatiquement : un score et les statistiques du même match ne s'accordent pas.
+      <div v-if="audit?.anomalies && !running" class="cm-note is-info">
+        <span class="cm-icon-box is-info"><AppIcon name="barChart" :size="17" /></span>
+        <div class="refresh-panel__alert">
+          <p class="cm-note__title refresh-panel__note-title--info">Contrôle des scores</p>
+          <p class="cm-note__text refresh-panel__note-text">
+            <strong>Contrôle des scores du {{ formatDateTime(audit.updatedAt) }} : {{ audit.anomalies }} anomalie(s)</strong> depuis le
+            {{ audit.since }}. Rien n'est corrigé automatiquement : un score et les statistiques du même match ne s'accordent pas.
+          </p>
           <ul class="refresh-panel__list">
             <li v-for="(a, i) in audit.samples" :key="i">{{ a.label }} — {{ a.detail }}</li>
           </ul>
         </div>
       </div>
 
-      <div v-if="cotes" class="refresh-panel__notice" :class="{ 'refresh-panel__notice--warn': cotes.vieilles }">
+      <div v-if="cotes" class="cm-note" :class="{ 'is-warning': cotes.vieilles }">
+        <span class="cm-icon-box" :class="cotes.vieilles ? 'is-warning' : 'is-muted'"><AppIcon name="percent" :size="17" /></span>
         <div>
-          <strong>Cotes à venir (The Odds API) relevées {{ ageCotes }}</strong>
-          ({{ formatDateTime(cotes.updatedAt) }}, {{ cotes.upcoming }} match(s) encore à venir sur {{ cotes.matches }}).
-          Elles ne se relèvent pas seules : chaque relevé coûte jusqu'à 37 crédits du quota mensuel de 500. Bouton « Actualiser »
-          de la ligne « Cotes marché (The Odds API) », dans le cadre Données.
+          <p class="cm-note__title" :class="{ 'refresh-panel__note-title--warning': cotes.vieilles }">Cotes à venir, à relever à la main</p>
+          <p class="cm-note__text refresh-panel__note-text">
+            <strong>Cotes à venir (The Odds API) relevées {{ ageCotes }}</strong>
+            ({{ formatDateTime(cotes.updatedAt) }}, {{ cotes.upcoming }} match(s) encore à venir sur {{ cotes.matches }}).
+            Elles ne se relèvent pas seules : chaque relevé coûte jusqu'à 37 crédits du quota mensuel de 500. Bouton « Actualiser »
+            de la ligne « Cotes marché (The Odds API) », dans le cadre Données.
+          </p>
         </div>
       </div>
 
-      <button v-if="overview.history?.length" type="button" class="refresh-panel__toggle" @click="showHistory = !showHistory">
-        <AppIcon name="chevronRight" :size="12" class="refresh-panel__chevron" :class="{ 'refresh-panel__chevron--open': showHistory }" />
+      <!-- 5. Les passes précédentes, repliées, en tableau. -->
+      <button v-if="overview.history?.length" type="button" class="cm-link refresh-panel__toggle" @click="showHistory = !showHistory">
+        <AppIcon name="chevronRight" :size="12" class="refresh-panel__chevron" :class="{ 'is-open': showHistory }" />
         Passes précédentes ({{ overview.history.length }})
       </button>
-      <ul v-if="showHistory" class="refresh-panel__history">
-        <li v-for="p in overview.history" :key="p.id">
-          <span class="cm-numeric">{{ formatDateTime(p.finishedAt) }}</span>
-          <span class="refresh-panel__outcome" :class="`refresh-panel__outcome--${p.outcome}`">{{ ISSUES[p.outcome] ?? p.outcome }}</span>
-          <span class="cm-text-muted">{{ p.reason }} · {{ duree(p.durationMs) }}</span>
-          <span class="cm-text-muted refresh-panel__history-issues">
-            {{ p.steps.filter((s) => s.status === 'warn' || s.status === 'error').map((s) => s.label).join(', ') }}
-          </span>
-        </li>
-      </ul>
+      <div v-if="showHistory" class="cm-table-wrap">
+        <table class="cm-table refresh-panel__history">
+          <thead>
+            <tr>
+              <th>Fin de la passe</th>
+              <th class="is-left">Issue</th>
+              <th class="is-left">Raison</th>
+              <th>Durée</th>
+              <th class="is-left" title="Étapes terminées avec un avertissement ou une erreur">À regarder</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="p in overview.history" :key="p.id">
+              <td class="cm-numeric is-strong">{{ formatDateTime(p.finishedAt) }}</td>
+              <td class="is-left">
+                <span class="cm-chip" :class="TONS_ISSUE[p.outcome] ?? ''">{{ ISSUES[p.outcome] ?? p.outcome }}</span>
+              </td>
+              <td class="is-left cm-text-secondary">{{ p.reason }}</td>
+              <td class="cm-numeric cm-text-muted">{{ duree(p.durationMs) }}</td>
+              <td class="is-left cm-text-muted refresh-panel__history-issues">
+                {{ p.steps.filter((s) => s.status === 'warn' || s.status === 'error').map((s) => s.label).join(', ') }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-      <p class="cm-text-muted refresh-panel__hint">
-        Tourne tant que l'appli est ouverte, sans Claude et sans quota payant (FotMob, football-data.co.uk) : une passe une minute après le
-        démarrage, qui rattrape tout ce qui s'est joué depuis la dernière passe réussie (jusqu'à 60 jours), puis toutes les
-        {{ Math.round((overview.intervalMinutes ?? 180) / 60) }} heures. Le contrôle des scores et la relance des feuilles tardives passent
-        une fois par jour, les cotes passées toutes les douze heures, la sauvegarde de la base une fois par semaine (deux copies
-        automatiques gardées dans CoteMaster\sauvegardes).
-      </p>
+      <!-- 6. Comment ça tourne. -->
+      <div class="cm-note">
+        <span class="cm-icon-box is-muted"><AppIcon name="clock" :size="16" /></span>
+        <div>
+          <p class="cm-note__title">Comment ça tourne</p>
+          <p class="cm-note__text refresh-panel__hint">
+            Tourne tant que l'appli est ouverte, sans Claude et sans quota payant (FotMob, football-data.co.uk) : une passe une minute après le
+            démarrage, qui rattrape tout ce qui s'est joué depuis la dernière passe réussie (jusqu'à 60 jours), puis toutes les
+            {{ Math.round((overview.intervalMinutes ?? 180) / 60) }} heures. Le contrôle des scores et la relance des feuilles tardives passent
+            une fois par jour, les cotes passées toutes les douze heures, la sauvegarde de la base une fois par semaine (deux copies
+            automatiques gardées dans CoteMaster\sauvegardes).
+          </p>
+        </div>
+      </div>
     </template>
 
-    <p v-else class="cm-text-muted">État de l'actualisation indisponible.</p>
+    <div v-else class="cm-note is-danger">
+      <span class="cm-icon-box is-danger"><AppIcon name="x" :size="16" /></span>
+      <div>
+        <p class="cm-note__title refresh-panel__note-title--danger">Actualisation</p>
+        <p class="cm-note__text refresh-panel__note-text">État de l'actualisation indisponible.</p>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
 .refresh-panel {
+  /* Se règle sur SA largeur : page entière comme panneau étroit. */
+  container: refresh / inline-size;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
+/* ------------------------------------------------------------------ état */
 .refresh-panel__header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: flex-start;
   gap: 12px;
 }
 
 .refresh-panel__state {
   display: flex;
-  gap: 10px;
   align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
 }
 
-.refresh-panel__dot {
-  flex: none;
-  width: 8px;
-  height: 8px;
-  margin-top: 5px;
-  border-radius: 50%;
-  background: var(--cm-accent);
-  box-shadow: 0 0 0 3px var(--cm-accent-soft);
-}
-
-.refresh-panel__dot--running {
-  background: var(--cm-warning);
-  box-shadow: 0 0 0 3px var(--cm-warning-soft);
-  animation: refresh-pulse 1.4s ease-in-out infinite;
-}
-
-.refresh-panel__dot--off {
-  background: var(--cm-text-muted);
-  box-shadow: none;
-}
-
-@keyframes refresh-pulse {
-  50% {
-    opacity: 0.35;
-  }
+.refresh-panel__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  min-width: 0;
 }
 
 .refresh-panel__headline {
   margin: 0;
-  font-size: 13px;
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--cm-text-primary);
 }
 
 .refresh-panel__sub {
-  margin: 2px 0 0;
+  margin: 0;
   font-size: 11.5px;
 }
 
+.refresh-panel__sub:empty {
+  display: none;
+}
+
+/* L'icône tourne tant qu'une passe est en cours. */
+.refresh-panel__spin {
+  animation: refresh-spin 1.6s linear infinite;
+}
+
+@keyframes refresh-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@container refresh (min-width: 640px) {
+  .refresh-panel__header {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+/* ------------------------------------------------------------ avancement */
+.refresh-panel__progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: var(--cm-radius-md);
+  border: 1px solid rgba(var(--cm-warning-rgb) / 0.28);
+  background: radial-gradient(120% 140% at 0% 0%, rgba(var(--cm-warning-rgb) / 0.09), transparent 55%), var(--cm-surface-alt);
+}
+
+.refresh-panel__progress-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.refresh-panel__progress-top .cm-eyebrow {
+  color: var(--cm-warning);
+}
+
+.refresh-panel__progress-pct {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.refresh-panel__bar {
+  height: 8px;
+}
+
+.refresh-panel__bar .cm-bar__fill {
+  background: var(--cm-warning);
+}
+
+/* ---------------------------------------------------------------- étapes */
 .refresh-panel__steps {
   display: flex;
   flex-direction: column;
   gap: 6px;
   margin: 0;
-  padding: 10px 0 0;
+  padding: 0;
   list-style: none;
-  border-top: 1px solid var(--cm-border-soft);
 }
 
-.refresh-panel__step {
+.step {
   display: grid;
-  grid-template-columns: 16px minmax(150px, 0.9fr) minmax(0, 2.4fr) auto;
-  gap: 8px;
-  align-items: baseline;
-  font-size: 12px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px 12px;
+  padding: 8px 12px;
+  border-radius: var(--cm-radius);
+  border: 1px solid var(--cm-border-soft);
+  background: var(--cm-surface-alt);
+  font-size: 12.5px;
 }
 
-.refresh-panel__step-icon {
-  align-self: center;
+.step.is-current {
+  border-color: rgba(var(--cm-warning-rgb) / 0.3);
+}
+
+.step.is-skipped .step__label,
+.step.is-skipped .step__summary {
   color: var(--cm-text-muted);
 }
 
-.refresh-panel__step--ok .refresh-panel__step-icon,
-.refresh-panel__step--done .refresh-panel__step-icon {
-  color: var(--cm-accent);
+.step__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
 }
 
-.refresh-panel__step--warn .refresh-panel__step-icon,
-.refresh-panel__step--current .refresh-panel__step-icon {
+.step__label {
+  font-weight: 600;
+  color: var(--cm-text-primary);
+}
+
+.step.is-current .step__label {
   color: var(--cm-warning);
 }
 
-.refresh-panel__step--error .refresh-panel__step-icon {
-  color: var(--cm-danger);
-}
-
-.refresh-panel__step--skipped,
-.refresh-panel__step--skipped .refresh-panel__step-summary {
-  color: var(--cm-text-muted);
-}
-
-.refresh-panel__step--current .refresh-panel__step-label {
-  font-weight: 600;
-}
-
-.refresh-panel__step-label {
-  font-weight: 500;
-}
-
-.refresh-panel__step-summary {
-  color: var(--cm-text-secondary);
+.step__summary {
+  font-size: 12px;
   line-height: 1.45;
+  color: var(--cm-text-secondary);
 }
 
-.refresh-panel__step-time {
+.step__time {
   font-size: 11px;
   white-space: nowrap;
 }
 
-.refresh-panel__notice {
+/* Assez de place : libellé et résumé côte à côte, la durée à droite. */
+@container refresh (min-width: 760px) {
+  .step__body {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .step__label {
+    flex: 0 0 220px;
+  }
+
+  .step__summary {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+/* --------------------------------------------------------------- alertes */
+.refresh-panel__alert {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 10px 12px;
-  border-radius: var(--cm-radius-sm);
-  background: var(--cm-info-soft);
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.refresh-panel__note-title--warning {
+  color: var(--cm-warning);
+}
+
+.refresh-panel__note-title--info {
+  color: var(--cm-info);
+}
+
+.refresh-panel__note-title--danger {
+  color: var(--cm-danger);
+}
+
+.refresh-panel__note-text {
+  font-size: 12.5px;
+  color: var(--cm-text-secondary);
+}
+
+.refresh-panel__note-text strong {
+  color: var(--cm-text-primary);
+}
+
+.refresh-panel__list {
+  margin: 0;
+  padding-left: 18px;
   font-size: 12px;
   line-height: 1.5;
   color: var(--cm-text-secondary);
 }
 
-.refresh-panel__notice--warn {
-  background: var(--cm-warning-soft);
+.refresh-panel__alert-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 2px;
 }
 
-.refresh-panel__list {
-  margin: 6px 0 0;
-  padding-left: 18px;
-  font-size: 11.5px;
-}
-
+/* ------------------------------------------------------------- historique */
 .refresh-panel__toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
   align-self: flex-start;
-  padding: 0;
-  border: 0;
-  background: none;
-  font: inherit;
-  font-size: 12px;
-  color: var(--cm-text-secondary);
-  cursor: pointer;
 }
 
 .refresh-panel__chevron {
   transition: transform var(--cm-transition);
 }
 
-.refresh-panel__chevron--open {
+.refresh-panel__chevron.is-open {
   transform: rotate(90deg);
 }
 
-.refresh-panel__history {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  font-size: 11.5px;
+.refresh-panel__history td {
+  font-size: 12px;
 }
 
-.refresh-panel__history li {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 10px;
-}
-
-.refresh-panel__outcome--ok {
-  color: var(--cm-accent);
-}
-
-.refresh-panel__outcome--partial {
-  color: var(--cm-warning);
-}
-
-.refresh-panel__outcome--error {
-  color: var(--cm-danger);
+/* La liste des étapes à regarder peut être longue : elle se replie sur plusieurs lignes. */
+.refresh-panel__history-issues {
+  white-space: normal;
+  min-width: 180px;
+  line-height: 1.45;
 }
 
 .refresh-panel__hint {
-  margin: 0;
-  font-size: 11px;
-  line-height: 1.5;
-}
-
-@media (max-width: 720px) {
-  .refresh-panel__header,
-  .refresh-panel__notice {
-    flex-direction: column;
-  }
-
-  .refresh-panel__step {
-    grid-template-columns: 16px minmax(0, 1fr);
-  }
-
-  .refresh-panel__step-summary,
-  .refresh-panel__step-time {
-    grid-column: 2;
-  }
+  font-size: 12px;
+  color: var(--cm-text-secondary);
 }
 </style>

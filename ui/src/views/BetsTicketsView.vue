@@ -8,6 +8,7 @@ import EmptyState from '@/components/common/EmptyState.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import BetTicketRow from '@/components/betting/BetTicketRow.vue';
 import LeagueBadge from '@/components/matches/LeagueBadge.vue';
+import { formatCurrency } from '@/utils/format.js';
 
 const betsStore = useBetsStore();
 
@@ -80,6 +81,15 @@ function isLostLeagueOpen(league) {
   return Boolean(searchQuery.value.trim()) || expandedLostLeagues.value.has(league);
 }
 
+// Ce que les tickets affichés ont rapporté (présentation seule, refonte du
+// 01/10/2026) : misé et retours des gagnés / perdus visibles, pour les puces
+// du bandeau — les totaux du carnet entier restent dans Performance paris.
+const bilanTickets = computed(() => {
+  const retours = wonTickets.value.reduce((somme, bet) => somme + bet.stake * bet.odds, 0);
+  const perdu = lostTickets.value.reduce((somme, bet) => somme + bet.stake, 0);
+  return { retours, perdu };
+});
+
 // Toujours réactualisé à l'ouverture (pas seulement si vide) : un match réglé
 // depuis un autre onglet/une autre fenêtre pendant que celui-ci était ouvert
 // ailleurs ne remonterait sinon jamais tant que le store Pinia (en mémoire,
@@ -91,88 +101,118 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="bets-tickets-view">
+  <div class="tickets cm-page">
+    <!-- 1. LE BANDEAU : combien de tickets, gagnés et perdus, et la recherche -->
+    <section class="cm-hero">
+      <div class="cm-hero__top">
+        <h2 class="cm-hero__title">
+          <span class="cm-icon-box"><AppIcon name="cards" :size="18" /></span>
+          Mes tickets
+        </h2>
+        <span class="cm-hero__chips">
+          <span class="cm-chip is-section"><AppIcon name="check" :size="11" />{{ betsStore.settledBets.length }} réglé{{ betsStore.settledBets.length > 1 ? 's' : '' }}</span>
+          <span class="cm-chip is-accent"><AppIcon name="trendUp" :size="11" />{{ wonTickets.length }} gagné{{ wonTickets.length > 1 ? 's' : '' }}</span>
+          <span class="cm-chip is-danger"><AppIcon name="trendDown" :size="11" />{{ lostTickets.length }} perdu{{ lostTickets.length > 1 ? 's' : '' }}</span>
+        </span>
+      </div>
+      <p class="cm-hero__subtitle">
+        Les paris gagnés et perdus, réglés depuis Mes paris, rangés par championnat — un combiné est rangé sous le championnat de sa première sélection.
+      </p>
+    </section>
+
+    <!-- 2. LA RECHERCHE ET LES DEUX COLONNES -->
     <AppCard :padded="false" title="">
-      <div class="tickets-search">
-        <AppTextField v-model="searchQuery" placeholder="Rechercher un ticket (équipe, marché, pick)…">
-          <template #icon><AppIcon name="search" :size="15" /></template>
-        </AppTextField>
+      <div class="tickets-toolbar cm-toolbar">
+        <div class="tickets-toolbar__search">
+          <AppTextField v-model="searchQuery" placeholder="Rechercher un ticket (équipe, marché, pick)…">
+            <template #icon><AppIcon name="search" :size="15" /></template>
+          </AppTextField>
+        </div>
+        <span v-if="searchQuery.trim()" class="cm-chip is-section tickets-toolbar__hint"><AppIcon name="filter" :size="11" />Championnats dépliés pour la recherche</span>
       </div>
 
-      <LoadingSpinner v-if="betsStore.loading" />
-      <EmptyState v-else-if="betsStore.error" icon="alert" title="Impossible de charger les tickets" :description="betsStore.error" />
-      <EmptyState
-        v-else-if="betsStore.settledBets.length === 0"
-        icon="target"
-        title="Aucun ticket réglé"
-        description="Les paris gagnés et perdus apparaîtront ici une fois réglés dans Mes paris."
-      />
-      <EmptyState
-        v-else-if="filteredSettledBets.length === 0"
-        icon="search"
-        title="Aucun résultat"
-        :description="`Aucun ticket ne correspond à «${searchQuery.trim()}».`"
-      />
+      <div class="tickets-body">
+        <LoadingSpinner v-if="betsStore.loading" label="Chargement des tickets…" />
+        <EmptyState v-else-if="betsStore.error" icon="alert" title="Impossible de charger les tickets" :description="betsStore.error" />
+        <EmptyState
+          v-else-if="betsStore.settledBets.length === 0"
+          icon="target"
+          title="Aucun ticket réglé"
+          description="Les paris gagnés et perdus apparaîtront ici une fois réglés dans Mes paris."
+        />
+        <EmptyState
+          v-else-if="filteredSettledBets.length === 0"
+          icon="search"
+          title="Aucun résultat"
+          :description="`Aucun ticket ne correspond à «${searchQuery.trim()}».`"
+        />
 
-      <div v-else class="tickets-columns">
-        <div class="tickets-column">
-          <h3 class="tickets-column__heading tickets-column__heading--won">
-            Paris gagnés <span class="cm-numeric">{{ wonTickets.length }}</span>
-          </h3>
-          <div v-if="wonByLeague.length === 0" class="cm-text-muted tickets-column__empty">Aucun ticket gagné pour l'instant.</div>
-          <div v-else class="league-list">
-            <div v-for="leagueGroup in wonByLeague" :key="leagueGroup.league" class="league-group">
-              <div
-                class="league-group__header"
-                role="button"
-                tabindex="0"
-                @click="toggleWonLeague(leagueGroup.league)"
-                @keydown.enter="toggleWonLeague(leagueGroup.league)"
-              >
-                <LeagueBadge :league="leagueGroup.league" />
-                <span class="cm-text-muted cm-numeric league-group__count">{{ leagueGroup.bets.length }}</span>
-                <AppIcon
-                  name="chevronRight"
-                  :size="12"
-                  class="league-group__chevron"
-                  :class="{ 'league-group__chevron--open': isWonLeagueOpen(leagueGroup.league) }"
-                />
+        <div v-else class="tickets-columns">
+          <!-- Gagnés -->
+          <article class="tickets-col is-won">
+            <header class="tickets-col__head">
+              <span class="cm-icon-box is-accent is-sm"><AppIcon name="check" :size="14" /></span>
+              <h3 class="tickets-col__title">Paris gagnés</h3>
+              <span class="cm-pill is-accent cm-numeric tickets-col__count">{{ wonTickets.length }}</span>
+              <span class="tickets-col__figure cm-numeric cm-positive" title="Retours des tickets gagnés affichés (mise × cote)">
+                +{{ formatCurrency(bilanTickets.retours) }}
+              </span>
+            </header>
+            <p v-if="wonByLeague.length === 0" class="tickets-col__empty cm-text-muted">Aucun ticket gagné pour l'instant.</p>
+            <div v-else class="tickets-leagues">
+              <div v-for="leagueGroup in wonByLeague" :key="leagueGroup.league" class="tickets-league" :class="{ 'is-open': isWonLeagueOpen(leagueGroup.league) }">
+                <div
+                  class="tickets-league__header"
+                  role="button"
+                  tabindex="0"
+                  @click="toggleWonLeague(leagueGroup.league)"
+                  @keydown.enter="toggleWonLeague(leagueGroup.league)"
+                >
+                  <AppIcon name="chevronRight" :size="13" class="tickets-league__chevron" :class="{ 'is-open': isWonLeagueOpen(leagueGroup.league) }" />
+                  <LeagueBadge :league="leagueGroup.league" />
+                  <span class="cm-pill cm-numeric tickets-league__count" title="Tickets dans ce championnat">{{ leagueGroup.bets.length }}</span>
+                </div>
+                <template v-if="isWonLeagueOpen(leagueGroup.league)">
+                  <div class="tickets-league__rows">
+                    <BetTicketRow v-for="bet in leagueGroup.bets" :key="bet.id" :bet="bet" />
+                  </div>
+                </template>
               </div>
-              <template v-if="isWonLeagueOpen(leagueGroup.league)">
-                <BetTicketRow v-for="bet in leagueGroup.bets" :key="bet.id" :bet="bet" />
-              </template>
             </div>
-          </div>
-        </div>
+          </article>
 
-        <div class="tickets-column">
-          <h3 class="tickets-column__heading tickets-column__heading--lost">
-            Paris perdus <span class="cm-numeric">{{ lostTickets.length }}</span>
-          </h3>
-          <div v-if="lostByLeague.length === 0" class="cm-text-muted tickets-column__empty">Aucun ticket perdu pour l'instant.</div>
-          <div v-else class="league-list">
-            <div v-for="leagueGroup in lostByLeague" :key="leagueGroup.league" class="league-group">
-              <div
-                class="league-group__header"
-                role="button"
-                tabindex="0"
-                @click="toggleLostLeague(leagueGroup.league)"
-                @keydown.enter="toggleLostLeague(leagueGroup.league)"
-              >
-                <LeagueBadge :league="leagueGroup.league" />
-                <span class="cm-text-muted cm-numeric league-group__count">{{ leagueGroup.bets.length }}</span>
-                <AppIcon
-                  name="chevronRight"
-                  :size="12"
-                  class="league-group__chevron"
-                  :class="{ 'league-group__chevron--open': isLostLeagueOpen(leagueGroup.league) }"
-                />
+          <!-- Perdus -->
+          <article class="tickets-col is-lost">
+            <header class="tickets-col__head">
+              <span class="cm-icon-box is-danger is-sm"><AppIcon name="x" :size="14" /></span>
+              <h3 class="tickets-col__title">Paris perdus</h3>
+              <span class="cm-pill tickets-col__count is-lost cm-numeric">{{ lostTickets.length }}</span>
+              <span class="tickets-col__figure cm-numeric cm-negative" title="Mises des tickets perdus affichés">
+                −{{ formatCurrency(bilanTickets.perdu) }}
+              </span>
+            </header>
+            <p v-if="lostByLeague.length === 0" class="tickets-col__empty cm-text-muted">Aucun ticket perdu pour l'instant.</p>
+            <div v-else class="tickets-leagues">
+              <div v-for="leagueGroup in lostByLeague" :key="leagueGroup.league" class="tickets-league" :class="{ 'is-open': isLostLeagueOpen(leagueGroup.league) }">
+                <div
+                  class="tickets-league__header"
+                  role="button"
+                  tabindex="0"
+                  @click="toggleLostLeague(leagueGroup.league)"
+                  @keydown.enter="toggleLostLeague(leagueGroup.league)"
+                >
+                  <AppIcon name="chevronRight" :size="13" class="tickets-league__chevron" :class="{ 'is-open': isLostLeagueOpen(leagueGroup.league) }" />
+                  <LeagueBadge :league="leagueGroup.league" />
+                  <span class="cm-pill cm-numeric tickets-league__count" title="Tickets dans ce championnat">{{ leagueGroup.bets.length }}</span>
+                </div>
+                <template v-if="isLostLeagueOpen(leagueGroup.league)">
+                  <div class="tickets-league__rows">
+                    <BetTicketRow v-for="bet in leagueGroup.bets" :key="bet.id" :bet="bet" />
+                  </div>
+                </template>
               </div>
-              <template v-if="isLostLeagueOpen(leagueGroup.league)">
-                <BetTicketRow v-for="bet in leagueGroup.bets" :key="bet.id" :bet="bet" />
-              </template>
             </div>
-          </div>
+          </article>
         </div>
       </div>
     </AppCard>
@@ -180,103 +220,164 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.bets-tickets-view {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+/* ---------------------------------------------------------- recherche */
+.tickets-toolbar {
+  align-items: center;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--cm-border-soft);
 }
 
-.tickets-search {
-  padding: 14px 16px 0;
+.tickets-toolbar__search {
+  flex: 1 1 320px;
+  max-width: 520px;
+}
+
+.tickets-toolbar__hint {
+  white-space: normal;
+}
+
+/* ------------------------------------------------------------ colonnes */
+.tickets-body {
+  /* Les colonnes se règlent sur LA largeur de la carte : deux côte à côte
+     quand la place existe, l'une sous l'autre dans un panneau étroit. */
+  container: tickets / inline-size;
+  padding: 16px 18px 18px;
 }
 
 .tickets-columns {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  align-items: start;
 }
 
-.tickets-column {
+/* Une colonne = une carte avec un liseré de sa couleur : vert gagné, rouge perdu. */
+.tickets-col {
+  --ton: var(--cm-accent);
+  --ton-doux: var(--cm-accent-soft);
+  display: flex;
+  flex-direction: column;
   min-width: 0;
+  border-radius: var(--cm-radius-md);
+  border: 1px solid var(--cm-border-soft);
+  border-top: 3px solid var(--ton);
+  background: var(--cm-surface-alt);
+  overflow: hidden;
 }
 
-.tickets-column:first-child {
-  border-right: 1px solid var(--cm-border-soft);
+.tickets-col.is-lost {
+  --ton: var(--cm-danger);
+  --ton-doux: var(--cm-danger-soft);
 }
 
-.tickets-column__heading {
+.tickets-col__head {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 12.5px;
-  font-weight: 700;
-  padding: 12px 16px;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  padding: 12px 14px;
+  background: linear-gradient(180deg, rgba(var(--cm-section-rgb) / 0.03), transparent), var(--cm-surface-alt);
+  border-bottom: 1px solid var(--cm-border-soft);
+}
+
+.tickets-col__title {
   margin: 0;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--ton);
 }
 
-.tickets-column__heading--won .cm-numeric {
-  color: var(--cm-accent);
+.tickets-col__count {
+  min-width: 32px;
+  padding: 2px 8px;
+  font-size: 12px;
 }
 
-.tickets-column__heading--lost .cm-numeric {
+.tickets-col__count.is-lost {
+  background: var(--cm-danger-soft);
   color: var(--cm-danger);
 }
 
-.tickets-column__empty {
-  font-size: 12px;
-  padding: 0 16px 14px;
+.tickets-col__figure {
+  margin-left: auto;
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
-.league-list {
+.tickets-col__empty {
+  margin: 0;
+  padding: 18px 14px;
+  font-size: 12.5px;
+}
+
+.tickets-leagues {
   display: flex;
   flex-direction: column;
 }
 
-.league-group {
-  border-top: 1px solid var(--cm-border-soft);
+.tickets-league {
+  border-bottom: 1px solid var(--cm-border-soft);
 }
 
-.league-group__header {
+.tickets-league:last-child {
+  border-bottom: 0;
+}
+
+/* L'en-tête d'un championnat, repliable : la compétition avec son drapeau et le nombre de tickets. */
+.tickets-league__header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 8px 16px;
-  background: var(--cm-surface-alt);
-  border: none;
+  gap: 10px;
+  padding: 9px 14px;
+  background: var(--cm-surface);
   cursor: pointer;
-  text-align: left;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
+  user-select: none;
+  transition: background var(--cm-transition);
 }
 
-.league-group__count {
-  font-size: 10.5px;
-  text-transform: none;
-  letter-spacing: normal;
+.tickets-league__header:hover {
+  background: var(--cm-surface-hover);
 }
 
-.league-group__chevron {
+.tickets-league.is-open .tickets-league__header {
+  background: var(--cm-surface-hover);
+}
+
+.tickets-league__chevron {
   flex-shrink: 0;
   color: var(--cm-text-muted);
+  transition: transform var(--cm-transition), color var(--cm-transition);
+}
+
+.tickets-league__chevron.is-open {
+  color: var(--cm-section);
   transform: rotate(90deg);
-  transition: transform var(--cm-transition);
 }
 
-.league-group__chevron--open {
-  transform: rotate(-90deg);
+.tickets-league__count {
+  min-width: 30px;
+  padding: 2px 8px;
+  font-size: 11.5px;
 }
 
-@media (max-width: 900px) {
+.tickets-league__rows {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ----------------------------------------------------------- étroit */
+@container tickets (max-width: 860px) {
   .tickets-columns {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
+}
 
-  .tickets-column:first-child {
-    border-right: none;
-    border-bottom: 1px solid var(--cm-border-soft);
+@container tickets (max-width: 480px) {
+  .tickets-body {
+    padding: 12px;
   }
 }
 </style>

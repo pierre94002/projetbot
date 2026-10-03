@@ -12,8 +12,12 @@ import AppIcon from '@/components/common/AppIcon.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import TeamLineup from '@/components/matches/TeamLineup.vue';
+import TeamCrest from '@/components/matches/TeamCrest.vue';
+import PlayerFlag from '@/components/matches/PlayerFlag.vue';
 import { formatKickoff } from '@/utils/format.js';
-import { LINEUP_UNAVAILABLE_MESSAGES } from '@/utils/lineupMessages.js';
+// describeLineupUnavailable est appelée par le gabarit (compo indisponible) :
+// elle manquait à l'import, la branche aurait planté à l'exécution.
+import { LINEUP_UNAVAILABLE_MESSAGES, describeLineupUnavailable } from '@/utils/lineupMessages.js';
 
 const matchesStore = useMatchesStore();
 const toastStore = useToastStore();
@@ -168,228 +172,332 @@ async function loadPlayers() {
 </script>
 
 <template>
-  <div class="team-squad">
-    <AppCard title="Composition en direct" subtitle="Formation, titulaires et remplaçants publiés par les clubs">
-      <div class="team-squad__controls">
-        <AppSelect v-model="selectedMatchId" label="Match" :options="matchOptions" />
-        <AppButton variant="primary" :loading="lineups?.loading" :disabled="!selectedMatchId" @click="loadLineups">
-          <template #icon><AppIcon name="bolt" :size="15" /></template>
-          Voir la composition
-        </AppButton>
+  <div class="team-squad cm-page">
+    <!-- Le bandeau de l'onglet : ce qu'il montre, et ce qu'il y a à choisir. -->
+    <section class="cm-hero">
+      <div class="cm-hero__top">
+        <h2 class="cm-hero__title">
+          <span class="cm-icon-box"><AppIcon name="users" :size="18" /></span>
+          Compo &amp; joueurs
+        </h2>
+        <span class="cm-hero__chips">
+          <span class="cm-chip is-section"><AppIcon name="matches" :size="11" />{{ matchesStore.matches.length }} match(s) au choix</span>
+          <span v-if="squadSeasons.length" class="cm-chip"><AppIcon name="calendar" :size="11" />{{ squadSeasons.length }} saison(s) en magasin</span>
+        </span>
       </div>
+      <p class="cm-hero__subtitle">
+        La composition publiée par les clubs pour une rencontre à venir, et l'effectif complet d'une équipe avec les statistiques de chacun de ses
+        joueurs, reconstitué depuis les feuilles de match.
+      </p>
+    </section>
 
-      <LoadingSpinner v-if="lineups?.loading" label="Récupération de la composition…" />
-
-      <EmptyState
-        v-else-if="lineups?.result && !lineups.result.available"
-        icon="target"
-        title="Composition indisponible"
-        :description="describeLineupUnavailable(lineups.result)"
-      />
-
-      <EmptyState v-else-if="lineups?.error" icon="alert" title="Erreur" :description="lineups.error" />
-
-      <template v-else-if="lineups?.result?.available">
-        <p v-if="lineups.result.source === 'web'" class="cm-text-muted team-squad__web-source">
-          Composition {{ lineups.result.officialOrProbable === 'official' ? 'officielle' : 'probable' }} trouvée via recherche web{{ lineups.result.sourceUrl ? ` (${lineups.result.sourceUrl})` : '' }} — pas depuis API-Football.
-        </p>
-        <div class="team-squad__lineups">
-          <TeamLineup v-for="(team, index) in lineups.result.teams" :key="team.teamId ?? `${team.teamName}-${index}`" :team="team" />
+    <!-- 1. COMPOSITION EN DIRECT -->
+    <AppCard icon="layers" eyebrow="En direct" title="Composition en direct" subtitle="Formation, titulaires et remplaçants publiés par les clubs">
+      <div class="team-squad__body">
+        <div class="cm-toolbar team-squad__toolbar">
+          <AppSelect v-model="selectedMatchId" label="Match" :options="matchOptions" class="team-squad__grow" />
+          <AppButton variant="primary" :loading="lineups?.loading" :disabled="!selectedMatchId" @click="loadLineups">
+            <template #icon><AppIcon name="bolt" :size="15" /></template>
+            Voir la composition
+          </AppButton>
         </div>
-      </template>
 
-      <EmptyState
-        v-else
-        icon="matches"
-        title="Choisis un match"
-        description="Sélectionne une rencontre puis clique sur « Voir la composition »."
-      />
+        <LoadingSpinner v-if="lineups?.loading" label="Récupération de la composition…" />
+
+        <EmptyState
+          v-else-if="lineups?.result && !lineups.result.available"
+          icon="target"
+          title="Composition indisponible"
+          :description="describeLineupUnavailable(lineups.result)"
+        />
+
+        <EmptyState v-else-if="lineups?.error" icon="alert" title="Erreur" :description="lineups.error" />
+
+        <template v-else-if="lineups?.result?.available">
+          <!-- D'où vient la composition quand ce n'est pas API-Football. -->
+          <div v-if="lineups.result.source === 'web'" class="cm-note is-info">
+            <span class="cm-icon-box is-info is-sm"><AppIcon name="globe" :size="14" /></span>
+            <div>
+              <p class="cm-note__title">Source</p>
+              <p class="cm-note__text">
+                Composition {{ lineups.result.officialOrProbable === 'official' ? 'officielle' : 'probable' }} trouvée via recherche web{{ lineups.result.sourceUrl ? ` (${lineups.result.sourceUrl})` : '' }} — pas depuis API-Football.
+              </p>
+            </div>
+          </div>
+          <!-- Une équipe par colonne dès que la place existe. -->
+          <div class="team-squad__lineups cm-stagger">
+            <TeamLineup v-for="(team, index) in lineups.result.teams" :key="team.teamId ?? `${team.teamName}-${index}`" :team="team" />
+          </div>
+        </template>
+
+        <EmptyState
+          v-else
+          icon="matches"
+          title="Choisis un match"
+          description="Sélectionne une rencontre puis clique sur « Voir la composition »."
+        />
+      </div>
     </AppCard>
 
+    <!-- 2. EFFECTIF ET STATISTIQUES INDIVIDUELLES -->
     <AppCard
+      icon="barChart"
+      eyebrow="Effectif"
       title="Statistiques individuelles des joueurs"
       subtitle="Effectif complet reconstitué depuis les feuilles de match — totaux de la saison ou moyennes par match joué"
     >
-      <div class="team-squad__controls team-squad__controls--squad">
-        <AppTextField v-model="playersTeamQuery" label="Équipe" placeholder="Ex. Real Madrid…" @keyup.enter="loadPlayers" />
-        <AppSelect v-if="seasonOptions.length > 1" v-model="squadSeason" label="Saison" :options="seasonOptions" />
-        <AppButton variant="primary" :loading="players?.loading" :disabled="!playersTeamQuery.trim()" @click="loadPlayers">
-          <template #icon><AppIcon name="bolt" :size="15" /></template>
-          Charger l'effectif
-        </AppButton>
-      </div>
+      <div class="team-squad__body">
+        <div class="cm-toolbar team-squad__toolbar">
+          <AppTextField v-model="playersTeamQuery" label="Équipe" placeholder="Ex. Real Madrid…" class="team-squad__grow" @keyup.enter="loadPlayers">
+            <template #icon><AppIcon name="search" :size="15" /></template>
+          </AppTextField>
+          <AppSelect v-if="seasonOptions.length > 1" v-model="squadSeason" label="Saison" :options="seasonOptions" class="team-squad__season" />
+          <AppButton variant="primary" :loading="players?.loading" :disabled="!playersTeamQuery.trim()" @click="loadPlayers">
+            <template #icon><AppIcon name="bolt" :size="15" /></template>
+            Charger l'effectif
+          </AppButton>
+        </div>
 
-      <LoadingSpinner v-if="players?.loading" label="Récupération de l'effectif…" />
-      <EmptyState v-else-if="players?.error" icon="alert" title="Effectif introuvable" :description="players.error" />
-      <EmptyState
-        v-else-if="players?.result && players.result.players.length === 0"
-        icon="target"
-        title="Aucun joueur trouvé"
-        description="Aucune statistique disponible pour cette équipe sur la saison consultée."
-      />
+        <LoadingSpinner v-if="players?.loading" label="Récupération de l'effectif…" />
+        <EmptyState v-else-if="players?.error" icon="alert" title="Effectif introuvable" :description="players.error" />
+        <EmptyState
+          v-else-if="players?.result && players.result.players.length === 0"
+          icon="target"
+          title="Aucun joueur trouvé"
+          description="Aucune statistique disponible pour cette équipe sur la saison consultée."
+        />
 
-      <div v-else-if="players?.result" class="team-squad__players-table-wrap">
-        <div class="team-squad__players-head">
-          <p class="cm-text-muted team-squad__players-season">
-            {{ players.result.teamName }} — saison {{ players.result.season }} ({{ players.result.players.length }} joueurs)
-            <template v-if="players.result.source === 'match-stats'">
-              — reconstitué depuis {{ players.result.matchesCounted }} feuille(s) de match
-            </template>
-            <template v-else-if="players.result.source === 'web'"> — trouvé via recherche web, pas depuis API-Football</template>
-          </p>
-          <div v-if="hasAverages" class="team-squad__toggle">
-            <button type="button" :class="{ 'is-active': playerMode === 'totals' }" @click="playerMode = 'totals'">Σ Totaux</button>
-            <button type="button" :class="{ 'is-active': playerMode === 'averages' }" @click="playerMode = 'averages'">⌀ Par match</button>
+        <div v-else-if="players?.result" class="team-squad__result">
+          <!-- Le club trouvé, la saison, la provenance ; à droite, totaux ou moyennes. -->
+          <div class="team-squad__players-head">
+            <div class="team-squad__team">
+              <TeamCrest :name="players.result.teamName" :size="40" class="team-squad__team-crest" />
+              <div class="team-squad__team-titles">
+                <p class="team-squad__team-name">{{ players.result.teamName }}</p>
+                <p class="cm-text-muted team-squad__players-season">
+                  <span class="cm-chip is-section"><AppIcon name="calendar" :size="11" />saison {{ players.result.season }}</span>
+                  <span class="cm-chip"><AppIcon name="users" :size="11" />{{ players.result.players.length }} joueurs</span>
+                  <template v-if="players.result.source === 'match-stats'">
+                    <span class="cm-chip" title="Effectif reconstitué depuis les feuilles de match du magasin"><AppIcon name="database" :size="11" />reconstitué depuis {{ players.result.matchesCounted }} feuille(s) de match</span>
+                  </template>
+                  <template v-else-if="players.result.source === 'web'">
+                    <span class="cm-chip is-info"><AppIcon name="globe" :size="11" />trouvé via recherche web, pas depuis API-Football</span>
+                  </template>
+                </p>
+              </div>
+            </div>
+            <div v-if="hasAverages" class="team-squad__toggle" role="group" aria-label="Totaux ou moyennes">
+              <button type="button" :class="{ 'is-active': playerMode === 'totals' }" @click="playerMode = 'totals'">Σ Totaux</button>
+              <button type="button" :class="{ 'is-active': playerMode === 'averages' }" @click="playerMode = 'averages'">⌀ Par match</button>
+            </div>
+          </div>
+
+          <div class="cm-table-wrap team-squad__wrap">
+            <table class="cm-table team-squad__players-table">
+              <thead>
+                <tr>
+                  <th class="is-left">Joueur</th>
+                  <th class="is-left">Poste</th>
+                  <th title="Présences sur la feuille de match">Feuille</th>
+                  <th title="Matchs réellement joués — titularisations et entrées en jeu">Joués</th>
+                  <th title="Titularisations">Titul.</th>
+                  <th v-for="col in playerColumns" :key="col.key" :title="col.title">{{ col.label }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="p in players.result.players" :key="p.id">
+                  <td class="is-left team-squad__players-name">
+                    <span class="team-squad__ident">
+                      <TeamCrest :name="players.result.teamName" :size="16" class="team-squad__flag" />
+                      <PlayerFlag :player-id="p.id ?? null" :size="14" class="team-squad__flag" />
+                      <span class="cm-truncate">{{ p.name }}</span>
+                    </span>
+                  </td>
+                  <td class="is-left"><span class="team-squad__position">{{ p.position ?? '—' }}</span></td>
+                  <td class="cm-numeric cm-text-muted">{{ p.onSheet ?? '—' }}</td>
+                  <td class="cm-numeric is-strong">{{ p.appearances ?? '—' }}</td>
+                  <td class="cm-numeric cm-text-muted">{{ p.starts ?? '—' }}</td>
+                  <td v-for="col in playerColumns" :key="col.key" class="cm-numeric">{{ playerCell(p, col) }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-        <table class="team-squad__players-table">
-          <thead>
-            <tr>
-              <th>Joueur</th>
-              <th>Poste</th>
-              <th title="Présences sur la feuille de match">Feuille</th>
-              <th title="Matchs réellement joués — titularisations et entrées en jeu">Joués</th>
-              <th>Titul.</th>
-              <th v-for="col in playerColumns" :key="col.key" :title="col.title">{{ col.label }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="p in players.result.players" :key="p.id">
-              <td class="team-squad__players-name cm-truncate">{{ p.name }}</td>
-              <td class="cm-text-muted">{{ p.position ?? '—' }}</td>
-              <td class="cm-numeric cm-text-muted">{{ p.onSheet ?? '—' }}</td>
-              <td class="cm-numeric">{{ p.appearances ?? '—' }}</td>
-              <td class="cm-numeric cm-text-muted">{{ p.starts ?? '—' }}</td>
-              <td v-for="col in playerColumns" :key="col.key" class="cm-numeric">{{ playerCell(p, col) }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
 
-      <EmptyState
-        v-else
-        icon="matches"
-        title="Cherche une équipe"
-        description="Tape un nom d'équipe puis clique sur « Charger l'effectif »."
-      />
+        <EmptyState
+          v-else
+          icon="matches"
+          title="Cherche une équipe"
+          description="Tape un nom d'équipe puis clique sur « Charger l'effectif »."
+        />
+      </div>
     </AppCard>
   </div>
 </template>
 
 <style scoped>
 .team-squad {
+  /* Se règle sur SA largeur : les deux compositions passent en colonnes dès que la place existe. */
+  container: squad / inline-size;
+}
+
+/* Le corps d'une carte : commandes, puis contenu, espacés. */
+.team-squad__body {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.team-squad__controls {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 14px;
-  align-items: end;
-  margin-bottom: 16px;
+.team-squad__toolbar {
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--cm-border-soft);
 }
 
-/* Carte effectif : un champ de plus, le sélecteur de saison. */
-.team-squad__controls--squad {
-  grid-template-columns: 1.4fr 1fr auto;
+.team-squad__grow {
+  flex: 1 1 260px;
 }
 
+.team-squad__season {
+  flex: 0 1 240px;
+}
+
+/* --------------------------------------------------------- compositions */
 .team-squad__lineups {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
 }
 
-.team-squad__web-source {
-  font-size: 11px;
-  margin-bottom: 10px;
-}
-
-.team-squad__players-season {
-  font-size: 11.5px;
-  margin-bottom: 10px;
+/* ------------------------------------------------------------- effectif */
+.team-squad__result {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .team-squad__players-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  gap: 12px 16px;
   flex-wrap: wrap;
 }
 
+.team-squad__team {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.team-squad__team-crest {
+  box-shadow: 0 0 0 3px rgba(var(--cm-section-rgb) / 0.18);
+}
+
+.team-squad__team-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.team-squad__team-name {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--cm-text-primary);
+}
+
+.team-squad__players-season {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 11.5px;
+}
+
+/* Σ Totaux / ⌀ Par match : commutateur segmenté, l'actif en couleur de section. */
 .team-squad__toggle {
   display: inline-flex;
-  border: 1px solid var(--cm-border-soft);
-  border-radius: var(--cm-radius-sm);
-  overflow: hidden;
   flex-shrink: 0;
+  gap: 3px;
+  padding: 3px;
+  border-radius: 999px;
+  border: 1px solid var(--cm-border-soft);
+  background: rgb(var(--cm-glass-tint) / var(--cm-glass-alpha-1));
 }
 
 .team-squad__toggle button {
   border: 0;
+  border-radius: 999px;
   background: transparent;
   color: var(--cm-text-secondary);
   font: inherit;
   font-size: 12px;
-  padding: 5px 12px;
+  font-weight: 600;
+  padding: 5px 13px;
   cursor: pointer;
-  transition: background var(--cm-transition), color var(--cm-transition);
+  transition: background var(--cm-transition), color var(--cm-transition), box-shadow var(--cm-transition);
 }
 
 .team-squad__toggle button:hover {
-  background: var(--cm-surface-hover);
+  color: var(--cm-text-primary);
+  background: rgb(var(--cm-glass-tint) / var(--cm-glass-alpha-2));
 }
 
 .team-squad__toggle button.is-active {
-  background: var(--cm-accent-soft);
-  color: var(--cm-text-primary);
+  background: var(--cm-section);
+  color: var(--cm-section-on);
+  box-shadow: 0 4px 14px rgba(var(--cm-section-rgb) / 0.3);
 }
 
-.team-squad__players-table-wrap {
-  overflow-x: auto;
-}
-
-.team-squad__players-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 12px;
-}
-
-.team-squad__players-table th,
-.team-squad__players-table td {
-  padding: 7px 8px;
-  text-align: right;
-  border-bottom: 1px solid var(--cm-border-soft);
-  white-space: nowrap;
-}
-
-.team-squad__players-table th {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  color: var(--cm-text-muted);
-  font-weight: 600;
-}
-
-.team-squad__players-table th:first-child,
-.team-squad__players-table td:first-child {
-  text-align: left;
+/* Le tableau garde son en-tête visible quand l'effectif est long. */
+.team-squad__wrap {
+  max-height: 72vh;
+  overflow: auto;
 }
 
 .team-squad__players-name {
   font-weight: 600;
-  max-width: 180px;
+  max-width: 220px;
 }
 
-@media (max-width: 960px) {
-  .team-squad__controls {
-    grid-template-columns: 1fr;
-  }
+/* Logo puis drapeau puis le nom, tronqué au besoin. */
+.team-squad__ident {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  color: var(--cm-text-primary);
+}
+
+.team-squad__flag {
+  flex-shrink: 0;
+}
+
+.team-squad__position {
+  display: inline-flex;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--cm-surface-hover);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--cm-text-secondary);
+}
+
+/* Assez de place : une équipe par colonne. */
+@container squad (min-width: 760px) {
   .team-squad__lineups {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Panneau étroit : les commandes s'empilent. */
+@container squad (max-width: 520px) {
+  .team-squad__grow,
+  .team-squad__season {
+    flex-basis: 100%;
   }
 }
 </style>

@@ -7,6 +7,8 @@ import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import MatchStatusBadge from '@/components/common/MatchStatusBadge.vue';
 import LeagueBadge from './LeagueBadge.vue';
+import MatchCard from './MatchCard.vue';
+import PickCrest from './PickCrest.vue';
 import { formatOdds, formatKickoff } from '@/utils/format.js';
 import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
 
@@ -96,279 +98,374 @@ function isLeagueOpen(league) {
 function impliedProbability(odds) {
   return odds > 1 ? Math.round((1 / odds) * 100) : null;
 }
+
+// Présentation seulement : combien de rencontres portent les paris affichés,
+// pour la puce en tête de carte (le nombre de paris est déjà sur l'onglet).
+const matchCount = computed(() => groupedPicks.value.reduce((sum, group) => sum + group.matches.length, 0));
 </script>
 
 <template>
-  <AppCard :title="title" :subtitle="subtitle">
-    <AppTextField v-model="searchQuery" :placeholder="searchPlaceholder" class="picks-search__field">
-      <template #icon><AppIcon name="search" :size="14" /></template>
-    </AppTextField>
-    <p class="cm-text-muted picks-search__note">
-      Cote marché affichée uniquement sur Résultat (1N2) — seul marché avec une vraie cote bookmaker dans l'app.
-    </p>
+  <AppCard :title="title" :subtitle="subtitle" icon="target" eyebrow="Sélection">
+    <div class="pks">
+      <div class="pks__tools">
+        <AppTextField v-model="searchQuery" :placeholder="searchPlaceholder">
+          <template #icon><AppIcon name="search" :size="14" /></template>
+        </AppTextField>
+        <p class="pks__note">
+          <AppIcon name="info" :size="12" />
+          Cote marché affichée uniquement sur Résultat (1N2) — seul marché avec une vraie cote bookmaker dans l'app.
+        </p>
+      </div>
 
-    <LoadingSpinner v-if="scanning && picks.length === 0" label="Analyse des matchs…" />
-    <EmptyState
-      v-else-if="!scanned"
-      icon="bolt"
-      title="Aucun scan encore lancé"
-      description="Choisis une période et clique sur « Scanner les matchs »."
-    />
-    <EmptyState
-      v-else-if="filteredPicks.length === 0 && searchQuery.trim()"
-      icon="search"
-      title="Aucun résultat"
-      :description="`Aucun pari ne correspond à «${searchQuery.trim()}».`"
-    />
-    <EmptyState v-else-if="filteredPicks.length === 0" icon="target" title="Rien à afficher" :description="emptyDescription" />
+      <LoadingSpinner v-if="scanning && picks.length === 0" label="Analyse des matchs…" />
+      <EmptyState
+        v-else-if="!scanned"
+        icon="bolt"
+        title="Aucun scan encore lancé"
+        description="Choisis une période et clique sur « Scanner les matchs »."
+      />
+      <EmptyState
+        v-else-if="filteredPicks.length === 0 && searchQuery.trim()"
+        icon="search"
+        title="Aucun résultat"
+        :description="`Aucun pari ne correspond à «${searchQuery.trim()}».`"
+      />
+      <EmptyState v-else-if="filteredPicks.length === 0" icon="target" title="Rien à afficher" :description="emptyDescription" />
 
-    <div v-else class="picks-search__list">
-      <div v-for="group in groupedPicks" :key="group.league" class="picks-search__league">
-        <div
-          class="picks-search__league-header"
-          role="button"
-          tabindex="0"
-          @click="toggleLeague(group.league)"
-          @keydown.enter="toggleLeague(group.league)"
-        >
-          <LeagueBadge :league="group.league" />
-          <span class="cm-text-muted cm-numeric">{{ group.count }}</span>
-          <AppIcon
-            name="chevronRight"
-            :size="12"
-            class="picks-search__league-chevron"
-            :class="{ 'picks-search__league-chevron--open': isLeagueOpen(group.league) }"
-          />
-        </div>
+      <div v-else class="pks__list cm-stagger">
+        <section v-for="group in groupedPicks" :key="group.league" class="pks-league" :class="{ 'is-open': isLeagueOpen(group.league) }">
+          <div
+            class="pks-league__header"
+            role="button"
+            tabindex="0"
+            @click="toggleLeague(group.league)"
+            @keydown.enter="toggleLeague(group.league)"
+          >
+            <LeagueBadge :league="group.league" />
+            <span class="cm-pill pks-league__count">{{ group.count }}</span>
+            <AppIcon name="chevronRight" :size="14" class="pks-chevron" :class="{ 'is-open': isLeagueOpen(group.league) }" />
+          </div>
 
-        <template v-if="isLeagueOpen(group.league)">
-        <div v-for="match in group.matches" :key="match.matchId" class="picks-search__match">
-          <p class="picks-search__match-header cm-truncate">
-            <button type="button" class="cm-team-link" @click.stop="teamStatsModalStore.openFor(match.homeName, group.league, match.matchId)">{{ match.homeName }}</button>
-            vs
-            <button type="button" class="cm-team-link" @click.stop="teamStatsModalStore.openFor(match.awayName, group.league, match.matchId)">{{ match.awayName }}</button>
-            <span class="cm-text-muted">· {{ formatKickoff(match.commenceTime) }}</span>
-            <MatchStatusBadge :commence-time="match.commenceTime" class="picks-search__status" />
-          </p>
-
-          <label class="picks-search__row">
-            <input type="checkbox" :checked="isSelected(match.best)" @change="emit('toggle', match.best)" />
-            <div class="picks-search__main">
-              <p class="picks-search__pick cm-truncate">
-                <span class="cm-text-muted">{{ match.best.market }} —</span> {{ match.best.pick }}
-                <span class="picks-search__probability">{{ impliedProbability(match.best.odds) }}%</span>
-              </p>
-            </div>
-            <div class="picks-search__row-right">
-              <span class="cm-numeric picks-search__odds">@ {{ formatOdds(match.best.odds) }}</span>
-              <span v-if="match.best.marketOdds" class="cm-text-muted picks-search__market-odds">marché @ {{ formatOdds(match.best.marketOdds) }}</span>
-              <button
-                v-if="match.rest.length"
-                type="button"
-                class="picks-search__expand"
-                @click.stop.prevent="toggleMatch(match.matchId)"
+          <template v-if="isLeagueOpen(group.league)">
+          <div class="pks-league__body">
+            <div v-for="match in group.matches" :key="match.matchId" class="pks-match">
+              <!-- Carte de rencontre commune (MatchCard.vue, 01/10/2026). -->
+              <MatchCard
+                :match="{
+                  matchId: match.matchId,
+                  commenceTime: match.commenceTime,
+                  date: match.commenceTime ? String(match.commenceTime).slice(0, 10) : null,
+                  league: group.league,
+                  homeName: match.homeName,
+                  awayName: match.awayName
+                }"
+                :to="`/match-a-venir/${match.matchId}`"
+                variant="compact"
+                :show-competition="false"
+                team-links
+                class="pks-match__card"
               >
-                +{{ match.rest.length }}
-                <AppIcon
-                  name="chevronRight"
-                  :size="10"
-                  class="picks-search__expand-icon"
-                  :class="{ 'picks-search__expand-icon--open': expandedMatches.has(match.matchId) }"
-                />
-              </button>
-            </div>
-          </label>
+                <template #aside>
+                  <MatchStatusBadge :commence-time="match.commenceTime" />
+                </template>
+              </MatchCard>
 
-          <template v-if="match.rest.length && expandedMatches.has(match.matchId)">
-            <label v-for="c in match.rest" :key="legKey(c)" class="picks-search__row picks-search__row--sub">
-              <input type="checkbox" :checked="isSelected(c)" @change="emit('toggle', c)" />
-              <div class="picks-search__main">
-                <p class="picks-search__pick cm-truncate">
-                  <span class="cm-text-muted">{{ c.market }} —</span> {{ c.pick }}
-                  <span class="picks-search__probability">{{ impliedProbability(c.odds) }}%</span>
-                </p>
+              <div class="pks-match__picks">
+                <!-- Le pari le plus probable du match, seul visible tant qu'on n'a pas déplié les autres. -->
+                <label class="pks-row" :class="{ 'is-selected': isSelected(match.best) }">
+                  <input type="checkbox" class="pks-row__check" :checked="isSelected(match.best)" @change="emit('toggle', match.best)" />
+                  <div class="pks-row__main">
+                    <span class="pks-row__market cm-truncate">{{ match.best.market }}</span>
+                    <p class="pks-row__pick cm-truncate">
+                      <PickCrest :item="match.best" :home="match.best.homeName" :away="match.best.awayName" :league="match.best.league" :size="14" />{{ match.best.pick }}
+                      <span class="pks-row__probability" title="Probabilité selon le moteur">{{ impliedProbability(match.best.odds) }}%</span>
+                    </p>
+                  </div>
+                  <div class="pks-row__right">
+                    <span v-if="match.best.marketOdds" class="pks-row__market-odds cm-numeric">marché @ {{ formatOdds(match.best.marketOdds) }}</span>
+                    <span class="cm-pill is-section pks-row__odds">@ {{ formatOdds(match.best.odds) }}</span>
+                    <button
+                      v-if="match.rest.length"
+                      type="button"
+                      class="pks-row__expand"
+                      :title="expandedMatches.has(match.matchId) ? 'Masquer les autres paris de ce match' : 'Voir les autres paris de ce match'"
+                      @click.stop.prevent="toggleMatch(match.matchId)"
+                    >
+                      +{{ match.rest.length }}
+                      <AppIcon name="chevronRight" :size="10" class="pks-chevron" :class="{ 'is-open': expandedMatches.has(match.matchId) }" />
+                    </button>
+                  </div>
+                </label>
+
+                <template v-if="match.rest.length && expandedMatches.has(match.matchId)">
+                  <label v-for="c in match.rest" :key="legKey(c)" class="pks-row is-sub" :class="{ 'is-selected': isSelected(c) }">
+                    <input type="checkbox" class="pks-row__check" :checked="isSelected(c)" @change="emit('toggle', c)" />
+                    <div class="pks-row__main">
+                      <span class="pks-row__market cm-truncate">{{ c.market }}</span>
+                      <p class="pks-row__pick cm-truncate">
+                        <PickCrest :item="c" :home="c.homeName" :away="c.awayName" :league="c.league" :size="14" />{{ c.pick }}
+                        <span class="pks-row__probability" title="Probabilité selon le moteur">{{ impliedProbability(c.odds) }}%</span>
+                      </p>
+                    </div>
+                    <div class="pks-row__right">
+                      <span v-if="c.marketOdds" class="pks-row__market-odds cm-numeric">marché @ {{ formatOdds(c.marketOdds) }}</span>
+                      <span class="cm-pill is-section pks-row__odds">@ {{ formatOdds(c.odds) }}</span>
+                    </div>
+                  </label>
+                </template>
               </div>
-              <div class="picks-search__row-right">
-                <span class="cm-numeric picks-search__odds">@ {{ formatOdds(c.odds) }}</span>
-                <span v-if="c.marketOdds" class="cm-text-muted picks-search__market-odds">marché @ {{ formatOdds(c.marketOdds) }}</span>
-              </div>
-            </label>
+            </div>
+          </div>
           </template>
-        </div>
-        </template>
+        </section>
       </div>
     </div>
+
+    <!-- La puce de tête de carte (déclarée après le corps : sans incidence sur le rendu). -->
+    <template #actions>
+      <span v-if="scanned && filteredPicks.length" class="cm-chip is-section cm-numeric">{{ filteredPicks.length }} paris · {{ matchCount }} rencontres</span>
+    </template>
   </AppCard>
 </template>
 
 <style scoped>
-.picks-search__field {
-  margin-bottom: 14px;
-}
-
-.picks-search__note {
-  font-size: 10.5px;
-  margin: -6px 0 14px;
-}
-
-.picks-search__market-odds {
-  font-size: 10.5px;
-  white-space: nowrap;
-}
-
-.picks-search__list {
+/* La carte se règle sur SA largeur (page entière ou panneau étroit). */
+.pks {
+  container: pks / inline-size;
   display: flex;
   flex-direction: column;
-  max-height: 420px;
-  overflow-y: auto;
+  gap: 16px;
 }
 
-.picks-search__league {
+.pks__tools {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pks__note {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--cm-text-muted);
+}
+
+.pks__note :deep(svg) {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.pks__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ------------------------------------------------- un championnat */
+.pks-league {
+  border-radius: var(--cm-radius-md);
+  border: 1px solid var(--cm-border-soft);
+  background: var(--cm-surface-alt);
+  overflow: hidden;
+  transition: border-color var(--cm-transition);
+}
+
+.pks-league.is-open {
+  border-color: rgba(var(--cm-section-rgb) / 0.3);
+}
+
+.pks-league__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background var(--cm-transition);
+}
+
+.pks-league__header:hover {
+  background: var(--cm-surface-hover);
+}
+
+.pks-league.is-open .pks-league__header {
   border-bottom: 1px solid var(--cm-border-soft);
 }
 
-.picks-search__league:last-child {
-  border-bottom: none;
-}
-
-.picks-search__league-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 8px 8px;
-  background: var(--cm-surface-alt);
-  border: none;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  cursor: pointer;
-  text-align: left;
-}
-
-.picks-search__league-header .cm-numeric {
+.pks-league__count {
   margin-left: auto;
-  font-size: 10.5px;
-  text-transform: none;
-  letter-spacing: normal;
+  min-width: 34px;
+  padding: 2px 8px;
+  font-size: 11.5px;
+  color: var(--cm-text-secondary);
 }
 
-.picks-search__league-chevron {
+.pks-chevron {
   flex-shrink: 0;
   color: var(--cm-text-muted);
+  transition: transform var(--cm-transition), color var(--cm-transition);
+}
+
+.pks-chevron.is-open {
   transform: rotate(90deg);
-  transition: transform var(--cm-transition);
+  color: var(--cm-section);
 }
 
-.picks-search__league-chevron--open {
-  transform: rotate(-90deg);
+.pks-league__body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
 }
 
-.picks-search__match {
-  padding-left: 4px;
+/* ----------------------------------------------------- une rencontre */
+.pks-match {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.picks-search__match-header {
-  padding: 8px 8px 4px;
-  font-size: 11.5px;
-  font-weight: 600;
+.pks-match__card {
+  --mcard-aside: 92px;
 }
 
-.picks-search__match-header .cm-team-link {
-  font-size: 14px;
+/* Les paris du match, en retrait sous sa carte, reliés par un filet. */
+.pks-match__picks {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-left: 12px;
+  padding-left: 12px;
+  border-left: 2px solid rgba(var(--cm-section-rgb) / 0.22);
+}
+
+.pks-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: var(--cm-radius);
+  border: 1px solid var(--cm-border-soft);
+  background: var(--cm-surface);
+  cursor: pointer;
+  transition: border-color var(--cm-transition), background var(--cm-transition);
+}
+
+.pks-row:hover {
+  border-color: var(--cm-border);
+  background: var(--cm-surface-hover);
+}
+
+/* Coché : la ligne prend la couleur de la section. */
+.pks-row.is-selected {
+  border-color: rgba(var(--cm-section-rgb) / 0.5);
+  background: linear-gradient(90deg, var(--cm-section-soft), transparent 70%), var(--cm-surface);
+}
+
+.pks-row.is-sub {
+  margin-left: 18px;
+}
+
+.pks-row__check {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  accent-color: var(--cm-section);
+  cursor: pointer;
+}
+
+.pks-row__main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.pks-row__market {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--cm-text-muted);
+}
+
+.pks-row__pick {
+  font-size: 13px;
   font-weight: 700;
   color: var(--cm-text-primary);
 }
 
-.picks-search__status {
-  margin-left: 6px;
-  vertical-align: middle;
-}
-
-.picks-search__row {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 12px;
-  padding: 7px 8px 7px 20px;
-  cursor: pointer;
-}
-
-.picks-search__row:hover {
-  background: var(--cm-surface-hover);
-}
-
-.picks-search__row--sub {
-  padding-left: 20px;
-}
-
-.picks-search__row input[type='checkbox'] {
-  width: 16px;
-  height: 16px;
-  accent-color: var(--cm-accent);
-  cursor: pointer;
-}
-
-.picks-search__main {
-  min-width: 0;
-}
-
-.picks-search__pick {
-  font-size: 12.5px;
-  font-weight: 600;
-}
-
-.picks-search__probability {
+/* La probabilité du moteur, en vert comme l'anneau de l'onglet Analyse IA. */
+.pks-row__probability {
   display: inline-block;
   margin-left: 6px;
-  padding: 1px 6px;
+  padding: 1px 7px;
   border-radius: 999px;
   background: var(--cm-accent-soft);
   color: var(--cm-accent);
-  font-size: 10px;
+  font-size: 10.5px;
   font-weight: 700;
   vertical-align: middle;
 }
 
-.picks-search__row-right {
+.pks-row__right {
   display: flex;
   align-items: center;
   gap: 8px;
   flex-shrink: 0;
 }
 
-.picks-search__odds {
-  font-size: 12.5px;
-  font-weight: 700;
-  flex-shrink: 0;
+.pks-row__market-odds {
+  font-size: 11px;
+  white-space: nowrap;
+  color: var(--cm-text-muted);
 }
 
-.picks-search__expand {
+.pks-row__odds {
+  min-width: 58px;
+}
+
+.pks-row__expand {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
-  padding: 2px 7px;
+  gap: 3px;
+  padding: 3px 8px;
   border: 1px solid var(--cm-border);
   border-radius: 999px;
   background: transparent;
-  color: var(--cm-text-muted);
-  font-size: 10px;
-  font-weight: 600;
+  color: var(--cm-text-secondary);
+  font-size: 10.5px;
+  font-weight: 700;
   cursor: pointer;
+  transition: border-color var(--cm-transition), color var(--cm-transition), background var(--cm-transition);
 }
 
-.picks-search__expand:hover {
-  border-color: var(--cm-accent);
-  color: var(--cm-accent);
+.pks-row__expand:hover {
+  border-color: var(--cm-section);
+  background: var(--cm-section-soft);
+  color: var(--cm-section);
 }
 
-.picks-search__expand-icon {
-  transform: rotate(90deg);
-  transition: transform var(--cm-transition);
-}
+/* Panneau étroit : la cote et les commandes passent sous le pronostic. */
+@container pks (max-width: 520px) {
+  .pks-row {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
 
-.picks-search__expand-icon--open {
-  transform: rotate(-90deg);
+  .pks-row__right {
+    grid-column: 2;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .pks-row.is-sub {
+    margin-left: 8px;
+  }
+
+  .pks-league__body {
+    padding: 10px 8px;
+  }
 }
 </style>

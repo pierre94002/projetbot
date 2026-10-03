@@ -10,17 +10,28 @@
  * Cotes passées : football-data.co.uk ; résultats : FotMob ; cotes du
  * jour : The Odds API (1X2 seulement — doubles chances déduites, cote
  * juste du profil pour les buts).
+ *
+ * Dessin (refonte du 01/10/2026) : les commandes en rangée, le résultat en
+ * chiffres clés, chaque marché en bloc avec son pourcentage en gros, sa
+ * cote et son voyant value ; les matchs retenus en cartes de rencontre.
  */
 import { computed, ref, watch } from 'vue';
 import { matchStatsApi } from '@/services/matchStatsApi.js';
 import AppSelect from '@/components/common/AppSelect.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
+import EmptyState from '@/components/common/EmptyState.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
+import MatchCard from '@/components/matches/MatchCard.vue';
+import PickCrest from '@/components/matches/PickCrest.vue';
 
 const props = defineProps({
   // Match de la liste : { matchId, league, home, away, commenceTime, marketOdds }
   match: { type: Object, default: null }
 });
+
+// Les issues qui désignent une équipe (« Domicile gagne », « Extérieur ou nul ») : son logo devant.
+const CAMP_DU_MARCHE = { 1: 'home', '1N': 'home', 2: 'away', N2: 'away' };
+const campDuMarche = (cle) => CAMP_DU_MARCHE[cle] ?? 'aucun';
 
 const PORTEES = [
   { value: 'championnat-2', label: 'Championnat en cours et saison précédente' },
@@ -129,121 +140,151 @@ function titreVoyant(m) {
     : `Pas de value : il manque ${pourcent(-m.value)} à la cote pour être rentable.`;
 }
 
-const dateCourte = (iso) => {
-  const [a, mo, j] = String(iso).split('-');
-  return `${j}/${mo}/${a.slice(2)}`;
-};
-
 const libellePortee = computed(() => {
   if (!profile.value?.team) return null;
   return profile.value.scope === 'equipe-domicile' ? `${profile.value.team} à domicile` : `${profile.value.team} à l'extérieur`;
 });
+
+// ---- présentation ---------------------------------------------------------
+// Le nombre de marchés où la cote du jour paie plus que le profil ne le justifie.
+const nombreValues = computed(() => (profile.value?.markets ?? []).filter((m) => m.isValue).length);
 </script>
 
 <template>
-  <div class="odds-profile">
-    <p v-if="!match" class="odds-profile__empty">Sélectionnez un match pour le profiler.</p>
-    <p v-else-if="!hasOdds" class="odds-profile__empty">
-      Pas de cote 1X2 pour ce match : le profilage compare les cotes du jour à celles des matchs passés.
-    </p>
+  <div class="opp">
+    <EmptyState v-if="!match" icon="percent" title="Aucun match sélectionné" description="Sélectionnez un match pour le profiler." />
+    <EmptyState
+      v-else-if="!hasOdds"
+      icon="percent"
+      title="Pas de cote 1X2 pour ce match"
+      description="Le profilage compare les cotes du jour à celles des matchs passés : sans cote 1X2, rien à comparer."
+    />
 
     <template v-else>
-      <div class="odds-profile__controls">
-        <AppSelect v-model="scope" label="Portée du profilage" :options="PORTEES" />
-        <div class="odds-profile__controls-row">
-          <AppSelect v-model="segment" label="Segment de jeu" :options="SEGMENTS" />
-          <AppSelect v-model="tolerance" label="Écart des cotes" :options="ECARTS" />
-        </div>
+      <!-- Les commandes du profilage, en rangée. -->
+      <div class="cm-toolbar opp__toolbar">
+        <AppSelect v-model="scope" label="Portée du profilage" :options="PORTEES" class="opp__scope" />
+        <AppSelect v-model="segment" label="Segment de jeu" :options="SEGMENTS" class="opp__segment" />
+        <AppSelect v-model="tolerance" label="Écart des cotes" :options="ECARTS" class="opp__tolerance" />
       </div>
 
       <LoadingSpinner v-if="loading && !profile" label="Profilage en cours…" />
-      <div v-else-if="error" class="odds-profile__notice odds-profile__notice--error">
-        <AppIcon name="alert" :size="14" />
-        <span>{{ error }}</span>
+      <div v-else-if="error" class="cm-note is-danger">
+        <span class="cm-icon-box is-danger is-sm"><AppIcon name="alert" :size="14" /></span>
+        <div>
+          <p class="cm-note__title">Profilage impossible</p>
+          <p class="cm-note__text">{{ error }}</p>
+        </div>
       </div>
 
       <template v-else-if="profile">
-        <div class="odds-profile__heading" :class="{ 'odds-profile__heading--busy': loading }">
-          <strong>Résultat du profilage avec {{ profile.analyzed }} match{{ profile.analyzed > 1 ? 's' : '' }} analysé{{ profile.analyzed > 1 ? 's' : '' }}</strong>
-          <span v-if="libellePortee" class="odds-profile__muted">{{ libellePortee }}</span>
-          <span v-if="profile.history?.count" class="odds-profile__muted">parmi {{ profile.history.count }} matchs cotés</span>
+        <!-- Le résultat du profilage en chiffres clés (estompé pendant une relecture). -->
+        <div class="cm-kpis opp__kpis" :class="{ 'is-busy': loading }">
+          <div class="cm-kpi is-section">
+            <span class="cm-kpi__label">Résultat du profilage</span>
+            <span class="cm-kpi__value">{{ profile.analyzed }}</span>
+            <span class="cm-kpi__detail">match{{ profile.analyzed > 1 ? 's' : '' }} analysé{{ profile.analyzed > 1 ? 's' : '' }}</span>
+          </div>
+          <div v-if="profile.history?.count" class="cm-kpi">
+            <span class="cm-kpi__label">Matchs cotés</span>
+            <span class="cm-kpi__value">{{ profile.history.count }}</span>
+            <span class="cm-kpi__detail">dans l'historique, parmi lesquels les matchs retenus</span>
+          </div>
+          <div v-if="libellePortee" class="cm-kpi opp__kpi-text">
+            <span class="cm-kpi__label">Portée</span>
+            <span class="cm-kpi__value">{{ libellePortee }}</span>
+            <span class="cm-kpi__detail">profil restreint à ce club</span>
+          </div>
+          <div v-if="profile.markets.length" class="cm-kpi" :class="{ 'opp__kpi-value': nombreValues }">
+            <span class="cm-kpi__label">Values</span>
+            <span class="cm-kpi__value">{{ nombreValues }}</span>
+            <span class="cm-kpi__detail">marché{{ nombreValues > 1 ? 's' : '' }} où la cote paie plus que le profil</span>
+          </div>
         </div>
 
-        <div v-if="profile.markets.length" class="odds-profile__grid">
-          <div
-            v-for="m in profile.markets"
-            :key="m.key"
-            class="odds-cell"
-            :class="{ 'odds-cell--value': m.isValue }"
-          >
-            <span class="odds-cell__label">{{ m.label }}</span>
-            <div class="odds-cell__row">
-              <span class="odds-cell__pct">{{ m.pct === null ? '–' : `${m.pct}%` }}</span>
-              <span class="odds-cell__odds" :class="{ 'odds-cell__odds--fair': !m.odds }" :title="titreCote(m)">
-                {{ m.odds ? nf(m.odds) : m.fairOdds ? `≈${nf(m.fairOdds)}` : '–' }}
+        <!-- Chaque marché en bloc : son pourcentage en gros, sa cote, son voyant value. -->
+        <div v-if="profile.markets.length" class="opp__section">
+          <p class="cm-group-title">Comment ont fini ces matchs, marché par marché</p>
+          <div class="opp__grid cm-stagger">
+            <div v-for="m in profile.markets" :key="m.key" class="cm-block opp__market" :class="{ 'is-value': m.isValue }">
+              <span class="opp__market-label cm-truncate">
+                <PickCrest :side="campDuMarche(m.key)" :home="match?.home ?? null" :away="match?.away ?? null" :league="match?.league ?? null" :size="14" />{{ m.label }}
               </span>
-              <span
-                v-if="m.value !== null"
-                class="odds-cell__badge"
-                :class="{ 'odds-cell__badge--on': m.isValue }"
-                :title="titreVoyant(m)"
-                :aria-label="m.isValue ? 'Value' : 'Pas de value'"
-              >
-                <AppIcon :name="m.isValue ? 'check' : 'x'" :size="10" />
+              <span class="opp__market-pct cm-numeric" title="Part des matchs retenus où ce pari est passé">{{ m.pct === null ? '–' : `${m.pct}%` }}</span>
+              <span class="opp__market-row">
+                <span class="cm-pill opp__market-odds" :class="{ 'is-fair': !m.odds }" :title="titreCote(m)">
+                  {{ m.odds ? nf(m.odds) : m.fairOdds ? `≈${nf(m.fairOdds)}` : '–' }}
+                </span>
+                <span
+                  v-if="m.value !== null"
+                  class="opp__badge"
+                  :class="{ 'is-on': m.isValue }"
+                  :title="titreVoyant(m)"
+                  :aria-label="m.isValue ? 'Value' : 'Pas de value'"
+                >
+                  <AppIcon :name="m.isValue ? 'check' : 'x'" :size="11" />
+                </span>
               </span>
             </div>
           </div>
         </div>
 
-        <div
-          v-for="w in profile.warnings"
-          :key="w"
-          class="odds-profile__notice"
-        >
-          <AppIcon name="alert" :size="14" />
-          <span>{{ w }}</span>
+        <div v-for="w in profile.warnings" :key="w" class="cm-note is-warning">
+          <span class="cm-icon-box is-warning is-sm"><AppIcon name="alert" :size="14" /></span>
+          <div>
+            <p class="cm-note__title">À savoir</p>
+            <p class="cm-note__text">{{ w }}</p>
+          </div>
         </div>
 
-        <p v-if="profile.markets.length" class="odds-profile__legend">
-          <span class="odds-profile__legend-item">
-            <span class="odds-cell__badge odds-cell__badge--on"><AppIcon name="check" :size="10" /></span>
+        <p v-if="profile.markets.length" class="opp__legend">
+          <span class="opp__legend-item">
+            <span class="opp__badge is-on"><AppIcon name="check" :size="11" /></span>
             value : pourcentage × cote &gt; 1
           </span>
-          <span class="odds-profile__legend-item">
-            <span class="odds-profile__fair">≈</span>
+          <span class="opp__legend-item">
+            <span class="opp__fair">≈</span>
             cote juste du profil, faute de cote du marché pour ce pari
           </span>
         </p>
 
-        <div v-if="profile.matches.length" class="odds-profile__matches">
-          <button type="button" class="odds-profile__toggle" @click="showMatches = !showMatches">
-            <AppIcon name="chevronRight" :size="12" :class="{ 'odds-profile__chevron--open': showMatches }" />
+        <!-- Les matchs retenus, en cartes de rencontre, à la demande. -->
+        <div v-if="profile.matches.length" class="opp__matches">
+          <button type="button" class="cm-link opp__toggle" @click="showMatches = !showMatches">
+            <AppIcon name="chevronRight" :size="13" class="opp__chevron" :class="{ 'is-open': showMatches }" />
             {{ showMatches ? 'Masquer' : 'Voir' }} les {{ profile.matches.length }} matchs retenus
           </button>
-          <table v-if="showMatches" class="odds-profile__table">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Match · cotes 1 N 2</th>
-                <th class="odds-profile__score">{{ profile.segment === 'complet' ? 'Score' : 'Score (MT)' }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="r in profile.matches" :key="r.date + r.home + r.away">
-                <td class="odds-profile__muted odds-profile__date">{{ dateCourte(r.date) }}</td>
-                <td>
-                  <span class="odds-profile__teams">{{ r.home }} – {{ r.away }}</span>
-                  <span class="odds-profile__row-odds">{{ nf(r.odds.home) }} · {{ nf(r.odds.draw) }} · {{ nf(r.odds.away) }}</span>
-                </td>
-                <td class="odds-profile__score">
-                  {{ r.score }}<span v-if="r.segmentScore" class="odds-profile__muted"> ({{ r.segmentScore }})</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div v-if="showMatches" class="opp__cards cm-stagger">
+            <!-- Carte de rencontre commune (01/10/2026) : cotes de clôture 1 N 2 et score de la période à droite. -->
+            <MatchCard
+              v-for="r in profile.matches"
+              :key="r.date + r.home + r.away"
+              :match="{
+                date: r.date,
+                league: match?.league ?? null,
+                homeName: r.home,
+                awayName: r.away,
+                homeId: r.homeId ?? null,
+                awayId: r.awayId ?? null,
+                homeGoals: r.homeGoals ?? Number(String(r.score).split('-')[0]),
+                awayGoals: r.awayGoals ?? Number(String(r.score).split('-')[1]),
+                status: 'finished'
+              }"
+              :to="r.matchKey ? `/match/${r.matchKey}` : null"
+              variant="compact"
+              :show-competition="false"
+              class="opp__card"
+            >
+              <template #aside>
+                <span class="opp__row-odds cm-numeric" title="Cotes de clôture 1 · N · 2">{{ nf(r.odds.home) }} · {{ nf(r.odds.draw) }} · {{ nf(r.odds.away) }}</span>
+                <span v-if="r.segmentScore" class="cm-pill opp__segment-score" title="Score de la période étudiée">MT {{ r.segmentScore }}</span>
+              </template>
+            </MatchCard>
+          </div>
         </div>
 
-        <p class="odds-profile__source">
+        <p class="opp__source">
+          <AppIcon name="database" :size="12" />
           Cotes passées : {{ profile.source }}, moyenne du marché à la clôture. Résultats : FotMob. Cotes du jour : The Odds API.
         </p>
       </template>
@@ -252,251 +293,259 @@ const libellePortee = computed(() => {
 </template>
 
 <style scoped>
-.odds-profile {
+.opp {
+  /* Se règle sur SA largeur : page large comme panneau étroit. */
+  container: opp / inline-size;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
-.odds-profile__empty {
-  margin: 0;
-  padding: 18px 4px;
-  color: var(--cm-text-secondary);
-  font-size: 13px;
+/* ------------------------------------------------------------- commandes */
+.opp__toolbar > * {
+  flex: 1 1 160px;
 }
 
-.odds-profile__controls {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.opp__scope {
+  flex-basis: 280px;
 }
 
-.odds-profile__controls-row {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.odds-profile__heading {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 4px 10px;
-  font-size: 13px;
+/* --------------------------------------------------------- chiffres clés */
+.opp__kpis {
   transition: opacity var(--cm-transition);
 }
 
-.odds-profile__heading--busy {
+.opp__kpis.is-busy {
   opacity: 0.55;
 }
 
-.odds-profile__muted {
-  color: var(--cm-text-muted);
-  font-size: 12px;
+/* Une portée en toutes lettres : plus petite qu'un chiffre. */
+.opp__kpi-text .cm-kpi__value {
+  font-size: 15px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
 }
 
-.odds-profile__grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px;
+/* Au moins une value : le chiffre en vert (sémantique, quelle que soit la section). */
+.opp__kpi-value {
+  border-color: rgba(var(--cm-accent-rgb) / 0.3);
 }
 
-.odds-cell {
+.opp__kpi-value .cm-kpi__value {
+  color: var(--cm-accent);
+}
+
+/* ------------------------------------------------------------- marchés */
+.opp__section {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  padding: 7px 9px 8px;
-  border: 1px solid var(--cm-border);
-  border-radius: var(--cm-radius-sm);
-  background: var(--cm-surface-alt);
+  gap: 10px;
+}
+
+.opp__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+}
+
+.opp__market {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
   min-width: 0;
+  transition: border-color var(--cm-transition), background var(--cm-transition);
 }
 
-.odds-cell--value {
-  border-color: rgba(52, 211, 153, 0.45);
-  background: linear-gradient(0deg, var(--cm-accent-soft), var(--cm-accent-soft)), var(--cm-surface-alt);
+.opp__market:hover {
+  border-color: var(--cm-border);
 }
 
-.odds-cell__label {
-  text-align: center;
-  font-size: 11px;
+/* Le marché en value : liseré et halo verts. */
+.opp__market.is-value {
+  border-color: rgba(var(--cm-accent-rgb) / 0.4);
+  background: radial-gradient(120% 140% at 0% 0%, rgba(var(--cm-accent-rgb) / 0.12), transparent 60%), var(--cm-surface-alt);
+}
+
+.opp__market-label {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
   color: var(--cm-text-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-.odds-cell__row {
+.opp__market-label :deep(.pick-crest) {
+  margin-right: 5px;
+}
+
+.opp__market-pct {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--cm-text-primary);
+}
+
+.opp__market.is-value .opp__market-pct {
+  color: var(--cm-accent);
+}
+
+.opp__market-row {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 6px;
 }
 
-.odds-cell__pct {
-  font-size: 13.5px;
-  font-weight: 700;
+.opp__market-odds {
+  min-width: 0;
+  padding: 3px 9px;
+  font-size: 12px;
   color: var(--cm-text-primary);
-  font-variant-numeric: tabular-nums;
-}
-
-.odds-cell__odds {
-  margin-left: auto;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--cm-text-primary);
-  font-variant-numeric: tabular-nums;
   cursor: help;
 }
 
-.odds-cell__odds--fair {
+.opp__market-odds.is-fair {
   color: var(--cm-text-muted);
   font-weight: 500;
   font-style: italic;
 }
 
-.odds-cell__badge {
+/* Le voyant value : éteint (gris) ou allumé (vert plein). */
+.opp__badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex: none;
-  width: 16px;
-  height: 16px;
-  border-radius: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
   border: 1px solid var(--cm-border);
+  background: var(--cm-surface-hover);
   color: var(--cm-text-muted);
   cursor: help;
 }
 
-.odds-cell__badge--on {
+.opp__badge.is-on {
   background: var(--cm-accent);
   border-color: var(--cm-accent);
-  color: #06251b;
+  color: var(--cm-text-on-accent);
+  box-shadow: 0 0 0 3px var(--cm-accent-soft);
 }
 
-.odds-profile__notice {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 12px;
-  border-radius: var(--cm-radius-sm);
-  background: var(--cm-warning-soft);
-  color: var(--cm-warning);
-  font-size: 12.5px;
-}
-
-.odds-profile__notice--error {
-  background: var(--cm-danger-soft);
-  color: var(--cm-danger);
-}
-
-.odds-profile__legend {
+/* ------------------------------------------------------------- légende */
+.opp__legend {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px 16px;
+  gap: 6px 18px;
   margin: 0;
   font-size: 11.5px;
   color: var(--cm-text-muted);
 }
 
-.odds-profile__legend-item {
+.opp__legend-item {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
 }
 
-.odds-profile__fair {
-  display: inline-block;
-  width: 16px;
-  text-align: center;
+.opp__fair {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  background: var(--cm-surface-hover);
   font-style: italic;
   font-weight: 700;
+  color: var(--cm-text-secondary);
 }
 
-.odds-profile__matches {
+/* ------------------------------------------------------- matchs retenus */
+.opp__matches {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.opp__toggle {
+  align-self: flex-start;
+}
+
+.opp__chevron {
+  transition: transform var(--cm-transition);
+}
+
+.opp__chevron.is-open {
+  transform: rotate(90deg);
+}
+
+.opp__cards {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.odds-profile__toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  align-self: flex-start;
-  padding: 0;
-  border: none;
-  background: none;
-  color: var(--cm-accent);
-  font-size: 12.5px;
+/* Cotes de clôture et score de la période, à droite de la carte. */
+.opp__card {
+  --mcard-aside: 220px;
+}
+
+.opp__row-odds {
+  font-size: 11.5px;
   font-weight: 600;
-  cursor: pointer;
-}
-
-.odds-profile__chevron--open {
-  transform: rotate(90deg);
-}
-
-.odds-profile__table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 12px;
-}
-
-.odds-profile__table th {
-  text-align: left;
-  padding: 6px 6px;
-  color: var(--cm-text-muted);
-  font-weight: 600;
-  border-bottom: 1px solid var(--cm-border);
-}
-
-.odds-profile__table td {
-  padding: 6px 6px;
-  border-bottom: 1px solid var(--cm-border-soft);
-  vertical-align: top;
-}
-
-.odds-profile__score {
-  font-weight: 700;
-  white-space: nowrap;
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-.odds-profile__date {
+  color: var(--cm-text-secondary);
   white-space: nowrap;
 }
 
-.odds-profile__teams {
-  display: block;
-}
-
-.odds-profile__row-odds {
-  display: block;
-  margin-top: 2px;
+.opp__segment-score {
+  min-width: 0;
+  padding: 2px 8px;
   font-size: 11px;
-  color: var(--cm-text-muted);
-  font-variant-numeric: tabular-nums;
+  color: var(--cm-text-secondary);
 }
 
-.odds-profile__source {
+/* --------------------------------------------------------------- source */
+.opp__source {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
   margin: 0;
   font-size: 11px;
+  line-height: 1.5;
   color: var(--cm-text-muted);
 }
 
-@media (max-width: 420px) {
-  .odds-profile__controls-row {
-    grid-template-columns: 1fr;
+.opp__source :deep(svg) {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Panneau étroit : les commandes en colonne, les marchés sur deux colonnes, les cotes sous la carte. */
+@container opp (max-width: 420px) {
+  .opp__toolbar > * {
+    flex-basis: 100%;
   }
 
-  .odds-cell {
-    padding: 6px 6px 7px;
+  .opp__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .odds-cell__pct,
-  .odds-cell__odds {
-    font-size: 12px;
+  .opp__market {
+    padding: 10px 12px;
+  }
+
+  .opp__market-pct {
+    font-size: 20px;
+  }
+
+  .opp__card {
+    --mcard-aside: 120px;
   }
 }
 </style>

@@ -49,8 +49,13 @@ export function extractGoalLine(label) {
  * paris à la probabilité très différente.
  */
 export function marketBreakdownLabel(market, pick) {
-  const base = market.startsWith('Buts — ') ? 'Buts par équipe' : market;
-  const line = extractGoalLine(pick);
+  // Les marchés d'UNE équipe (« Corners — Arsenal ») se regroupent par type,
+  // pas par club : sinon une ligne par équipe rencontrée.
+  const parEquipe = /^(Buts|Corners|Tirs cadrés|Tirs) — /.exec(market);
+  const base = parEquipe ? `${parEquipe[1]} par équipe` : market;
+  // La ligne aussi pour les corners et les tirs (extractGoalLine, qui sert au
+  // règlement, ne lit que les buts et reste tel quel).
+  const line = /(?:plus|moins) de (\d+(?:[.,]\d+)?)\s*(?:buts?|corners?|tirs)/i.exec(pick ?? '')?.[1]?.replace(',', '.') ?? null;
   return line ? `${base} (${line})` : base;
 }
 

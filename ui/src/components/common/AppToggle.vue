@@ -11,7 +11,7 @@ const model = defineModel({ type: Boolean, required: true });
   <label class="toggle">
     <div v-if="label" class="toggle__text">
       <span class="toggle__label">{{ label }}</span>
-      <span v-if="description" class="toggle__description cm-text-muted">{{ description }}</span>
+      <span v-if="description" class="toggle__description">{{ description }}</span>
     </div>
     <span class="toggle__switch" :class="{ 'toggle__switch--on': model }" @click="model = !model">
       <input type="checkbox" v-model="model" class="cm-visually-hidden" />
@@ -37,39 +37,44 @@ const model = defineModel({ type: Boolean, required: true });
 
 .toggle__label {
   font-size: 13.5px;
+  font-weight: 600;
   color: var(--cm-text-primary);
 }
 
 .toggle__description {
   font-size: 12px;
+  line-height: 1.45;
+  color: var(--cm-text-muted);
 }
 
 .toggle__switch {
   flex-shrink: 0;
-  width: 38px;
-  height: 22px;
+  width: 42px;
+  height: 24px;
   border-radius: 999px;
-  background: var(--cm-border);
+  background: var(--cm-border-strong);
   position: relative;
-  transition: background var(--cm-transition);
+  transition: background var(--cm-transition), box-shadow var(--cm-transition);
 }
 
 .toggle__switch--on {
-  background: var(--cm-accent);
+  background: var(--cm-section);
+  box-shadow: 0 0 0 3px rgba(var(--cm-section-rgb) / 0.18);
 }
 
 .toggle__knob {
   position: absolute;
   top: 3px;
   left: 3px;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   transition: transform var(--cm-transition);
 }
 
 .toggle__switch--on .toggle__knob {
-  transform: translateX(16px);
+  transform: translateX(18px);
 }
 </style>

@@ -3,10 +3,15 @@ import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useApiHealth } from '@/composables/useApiHealth.js';
 import { refreshApi } from '@/services/refreshApi.js';
+import AppIcon from '@/components/common/AppIcon.vue';
 
 const route = useRoute();
 const router = useRouter();
 const title = computed(() => route.meta?.title ?? 'CôteMaster');
+const SECTIONS = { matches: 'Matchs', bets: 'Mes paris', history: 'Historique moteur', settings: 'Réglages' };
+// Le fil : la section, puis la page quand elle en diffère (« Matchs › Équipe »).
+const section = computed(() => SECTIONS[route.meta?.section] ?? null);
+const sousPage = computed(() => (section.value && section.value !== title.value ? title.value : null));
 const { isOnline } = useApiHealth();
 
 // Repère de l'actualisation automatique : une passe en cours, ou l'heure de
@@ -66,7 +71,10 @@ const statusLabel = computed(() => {
 
 <template>
   <header class="topbar">
-    <h1 class="topbar__title">{{ title }}</h1>
+    <div class="topbar__titles">
+      <span v-if="sousPage" class="topbar__eyebrow">{{ section }} › {{ sousPage }}</span>
+      <h1 class="topbar__title">{{ title }}</h1>
+    </div>
 
     <div class="topbar__right">
       <button
@@ -77,6 +85,7 @@ const statusLabel = computed(() => {
         title="Actualisation automatique — détails dans Réglages"
         @click="router.push({ name: 'settings' }).catch(() => {})"
       >
+        <AppIcon name="refresh" :size="12" class="topbar__refresh-icon" :class="{ 'is-spinning': refreshTone === 'running' }" />
         {{ refreshLabel }}
       </button>
       <div class="topbar__status" :class="{ 'topbar__status--online': isOnline, 'topbar__status--offline': isOnline === false }">
@@ -93,40 +102,79 @@ const statusLabel = computed(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 28px;
+  gap: 16px;
+  padding: 0 30px;
   border-bottom: 1px solid var(--cm-glass-border);
   position: sticky;
   top: 0;
+  background: rgb(var(--cm-glass-tint) / var(--cm-elevation-1));
   backdrop-filter: blur(var(--cm-elevation-1-blur)) saturate(var(--cm-glass-saturate));
   -webkit-backdrop-filter: blur(var(--cm-elevation-1-blur)) saturate(var(--cm-glass-saturate));
   z-index: 10;
 }
 
+.topbar__titles {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.topbar__eyebrow {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  color: var(--cm-section);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .topbar__title {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .topbar__right {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .topbar__refresh {
-  padding: 3px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
   border: 1px solid var(--cm-border-soft);
   border-radius: 999px;
-  background: none;
+  background: rgba(255, 255, 255, 0.03);
   font: inherit;
   font-size: 11.5px;
+  font-weight: 600;
   color: var(--cm-text-muted);
   cursor: pointer;
+  transition: border-color var(--cm-transition), color var(--cm-transition);
+}
+
+.topbar__refresh:hover {
+  border-color: var(--cm-border);
+  color: var(--cm-text-secondary);
+}
+
+.topbar__refresh--ok {
+  color: var(--cm-text-secondary);
 }
 
 .topbar__refresh--running {
   color: var(--cm-warning);
-  border-color: var(--cm-warning-soft);
+  border-color: rgba(var(--cm-warning-rgb) / 0.3);
 }
 
 .topbar__refresh--warn {
@@ -135,14 +183,28 @@ const statusLabel = computed(() => {
 
 .topbar__refresh--error {
   color: var(--cm-danger);
-  border-color: var(--cm-danger-soft);
+  border-color: rgba(var(--cm-danger-rgb) / 0.3);
+}
+
+.topbar__refresh-icon.is-spinning {
+  animation: topbar-spin 1.4s linear infinite;
+}
+
+@keyframes topbar-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .topbar__status {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 12.5px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--cm-border-soft);
+  font-size: 11.5px;
+  font-weight: 600;
   color: var(--cm-text-muted);
 }
 
@@ -155,6 +217,7 @@ const statusLabel = computed(() => {
 
 .topbar__status--online {
   color: var(--cm-accent);
+  border-color: rgba(var(--cm-accent-rgb) / 0.25);
 }
 .topbar__status--online .topbar__dot {
   background: var(--cm-accent);
@@ -163,9 +226,20 @@ const statusLabel = computed(() => {
 
 .topbar__status--offline {
   color: var(--cm-danger);
+  border-color: rgba(var(--cm-danger-rgb) / 0.3);
 }
 .topbar__status--offline .topbar__dot {
   background: var(--cm-danger);
   box-shadow: 0 0 0 3px var(--cm-danger-soft);
+}
+
+@media (max-width: 900px) {
+  .topbar {
+    padding: 0 16px;
+  }
+
+  .topbar__refresh {
+    display: none;
+  }
 }
 </style>

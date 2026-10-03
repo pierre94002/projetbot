@@ -1,60 +1,97 @@
+/* ==========================================================================
+   Jetons de l'interface CôteMaster — refonte visuelle du 01/10/2026
+   (demande de Pierre : « une appli digne d'un ingénieur web », la couleur
+   d'ambiance change avec la section).
+   --------------------------------------------------------------------------
+   Deux familles de couleurs, à ne jamais confondre :
+   - les couleurs SÉMANTIQUES (--cm-accent = positif/validé, --cm-danger,
+     --cm-warning, --cm-info) : stables partout, elles portent un sens ;
+   - la couleur de SECTION (--cm-section) : celle de la page où l'on est
+     (Matchs émeraude, Mes paris or, Historique moteur violet, Réglages
+     cyan), posée par AppShell via [data-section]. Elle teinte le fond, la
+     barre latérale, les onglets, les en-têtes — jamais un badge de résultat.
+   ========================================================================== */
 :root {
-  /* Surfaces */
-  --cm-bg: #0a0d13;
-  --cm-surface: #12161f;
-  --cm-surface-alt: #171c28;
-  --cm-surface-hover: #1d2432;
-  --cm-border: #232a3a;
-  --cm-border-soft: #1a202c;
+  /* Surfaces (fond navy profond, surfaces à peine plus claires) */
+  --cm-bg: #090c12;
+  --cm-surface: #10141c;
+  --cm-surface-alt: #151a24;
+  --cm-surface-hover: #1c2230;
+  --cm-surface-raised: #1f2634;
+  --cm-border: #242c3b;
+  --cm-border-soft: #1b212c;
+  --cm-border-strong: #313b4e;
 
   /* Texte */
-  --cm-text-primary: #edf0f5;
+  --cm-text-primary: #eef1f6;
   --cm-text-secondary: #9aa4ba;
-  --cm-text-muted: #5c6780;
+  --cm-text-muted: #606b84;
+  --cm-text-on-accent: #06251b;
 
-  /* Accents */
+  /* Couleurs sémantiques */
   --cm-accent: #34d399;
   --cm-accent-strong: #10b981;
   --cm-accent-soft: rgba(52, 211, 153, 0.12);
+  --cm-accent-rgb: 52 211 153;
   --cm-danger: #f87171;
   --cm-danger-soft: rgba(248, 113, 113, 0.12);
+  --cm-danger-rgb: 248 113 113;
   --cm-warning: #fbbf24;
   --cm-warning-soft: rgba(251, 191, 36, 0.12);
+  --cm-warning-rgb: 251 191 36;
   --cm-info: #60a5fa;
   --cm-info-soft: rgba(96, 165, 250, 0.12);
+  --cm-info-rgb: 96 165 250;
+  --cm-violet: #a78bfa;
+  --cm-violet-soft: rgba(167, 139, 250, 0.14);
+  --cm-violet-rgb: 167 139 250;
+  --cm-cyan: #22d3ee;
+  --cm-cyan-soft: rgba(34, 211, 238, 0.12);
+  --cm-cyan-rgb: 34 211 238;
+  --cm-gold: #f5b942;
+  --cm-gold-soft: rgba(245, 185, 66, 0.14);
+  --cm-gold-rgb: 245 185 66;
+
+  /* Couleur de section (valeur par défaut : Matchs) — redéfinie par
+     [data-section] ci-dessous. --cm-section-glow-2 est la seconde tache du
+     fond, pour que l'ambiance ne soit jamais monochrome. */
+  --cm-section: var(--cm-accent);
+  --cm-section-rgb: var(--cm-accent-rgb);
+  --cm-section-soft: rgba(var(--cm-section-rgb) / 0.12);
+  --cm-section-glow: rgba(var(--cm-section-rgb) / 0.2);
+  --cm-section-glow-2: rgba(34, 211, 238, 0.12);
+  --cm-section-on: #06251b;
 
   /* Forme */
-  --cm-radius-sm: 6px;
-  --cm-radius: 10px;
-  --cm-radius-lg: 16px;
-  --cm-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+  --cm-radius-xs: 6px;
+  --cm-radius-sm: 9px;
+  --cm-radius: 12px;
+  --cm-radius-md: 14px;
+  --cm-radius-lg: 18px;
+  --cm-radius-xl: 24px;
+  --cm-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(0, 0, 0, 0.2);
+  --cm-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+  --cm-shadow-lg: 0 18px 50px rgba(0, 0, 0, 0.45);
+  --cm-shadow-section: 0 6px 20px rgba(var(--cm-section-rgb) / 0.28);
 
   /* Matériau "glass" (flat glass blur) — vient EN PLUS des surfaces opaques
-     ci-dessus, jamais à la place. Direction délibérément "flat" et pas
-     glossy : pas d'ombre marquée, pas de bordure lumineuse, flou modéré —
-     seules la transparence et le flou donnent le relief, comme le Centre de
-     contrôle iOS en mode sombre (matériau = fond assombri légèrement teinté
-     de blanc + flou, pas un film blanc opaque). Un fond doux (cf.
-     .shell__wash dans AppShell.vue) est nécessaire pour que le flou révèle
-     quelque chose : flouter une couleur plate ne produit aucun effet visible.
-
-     Triplet RGB (pas un rgba figé) pour faire varier l'alpha indépendamment :
-     rgb(var(--cm-glass-tint) / var(--cm-elevation-2)) par ex. */
+     ci-dessus, jamais à la place. Transparence + flou + bordure fine, pas de
+     film blanc opaque. Un fond doux (cf. .shell__wash dans AppShell.vue) est
+     nécessaire pour que le flou révèle quelque chose. Triplet RGB pour faire
+     varier l'alpha : rgb(var(--cm-glass-tint) / var(--cm-elevation-2)). */
   --cm-glass-tint: 255 255 255;
-  --cm-glass-alpha-1: 0.04;
-  --cm-glass-alpha-2: 0.07;
-  --cm-glass-alpha-3: 0.1;
-  --cm-glass-border: rgba(255, 255, 255, 0.08);
-  --cm-glass-blur-sm: 12px;
-  --cm-glass-blur-md: 20px;
-  --cm-glass-blur-lg: 32px;
-  --cm-glass-saturate: 1.2;
+  --cm-glass-alpha-1: 0.035;
+  --cm-glass-alpha-2: 0.055;
+  --cm-glass-alpha-3: 0.09;
+  --cm-glass-border: rgba(255, 255, 255, 0.07);
+  --cm-glass-highlight: rgba(255, 255, 255, 0.09);
+  --cm-glass-blur-sm: 14px;
+  --cm-glass-blur-md: 22px;
+  --cm-glass-blur-lg: 34px;
+  --cm-glass-saturate: 1.25;
 
-  /* Presets d'élévation — un nom plutôt que recomposer alpha+flou à chaque
-     composant (même principe que --cm-surface-hover aujourd'hui). Jamais
-     d'ombre portée marquée à aucun niveau, seulement alpha+flou+bordure
-     hairline : 1 = chrome persistant (sidebar/topbar), 2 = cards/panneaux,
-     3 = popovers/dropdowns, 4 = modals (élévation la plus haute). */
+  /* Presets d'élévation : 1 = chrome persistant (sidebar/topbar), 2 = cartes,
+     3 = popovers, 4 = modals. */
   --cm-elevation-1: var(--cm-glass-alpha-1);
   --cm-elevation-1-blur: var(--cm-glass-blur-sm);
   --cm-elevation-2: var(--cm-glass-alpha-2);
@@ -64,17 +101,48 @@
   --cm-elevation-4: var(--cm-glass-alpha-3);
   --cm-elevation-4-blur: var(--cm-glass-blur-lg);
 
-  /* Alias sport — coût nul aujourd'hui (football = seul sport actif), évite
-     une passe de renommage si un futur sport a besoin de son propre accent
-     sans toucher --cm-accent (encore utilisé tel quel un peu partout). */
+  /* Alias sport — football = seul sport actif. */
   --cm-sport-accent: var(--cm-accent);
 
   /* Typo */
-  --cm-font: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+  --cm-font: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
   --cm-font-mono: 'Cascadia Code', 'SF Mono', Consolas, monospace;
 
   /* Rythme */
-  --cm-sidebar-width: 240px;
+  --cm-sidebar-width: 248px;
   --cm-topbar-height: 64px;
   --cm-transition: 160ms ease;
+  --cm-transition-slow: 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---- Couleur de section : posée par AppShell sur sa racine ---------------
+   Matchs : émeraude (la marque). Mes paris : or. Historique moteur : violet.
+   Réglages : cyan. Les pages de détail (match, équipe, joueur) suivent la
+   section d'où l'on vient (cf. router meta.section). */
+[data-section='matches'] {
+  --cm-section: #34d399;
+  --cm-section-rgb: 52 211 153;
+  --cm-section-glow-2: rgba(34, 211, 238, 0.12);
+  --cm-section-on: #06251b;
+}
+
+[data-section='bets'] {
+  --cm-section: #f5b942;
+  --cm-section-rgb: 245 185 66;
+  --cm-section-glow-2: rgba(251, 113, 133, 0.11);
+  --cm-section-on: #2a1a02;
+}
+
+[data-section='history'] {
+  --cm-section: #a78bfa;
+  --cm-section-rgb: 167 139 250;
+  --cm-section-glow-2: rgba(96, 165, 250, 0.13);
+  --cm-section-on: #170f33;
+}
+
+[data-section='settings'] {
+  --cm-section: #38bdf8;
+  --cm-section-rgb: 56 189 248;
+  --cm-section-glow-2: rgba(148, 163, 184, 0.12);
+  --cm-section-on: #06202d;
 }

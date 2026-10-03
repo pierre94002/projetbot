@@ -1,26 +1,40 @@
 <script setup>
+import AppIcon from '@/components/common/AppIcon.vue';
+
+/**
+ * Les constats d'une analyse IA : facteur, constat, preuve, suggestion.
+ * Refonte visuelle du 01/10/2026 (guide ui/DESIGN.md) : le tableau commun
+ * .cm-table, le facteur en puce, la suggestion en vert. Aucune colonne n'a
+ * bougé.
+ */
 defineProps({
   findings: { type: Array, default: () => [] }
 });
 </script>
 
 <template>
-  <div class="ai-findings-table-wrap">
-    <table class="ai-findings-table">
+  <div class="cm-table-wrap findings">
+    <table class="cm-table findings__table">
       <thead>
         <tr>
           <th>Facteur</th>
-          <th>Constat</th>
-          <th>Preuve</th>
-          <th>Suggestion</th>
+          <th class="is-left">Constat</th>
+          <th class="is-left">Preuve</th>
+          <th class="is-left">Suggestion</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(finding, index) in findings" :key="index">
-          <td><span class="ai-findings-table__factor">{{ finding.factor }}</span></td>
-          <td>{{ finding.observation }}</td>
-          <td class="cm-text-muted">{{ finding.evidence }}</td>
-          <td class="ai-findings-table__suggestion">{{ finding.suggestionText }}</td>
+          <td><span class="cm-chip is-section findings__factor">{{ finding.factor }}</span></td>
+          <td class="is-left findings__observation">{{ finding.observation }}</td>
+          <td class="is-left cm-text-muted findings__evidence">{{ finding.evidence }}</td>
+          <td class="is-left findings__suggestion">
+            <AppIcon name="arrowRight" :size="12" class="findings__suggestion-icon" />
+            <span>{{ finding.suggestionText }}</span>
+          </td>
+        </tr>
+        <tr v-if="!findings.length">
+          <td colspan="4" class="is-left cm-text-muted findings__empty">Aucun constat dans cette analyse.</td>
         </tr>
       </tbody>
     </table>
@@ -28,63 +42,57 @@ defineProps({
 </template>
 
 <style scoped>
-.ai-findings-table-wrap {
-  overflow-x: auto;
-}
-
-.ai-findings-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 12px;
+/* Des phrases, pas des chiffres : les cellules se replient sur plusieurs lignes. */
+.findings__table {
   table-layout: fixed;
+  min-width: 520px;
 }
 
-.ai-findings-table th,
-.ai-findings-table td {
-  padding: 7px 10px;
-  text-align: left;
-  vertical-align: top;
-  border-bottom: 1px solid var(--cm-border-soft);
+.findings__table th,
+.findings__table td {
   white-space: normal;
   overflow-wrap: break-word;
+  vertical-align: top;
+  line-height: 1.5;
 }
 
-.ai-findings-table th {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  color: var(--cm-text-muted);
-  font-weight: 600;
+.findings__table th:nth-child(1),
+.findings__table td:nth-child(1) {
+  width: 15%;
 }
 
-.ai-findings-table th:nth-child(1),
-.ai-findings-table td:nth-child(1) {
-  width: 11%;
+.findings__table th:nth-child(3),
+.findings__table td:nth-child(3) {
+  width: 26%;
 }
 
-.ai-findings-table th:nth-child(3),
-.ai-findings-table td:nth-child(3) {
-  width: 28%;
-  font-size: 11px;
+.findings__factor {
+  white-space: normal;
+  text-align: left;
+  line-height: 1.3;
 }
 
-.ai-findings-table tbody tr:last-child td {
-  border-bottom: none;
+.findings__observation {
+  color: var(--cm-text-primary);
 }
 
-.ai-findings-table__factor {
-  display: inline-block;
-  padding: 2px 7px;
-  border-radius: 999px;
-  background: var(--cm-surface-hover);
-  color: var(--cm-text-secondary);
-  font-size: 9.5px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
+.findings__evidence {
+  font-size: 11.5px;
 }
 
-.ai-findings-table__suggestion {
+/* La suggestion : ce qu'il faudrait changer, en vert de la marque. */
+.findings__suggestion {
   color: var(--cm-accent);
+}
+
+.findings__suggestion-icon {
+  display: inline-block;
+  margin-right: 5px;
+  vertical-align: -1px;
+}
+
+.findings__empty {
+  padding: 14px 12px;
+  text-align: center;
 }
 </style>

@@ -11,6 +11,7 @@ import AppTextField from '@/components/common/AppTextField.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import MatchStatusBadge from '@/components/common/MatchStatusBadge.vue';
 import LeagueBadge from '@/components/matches/LeagueBadge.vue';
+import MatchCard from '@/components/matches/MatchCard.vue';
 import TabbedView from '@/components/common/TabbedView.vue';
 import BetsPerformanceView from '@/views/BetsPerformanceView.vue';
 import BetsTicketsView from '@/views/BetsTicketsView.vue';
@@ -145,6 +146,26 @@ const marketBreakdownTotal = computed(() => {
   };
 });
 
+// Chiffres du bandeau (présentation seule, refonte du 01/10/2026) : les mêmes
+// nombres que la phrase de synthèse, lisibles d'un coup d'œil — le taux de
+// réussite en anneau, puis corrects / incorrects / en attente en tuiles.
+const chiffresMoteur = computed(() => {
+  const entrees = predictionsStore.entries;
+  const compte = (statut) => entrees.filter((e) => e.status === statut).length;
+  const corrects = compte('correct');
+  const incorrects = compte('incorrect');
+  const regles = corrects + incorrects;
+  return {
+    total: entrees.length,
+    jours: predictionDailySummaries.value.length,
+    corrects,
+    incorrects,
+    enAttente: compte('pending'),
+    regles,
+    taux: regles > 0 ? Math.round((corrects / regles) * 100) : null
+  };
+});
+
 // Regroupement par match — sert à saisir le score final UNE SEULE FOIS par
 // match plutôt que de cliquer Correct/Incorrect sur chaque marché un par un.
 const entryGroups = computed(() => {
@@ -232,6 +253,26 @@ function matchKickoff(matchId) {
   return matchesStore.matches.find((m) => m.matchId === matchId)?.commenceTime ?? null;
 }
 
+// Résultats enregistrés (match-results.json), à part des champs de saisie :
+// la carte montre le score connu, pas celui qu'on est en train de taper.
+const resultatsConnus = reactive({});
+
+// Le match d'un groupe au format de la carte de rencontre commune (MatchCard.vue, 01/10/2026).
+function versCarte(group) {
+  const r = resultatsConnus[group.matchId];
+  return {
+    matchId: group.matchId,
+    date: group.day,
+    commenceTime: matchKickoff(group.matchId),
+    league: group.league,
+    homeName: group.homeName,
+    awayName: group.awayName,
+    homeGoals: r?.home ?? null,
+    awayGoals: r?.away ?? null,
+    status: r ? 'finished' : 'scheduled'
+  };
+}
+
 onMounted(() => {
   predictionsStore.fetchPredictions();
   betsStore.fetchBets();
@@ -250,6 +291,7 @@ onMounted(() => {
     .then(({ results }) => {
       for (const result of results) {
         scores[result.matchId] = { home: result.homeGoals, away: result.awayGoals };
+        resultatsConnus[result.matchId] = { home: result.homeGoals, away: result.awayGoals };
       }
     })
     .catch(() => {});
@@ -257,418 +299,674 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="predictions-history-view">
+  <div class="hist cm-page">
     <TabbedView v-model="activeTab" :tabs="TABS" query-param="onglet" />
 
     <Transition name="view" mode="out-in">
-    <BetsPerformanceView v-if="activeTab === 'performance'" key="performance" />
-    <BetsTicketsView v-else-if="activeTab === 'tickets'" key="tickets" />
+      <BetsPerformanceView v-if="activeTab === 'performance'" key="performance" />
+      <BetsTicketsView v-else-if="activeTab === 'tickets'" key="tickets" />
 
-    <div v-else key="moteur" class="predictions-history-view__default">
-    <AppCard
-      title="Historique — Pronostics du moteur"
-      subtitle="Résultat, total buts, les 2 équipes marquent, buts par équipe — moyenne générale sur tous les matchs scannés"
-    >
-      <template #actions>
-        <AppButton variant="secondary" size="sm" :loading="predictionsStore.loading" @click="predictionsStore.fetchPredictions">
-          <template #icon><AppIcon name="refresh" :size="14" /></template>
-          Actualiser
-        </AppButton>
-      </template>
-
-      <p v-if="predictionSummary" class="cm-text-secondary performance-summary performance-summary--main">{{ predictionSummary }}</p>
-      <p v-else class="cm-text-muted performance-summary">
-        Aucun match scanné pour l'instant — lance un scan depuis <RouterLink to="/paris">Mes paris</RouterLink>.
-      </p>
-
-      <h3 class="daily-table__subheading">
-        Taux de réussite par marché <span class="cm-text-muted">(toutes journées confondues)</span>
-      </h3>
-      <div class="daily-table-scroll">
-        <table class="daily-table">
-          <thead>
-            <tr>
-              <th>Marché</th>
-              <th>Prédictions</th>
-              <th>Corrects</th>
-              <th>Incorrects</th>
-              <th>En attente</th>
-              <th>Taux de réussite</th>
-              <th>Taux d'échec</th>
-              <th>Yield <span class="cm-text-muted">(simulé, mise 10€)</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-if="!marketBreakdown.length">
-              <td colspan="8" class="daily-table__empty cm-text-muted">Aucune donnée pour l'instant.</td>
-            </tr>
-            <tr v-for="m in marketBreakdown" :key="m.market">
-              <td class="daily-table__day">{{ m.market }}</td>
-              <td class="cm-numeric">{{ m.total }}</td>
-              <td class="cm-numeric cm-positive">{{ m.correct || '—' }}</td>
-              <td class="cm-numeric cm-negative">{{ m.incorrect || '—' }}</td>
-              <td class="cm-numeric cm-text-muted">{{ m.pending || '—' }}</td>
-              <td class="cm-numeric cm-positive">{{ m.hitRate === null ? '—' : `${m.hitRate.toFixed(0)}%` }}</td>
-              <td class="cm-numeric cm-negative">{{ m.failRate === null ? '—' : `${m.failRate.toFixed(0)}%` }}</td>
-              <td class="cm-numeric" :class="(m.yieldPercent ?? 0) >= 0 ? 'cm-positive' : 'cm-negative'">
-                {{ m.yieldPercent === null ? '—' : formatPercent(m.yieldPercent, { showSign: true }) }}
-              </td>
-            </tr>
-            <tr v-if="marketBreakdown.length" class="daily-table__total">
-              <td class="daily-table__day">Tous marchés</td>
-              <td class="cm-numeric">{{ marketBreakdownTotal.total }}</td>
-              <td class="cm-numeric cm-positive">{{ marketBreakdownTotal.correct || '—' }}</td>
-              <td class="cm-numeric cm-negative">{{ marketBreakdownTotal.incorrect || '—' }}</td>
-              <td class="cm-numeric cm-text-muted">{{ marketBreakdownTotal.pending || '—' }}</td>
-              <td class="cm-numeric cm-positive">{{ marketBreakdownTotal.hitRate === null ? '—' : `${marketBreakdownTotal.hitRate.toFixed(0)}%` }}</td>
-              <td class="cm-numeric cm-negative">{{ marketBreakdownTotal.failRate === null ? '—' : `${marketBreakdownTotal.failRate.toFixed(0)}%` }}</td>
-              <td class="cm-numeric" :class="(marketBreakdownTotal.yieldPercent ?? 0) >= 0 ? 'cm-positive' : 'cm-negative'">
-                {{ marketBreakdownTotal.yieldPercent === null ? '—' : formatPercent(marketBreakdownTotal.yieldPercent, { showSign: true }) }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </AppCard>
-
-    <AppCard :padded="false" title="">
-      <div class="predictions-search">
-        <AppTextField v-model="predictionsSearchQuery" placeholder="Rechercher un match réglé (équipe, marché, pick)…">
-          <template #icon><AppIcon name="search" :size="15" /></template>
-        </AppTextField>
-      </div>
-
-      <EmptyState
-        v-if="predictionsStore.entries.length === 0"
-        icon="target"
-        title="Aucun match scanné"
-        description="Va sur la page Mes paris et clique sur « Charger les value bets » pour lancer un scan."
-      />
-      <EmptyState
-        v-else-if="visibleEntryGroups.length === 0 && predictionsSearchQuery.trim()"
-        icon="search"
-        title="Aucun résultat"
-        :description="`Aucun match ne correspond à «${predictionsSearchQuery.trim()}».`"
-      />
-      <EmptyState
-        v-else-if="visibleEntryGroups.length === 0"
-        icon="target"
-        title="Aucun match en attente"
-        description="Tous les matchs scannés sont réglés — recherche un match précis ci-dessus pour le retrouver."
-      />
-      <div v-else class="match-groups">
-        <div v-for="leagueGroup in groupedByLeague" :key="leagueGroup.league" class="league-group">
-          <div
-            class="league-group__header"
-            role="button"
-            tabindex="0"
-            @click="toggleLeague(leagueGroup.league)"
-            @keydown.enter="toggleLeague(leagueGroup.league)"
-          >
-            <LeagueBadge :league="leagueGroup.league" />
-            <span class="cm-text-muted cm-numeric league-group__count">{{ leagueGroup.groups.length }}</span>
-            <AppIcon
-              name="chevronRight"
-              :size="12"
-              class="league-group__chevron"
-              :class="{ 'league-group__chevron--open': isLeagueOpen(leagueGroup.league) }"
-            />
-          </div>
-
-          <template v-if="isLeagueOpen(leagueGroup.league)">
-        <div v-for="group in leagueGroup.groups" :key="group.matchId" class="match-group">
-          <div class="match-group__header">
-            <div class="match-group__title">
-              <p class="match-group__match cm-truncate">
-                <button type="button" class="cm-team-link" @click.stop="teamStatsModalStore.openFor(group.homeName, group.league, group.matchId)">{{ group.homeName }}</button>
-                vs
-                <button type="button" class="cm-team-link" @click.stop="teamStatsModalStore.openFor(group.awayName, group.league, group.matchId)">{{ group.awayName }}</button>
-              </p>
-              <p class="cm-text-muted match-group__meta cm-truncate">
-                {{ formatDay(group.day) }}
-                <MatchStatusBadge :commence-time="matchKickoff(group.matchId)" class="match-group__status-badge" />
-                <span v-if="matchAiAnalysisStore.byMatchId[group.matchId]" class="match-group__ai-badge" title="Analyse IA disponible pour ce match">
-                  <AppIcon name="bolt" :size="9" />IA
-                </span>
-              </p>
-            </div>
-            <div class="match-group__score">
-              <span class="cm-text-muted match-group__score-label">Score final</span>
-              <input
-                type="number"
-                min="0"
-                class="score-input"
-                :value="getScore(group.matchId).home"
-                placeholder="0"
-                @input="onScoreInput(group.matchId, 'home', $event)"
-              />
-              <span class="cm-text-muted">-</span>
-              <input
-                type="number"
-                min="0"
-                class="score-input"
-                :value="getScore(group.matchId).away"
-                placeholder="0"
-                @input="onScoreInput(group.matchId, 'away', $event)"
-              />
-              <AppButton
-                variant="secondary"
-                size="sm"
-                :loading="settling[group.matchId]"
-                :disabled="getScore(group.matchId).home === null || getScore(group.matchId).away === null"
-                @click="settleMatch(group, getScore(group.matchId))"
-              >
-                Régler
+      <div v-else key="moteur" class="hist__tab cm-page">
+        <!-- 1. LE BANDEAU : ce que vaut le moteur, d'un coup d'œil -->
+        <section class="cm-hero">
+          <div class="cm-hero__top">
+            <h2 class="cm-hero__title">
+              <span class="cm-icon-box"><AppIcon name="cpu" :size="18" /></span>
+              Historique — Pronostics du moteur
+            </h2>
+            <div class="hist-hero__side">
+              <span class="cm-hero__chips">
+                <span class="cm-chip is-section"><AppIcon name="target" :size="11" />{{ chiffresMoteur.total }} pronostic{{ chiffresMoteur.total > 1 ? 's' : '' }}</span>
+                <span class="cm-chip"><AppIcon name="calendar" :size="11" />{{ chiffresMoteur.jours }} jour{{ chiffresMoteur.jours > 1 ? 's' : '' }} actif{{ chiffresMoteur.jours > 1 ? 's' : '' }}</span>
+              </span>
+              <AppButton variant="secondary" size="sm" :loading="predictionsStore.loading" @click="predictionsStore.fetchPredictions">
+                <template #icon><AppIcon name="refresh" :size="14" /></template>
+                Actualiser
               </AppButton>
             </div>
           </div>
+          <p class="cm-hero__subtitle">Résultat, total buts, les 2 équipes marquent, buts par équipe — moyenne générale sur tous les matchs scannés.</p>
 
-          <div class="match-group__summary">
-            <span class="cm-text-muted cm-numeric">{{ group.entries.length }} pronostic(s)</span>
-            <span v-if="countByStatus(group, 'correct')" class="cm-positive cm-numeric">{{ countByStatus(group, 'correct') }} correct(s)</span>
-            <span v-if="countByStatus(group, 'incorrect')" class="cm-negative cm-numeric">{{ countByStatus(group, 'incorrect') }} incorrect(s)</span>
-            <span v-if="countByStatus(group, 'pending')" class="cm-text-muted cm-numeric">{{ countByStatus(group, 'pending') }} en attente</span>
-            <RouterLink :to="`/historique-moteur/${group.matchId}`" class="match-group__detail-link">
-              Voir le détail <AppIcon name="chevronRight" :size="12" />
-            </RouterLink>
+          <div class="hist-hero__body">
+            <!-- L'anneau : la part de pronostics corrects parmi les réglés. -->
+            <div
+              class="hist-ring"
+              :class="{ 'is-empty': chiffresMoteur.taux === null }"
+              :style="{ '--p': chiffresMoteur.taux ?? 0 }"
+              title="Taux de réussite du moteur sur les pronostics réglés"
+            >
+              <span class="hist-ring__value">{{ chiffresMoteur.taux === null ? '—' : `${chiffresMoteur.taux}%` }}</span>
+              <span class="hist-ring__label">réussite</span>
+            </div>
+            <div class="hist-hero__text">
+              <p v-if="predictionSummary" class="hist-hero__summary">{{ predictionSummary }}</p>
+              <p v-else class="hist-hero__summary is-muted">
+                Aucun match scanné pour l'instant — lance un scan depuis <RouterLink to="/paris" class="cm-link">Mes paris</RouterLink>.
+              </p>
+              <p class="hist-hero__note">
+                « Correct » : l'issue pronostiquée (la cote la plus basse du moteur) a bien eu lieu. Le yield est simulé sur une mise fixe de 10 € à la cote du
+                moteur — aucune mise réelle n'est engagée ici, les vraies mises et retours sont dans Performance paris.
+              </p>
+            </div>
           </div>
-        </div>
-          </template>
-        </div>
+
+          <div class="cm-kpis">
+            <div class="cm-kpi is-section">
+              <span class="cm-kpi__label">Pronostics corrects</span>
+              <span class="cm-kpi__value">{{ chiffresMoteur.corrects }}</span>
+              <span class="cm-kpi__detail">sur {{ chiffresMoteur.regles }} réglé{{ chiffresMoteur.regles > 1 ? 's' : '' }}</span>
+            </div>
+            <div class="cm-kpi">
+              <span class="cm-kpi__label">Incorrects</span>
+              <span class="cm-kpi__value cm-negative">{{ chiffresMoteur.incorrects }}</span>
+              <span class="cm-kpi__detail">issue pronostiquée non réalisée</span>
+            </div>
+            <div class="cm-kpi">
+              <span class="cm-kpi__label">En attente</span>
+              <span class="cm-kpi__value">{{ chiffresMoteur.enAttente }}</span>
+              <span class="cm-kpi__detail">score final à saisir ci-dessous</span>
+            </div>
+            <div class="cm-kpi">
+              <span class="cm-kpi__label">Yield simulé</span>
+              <span class="cm-kpi__value" :class="(marketBreakdownTotal.yieldPercent ?? 0) >= 0 ? 'cm-positive' : 'cm-negative'">
+                {{ marketBreakdownTotal.yieldPercent === null ? '—' : formatPercent(marketBreakdownTotal.yieldPercent, { showSign: true }) }}
+              </span>
+              <span class="cm-kpi__detail">mise fixe de 10 €, tous marchés</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. LE TABLEAU PAR MARCHÉ -->
+        <AppCard
+          icon="barChart"
+          title="Taux de réussite par marché"
+          subtitle="Toutes journées confondues — la ligne de buts (0.5 / 1.5 / 2.5…) compte comme un marché à part, un « Plus de 0.5 » et un « Plus de 2.5 » n'ayant pas la même probabilité."
+        >
+          <div class="cm-table-wrap">
+            <table class="cm-table">
+              <thead>
+                <tr>
+                  <th>Marché</th>
+                  <th>Prédictions</th>
+                  <th>Corrects</th>
+                  <th>Incorrects</th>
+                  <th>En attente</th>
+                  <th>Taux de réussite</th>
+                  <th>Taux d'échec</th>
+                  <th>Yield <span class="hist-th__hint">(simulé, mise 10€)</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-if="!marketBreakdown.length">
+                  <td colspan="8" class="hist-table__empty is-center cm-text-muted">Aucune donnée pour l'instant.</td>
+                </tr>
+                <tr v-for="m in marketBreakdown" :key="m.market">
+                  <td class="is-strong hist-table__market">{{ m.market }}</td>
+                  <td class="cm-numeric">{{ m.total }}</td>
+                  <td class="cm-numeric cm-positive">{{ m.correct || '—' }}</td>
+                  <td class="cm-numeric cm-negative">{{ m.incorrect || '—' }}</td>
+                  <td class="cm-numeric cm-text-muted">{{ m.pending || '—' }}</td>
+                  <td class="cm-numeric">
+                    <span class="hist-rate">
+                      <span class="cm-bar hist-rate__bar"><span class="cm-bar__fill" :style="{ width: `${m.hitRate ?? 0}%` }" /></span>
+                      <span class="cm-positive">{{ m.hitRate === null ? '—' : `${m.hitRate.toFixed(0)}%` }}</span>
+                    </span>
+                  </td>
+                  <td class="cm-numeric cm-negative">{{ m.failRate === null ? '—' : `${m.failRate.toFixed(0)}%` }}</td>
+                  <td class="cm-numeric">
+                    <span class="cm-pill hist-yield" :class="(m.yieldPercent ?? 0) >= 0 ? 'is-positive' : 'is-negative'">
+                      {{ m.yieldPercent === null ? '—' : formatPercent(m.yieldPercent, { showSign: true }) }}
+                    </span>
+                  </td>
+                </tr>
+                <tr v-if="marketBreakdown.length" class="is-total">
+                  <td class="is-strong hist-table__market">Tous marchés</td>
+                  <td class="cm-numeric">{{ marketBreakdownTotal.total }}</td>
+                  <td class="cm-numeric cm-positive">{{ marketBreakdownTotal.correct || '—' }}</td>
+                  <td class="cm-numeric cm-negative">{{ marketBreakdownTotal.incorrect || '—' }}</td>
+                  <td class="cm-numeric cm-text-muted">{{ marketBreakdownTotal.pending || '—' }}</td>
+                  <td class="cm-numeric">
+                    <span class="hist-rate">
+                      <span class="cm-bar hist-rate__bar"><span class="cm-bar__fill" :style="{ width: `${marketBreakdownTotal.hitRate ?? 0}%` }" /></span>
+                      <span class="cm-positive">{{ marketBreakdownTotal.hitRate === null ? '—' : `${marketBreakdownTotal.hitRate.toFixed(0)}%` }}</span>
+                    </span>
+                  </td>
+                  <td class="cm-numeric cm-negative">{{ marketBreakdownTotal.failRate === null ? '—' : `${marketBreakdownTotal.failRate.toFixed(0)}%` }}</td>
+                  <td class="cm-numeric">
+                    <span class="cm-pill hist-yield" :class="(marketBreakdownTotal.yieldPercent ?? 0) >= 0 ? 'is-positive' : 'is-negative'">
+                      {{ marketBreakdownTotal.yieldPercent === null ? '—' : formatPercent(marketBreakdownTotal.yieldPercent, { showSign: true }) }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </AppCard>
+
+        <!-- 3. LES RENCONTRES : le score à saisir, une fois par match -->
+        <AppCard :padded="false" title="">
+          <div class="hist-list__head">
+            <div class="hist-list__heading">
+              <span class="cm-icon-box"><AppIcon name="whistle" :size="17" /></span>
+              <div class="hist-list__titles">
+                <h3 class="hist-list__title">Rencontres scannées</h3>
+                <p class="hist-list__subtitle">
+                  Saisis le score final une seule fois par match : tous ses pronostics sont réglés d'un coup. Un match entièrement réglé sort de la liste, mais
+                  la recherche le retrouve.
+                </p>
+              </div>
+            </div>
+            <div class="hist-list__search">
+              <AppTextField v-model="predictionsSearchQuery" placeholder="Rechercher un match réglé (équipe, marché, pick)…">
+                <template #icon><AppIcon name="search" :size="15" /></template>
+              </AppTextField>
+            </div>
+          </div>
+
+          <div class="hist-list__body">
+            <EmptyState
+              v-if="predictionsStore.entries.length === 0"
+              icon="target"
+              title="Aucun match scanné"
+              description="Va sur la page Mes paris et clique sur « Charger les value bets » pour lancer un scan."
+            />
+            <EmptyState
+              v-else-if="visibleEntryGroups.length === 0 && predictionsSearchQuery.trim()"
+              icon="search"
+              title="Aucun résultat"
+              :description="`Aucun match ne correspond à «${predictionsSearchQuery.trim()}».`"
+            />
+            <EmptyState
+              v-else-if="visibleEntryGroups.length === 0"
+              icon="target"
+              title="Aucun match en attente"
+              description="Tous les matchs scannés sont réglés — recherche un match précis ci-dessus pour le retrouver."
+            />
+            <div v-else class="hist-groups">
+              <section v-for="leagueGroup in groupedByLeague" :key="leagueGroup.league" class="hist-league" :class="{ 'is-open': isLeagueOpen(leagueGroup.league) }">
+                <div
+                  class="hist-league__header"
+                  role="button"
+                  tabindex="0"
+                  @click="toggleLeague(leagueGroup.league)"
+                  @keydown.enter="toggleLeague(leagueGroup.league)"
+                >
+                  <AppIcon name="chevronRight" :size="13" class="hist-league__chevron" :class="{ 'is-open': isLeagueOpen(leagueGroup.league) }" />
+                  <LeagueBadge :league="leagueGroup.league" />
+                  <span class="cm-pill is-section cm-numeric hist-league__count" title="Rencontres dans ce championnat">{{ leagueGroup.groups.length }}</span>
+                </div>
+
+                <template v-if="isLeagueOpen(leagueGroup.league)">
+                  <div class="hist-league__matches cm-stagger">
+                    <article v-for="group in leagueGroup.groups" :key="group.matchId" class="hist-match">
+                      <div class="hist-match__row">
+                        <MatchCard
+                          :match="versCarte(group)"
+                          :to="`/historique-moteur/${group.matchId}`"
+                          :show-competition="false"
+                          team-links
+                          class="hist-match__card"
+                        >
+                          <template #aside>
+                            <span v-if="matchAiAnalysisStore.byMatchId[group.matchId]" class="hist-ai-badge" title="Analyse IA disponible pour ce match">
+                              <AppIcon name="bolt" :size="9" />IA
+                            </span>
+                            <MatchStatusBadge :commence-time="matchKickoff(group.matchId)" />
+                          </template>
+                        </MatchCard>
+
+                        <div class="hist-score">
+                          <span class="hist-score__label">Score final</span>
+                          <div class="hist-score__inputs">
+                            <input
+                              type="number"
+                              min="0"
+                              class="score-input"
+                              :value="getScore(group.matchId).home"
+                              placeholder="0"
+                              @input="onScoreInput(group.matchId, 'home', $event)"
+                            />
+                            <span class="hist-score__sep">-</span>
+                            <input
+                              type="number"
+                              min="0"
+                              class="score-input"
+                              :value="getScore(group.matchId).away"
+                              placeholder="0"
+                              @input="onScoreInput(group.matchId, 'away', $event)"
+                            />
+                          </div>
+                          <AppButton
+                            variant="section"
+                            size="sm"
+                            :loading="settling[group.matchId]"
+                            :disabled="getScore(group.matchId).home === null || getScore(group.matchId).away === null"
+                            @click="settleMatch(group, getScore(group.matchId))"
+                          >
+                            <template #icon><AppIcon name="check" :size="13" /></template>
+                            Régler
+                          </AppButton>
+                        </div>
+                      </div>
+
+                      <div class="hist-match__summary">
+                        <span class="cm-chip"><AppIcon name="target" :size="11" />{{ group.entries.length }} pronostic(s)</span>
+                        <span v-if="countByStatus(group, 'correct')" class="cm-chip is-accent"><AppIcon name="check" :size="11" />{{ countByStatus(group, 'correct') }} correct(s)</span>
+                        <span v-if="countByStatus(group, 'incorrect')" class="cm-chip is-danger"><AppIcon name="x" :size="11" />{{ countByStatus(group, 'incorrect') }} incorrect(s)</span>
+                        <span v-if="countByStatus(group, 'pending')" class="cm-chip"><AppIcon name="clock" :size="11" />{{ countByStatus(group, 'pending') }} en attente</span>
+                        <RouterLink :to="`/historique-moteur/${group.matchId}`" class="cm-link hist-match__detail">
+                          Voir le détail <AppIcon name="chevronRight" :size="12" />
+                        </RouterLink>
+                      </div>
+                    </article>
+                  </div>
+                </template>
+              </section>
+            </div>
+          </div>
+        </AppCard>
       </div>
-    </AppCard>
-    </div>
     </Transition>
   </div>
 </template>
 
 <style scoped>
-.predictions-history-view {
+/* La page se règle sur SA largeur : pleine page ou panneau étroit. */
+.hist {
+  container: hist / inline-size;
+}
+
+/* ------------------------------------------------------------ bandeau */
+.hist-hero__side {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+
+.hist-hero__body {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 18px;
+}
+
+.hist-hero__text {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 6px;
+  min-width: 0;
 }
 
-.predictions-history-view__default {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.performance-summary {
-  font-size: 12.5px;
-  margin-bottom: 14px;
-}
-
-.performance-summary--main {
-  font-size: 14px;
+.hist-hero__summary {
+  margin: 0;
+  font-size: 14.5px;
   font-weight: 600;
+  line-height: 1.6;
+  color: var(--cm-text-primary);
 }
 
-.daily-table-scroll {
-  overflow-x: auto;
+.hist-hero__summary.is-muted {
+  font-weight: 500;
+  color: var(--cm-text-secondary);
 }
 
-.daily-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 12.5px;
-}
-
-.daily-table th,
-.daily-table td {
-  padding: 8px 10px;
-  text-align: right;
-  border-bottom: 1px solid var(--cm-border-soft);
-  white-space: nowrap;
-}
-
-.daily-table th {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
+.hist-hero__note {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.55;
   color: var(--cm-text-muted);
-  font-weight: 600;
 }
 
-.daily-table th:first-child,
-.daily-table td:first-child {
-  text-align: left;
+/* L'anneau du taux de réussite : un arc en couleur de section sur un disque
+   creux (dégradé conique + disque intérieur), le chiffre au centre. */
+.hist-ring {
+  --p: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: conic-gradient(var(--cm-section) calc(var(--p) * 1%), var(--cm-surface-hover) 0);
+  box-shadow: 0 10px 28px rgba(var(--cm-section-rgb) / 0.2);
 }
 
-.daily-table__day {
-  font-weight: 600;
+.hist-ring::before {
+  content: '';
+  position: absolute;
+  inset: 7px;
+  border-radius: 50%;
+  background: var(--cm-surface-alt);
+}
+
+.hist-ring__value {
+  position: relative;
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--cm-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.hist-ring.is-empty .hist-ring__value {
+  color: var(--cm-text-muted);
+}
+
+.hist-ring__label {
+  position: relative;
+  margin-top: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--cm-text-muted);
+}
+
+/* ------------------------------------------------------------ tableau */
+.hist-th__hint {
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.hist-table__market {
   text-transform: capitalize;
 }
 
-.daily-table__empty {
-  text-align: center !important;
-  padding: 20px 10px;
+.hist-table__empty {
+  padding: 22px 12px;
 }
 
-.daily-table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-.daily-table__total td {
-  border-top: 2px solid var(--cm-border);
+/* La ligne « Tous marchés » : un filet plus marqué et un fond à peine teinté. */
+.cm-table tr.is-total td {
+  border-top: 1px solid var(--cm-border);
+  background: rgba(var(--cm-section-rgb) / 0.05);
   font-weight: 700;
+  color: var(--cm-text-primary);
 }
 
-.daily-table__subheading {
+/* Le taux de réussite : une barre fine, puis le chiffre. */
+.hist-rate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.hist-rate__bar {
+  width: 60px;
+}
+
+.hist-rate .cm-bar__fill {
+  background: var(--cm-accent);
+}
+
+/* Le yield en pastille, verte ou rouge selon le signe. */
+.hist-yield {
+  min-width: 64px;
   font-size: 12px;
-  font-weight: 700;
-  margin: 18px 0 10px;
 }
 
-.predictions-search {
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--cm-border-soft);
+.hist-yield.is-positive {
+  background: var(--cm-accent-soft);
+  color: var(--cm-accent);
 }
 
-.match-groups {
+.hist-yield.is-negative {
+  background: var(--cm-danger-soft);
+  color: var(--cm-danger);
+}
+
+/* -------------------------------------------------- liste des rencontres */
+.hist-list__head {
   display: flex;
   flex-direction: column;
-}
-
-.league-group {
+  gap: 14px;
+  padding: 18px 20px 16px;
   border-bottom: 1px solid var(--cm-border-soft);
 }
 
-.league-group:last-child {
-  border-bottom: none;
+.hist-list__heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
 }
 
-.league-group__header {
+.hist-list__titles {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.hist-list__title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--cm-text-primary);
+}
+
+.hist-list__subtitle {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--cm-text-secondary);
+}
+
+.hist-list__search {
+  max-width: 520px;
+}
+
+.hist-list__body {
+  container: histlist / inline-size;
+  padding: 16px 20px 20px;
+}
+
+.hist-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.hist-league {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* L'en-tête d'un championnat : repliable, teinté de la section. */
+.hist-league__header {
   display: flex;
   align-items: center;
-  gap: 9px;
-  width: 100%;
-  padding: 10px 16px;
-  background: var(--cm-surface-alt);
-  border: none;
+  gap: 10px;
+  padding: 9px 14px;
+  border-radius: var(--cm-radius);
+  border: 1px solid rgba(var(--cm-section-rgb) / 0.14);
+  background: rgba(var(--cm-section-rgb) / 0.06);
   cursor: pointer;
-  text-align: left;
+  user-select: none;
+  transition: background var(--cm-transition), border-color var(--cm-transition);
 }
 
-.league-group__count {
-  font-size: 11px;
+.hist-league__header:hover {
+  border-color: rgba(var(--cm-section-rgb) / 0.3);
+  background: rgba(var(--cm-section-rgb) / 0.1);
 }
 
-.league-group__chevron {
+.hist-league__chevron {
   flex-shrink: 0;
-  color: var(--cm-text-muted);
-  transform: rotate(90deg);
+  color: var(--cm-section);
   transition: transform var(--cm-transition);
 }
 
-.league-group__chevron--open {
-  transform: rotate(-90deg);
+.hist-league__chevron.is-open {
+  transform: rotate(90deg);
 }
 
-.match-group {
-  border-bottom: 1px solid var(--cm-border-soft);
+.hist-league__count {
+  min-width: 30px;
+  padding: 2px 8px;
+  font-size: 11.5px;
 }
 
-.match-group:last-child {
-  border-bottom: none;
+.hist-league__matches {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: 12px;
+  border-left: 2px solid rgba(var(--cm-section-rgb) / 0.18);
 }
 
-.match-group__ai-badge {
+/* Une rencontre : la carte commune, le score à saisir, le bilan de ses pronostics. */
+.hist-match {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border-radius: var(--cm-radius-lg);
+  border: 1px solid var(--cm-border-soft);
+  background: var(--cm-surface);
+  transition: border-color var(--cm-transition);
+}
+
+.hist-match:hover {
+  border-color: var(--cm-border);
+}
+
+.hist-match__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.hist-match__card {
+  min-width: 0;
+  --mcard-aside: 150px;
+}
+
+.hist-ai-badge {
   display: inline-flex;
   align-items: center;
   gap: 2px;
-  padding: 1px 5px;
+  padding: 1px 6px;
   border-radius: 999px;
   background: var(--cm-info-soft);
   color: var(--cm-info);
-  font-size: 8.5px;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.2px;
 }
 
-.match-group__header {
+/* La saisie du score : un bloc à part, le bouton vert quand les deux cases sont remplies. */
+.hist-score {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 12px 16px;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: var(--cm-radius-md);
+  border: 1px solid var(--cm-border-soft);
   background: var(--cm-surface-alt);
 }
 
-.match-group__title {
-  min-width: 0;
-}
-
-.match-group__match {
-  font-size: 13.5px;
+.hist-score__label {
+  font-size: 10px;
   font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--cm-text-muted);
+  white-space: nowrap;
 }
 
-.match-group__meta {
-  font-size: 11px;
-  margin-top: 2px;
-}
-
-.match-group__status-badge {
-  margin-left: 6px;
-  vertical-align: middle;
-}
-
-.match-group__score {
-  display: flex;
+.hist-score__inputs {
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
+  gap: 6px;
 }
 
-.match-group__score-label {
-  font-size: 11px;
-  margin-right: 2px;
+.hist-score__sep {
+  font-weight: 700;
+  color: var(--cm-text-muted);
 }
 
 .score-input {
-  width: 44px;
-  padding: 5px 6px;
+  width: 46px;
+  height: 32px;
+  padding: 0 4px;
   border: 1px solid var(--cm-border);
   border-radius: var(--cm-radius-sm);
   background: var(--cm-surface);
   color: var(--cm-text-primary);
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 700;
   text-align: center;
+  font-variant-numeric: tabular-nums;
+  transition: border-color var(--cm-transition), box-shadow var(--cm-transition);
 }
 
+.score-input:hover {
+  border-color: var(--cm-border-strong);
+}
+
+.score-input:focus {
+  outline: none;
+  border-color: var(--cm-section);
+  box-shadow: 0 0 0 3px rgba(var(--cm-section-rgb) / 0.18);
+}
+
+.score-input::placeholder {
+  color: var(--cm-text-muted);
+  font-weight: 500;
+}
+
+/* Les flèches du champ restent visibles : on règle souvent au clic. */
 .score-input::-webkit-inner-spin-button,
 .score-input::-webkit-outer-spin-button {
   opacity: 1;
 }
 
-.match-group__summary {
+.hist-match__summary {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 6px 12px;
-  padding: 10px 16px;
-  font-size: 12px;
+  gap: 6px;
+  padding: 0 4px 2px;
 }
 
-.match-group__detail-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
+.hist-match__detail {
   margin-left: auto;
-  font-weight: 600;
-  color: var(--cm-accent);
 }
 
-.match-group__detail-link:hover {
-  color: var(--cm-accent-strong);
+/* ----------------------------------------------------------- étroit */
+@container hist (max-width: 640px) {
+  .hist-hero__body {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+  }
+
+  .hist-hero__side {
+    width: 100%;
+    justify-content: space-between;
+  }
 }
 
-@media (max-width: 960px) {
-  .match-group__header {
-    flex-direction: column;
-    align-items: flex-start;
+@container histlist (max-width: 720px) {
+  .hist-match__row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hist-score {
+    justify-content: space-between;
+  }
+
+  .hist-league__matches {
+    padding-left: 8px;
   }
 }
 </style>
