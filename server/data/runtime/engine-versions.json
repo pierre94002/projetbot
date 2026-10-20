@@ -1,0 +1,305 @@
+{
+  "format": 1,
+  "enService": 3,
+  "pile": [
+    1,
+    2,
+    3
+  ],
+  "versions": [
+    {
+      "numero": 1,
+      "creeeLe": "2026-10-07T16:10:40.183Z",
+      "origine": "premier-demarrage",
+      "pourquoi": "premier démarrage de l’appli avec les versions : l’état du moteur à ce moment, rien de changé dans les chiffres",
+      "empreinte": "1eae708f27fa32c71f13bc690d3a4963cb447cbc",
+      "empreinteReglages": {
+        "football": "a5f7d32a6fe4b92cd15032725ec92d812575424d"
+      },
+      "reglages": {
+        "football": {
+          "edgeThresholdMin": 0.02,
+          "edgeThresholdMax": 0.25,
+          "valueBookmakers": [
+            "williamhill",
+            "sport888",
+            "betsson",
+            "nordicbet",
+            "unibet_nl",
+            "unibet_se",
+            "leovegas_se",
+            "tipico_de",
+            "coolbet",
+            "codere_it"
+          ],
+          "maxValueOdds": 5,
+          "defaultCorrelation": -0.075,
+          "kellyFraction": 0.125,
+          "maxStakePercent": 0.02,
+          "homeAdvantage": 1.06,
+          "cornersAdjustmentMax": 0.08,
+          "maxExpectedRateGap": 0.4,
+          "weights": {
+            "market": 1,
+            "structural": 0,
+            "exogenous": 0
+          }
+        }
+      },
+      "code": {
+        "empreinte": "b40444f71c456134a6a88a7bde108abf81cf682b",
+        "fichiers": {
+          "core/engine/coteMinimale.js": "0ea5dee5c0b3e1fa",
+          "core/engine/engineConfig.js": "87b6ac0fd2ebafa4",
+          "core/engine/fraicheurCotes.js": "d7f4bf125d8b7902",
+          "core/engine/oddsEngine.js": "e9950859c5caa74c",
+          "core/engine/resultPrediction.js": "df32c8d76e8c720c",
+          "core/engine/scorePrediction.js": "e5cc16c9e0d728a1",
+          "core/engine/tiltState.js": "de63bb4a3c63d88f",
+          "core/engine/valueFinder.js": "25e4757198fc09a1",
+          "core/engine/verdictPari.js": "a863242e40278d79",
+          "core/engine/vosBookmakers.js": "9abf1962a1c47d85",
+          "core/market/marginRemoval.js": "b3deabcfcf1fe1d7",
+          "core/model/dixonColes.js": "83c4cf5111c071ca",
+          "core/model/poisson.js": "78be7262cce935f7",
+          "core/risk/exogenousFactors.js": "fd7749a7d45ba0fd",
+          "core/risk/gardeFous.js": "2edd957379facdb0",
+          "core/risk/seriesDePertes.js": "84ad459c0c2794a2",
+          "core/risk/staking.js": "6522d9ea3662ea39",
+          "core/risk/structuralFactors.js": "4a21c27362e21c93",
+          "core/signals/cornersSignal.js": "28e6d8c721386a52",
+          "core/xg/xgSmoothing.js": "3a125f8d663be5c0",
+          "core/xg/xgStructural.js": "724a35bcf329112a",
+          "data/db/matchStatsRead.js": "7dc674629218dc54",
+          "data/db/scoreFormRead.js": "46e2c8b26c722bec",
+          "data/db/statInputsRead.js": "6c088c096ee00a4a",
+          "data/providers/matchEnrichment.js": "22c9be3d901c23c3",
+          "data/providers/standingsService.js": "5ff06688e36c3035",
+          "sports/football/bookmakerConsensus.js": "70ee1711b3040108",
+          "sports/football/index.js": "71c411a490f07fa5",
+          "sports/football/markets.js": "32e8f2c708cbb956",
+          "sports/football/model.js": "096ab0dee64e94b2",
+          "sports/football/scoreMatrix.js": "d04ef225bae98fa8",
+          "sports/football/statMarkets.js": "73604446314c885d",
+          "sports/football/xgBaseline.js": "1774c087b4d30769",
+          "sports/index.js": "963bc8caf965c7bc",
+          "sports/sportPort.js": "433369bfb949df9c"
+        }
+      },
+      "lancements": [],
+      "depuis": null,
+      "changements": []
+    },
+    {
+      "numero": 2,
+      "creeeLe": "2026-10-13T05:50:41.944Z",
+      "origine": "code",
+      "pourquoi": "mise à jour du code du moteur (notée au démarrage de l’appli)",
+      "empreinte": "3951fc53efb47415093ad068823807b0d96d62a4",
+      "empreinteReglages": {
+        "football": "a5f7d32a6fe4b92cd15032725ec92d812575424d"
+      },
+      "reglages": {
+        "football": {
+          "edgeThresholdMin": 0.02,
+          "edgeThresholdMax": 0.25,
+          "valueBookmakers": [
+            "williamhill",
+            "sport888",
+            "betsson",
+            "nordicbet",
+            "unibet_nl",
+            "unibet_se",
+            "leovegas_se",
+            "tipico_de",
+            "coolbet",
+            "codere_it"
+          ],
+          "maxValueOdds": 5,
+          "defaultCorrelation": -0.075,
+          "kellyFraction": 0.125,
+          "maxStakePercent": 0.02,
+          "homeAdvantage": 1.06,
+          "cornersAdjustmentMax": 0.08,
+          "maxExpectedRateGap": 0.4,
+          "weights": {
+            "market": 1,
+            "structural": 0,
+            "exogenous": 0
+          }
+        }
+      },
+      "code": {
+        "empreinte": "86f7724cccbfaf72af4dacc3563ebbcf2a37e815",
+        "fichiers": {
+          "core/engine/coteMinimale.js": "0ea5dee5c0b3e1fa",
+          "core/engine/engineConfig.js": "87b6ac0fd2ebafa4",
+          "core/engine/fraicheurCotes.js": "d7f4bf125d8b7902",
+          "core/engine/oddsEngine.js": "e9950859c5caa74c",
+          "core/engine/resultPrediction.js": "df32c8d76e8c720c",
+          "core/engine/scorePrediction.js": "e5cc16c9e0d728a1",
+          "core/engine/tiltState.js": "de63bb4a3c63d88f",
+          "core/engine/valueFinder.js": "25e4757198fc09a1",
+          "core/engine/verdictPari.js": "a863242e40278d79",
+          "core/engine/vosBookmakers.js": "9abf1962a1c47d85",
+          "core/market/marginRemoval.js": "b3deabcfcf1fe1d7",
+          "core/model/dixonColes.js": "83c4cf5111c071ca",
+          "core/model/poisson.js": "78be7262cce935f7",
+          "core/risk/exogenousFactors.js": "fd7749a7d45ba0fd",
+          "core/risk/gardeFous.js": "2edd957379facdb0",
+          "core/risk/seriesDePertes.js": "84ad459c0c2794a2",
+          "core/risk/staking.js": "6522d9ea3662ea39",
+          "core/risk/structuralFactors.js": "4a21c27362e21c93",
+          "core/signals/cornersSignal.js": "28e6d8c721386a52",
+          "core/xg/xgSmoothing.js": "3a125f8d663be5c0",
+          "core/xg/xgStructural.js": "724a35bcf329112a",
+          "data/db/matchStatsRead.js": "7dc674629218dc54",
+          "data/db/scoreFormRead.js": "46e2c8b26c722bec",
+          "data/db/statInputsRead.js": "45470ac1777308c6",
+          "data/providers/matchEnrichment.js": "22c9be3d901c23c3",
+          "data/providers/standingsService.js": "5ff06688e36c3035",
+          "sports/football/bookmakerConsensus.js": "70ee1711b3040108",
+          "sports/football/index.js": "71c411a490f07fa5",
+          "sports/football/markets.js": "32e8f2c708cbb956",
+          "sports/football/model.js": "096ab0dee64e94b2",
+          "sports/football/scoreMatrix.js": "d04ef225bae98fa8",
+          "sports/football/statMarkets.js": "73604446314c885d",
+          "sports/football/xgBaseline.js": "1774c087b4d30769",
+          "sports/index.js": "963bc8caf965c7bc",
+          "sports/sportPort.js": "433369bfb949df9c"
+        }
+      },
+      "lancements": [],
+      "depuis": 1,
+      "changements": [
+        {
+          "type": "code",
+          "modifies": [
+            "data/db/statInputsRead.js"
+          ],
+          "ajoutes": [],
+          "retires": []
+        }
+      ]
+    },
+    {
+      "numero": 3,
+      "creeeLe": "2026-10-14T05:27:05.494Z",
+      "origine": "code",
+      "pourquoi": "mise à jour du code du moteur (notée au démarrage de l’appli)",
+      "empreinte": "95a964298b9326322322463fe485422743667083",
+      "empreinteReglages": {
+        "football": "a5f7d32a6fe4b92cd15032725ec92d812575424d"
+      },
+      "reglages": {
+        "football": {
+          "edgeThresholdMin": 0.02,
+          "edgeThresholdMax": 0.25,
+          "valueBookmakers": [
+            "williamhill",
+            "sport888",
+            "betsson",
+            "nordicbet",
+            "unibet_nl",
+            "unibet_se",
+            "leovegas_se",
+            "tipico_de",
+            "coolbet",
+            "codere_it"
+          ],
+          "maxValueOdds": 5,
+          "defaultCorrelation": -0.075,
+          "kellyFraction": 0.125,
+          "maxStakePercent": 0.02,
+          "homeAdvantage": 1.06,
+          "cornersAdjustmentMax": 0.08,
+          "maxExpectedRateGap": 0.4,
+          "weights": {
+            "market": 1,
+            "structural": 0,
+            "exogenous": 0
+          }
+        }
+      },
+      "code": {
+        "empreinte": "6ed7e010f5076bdb070c71ac2fb62d75d19c0fc3",
+        "fichiers": {
+          "core/engine/coteMinimale.js": "0ea5dee5c0b3e1fa",
+          "core/engine/engineConfig.js": "87b6ac0fd2ebafa4",
+          "core/engine/fraicheurCotes.js": "d7f4bf125d8b7902",
+          "core/engine/oddsEngine.js": "e9950859c5caa74c",
+          "core/engine/resultPrediction.js": "df32c8d76e8c720c",
+          "core/engine/scorePrediction.js": "0a922e742448bd6d",
+          "core/engine/tiltState.js": "de63bb4a3c63d88f",
+          "core/engine/valueFinder.js": "25e4757198fc09a1",
+          "core/engine/verdictPari.js": "a863242e40278d79",
+          "core/engine/vosBookmakers.js": "9abf1962a1c47d85",
+          "core/market/marginRemoval.js": "b3deabcfcf1fe1d7",
+          "core/model/dixonColes.js": "83c4cf5111c071ca",
+          "core/model/poisson.js": "78be7262cce935f7",
+          "core/risk/exogenousFactors.js": "fd7749a7d45ba0fd",
+          "core/risk/gardeFous.js": "2edd957379facdb0",
+          "core/risk/seriesDePertes.js": "84ad459c0c2794a2",
+          "core/risk/staking.js": "6522d9ea3662ea39",
+          "core/risk/structuralFactors.js": "4a21c27362e21c93",
+          "core/signals/cornersSignal.js": "28e6d8c721386a52",
+          "core/xg/xgSmoothing.js": "3a125f8d663be5c0",
+          "core/xg/xgStructural.js": "724a35bcf329112a",
+          "data/db/matchStatsRead.js": "7dc674629218dc54",
+          "data/db/scoreFormRead.js": "46e2c8b26c722bec",
+          "data/db/statInputsRead.js": "45470ac1777308c6",
+          "data/providers/matchEnrichment.js": "22c9be3d901c23c3",
+          "data/providers/standingsService.js": "5ff06688e36c3035",
+          "sports/football/bookmakerConsensus.js": "70ee1711b3040108",
+          "sports/football/index.js": "71c411a490f07fa5",
+          "sports/football/markets.js": "32e8f2c708cbb956",
+          "sports/football/model.js": "12cf37fb7aca566e",
+          "sports/football/scoreMatrix.js": "d04ef225bae98fa8",
+          "sports/football/statMarkets.js": "86fe12b131b4315e",
+          "sports/football/xgBaseline.js": "1774c087b4d30769",
+          "sports/index.js": "963bc8caf965c7bc",
+          "sports/sportPort.js": "433369bfb949df9c"
+        }
+      },
+      "lancements": [],
+      "depuis": 2,
+      "changements": [
+        {
+          "type": "code",
+          "modifies": [
+            "core/engine/scorePrediction.js",
+            "sports/football/model.js",
+            "sports/football/statMarkets.js"
+          ],
+          "ajoutes": [],
+          "retires": []
+        }
+      ]
+    }
+  ],
+  "journal": [
+    {
+      "le": "2026-10-07T16:10:40.183Z",
+      "action": "creation",
+      "version": 1,
+      "origine": "premier-demarrage"
+    },
+    {
+      "le": "2026-10-13T05:50:41.944Z",
+      "action": "creation",
+      "version": 2,
+      "depuis": 1,
+      "origine": "code"
+    },
+    {
+      "le": "2026-10-14T05:27:05.494Z",
+      "action": "creation",
+      "version": 3,
+      "depuis": 2,
+      "origine": "code"
+    }
+  ],
+  "candidate": null,
+  "candidatesPassees": [],
+  "majLe": "2026-10-14T05:27:05.494Z"
+}

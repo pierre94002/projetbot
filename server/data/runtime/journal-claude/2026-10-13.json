@@ -1,0 +1,5057 @@
+{
+  "version": 1,
+  "jour": "2026-10-13",
+  "canal": "claude-code",
+  "majLe": "2026-10-13T18:28:30.589Z",
+  "totaux": {
+    "appels": 151,
+    "ok": 150,
+    "echecs": 1,
+    "sansTokens": 1,
+    "tokens": {
+      "entree": 414,
+      "ecritureCache": 1055943,
+      "lectureCache": 887661,
+      "sortie": 608849,
+      "total": 2552867
+    },
+    "equivalentApiUsd": 10.490635,
+    "parType": {
+      "coup-d-envoi": {
+        "appels": 18,
+        "ok": 18,
+        "echecs": 0,
+        "sansTokens": 0,
+        "tokens": {
+          "entree": 38,
+          "ecritureCache": 149376,
+          "lectureCache": 78979,
+          "sortie": 71519,
+          "total": 299912
+        },
+        "equivalentApiUsd": 1.328566
+      },
+      "reprise": {
+        "appels": 2,
+        "ok": 2,
+        "echecs": 0,
+        "sansTokens": 0,
+        "tokens": {
+          "entree": 4,
+          "ecritureCache": 15247,
+          "lectureCache": 8940,
+          "sortie": 7959,
+          "total": 32150
+        },
+        "equivalentApiUsd": 0.142374
+      },
+      "avance": {
+        "appels": 46,
+        "ok": 45,
+        "echecs": 1,
+        "sansTokens": 1,
+        "tokens": {
+          "entree": 94,
+          "ecritureCache": 343452,
+          "lectureCache": 220483,
+          "sortie": 173141,
+          "total": 737170
+        },
+        "equivalentApiUsd": 3.149503
+      },
+      "revue": {
+        "appels": 85,
+        "ok": 85,
+        "echecs": 0,
+        "sansTokens": 0,
+        "tokens": {
+          "entree": 278,
+          "ecritureCache": 547868,
+          "lectureCache": 579259,
+          "sortie": 356230,
+          "total": 1483635
+        },
+        "equivalentApiUsd": 5.870192
+      }
+    }
+  },
+  "appels": [
+    {
+      "id": "2026-10-12T22:00:51.618Z-10080-152-c6db1c",
+      "at": "2026-10-12T22:00:51.618Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-12T22:00:24.975Z",
+      "dureeMs": 26643,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-10-12-nacional-recoleta",
+        "home": "Nacional",
+        "away": "Recoleta",
+        "league": "División Profesional - Paraguay"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12619
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 11692,
+        "lectureCache": 0,
+        "sortie": 4027,
+        "total": 15721
+      },
+      "equivalentApiUsd": 0.087042
+    },
+    {
+      "id": "2026-10-12T22:01:17.910Z-10080-153-10d5bd",
+      "at": "2026-10-12T22:01:17.910Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-12T22:00:53.108Z",
+      "dureeMs": 24802,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-10-12-chapecoense-athletico-paranaense",
+        "home": "Chapecoense",
+        "away": "Athletico Paranaense",
+        "league": "Brazil Série A"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13915
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7862,
+        "lectureCache": 4470,
+        "sortie": 3851,
+        "total": 16185
+      },
+      "equivalentApiUsd": 0.070856
+    },
+    {
+      "id": "2026-10-12T22:15:52.782Z-10080-154-5cea9c",
+      "at": "2026-10-12T22:15:52.782Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-12T22:15:24.768Z",
+      "dureeMs": 28014,
+      "canal": "claude-code",
+      "type": "reprise",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-10-12-chapecoense-athletico-paranaense",
+        "home": "Chapecoense",
+        "away": "Athletico Paranaense",
+        "league": "Brazil Série A"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13982
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7897,
+        "lectureCache": 4470,
+        "sortie": 4230,
+        "total": 16599
+      },
+      "equivalentApiUsd": 0.074786
+    },
+    {
+      "id": "2026-10-13T05:53:01.695Z-3228-1-0d44fb",
+      "at": "2026-10-13T05:53:01.695Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T05:52:38.972Z",
+      "dureeMs": 22723,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-13-bristol-city-blackburn",
+        "home": "Bristol City",
+        "away": "Blackburn",
+        "league": "Championship"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12440
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 11541,
+        "lectureCache": 0,
+        "sortie": 3430,
+        "total": 14973
+      },
+      "equivalentApiUsd": 0.080468
+    },
+    {
+      "id": "2026-10-13T05:55:03.398Z-3228-2-c39404",
+      "at": "2026-10-13T05:55:03.398Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T05:53:03.362Z",
+      "dureeMs": 120036,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-13-burnley-charlton",
+        "home": "Burnley",
+        "away": "Charlton",
+        "league": "Championship"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12453
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "echec",
+      "erreur": "Claude Code (headless) n'a pas répondu : Command failed: C:\\Users\\PC\\AppData\\Roaming\\npm\\node_modules\\@anthropic-ai\\claude-code\\bin\\claude.exe -p --output-format json --json-schema {\"type\":\"object\",\"properties\":{\"summary\":{\"type\":\"string\",\"description\":\"Synthèse qualitative en 2-4 phrases : la forme",
+      "tokens": null,
+      "equivalentApiUsd": null
+    },
+    {
+      "id": "2026-10-13T05:55:30.692Z-3228-3-62a3d0",
+      "at": "2026-10-13T05:55:30.692Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T05:55:05.233Z",
+      "dureeMs": 25459,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-13-cardiff-watford",
+        "home": "Cardiff",
+        "away": "Watford",
+        "league": "Championship"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13122
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7474,
+        "lectureCache": 4470,
+        "sortie": 3750,
+        "total": 15696
+      },
+      "equivalentApiUsd": 0.068294
+    },
+    {
+      "id": "2026-10-13T05:55:55.334Z-3228-4-43a86f",
+      "at": "2026-10-13T05:55:55.334Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T05:55:32.375Z",
+      "dureeMs": 22959,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-13-millwall-swansea",
+        "home": "Millwall",
+        "away": "Swansea",
+        "league": "Championship"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12289
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7066,
+        "lectureCache": 4470,
+        "sortie": 3459,
+        "total": 14997
+      },
+      "equivalentApiUsd": 0.063752
+    },
+    {
+      "id": "2026-10-13T05:56:20.688Z-3228-5-aac88c",
+      "at": "2026-10-13T05:56:20.688Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T05:55:56.820Z",
+      "dureeMs": 23868,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-13-wolves-bolton",
+        "home": "Wolves",
+        "away": "Bolton",
+        "league": "Championship"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12468
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7176,
+        "lectureCache": 4470,
+        "sortie": 3585,
+        "total": 15233
+      },
+      "equivalentApiUsd": 0.065452
+    },
+    {
+      "id": "2026-10-13T05:56:46.201Z-3228-6-4eeb67",
+      "at": "2026-10-13T05:56:46.201Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T05:56:22.629Z",
+      "dureeMs": 23572,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-13-wrexham-west-brom",
+        "home": "Wrexham",
+        "away": "West Brom",
+        "league": "Championship"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12526
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7147,
+        "lectureCache": 4470,
+        "sortie": 3641,
+        "total": 15260
+      },
+      "equivalentApiUsd": 0.065896
+    },
+    {
+      "id": "2026-10-13T05:57:10.856Z-3228-7-112f35",
+      "at": "2026-10-13T05:57:10.856Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T05:56:47.730Z",
+      "dureeMs": 23126,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-13-birmingham-preston",
+        "home": "Birmingham",
+        "away": "Preston",
+        "league": "Championship"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12213
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 6914,
+        "lectureCache": 4470,
+        "sortie": 3448,
+        "total": 14834
+      },
+      "equivalentApiUsd": 0.063034
+    },
+    {
+      "id": "2026-10-13T05:57:39.009Z-3228-8-8da934",
+      "at": "2026-10-13T05:57:39.009Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T05:57:12.486Z",
+      "dureeMs": 26523,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-13-stoke-middlesbrough",
+        "home": "Stoke",
+        "away": "Middlesbrough",
+        "league": "Championship"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12986
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7438,
+        "lectureCache": 4470,
+        "sortie": 3988,
+        "total": 15898
+      },
+      "equivalentApiUsd": 0.07053
+    },
+    {
+      "id": "2026-10-13T05:58:03.957Z-3228-9-0cc0da",
+      "at": "2026-10-13T05:58:03.957Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T05:57:40.823Z",
+      "dureeMs": 23134,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-13-bucaramanga-aguilas-doradas",
+        "home": "Bucaramanga",
+        "away": "Águilas Doradas",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13125
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7446,
+        "lectureCache": 4470,
+        "sortie": 3526,
+        "total": 15444
+      },
+      "equivalentApiUsd": 0.065942
+    },
+    {
+      "id": "2026-10-13T05:58:31.584Z-3228-10-9ccfa5",
+      "at": "2026-10-13T05:58:31.584Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T05:58:06.114Z",
+      "dureeMs": 25470,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-14-boca-juniors-vasco-da-gama",
+        "home": "Boca Juniors",
+        "away": "Vasco da Gama",
+        "league": "Copa Sudamericana"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13753
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7843,
+        "lectureCache": 4470,
+        "sortie": 3835,
+        "total": 16150
+      },
+      "equivalentApiUsd": 0.07062
+    },
+    {
+      "id": "2026-10-13T05:58:57.768Z-3228-11-fa0fcb",
+      "at": "2026-10-13T05:58:57.768Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T05:58:33.427Z",
+      "dureeMs": 24341,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-14-millonarios-once-caldas",
+        "home": "Millonarios",
+        "away": "Once Caldas",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13582
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7676,
+        "lectureCache": 4470,
+        "sortie": 3675,
+        "total": 15823
+      },
+      "equivalentApiUsd": 0.068352
+    },
+    {
+      "id": "2026-10-13T05:59:16.438Z-3228-12-62cae0",
+      "at": "2026-10-13T05:59:16.438Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T05:58:58.674Z",
+      "dureeMs": 17764,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-14-santarem-gil-vicente",
+        "home": "Santarém",
+        "away": "Gil Vicente",
+        "league": "Taça de Portugal"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10816
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5954,
+        "lectureCache": 4470,
+        "sortie": 2462,
+        "total": 12888
+      },
+      "equivalentApiUsd": 0.049334
+    },
+    {
+      "id": "2026-10-13T05:59:42.673Z-3228-13-ce68e5",
+      "at": "2026-10-13T05:59:42.673Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T05:59:17.715Z",
+      "dureeMs": 24958,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-14-bohemians-1905-mlada-boleslav",
+        "home": "Bohemians 1905",
+        "away": "Mladá Boleslav",
+        "league": "First League - Czechia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13133
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7486,
+        "lectureCache": 4470,
+        "sortie": 3761,
+        "total": 15719
+      },
+      "equivalentApiUsd": 0.068452
+    },
+    {
+      "id": "2026-10-13T06:00:08.687Z-3228-14-b40d85",
+      "at": "2026-10-13T06:00:08.687Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T05:59:43.983Z",
+      "dureeMs": 24704,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "5d6f9accd6f79ae4216dfd29ccc342b2",
+        "home": "Feyenoord",
+        "away": "Como",
+        "league": "UEFA Champions League"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12802
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7254,
+        "lectureCache": 4470,
+        "sortie": 3726,
+        "total": 15452
+      },
+      "equivalentApiUsd": 0.067174
+    },
+    {
+      "id": "2026-10-13T06:00:31.449Z-3228-15-40c757",
+      "at": "2026-10-13T06:00:31.449Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:00:10.078Z",
+      "dureeMs": 21371,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "2903ee092f7e08c549b130a3d394ac3c",
+        "home": "LASK",
+        "away": "Liverpool",
+        "league": "UEFA Champions League"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12855
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7291,
+        "lectureCache": 4470,
+        "sortie": 3215,
+        "total": 14978
+      },
+      "equivalentApiUsd": 0.062212
+    },
+    {
+      "id": "2026-10-13T06:00:59.486Z-3228-16-ced9cc",
+      "at": "2026-10-13T06:00:59.486Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:00:33.518Z",
+      "dureeMs": 25968,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-14-norwich-southampton",
+        "home": "Norwich",
+        "away": "Southampton",
+        "league": "Championship"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13083
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7450,
+        "lectureCache": 4470,
+        "sortie": 3867,
+        "total": 15789
+      },
+      "equivalentApiUsd": 0.069368
+    },
+    {
+      "id": "2026-10-13T06:01:25.905Z-3228-17-f94c51",
+      "at": "2026-10-13T06:01:25.905Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:01:01.054Z",
+      "dureeMs": 24851,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-14-portsmouth-sheffield-united",
+        "home": "Portsmouth",
+        "away": "Sheffield United",
+        "league": "Championship"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13566
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7709,
+        "lectureCache": 4470,
+        "sortie": 3855,
+        "total": 16036
+      },
+      "equivalentApiUsd": 0.070284
+    },
+    {
+      "id": "2026-10-13T06:01:51.270Z-3228-18-9a710d",
+      "at": "2026-10-13T06:01:51.270Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:01:27.589Z",
+      "dureeMs": 23681,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-14-qpr-derby",
+        "home": "QPR",
+        "away": "Derby",
+        "league": "Championship"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12385
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7110,
+        "lectureCache": 4470,
+        "sortie": 3416,
+        "total": 14998
+      },
+      "equivalentApiUsd": 0.063498
+    },
+    {
+      "id": "2026-10-13T06:02:44.843Z-3228-19-e76096",
+      "at": "2026-10-13T06:02:44.843Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:01:52.698Z",
+      "dureeMs": 52145,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-14-lincoln-city-west-ham",
+        "home": "Lincoln City",
+        "away": "West Ham",
+        "league": "Championship"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12571
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 8664,
+        "lectureCache": 16113,
+        "sortie": 8515,
+        "total": 33296
+      },
+      "equivalentApiUsd": 0.123037
+    },
+    {
+      "id": "2026-10-13T06:03:11.778Z-3228-20-dee2cc",
+      "at": "2026-10-13T06:03:11.778Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:02:46.296Z",
+      "dureeMs": 25482,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "0f961390e790ad2c80ecb3f302cad4a6",
+        "home": "Shakhtar Donetsk",
+        "away": "AEK Athens",
+        "league": "UEFA Champions League"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13188
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7542,
+        "lectureCache": 4470,
+        "sortie": 3912,
+        "total": 15926
+      },
+      "equivalentApiUsd": 0.070186
+    },
+    {
+      "id": "2026-10-13T06:03:36.477Z-3228-21-3e6ab5",
+      "at": "2026-10-13T06:03:36.477Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:03:13.120Z",
+      "dureeMs": 23357,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "d4ef112438afa4c2cdbbfc9376a009c9",
+        "home": "AS Roma",
+        "away": "Real Madrid",
+        "league": "UEFA Champions League"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12858
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7268,
+        "lectureCache": 4470,
+        "sortie": 3461,
+        "total": 15201
+      },
+      "equivalentApiUsd": 0.06458
+    },
+    {
+      "id": "2026-10-13T06:04:03.351Z-3228-22-d1fee5",
+      "at": "2026-10-13T06:04:03.351Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:03:37.790Z",
+      "dureeMs": 25561,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "3f3cb74e560dfcc3e795b667ed9ebdef",
+        "home": "Aston Villa",
+        "away": "Fenerbahce",
+        "league": "UEFA Champions League"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13351
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7582,
+        "lectureCache": 4470,
+        "sortie": 3969,
+        "total": 16023
+      },
+      "equivalentApiUsd": 0.070916
+    },
+    {
+      "id": "2026-10-13T06:04:28.362Z-3228-23-8bd6ae",
+      "at": "2026-10-13T06:04:28.362Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:04:04.941Z",
+      "dureeMs": 23421,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "ca87a3874b0eae31b4173ae4a9324957",
+        "home": "Bodø/Glimt",
+        "away": "Borussia Dortmund",
+        "league": "UEFA Champions League"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13532
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7711,
+        "lectureCache": 4470,
+        "sortie": 3725,
+        "total": 15908
+      },
+      "equivalentApiUsd": 0.068992
+    },
+    {
+      "id": "2026-10-13T06:04:56.233Z-3228-24-ddad1c",
+      "at": "2026-10-13T06:04:56.233Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:04:29.662Z",
+      "dureeMs": 26571,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "5a1a6a04c5561897741105e30d5d7ec4",
+        "home": "Manchester City",
+        "away": "Paris Saint Germain",
+        "league": "UEFA Champions League"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13329
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7466,
+        "lectureCache": 4470,
+        "sortie": 3908,
+        "total": 15846
+      },
+      "equivalentApiUsd": 0.069842
+    },
+    {
+      "id": "2026-10-13T06:05:23.211Z-3228-25-96673f",
+      "at": "2026-10-13T06:05:23.211Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:04:57.906Z",
+      "dureeMs": 25305,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "4c7f87780ae5ab8bec9e83d6d6ec9909",
+        "home": "Real Betis",
+        "away": "Porto",
+        "league": "UEFA Champions League"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12502
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7209,
+        "lectureCache": 4470,
+        "sortie": 3877,
+        "total": 15558
+      },
+      "equivalentApiUsd": 0.068504
+    },
+    {
+      "id": "2026-10-13T06:05:49.642Z-3228-26-d25f36",
+      "at": "2026-10-13T06:05:49.642Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:05:24.808Z",
+      "dureeMs": 24834,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "d7576351b8cb2396e32cc3de0446f3de",
+        "home": "ŠK Slovan Bratislava",
+        "away": "VfB Stuttgart",
+        "league": "UEFA Champions League"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13338
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7586,
+        "lectureCache": 4470,
+        "sortie": 3807,
+        "total": 15865
+      },
+      "equivalentApiUsd": 0.069312
+    },
+    {
+      "id": "2026-10-13T06:06:14.273Z-3228-27-d31070",
+      "at": "2026-10-13T06:06:14.273Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:05:51.002Z",
+      "dureeMs": 23271,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-14-junior-fc-deportivo-pereira",
+        "home": "Junior FC",
+        "away": "Deportivo Pereira",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13648
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7735,
+        "lectureCache": 4470,
+        "sortie": 3540,
+        "total": 15747
+      },
+      "equivalentApiUsd": 0.067238
+    },
+    {
+      "id": "2026-10-13T06:06:40.738Z-3228-28-66bbd2",
+      "at": "2026-10-13T06:06:40.738Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:06:16.451Z",
+      "dureeMs": 24287,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-14-sarmiento-river-plate",
+        "home": "Sarmiento",
+        "away": "River Plate",
+        "league": "Primera División - Argentina"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13744
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7774,
+        "lectureCache": 4470,
+        "sortie": 3522,
+        "total": 15768
+      },
+      "equivalentApiUsd": 0.067214
+    },
+    {
+      "id": "2026-10-13T06:07:05.626Z-3228-29-cdfdc2",
+      "at": "2026-10-13T06:07:05.626Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:06:42.273Z",
+      "dureeMs": 23353,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-14-atletico-mg-montevideo-city-torque",
+        "home": "Atlético-MG",
+        "away": "Montevideo City Torque",
+        "league": "Copa Sudamericana"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13353
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7548,
+        "lectureCache": 4470,
+        "sortie": 3630,
+        "total": 15650
+      },
+      "equivalentApiUsd": 0.06739
+    },
+    {
+      "id": "2026-10-13T06:07:31.341Z-3228-30-65ed4c",
+      "at": "2026-10-13T06:07:31.341Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:07:07.540Z",
+      "dureeMs": 23801,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-14-cf-montreal-atlanta-united",
+        "home": "CF Montréal",
+        "away": "Atlanta United",
+        "league": "MLS"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13006
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7411,
+        "lectureCache": 4470,
+        "sortie": 3563,
+        "total": 15446
+      },
+      "equivalentApiUsd": 0.066172
+    },
+    {
+      "id": "2026-10-13T06:07:58.161Z-3228-31-9d7632",
+      "at": "2026-10-13T06:07:58.161Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:07:32.787Z",
+      "dureeMs": 25374,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-14-columbus-crew-charlotte-fc",
+        "home": "Columbus Crew",
+        "away": "Charlotte FC",
+        "league": "MLS"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13238
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7573,
+        "lectureCache": 4470,
+        "sortie": 4040,
+        "total": 16085
+      },
+      "equivalentApiUsd": 0.07159
+    },
+    {
+      "id": "2026-10-13T06:08:21.785Z-3228-32-1d47f7",
+      "at": "2026-10-13T06:08:21.785Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:07:59.556Z",
+      "dureeMs": 22229,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-14-dc-united-red-bull-new-york",
+        "home": "DC United",
+        "away": "Red Bull New York",
+        "league": "MLS"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13250
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7461,
+        "lectureCache": 4470,
+        "sortie": 3353,
+        "total": 15286
+      },
+      "equivalentApiUsd": 0.064272
+    },
+    {
+      "id": "2026-10-13T06:08:46.436Z-3228-33-1ef5dd",
+      "at": "2026-10-13T06:08:46.436Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:08:23.232Z",
+      "dureeMs": 23204,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-14-fc-cincinnati-new-england-revolution",
+        "home": "FC Cincinnati",
+        "away": "New England Revolution",
+        "league": "MLS"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13665
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7683,
+        "lectureCache": 4470,
+        "sortie": 3534,
+        "total": 15689
+      },
+      "equivalentApiUsd": 0.06697
+    },
+    {
+      "id": "2026-10-13T06:09:10.617Z-3228-34-a12bd6",
+      "at": "2026-10-13T06:09:10.617Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:08:48.408Z",
+      "dureeMs": 22209,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-14-inter-miami-cf-new-york-city-fc",
+        "home": "Inter Miami CF",
+        "away": "New York City FC",
+        "league": "MLS"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13852
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7819,
+        "lectureCache": 4470,
+        "sortie": 3334,
+        "total": 15625
+      },
+      "equivalentApiUsd": 0.065514
+    },
+    {
+      "id": "2026-10-13T06:09:35.658Z-3228-35-85ac1c",
+      "at": "2026-10-13T06:09:35.658Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:09:12.004Z",
+      "dureeMs": 23654,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-14-toronto-fc-orlando-city",
+        "home": "Toronto FC",
+        "away": "Orlando City",
+        "league": "MLS"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13090
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7425,
+        "lectureCache": 4470,
+        "sortie": 3620,
+        "total": 15517
+      },
+      "equivalentApiUsd": 0.066798
+    },
+    {
+      "id": "2026-10-13T06:10:05.637Z-3228-36-800eff",
+      "at": "2026-10-13T06:10:05.637Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:09:37.073Z",
+      "dureeMs": 28564,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-14-santa-fe-cd-jaguares",
+        "home": "Santa Fe",
+        "away": "CD Jaguares",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13409
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7656,
+        "lectureCache": 4470,
+        "sortie": 4294,
+        "total": 16422
+      },
+      "equivalentApiUsd": 0.074462
+    },
+    {
+      "id": "2026-10-13T06:10:30.261Z-3228-37-a2f397",
+      "at": "2026-10-13T06:10:30.261Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:10:08.047Z",
+      "dureeMs": 22214,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-15-fluminense-palmeiras",
+        "home": "Fluminense",
+        "away": "Palmeiras",
+        "league": "Copa Libertadores"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13587
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7698,
+        "lectureCache": 4470,
+        "sortie": 3330,
+        "total": 15500
+      },
+      "equivalentApiUsd": 0.06499
+    },
+    {
+      "id": "2026-10-13T06:10:55.235Z-3228-38-917b24",
+      "at": "2026-10-13T06:10:55.235Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:10:31.715Z",
+      "dureeMs": 23520,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-15-chicago-fire-fc-philadelphia-union",
+        "home": "Chicago Fire FC",
+        "away": "Philadelphia Union",
+        "league": "MLS"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13281
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7540,
+        "lectureCache": 4470,
+        "sortie": 3544,
+        "total": 15556
+      },
+      "equivalentApiUsd": 0.066498
+    },
+    {
+      "id": "2026-10-13T06:11:21.151Z-3228-39-dc680f",
+      "at": "2026-10-13T06:11:21.151Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:10:56.741Z",
+      "dureeMs": 24410,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-15-fc-dallas-seattle-sounders-fc",
+        "home": "FC Dallas",
+        "away": "Seattle Sounders FC",
+        "league": "MLS"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13367
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7615,
+        "lectureCache": 4470,
+        "sortie": 3721,
+        "total": 15808
+      },
+      "equivalentApiUsd": 0.068568
+    },
+    {
+      "id": "2026-10-13T06:11:48.687Z-3228-40-050c9b",
+      "at": "2026-10-13T06:11:48.687Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:11:22.811Z",
+      "dureeMs": 25876,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-15-nashville-sc-sporting-kansas-city",
+        "home": "Nashville SC",
+        "away": "Sporting Kansas City",
+        "league": "MLS"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13586
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7689,
+        "lectureCache": 4470,
+        "sortie": 3759,
+        "total": 15920
+      },
+      "equivalentApiUsd": 0.069244
+    },
+    {
+      "id": "2026-10-13T06:12:12.387Z-3228-41-726586",
+      "at": "2026-10-13T06:12:12.387Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:11:50.263Z",
+      "dureeMs": 22124,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-15-st-louis-city-vancouver-whitecaps",
+        "home": "St. Louis City",
+        "away": "Vancouver Whitecaps",
+        "league": "MLS"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13853
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7846,
+        "lectureCache": 4470,
+        "sortie": 3399,
+        "total": 15717
+      },
+      "equivalentApiUsd": 0.066272
+    },
+    {
+      "id": "2026-10-13T06:12:38.422Z-3228-42-08c5ad",
+      "at": "2026-10-13T06:12:38.422Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:12:13.902Z",
+      "dureeMs": 24520,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-15-colorado-rapids-minnesota-united",
+        "home": "Colorado Rapids",
+        "away": "Minnesota United",
+        "league": "MLS"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13867
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7824,
+        "lectureCache": 4470,
+        "sortie": 3712,
+        "total": 16008
+      },
+      "equivalentApiUsd": 0.069314
+    },
+    {
+      "id": "2026-10-13T06:13:06.779Z-3228-43-b5035e",
+      "at": "2026-10-13T06:13:06.779Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:12:40.157Z",
+      "dureeMs": 26622,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-15-real-salt-lake-san-jose-earthquakes",
+        "home": "Real Salt Lake",
+        "away": "San Jose Earthquakes",
+        "league": "MLS"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 14256
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 8034,
+        "lectureCache": 4470,
+        "sortie": 3943,
+        "total": 16449
+      },
+      "equivalentApiUsd": 0.072464
+    },
+    {
+      "id": "2026-10-13T06:14:00.109Z-3228-44-681036",
+      "at": "2026-10-13T06:14:00.109Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:13:08.275Z",
+      "dureeMs": 51834,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-15-la-galaxy-portland-timbers",
+        "home": "LA Galaxy",
+        "away": "Portland Timbers",
+        "league": "MLS"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13564
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 9160,
+        "lectureCache": 16630,
+        "sortie": 8687,
+        "total": 34481
+      },
+      "equivalentApiUsd": 0.126844
+    },
+    {
+      "id": "2026-10-13T06:14:23.836Z-3228-45-10d67a",
+      "at": "2026-10-13T06:14:23.836Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:14:02.007Z",
+      "dureeMs": 21829,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-15-los-angeles-fc-austin-fc",
+        "home": "Los Angeles FC",
+        "away": "Austin FC",
+        "league": "MLS"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13454
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7639,
+        "lectureCache": 4470,
+        "sortie": 3295,
+        "total": 15406
+      },
+      "equivalentApiUsd": 0.064404
+    },
+    {
+      "id": "2026-10-13T06:14:48.149Z-3228-46-19ddcd",
+      "at": "2026-10-13T06:14:48.149Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:14:25.191Z",
+      "dureeMs": 22958,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-10-15-san-diego-fc-houston-dynamo-fc",
+        "home": "San Diego FC",
+        "away": "Houston Dynamo FC",
+        "league": "MLS"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12943
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7319,
+        "lectureCache": 4470,
+        "sortie": 3508,
+        "total": 15299
+      },
+      "equivalentApiUsd": 0.065254
+    },
+    {
+      "id": "2026-10-13T06:15:34.722Z-3228-47-783a25",
+      "at": "2026-10-13T06:15:34.722Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:14:50.947Z",
+      "dureeMs": 43775,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-chengdu-rongcheng-fc-tianjin-jinmen-tiger-fc",
+        "home": "Chengdu Rongcheng FC",
+        "away": "Tianjin Jinmen Tiger FC",
+        "league": "Super League - China"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9869
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 9124,
+        "lectureCache": 7553,
+        "sortie": 6486,
+        "total": 23167
+      },
+      "equivalentApiUsd": 0.102875
+    },
+    {
+      "id": "2026-10-13T06:16:18.950Z-3228-48-3af6e1",
+      "at": "2026-10-13T06:16:18.950Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:15:36.126Z",
+      "dureeMs": 42824,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-clermont-red-star",
+        "home": "Clermont",
+        "away": "Red Star",
+        "league": "Ligue 2 - France"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9189
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6637,
+        "lectureCache": 9182,
+        "sortie": 5986,
+        "total": 21809
+      },
+      "equivalentApiUsd": 0.088252
+    },
+    {
+      "id": "2026-10-13T06:16:41.496Z-3228-49-3ebc31",
+      "at": "2026-10-13T06:16:41.496Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:16:20.349Z",
+      "dureeMs": 21147,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-cracovia-zag-ebie-lubin",
+        "home": "Cracovia",
+        "away": "Zagłębie Lubin",
+        "league": "Ekstraklasa - Poland"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9289
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5155,
+        "lectureCache": 2088,
+        "sortie": 2865,
+        "total": 10110
+      },
+      "equivalentApiUsd": 0.049692
+    },
+    {
+      "id": "2026-10-13T06:17:06.246Z-3228-50-0424c1",
+      "at": "2026-10-13T06:17:06.246Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:16:42.912Z",
+      "dureeMs": 23334,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-crawley-town-chesterfield",
+        "home": "Crawley Town",
+        "away": "Chesterfield",
+        "league": "League 2"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10083
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5358,
+        "lectureCache": 2088,
+        "sortie": 3058,
+        "total": 10506
+      },
+      "equivalentApiUsd": 0.052434
+    },
+    {
+      "id": "2026-10-13T06:17:33.324Z-3228-51-57d5b7",
+      "at": "2026-10-13T06:17:33.324Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:17:07.672Z",
+      "dureeMs": 25652,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-cukaricki-macva-sabac",
+        "home": "Čukarički",
+        "away": "Mačva Šabac",
+        "league": "Super Liga - Serbia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9642
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6585,
+        "lectureCache": 9503,
+        "sortie": 3280,
+        "total": 19372
+      },
+      "equivalentApiUsd": 0.061049
+    },
+    {
+      "id": "2026-10-13T06:18:02.525Z-3228-52-3d636c",
+      "at": "2026-10-13T06:18:02.525Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:17:34.747Z",
+      "dureeMs": 27778,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-darmstadt-cottbus",
+        "home": "Darmstadt",
+        "away": "Cottbus",
+        "league": "Bundesliga 2 - Germany"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9340
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6546,
+        "lectureCache": 9387,
+        "sortie": 3783,
+        "total": 19720
+      },
+      "equivalentApiUsd": 0.065899
+    },
+    {
+      "id": "2026-10-13T06:18:24.865Z-3228-53-44a58f",
+      "at": "2026-10-13T06:18:24.865Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:18:03.571Z",
+      "dureeMs": 21294,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-deportivo-garcilaso-sport-huancayo",
+        "home": "Deportivo Garcilaso",
+        "away": "Sport Huancayo",
+        "league": "Liga 1 - Peru"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10159
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5498,
+        "lectureCache": 2088,
+        "sortie": 2812,
+        "total": 10400
+      },
+      "equivalentApiUsd": 0.050534
+    },
+    {
+      "id": "2026-10-13T06:18:45.086Z-3228-54-3784ee",
+      "at": "2026-10-13T06:18:45.086Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:18:26.154Z",
+      "dureeMs": 18932,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "9f2bb19d00e60d89a304ff8c8da85e2c",
+        "home": "Derby County",
+        "away": "Wrexham AFC",
+        "league": "Championship"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9820
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5323,
+        "lectureCache": 2088,
+        "sortie": 2311,
+        "total": 9724
+      },
+      "equivalentApiUsd": 0.044824
+    },
+    {
+      "id": "2026-10-13T06:19:05.466Z-3228-55-df1d31",
+      "at": "2026-10-13T06:19:05.466Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:18:46.594Z",
+      "dureeMs": 18872,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-doncaster-rovers-burton-albion",
+        "home": "Doncaster Rovers",
+        "away": "Burton Albion",
+        "league": "League 1"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10680
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5628,
+        "lectureCache": 2088,
+        "sortie": 2356,
+        "total": 10074
+      },
+      "equivalentApiUsd": 0.046494
+    },
+    {
+      "id": "2026-10-13T06:19:50.630Z-3228-56-b383fe",
+      "at": "2026-10-13T06:19:50.630Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:19:06.854Z",
+      "dureeMs": 43776,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-dundee-united-hibernian",
+        "home": "Dundee United",
+        "away": "Hibernian",
+        "league": "Premiership - Scotland"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10448
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7099,
+        "lectureCache": 9681,
+        "sortie": 6583,
+        "total": 23367
+      },
+      "equivalentApiUsd": 0.09617
+    },
+    {
+      "id": "2026-10-13T06:20:21.622Z-3228-57-461381",
+      "at": "2026-10-13T06:20:21.622Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:19:52.000Z",
+      "dureeMs": 29622,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "80e0ce2fd3fae9a4a1fafc4a25339997",
+        "home": "Empoli",
+        "away": "Palermo",
+        "league": "Serie B - Italy"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9000
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6360,
+        "lectureCache": 9194,
+        "sortie": 3722,
+        "total": 19280
+      },
+      "equivalentApiUsd": 0.064507
+    },
+    {
+      "id": "2026-10-13T06:20:47.194Z-3228-58-7ca611",
+      "at": "2026-10-13T06:20:47.194Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:20:22.964Z",
+      "dureeMs": 24230,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-fc-fakel-voronezh-lokomotiv-moscow",
+        "home": "FC Fakel Voronezh",
+        "away": "Lokomotiv Moscow",
+        "league": "Premier League - Russia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9420
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5300,
+        "lectureCache": 2088,
+        "sortie": 3147,
+        "total": 10537
+      },
+      "equivalentApiUsd": 0.053092
+    },
+    {
+      "id": "2026-10-13T06:21:24.732Z-3228-59-ec3fd1",
+      "at": "2026-10-13T06:21:24.732Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:20:48.531Z",
+      "dureeMs": 36201,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-falkirk-dundee",
+        "home": "Falkirk",
+        "away": "Dundee",
+        "league": "Premiership - Scotland"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 8441
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6292,
+        "lectureCache": 8867,
+        "sortie": 5145,
+        "total": 20308
+      },
+      "equivalentApiUsd": 0.078399
+    },
+    {
+      "id": "2026-10-13T06:21:59.097Z-3228-60-da9b5d",
+      "at": "2026-10-13T06:21:59.097Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:21:26.139Z",
+      "dureeMs": 32958,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-fc-kosice-komarno",
+        "home": "FC Košice",
+        "away": "Komárno",
+        "league": "Nike Liga - Slovakia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 8993
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 8263,
+        "lectureCache": 9069,
+        "sortie": 5036,
+        "total": 22372
+      },
+      "equivalentApiUsd": 0.085234
+    },
+    {
+      "id": "2026-10-13T06:22:40.287Z-3228-61-9985bc",
+      "at": "2026-10-13T06:22:40.287Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:22:00.595Z",
+      "dureeMs": 39692,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-fc-krasnodar-zenit-st-petersburg",
+        "home": "FC Krasnodar",
+        "away": "Zenit St Petersburg",
+        "league": "Premier League - Russia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9262
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6816,
+        "lectureCache": 9303,
+        "sortie": 5704,
+        "total": 21827
+      },
+      "equivalentApiUsd": 0.086173
+    },
+    {
+      "id": "2026-10-13T06:23:26.792Z-3228-62-74a8ad",
+      "at": "2026-10-13T06:23:26.792Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:22:41.681Z",
+      "dureeMs": 45111,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-gazovik-orenburg-fc-dynamo-makhachkala",
+        "home": "Gazovik Orenburg",
+        "away": "FC Dynamo Makhachkala",
+        "league": "Premier League - Russia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10109
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7071,
+        "lectureCache": 9715,
+        "sortie": 6659,
+        "total": 23449
+      },
+      "equivalentApiUsd": 0.096825
+    },
+    {
+      "id": "2026-10-13T06:23:55.131Z-3228-63-b774bf",
+      "at": "2026-10-13T06:23:55.131Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:23:28.062Z",
+      "dureeMs": 27069,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-fc-zbrojovka-brno-jablonec",
+        "home": "FC Zbrojovka Brno",
+        "away": "Jablonec",
+        "league": "First League - Czechia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9744
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6837,
+        "lectureCache": 9556,
+        "sortie": 3657,
+        "total": 20054
+      },
+      "equivalentApiUsd": 0.065837
+    },
+    {
+      "id": "2026-10-13T06:24:16.414Z-3228-64-3ebf9f",
+      "at": "2026-10-13T06:24:16.414Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:23:56.525Z",
+      "dureeMs": 19889,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-fk-imt-beograd-fk-radnik-surdulica",
+        "home": "FK IMT Beograd",
+        "away": "FK Radnik Surdulica",
+        "league": "Super Liga - Serbia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9167
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5145,
+        "lectureCache": 2088,
+        "sortie": 2384,
+        "total": 9619
+      },
+      "equivalentApiUsd": 0.044842
+    },
+    {
+      "id": "2026-10-13T06:24:55.462Z-3228-65-8ecf9f",
+      "at": "2026-10-13T06:24:55.462Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:24:17.428Z",
+      "dureeMs": 38034,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-fk-tukums-2000-riga-fc",
+        "home": "FK Tukums 2000",
+        "away": "Riga FC",
+        "league": "Virsliga - Latvia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10222
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7302,
+        "lectureCache": 9831,
+        "sortie": 5391,
+        "total": 22528
+      },
+      "equivalentApiUsd": 0.085092
+    },
+    {
+      "id": "2026-10-13T06:25:38.148Z-3228-66-b53d4e",
+      "at": "2026-10-13T06:25:38.148Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:24:56.378Z",
+      "dureeMs": 41770,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-fleetwood-town-walsall",
+        "home": "Fleetwood Town",
+        "away": "Walsall",
+        "league": "League 2"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9572
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6820,
+        "lectureCache": 9384,
+        "sortie": 6279,
+        "total": 22487
+      },
+      "equivalentApiUsd": 0.091955
+    },
+    {
+      "id": "2026-10-13T06:26:02.075Z-3228-67-32626b",
+      "at": "2026-10-13T06:26:02.075Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:25:38.944Z",
+      "dureeMs": 23131,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-gais-sirius",
+        "home": "GAIS",
+        "away": "Sirius",
+        "league": "Allsvenskan - Sweden"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 8184
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 4618,
+        "lectureCache": 2088,
+        "sortie": 3035,
+        "total": 9743
+      },
+      "equivalentApiUsd": 0.049244
+    },
+    {
+      "id": "2026-10-13T06:26:22.772Z-3228-68-5fd184",
+      "at": "2026-10-13T06:26:22.772Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:26:03.496Z",
+      "dureeMs": 19276,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-go-ahead-eagles-sparta-rotterdam",
+        "home": "Go Ahead Eagles",
+        "away": "Sparta Rotterdam",
+        "league": "Dutch Eredivisie"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9243
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5261,
+        "lectureCache": 2088,
+        "sortie": 2432,
+        "total": 9783
+      },
+      "equivalentApiUsd": 0.045786
+    },
+    {
+      "id": "2026-10-13T06:26:46.513Z-3228-69-bab25e",
+      "at": "2026-10-13T06:26:46.513Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:26:24.284Z",
+      "dureeMs": 22229,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-grazer-ak-salzburg",
+        "home": "Grazer AK",
+        "away": "Salzburg",
+        "league": "Austrian Football Bundesliga"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10116
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5485,
+        "lectureCache": 2088,
+        "sortie": 2880,
+        "total": 10455
+      },
+      "equivalentApiUsd": 0.051162
+    },
+    {
+      "id": "2026-10-13T06:27:08.982Z-3228-70-2a4507",
+      "at": "2026-10-13T06:27:08.982Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:26:47.725Z",
+      "dureeMs": 21257,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-hajduk-split-dinamo-zagreb",
+        "home": "Hajduk Split",
+        "away": "Dinamo Zagreb",
+        "league": "HNL - Croatia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9727
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5536,
+        "lectureCache": 2088,
+        "sortie": 2812,
+        "total": 10438
+      },
+      "equivalentApiUsd": 0.050686
+    },
+    {
+      "id": "2026-10-13T06:27:28.190Z-3228-71-508cfa",
+      "at": "2026-10-13T06:27:28.190Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:27:10.461Z",
+      "dureeMs": 17729,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-heart-of-midlothian-st-mirren",
+        "home": "Heart of Midlothian",
+        "away": "St Mirren",
+        "league": "Premiership - Scotland"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9773
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5324,
+        "lectureCache": 2088,
+        "sortie": 2250,
+        "total": 9664
+      },
+      "equivalentApiUsd": 0.044218
+    },
+    {
+      "id": "2026-10-13T06:28:13.335Z-3228-72-dc7580",
+      "at": "2026-10-13T06:28:13.335Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:27:29.531Z",
+      "dureeMs": 43804,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-hradec-kralove-artis-brno",
+        "home": "Hradec Králové",
+        "away": "Artis Brno",
+        "league": "First League - Czechia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9066
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6635,
+        "lectureCache": 9142,
+        "sortie": 6081,
+        "total": 21862
+      },
+      "equivalentApiUsd": 0.089186
+    },
+    {
+      "id": "2026-10-13T06:28:40.630Z-3228-73-7f0636",
+      "at": "2026-10-13T06:28:40.630Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:28:14.809Z",
+      "dureeMs": 25821,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-huddersfield-town-sheffield-wednesday",
+        "home": "Huddersfield Town",
+        "away": "Sheffield Wednesday",
+        "league": "League 1"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10068
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6517,
+        "lectureCache": 9558,
+        "sortie": 3383,
+        "total": 19462
+      },
+      "equivalentApiUsd": 0.061818
+    },
+    {
+      "id": "2026-10-13T06:29:03.466Z-3228-74-fb0b8a",
+      "at": "2026-10-13T06:29:03.466Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:28:42.097Z",
+      "dureeMs": 21369,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-kryliya-sovetov-spartak-moscow",
+        "home": "Kryliya Sovetov",
+        "away": "Spartak Moscow",
+        "league": "Premier League - Russia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9839
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5357,
+        "lectureCache": 2088,
+        "sortie": 2833,
+        "total": 10280
+      },
+      "equivalentApiUsd": 0.05018
+    },
+    {
+      "id": "2026-10-13T06:29:30.061Z-3228-75-694c01",
+      "at": "2026-10-13T06:29:30.061Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:29:05.124Z",
+      "dureeMs": 24937,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-leicester-city-peterborough-united",
+        "home": "Leicester City",
+        "away": "Peterborough United",
+        "league": "League 1"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9532
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6217,
+        "lectureCache": 9130,
+        "sortie": 3146,
+        "total": 18497
+      },
+      "equivalentApiUsd": 0.058162
+    },
+    {
+      "id": "2026-10-13T06:30:09.546Z-3228-76-7d9a5e",
+      "at": "2026-10-13T06:30:09.546Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:29:31.724Z",
+      "dureeMs": 37822,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "3aa72885e0aa107c62843749f7930a9a",
+        "home": "Lorient",
+        "away": "Paris FC",
+        "league": "Ligue 1 - France"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10567
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7228,
+        "lectureCache": 9832,
+        "sortie": 5229,
+        "total": 22293
+      },
+      "equivalentApiUsd": 0.083176
+    },
+    {
+      "id": "2026-10-13T06:30:47.657Z-3228-77-d79ffc",
+      "at": "2026-10-13T06:30:47.657Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:30:11.193Z",
+      "dureeMs": 36464,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-magdeburg-hannover",
+        "home": "Magdeburg",
+        "away": "Hannover",
+        "league": "Bundesliga 2 - Germany"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10141
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7142,
+        "lectureCache": 9621,
+        "sortie": 5187,
+        "total": 21954
+      },
+      "equivalentApiUsd": 0.08237
+    },
+    {
+      "id": "2026-10-13T06:31:14.631Z-3228-78-5544d7",
+      "at": "2026-10-13T06:31:14.631Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:30:49.293Z",
+      "dureeMs": 25338,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "418f8c26d46eaabd829f2e265673b855",
+        "home": "FSV Mainz 05",
+        "away": "Bayer Leverkusen",
+        "league": "Bundesliga - Germany"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 11013
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7223,
+        "lectureCache": 10228,
+        "sortie": 3370,
+        "total": 20825
+      },
+      "equivalentApiUsd": 0.064646
+    },
+    {
+      "id": "2026-10-13T06:31:55.760Z-3228-79-d68589",
+      "at": "2026-10-13T06:31:55.760Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:31:15.994Z",
+      "dureeMs": 39766,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "22c9b2c43cbe1334381269550dab78e6",
+        "home": "Manchester United",
+        "away": "Tottenham Hotspur",
+        "league": "EPL"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10274
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7084,
+        "lectureCache": 9657,
+        "sortie": 5515,
+        "total": 22260
+      },
+      "equivalentApiUsd": 0.085425
+    },
+    {
+      "id": "2026-10-13T06:32:36.957Z-3228-80-ef3de4",
+      "at": "2026-10-13T06:32:36.957Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:31:57.176Z",
+      "dureeMs": 39781,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-mansfield-town-bromley",
+        "home": "Mansfield Town",
+        "away": "Bromley",
+        "league": "League 1"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10247
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 6,
+        "ecritureCache": 10270,
+        "lectureCache": 18666,
+        "sortie": 6258,
+        "total": 35200
+      },
+      "equivalentApiUsd": 0.107405
+    },
+    {
+      "id": "2026-10-13T06:33:16.409Z-3228-81-4d717a",
+      "at": "2026-10-13T06:33:16.409Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:32:37.930Z",
+      "dureeMs": 38479,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-metropolitanos-fc-rayo-zuliano",
+        "home": "Metropolitanos FC",
+        "away": "Rayo Zuliano",
+        "league": "Primera División - Venezuela"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9076
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6634,
+        "lectureCache": 9209,
+        "sortie": 5382,
+        "total": 21229
+      },
+      "equivalentApiUsd": 0.082206
+    },
+    {
+      "id": "2026-10-13T06:33:56.472Z-3228-82-a74ec6",
+      "at": "2026-10-13T06:33:56.472Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:33:17.763Z",
+      "dureeMs": 38709,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "96673c1fdea1d48aa7440246f5e00bd6",
+        "home": "Middlesbrough",
+        "away": "Wolverhampton Wanderers",
+        "league": "Championship"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10722
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7422,
+        "lectureCache": 9964,
+        "sortie": 5730,
+        "total": 23120
+      },
+      "equivalentApiUsd": 0.088989
+    },
+    {
+      "id": "2026-10-13T06:34:19.444Z-3228-83-dd1d6a",
+      "at": "2026-10-13T06:34:19.444Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:33:57.868Z",
+      "dureeMs": 21576,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-milton-keynes-dons-reading",
+        "home": "Milton Keynes Dons",
+        "away": "Reading",
+        "league": "League 1"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9030
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 4955,
+        "lectureCache": 2088,
+        "sortie": 2694,
+        "total": 9739
+      },
+      "equivalentApiUsd": 0.047182
+    },
+    {
+      "id": "2026-10-13T06:34:42.369Z-3228-84-a7751c",
+      "at": "2026-10-13T06:34:42.369Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:34:20.981Z",
+      "dureeMs": 21388,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "c2c64ebfc5810226f807c1920d580392",
+        "home": "AS Monaco",
+        "away": "Toulouse",
+        "league": "Ligue 1 - France"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10162
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5540,
+        "lectureCache": 2088,
+        "sortie": 2605,
+        "total": 10235
+      },
+      "equivalentApiUsd": 0.048632
+    },
+    {
+      "id": "2026-10-13T06:35:11.637Z-3228-85-cf0271",
+      "at": "2026-10-13T06:35:11.637Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:34:44.010Z",
+      "dureeMs": 27627,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-nantes-reims",
+        "home": "Nantes",
+        "away": "Reims",
+        "league": "Ligue 2 - France"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9157
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6375,
+        "lectureCache": 9195,
+        "sortie": 3465,
+        "total": 19039
+      },
+      "equivalentApiUsd": 0.061997
+    },
+    {
+      "id": "2026-10-13T06:35:57.089Z-3228-86-ad44b2",
+      "at": "2026-10-13T06:35:57.089Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:35:13.137Z",
+      "dureeMs": 43952,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "40c1bd70fee927f9bfa8901edab02b48",
+        "home": "Napoli",
+        "away": "Frosinone",
+        "league": "Serie A - Italy"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9954
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7023,
+        "lectureCache": 9574,
+        "sortie": 6550,
+        "total": 23151
+      },
+      "equivalentApiUsd": 0.095515
+    },
+    {
+      "id": "2026-10-13T06:36:28.978Z-3228-87-09b313",
+      "at": "2026-10-13T06:36:28.978Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:35:58.993Z",
+      "dureeMs": 29985,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-newport-county-colchester-united",
+        "home": "Newport County",
+        "away": "Colchester United",
+        "league": "League 2"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10407
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6666,
+        "lectureCache": 9521,
+        "sortie": 3973,
+        "total": 20164
+      },
+      "equivalentApiUsd": 0.068306
+    },
+    {
+      "id": "2026-10-13T06:36:53.153Z-3228-88-6bb816",
+      "at": "2026-10-13T06:36:53.153Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:36:30.432Z",
+      "dureeMs": 22721,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-notts-county-oxford-united",
+        "home": "Notts County",
+        "away": "Oxford United",
+        "league": "League 1"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10028
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5313,
+        "lectureCache": 2088,
+        "sortie": 2855,
+        "total": 10258
+      },
+      "equivalentApiUsd": 0.050224
+    },
+    {
+      "id": "2026-10-13T06:37:19.336Z-3228-89-0f11a7",
+      "at": "2026-10-13T06:37:19.336Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:36:54.802Z",
+      "dureeMs": 24534,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-oldham-athletic-accrington-stanley",
+        "home": "Oldham Athletic",
+        "away": "Accrington Stanley",
+        "league": "League 2"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9894
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6838,
+        "lectureCache": 9461,
+        "sortie": 3357,
+        "total": 19660
+      },
+      "equivalentApiUsd": 0.062822
+    },
+    {
+      "id": "2026-10-13T06:37:41.516Z-3228-90-0720ec",
+      "at": "2026-10-13T06:37:41.516Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:37:20.976Z",
+      "dureeMs": 20540,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-once-caldas-llaneros-fc",
+        "home": "Once Caldas",
+        "away": "Llaneros FC",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 11000
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5845,
+        "lectureCache": 2088,
+        "sortie": 2811,
+        "total": 10746
+      },
+      "equivalentApiUsd": 0.051912
+    },
+    {
+      "id": "2026-10-13T06:38:10.052Z-3228-91-19c932",
+      "at": "2026-10-13T06:38:10.052Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:37:43.296Z",
+      "dureeMs": 26756,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "9aade3e736c3d113dab19e641c43e272",
+        "home": "SC Paderborn",
+        "away": "VfB Stuttgart",
+        "league": "Bundesliga - Germany"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10935
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7564,
+        "lectureCache": 10182,
+        "sortie": 3651,
+        "total": 21401
+      },
+      "equivalentApiUsd": 0.06881
+    },
+    {
+      "id": "2026-10-13T06:38:56.920Z-3228-92-5f11f0",
+      "at": "2026-10-13T06:38:56.920Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:38:11.478Z",
+      "dureeMs": 45442,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "2849460eb4d15adbb20ec15927a0fd4a",
+        "home": "Paris Saint Germain",
+        "away": "Le Mans FC",
+        "league": "Ligue 1 - France"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10153
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7108,
+        "lectureCache": 9685,
+        "sortie": 6725,
+        "total": 23522
+      },
+      "equivalentApiUsd": 0.097627
+    },
+    {
+      "id": "2026-10-13T06:39:21.632Z-3228-93-65ba71",
+      "at": "2026-10-13T06:39:21.632Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:38:58.443Z",
+      "dureeMs": 23189,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-plymouth-argyle-afc-wimbledon",
+        "home": "Plymouth Argyle",
+        "away": "AFC Wimbledon",
+        "league": "League 1"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10768
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5725,
+        "lectureCache": 2088,
+        "sortie": 3058,
+        "total": 10873
+      },
+      "equivalentApiUsd": 0.053902
+    },
+    {
+      "id": "2026-10-13T06:39:43.293Z-3228-94-762667",
+      "at": "2026-10-13T06:39:43.293Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:39:22.599Z",
+      "dureeMs": 20694,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-port-vale-grimsby-town",
+        "home": "Port Vale",
+        "away": "Grimsby Town",
+        "league": "League 2"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 8728
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 4833,
+        "lectureCache": 2088,
+        "sortie": 2609,
+        "total": 9532
+      },
+      "equivalentApiUsd": 0.045844
+    },
+    {
+      "id": "2026-10-13T06:40:30.929Z-3228-95-ba2c7f",
+      "at": "2026-10-13T06:40:30.929Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:39:44.746Z",
+      "dureeMs": 46183,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "1f9e31de12bb3b92a0deaaf9ee57af3d",
+        "home": "Preston North End",
+        "away": "Millwall",
+        "league": "Championship"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 11053
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7400,
+        "lectureCache": 9944,
+        "sortie": 6489,
+        "total": 23837
+      },
+      "equivalentApiUsd": 0.096487
+    },
+    {
+      "id": "2026-10-13T06:41:03.368Z-3228-96-1ed5b9",
+      "at": "2026-10-13T06:41:03.368Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:40:32.410Z",
+      "dureeMs": 30958,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-puebla-leon",
+        "home": "Puebla",
+        "away": "León",
+        "league": "Liga MX"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9780
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 8415,
+        "lectureCache": 9330,
+        "sortie": 4818,
+        "total": 22567
+      },
+      "equivalentApiUsd": 0.083714
+    },
+    {
+      "id": "2026-10-13T06:41:28.492Z-3228-97-1c6e7b",
+      "at": "2026-10-13T06:41:28.492Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:41:05.107Z",
+      "dureeMs": 23385,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-rangers-kilmarnock",
+        "home": "Rangers",
+        "away": "Kilmarnock",
+        "league": "Premiership - Scotland"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10683
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5676,
+        "lectureCache": 2088,
+        "sortie": 3079,
+        "total": 10845
+      },
+      "equivalentApiUsd": 0.053916
+    },
+    {
+      "id": "2026-10-13T06:41:51.899Z-3228-98-cc42ee",
+      "at": "2026-10-13T06:41:51.899Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:41:29.615Z",
+      "dureeMs": 22284,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "01cb7a67c8ae71201ec27297455fc0e8",
+        "home": "RB Leipzig",
+        "away": "Eintracht Frankfurt",
+        "league": "Bundesliga - Germany"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10057
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5576,
+        "lectureCache": 2088,
+        "sortie": 2857,
+        "total": 10523
+      },
+      "equivalentApiUsd": 0.051296
+    },
+    {
+      "id": "2026-10-13T06:42:30.828Z-3228-99-e256d1",
+      "at": "2026-10-13T06:42:30.828Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:41:53.381Z",
+      "dureeMs": 37447,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "551f242223b1625f458d1a2ea212a0c3",
+        "home": "Real Madrid",
+        "away": "Villarreal",
+        "league": "La Liga - Spain"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10599
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7234,
+        "lectureCache": 9787,
+        "sortie": 5295,
+        "total": 22320
+      },
+      "equivalentApiUsd": 0.083851
+    },
+    {
+      "id": "2026-10-13T06:43:18.958Z-3228-100-9e4a79",
+      "at": "2026-10-13T06:43:18.958Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:42:32.195Z",
+      "dureeMs": 46763,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-rotherham-united-gillingham",
+        "home": "Rotherham United",
+        "away": "Gillingham",
+        "league": "League 2"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 11944
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7757,
+        "lectureCache": 10390,
+        "sortie": 6815,
+        "total": 24966
+      },
+      "equivalentApiUsd": 0.101264
+    },
+    {
+      "id": "2026-10-13T06:43:43.582Z-3228-101-e17b14",
+      "at": "2026-10-13T06:43:43.582Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:43:20.618Z",
+      "dureeMs": 22964,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-samsunspor-trabzonspor",
+        "home": "Samsunspor",
+        "away": "Trabzonspor",
+        "league": "Turkey Super League"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9900
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5435,
+        "lectureCache": 2088,
+        "sortie": 2949,
+        "total": 10474
+      },
+      "equivalentApiUsd": 0.051652
+    },
+    {
+      "id": "2026-10-13T06:44:10.307Z-3228-102-ca97a0",
+      "at": "2026-10-13T06:44:10.307Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:43:45.463Z",
+      "dureeMs": 24844,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-shanghai-shenhua-fc-yunnan-yukun",
+        "home": "Shanghai Shenhua FC",
+        "away": "Yunnan Yukun",
+        "league": "Super League - China"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9694
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5399,
+        "lectureCache": 2088,
+        "sortie": 2803,
+        "total": 10292
+      },
+      "equivalentApiUsd": 0.050048
+    },
+    {
+      "id": "2026-10-13T06:44:50.789Z-3228-103-3444f3",
+      "at": "2026-10-13T06:44:50.789Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:44:11.361Z",
+      "dureeMs": 39428,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "6e370faecd2f841fc843ec49c641a9e3",
+        "home": "Sheffield United",
+        "away": "Lincoln City",
+        "league": "Championship"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9980
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6960,
+        "lectureCache": 9543,
+        "sortie": 5536,
+        "total": 22043
+      },
+      "equivalentApiUsd": 0.085117
+    },
+    {
+      "id": "2026-10-13T06:45:14.087Z-3228-104-0d4d68",
+      "at": "2026-10-13T06:45:14.087Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:44:52.549Z",
+      "dureeMs": 21538,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-shrewsbury-town-exeter-city",
+        "home": "Shrewsbury Town",
+        "away": "Exeter City",
+        "league": "League 2"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10652
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5664,
+        "lectureCache": 2088,
+        "sortie": 2782,
+        "total": 10536
+      },
+      "equivalentApiUsd": 0.050898
+    },
+    {
+      "id": "2026-10-13T06:45:57.470Z-3228-105-e59680",
+      "at": "2026-10-13T06:45:57.470Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:45:15.226Z",
+      "dureeMs": 42244,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-sk-super-nova-grobina",
+        "home": "SK Super Nova",
+        "away": "Grobiņa",
+        "league": "Virsliga - Latvia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9818
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7098,
+        "lectureCache": 9568,
+        "sortie": 6102,
+        "total": 22772
+      },
+      "equivalentApiUsd": 0.091334
+    },
+    {
+      "id": "2026-10-13T06:46:34.507Z-3228-106-0eef39",
+      "at": "2026-10-13T06:46:34.507Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:46:06.538Z",
+      "dureeMs": 27969,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-skalica-slovan-bratislava",
+        "home": "Skalica",
+        "away": "Slovan Bratislava",
+        "league": "Nike Liga - Slovakia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9582
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6535,
+        "lectureCache": 9375,
+        "sortie": 3625,
+        "total": 19539
+      },
+      "equivalentApiUsd": 0.064273
+    },
+    {
+      "id": "2026-10-13T06:47:02.742Z-3228-107-3d8bb9",
+      "at": "2026-10-13T06:47:02.742Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:46:36.139Z",
+      "dureeMs": 26603,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-stevenage-wigan-athletic",
+        "home": "Stevenage",
+        "away": "Wigan Athletic",
+        "league": "League 1"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9213
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6422,
+        "lectureCache": 9213,
+        "sortie": 3202,
+        "total": 18841
+      },
+      "equivalentApiUsd": 0.059559
+    },
+    {
+      "id": "2026-10-13T06:47:35.205Z-3228-108-eb0a47",
+      "at": "2026-10-13T06:47:35.205Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:47:04.225Z",
+      "dureeMs": 30980,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-stjarnan-ka-akureyri",
+        "home": "Stjarnan",
+        "away": "KA Akureyri",
+        "league": "Besta deildin - Iceland"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9556
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6739,
+        "lectureCache": 9464,
+        "sortie": 3747,
+        "total": 19954
+      },
+      "equivalentApiUsd": 0.066327
+    },
+    {
+      "id": "2026-10-13T06:48:01.887Z-3228-109-f6c6cc",
+      "at": "2026-10-13T06:48:01.887Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:47:37.143Z",
+      "dureeMs": 24744,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-stockport-county-barnsley",
+        "home": "Stockport County",
+        "away": "Barnsley",
+        "league": "League 1"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10558
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6855,
+        "lectureCache": 9667,
+        "sortie": 3116,
+        "total": 19642
+      },
+      "equivalentApiUsd": 0.060521
+    },
+    {
+      "id": "2026-10-13T06:48:29.123Z-3228-110-c3c3ae",
+      "at": "2026-10-13T06:48:29.123Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:48:03.410Z",
+      "dureeMs": 25713,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "d4b4b1c6db1258fa90bb32e8b5548869",
+        "home": "Südtirol",
+        "away": "Ascoli",
+        "league": "Serie B - Italy"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9595
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6914,
+        "lectureCache": 9431,
+        "sortie": 3383,
+        "total": 19732
+      },
+      "equivalentApiUsd": 0.06338
+    },
+    {
+      "id": "2026-10-13T06:49:00.218Z-3228-111-b17c09",
+      "at": "2026-10-13T06:49:00.218Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:48:30.886Z",
+      "dureeMs": 29332,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "380b8f24ec5430fb545a7490c1017285",
+        "home": "Sunderland",
+        "away": "Brighton and Hove Albion",
+        "league": "EPL"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10711
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5727,
+        "lectureCache": 2088,
+        "sortie": 3703,
+        "total": 11520
+      },
+      "equivalentApiUsd": 0.06036
+    },
+    {
+      "id": "2026-10-13T06:49:29.887Z-3228-112-d86a86",
+      "at": "2026-10-13T06:49:29.887Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:49:01.689Z",
+      "dureeMs": 28198,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "34156ace068fbe5b24944791e752b43d",
+        "home": "Swansea City",
+        "away": "Norwich City",
+        "league": "Championship"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9267
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6378,
+        "lectureCache": 9161,
+        "sortie": 3707,
+        "total": 19250
+      },
+      "equivalentApiUsd": 0.064422
+    },
+    {
+      "id": "2026-10-13T06:49:52.844Z-3228-113-fb0fbe",
+      "at": "2026-10-13T06:49:52.844Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:49:31.388Z",
+      "dureeMs": 21456,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-swindon-town-crewe-alexandra",
+        "home": "Swindon Town",
+        "away": "Crewe Alexandra",
+        "league": "League 2"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10190
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5442,
+        "lectureCache": 2088,
+        "sortie": 2741,
+        "total": 10273
+      },
+      "equivalentApiUsd": 0.0496
+    },
+    {
+      "id": "2026-10-13T06:50:16.856Z-3228-114-8f7db7",
+      "at": "2026-10-13T06:50:16.856Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:49:54.267Z",
+      "dureeMs": 22589,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-thor-akureyri-ibv-vestmannaeyjar",
+        "home": "Thór Akureyri",
+        "away": "ÍBV Vestmannaeyjar",
+        "league": "Besta deildin - Iceland"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10370
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5801,
+        "lectureCache": 2088,
+        "sortie": 2886,
+        "total": 10777
+      },
+      "equivalentApiUsd": 0.052486
+    },
+    {
+      "id": "2026-10-13T06:51:01.687Z-3228-115-fe0dcb",
+      "at": "2026-10-13T06:51:01.687Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:50:18.541Z",
+      "dureeMs": 43146,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-tigres-toluca",
+        "home": "Tigres",
+        "away": "Toluca",
+        "league": "Liga MX"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10317
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7208,
+        "lectureCache": 9747,
+        "sortie": 5979,
+        "total": 22938
+      },
+      "equivalentApiUsd": 0.090579
+    },
+    {
+      "id": "2026-10-13T06:51:45.307Z-3228-116-687d6a",
+      "at": "2026-10-13T06:51:45.307Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:51:03.894Z",
+      "dureeMs": 41413,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-tps-ff-jaro",
+        "home": "TPS",
+        "away": "FF Jaro",
+        "league": "Veikkausliiga - Finland"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9799
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7034,
+        "lectureCache": 9545,
+        "sortie": 6281,
+        "total": 22864
+      },
+      "equivalentApiUsd": 0.092863
+    },
+    {
+      "id": "2026-10-13T06:52:07.645Z-3228-117-8ada66",
+      "at": "2026-10-13T06:52:07.645Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:51:47.133Z",
+      "dureeMs": 20512,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-tranmere-rovers-rochdale",
+        "home": "Tranmere Rovers",
+        "away": "Rochdale",
+        "league": "League 2"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9634
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5245,
+        "lectureCache": 2088,
+        "sortie": 2607,
+        "total": 9942
+      },
+      "equivalentApiUsd": 0.047472
+    },
+    {
+      "id": "2026-10-13T06:52:55.028Z-3228-118-422aa2",
+      "at": "2026-10-13T06:52:55.028Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:52:09.457Z",
+      "dureeMs": 45571,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-trencin-dukla-banska-bystrica",
+        "home": "Trenčín",
+        "away": "Dukla Banská Bystrica",
+        "league": "Nike Liga - Slovakia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9802
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6967,
+        "lectureCache": 9450,
+        "sortie": 6461,
+        "total": 22882
+      },
+      "equivalentApiUsd": 0.094376
+    },
+    {
+      "id": "2026-10-13T06:53:39.463Z-3228-119-273ad1",
+      "at": "2026-10-13T06:53:39.463Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:52:56.824Z",
+      "dureeMs": 42639,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "2fd48be0a24ed906187067d4170bf010",
+        "home": "Union Berlin",
+        "away": "Elversberg",
+        "league": "Bundesliga - Germany"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9336
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6652,
+        "lectureCache": 9239,
+        "sortie": 6325,
+        "total": 22220
+      },
+      "equivalentApiUsd": 0.091714
+    },
+    {
+      "id": "2026-10-13T06:54:12.498Z-3228-120-16fda1",
+      "at": "2026-10-13T06:54:12.498Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:53:41.132Z",
+      "dureeMs": 31366,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-union-defensa-y-justicia",
+        "home": "Unión",
+        "away": "Defensa y Justicia",
+        "league": "Primera División - Argentina"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10757
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7403,
+        "lectureCache": 9952,
+        "sortie": 3721,
+        "total": 21080
+      },
+      "equivalentApiUsd": 0.06882
+    },
+    {
+      "id": "2026-10-13T06:54:38.178Z-3228-121-cdf6f8",
+      "at": "2026-10-13T06:54:38.178Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:54:14.207Z",
+      "dureeMs": 23971,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-valur-fh-hafnarfjor-ur",
+        "home": "Valur",
+        "away": "FH Hafnarfjörður",
+        "league": "Besta deildin - Iceland"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10249
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5497,
+        "lectureCache": 2088,
+        "sortie": 2949,
+        "total": 10536
+      },
+      "equivalentApiUsd": 0.0519
+    },
+    {
+      "id": "2026-10-13T06:55:01.344Z-3228-122-b3423b",
+      "at": "2026-10-13T06:55:01.344Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:54:39.976Z",
+      "dureeMs": 21368,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-osnabruck-dresden",
+        "home": "Osnabruck",
+        "away": "Dresden",
+        "league": "Bundesliga 2 - Germany"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 8828
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 4882,
+        "lectureCache": 2088,
+        "sortie": 2747,
+        "total": 9719
+      },
+      "equivalentApiUsd": 0.04742
+    },
+    {
+      "id": "2026-10-13T06:55:44.030Z-3228-123-6dfa9c",
+      "at": "2026-10-13T06:55:44.030Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:55:03.185Z",
+      "dureeMs": 40845,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-viktoria-plzen-mlada-boleslav",
+        "home": "Viktoria Plzeň",
+        "away": "Mladá Boleslav",
+        "league": "First League - Czechia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 11200
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7866,
+        "lectureCache": 10326,
+        "sortie": 5687,
+        "total": 23883
+      },
+      "equivalentApiUsd": 0.090407
+    },
+    {
+      "id": "2026-10-13T06:56:22.240Z-3228-124-a319d0",
+      "at": "2026-10-13T06:56:22.240Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:55:45.706Z",
+      "dureeMs": 36534,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "7e624ab39c4b3406fdcf3bae75c18e0b",
+        "home": "Virtus Entella",
+        "away": "Juve Stabia",
+        "league": "Serie B - Italy"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9474
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6971,
+        "lectureCache": 9438,
+        "sortie": 5229,
+        "total": 21642
+      },
+      "equivalentApiUsd": 0.08207
+    },
+    {
+      "id": "2026-10-13T06:56:52.772Z-3228-125-463a9a",
+      "at": "2026-10-13T06:56:52.772Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:56:23.791Z",
+      "dureeMs": 28981,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "92f161645aed415d240b06de729f5015",
+        "home": "Watford",
+        "away": "Burnley",
+        "league": "Championship"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10863
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7228,
+        "lectureCache": 9889,
+        "sortie": 3772,
+        "total": 20893
+      },
+      "equivalentApiUsd": 0.068618
+    },
+    {
+      "id": "2026-10-13T06:57:39.376Z-3228-126-b23225",
+      "at": "2026-10-13T06:57:39.376Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:56:54.482Z",
+      "dureeMs": 44894,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "3e8a2baae4566a7c7fcc390dc089e9b8",
+        "home": "West Bromwich Albion",
+        "away": "Birmingham City",
+        "league": "Championship"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9755
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6790,
+        "lectureCache": 9344,
+        "sortie": 6626,
+        "total": 22764
+      },
+      "equivalentApiUsd": 0.095297
+    },
+    {
+      "id": "2026-10-13T06:58:30.985Z-3228-127-458470",
+      "at": "2026-10-13T06:58:30.985Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:57:42.241Z",
+      "dureeMs": 48744,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-wsg-tirol-ried",
+        "home": "WSG Tirol",
+        "away": "Ried",
+        "league": "Austrian Football Bundesliga"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 8169
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6260,
+        "lectureCache": 8804,
+        "sortie": 6268,
+        "total": 21336
+      },
+      "equivalentApiUsd": 0.089489
+    },
+    {
+      "id": "2026-10-13T06:59:09.727Z-3228-128-2ee360",
+      "at": "2026-10-13T06:59:09.727Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:58:36.043Z",
+      "dureeMs": 33684,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-wycombe-wanderers-luton-town",
+        "home": "Wycombe Wanderers",
+        "away": "Luton Town",
+        "league": "League 1"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9668
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6926,
+        "lectureCache": 9429,
+        "sortie": 3717,
+        "total": 20076
+      },
+      "equivalentApiUsd": 0.066768
+    },
+    {
+      "id": "2026-10-13T07:00:01.760Z-3228-129-cf66dc",
+      "at": "2026-10-13T07:00:01.760Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T06:59:14.313Z",
+      "dureeMs": 47447,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-10-york-city-northampton-town",
+        "home": "York City",
+        "away": "Northampton Town",
+        "league": "League 2"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10573
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 6938,
+        "lectureCache": 9557,
+        "sortie": 6420,
+        "total": 22919
+      },
+      "equivalentApiUsd": 0.093871
+    },
+    {
+      "id": "2026-10-13T07:00:22.929Z-3228-130-63d31b",
+      "at": "2026-10-13T07:00:22.929Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T07:00:03.500Z",
+      "dureeMs": 19429,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "a8801462cb97a43570956e4b3ef4aedf",
+        "home": "1. FC Köln",
+        "away": "Borussia Monchengladbach",
+        "league": "Bundesliga - Germany"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 11163
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5988,
+        "lectureCache": 2088,
+        "sortie": 2493,
+        "total": 10571
+      },
+      "equivalentApiUsd": 0.049304
+    },
+    {
+      "id": "2026-10-13T07:00:47.588Z-3228-131-8076cf",
+      "at": "2026-10-13T07:00:47.588Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T07:00:26.082Z",
+      "dureeMs": 21506,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-11-atletico-de-san-luis-santos-laguna",
+        "home": "Atlético de San Luis",
+        "away": "Santos Laguna",
+        "league": "Liga MX"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10760
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5689,
+        "lectureCache": 2088,
+        "sortie": 2793,
+        "total": 10572
+      },
+      "equivalentApiUsd": 0.051108
+    },
+    {
+      "id": "2026-10-13T16:18:28.412Z-3228-132-7824b0",
+      "at": "2026-10-13T16:18:28.412Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T16:18:02.026Z",
+      "dureeMs": 26386,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "2b0a946cac613732fcbf57ce931490a1",
+        "home": "RC Lens",
+        "away": "Sporting Lisbon",
+        "league": "UEFA Champions League"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12749
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 11859,
+        "lectureCache": 0,
+        "sortie": 3545,
+        "total": 15406
+      },
+      "equivalentApiUsd": 0.08289
+    },
+    {
+      "id": "2026-10-13T16:19:03.205Z-3228-133-fe6488",
+      "at": "2026-10-13T16:19:03.205Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T16:18:34.673Z",
+      "dureeMs": 28532,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "46f726554e6876fb828c767bfbfdfdad",
+        "home": "Sabah FK",
+        "away": "Slavia Praha",
+        "league": "UEFA Champions League"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12471
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7264,
+        "lectureCache": 4470,
+        "sortie": 3688,
+        "total": 15424
+      },
+      "equivalentApiUsd": 0.066834
+    },
+    {
+      "id": "2026-10-13T17:53:29.535Z-3228-134-bf73f6",
+      "at": "2026-10-13T17:53:29.535Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T17:53:06.299Z",
+      "dureeMs": 23236,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-10-13-bristol-city-blackburn",
+        "home": "Bristol City",
+        "away": "Blackburn",
+        "league": "Championship"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12453
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 11608,
+        "lectureCache": 0,
+        "sortie": 3445,
+        "total": 15055
+      },
+      "equivalentApiUsd": 0.080886
+    },
+    {
+      "id": "2026-10-13T17:53:56.229Z-3228-135-d64952",
+      "at": "2026-10-13T17:53:56.229Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T17:53:33.275Z",
+      "dureeMs": 22954,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-10-13-burnley-charlton",
+        "home": "Burnley",
+        "away": "Charlton",
+        "league": "Championship"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12793
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7412,
+        "lectureCache": 4470,
+        "sortie": 3355,
+        "total": 15239
+      },
+      "equivalentApiUsd": 0.064096
+    },
+    {
+      "id": "2026-10-13T17:54:23.283Z-3228-136-2fe078",
+      "at": "2026-10-13T17:54:23.283Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T17:53:58.995Z",
+      "dureeMs": 24288,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-10-13-cardiff-watford",
+        "home": "Cardiff",
+        "away": "Watford",
+        "league": "Championship"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12924
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7428,
+        "lectureCache": 4470,
+        "sortie": 3637,
+        "total": 15537
+      },
+      "equivalentApiUsd": 0.06698
+    },
+    {
+      "id": "2026-10-13T17:54:51.687Z-3228-137-e3b4c9",
+      "at": "2026-10-13T17:54:51.687Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T17:54:26.002Z",
+      "dureeMs": 25685,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-10-13-millwall-swansea",
+        "home": "Millwall",
+        "away": "Swansea",
+        "league": "Championship"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12748
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7385,
+        "lectureCache": 4470,
+        "sortie": 3905,
+        "total": 15762
+      },
+      "equivalentApiUsd": 0.069488
+    },
+    {
+      "id": "2026-10-13T17:55:17.814Z-3228-138-d214eb",
+      "at": "2026-10-13T17:55:17.814Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T17:54:54.270Z",
+      "dureeMs": 23544,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-10-13-wolves-bolton",
+        "home": "Wolves",
+        "away": "Bolton",
+        "league": "Championship"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12577
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7292,
+        "lectureCache": 4470,
+        "sortie": 3621,
+        "total": 15385
+      },
+      "equivalentApiUsd": 0.066276
+    },
+    {
+      "id": "2026-10-13T17:56:12.381Z-3228-139-62e02e",
+      "at": "2026-10-13T17:56:12.381Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T17:55:19.982Z",
+      "dureeMs": 52399,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-10-13-wrexham-west-brom",
+        "home": "Wrexham",
+        "away": "West Brom",
+        "league": "Championship"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12978
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 9045,
+        "lectureCache": 16399,
+        "sortie": 8864,
+        "total": 34312
+      },
+      "equivalentApiUsd": 0.128108
+    },
+    {
+      "id": "2026-10-13T18:08:31.937Z-3228-140-b1264b",
+      "at": "2026-10-13T18:08:31.937Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T18:08:05.194Z",
+      "dureeMs": 26743,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "93177465a42a0fb7802f1c8b06d6ee3a",
+        "home": "Arsenal",
+        "away": "Lille",
+        "league": "UEFA Champions League"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13400
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7761,
+        "lectureCache": 4470,
+        "sortie": 4020,
+        "total": 16253
+      },
+      "equivalentApiUsd": 0.072142
+    },
+    {
+      "id": "2026-10-13T18:09:01.662Z-3228-141-09be03",
+      "at": "2026-10-13T18:09:01.662Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T18:08:34.810Z",
+      "dureeMs": 26852,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "a9c22e08b395ee5753c8a65bc0eb97cf",
+        "home": "Atlético Madrid",
+        "away": "Manchester United",
+        "league": "UEFA Champions League"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13321
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7597,
+        "lectureCache": 4470,
+        "sortie": 4029,
+        "total": 16098
+      },
+      "equivalentApiUsd": 0.071576
+    },
+    {
+      "id": "2026-10-13T18:09:30.117Z-3228-142-502d0e",
+      "at": "2026-10-13T18:09:30.117Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T18:09:05.006Z",
+      "dureeMs": 25111,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "dd431688ed5c8f383b6434fd4f01e883",
+        "home": "Galatasaray",
+        "away": "Barcelona",
+        "league": "UEFA Champions League"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13026
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7526,
+        "lectureCache": 4470,
+        "sortie": 3794,
+        "total": 15792
+      },
+      "equivalentApiUsd": 0.068942
+    },
+    {
+      "id": "2026-10-13T18:09:56.507Z-3228-143-cac030",
+      "at": "2026-10-13T18:09:56.507Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T18:09:33.835Z",
+      "dureeMs": 22672,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "ca3f4b075d835413f9cb7bd3c439fdd0",
+        "home": "Inter Milan",
+        "away": "Club Brugge",
+        "league": "UEFA Champions League"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12836
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7447,
+        "lectureCache": 4470,
+        "sortie": 3432,
+        "total": 15351
+      },
+      "equivalentApiUsd": 0.065006
+    },
+    {
+      "id": "2026-10-13T18:10:23.236Z-3228-144-247803",
+      "at": "2026-10-13T18:10:23.236Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T18:09:59.514Z",
+      "dureeMs": 23722,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "09e41b63d1d59bd4d971c54ffce154d3",
+        "home": "Villarreal",
+        "away": "Napoli",
+        "league": "UEFA Champions League"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13490
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7765,
+        "lectureCache": 4470,
+        "sortie": 3401,
+        "total": 15638
+      },
+      "equivalentApiUsd": 0.065968
+    },
+    {
+      "id": "2026-10-13T18:10:49.680Z-3228-145-aa819e",
+      "at": "2026-10-13T18:10:49.680Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T18:10:25.945Z",
+      "dureeMs": 23735,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "da9e9e9eb9a238ed97827c4a8fbe6044",
+        "home": "RB Leipzig",
+        "away": "PSV Eindhoven",
+        "league": "UEFA Champions League"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 13607
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7917,
+        "lectureCache": 4470,
+        "sortie": 3637,
+        "total": 16026
+      },
+      "equivalentApiUsd": 0.068936
+    },
+    {
+      "id": "2026-10-13T18:11:18.093Z-3228-146-3b6730",
+      "at": "2026-10-13T18:11:18.093Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T18:10:52.604Z",
+      "dureeMs": 25489,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-10-13-birmingham-preston",
+        "home": "Birmingham",
+        "away": "Preston",
+        "league": "Championship"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12566
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7190,
+        "lectureCache": 4470,
+        "sortie": 3788,
+        "total": 15450
+      },
+      "equivalentApiUsd": 0.067538
+    },
+    {
+      "id": "2026-10-13T18:11:44.537Z-3228-147-2d8175",
+      "at": "2026-10-13T18:11:44.537Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T18:11:20.831Z",
+      "dureeMs": 23706,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-10-13-stoke-middlesbrough",
+        "home": "Stoke",
+        "away": "Middlesbrough",
+        "league": "Championship"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12697
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7326,
+        "lectureCache": 4470,
+        "sortie": 3480,
+        "total": 15278
+      },
+      "equivalentApiUsd": 0.065002
+    },
+    {
+      "id": "2026-10-13T18:28:30.587Z-3228-148-e1dfb0",
+      "at": "2026-10-13T18:28:30.587Z",
+      "jour": "2026-10-13",
+      "debut": "2026-10-13T18:28:05.746Z",
+      "dureeMs": 24841,
+      "canal": "claude-code",
+      "type": "reprise",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-10-13-wolves-bolton",
+        "home": "Wolves",
+        "away": "Bolton",
+        "league": "Championship"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12690
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7350,
+        "lectureCache": 4470,
+        "sortie": 3729,
+        "total": 15551
+      },
+      "equivalentApiUsd": 0.067588
+    }
+  ]
+}
