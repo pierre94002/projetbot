@@ -292,6 +292,20 @@ if (phase === 'rejeu') {
   // Une copie SANS football-data : aucune erreur.
   const sansFd = await R.rejouer({ database: db, periodes: ['P4'], prix: ['fd-avant-match'], de: '2026-09-15', tirages: 100, minBlocs: 20, reproduction: false });
   sortie.sansFd = { erreur: sansFd.bilan.erreur, rejouees: sansFd.bilan.rencontres.rejouees };
+  // Une CANDIDATE rejouée avec sa DÉCLARATION (bancCandidate, étapes 25 et 27 ; correction du 19/10) : ses vues étiquettent
+  // les cases (« candidate:… ») et son étiquette est complète ; la même sans déclaration : incomplète.
+  const reglagesEnService = (await imp('core/engine/engineConfig.js')).lireReglagesDuMoteur().football;
+  const reglagesCandidate = { ...JSON.parse(JSON.stringify(reglagesEnService)), defaultCorrelation: -0.2 };
+  const commun = { database: db, periodes: ['P4'], prix: ['fd-avant-match'], de: '2026-09-15', tirages: 100, minBlocs: 20, reproduction: false, config: reglagesCandidate };
+  const avecDeclaration = await R.rejouer({ ...commun, declaration: { etape: '27', version: 'c9', vues: [{ de: '2026-09-15', a: '2026-12-31', quoi: 'essai' }] } });
+  const sansDeclaration = await R.rejouer(commun);
+  sortie.declaration = {
+    erreur: avecDeclaration.bilan.erreur,
+    etiquette: avecDeclaration.bilan.etiquette,
+    fenetres: (avecDeclaration.resume?.options?.fenetres ?? []).map((f) => f.id),
+    vues: [...new Set(casesDe(avecDeclaration).flatMap((c) => Object.keys(c.vues?.parFenetre ?? {})))],
+    sans: { erreur: sansDeclaration.bilan.erreur, etiquette: sansDeclaration.bilan.etiquette, vues: [...new Set(casesDe(sansDeclaration).flatMap((c) => Object.keys(c.vues?.parFenetre ?? {})))] }
+  };
   for (const [nom, r] of [['r1', r1], ['r2', r2]]) {
     const cles = r.lignes.filter((l) => l.type === 'ligne').map((l) => l.cle);
     sortie[nom] = {
@@ -546,20 +560,53 @@ if (phase === 'route') {
   liberer();
   await tenu;
   sortie.invalide = await requete(app, 'POST', '/api/bench/run', { periodes: ['P9'] });
-  // Un rejeu lancé : 202 ; pendant qu'il tourne, une passe d'actualisation est REPORTÉE (jamais le bilan du banc).
+  // La course : le verrou pris par un autre processus ENTRE la vérification et la pose (simulée : la pose du fichier
+  // échoue « EEXIST ») → 409 dit simplement, rien de lancé, ni « en cours » ni refus rangé (correction du 19/10 : la
+  // réponse disait « lancé »).
+  const fsm = (await import('node:fs')).default;
+  const lier = fsm.linkSync;
+  fsm.linkSync = () => {
+    throw Object.assign(new Error('EEXIST: verrou posé par un autre processus (simulé)'), { code: 'EEXIST' });
+  };
+  try {
+    sortie.course = await requete(app, 'POST', '/api/bench/run', { periodes: ['P3'], prix: ['fd-cloture'] });
+  } finally {
+    fsm.linkSync = lier;
+  }
+  sortie.courseApres = { enCours: D.rejeuEnCours(), refus: (await requete(app, 'GET', '/api/bench?resume=non')).corps.dernierRefus };
+  // Un rejeu lancé : 202 ; il tourne dans un PROCESSUS À PART (correction du 19/10) ; pendant ce temps, une passe
+  // d'actualisation est REPORTÉE (jamais le bilan du banc), et la boucle d'événements de CE processus (le serveur) est mesurée.
+  const { monitorEventLoopDelay } = await import('node:perf_hooks');
+  const boucle = monitorEventLoopDelay({ resolution: 10 });
+  boucle.enable();
   const lance = await requete(app, 'POST', '/api/bench/run', { periodes: ['P3'], prix: ['fd-cloture'] });
   sortie.lance = { code: lance.code, options: lance.corps?.options };
   const passe = await withRefreshLock(async () => ({ bilan: 'de la passe' }), { stamp: false });
   sortie.passePendantLeBanc = passe;
   sortie.encore = (await requete(app, 'POST', '/api/bench/run', { periodes: ['P3'], prix: ['fd-cloture'] })).code;
-  let etat;
-  for (let i = 0; i < 600; i++) {
-    etat = (await requete(app, 'GET', '/api/bench')).corps;
-    if (!etat.enCours) break;
-    await new Promise((fin) => setTimeout(fin, 100));
-  }
-  sortie.apres = { enCours: etat.enCours, refus: etat.dernierRefus, rejeux: etat.rejeux.length, dernier: etat.dernierRejeu && { id: etat.dernierRejeu.id, ou: etat.dernierRejeu.ou, finiLe: Boolean(etat.dernierRejeu.finiLe), erreur: etat.dernierRejeu.bilan?.erreur ?? null, rencontres: etat.dernierRejeu.bilan?.rencontres ?? null, tranches: Object.keys(etat.dernierRejeu.resume?.tranches ?? {}), variantes: etat.dernierRejeu.resume?.juge?.variantes ?? null } };
+  const attendreLaFin = async () => {
+    let e;
+    for (let i = 0; i < 1200; i++) {
+      e = (await requete(app, 'GET', '/api/bench?resume=non')).corps;
+      if (!e.enCours) break;
+      await new Promise((fin) => setTimeout(fin, 100));
+    }
+    return (await requete(app, 'GET', '/api/bench')).corps;
+  };
+  let etat = await attendreLaFin();
+  boucle.disable();
+  sortie.pid = process.pid;
+  sortie.boucle = { maxMs: Math.round(boucle.max / 1e6), p99Ms: Math.round(boucle.percentile(99) / 1e6) };
+  const resumeDe = (r) => r && { id: r.id, ou: r.ou, finiLe: Boolean(r.finiLe), erreur: r.bilan?.erreur ?? null, rencontres: r.bilan?.rencontres ?? null, aPart: r.bilan?.aPart ?? null, serveur: r.bilan?.serveur ?? null, retardBoucleMaxMs: r.bilan?.retardBoucleMaxMs ?? null, aUnResume: Boolean(r.resume), tranches: Object.keys(r.resume?.tranches ?? {}), variantes: r.resume?.juge?.variantes ?? null };
+  sortie.apres = { enCours: etat.enCours, refus: etat.dernierRefus, rejeux: etat.rejeux.length, dernier: resumeDe(etat.dernierRejeu), reussi: resumeDe(etat.dernierRejeuReussi) };
   sortie.passeApres = await withRefreshLock(async () => ({ bilan: 'de la passe' }), { stamp: false });
+  // Un rejeu ARRÊTÉ en erreur (la table du jour J retirée de la copie : l'enfant échoue) : rangé avec son erreur, et le
+  // dernier rejeu RÉUSSI reste celui de la page.
+  db.exec('ALTER TABLE day_matches RENAME TO day_matches_cachee');
+  sortie.lanceEnErreur = (await requete(app, 'POST', '/api/bench/run', { periodes: ['P3'], prix: ['fd-cloture'] })).code;
+  etat = await attendreLaFin();
+  db.exec('ALTER TABLE day_matches_cachee RENAME TO day_matches');
+  sortie.arret = { enCours: etat.enCours, refus: etat.dernierRefus, dernier: resumeDe(etat.dernierRejeu), reussi: resumeDe(etat.dernierRejeuReussi), rangee: db.prepare('SELECT fini_le, bilan, resume FROM bench_runs WHERE id = ?').get(etat.dernierRejeu?.id ?? -1) };
   // bench_runs : un INSERT (fini_le NULL), un UPDATE, un second UPDATE refusé (la ligne ne bouge pas).
   const id = D.ouvrirRejeu({ database: db, ou: 'bac', moteur: { empreinte: 'a'.repeat(40), empreinteCode: 'b'.repeat(40), version: null }, options: { essai: true } });
   const ouverte = db.prepare('SELECT fini_le, bilan, resume FROM bench_runs WHERE id = ?').get(id);
@@ -622,9 +669,12 @@ if (phase === 'ecran') {
     await new Promise((fin) => setTimeout(fin, 100));
   }
   sortie.fini = etat;
-  // La lecture légère de l'avancement : le dernier rejeu sans son résumé.
+  // La reproduction du 23/09, calculée par le bouton depuis le 19/10 (sans le jeu « fd-cloture ») : les lignes lien = 1 de 2025-26
+  // à clôture complète, comptées ICI en SQL.
+  sortie.reproductionAttendue = db.prepare("SELECT COUNT(*) n FROM fd_history WHERE lien = 1 AND date >= '2025-07-01' AND date <= '2026-09-23' AND moy_c1 IS NOT NULL AND moy_cn IS NOT NULL AND moy_c2 IS NOT NULL").get().n;
+  // La lecture légère de l'avancement : le dernier rejeu réussi sans son résumé.
   const leger = (await requete(app, 'GET', '/api/bench?resume=non')).corps;
-  sortie.leger = { id: leger.dernierRejeu?.id ?? null, aUnResume: Boolean(leger.dernierRejeu && 'resume' in leger.dernierRejeu), bilan: Boolean(leger.dernierRejeu?.bilan), octets: JSON.stringify(leger).length, octetsComplet: JSON.stringify(etat).length };
+  sortie.leger = { id: leger.dernierRejeuReussi?.id ?? null, aUnResume: Boolean(leger.dernierRejeuReussi && 'resume' in leger.dernierRejeuReussi), bilan: Boolean(leger.dernierRejeuReussi?.bilan), octets: JSON.stringify(leger).length, octetsComplet: JSON.stringify(etat).length };
   sortie.refuse = await requete(app, 'POST', '/api/bench/run', { periodes: ['P9'] });
 }
 

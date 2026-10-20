@@ -69,7 +69,7 @@ const L27 = Object.freeze({
     { id: 'score-marche-v1', quoi: 'poids du marché 0,6 (retenue)' },
     { id: 'score-marche-v0', quoi: 'poids du marché 0,5' }
   ],
-  vues: [{ de: '2026-11-15', a: '2026-11-16', quoi: 'rattrapage regardé après coup' }]
+  vues: [{ de: '2026-11-15', a: '2026-11-16', quoi: 'rattrapage regardé après coup', pour: ['moteur'] }]
 });
 const LANCEE_LE = Date.parse('2026-11-09T07:52:10Z'); // un lundi matin : le 09/11 à Paris
 
@@ -210,10 +210,10 @@ test('preuve : rendement et valeur de clôture — le pourcentage est « × 100 
 // --------------------------------------------------------------- 12. le registre
 
 test('registre : enregistrerLancements crée le fichier, daté du jour de PARIS du démarrage (23 h 30 UTC = le lendemain) ; rejoué, il n’écrit rien ; un « le » fixe est recopié tel quel ; rien à noter, aucun fichier créé', () => {
-  // Rien à noter (LANCEMENTS du code, vide à l'étape 16) : aucun fichier créé.
+  // Rien à noter (une liste vide ; celle du code a l'étape 29 depuis le 19/10) : aucun fichier créé.
   const vide = nouveauFichier();
-  assert.deepEqual(LANCEMENTS, []);
-  assert.deepEqual(enregistrerLancements({ fichier: vide }), { nouveaux: [], source: 'absent', probleme: null });
+  assert.deepEqual(LANCEMENTS.map((l) => [l.etape, l.version, l.le]), [['29', 'indice-v1', '2026-10-14']]);
+  assert.deepEqual(enregistrerLancements({ fichier: vide, lancements: [] }), { nouveaux: [], source: 'absent', probleme: null });
   assert.equal(fs.existsSync(vide), false);
 
   const fichier = nouveauFichier();
@@ -247,7 +247,7 @@ test('registre : enregistrerLancements crée le fichier, daté du jour de PARIS 
     le: '2026-11-09',
     heure: '2026-11-08T23:30:00.000Z',
     source: 'code',
-    vues: [{ de: '2026-11-15', a: '2026-11-16', quoi: 'rattrapage regardé après coup' }]
+    vues: [{ de: '2026-11-15', a: '2026-11-16', quoi: 'rattrapage regardé après coup', pour: ['moteur'] }]
   });
   assert.deepEqual(fenetresVues('27', { fichier, lancements }).map((f) => [f.de, f.a]), [['2023-07-01', '2024-06-30'], ['2024-07-01', '2025-06-30'], ['2025-07-01', '2026-09-23'], ['2026-11-15', '2026-11-16']]);
   // Une version ajoutée au code plus tard : seule elle est notée, au jour de son démarrage ; elle devient le lancement qui compte.
@@ -357,7 +357,7 @@ test('lancements du code : la liste vérifiée (vide à l’étape 16), les éta
   refuse([{ ...L27, etape: '48' }], /inconnue du plan/);
   refuse([{ ...L27, etape: 27 }], /inconnue du plan \(plan\.js\), ou mal écrite/);
   refuse([L27, { ...L27 }], /déclarée deux fois pour l’étape 27/);
-  refuse([{ ...L27, vues: [{ de: '2026-11-16', a: '2026-11-15' }] }], /commence après sa fin/);
+  refuse([{ ...L27, vues: [{ de: '2026-11-16', a: '2026-11-15', pour: ['moteur'] }] }], /commence après sa fin/);
   refuse([{ ...L27, variantes: [{ id: 'score-marche-v0' }] }], /doit faire partie de ses variantes/);
   refuse([{ ...L27, variantes: [] }], /au moins une variante/);
   refuse([{ ...L27, variantes: [{ id: 'score-marche-v1' }, { id: 'score-marche-v1' }] }], /déclarée deux fois/);
@@ -369,9 +369,47 @@ test('lancements du code : la liste vérifiée (vide à l’étape 16), les éta
   assert.equal(verifierLancements([L27, { ...L27, etape: '28' }, { ...L27, version: 'score-marche-v2', variantes: [{ id: 'score-marche-v2' }] }]), true);
 });
 
+test('juge de preuve, « déjà vu » par PORTÉE (correction du 19/10) : DONNEES_VUES, TOUTES les vues de l’étape jugée (toutes versions, toutes portées), les vues « moteur » des lancements ENREGISTRÉS des autres étapes — jamais une autre grandeur ni un lancement pas encore noté ; l’étape 29 lancée le 14/10', () => {
+  const vue = (de, a, pour) => ({ de, a, quoi: `${de}`, pour });
+  const lancements = [
+    { ...L27, le: '2026-11-09', vues: [vue('2026-11-15', '2026-11-16', ['moteur']), vue('2018-01-01', '2018-01-31', ['indice'])] },
+    { ...L27, version: 'score-marche-v0', le: '2026-10-20', variantes: [{ id: 'score-marche-v0' }], vues: [vue('2017-01-01', '2017-01-31', ['moteur'])] },
+    { etape: '30', version: 'joueurs-v1', quoi: 'Fiches joueurs', le: '2026-10-25', variantes: [{ id: 'joueurs-v1' }], vues: [vue('2016-01-01', '2016-01-31', ['moteur']), vue('2015-01-01', '2015-01-31', ['indice']), vue('2026-11-20', '2026-11-22', ['moteur']), vue('2026-11-25', '2026-11-26', ['indice'])] },
+    { etape: '26', version: 'boucle-v1', quoi: 'Boucle', le: null, variantes: [{ id: 'boucle-v1' }], vues: [vue('2014-01-01', '2014-01-31', ['moteur'])] }
+  ];
+  assert.equal(verifierLancements(lancements), true);
+  const fichier = nouveauFichier();
+  const jours = (etape) => fenetresVues(etape, { fichier, lancements }).map((f) => f.de).sort();
+  const vingt3 = ['2023-07-01', '2024-07-01', '2025-07-01'];
+  // L'étape 27 jugée : toutes ses vues (les deux versions, « indice » compris), la vue « moteur » de 30 (lancée à date fixe) ;
+  // ni la vue « indice » de 30, ni celle de 26 (« le: null », jamais notée au registre).
+  assert.deepEqual(jours('27'), ['2016-01-01', '2017-01-01', '2018-01-01', ...vingt3, '2026-11-15', '2026-11-20'].sort());
+  // L'étape 30 jugée : toutes ses vues, et les vues « moteur » des DEUX versions lancées de 27 ; jamais la vue « indice » de 27.
+  assert.deepEqual(jours('30'), ['2015-01-01', '2016-01-01', '2017-01-01', ...vingt3, '2026-11-15', '2026-11-20', '2026-11-25'].sort());
+  // 26 notée au registre (un démarrage) : sa vue « moteur » entre dans le jugement des autres.
+  enregistrerLancements({ fichier, lancements, maintenant: Date.parse('2026-11-30T08:00:00Z') });
+  assert.ok(jours('27').includes('2014-01-01'));
+  // Le juge écarte bien ces lignes : 3 dans la vue « moteur » de 30, 3 dans sa vue « indice » (gardées), 4 hors de tout.
+  const lignes = [
+    ...Array.from({ length: 3 }, (_, i) => ({ bloc: `moteur${i}`, date: '2026-11-21', a: 1, b: 1 })),
+    ...Array.from({ length: 3 }, (_, i) => ({ bloc: `indice${i}`, date: '2026-11-25', a: 1, b: 0.95 })),
+    ...Array.from({ length: 4 }, (_, i) => ({ bloc: `neuve${i}`, date: '2026-12-01', a: 1, b: 0.9 }))
+  ];
+  const j = jugerEtape({ etape: '27', lignes, mesure: 'perte-log', maintenant: Date.parse('2026-12-02T08:00:00Z'), registre: { fichier, lancements }, enregistrer: false });
+  assert.deepEqual(j.ecartees, { avantLancement: 0, donneesVues: 3 }, 'la vue « moteur » d’une autre étape lancée : écartée ; sa vue « indice » : gardée');
+  assert.equal(j.n.lignes, 7);
+  // Le vrai code : l'étape 29 est lancée le 14/10 (date fixe), sa preuve écarte ses six vues, « indice » comprises.
+  const vrai = nouveauFichier();
+  assert.deepEqual(enregistrerLancements({ fichier: vrai, maintenant: Date.parse('2026-10-19T08:00:00Z') }).nouveaux, [{ etape: '29', version: 'indice-v1', le: '2026-10-14' }]);
+  assert.equal(lancementDe('29', { fichier: vrai }).le, '2026-10-14');
+  assert.deepEqual(fenetresVues('29', { fichier: vrai }).map((f) => [f.de, f.a]).sort(), [['2000-07-01', '2019-06-30'], ['2019-07-01', '2023-06-30'], ['2023-01-01', '2024-06-30'], ['2023-07-01', '2024-06-30'], ['2024-07-01', '2025-06-30'], ['2025-07-01', '2026-09-23'], ['2025-07-01', '2026-10-07']]);
+  // … et le jugement d'une autre étape (27, une candidate du moteur) n'en écarte aucune : l'indice n'est pas lu par le moteur.
+  assert.deepEqual(fenetresVues('27', { fichier: vrai, lancements: [...LANCEMENTS, L27] }).map((f) => f.de).sort(), [...vingt3, '2026-11-15']);
+});
+
 // ---------------------------------------------------------- 13. la feuille de route
 
-const PIERRE_VIDE = { source: 'absent', fichier: 'C:\\essai\\roadmap.json', probleme: null, majLe: null, etapes: {} };
+const PIERRE_VIDE ={ source: 'absent', fichier: 'C:\\essai\\roadmap.json', probleme: null, majLe: null, etapes: {} };
 const MIDI = Date.parse('2026-12-01T10:00:00Z');
 
 test('feuille de route : chaque étape à juger a sa preuve (lancement, variantes, dernier jugement principal), les autres rien — sauf une entrée au registre ; le tout SANS base', () => {

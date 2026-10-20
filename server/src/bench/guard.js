@@ -417,8 +417,9 @@ const dansUneFenetre = (jour, fenetres) => fenetres.some((f) => jour >= f.de && 
  *      (on ne peut pas oublier de compter : la version jugée doit elle-même être déclarée) ;
  *   3. chaque ligne doit porter son jour (`date`, AAAA-MM-JJ) — sinon LignesInvalides ;
  *   4. une ligne n'est gardée que si son jour est STRICTEMENT après le jour du lancement (le jour même,
- *      l'ancien code a pu produire des pronostics) ET hors de toute fenêtre vue (DONNEES_VUES + celles du
- *      lancement, bornes comprises) — comparaisons de textes AAAA-MM-JJ, jamais de Date (le fuseau
+ *      l'ancien code a pu produire des pronostics) ET hors de toute fenêtre vue (fenetresVues, par portée depuis
+ *      le 19/10 : DONNEES_VUES, toutes celles de l'étape, celles de portée « moteur » des lancements enregistrés
+ *      des autres étapes ; bornes comprises) — comparaisons de textes AAAA-MM-JJ, jamais de Date (le fuseau
  *      décalerait d'un jour). La règle des données vues est redondante avec celle du lancement dans le
  *      cas normal : elle protège contre une date de lancement fausse (un `le` fixé trop tôt ferait passer
  *      la saison 2025-26 pour de la preuve neuve). Le reste est compté : ecartees { avantLancement, donneesVues } ;

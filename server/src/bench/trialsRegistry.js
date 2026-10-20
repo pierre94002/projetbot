@@ -18,7 +18,8 @@
  *   - l'étape 25 : declarerLancement à l'adoption d'une version,
  *     declarerVariante à chaque candidate mise à blanc, et jugerEtape (guard.js)
  *     qui range chaque jugement par enregistrerJugement ;
- *   - le banc (étape 19) n'écrit rien ici : il lit fenetresVues.
+ *   - le banc (étape 19) n'écrit rien ici et n'y lit rien : ses étiquettes « déjà vu » viennent du code
+ *     (fenetresDeclarees, portée « moteur ») ; le juge de preuve, lui, écarte fenetresVues (par portée).
  * Ce que lit la feuille de route : etatPourFeuilleDeRoute(), SANS base ni réseau.
  *
  * Règles d'écriture, celles de roadmapRepository.js : toujours
@@ -39,7 +40,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readJsonFile, writeJsonAtomic } from '../utils/atomicJson.js';
-import { LANCEMENTS, DONNEES_VUES, ETAPES_A_JUGER, verifierLancements, jourValide } from './lancements.js';
+import { LANCEMENTS, DONNEES_VUES, ETAPES_A_JUGER, verifierLancements, jourValide, pourLaPortee } from './lancements.js';
 import { normaliserIdEtape } from '../data/roadmap/plan.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -140,7 +141,7 @@ export function lireRegistre(options) {
 
 // ------------------------------------------------- fusion code + registre
 
-const copieVues = (vues) => (Array.isArray(vues) ? vues.map((f) => ({ de: f.de, a: f.a, quoi: f.quoi ?? '' })) : []);
+const copieVues = (vues) => (Array.isArray(vues) ? vues.map((f) => ({ de: f.de, a: f.a, quoi: f.quoi ?? '', pour: Array.isArray(f.pour) ? [...f.pour] : [] })) : []);
 
 /**
  * Tous les lancements d'une étape : ceux du registre (dans leur ordre), puis ceux du code à date
@@ -290,11 +291,36 @@ export function compterVariantes(etape, options) {
   return variantesDe(etape, options).length;
 }
 
-/** Les fenêtres de données vues qui s'appliquent à l'étape : DONNEES_VUES + celles du dernier lancement. Lève RegistreIllisible. */
+/**
+ * Les fenêtres que le juge de preuve ÉCARTE pour une étape (correction du 19/10/2026 : par portée et par version
+ * en service, au lieu de « DONNEES_VUES + le dernier lancement de l'étape ») :
+ *   - DONNEES_VUES (portée « tout ») ;
+ *   - TOUTES les fenêtres de l'étape jugée — chacune de ses déclarations du code, toutes versions, toutes
+ *     portées : ce qu'elle a regardé pour se construire, même pour une version d'avant ;
+ *   - les fenêtres de portée « moteur » (ou « tout ») des lancements ENREGISTRÉS des autres étapes (registre +
+ *     code à date fixe, toutes versions) : le moteur jugé est construit sur les leurs ; jamais celles d'une
+ *     autre grandeur (l'indice de 29, les demi-vies de 18, le marché de 22) ni d'un lancement pas encore noté.
+ * Rend [{ de, a, quoi, pour }] sans doublon de jours. Lève RegistreIllisible.
+ */
 export function fenetresVues(etape, options) {
-  const { donneesVues } = optionsDe(options);
-  const dernier = lancementDe(etape, options);
-  return [...donneesVues.map((f) => ({ de: f.de, a: f.a, quoi: f.quoi ?? '' })), ...(dernier?.vues ?? [])];
+  const id = normaliserIdEtape(etape);
+  const { fichier, lancements, donneesVues } = optionsDe(options);
+  const brut = lireOuLever(fichier).brut;
+  const fenetres = [...donneesVues.map((f) => ({ de: f.de, a: f.a, quoi: f.quoi ?? '', pour: ['tout'] }))];
+  if (id) for (const d of lancements) if (d.etape === id) fenetres.push(...copieVues(d.vues));
+  const autres = new Set([...lancements.map((d) => d.etape), ...Object.keys(brut?.etapes ?? {})]);
+  autres.delete(id);
+  for (const autre of autres) {
+    if (normaliserIdEtape(autre) !== autre) continue;
+    for (const l of lancementsFusionnes(autre, brut, lancements)) fenetres.push(...l.vues.filter((f) => pourLaPortee(f.pour, 'moteur')));
+  }
+  const vus = new Set();
+  return fenetres.filter((f) => {
+    const cle = `${f.de}|${f.a}`;
+    if (vus.has(cle)) return false;
+    vus.add(cle);
+    return true;
+  });
 }
 
 /** Les jugements rangés de l'étape, du plus ancien au plus récent. Lève RegistreIllisible. */

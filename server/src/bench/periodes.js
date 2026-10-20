@@ -251,7 +251,8 @@ export const AVANCE_DE_LA_COUPURE_MINUTES = 60;
 /**
  * La COUPURE des cotes d'un match, une seule règle pour les cotes gratuites et pour vos bookmakers :
  * coup d'envoi − 60 min quand l'heure est connue (`heureSure`), sinon minuit UTC du jour du match (la
- * veille). `kickoff` : meta.kickoff du magasin, sinon odds_events.kickoff. Jamais l'horloge du moment.
+ * veille). `kickoff` : meta.kickoff du magasin (sans lui, minuit : plus prudent ; odds_events.kickoff n'est pas lu —
+ * mesuré le 19/10, toutes les rencontres du magasin ont meta.kickoff). Jamais l'horloge du moment.
  */
 export function coupureDe({ date, kickoff = null } = {}) {
   if (!jourValide(date)) throw new RangeError(`coupureDe : jour illisible (${String(date)}).`);
@@ -312,12 +313,14 @@ export const cleDeLigne = ({ fixtureKey, marketKey, ligne = null, prix }) => `${
 // ------------------------------------------------------------- « déjà vu »
 
 /**
- * Les fenêtres avec lesquelles le banc étiquette ses lignes : toutes celles déclarées dans le code
- * (fenetresDeclarees) et les `vues` passées au rejeu (une candidate de 25 ou 27), « rejeu:1 », « rejeu:2 »…
+ * Les fenêtres avec lesquelles le banc étiquette ses lignes (corrigé le 19/10 : par portée) : celles du code
+ * qui valent pour le MOTEUR (fenetresDeclarees, portée « moteur » : DONNEES_VUES et les vues « moteur » des
+ * lancements), la DÉCLARATION de la candidate rejouée (`declaration` : ses vues, « candidate:… »), et les `vues`
+ * passées au rejeu, « rejeu:1 », « rejeu:2 »… Jamais une fenêtre regardée pour une autre grandeur.
  */
-export function fenetresDuBanc({ vues = [], lancements, donneesVues } = {}) {
-  const declarees = fenetresDeclarees({ ...(lancements ? { lancements } : {}), ...(donneesVues ? { donneesVues } : {}) });
-  return [...declarees, ...(vues ?? []).map((f, i) => ({ id: `rejeu:${i + 1}`, de: f.de, a: f.a, quoi: f.quoi ?? '', etape: null, version: null }))];
+export function fenetresDuBanc({ vues = [], declaration = null, lancements, donneesVues } = {}) {
+  const declarees = fenetresDeclarees({ portee: 'moteur', declaration, ...(lancements ? { lancements } : {}), ...(donneesVues ? { donneesVues } : {}) });
+  return [...declarees, ...(vues ?? []).map((f, i) => ({ id: `rejeu:${i + 1}`, de: f.de, a: f.a, quoi: f.quoi ?? '', etape: null, version: null, pour: ['moteur'], candidate: false }))];
 }
 
 /** Les identifiants des fenêtres qui contiennent ce jour (bornes comprises) ; [] = jamais vu. */
@@ -334,7 +337,16 @@ export function texteDesVues(ids) {
     id === 'mesures-du-23-09' ? 'déjà vues (vérification du 23/09)'
     : id === 'apprentissage-23-09' ? 'déjà vues (apprentissage du 23/09)'
     : id === 'regle-de-value-23-09' ? 'déjà vues par le choix du livre de référence et la règle de pari'
-    : `déjà vues (${id})`
+    : texteDUneFenetre(id)
   );
   return [...new Set(textes)].join(' ; ');
+}
+
+/** « déjà vues (étape 27, version v1) », « déjà vues (candidate) », « déjà vues (fenêtre du rejeu) » ; sinon l'identifiant. */
+export function texteDUneFenetre(id) {
+  const m = /^(\d+|E):([^:]+):\d+$/.exec(String(id));
+  if (/^candidate:/.test(String(id))) return 'déjà vues (candidate)';
+  if (/^rejeu:\d+$/.test(String(id))) return 'déjà vues (fenêtre du rejeu)';
+  if (m) return `déjà vues (étape ${m[1]}, version ${m[2]})`;
+  return `déjà vues (${id})`;
 }

@@ -84,6 +84,21 @@ export function dernierRejeu({ database, avecResume = true }) {
   }
 }
 
+/**
+ * Le dernier rejeu RÉUSSI (fini, avec son résumé), ou null (correction du 19/10) : un rejeu arrêté en erreur reste
+ * « le dernier rejeu » (la page dit l'arrêt et sa raison, rangée dans son bilan), mais n'efface plus de la page le
+ * tableau du dernier rejeu réussi.
+ */
+export function dernierRejeuReussi({ database, avecResume = true }) {
+  try {
+    const colonnes = avecResume ? '*' : 'id, lance_le, fini_le, ou, version_banc, format_lignes, empreinte_moteur, empreinte_code, version_moteur, options, bilan, NULL AS resume';
+    return enRejeu(database.prepare(`SELECT ${colonnes} FROM bench_runs WHERE fini_le IS NOT NULL AND resume IS NOT NULL ORDER BY id DESC LIMIT 1`).get(), { avecResume });
+  } catch (error) {
+    if (tableAbsente(error)) return null;
+    throw error;
+  }
+}
+
 /** Un rejeu par son identifiant (avec son résumé), ou null. */
 export function lireRejeu(id, { database }) {
   try {

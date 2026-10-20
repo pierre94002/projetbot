@@ -191,7 +191,10 @@ test('banc.js : l’état du rejeu (aucun, en cours avec la passe football-data,
   assert.match(B.etatDuRejeu({}).texte, /^Aucun rejeu encore sur cette appli : la note de départ vient du bac à sable\.$/);
   assert.equal(B.etatDuRejeu({ enCours: { partie: 'football-data', fait: 12400, total: 30204, date: '2021-03-14' } }).texte.replace(/\u202f/g, ' '), 'En cours : football-data 12 400 / 30 204 (14/03/2021).');
   assert.equal(B.etatDuRejeu({ enCours: { partie: 'préparation', fait: 0, total: null } }).enCours, true);
-  assert.equal(B.etatDuRejeu({ dernierRefus: { raison: 'verrou détenu par un autre processus' } }).texte, 'Pas lancé : verrou détenu par un autre processus.');
+  // Le refus en langage simple (correction du 19/10 : « processus » n'est pas un mot pour Pierre).
+  assert.equal(B.etatDuRejeu({ dernierRefus: { raison: 'verrou détenu par un autre processus' } }).texte, 'Pas lancé : une autre tâche tenait la base (un import ou une actualisation lancés à la main).');
+  assert.equal(B.etatDuRejeu({ dernierRefus: { raison: 'actualisation en cours dans ce processus' } }).texte, 'Pas lancé : actualisation tournait déjà.');
+  assert.equal(B.raisonDite('Une actualisation tient la base'), 'Une actualisation tient la base', 'une raison déjà simple, telle quelle');
   const arrete = B.etatDuRejeu({ dernierRejeu: { finiLe: '2026-10-13T12:00:00.000Z', bilan: { erreur: 'Fuite : un fait du 2021-03-14 au jour J' } } });
   assert.equal(arrete.ton, 'is-danger');
   assert.match(arrete.texte, /^Dernier rejeu arrêté : Fuite/);
@@ -233,6 +236,16 @@ test('banc.js : les tuiles de la note de départ (P2 jamais vue, P4b à côté, 
   assert.equal(tableau.lignes[0].marketKey, 'result');
   assert.deepEqual(tableau.lignes[0].cellules.P4b.vues, { texte: 'déjà vues (vérification du 23/09)', vues: true });
   assert.deepEqual(tableau.lignes[0].cellules.P2.vues, { texte: 'jamais vues', vues: false });
+  // Les vues de la note : lues dans la note, jamais redites en dur (correction du 19/10) — une P2 « vue » le dirait partout.
+  assert.match(B.phraseDeLaNote(note).detail, /2019-2023 : jamais vu par les réglages ; 2025-26 : déjà vu \(vérification du 23\/09\)\./);
+  const noteVue = { ...note, depart: { ...note.depart, P2: { ...note.depart.P2, vues: ['27:v1:1'] } } };
+  assert.match(B.tuilesDeLaNote(noteVue).resultat.detail, /matchs de 2019-2023 \(déjà vus\)/);
+  assert.match(B.phraseDeLaNote(noteVue).detail, /2019-2023 : déjà vu \(étape 27, version v1\) ; 2025-26 : déjà vu \(vérification du 23\/09\)\./);
+  assert.deepEqual(B.tableauDeLaNote(noteVue).lignes[0].cellules.P2.vues, { texte: 'déjà vues (étape 27, version v1)', vues: true });
+  // Le commit du dépôt qui porte le moteur (correction du 19/10) : dit, qu'il existe ou non — sans lui, l'étape 47 ne le rejoue pas.
+  assert.match(B.phraseDeLaNote({ ...note, moteur: { ...note.moteur, commit: null } }).commit, /^Aucun commit du dépôt ne porte encore ce moteur : la preuve finale \(étape 47\) attend/);
+  assert.equal(B.phraseDeLaNote({ ...note, moteur: { ...note.moteur, commit: 'ab'.repeat(20) } }).commit, 'Commit du dépôt : abababab….');
+  assert.match(B.phraseDeLaNote({ ...note, moteur: { ...note.moteur, commit: 'abc1234' } }).commit, /^Aucun commit/, 'un commit abrégé ne compte pas');
   const courbe = B.courbeDeLaNote(note, { tranche: 'P2', marketKey: 'result' });
   assert.equal(courbe.calibration.table, 'cotes');
   const fiab = B.fiabiliteFaceAuBanc(courbe.calibration, etats.vide.fiabilite);
@@ -251,8 +264,16 @@ test('banc.js : les tuiles de la note de départ (P2 jamais vue, P4b à côté, 
 });
 
 test('banc.js : sur un vrai rejeu (la route du serveur) — le tableau par jeu de prix, les paris (la règle du moteur d’abord, les variantes « pas vos paris »), la carte par groupe, les écartées avec le lien 4 dit même à zéro', () => {
-  const rejeu = etats.fini.dernierRejeu;
+  const rejeu = etats.fini.dernierRejeuReussi;
   const resume = rejeu.resume;
+  // La reproduction du 23/09, calculée par le bouton (correction du 19/10) : toutes les lignes lien = 1 de 2025-26 à clôture
+  // complète, comptées en SQL dans la copie ; le moteur rejoué la redonne (cotes incohérentes refusées et comptées).
+  const rp = resume.reproduction;
+  assert.ok(rp, 'la reproduction calculée sans le jeu « fd-cloture »');
+  assert.equal(rp.lectureDirecte.matchs, etats.reproductionAttendue);
+  assert.equal(rp.moteur.matchs + rp.moteur.cotesIncoherentes, rp.lectureDirecte.matchs);
+  assert.ok(rp.moteur.maxEcartP <= 1e-9, `écart du moteur : ${rp.moteur.maxEcartP}`);
+  assert.ok(rejeu.bilan.reproductionAnalyses >= rp.lectureDirecte.matchs, `ses analyses comptées à part : ${rejeu.bilan.reproductionAnalyses} pour ${rp.lectureDirecte.matchs} matchs`);
   const tableau = B.tableauDuRejeu(resume, { prix: 'fd-avant-match' });
   assert.ok(tableau.colonnes.some((c) => c.id === 'P2'));
   for (const l of tableau.lignes) for (const c of Object.values(l.cellules)) assert.ok(Number.isInteger(c.n) && c.n > 0);
@@ -279,6 +300,11 @@ test('banc.js : sur un vrai rejeu (la route du serveur) — le tableau par jeu d
   assert.ok(ecartees.parTranche.some((t) => t.raisons.some((r) => /^statistique non relevée : corners \d/.test(r.texte))));
   assert.equal(B.ecarteesDuRejeu({ bilan: { ecartees: {}, liensFd: { E0: { 0: 10, 4: 2 } } }, resume: null }).globales.find((e) => e.cle === 'lien4').texte.startsWith('2 ligne(s)'), true);
   assert.equal(B.ecarteesDuRejeu(null), null);
+  // Les lignes football-data jamais rejouées d'après juin 2023 : comptées par code, et nommées (correction du 19/10 : elles
+  // n'étaient pas « laissées au magasin », qui ne suit pas ces championnats).
+  assert.equal(Object.values(rejeu.bilan.fdHorsSourceParCode ?? {}).reduce((s, n) => s + n, 0), rejeu.bilan.ecartees.fdHorsSource);
+  const hors = B.ecarteesDuRejeu({ bilan: { ecartees: { fdHorsSource: 5 }, fdHorsSourceParCode: { JPN: 2, EC: 3 } }, resume: null }).globales.find((e) => e.cle === 'fdHorsSource');
+  assert.match(hors.texte, /^5 ligne\(s\) football-data d’après juin 2023 non rejouées : .* il ne suit pas ces championnats \(National League 3, J-League 2\)$/);
 });
 
 // ============================================== 2. la page
@@ -318,7 +344,7 @@ test('la page pendant un rejeu : « En cours : préparation », le bouton désac
   assert.deepEqual(etats.lance.options.prix, ['fd-avant-match', 'gratuites-avant-match', 'vos-bookmakers'], 'les prix par défaut');
   assert.equal(etats.refuse.code, 400);
   // La relecture de l'avancement : le même dernier rejeu, son bilan, jamais son résumé.
-  assert.deepEqual([etats.leger.id, etats.leger.aUnResume, etats.leger.bilan], [etats.fini.dernierRejeu.id, false, true]);
+  assert.deepEqual([etats.leger.id, etats.leger.aUnResume, etats.leger.bilan], [etats.fini.dernierRejeuReussi.id, false, true]);
   assert.ok(etats.leger.octets < etats.leger.octetsComplet / 2, `${etats.leger.octets} octets au lieu de ${etats.leger.octetsComplet}`);
 });
 

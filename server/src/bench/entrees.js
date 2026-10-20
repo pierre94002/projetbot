@@ -576,7 +576,8 @@ export function distributionsDuRepere(rep) {
 
 /** La loi d'un compte pour la perte log (A18) : N = max(41, ⌈4 × attendu⌉) cases, puis la queue. */
 export function loiDuCompte(mu, invK) {
-  if (!(mu > 0)) return null;
+  // Un attendu infini ferait un tableau sans fin (loiDesComptes lève) : pas de loi, comme pour un attendu nul (19/10).
+  if (!Number.isFinite(mu) || !(mu > 0)) return null;
   return loiDesComptes(mu, invK, Math.max(41, Math.ceil(4 * mu)));
 }
 export const dispersionDe = (kind, portee) => (portee === 'total' ? STAT_KINDS[kind].invKTotal : STAT_KINDS[kind].invKTeam);

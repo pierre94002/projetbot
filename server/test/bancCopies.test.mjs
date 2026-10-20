@@ -12,6 +12,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { preparerCopie, executer, SERVEUR } from './aides/isolement.mjs';
 import { preparerCopieDeBac, executerDansLeBac } from './aides/bacSimule.mjs';
 import { gainMiseFixe } from '../src/bench/metrics.js';
+import { COMMIT_DU_MOTEUR_DE_DEPART } from '../src/bench/noteDeDepart.js';
 import { removeMargin } from '../src/core/market/marginRemoval.js';
 
 const SCRIPT = path.join(SERVEUR, 'test', 'aides', 'script-banc.mjs');
@@ -172,10 +173,11 @@ test('cotes gratuites à la coupure (H − 60) : ouverture et pré-clôture touj
 
 // ==================================================================== la route
 
-test('route : GET /api/bench sans rejeu (structure complète) ; POST sous verrou → 409, invalide → 400 ; un rejeu dans le serveur → 202 ; une passe pendant le banc REPORTÉE (jamais son bilan) ; bench_runs : un INSERT, un UPDATE, un second refusé', () => {
+test('route : GET /api/bench sans rejeu (structure complète) ; POST sous verrou → 409, invalide → 400, verrou pris pendant la pose → 409 ; un rejeu → 202, dans un PROCESSUS À PART, le serveur jamais retenu ; une passe pendant le banc REPORTÉE (jamais son bilan) ; un rejeu arrêté en erreur rangé, le dernier réussi gardé ; bench_runs : un INSERT, un UPDATE, un second refusé', () => {
   const j = lancer('route', { scripts: true });
-  for (const cle of ['noteDeDepart', 'dernierRejeu', 'enCours', 'rejeux', 'periodes', 'jeux', 'regles', 'decisions', 'provenance']) assert.ok(cle in j.vide, cle);
+  for (const cle of ['noteDeDepart', 'dernierRejeu', 'dernierRejeuReussi', 'enCours', 'rejeux', 'periodes', 'jeux', 'regles', 'decisions', 'provenance']) assert.ok(cle in j.vide, cle);
   assert.equal(j.vide.dernierRejeu, null);
+  assert.equal(j.vide.dernierRejeuReussi, null);
   assert.deepEqual(j.vide.rejeux, []);
   // La note de départ telle que la page la reçoit (conception §10, 8) ; la fiabilité affichée, pour la poser à côté.
   const note = j.vide.noteDeDepart;
@@ -187,6 +189,10 @@ test('route : GET /api/bench sans rejeu (structure complète) ; POST sous verrou
   assert.equal(j.sousVerrou.code, 409);
   assert.match(j.sousVerrou.corps.error, /tient la base/);
   assert.equal(j.invalide.code, 400);
+  // La course verrou/vérification (correction du 19/10) : 409 en langage simple, jamais « lancé », rien de posé.
+  assert.equal(j.course.code, 409);
+  assert.match(j.course.corps.error, /vient de prendre la base : le banc n’est pas lancé/);
+  assert.deepEqual(j.courseApres, { enCours: null, refus: null });
   assert.equal(j.lance.code, 202);
   assert.match(j.passePendantLeBanc.skipped, /banc en cours dans ce processus/);
   assert.ok(!('bilan' in j.passePendantLeBanc), 'jamais le bilan du banc');
@@ -194,9 +200,31 @@ test('route : GET /api/bench sans rejeu (structure complète) ; POST sous verrou
   assert.equal(j.apres.enCours, null);
   assert.equal(j.apres.refus, null);
   assert.deepEqual([j.apres.dernier.ou, j.apres.dernier.finiLe, j.apres.dernier.erreur], ['serveur', true, null]);
-  assert.deepEqual(j.apres.dernier.tranches, ['P3']);
-  assert.ok(j.apres.dernier.variantes >= 1);
+  assert.equal(j.apres.dernier.aUnResume, false, 'le dernier rejeu sans son résumé (il peut être arrêté) ; le résumé vient avec le dernier réussi');
+  assert.equal(j.apres.reussi.id, j.apres.dernier.id);
+  assert.deepEqual(j.apres.reussi.tranches, ['P3']);
+  assert.ok(j.apres.reussi.variantes >= 1);
+  // Correction du 19/10 : le rejeu a tourné AILLEURS (un enfant, base en lecture seule), le serveur l'a mesuré et rangé.
+  assert.ok(Number.isInteger(j.apres.dernier.aPart?.pid) && j.apres.dernier.aPart.pid !== j.pid, 'le rejeu dans un autre processus');
+  assert.ok(j.apres.dernier.aPart.rssFinOctets > 0);
+  assert.equal(j.apres.dernier.serveur.pid, j.pid);
+  for (const champ of ['retardBoucleMaxMs', 'retardBoucleP99Ms', 'rssAvantOctets', 'rssMaxOctets', 'rssApresOctets']) assert.ok(Number.isFinite(j.apres.dernier.serveur[champ]), `serveur.${champ}`);
+  assert.ok(Number.isFinite(j.apres.dernier.retardBoucleMaxMs), 'le retard de la boucle de l’enfant, à côté de blocMaxMs');
+  // Le serveur (ce processus) jamais retenu pendant le rejeu : un rejeu sur place, même en rendant la main, le retiendrait.
+  assert.ok(j.boucle.p99Ms < 100, `retard de boucle du serveur, p99 : ${j.boucle.p99Ms} ms`);
+  assert.ok(j.boucle.maxMs < 1000, `retard de boucle du serveur, au plus : ${j.boucle.maxMs} ms`);
   assert.deepEqual(j.passeApres, { bilan: 'de la passe' });
+  // Un rejeu arrêté en erreur : rangé (fini, son erreur dans le bilan, sans résumé), dit comme le dernier rejeu ; le dernier
+  // RÉUSSI reste celui de la page ; ce n'est pas un refus de lancement.
+  assert.equal(j.lanceEnErreur, 202);
+  assert.match(j.arret.dernier.erreur, /day_matches/);
+  assert.deepEqual([j.arret.dernier.finiLe, j.arret.dernier.aUnResume], [true, false]);
+  assert.ok(j.arret.dernier.id > j.apres.reussi.id);
+  assert.equal(j.arret.reussi.id, j.apres.reussi.id, 'le dernier rejeu réussi n’est pas effacé');
+  assert.equal(j.arret.reussi.aUnResume, true);
+  assert.ok(j.arret.rangee.fini_le && j.arret.rangee.resume === null && JSON.parse(j.arret.rangee.bilan).erreur);
+  assert.equal(j.arret.refus, null);
+  assert.equal(j.arret.enCours, null);
   assert.deepEqual(j.depot.ouverte, { fini_le: null, bilan: null, resume: null });
   assert.equal(j.depot.second, 'RejeuDejaFini');
   assert.deepEqual(j.depot.apresSecond, j.depot.finie);
@@ -217,8 +245,11 @@ test('scripts/bench.mjs dans un bac simulé : bilan JSON, la main rendue, une li
     const r1 = run(['--json', '--periodes', 'P4', '--prix', 'fd-cloture', '--de', '2026-09-12', '--tirages', '100', '--lignes', a]);
     assert.equal(r1.code, 0, r1.erreurs.slice(-2000));
     assert.equal(r1.json.bilan.erreur, null);
-    assert.ok(r1.json.bilan.blocMaxMs < 2000, `blocMaxMs ${r1.json.bilan.blocMaxMs}`);
+    // Correction du 19/10 : l'ancienne borne (blocMaxMs < 2 s sur un rejeu de 2 s) ne protégeait rien. Le serveur est protégé
+    // par le processus à part (test « route » : son retard de boucle mesuré) ; ici, la main rendue et les deux mesures rangées.
     assert.ok(r1.json.bilan.pauses > 0, 'la main rendue (setImmediate) dans le script aussi');
+    for (const champ of ['blocMaxMs', 'retardBoucleMaxMs', 'retardBoucleP99Ms']) assert.ok(Number.isInteger(r1.json.bilan[champ]), `bilan.${champ}`);
+    assert.ok(r1.json.bilan.retardBoucleMaxMs <= r1.json.bilan.dureeMs, 'un retard de boucle jamais plus long que le rejeu');
     assert.ok(Number.isInteger(r1.json.bilan.battements), 'les battements du verrou sont comptés');
     assert.ok(r1.json.export.lignes > 0);
     const config = path.join(copie.dossier, 'candidate.json');
@@ -243,6 +274,16 @@ test('scripts/bench.mjs dans un bac simulé : bilan JSON, la main rendue, une li
     assert.equal(c.json.verdict, null, 'sans --variantes ni --etapes : pas de verdict');
     assert.ok(c.json.paires > 0);
     assert.deepEqual([c.json.empreintes.a.empreinte, c.json.empreintes.b.empreinte], [r1.json.moteur.empreinte, r2.json.moteur.empreinte]);
+    // L'étape 47 : « le moteur de départ » (--depart) refusé tant que la note de départ n'a pas de commit — et dit pourquoi ;
+    // une fois le commit écrit dans noteDeDepart.js, accepté (le fichier A est ce moteur : le code du moteur n'a pas changé).
+    const depart = run(['--comparer', a, b, '--mesure', 'perte-log', '--tirages', '100', '--depart']);
+    if (COMMIT_DU_MOTEUR_DE_DEPART === null) {
+      assert.notEqual(depart.code, 0);
+      assert.match(depart.erreurs, /moteur de départ ne se rejoue pas : la note de départ n’a pas de commit/);
+    } else {
+      assert.equal(depart.code, 0, depart.erreurs.slice(-2000));
+      assert.equal(depart.json.paires, c.json.paires);
+    }
     const cv = run(['--comparer', a, b, '--variantes', '2', '--tirages', '100']);
     assert.ok(['retenu', 'pas-prouve', 'moins-bon', 'pas-assez-de-matchs'].includes(cv.json.verdict));
     const db = new DatabaseSync(copie.base, { readOnly: true });

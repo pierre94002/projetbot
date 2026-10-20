@@ -224,14 +224,10 @@ export const REGLAGES_INDICE_FORCE = Object.freeze({
 
 /**
  * Les fenêtres REGARDÉES par l'étape 29 (en plus de VUES_DE_L_ETAPE_18, dont elle lit les demi-vies) : les
- * vues de sa déclaration de lancement, prête dans teamStrengthBanc.js (LANCEMENT_PREPARE) mais pas ajoutée à
- * LANCEMENTS — cf. le commentaire de LANCEMENT_PREPARE.
+ * vues de son lancement, déclaré dans LANCEMENTS (lancements.js, portée 'indice') depuis le 19/10 — définies
+ * là-bas, ré-exportées ici.
  */
-export const VUES_DE_L_ETAPE_29 = Object.freeze([
-  Object.freeze({ de: '2024-07-01', a: '2025-06-30', quoi: 'Étape 29 : poids de la note et liens « écart → probabilités » appris sur le magasin (P4a).' }),
-  Object.freeze({ de: '2023-01-01', a: '2024-06-30', quoi: 'Étape 29 : indice jugé face au classement corrigé xG et au classement réel sur le magasin neuf (P3) — ses variantes comptées.' }),
-  Object.freeze({ de: '2025-07-01', a: '2026-10-07', quoi: 'Étape 29 : les mêmes jugements, indicatifs, sur P4b et P5 (déjà vues), jusqu’au dernier jour de la base du bac.' })
-]);
+export { VUES_DE_L_ETAPE_29 } from '../../bench/lancements.js';
 
 // ======================================================= petites règles (pures)
 

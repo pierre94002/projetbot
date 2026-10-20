@@ -46,6 +46,7 @@ import { probabilitesLigne } from '../sports/football/statMarkets.js';
 import { getSport } from '../sports/index.js';
 import { deriveActualOutcome } from '../core/settlement/settlementRules.js';
 import { creerPauses } from '../utils/travailCooperatif.js';
+import { monitorEventLoopDelay } from 'node:perf_hooks';
 import { perteLog, brier, rps, PROBA_MIN, ajouterACalibration } from './metrics.js';
 import {
   VERSION_BANC, FORMAT_LIGNES, PERIODES, BORNES_DES_TRANCHES, JEUX_DE_PRIX, SANS_COTE, MARCHES_DU_BANC, FAMILLES_DU_BANC, PERIODES_PAR_DEFAUT, PRIX_PAR_DEFAUT,
@@ -63,7 +64,7 @@ import { Accumulateurs, resumer, nouvelleReproduction } from './resume.js';
 export class OptionsDuBancInvalides extends Error {}
 
 const JOUR = /^\d{4}-\d{2}-\d{2}$/;
-const OPTIONS = Object.freeze(['periodes', 'prix', 'marches', 'de', 'a', 'config', 'vues', 'coupure', 'database', 'rendreLaMain', 'journal', 'avancement', 'surLigne', 'graine', 'tirages', 'minBlocs', 'reproduction']);
+const OPTIONS = Object.freeze(['periodes', 'prix', 'marches', 'de', 'a', 'config', 'vues', 'coupure', 'database', 'rendreLaMain', 'journal', 'avancement', 'surLigne', 'graine', 'tirages', 'minBlocs', 'reproduction', 'declaration']);
 const fini = (x) => typeof x === 'number' && Number.isFinite(x);
 const copie = (v) => JSON.parse(JSON.stringify(v));
 
@@ -97,6 +98,10 @@ function lireOptions(options) {
   if (!options.database) throw new OptionsDuBancInvalides('La base est obligatoire : le banc n’en ouvre jamais.');
   const vues = options.vues ?? [];
   for (const f of vues) if (!JOUR.test(f?.de ?? '') || !JOUR.test(f?.a ?? '') || f.de > f.a) throw new OptionsDuBancInvalides('Une fenêtre vue sans jours AAAA-MM-JJ valides (de ≤ a).');
+  // La déclaration de la candidate rejouée (étape 25 ou 27) : ses vues étiquettent les lignes « candidate:… » (portée de la candidate).
+  const declaration = options.declaration ?? null;
+  if (declaration !== null && (typeof declaration !== 'object' || (declaration.vues !== undefined && !Array.isArray(declaration.vues)))) throw new OptionsDuBancInvalides('La déclaration de la candidate : un objet { etape, version | id, vues: [...] }.');
+  for (const f of declaration?.vues ?? []) if (!JOUR.test(f?.de ?? '') || !JOUR.test(f?.a ?? '') || f.de > f.a) throw new OptionsDuBancInvalides('Une fenêtre de la candidate sans jours AAAA-MM-JJ valides (de ≤ a).');
   return {
     tranches: [...new Set(tranches)],
     prix: [...new Set(prix)],
@@ -105,6 +110,7 @@ function lireOptions(options) {
     a: options.a ?? null,
     config: options.config ?? null,
     vues,
+    declaration,
     database: options.database,
     rendreLaMain: options.rendreLaMain ?? null,
     journal: options.journal ?? null,
@@ -484,9 +490,15 @@ async function rejouerUnMatch(ctx, m) {
     }
   }
   // La reproduction du 23/09 : P4b, moyenne de clôture (le chemin du moteur et la lecture directe).
-  if (ctx.reproduction && tranche === 'P4b' && m.source === 'magasin') {
+  if (ctx.reproduction && tranche === 'P4b' && m.source === 'magasin' && m.prixReproduction) {
     const x = parJeu.find((p) => p.jeu === 'fd-cloture');
     if (x) ajouterAReproduction(ctx, m.ligneFd, x.analyse, x.mo);
+    else {
+      // Le jeu « fd-cloture » n'est pas rejoué : une analyse de plus, pour la seule reproduction (jamais versée aux cases).
+      const match = matchDuBanc({ rencontre: m.rencontre, entrees: m.entrees, marketOdds: m.prixReproduction });
+      ajouterAReproduction(ctx, m.ligneFd, await analyzeMatch(match, ctx.config, TILT_NEUTRE, ctx.sport), m.prixReproduction);
+      ctx.bilan.reproductionAnalyses++;
+    }
   }
 }
 
@@ -556,7 +568,7 @@ export async function rejouer(options = {}) {
   const rendre = o.rendreLaMain ? () => new Promise((fin) => o.rendreLaMain(fin)) : () => Promise.resolve();
   const pauses = creerPauses({ rendreLaMain: rendre });
   const dire = (texte) => o.journal?.(texte);
-  const fenetres = fenetresDuBanc({ vues: o.vues });
+  const fenetres = fenetresDuBanc({ vues: o.vues, declaration: o.declaration });
   const bilan = {
     versionBanc: VERSION_BANC,
     debut: new Date().toISOString(),
@@ -564,6 +576,8 @@ export async function rejouer(options = {}) {
     dureeMs: null,
     parties: {},
     analyses: 0,
+    // Les analyses faites pour la seule reproduction du 23/09 (moyenne de clôture), quand ce jeu n'est pas rejoué lui-même.
+    reproductionAnalyses: 0,
     rencontres: { magasin: 0, fd: 0, rejouees: 0 },
     ecartees: { attribue: 0, sansLigneJourJ: 0, avantMoteur: 0, fdHorsSource: 0 },
     liensFd: {},
@@ -571,12 +585,23 @@ export async function rejouer(options = {}) {
     grilleDifferente: 0,
     horsGrille: 0,
     fd: 'non chargé',
-    etiquette: candidate && !o.vues.length ? 'incomplete' : 'complete',
+    // Une candidate qui ne déclare pas ce qu'elle a vu (ni vues ni déclaration avec ses vues) : étiquettes incomplètes.
+    etiquette: candidate && !o.vues.length && !Array.isArray(o.declaration?.vues) ? 'incomplete' : 'complete',
     rssMax: process.memoryUsage.rss(),
     erreur: null
   };
   const acc = new Accumulateurs({ uneCaseParLigne: DECISIONS_DE_PIERRE.uneCaseParLigne });
-  if (o.reproduction && o.prix.includes('fd-cloture') && o.tranches.includes('P4b')) acc.reproduction = nouvelleReproduction();
+  // La reproduction du 23/09 (l'étalonnage du banc) dès que P4b est rejouée — même sans le jeu « fd-cloture » (correction du 19/10 :
+  // le bouton « Lancer le banc » ne la calculait jamais) ; ses analyses sont comptées à part (bilan.reproductionAnalyses).
+  if (o.reproduction && o.tranches.includes('P4b')) acc.reproduction = nouvelleReproduction();
+  // Le retard RÉEL de la boucle d'événements du processus qui rejoue (enfant du serveur, script), à côté de blocMaxMs.
+  const boucle = o.rendreLaMain ? monitorEventLoopDelay({ resolution: 10 }) : null;
+  boucle?.enable();
+  const retardDeLaBoucle = () => {
+    if (!boucle) return { retardBoucleMaxMs: null, retardBoucleP99Ms: null };
+    boucle.disable();
+    return { retardBoucleMaxMs: Math.round(boucle.max / 1e6), retardBoucleP99Ms: Math.round(boucle.percentile(99) / 1e6) };
+  };
   const ctx = {
     acc,
     config,
@@ -605,7 +630,11 @@ export async function rejouer(options = {}) {
     const debutFd = avecFaits ? PERIODES.P1.de : debutRepere;
     let memoire = avecFaits ? new MemoireFd({ fdTeams: database.prepare('SELECT id, nom FROM fd_teams').all() }) : null;
     if (avecFaits) bilan.fd = { faits: 0, lignes: 0 };
-    bilan.ecartees.fdHorsSource = database.prepare('SELECT COUNT(*) n FROM fd_history WHERE lien = 0 AND date > ? AND date <= ? AND date >= ?').get(PERIODES.P2.a, finRejeu, debutRejeu)?.n ?? 0;
+    // Les lignes football-data d'après juin 2023 jamais rejouées (de 2023 à 2026, seul le magasin l'est), par code : surtout des
+    // championnats que le magasin ne suit pas (National League, J-League, divisions écossaises) — la page les nomme.
+    const horsSource = database.prepare('SELECT code, COUNT(*) n FROM fd_history WHERE lien = 0 AND date > ? AND date <= ? AND date >= ? GROUP BY code').all(PERIODES.P2.a, finRejeu, debutRejeu);
+    bilan.ecartees.fdHorsSource = horsSource.reduce((t, x) => t + x.n, 0);
+    bilan.fdHorsSourceParCode = Object.fromEntries(horsSource.map((x) => [x.code, x.n]));
     const reperes = new ReperesCourants();
     const codes = database.prepare('SELECT DISTINCT code FROM fd_history').all().map((r) => r.code);
     const lireFd = codes.length ? database.prepare(`SELECT ${COLONNES_FD.join(', ')} FROM fd_history WHERE code IN (${codes.map(() => '?').join(', ')}) AND date >= ? AND date < ?`) : null;
@@ -729,6 +758,8 @@ export async function rejouer(options = {}) {
             else if (jeu === 'gratuites-avant-match') prix[jeu] = prixGratuits(r.matchKey, { coupure, database });
             else if (jeu === 'vos-bookmakers') prix[jeu] = prixVosBookmakers(r.matchKey, { coupure, database });
           }
+          // Le prix de la reproduction (moyenne de clôture), lu une fois : celui du jeu « fd-cloture » s'il est rejoué.
+          const prixReproduction = ctx.reproduction && tranche === 'P4b' && ligneFd ? (o.prix.includes('fd-cloture') ? prix['fd-cloture'] : prixFd(ligneFd, { jeu: 'fd-cloture' })) : null;
           tracer('prix', t3);
           const m = {
             source: 'magasin',
@@ -739,6 +770,7 @@ export async function rejouer(options = {}) {
             prix,
             jeux: o.prix,
             ligneFd,
+            prixReproduction,
             coupure,
             temoins: ligneFd ? temoinsDeCloture(ligneFd) : null,
             repere: repere(r.league, date, r.saison),
@@ -750,13 +782,14 @@ export async function rejouer(options = {}) {
             acc.compter(tranche, 'attribue');
             bilan.ecartees.attribue++;
             // La reproduction compte les rencontres attribuées comme t24 (lecture du fichier football-data).
-            if (ctx.reproduction && tranche === 'P4b' && prix['fd-cloture']) {
-              const match = matchDuBanc({ rencontre, entrees: e.entrees, marketOdds: prix['fd-cloture'] });
-              ajouterAReproduction(ctx, ligneFd, await analyzeMatch(match, config, TILT_NEUTRE, ctx.sport), prix['fd-cloture']);
+            if (prixReproduction) {
+              const match = matchDuBanc({ rencontre, entrees: e.entrees, marketOdds: prixReproduction });
+              ajouterAReproduction(ctx, ligneFd, await analyzeMatch(match, config, TILT_NEUTRE, ctx.sport), prixReproduction);
               acc.reproduction.attribuees++;
+              bilan.reproductionAnalyses++;
             }
           } else {
-            if (faits.prolongation && ctx.reproduction && tranche === 'P4b' && prix['fd-cloture']) acc.reproduction.prolongees++;
+            if (faits.prolongation && prixReproduction) acc.reproduction.prolongees++;
             await rejouerUnMatch(ctx, m);
             bilan.rencontres.rejouees++;
           }
@@ -865,10 +898,10 @@ export async function rejouer(options = {}) {
     resume.versionBanc = VERSION_BANC;
     resume.formatLignes = FORMAT_LIGNES;
     const fin = performance.now();
-    Object.assign(bilan, { fin: new Date().toISOString(), dureeMs: Math.round(fin - debut), ...pauses.bilan(), rssMax: Math.max(bilan.rssMax, process.memoryUsage.rss()) });
+    Object.assign(bilan, { fin: new Date().toISOString(), dureeMs: Math.round(fin - debut), ...pauses.bilan(), ...retardDeLaBoucle(), rssMax: Math.max(bilan.rssMax, process.memoryUsage.rss()) });
     return { bilan, resume, moteur };
   } catch (error) {
-    Object.assign(bilan, { fin: new Date().toISOString(), dureeMs: Math.round(performance.now() - debut), ...pauses.bilan(), erreur: `${error.name === 'Error' ? '' : `${error.name} : `}${error.message}` });
+    Object.assign(bilan, { fin: new Date().toISOString(), dureeMs: Math.round(performance.now() - debut), ...pauses.bilan(), ...retardDeLaBoucle(), erreur: `${error.name === 'Error' ? '' : `${error.name} : `}${error.message}` });
     return { bilan, resume: null, moteur };
   }
 }

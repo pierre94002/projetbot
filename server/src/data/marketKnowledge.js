@@ -548,7 +548,7 @@ export class Releves {
   }
 
   /** Range les cotes par rencontre (tri par comptage, stable) et pose les étiquettes « déjà vu » et les grandes équipes. */
-  ranger({ fenetres = fenetresDeclarees(), premiers = null } = {}) {
+  ranger({ fenetres = fenetresDeclarees({ portee: 'marche' }), premiers = null } = {}) {
     const nm = this.matchs.length;
     const debuts = new Int32Array(nm + 1);
     for (let k = 0; k < this.n; k++) debuts[this.eMatch[k] + 1]++;
@@ -629,7 +629,7 @@ const issueDuScore = (h, a) => (!Number.isInteger(h) || !Number.isInteger(a) ? V
  * Les classements de la saison d'avant (grandes équipes) se font en lisant : football-data par code et
  * saison, le magasin par championnat et saison (matchs comptés au classement, hors coupes et attribués).
  */
-export function* chargerLesReleves(database, { fenetres = fenetresDeclarees() } = {}) {
+export function* chargerLesReleves(database, { fenetres = fenetresDeclarees({ portee: 'marche' }) } = {}) {
   const R = new Releves({ capacite: 1 << 18 });
   const bilan = { rencontresDuMagasin: 0, lignesFd: 0, fdEcartees: { scoreDifferent: 0, rattachementIncertain: 0 }, lignesDeCotes: 0, groupes: 0, evenementsSansRencontre: 0 };
   // 1. Le magasin.

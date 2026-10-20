@@ -487,13 +487,16 @@ test('banc : les poids (ridge) et le lien « écart → 1N2 » (logit ordonné) 
   proche(lien.pente, vrai.pente, 0.06, 'pente');
   for (const s of [-3, 0, 2.5]) proche(B.probabilitesDuLien(lien, s).reduce((a, b) => a + b, 0), 1, 1e-12, 'Σ = 1');
   assert.ok(B.probabilitesDuLien(lien, 2)[0] > B.probabilitesDuLien(lien, 0)[0], 'plus d’écart, plus de victoires à domicile');
-  // La déclaration de l'étape : la forme de lancements.js, les vues de l'étape 18 dedans ; LANCEMENTS du code inchangé.
-  const declaration = B.LANCEMENT_PREPARE;
+  // Le lancement de l'étape (dans LANCEMENTS depuis le 19/10, daté du 14/10) : les vues de l'étape 18 dedans, toutes de portée « indice ».
+  const declaration = B.LANCEMENT;
   assert.equal(verifierLancements([declaration]), true);
-  assert.deepEqual(declaration.vues.slice(0, VUES_DE_L_ETAPE_18.length), [...VUES_DE_L_ETAPE_18], 'les vues de l’étape 18, dont elle lit les demi-vies');
-  assert.deepEqual(declaration.vues.slice(VUES_DE_L_ETAPE_18.length), [...F.VUES_DE_L_ETAPE_29]);
+  const sansPortee = (vues) => vues.map(({ pour, ...f }) => f);
+  assert.deepEqual(sansPortee(declaration.vues.slice(0, VUES_DE_L_ETAPE_18.length)), [...VUES_DE_L_ETAPE_18], 'les vues de l’étape 18, dont elle lit les demi-vies');
+  assert.deepEqual(sansPortee(declaration.vues.slice(VUES_DE_L_ETAPE_18.length)), [...F.VUES_DE_L_ETAPE_29]);
+  assert.ok(declaration.vues.every((f) => f.pour.length === 1 && f.pour[0] === 'indice'), 'portée « indice » : jamais « déjà vu » pour le moteur');
   assert.deepEqual(declaration.variantes.map((x) => x.id), ['indice-v1', 'indice-dom-ext', 'sans-correction', 'demi-vie-18']);
-  assert.equal(LANCEMENTS.some((l) => l.etape === '29'), false, 'pas encore ajoutée à LANCEMENTS (écart dit dans le compte rendu)');
+  assert.equal(declaration.le, '2026-10-14', 'en service chez Pierre depuis le 14/10');
+  assert.equal(LANCEMENTS.filter((l) => l.etape === '29').length, 1);
   assert.equal(B.COMPARAISONS.filter((c) => c.principale).length, 1);
   assert.equal(B.COMPARAISONS[0].variante, 'indice-v1', 'la comparaison principale : la version retenue AVANT de regarder');
   assert.deepEqual(B.PERIODES_DU_BANC.preuve, { de: '2023-01-01', a: '2024-06-30', tranches: ['P3'] });
@@ -691,13 +694,14 @@ test('la lecture pour 31, 27 et 30 et la route GET /api/match-stats/team-strengt
   assert.equal(n.routesEcritures, 0, 'la route n’écrit rien');
 });
 
-test('le banc sur la copie : les variantes DÉCLARÉES au registre d’essai (4) avant de juger, K = 7 comparaisons ; la veille de chaque match sans le match lui-même ; la forme du résumé', () => {
+test('le banc sur la copie : les variantes comptées (4, celles du lancement de 29 au code) avant de juger, K = 7 comparaisons ; la veille de chaque match sans le match lui-même ; la forme du résumé', () => {
   const n = laNuit();
   const b = n.banc;
   assert.equal(b.variantes.auRegistre, 4);
   assert.equal(b.variantes.K, 7);
-  assert.deepEqual(b.registre.ids, B.VARIANTES_INDICE.map((v) => v.id));
-  assert.ok(b.registre.ou.every((o) => o === 'banc'));
+  // Depuis le 19/10, les quatre variantes sont celles du lancement de 29 dans le CODE : rien à redéclarer au registre d'essai.
+  assert.deepEqual(B.LANCEMENT.variantes.map((v) => v.id), B.VARIANTES_INDICE.map((v) => v.id));
+  assert.deepEqual([b.registre.existe, b.registre.ids], [false, []]);
   assert.equal(b.jugements, 14, 'sept comparaisons, P3 et P4b + P5');
   assert.equal(b.fenetresDansLaPeriode, true, `chaque jugement dans sa période : ${b.lignesJugees.join(', ')}`);
   assert.ok(['retenu', 'pas-prouve', 'moins-bon', 'pas-assez-de-matchs'].includes(b.principal));

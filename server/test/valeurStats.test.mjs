@@ -480,6 +480,9 @@ test('verdicts, options, périodes : « compte » au-delà de 1 % prouvé, 10 co
   assert.equal(VUES_DE_L_ETAPE_18.length, 3);
   assert.ok(VUES_DE_L_ETAPE_18.every((v) => v.de && v.a && v.quoi));
   assert.deepEqual(VUES_DE_L_ETAPE_18.map((v) => [v.de, v.a]), [['2024-07-01', '2025-06-30'], ['2000-07-01', '2019-06-30'], ['2019-07-01', '2023-06-30']]);
+  // Définies dans lancements.js depuis le 19/10 (le lancement de l'étape 29 les lit) : toujours les jours de PERIODES_DU_CALCUL.
+  const P18 = PERIODES_DU_CALCUL;
+  assert.deepEqual(VUES_DE_L_ETAPE_18.map((v) => [v.de, v.a]), [[P18.magasin.calcul.de, P18.magasin.calcul.a], [P18['football-data'].calcul.de, P18['football-data'].calcul.a], [P18['football-data'].jugement.de, P18['football-data'].jugement.a]]);
   // Le catalogue : des identifiants uniques, chaque cible lisible, football-data sans xG ni occasions ni possession.
   assert.equal(new Set(STATISTIQUES_EQUIPE.map((s) => s.id)).size, STATISTIQUES_EQUIPE.length);
   assert.equal(new Set(STATISTIQUES_JOUEUR.map((s) => s.id)).size, STATISTIQUES_JOUEUR.length);

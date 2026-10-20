@@ -75,8 +75,8 @@ function suivre() {
     try {
       const leger = await benchApi.avancement();
       if (!leger.enCours) return charger();
-      const garde = etat.value?.dernierRejeu;
-      etat.value = { ...leger, dernierRejeu: garde && leger.dernierRejeu?.id === garde.id ? garde : leger.dernierRejeu };
+      const garde = etat.value?.dernierRejeuReussi;
+      etat.value = { ...leger, dernierRejeuReussi: garde && leger.dernierRejeuReussi?.id === garde.id ? garde : leger.dernierRejeuReussi };
       erreurDeLecture.value = '';
     } catch (error) {
       erreurDeLecture.value = error.message;
@@ -110,10 +110,17 @@ const titreNote = computed(() => phraseDeLaNote(note.value));
 const reproductionNote = computed(() => phraseDeLaReproduction(note.value?.reproduction));
 
 // --------------------------------------------------------- 2. le rejeu sur cette appli
+// Le dernier rejeu (peut-être arrêté en erreur : la ligne d'état le dit) et le dernier RÉUSSI, dont le résumé fait les tableaux
+// (correction du 19/10 : un arrêt n'efface plus le dernier rejeu réussi de la page).
 const dernier = computed(() => etat.value?.dernierRejeu ?? null);
-const resume = computed(() => dernier.value?.resume ?? null);
+const reussi = computed(() => etat.value?.dernierRejeuReussi ?? null);
+const resume = computed(() => reussi.value?.resume ?? null);
 const etatRejeu = computed(() => etatDuRejeu({ enCours: etat.value?.enCours, dernierRejeu: dernier.value, dernierRefus: etat.value?.dernierRefus }));
-const reproductionIci = computed(() => phraseDeLaReproduction(resume.value?.reproduction, { ici: true }));
+const reproductionIci = computed(() =>
+  resume.value && !resume.value.reproduction
+    ? { texte: `Référence du 23/09 non calculée par le rejeu n° ${reussi.value.id} (il ne rejouait pas 2025-26, ou date d’avant le 19/10).`, egal: false, moteur: null }
+    : phraseDeLaReproduction(resume.value?.reproduction, { ici: true })
+);
 const quand = (iso) => (typeof iso === 'string' ? new Date(iso).toLocaleString('fr-FR', { timeZone: 'Europe/Paris', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'date inconnue');
 const rejeux = computed(() =>
   (etat.value?.rejeux ?? []).map((r) => ({
@@ -142,7 +149,7 @@ const titreDuJeu = computed(() => optionsPrix.value.find((o) => o.value === prix
 const communs = computed(() => (resume.value ? communsDuRejeu(resume.value, jeux.value) : []));
 const sourceDuTableau = computed(() =>
   resume.value
-    ? `Rejeu n° ${dernier.value.id} de cette appli.`
+    ? `Rejeu n° ${reussi.value.id} de cette appli${dernier.value && dernier.value.id !== reussi.value.id ? ` (le n° ${dernier.value.id}, plus récent, s’est arrêté : voir « Rejeu sur cette appli »)` : ''}.`
     : 'Note de départ (bac à sable) : 2019-2023 et 2025-26 seulement, jusqu’au premier rejeu sur cette appli.'
 );
 
@@ -186,7 +193,7 @@ const carte = computed(() => (resume.value ? carteDuRejeu(resume.value, { tranch
 
 // --------------------------------------------------------- 7. provenance et écartées
 const provenance = computed(() => etat.value?.provenance ?? {});
-const ecartees = computed(() => ecarteesDuRejeu(dernier.value, jeux.value));
+const ecartees = computed(() => ecarteesDuRejeu(reussi.value, jeux.value));
 </script>
 
 <template>

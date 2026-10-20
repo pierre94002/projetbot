@@ -50,36 +50,20 @@ import { seasonOf } from '../providers/seasonWindows.js';
 import { comparer } from '../../bench/guard.js';
 import { perteLog, rps } from '../../bench/metrics.js';
 import { BORNES_DES_TRANCHES } from '../../bench/periodes.js';
-import { fenetresDeclarees } from '../../bench/lancements.js';
-import { VUES_DE_L_ETAPE_18 } from '../../bench/statValue.js';
+import { fenetresDeclarees, LANCEMENTS, VARIANTES_INDICE } from '../../bench/lancements.js';
 import { declarerVariante, compterVariantes } from '../../bench/trialsRegistry.js';
 
 /** Forme de la mesure : deux mesures de versions différentes ne se comparent pas. */
 export const VERSION_BANC_INDICE = 1;
-/** Les variantes de l'indice, toutes regardées (la retenue d'abord, choisie avant de regarder). */
-export const VARIANTES_INDICE = Object.freeze([
-  Object.freeze({ id: 'indice-v1', quoi: 'Indice de force retenu : correction des adversaires, demi-vies mesurées par l’étape 18, note « tous lieux ».' }),
-  Object.freeze({ id: 'indice-dom-ext', quoi: 'La note à domicile du club qui reçoit face à la note à l’extérieur du visiteur.' }),
-  Object.freeze({ id: 'sans-correction', quoi: 'Sans la correction des adversaires (itération 0 : le classement brut pondéré dans le temps).' }),
-  Object.freeze({ id: 'demi-vie-18', quoi: 'L’idée de départ du plan : une demi-vie de 18 matchs pour toutes les statistiques.' })
-]);
+/** Les variantes de l'indice, toutes regardées (la retenue d'abord, choisie avant de regarder) : définies dans lancements.js. */
+export { VARIANTES_INDICE };
 /**
- * LA DÉCLARATION DE LANCEMENT de l'étape 29 (la forme de lancements.js, vérifiée par un test), PRÊTE mais PAS
- * ajoutée à LANCEMENTS : fenetresDeclarees() étiquette les lignes de TOUTES les étapes avec les vues de
- * chacune ; y mettre les vues de l'étape 18 (P1 et P2 football-data, que l'indice ne lit pas) ferait passer
- * en « déjà vu » la note de départ du banc (P2), les jugements « jamais vus » de l'étape 22 (toute l'histoire
- * football-data) et ceux de l'étape 18 elle-même. À ajouter à LANCEMENTS quand ce sera décidé (avec Pierre),
- * ou après qu'on aura étiqueté par étape (ce que fait déjà jugerEtape) ; sans elle, la date de mise en service
- * de l'indice n'est pas notée au registre.
+ * LE LANCEMENT de l'étape 29, déclaré dans LANCEMENTS (lancements.js) depuis le 19/10, daté du 14/10 (sa mise en
+ * service chez Pierre) : ses vues — celles de l'étape 18, dont l'indice lit les demi-vies, puis les siennes —
+ * portent la portée 'indice' : elles ne font passer « déjà vues » ni les lignes du moteur (banc, note de départ),
+ * ni les jugements des étapes 18 et 22, seulement ceux de l'indice.
  */
-export const LANCEMENT_PREPARE = Object.freeze({
-  etape: '29',
-  version: 'indice-v1',
-  quoi: 'Indice de force des équipes : note et statistiques corrigées de la force des adversaires, pondérées dans le temps (demi-vies de l’étape 18), au total, à domicile et à l’extérieur ; proposé aux modèles, jamais lu par le moteur.',
-  le: null,
-  variantes: VARIANTES_INDICE,
-  vues: Object.freeze([...VUES_DE_L_ETAPE_18, ...VUES_DE_L_ETAPE_29])
-});
+export const LANCEMENT = LANCEMENTS.find((l) => l.etape === '29');
 
 /** Les comparaisons jugées sur P3 : (prédicteur, référence, filtre). Leur nombre est le K du juge. */
 export const COMPARAISONS = Object.freeze([
@@ -517,7 +501,9 @@ export function* mesurerAuBanc({ database, tirages = 1000, graine = 29, declarer
   yield 'liens';
 
   // 3. Les jugements : P3 (la preuve) et P4b + P5 (indicatif).
-  const fenetres = [...fenetresDeclarees(), ...VUES_DE_L_ETAPE_18.map((f, i) => ({ id: `etape-18:${i + 1}`, de: f.de, a: f.a, quoi: f.quoi }))];
+  // « Déjà vu » pour l'INDICE (correction du 19/10) : les réglages du 23/09 et les fenêtres de portée 'indice' — le
+  // lancement de l'étape 29 lui-même (les vues de l'étape 18, dont il lit les demi-vies, puis les siennes).
+  const fenetres = fenetresDeclarees({ portee: 'indice' });
   const juger = (comparaison, periode) => {
     const lignes = [];
     const vues = { total: 0, parFenetre: {} };

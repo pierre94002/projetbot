@@ -14,7 +14,8 @@
  *
  * Ce verdict est INDICATIF, toujours : ces matchs-là ont pu servir à
  * construire la candidate (la part des lignes dans des fenêtres déjà vues est
- * dite : DONNEES_VUES, et celles que la candidate déclare), et il ne dit rien
+ * dite : DONNEES_VUES, les vues « moteur » des lancements du code et celles que la candidate déclare —
+ * portée « moteur », correction du 19/10), et il ne dit rien
  * des matchs à venir. Il ne décide JAMAIS d'une adoption : seul le jugement de
  * l'essai à blanc, sur des matchs joués après sa mise à blanc et pris à son
  * horizon, le fait (moteurABlanc.js, engineVersions.js).
@@ -32,7 +33,7 @@
 import { rejouer as rejouerParDefaut } from './runner.js';
 import { comparer } from './guard.js';
 import { compterVariantes } from './trialsRegistry.js';
-import { DONNEES_VUES } from './lancements.js';
+import { fenetresDeclarees } from './lancements.js';
 
 /** La période et le jeu de prix par défaut : ceux de la note de départ (jamais vus, avant-match football-data). */
 export const PERIODES_DU_BANC_CANDIDATE = Object.freeze(['P2']);
@@ -158,6 +159,8 @@ export async function jugerLaCandidateAuBanc({
   const rB = await rejouer({
     ...options,
     config: reglagesCandidate,
+    // Sa déclaration : ses vues étiquettent ses lignes (« candidate:… ») et l'étiquette du rejeu n'est plus « incomplete ».
+    declaration: { etape: candidate.etape, version: candidate.id, vues: Array.isArray(candidate.vues) ? candidate.vues : [] },
     avancement: suivre('candidate'),
     surLigne: (l) => {
       if (l?.type !== 'ligne') return;
@@ -191,7 +194,8 @@ export async function jugerLaCandidateAuBanc({
   const j = comparer(lignes, { mode: 'moyenne', sens: 'min', variantes, graine, tirages });
   const base = j.a.moyenne;
   const echelle = fini(base) && base !== 0 ? 100 / Math.abs(base) : 100;
-  const fenetres = [...DONNEES_VUES.map((f) => ({ de: f.de, a: f.a })), ...(candidate.vues ?? []).map((f) => ({ de: f.de, a: f.a }))];
+  // « Déjà vu » pour le MOTEUR (correction du 19/10) : le 23/09, les vues « moteur » des lancements, et la déclaration de la candidate.
+  const fenetres = fenetresDeclarees({ portee: 'moteur', declaration: { etape: candidate.etape, version: candidate.id, vues: Array.isArray(candidate.vues) ? candidate.vues : [] } });
   const dansVues = lignes.filter((l) => fenetres.some((f) => l.date >= f.de && l.date <= f.a)).length;
   return {
     ...sortie,

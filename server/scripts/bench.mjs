@@ -13,7 +13,7 @@
  *                          [--marches result,totalGoals] [--de AAAA-MM-JJ --a AAAA-MM-JJ]
  *                          [--config reglages.json] [--vues AAAA-MM-JJ:AAAA-MM-JJ,…]
  *                          [--lignes sortie.jsonl] [--graine N] [--tirages N] [--json]
- *   node scripts/bench.mjs --comparer a.jsonl b.jsonl --mesure perte-log (--variantes N | --etapes 27,28)
+ *   node scripts/bench.mjs --comparer a.jsonl b.jsonl --mesure perte-log (--variantes N | --etapes 27,28) [--depart]
  *
  * Par défaut : P1 à P5 et les quatre jeux de prix (reproduction du 23/09
  * comprise) — c'est le rejeu complet du bac, 20 à 30 minutes.
@@ -80,7 +80,8 @@ if (argv.includes('--comparer')) {
   const variantes = valeur('--variantes') !== undefined ? Number(valeur('--variantes')) : null;
   const etapes = liste('--etapes') ?? null;
   try {
-    const r = await comparerDesFichiers({ fichierA: a, fichierB: b, mesure: valeur('--mesure') ?? 'perte-log', variantes, etapes, graine: Number(valeur('--graine') ?? 1), tirages: Number(valeur('--tirages') ?? 1000) });
+    // --depart (étape 47) : A est « le moteur de départ » — refusé tant que la note n'a pas de commit (noteDeDepart.js).
+    const r = await comparerDesFichiers({ fichierA: a, fichierB: b, mesure: valeur('--mesure') ?? 'perte-log', variantes, etapes, graine: Number(valeur('--graine') ?? 1), tirages: Number(valeur('--tirages') ?? 1000), depart: argv.includes('--depart') });
     dire(`Comparaison : ${r.paires} paires (sans paire : ${r.ecartees.sansPaire}, lignes différentes : ${r.ecartees.lignesDifferentes}) ; verdict : ${r.verdict ?? 'aucun (ni --variantes ni --etapes)'}.`);
     process.stdout.write(`${JSON.stringify(r)}\n`);
     process.exit(0);
@@ -196,7 +197,8 @@ const b = resultat.bilan;
 const rssMax = Math.max(b.rssMax ?? 0, rssFin);
 if (b.erreur) dire(`ERREUR : ${b.erreur}`);
 dire(`Rejeu n° ${id} : ${b.rencontres.rejouees} rencontres rejouées (${b.analyses} analyses du moteur), en ${Math.round(dureeTotaleMs / 100) / 10} s ; par partie (ms) : ${JSON.stringify(b.parties)}.`);
-dire(`Le plus long moment sans rendre la main : ${b.blocMaxMs} ms (${b.blocMaxOu ?? '—'}), ${b.pauses} pauses, ${battements} battements du verrou.`);
+dire(`Le plus long moment sans rendre la main : ${b.blocMaxMs} ms (${b.blocMaxOu ?? '—'}), ${b.pauses} pauses, ${battements} battements du verrou ; retard réel de la boucle : ${b.retardBoucleMaxMs ?? '?'} ms au plus, ${b.retardBoucleP99Ms ?? '?'} ms à 99 %.`);
+if (b.reproductionAnalyses) dire(`Reproduction du 23/09 : ${b.reproductionAnalyses} analyses de plus (moyenne de clôture), comptées à part.`);
 dire(`Mémoire : RSS ${mo(rssDepart)} au départ, ${mo(rssMax)} au plus haut (+${mo(rssMax - rssDepart)}). Journal : -wal ${mo(walMax)} au plus haut.`);
 if (resultat.resume?.reproduction) {
   const rp = resultat.resume.reproduction;

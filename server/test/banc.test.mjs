@@ -136,10 +136,10 @@ test('déjà vu : trois fenêtres contiguës et ordonnées, les déclarations de
     assert.equal(veille.toISOString().slice(0, 10), DONNEES_VUES[i - 1].a, 'contiguës');
   }
   assert.equal(verifierLancements(LANCEMENTS), true);
-  const fabrique = [{ etape: '27', version: 'v1', quoi: 'essai', le: null, variantes: [{ id: 'v1' }], vues: [{ de: '2019-07-01', a: '2023-06-30' }] }];
+  const fabrique = [{ etape: '27', version: 'v1', quoi: 'essai', le: null, variantes: [{ id: 'v1' }], vues: [{ de: '2019-07-01', a: '2023-06-30', pour: ['moteur'] }] }];
   const f = fenetresDeclarees({ lancements: fabrique });
   assert.deepEqual(f.map((x) => x.id), ['regle-de-value-23-09', 'apprentissage-23-09', 'mesures-du-23-09', '27:v1:1']);
-  // Une ligne de P2 n'est « vue » que si une étape l'a déclarée — le juge de preuve, lui, ne la voit jamais.
+  // Une ligne de P2 n'est « vue » que si une étape l'a déclarée POUR LE MOTEUR.
   assert.deepEqual(P.fenetresDuJour('2021-01-10', f), ['27:v1:1']);
   const banc = P.fenetresDuBanc({ vues: [{ de: '2026-10-01', a: '2026-10-31', quoi: 'candidate' }] });
   assert.deepEqual(banc.map((x) => x.id).slice(-1), ['rejeu:1']);
@@ -147,6 +147,40 @@ test('déjà vu : trois fenêtres contiguës et ordonnées, les déclarations de
   assert.equal(P.texteDesVues([]), 'jamais vues');
   assert.match(P.texteDesVues(['regle-de-value-23-09']), /livre de référence et la règle de pari/);
   assert.match(P.texteDesVues(['mesures-du-23-09']), /vérification du 23\/09/);
+});
+
+test('déjà vu par PORTÉE (correction du 19/10) : l’étape 29 lancée le 14/10 pour l’indice ne fait pas passer P2 « vue » pour le moteur ; une fenêtre ne vaut que pour ce qu’elle a réglé ; la déclaration d’une candidate ; les refus', () => {
+  // Le vrai code : 29 dans LANCEMENTS (portée « indice », le 14/10), et le banc du moteur n'en voit rien.
+  const l29 = LANCEMENTS.find((l) => l.etape === '29');
+  assert.deepEqual([l29.version, l29.le, l29.vues.length, [...new Set(l29.vues.flatMap((x) => x.pour))]], ['indice-v1', '2026-10-14', 6, ['indice']]);
+  assert.deepEqual(P.fenetresDuJour('2021-01-10', P.fenetresDuBanc()), [], 'le banc (portée moteur) : P2 jamais vue');
+  assert.deepEqual(P.fenetresDuJour('2021-01-10', fenetresDeclarees({ portee: 'indice' })), ['29:indice-v1:3'], 'l’indice : P2 vue par l’étape 18 dont il lit les demi-vies');
+  assert.deepEqual(P.fenetresDuJour('2021-01-10', fenetresDeclarees({ portee: 'statistiques' })), [], 'les statistiques (18) : rien de l’indice');
+  assert.deepEqual(P.fenetresDuJour('2021-01-10', fenetresDeclarees({ portee: 'marche' })), [], 'le marché (22) : rien de l’indice');
+  // Une fenêtre « tout » vaut pour toutes les mesures ; une fenêtre « marche » seulement pour le marché.
+  const lances = [
+    { etape: '27', version: 'v1', quoi: 'm', le: null, variantes: [{ id: 'v1' }], vues: [{ de: '2010-01-01', a: '2010-12-31', pour: ['tout'] }, { de: '2011-01-01', a: '2011-12-31', pour: ['marche', 'moteur'] }] },
+    { etape: '30', version: 'w1', quoi: 'm', le: null, variantes: [{ id: 'w1' }], vues: [{ de: '2012-01-01', a: '2012-12-31', pour: ['marche'] }] }
+  ];
+  assert.equal(verifierLancements(lances), true);
+  assert.deepEqual(fenetresDeclarees({ lancements: lances, portee: 'moteur' }).slice(3).map((x) => x.id), ['27:v1:1', '27:v1:2']);
+  assert.deepEqual(fenetresDeclarees({ lancements: lances, portee: 'marche' }).slice(3).map((x) => x.id), ['27:v1:1', '27:v1:2', '30:w1:1']);
+  assert.deepEqual(fenetresDeclarees({ lancements: lances, portee: 'indice' }).slice(3).map((x) => x.id), ['27:v1:1']);
+  // La candidate rejouée : ses vues, quelle que soit leur portée, « candidate:… » ; jamais deux fois si elle est déjà au code.
+  const declaration = { etape: '27', version: 'c2', vues: [{ de: '2021-01-01', a: '2021-02-28', quoi: 'réglée là' }] };
+  const avecCandidate = P.fenetresDuBanc({ declaration });
+  assert.deepEqual(P.fenetresDuJour('2021-01-10', avecCandidate), ['candidate:c2:1']);
+  assert.equal(avecCandidate.at(-1).candidate, true);
+  assert.equal(fenetresDeclarees({ lancements: lances, declaration: { etape: '27', version: 'v1', vues: [{ de: '2015-01-01', a: '2015-01-02' }] } }).some((x) => x.candidate), false, 'déjà déclarée au code : pas deux fois');
+  assert.match(P.texteDesVues(['27:v1:2']), /^déjà vues \(étape 27, version v1\)$/);
+  assert.match(P.texteDesVues(['candidate:c2:1']), /^déjà vues \(candidate\)$/);
+  assert.match(P.texteDesVues(['rejeu:1']), /^déjà vues \(fenêtre du rejeu\)$/);
+  // Les refus : une fenêtre sans portée, une portée inconnue ou en double ; une mesure sans portée connue.
+  const refuse = (vues, motif) => assert.throws(() => verifierLancements([{ ...lances[0], vues }]), (e) => motif.test(e.message), String(motif));
+  refuse([{ de: '2010-01-01', a: '2010-12-31' }], /ne dit pas ce qu’elle a réglé/);
+  refuse([{ de: '2010-01-01', a: '2010-12-31', pour: ['cotes'] }], /portée « cotes » inconnue/);
+  refuse([{ de: '2010-01-01', a: '2010-12-31', pour: ['moteur', 'moteur'] }], /écrite deux fois/);
+  assert.throws(() => fenetresDeclarees({ portee: 'tout' }), /portée « tout » inconnue/);
 });
 
 // ==================================================================== 2. pur : les prix football-data
@@ -218,6 +252,8 @@ test('score exact : la grille complète (81 cases, home × 9 + away, somme 1) es
   // Un compte au-delà de la grille : la queue, au plancher.
   const loi = loiDuCompte(10, 0.0205);
   assert.ok(loi.pmf.length >= 41);
+  // Un attendu infini, nul ou absent : pas de loi (jamais un tableau sans fin ; correction du 19/10).
+  for (const mu of [Infinity, 0, -1, NaN, null]) assert.equal(loiDuCompte(mu, 0.0205), null, String(mu));
   const loin = perteLogDesComptes(loi, 400);
   assert.ok(Number.isFinite(loin.valeur) && loin.valeur <= -Math.log(PROBA_MIN) + 1e-12);
   proche(perteLogDesComptes(loi, 7).valeur, -Math.log(loi.pmf[7]), 1e-12, 'compte dans la grille');
@@ -337,6 +373,37 @@ test('juge à part (fil du serveur) : le même verdict que sur place, au bit pr�
     await juge.fermer();
   }
   await assert.rejects(juge.comparer({ blocs, a, b, n }, { sens: 'min' }), /fermé/);
+  // Le fil se ferme À LA FIN de resumer (finally ; correction du 19/10) : un processus qui a résumé « à part » s'arrête
+  // seul — un fil oublié le retiendrait pour toujours (l'enfant du rejeu, le script du bac). Un vrai fichier (le fil hérite
+  // des options de Node : « --input-type » le ferait tomber au départ, et l'essai passerait pour rien) ; une case jugée DANS
+  // le fil, pour le savoir vivant.
+  const { spawnSync } = await import('node:child_process');
+  const { pathToFileURL } = await import('node:url');
+  fs.mkdirSync(RACINE_ESSAIS, { recursive: true });
+  const dossier = fs.mkdtempSync(path.join(RACINE_ESSAIS, 'cm-juge-fil-'));
+  try {
+    const fichier = path.join(dossier, 'resumer-a-part.mjs');
+    fs.writeFileSync(
+      fichier,
+      [
+        `import { Accumulateurs, resumer } from ${JSON.stringify(pathToFileURL(path.join(SERVEUR, 'src', 'bench', 'resume.js')).href)};`,
+        'const acc = new Accumulateurs();',
+        'for (let i = 0; i < 300; i++) {',
+        '  const b = ((i * 7919) % 101) / 1000;',
+        "  const l = { marketKey: 'result', famille: 'result', ligne: null, mesure: 'categorie', pl: 1.05 + b, ecr: false, brier: null, rps: null, plM: 1 + b, plR: 1.05 + b, sourceR: 'courant:saison', plT: null, justes: null, top3: null, un11: null, calib: null, horsGrille: false, sansMoyenneDeLigue: false };",
+        "  acc.ajouterLigne({ tranche: 'P3', prix: 'fd-avant-match', bloc: i, l, vues: [] });",
+        '}',
+        'const r = await resumer(acc, { tirages: 100, minBlocs: 20, aPart: true });',
+        "const c = r.tranches.P3.cases.find((x) => x.marketKey === 'result' && x.sousTable === 'tout');",
+        'console.log(JSON.stringify({ fini: true, verdict: c?.marche?.juge?.verdict ?? null }));'
+      ].join('\n')
+    );
+    const seul = spawnSync(process.execPath, [fichier], { encoding: 'utf8', timeout: 30_000 });
+    assert.equal(seul.status, 0, `le processus ne s'arrête pas seul (${seul.signal ?? 'code ' + seul.status}) ${String(seul.stderr).slice(-400)}`);
+    assert.deepEqual(JSON.parse(seul.stdout), { fini: true, verdict: 'moins-bon' }, 'la case jugée dans le fil (le moteur pire que le marché)');
+  } finally {
+    fs.rmSync(dossier, { recursive: true, force: true });
+  }
 });
 
 test('paris : mise fixe sur la cote nette, valeur de clôture = cote prise × probabilité de clôture − 1, refus comptés ; résumé : rendement sans verdict, clôture avec verdict, journée pour bloc, pire série', () => {
@@ -415,9 +482,41 @@ test('appariement : deux rejeux par la clé complète (match | marché | ligne |
     assert.equal(avec.verdict, 'moins-bon');
     const f2 = ecrire('c', lignes(0), { formatEchange: 2, reglement: 'bp90' });
     await assert.rejects(() => comparerDesFichiers({ fichierA: fa, fichierB: f2 }), /format d’échange 2/);
+    // Correction du 19/10 — l'étape 47 (« le moteur de départ » en A) : refusée tant que la note n'a pas de commit, et le dit ;
+    // avec un commit, le fichier A doit être CE moteur (son empreinte du code est celle de la note).
+    const { NOTE_DE_DEPART: N, COMMIT_DU_MOTEUR_DE_DEPART, exigerLeCommitDeDepart, MoteurDeDepartSansCommit } = await import('../src/bench/noteDeDepart.js');
+    assert.equal(N.moteur.commit, COMMIT_DU_MOTEUR_DE_DEPART);
+    assert.ok(COMMIT_DU_MOTEUR_DE_DEPART === null || /^[0-9a-f]{40}$/.test(COMMIT_DU_MOTEUR_DE_DEPART), 'null, ou les 40 caractères de git rev-parse HEAD');
+    if (COMMIT_DU_MOTEUR_DE_DEPART === null) assert.match(N.moteur.commitManquant, /Aucun commit du dépôt ne porte encore ce moteur/);
+    assert.throws(() => exigerLeCommitDeDepart({ moteur: { commit: null } }), (e) => e instanceof MoteurDeDepartSansCommit && /COMMIT_DU_MOTEUR_DE_DEPART/.test(e.message));
+    assert.throws(() => exigerLeCommitDeDepart({ moteur: { commit: 'abc1234' } }), MoteurDeDepartSansCommit, 'un commit abrégé ne suffit pas : les 40 caractères');
+    await assert.rejects(() => comparerDesFichiers({ fichierA: fa, fichierB: fb, depart: true, note: { moteur: { commit: null, empreinteCode: 'c' } } }), MoteurDeDepartSansCommit);
+    const avecCommit = { moteur: { commit: 'f'.repeat(40), empreinte: 'e', empreinteCode: 'c' } };
+    assert.deepEqual(exigerLeCommitDeDepart(avecCommit), { commit: 'f'.repeat(40), empreinte: 'e', empreinteCode: 'c' });
+    assert.equal((await comparerDesFichiers({ fichierA: fa, fichierB: fb, tirages: 200, depart: true, note: avecCommit })).paires, 250, 'A est bien le moteur de départ');
+    await assert.rejects(() => comparerDesFichiers({ fichierA: fa, fichierB: fb, depart: true, note: { moteur: { ...avecCommit.moteur, empreinteCode: 'autre' } } }), /n’est pas le moteur de départ/);
   } finally {
     fs.rmSync(dossier, { recursive: true, force: true });
   }
+});
+
+test('note de départ : noteDepuisUnRejeu RECOPIE les fenêtres vues des cases de P4b et P2 (sous-table « tout », avant-match), jamais en dur (correction du 19/10)', async () => {
+  const { noteDepuisUnRejeu, NOTE_DE_DEPART: N } = await import('../src/bench/noteDeDepart.js');
+  const uneCase = (prix, sousTable, parFenetre) => ({ prix, sousTable, marketKey: 'result', ligne: null, n: 3, moteur: { perteLog: 1, brier: 0.6, rps: 0.2, justes: null, top3: null }, marche: null, repere: null, calibration: null, vues: { total: 3, parFenetre } });
+  const rejeu = (p2) => ({
+    id: 9,
+    finiLe: '2026-10-19T18:00:00.000Z',
+    bilan: { dureeMs: 1 },
+    moteur: { empreinte: 'e', empreinteCode: 'c', version: null },
+    options: {},
+    resume: { tranches: { P4b: { cases: [uneCase('fd-avant-match', 'tout', { 'mesures-du-23-09': 3 }), uneCase('fd-cloture', 'tout', { autre: 3 }), uneCase('fd-avant-match', 'coupes', { 'autre-encore': 1 })] }, P2: { cases: [uneCase('fd-avant-match', 'tout', p2)] } }, paris: [] }
+  });
+  const n = noteDepuisUnRejeu(rejeu({}));
+  assert.deepEqual([n.depart.P4b.vues, n.depart.P2.vues], [['mesures-du-23-09'], []]);
+  // Le jour où une fenêtre de portée « moteur » couvrira P2 (étape 27), la note le dira (une fenêtre à 0 match ne compte pas).
+  assert.deepEqual(noteDepuisUnRejeu(rejeu({ '27:v1:1': 2, zero: 0 })).depart.P2.vues, ['27:v1:1']);
+  // La note du code dit ce que son rejeu disait : P4b vérifiée le 23/09, P2 jamais vue.
+  assert.deepEqual([N.depart.P4b.vues, N.depart.P2.vues], [['mesures-du-23-09'], []]);
 });
 
 test('moteur (amendement A1) : la clé leagueGoalAverages — absente, le magasin d’aujourd’hui (l’appli inchangée) ; posée à cette moyenne, le même résultat champ pour champ ; nulle, le barème et jamais le magasin ; avec et sans cotes', () => {
@@ -483,6 +582,12 @@ test('rejeu : une ligne par rencontre × marché × jeu, clés uniques ; une ren
   assert.equal(caseCloture.n, lignesCloture, 'la case du 1N2 à la clôture : exactement ses lignes « sur les cotes »');
   assert.deepEqual(j.sansFd, { erreur: null, rejouees: j.sansFd.rejouees });
   assert.ok(j.sansFd.rejouees > 0, 'sans football-data : aucune erreur');
+  // Une candidate avec sa déclaration (bancCandidate ; correction du 19/10) : ses vues étiquettent ses cases, étiquette complète ;
+  // sans déclaration : incomplète, et aucune case « candidate:… ».
+  assert.deepEqual([j.declaration.erreur, j.declaration.etiquette, j.declaration.sans.erreur, j.declaration.sans.etiquette], [null, 'complete', null, 'incomplete']);
+  assert.ok(j.declaration.fenetres.includes('candidate:c9:1'), JSON.stringify(j.declaration.fenetres));
+  assert.ok(j.declaration.vues.includes('candidate:c9:1'), 'les cases de la candidate étiquetées par sa déclaration');
+  assert.ok(!j.declaration.sans.vues.some((id) => id.startsWith('candidate:')));
   // L'avancement lu par la page : la passe football-data (la plus longue chez Pierre) et le juge, chacun avec son total.
   assert.ok(j.avancement.includes('football-data|total'), `avancement : ${j.avancement.join(', ')}`);
   assert.ok(j.avancement.includes('juge|total'));

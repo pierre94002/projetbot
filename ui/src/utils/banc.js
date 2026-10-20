@@ -97,6 +97,9 @@ export function texteDesVues(vues) {
     id === 'mesures-du-23-09' ? 'déjà vues (vérification du 23/09)'
     : id === 'apprentissage-23-09' ? 'déjà vues (apprentissage du 23/09)'
     : id === 'regle-de-value-23-09' ? 'déjà vues par le choix du livre de référence et la règle de pari'
+    : /^candidate:/.test(id) ? 'déjà vues (candidate)'
+    : /^rejeu:\d+$/.test(id) ? 'déjà vues (fenêtre du rejeu)'
+    : /^(\d+|E):([^:]+):\d+$/.test(id) ? id.replace(/^(\d+|E):([^:]+):\d+$/, 'déjà vues (étape $1, version $2)')
     : `déjà vues (${id})`
   );
   const part = Math.max(...ids.map((id) => par[id])) / total;
@@ -221,6 +224,9 @@ export function pointsDeLaCourbe(cas) {
   return (cas?.courbe ?? []).filter((t) => t.n > 0).map((t) => ({ de: t.de, a: t.a, n: t.n, annonce: t.annonce, realise: t.realise }));
 }
 
+/** Les fenêtres déjà vues d'une tranche de la note (P2, P4b), telles que la note les a recopiées de son rejeu (correction du 19/10). */
+const vuesDeLaNote = (note, tranche) => texteDesVues({ total: 1, parFenetre: Object.fromEntries((note?.depart?.[tranche]?.vues ?? []).map((id) => [id, 1])) });
+
 /**
  * Les QUATRE TUILES de la note de départ : 1N2 (P2, la preuve au banc ; P4b à côté), score exact, corners et
  * tirs (le pronostic retenu), paris simulés de P2. Chaque tuile dit sa fenêtre et si elle est déjà vue.
@@ -245,8 +251,8 @@ export function tuilesDeLaNote(note) {
     resultat: {
       titre: '1N2 sur les cotes d’avant-match',
       valeur: r2 ? perteDite(r2.moteur.perteLog) : 'non mesuré',
-      detail: r2 ? `perte log sur ${entier(r2.n)} matchs de 2019-2023 (jamais vus) · ${pourcentDit(r2.moteur.justes)} de justes · marché : ${perteDite(r2.marche?.perteLog)}${e2 ? ` (${e2.gain} ${e2.fourchette ?? ''})` : ''}` : 'pas de note',
-      aCote: r4 ? `2025-26 (déjà vue) : ${perteDite(r4.moteur.perteLog)} sur ${entier(r4.n)} matchs, ${pourcentDit(r4.moteur.justes)} de justes` : null,
+      detail: r2 ? `perte log sur ${entier(r2.n)} matchs de 2019-2023 (${vuesDeLaNote(note, 'P2').vues ? 'déjà vus' : 'jamais vus'}) · ${pourcentDit(r2.moteur.justes)} de justes · marché : ${perteDite(r2.marche?.perteLog)}${e2 ? ` (${e2.gain} ${e2.fourchette ?? ''})` : ''}` : 'pas de note',
+      aCote: r4 ? `2025-26 (${vuesDeLaNote(note, 'P4b').vues ? 'déjà vue' : 'jamais vue'}) : ${perteDite(r4.moteur.perteLog)} sur ${entier(r4.n)} matchs, ${pourcentDit(r4.moteur.justes)} de justes` : null,
       verdict: r2?.marche ? libelleVerdict(r2.marche.verdict) : null
     },
     score: {
@@ -268,9 +274,18 @@ export function phraseDeLaNote(note) {
   if (!note) return { titre: 'Pas encore de note de départ', detail: 'Elle s’écrit dans le code après le rejeu complet du bac à sable.' };
   const jour = typeof note.calculeeLe === 'string' ? note.calculeeLe.split('-').reverse().join('/') : 'date inconnue';
   const version = Number.isInteger(note.moteur?.version) ? `version ${note.moteur.version}` : 'sans numéro de version dans le bac';
+  // Le commit qui porte ce moteur (correction du 19/10) : dit, qu'il existe ou non — sans lui, l'étape 47 ne le rejoue pas.
+  const commit = typeof note.moteur?.commit === 'string' && /^[0-9a-f]{40}$/.test(note.moteur.commit)
+    ? ` Commit du dépôt : ${note.moteur.commit.slice(0, 8)}….`
+    : ' Aucun commit du dépôt ne porte encore ce moteur : la preuve finale (étape 47) attend que le dépôt soit commité.';
+  const dit = (tranche) => {
+    const v = vuesDeLaNote(note, tranche);
+    return v.vues ? v.texte.replace(/^déjà vues/, 'déjà vu') : 'jamais vu par les réglages';
+  };
   return {
     titre: `Moteur mesuré le ${jour} (${version}, empreinte ${String(note.moteur?.empreinte ?? '').slice(0, 8)}…)`,
-    detail: `Écrite dans le code (noteDeDepart.js), d’après le rejeu n° ${note.rejeu?.id ?? '?'} du bac à sable. 2019-2023 : jamais vu par les réglages ; 2025-26 : déjà vu (vérification du 23/09).`
+    detail: `Écrite dans le code (noteDeDepart.js), d’après le rejeu n° ${note.rejeu?.id ?? '?'} du bac à sable. 2019-2023 : ${dit('P2')} ; 2025-26 : ${dit('P4b')}.${commit}`,
+    commit: commit.trim()
   };
 }
 
@@ -309,7 +324,7 @@ export function etatDuRejeu({ enCours = null, dernierRejeu = null, dernierRefus 
     const total = fini(enCours.total) ? ` / ${entier(enCours.total)}` : '';
     return { ton: 'is-info', texte: `En cours : ${enCours.partie ?? 'préparation'} ${fait}${total}${enCours.date ? ` (${enCours.date.split('-').reverse().join('/')})` : ''}.`, enCours: true };
   }
-  if (dernierRefus) return { ton: 'is-warning', texte: `Pas lancé : ${dernierRefus.raison}.`, enCours: false };
+  if (dernierRefus) return { ton: 'is-warning', texte: `Pas lancé : ${raisonDite(dernierRefus.raison)}.`, enCours: false };
   if (!dernierRejeu) return { ton: '', texte: 'Aucun rejeu encore sur cette appli : la note de départ vient du bac à sable.', enCours: false };
   const b = dernierRejeu.bilan ?? {};
   const minutes = fini(b.dureeMs) ? `${fr(b.dureeMs / 60000, 1)} min` : 'durée inconnue';
@@ -324,7 +339,15 @@ export function etatDuRejeu({ enCours = null, dernierRejeu = null, dernierRefus 
 
 /** La confirmation du bouton « Lancer le banc ». */
 export const CONFIRMATION_DU_LANCEMENT =
-  'Lancer le banc d’essai ?\n\nIl rejoue le moteur sur 2019-2026 (environ 10 à 13 minutes). Pendant ce temps, aucune actualisation ne tourne ; l’appli reste utilisable. Rien n’est changé dans vos chiffres, vos paris ou vos réglages : le banc mesure seulement.';
+  'Lancer le banc d’essai ?\n\nIl rejoue le moteur sur 2019-2026 (environ 10 à 13 minutes), dans un processus à part : l’appli reste rapide et la mémoire du rejeu est rendue à la fin. Pendant ce temps, aucune actualisation ne tourne ; l’appli reste utilisable. Rien n’est changé dans vos chiffres, vos paris ou vos réglages : le banc mesure seulement.';
+
+/** La raison d'un refus de lancement, en langage simple (le verrou parle de « processus » : Pierre n'a pas à le lire). */
+export function raisonDite(raison) {
+  const r = String(raison ?? '');
+  if (/verrou détenu par un autre processus/.test(r)) return 'une autre tâche tenait la base (un import ou une actualisation lancés à la main)';
+  if (/ en cours dans ce processus$/.test(r)) return `${r.replace(/ en cours dans ce processus$/, '')} tournait déjà`;
+  return r;
+}
 
 /** Les paris simulés d'un rejeu, regroupés par règle puis par tranche ; la règle du moteur d'abord. */
 export function parisDuRejeu(resume, jeux = {}) {
@@ -495,6 +518,9 @@ export function ecarteesDites(comptes, jeux = {}) {
   return lignes;
 }
 
+/** Les codes football-data que le magasin ne suit pas, nommés pour Pierre (le reste : le code tel quel). */
+const CODES_FD_DITS = Object.freeze({ EC: 'National League', JPN: 'J-League', SC1: 'Scottish Championship', SC2: 'Scottish League One', SC3: 'Scottish League Two' });
+
 /**
  * Les rencontres ÉCARTÉES d'un rejeu (bloc 7) : celles du rejeu entier (bilan) puis, tranche par tranche, les
  * raisons comptées. Jamais une rencontre écartée en silence ; la décision 4 de Pierre (lien 4) dite avec son
@@ -510,7 +536,12 @@ export function ecarteesDuRejeu(rejeu, jeux = {}) {
     { cle: 'lien4', texte: `${entier(liens('4'))} ligne(s) football-data sans rencontre au magasin (lien 4) : écartées et comptées (décision de Pierre)` },
     { cle: 'lien3', texte: `${entier(liens('3'))} ligne(s) football-data au rattachement incertain (lien 3) : écartées et comptées` }
   ];
-  if (fini(e.fdHorsSource) && e.fdHorsSource > 0) globales.push({ cle: 'fdHorsSource', texte: `${entier(e.fdHorsSource)} ligne(s) football-data de 2023-2026 laissées au magasin : une rencontre, un seul rejeu` });
+  if (fini(e.fdHorsSource) && e.fdHorsSource > 0) {
+    // Corrigé le 19/10 : ce ne sont pas des rencontres « laissées au magasin » — le magasin ne suit pas ces championnats.
+    const parCode = Object.entries(b.fdHorsSourceParCode ?? {}).sort((x, y) => y[1] - x[1]);
+    const noms = parCode.length ? ` (${parCode.map(([code, n]) => `${CODES_FD_DITS[code] ?? code} ${entier(n)}`).join(', ')})` : '';
+    globales.push({ cle: 'fdHorsSource', texte: `${entier(e.fdHorsSource)} ligne(s) football-data d’après juin 2023 non rejouées : de 2023 à 2026, seul le magasin est rejoué, et il ne suit pas ces championnats${noms}` });
+  }
   if (fini(e.avantMoteur) && e.avantMoteur > 0) globales.push({ cle: 'avantMoteur', texte: `${entier(e.avantMoteur)} rencontre(s) d’avant le 29/07/2005 : échauffement des formes seulement` });
   if (fini(e.sansLigneJourJ) && e.sansLigneJourJ > 0) globales.push({ cle: 'sansLigneJourJ', texte: `${entier(e.sansLigneJourJ)} rencontre(s) du magasin sans ligne dans la table du jour J` });
   if (fini(b.horsGrille) && b.horsGrille > 0) globales.push({ cle: 'horsGrille', texte: `${entier(b.horsGrille)} score(s) hors de la grille 9 × 9 : réglés au plancher et comptés, jamais écartés` });
@@ -559,7 +590,8 @@ export function tableauDeLaNote(note) {
         repere: c.repere?.perteLog ?? null,
         ecartMarche: ecartDuJuge(duel(c.marche)),
         ecartRepere: ecartDuJuge(duel(c.repere)),
-        vues: t.id === 'P4b' ? { texte: 'déjà vues (vérification du 23/09)', vues: true } : { texte: 'jamais vues', vues: false },
+        // Les fenêtres vues que la NOTE dit pour cette période (recopiées du rejeu), jamais retapées ici (19/10).
+        vues: vuesDeLaNote(note, t.id),
         sansMarche: !c.marche,
         temoins: temoinsDe(c.moteur, null)
       };

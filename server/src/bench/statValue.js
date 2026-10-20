@@ -112,7 +112,7 @@ import { faitsDepuisFd, paireRelevee, cartonsReleves, CONSTANTES } from '../data
 import { paireFd } from '../data/db/leagueBenchmarks.js';
 import { comparer, generateur, LignesInvalides } from './guard.js';
 import { lignesDuJuge } from './jugeAPart.js';
-import { fenetresDeclarees } from './lancements.js';
+import { fenetresDeclarees, VUES_DE_L_ETAPE_18 } from './lancements.js';
 import { BORNES_DES_TRANCHES } from './periodes.js';
 import { PROBA_MIN } from './metrics.js';
 import { statExpectations, STAT_KINDS, loiDesComptes } from '../sports/football/statMarkets.js';
@@ -160,14 +160,11 @@ export const PERIODES_DU_CALCUL = Object.freeze({
 
 /**
  * Ce que l'étape 18 a REGARDÉ, pour les étapes qui liront sa demi-vie ou sa fenêtre (27, 29, 30) : à
- * recopier dans les `vues` de leur lancement (lancements.js). Le calcul y a CHOISI ; le jugement y a
- * regardé un résultat (une variante de plus à compter sur P2, la preuve au banc).
+ * recopier dans les `vues` de leur lancement (lancements.js), avec la portée de ce que l'étape lectrice règle.
+ * Défini dans lancements.js depuis le 19/10 (le lancement de l'étape 29 le lit, et lancements.js ne peut pas
+ * lire ce fichier) ; ses jours sont ceux de PERIODES_DU_CALCUL — un test vérifie qu'ils restent égaux.
  */
-export const VUES_DE_L_ETAPE_18 = Object.freeze([
-  Object.freeze({ de: PERIODES_DU_CALCUL.magasin.calcul.de, a: PERIODES_DU_CALCUL.magasin.calcul.a, quoi: 'Étape 18 : demi-vies, fenêtres et pentes choisies sur le magasin (P4a).' }),
-  Object.freeze({ de: PERIODES_DU_CALCUL['football-data'].calcul.de, a: PERIODES_DU_CALCUL['football-data'].calcul.a, quoi: 'Étape 18 : demi-vies, fenêtres et pentes choisies sur football-data (P1).' }),
-  Object.freeze({ de: PERIODES_DU_CALCUL['football-data'].jugement.de, a: PERIODES_DU_CALCUL['football-data'].jugement.a, quoi: 'Étape 18 : fenêtres et demi-vies jugées sur football-data (P2) — une variante regardée.' })
-]);
+export { VUES_DE_L_ETAPE_18 };
 
 // ======================================================= le catalogue
 
@@ -1700,7 +1697,9 @@ export async function calculerSurDesSeries(series, { options = {}, juge = JUGE_S
   const executer = (gen) => executerEnRendantLaMain(gen, (ou) => pauses.siLongtemps(ou));
   const { lignes: prevues, moteur: moteurPrevu } = lignesPrevues(o);
   const variantes = variantesDonnees ?? variantesDu(o);
-  const vues = fenetresVuesEnJours(fenetresDeclarees());
+  // « Déjà vu » pour la VALEUR DES STATISTIQUES (portée de l'étape 18 ; correction du 19/10) : les réglages du 23/09 et
+  // les fenêtres déclarées pour les statistiques — jamais celles qu'une autre grandeur a regardées (l'indice de 29).
+  const vues = fenetresVuesEnJours(fenetresDeclarees({ portee: 'statistiques' }));
   const lignes = [];
   const sautees = [];
   let fait = faitAvant;

@@ -448,7 +448,7 @@ test('meilleur moment : trois championnats fabriqués — relevé moins chargé 
 // ------------------------------------------------------------ 7. le 23/09
 
 test('le 23/09 : sa fenêtre (07/2023 → 23/09/2026, la justesse des bookmakers) est déclarée jour par jour ; « retrouvé » = Pinnacle meneur, 0,9925 à 0,0005 près, 15 885 matchs à 1 % près ; le panier : relevé football-data, 18 championnats à fichier saisonnier, rencontres rattachées', async () => {
-  const fenetres = fenetresDeclarees();
+  const fenetres = fenetresDeclarees({ portee: 'marche' });
   for (let t = Date.parse(`${K.FENETRE_23_09.de}T12:00:00Z`); t <= Date.parse(`${K.FENETRE_23_09.a}T12:00:00Z`); t += 86_400_000) {
     const j = new Date(t).toISOString().slice(0, 10);
     assert.ok(fenetres.some((f) => j >= f.de && j <= f.a), `${j} : déjà vu par le 23/09`);

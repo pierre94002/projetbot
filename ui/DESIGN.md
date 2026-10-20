@@ -360,6 +360,15 @@ viennent ces chiffres** (la provenance de la route, mot pour mot) et **les renco
 zéro, lien 3, hors grille — puis période par période, chaque raison comptée). Tant qu'aucun rejeu n'a tourné ici, les blocs 3 à 5 montrent la note
 (P2 et P4b) et la carte dit qu'elle attend le premier rejeu ; une panne de lecture se dit (`.cm-note.is-danger`) sans retirer un bloc. Les composants
 n'appellent rien (props) ; les mots viennent de `utils/banc.js` (pur, rejoué par `server/test/bancEcran.test.mjs` sur les vraies réponses de la route).
+Retouche du 19/10/2026 (après la vérification en ultracode) : la route rend `dernierRejeu` (le dernier fini, sans son résumé — la ligne d'état dit
+« arrêté » en `is-danger`) ET `dernierRejeuReussi` (avec son résumé) : les blocs 3 à 7 lisent le dernier rejeu RÉUSSI, jamais un rejeu arrêté, et la
+légende du tableau nomme le n° plus récent qui s'est arrêté ; la reproduction du 23/09 est dite pour chaque rejeu du bouton (« non calculée par le
+rejeu n° N » pour un rejeu d'avant) ; la confirmation dit « dans un processus à part : l’appli reste rapide et la mémoire du rejeu est rendue à la
+fin » ; un lancement refusé se dit en clair (`raisonDite` : « une autre tâche tenait la base (un import ou une actualisation lancés à la main) »,
+« banc tournait déjà »), jamais « verrou détenu par un autre processus » ; « déjà vues (étape 29, version indice-v1) », « (candidate) », « (fenêtre
+du rejeu) » ; les lignes football-data hors magasin nommées par championnat (National League, J-League, Scottish Championship / League One / League
+Two) ; la note dit si un commit du dépôt porte son moteur, et les « jamais vus / déjà vue » de ses tuiles et de sa phrase sont LUS dans la note
+(`depart.P2.vues`, `depart.P4b.vues`), plus jamais écrits en dur.
 Lisible en panneau étroit : `container: banc`, une colonne sous 760 px, les tableaux défilent dans leur cadre.
 Depuis l'étape 20 du plan (13/10/2026) : le bloc **« Calibration du mois »** d'Historique moteur (`CalibrationPanel`, `AppCard` icône `target`,
 sur-titre « Calibration », dans l'onglet « Historique moteur » juste après `ClosingValuePanel`) — LIT `GET /api/predictions/calibration` (une

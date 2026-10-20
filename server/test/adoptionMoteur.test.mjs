@@ -288,7 +288,7 @@ test('le banc avant l’essai : deux rejeux du banc (la version en service, puis
     const appels = [];
     const ligne = (i, prix, v, o = {}) => ({ type: 'ligne', cle: `f${i}|bothTeamsScore|-|${prix}`, fixtureKey: `f${i}`, date: i < 50 ? '2023-08-10' : '2020-03-01', marketKey: 'bothTeamsScore', prix, mesures: { moteur: { perteLog: v } }, ...o });
     const faux = async (o) => {
-      appels.push({ config: o.config, periodes: o.periodes, prix: o.prix, marches: o.marches, reproduction: o.reproduction, database: o.database });
+      appels.push({ config: o.config, periodes: o.periodes, prix: o.prix, marches: o.marches, reproduction: o.reproduction, database: o.database, declaration: o.declaration ?? null });
       const candidate = o.config.defaultCorrelation === -0.2;
       for (let i = 0; i < 260; i++) o.surLigne(ligne(i, 'fd-avant-match', candidate ? 0.6 + (i % 5) / 100 : 0.7 + (i % 5) / 100));
       // Présente d'un seul côté, une autre ligne retenue, une mesure manquante, un pari (ignoré).
@@ -303,6 +303,8 @@ test('le banc avant l’essai : deux rejeux du banc (la version en service, puis
     assert.deepEqual(appels.map((a) => a.config.defaultCorrelation), [-0.075, -0.2], 'la version en service, puis la candidate (option config du banc)');
     assert.deepEqual(appels[0].marches, ['bothTeamsScore', 'corners'], 'les familles du banc de ses marchés');
     assert.deepEqual([appels[0].periodes, appels[0].prix, appels[0].reproduction, appels[0].database], [['P2'], ['fd-avant-match'], false, 'base-de-l-appelant']);
+    // La candidate rejouée avec SA déclaration (ses vues, sinon []) ; la version en service, sans (ses vues sont au code ; correction du 19/10).
+    assert.deepEqual(appels.map((a) => a.declaration), [null, { etape: '27', version: 'essai-banc', vues: [] }]);
     assert.equal(r.indicatif, true);
     assert.deepEqual([r.paires, r.matchs, r.variantes, r.verdict], [260, 260, 2, 'retenu']);
     assert.deepEqual(r.ecartees, { sansPaire: 1, lignesDifferentes: 2, nonReglable: 1 });

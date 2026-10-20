@@ -29,6 +29,7 @@ import readline from 'node:readline';
 import { comparer, LignesInvalides } from './guard.js';
 import { compterVariantes } from './trialsRegistry.js';
 import { FORMAT_ECHANGE, VERSION_BANC } from './periodes.js';
+import { exigerLeCommitDeDepart, NOTE_DE_DEPART } from './noteDeDepart.js';
 import { cleDuMarche } from '../data/enregistreurs/gelPronostics.js';
 import { memeDistribution, ECART_DE_DISTRIBUTION } from '../data/enregistreurs/depot.js';
 
@@ -126,10 +127,14 @@ async function lireEchange(fichier, surLigne) {
  * rend les deux empreintes du moteur. `variantes` (un nombre) ou `etapes` (['27', '28'] : la somme de leurs
  * variantes déclarées au registre de la mesure) fait la fourchette ; sans l'un ni l'autre, le gain et sa
  * fourchette à une variante sont rendus, mais `verdict: null` — le nombre d'essais manque.
+ * `depart` (étape 47 : « le moteur de départ » en A, correction du 19/10) : exige le commit de la note de départ
+ * (exigerLeCommitDeDepart lève MoteurDeDepartSansCommit sinon) et que le fichier A soit bien ce moteur (son empreinte
+ * du code est celle de la note) ; `note` : la note (celle du code par défaut).
  */
-export async function comparerDesFichiers({ fichierA, fichierB, mesure = 'perte-log', variantes = null, etapes = null, graine = 1, tirages = 1000, registre = {} } = {}) {
+export async function comparerDesFichiers({ fichierA, fichierB, mesure = 'perte-log', variantes = null, etapes = null, graine = 1, tirages = 1000, registre = {}, depart = false, note = NOTE_DE_DEPART } = {}) {
   const lire = MESURES_APPARIABLES[mesure];
   if (!lire) throw new EchangeInvalide(`Mesure inconnue : « ${String(mesure)} ».`);
+  const attendu = depart ? exigerLeCommitDeDepart(note) : null;
   const A = new Map();
   const enteteA = await lireEchange(fichierA, (l) => {
     if (l.type !== 'ligne') return;
@@ -161,6 +166,9 @@ export async function comparerDesFichiers({ fichierA, fichierB, mesure = 'perte-
     if (vuesB.has(cle)) continue;
     if (sansLigneB.has(a.sansLigne)) ecartees.lignesDifferentes++;
     else ecartees.sansPaire++;
+  }
+  if (attendu && (enteteA.moteur?.empreinteCode ?? null) !== attendu.empreinteCode) {
+    throw new EchangeInvalide(`Le fichier A n’est pas le moteur de départ : empreinte du code ${enteteA.moteur?.empreinteCode ?? 'absente'}, la note de départ dit ${attendu.empreinteCode} (commit ${attendu.commit}).`);
   }
   if ((enteteA.reglement ?? null) !== (enteteB.reglement ?? null)) throw new EchangeInvalide(`Règlements différents (${enteteA.reglement} / ${enteteB.reglement}) : rien n'est jugé.`);
   let m = null;

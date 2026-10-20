@@ -239,7 +239,8 @@ sortie.homonymes = {
 // Le banc sur la copie, ses variantes dans un registre d'ESSAI.
 const fichier = path.join(process.env.CM_TEST_DOSSIER, 'registre-essai.json');
 const mesure = executerSansPause(B.mesurerAuBanc({ database: db, tirages: 200, declarer: true, registre: { fichier } }));
-const registre = JSON.parse(fs.readFileSync(fichier, 'utf8'));
+// Depuis le 19/10, les quatre variantes sont déclarées dans le CODE (LANCEMENTS) : le banc n'a plus rien à écrire au registre.
+const registre = fs.existsSync(fichier) ? JSON.parse(fs.readFileSync(fichier, 'utf8')) : { etapes: {} };
 const { veille } = executerSansPause(B.classementsDeLaVeille(db));
 const epl = db.prepare("SELECT match_key, date, home_id, away_id, meta FROM matches WHERE league = 'EPL' ORDER BY date, match_key").all();
 const premier = veille.get(epl[0].match_key)?.reel;
@@ -264,7 +265,7 @@ for (const x of epl) {
 }
 sortie.banc = {
   variantes: mesure.variantes,
-  registre: { ids: (registre.etapes['29']?.variantes ?? []).map((v) => v.id), ou: (registre.etapes['29']?.variantes ?? []).map((v) => v.ou) },
+  registre: { existe: fs.existsSync(fichier), ids: (registre.etapes?.['29']?.variantes ?? []).map((v) => v.id), ou: (registre.etapes?.['29']?.variantes ?? []).map((v) => v.ou) },
   jugements: mesure.jugements.length,
   // Chaque jugement : ses matchs dans sa période (P3 : 2023-01-01 → 2024-06-30 ; P4b + P5 : depuis 2025-07-01).
   fenetresDansLaPeriode: mesure.jugements.every((j) => j.n === 0 || (j.periode === 'P3' ? j.fenetre.de >= '2023-01-01' && j.fenetre.a <= '2024-06-30' : j.fenetre.de >= '2025-07-01')),

@@ -528,7 +528,8 @@ test('la route : GET /api/engine-health, lecture seule, branchée une fois ; le 
   const importees = [...page.matchAll(/^import \{([^}]*)\} from '([^']*)';$/gm)].flatMap((m) => m[1].split(',').map((x) => x.trim()));
   assert.deepEqual(
     importees.sort(),
-    ['NOTE_DE_DEPART', 'deriveDuMoteur', 'dernierRejeu', 'etatBudgetClaude', 'etatDesVersions', 'etatSauvegardes', 'lireLeControle', 'openDb', 'rejeuxDe', 'resumeDeLaCalibration'].sort()
+    // Le dernier rejeu RÉUSSI du banc (correction du 19/10 de l'étape 19 : un rejeu arrêté en erreur n'efface plus le dernier réussi).
+    ['NOTE_DE_DEPART', 'deriveDuMoteur', 'dernierRejeuReussi', 'etatBudgetClaude', 'etatDesVersions', 'etatSauvegardes', 'lireLeControle', 'openDb', 'rejeuxDe', 'resumeDeLaCalibration'].sort()
   );
   for (const lourd of [/travailDuBilan/, /calculerBilan/, /preparerLeMoisEnCours/, /figerLesMoisEcoules/, /rejouer\(/, /construireTableJourJ/, /connaitreLeMarche/, /executerControleQuotidien/, /lancerControleQuotidien/, /writeJsonAtomic/, /INSERT|UPDATE|DELETE/]) {
     assert.doesNotMatch(page, lourd, String(lourd));

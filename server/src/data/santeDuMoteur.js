@@ -36,7 +36,7 @@ import { etatDesVersions } from '../core/engine/engineVersions.js';
 import { deriveDuMoteur } from './deriveMoteur.js';
 import { resumeDeLaCalibration } from './calibration.js';
 import { NOTE_DE_DEPART } from '../bench/noteDeDepart.js';
-import { dernierRejeu, rejeuxDe } from '../bench/depotBanc.js';
+import { dernierRejeuReussi, rejeuxDe } from '../bench/depotBanc.js';
 
 // ============================================================ les vraies places
 
@@ -112,7 +112,8 @@ export const LECTEURS = Object.freeze({
   budget: ({ maintenant }) => etatBudgetClaude({ maintenant }),
   banc: () => {
     const database = openDb();
-    return { note: NOTE_DE_DEPART, dernier: dernierRejeu({ database, avecResume: false }), rejeux: rejeuxDe({ database, limite: 10 }).length };
+    // Le dernier rejeu RÉUSSI (correction du 19/10) : un rejeu arrêté en erreur se lit sur la page du banc, avec sa raison.
+    return { note: NOTE_DE_DEPART, dernier: dernierRejeuReussi({ database, avecResume: false }), rejeux: rejeuxDe({ database, limite: 10 }).length };
   },
   calibration: ({ maintenant }) => resumeDeLaCalibration({ database: openDb(), maintenant }),
   versions: () => ({ versions: etatDesVersions(), derive: deriveDuMoteur({ database: openDb() }) }),

@@ -27,6 +27,37 @@
  * -----------------------------------------------------------------------
  */
 
+/**
+ * LE COMMIT du dépôt qui porte le moteur de départ (empreinte du code 6ed7e010…, version 3 chez Pierre) : 2e602ea,
+ * le dernier des cinq commits du 20/10/2026 (tout ce qui était en service depuis le 03/10, envoyés sur GitHub à la
+ * demande de Pierre). Vérifié : empreinteDuCode sur le contenu de ce commit (git archive) rend 6ed7e010f507…, celle de
+ * la note. La note elle-même entre dans un commit suivant. Si ce commit manquait (null), l'étape 47 refuserait de
+ * rejouer « le moteur de départ » depuis git (exigerLeCommitDeDepart) et le dirait ; les chiffres de la note, eux,
+ * resteraient justes.
+ */
+export const COMMIT_DU_MOTEUR_DE_DEPART = '2e602ea69ce5a905fbdee6d09c89d86ea626c137';
+
+/** Ce que la note dit tant que le commit manque (aussi à l'écran). */
+export const COMMIT_MANQUANT =
+  'Aucun commit du dépôt ne porte encore ce moteur (le dépôt n’a pas été commité depuis le 03/10 : c’est la décision de Pierre). Ses chiffres sont justes et son empreinte est notée, mais l’étape 47 ne pourra le rejouer depuis git qu’une fois le commit fait et son identifiant écrit dans noteDeDepart.js.';
+
+/** Le moteur de départ ne se rejoue pas sans son commit (étape 47). */
+export class MoteurDeDepartSansCommit extends Error {}
+
+/**
+ * LA GARDE de l'étape 47 : rejouer « le moteur de départ » (git worktree au commit de la note, puis le banc) exige
+ * son commit. Rend { commit, empreinte, empreinteCode } ; lève MoteurDeDepartSansCommit, qui dit quoi faire, sinon.
+ */
+export function exigerLeCommitDeDepart(note = NOTE_DE_DEPART) {
+  const commit = note?.moteur?.commit ?? null;
+  if (typeof commit !== 'string' || !/^[0-9a-f]{40}$/.test(commit)) {
+    throw new MoteurDeDepartSansCommit(
+      'Le moteur de départ ne se rejoue pas : la note de départ n’a pas de commit (aucun commit du dépôt ne porte ce moteur). Il faut d’abord que le dépôt soit commité, puis écrire l’identifiant du commit (git rev-parse HEAD) dans noteDeDepart.js, COMMIT_DU_MOTEUR_DE_DEPART.'
+    );
+  }
+  return { commit, empreinte: note.moteur.empreinte ?? null, empreinteCode: note.moteur.empreinteCode ?? null };
+}
+
 const p4 = (x) => (typeof x === 'number' && Number.isFinite(x) ? Number(x.toFixed(4)) : null);
 const p2 = (x) => (typeof x === 'number' && Number.isFinite(x) ? Number(x.toFixed(2)) : null);
 
@@ -63,6 +94,20 @@ function notesDUneTranche(resume, tranche, prix) {
     out[`${c.marketKey}${c.ligne === null || c.ligne === undefined ? '' : `|${c.ligne}`}`] = caseDeLaNote(c);
   }
   return out;
+}
+
+/**
+ * Les fenêtres DÉJÀ VUES d'une tranche × jeu de prix, recopiées des cases du résumé (leurs vues.parFenetre ; sous-table
+ * « tout »), jamais retapées (correction du 19/10) : la note dira juste le jour où une fenêtre de portée « moteur »
+ * couvrira P2 (étape 27).
+ */
+function vuesDUneTranche(resume, tranche, prix) {
+  const ids = new Set();
+  for (const c of resume?.tranches?.[tranche]?.cases ?? []) {
+    if (c.prix !== prix || c.sousTable !== 'tout') continue;
+    for (const [id, n] of Object.entries(c.vues?.parFenetre ?? {})) if (n > 0) ids.add(id);
+  }
+  return [...ids].sort();
 }
 
 /** Les paris d'une tranche (règle du moteur) pour la note. */
@@ -136,14 +181,14 @@ export function noteDepuisUnRejeu(rejeu, identite = {}) {
     depart: {
       P4b: {
         prix: 'fd-avant-match',
-        vues: ['mesures-du-23-09'],
+        vues: vuesDUneTranche(r, 'P4b', 'fd-avant-match'),
         marches: notesDUneTranche(r, 'P4b', 'fd-avant-match'),
         paris: null,
         pourquoiPasDeParis: 'Aucune cote William Hill après le 27/03/2025 et Pinnacle jusqu’au 15/01/2026 seulement : la règle du moteur n’a presque plus de prix pour parier en 2025-26 (les décisions et refus sont au résumé du rejeu).'
       },
       P2: {
         prix: 'fd-avant-match',
-        vues: [],
+        vues: vuesDUneTranche(r, 'P2', 'fd-avant-match'),
         marches: notesDUneTranche(r, 'P2', 'fd-avant-match'),
         paris: parisDeLaNote(r, 'P2')
       }
@@ -164,16 +209,18 @@ const gele = (o) => {
  * LA NOTE DE DÉPART (format 1), remplie le 13/10/2026 après le rejeu complet n° 4 du bac à sable (P1 à P5,
  * quatre jeux de prix, 246 171 rencontres, 26 min) : chaque chiffre est celui de noteDepuisUnRejeu sur le
  * résumé rangé dans bench_runs (script ecrire-note.mjs du scratchpad de l'étape 19), jamais retapé.
- * `moteur.commit` : null — le commit qui porte ce code n'existe pas encore (il se note à la recopie,
- * sandbox-apply) ; `moteur.version` : null — le bac n'a pas de numéro de version pour ce code (la version
- * se crée au premier démarrage chez Pierre, sans aucun chiffre changé).
+ * `moteur.commit` : COMMIT_DU_MOTEUR_DE_DEPART (2e602ea…, commit du 20/10/2026, voir plus haut) ; `moteur.version` : null — le bac
+ * n'a pas de numéro de version pour ce code (chez Pierre, ce moteur est la version 3, notée au démarrage du
+ * 14/10, empreinte 95a96429… : engine-versions.json). Le bilan rangé du rejeu n° 4 dit encore « etiquette:
+ * incomplete » : un défaut de la détection de candidate, corrigé le 13/10 après ce rejeu — les réglages rejoués
+ * sont ceux en service (empreinte a5f7d32a…).
  */
 export const NOTE_DE_DEPART = gele({
   format: 1,
   calculeeLe: "2026-10-13",
   ou: "bac à sable",
   rejeu: {"id":4,"dureeMs":1568908,"versionBanc":1,"formatLignes":1,"graine":1,"tirages":1000,"variantes":999,"base":{"fichier":"bac-a-sable/base/match-stats.db","octets":2169344000,"copieLe":"2026-10-07","rencontres":60211},"fdHistory":{"lignes":262887,"lien1P4b":12997,"derniereDate":"2026-10-06"},"tableJourJ":{"version":1,"construiteLe":"2026-10-12T15:49:45.735Z"}},
-  moteur: {"empreinte":"95a964298b9326322322463fe485422743667083","empreinteCode":"6ed7e010f5076bdb070c71ac2fb62d75d19c0fc3","empreinteReglages":{"football":"a5f7d32a6fe4b92cd15032725ec92d812575424d"},"version":null,"commit":null,"reglages":{"edgeThresholdMin":0.02,"edgeThresholdMax":0.25,"valueBookmakers":["williamhill","sport888","betsson","nordicbet","unibet_nl","unibet_se","leovegas_se","tipico_de","coolbet","codere_it"],"maxValueOdds":5,"defaultCorrelation":-0.075,"kellyFraction":0.125,"maxStakePercent":0.02,"homeAdvantage":1.06,"cornersAdjustmentMax":0.08,"maxExpectedRateGap":0.4,"weights":{"market":1,"structural":0,"exogenous":0}}},
+  moteur: {"empreinte":"95a964298b9326322322463fe485422743667083","empreinteCode":"6ed7e010f5076bdb070c71ac2fb62d75d19c0fc3","empreinteReglages":{"football":"a5f7d32a6fe4b92cd15032725ec92d812575424d"},"version":null,"commit":COMMIT_DU_MOTEUR_DE_DEPART,"commitManquant":COMMIT_DU_MOTEUR_DE_DEPART ? null : COMMIT_MANQUANT,"reglages":{"edgeThresholdMin":0.02,"edgeThresholdMax":0.25,"valueBookmakers":["williamhill","sport888","betsson","nordicbet","unibet_nl","unibet_se","leovegas_se","tipico_de","coolbet","codere_it"],"maxValueOdds":5,"defaultCorrelation":-0.075,"kellyFraction":0.125,"maxStakePercent":0.02,"homeAdvantage":1.06,"cornersAdjustmentMax":0.08,"maxExpectedRateGap":0.4,"weights":{"market":1,"structural":0,"exogenous":0}}},
   reproduction: {"periode":"P4b","prix":"fd-cloture","lectureDirecte":{"matchs":12997,"justes":50.26,"perteLog":1.0034,"brier":0.6003,"rps":0.2043,"anomalies":24,"tranches":[2393,4808,3029,1647,828,292]},"moteur":{"matchs":12973,"cotesIncoherentes":24,"justes":50.26,"perteLog":1.0033,"brier":0.6002,"rps":0.2043,"maxEcartP":0},"attribuees":3,"prolongees":12,"attendu":{"source":"t24, 07/10/2026","matchs":12997,"justes":50.26,"perteLog":1.0034,"brier":0.6003,"rps":0.2043,"tranches":[2393,4808,3029,1647,828,292]},"tolerance":0.0001},
   depart: {
     P4b: {
