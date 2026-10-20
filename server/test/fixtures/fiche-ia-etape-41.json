@@ -1,0 +1,4242 @@
+{
+ "description": "Étape 41 (fiche compacte) : entrées d'analyse IA et ce que le code d'AVANT l'étape en faisait (ancienne forme, schémas de sortie). A : Girona – Mallorca (copie du bac, 04/10/2026), enrichi pour couvrir chaque cas ; B : équipe inconnue du magasin ; revue : Girona – Mallorca. Ne pas regénérer : c'est la référence de l'ancienne forme.",
+ "genereLe": "2026-10-06T15:17:29.753Z",
+ "schemas": {
+  "avant": {
+   "name": "submit_pre_match_analysis",
+   "description": "Soumets le commentaire qualitatif structuré sur un match à venir, en complément de la prédiction chiffrée déjà produite par le moteur CôteMaster.",
+   "input_schema": {
+    "type": "object",
+    "properties": {
+     "summary": {
+      "type": "string",
+      "description": "Synthèse qualitative en 2-4 phrases : la forme des deux équipes, leurs statistiques et moyennes, et ce que disent les compositions (qui joue, qui manque)."
+     },
+     "keyFactors": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "factor": {
+         "type": "string",
+         "description": "ex: \"forme récente\", \"statistiques et moyennes\", \"compositions\", \"absences\", \"classement\", \"edge du modèle\""
+        },
+        "observation": {
+         "type": "string"
+        },
+        "evidence": {
+         "type": "string",
+         "description": "Chiffres précis tirés UNIQUEMENT des données fournies (classement, forme V/N/D, moyennes)."
+        }
+       },
+       "required": [
+        "factor",
+        "observation",
+        "evidence"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "alignmentWithModel": {
+      "type": "string",
+      "description": "Le contexte qualitatif va-t-il dans le même sens que l'edge chiffré du moteur, ou le nuance-t-il ? En mots uniquement — jamais de cote, probabilité ou mise alternative."
+     },
+     "marketViews": {
+      "type": "array",
+      "description": "Un avis par marché de `marketPredictions`, dans le même ordre, sans en omettre aucun.",
+      "items": {
+       "type": "object",
+       "properties": {
+        "market": {
+         "type": "string",
+         "description": "Le marché, recopié tel quel de `marketPredictions[].market`."
+        },
+        "pick": {
+         "type": "string",
+         "description": "Le pronostic du moteur sur ce marché, recopié tel quel de `marketPredictions[].predictedLabel`."
+        },
+        "verdict": {
+         "type": "string",
+         "enum": [
+          "confirme",
+          "nuance",
+          "contredit"
+         ],
+         "description": "Le contexte confirme-t-il, nuance-t-il ou contredit-il CE pronostic du moteur ?"
+        },
+        "confidence": {
+         "type": "string",
+         "enum": [
+          "faible",
+          "moyenne",
+          "forte"
+         ],
+         "description": "Solidité de ton avis au vu des données disponibles et de ton expérience sur ce type de marché."
+        },
+        "explanation": {
+         "type": "string",
+         "description": "UNE phrase (30 mots au plus) qui explique le pourcentage du moteur pour CE pronostic (`marketPredictions[].probability`), avec le ou les chiffres qui le fondent : forme récente, moyennes produites et concédées, nombres attendus (`statExpectations`), joueurs alignés ou absents. Ex. : « 76 % : Arsenal n'a marqué plus de 3 buts qu'une fois en 10 matchs et Leeds n'en encaisse que 1,1 par match à l'extérieur. » Tu expliques le chiffre du moteur, tu n'en proposes jamais un autre."
+        },
+        "reasoning": {
+         "type": "string",
+         "description": "Ton avis en 1 à 2 phrases : pourquoi le contexte confirme, nuance ou contredit ce pronostic, chiffres fournis à l'appui (forme, moyennes, composition, absences…). En mots — jamais de cote, probabilité ou mise alternative."
+        }
+       },
+       "required": [
+        "market",
+        "pick",
+        "verdict",
+        "confidence",
+        "explanation",
+        "reasoning"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "lineupImpact": {
+      "type": "string",
+      "description": "Dès que `lineups` est fourni : ce que les compositions changent à la lecture du match et des marchés — titulaires habituels absents ou remplaçants, joueurs décisifs présents, choix de l'entraîneur (rotation, système), avec les chiffres des joueurs concernés. Avec `lineups.source: \"magasin\"`, dis que c'est la dernière composition alignée, pas celle du match."
+     },
+     "caveats": {
+      "type": "string",
+      "description": "Données indisponibles pour ce match (classement absent pour une coupe, forme non résolue, échantillon réduit...)."
+     }
+    },
+    "required": [
+     "summary",
+     "keyFactors",
+     "alignmentWithModel",
+     "marketViews"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "avantChoix": {
+   "type": "tool",
+   "name": "submit_pre_match_analysis"
+  },
+  "apres": {
+   "name": "submit_post_match_review",
+   "description": "Soumets la confrontation structurée entre une analyse IA pré-match déjà soumise et le résultat réel du match, une fois celui-ci connu.",
+   "input_schema": {
+    "type": "object",
+    "properties": {
+     "summary": {
+      "type": "string",
+      "description": "Synthèse en 2-4 phrases de la confrontation entre la lecture pré-match et le résultat réel."
+     },
+     "whatWasRight": {
+      "type": "string",
+      "description": "Ce que l'analyse pré-match avait correctement anticipé, avec preuve tirée du résultat réel."
+     },
+     "whatWasMissed": {
+      "type": "string",
+      "description": "Ce que l'analyse pré-match avait manqué ou mal évalué, avec preuve tirée du résultat réel."
+     },
+     "outcomeVsEngine": {
+      "type": "string",
+      "description": "Le résultat réel va-t-il dans le sens du chiffrage du moteur (edge/probabilités) ou le contredit-il ? En mots uniquement."
+     },
+     "marketReviews": {
+      "type": "array",
+      "description": "Un bilan par marché de `marketOutcomes`, dans le même ordre, sans en omettre aucun.",
+      "items": {
+       "type": "object",
+       "properties": {
+        "market": {
+         "type": "string",
+         "description": "Le marché, recopié tel quel de `marketOutcomes[].market`."
+        },
+        "explanation": {
+         "type": "string",
+         "description": "Ce qui, dans le déroulé du match (score, buts et leurs minutes, statistiques de `matchStats`), explique l'issue de CE marché."
+        },
+        "lesson": {
+         "type": "string",
+         "description": "Si ton avis d'avant-match sur ce marché s'est trompé : la correction à retenir. S'il était juste : ce qui le confirme et mérite d'être gardé. Sans avis d'avant-match : ce que ce marché enseigne pour la suite."
+        }
+       },
+       "required": [
+        "market",
+        "explanation",
+        "lesson"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "caveats": {
+      "type": "string",
+      "description": "Limites de cette confrontation (échantillon d'un seul match, résultat pouvant tenir à un facteur non modélisable...)."
+     }
+    },
+    "required": [
+     "summary",
+     "whatWasRight",
+     "whatWasMissed",
+     "outcomeVsEngine",
+     "marketReviews"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "apresChoix": {
+   "type": "tool",
+   "name": "submit_post_match_review"
+  }
+ },
+ "avantA": {
+  "entree": {
+   "home": "Girona",
+   "away": "Mallorca",
+   "league": "La Liga 2 - Spain",
+   "commenceTime": "2026-10-04T19:00:00.000Z",
+   "timing": "coup-d-envoi",
+   "engineSummary": {
+    "label": "Girona vs Mallorca",
+    "expectedGoals": {
+     "home": 1.039,
+     "away": 0.5,
+     "source": "fotmob"
+    },
+    "trueOdds": {
+     "home": 2.17,
+     "draw": 3.17,
+     "away": 4.46
+    },
+    "market": {
+     "odds1": 2.3,
+     "oddsDraw": 3.1,
+     "odds2": 4.2
+    },
+    "edgePercent": 5.98,
+    "staking": {
+     "action": "RECOMMENDED",
+     "stake": 21.5,
+     "outcome": "home",
+     "label": "Girona gagne",
+     "odds": 2.3,
+     "displayedOdds": 2.3,
+     "bookmaker": "williamhill",
+     "bookmakerTitle": "William Hill",
+     "fairOdds": 2.17,
+     "ev": 0.0599,
+     "exclusion": null,
+     "candidates": [
+      {
+       "outcome": "home",
+       "label": "Girona gagne",
+       "odds": 2.3,
+       "displayedOdds": 2.3,
+       "bookmaker": "williamhill",
+       "bookmakerTitle": "William Hill",
+       "fairOdds": 2.17,
+       "ev": 0.0599,
+       "exclusion": null
+      },
+      {
+       "outcome": "draw",
+       "label": "Match nul",
+       "odds": 3.1,
+       "displayedOdds": 3.05,
+       "bookmaker": "unibet_fr",
+       "bookmakerTitle": "Unibet",
+       "fairOdds": 3.17,
+       "ev": -0.0221,
+       "exclusion": "sous_le_seuil"
+      },
+      {
+       "outcome": "away",
+       "label": "Mallorca gagne",
+       "odds": 4.2,
+       "displayedOdds": 4.2,
+       "bookmaker": "betclic",
+       "bookmakerTitle": "Betclic",
+       "fairOdds": 4.46,
+       "ev": -0.0583,
+       "exclusion": "sous_le_seuil"
+      }
+     ],
+     "limits": {
+      "edgeThresholdMin": 0.02,
+      "edgeThresholdMax": 0.25,
+      "maxValueOdds": 5
+     }
+    },
+    "statExpectations": {
+     "corners": {
+      "home": 4.79,
+      "away": 3.55,
+      "total": 8.34
+     },
+     "shots": {
+      "home": 15.01,
+      "away": 11.3,
+      "total": 26.31
+     },
+     "shotsOnTarget": {
+      "home": 4.57,
+      "away": 3.74,
+      "total": 8.3
+     }
+    },
+    "marketPredictions": [
+     {
+      "marketId": "result",
+      "params": {
+       "outcome": "home"
+      },
+      "market": "Résultat",
+      "predictedOutcome": "home",
+      "predictedLabel": "Girona gagne",
+      "predictedOdds": 2.17,
+      "probability": 46,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "totalGoals",
+      "params": {
+       "line": 2.5,
+       "side": "under"
+      },
+      "market": "Total buts",
+      "predictedOutcome": "under",
+      "predictedLabel": "Moins de 2.5 buts",
+      "predictedOdds": 1.25,
+      "probability": 80,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "bothTeamsScore",
+      "params": {
+       "outcome": "no"
+      },
+      "market": "Les 2 équipes marquent",
+      "predictedOutcome": "no",
+      "predictedLabel": "Non",
+      "predictedOdds": 1.36,
+      "probability": 74,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "resultAndTotal",
+      "params": {
+       "line": 3.5,
+       "key": "homeUnder"
+      },
+      "market": "Résultat + Total buts",
+      "predictedOutcome": "homeUnder",
+      "predictedLabel": "Girona & Moins de 3.5 buts",
+      "predictedOdds": 2.41,
+      "probability": 41,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "teamGoals",
+      "params": {
+       "team": "home",
+       "line": 1.5,
+       "side": "under"
+      },
+      "market": "Buts — Girona",
+      "predictedOutcome": "under",
+      "predictedLabel": "Girona — Moins de 1.5 buts",
+      "predictedOdds": 1.39,
+      "probability": 72,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "teamGoals",
+      "params": {
+       "team": "away",
+       "line": 0.5,
+       "side": "under"
+      },
+      "market": "Buts — Mallorca",
+      "predictedOutcome": "under",
+      "predictedLabel": "Mallorca — Moins de 0.5 buts",
+      "predictedOdds": 1.65,
+      "probability": 61,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "totalCorners",
+      "params": {
+       "line": 5.5,
+       "side": "over"
+      },
+      "market": "Total corners",
+      "predictedOutcome": "over",
+      "predictedLabel": "Plus de 5.5 corners",
+      "predictedOdds": 1.22,
+      "probability": 82,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "totalCorners",
+      "params": {
+       "line": 3.5,
+       "side": "over"
+      },
+      "market": "Total corners (ligne basse)",
+      "predictedOutcome": "over",
+      "predictedLabel": "Plus de 3.5 corners",
+      "predictedOdds": 1.08,
+      "probability": 93,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "teamCorners",
+      "params": {
+       "team": "home",
+       "line": 2.5,
+       "side": "over"
+      },
+      "market": "Corners — Girona",
+      "predictedOutcome": "over",
+      "predictedLabel": "Girona — Plus de 2.5 corners",
+      "predictedOdds": 1.25,
+      "probability": 80,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "teamCorners",
+      "params": {
+       "team": "away",
+       "line": 1.5,
+       "side": "over"
+      },
+      "market": "Corners — Mallorca",
+      "predictedOutcome": "over",
+      "predictedLabel": "Mallorca — Plus de 1.5 corners",
+      "predictedOdds": 1.21,
+      "probability": 83,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "totalShots",
+      "params": {
+       "line": 20.5,
+       "side": "over"
+      },
+      "market": "Total tirs",
+      "predictedOutcome": "over",
+      "predictedLabel": "Plus de 20.5 tirs",
+      "predictedOdds": 1.2,
+      "probability": 83,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "teamShots",
+      "params": {
+       "team": "home",
+       "line": 19.5,
+       "side": "under"
+      },
+      "market": "Tirs — Girona",
+      "predictedOutcome": "under",
+      "predictedLabel": "Girona — Moins de 19.5 tirs",
+      "predictedOdds": 1.24,
+      "probability": 81,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "teamShots",
+      "params": {
+       "team": "away",
+       "line": 15.5,
+       "side": "under"
+      },
+      "market": "Tirs — Mallorca",
+      "predictedOutcome": "under",
+      "predictedLabel": "Mallorca — Moins de 15.5 tirs",
+      "predictedOdds": 1.2,
+      "probability": 83,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "totalShotsOnTarget",
+      "params": {
+       "line": 5.5,
+       "side": "over"
+      },
+      "market": "Total tirs cadrés",
+      "predictedOutcome": "over",
+      "predictedLabel": "Plus de 5.5 tirs cadrés",
+      "predictedOdds": 1.22,
+      "probability": 82,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "teamShotsOnTarget",
+      "params": {
+       "team": "home",
+       "line": 2.5,
+       "side": "over"
+      },
+      "market": "Tirs cadrés — Girona",
+      "predictedOutcome": "over",
+      "predictedLabel": "Girona — Plus de 2.5 tirs cadrés",
+      "predictedOdds": 1.24,
+      "probability": 81,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "teamShotsOnTarget",
+      "params": {
+       "team": "away",
+       "line": 5.5,
+       "side": "under"
+      },
+      "market": "Tirs cadrés — Mallorca",
+      "predictedOutcome": "under",
+      "predictedLabel": "Mallorca — Moins de 5.5 tirs cadrés",
+      "predictedOdds": 1.23,
+      "probability": 81,
+      "minOdds": 1.2
+     }
+    ]
+   },
+   "contexte": {
+    "standings": {
+     "home": {
+      "rank": 4,
+      "teamId": "fotmob-7732",
+      "teamName": "Girona",
+      "shortName": "Girona",
+      "teamLogo": null,
+      "played": 8,
+      "won": 4,
+      "drawn": 2,
+      "lost": 2,
+      "goalsFor": 14,
+      "goalsAgainst": 8,
+      "goalDiff": 6,
+      "points": 14,
+      "deduction": null,
+      "description": "Promotion qualification",
+      "home": {
+       "played": 5,
+       "won": 2,
+       "drawn": 2,
+       "lost": 1,
+       "goalsFor": 9,
+       "goalsAgainst": 5
+      },
+      "away": {
+       "played": 3,
+       "won": 2,
+       "drawn": 0,
+       "lost": 1,
+       "goalsFor": 5,
+       "goalsAgainst": 3
+      }
+     },
+     "away": {
+      "rank": 5,
+      "teamId": "fotmob-8661",
+      "teamName": "Mallorca",
+      "shortName": "Mallorca",
+      "teamLogo": null,
+      "played": 8,
+      "won": 4,
+      "drawn": 2,
+      "lost": 2,
+      "goalsFor": 8,
+      "goalsAgainst": 3,
+      "goalDiff": 5,
+      "points": 14,
+      "deduction": null,
+      "description": "Promotion qualification",
+      "home": {
+       "played": 4,
+       "won": 3,
+       "drawn": 0,
+       "lost": 1,
+       "goalsFor": 7,
+       "goalsAgainst": 1
+      },
+      "away": {
+       "played": 4,
+       "won": 1,
+       "drawn": 2,
+       "lost": 1,
+       "goalsFor": 1,
+       "goalsAgainst": 2
+      }
+     }
+    },
+    "homeStats": {
+     "source": "FotMob (magasin)",
+     "from": "2026-05-17",
+     "to": "2026-10-04",
+     "last10": {
+      "matches": 10,
+      "results": "NVVDVVDNND",
+      "goalsFor": 1.5,
+      "goalsAgainst": 1,
+      "for": {
+       "xg": 1.39,
+       "shots": 15.6,
+       "shotsOnTarget": 5.8,
+       "bigChances": 2,
+       "corners": 4.2,
+       "possession": 51.3,
+       "yellowCards": 2.4
+      },
+      "against": {
+       "xg": 1.4,
+       "shots": 12.5,
+       "shotsOnTarget": 4,
+       "bigChances": 1.9,
+       "corners": 4.2,
+       "possession": 48.7,
+       "yellowCards": 3
+      }
+     },
+     "atHome": {
+      "matches": 6,
+      "results": "NVDVNN",
+      "goalsFor": 1.67,
+      "goalsAgainst": 1,
+      "for": {
+       "xg": 1.47,
+       "shots": 16,
+       "shotsOnTarget": 5.7,
+       "bigChances": 2.5,
+       "corners": 4.5,
+       "possession": 53.2,
+       "yellowCards": 2
+      },
+      "against": {
+       "xg": 1.17,
+       "shots": 10,
+       "shotsOnTarget": 3.8,
+       "bigChances": 1.5,
+       "corners": 4.2,
+       "possession": 46.8,
+       "yellowCards": 3
+      }
+     }
+    },
+    "awayStats": {
+     "source": "FotMob (magasin)",
+     "from": "2026-05-17",
+     "to": "2026-10-04",
+     "last10": {
+      "matches": 10,
+      "results": "NDVVNVDVVD",
+      "goalsFor": 1.1,
+      "goalsAgainst": 0.5,
+      "for": {
+       "xg": 1.3,
+       "shots": 12.9,
+       "shotsOnTarget": 3.9,
+       "bigChances": 3,
+       "corners": 4.5,
+       "possession": 55.5,
+       "yellowCards": 2.8
+      },
+      "against": {
+       "xg": 1.04,
+       "shots": 11.4,
+       "shotsOnTarget": 2.7,
+       "bigChances": 1.4,
+       "corners": 4.6,
+       "possession": 44.5,
+       "yellowCards": 1.7
+      }
+     },
+     "away": {
+      "matches": 5,
+      "results": "NVNDD",
+      "goalsFor": 0.2,
+      "goalsAgainst": 0.8,
+      "for": {
+       "xg": 0.75,
+       "shots": 11,
+       "shotsOnTarget": 2.8,
+       "bigChances": 1.3,
+       "corners": 5,
+       "possession": 58.6,
+       "yellowCards": 2.8
+      },
+      "against": {
+       "xg": 1.22,
+       "shots": 12.4,
+       "shotsOnTarget": 3.8,
+       "bigChances": 2.3,
+       "corners": 5.2,
+       "possession": 41.4,
+       "yellowCards": 1.4
+      }
+     }
+    },
+    "homeForm": {
+     "source": "FotMob (magasin)",
+     "matches": [
+      {
+       "date": "2026-10-04",
+       "opponent": "Mallorca",
+       "venue": "domicile",
+       "score": "0-0",
+       "result": "N"
+      },
+      {
+       "date": "2026-09-25",
+       "opponent": "Albacete",
+       "venue": "domicile",
+       "score": "2-0",
+       "result": "V"
+      },
+      {
+       "date": "2026-09-19",
+       "opponent": "Cádiz",
+       "venue": "extérieur",
+       "score": "2-1",
+       "result": "V"
+      },
+      {
+       "date": "2026-09-12",
+       "opponent": "Castellón",
+       "venue": "domicile",
+       "score": "1-2",
+       "result": "D"
+      },
+      {
+       "date": "2026-09-05",
+       "opponent": "Sporting Gijón",
+       "venue": "extérieur",
+       "score": "2-0",
+       "result": "V"
+      }
+     ],
+     "sampleSize": 5
+    },
+    "awayForm": {
+     "source": "FotMob (magasin)",
+     "matches": [
+      {
+       "date": "2026-10-04",
+       "opponent": "Girona",
+       "venue": "extérieur",
+       "score": "0-0",
+       "result": "N"
+      },
+      {
+       "date": "2026-09-27",
+       "opponent": "Almería",
+       "venue": "domicile",
+       "score": "0-1",
+       "result": "D"
+      },
+      {
+       "date": "2026-09-19",
+       "opponent": "Real Sociedad B",
+       "venue": "extérieur",
+       "score": "1-0",
+       "result": "V"
+      },
+      {
+       "date": "2026-09-13",
+       "opponent": "Sabadell",
+       "venue": "domicile",
+       "score": "2-0",
+       "result": "V"
+      },
+      {
+       "date": "2026-09-05",
+       "opponent": "Eldense",
+       "venue": "extérieur",
+       "score": "0-0",
+       "result": "N"
+      }
+     ],
+     "sampleSize": 5
+    },
+    "homeFlashscoreStats": null,
+    "awayFlashscoreStats": null,
+    "homeHistoricalStats": null,
+    "awayHistoricalStats": null,
+    "homeHistoricalForm": null,
+    "awayHistoricalForm": null,
+    "homeTeamProfile": null,
+    "awayTeamProfile": null,
+    "teamNews": {
+     "home": {
+      "teamName": "Girona",
+      "longTermAbsences": [
+       {
+        "name": "Cristhian Stuani",
+        "type": "blessure",
+        "expectedReturn": "Doubtful"
+       },
+       {
+        "name": "Jastin García",
+        "type": "blessure",
+        "expectedReturn": "Doubtful"
+       }
+      ],
+      "coachChange": {
+       "previousCoach": "Míchel",
+       "currentCoach": "Quique Alvarez",
+       "since": "2026-05-23"
+      }
+     },
+     "away": {
+      "teamName": "Mallorca",
+      "longTermAbsences": [
+       {
+        "name": "Manu Morlanes",
+        "type": "blessure",
+        "expectedReturn": "Early December 2026"
+       },
+       {
+        "name": "Pablo Maffeo",
+        "type": "suspension",
+        "expectedReturn": null
+       }
+      ],
+      "coachChange": {
+       "previousCoach": "Martín Demichelis",
+       "currentCoach": "Luis García",
+       "since": "2026-05-23"
+      }
+     }
+    },
+    "userNote": {
+     "text": "Vestiaire tendu à Mallorca après la défaite contre Almería ;\nle capitaine Raíllo a critiqué le club dans la presse.",
+     "updatedAt": "2026-10-03T21:14:00.000Z"
+    }
+   },
+   "compoBrute": {
+    "source": "FotMob",
+    "fotmobMatchId": "5868476",
+    "fetchedAt": "2026-10-04T18:43:46.991Z",
+    "minutesBeforeKickoff": 16,
+    "home": {
+     "team": "Girona",
+     "teamId": "fotmob-7732",
+     "formation": "4-2-3-1",
+     "coach": "Quique Alvarez",
+     "statsSince": "2026-07-01",
+     "teamMatches": 7,
+     "startXI": [
+      {
+       "id": "fotmob-278285",
+       "name": "Paulo Gazzaniga",
+       "number": 13,
+       "position": "Goalkeeper",
+       "age": 34,
+       "countryCode": "ARG",
+       "countryName": "Argentina",
+       "x": 0.1,
+       "y": 0.5,
+       "stats": {
+        "apps": 7,
+        "starts": 7,
+        "minutes": 630,
+        "goals": 0,
+        "assists": 1,
+        "xg": null,
+        "rating": 7.44
+       }
+      },
+      {
+       "id": "fotmob-1367926",
+       "name": "Javier Boñar",
+       "number": 4,
+       "position": "Defender",
+       "age": 21,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "x": 0.292,
+       "y": 0.875,
+       "stats": {
+        "apps": 5,
+        "starts": 2,
+        "minutes": 241,
+        "goals": 0,
+        "assists": 1,
+        "xg": 0.12,
+        "rating": 7.09
+       }
+      },
+      {
+       "id": "fotmob-215584",
+       "name": "David López",
+       "number": 5,
+       "position": "Defender",
+       "age": 36,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "x": 0.292,
+       "y": 0.625,
+       "stats": {
+        "apps": 5,
+        "starts": 5,
+        "minutes": 415,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.13,
+        "rating": 6.76
+       }
+      },
+      {
+       "id": "fotmob-1112511",
+       "name": "Alejandro Francés",
+       "number": 16,
+       "position": "Defender",
+       "age": 24,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "x": 0.292,
+       "y": 0.375,
+       "stats": {
+        "apps": 7,
+        "starts": 6,
+        "minutes": 538,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.11,
+        "rating": 7.38
+       }
+      },
+      {
+       "id": "fotmob-477588",
+       "name": "Álex Moreno",
+       "number": 11,
+       "position": "Defender",
+       "age": 33,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "x": 0.292,
+       "y": 0.125,
+       "stats": {
+        "apps": 7,
+        "starts": 7,
+        "minutes": 618,
+        "goals": 0,
+        "assists": 2,
+        "xg": 0.44,
+        "rating": 7.42
+       }
+      },
+      {
+       "id": "fotmob-1167225",
+       "name": "Iván Morante",
+       "number": 14,
+       "position": "Midfielder",
+       "age": 25,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "x": 0.485,
+       "y": 0.7,
+       "stats": {
+        "apps": 6,
+        "starts": 3,
+        "minutes": 291,
+        "goals": 0,
+        "assists": 1,
+        "xg": 0.07,
+        "rating": 6.98
+       }
+      },
+      {
+       "id": "fotmob-1683631",
+       "name": "Izan González",
+       "number": 24,
+       "position": "Midfielder",
+       "age": 21,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "x": 0.485,
+       "y": 0.3,
+       "stats": {
+        "apps": 7,
+        "starts": 6,
+        "minutes": 505,
+        "goals": 1,
+        "assists": 0,
+        "xg": 0.62,
+        "rating": 7.22
+       }
+      },
+      {
+       "id": "fotmob-873297",
+       "name": "Carles Pérez",
+       "number": 23,
+       "position": "Midfielder",
+       "age": 28,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "x": 0.678,
+       "y": 0.837,
+       "stats": {
+        "apps": 4,
+        "starts": 2,
+        "minutes": 264,
+        "goals": 2,
+        "assists": 1,
+        "xg": 0.76,
+        "rating": 7.22
+       }
+      },
+      {
+       "id": "fotmob-612836",
+       "name": "Donny van de Beek",
+       "number": 6,
+       "position": "Midfielder",
+       "age": 29,
+       "countryCode": "NED",
+       "countryName": "Netherlands",
+       "x": 0.678,
+       "y": 0.5,
+       "stats": {
+        "apps": 4,
+        "starts": 2,
+        "minutes": 156,
+        "goals": 1,
+        "assists": 0,
+        "xg": 0.41,
+        "rating": 6.89
+       }
+      },
+      {
+       "id": "fotmob-1816688",
+       "name": "Javier Sarasa",
+       "number": 36,
+       "position": "Midfielder",
+       "age": 21,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "x": 0.678,
+       "y": 0.163,
+       "stats": {
+        "apps": 2,
+        "starts": 1,
+        "minutes": 98,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.2,
+        "rating": 6.68
+       }
+      },
+      {
+       "id": "fotmob-748380",
+       "name": "Abel Ruiz",
+       "number": 9,
+       "position": "Forward",
+       "age": 26,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "x": 0.87,
+       "y": 0.5,
+       "stats": {
+        "apps": 6,
+        "starts": 5,
+        "minutes": 365,
+        "goals": 2,
+        "assists": 1,
+        "xg": 0.99,
+        "rating": 6.8
+       }
+      }
+     ],
+     "bench": [
+      {
+       "id": "fotmob-1526728",
+       "name": "Vladyslav Krapyvtsov",
+       "number": 25,
+       "position": "Goalkeeper",
+       "age": 21,
+       "countryCode": "UKR",
+       "countryName": "Ukraine",
+       "stats": {
+        "apps": 0,
+        "starts": 0,
+        "minutes": 0,
+        "goals": 0,
+        "assists": 0,
+        "xg": null,
+        "rating": null
+       }
+      },
+      {
+       "id": "fotmob-776591",
+       "name": "Abdul Mumin",
+       "number": 2,
+       "position": "Defender",
+       "age": 28,
+       "countryCode": "GHA",
+       "countryName": "Ghana",
+       "stats": {
+        "apps": 4,
+        "starts": 0,
+        "minutes": 50,
+        "goals": 0,
+        "assists": 0,
+        "xg": null,
+        "rating": 6.28
+       }
+      },
+      {
+       "id": "fotmob-844478",
+       "name": "Mateu Morey",
+       "number": 3,
+       "position": "Defender",
+       "age": 26,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "stats": {
+        "apps": 2,
+        "starts": 0,
+        "minutes": 28,
+        "goals": 0,
+        "assists": 0,
+        "xg": null,
+        "rating": 6.5
+       }
+      },
+      {
+       "id": "fotmob-1843148",
+       "name": "Mauro Furtado",
+       "number": 33,
+       "position": "Defender",
+       "age": 18,
+       "countryCode": "POR",
+       "countryName": "Portugal",
+       "stats": {
+        "apps": 0,
+        "starts": 0,
+        "minutes": 0,
+        "goals": 0,
+        "assists": 0,
+        "xg": null,
+        "rating": null
+       }
+      },
+      {
+       "id": "fotmob-785511",
+       "name": "Fran Beltrán",
+       "number": 8,
+       "position": "Midfielder",
+       "age": 27,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "stats": {
+        "apps": 6,
+        "starts": 6,
+        "minutes": 511,
+        "goals": 1,
+        "assists": 1,
+        "xg": 0.15,
+        "rating": 7.02
+       }
+      },
+      {
+       "id": "fotmob-1643963",
+       "name": "Lass Kourouma",
+       "number": 29,
+       "position": "Midfielder",
+       "age": 22,
+       "countryCode": "GUI",
+       "countryName": "Guinea",
+       "stats": {
+        "apps": 2,
+        "starts": 0,
+        "minutes": 37,
+        "goals": 0,
+        "assists": 0,
+        "xg": null,
+        "rating": 6.13
+       }
+      },
+      {
+       "id": "fotmob-1581726",
+       "name": "Mohammed Hamony",
+       "number": 35,
+       "position": "Midfielder",
+       "age": 20,
+       "countryCode": "MAR",
+       "countryName": "Morocco",
+       "stats": {
+        "apps": 0,
+        "starts": 0,
+        "minutes": 0,
+        "goals": 0,
+        "assists": 0,
+        "xg": null,
+        "rating": null
+       }
+      },
+      {
+       "id": "fotmob-1326046",
+       "name": "Unai Hernández",
+       "number": 30,
+       "position": "Midfielder",
+       "age": 21,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "stats": {
+        "apps": 1,
+        "starts": 0,
+        "minutes": 13,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.02,
+        "rating": 6.24
+       }
+      },
+      {
+       "id": "fotmob-970692",
+       "name": "Bryan Gil",
+       "number": 17,
+       "position": "Forward",
+       "age": 25,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "stats": {
+        "apps": 5,
+        "starts": 5,
+        "minutes": 338,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.94,
+        "rating": 6.75
+       }
+      },
+      {
+       "id": "fotmob-282692",
+       "name": "Portu",
+       "number": 10,
+       "position": "Forward",
+       "age": 34,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "stats": {
+        "apps": 1,
+        "starts": 0,
+        "minutes": 6,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.13,
+        "rating": null
+       }
+      },
+      {
+       "id": "fotmob-1682236",
+       "name": "Juan Arango",
+       "number": 32,
+       "position": "Forward",
+       "age": 20,
+       "countryCode": "VEN",
+       "countryName": "Venezuela",
+       "stats": {
+        "apps": 2,
+        "starts": 1,
+        "minutes": 104,
+        "goals": 0,
+        "assists": 0,
+        "xg": null,
+        "rating": 6.8
+       }
+      },
+      {
+       "id": "fotmob-1665022",
+       "name": "Oleksandr Pyshchur",
+       "number": 15,
+       "position": "Forward",
+       "age": 21,
+       "countryCode": "UKR",
+       "countryName": "Ukraine",
+       "stats": {
+        "apps": 4,
+        "starts": 0,
+        "minutes": 105,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.97,
+        "rating": 6.18
+       }
+      }
+     ],
+     "unavailable": [
+      {
+       "id": "fotmob-1231648",
+       "age": 24,
+       "countryCode": "UKR",
+       "countryName": "Ukraine",
+       "name": "Vladyslav Vanat",
+       "reason": "en sélection",
+       "expectedReturn": "Early October 2026",
+       "position": null,
+       "stats": null
+      },
+      {
+       "id": "fotmob-1277380",
+       "age": 22,
+       "countryCode": "COL",
+       "countryName": "Colombia",
+       "name": "Yáser Asprilla",
+       "reason": "en sélection",
+       "expectedReturn": "Early October 2026",
+       "position": "Midfielder",
+       "stats": {
+        "apps": 6,
+        "starts": 3,
+        "minutes": 301,
+        "goals": 4,
+        "assists": 0,
+        "xg": 1.35,
+        "rating": 7.4
+       }
+      },
+      {
+       "id": "fotmob-2119606",
+       "age": 17,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "name": "Holmes Zamorano",
+       "reason": "en sélection",
+       "expectedReturn": "Early October 2026",
+       "position": null,
+       "stats": null
+      },
+      {
+       "id": "fotmob-58294",
+       "age": 39,
+       "countryCode": "URU",
+       "countryName": "Uruguay",
+       "name": "Cristhian Stuani",
+       "reason": "blessé",
+       "expectedReturn": "Doubtful",
+       "position": "Forward",
+       "stats": {
+        "apps": 2,
+        "starts": 0,
+        "minutes": 38,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.42,
+        "rating": 6.04
+       }
+      },
+      {
+       "id": "fotmob-1554143",
+       "age": 22,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "name": "Jastin García",
+       "reason": "blessé",
+       "expectedReturn": "Doubtful",
+       "position": null,
+       "stats": null
+      },
+      {
+       "id": "fotmob-777001",
+       "age": 24,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "name": "Inaki González",
+       "reason": "blessé",
+       "expectedReturn": "Late October 2026",
+       "position": "Defender",
+       "stats": {
+        "apps": 5,
+        "starts": 5,
+        "minutes": 450,
+        "goals": 0,
+        "assists": 1,
+        "xg": 0.1,
+        "rating": 6.9
+       }
+      }
+     ],
+     "usualStartersMissing": [
+      {
+       "id": "fotmob-785511",
+       "age": 27,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "name": "Fran Beltrán",
+       "position": "Midfielder",
+       "starts": 6,
+       "goals": 1,
+       "assists": 1,
+       "status": "remplaçant"
+      },
+      {
+       "id": "fotmob-2119606",
+       "age": 17,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "name": "Holmes Zamorano",
+       "position": "Defender",
+       "starts": 6,
+       "goals": 1,
+       "assists": 0,
+       "status": "en sélection"
+      },
+      {
+       "id": "fotmob-970692",
+       "age": 25,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "name": "Bryan Gil",
+       "position": "Midfielder",
+       "starts": 5,
+       "goals": 0,
+       "assists": 0,
+       "status": "remplaçant"
+      },
+      {
+       "id": "fotmob-1231648",
+       "age": 24,
+       "countryCode": "UKR",
+       "countryName": "Ukraine",
+       "name": "Vladyslav Vanat",
+       "position": "Forward",
+       "starts": 4,
+       "goals": 1,
+       "assists": 1,
+       "status": "en sélection"
+      },
+      {
+       "id": "fotmob-777001",
+       "age": 24,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "name": "Iñaki González",
+       "position": "Defender",
+       "starts": 5,
+       "goals": 0,
+       "assists": 1,
+       "status": "blessé"
+      }
+     ]
+    },
+    "away": {
+     "team": "Mallorca",
+     "teamId": "fotmob-8661",
+     "formation": "4-4-2",
+     "coach": "Luis García",
+     "statsSince": "2026-07-01",
+     "teamMatches": 7,
+     "startXI": [
+      {
+       "id": "fotmob-942375",
+       "name": "Arnau Tenas",
+       "number": 1,
+       "position": "Goalkeeper",
+       "age": 25,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "x": 0.1,
+       "y": 0.5,
+       "stats": {
+        "apps": 7,
+        "starts": 7,
+        "minutes": 630,
+        "goals": 0,
+        "assists": 1,
+        "xg": 0.01,
+        "rating": 7.07
+       }
+      },
+      {
+       "id": "fotmob-1077917",
+       "name": "Arnau Puigmal",
+       "number": 17,
+       "position": "Defender",
+       "age": 25,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "x": 0.357,
+       "y": 0.875,
+       "stats": {
+        "apps": 4,
+        "starts": 0,
+        "minutes": 105,
+        "goals": 0,
+        "assists": 0,
+        "xg": null,
+        "rating": 5.99
+       }
+      },
+      {
+       "id": "fotmob-640231",
+       "name": "Antonio Raíllo",
+       "number": 21,
+       "position": "Defender",
+       "age": 34,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "x": 0.357,
+       "y": 0.625,
+       "stats": {
+        "apps": 7,
+        "starts": 7,
+        "minutes": 609,
+        "goals": 1,
+        "assists": 0,
+        "xg": 0.47,
+        "rating": 7.47
+       }
+      },
+      {
+       "id": "fotmob-1623826",
+       "name": "Aboubaka Soumahoro",
+       "number": 22,
+       "position": "Defender",
+       "age": 21,
+       "countryCode": "FRA",
+       "countryName": "France",
+       "x": 0.357,
+       "y": 0.375,
+       "stats": {
+        "apps": 5,
+        "starts": 3,
+        "minutes": 271,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.02,
+        "rating": 6.89
+       }
+      },
+      {
+       "id": "fotmob-314605",
+       "name": "Alberto Moreno",
+       "number": 5,
+       "position": "Defender",
+       "age": 34,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "x": 0.357,
+       "y": 0.125,
+       "stats": {
+        "apps": 1,
+        "starts": 0,
+        "minutes": 17,
+        "goals": 0,
+        "assists": 0,
+        "xg": null,
+        "rating": 6.62
+       }
+      },
+      {
+       "id": "fotmob-1055327",
+       "name": "Antonio Sánchez",
+       "number": 6,
+       "position": "Midfielder",
+       "age": 29,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "x": 0.613,
+       "y": 0.875,
+       "stats": {
+        "apps": 4,
+        "starts": 0,
+        "minutes": 45,
+        "goals": 0,
+        "assists": 0,
+        "xg": null,
+        "rating": 6.22
+       }
+      },
+      {
+       "id": "fotmob-1217644",
+       "name": "John Donald",
+       "number": 15,
+       "position": "Midfielder",
+       "age": 26,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "x": 0.613,
+       "y": 0.625,
+       "stats": {
+        "apps": 2,
+        "starts": 1,
+        "minutes": 111,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.1,
+        "rating": 6.75
+       }
+      },
+      {
+       "id": "fotmob-1233404",
+       "name": "Pablo Torre",
+       "number": 20,
+       "position": "Midfielder",
+       "age": 23,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "x": 0.613,
+       "y": 0.375,
+       "stats": {
+        "apps": 7,
+        "starts": 5,
+        "minutes": 447,
+        "goals": 1,
+        "assists": 0,
+        "xg": 0.83,
+        "rating": 6.89
+       }
+      },
+      {
+       "id": "fotmob-1280198",
+       "name": "Álex Sala",
+       "number": 7,
+       "position": "Midfielder",
+       "age": 25,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "x": 0.613,
+       "y": 0.125,
+       "stats": {
+        "apps": 7,
+        "starts": 6,
+        "minutes": 523,
+        "goals": 1,
+        "assists": 2,
+        "xg": 1.75,
+        "rating": 7.19
+       }
+      },
+      {
+       "id": "fotmob-557396",
+       "name": "Adam Buksa",
+       "number": 16,
+       "position": "Forward",
+       "age": 30,
+       "countryCode": "POL",
+       "countryName": "Poland",
+       "x": 0.87,
+       "y": 0.7,
+       "stats": {
+        "apps": 6,
+        "starts": 0,
+        "minutes": 124,
+        "goals": 1,
+        "assists": 0,
+        "xg": 0.52,
+        "rating": 6.25
+       }
+      },
+      {
+       "id": "fotmob-972407",
+       "name": "Adrián Fuentes",
+       "number": 18,
+       "position": "Forward",
+       "age": 30,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "x": 0.87,
+       "y": 0.3,
+       "stats": {
+        "apps": 7,
+        "starts": 7,
+        "minutes": 566,
+        "goals": 4,
+        "assists": 0,
+        "xg": 3.48,
+        "rating": 7.14
+       }
+      }
+     ],
+     "bench": [
+      {
+       "id": "fotmob-33630",
+       "name": "Iván Cuéllar",
+       "number": 25,
+       "position": "Goalkeeper",
+       "age": 42,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "stats": {
+        "apps": 0,
+        "starts": 0,
+        "minutes": 0,
+        "goals": 0,
+        "assists": 0,
+        "xg": null,
+        "rating": null
+       }
+      },
+      {
+       "id": "fotmob-1329409",
+       "name": "Toni Dols",
+       "number": 37,
+       "position": "Goalkeeper",
+       "age": 23,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "stats": {
+        "apps": 0,
+        "starts": 0,
+        "minutes": 0,
+        "goals": 0,
+        "assists": 0,
+        "xg": null,
+        "rating": null
+       }
+      },
+      {
+       "id": "fotmob-1552991",
+       "name": "David López",
+       "number": 4,
+       "position": "Defender",
+       "age": 23,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "stats": {
+        "apps": 0,
+        "starts": 0,
+        "minutes": 0,
+        "goals": 0,
+        "assists": 0,
+        "xg": null,
+        "rating": null
+       }
+      },
+      {
+       "id": "fotmob-1981023",
+       "name": "Miguel Calatayud",
+       "number": 34,
+       "position": "Defender",
+       "age": 20,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "stats": {
+        "apps": 7,
+        "starts": 7,
+        "minutes": 516,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.09,
+        "rating": 7.15
+       }
+      },
+      {
+       "id": "fotmob-674518",
+       "name": "Toni Lato",
+       "number": 3,
+       "position": "Defender",
+       "age": 28,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "stats": {
+        "apps": 4,
+        "starts": 4,
+        "minutes": 326,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.1,
+        "rating": 7.55
+       }
+      },
+      {
+       "id": "fotmob-1541825",
+       "name": "Adrián Liso",
+       "number": 33,
+       "position": "Midfielder",
+       "age": 21,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "stats": {
+        "apps": 7,
+        "starts": 3,
+        "minutes": 306,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.43,
+        "rating": 6.47
+       }
+      },
+      {
+       "id": "fotmob-1665436",
+       "name": "Guille Fernández",
+       "number": 2,
+       "position": "Midfielder",
+       "age": 18,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "stats": {
+        "apps": 1,
+        "starts": 0,
+        "minutes": 7,
+        "goals": 0,
+        "assists": 0,
+        "xg": null,
+        "rating": null
+       }
+      },
+      {
+       "id": "fotmob-282472",
+       "name": "Sergi Darder",
+       "number": 10,
+       "position": "Midfielder",
+       "age": 32,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "stats": {
+        "apps": 5,
+        "starts": 4,
+        "minutes": 376,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.25,
+        "rating": 7.22
+       }
+      },
+      {
+       "id": "fotmob-245311",
+       "name": "Abdón Prats",
+       "number": 9,
+       "position": "Forward",
+       "age": 33,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "stats": {
+        "apps": 0,
+        "starts": 0,
+        "minutes": 0,
+        "goals": 0,
+        "assists": 0,
+        "xg": null,
+        "rating": null
+       }
+      },
+      {
+       "id": "fotmob-1442443",
+       "name": "Josep Cerdà",
+       "number": 19,
+       "position": "Forward",
+       "age": 23,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "stats": {
+        "apps": 6,
+        "starts": 3,
+        "minutes": 284,
+        "goals": 0,
+        "assists": 1,
+        "xg": 0.58,
+        "rating": 6.64
+       }
+      },
+      {
+       "id": "fotmob-1457823",
+       "name": "Justin Kalumba",
+       "number": 30,
+       "position": "Forward",
+       "age": 21,
+       "countryCode": "FRA",
+       "countryName": "France",
+       "stats": null
+      }
+     ],
+     "unavailable": [
+      {
+       "id": "fotmob-1089744",
+       "age": 24,
+       "countryCode": "ANG",
+       "countryName": "Angola",
+       "name": "Zito Luvumbo",
+       "reason": "en sélection",
+       "expectedReturn": "Early October 2026",
+       "position": null,
+       "stats": null
+      },
+      {
+       "id": "fotmob-1096396",
+       "age": 24,
+       "countryCode": "FIN",
+       "countryName": "Finland",
+       "name": "Lucas Bergström",
+       "reason": "en sélection",
+       "expectedReturn": "Early October 2026",
+       "position": null,
+       "stats": null
+      },
+      {
+       "id": "fotmob-521846",
+       "age": 30,
+       "countryCode": "SVK",
+       "countryName": "Slovakia",
+       "name": "Martin Valjent",
+       "reason": "en sélection",
+       "expectedReturn": "Early October 2026",
+       "position": null,
+       "stats": null
+      },
+      {
+       "id": "fotmob-1323403",
+       "age": 24,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "name": "Antoniu Roca",
+       "reason": "blessé",
+       "expectedReturn": "Late October 2026",
+       "position": "Midfielder",
+       "stats": {
+        "apps": 6,
+        "starts": 3,
+        "minutes": 280,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.63,
+        "rating": 6.55
+       }
+      },
+      {
+       "id": "fotmob-784241",
+       "age": 27,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "name": "Manu Morlanes",
+       "reason": "blessé",
+       "expectedReturn": "Early December 2026",
+       "position": null,
+       "stats": null
+      },
+      {
+       "id": "fotmob-1673117",
+       "age": 21,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "name": "Jan Salas",
+       "reason": "blessé",
+       "expectedReturn": "Late October 2026",
+       "position": null,
+       "stats": null
+      }
+     ],
+     "usualStartersMissing": [
+      {
+       "id": "fotmob-784241",
+       "age": 27,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "name": "Manu Morlanes",
+       "position": "Midfielder",
+       "starts": 7,
+       "goals": 0,
+       "assists": 0,
+       "status": "blessé"
+      },
+      {
+       "id": "fotmob-1981023",
+       "age": 20,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "name": "Miguel Calatayud",
+       "position": "Defender",
+       "starts": 7,
+       "goals": 0,
+       "assists": 0,
+       "status": "remplaçant"
+      },
+      {
+       "id": "fotmob-521846",
+       "age": 30,
+       "countryCode": "SVK",
+       "countryName": "Slovakia",
+       "name": "Martin Valjent",
+       "position": "Defender",
+       "starts": 6,
+       "goals": 0,
+       "assists": 0,
+       "status": "en sélection"
+      },
+      {
+       "id": "fotmob-674518",
+       "age": 28,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "name": "Toni Lato",
+       "position": "Defender",
+       "starts": 4,
+       "goals": 0,
+       "assists": 0,
+       "status": "remplaçant"
+      },
+      {
+       "id": "fotmob-282472",
+       "age": 32,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "name": "Sergi Darder",
+       "position": "Midfielder",
+       "starts": 4,
+       "goals": 0,
+       "assists": 0,
+       "status": "remplaçant"
+      },
+      {
+       "id": "fotmob-1089744",
+       "age": 24,
+       "countryCode": "ANG",
+       "countryName": "Angola",
+       "name": "Zito Luvumbo",
+       "position": "Midfielder",
+       "starts": 4,
+       "goals": 0,
+       "assists": 1,
+       "status": "en sélection"
+      }
+     ]
+    },
+    "matchInfo": {
+     "round": "8",
+     "stadium": "Estadi Municipal de Montilivi",
+     "city": "Girona",
+     "capacity": 14500,
+     "surface": "grass",
+     "weather": "Partly Cloudy",
+     "temperature": 17,
+     "windSpeed": 2,
+     "precipitation": 0,
+     "referee": {
+      "name": "Eder Mallo Fernández",
+      "country": "Spain",
+      "league": "LaLiga2",
+      "matches": 44,
+      "yellowCardsPerMatch": 5.39,
+      "yellowCardsLeagueAverage": 5.02,
+      "redCards": 3,
+      "penalties": 9,
+      "foulsPerMatch": 25.95,
+      "foulsLeagueAverage": 26.55
+     }
+    }
+   },
+   "lineupsAncienne": {
+    "source": "FotMob",
+    "minutesBeforeKickoff": 16,
+    "home": {
+     "team": "Girona",
+     "formation": "4-2-3-1",
+     "coach": "Quique Alvarez",
+     "statsSince": "2026-07-01",
+     "teamMatches": 7,
+     "startXI": [
+      {
+       "name": "Paulo Gazzaniga",
+       "position": "Goalkeeper",
+       "stats": {
+        "apps": 7,
+        "starts": 7,
+        "goals": 0,
+        "assists": 1,
+        "rating": 7.44
+       }
+      },
+      {
+       "name": "Javier Boñar",
+       "position": "Defender",
+       "stats": {
+        "apps": 5,
+        "starts": 2,
+        "goals": 0,
+        "assists": 1,
+        "xg": 0.12,
+        "rating": 7.09
+       }
+      },
+      {
+       "name": "David López",
+       "position": "Defender",
+       "stats": {
+        "apps": 5,
+        "starts": 5,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.13,
+        "rating": 6.76
+       }
+      },
+      {
+       "name": "Alejandro Francés",
+       "position": "Defender",
+       "stats": {
+        "apps": 7,
+        "starts": 6,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.11,
+        "rating": 7.38
+       }
+      },
+      {
+       "name": "Álex Moreno",
+       "position": "Defender",
+       "stats": {
+        "apps": 7,
+        "starts": 7,
+        "goals": 0,
+        "assists": 2,
+        "xg": 0.44,
+        "rating": 7.42
+       }
+      },
+      {
+       "name": "Iván Morante",
+       "position": "Midfielder",
+       "stats": {
+        "apps": 6,
+        "starts": 3,
+        "goals": 0,
+        "assists": 1,
+        "xg": 0.07,
+        "rating": 6.98
+       }
+      },
+      {
+       "name": "Izan González",
+       "position": "Midfielder",
+       "stats": {
+        "apps": 7,
+        "starts": 6,
+        "goals": 1,
+        "assists": 0,
+        "xg": 0.62,
+        "rating": 7.22
+       }
+      },
+      {
+       "name": "Carles Pérez",
+       "position": "Midfielder",
+       "stats": {
+        "apps": 4,
+        "starts": 2,
+        "goals": 2,
+        "assists": 1,
+        "xg": 0.76,
+        "rating": 7.22
+       }
+      },
+      {
+       "name": "Donny van de Beek",
+       "position": "Midfielder",
+       "stats": {
+        "apps": 4,
+        "starts": 2,
+        "goals": 1,
+        "assists": 0,
+        "xg": 0.41,
+        "rating": 6.89
+       }
+      },
+      {
+       "name": "Javier Sarasa",
+       "position": "Midfielder",
+       "stats": {
+        "apps": 2,
+        "starts": 1,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.2,
+        "rating": 6.68
+       }
+      },
+      {
+       "name": "Abel Ruiz",
+       "position": "Forward",
+       "stats": {
+        "apps": 6,
+        "starts": 5,
+        "goals": 2,
+        "assists": 1,
+        "xg": 0.99,
+        "rating": 6.8
+       }
+      }
+     ],
+     "bench": [
+      {
+       "name": "Fran Beltrán",
+       "position": "Midfielder",
+       "stats": {
+        "apps": 6,
+        "starts": 6,
+        "goals": 1,
+        "assists": 1,
+        "xg": 0.15,
+        "rating": 7.02
+       }
+      },
+      {
+       "name": "Bryan Gil",
+       "position": "Forward",
+       "stats": {
+        "apps": 5,
+        "starts": 5,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.94,
+        "rating": 6.75
+       }
+      }
+     ],
+     "unavailable": [
+      {
+       "name": "Vladyslav Vanat",
+       "reason": "en sélection",
+       "expectedReturn": "Early October 2026"
+      },
+      {
+       "name": "Yáser Asprilla",
+       "reason": "en sélection",
+       "expectedReturn": "Early October 2026"
+      },
+      {
+       "name": "Holmes Zamorano",
+       "reason": "en sélection",
+       "expectedReturn": "Early October 2026"
+      },
+      {
+       "name": "Cristhian Stuani",
+       "reason": "blessé",
+       "expectedReturn": "Doubtful"
+      },
+      {
+       "name": "Jastin García",
+       "reason": "blessé",
+       "expectedReturn": "Doubtful"
+      },
+      {
+       "name": "Inaki González",
+       "reason": "blessé",
+       "expectedReturn": "Late October 2026"
+      }
+     ],
+     "usualStartersMissing": [
+      {
+       "name": "Fran Beltrán",
+       "position": "Midfielder",
+       "starts": 6,
+       "goals": 1,
+       "assists": 1,
+       "status": "remplaçant"
+      },
+      {
+       "name": "Holmes Zamorano",
+       "position": "Defender",
+       "starts": 6,
+       "goals": 1,
+       "assists": 0,
+       "status": "en sélection"
+      },
+      {
+       "name": "Bryan Gil",
+       "position": "Midfielder",
+       "starts": 5,
+       "goals": 0,
+       "assists": 0,
+       "status": "remplaçant"
+      },
+      {
+       "name": "Vladyslav Vanat",
+       "position": "Forward",
+       "starts": 4,
+       "goals": 1,
+       "assists": 1,
+       "status": "en sélection"
+      },
+      {
+       "name": "Iñaki González",
+       "position": "Defender",
+       "starts": 5,
+       "goals": 0,
+       "assists": 1,
+       "status": "blessé"
+      }
+     ]
+    },
+    "away": {
+     "team": "Mallorca",
+     "formation": "4-4-2",
+     "coach": "Luis García",
+     "statsSince": "2026-07-01",
+     "teamMatches": 7,
+     "startXI": [
+      {
+       "name": "Arnau Tenas",
+       "position": "Goalkeeper",
+       "stats": {
+        "apps": 7,
+        "starts": 7,
+        "goals": 0,
+        "assists": 1,
+        "xg": 0.01,
+        "rating": 7.07
+       }
+      },
+      {
+       "name": "Arnau Puigmal",
+       "position": "Defender",
+       "stats": {
+        "apps": 4,
+        "starts": 0,
+        "goals": 0,
+        "assists": 0,
+        "rating": 5.99
+       }
+      },
+      {
+       "name": "Antonio Raíllo",
+       "position": "Defender",
+       "stats": {
+        "apps": 7,
+        "starts": 7,
+        "goals": 1,
+        "assists": 0,
+        "xg": 0.47,
+        "rating": 7.47
+       }
+      },
+      {
+       "name": "Aboubaka Soumahoro",
+       "position": "Defender",
+       "stats": {
+        "apps": 5,
+        "starts": 3,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.02,
+        "rating": 6.89
+       }
+      },
+      {
+       "name": "Alberto Moreno",
+       "position": "Defender",
+       "stats": {
+        "apps": 1,
+        "starts": 0,
+        "goals": 0,
+        "assists": 0,
+        "rating": 6.62
+       }
+      },
+      {
+       "name": "Antonio Sánchez",
+       "position": "Midfielder",
+       "stats": {
+        "apps": 4,
+        "starts": 0,
+        "goals": 0,
+        "assists": 0,
+        "rating": 6.22
+       }
+      },
+      {
+       "name": "John Donald",
+       "position": "Midfielder",
+       "stats": {
+        "apps": 2,
+        "starts": 1,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.1,
+        "rating": 6.75
+       }
+      },
+      {
+       "name": "Pablo Torre",
+       "position": "Midfielder",
+       "stats": {
+        "apps": 7,
+        "starts": 5,
+        "goals": 1,
+        "assists": 0,
+        "xg": 0.83,
+        "rating": 6.89
+       }
+      },
+      {
+       "name": "Álex Sala",
+       "position": "Midfielder",
+       "stats": {
+        "apps": 7,
+        "starts": 6,
+        "goals": 1,
+        "assists": 2,
+        "xg": 1.75,
+        "rating": 7.19
+       }
+      },
+      {
+       "name": "Adam Buksa",
+       "position": "Forward",
+       "stats": {
+        "apps": 6,
+        "starts": 0,
+        "goals": 1,
+        "assists": 0,
+        "xg": 0.52,
+        "rating": 6.25
+       }
+      },
+      {
+       "name": "Adrián Fuentes",
+       "position": "Forward",
+       "stats": {
+        "apps": 7,
+        "starts": 7,
+        "goals": 4,
+        "assists": 0,
+        "xg": 3.48,
+        "rating": 7.14
+       }
+      }
+     ],
+     "bench": [
+      {
+       "name": "Miguel Calatayud",
+       "position": "Defender",
+       "stats": {
+        "apps": 7,
+        "starts": 7,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.09,
+        "rating": 7.15
+       }
+      },
+      {
+       "name": "Toni Lato",
+       "position": "Defender",
+       "stats": {
+        "apps": 4,
+        "starts": 4,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.1,
+        "rating": 7.55
+       }
+      },
+      {
+       "name": "Adrián Liso",
+       "position": "Midfielder",
+       "stats": {
+        "apps": 7,
+        "starts": 3,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.43,
+        "rating": 6.47
+       }
+      },
+      {
+       "name": "Sergi Darder",
+       "position": "Midfielder",
+       "stats": {
+        "apps": 5,
+        "starts": 4,
+        "goals": 0,
+        "assists": 0,
+        "xg": 0.25,
+        "rating": 7.22
+       }
+      },
+      {
+       "name": "Josep Cerdà",
+       "position": "Forward",
+       "stats": {
+        "apps": 6,
+        "starts": 3,
+        "goals": 0,
+        "assists": 1,
+        "xg": 0.58,
+        "rating": 6.64
+       }
+      }
+     ],
+     "unavailable": [
+      {
+       "name": "Zito Luvumbo",
+       "reason": "en sélection",
+       "expectedReturn": "Early October 2026"
+      },
+      {
+       "name": "Lucas Bergström",
+       "reason": "en sélection",
+       "expectedReturn": "Early October 2026"
+      },
+      {
+       "name": "Martin Valjent",
+       "reason": "en sélection",
+       "expectedReturn": "Early October 2026"
+      },
+      {
+       "name": "Antoniu Roca",
+       "reason": "blessé",
+       "expectedReturn": "Late October 2026"
+      },
+      {
+       "name": "Manu Morlanes",
+       "reason": "blessé",
+       "expectedReturn": "Early December 2026"
+      },
+      {
+       "name": "Jan Salas",
+       "reason": "blessé",
+       "expectedReturn": "Late October 2026"
+      }
+     ],
+     "usualStartersMissing": [
+      {
+       "name": "Manu Morlanes",
+       "position": "Midfielder",
+       "starts": 7,
+       "goals": 0,
+       "assists": 0,
+       "status": "blessé"
+      },
+      {
+       "name": "Miguel Calatayud",
+       "position": "Defender",
+       "starts": 7,
+       "goals": 0,
+       "assists": 0,
+       "status": "remplaçant"
+      },
+      {
+       "name": "Martin Valjent",
+       "position": "Defender",
+       "starts": 6,
+       "goals": 0,
+       "assists": 0,
+       "status": "en sélection"
+      },
+      {
+       "name": "Toni Lato",
+       "position": "Defender",
+       "starts": 4,
+       "goals": 0,
+       "assists": 0,
+       "status": "remplaçant"
+      },
+      {
+       "name": "Sergi Darder",
+       "position": "Midfielder",
+       "starts": 4,
+       "goals": 0,
+       "assists": 0,
+       "status": "remplaçant"
+      },
+      {
+       "name": "Zito Luvumbo",
+       "position": "Midfielder",
+       "starts": 4,
+       "goals": 0,
+       "assists": 1,
+       "status": "en sélection"
+      }
+     ]
+    },
+    "matchInfo": {
+     "round": "8",
+     "stadium": "Estadi Municipal de Montilivi",
+     "city": "Girona",
+     "capacity": 14500,
+     "surface": "grass",
+     "weather": "Partly Cloudy",
+     "temperature": 17,
+     "windSpeed": 2,
+     "precipitation": 0,
+     "referee": {
+      "name": "Eder Mallo Fernández",
+      "country": "Spain",
+      "league": "LaLiga2",
+      "matches": 44,
+      "yellowCardsPerMatch": 5.39,
+      "yellowCardsLeagueAverage": 5.02,
+      "redCards": 3,
+      "penalties": 9,
+      "foulsPerMatch": 25.95,
+      "foulsLeagueAverage": 26.55
+     }
+    }
+   },
+   "experience": [
+    {
+     "marketType": "result",
+     "label": "Résultat",
+     "matches": 31,
+     "engineRight": 14,
+     "aiVerdicts": 18,
+     "aiRight": 10,
+     "byConfidence": {
+      "moyenne": {
+       "verdicts": 16,
+       "right": 9
+      },
+      "faible": {
+       "verdicts": 1,
+       "right": 0
+      },
+      "forte": {
+       "verdicts": 1,
+       "right": 1
+      }
+     },
+     "recentLessons": [
+      {
+       "match": "Sociedad B - Granada",
+       "pick": "Granada gagne",
+       "outcome": "juste",
+       "aiVerdict": "nuance",
+       "lesson": "Avis nuancé et prudent : conserver cette prudence. Le favori léger au xG et aux tirs a gagné, mais le scénario a été serré (but à la 90e), donc ne pas monter la confiance sur un favori à 40 %."
+      },
+      {
+       "match": "Tolima - Chicó FC",
+       "pick": "Tolima gagne",
+       "outcome": "faux",
+       "aiVerdict": "confirme",
+       "lesson": "Pour un favori en méforme, sans ses buteurs et avec un nouveau coach, ne pas confirmer la victoire avec confiance moyenne. La domination statistique ne garantit pas le gain. Le nul reste sous-estimé dans ce profil."
+      },
+      {
+       "match": "Guaraní - Sportivo San Lorenzo",
+       "pick": "Guaraní gagne",
+       "outcome": "faux",
+       "aiVerdict": "confirme",
+       "lesson": "Un favori à 59 % reste loin d'être sûr quand il ne marque que 1,1 but par match et change son onze. Avec un nouvel entraîneur dans l'équipe faible, l'historique de forme est peu fiable."
+      }
+     ]
+    },
+    {
+     "marketType": "totalGoals",
+     "label": "Total buts",
+     "matches": 31,
+     "engineRight": 19,
+     "aiVerdicts": 24,
+     "aiRight": 17,
+     "byConfidence": {
+      "forte": {
+       "verdicts": 6,
+       "right": 6
+      },
+      "moyenne": {
+       "verdicts": 18,
+       "right": 11
+      }
+     },
+     "recentLessons": [
+      {
+       "match": "Sociedad B - Granada",
+       "pick": "Plus de 0.5 buts",
+       "outcome": "juste",
+       "aiVerdict": "confirme",
+       "lesson": "Avis confirmé : le « plus de 0,5 » est solide quand les deux défenses concèdent. À garder, mais la marge était si large que ce marché apporte peu d'information."
+      },
+      {
+       "match": "Tolima - Chicó FC",
+       "pick": "Plus de 2.5 buts",
+       "outcome": "faux",
+       "aiVerdict": "nuance",
+       "lesson": "Ma nuance était juste : la production récente de Tolima (environ 1 but par match) devait peser davantage que le xG moteur. Quand ma lecture diverge du moteur sur les buts, la suivre."
+      },
+      {
+       "match": "Guaraní - Sportivo San Lorenzo",
+       "pick": "Moins de 3.5 buts",
+       "outcome": "juste",
+       "aiVerdict": "confirme",
+       "lesson": "La ligne moins de 3.5 entre deux équipes à faible total attendu (2,4) est un marché solide à conserver."
+      }
+     ]
+    },
+    {
+     "marketType": "bothTeamsScore",
+     "label": "Les 2 équipes marquent",
+     "matches": 30,
+     "engineRight": 12,
+     "aiVerdicts": 15,
+     "aiRight": 8,
+     "byConfidence": {
+      "moyenne": {
+       "verdicts": 13,
+       "right": 7
+      },
+      "faible": {
+       "verdicts": 2,
+       "right": 1
+      }
+     },
+     "recentLessons": [
+      {
+       "match": "Sociedad B - Granada",
+       "pick": "Non",
+       "outcome": "faux",
+       "aiVerdict": "nuance",
+       "lesson": "Avec un gardien remplaçant côté adverse, le « Non » sur les deux équipes est fragile : ma nuance était justifiée. Éviter ce « Non » quand le gardien titulaire est absent et que la défense adverse concède déjà deux buts."
+      },
+      {
+       "match": "Tolima - Chicó FC",
+       "pick": "Non",
+       "outcome": "juste",
+       "aiVerdict": "confirme",
+       "lesson": "Garder : la faiblesse offensive de Chicó à l'extérieur (0,4 but par match) était un signal fiable pour le « Non »."
+      },
+      {
+       "match": "Guaraní - Sportivo San Lorenzo",
+       "pick": "Non",
+       "outcome": "faux",
+       "aiVerdict": "confirme",
+       "lesson": "Ne pas laisser une moyenne très basse (0,2) dicter un « non » à 66 % avec un adversaire diminué. Un but sur un seul tir ou une seule occasion suffit. Fixer une confiance plus faible quand l'équipe reçue est sans gardien titulaire ou entraîneur nouveau."
+      }
+     ]
+    },
+    {
+     "marketType": "resultAndTotal",
+     "label": "Résultat + Total buts",
+     "matches": 31,
+     "engineRight": 9,
+     "aiVerdicts": 13,
+     "aiRight": 5,
+     "byConfidence": {
+      "moyenne": {
+       "verdicts": 8,
+       "right": 4
+      },
+      "faible": {
+       "verdicts": 5,
+       "right": 1
+      }
+     },
+     "recentLessons": [
+      {
+       "match": "Sociedad B - Granada",
+       "pick": "Granada & Moins de 3.5 buts",
+       "outcome": "faux",
+       "aiVerdict": "nuance",
+       "lesson": "Un combiné cumule deux risques : ici le total a cassé alors que le résultat était bon. Quand le gardien est inhabituel, ne pas supposer un match fermé dans un combiné « moins de »."
+      },
+      {
+       "match": "Tolima - Chicó FC",
+       "pick": "Tolima & Plus de 1.5 buts",
+       "outcome": "faux",
+       "aiVerdict": "confirme",
+       "lesson": "Un combiné qui dépend d'un résultat fragile hérite de sa fragilité. À éviter quand la forme du favori est douteuse."
+      },
+      {
+       "match": "Guaraní - Sportivo San Lorenzo",
+       "pick": "Guaraní & Plus de 1.5 buts",
+       "outcome": "faux",
+       "aiVerdict": "nuance",
+       "lesson": "Les combinés dépendent du maillon le plus fragile (ici la victoire). La prudence est à garder."
+      }
+     ]
+    },
+    {
+     "marketType": "teamGoals",
+     "label": "Buts d'une équipe",
+     "matches": 62,
+     "engineRight": 39,
+     "aiVerdicts": 40,
+     "aiRight": 31,
+     "byConfidence": {
+      "moyenne": {
+       "verdicts": 29,
+       "right": 22
+      },
+      "forte": {
+       "verdicts": 9,
+       "right": 7
+      },
+      "faible": {
+       "verdicts": 2,
+       "right": 2
+      }
+     },
+     "recentLessons": [
+      {
+       "match": "Sociedad B - Granada",
+       "pick": "Sociedad B — Moins de 0.5 buts",
+       "outcome": "faux",
+       "aiVerdict": "nuance",
+       "lesson": "Ma nuance était justifiée. Une attaque à 0,8 but par match à domicile peut exploser contre un gardien inhabituel : ne pas surpondérer la moyenne à domicile quand la défense adverse est affaiblie."
+      },
+      {
+       "match": "Sociedad B - Granada",
+       "pick": "Granada — Moins de 1.5 buts",
+       "outcome": "faux",
+       "aiVerdict": "confirme",
+       "lesson": "Mon avis confirmé était faux. Une moyenne à l'extérieur de 1,2 but ne protège pas un « moins de 1,5 » quand l'équipe tire beaucoup et affronte une défense affaiblie ; le xG et les tirs récents ont plus de valeur que la moyenne de buts."
+      },
+      {
+       "match": "Tolima - Chicó FC",
+       "pick": "Tolima — Plus de 1.5 buts",
+       "outcome": "faux",
+       "aiVerdict": "nuance",
+       "lesson": "Ma nuance était fondée. Les lignes de buts d'équipe issues du xG moteur sont trop hautes pour un Tolima qui marque peu : les modérer."
+      }
+     ]
+    },
+    {
+     "marketType": "totalCorners",
+     "label": "Total corners",
+     "matches": 15,
+     "engineRight": 13,
+     "aiVerdicts": 15,
+     "aiRight": 13,
+     "byConfidence": {
+      "moyenne": {
+       "verdicts": 14,
+       "right": 13
+      },
+      "forte": {
+       "verdicts": 1,
+       "right": 0
+      }
+     },
+     "recentLessons": [
+      {
+       "match": "Sociedad B - Granada",
+       "pick": "Plus de 6.5 corners",
+       "outcome": "juste",
+       "aiVerdict": "confirme",
+       "lesson": "Avis confirmé : le total de corners reste fiable, car il est moins sensible à la répartition entre les équipes que les lignes par équipe."
+      },
+      {
+       "match": "Tolima - Chicó FC",
+       "pick": "Plus de 6.5 corners",
+       "outcome": "juste",
+       "aiVerdict": "confirme",
+       "lesson": "Total solide, mais il est venu d'un seul côté. Il faut éviter de répartir naïvement les corners entre les deux équipes."
+      },
+      {
+       "match": "Guaraní - Sportivo San Lorenzo",
+       "pick": "Moins de 12.5 corners",
+       "outcome": "juste",
+       "aiVerdict": "confirme",
+       "lesson": "Les corners sont restés conformes aux moyennes, la ligne haute a bien fonctionné."
+      }
+     ]
+    },
+    {
+     "marketType": "teamCorners",
+     "label": "Corners d'une équipe",
+     "matches": 30,
+     "engineRight": 20,
+     "aiVerdicts": 28,
+     "aiRight": 18,
+     "byConfidence": {
+      "moyenne": {
+       "verdicts": 25,
+       "right": 16
+      },
+      "forte": {
+       "verdicts": 3,
+       "right": 2
+      }
+     },
+     "recentLessons": [
+      {
+       "match": "Sociedad B - Granada",
+       "pick": "Sociedad B — Plus de 2.5 corners",
+       "outcome": "faux",
+       "aiVerdict": "confirme",
+       "lesson": "Avis confirmé mais faux : la ligne de 2,5 corners pour une équipe locale n'est pas sûre malgré une moyenne de 4,6. Un faible volume de corners est possible si l'équipe tire de loin ou marque vite, et la marge sur les corners par équipe était surestimée."
+      },
+      {
+       "match": "Sociedad B - Granada",
+       "pick": "Granada — Plus de 2.5 corners",
+       "outcome": "juste",
+       "aiVerdict": "confirme",
+       "lesson": "Avis confirmé : à garder. Une équipe qui mène le jeu en volume dépasse largement une ligne de corners basse."
+      },
+      {
+       "match": "Tolima - Chicó FC",
+       "pick": "Tolima — Moins de 8.5 corners",
+       "outcome": "faux",
+       "aiVerdict": "confirme",
+       "lesson": "Contre un adversaire passif, la ligne « moins de » d'un favori dominant est risquée. Un très fort écart de possession (75 %) fait exploser les corners du favori."
+      }
+     ]
+    },
+    {
+     "marketType": "totalShots",
+     "label": "Total tirs",
+     "matches": 15,
+     "engineRight": 11,
+     "aiVerdicts": 15,
+     "aiRight": 11,
+     "byConfidence": {
+      "moyenne": {
+       "verdicts": 15,
+       "right": 11
+      }
+     },
+     "recentLessons": [
+      {
+       "match": "Sociedad B - Granada",
+       "pick": "Moins de 30.5 tirs",
+       "outcome": "faux",
+       "aiVerdict": "confirme",
+       "lesson": "Ma leçon précédente sur le risque d'un match ouvert se confirme. Quand un gardien inhabituel ou une défense remaniée sont présents, le « moins de » sur les tirs totaux est exposé."
+      },
+      {
+       "match": "Tolima - Chicó FC",
+       "pick": "Plus de 18.5 tirs",
+       "outcome": "juste",
+       "aiVerdict": "confirme",
+       "lesson": "Réussi de justesse : le total a tenu uniquement grâce à Tolima, avec très peu de marge. Ne pas compter sur les tirs de Chicó."
+      },
+      {
+       "match": "Guaraní - Sportivo San Lorenzo",
+       "pick": "Moins de 30.5 tirs",
+       "outcome": "faux",
+       "aiVerdict": "confirme",
+       "lesson": "Un total de tirs peut exploser quand une équipe dite faible pousse et que l'autre ne contrôle pas. Une marge de 5 tirs sur la moyenne n'est pas une garantie : prudence sur les lignes unders de tirs, avec une confiance moins élevée que 82 %."
+      }
+     ]
+    },
+    {
+     "marketType": "teamShots",
+     "label": "Tirs d'une équipe",
+     "matches": 30,
+     "engineRight": 22,
+     "aiVerdicts": 26,
+     "aiRight": 19,
+     "byConfidence": {
+      "moyenne": {
+       "verdicts": 23,
+       "right": 17
+      },
+      "forte": {
+       "verdicts": 3,
+       "right": 2
+      }
+     },
+     "recentLessons": [
+      {
+       "match": "Sociedad B - Granada",
+       "pick": "Sociedad B — Plus de 8.5 tirs",
+       "outcome": "juste",
+       "aiVerdict": "confirme",
+       "lesson": "Avis confirmé : la marge de 1,7 tir sur la moyenne locale a bien tenu, et la défense visiteuse affaiblie a encore augmenté le volume."
+      },
+      {
+       "match": "Sociedad B - Granada",
+       "pick": "Granada — Moins de 16.5 tirs",
+       "outcome": "faux",
+       "aiVerdict": "confirme",
+       "lesson": "Mon avis confirmé était faux. Quand la moyenne extérieure est proche de la ligne, ne pas suivre le moteur sur un « moins de » : la marge était mince et le scénario (équipe qui court derrière le score) augmente les tirs."
+      },
+      {
+       "match": "Tolima - Chicó FC",
+       "pick": "Tolima — Moins de 19.5 tirs",
+       "outcome": "juste",
+       "aiVerdict": "nuance",
+       "lesson": "Ma nuance sur la marge limitée était bonne. Garder la prudence quand la ligne est proche de la moyenne à domicile."
+      }
+     ]
+    },
+    {
+     "marketType": "totalShotsOnTarget",
+     "label": "Total tirs cadrés",
+     "matches": 15,
+     "engineRight": 13,
+     "aiVerdicts": 12,
+     "aiRight": 11,
+     "byConfidence": {
+      "moyenne": {
+       "verdicts": 10,
+       "right": 9
+      },
+      "faible": {
+       "verdicts": 2,
+       "right": 2
+      }
+     },
+     "recentLessons": [
+      {
+       "match": "Sociedad B - Granada",
+       "pick": "Moins de 11.5 tirs cadrés",
+       "outcome": "juste",
+       "aiVerdict": "confirme",
+       "lesson": "Avis confirmé, mais de justesse : le total de tirs cadrés est resté sous la ligne malgré un match très ouvert. À garder, avec prudence."
+      },
+      {
+       "match": "Tolima - Chicó FC",
+       "pick": "Plus de 5.5 tirs cadrés",
+       "outcome": "juste",
+       "aiVerdict": "confirme",
+       "lesson": "Garder : la défense de Chicó concédait beaucoup de tirs cadrés. Le volume de Tolima suffit."
+      },
+      {
+       "match": "Guaraní - Sportivo San Lorenzo",
+       "pick": "Plus de 4.5 tirs cadrés",
+       "outcome": "juste",
+       "aiVerdict": "confirme",
+       "lesson": "Le total de tirs cadrés était bien calibré et se confirme."
+      }
+     ]
+    },
+    {
+     "marketType": "teamShotsOnTarget",
+     "label": "Tirs cadrés d'une équipe",
+     "matches": 30,
+     "engineRight": 24,
+     "aiVerdicts": 25,
+     "aiRight": 20,
+     "byConfidence": {
+      "moyenne": {
+       "verdicts": 24,
+       "right": 19
+      },
+      "forte": {
+       "verdicts": 1,
+       "right": 1
+      }
+     },
+     "recentLessons": [
+      {
+       "match": "Sociedad B - Granada",
+       "pick": "Sociedad B — Plus de 2.5 tirs cadrés",
+       "outcome": "juste",
+       "aiVerdict": "nuance",
+       "lesson": "Ma nuance sur la marge mince était trop prudente : le volume offensif local a dépassé la moyenne. Le moteur avait raison d'attendre 4,79."
+      },
+      {
+       "match": "Sociedad B - Granada",
+       "pick": "Granada — Moins de 5.5 tirs cadrés",
+       "outcome": "juste",
+       "aiVerdict": "confirme",
+       "lesson": "Avis confirmé, mais de justesse : beaucoup de tirs de Granada n'ont pas été cadrés. La précision était faible : ce marché reste plus fiable que celui des tirs totaux."
+      },
+      {
+       "match": "Tolima - Chicó FC",
+       "pick": "Tolima — Plus de 3.5 tirs cadrés",
+       "outcome": "juste",
+       "aiVerdict": "confirme",
+       "lesson": "Garder : le volume de Tolima à domicile se transforme de façon stable en tirs cadrés, même sans but."
+      }
+     ]
+    }
+   ]
+  },
+  "ancienneForme": {
+   "system": "Tu es un commentateur qualitatif qui accompagne, pour un match à venir (Girona vs Mallorca, La Liga 2 - Spain), la prédiction déjà chiffrée par le moteur CôteMaster (Poisson + Dixon-Coles). Rôle strictement consultatif : ne propose JAMAIS de cote, de probabilité ou de mise alternative, et ne prétends jamais recalculer ou corriger le chiffrage du moteur — tu apportes un contexte qualitatif (forme, statistiques et moyennes, compositions, classement) en COMPLÉMENT, jamais en remplacement. Tu peux citer les pourcentages du moteur pour les expliquer, jamais en proposer d'autres. N'invente aucune donnée non fournie ci-dessous ; une donnée absente (classement indisponible, forme non trouvée...) va dans `caveats`, jamais devinée. Analyse d'abord, pour chaque équipe, sa FORME, ses STATISTIQUES et MOYENNES, puis sa COMPOSITION. Forme : `homeForm`/`awayForm` (`source: \"FotMob (magasin)\"`), ses derniers matchs de la saison en cours avec date, adversaire, lieu (`venue`), score et résultat — la forme de référence. Statistiques : `homeStats`/`awayStats` (`source: \"FotMob (magasin)\"`, du `from` au `to`) sur ses 10 derniers matchs toutes compétitions (`last10`) puis sur ceux joués au lieu de CE match (`atHome` pour l'équipe qui reçoit, `away` pour l'autre) : `results` (V/N/D, du plus récent au plus ancien), buts marqués et encaissés par match (`goalsFor`/`goalsAgainst`), et par match pour l'équipe (`for`) comme pour ses adversaires (`against`) : xG, tirs, tirs cadrés, grosses occasions, corners, possession, cartons jaunes — ce qu'elle produit ET ce qu'elle concède. Une équipe que le magasin ne connaît pas peut n'avoir que des sources plus anciennes ou partielles, à signaler dans `caveats` : `homeForm.source: \"API-Football\"` (saison `season` du plan, souvent dépassée), `homeStats.source: \"API-Football\"`, `homeFlashscoreStats` (FlashScore, `collectedAt`), `homeHistoricalStats`/`homeHistoricalForm` (football-data.co.uk, 5 saisons ; `division: \"other\"` = chiffres réalisés dans une autre division `divisionLabel`, à ne pas comparer directement à l'adversaire), `homeTeamProfile` (recherche web, `updatedAt`). Si `standings` porte `source: \"football-data.co.uk (historique)\"`, précise que ce classement n'est pas en direct. `teamNews.home`/`teamNews.away` (FotMob, gratuit) : `longTermAbsences` liste les joueurs blessés ou suspendus pour ce match avec leur retour attendu (`expectedReturn`, parfois \"Doubtful\" = incertain plutôt qu'une date) — n'y figurent jamais les joueurs simplement partis en sélection nationale, ce n'est pas une absence notable. `coachChange`, s'il est présent, donne `previousCoach`/`currentCoach` et `since` (dernier match connu avec l'ancien entraîneur, approximatif) : ce n'est PAS un flux d'actualité dédié, seulement ce que les compositions déjà importées laissent déduire — l'absence de `coachChange` ne prouve rien, signale au besoin dans `caveats` que l'historique manque plutôt que d'affirmer qu'il n'y a pas eu de changement. `lineups` est la composition à analyser joueur par joueur. `source: \"FotMob\"` : la composition de CE match relue chez FotMob (`minutesBeforeKickoff` avant le coup d'envoi ; relevée moins d'une heure avant, elle est presque toujours officielle — plus tôt, dis que ce peut être une prévision). `source: \"magasin\"` : FotMob n'a encore rien publié, c'est la DERNIÈRE composition alignée par chaque équipe, lors du match `lastMatch` — pas celle de ce match : présente-la comme le onze probable, jamais comme officiel ; un joueur de ce onze que FotMob annonce indisponible pour CE match (`unavailable`) ne jouera pas. Pour chaque équipe : la formation, l'entraîneur, le onze de départ (`startXI`), les remplaçants qui ont compté cette saison (`bench` : au moins 3 titularisations, ou un but ou une passe décisive), les absents avec leur motif (`unavailable`), et pour chaque joueur ses chiffres depuis `statsSince`, toutes compétitions (`apps` matchs joués, `starts` titularisations, `goals`, `assists`, `xg`, `rating` note moyenne ; `stats` null = joueur inconnu du magasin, souvent une recrue ou un jeune). `usualStartersMissing` liste les titulaires habituels (au moins la moitié des `teamMatches` de l'équipe) qui ne sont PAS dans le onze, avec leur statut (remplaçant, blessé, suspendu, absent de la feuille). Appuie chaque avis de marché sur QUI joue (buteur ou gardien titulaire absent, défense remaniée, rotation avant une coupe, retour d'un cadre) et résume-le dans `lineupImpact`. `lineups.matchInfo`, quand il est là, donne le cadre publié par FotMob : stade et pelouse (`surface`), météo (`weather`, `temperature`, `windSpeed` en km/h, `precipitation`), arbitre (`referee` : matchs dirigés, cartons jaunes et fautes par match face à la moyenne du championnat, rouges, penalties) — cite-le seulement s'il pèse sur un marché (pluie ou vent forts, terrain synthétique, arbitre nettement plus sévère que la moyenne). `userNote`, quand il est fourni, est un texte libre écrit par Pierre lui-même (vestiaire, rumeur, mercato, difficultés financières du club, tout ce qu'aucune donnée mesurée ne capture) : traite-le comme un fait qu'il te communique, avec sa date d'écriture (`updatedAt`) — s'il est ancien, dis-le plutôt que de le prendre pour une actualité du jour. Il ne remplace ni ne corrige les données chiffrées ci-dessus, il les complète. MARCHÉ PAR MARCHÉ : `marketPredictions` liste le pronostic du moteur sur chacun des marchés joués (résultat, total de buts, les deux équipes marquent, résultat + total, buts de chaque équipe, et — quand le magasin a assez de relevés — corners, tirs et tirs cadrés, au total et par équipe ; `statExpectations` donne le nombre attendu de chacun pour chaque équipe, d'après ce qu'elle produit et ce que l'adversaire concède sur leurs 10 derniers matchs). Chaque pronostic est l'issue la plus probable de son marché parmi celles cotées au moins `minOdds` (1,20), jamais une quasi-certitude ; un marché dont l'issue la plus probable reste sous ce plancher (favori écrasant) n'a pas de pronostic et manque à la liste. Chacun porte `probability`, le pourcentage du moteur pour cette issue (1 / cote juste), celui qu'affiche l'appli à côté du pronostic. Donne dans `marketViews` une entrée pour CHACUN, sans en omettre : `explanation`, UNE phrase qui explique ce pourcentage avec les chiffres qui le fondent (forme, moyennes produites et concédées, `statExpectations` pour les corners et les tirs, joueurs alignés ou absents — par exemple pourquoi 76 % et pas davantage) ; puis `verdict` et `reasoning` : le contexte confirme-t-il, nuance-t-il ou contredit-il ce pronostic précis, et pourquoi. Une explication et un avis propres à chaque marché, jamais une phrase générale recopiée d'un marché à l'autre. Le pronostic et son pourcentage restent ceux du moteur : tu ne proposes ni autre choix, ni cote, ni probabilité, ni mise. `experience`, quand il est fourni, est ton propre bilan des matchs passés, par type de marché : combien de pronostics du moteur sont tombés justes (`engineRight`/`matches`), combien de tes avis ont tenu (`aiRight`/`aiVerdicts`, et `byConfidence` par niveau de confiance que tu avais annoncé), et tes dernières leçons. Sers-t'en pour calibrer ta confiance (plus prudent là où tu t'es souvent trompé, et si tes avis « forte » ne tiennent pas mieux que les autres) et pour ne pas répéter une erreur déjà relevée ; un bilan sur peu de matchs ne prouve encore rien, dis-le. Réponds exclusivement via l'outil submit_pre_match_analysis.",
+   "user": "Prédiction chiffrée du moteur pour ce match :\n{\"label\":\"Girona vs Mallorca\",\"expectedGoals\":{\"home\":1.039,\"away\":0.5,\"source\":\"fotmob\"},\"trueOdds\":{\"home\":2.17,\"draw\":3.17,\"away\":4.46},\"market\":{\"odds1\":2.3,\"oddsDraw\":3.1,\"odds2\":4.2},\"edgePercent\":5.98,\"staking\":{\"action\":\"RECOMMENDED\",\"stake\":21.5,\"outcome\":\"home\",\"label\":\"Girona gagne\",\"odds\":2.3,\"displayedOdds\":2.3,\"bookmaker\":\"williamhill\",\"bookmakerTitle\":\"William Hill\",\"fairOdds\":2.17,\"ev\":0.0599,\"exclusion\":null,\"candidates\":[{\"outcome\":\"home\",\"label\":\"Girona gagne\",\"odds\":2.3,\"displayedOdds\":2.3,\"bookmaker\":\"williamhill\",\"bookmakerTitle\":\"William Hill\",\"fairOdds\":2.17,\"ev\":0.0599,\"exclusion\":null},{\"outcome\":\"draw\",\"label\":\"Match nul\",\"odds\":3.1,\"displayedOdds\":3.05,\"bookmaker\":\"unibet_fr\",\"bookmakerTitle\":\"Unibet\",\"fairOdds\":3.17,\"ev\":-0.0221,\"exclusion\":\"sous_le_seuil\"},{\"outcome\":\"away\",\"label\":\"Mallorca gagne\",\"odds\":4.2,\"displayedOdds\":4.2,\"bookmaker\":\"betclic\",\"bookmakerTitle\":\"Betclic\",\"fairOdds\":4.46,\"ev\":-0.0583,\"exclusion\":\"sous_le_seuil\"}],\"limits\":{\"edgeThresholdMin\":0.02,\"edgeThresholdMax\":0.25,\"maxValueOdds\":5}},\"statExpectations\":{\"corners\":{\"home\":4.79,\"away\":3.55,\"total\":8.34},\"shots\":{\"home\":15.01,\"away\":11.3,\"total\":26.31},\"shotsOnTarget\":{\"home\":4.57,\"away\":3.74,\"total\":8.3}},\"marketPredictions\":[{\"marketId\":\"result\",\"params\":{\"outcome\":\"home\"},\"market\":\"Résultat\",\"predictedOutcome\":\"home\",\"predictedLabel\":\"Girona gagne\",\"predictedOdds\":2.17,\"probability\":46,\"minOdds\":1.2},{\"marketId\":\"totalGoals\",\"params\":{\"line\":2.5,\"side\":\"under\"},\"market\":\"Total buts\",\"predictedOutcome\":\"under\",\"predictedLabel\":\"Moins de 2.5 buts\",\"predictedOdds\":1.25,\"probability\":80,\"minOdds\":1.2},{\"marketId\":\"bothTeamsScore\",\"params\":{\"outcome\":\"no\"},\"market\":\"Les 2 équipes marquent\",\"predictedOutcome\":\"no\",\"predictedLabel\":\"Non\",\"predictedOdds\":1.36,\"probability\":74,\"minOdds\":1.2},{\"marketId\":\"resultAndTotal\",\"params\":{\"line\":3.5,\"key\":\"homeUnder\"},\"market\":\"Résultat + Total buts\",\"predictedOutcome\":\"homeUnder\",\"predictedLabel\":\"Girona & Moins de 3.5 buts\",\"predictedOdds\":2.41,\"probability\":41,\"minOdds\":1.2},{\"marketId\":\"teamGoals\",\"params\":{\"team\":\"home\",\"line\":1.5,\"side\":\"under\"},\"market\":\"Buts — Girona\",\"predictedOutcome\":\"under\",\"predictedLabel\":\"Girona — Moins de 1.5 buts\",\"predictedOdds\":1.39,\"probability\":72,\"minOdds\":1.2},{\"marketId\":\"teamGoals\",\"params\":{\"team\":\"away\",\"line\":0.5,\"side\":\"under\"},\"market\":\"Buts — Mallorca\",\"predictedOutcome\":\"under\",\"predictedLabel\":\"Mallorca — Moins de 0.5 buts\",\"predictedOdds\":1.65,\"probability\":61,\"minOdds\":1.2},{\"marketId\":\"totalCorners\",\"params\":{\"line\":5.5,\"side\":\"over\"},\"market\":\"Total corners\",\"predictedOutcome\":\"over\",\"predictedLabel\":\"Plus de 5.5 corners\",\"predictedOdds\":1.22,\"probability\":82,\"minOdds\":1.2},{\"marketId\":\"totalCorners\",\"params\":{\"line\":3.5,\"side\":\"over\"},\"market\":\"Total corners (ligne basse)\",\"predictedOutcome\":\"over\",\"predictedLabel\":\"Plus de 3.5 corners\",\"predictedOdds\":1.08,\"probability\":93,\"minOdds\":1.2},{\"marketId\":\"teamCorners\",\"params\":{\"team\":\"home\",\"line\":2.5,\"side\":\"over\"},\"market\":\"Corners — Girona\",\"predictedOutcome\":\"over\",\"predictedLabel\":\"Girona — Plus de 2.5 corners\",\"predictedOdds\":1.25,\"probability\":80,\"minOdds\":1.2},{\"marketId\":\"teamCorners\",\"params\":{\"team\":\"away\",\"line\":1.5,\"side\":\"over\"},\"market\":\"Corners — Mallorca\",\"predictedOutcome\":\"over\",\"predictedLabel\":\"Mallorca — Plus de 1.5 corners\",\"predictedOdds\":1.21,\"probability\":83,\"minOdds\":1.2},{\"marketId\":\"totalShots\",\"params\":{\"line\":20.5,\"side\":\"over\"},\"market\":\"Total tirs\",\"predictedOutcome\":\"over\",\"predictedLabel\":\"Plus de 20.5 tirs\",\"predictedOdds\":1.2,\"probability\":83,\"minOdds\":1.2},{\"marketId\":\"teamShots\",\"params\":{\"team\":\"home\",\"line\":19.5,\"side\":\"under\"},\"market\":\"Tirs — Girona\",\"predictedOutcome\":\"under\",\"predictedLabel\":\"Girona — Moins de 19.5 tirs\",\"predictedOdds\":1.24,\"probability\":81,\"minOdds\":1.2},{\"marketId\":\"teamShots\",\"params\":{\"team\":\"away\",\"line\":15.5,\"side\":\"under\"},\"market\":\"Tirs — Mallorca\",\"predictedOutcome\":\"under\",\"predictedLabel\":\"Mallorca — Moins de 15.5 tirs\",\"predictedOdds\":1.2,\"probability\":83,\"minOdds\":1.2},{\"marketId\":\"totalShotsOnTarget\",\"params\":{\"line\":5.5,\"side\":\"over\"},\"market\":\"Total tirs cadrés\",\"predictedOutcome\":\"over\",\"predictedLabel\":\"Plus de 5.5 tirs cadrés\",\"predictedOdds\":1.22,\"probability\":82,\"minOdds\":1.2},{\"marketId\":\"teamShotsOnTarget\",\"params\":{\"team\":\"home\",\"line\":2.5,\"side\":\"over\"},\"market\":\"Tirs cadrés — Girona\",\"predictedOutcome\":\"over\",\"predictedLabel\":\"Girona — Plus de 2.5 tirs cadrés\",\"predictedOdds\":1.24,\"probability\":81,\"minOdds\":1.2},{\"marketId\":\"teamShotsOnTarget\",\"params\":{\"team\":\"away\",\"line\":5.5,\"side\":\"under\"},\"market\":\"Tirs cadrés — Mallorca\",\"predictedOutcome\":\"under\",\"predictedLabel\":\"Mallorca — Moins de 5.5 tirs cadrés\",\"predictedOdds\":1.23,\"probability\":81,\"minOdds\":1.2}]}\n\nContexte qualitatif disponible :\n{\"standings\":{\"home\":{\"rank\":4,\"teamId\":\"fotmob-7732\",\"teamName\":\"Girona\",\"shortName\":\"Girona\",\"teamLogo\":null,\"played\":8,\"won\":4,\"drawn\":2,\"lost\":2,\"goalsFor\":14,\"goalsAgainst\":8,\"goalDiff\":6,\"points\":14,\"deduction\":null,\"description\":\"Promotion qualification\",\"home\":{\"played\":5,\"won\":2,\"drawn\":2,\"lost\":1,\"goalsFor\":9,\"goalsAgainst\":5},\"away\":{\"played\":3,\"won\":2,\"drawn\":0,\"lost\":1,\"goalsFor\":5,\"goalsAgainst\":3}},\"away\":{\"rank\":5,\"teamId\":\"fotmob-8661\",\"teamName\":\"Mallorca\",\"shortName\":\"Mallorca\",\"teamLogo\":null,\"played\":8,\"won\":4,\"drawn\":2,\"lost\":2,\"goalsFor\":8,\"goalsAgainst\":3,\"goalDiff\":5,\"points\":14,\"deduction\":null,\"description\":\"Promotion qualification\",\"home\":{\"played\":4,\"won\":3,\"drawn\":0,\"lost\":1,\"goalsFor\":7,\"goalsAgainst\":1},\"away\":{\"played\":4,\"won\":1,\"drawn\":2,\"lost\":1,\"goalsFor\":1,\"goalsAgainst\":2}}},\"homeStats\":{\"source\":\"FotMob (magasin)\",\"from\":\"2026-05-17\",\"to\":\"2026-10-04\",\"last10\":{\"matches\":10,\"results\":\"NVVDVVDNND\",\"goalsFor\":1.5,\"goalsAgainst\":1,\"for\":{\"xg\":1.39,\"shots\":15.6,\"shotsOnTarget\":5.8,\"bigChances\":2,\"corners\":4.2,\"possession\":51.3,\"yellowCards\":2.4},\"against\":{\"xg\":1.4,\"shots\":12.5,\"shotsOnTarget\":4,\"bigChances\":1.9,\"corners\":4.2,\"possession\":48.7,\"yellowCards\":3}},\"atHome\":{\"matches\":6,\"results\":\"NVDVNN\",\"goalsFor\":1.67,\"goalsAgainst\":1,\"for\":{\"xg\":1.47,\"shots\":16,\"shotsOnTarget\":5.7,\"bigChances\":2.5,\"corners\":4.5,\"possession\":53.2,\"yellowCards\":2},\"against\":{\"xg\":1.17,\"shots\":10,\"shotsOnTarget\":3.8,\"bigChances\":1.5,\"corners\":4.2,\"possession\":46.8,\"yellowCards\":3}}},\"awayStats\":{\"source\":\"FotMob (magasin)\",\"from\":\"2026-05-17\",\"to\":\"2026-10-04\",\"last10\":{\"matches\":10,\"results\":\"NDVVNVDVVD\",\"goalsFor\":1.1,\"goalsAgainst\":0.5,\"for\":{\"xg\":1.3,\"shots\":12.9,\"shotsOnTarget\":3.9,\"bigChances\":3,\"corners\":4.5,\"possession\":55.5,\"yellowCards\":2.8},\"against\":{\"xg\":1.04,\"shots\":11.4,\"shotsOnTarget\":2.7,\"bigChances\":1.4,\"corners\":4.6,\"possession\":44.5,\"yellowCards\":1.7}},\"away\":{\"matches\":5,\"results\":\"NVNDD\",\"goalsFor\":0.2,\"goalsAgainst\":0.8,\"for\":{\"xg\":0.75,\"shots\":11,\"shotsOnTarget\":2.8,\"bigChances\":1.3,\"corners\":5,\"possession\":58.6,\"yellowCards\":2.8},\"against\":{\"xg\":1.22,\"shots\":12.4,\"shotsOnTarget\":3.8,\"bigChances\":2.3,\"corners\":5.2,\"possession\":41.4,\"yellowCards\":1.4}}},\"homeForm\":{\"source\":\"FotMob (magasin)\",\"matches\":[{\"date\":\"2026-10-04\",\"opponent\":\"Mallorca\",\"venue\":\"domicile\",\"score\":\"0-0\",\"result\":\"N\"},{\"date\":\"2026-09-25\",\"opponent\":\"Albacete\",\"venue\":\"domicile\",\"score\":\"2-0\",\"result\":\"V\"},{\"date\":\"2026-09-19\",\"opponent\":\"Cádiz\",\"venue\":\"extérieur\",\"score\":\"2-1\",\"result\":\"V\"},{\"date\":\"2026-09-12\",\"opponent\":\"Castellón\",\"venue\":\"domicile\",\"score\":\"1-2\",\"result\":\"D\"},{\"date\":\"2026-09-05\",\"opponent\":\"Sporting Gijón\",\"venue\":\"extérieur\",\"score\":\"2-0\",\"result\":\"V\"}],\"sampleSize\":5},\"awayForm\":{\"source\":\"FotMob (magasin)\",\"matches\":[{\"date\":\"2026-10-04\",\"opponent\":\"Girona\",\"venue\":\"extérieur\",\"score\":\"0-0\",\"result\":\"N\"},{\"date\":\"2026-09-27\",\"opponent\":\"Almería\",\"venue\":\"domicile\",\"score\":\"0-1\",\"result\":\"D\"},{\"date\":\"2026-09-19\",\"opponent\":\"Real Sociedad B\",\"venue\":\"extérieur\",\"score\":\"1-0\",\"result\":\"V\"},{\"date\":\"2026-09-13\",\"opponent\":\"Sabadell\",\"venue\":\"domicile\",\"score\":\"2-0\",\"result\":\"V\"},{\"date\":\"2026-09-05\",\"opponent\":\"Eldense\",\"venue\":\"extérieur\",\"score\":\"0-0\",\"result\":\"N\"}],\"sampleSize\":5},\"homeFlashscoreStats\":null,\"awayFlashscoreStats\":null,\"homeHistoricalStats\":null,\"awayHistoricalStats\":null,\"homeHistoricalForm\":null,\"awayHistoricalForm\":null,\"homeTeamProfile\":null,\"awayTeamProfile\":null,\"teamNews\":{\"home\":{\"teamName\":\"Girona\",\"longTermAbsences\":[{\"name\":\"Cristhian Stuani\",\"type\":\"blessure\",\"expectedReturn\":\"Doubtful\"},{\"name\":\"Jastin García\",\"type\":\"blessure\",\"expectedReturn\":\"Doubtful\"}],\"coachChange\":{\"previousCoach\":\"Míchel\",\"currentCoach\":\"Quique Alvarez\",\"since\":\"2026-05-23\"}},\"away\":{\"teamName\":\"Mallorca\",\"longTermAbsences\":[{\"name\":\"Manu Morlanes\",\"type\":\"blessure\",\"expectedReturn\":\"Early December 2026\"},{\"name\":\"Pablo Maffeo\",\"type\":\"suspension\",\"expectedReturn\":null}],\"coachChange\":{\"previousCoach\":\"Martín Demichelis\",\"currentCoach\":\"Luis García\",\"since\":\"2026-05-23\"}}},\"userNote\":{\"text\":\"Vestiaire tendu à Mallorca après la défaite contre Almería ;\\nle capitaine Raíllo a critiqué le club dans la presse.\",\"updatedAt\":\"2026-10-03T21:14:00.000Z\"},\"lineups\":{\"source\":\"FotMob\",\"minutesBeforeKickoff\":16,\"home\":{\"team\":\"Girona\",\"formation\":\"4-2-3-1\",\"coach\":\"Quique Alvarez\",\"statsSince\":\"2026-07-01\",\"teamMatches\":7,\"startXI\":[{\"name\":\"Paulo Gazzaniga\",\"position\":\"Goalkeeper\",\"stats\":{\"apps\":7,\"starts\":7,\"goals\":0,\"assists\":1,\"rating\":7.44}},{\"name\":\"Javier Boñar\",\"position\":\"Defender\",\"stats\":{\"apps\":5,\"starts\":2,\"goals\":0,\"assists\":1,\"xg\":0.12,\"rating\":7.09}},{\"name\":\"David López\",\"position\":\"Defender\",\"stats\":{\"apps\":5,\"starts\":5,\"goals\":0,\"assists\":0,\"xg\":0.13,\"rating\":6.76}},{\"name\":\"Alejandro Francés\",\"position\":\"Defender\",\"stats\":{\"apps\":7,\"starts\":6,\"goals\":0,\"assists\":0,\"xg\":0.11,\"rating\":7.38}},{\"name\":\"Álex Moreno\",\"position\":\"Defender\",\"stats\":{\"apps\":7,\"starts\":7,\"goals\":0,\"assists\":2,\"xg\":0.44,\"rating\":7.42}},{\"name\":\"Iván Morante\",\"position\":\"Midfielder\",\"stats\":{\"apps\":6,\"starts\":3,\"goals\":0,\"assists\":1,\"xg\":0.07,\"rating\":6.98}},{\"name\":\"Izan González\",\"position\":\"Midfielder\",\"stats\":{\"apps\":7,\"starts\":6,\"goals\":1,\"assists\":0,\"xg\":0.62,\"rating\":7.22}},{\"name\":\"Carles Pérez\",\"position\":\"Midfielder\",\"stats\":{\"apps\":4,\"starts\":2,\"goals\":2,\"assists\":1,\"xg\":0.76,\"rating\":7.22}},{\"name\":\"Donny van de Beek\",\"position\":\"Midfielder\",\"stats\":{\"apps\":4,\"starts\":2,\"goals\":1,\"assists\":0,\"xg\":0.41,\"rating\":6.89}},{\"name\":\"Javier Sarasa\",\"position\":\"Midfielder\",\"stats\":{\"apps\":2,\"starts\":1,\"goals\":0,\"assists\":0,\"xg\":0.2,\"rating\":6.68}},{\"name\":\"Abel Ruiz\",\"position\":\"Forward\",\"stats\":{\"apps\":6,\"starts\":5,\"goals\":2,\"assists\":1,\"xg\":0.99,\"rating\":6.8}}],\"bench\":[{\"name\":\"Fran Beltrán\",\"position\":\"Midfielder\",\"stats\":{\"apps\":6,\"starts\":6,\"goals\":1,\"assists\":1,\"xg\":0.15,\"rating\":7.02}},{\"name\":\"Bryan Gil\",\"position\":\"Forward\",\"stats\":{\"apps\":5,\"starts\":5,\"goals\":0,\"assists\":0,\"xg\":0.94,\"rating\":6.75}}],\"unavailable\":[{\"name\":\"Vladyslav Vanat\",\"reason\":\"en sélection\",\"expectedReturn\":\"Early October 2026\"},{\"name\":\"Yáser Asprilla\",\"reason\":\"en sélection\",\"expectedReturn\":\"Early October 2026\"},{\"name\":\"Holmes Zamorano\",\"reason\":\"en sélection\",\"expectedReturn\":\"Early October 2026\"},{\"name\":\"Cristhian Stuani\",\"reason\":\"blessé\",\"expectedReturn\":\"Doubtful\"},{\"name\":\"Jastin García\",\"reason\":\"blessé\",\"expectedReturn\":\"Doubtful\"},{\"name\":\"Inaki González\",\"reason\":\"blessé\",\"expectedReturn\":\"Late October 2026\"}],\"usualStartersMissing\":[{\"name\":\"Fran Beltrán\",\"position\":\"Midfielder\",\"starts\":6,\"goals\":1,\"assists\":1,\"status\":\"remplaçant\"},{\"name\":\"Holmes Zamorano\",\"position\":\"Defender\",\"starts\":6,\"goals\":1,\"assists\":0,\"status\":\"en sélection\"},{\"name\":\"Bryan Gil\",\"position\":\"Midfielder\",\"starts\":5,\"goals\":0,\"assists\":0,\"status\":\"remplaçant\"},{\"name\":\"Vladyslav Vanat\",\"position\":\"Forward\",\"starts\":4,\"goals\":1,\"assists\":1,\"status\":\"en sélection\"},{\"name\":\"Iñaki González\",\"position\":\"Defender\",\"starts\":5,\"goals\":0,\"assists\":1,\"status\":\"blessé\"}]},\"away\":{\"team\":\"Mallorca\",\"formation\":\"4-4-2\",\"coach\":\"Luis García\",\"statsSince\":\"2026-07-01\",\"teamMatches\":7,\"startXI\":[{\"name\":\"Arnau Tenas\",\"position\":\"Goalkeeper\",\"stats\":{\"apps\":7,\"starts\":7,\"goals\":0,\"assists\":1,\"xg\":0.01,\"rating\":7.07}},{\"name\":\"Arnau Puigmal\",\"position\":\"Defender\",\"stats\":{\"apps\":4,\"starts\":0,\"goals\":0,\"assists\":0,\"rating\":5.99}},{\"name\":\"Antonio Raíllo\",\"position\":\"Defender\",\"stats\":{\"apps\":7,\"starts\":7,\"goals\":1,\"assists\":0,\"xg\":0.47,\"rating\":7.47}},{\"name\":\"Aboubaka Soumahoro\",\"position\":\"Defender\",\"stats\":{\"apps\":5,\"starts\":3,\"goals\":0,\"assists\":0,\"xg\":0.02,\"rating\":6.89}},{\"name\":\"Alberto Moreno\",\"position\":\"Defender\",\"stats\":{\"apps\":1,\"starts\":0,\"goals\":0,\"assists\":0,\"rating\":6.62}},{\"name\":\"Antonio Sánchez\",\"position\":\"Midfielder\",\"stats\":{\"apps\":4,\"starts\":0,\"goals\":0,\"assists\":0,\"rating\":6.22}},{\"name\":\"John Donald\",\"position\":\"Midfielder\",\"stats\":{\"apps\":2,\"starts\":1,\"goals\":0,\"assists\":0,\"xg\":0.1,\"rating\":6.75}},{\"name\":\"Pablo Torre\",\"position\":\"Midfielder\",\"stats\":{\"apps\":7,\"starts\":5,\"goals\":1,\"assists\":0,\"xg\":0.83,\"rating\":6.89}},{\"name\":\"Álex Sala\",\"position\":\"Midfielder\",\"stats\":{\"apps\":7,\"starts\":6,\"goals\":1,\"assists\":2,\"xg\":1.75,\"rating\":7.19}},{\"name\":\"Adam Buksa\",\"position\":\"Forward\",\"stats\":{\"apps\":6,\"starts\":0,\"goals\":1,\"assists\":0,\"xg\":0.52,\"rating\":6.25}},{\"name\":\"Adrián Fuentes\",\"position\":\"Forward\",\"stats\":{\"apps\":7,\"starts\":7,\"goals\":4,\"assists\":0,\"xg\":3.48,\"rating\":7.14}}],\"bench\":[{\"name\":\"Miguel Calatayud\",\"position\":\"Defender\",\"stats\":{\"apps\":7,\"starts\":7,\"goals\":0,\"assists\":0,\"xg\":0.09,\"rating\":7.15}},{\"name\":\"Toni Lato\",\"position\":\"Defender\",\"stats\":{\"apps\":4,\"starts\":4,\"goals\":0,\"assists\":0,\"xg\":0.1,\"rating\":7.55}},{\"name\":\"Adrián Liso\",\"position\":\"Midfielder\",\"stats\":{\"apps\":7,\"starts\":3,\"goals\":0,\"assists\":0,\"xg\":0.43,\"rating\":6.47}},{\"name\":\"Sergi Darder\",\"position\":\"Midfielder\",\"stats\":{\"apps\":5,\"starts\":4,\"goals\":0,\"assists\":0,\"xg\":0.25,\"rating\":7.22}},{\"name\":\"Josep Cerdà\",\"position\":\"Forward\",\"stats\":{\"apps\":6,\"starts\":3,\"goals\":0,\"assists\":1,\"xg\":0.58,\"rating\":6.64}}],\"unavailable\":[{\"name\":\"Zito Luvumbo\",\"reason\":\"en sélection\",\"expectedReturn\":\"Early October 2026\"},{\"name\":\"Lucas Bergström\",\"reason\":\"en sélection\",\"expectedReturn\":\"Early October 2026\"},{\"name\":\"Martin Valjent\",\"reason\":\"en sélection\",\"expectedReturn\":\"Early October 2026\"},{\"name\":\"Antoniu Roca\",\"reason\":\"blessé\",\"expectedReturn\":\"Late October 2026\"},{\"name\":\"Manu Morlanes\",\"reason\":\"blessé\",\"expectedReturn\":\"Early December 2026\"},{\"name\":\"Jan Salas\",\"reason\":\"blessé\",\"expectedReturn\":\"Late October 2026\"}],\"usualStartersMissing\":[{\"name\":\"Manu Morlanes\",\"position\":\"Midfielder\",\"starts\":7,\"goals\":0,\"assists\":0,\"status\":\"blessé\"},{\"name\":\"Miguel Calatayud\",\"position\":\"Defender\",\"starts\":7,\"goals\":0,\"assists\":0,\"status\":\"remplaçant\"},{\"name\":\"Martin Valjent\",\"position\":\"Defender\",\"starts\":6,\"goals\":0,\"assists\":0,\"status\":\"en sélection\"},{\"name\":\"Toni Lato\",\"position\":\"Defender\",\"starts\":4,\"goals\":0,\"assists\":0,\"status\":\"remplaçant\"},{\"name\":\"Sergi Darder\",\"position\":\"Midfielder\",\"starts\":4,\"goals\":0,\"assists\":0,\"status\":\"remplaçant\"},{\"name\":\"Zito Luvumbo\",\"position\":\"Midfielder\",\"starts\":4,\"goals\":0,\"assists\":1,\"status\":\"en sélection\"}]},\"matchInfo\":{\"round\":\"8\",\"stadium\":\"Estadi Municipal de Montilivi\",\"city\":\"Girona\",\"capacity\":14500,\"surface\":\"grass\",\"weather\":\"Partly Cloudy\",\"temperature\":17,\"windSpeed\":2,\"precipitation\":0,\"referee\":{\"name\":\"Eder Mallo Fernández\",\"country\":\"Spain\",\"league\":\"LaLiga2\",\"matches\":44,\"yellowCardsPerMatch\":5.39,\"yellowCardsLeagueAverage\":5.02,\"redCards\":3,\"penalties\":9,\"foulsPerMatch\":25.95,\"foulsLeagueAverage\":26.55}}}}\n\nTon expérience par type de marché (matchs déjà analysés puis confrontés au résultat) :\n[{\"marketType\":\"result\",\"label\":\"Résultat\",\"matches\":31,\"engineRight\":14,\"aiVerdicts\":18,\"aiRight\":10,\"byConfidence\":{\"moyenne\":{\"verdicts\":16,\"right\":9},\"faible\":{\"verdicts\":1,\"right\":0},\"forte\":{\"verdicts\":1,\"right\":1}},\"recentLessons\":[{\"match\":\"Sociedad B - Granada\",\"pick\":\"Granada gagne\",\"outcome\":\"juste\",\"aiVerdict\":\"nuance\",\"lesson\":\"Avis nuancé et prudent : conserver cette prudence. Le favori léger au xG et aux tirs a gagné, mais le scénario a été serré (but à la 90e), donc ne pas monter la confiance sur un favori à 40 %.\"},{\"match\":\"Tolima - Chicó FC\",\"pick\":\"Tolima gagne\",\"outcome\":\"faux\",\"aiVerdict\":\"confirme\",\"lesson\":\"Pour un favori en méforme, sans ses buteurs et avec un nouveau coach, ne pas confirmer la victoire avec confiance moyenne. La domination statistique ne garantit pas le gain. Le nul reste sous-estimé dans ce profil.\"},{\"match\":\"Guaraní - Sportivo San Lorenzo\",\"pick\":\"Guaraní gagne\",\"outcome\":\"faux\",\"aiVerdict\":\"confirme\",\"lesson\":\"Un favori à 59 % reste loin d'être sûr quand il ne marque que 1,1 but par match et change son onze. Avec un nouvel entraîneur dans l'équipe faible, l'historique de forme est peu fiable.\"}]},{\"marketType\":\"totalGoals\",\"label\":\"Total buts\",\"matches\":31,\"engineRight\":19,\"aiVerdicts\":24,\"aiRight\":17,\"byConfidence\":{\"forte\":{\"verdicts\":6,\"right\":6},\"moyenne\":{\"verdicts\":18,\"right\":11}},\"recentLessons\":[{\"match\":\"Sociedad B - Granada\",\"pick\":\"Plus de 0.5 buts\",\"outcome\":\"juste\",\"aiVerdict\":\"confirme\",\"lesson\":\"Avis confirmé : le « plus de 0,5 » est solide quand les deux défenses concèdent. À garder, mais la marge était si large que ce marché apporte peu d'information.\"},{\"match\":\"Tolima - Chicó FC\",\"pick\":\"Plus de 2.5 buts\",\"outcome\":\"faux\",\"aiVerdict\":\"nuance\",\"lesson\":\"Ma nuance était juste : la production récente de Tolima (environ 1 but par match) devait peser davantage que le xG moteur. Quand ma lecture diverge du moteur sur les buts, la suivre.\"},{\"match\":\"Guaraní - Sportivo San Lorenzo\",\"pick\":\"Moins de 3.5 buts\",\"outcome\":\"juste\",\"aiVerdict\":\"confirme\",\"lesson\":\"La ligne moins de 3.5 entre deux équipes à faible total attendu (2,4) est un marché solide à conserver.\"}]},{\"marketType\":\"bothTeamsScore\",\"label\":\"Les 2 équipes marquent\",\"matches\":30,\"engineRight\":12,\"aiVerdicts\":15,\"aiRight\":8,\"byConfidence\":{\"moyenne\":{\"verdicts\":13,\"right\":7},\"faible\":{\"verdicts\":2,\"right\":1}},\"recentLessons\":[{\"match\":\"Sociedad B - Granada\",\"pick\":\"Non\",\"outcome\":\"faux\",\"aiVerdict\":\"nuance\",\"lesson\":\"Avec un gardien remplaçant côté adverse, le « Non » sur les deux équipes est fragile : ma nuance était justifiée. Éviter ce « Non » quand le gardien titulaire est absent et que la défense adverse concède déjà deux buts.\"},{\"match\":\"Tolima - Chicó FC\",\"pick\":\"Non\",\"outcome\":\"juste\",\"aiVerdict\":\"confirme\",\"lesson\":\"Garder : la faiblesse offensive de Chicó à l'extérieur (0,4 but par match) était un signal fiable pour le « Non ».\"},{\"match\":\"Guaraní - Sportivo San Lorenzo\",\"pick\":\"Non\",\"outcome\":\"faux\",\"aiVerdict\":\"confirme\",\"lesson\":\"Ne pas laisser une moyenne très basse (0,2) dicter un « non » à 66 % avec un adversaire diminué. Un but sur un seul tir ou une seule occasion suffit. Fixer une confiance plus faible quand l'équipe reçue est sans gardien titulaire ou entraîneur nouveau.\"}]},{\"marketType\":\"resultAndTotal\",\"label\":\"Résultat + Total buts\",\"matches\":31,\"engineRight\":9,\"aiVerdicts\":13,\"aiRight\":5,\"byConfidence\":{\"moyenne\":{\"verdicts\":8,\"right\":4},\"faible\":{\"verdicts\":5,\"right\":1}},\"recentLessons\":[{\"match\":\"Sociedad B - Granada\",\"pick\":\"Granada & Moins de 3.5 buts\",\"outcome\":\"faux\",\"aiVerdict\":\"nuance\",\"lesson\":\"Un combiné cumule deux risques : ici le total a cassé alors que le résultat était bon. Quand le gardien est inhabituel, ne pas supposer un match fermé dans un combiné « moins de ».\"},{\"match\":\"Tolima - Chicó FC\",\"pick\":\"Tolima & Plus de 1.5 buts\",\"outcome\":\"faux\",\"aiVerdict\":\"confirme\",\"lesson\":\"Un combiné qui dépend d'un résultat fragile hérite de sa fragilité. À éviter quand la forme du favori est douteuse.\"},{\"match\":\"Guaraní - Sportivo San Lorenzo\",\"pick\":\"Guaraní & Plus de 1.5 buts\",\"outcome\":\"faux\",\"aiVerdict\":\"nuance\",\"lesson\":\"Les combinés dépendent du maillon le plus fragile (ici la victoire). La prudence est à garder.\"}]},{\"marketType\":\"teamGoals\",\"label\":\"Buts d'une équipe\",\"matches\":62,\"engineRight\":39,\"aiVerdicts\":40,\"aiRight\":31,\"byConfidence\":{\"moyenne\":{\"verdicts\":29,\"right\":22},\"forte\":{\"verdicts\":9,\"right\":7},\"faible\":{\"verdicts\":2,\"right\":2}},\"recentLessons\":[{\"match\":\"Sociedad B - Granada\",\"pick\":\"Sociedad B — Moins de 0.5 buts\",\"outcome\":\"faux\",\"aiVerdict\":\"nuance\",\"lesson\":\"Ma nuance était justifiée. Une attaque à 0,8 but par match à domicile peut exploser contre un gardien inhabituel : ne pas surpondérer la moyenne à domicile quand la défense adverse est affaiblie.\"},{\"match\":\"Sociedad B - Granada\",\"pick\":\"Granada — Moins de 1.5 buts\",\"outcome\":\"faux\",\"aiVerdict\":\"confirme\",\"lesson\":\"Mon avis confirmé était faux. Une moyenne à l'extérieur de 1,2 but ne protège pas un « moins de 1,5 » quand l'équipe tire beaucoup et affronte une défense affaiblie ; le xG et les tirs récents ont plus de valeur que la moyenne de buts.\"},{\"match\":\"Tolima - Chicó FC\",\"pick\":\"Tolima — Plus de 1.5 buts\",\"outcome\":\"faux\",\"aiVerdict\":\"nuance\",\"lesson\":\"Ma nuance était fondée. Les lignes de buts d'équipe issues du xG moteur sont trop hautes pour un Tolima qui marque peu : les modérer.\"}]},{\"marketType\":\"totalCorners\",\"label\":\"Total corners\",\"matches\":15,\"engineRight\":13,\"aiVerdicts\":15,\"aiRight\":13,\"byConfidence\":{\"moyenne\":{\"verdicts\":14,\"right\":13},\"forte\":{\"verdicts\":1,\"right\":0}},\"recentLessons\":[{\"match\":\"Sociedad B - Granada\",\"pick\":\"Plus de 6.5 corners\",\"outcome\":\"juste\",\"aiVerdict\":\"confirme\",\"lesson\":\"Avis confirmé : le total de corners reste fiable, car il est moins sensible à la répartition entre les équipes que les lignes par équipe.\"},{\"match\":\"Tolima - Chicó FC\",\"pick\":\"Plus de 6.5 corners\",\"outcome\":\"juste\",\"aiVerdict\":\"confirme\",\"lesson\":\"Total solide, mais il est venu d'un seul côté. Il faut éviter de répartir naïvement les corners entre les deux équipes.\"},{\"match\":\"Guaraní - Sportivo San Lorenzo\",\"pick\":\"Moins de 12.5 corners\",\"outcome\":\"juste\",\"aiVerdict\":\"confirme\",\"lesson\":\"Les corners sont restés conformes aux moyennes, la ligne haute a bien fonctionné.\"}]},{\"marketType\":\"teamCorners\",\"label\":\"Corners d'une équipe\",\"matches\":30,\"engineRight\":20,\"aiVerdicts\":28,\"aiRight\":18,\"byConfidence\":{\"moyenne\":{\"verdicts\":25,\"right\":16},\"forte\":{\"verdicts\":3,\"right\":2}},\"recentLessons\":[{\"match\":\"Sociedad B - Granada\",\"pick\":\"Sociedad B — Plus de 2.5 corners\",\"outcome\":\"faux\",\"aiVerdict\":\"confirme\",\"lesson\":\"Avis confirmé mais faux : la ligne de 2,5 corners pour une équipe locale n'est pas sûre malgré une moyenne de 4,6. Un faible volume de corners est possible si l'équipe tire de loin ou marque vite, et la marge sur les corners par équipe était surestimée.\"},{\"match\":\"Sociedad B - Granada\",\"pick\":\"Granada — Plus de 2.5 corners\",\"outcome\":\"juste\",\"aiVerdict\":\"confirme\",\"lesson\":\"Avis confirmé : à garder. Une équipe qui mène le jeu en volume dépasse largement une ligne de corners basse.\"},{\"match\":\"Tolima - Chicó FC\",\"pick\":\"Tolima — Moins de 8.5 corners\",\"outcome\":\"faux\",\"aiVerdict\":\"confirme\",\"lesson\":\"Contre un adversaire passif, la ligne « moins de » d'un favori dominant est risquée. Un très fort écart de possession (75 %) fait exploser les corners du favori.\"}]},{\"marketType\":\"totalShots\",\"label\":\"Total tirs\",\"matches\":15,\"engineRight\":11,\"aiVerdicts\":15,\"aiRight\":11,\"byConfidence\":{\"moyenne\":{\"verdicts\":15,\"right\":11}},\"recentLessons\":[{\"match\":\"Sociedad B - Granada\",\"pick\":\"Moins de 30.5 tirs\",\"outcome\":\"faux\",\"aiVerdict\":\"confirme\",\"lesson\":\"Ma leçon précédente sur le risque d'un match ouvert se confirme. Quand un gardien inhabituel ou une défense remaniée sont présents, le « moins de » sur les tirs totaux est exposé.\"},{\"match\":\"Tolima - Chicó FC\",\"pick\":\"Plus de 18.5 tirs\",\"outcome\":\"juste\",\"aiVerdict\":\"confirme\",\"lesson\":\"Réussi de justesse : le total a tenu uniquement grâce à Tolima, avec très peu de marge. Ne pas compter sur les tirs de Chicó.\"},{\"match\":\"Guaraní - Sportivo San Lorenzo\",\"pick\":\"Moins de 30.5 tirs\",\"outcome\":\"faux\",\"aiVerdict\":\"confirme\",\"lesson\":\"Un total de tirs peut exploser quand une équipe dite faible pousse et que l'autre ne contrôle pas. Une marge de 5 tirs sur la moyenne n'est pas une garantie : prudence sur les lignes unders de tirs, avec une confiance moins élevée que 82 %.\"}]},{\"marketType\":\"teamShots\",\"label\":\"Tirs d'une équipe\",\"matches\":30,\"engineRight\":22,\"aiVerdicts\":26,\"aiRight\":19,\"byConfidence\":{\"moyenne\":{\"verdicts\":23,\"right\":17},\"forte\":{\"verdicts\":3,\"right\":2}},\"recentLessons\":[{\"match\":\"Sociedad B - Granada\",\"pick\":\"Sociedad B — Plus de 8.5 tirs\",\"outcome\":\"juste\",\"aiVerdict\":\"confirme\",\"lesson\":\"Avis confirmé : la marge de 1,7 tir sur la moyenne locale a bien tenu, et la défense visiteuse affaiblie a encore augmenté le volume.\"},{\"match\":\"Sociedad B - Granada\",\"pick\":\"Granada — Moins de 16.5 tirs\",\"outcome\":\"faux\",\"aiVerdict\":\"confirme\",\"lesson\":\"Mon avis confirmé était faux. Quand la moyenne extérieure est proche de la ligne, ne pas suivre le moteur sur un « moins de » : la marge était mince et le scénario (équipe qui court derrière le score) augmente les tirs.\"},{\"match\":\"Tolima - Chicó FC\",\"pick\":\"Tolima — Moins de 19.5 tirs\",\"outcome\":\"juste\",\"aiVerdict\":\"nuance\",\"lesson\":\"Ma nuance sur la marge limitée était bonne. Garder la prudence quand la ligne est proche de la moyenne à domicile.\"}]},{\"marketType\":\"totalShotsOnTarget\",\"label\":\"Total tirs cadrés\",\"matches\":15,\"engineRight\":13,\"aiVerdicts\":12,\"aiRight\":11,\"byConfidence\":{\"moyenne\":{\"verdicts\":10,\"right\":9},\"faible\":{\"verdicts\":2,\"right\":2}},\"recentLessons\":[{\"match\":\"Sociedad B - Granada\",\"pick\":\"Moins de 11.5 tirs cadrés\",\"outcome\":\"juste\",\"aiVerdict\":\"confirme\",\"lesson\":\"Avis confirmé, mais de justesse : le total de tirs cadrés est resté sous la ligne malgré un match très ouvert. À garder, avec prudence.\"},{\"match\":\"Tolima - Chicó FC\",\"pick\":\"Plus de 5.5 tirs cadrés\",\"outcome\":\"juste\",\"aiVerdict\":\"confirme\",\"lesson\":\"Garder : la défense de Chicó concédait beaucoup de tirs cadrés. Le volume de Tolima suffit.\"},{\"match\":\"Guaraní - Sportivo San Lorenzo\",\"pick\":\"Plus de 4.5 tirs cadrés\",\"outcome\":\"juste\",\"aiVerdict\":\"confirme\",\"lesson\":\"Le total de tirs cadrés était bien calibré et se confirme.\"}]},{\"marketType\":\"teamShotsOnTarget\",\"label\":\"Tirs cadrés d'une équipe\",\"matches\":30,\"engineRight\":24,\"aiVerdicts\":25,\"aiRight\":20,\"byConfidence\":{\"moyenne\":{\"verdicts\":24,\"right\":19},\"forte\":{\"verdicts\":1,\"right\":1}},\"recentLessons\":[{\"match\":\"Sociedad B - Granada\",\"pick\":\"Sociedad B — Plus de 2.5 tirs cadrés\",\"outcome\":\"juste\",\"aiVerdict\":\"nuance\",\"lesson\":\"Ma nuance sur la marge mince était trop prudente : le volume offensif local a dépassé la moyenne. Le moteur avait raison d'attendre 4,79.\"},{\"match\":\"Sociedad B - Granada\",\"pick\":\"Granada — Moins de 5.5 tirs cadrés\",\"outcome\":\"juste\",\"aiVerdict\":\"confirme\",\"lesson\":\"Avis confirmé, mais de justesse : beaucoup de tirs de Granada n'ont pas été cadrés. La précision était faible : ce marché reste plus fiable que celui des tirs totaux.\"},{\"match\":\"Tolima - Chicó FC\",\"pick\":\"Tolima — Plus de 3.5 tirs cadrés\",\"outcome\":\"juste\",\"aiVerdict\":\"confirme\",\"lesson\":\"Garder : le volume de Tolima à domicile se transforme de façon stable en tirs cadrés, même sans but.\"}]}]"
+  }
+ },
+ "avantB": {
+  "entree": {
+   "home": "Real Ávila",
+   "away": "Atlético Baleares",
+   "league": "Primera Federación - Spain",
+   "commenceTime": "2026-10-11T16:00:00.000Z",
+   "timing": "avance",
+   "engineSummary": {
+    "label": "Real Ávila vs Atlético Baleares",
+    "expectedGoals": {
+     "home": 1.21,
+     "away": 1.08,
+     "source": "classement"
+    },
+    "trueOdds": {
+     "home": 2.6,
+     "draw": 3.2,
+     "away": 2.9
+    },
+    "market": {
+     "odds1": null,
+     "oddsDraw": null,
+     "odds2": null
+    },
+    "edgePercent": null,
+    "staking": {
+     "action": "PASS",
+     "stake": null,
+     "reason": "no_market_odds",
+     "candidates": []
+    },
+    "statExpectations": null,
+    "marketPredictions": [
+     {
+      "marketId": "result",
+      "params": {
+       "outcome": "home"
+      },
+      "market": "Résultat",
+      "predictedOutcome": "home",
+      "predictedLabel": "Real Ávila gagne",
+      "predictedOdds": 2.6,
+      "probability": 38,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "totalGoals",
+      "params": {
+       "line": 2.5,
+       "side": "under"
+      },
+      "market": "Total buts",
+      "predictedOutcome": "under",
+      "predictedLabel": "Moins de 2.5 buts",
+      "predictedOdds": 1.72,
+      "probability": 58,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "bothTeamsScore",
+      "params": {
+       "outcome": "yes"
+      },
+      "market": "Les 2 équipes marquent",
+      "predictedOutcome": "yes",
+      "predictedLabel": "Oui",
+      "predictedOdds": 1.95,
+      "probability": 51,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "teamGoals",
+      "params": {
+       "team": "away",
+       "line": 1.5,
+       "side": "under"
+      },
+      "market": "Buts — Atlético Baleares",
+      "predictedOutcome": "under",
+      "predictedLabel": "Atlético Baleares — Moins de 1.5 buts",
+      "predictedOdds": 1.42,
+      "probability": 70,
+      "minOdds": 1.2
+     }
+    ]
+   },
+   "contexte": {
+    "standings": {
+     "home": {
+      "rank": 3,
+      "teamId": "fotmob-1001",
+      "teamName": "Real Ávila",
+      "shortName": "Ávila",
+      "teamLogo": "https://images.fotmob.com/image_resources/logo/teamlogo/1001.png",
+      "played": 6,
+      "won": 4,
+      "drawn": 1,
+      "lost": 1,
+      "goalsFor": 9,
+      "goalsAgainst": 4,
+      "goalDiff": 5,
+      "points": 13,
+      "deduction": 3,
+      "description": "Promotion",
+      "home": {
+       "played": 3,
+       "won": 3,
+       "drawn": 0,
+       "lost": 0,
+       "goalsFor": 6,
+       "goalsAgainst": 1
+      },
+      "away": {
+       "played": 3,
+       "won": 1,
+       "drawn": 1,
+       "lost": 1,
+       "goalsFor": 3,
+       "goalsAgainst": 3
+      }
+     },
+     "away": {
+      "source": "football-data.co.uk (historique)",
+      "season": "2024-2025",
+      "division": "other",
+      "divisionLabel": "Tercera RFEF",
+      "rank": 7,
+      "played": 34,
+      "won": 14,
+      "drawn": 9,
+      "lost": 11,
+      "goalsFor": 41,
+      "goalsAgainst": 37,
+      "goalDiff": 4,
+      "points": 51
+     }
+    },
+    "homeStats": {
+     "source": "FotMob (magasin)",
+     "from": "2026-08-24",
+     "to": "2026-10-01",
+     "last10": {
+      "matches": 6,
+      "results": "VVNVDV",
+      "goalsFor": 1.5,
+      "goalsAgainst": 0.67,
+      "for": {
+       "xg": 1.31,
+       "shots": 13.2,
+       "shotsOnTarget": 4.5,
+       "corners": 5.1,
+       "possession": 52.4
+      },
+      "against": {
+       "xg": 0.92,
+       "shots": 9.8,
+       "shotsOnTarget": 3.1,
+       "corners": 3.9,
+       "possession": 47.6
+      }
+     },
+     "atHome": {
+      "matches": 3,
+      "results": "VVV",
+      "goalsFor": 2,
+      "goalsAgainst": 0.33,
+      "for": {
+       "xg": 1.62,
+       "shots": 15,
+       "shotsOnTarget": 5.3,
+       "corners": 6,
+       "possession": 55
+      },
+      "against": {
+       "xg": 0.71,
+       "shots": 8,
+       "shotsOnTarget": 2.3,
+       "corners": 3.3,
+       "possession": 45
+      }
+     }
+    },
+    "awayStats": {
+     "source": "API-Football",
+     "stats": {
+      "Shots on Goal": 3.4,
+      "Total Shots": 10.1,
+      "Ball Possession": "48%",
+      "expected_goals": 1.02,
+      "Corner Kicks": 4.4
+     },
+     "sampleSize": 8
+    },
+    "homeForm": {
+     "source": "FotMob (magasin)",
+     "matches": [
+      {
+       "date": "2026-10-01",
+       "opponent": "Unionistas",
+       "venue": "extérieur",
+       "score": "1-1",
+       "result": "N"
+      },
+      {
+       "date": "2026-09-27",
+       "opponent": "Zamora",
+       "venue": "domicile",
+       "score": "2-0",
+       "result": "V"
+      }
+     ],
+     "sampleSize": 2
+    },
+    "awayForm": {
+     "source": "API-Football",
+     "season": 2024,
+     "results": [
+      "D",
+      "V",
+      "N"
+     ],
+     "dates": [
+      "2026-09-28",
+      "2026-09-21",
+      "2026-09-14"
+     ],
+     "sampleSize": 3
+    },
+    "homeFlashscoreStats": null,
+    "awayFlashscoreStats": {
+     "matches": 7,
+     "goalsFor": 1.29,
+     "goalsAgainst": 1.14,
+     "xg": 1.11,
+     "possession": 49.2,
+     "collectedAt": "2026-09-29T08:00:00.000Z"
+    },
+    "homeHistoricalStats": null,
+    "awayHistoricalStats": {
+     "sampleSize": 10,
+     "division": "other",
+     "divisionLabel": "Tercera RFEF",
+     "averages": {
+      "goalsFor": 1.4,
+      "goalsAgainst": 1.1,
+      "shots": 11.3,
+      "shotsOnTarget": 4.2,
+      "corners": 5.3
+     }
+    },
+    "homeHistoricalForm": null,
+    "awayHistoricalForm": {
+     "results": [
+      "V",
+      "D",
+      "D",
+      "N",
+      "V"
+     ],
+     "sampleSize": 5
+    },
+    "homeTeamProfile": null,
+    "awayTeamProfile": {
+     "recentForm": "irrégulier, deux défaites à l’extérieur",
+     "historicalAverages": {
+      "goalsFor": 1.2
+     },
+     "updatedAt": "2026-09-19T21:46:07.000Z"
+    },
+    "teamNews": null,
+    "userNote": null,
+    "nouvelleSource": {
+     "fournisseur": "essai",
+     "indice": 0.73,
+     "liste": [
+      "a",
+      "b"
+     ]
+    }
+   },
+   "compoBrute": {
+    "source": "magasin",
+    "home": {
+     "team": "Real Ávila",
+     "teamId": "fotmob-1001",
+     "formation": "4-4-2",
+     "coach": "Miguel Ángel Ruiz",
+     "statsSince": "2026-07-01",
+     "teamMatches": 6,
+     "startXI": [
+      {
+       "id": "fotmob-5001",
+       "name": "Diego Cuadrado",
+       "number": 1,
+       "position": "Goalkeeper",
+       "age": 29,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "x": 0.5,
+       "y": 0.05,
+       "stats": {
+        "apps": 6,
+        "starts": 6,
+        "minutes": 540,
+        "goals": 0,
+        "assists": 0,
+        "xg": null,
+        "rating": 7.1
+       }
+      },
+      {
+       "id": "fotmob-5002",
+       "name": "Rafa Mújica",
+       "number": 9,
+       "position": "Forward",
+       "age": 27,
+       "countryCode": "ESP",
+       "countryName": "Spain",
+       "x": 0.5,
+       "y": 0.9,
+       "stats": {
+        "apps": 6,
+        "starts": 5,
+        "minutes": 470,
+        "goals": 4,
+        "assists": 1,
+        "xg": 3.2,
+        "rating": 7.6
+       }
+      },
+      {
+       "id": null,
+       "name": "Juvenil Pérez",
+       "number": 30,
+       "position": null,
+       "age": null,
+       "countryCode": null,
+       "countryName": null,
+       "stats": null
+      }
+     ],
+     "bench": [
+      {
+       "id": "fotmob-5010",
+       "name": "Óscar Plano",
+       "number": 10,
+       "position": "Midfielder",
+       "stats": {
+        "apps": 5,
+        "starts": 1,
+        "minutes": 180,
+        "goals": 2,
+        "assists": 0,
+        "xg": 0.9,
+        "rating": 7
+       }
+      },
+      {
+       "id": "fotmob-5011",
+       "name": "Banquillo Nunca",
+       "number": 22,
+       "position": "Defender",
+       "stats": {
+        "apps": 1,
+        "starts": 0,
+        "minutes": 5,
+        "goals": 0,
+        "assists": 0,
+        "xg": null,
+        "rating": null
+       }
+      }
+     ],
+     "unavailable": [
+      {
+       "id": "fotmob-5020",
+       "name": "Lesionado Largo",
+       "reason": "blessé",
+       "expectedReturn": "Doubtful",
+       "position": null,
+       "stats": null
+      }
+     ],
+     "usualStartersMissing": [],
+     "lastMatch": {
+      "date": "2026-10-01",
+      "league": "Primera Federación",
+      "home": "Unionistas",
+      "away": "Real Ávila",
+      "homeGoals": 1,
+      "awayGoals": 1
+     }
+    },
+    "away": null,
+    "matchInfo": {
+     "round": "7",
+     "stadium": "Adolfo Suárez",
+     "city": "Ávila",
+     "surface": "artificial",
+     "weather": "Rain",
+     "temperature": 9,
+     "windSpeed": 31,
+     "precipitation": 6.2,
+     "referee": {
+      "name": "Árbitro Ejemplo",
+      "country": "Spain",
+      "matches": 12,
+      "yellowCardsPerMatch": 6.1,
+      "yellowCardsLeagueAverage": 4.9,
+      "foulsPerMatch": 29,
+      "foulsLeagueAverage": 27.4,
+      "redCards": 2,
+      "penalties": 1,
+      "nouvelleStat": 3
+     }
+    }
+   },
+   "lineupsAncienne": {
+    "source": "magasin",
+    "home": {
+     "team": "Real Ávila",
+     "formation": "4-4-2",
+     "coach": "Miguel Ángel Ruiz",
+     "statsSince": "2026-07-01",
+     "teamMatches": 6,
+     "startXI": [
+      {
+       "name": "Diego Cuadrado",
+       "position": "Goalkeeper",
+       "stats": {
+        "apps": 6,
+        "starts": 6,
+        "goals": 0,
+        "assists": 0,
+        "rating": 7.1
+       }
+      },
+      {
+       "name": "Rafa Mújica",
+       "position": "Forward",
+       "stats": {
+        "apps": 6,
+        "starts": 5,
+        "goals": 4,
+        "assists": 1,
+        "xg": 3.2,
+        "rating": 7.6
+       }
+      },
+      {
+       "name": "Juvenil Pérez",
+       "position": null,
+       "stats": null
+      }
+     ],
+     "bench": [
+      {
+       "name": "Óscar Plano",
+       "position": "Midfielder",
+       "stats": {
+        "apps": 5,
+        "starts": 1,
+        "goals": 2,
+        "assists": 0,
+        "xg": 0.9,
+        "rating": 7
+       }
+      }
+     ],
+     "unavailable": [
+      {
+       "name": "Lesionado Largo",
+       "reason": "blessé",
+       "expectedReturn": "Doubtful"
+      }
+     ],
+     "usualStartersMissing": [],
+     "lastMatch": {
+      "date": "2026-10-01",
+      "league": "Primera Federación",
+      "home": "Unionistas",
+      "away": "Real Ávila",
+      "homeGoals": 1,
+      "awayGoals": 1
+     }
+    },
+    "away": null,
+    "matchInfo": {
+     "round": "7",
+     "stadium": "Adolfo Suárez",
+     "city": "Ávila",
+     "surface": "artificial",
+     "weather": "Rain",
+     "temperature": 9,
+     "windSpeed": 31,
+     "precipitation": 6.2,
+     "referee": {
+      "name": "Árbitro Ejemplo",
+      "country": "Spain",
+      "matches": 12,
+      "yellowCardsPerMatch": 6.1,
+      "yellowCardsLeagueAverage": 4.9,
+      "foulsPerMatch": 29,
+      "foulsLeagueAverage": 27.4,
+      "redCards": 2,
+      "penalties": 1,
+      "nouvelleStat": 3
+     }
+    }
+   },
+   "experience": []
+  },
+  "ancienneForme": {
+   "system": "Tu es un commentateur qualitatif qui accompagne, pour un match à venir (Real Ávila vs Atlético Baleares, Primera Federación - Spain), la prédiction déjà chiffrée par le moteur CôteMaster (Poisson + Dixon-Coles). Rôle strictement consultatif : ne propose JAMAIS de cote, de probabilité ou de mise alternative, et ne prétends jamais recalculer ou corriger le chiffrage du moteur — tu apportes un contexte qualitatif (forme, statistiques et moyennes, compositions, classement) en COMPLÉMENT, jamais en remplacement. Tu peux citer les pourcentages du moteur pour les expliquer, jamais en proposer d'autres. N'invente aucune donnée non fournie ci-dessous ; une donnée absente (classement indisponible, forme non trouvée...) va dans `caveats`, jamais devinée. Analyse d'abord, pour chaque équipe, sa FORME, ses STATISTIQUES et MOYENNES, puis sa COMPOSITION. Forme : `homeForm`/`awayForm` (`source: \"FotMob (magasin)\"`), ses derniers matchs de la saison en cours avec date, adversaire, lieu (`venue`), score et résultat — la forme de référence. Statistiques : `homeStats`/`awayStats` (`source: \"FotMob (magasin)\"`, du `from` au `to`) sur ses 10 derniers matchs toutes compétitions (`last10`) puis sur ceux joués au lieu de CE match (`atHome` pour l'équipe qui reçoit, `away` pour l'autre) : `results` (V/N/D, du plus récent au plus ancien), buts marqués et encaissés par match (`goalsFor`/`goalsAgainst`), et par match pour l'équipe (`for`) comme pour ses adversaires (`against`) : xG, tirs, tirs cadrés, grosses occasions, corners, possession, cartons jaunes — ce qu'elle produit ET ce qu'elle concède. Une équipe que le magasin ne connaît pas peut n'avoir que des sources plus anciennes ou partielles, à signaler dans `caveats` : `homeForm.source: \"API-Football\"` (saison `season` du plan, souvent dépassée), `homeStats.source: \"API-Football\"`, `homeFlashscoreStats` (FlashScore, `collectedAt`), `homeHistoricalStats`/`homeHistoricalForm` (football-data.co.uk, 5 saisons ; `division: \"other\"` = chiffres réalisés dans une autre division `divisionLabel`, à ne pas comparer directement à l'adversaire), `homeTeamProfile` (recherche web, `updatedAt`). Si `standings` porte `source: \"football-data.co.uk (historique)\"`, précise que ce classement n'est pas en direct. `teamNews.home`/`teamNews.away` (FotMob, gratuit) : `longTermAbsences` liste les joueurs blessés ou suspendus pour ce match avec leur retour attendu (`expectedReturn`, parfois \"Doubtful\" = incertain plutôt qu'une date) — n'y figurent jamais les joueurs simplement partis en sélection nationale, ce n'est pas une absence notable. `coachChange`, s'il est présent, donne `previousCoach`/`currentCoach` et `since` (dernier match connu avec l'ancien entraîneur, approximatif) : ce n'est PAS un flux d'actualité dédié, seulement ce que les compositions déjà importées laissent déduire — l'absence de `coachChange` ne prouve rien, signale au besoin dans `caveats` que l'historique manque plutôt que d'affirmer qu'il n'y a pas eu de changement. `lineups` est la composition à analyser joueur par joueur. `source: \"FotMob\"` : la composition de CE match relue chez FotMob (`minutesBeforeKickoff` avant le coup d'envoi ; relevée moins d'une heure avant, elle est presque toujours officielle — plus tôt, dis que ce peut être une prévision). `source: \"magasin\"` : FotMob n'a encore rien publié, c'est la DERNIÈRE composition alignée par chaque équipe, lors du match `lastMatch` — pas celle de ce match : présente-la comme le onze probable, jamais comme officiel ; un joueur de ce onze que FotMob annonce indisponible pour CE match (`unavailable`) ne jouera pas. Pour chaque équipe : la formation, l'entraîneur, le onze de départ (`startXI`), les remplaçants qui ont compté cette saison (`bench` : au moins 3 titularisations, ou un but ou une passe décisive), les absents avec leur motif (`unavailable`), et pour chaque joueur ses chiffres depuis `statsSince`, toutes compétitions (`apps` matchs joués, `starts` titularisations, `goals`, `assists`, `xg`, `rating` note moyenne ; `stats` null = joueur inconnu du magasin, souvent une recrue ou un jeune). `usualStartersMissing` liste les titulaires habituels (au moins la moitié des `teamMatches` de l'équipe) qui ne sont PAS dans le onze, avec leur statut (remplaçant, blessé, suspendu, absent de la feuille). Appuie chaque avis de marché sur QUI joue (buteur ou gardien titulaire absent, défense remaniée, rotation avant une coupe, retour d'un cadre) et résume-le dans `lineupImpact`. `lineups.matchInfo`, quand il est là, donne le cadre publié par FotMob : stade et pelouse (`surface`), météo (`weather`, `temperature`, `windSpeed` en km/h, `precipitation`), arbitre (`referee` : matchs dirigés, cartons jaunes et fautes par match face à la moyenne du championnat, rouges, penalties) — cite-le seulement s'il pèse sur un marché (pluie ou vent forts, terrain synthétique, arbitre nettement plus sévère que la moyenne). `userNote`, quand il est fourni, est un texte libre écrit par Pierre lui-même (vestiaire, rumeur, mercato, difficultés financières du club, tout ce qu'aucune donnée mesurée ne capture) : traite-le comme un fait qu'il te communique, avec sa date d'écriture (`updatedAt`) — s'il est ancien, dis-le plutôt que de le prendre pour une actualité du jour. Il ne remplace ni ne corrige les données chiffrées ci-dessus, il les complète. MARCHÉ PAR MARCHÉ : `marketPredictions` liste le pronostic du moteur sur chacun des marchés joués (résultat, total de buts, les deux équipes marquent, résultat + total, buts de chaque équipe, et — quand le magasin a assez de relevés — corners, tirs et tirs cadrés, au total et par équipe ; `statExpectations` donne le nombre attendu de chacun pour chaque équipe, d'après ce qu'elle produit et ce que l'adversaire concède sur leurs 10 derniers matchs). Chaque pronostic est l'issue la plus probable de son marché parmi celles cotées au moins `minOdds` (1,20), jamais une quasi-certitude ; un marché dont l'issue la plus probable reste sous ce plancher (favori écrasant) n'a pas de pronostic et manque à la liste. Chacun porte `probability`, le pourcentage du moteur pour cette issue (1 / cote juste), celui qu'affiche l'appli à côté du pronostic. Donne dans `marketViews` une entrée pour CHACUN, sans en omettre : `explanation`, UNE phrase qui explique ce pourcentage avec les chiffres qui le fondent (forme, moyennes produites et concédées, `statExpectations` pour les corners et les tirs, joueurs alignés ou absents — par exemple pourquoi 76 % et pas davantage) ; puis `verdict` et `reasoning` : le contexte confirme-t-il, nuance-t-il ou contredit-il ce pronostic précis, et pourquoi. Une explication et un avis propres à chaque marché, jamais une phrase générale recopiée d'un marché à l'autre. Le pronostic et son pourcentage restent ceux du moteur : tu ne proposes ni autre choix, ni cote, ni probabilité, ni mise. `experience`, quand il est fourni, est ton propre bilan des matchs passés, par type de marché : combien de pronostics du moteur sont tombés justes (`engineRight`/`matches`), combien de tes avis ont tenu (`aiRight`/`aiVerdicts`, et `byConfidence` par niveau de confiance que tu avais annoncé), et tes dernières leçons. Sers-t'en pour calibrer ta confiance (plus prudent là où tu t'es souvent trompé, et si tes avis « forte » ne tiennent pas mieux que les autres) et pour ne pas répéter une erreur déjà relevée ; un bilan sur peu de matchs ne prouve encore rien, dis-le. Réponds exclusivement via l'outil submit_pre_match_analysis.",
+   "user": "Prédiction chiffrée du moteur pour ce match :\n{\"label\":\"Real Ávila vs Atlético Baleares\",\"expectedGoals\":{\"home\":1.21,\"away\":1.08,\"source\":\"classement\"},\"trueOdds\":{\"home\":2.6,\"draw\":3.2,\"away\":2.9},\"market\":{\"odds1\":null,\"oddsDraw\":null,\"odds2\":null},\"edgePercent\":null,\"staking\":{\"action\":\"PASS\",\"stake\":null,\"reason\":\"no_market_odds\",\"candidates\":[]},\"statExpectations\":null,\"marketPredictions\":[{\"marketId\":\"result\",\"params\":{\"outcome\":\"home\"},\"market\":\"Résultat\",\"predictedOutcome\":\"home\",\"predictedLabel\":\"Real Ávila gagne\",\"predictedOdds\":2.6,\"probability\":38,\"minOdds\":1.2},{\"marketId\":\"totalGoals\",\"params\":{\"line\":2.5,\"side\":\"under\"},\"market\":\"Total buts\",\"predictedOutcome\":\"under\",\"predictedLabel\":\"Moins de 2.5 buts\",\"predictedOdds\":1.72,\"probability\":58,\"minOdds\":1.2},{\"marketId\":\"bothTeamsScore\",\"params\":{\"outcome\":\"yes\"},\"market\":\"Les 2 équipes marquent\",\"predictedOutcome\":\"yes\",\"predictedLabel\":\"Oui\",\"predictedOdds\":1.95,\"probability\":51,\"minOdds\":1.2},{\"marketId\":\"teamGoals\",\"params\":{\"team\":\"away\",\"line\":1.5,\"side\":\"under\"},\"market\":\"Buts — Atlético Baleares\",\"predictedOutcome\":\"under\",\"predictedLabel\":\"Atlético Baleares — Moins de 1.5 buts\",\"predictedOdds\":1.42,\"probability\":70,\"minOdds\":1.2}]}\n\nContexte qualitatif disponible :\n{\"standings\":{\"home\":{\"rank\":3,\"teamId\":\"fotmob-1001\",\"teamName\":\"Real Ávila\",\"shortName\":\"Ávila\",\"teamLogo\":\"https://images.fotmob.com/image_resources/logo/teamlogo/1001.png\",\"played\":6,\"won\":4,\"drawn\":1,\"lost\":1,\"goalsFor\":9,\"goalsAgainst\":4,\"goalDiff\":5,\"points\":13,\"deduction\":3,\"description\":\"Promotion\",\"home\":{\"played\":3,\"won\":3,\"drawn\":0,\"lost\":0,\"goalsFor\":6,\"goalsAgainst\":1},\"away\":{\"played\":3,\"won\":1,\"drawn\":1,\"lost\":1,\"goalsFor\":3,\"goalsAgainst\":3}},\"away\":{\"source\":\"football-data.co.uk (historique)\",\"season\":\"2024-2025\",\"division\":\"other\",\"divisionLabel\":\"Tercera RFEF\",\"rank\":7,\"played\":34,\"won\":14,\"drawn\":9,\"lost\":11,\"goalsFor\":41,\"goalsAgainst\":37,\"goalDiff\":4,\"points\":51}},\"homeStats\":{\"source\":\"FotMob (magasin)\",\"from\":\"2026-08-24\",\"to\":\"2026-10-01\",\"last10\":{\"matches\":6,\"results\":\"VVNVDV\",\"goalsFor\":1.5,\"goalsAgainst\":0.67,\"for\":{\"xg\":1.31,\"shots\":13.2,\"shotsOnTarget\":4.5,\"corners\":5.1,\"possession\":52.4},\"against\":{\"xg\":0.92,\"shots\":9.8,\"shotsOnTarget\":3.1,\"corners\":3.9,\"possession\":47.6}},\"atHome\":{\"matches\":3,\"results\":\"VVV\",\"goalsFor\":2,\"goalsAgainst\":0.33,\"for\":{\"xg\":1.62,\"shots\":15,\"shotsOnTarget\":5.3,\"corners\":6,\"possession\":55},\"against\":{\"xg\":0.71,\"shots\":8,\"shotsOnTarget\":2.3,\"corners\":3.3,\"possession\":45}}},\"awayStats\":{\"source\":\"API-Football\",\"stats\":{\"Shots on Goal\":3.4,\"Total Shots\":10.1,\"Ball Possession\":\"48%\",\"expected_goals\":1.02,\"Corner Kicks\":4.4},\"sampleSize\":8},\"homeForm\":{\"source\":\"FotMob (magasin)\",\"matches\":[{\"date\":\"2026-10-01\",\"opponent\":\"Unionistas\",\"venue\":\"extérieur\",\"score\":\"1-1\",\"result\":\"N\"},{\"date\":\"2026-09-27\",\"opponent\":\"Zamora\",\"venue\":\"domicile\",\"score\":\"2-0\",\"result\":\"V\"}],\"sampleSize\":2},\"awayForm\":{\"source\":\"API-Football\",\"season\":2024,\"results\":[\"D\",\"V\",\"N\"],\"dates\":[\"2026-09-28\",\"2026-09-21\",\"2026-09-14\"],\"sampleSize\":3},\"homeFlashscoreStats\":null,\"awayFlashscoreStats\":{\"matches\":7,\"goalsFor\":1.29,\"goalsAgainst\":1.14,\"xg\":1.11,\"possession\":49.2,\"collectedAt\":\"2026-09-29T08:00:00.000Z\"},\"homeHistoricalStats\":null,\"awayHistoricalStats\":{\"sampleSize\":10,\"division\":\"other\",\"divisionLabel\":\"Tercera RFEF\",\"averages\":{\"goalsFor\":1.4,\"goalsAgainst\":1.1,\"shots\":11.3,\"shotsOnTarget\":4.2,\"corners\":5.3}},\"homeHistoricalForm\":null,\"awayHistoricalForm\":{\"results\":[\"V\",\"D\",\"D\",\"N\",\"V\"],\"sampleSize\":5},\"homeTeamProfile\":null,\"awayTeamProfile\":{\"recentForm\":\"irrégulier, deux défaites à l’extérieur\",\"historicalAverages\":{\"goalsFor\":1.2},\"updatedAt\":\"2026-09-19T21:46:07.000Z\"},\"teamNews\":null,\"userNote\":null,\"nouvelleSource\":{\"fournisseur\":\"essai\",\"indice\":0.73,\"liste\":[\"a\",\"b\"]},\"lineups\":{\"source\":\"magasin\",\"home\":{\"team\":\"Real Ávila\",\"formation\":\"4-4-2\",\"coach\":\"Miguel Ángel Ruiz\",\"statsSince\":\"2026-07-01\",\"teamMatches\":6,\"startXI\":[{\"name\":\"Diego Cuadrado\",\"position\":\"Goalkeeper\",\"stats\":{\"apps\":6,\"starts\":6,\"goals\":0,\"assists\":0,\"rating\":7.1}},{\"name\":\"Rafa Mújica\",\"position\":\"Forward\",\"stats\":{\"apps\":6,\"starts\":5,\"goals\":4,\"assists\":1,\"xg\":3.2,\"rating\":7.6}},{\"name\":\"Juvenil Pérez\",\"position\":null,\"stats\":null}],\"bench\":[{\"name\":\"Óscar Plano\",\"position\":\"Midfielder\",\"stats\":{\"apps\":5,\"starts\":1,\"goals\":2,\"assists\":0,\"xg\":0.9,\"rating\":7}}],\"unavailable\":[{\"name\":\"Lesionado Largo\",\"reason\":\"blessé\",\"expectedReturn\":\"Doubtful\"}],\"usualStartersMissing\":[],\"lastMatch\":{\"date\":\"2026-10-01\",\"league\":\"Primera Federación\",\"home\":\"Unionistas\",\"away\":\"Real Ávila\",\"homeGoals\":1,\"awayGoals\":1}},\"away\":null,\"matchInfo\":{\"round\":\"7\",\"stadium\":\"Adolfo Suárez\",\"city\":\"Ávila\",\"surface\":\"artificial\",\"weather\":\"Rain\",\"temperature\":9,\"windSpeed\":31,\"precipitation\":6.2,\"referee\":{\"name\":\"Árbitro Ejemplo\",\"country\":\"Spain\",\"matches\":12,\"yellowCardsPerMatch\":6.1,\"yellowCardsLeagueAverage\":4.9,\"foulsPerMatch\":29,\"foulsLeagueAverage\":27.4,\"redCards\":2,\"penalties\":1,\"nouvelleStat\":3}}}}"
+  }
+ },
+ "apres": {
+  "entree": {
+   "home": "Girona",
+   "away": "Mallorca",
+   "league": "La Liga 2 - Spain",
+   "commenceTime": "2026-10-04T19:00:00.000Z",
+   "timing": "coup-d-envoi",
+   "analysedAt": "2026-10-04T18:44:18.615Z",
+   "priorAnalysis": {
+    "summary": "Girona (5e, 13 pts) reçoit Mallorca (6e, 13 pts) en Liga 2. Girona est en bonne forme offensive (1,83 but par match à domicile, 3 victoires sur ses 4 derniers matchs, 2-0 contre Albacete). Mallorca défend bien (0,8 but encaissé par match sur 10 matchs) mais marque très peu à l'extérieur (0,4 par match, VNDDD) et sort d'une défaite 0-1 contre Almería. Les deux ont un nouvel entraîneur depuis mai. Composition de Girona : Beltrán et Bryan Gil sur le banc, Zamorano et Vanat en sélection. Mallorca sans Morlanes (blessé) ni Valjent (sélection). Fuentes (4 buts, 3,48 xG) est la menace principale de Mallorca.",
+    "keyFactors": [
+     {
+      "factor": "forme récente",
+      "observation": "Girona produit plus et marque plus que Mallorca, surtout à domicile.",
+      "evidence": "Girona à domicile : 1,83 but marqué, 1,17 encaissé, 18,2 tirs. Mallorca à l'extérieur : 0,4 but marqué, 1,4 encaissé, résultats VNDDD."
+     },
+     {
+      "factor": "statistiques et moyennes",
+      "observation": "Mallorca tire peu à l'extérieur et possède le ballon sans le convertir.",
+      "evidence": "Mallorca à l'extérieur : 0,78 xG, 11 tirs, 3,2 tirs cadrés, 61,6 % de possession. Girona concède 9,5 tirs à domicile."
+     },
+     {
+      "factor": "compositions",
+      "observation": "Girona aligne Moreno, Gazzaniga et Ruiz. Mallorca est amputé de Morlanes (7 titularisations) et de Valjent, et Fuentes est titulaire.",
+      "evidence": "Fuentes 4 buts, 3,48 xG en 7 matchs ; Ruiz 2 buts, 0,99 xG ; Sala 1,75 xG."
+     },
+     {
+      "factor": "classement",
+      "observation": "Les deux équipes sont à égalité de points en zone de barrages de promotion.",
+      "evidence": "Girona 5e, 13 pts, différence de buts +6 ; Mallorca 6e, 13 pts, +5."
+     },
+     {
+      "factor": "arbitre",
+      "observation": "Arbitre légèrement plus sévère que la moyenne en cartons.",
+      "evidence": "5,39 jaunes par match contre 5,02 en moyenne de championnat."
+     }
+    ],
+    "lineupImpact": "Composition FotMob relevée 16 minutes avant le coup d'envoi, donc presque officielle. Girona : 4-2-3-1 sans Beltrán (6 titularisations) ni Bryan Gil (5), tous deux remplaçants, et sans Zamorano ni Vanat (sélection) ; Ruiz mène l'attaque (2 buts, 0,99 xG), Carles Pérez (2 buts) en soutien, Gazzaniga dans les buts (note 7,44). Mallorca : 4-4-2 remanié, sans Morlanes (blessé), Valjent (sélection), Calatayud, Lato ni Darder (remplaçants) ; défense peu rodée (Puigmal 0 titularisation, Soumahoro 3). Fuentes (4 buts, 3,48 xG) et Sala (1,75 xG) restent la menace. Défense expérimentée de Mallorca affaiblie, ce qui nuance un peu les marchés « moins de » côté Mallorca.",
+    "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : Girona est plus offensif à domicile et Mallorca est très pauvre en attaque à l'extérieur. Il nuance toutefois les marchés de buts de Mallorca, car sa défense est remaniée et Fuentes est en forme.",
+    "caveats": "Pas de cotes de marché fournies. Les échantillons sont réduits (7 matchs de saison, 5 matchs à l'extérieur pour Mallorca). Les deux équipes ont un nouvel entraîneur, ce qui rend l'historique moins fiable. Mon bilan sur ces marchés est modeste : résultat 10/18, les deux équipes marquent 8/15, combinés 5/13.",
+    "marketViews": [
+     {
+      "market": "Résultat",
+      "pick": "Girona gagne",
+      "verdict": "confirme",
+      "confidence": "faible",
+      "explanation": "46 % : Girona marque 1,83 but à domicile et Mallorca seulement 0,4 à l'extérieur, mais le nul reste fort avec 1,04 contre 0,5 de buts attendus.",
+      "reasoning": "Le contexte favorise Girona (domicile, attaque, Mallorca remaniée), mais Mallorca a une bonne défense (0,8 but encaissé par match) et un nouvel entraîneur ; confiance prudente comme sur mes favoris légers.",
+      "probability": 46
+     },
+     {
+      "market": "Total buts",
+      "pick": "Moins de 2.5 buts",
+      "verdict": "confirme",
+      "confidence": "moyenne",
+      "explanation": "80 % : environ 1,54 but attendu au total, Mallorca marque 0,4 à l'extérieur et n'encaisse que 0,8 par match sur 10 matchs.",
+      "reasoning": "Mallorca marque très peu à l'extérieur, ce qui limite le total ; Girona a pourtant marqué 5 et 2 buts récemment, d'où une confiance moyenne.",
+      "probability": 80
+     },
+     {
+      "market": "Les 2 équipes marquent",
+      "pick": "Non",
+      "verdict": "nuance",
+      "confidence": "faible",
+      "explanation": "74 % : Mallorca n'a marqué que 2 buts en 5 sorties (0,4 par match, 0,78 xG), pour 0,5 but attendu.",
+      "reasoning": "La faiblesse offensive de Mallorca à l'extérieur soutient le Non, mais Fuentes (3,48 xG) et la défense de Girona qui encaisse 1,17 par match à domicile nuancent.",
+      "probability": 74
+     },
+     {
+      "market": "Résultat + Total buts",
+      "pick": "Girona & Moins de 3.5 buts",
+      "verdict": "nuance",
+      "confidence": "faible",
+      "explanation": "41 % : c'est à peu près la victoire de Girona (46 %) presque assortie du moins de 3.5, très probable vu 1,54 but attendu.",
+      "reasoning": "Le total est solide, mais le combiné hérite de la fragilité du résultat, et mes combinés ne tiennent pas bien.",
+      "probability": 41
+     },
+     {
+      "market": "Buts — Girona",
+      "pick": "Girona — Moins de 1.5 buts",
+      "verdict": "nuance",
+      "confidence": "faible",
+      "explanation": "72 % : 1,04 but attendu par le moteur, alors que Girona marque 1,83 à domicile et 1,6 sur 10 matchs.",
+      "reasoning": "Les moyennes réelles de Girona sont nettement plus hautes que l'attendu du moteur, face à une défense de Mallorca remaniée ; ce « moins de » est donc plus risqué qu'il n'y paraît.",
+      "probability": 72
+     },
+     {
+      "market": "Buts — Mallorca",
+      "pick": "Mallorca — Moins de 0.5 buts",
+      "verdict": "nuance",
+      "confidence": "faible",
+      "explanation": "61 % : 0,5 but attendu pour Mallorca, qui marque 0,4 par match à l'extérieur avec 0,78 xG.",
+      "reasoning": "Les chiffres extérieurs de Mallorca sont faibles, mais Fuentes est en forme et Girona encaisse 1,17 à domicile ; un seul but suffit à casser ce marché.",
+      "probability": 61
+     },
+     {
+      "market": "Total corners",
+      "pick": "Plus de 5.5 corners",
+      "verdict": "confirme",
+      "confidence": "moyenne",
+      "explanation": "82 % : 8,34 corners attendus, Girona en obtient 4,7 à domicile et Mallorca 4,2 à l'extérieur.",
+      "reasoning": "Le total de corners est le marché où je suis le plus fiable, avec une marge de près de 3 corners sur la ligne.",
+      "probability": 82
+     },
+     {
+      "market": "Corners — Girona",
+      "pick": "Girona — Plus de 2.5 corners",
+      "verdict": "confirme",
+      "confidence": "moyenne",
+      "explanation": "80 % : 4,79 corners attendus pour Girona, 4,7 en moyenne à domicile, contre 3,8 concédés par Mallorca.",
+      "reasoning": "Girona domine le jeu à domicile, avec une marge de plus de 2 corners ; le risque d'un faible volume existe, comme je l'ai déjà vu.",
+      "probability": 80
+     },
+     {
+      "market": "Corners — Mallorca",
+      "pick": "Mallorca — Plus de 1.5 corners",
+      "verdict": "confirme",
+      "confidence": "moyenne",
+      "explanation": "83 % : 3,55 corners attendus pour Mallorca, 4,2 en moyenne à l'extérieur.",
+      "reasoning": "La ligne est basse et Mallorca garde le ballon (61,6 % de possession à l'extérieur), ce qui produit des corners.",
+      "probability": 83
+     },
+     {
+      "market": "Total tirs",
+      "pick": "Plus de 20.5 tirs",
+      "verdict": "confirme",
+      "confidence": "moyenne",
+      "explanation": "83 % : 26,31 tirs attendus, Girona en tire 18,2 à domicile et Mallorca 11 à l'extérieur.",
+      "reasoning": "Le volume de Girona suffit presque à lui seul, avec une marge de 5 tirs sur la ligne.",
+      "probability": 83
+     },
+     {
+      "market": "Tirs — Girona",
+      "pick": "Girona — Moins de 19.5 tirs",
+      "verdict": "nuance",
+      "confidence": "faible",
+      "explanation": "81 % : 15,01 tirs attendus pour Girona, contre 18,2 de moyenne à domicile et 9,5 concédés par Mallorca.",
+      "reasoning": "La moyenne à domicile de Girona (18,2) est proche de la ligne, donc la marge est mince ; je reste prudent sur ce « moins de ».",
+      "probability": 81
+     },
+     {
+      "market": "Tirs — Mallorca",
+      "pick": "Mallorca — Moins de 15.5 tirs",
+      "verdict": "confirme",
+      "confidence": "moyenne",
+      "explanation": "83 % : 11,3 tirs attendus pour Mallorca, qui en tire 11 à l'extérieur et 12,9 sur 10 matchs.",
+      "reasoning": "Mallorca est bien sous la ligne partout dans ses statistiques, avec une marge de plus de 4 tirs.",
+      "probability": 83
+     },
+     {
+      "market": "Total tirs cadrés",
+      "pick": "Plus de 5.5 tirs cadrés",
+      "verdict": "confirme",
+      "confidence": "moyenne",
+      "explanation": "82 % : 8,3 tirs cadrés attendus, Girona en a 5,5 à domicile et Mallorca 3,2 à l'extérieur.",
+      "reasoning": "Le total est cohérent avec les moyennes de Girona et le marché a bien tenu dans mes bilans, avec une marge de près de 3.",
+      "probability": 82
+     },
+     {
+      "market": "Tirs cadrés — Girona",
+      "pick": "Girona — Plus de 2.5 tirs cadrés",
+      "verdict": "confirme",
+      "confidence": "moyenne",
+      "explanation": "81 % : 4,57 tirs cadrés attendus pour Girona, 5,5 en moyenne à domicile.",
+      "reasoning": "Girona dépasse nettement la ligne dans ses moyennes, et son volume de tirs se transforme de façon stable en tirs cadrés.",
+      "probability": 81
+     },
+     {
+      "market": "Tirs cadrés — Mallorca",
+      "pick": "Mallorca — Moins de 5.5 tirs cadrés",
+      "verdict": "confirme",
+      "confidence": "moyenne",
+      "explanation": "81 % : 3,74 tirs cadrés attendus pour Mallorca, qui en cadre 3,2 à l'extérieur.",
+      "reasoning": "Mallorca est loin de la ligne dans ses moyennes à l'extérieur (3,2) comme sur 10 matchs (4,1).",
+      "probability": 81
+     },
+     {
+      "market": "Mi-temps",
+      "pick": "Nul à la pause",
+      "verdict": "nuance",
+      "confidence": "faible",
+      "explanation": "Marché retiré depuis : nul à la pause.",
+      "reasoning": "Ancien marché du moteur.",
+      "probability": 41
+     }
+    ]
+   },
+   "engineSummary": {
+    "label": "Girona vs Mallorca",
+    "expectedGoals": {
+     "home": 1.039,
+     "away": 0.5,
+     "source": "fotmob"
+    },
+    "trueOdds": {
+     "home": 2.17,
+     "draw": 3.17,
+     "away": 4.46
+    },
+    "market": {
+     "odds1": 2.3,
+     "oddsDraw": 3.1,
+     "odds2": 4.2
+    },
+    "edgePercent": 5.98,
+    "staking": {
+     "action": "RECOMMENDED",
+     "stake": 21.5,
+     "outcome": "home",
+     "label": "Girona gagne",
+     "odds": 2.3,
+     "displayedOdds": 2.3,
+     "bookmaker": "williamhill",
+     "bookmakerTitle": "William Hill",
+     "fairOdds": 2.17,
+     "ev": 0.0599,
+     "exclusion": null,
+     "candidates": [
+      {
+       "outcome": "home",
+       "label": "Girona gagne",
+       "odds": 2.3,
+       "displayedOdds": 2.3,
+       "bookmaker": "williamhill",
+       "bookmakerTitle": "William Hill",
+       "fairOdds": 2.17,
+       "ev": 0.0599,
+       "exclusion": null
+      },
+      {
+       "outcome": "draw",
+       "label": "Match nul",
+       "odds": 3.1,
+       "displayedOdds": 3.05,
+       "bookmaker": "unibet_fr",
+       "bookmakerTitle": "Unibet",
+       "fairOdds": 3.17,
+       "ev": -0.0221,
+       "exclusion": "sous_le_seuil"
+      },
+      {
+       "outcome": "away",
+       "label": "Mallorca gagne",
+       "odds": 4.2,
+       "displayedOdds": 4.2,
+       "bookmaker": "betclic",
+       "bookmakerTitle": "Betclic",
+       "fairOdds": 4.46,
+       "ev": -0.0583,
+       "exclusion": "sous_le_seuil"
+      }
+     ],
+     "limits": {
+      "edgeThresholdMin": 0.02,
+      "edgeThresholdMax": 0.25,
+      "maxValueOdds": 5
+     }
+    },
+    "statExpectations": {
+     "corners": {
+      "home": 4.79,
+      "away": 3.55,
+      "total": 8.34
+     },
+     "shots": {
+      "home": 15.01,
+      "away": 11.3,
+      "total": 26.31
+     },
+     "shotsOnTarget": {
+      "home": 4.57,
+      "away": 3.74,
+      "total": 8.3
+     }
+    },
+    "marketPredictions": [
+     {
+      "marketId": "result",
+      "params": {
+       "outcome": "home"
+      },
+      "market": "Résultat",
+      "predictedOutcome": "home",
+      "predictedLabel": "Girona gagne",
+      "predictedOdds": 2.17,
+      "probability": 46,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "totalGoals",
+      "params": {
+       "line": 2.5,
+       "side": "under"
+      },
+      "market": "Total buts",
+      "predictedOutcome": "under",
+      "predictedLabel": "Moins de 2.5 buts",
+      "predictedOdds": 1.25,
+      "probability": 80,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "bothTeamsScore",
+      "params": {
+       "outcome": "no"
+      },
+      "market": "Les 2 équipes marquent",
+      "predictedOutcome": "no",
+      "predictedLabel": "Non",
+      "predictedOdds": 1.36,
+      "probability": 74,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "resultAndTotal",
+      "params": {
+       "line": 3.5,
+       "key": "homeUnder"
+      },
+      "market": "Résultat + Total buts",
+      "predictedOutcome": "homeUnder",
+      "predictedLabel": "Girona & Moins de 3.5 buts",
+      "predictedOdds": 2.41,
+      "probability": 41,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "teamGoals",
+      "params": {
+       "team": "home",
+       "line": 1.5,
+       "side": "under"
+      },
+      "market": "Buts — Girona",
+      "predictedOutcome": "under",
+      "predictedLabel": "Girona — Moins de 1.5 buts",
+      "predictedOdds": 1.39,
+      "probability": 72,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "teamGoals",
+      "params": {
+       "team": "away",
+       "line": 0.5,
+       "side": "under"
+      },
+      "market": "Buts — Mallorca",
+      "predictedOutcome": "under",
+      "predictedLabel": "Mallorca — Moins de 0.5 buts",
+      "predictedOdds": 1.65,
+      "probability": 61,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "totalCorners",
+      "params": {
+       "line": 5.5,
+       "side": "over"
+      },
+      "market": "Total corners",
+      "predictedOutcome": "over",
+      "predictedLabel": "Plus de 5.5 corners",
+      "predictedOdds": 1.22,
+      "probability": 82,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "teamCorners",
+      "params": {
+       "team": "home",
+       "line": 2.5,
+       "side": "over"
+      },
+      "market": "Corners — Girona",
+      "predictedOutcome": "over",
+      "predictedLabel": "Girona — Plus de 2.5 corners",
+      "predictedOdds": 1.25,
+      "probability": 80,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "teamCorners",
+      "params": {
+       "team": "away",
+       "line": 1.5,
+       "side": "over"
+      },
+      "market": "Corners — Mallorca",
+      "predictedOutcome": "over",
+      "predictedLabel": "Mallorca — Plus de 1.5 corners",
+      "predictedOdds": 1.21,
+      "probability": 83,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "totalShots",
+      "params": {
+       "line": 20.5,
+       "side": "over"
+      },
+      "market": "Total tirs",
+      "predictedOutcome": "over",
+      "predictedLabel": "Plus de 20.5 tirs",
+      "predictedOdds": 1.2,
+      "probability": 83,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "teamShots",
+      "params": {
+       "team": "home",
+       "line": 19.5,
+       "side": "under"
+      },
+      "market": "Tirs — Girona",
+      "predictedOutcome": "under",
+      "predictedLabel": "Girona — Moins de 19.5 tirs",
+      "predictedOdds": 1.24,
+      "probability": 81,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "teamShots",
+      "params": {
+       "team": "away",
+       "line": 15.5,
+       "side": "under"
+      },
+      "market": "Tirs — Mallorca",
+      "predictedOutcome": "under",
+      "predictedLabel": "Mallorca — Moins de 15.5 tirs",
+      "predictedOdds": 1.2,
+      "probability": 83,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "totalShotsOnTarget",
+      "params": {
+       "line": 5.5,
+       "side": "over"
+      },
+      "market": "Total tirs cadrés",
+      "predictedOutcome": "over",
+      "predictedLabel": "Plus de 5.5 tirs cadrés",
+      "predictedOdds": 1.22,
+      "probability": 82,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "teamShotsOnTarget",
+      "params": {
+       "team": "home",
+       "line": 2.5,
+       "side": "over"
+      },
+      "market": "Tirs cadrés — Girona",
+      "predictedOutcome": "over",
+      "predictedLabel": "Girona — Plus de 2.5 tirs cadrés",
+      "predictedOdds": 1.24,
+      "probability": 81,
+      "minOdds": 1.2
+     },
+     {
+      "marketId": "teamShotsOnTarget",
+      "params": {
+       "team": "away",
+       "line": 5.5,
+       "side": "under"
+      },
+      "market": "Tirs cadrés — Mallorca",
+      "predictedOutcome": "under",
+      "predictedLabel": "Mallorca — Moins de 5.5 tirs cadrés",
+      "predictedOdds": 1.23,
+      "probability": 81,
+      "minOdds": 1.2
+     }
+    ]
+   },
+   "result": {
+    "homeGoals": 2,
+    "awayGoals": 1
+   },
+   "marketOutcomes": [
+    {
+     "market": "Résultat",
+     "marketId": "result",
+     "pick": "Girona gagne",
+     "minOdds": 1.2,
+     "outcome": "faux",
+     "aiVerdict": "confirme",
+     "aiConfidence": "faible",
+     "aiWasRight": false
+    },
+    {
+     "market": "Total buts",
+     "marketId": "totalGoals",
+     "pick": "Moins de 2.5 buts",
+     "minOdds": 1.2,
+     "outcome": "juste",
+     "aiVerdict": "confirme",
+     "aiConfidence": "moyenne",
+     "aiWasRight": true
+    },
+    {
+     "market": "Les 2 équipes marquent",
+     "marketId": "bothTeamsScore",
+     "pick": "Non",
+     "minOdds": 1.2,
+     "outcome": "juste",
+     "aiVerdict": "nuance",
+     "aiConfidence": "faible",
+     "aiWasRight": null
+    },
+    {
+     "market": "Résultat + Total buts",
+     "marketId": "resultAndTotal",
+     "pick": "Girona & Moins de 3.5 buts",
+     "minOdds": 1.2,
+     "outcome": "faux",
+     "aiVerdict": "nuance",
+     "aiConfidence": "faible",
+     "aiWasRight": null
+    },
+    {
+     "market": "Buts — Girona",
+     "marketId": "teamGoals",
+     "pick": "Girona — Moins de 1.5 buts",
+     "minOdds": 1.2,
+     "outcome": "juste",
+     "aiVerdict": "nuance",
+     "aiConfidence": "faible",
+     "aiWasRight": null
+    },
+    {
+     "market": "Buts — Mallorca",
+     "marketId": "teamGoals",
+     "pick": "Mallorca — Moins de 0.5 buts",
+     "minOdds": 1.2,
+     "outcome": "juste",
+     "aiVerdict": "nuance",
+     "aiConfidence": "faible",
+     "aiWasRight": null
+    },
+    {
+     "market": "Total corners",
+     "marketId": "totalCorners",
+     "pick": "Plus de 5.5 corners",
+     "minOdds": 1.2,
+     "outcome": "juste",
+     "aiVerdict": "confirme",
+     "aiConfidence": "moyenne",
+     "aiWasRight": true
+    },
+    {
+     "market": "Corners — Girona",
+     "marketId": "teamCorners",
+     "pick": "Girona — Plus de 2.5 corners",
+     "minOdds": 1.2,
+     "outcome": "juste",
+     "aiVerdict": "confirme",
+     "aiConfidence": "moyenne",
+     "aiWasRight": true
+    },
+    {
+     "market": "Corners — Mallorca",
+     "marketId": "teamCorners",
+     "pick": "Mallorca — Plus de 1.5 corners",
+     "minOdds": 1.2,
+     "outcome": "juste",
+     "aiVerdict": "confirme",
+     "aiConfidence": "moyenne",
+     "aiWasRight": true
+    },
+    {
+     "market": "Total tirs",
+     "marketId": "totalShots",
+     "pick": "Plus de 20.5 tirs",
+     "minOdds": 1.2,
+     "outcome": "juste",
+     "aiVerdict": "confirme",
+     "aiConfidence": "moyenne",
+     "aiWasRight": true
+    },
+    {
+     "market": "Tirs — Girona",
+     "marketId": "teamShots",
+     "pick": "Girona — Moins de 19.5 tirs",
+     "minOdds": 1.2,
+     "outcome": "juste",
+     "aiVerdict": "nuance",
+     "aiConfidence": "faible",
+     "aiWasRight": null
+    },
+    {
+     "market": "Tirs — Mallorca",
+     "marketId": "teamShots",
+     "pick": "Mallorca — Moins de 15.5 tirs",
+     "minOdds": 1.2,
+     "outcome": "juste",
+     "aiVerdict": "confirme",
+     "aiConfidence": "moyenne",
+     "aiWasRight": true
+    },
+    {
+     "market": "Total tirs cadrés",
+     "marketId": "totalShotsOnTarget",
+     "pick": "Plus de 5.5 tirs cadrés",
+     "minOdds": 1.2,
+     "outcome": "faux",
+     "aiVerdict": "confirme",
+     "aiConfidence": "moyenne",
+     "aiWasRight": false
+    },
+    {
+     "market": "Tirs cadrés — Girona",
+     "marketId": "teamShotsOnTarget",
+     "pick": "Girona — Plus de 2.5 tirs cadrés",
+     "minOdds": 1.2,
+     "outcome": "juste",
+     "aiVerdict": "confirme",
+     "aiConfidence": "moyenne",
+     "aiWasRight": true
+    },
+    {
+     "market": "Tirs cadrés — Mallorca",
+     "marketId": "teamShotsOnTarget",
+     "pick": "Mallorca — Moins de 5.5 tirs cadrés",
+     "minOdds": 1.2,
+     "outcome": "juste",
+     "aiVerdict": "confirme",
+     "aiConfidence": "moyenne",
+     "aiWasRight": true
+    }
+   ],
+   "matchStats": {
+    "score": {
+     "home": 2,
+     "away": 1
+    },
+    "goals": [
+     {
+      "minute": 12,
+      "side": "home",
+      "player": "Abel Ruiz",
+      "ownGoal": false,
+      "penalty": true
+     },
+     {
+      "minute": 55,
+      "side": "away",
+      "player": "Antonio Raíllo",
+      "ownGoal": true,
+      "penalty": false
+     },
+     {
+      "minute": 88,
+      "side": "away",
+      "player": "Adrián Fuentes",
+      "ownGoal": false,
+      "penalty": false
+     }
+    ],
+    "redCards": [
+     {
+      "minute": 71,
+      "side": "away",
+      "player": "Pablo Torre"
+     }
+    ],
+    "stats": {
+     "home": {
+      "expected_goals": 1.13,
+      "Total Shots": 16,
+      "Shots on Goal": 5,
+      "big_chances": 1,
+      "Ball Possession": "55%",
+      "Corner Kicks": 5,
+      "Yellow Cards": 1,
+      "Red Cards": 0
+     },
+     "away": {
+      "expected_goals": 0.26,
+      "Total Shots": 9,
+      "Shots on Goal": 0,
+      "big_chances": 0,
+      "Ball Possession": "45%",
+      "Corner Kicks": 7,
+      "Yellow Cards": 4,
+      "Red Cards": 1
+     }
+    }
+   }
+  },
+  "ancienneForme": {
+   "system": "Tu as déjà analysé qualitativement, AVANT qu'il ne se joue, le match Girona vs Mallorca (La Liga 2 - Spain) — le voici maintenant terminé, avec un résultat réel connu. Confronte spécifiquement ta lecture d'avant-match au résultat réel : qu'avais-tu bien anticipé, qu'as-tu manqué ou mal évalué ? Le résultat va-t-il dans le sens du chiffrage du moteur (edge/probabilités) ou le contredit-il ? MARCHÉ PAR MARCHÉ : `marketOutcomes` donne, pour chaque marché joué, le pronostic du moteur (`pick`), son issue réelle (`outcome` : juste ou faux), ton avis d'avant-match (`aiVerdict`, `aiConfidence`) et s'il a tenu (`aiWasRight` : confirmer un pronostic juste ou contredire un pronostic faux, c'est avoir eu raison ; null pour un avis nuancé ou absent). Pour CHACUN, dans `marketReviews`, explique l'issue avec les faits du match (`matchStats` : buts et leurs minutes, xG, tirs, possession…) et tire la leçon : la correction à retenir si tu t'es trompé, ce qui mérite d'être gardé si tu avais raison. Ces leçons te seront redonnées avant les prochains matchs : écris-les pour qu'elles servent, propres à chaque marché, jamais une phrase générale recopiée. Rôle strictement consultatif comme avant le match : ne propose JAMAIS de nouvelle cote, probabilité ou mise — cette confrontation est un exercice d'auto-évaluation qualitative, pas un nouveau pronostic. N'invente aucune donnée non fournie ci-dessous ; signale plutôt une limite dans `caveats`. Réponds exclusivement via l'outil submit_post_match_review.",
+   "user": "Ton analyse pré-match pour ce match :\n{\"summary\":\"Girona (5e, 13 pts) reçoit Mallorca (6e, 13 pts) en Liga 2. Girona est en bonne forme offensive (1,83 but par match à domicile, 3 victoires sur ses 4 derniers matchs, 2-0 contre Albacete). Mallorca défend bien (0,8 but encaissé par match sur 10 matchs) mais marque très peu à l'extérieur (0,4 par match, VNDDD) et sort d'une défaite 0-1 contre Almería. Les deux ont un nouvel entraîneur depuis mai. Composition de Girona : Beltrán et Bryan Gil sur le banc, Zamorano et Vanat en sélection. Mallorca sans Morlanes (blessé) ni Valjent (sélection). Fuentes (4 buts, 3,48 xG) est la menace principale de Mallorca.\",\"keyFactors\":[{\"factor\":\"forme récente\",\"observation\":\"Girona produit plus et marque plus que Mallorca, surtout à domicile.\",\"evidence\":\"Girona à domicile : 1,83 but marqué, 1,17 encaissé, 18,2 tirs. Mallorca à l'extérieur : 0,4 but marqué, 1,4 encaissé, résultats VNDDD.\"},{\"factor\":\"statistiques et moyennes\",\"observation\":\"Mallorca tire peu à l'extérieur et possède le ballon sans le convertir.\",\"evidence\":\"Mallorca à l'extérieur : 0,78 xG, 11 tirs, 3,2 tirs cadrés, 61,6 % de possession. Girona concède 9,5 tirs à domicile.\"},{\"factor\":\"compositions\",\"observation\":\"Girona aligne Moreno, Gazzaniga et Ruiz. Mallorca est amputé de Morlanes (7 titularisations) et de Valjent, et Fuentes est titulaire.\",\"evidence\":\"Fuentes 4 buts, 3,48 xG en 7 matchs ; Ruiz 2 buts, 0,99 xG ; Sala 1,75 xG.\"},{\"factor\":\"classement\",\"observation\":\"Les deux équipes sont à égalité de points en zone de barrages de promotion.\",\"evidence\":\"Girona 5e, 13 pts, différence de buts +6 ; Mallorca 6e, 13 pts, +5.\"},{\"factor\":\"arbitre\",\"observation\":\"Arbitre légèrement plus sévère que la moyenne en cartons.\",\"evidence\":\"5,39 jaunes par match contre 5,02 en moyenne de championnat.\"}],\"lineupImpact\":\"Composition FotMob relevée 16 minutes avant le coup d'envoi, donc presque officielle. Girona : 4-2-3-1 sans Beltrán (6 titularisations) ni Bryan Gil (5), tous deux remplaçants, et sans Zamorano ni Vanat (sélection) ; Ruiz mène l'attaque (2 buts, 0,99 xG), Carles Pérez (2 buts) en soutien, Gazzaniga dans les buts (note 7,44). Mallorca : 4-4-2 remanié, sans Morlanes (blessé), Valjent (sélection), Calatayud, Lato ni Darder (remplaçants) ; défense peu rodée (Puigmal 0 titularisation, Soumahoro 3). Fuentes (4 buts, 3,48 xG) et Sala (1,75 xG) restent la menace. Défense expérimentée de Mallorca affaiblie, ce qui nuance un peu les marchés « moins de » côté Mallorca.\",\"alignmentWithModel\":\"Le contexte va globalement dans le sens du moteur : Girona est plus offensif à domicile et Mallorca est très pauvre en attaque à l'extérieur. Il nuance toutefois les marchés de buts de Mallorca, car sa défense est remaniée et Fuentes est en forme.\",\"caveats\":\"Pas de cotes de marché fournies. Les échantillons sont réduits (7 matchs de saison, 5 matchs à l'extérieur pour Mallorca). Les deux équipes ont un nouvel entraîneur, ce qui rend l'historique moins fiable. Mon bilan sur ces marchés est modeste : résultat 10/18, les deux équipes marquent 8/15, combinés 5/13.\",\"marketViews\":[{\"market\":\"Résultat\",\"pick\":\"Girona gagne\",\"verdict\":\"confirme\",\"confidence\":\"faible\",\"explanation\":\"46 % : Girona marque 1,83 but à domicile et Mallorca seulement 0,4 à l'extérieur, mais le nul reste fort avec 1,04 contre 0,5 de buts attendus.\",\"reasoning\":\"Le contexte favorise Girona (domicile, attaque, Mallorca remaniée), mais Mallorca a une bonne défense (0,8 but encaissé par match) et un nouvel entraîneur ; confiance prudente comme sur mes favoris légers.\",\"probability\":46},{\"market\":\"Total buts\",\"pick\":\"Moins de 2.5 buts\",\"verdict\":\"confirme\",\"confidence\":\"moyenne\",\"explanation\":\"80 % : environ 1,54 but attendu au total, Mallorca marque 0,4 à l'extérieur et n'encaisse que 0,8 par match sur 10 matchs.\",\"reasoning\":\"Mallorca marque très peu à l'extérieur, ce qui limite le total ; Girona a pourtant marqué 5 et 2 buts récemment, d'où une confiance moyenne.\",\"probability\":80},{\"market\":\"Les 2 équipes marquent\",\"pick\":\"Non\",\"verdict\":\"nuance\",\"confidence\":\"faible\",\"explanation\":\"74 % : Mallorca n'a marqué que 2 buts en 5 sorties (0,4 par match, 0,78 xG), pour 0,5 but attendu.\",\"reasoning\":\"La faiblesse offensive de Mallorca à l'extérieur soutient le Non, mais Fuentes (3,48 xG) et la défense de Girona qui encaisse 1,17 par match à domicile nuancent.\",\"probability\":74},{\"market\":\"Résultat + Total buts\",\"pick\":\"Girona & Moins de 3.5 buts\",\"verdict\":\"nuance\",\"confidence\":\"faible\",\"explanation\":\"41 % : c'est à peu près la victoire de Girona (46 %) presque assortie du moins de 3.5, très probable vu 1,54 but attendu.\",\"reasoning\":\"Le total est solide, mais le combiné hérite de la fragilité du résultat, et mes combinés ne tiennent pas bien.\",\"probability\":41},{\"market\":\"Buts — Girona\",\"pick\":\"Girona — Moins de 1.5 buts\",\"verdict\":\"nuance\",\"confidence\":\"faible\",\"explanation\":\"72 % : 1,04 but attendu par le moteur, alors que Girona marque 1,83 à domicile et 1,6 sur 10 matchs.\",\"reasoning\":\"Les moyennes réelles de Girona sont nettement plus hautes que l'attendu du moteur, face à une défense de Mallorca remaniée ; ce « moins de » est donc plus risqué qu'il n'y paraît.\",\"probability\":72},{\"market\":\"Buts — Mallorca\",\"pick\":\"Mallorca — Moins de 0.5 buts\",\"verdict\":\"nuance\",\"confidence\":\"faible\",\"explanation\":\"61 % : 0,5 but attendu pour Mallorca, qui marque 0,4 par match à l'extérieur avec 0,78 xG.\",\"reasoning\":\"Les chiffres extérieurs de Mallorca sont faibles, mais Fuentes est en forme et Girona encaisse 1,17 à domicile ; un seul but suffit à casser ce marché.\",\"probability\":61},{\"market\":\"Total corners\",\"pick\":\"Plus de 5.5 corners\",\"verdict\":\"confirme\",\"confidence\":\"moyenne\",\"explanation\":\"82 % : 8,34 corners attendus, Girona en obtient 4,7 à domicile et Mallorca 4,2 à l'extérieur.\",\"reasoning\":\"Le total de corners est le marché où je suis le plus fiable, avec une marge de près de 3 corners sur la ligne.\",\"probability\":82},{\"market\":\"Corners — Girona\",\"pick\":\"Girona — Plus de 2.5 corners\",\"verdict\":\"confirme\",\"confidence\":\"moyenne\",\"explanation\":\"80 % : 4,79 corners attendus pour Girona, 4,7 en moyenne à domicile, contre 3,8 concédés par Mallorca.\",\"reasoning\":\"Girona domine le jeu à domicile, avec une marge de plus de 2 corners ; le risque d'un faible volume existe, comme je l'ai déjà vu.\",\"probability\":80},{\"market\":\"Corners — Mallorca\",\"pick\":\"Mallorca — Plus de 1.5 corners\",\"verdict\":\"confirme\",\"confidence\":\"moyenne\",\"explanation\":\"83 % : 3,55 corners attendus pour Mallorca, 4,2 en moyenne à l'extérieur.\",\"reasoning\":\"La ligne est basse et Mallorca garde le ballon (61,6 % de possession à l'extérieur), ce qui produit des corners.\",\"probability\":83},{\"market\":\"Total tirs\",\"pick\":\"Plus de 20.5 tirs\",\"verdict\":\"confirme\",\"confidence\":\"moyenne\",\"explanation\":\"83 % : 26,31 tirs attendus, Girona en tire 18,2 à domicile et Mallorca 11 à l'extérieur.\",\"reasoning\":\"Le volume de Girona suffit presque à lui seul, avec une marge de 5 tirs sur la ligne.\",\"probability\":83},{\"market\":\"Tirs — Girona\",\"pick\":\"Girona — Moins de 19.5 tirs\",\"verdict\":\"nuance\",\"confidence\":\"faible\",\"explanation\":\"81 % : 15,01 tirs attendus pour Girona, contre 18,2 de moyenne à domicile et 9,5 concédés par Mallorca.\",\"reasoning\":\"La moyenne à domicile de Girona (18,2) est proche de la ligne, donc la marge est mince ; je reste prudent sur ce « moins de ».\",\"probability\":81},{\"market\":\"Tirs — Mallorca\",\"pick\":\"Mallorca — Moins de 15.5 tirs\",\"verdict\":\"confirme\",\"confidence\":\"moyenne\",\"explanation\":\"83 % : 11,3 tirs attendus pour Mallorca, qui en tire 11 à l'extérieur et 12,9 sur 10 matchs.\",\"reasoning\":\"Mallorca est bien sous la ligne partout dans ses statistiques, avec une marge de plus de 4 tirs.\",\"probability\":83},{\"market\":\"Total tirs cadrés\",\"pick\":\"Plus de 5.5 tirs cadrés\",\"verdict\":\"confirme\",\"confidence\":\"moyenne\",\"explanation\":\"82 % : 8,3 tirs cadrés attendus, Girona en a 5,5 à domicile et Mallorca 3,2 à l'extérieur.\",\"reasoning\":\"Le total est cohérent avec les moyennes de Girona et le marché a bien tenu dans mes bilans, avec une marge de près de 3.\",\"probability\":82},{\"market\":\"Tirs cadrés — Girona\",\"pick\":\"Girona — Plus de 2.5 tirs cadrés\",\"verdict\":\"confirme\",\"confidence\":\"moyenne\",\"explanation\":\"81 % : 4,57 tirs cadrés attendus pour Girona, 5,5 en moyenne à domicile.\",\"reasoning\":\"Girona dépasse nettement la ligne dans ses moyennes, et son volume de tirs se transforme de façon stable en tirs cadrés.\",\"probability\":81},{\"market\":\"Tirs cadrés — Mallorca\",\"pick\":\"Mallorca — Moins de 5.5 tirs cadrés\",\"verdict\":\"confirme\",\"confidence\":\"moyenne\",\"explanation\":\"81 % : 3,74 tirs cadrés attendus pour Mallorca, qui en cadre 3,2 à l'extérieur.\",\"reasoning\":\"Mallorca est loin de la ligne dans ses moyennes à l'extérieur (3,2) comme sur 10 matchs (4,1).\",\"probability\":81},{\"market\":\"Mi-temps\",\"pick\":\"Nul à la pause\",\"verdict\":\"nuance\",\"confidence\":\"faible\",\"explanation\":\"Marché retiré depuis : nul à la pause.\",\"reasoning\":\"Ancien marché du moteur.\",\"probability\":41}]}\n\nPrédiction chiffrée du moteur à ce moment-là :\n{\"label\":\"Girona vs Mallorca\",\"expectedGoals\":{\"home\":1.039,\"away\":0.5,\"source\":\"fotmob\"},\"trueOdds\":{\"home\":2.17,\"draw\":3.17,\"away\":4.46},\"market\":{\"odds1\":2.3,\"oddsDraw\":3.1,\"odds2\":4.2},\"edgePercent\":5.98,\"staking\":{\"action\":\"RECOMMENDED\",\"stake\":21.5,\"outcome\":\"home\",\"label\":\"Girona gagne\",\"odds\":2.3,\"displayedOdds\":2.3,\"bookmaker\":\"williamhill\",\"bookmakerTitle\":\"William Hill\",\"fairOdds\":2.17,\"ev\":0.0599,\"exclusion\":null,\"candidates\":[{\"outcome\":\"home\",\"label\":\"Girona gagne\",\"odds\":2.3,\"displayedOdds\":2.3,\"bookmaker\":\"williamhill\",\"bookmakerTitle\":\"William Hill\",\"fairOdds\":2.17,\"ev\":0.0599,\"exclusion\":null},{\"outcome\":\"draw\",\"label\":\"Match nul\",\"odds\":3.1,\"displayedOdds\":3.05,\"bookmaker\":\"unibet_fr\",\"bookmakerTitle\":\"Unibet\",\"fairOdds\":3.17,\"ev\":-0.0221,\"exclusion\":\"sous_le_seuil\"},{\"outcome\":\"away\",\"label\":\"Mallorca gagne\",\"odds\":4.2,\"displayedOdds\":4.2,\"bookmaker\":\"betclic\",\"bookmakerTitle\":\"Betclic\",\"fairOdds\":4.46,\"ev\":-0.0583,\"exclusion\":\"sous_le_seuil\"}],\"limits\":{\"edgeThresholdMin\":0.02,\"edgeThresholdMax\":0.25,\"maxValueOdds\":5}},\"statExpectations\":{\"corners\":{\"home\":4.79,\"away\":3.55,\"total\":8.34},\"shots\":{\"home\":15.01,\"away\":11.3,\"total\":26.31},\"shotsOnTarget\":{\"home\":4.57,\"away\":3.74,\"total\":8.3}},\"marketPredictions\":[{\"marketId\":\"result\",\"params\":{\"outcome\":\"home\"},\"market\":\"Résultat\",\"predictedOutcome\":\"home\",\"predictedLabel\":\"Girona gagne\",\"predictedOdds\":2.17,\"probability\":46,\"minOdds\":1.2},{\"marketId\":\"totalGoals\",\"params\":{\"line\":2.5,\"side\":\"under\"},\"market\":\"Total buts\",\"predictedOutcome\":\"under\",\"predictedLabel\":\"Moins de 2.5 buts\",\"predictedOdds\":1.25,\"probability\":80,\"minOdds\":1.2},{\"marketId\":\"bothTeamsScore\",\"params\":{\"outcome\":\"no\"},\"market\":\"Les 2 équipes marquent\",\"predictedOutcome\":\"no\",\"predictedLabel\":\"Non\",\"predictedOdds\":1.36,\"probability\":74,\"minOdds\":1.2},{\"marketId\":\"resultAndTotal\",\"params\":{\"line\":3.5,\"key\":\"homeUnder\"},\"market\":\"Résultat + Total buts\",\"predictedOutcome\":\"homeUnder\",\"predictedLabel\":\"Girona & Moins de 3.5 buts\",\"predictedOdds\":2.41,\"probability\":41,\"minOdds\":1.2},{\"marketId\":\"teamGoals\",\"params\":{\"team\":\"home\",\"line\":1.5,\"side\":\"under\"},\"market\":\"Buts — Girona\",\"predictedOutcome\":\"under\",\"predictedLabel\":\"Girona — Moins de 1.5 buts\",\"predictedOdds\":1.39,\"probability\":72,\"minOdds\":1.2},{\"marketId\":\"teamGoals\",\"params\":{\"team\":\"away\",\"line\":0.5,\"side\":\"under\"},\"market\":\"Buts — Mallorca\",\"predictedOutcome\":\"under\",\"predictedLabel\":\"Mallorca — Moins de 0.5 buts\",\"predictedOdds\":1.65,\"probability\":61,\"minOdds\":1.2},{\"marketId\":\"totalCorners\",\"params\":{\"line\":5.5,\"side\":\"over\"},\"market\":\"Total corners\",\"predictedOutcome\":\"over\",\"predictedLabel\":\"Plus de 5.5 corners\",\"predictedOdds\":1.22,\"probability\":82,\"minOdds\":1.2},{\"marketId\":\"teamCorners\",\"params\":{\"team\":\"home\",\"line\":2.5,\"side\":\"over\"},\"market\":\"Corners — Girona\",\"predictedOutcome\":\"over\",\"predictedLabel\":\"Girona — Plus de 2.5 corners\",\"predictedOdds\":1.25,\"probability\":80,\"minOdds\":1.2},{\"marketId\":\"teamCorners\",\"params\":{\"team\":\"away\",\"line\":1.5,\"side\":\"over\"},\"market\":\"Corners — Mallorca\",\"predictedOutcome\":\"over\",\"predictedLabel\":\"Mallorca — Plus de 1.5 corners\",\"predictedOdds\":1.21,\"probability\":83,\"minOdds\":1.2},{\"marketId\":\"totalShots\",\"params\":{\"line\":20.5,\"side\":\"over\"},\"market\":\"Total tirs\",\"predictedOutcome\":\"over\",\"predictedLabel\":\"Plus de 20.5 tirs\",\"predictedOdds\":1.2,\"probability\":83,\"minOdds\":1.2},{\"marketId\":\"teamShots\",\"params\":{\"team\":\"home\",\"line\":19.5,\"side\":\"under\"},\"market\":\"Tirs — Girona\",\"predictedOutcome\":\"under\",\"predictedLabel\":\"Girona — Moins de 19.5 tirs\",\"predictedOdds\":1.24,\"probability\":81,\"minOdds\":1.2},{\"marketId\":\"teamShots\",\"params\":{\"team\":\"away\",\"line\":15.5,\"side\":\"under\"},\"market\":\"Tirs — Mallorca\",\"predictedOutcome\":\"under\",\"predictedLabel\":\"Mallorca — Moins de 15.5 tirs\",\"predictedOdds\":1.2,\"probability\":83,\"minOdds\":1.2},{\"marketId\":\"totalShotsOnTarget\",\"params\":{\"line\":5.5,\"side\":\"over\"},\"market\":\"Total tirs cadrés\",\"predictedOutcome\":\"over\",\"predictedLabel\":\"Plus de 5.5 tirs cadrés\",\"predictedOdds\":1.22,\"probability\":82,\"minOdds\":1.2},{\"marketId\":\"teamShotsOnTarget\",\"params\":{\"team\":\"home\",\"line\":2.5,\"side\":\"over\"},\"market\":\"Tirs cadrés — Girona\",\"predictedOutcome\":\"over\",\"predictedLabel\":\"Girona — Plus de 2.5 tirs cadrés\",\"predictedOdds\":1.24,\"probability\":81,\"minOdds\":1.2},{\"marketId\":\"teamShotsOnTarget\",\"params\":{\"team\":\"away\",\"line\":5.5,\"side\":\"under\"},\"market\":\"Tirs cadrés — Mallorca\",\"predictedOutcome\":\"under\",\"predictedLabel\":\"Mallorca — Moins de 5.5 tirs cadrés\",\"predictedOdds\":1.23,\"probability\":81,\"minOdds\":1.2}]}\n\nRésultat réel :\n{\"homeGoals\":2,\"awayGoals\":1}\n\nMarchés joués et leur issue :\n[{\"market\":\"Résultat\",\"marketId\":\"result\",\"pick\":\"Girona gagne\",\"minOdds\":1.2,\"outcome\":\"faux\",\"aiVerdict\":\"confirme\",\"aiConfidence\":\"faible\",\"aiWasRight\":false},{\"market\":\"Total buts\",\"marketId\":\"totalGoals\",\"pick\":\"Moins de 2.5 buts\",\"minOdds\":1.2,\"outcome\":\"juste\",\"aiVerdict\":\"confirme\",\"aiConfidence\":\"moyenne\",\"aiWasRight\":true},{\"market\":\"Les 2 équipes marquent\",\"marketId\":\"bothTeamsScore\",\"pick\":\"Non\",\"minOdds\":1.2,\"outcome\":\"juste\",\"aiVerdict\":\"nuance\",\"aiConfidence\":\"faible\",\"aiWasRight\":null},{\"market\":\"Résultat + Total buts\",\"marketId\":\"resultAndTotal\",\"pick\":\"Girona & Moins de 3.5 buts\",\"minOdds\":1.2,\"outcome\":\"faux\",\"aiVerdict\":\"nuance\",\"aiConfidence\":\"faible\",\"aiWasRight\":null},{\"market\":\"Buts — Girona\",\"marketId\":\"teamGoals\",\"pick\":\"Girona — Moins de 1.5 buts\",\"minOdds\":1.2,\"outcome\":\"juste\",\"aiVerdict\":\"nuance\",\"aiConfidence\":\"faible\",\"aiWasRight\":null},{\"market\":\"Buts — Mallorca\",\"marketId\":\"teamGoals\",\"pick\":\"Mallorca — Moins de 0.5 buts\",\"minOdds\":1.2,\"outcome\":\"juste\",\"aiVerdict\":\"nuance\",\"aiConfidence\":\"faible\",\"aiWasRight\":null},{\"market\":\"Total corners\",\"marketId\":\"totalCorners\",\"pick\":\"Plus de 5.5 corners\",\"minOdds\":1.2,\"outcome\":\"juste\",\"aiVerdict\":\"confirme\",\"aiConfidence\":\"moyenne\",\"aiWasRight\":true},{\"market\":\"Corners — Girona\",\"marketId\":\"teamCorners\",\"pick\":\"Girona — Plus de 2.5 corners\",\"minOdds\":1.2,\"outcome\":\"juste\",\"aiVerdict\":\"confirme\",\"aiConfidence\":\"moyenne\",\"aiWasRight\":true},{\"market\":\"Corners — Mallorca\",\"marketId\":\"teamCorners\",\"pick\":\"Mallorca — Plus de 1.5 corners\",\"minOdds\":1.2,\"outcome\":\"juste\",\"aiVerdict\":\"confirme\",\"aiConfidence\":\"moyenne\",\"aiWasRight\":true},{\"market\":\"Total tirs\",\"marketId\":\"totalShots\",\"pick\":\"Plus de 20.5 tirs\",\"minOdds\":1.2,\"outcome\":\"juste\",\"aiVerdict\":\"confirme\",\"aiConfidence\":\"moyenne\",\"aiWasRight\":true},{\"market\":\"Tirs — Girona\",\"marketId\":\"teamShots\",\"pick\":\"Girona — Moins de 19.5 tirs\",\"minOdds\":1.2,\"outcome\":\"juste\",\"aiVerdict\":\"nuance\",\"aiConfidence\":\"faible\",\"aiWasRight\":null},{\"market\":\"Tirs — Mallorca\",\"marketId\":\"teamShots\",\"pick\":\"Mallorca — Moins de 15.5 tirs\",\"minOdds\":1.2,\"outcome\":\"juste\",\"aiVerdict\":\"confirme\",\"aiConfidence\":\"moyenne\",\"aiWasRight\":true},{\"market\":\"Total tirs cadrés\",\"marketId\":\"totalShotsOnTarget\",\"pick\":\"Plus de 5.5 tirs cadrés\",\"minOdds\":1.2,\"outcome\":\"faux\",\"aiVerdict\":\"confirme\",\"aiConfidence\":\"moyenne\",\"aiWasRight\":false},{\"market\":\"Tirs cadrés — Girona\",\"marketId\":\"teamShotsOnTarget\",\"pick\":\"Girona — Plus de 2.5 tirs cadrés\",\"minOdds\":1.2,\"outcome\":\"juste\",\"aiVerdict\":\"confirme\",\"aiConfidence\":\"moyenne\",\"aiWasRight\":true},{\"market\":\"Tirs cadrés — Mallorca\",\"marketId\":\"teamShotsOnTarget\",\"pick\":\"Mallorca — Moins de 5.5 tirs cadrés\",\"minOdds\":1.2,\"outcome\":\"juste\",\"aiVerdict\":\"confirme\",\"aiConfidence\":\"moyenne\",\"aiWasRight\":true}]\n\nDéroulé et statistiques du match :\n{\"score\":{\"home\":2,\"away\":1},\"goals\":[{\"minute\":12,\"side\":\"home\",\"player\":\"Abel Ruiz\",\"ownGoal\":false,\"penalty\":true},{\"minute\":55,\"side\":\"away\",\"player\":\"Antonio Raíllo\",\"ownGoal\":true,\"penalty\":false},{\"minute\":88,\"side\":\"away\",\"player\":\"Adrián Fuentes\",\"ownGoal\":false,\"penalty\":false}],\"redCards\":[{\"minute\":71,\"side\":\"away\",\"player\":\"Pablo Torre\"}],\"stats\":{\"home\":{\"expected_goals\":1.13,\"Total Shots\":16,\"Shots on Goal\":5,\"big_chances\":1,\"Ball Possession\":\"55%\",\"Corner Kicks\":5,\"Yellow Cards\":1,\"Red Cards\":0},\"away\":{\"expected_goals\":0.26,\"Total Shots\":9,\"Shots on Goal\":0,\"big_chances\":0,\"Ball Possession\":\"45%\",\"Corner Kicks\":7,\"Yellow Cards\":4,\"Red Cards\":1}}}"
+  }
+ }
+}

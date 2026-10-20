@@ -1,0 +1,3390 @@
+{
+ "version": 1,
+ "fabriqueLe": "2026-10-05T19:09:18.800Z",
+ "source": "copie du bac à sable (base\\match-stats.db)",
+ "criteres": {
+  "jusquAu": "2026-09-21",
+  "choix": [
+   {
+    "league": "EPL",
+    "n": 20,
+    "joueurs": true,
+    "pourquoi": "xG, cotes moyennes de clôture (football-data), Leeds United"
+   },
+   {
+    "league": "Championship",
+    "n": 12,
+    "pourquoi": "Portsmouth"
+   },
+   {
+    "league": "League 2",
+    "n": 8,
+    "pourquoi": "Port Vale"
+   },
+   {
+    "league": "Primeira Liga - Portugal",
+    "n": 18,
+    "pourquoi": "Nacional (Portugal), FC Porto"
+   },
+   {
+    "league": "División Profesional - Paraguay",
+    "n": 12,
+    "joueurs": true,
+    "pourquoi": "sans xG ; Nacional et Libertad (Paraguay)"
+   },
+   {
+    "league": "MLS",
+    "n": 18,
+    "pourquoi": "DC United, Inter Miami"
+   },
+   {
+    "league": "Serie A - Ecuador",
+    "n": 12,
+    "pourquoi": "sans xG ; Libertad et Universidad Católica (Équateur)"
+   },
+   {
+    "league": "Super League - China",
+    "n": 10,
+    "pourquoi": "sans xG ; Shanghai Port"
+   },
+   {
+    "league": "Serie A - Italy",
+    "n": 10,
+    "pourquoi": "Inter"
+   },
+   {
+    "league": "Premier League - Russia",
+    "n": 16,
+    "pourquoi": "xG mais presque pas de cote passée"
+   },
+   {
+    "league": "EFL Cup",
+    "n": 18,
+    "joueurs": true,
+    "pourquoi": "coupe : avec et sans cote, tirs au but"
+   },
+   {
+    "league": "DFB Pokal - Germany",
+    "n": 8,
+    "pourquoi": "coupe : prolongations"
+   },
+   {
+    "league": "Primera División - Chile",
+    "n": 8,
+    "pourquoi": "sans xG ; Universidad Católica (Chili)"
+   },
+   {
+    "league": "Virsliga - Latvia",
+    "n": 8,
+    "joueurs": true,
+    "pourquoi": "couverture réduite (« lower »)"
+   }
+  ],
+  "coupesProlongations": [
+   "EFL Cup",
+   "DFB Pokal - Germany"
+  ],
+  "fenetreProlongationsJours": 60,
+  "clubsPieges": {
+   "fotmob-8463": "Leeds United",
+   "fotmob-6602": "DC United",
+   "fotmob-10214": "Nacional (Portugal)",
+   "fotmob-49689": "Nacional (Paraguay)",
+   "fotmob-9799": "Port Vale",
+   "fotmob-8462": "Portsmouth",
+   "fotmob-9773": "FC Porto",
+   "fotmob-198616": "Shanghai Port",
+   "fotmob-6620": "Libertad (Paraguay)",
+   "fotmob-1345405": "Libertad (Équateur)",
+   "fotmob-113053": "Universidad Católica (Équateur)",
+   "fotmob-6458": "Universidad Católica (Chili)",
+   "fotmob-8636": "Inter",
+   "fotmob-960720": "Inter Miami CF"
+  },
+  "historiqueParEquipe": 12,
+  "fenetreLigueJours": 75,
+  "tables": [
+   "matches",
+   "team_stats",
+   "players",
+   "match_odds",
+   "teams",
+   "team_aliases",
+   "team_source_names",
+   "people",
+   "people_aliases",
+   "standings_official"
+  ]
+ },
+ "comptes": {
+  "cibles": 201,
+  "historique": 1955,
+  "team_stats": 4112,
+  "players": 2371,
+  "match_odds": 1921,
+  "teams": 444,
+  "team_aliases": 651,
+  "team_source_names": 444,
+  "people": 1295,
+  "people_aliases": 1692,
+  "standings_official": 18,
+  "rencontres": 2156,
+  "indexRetires": 24
+ },
+ "variete": {
+  "competitions": 15,
+  "avecXg": 149,
+  "sansXg": 52,
+  "avecCotes": 168,
+  "sansCotes": 33,
+  "avecJoueurs": 58,
+  "prolongations": 2,
+  "tirsAuBut": 17
+ },
+ "octets": 4370432,
+ "mo": 4.17,
+ "sha1": "85e82c04ee2215efd8c32fae3546d032337c40e8",
+ "dureeMs": 8332,
+ "cibles": [
+  {
+   "cle": "2026-09-12-charlton-portsmouth",
+   "date": "2026-09-12",
+   "league": "Championship",
+   "home": "Charlton",
+   "away": "Portsmouth",
+   "score": "0-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "club piège : Portsmouth"
+   ]
+  },
+  {
+   "cle": "2026-09-18-bristol-city-watford",
+   "date": "2026-09-18",
+   "league": "Championship",
+   "home": "Bristol City",
+   "away": "Watford",
+   "score": "1-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Championship"
+   ]
+  },
+  {
+   "cle": "2026-09-19-birmingham-middlesbrough",
+   "date": "2026-09-19",
+   "league": "Championship",
+   "home": "Birmingham",
+   "away": "Middlesbrough",
+   "score": "2-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Championship"
+   ]
+  },
+  {
+   "cle": "2026-09-19-burnley-derby",
+   "date": "2026-09-19",
+   "league": "Championship",
+   "home": "Burnley",
+   "away": "Derby",
+   "score": "1-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Championship"
+   ]
+  },
+  {
+   "cle": "2026-09-19-cardiff-charlton",
+   "date": "2026-09-19",
+   "league": "Championship",
+   "home": "Cardiff",
+   "away": "Charlton",
+   "score": "3-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Championship"
+   ]
+  },
+  {
+   "cle": "2026-09-19-lincoln-city-swansea",
+   "date": "2026-09-19",
+   "league": "Championship",
+   "home": "Lincoln City",
+   "away": "Swansea",
+   "score": "1-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Championship"
+   ]
+  },
+  {
+   "cle": "2026-09-19-millwall-west-ham",
+   "date": "2026-09-19",
+   "league": "Championship",
+   "home": "Millwall",
+   "away": "West Ham",
+   "score": "2-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Championship"
+   ]
+  },
+  {
+   "cle": "2026-09-19-portsmouth-blackburn",
+   "date": "2026-09-19",
+   "league": "Championship",
+   "home": "Portsmouth",
+   "away": "Blackburn",
+   "score": "2-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Championship",
+    "club piège : Portsmouth"
+   ]
+  },
+  {
+   "cle": "2026-09-19-qpr-preston",
+   "date": "2026-09-19",
+   "league": "Championship",
+   "home": "QPR",
+   "away": "Preston",
+   "score": "2-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Championship"
+   ]
+  },
+  {
+   "cle": "2026-09-19-stoke-sheffield-united",
+   "date": "2026-09-19",
+   "league": "Championship",
+   "home": "Stoke",
+   "away": "Sheffield United",
+   "score": "2-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Championship"
+   ]
+  },
+  {
+   "cle": "2026-09-19-wrexham-southampton",
+   "date": "2026-09-19",
+   "league": "Championship",
+   "home": "Wrexham",
+   "away": "Southampton",
+   "score": "2-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Championship"
+   ]
+  },
+  {
+   "cle": "2026-09-20-norwich-bolton",
+   "date": "2026-09-20",
+   "league": "Championship",
+   "home": "Norwich",
+   "away": "Bolton",
+   "score": "3-4",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Championship"
+   ]
+  },
+  {
+   "cle": "2026-09-20-wolves-west-brom",
+   "date": "2026-09-20",
+   "league": "Championship",
+   "home": "Wolves",
+   "away": "West Brom",
+   "score": "1-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Championship"
+   ]
+  },
+  {
+   "cle": "2026-09-01-shandong-taishan-shanghai-port",
+   "date": "2026-09-01",
+   "league": "Coupe de Chine",
+   "home": "Shandong Taishan",
+   "away": "Shanghai Port",
+   "score": "0-3",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "club piège : Shanghai Port"
+   ]
+  },
+  {
+   "cle": "2026-08-21-waldhof-mannheim-kaiserslautern",
+   "date": "2026-08-21",
+   "league": "DFB Pokal - Germany",
+   "home": "Waldhof Mannheim",
+   "away": "Kaiserslautern",
+   "score": "0-1",
+   "fin": "afterextra",
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "DFB Pokal - Germany : prolongation ou tirs au but"
+   ]
+  },
+  {
+   "cle": "2026-08-22-saarbrucken-hertha-bsc",
+   "date": "2026-08-22",
+   "league": "DFB Pokal - Germany",
+   "home": "Saarbrücken",
+   "away": "Hertha BSC",
+   "score": "1-1",
+   "fin": "afterpenalties",
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "DFB Pokal - Germany : prolongation ou tirs au but"
+   ]
+  },
+  {
+   "cle": "2026-08-22-sonnenhof-gro-aspach-arminia-bielefeld",
+   "date": "2026-08-22",
+   "league": "DFB Pokal - Germany",
+   "home": "Sonnenhof Großaspach",
+   "away": "Arminia Bielefeld",
+   "score": "2-2",
+   "fin": "afterpenalties",
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "DFB Pokal - Germany : prolongation ou tirs au but"
+   ]
+  },
+  {
+   "cle": "2026-08-22-viktoria-koln-1904-1-fc-nurnberg",
+   "date": "2026-08-22",
+   "league": "DFB Pokal - Germany",
+   "home": "Viktoria Köln 1904",
+   "away": "1. FC Nürnberg",
+   "score": "1-1",
+   "fin": "afterpenalties",
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "DFB Pokal - Germany : prolongation ou tirs au but"
+   ]
+  },
+  {
+   "cle": "2026-08-23-vfb-krieschow-mainz-05",
+   "date": "2026-08-23",
+   "league": "DFB Pokal - Germany",
+   "home": "VfB Krieschow",
+   "away": "Mainz 05",
+   "score": "0-9",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "DFB Pokal - Germany"
+   ]
+  },
+  {
+   "cle": "2026-08-23-westfalia-rhynern-dynamo-dresden",
+   "date": "2026-08-23",
+   "league": "DFB Pokal - Germany",
+   "home": "Westfalia Rhynern",
+   "away": "Dynamo Dresden",
+   "score": "0-6",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "DFB Pokal - Germany"
+   ]
+  },
+  {
+   "cle": "2026-08-24-hallescher-fc-schalke-04",
+   "date": "2026-08-24",
+   "league": "DFB Pokal - Germany",
+   "home": "Hallescher FC",
+   "away": "Schalke 04",
+   "score": "2-5",
+   "fin": "afterextra",
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "DFB Pokal - Germany",
+    "DFB Pokal - Germany : prolongation ou tirs au but"
+   ]
+  },
+  {
+   "cle": "2026-08-24-sc-verl-hamburger-sv",
+   "date": "2026-08-24",
+   "league": "DFB Pokal - Germany",
+   "home": "SC Verl",
+   "away": "Hamburger SV",
+   "score": "0-3",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "DFB Pokal - Germany"
+   ]
+  },
+  {
+   "cle": "2026-08-24-vsg-altglienicke-wolfsburg",
+   "date": "2026-08-24",
+   "league": "DFB Pokal - Germany",
+   "home": "VSG Altglienicke",
+   "away": "Wolfsburg",
+   "score": "3-3",
+   "fin": "afterpenalties",
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "DFB Pokal - Germany",
+    "DFB Pokal - Germany : prolongation ou tirs au but"
+   ]
+  },
+  {
+   "cle": "2026-08-24-wurzburger-kickers-1-fc-koln",
+   "date": "2026-08-24",
+   "league": "DFB Pokal - Germany",
+   "home": "Würzburger Kickers",
+   "away": "1. FC Köln",
+   "score": "1-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "DFB Pokal - Germany"
+   ]
+  },
+  {
+   "cle": "2026-09-01-hebc-hamburg-borussia-dortmund",
+   "date": "2026-09-01",
+   "league": "DFB Pokal - Germany",
+   "home": "HEBC Hamburg",
+   "away": "Borussia Dortmund",
+   "score": "0-5",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "DFB Pokal - Germany"
+   ]
+  },
+  {
+   "cle": "2026-09-02-vfl-osnabruck-bayern-munchen",
+   "date": "2026-09-02",
+   "league": "DFB Pokal - Germany",
+   "home": "VfL Osnabrück",
+   "away": "Bayern München",
+   "score": "1-4",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "DFB Pokal - Germany"
+   ]
+  },
+  {
+   "cle": "2026-09-11-2-de-mayo-libertad",
+   "date": "2026-09-11",
+   "league": "División Profesional - Paraguay",
+   "home": "2 de Mayo",
+   "away": "Libertad",
+   "score": "0-2",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 45,
+   "pourquoi": [
+    "División Profesional - Paraguay",
+    "club piège : Libertad (Paraguay)"
+   ]
+  },
+  {
+   "cle": "2026-09-11-sportivo-ameliano-sportivo-san-lorenzo",
+   "date": "2026-09-11",
+   "league": "División Profesional - Paraguay",
+   "home": "Sportivo Ameliano",
+   "away": "Sportivo San Lorenzo",
+   "score": "1-0",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 45,
+   "pourquoi": [
+    "División Profesional - Paraguay"
+   ]
+  },
+  {
+   "cle": "2026-09-12-guarani-cerro-porteno",
+   "date": "2026-09-12",
+   "league": "División Profesional - Paraguay",
+   "home": "Guaraní",
+   "away": "Cerro Porteño",
+   "score": "1-1",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 45,
+   "pourquoi": [
+    "División Profesional - Paraguay"
+   ]
+  },
+  {
+   "cle": "2026-09-12-recoleta-sportivo-trinidense",
+   "date": "2026-09-12",
+   "league": "División Profesional - Paraguay",
+   "home": "Recoleta",
+   "away": "Sportivo Trinidense",
+   "score": "1-3",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 46,
+   "pourquoi": [
+    "División Profesional - Paraguay"
+   ]
+  },
+  {
+   "cle": "2026-09-13-olimpia-luqueno",
+   "date": "2026-09-13",
+   "league": "División Profesional - Paraguay",
+   "home": "Olimpia",
+   "away": "Luqueño",
+   "score": "3-0",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 45,
+   "pourquoi": [
+    "División Profesional - Paraguay"
+   ]
+  },
+  {
+   "cle": "2026-09-13-rubio-nu-nacional",
+   "date": "2026-09-13",
+   "league": "División Profesional - Paraguay",
+   "home": "Rubio Ñú",
+   "away": "Nacional",
+   "score": "0-1",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 46,
+   "pourquoi": [
+    "División Profesional - Paraguay",
+    "club piège : Nacional (Paraguay)"
+   ]
+  },
+  {
+   "cle": "2026-09-18-nacional-2-de-mayo",
+   "date": "2026-09-18",
+   "league": "División Profesional - Paraguay",
+   "home": "Nacional",
+   "away": "2 de Mayo",
+   "score": "3-0",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 45,
+   "pourquoi": [
+    "División Profesional - Paraguay",
+    "club piège : Nacional (Paraguay)"
+   ]
+  },
+  {
+   "cle": "2026-09-18-sportivo-trinidense-guarani",
+   "date": "2026-09-18",
+   "league": "División Profesional - Paraguay",
+   "home": "Sportivo Trinidense",
+   "away": "Guaraní",
+   "score": "0-1",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 45,
+   "pourquoi": [
+    "División Profesional - Paraguay"
+   ]
+  },
+  {
+   "cle": "2026-09-19-cerro-porteno-rubio-nu",
+   "date": "2026-09-19",
+   "league": "División Profesional - Paraguay",
+   "home": "Cerro Porteño",
+   "away": "Rubio Ñú",
+   "score": "1-0",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 46,
+   "pourquoi": [
+    "División Profesional - Paraguay"
+   ]
+  },
+  {
+   "cle": "2026-09-19-libertad-sportivo-ameliano",
+   "date": "2026-09-19",
+   "league": "División Profesional - Paraguay",
+   "home": "Libertad",
+   "away": "Sportivo Ameliano",
+   "score": "1-1",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 46,
+   "pourquoi": [
+    "División Profesional - Paraguay",
+    "club piège : Libertad (Paraguay)"
+   ]
+  },
+  {
+   "cle": "2026-09-20-luqueno-recoleta",
+   "date": "2026-09-20",
+   "league": "División Profesional - Paraguay",
+   "home": "Luqueño",
+   "away": "Recoleta",
+   "score": "1-0",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 45,
+   "pourquoi": [
+    "División Profesional - Paraguay"
+   ]
+  },
+  {
+   "cle": "2026-09-20-sportivo-san-lorenzo-olimpia",
+   "date": "2026-09-20",
+   "league": "División Profesional - Paraguay",
+   "home": "Sportivo San Lorenzo",
+   "away": "Olimpia",
+   "score": "0-3",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 45,
+   "pourquoi": [
+    "División Profesional - Paraguay"
+   ]
+  },
+  {
+   "cle": "2026-08-01-tranmere-rovers-rochdale",
+   "date": "2026-08-01",
+   "league": "EFL Cup",
+   "home": "Tranmere Rovers",
+   "away": "Rochdale",
+   "score": "2-2",
+   "fin": "afterpenalties",
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "EFL Cup : prolongation ou tirs au but"
+   ]
+  },
+  {
+   "cle": "2026-08-08-afc-wimbledon-newport-county",
+   "date": "2026-08-08",
+   "league": "EFL Cup",
+   "home": "AFC Wimbledon",
+   "away": "Newport County",
+   "score": "1-1",
+   "fin": "afterpenalties",
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "EFL Cup : prolongation ou tirs au but"
+   ]
+  },
+  {
+   "cle": "2026-08-08-barnsley-wigan-athletic",
+   "date": "2026-08-08",
+   "league": "EFL Cup",
+   "home": "Barnsley",
+   "away": "Wigan Athletic",
+   "score": "1-1",
+   "fin": "afterpenalties",
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "EFL Cup : prolongation ou tirs au but"
+   ]
+  },
+  {
+   "cle": "2026-08-08-bromley-reading",
+   "date": "2026-08-08",
+   "league": "EFL Cup",
+   "home": "Bromley",
+   "away": "Reading",
+   "score": "1-1",
+   "fin": "afterpenalties",
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "EFL Cup : prolongation ou tirs au but"
+   ]
+  },
+  {
+   "cle": "2026-08-08-burnley-notts-county",
+   "date": "2026-08-08",
+   "league": "EFL Cup",
+   "home": "Burnley",
+   "away": "Notts County",
+   "score": "1-1",
+   "fin": "afterpenalties",
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "EFL Cup : prolongation ou tirs au but"
+   ]
+  },
+  {
+   "cle": "2026-08-08-preston-north-end-huddersfield-town",
+   "date": "2026-08-08",
+   "league": "EFL Cup",
+   "home": "Preston North End",
+   "away": "Huddersfield Town",
+   "score": "1-1",
+   "fin": "afterpenalties",
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "EFL Cup : prolongation ou tirs au but"
+   ]
+  },
+  {
+   "cle": "2026-08-08-queens-park-rangers-millwall",
+   "date": "2026-08-08",
+   "league": "EFL Cup",
+   "home": "Queens Park Rangers",
+   "away": "Millwall",
+   "score": "1-1",
+   "fin": "afterpenalties",
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "EFL Cup : prolongation ou tirs au but"
+   ]
+  },
+  {
+   "cle": "2026-08-08-salford-city-shrewsbury-town",
+   "date": "2026-08-08",
+   "league": "EFL Cup",
+   "home": "Salford City",
+   "away": "Shrewsbury Town",
+   "score": "1-1",
+   "fin": "afterpenalties",
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "EFL Cup : prolongation ou tirs au but"
+   ]
+  },
+  {
+   "cle": "2026-08-08-stockport-county-doncaster-rovers",
+   "date": "2026-08-08",
+   "league": "EFL Cup",
+   "home": "Stockport County",
+   "away": "Doncaster Rovers",
+   "score": "1-1",
+   "fin": "afterpenalties",
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "EFL Cup : prolongation ou tirs au but"
+   ]
+  },
+  {
+   "cle": "2026-08-25-stoke-city-hull-city",
+   "date": "2026-08-25",
+   "league": "EFL Cup",
+   "home": "Stoke City",
+   "away": "Hull City",
+   "score": "1-1",
+   "fin": "afterpenalties",
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "EFL Cup : prolongation ou tirs au but"
+   ]
+  },
+  {
+   "cle": "2026-08-25-walsall-leyton-orient",
+   "date": "2026-08-25",
+   "league": "EFL Cup",
+   "home": "Walsall",
+   "away": "Leyton Orient",
+   "score": "0-0",
+   "fin": "afterpenalties",
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "EFL Cup : prolongation ou tirs au but"
+   ]
+  },
+  {
+   "cle": "2026-08-26-bradford-city-burnley",
+   "date": "2026-08-26",
+   "league": "EFL Cup",
+   "home": "Bradford City",
+   "away": "Burnley",
+   "score": "0-0",
+   "fin": "afterpenalties",
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "EFL Cup : prolongation ou tirs au but"
+   ]
+  },
+  {
+   "cle": "2026-08-27-chelsea-luton-town",
+   "date": "2026-08-27",
+   "league": "EFL Cup",
+   "home": "Chelsea",
+   "away": "Luton Town",
+   "score": "2-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 40,
+   "pourquoi": [
+    "EFL Cup"
+   ]
+  },
+  {
+   "cle": "2026-08-27-fulham-afc-wimbledon",
+   "date": "2026-08-27",
+   "league": "EFL Cup",
+   "home": "Fulham",
+   "away": "AFC Wimbledon",
+   "score": "3-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EFL Cup"
+   ]
+  },
+  {
+   "cle": "2026-09-08-bournemouth-lincoln-city",
+   "date": "2026-09-08",
+   "league": "EFL Cup",
+   "home": "Bournemouth",
+   "away": "Lincoln City",
+   "score": "4-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 40,
+   "pourquoi": [
+    "EFL Cup"
+   ]
+  },
+  {
+   "cle": "2026-09-08-crystal-palace-middlesbrough",
+   "date": "2026-09-08",
+   "league": "EFL Cup",
+   "home": "Crystal Palace",
+   "away": "Middlesbrough",
+   "score": "3-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EFL Cup"
+   ]
+  },
+  {
+   "cle": "2026-09-08-leyton-orient-bradford-city",
+   "date": "2026-09-08",
+   "league": "EFL Cup",
+   "home": "Leyton Orient",
+   "away": "Bradford City",
+   "score": "1-3",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EFL Cup"
+   ]
+  },
+  {
+   "cle": "2026-09-08-millwall-newcastle-united",
+   "date": "2026-09-08",
+   "league": "EFL Cup",
+   "home": "Millwall",
+   "away": "Newcastle United",
+   "score": "0-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EFL Cup"
+   ]
+  },
+  {
+   "cle": "2026-09-08-sunderland-hull-city",
+   "date": "2026-09-08",
+   "league": "EFL Cup",
+   "home": "Sunderland",
+   "away": "Hull City",
+   "score": "1-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EFL Cup"
+   ]
+  },
+  {
+   "cle": "2026-09-09-chelsea-leeds-united",
+   "date": "2026-09-09",
+   "league": "EFL Cup",
+   "home": "Chelsea",
+   "away": "Leeds United",
+   "score": "6-3",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EFL Cup"
+   ]
+  },
+  {
+   "cle": "2026-09-15-ipswich-town-arsenal",
+   "date": "2026-09-15",
+   "league": "EFL Cup",
+   "home": "Ipswich Town",
+   "away": "Arsenal",
+   "score": "2-4",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EFL Cup"
+   ]
+  },
+  {
+   "cle": "2026-09-15-liverpool-tottenham-hotspur",
+   "date": "2026-09-15",
+   "league": "EFL Cup",
+   "home": "Liverpool",
+   "away": "Tottenham Hotspur",
+   "score": "3-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EFL Cup"
+   ]
+  },
+  {
+   "cle": "2026-09-15-peterborough-united-barnsley",
+   "date": "2026-09-15",
+   "league": "EFL Cup",
+   "home": "Peterborough United",
+   "away": "Barnsley",
+   "score": "3-3",
+   "fin": "afterpenalties",
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EFL Cup",
+    "EFL Cup : prolongation ou tirs au but"
+   ]
+  },
+  {
+   "cle": "2026-09-15-reading-brentford",
+   "date": "2026-09-15",
+   "league": "EFL Cup",
+   "home": "Reading",
+   "away": "Brentford",
+   "score": "1-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EFL Cup"
+   ]
+  },
+  {
+   "cle": "2026-09-15-west-ham-united-fulham",
+   "date": "2026-09-15",
+   "league": "EFL Cup",
+   "home": "West Ham United",
+   "away": "Fulham",
+   "score": "2-3",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EFL Cup"
+   ]
+  },
+  {
+   "cle": "2026-09-16-coventry-city-aston-villa",
+   "date": "2026-09-16",
+   "league": "EFL Cup",
+   "home": "Coventry City",
+   "away": "Aston Villa",
+   "score": "1-3",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EFL Cup"
+   ]
+  },
+  {
+   "cle": "2026-09-16-everton-wolverhampton-wanderers",
+   "date": "2026-09-16",
+   "league": "EFL Cup",
+   "home": "Everton",
+   "away": "Wolverhampton Wanderers",
+   "score": "1-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EFL Cup"
+   ]
+  },
+  {
+   "cle": "2026-09-16-fleetwood-town-sheffield-united",
+   "date": "2026-09-16",
+   "league": "EFL Cup",
+   "home": "Fleetwood Town",
+   "away": "Sheffield United",
+   "score": "1-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EFL Cup"
+   ]
+  },
+  {
+   "cle": "2026-09-16-manchester-united-brighton",
+   "date": "2026-09-16",
+   "league": "EFL Cup",
+   "home": "Manchester United",
+   "away": "Brighton",
+   "score": "2-3",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EFL Cup"
+   ]
+  },
+  {
+   "cle": "2026-09-17-manchester-city-norwich-city",
+   "date": "2026-09-17",
+   "league": "EFL Cup",
+   "home": "Manchester City",
+   "away": "Norwich City",
+   "score": "5-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EFL Cup"
+   ]
+  },
+  {
+   "cle": "2026-09-12-aston-villa-nott-m-forest",
+   "date": "2026-09-12",
+   "league": "EPL",
+   "home": "Aston Villa",
+   "away": "Nott'm Forest",
+   "score": "1-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EPL"
+   ]
+  },
+  {
+   "cle": "2026-09-12-bournemouth-brentford",
+   "date": "2026-09-12",
+   "league": "EPL",
+   "home": "Bournemouth",
+   "away": "Brentford",
+   "score": "2-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EPL"
+   ]
+  },
+  {
+   "cle": "2026-09-12-chelsea-hull-city",
+   "date": "2026-09-12",
+   "league": "EPL",
+   "home": "Chelsea",
+   "away": "Hull City",
+   "score": "2-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EPL"
+   ]
+  },
+  {
+   "cle": "2026-09-12-crystal-palace-ipswich",
+   "date": "2026-09-12",
+   "league": "EPL",
+   "home": "Crystal Palace",
+   "away": "Ipswich",
+   "score": "2-3",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EPL"
+   ]
+  },
+  {
+   "cle": "2026-09-12-liverpool-fulham",
+   "date": "2026-09-12",
+   "league": "EPL",
+   "home": "Liverpool",
+   "away": "Fulham",
+   "score": "0-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EPL"
+   ]
+  },
+  {
+   "cle": "2026-09-12-sunderland-arsenal",
+   "date": "2026-09-12",
+   "league": "EPL",
+   "home": "Sunderland",
+   "away": "Arsenal",
+   "score": "0-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EPL"
+   ]
+  },
+  {
+   "cle": "2026-09-12-tottenham-everton",
+   "date": "2026-09-12",
+   "league": "EPL",
+   "home": "Tottenham",
+   "away": "Everton",
+   "score": "0-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EPL"
+   ]
+  },
+  {
+   "cle": "2026-09-13-coventry-brighton",
+   "date": "2026-09-13",
+   "league": "EPL",
+   "home": "Coventry",
+   "away": "Brighton",
+   "score": "0-5",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EPL"
+   ]
+  },
+  {
+   "cle": "2026-09-13-man-united-man-city",
+   "date": "2026-09-13",
+   "league": "EPL",
+   "home": "Man United",
+   "away": "Man City",
+   "score": "0-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EPL"
+   ]
+  },
+  {
+   "cle": "2026-09-14-leeds-newcastle",
+   "date": "2026-09-14",
+   "league": "EPL",
+   "home": "Leeds",
+   "away": "Newcastle",
+   "score": "4-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EPL",
+    "club piège : Leeds United"
+   ]
+  },
+  {
+   "cle": "2026-09-18-brentford-chelsea",
+   "date": "2026-09-18",
+   "league": "EPL",
+   "home": "Brentford",
+   "away": "Chelsea",
+   "score": "3-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EPL"
+   ]
+  },
+  {
+   "cle": "2026-09-19-brighton-arsenal",
+   "date": "2026-09-19",
+   "league": "EPL",
+   "home": "Brighton",
+   "away": "Arsenal",
+   "score": "3-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EPL"
+   ]
+  },
+  {
+   "cle": "2026-09-19-everton-ipswich",
+   "date": "2026-09-19",
+   "league": "EPL",
+   "home": "Everton",
+   "away": "Ipswich",
+   "score": "1-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EPL"
+   ]
+  },
+  {
+   "cle": "2026-09-19-newcastle-hull-city",
+   "date": "2026-09-19",
+   "league": "EPL",
+   "home": "Newcastle",
+   "away": "Hull City",
+   "score": "2-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EPL"
+   ]
+  },
+  {
+   "cle": "2026-09-19-nott-m-forest-coventry",
+   "date": "2026-09-19",
+   "league": "EPL",
+   "home": "Nott'm Forest",
+   "away": "Coventry",
+   "score": "0-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EPL"
+   ]
+  },
+  {
+   "cle": "2026-09-19-tottenham-aston-villa",
+   "date": "2026-09-19",
+   "league": "EPL",
+   "home": "Tottenham",
+   "away": "Aston Villa",
+   "score": "2-3",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EPL"
+   ]
+  },
+  {
+   "cle": "2026-09-20-bournemouth-liverpool",
+   "date": "2026-09-20",
+   "league": "EPL",
+   "home": "Bournemouth",
+   "away": "Liverpool",
+   "score": "0-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EPL"
+   ]
+  },
+  {
+   "cle": "2026-09-20-fulham-man-united",
+   "date": "2026-09-20",
+   "league": "EPL",
+   "home": "Fulham",
+   "away": "Man United",
+   "score": "1-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EPL"
+   ]
+  },
+  {
+   "cle": "2026-09-20-leeds-crystal-palace",
+   "date": "2026-09-20",
+   "league": "EPL",
+   "home": "Leeds",
+   "away": "Crystal Palace",
+   "score": "0-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EPL",
+    "club piège : Leeds United"
+   ]
+  },
+  {
+   "cle": "2026-09-20-man-city-sunderland",
+   "date": "2026-09-20",
+   "league": "EPL",
+   "home": "Man City",
+   "away": "Sunderland",
+   "score": "5-3",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 40,
+   "pourquoi": [
+    "EPL"
+   ]
+  },
+  {
+   "cle": "2026-09-12-port-vale-exeter-city",
+   "date": "2026-09-12",
+   "league": "League 2",
+   "home": "Port Vale",
+   "away": "Exeter City",
+   "score": "1-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "club piège : Port Vale"
+   ]
+  },
+  {
+   "cle": "2026-09-19-crewe-alexandra-shrewsbury-town",
+   "date": "2026-09-19",
+   "league": "League 2",
+   "home": "Crewe Alexandra",
+   "away": "Shrewsbury Town",
+   "score": "1-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "League 2"
+   ]
+  },
+  {
+   "cle": "2026-09-19-exeter-city-tranmere-rovers",
+   "date": "2026-09-19",
+   "league": "League 2",
+   "home": "Exeter City",
+   "away": "Tranmere Rovers",
+   "score": "0-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "League 2"
+   ]
+  },
+  {
+   "cle": "2026-09-19-gillingham-bristol-rovers",
+   "date": "2026-09-19",
+   "league": "League 2",
+   "home": "Gillingham",
+   "away": "Bristol Rovers",
+   "score": "3-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "League 2"
+   ]
+  },
+  {
+   "cle": "2026-09-19-grimsby-town-crawley-town",
+   "date": "2026-09-19",
+   "league": "League 2",
+   "home": "Grimsby Town",
+   "away": "Crawley Town",
+   "score": "2-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "League 2"
+   ]
+  },
+  {
+   "cle": "2026-09-19-northampton-town-rotherham-united",
+   "date": "2026-09-19",
+   "league": "League 2",
+   "home": "Northampton Town",
+   "away": "Rotherham United",
+   "score": "0-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "League 2"
+   ]
+  },
+  {
+   "cle": "2026-09-19-rochdale-oldham-athletic",
+   "date": "2026-09-19",
+   "league": "League 2",
+   "home": "Rochdale",
+   "away": "Oldham Athletic",
+   "score": "2-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "League 2"
+   ]
+  },
+  {
+   "cle": "2026-09-19-salford-city-swindon-town",
+   "date": "2026-09-19",
+   "league": "League 2",
+   "home": "Salford City",
+   "away": "Swindon Town",
+   "score": "1-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "League 2"
+   ]
+  },
+  {
+   "cle": "2026-09-19-walsall-port-vale",
+   "date": "2026-09-19",
+   "league": "League 2",
+   "home": "Walsall",
+   "away": "Port Vale",
+   "score": "2-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "League 2",
+    "club piège : Port Vale"
+   ]
+  },
+  {
+   "cle": "2026-09-12-dc-united-atlanta-united",
+   "date": "2026-09-12",
+   "league": "MLS",
+   "home": "DC United",
+   "away": "Atlanta United",
+   "score": "0-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "club piège : DC United"
+   ]
+  },
+  {
+   "cle": "2026-09-12-inter-miami-cf-nashville-sc",
+   "date": "2026-09-12",
+   "league": "MLS",
+   "home": "Inter Miami CF",
+   "away": "Nashville SC",
+   "score": "2-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "club piège : Inter Miami CF"
+   ]
+  },
+  {
+   "cle": "2026-09-13-st-louis-city-minnesota-united",
+   "date": "2026-09-13",
+   "league": "MLS",
+   "home": "St. Louis City",
+   "away": "Minnesota United",
+   "score": "4-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "MLS"
+   ]
+  },
+  {
+   "cle": "2026-09-13-vancouver-whitecaps-austin-fc",
+   "date": "2026-09-13",
+   "league": "MLS",
+   "home": "Vancouver Whitecaps",
+   "away": "Austin FC",
+   "score": "1-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "MLS"
+   ]
+  },
+  {
+   "cle": "2026-09-14-san-diego-fc-philadelphia-union",
+   "date": "2026-09-14",
+   "league": "MLS",
+   "home": "San Diego FC",
+   "away": "Philadelphia Union",
+   "score": "0-5",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "MLS"
+   ]
+  },
+  {
+   "cle": "2026-09-18-new-york-city-fc-red-bull-new-york",
+   "date": "2026-09-18",
+   "league": "MLS",
+   "home": "New York City FC",
+   "away": "Red Bull New York",
+   "score": "0-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "MLS"
+   ]
+  },
+  {
+   "cle": "2026-09-19-cf-montreal-columbus-crew",
+   "date": "2026-09-19",
+   "league": "MLS",
+   "home": "CF Montréal",
+   "away": "Columbus Crew",
+   "score": "0-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "MLS"
+   ]
+  },
+  {
+   "cle": "2026-09-19-dc-united-charlotte-fc",
+   "date": "2026-09-19",
+   "league": "MLS",
+   "home": "DC United",
+   "away": "Charlotte FC",
+   "score": "1-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "MLS",
+    "club piège : DC United"
+   ]
+  },
+  {
+   "cle": "2026-09-19-new-england-revolution-orlando-city",
+   "date": "2026-09-19",
+   "league": "MLS",
+   "home": "New England Revolution",
+   "away": "Orlando City",
+   "score": "4-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "MLS"
+   ]
+  },
+  {
+   "cle": "2026-09-19-san-jose-earthquakes-los-angeles-fc",
+   "date": "2026-09-19",
+   "league": "MLS",
+   "home": "San Jose Earthquakes",
+   "away": "Los Angeles FC",
+   "score": "2-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "MLS"
+   ]
+  },
+  {
+   "cle": "2026-09-20-colorado-rapids-seattle-sounders-fc",
+   "date": "2026-09-20",
+   "league": "MLS",
+   "home": "Colorado Rapids",
+   "away": "Seattle Sounders FC",
+   "score": "3-3",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "MLS"
+   ]
+  },
+  {
+   "cle": "2026-09-20-fc-dallas-austin-fc",
+   "date": "2026-09-20",
+   "league": "MLS",
+   "home": "FC Dallas",
+   "away": "Austin FC",
+   "score": "0-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "MLS"
+   ]
+  },
+  {
+   "cle": "2026-09-20-houston-dynamo-fc-fc-cincinnati",
+   "date": "2026-09-20",
+   "league": "MLS",
+   "home": "Houston Dynamo FC",
+   "away": "FC Cincinnati",
+   "score": "2-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "MLS"
+   ]
+  },
+  {
+   "cle": "2026-09-20-inter-miami-cf-san-diego-fc",
+   "date": "2026-09-20",
+   "league": "MLS",
+   "home": "Inter Miami CF",
+   "away": "San Diego FC",
+   "score": "2-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "MLS",
+    "club piège : Inter Miami CF"
+   ]
+  },
+  {
+   "cle": "2026-09-20-minnesota-united-la-galaxy",
+   "date": "2026-09-20",
+   "league": "MLS",
+   "home": "Minnesota United",
+   "away": "LA Galaxy",
+   "score": "2-3",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "MLS"
+   ]
+  },
+  {
+   "cle": "2026-09-20-nashville-sc-chicago-fire-fc",
+   "date": "2026-09-20",
+   "league": "MLS",
+   "home": "Nashville SC",
+   "away": "Chicago Fire FC",
+   "score": "3-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "MLS"
+   ]
+  },
+  {
+   "cle": "2026-09-20-portland-timbers-atlanta-united",
+   "date": "2026-09-20",
+   "league": "MLS",
+   "home": "Portland Timbers",
+   "away": "Atlanta United",
+   "score": "0-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "MLS"
+   ]
+  },
+  {
+   "cle": "2026-09-20-real-salt-lake-vancouver-whitecaps",
+   "date": "2026-09-20",
+   "league": "MLS",
+   "home": "Real Salt Lake",
+   "away": "Vancouver Whitecaps",
+   "score": "0-3",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "MLS"
+   ]
+  },
+  {
+   "cle": "2026-09-20-sporting-kansas-city-philadelphia-union",
+   "date": "2026-09-20",
+   "league": "MLS",
+   "home": "Sporting Kansas City",
+   "away": "Philadelphia Union",
+   "score": "3-4",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "MLS"
+   ]
+  },
+  {
+   "cle": "2026-09-20-st-louis-city-toronto-fc",
+   "date": "2026-09-20",
+   "league": "MLS",
+   "home": "St. Louis City",
+   "away": "Toronto FC",
+   "score": "3-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "MLS"
+   ]
+  },
+  {
+   "cle": "2026-09-11-kryliya-sovetov-rodina-moscow",
+   "date": "2026-09-11",
+   "league": "Premier League - Russia",
+   "home": "Kryliya Sovetov",
+   "away": "Rodina Moscow",
+   "score": "2-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "Premier League - Russia"
+   ]
+  },
+  {
+   "cle": "2026-09-12-cska-moscow-rubin-kazan",
+   "date": "2026-09-12",
+   "league": "Premier League - Russia",
+   "home": "CSKA Moscow",
+   "away": "Rubin Kazan",
+   "score": "1-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "Premier League - Russia"
+   ]
+  },
+  {
+   "cle": "2026-09-12-dinamo-moscow-gazovik-orenburg",
+   "date": "2026-09-12",
+   "league": "Premier League - Russia",
+   "home": "Dinamo Moscow",
+   "away": "Gazovik Orenburg",
+   "score": "1-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "Premier League - Russia"
+   ]
+  },
+  {
+   "cle": "2026-09-12-fc-fakel-voronezh-fc-baltika-kaliningrad",
+   "date": "2026-09-12",
+   "league": "Premier League - Russia",
+   "home": "FC Fakel Voronezh",
+   "away": "FC Baltika Kaliningrad",
+   "score": "2-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "Premier League - Russia"
+   ]
+  },
+  {
+   "cle": "2026-09-12-zenit-st-petersburg-lokomotiv-moscow",
+   "date": "2026-09-12",
+   "league": "Premier League - Russia",
+   "home": "Zenit St Petersburg",
+   "away": "Lokomotiv Moscow",
+   "score": "2-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "Premier League - Russia"
+   ]
+  },
+  {
+   "cle": "2026-09-13-fc-akhmat-grozny-fc-dynamo-makhachkala",
+   "date": "2026-09-13",
+   "league": "Premier League - Russia",
+   "home": "FC Akhmat Grozny",
+   "away": "FC Dynamo Makhachkala",
+   "score": "3-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "Premier League - Russia"
+   ]
+  },
+  {
+   "cle": "2026-09-13-fc-krasnodar-fc-akron-tolyatti",
+   "date": "2026-09-13",
+   "league": "Premier League - Russia",
+   "home": "FC Krasnodar",
+   "away": "FC Akron Tolyatti",
+   "score": "1-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "Premier League - Russia"
+   ]
+  },
+  {
+   "cle": "2026-09-13-spartak-moscow-fk-rostov",
+   "date": "2026-09-13",
+   "league": "Premier League - Russia",
+   "home": "Spartak Moscow",
+   "away": "FK Rostov",
+   "score": "3-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "Premier League - Russia"
+   ]
+  },
+  {
+   "cle": "2026-09-16-fc-baltika-kaliningrad-zenit-st-petersburg",
+   "date": "2026-09-16",
+   "league": "Premier League - Russia",
+   "home": "FC Baltika Kaliningrad",
+   "away": "Zenit St Petersburg",
+   "score": "2-3",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "Premier League - Russia"
+   ]
+  },
+  {
+   "cle": "2026-09-16-lokomotiv-moscow-kryliya-sovetov",
+   "date": "2026-09-16",
+   "league": "Premier League - Russia",
+   "home": "Lokomotiv Moscow",
+   "away": "Kryliya Sovetov",
+   "score": "1-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "Premier League - Russia"
+   ]
+  },
+  {
+   "cle": "2026-09-16-rodina-moscow-rubin-kazan",
+   "date": "2026-09-16",
+   "league": "Premier League - Russia",
+   "home": "Rodina Moscow",
+   "away": "Rubin Kazan",
+   "score": "1-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "Premier League - Russia"
+   ]
+  },
+  {
+   "cle": "2026-09-16-spartak-moscow-fc-fakel-voronezh",
+   "date": "2026-09-16",
+   "league": "Premier League - Russia",
+   "home": "Spartak Moscow",
+   "away": "FC Fakel Voronezh",
+   "score": "1-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "Premier League - Russia"
+   ]
+  },
+  {
+   "cle": "2026-09-17-fc-akron-tolyatti-fc-akhmat-grozny",
+   "date": "2026-09-17",
+   "league": "Premier League - Russia",
+   "home": "FC Akron Tolyatti",
+   "away": "FC Akhmat Grozny",
+   "score": "2-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "Premier League - Russia"
+   ]
+  },
+  {
+   "cle": "2026-09-17-fc-dynamo-makhachkala-cska-moscow",
+   "date": "2026-09-17",
+   "league": "Premier League - Russia",
+   "home": "FC Dynamo Makhachkala",
+   "away": "CSKA Moscow",
+   "score": "1-3",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "Premier League - Russia"
+   ]
+  },
+  {
+   "cle": "2026-09-17-fk-rostov-dinamo-moscow",
+   "date": "2026-09-17",
+   "league": "Premier League - Russia",
+   "home": "FK Rostov",
+   "away": "Dinamo Moscow",
+   "score": "0-3",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "Premier League - Russia"
+   ]
+  },
+  {
+   "cle": "2026-09-17-gazovik-orenburg-fc-krasnodar",
+   "date": "2026-09-17",
+   "league": "Premier League - Russia",
+   "home": "Gazovik Orenburg",
+   "away": "FC Krasnodar",
+   "score": "0-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "Premier League - Russia"
+   ]
+  },
+  {
+   "cle": "2026-09-12-academico-viseu-vitoria-de-guimaraes",
+   "date": "2026-09-12",
+   "league": "Primeira Liga - Portugal",
+   "home": "Académico Viseu",
+   "away": "Vitória de Guimarães",
+   "score": "2-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Primeira Liga - Portugal"
+   ]
+  },
+  {
+   "cle": "2026-09-12-casa-pia-ac-fc-porto",
+   "date": "2026-09-12",
+   "league": "Primeira Liga - Portugal",
+   "home": "Casa Pia AC",
+   "away": "FC Porto",
+   "score": "1-4",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Primeira Liga - Portugal",
+    "club piège : FC Porto"
+   ]
+  },
+  {
+   "cle": "2026-09-12-nacional-alverca",
+   "date": "2026-09-12",
+   "league": "Primeira Liga - Portugal",
+   "home": "Nacional",
+   "away": "Alverca",
+   "score": "1-3",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Primeira Liga - Portugal",
+    "club piège : Nacional (Portugal)"
+   ]
+  },
+  {
+   "cle": "2026-09-13-arouca-santa-clara",
+   "date": "2026-09-13",
+   "league": "Primeira Liga - Portugal",
+   "home": "Arouca",
+   "away": "Santa Clara",
+   "score": "1-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Primeira Liga - Portugal"
+   ]
+  },
+  {
+   "cle": "2026-09-13-benfica-gil-vicente",
+   "date": "2026-09-13",
+   "league": "Primeira Liga - Portugal",
+   "home": "Benfica",
+   "away": "Gil Vicente",
+   "score": "3-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Primeira Liga - Portugal"
+   ]
+  },
+  {
+   "cle": "2026-09-13-famalicao-sporting-cp",
+   "date": "2026-09-13",
+   "league": "Primeira Liga - Portugal",
+   "home": "Famalicão",
+   "away": "Sporting CP",
+   "score": "1-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Primeira Liga - Portugal"
+   ]
+  },
+  {
+   "cle": "2026-09-14-braga-estoril",
+   "date": "2026-09-14",
+   "league": "Primeira Liga - Portugal",
+   "home": "Braga",
+   "away": "Estoril",
+   "score": "1-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Primeira Liga - Portugal"
+   ]
+  },
+  {
+   "cle": "2026-09-14-moreirense-maritimo",
+   "date": "2026-09-14",
+   "league": "Primeira Liga - Portugal",
+   "home": "Moreirense",
+   "away": "Maritimo",
+   "score": "3-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Primeira Liga - Portugal"
+   ]
+  },
+  {
+   "cle": "2026-09-14-rio-ave-estrela",
+   "date": "2026-09-14",
+   "league": "Primeira Liga - Portugal",
+   "home": "Rio Ave",
+   "away": "Estrela",
+   "score": "3-3",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Primeira Liga - Portugal"
+   ]
+  },
+  {
+   "cle": "2026-09-19-alverca-rio-ave",
+   "date": "2026-09-19",
+   "league": "Primeira Liga - Portugal",
+   "home": "Alverca",
+   "away": "Rio Ave",
+   "score": "1-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Primeira Liga - Portugal"
+   ]
+  },
+  {
+   "cle": "2026-09-19-c-d-nacional-fc-famalicao",
+   "date": "2026-09-19",
+   "league": "Primeira Liga - Portugal",
+   "home": "C.D. Nacional",
+   "away": "FC Famalicao",
+   "score": "0-4",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Primeira Liga - Portugal",
+    "club piège : Nacional (Portugal)"
+   ]
+  },
+  {
+   "cle": "2026-09-19-gil-vicente-maritimo",
+   "date": "2026-09-19",
+   "league": "Primeira Liga - Portugal",
+   "home": "Gil Vicente",
+   "away": "Maritimo",
+   "score": "1-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Primeira Liga - Portugal"
+   ]
+  },
+  {
+   "cle": "2026-09-19-sporting-cp-arouca",
+   "date": "2026-09-19",
+   "league": "Primeira Liga - Portugal",
+   "home": "Sporting CP",
+   "away": "Arouca",
+   "score": "2-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Primeira Liga - Portugal"
+   ]
+  },
+  {
+   "cle": "2026-09-20-estoril-casa-pia",
+   "date": "2026-09-20",
+   "league": "Primeira Liga - Portugal",
+   "home": "Estoril",
+   "away": "Casa Pia",
+   "score": "1-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Primeira Liga - Portugal"
+   ]
+  },
+  {
+   "cle": "2026-09-20-estrela-academico-de-viseu",
+   "date": "2026-09-20",
+   "league": "Primeira Liga - Portugal",
+   "home": "Estrela",
+   "away": "Académico de Viseu",
+   "score": "0-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Primeira Liga - Portugal"
+   ]
+  },
+  {
+   "cle": "2026-09-20-fc-porto-benfica",
+   "date": "2026-09-20",
+   "league": "Primeira Liga - Portugal",
+   "home": "FC Porto",
+   "away": "Benfica",
+   "score": "3-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Primeira Liga - Portugal",
+    "club piège : FC Porto"
+   ]
+  },
+  {
+   "cle": "2026-09-20-santa-clara-braga",
+   "date": "2026-09-20",
+   "league": "Primeira Liga - Portugal",
+   "home": "Santa Clara",
+   "away": "Braga",
+   "score": "0-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Primeira Liga - Portugal"
+   ]
+  },
+  {
+   "cle": "2026-09-20-vitoria-de-guimaraes-moreirense",
+   "date": "2026-09-20",
+   "league": "Primeira Liga - Portugal",
+   "home": "Vitória de Guimaraes",
+   "away": "Moreirense",
+   "score": "1-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Primeira Liga - Portugal"
+   ]
+  },
+  {
+   "cle": "2026-09-05-everton-cd-universidad-catolica",
+   "date": "2026-09-05",
+   "league": "Primera División - Chile",
+   "home": "Everton CD",
+   "away": "Universidad Católica",
+   "score": "0-1",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "club piège : Universidad Católica (Chili)"
+   ]
+  },
+  {
+   "cle": "2026-09-12-cobresal-coquimbo-unido",
+   "date": "2026-09-12",
+   "league": "Primera División - Chile",
+   "home": "Cobresal",
+   "away": "Coquimbo Unido",
+   "score": "3-2",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Primera División - Chile"
+   ]
+  },
+  {
+   "cle": "2026-09-12-nublense-everton-cd",
+   "date": "2026-09-12",
+   "league": "Primera División - Chile",
+   "home": "Ñublense",
+   "away": "Everton CD",
+   "score": "1-3",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "Primera División - Chile"
+   ]
+  },
+  {
+   "cle": "2026-09-12-palestino-universidad-catolica",
+   "date": "2026-09-12",
+   "league": "Primera División - Chile",
+   "home": "Palestino",
+   "away": "Universidad Católica",
+   "score": "2-3",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Primera División - Chile",
+    "club piège : Universidad Católica (Chili)"
+   ]
+  },
+  {
+   "cle": "2026-09-13-audax-italiano-o-higgins",
+   "date": "2026-09-13",
+   "league": "Primera División - Chile",
+   "home": "Audax Italiano",
+   "away": "O'Higgins",
+   "score": "1-0",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Primera División - Chile"
+   ]
+  },
+  {
+   "cle": "2026-09-13-colo-colo-deportes-concepcion",
+   "date": "2026-09-13",
+   "league": "Primera División - Chile",
+   "home": "Colo Colo",
+   "away": "Deportes Concepción",
+   "score": "1-1",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Primera División - Chile"
+   ]
+  },
+  {
+   "cle": "2026-09-13-la-serena-universidad-de-chile",
+   "date": "2026-09-13",
+   "league": "Primera División - Chile",
+   "home": "La Serena",
+   "away": "Universidad de Chile",
+   "score": "0-3",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "Primera División - Chile"
+   ]
+  },
+  {
+   "cle": "2026-09-14-union-la-calera-deportes-limache",
+   "date": "2026-09-14",
+   "league": "Primera División - Chile",
+   "home": "Unión La Calera",
+   "away": "Deportes Limache",
+   "score": "1-0",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "Primera División - Chile"
+   ]
+  },
+  {
+   "cle": "2026-09-16-coquimbo-unido-huachipato",
+   "date": "2026-09-16",
+   "league": "Primera División - Chile",
+   "home": "Coquimbo Unido",
+   "away": "Huachipato",
+   "score": "0-1",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Primera División - Chile"
+   ]
+  },
+  {
+   "cle": "2026-09-13-csd-macara-emelec",
+   "date": "2026-09-13",
+   "league": "Serie A - Ecuador",
+   "home": "CSD Macará",
+   "away": "Emelec",
+   "score": "1-0",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Serie A - Ecuador"
+   ]
+  },
+  {
+   "cle": "2026-09-13-ldu-de-quito-deportivo-cuenca",
+   "date": "2026-09-13",
+   "league": "Serie A - Ecuador",
+   "home": "LDU de Quito",
+   "away": "Deportivo Cuenca",
+   "score": "1-1",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Serie A - Ecuador"
+   ]
+  },
+  {
+   "cle": "2026-09-13-leones-del-norte-tecnico-universitario",
+   "date": "2026-09-13",
+   "league": "Serie A - Ecuador",
+   "home": "Leones del Norte",
+   "away": "Técnico Universitario",
+   "score": "0-1",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "Serie A - Ecuador"
+   ]
+  },
+  {
+   "cle": "2026-09-13-libertad-independiente-del-valle",
+   "date": "2026-09-13",
+   "league": "Serie A - Ecuador",
+   "home": "Libertad",
+   "away": "Independiente del Valle",
+   "score": "2-3",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Serie A - Ecuador",
+    "club piège : Libertad (Équateur)"
+   ]
+  },
+  {
+   "cle": "2026-09-15-universidad-catolica-orense",
+   "date": "2026-09-15",
+   "league": "Serie A - Ecuador",
+   "home": "Universidad Católica",
+   "away": "Orense",
+   "score": "2-1",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Serie A - Ecuador",
+    "club piège : Universidad Católica (Équateur)"
+   ]
+  },
+  {
+   "cle": "2026-09-19-aucas-csd-macara",
+   "date": "2026-09-19",
+   "league": "Serie A - Ecuador",
+   "home": "Aucas",
+   "away": "CSD Macará",
+   "score": "1-2",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Serie A - Ecuador"
+   ]
+  },
+  {
+   "cle": "2026-09-19-guayaquil-city-leones-del-norte",
+   "date": "2026-09-19",
+   "league": "Serie A - Ecuador",
+   "home": "Guayaquil City",
+   "away": "Leones del Norte",
+   "score": "1-1",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": null,
+   "joueurs": 0,
+   "pourquoi": [
+    "Serie A - Ecuador"
+   ]
+  },
+  {
+   "cle": "2026-09-20-deportivo-cuenca-mushuc-runa",
+   "date": "2026-09-20",
+   "league": "Serie A - Ecuador",
+   "home": "Deportivo Cuenca",
+   "away": "Mushuc Runa",
+   "score": "1-1",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Serie A - Ecuador"
+   ]
+  },
+  {
+   "cle": "2026-09-20-emelec-libertad",
+   "date": "2026-09-20",
+   "league": "Serie A - Ecuador",
+   "home": "Emelec",
+   "away": "Libertad",
+   "score": "1-2",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Serie A - Ecuador",
+    "club piège : Libertad (Équateur)"
+   ]
+  },
+  {
+   "cle": "2026-09-20-ldu-de-quito-universidad-catolica",
+   "date": "2026-09-20",
+   "league": "Serie A - Ecuador",
+   "home": "LDU de Quito",
+   "away": "Universidad Católica",
+   "score": "2-1",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Serie A - Ecuador",
+    "club piège : Universidad Católica (Équateur)"
+   ]
+  },
+  {
+   "cle": "2026-09-20-tecnico-universitario-delfin",
+   "date": "2026-09-20",
+   "league": "Serie A - Ecuador",
+   "home": "Técnico Universitario",
+   "away": "Delfín",
+   "score": "1-1",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Serie A - Ecuador"
+   ]
+  },
+  {
+   "cle": "2026-09-21-manta-orense",
+   "date": "2026-09-21",
+   "league": "Serie A - Ecuador",
+   "home": "Manta",
+   "away": "Orense",
+   "score": "2-1",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Serie A - Ecuador"
+   ]
+  },
+  {
+   "cle": "2026-09-14-inter-udinese",
+   "date": "2026-09-14",
+   "league": "Serie A - Italy",
+   "home": "Inter",
+   "away": "Udinese",
+   "score": "5-3",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "club piège : Inter"
+   ]
+  },
+  {
+   "cle": "2026-09-18-monza-sassuolo",
+   "date": "2026-09-18",
+   "league": "Serie A - Italy",
+   "home": "Monza",
+   "away": "Sassuolo",
+   "score": "2-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Serie A - Italy"
+   ]
+  },
+  {
+   "cle": "2026-09-19-bologna-torino",
+   "date": "2026-09-19",
+   "league": "Serie A - Italy",
+   "home": "Bologna",
+   "away": "Torino",
+   "score": "1-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Serie A - Italy"
+   ]
+  },
+  {
+   "cle": "2026-09-19-roma-inter",
+   "date": "2026-09-19",
+   "league": "Serie A - Italy",
+   "home": "Roma",
+   "away": "Inter",
+   "score": "2-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Serie A - Italy",
+    "club piège : Inter"
+   ]
+  },
+  {
+   "cle": "2026-09-19-udinese-cagliari",
+   "date": "2026-09-19",
+   "league": "Serie A - Italy",
+   "home": "Udinese",
+   "away": "Cagliari",
+   "score": "0-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Serie A - Italy"
+   ]
+  },
+  {
+   "cle": "2026-09-19-venezia-lazio",
+   "date": "2026-09-19",
+   "league": "Serie A - Italy",
+   "home": "Venezia",
+   "away": "Lazio",
+   "score": "0-2",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Serie A - Italy"
+   ]
+  },
+  {
+   "cle": "2026-09-20-fiorentina-napoli",
+   "date": "2026-09-20",
+   "league": "Serie A - Italy",
+   "home": "Fiorentina",
+   "away": "Napoli",
+   "score": "1-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Serie A - Italy"
+   ]
+  },
+  {
+   "cle": "2026-09-20-frosinone-como",
+   "date": "2026-09-20",
+   "league": "Serie A - Italy",
+   "home": "Frosinone",
+   "away": "Como",
+   "score": "2-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Serie A - Italy"
+   ]
+  },
+  {
+   "cle": "2026-09-20-juventus-atalanta",
+   "date": "2026-09-20",
+   "league": "Serie A - Italy",
+   "home": "Juventus",
+   "away": "Atalanta",
+   "score": "2-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Serie A - Italy"
+   ]
+  },
+  {
+   "cle": "2026-09-20-milan-lecce",
+   "date": "2026-09-20",
+   "league": "Serie A - Italy",
+   "home": "Milan",
+   "away": "Lecce",
+   "score": "3-0",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Serie A - Italy"
+   ]
+  },
+  {
+   "cle": "2026-09-20-parma-genoa",
+   "date": "2026-09-20",
+   "league": "Serie A - Italy",
+   "home": "Parma",
+   "away": "Genoa",
+   "score": "2-1",
+   "fin": null,
+   "couverture": "xG",
+   "xg": true,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Serie A - Italy"
+   ]
+  },
+  {
+   "cle": "2026-09-05-shandong-luneng-taishan-fc-shenzhen-peng-city-fc",
+   "date": "2026-09-05",
+   "league": "Super League - China",
+   "home": "Shandong Luneng Taishan FC",
+   "away": "Shenzhen Peng City FC",
+   "score": "1-1",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Super League - China"
+   ]
+  },
+  {
+   "cle": "2026-09-05-shanghai-sipg-fc-beijing-fc",
+   "date": "2026-09-05",
+   "league": "Super League - China",
+   "home": "Shanghai SIPG FC",
+   "away": "Beijing FC",
+   "score": "0-0",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Super League - China",
+    "club piège : Shanghai Port"
+   ]
+  },
+  {
+   "cle": "2026-09-05-wuhan-three-towns-qingdao-west-coast-fc",
+   "date": "2026-09-05",
+   "league": "Super League - China",
+   "home": "Wuhan Three Towns",
+   "away": "Qingdao West Coast FC",
+   "score": "2-2",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Super League - China"
+   ]
+  },
+  {
+   "cle": "2026-09-06-chongqing-tonglianglong-fc-shanghai-shenhua-fc",
+   "date": "2026-09-06",
+   "league": "Super League - China",
+   "home": "Chongqing Tonglianglong FC",
+   "away": "Shanghai Shenhua FC",
+   "score": "1-3",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Super League - China"
+   ]
+  },
+  {
+   "cle": "2026-09-06-henan-fc-chengdu-rongcheng-fc",
+   "date": "2026-09-06",
+   "league": "Super League - China",
+   "home": "Henan FC",
+   "away": "Chengdu Rongcheng FC",
+   "score": "0-0",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Super League - China"
+   ]
+  },
+  {
+   "cle": "2026-09-06-tianjin-jinmen-tiger-fc-zhejiang",
+   "date": "2026-09-06",
+   "league": "Super League - China",
+   "home": "Tianjin Jinmen Tiger FC",
+   "away": "Zhejiang",
+   "score": "2-1",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Super League - China"
+   ]
+  },
+  {
+   "cle": "2026-09-06-yunnan-yukun-liaoning-tieren-fc",
+   "date": "2026-09-06",
+   "league": "Super League - China",
+   "home": "Yunnan Yukun",
+   "away": "Liaoning Tieren FC",
+   "score": "5-0",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Super League - China"
+   ]
+  },
+  {
+   "cle": "2026-09-12-tianjin-jinmen-tiger-fc-liaoning-tieren-fc",
+   "date": "2026-09-12",
+   "league": "Super League - China",
+   "home": "Tianjin Jinmen Tiger FC",
+   "away": "Liaoning Tieren FC",
+   "score": "1-0",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Super League - China"
+   ]
+  },
+  {
+   "cle": "2026-09-12-wuhan-three-towns-henan-fc",
+   "date": "2026-09-12",
+   "league": "Super League - China",
+   "home": "Wuhan Three Towns",
+   "away": "Henan FC",
+   "score": "1-1",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Super League - China"
+   ]
+  },
+  {
+   "cle": "2026-09-18-zhejiang-wuhan-three-towns",
+   "date": "2026-09-18",
+   "league": "Super League - China",
+   "home": "Zhejiang",
+   "away": "Wuhan Three Towns",
+   "score": "4-1",
+   "fin": null,
+   "couverture": "ratings",
+   "xg": false,
+   "cotes": "moyenne clôture",
+   "joueurs": 0,
+   "pourquoi": [
+    "Super League - China"
+   ]
+  },
+  {
+   "cle": "2026-09-13-bfc-daugavpils-rfs",
+   "date": "2026-09-13",
+   "league": "Virsliga - Latvia",
+   "home": "BFC Daugavpils",
+   "away": "RFS",
+   "score": "1-2",
+   "fin": null,
+   "couverture": "lower",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 40,
+   "pourquoi": [
+    "Virsliga - Latvia"
+   ]
+  },
+  {
+   "cle": "2026-09-15-sk-super-nova-riga-fc",
+   "date": "2026-09-15",
+   "league": "Virsliga - Latvia",
+   "home": "SK Super Nova",
+   "away": "Riga FC",
+   "score": "0-1",
+   "fin": null,
+   "couverture": "lower",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 39,
+   "pourquoi": [
+    "Virsliga - Latvia"
+   ]
+  },
+  {
+   "cle": "2026-09-16-auda-ogre-united",
+   "date": "2026-09-16",
+   "league": "Virsliga - Latvia",
+   "home": "Auda",
+   "away": "Ogre United",
+   "score": "1-0",
+   "fin": null,
+   "couverture": "lower",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 37,
+   "pourquoi": [
+    "Virsliga - Latvia"
+   ]
+  },
+  {
+   "cle": "2026-09-19-fk-jelgava-riga-fc",
+   "date": "2026-09-19",
+   "league": "Virsliga - Latvia",
+   "home": "FK Jelgava",
+   "away": "Riga FC",
+   "score": "0-1",
+   "fin": null,
+   "couverture": "lower",
+   "xg": false,
+   "cotes": null,
+   "joueurs": 38,
+   "pourquoi": [
+    "Virsliga - Latvia"
+   ]
+  },
+  {
+   "cle": "2026-09-19-fk-liepaja-bfc-daugavpils",
+   "date": "2026-09-19",
+   "league": "Virsliga - Latvia",
+   "home": "FK Liepāja",
+   "away": "BFC Daugavpils",
+   "score": "0-0",
+   "fin": null,
+   "couverture": "lower",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 38,
+   "pourquoi": [
+    "Virsliga - Latvia"
+   ]
+  },
+  {
+   "cle": "2026-09-20-auda-rfs",
+   "date": "2026-09-20",
+   "league": "Virsliga - Latvia",
+   "home": "Auda",
+   "away": "RFS",
+   "score": "1-1",
+   "fin": null,
+   "couverture": "lower",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 39,
+   "pourquoi": [
+    "Virsliga - Latvia"
+   ]
+  },
+  {
+   "cle": "2026-09-20-fk-tukums-2000-grobina",
+   "date": "2026-09-20",
+   "league": "Virsliga - Latvia",
+   "home": "FK Tukums 2000",
+   "away": "Grobiņa",
+   "score": "1-1",
+   "fin": null,
+   "couverture": "lower",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 38,
+   "pourquoi": [
+    "Virsliga - Latvia"
+   ]
+  },
+  {
+   "cle": "2026-09-20-ogre-united-sk-super-nova",
+   "date": "2026-09-20",
+   "league": "Virsliga - Latvia",
+   "home": "Ogre United",
+   "away": "SK Super Nova",
+   "score": "1-0",
+   "fin": null,
+   "couverture": "lower",
+   "xg": false,
+   "cotes": "Bet365 ouverture",
+   "joueurs": 38,
+   "pourquoi": [
+    "Virsliga - Latvia"
+   ]
+  }
+ ]
+}
