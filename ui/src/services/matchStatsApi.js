@@ -14,6 +14,9 @@ export const matchStatsApi = {
   // championnat (FotMob, magasin local) : `periode` = 'saison' ou un nombre N.
   leagueAverages: (league, periode = 'saison') =>
     httpClient.get(`/match-stats/league-averages?league=${encodeURIComponent(league)}&periode=${encodeURIComponent(periode)}`),
+  // Les repères d'un championnat (étape 15 du plan) : calculés chaque nuit par
+  // l'actualisation (server/src/data/db/leagueBenchmarks.js), lus tels quels.
+  benchmarks: (league) => httpClient.get(`/match-stats/benchmarks?league=${encodeURIComponent(league)}`),
   get: (matchId) => httpClient.get(`/match-stats/${encodeURIComponent(matchId)}`),
   // Page d'un match à venir : coup d'envoi exact, stade, météo, arbitre et
   // composition décrite (FotMob, gratuit — cf. lineupContext.js côté serveur).
@@ -27,11 +30,32 @@ export const matchStatsApi = {
   // Couverture par championnat et état du rafraîchissement automatique
   // (cf. server/src/jobs/matchStatsAutoRefresh.js).
   coverage: () => httpClient.get('/match-stats/coverage'),
+  // Carnet de santé des données (étape 12 du plan) : un état préparé chaque nuit
+  // par le contrôle (server/scripts/data-health.mjs), lu tel quel.
+  health: ({ type = '', gravite = '', ligue = '', saison = '', limite = null } = {}) => {
+    const params = new URLSearchParams();
+    if (type) params.set('type', type);
+    if (gravite) params.set('gravite', gravite);
+    if (ligue) params.set('ligue', ligue);
+    if (saison) params.set('saison', String(saison));
+    if (limite) params.set('limite', String(limite));
+    const requete = params.toString();
+    return httpClient.get(`/match-stats/health${requete ? `?${requete}` : ''}`);
+  },
+  // Historique football-data depuis 2000 (étape 13 du plan) : un résumé préparé
+  // à chaque passe de l'actualisation (server/src/data/providers/footballDataHistory.js), lu tel quel.
+  fdHistory: () => httpClient.get('/match-stats/fd-history'),
+  // La table du jour J (étape 17 du plan) : l'état noté par la dernière construction ou nuit
+  // de l'actualisation (server/src/data/db/dayTable.js), lu tel quel — jamais recompté.
+  dayTable: () => httpClient.get('/match-stats/day-table'),
   refresh: (limit) => httpClient.post('/match-stats/refresh', limit ? { limit } : {}),
   // Classement des joueurs d'une compétition, agrégé par la base (FotMob),
   // sans API-Football (plan gratuit limité à 2024, qui ne couvrait pas tous
   // les championnats).
   seasons: (league) => httpClient.get(`/match-stats/seasons?league=${encodeURIComponent(league)}`),
+  /** Classement corrigé par les xG (points attendus, cf. server/src/data/db/expectedPoints.js). */
+  xgTable: (league, season = null) =>
+    httpClient.get(`/match-stats/xg-table?league=${encodeURIComponent(league)}${season ? `&season=${season}` : ''}`),
   // Profilage de cotes d'un match à venir : les matchs passés aux cotes
   // semblables et comment ils ont fini (server/src/data/db/oddsProfileRead.js).
   oddsProfile: ({ league, home, away, kickoff, odds1, oddsDraw, odds2, scope, segment, tolerance }) => {

@@ -12,6 +12,8 @@ import AppButton from '@/components/common/AppButton.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
+// Étape 15 du plan : les repères de chaque championnat (calculés chaque nuit par l'actualisation).
+import LeagueBenchmarksPanel from '@/components/team-stats/LeagueBenchmarksPanel.vue';
 import { formatLeagueOptionLabel } from '@/utils/leagueDisplay.js';
 import { MATCH_STAT_SECTIONS, parseNumeric } from '@/constants/matchStatFields.js';
 
@@ -340,6 +342,19 @@ watch(() => favoris.leagues.map((l) => l.name).join('|'), choisirParDefaut);
         description="FotMob n'a encore relevé aucune feuille de match de ce championnat sur cette période : choisissez une autre période, ou lancez une actualisation dans Réglages."
       />
     </template>
+
+    <!-- 3. LES REPÈRES DU CHAMPIONNAT (étape 15 du plan, 07/10/2026) : ce qu'est un match « normal » ici, saison
+         par saison depuis 2000 — calculés chaque nuit, lus tels quels ; affichés dès qu'un championnat est choisi,
+         même si son classement manque. -->
+    <AppCard
+      v-if="selectedLeague"
+      icon="history"
+      eyebrow="Source : FotMob et football-data.co.uk"
+      title="Repères du championnat"
+      subtitle="Ce qu'est un match « normal » dans ce championnat, saison par saison : FotMob depuis 2023, football-data.co.uk avant. Calculés chaque nuit ; mesurés seulement, le moteur ne s'en sert pas encore."
+    >
+      <LeagueBenchmarksPanel :league="selectedLeague" />
+    </AppCard>
   </div>
 </template>
 

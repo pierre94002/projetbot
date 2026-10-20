@@ -1,5 +1,4 @@
-import { TEAM_GOAL_LINES, SHOTS_ON_TARGET_LINES, CORNER_LINES, teamGoalsLineOdds } from './betTrends.js';
-import { compareTeamsPoisson, teamLineOddsPoisson, TOTAL_SHOTS_LINES, SHOTS_ON_TARGET_TEAM_LINES } from './shotsModel.js';
+import { TEAM_GOAL_LINES, teamGoalsLineOdds } from './betTrends.js';
 
 function resultAndTotalLabels(line) {
   return {
@@ -9,16 +8,6 @@ function resultAndTotalLabels(line) {
     drawUnder: () => `Nul & Moins de ${line} buts`,
     awayOver: (home, away) => `${away} & Plus de ${line} buts`,
     awayUnder: (home, away) => `${away} & Moins de ${line} buts`
-  };
-}
-
-// L'ordre de `teams` n'est pas garanti domicile/extérieur : on résout par homeTeamId.
-function resolveAveragesStats(averagesComparison) {
-  const teams = averagesComparison?.teams;
-  if (!teams || teams.length !== 2) return { home: null, away: null };
-  return {
-    home: (teams.find((t) => t.teamId === averagesComparison?.homeTeamId) ?? teams[0]).stats ?? null,
-    away: (teams.find((t) => t.teamId !== averagesComparison?.homeTeamId) ?? teams[1]).stats ?? null
   };
 }
 
@@ -38,17 +27,22 @@ function lowestAbove(candidates, minOdds) {
   return best;
 }
 
-// "Plus de X" sur la somme des deux moyennes équipe (lambda combiné) — le
-// pendant "tirs cadrés"/"corners" du total buts, via le même Poisson simple
-// que compareTeamsPoisson/teamLineOddsPoisson (la somme de deux Poisson
-// indépendants est elle-même Poisson(lambdaHome + lambdaAway)).
-function combinedOverPicks(homeValue, awayValue, lines) {
-  const homeNum = Number(homeValue);
-  const awayNum = Number(awayValue);
-  if (!Number.isFinite(homeNum) || !Number.isFinite(awayNum)) return [];
-  const lambda = homeNum + awayNum;
-  return lines.map((line) => ({ line, odds: teamLineOddsPoisson(lambda, line)?.overOdds ?? null }));
+/**
+ * Les lignes d'une statistique telles que le MOTEUR les donne (`statLines` de
+ * l'analyse, cf. server/src/sports/football/statMarkets.js) : la cote juste de
+ * chaque ligne, « moins » et « plus », par la binomiale négative mesurée sur
+ * 36 400 matchs — jamais recalculée ici. Étape 8 du plan (06/10/2026) : ce
+ * récapitulatif refaisait une loi de Poisson simple sur les moyennes de saison,
+ * trop optimiste de 2 à 7 points pour corners et tirs.
+ */
+function lignesDuMoteur(lignes) {
+  return (lignes ?? []).flatMap((l) => [
+    { line: l.line, side: 'under', odds: l.under ?? null },
+    { line: l.line, side: 'over', odds: l.over ?? null }
+  ]);
 }
+
+const SENS = { over: 'Plus de', under: 'Moins de' };
 
 /**
  * Récapitulatif "meilleures chances" : pour CHAQUE marché déjà calculé
@@ -59,7 +53,7 @@ function combinedOverPicks(homeValue, awayValue, lines) {
  * dérivent du même modèle de buts (donc corrélés) — les combiner comme des
  * paris indépendants donnerait une fausse cote, trop généreuse.
  */
-export function computeSafestPicks(result, averagesComparison) {
+export function computeSafestPicks(result) {
   if (!result) return [];
 
   const trueOdds = result.trueOdds;
@@ -135,90 +129,29 @@ export function computeSafestPicks(result, averagesComparison) {
     }
   }
 
-  // Tirs / tirs cadrés (nécessitent "Moyennes des deux équipes").
-  const { home: homeStats, away: awayStats } = resolveAveragesStats(averagesComparison);
+  // Corners, tirs et tirs cadrés : les cotes justes du MOTEUR (`statLines`, binomiale négative
+  // mesurée), les mêmes que ses pronostics de marché — sur les lignes qu'il considère lui-même, plus
+  // ET moins. Les mêmes marchés et libellés qu'avant (le règlement des paris les lit) ; « Qui fait le
+  // plus de tirs / corners » n'a pas de probabilité du moteur et n'est plus proposé (il ne s'affichait
+  // d'ailleurs plus : cet onglet ne recevait pas les moyennes de saison qu'il demandait).
+  const lignes = result.statLines ?? null;
+  const total = (kind, market, marketId, unit) => {
+    const best = lowestAbove(lignesDuMoteur(lignes?.[kind]?.total), MIN_PICK_ODDS);
+    if (best) picks.push({ market, marketId, params: { line: best.line, side: best.side }, pick: `${SENS[best.side]} ${best.line} ${unit}`, odds: best.odds });
+  };
+  total('shotsOnTarget', 'Total tirs cadrés', 'totalShotsOnTarget', 'tirs cadrés');
+  total('corners', 'Total corners', 'totalCorners', 'corners');
 
-  if (homeStats && awayStats) {
-    const totalShots = compareTeamsPoisson(Number(homeStats['Total Shots']), Number(awayStats['Total Shots']));
-    if (totalShots) {
-      const best = lowestAbove(
-        [
-          { pick: homeName, odds: totalShots.home > 0 ? Number((1 / totalShots.home).toFixed(2)) : null },
-          { pick: 'Égalité', odds: totalShots.equal > 0 ? Number((1 / totalShots.equal).toFixed(2)) : null },
-          { pick: awayName, odds: totalShots.away > 0 ? Number((1 / totalShots.away).toFixed(2)) : null }
-        ],
-        MIN_PICK_ODDS
-      );
-      if (best) picks.push({ market: 'Qui fait le plus de tirs', pick: best.pick, odds: best.odds });
-    }
-
-    const shotsOnTarget = compareTeamsPoisson(Number(homeStats['Shots on Goal']), Number(awayStats['Shots on Goal']));
-    if (shotsOnTarget) {
-      const best = lowestAbove(
-        [
-          { pick: homeName, odds: shotsOnTarget.home > 0 ? Number((1 / shotsOnTarget.home).toFixed(2)) : null },
-          { pick: 'Égalité', odds: shotsOnTarget.equal > 0 ? Number((1 / shotsOnTarget.equal).toFixed(2)) : null },
-          { pick: awayName, odds: shotsOnTarget.away > 0 ? Number((1 / shotsOnTarget.away).toFixed(2)) : null }
-        ],
-        MIN_PICK_ODDS
-      );
-      if (best) picks.push({ market: 'Qui fait le plus de tirs cadrés', pick: best.pick, odds: best.odds });
-    }
-
-    // Total tirs cadrés (Plus de X, sur la somme des deux lambdas — même
-    // principe que le total buts, juste porté sur "Shots on Goal").
-    const totalShotsOnTargetBest = lowestAbove(combinedOverPicks(homeStats['Shots on Goal'], awayStats['Shots on Goal'], SHOTS_ON_TARGET_LINES), MIN_PICK_ODDS);
-    if (totalShotsOnTargetBest) picks.push({ market: 'Total tirs cadrés', pick: `Plus de ${totalShotsOnTargetBest.line} tirs cadrés`, odds: totalShotsOnTargetBest.odds });
-
-    const cornersHeadToHead = compareTeamsPoisson(Number(homeStats['Corner Kicks']), Number(awayStats['Corner Kicks']));
-    if (cornersHeadToHead) {
-      const best = lowestAbove(
-        [
-          { pick: homeName, odds: cornersHeadToHead.home > 0 ? Number((1 / cornersHeadToHead.home).toFixed(2)) : null },
-          { pick: 'Égalité', odds: cornersHeadToHead.equal > 0 ? Number((1 / cornersHeadToHead.equal).toFixed(2)) : null },
-          { pick: awayName, odds: cornersHeadToHead.away > 0 ? Number((1 / cornersHeadToHead.away).toFixed(2)) : null }
-        ],
-        MIN_PICK_ODDS
-      );
-      if (best) picks.push({ market: 'Qui fait le plus de corners', pick: best.pick, odds: best.odds });
-    }
-
-    // Total corners (Plus de X, même principe que le total tirs cadrés).
-    const totalCornersBest = lowestAbove(combinedOverPicks(homeStats['Corner Kicks'], awayStats['Corner Kicks'], CORNER_LINES), MIN_PICK_ODDS);
-    if (totalCornersBest) picks.push({ market: 'Total corners', pick: `Plus de ${totalCornersBest.line} corners`, odds: totalCornersBest.odds });
-  }
-
-  // Tirs / tirs cadrés par équipe (les 4 lignes × Plus/Moins, pour chaque équipe).
-  for (const [stats, teamName] of [
-    [homeStats, homeName],
-    [awayStats, awayName]
+  for (const [side, teamName] of [
+    ['home', homeName],
+    ['away', awayName]
   ]) {
-    if (!stats) continue;
-
-    const shotsCandidates = TOTAL_SHOTS_LINES.flatMap((line) => {
-      const lineOdds = teamLineOddsPoisson(Number(stats['Total Shots']), line);
-      return [
-        { odds: lineOdds?.overOdds, side: 'over', line },
-        { odds: lineOdds?.underOdds, side: 'under', line }
-      ];
-    });
-    const bestShots = lowestAbove(shotsCandidates, MIN_PICK_ODDS);
-    if (bestShots) {
-      const side = bestShots.side === 'over' ? 'Plus de' : 'Moins de';
-      picks.push({ market: 'Tirs par équipe', pick: `${teamName} — ${side} ${bestShots.line} tirs`, odds: bestShots.odds });
-    }
-
-    const shotsOnTargetCandidates = SHOTS_ON_TARGET_TEAM_LINES.flatMap((line) => {
-      const lineOdds = teamLineOddsPoisson(Number(stats['Shots on Goal']), line);
-      return [
-        { odds: lineOdds?.overOdds, side: 'over', line },
-        { odds: lineOdds?.underOdds, side: 'under', line }
-      ];
-    });
-    const bestShotsOnTarget = lowestAbove(shotsOnTargetCandidates, MIN_PICK_ODDS);
-    if (bestShotsOnTarget) {
-      const side = bestShotsOnTarget.side === 'over' ? 'Plus de' : 'Moins de';
-      picks.push({ market: 'Tirs cadrés par équipe', pick: `${teamName} — ${side} ${bestShotsOnTarget.line} tirs cadrés`, odds: bestShotsOnTarget.odds });
+    for (const [kind, market, marketId, unit] of [
+      ['shots', 'Tirs par équipe', 'teamShots', 'tirs'],
+      ['shotsOnTarget', 'Tirs cadrés par équipe', 'teamShotsOnTarget', 'tirs cadrés']
+    ]) {
+      const best = lowestAbove(lignesDuMoteur(lignes?.[kind]?.[side]), MIN_PICK_ODDS);
+      if (best) picks.push({ market, marketId, params: { team: side, line: best.line, side: best.side }, pick: `${teamName} — ${SENS[best.side]} ${best.line} ${unit}`, odds: best.odds });
     }
   }
 

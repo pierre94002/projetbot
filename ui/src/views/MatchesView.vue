@@ -23,6 +23,9 @@ import CupPanel from '@/components/matches/CupPanel.vue';
 import TeamStatsView from '@/views/TeamStatsView.vue';
 import SeasonCalendarView from '@/views/SeasonCalendarView.vue';
 import PlayerStatsView from '@/views/PlayerStatsView.vue';
+import ScreenerView from '@/views/ScreenerView.vue';
+import DroppingOddsView from '@/views/DroppingOddsView.vue';
+import OpportunitiesView from '@/views/OpportunitiesView.vue';
 import { standingsApi } from '@/services/standingsApi.js';
 import { matchStatsApi } from '@/services/matchStatsApi.js';
 import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
@@ -56,8 +59,18 @@ const matchAiAnalysisStore = useMatchAiAnalysisStore();
 // matchs/statistiques à un seul endroit. L'onglet « Compo & joueurs » a été
 // retiré le 03/10/2026 (demande de Pierre) : la composition d'un match est
 // sur sa page, l'effectif d'un club et ses joueurs sur la page du club.
+// « Repérage » et « Chutes de cotes » (04/10/2026, Pierre : « lance les 4
+// améliorations ») : les matchs à venir classés par marché, et les issues
+// dont la cote a le plus baissé — deux façons de regarder la même liste.
+// « Opportunités » (étape 8 du plan, 06/10/2026) : les deux réunis avec les
+// value bets en une liste de paris, triée par value. Un onglet ici plutôt
+// qu'une entrée du menu : le menu garde ses cinq sections (une couleur
+// chacune), et la page vit à côté des deux onglets qu'elle réunit.
 const TABS = [
   { value: 'matches', label: 'Matchs' },
+  { value: 'opportunites', label: 'Opportunités' },
+  { value: 'screener', label: 'Repérage' },
+  { value: 'dropping', label: 'Chutes de cotes' },
   { value: 'calendar', label: 'Calendrier saison' },
   { value: 'stats', label: 'Statistiques ligue' },
   { value: 'players', label: 'Statistiques joueurs' }
@@ -65,6 +78,14 @@ const TABS = [
 // Onglet initial lu depuis ?vue=... s'il est valide (lien partagé/rechargement
 // de page) — sinon "Matchs" par défaut, comme avant l'ajout du reflet d'URL.
 const activeTab = ref(TABS.some((t) => t.value === route.query.onglet) ? route.query.onglet : 'matches');
+// Un lien vers un onglet alors que la page est déjà ouverte (la notification
+// d'une nouvelle opportunité, étape 8) : l'onglet suit l'adresse.
+watch(
+  () => route.query.onglet,
+  (onglet) => {
+    if (TABS.some((t) => t.value === onglet) && onglet !== activeTab.value) activeTab.value = onglet;
+  }
+);
 
 const searchQuery = ref('');
 const leagueQuery = ref('');
@@ -314,6 +335,9 @@ onMounted(() => {
     <TeamStatsView v-if="activeTab === 'stats'" key="stats" />
     <PlayerStatsView v-else-if="activeTab === 'players'" key="players" />
     <SeasonCalendarView v-else-if="activeTab === 'calendar'" key="calendar" />
+    <ScreenerView v-else-if="activeTab === 'screener'" key="screener" />
+    <DroppingOddsView v-else-if="activeTab === 'dropping'" key="dropping" />
+    <OpportunitiesView v-else-if="activeTab === 'opportunites'" key="opportunites" />
 
     <div v-else key="matches" class="matches-view__default cm-page">
     <!-- Le bandeau : ce qu'on regarde, en chiffres. -->

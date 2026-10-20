@@ -6,6 +6,7 @@ import AppTopbar from './AppTopbar.vue';
 import ToastStack from '@/components/common/ToastStack.vue';
 import { useDataAutoRefresh } from '@/composables/useDataAutoRefresh.js';
 import { useFavoritesStore } from '@/stores/favoritesStore.js';
+import { useSurveillanceOpportunites } from '@/composables/useNotificationsOpportunites.js';
 
 // Monté ici parce que AppShell enveloppe toute l'appli et n'est jamais démonté :
 // la surveillance tourne donc quelle que soit la page affichée.
@@ -14,6 +15,11 @@ useDataAutoRefresh();
 // Les équipes et championnats favoris (03/10/2026) : chargés une fois, lus
 // par toutes les pages qui rangent des matchs ou des championnats.
 useFavoritesStore().fetch();
+
+// Étape 8 du plan : la notification Windows d'une NOUVELLE opportunité verte.
+// Ne tourne que si Pierre l'a activée sur la page Opportunités (et que le
+// navigateur l'a permise) ; montée ici pour veiller quelle que soit la page.
+useSurveillanceOpportunites();
 
 // La section de la page (cf. router meta.section) : elle choisit la couleur
 // d'ambiance de toute l'interface via [data-section] (tokens.css) — demande

@@ -285,7 +285,7 @@ const nombreValues = computed(() => (profile.value?.markets ?? []).filter((m) =>
 
         <p class="opp__source">
           <AppIcon name="database" :size="12" />
-          Cotes passées : {{ profile.source }}, moyenne du marché à la clôture. Résultats : FotMob. Cotes du jour : The Odds API.
+          Cotes passées : {{ profile.source }}. Résultats : FotMob. Cotes du jour : {{ props.match?.marketOdds?.source === 'gratuit' ? 'relevées gratuitement (' + (props.match.marketOdds.sources ?? []).join(', ') + ')' : 'The Odds API' }}.
         </p>
       </template>
     </template>

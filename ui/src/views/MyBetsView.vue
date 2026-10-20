@@ -32,8 +32,14 @@ import MatchStatusBadge from '@/components/common/MatchStatusBadge.vue';
 import MatchStatsPanel from '@/components/matches/MatchStatsPanel.vue';
 import LeagueBadge from '@/components/matches/LeagueBadge.vue';
 import TabbedView from '@/components/common/TabbedView.vue';
+import ValueBadge from '@/components/common/ValueBadge.vue';
+// Étape 10 du plan : le ticket « J'ai parié » (cote prise, bookmaker, probabilité du moteur, heure de la cote).
+import TicketDuPari from '@/components/betting/TicketDuPari.vue';
+import { prendre, selectionDuCandidat, controleDuTicket, pariAEnregistrer, bookmakerPropose, gainAttenduDit, natureDuTicket, NATURES, SOURCES_DE_COTE } from '@/utils/ticket.js';
 import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
 import { formatOdds, formatCurrency, formatPercent, formatDateTime, formatKickoff } from '@/utils/format.js';
+// Étape 11 du plan : vos garde-fous et les fiches de vos comptes — le ticket signale une mise au-delà, jamais un refus.
+import { useRisqueStore } from '@/stores/risqueStore.js';
 
 /**
  * Mes paris — refonte visuelle du 01/10/2026 (cf. ui/DESIGN.md) : un bandeau
@@ -53,6 +59,7 @@ const favoris = useFavoritesStore();
 const predictionsStore = usePredictionsStore();
 const toastStore = useToastStore();
 const teamStatsModalStore = useTeamStatsModalStore();
+const risque = useRisqueStore();
 
 const STATUS_LABELS = { pending: 'En attente', won: 'Gagné', lost: 'Perdu', void: 'Annulé' };
 
@@ -260,9 +267,19 @@ const scanned = ref(false);
 // - allPicksPool : TOUS les pronostics du moteur, sans filtre de seuil —
 //   pour parier sur autre chose que ce que les deux listes ci-dessus retiennent.
 const valueBets = ref([]); // [{ matchId, homeName, awayName, league, commenceTime, market, pick, odds, modelOdds, edgePercent, recommendedStake, bookmaker, oddsField }]
+// Étape 7 du plan : les values qui n'existent que sur une cote à rafraîchir (trop vieille, ou relevée
+// avant l'annonce des compositions) — le serveur ne les recommande plus ; on les dit, sans les lister.
+const valuesARafraichir = ref([]); // [{ matchId, homeName, awayName, pick, bookmaker, odds, raison }]
 const safestPicksPool = ref([]); // même forme, sans modelOdds/edgePercent/recommendedStake
 const allPicksPool = ref([]); // même forme que safestPicksPool
 const selectedByMatch = ref(new Map()); // matchId -> candidate sélectionné (1 max par match)
+// Étape 10 : ce que Pierre a pris chez le bookmaker — le bookmaker du ticket, la cote prise de chaque sélection
+// (clé = legKey), la cote d'un combiné (utils/ticket.js). « Combiner les paris d'un même match » : désactivé, un
+// seul pari par match, comme avant ; coché, une deuxième sélection d'un match s'ajoute (combiné du même match).
+const editionDuTicket = ref({ bookmaker: null, cotes: {}, coteCombinee: null });
+const combinerMemeMatch = ref(false);
+// Vos bookmakers (Réglages), tels que l'analyse du moteur les rend au scan (comparateur de l'étape 10).
+const vosBookmakersDuScan = ref([]);
 
 function legKey(candidate) {
   return `${candidate.matchId}|${candidate.market}|${candidate.pick}`;
@@ -285,6 +302,8 @@ async function scanMatches() {
   scanning.value = true;
   scanned.value = true;
   valueBets.value = [];
+  valuesARafraichir.value = [];
+  const foundStale = [];
   safestPicksPool.value = [];
   allPicksPool.value = [];
   selectedByMatch.value = new Map();
@@ -309,8 +328,15 @@ async function scanMatches() {
       const match = batch[index];
       const data = result.value;
       const base = { matchId: match.matchId, homeName: match.home, awayName: match.away, league: match.league, commenceTime: match.commenceTime };
+      // Étape 10 : l'heure où le moteur a calculé ces probabilités (« J'ai parié » la note) et vos bookmakers (Réglages).
+      base.lueA = data.comparateur?.calculeLe ?? new Date().toISOString();
+      if (data.comparateur?.vosBookmakers?.length) vosBookmakersDuScan.value = data.comparateur.vosBookmakers;
 
       const pari = data.staking;
+      if (pari?.reason === 'a_rafraichir' && pari.aRafraichir) {
+        const p = pari.aRafraichir;
+        foundStale.push({ ...base, pick: p.label, bookmaker: p.bookmakerTitle, odds: p.displayedOdds ?? p.odds, raison: p.fraicheur?.raison ?? null });
+      }
       if (pari?.action === 'RECOMMENDED' && (pari.displayedOdds ?? pari.odds) >= MIN_DISPLAYED_ODDS) {
         const CHAMPS = { home: 'odds1', draw: 'oddsDraw', away: 'odds2' };
         const LIBELLES = { home: `${match.home} gagne`, draw: 'Match nul', away: `${match.away} gagne` };
@@ -331,13 +357,24 @@ async function scanMatches() {
           edgePercent: data.edgePercent,
           recommendedStake: pari.stake,
           oddsField: CHAMPS[pari.outcome],
+          // Étape 8 du plan : le verdict du moteur sur cette issue (verdictPari.js), le même que la page
+          // « Opportunités du jour » — la pastille le réévalue à l'horloge (une cote qui vieillit : « à rafraîchir »).
+          verdict: data.verdicts?.[pari.outcome] ?? null,
           byBookmaker: data.market.byBookmaker ?? []
         });
+        // Étape 10 : la cote minimale à prendre pour cette issue (comparateur du serveur).
+        Object.assign(foundValue.at(-1), { bornes: bornesDuPronostic(data, { marketId: 'result', params: { outcome: pari.outcome } }) });
+        // Étape 11 : la mise conseillée ramenée à un plafond de vos garde-fous (le serveur dit lequel, et ce que le moteur conseillait).
+        Object.assign(foundValue.at(-1), { misePlafonnee: pari.misePlafonnee ?? null });
       }
 
       for (const safePick of computeSafestPicks(data)) {
         if (safePick.odds < MIN_DISPLAYED_ODDS) continue;
         allSafest.push({ ...base, market: safePick.market, pick: safePick.pick, odds: safePick.odds });
+        // Étape 8 : corners et tirs portent leur marché structuré (comme « Tous les paris »), pour le ticket et le règlement.
+        Object.assign(allSafest.at(-1), { marketId: safePick.marketId ?? null, params: safePick.params ?? null });
+        // Étape 10 : la cote minimale à prendre, quand cette ligne est celle du pronostic du moteur (comparateur du serveur).
+        Object.assign(allSafest.at(-1), { bornes: bornesDuPronostic(data, allSafest.at(-1)) });
       }
 
       // Dérivé côté serveur (cf. sports/football/markets.js) — source unique,
@@ -354,6 +391,8 @@ async function scanMatches() {
           marketId: p.marketId ?? null,
           params: p.params ?? null
         });
+        // Étape 10 : la cote minimale à prendre pour ce pronostic (comparateur du serveur).
+        Object.assign(allPicks.at(-1), { bornes: bornesDuPronostic(data, p) });
       }
       // Le marqueur « value bet » et l'avantage ne vont qu'au pronostic
       // « Résultat » qui porte sur l'issue réellement pariée : le pari value
@@ -373,11 +412,14 @@ async function scanMatches() {
           commenceTime: match.commenceTime ?? null,
           action: surLePari ? 'RECOMMENDED' : pari?.action === 'RECOMMENDED' ? 'PASS' : pari?.action ?? null,
           edgePercent: candidat ? Number((candidat.ev * 100).toFixed(2)) : null,
+          // Étape 25 du plan : la version du moteur qui a calculé ce pronostic, gardée avec lui au journal.
+          engineVersion: data.engineVersion ?? null,
           ...marketPrediction
         });
       }
     });
     valueBets.value = [...foundValue];
+    valuesARafraichir.value = [...foundStale];
     safestPicksPool.value = allSafest.sort((a, b) => a.odds - b.odds);
     allPicksPool.value = [...allPicks];
   }
@@ -449,6 +491,8 @@ const groupedValueBets = computed(() => {
 // s'y ajouter : deux issues du même match combinées seraient corrélées
 // (parfois même mutuellement exclusives), donc jamais un vrai combiné.
 function toggleSelect(candidate) {
+  // Étape 10 : « Combiner les paris d'un même match » coché — une deuxième sélection d'un match s'ajoute (cf. basculerDansLeCombine).
+  if (combinerMemeMatch.value && basculerDansLeCombine(candidate)) return;
   const next = new Map(selectedByMatch.value);
   const current = next.get(candidate.matchId);
   if (current && legKey(current) === legKey(candidate)) {
@@ -461,6 +505,8 @@ function toggleSelect(candidate) {
 }
 
 function isSelected(candidate) {
+  // Étape 10 : une sélection ajoutée au combiné du même match est rangée sous sa propre clé (legKey).
+  if ([...selectedByMatch.value.entries()].some(([cle, c]) => cle !== c.matchId && legKey(c) === legKey(candidate))) return true;
   const current = selectedByMatch.value.get(candidate.matchId);
   return Boolean(current) && legKey(current) === legKey(candidate);
 }
@@ -480,6 +526,73 @@ function toggleBookmakers(matchId) {
 const selectedLegs = computed(() => [...selectedByMatch.value.values()]);
 const combinedOdds = computed(() => selectedLegs.value.reduce((product, leg) => product * leg.odds, 1));
 
+// ----------------------------------------------- étape 10 : le ticket « J'ai parié »
+/** La cote minimale à prendre d'un pronostic, d'après le comparateur du serveur (null quand ce n'est pas la ligne du moteur). */
+function bornesDuPronostic(data, p) {
+  const c = data?.comparateur;
+  if (!c || !p?.marketId) return null;
+  if (p.marketId === 'result') return c.issues?.find((i) => i.issue === p.params?.outcome)?.bornes ?? null;
+  const memes = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
+  return c.marches?.find((m) => m.marketId === p.marketId && memes(m.params, p.params))?.bornes ?? null;
+}
+
+/**
+ * « Combiner les paris d'un même match » coché : une deuxième sélection d'un match déjà sur le ticket s'AJOUTE
+ * (combiné du même match) au lieu de remplacer la première — sauf une autre issue du même marché, qui l'exclut
+ * et la remplace (la règle du ticket, utils/ticket.js, prendre). La première sélection d'un match garde la clé
+ * du match, comme avant ; les suivantes sont rangées sous leur clé de pari (legKey).
+ * @returns {boolean} faux : le chemin d'avant (première sélection d'un match, ou la seule qu'on retire)
+ */
+function basculerDansLeCombine(candidate) {
+  const actuel = [...selectedByMatch.value.values()];
+  const duMatch = actuel.filter((c) => c.matchId === candidate.matchId);
+  if (!duMatch.length || (duMatch.length === 1 && legKey(duMatch[0]) === legKey(candidate))) return false;
+  const r = prendre(actuel, candidate, { memeMatch: true });
+  const next = new Map();
+  for (const c of r.selections) next.set(next.has(c.matchId) ? legKey(c) : c.matchId, c);
+  selectedByMatch.value = next;
+  if (r.message) toastStore.push(r.message, 'info');
+  return true;
+}
+
+// Décoché : retour à un seul pari par match — les sélections ajoutées au combiné du même match sont retirées.
+watch(combinerMemeMatch, (actif) => {
+  if (actif) return;
+  const premieres = new Map([...selectedByMatch.value.entries()].filter(([cle, c]) => cle === c.matchId));
+  if (premieres.size !== selectedByMatch.value.size) {
+    selectedByMatch.value = premieres;
+    toastStore.push('Un seul pari par match : les sélections ajoutées au combiné du même match sont retirées du ticket.', 'info');
+  }
+});
+
+/** Les sélections du ticket, dans la forme du ticket (utils/ticket.js) : cote relevée, bookmaker, probabilité du moteur. */
+const selectionsDuTicket = computed(() => selectedLegs.value.map(selectionDuCandidat));
+/** Une sélection retirée depuis le ticket : comme la décocher dans sa liste. */
+function retirerDuTicketMesParis(cle) {
+  const candidat = selectedLegs.value.find((c) => legKey(c) === cle);
+  if (candidat) toggleSelect(candidat);
+}
+// Le bookmaker du ticket : celui de la dernière sélection qui en propose un (un value bet), tant que Pierre n'en a pas choisi.
+watch(selectionsDuTicket, (selections) => {
+  const cles = new Set(selections.map((s) => legKey(s)));
+  const cotes = Object.fromEntries(Object.entries(editionDuTicket.value.cotes ?? {}).filter(([cle]) => cles.has(cle)));
+  editionDuTicket.value = { ...editionDuTicket.value, cotes, bookmaker: editionDuTicket.value.bookmaker ?? bookmakerPropose(selections) };
+});
+/** La nature du ticket (simple, combiné de plusieurs matchs, combiné du même match), en mots. */
+const natureDuBordereau = computed(() => natureDuTicket(selectionsDuTicket.value));
+
+/** Pour le carnet : la probabilité du moteur au moment du pari, ou « non notée » (pari d'avant l'étape 10). */
+function probabiliteAuPari(leg) {
+  return Number.isFinite(leg?.probabiliteMoteur) ? `${(leg.probabiliteMoteur * 100).toLocaleString('fr-FR', { maximumFractionDigits: 1 })} % au pari` : 'probabilité non notée';
+}
+/** Pour le carnet : chez qui (le bookmaker noté par « J'ai parié »), ou « bookmaker non noté ». */
+const bookmakerDuPari = (bet, leg = null) => leg?.bookmakerTitle ?? bet?.bookmakerTitle ?? leg?.bookmaker ?? bet?.bookmaker ?? 'bookmaker non noté';
+/** Pour le carnet : l'heure de la cote prise et d'où elle vient. */
+function heureDeLaCotePrise(leg) {
+  if (!leg?.coteReleveeA) return null;
+  return `${SOURCES_DE_COTE[leg.coteSource] ?? 'cote'} · ${formatDateTime(leg.coteReleveeA)}`;
+}
+
 const slipStake = ref(10);
 const submittingSlip = ref(false);
 
@@ -497,6 +610,13 @@ watch(selectedLegs, (legs) => {
 
 async function submitSlip() {
   if (!selectedLegs.value.length) return;
+  // Étape 10 : « J'ai parié » — rien ne part sans le bookmaker, la cote prise de chaque sélection, et celle d'un combiné du même match.
+  const manquesDuTicket = controleDuTicket({ selections: selectionsDuTicket.value, edition: editionDuTicket.value, mise: Number(slipStake.value), bookmakers: vosBookmakersDuScan.value });
+  if (manquesDuTicket.length) {
+    toastStore.error(manquesDuTicket[0]);
+    return;
+  }
+  const corpsDuTicket = pariAEnregistrer({ selections: selectionsDuTicket.value, edition: editionDuTicket.value, mise: Number(slipStake.value), origine: 'mes-paris', bookmakers: vosBookmakersDuScan.value });
   submittingSlip.value = true;
   try {
     await betsStore.createBet({
@@ -513,9 +633,16 @@ async function submitSlip() {
         pick: leg.pick,
         odds: leg.odds
       }))
+        // Étape 10 : la cote PRISE (à la place de la cote indiquée), le bookmaker, la probabilité du moteur au moment du pari, l'heure de la cote.
+        .map((jambe, i) => ({ ...jambe, ...corpsDuTicket.legs[i] })),
+      ...(corpsDuTicket.cotePrise ? { cotePrise: corpsDuTicket.cotePrise } : {}),
+      origine: 'mes-paris'
     });
     toastStore.success(selectedLegs.value.length > 1 ? 'Pari combiné ajouté au carnet.' : 'Pari ajouté au carnet.');
+    // Étape 11 : ce que les garde-fous et la fiche du compte signalent sur ce pari (déjà enregistré) — le pari créé est en tête du carnet.
+    for (const a of betsStore.bets[0]?.alertes ?? []) toastStore.push(a.texte, a.niveau === 'danger' ? 'error' : 'info', 9000);
     selectedByMatch.value = new Map();
+    editionDuTicket.value = { ...editionDuTicket.value, cotes: {}, coteCombinee: null };
   } catch (error) {
     toastStore.error(`Création du pari impossible : ${error.message}`);
   } finally {
@@ -525,6 +652,7 @@ async function submitSlip() {
 
 onMounted(() => {
   betsStore.fetchBets();
+  risque.charger();
   if (!sourcesStore.sources.length) sourcesStore.fetchSources();
   if (matchesStore.matches.length === 0) matchesStore.fetchMatches();
 });
@@ -588,9 +716,16 @@ onMounted(() => {
         <div class="bet-slip__titles">
           <p class="bet-slip__title">
             {{ selectedLegs.length }} sélection{{ selectedLegs.length > 1 ? 's' : '' }}
-            <span v-if="selectedLegs.length > 1" class="bet-slip__combo">— combiné, cote {{ formatOdds(combinedOdds) }}</span>
+            <!-- Étape 10 : un combiné du même match n'a pas pour cote le produit des cotes (sélections liées) : la cote est celle du bookmaker. -->
+            <template v-if="natureDuBordereau !== 'combine-meme-match'">
+              <span v-if="selectedLegs.length > 1" class="bet-slip__combo">— combiné, cote indiquée {{ formatOdds(combinedOdds) }}</span>
+            </template>
+            <span v-else class="bet-slip__combo">— {{ NATURES[natureDuBordereau].toLowerCase() }}, cote du bookmaker</span>
           </p>
-          <p class="bet-slip__hint">Gain potentiel <span class="cm-numeric bet-slip__potential">{{ formatCurrency(slipPotential) }}</span> · un seul pari par match</p>
+          <template v-if="natureDuBordereau !== 'combine-meme-match'">
+            <p class="bet-slip__hint">Gain potentiel aux cotes indiquées <span class="cm-numeric bet-slip__potential">{{ formatCurrency(slipPotential) }}</span><template v-if="!combinerMemeMatch"> · un seul pari par match</template></p>
+          </template>
+          <p v-else class="bet-slip__hint">Les sélections d'un même match sont liées : tapez la cote du combiné que donne le bookmaker.</p>
         </div>
       </div>
 
@@ -602,10 +737,25 @@ onMounted(() => {
         </span>
       </div>
 
+      <!-- Étape 10 : ce que vous avez pris chez le bookmaker — le ticket « J'ai parié » (bookmaker, cote prise, probabilité du moteur, heure de la cote). -->
+      <TicketDuPari
+        v-model:edition="editionDuTicket"
+        v-model:memeMatch="combinerMemeMatch"
+        class="bet-slip__ticket"
+        :selections="selectionsDuTicket"
+        :mise="Number(slipStake)"
+        :bookmakers="vosBookmakersDuScan"
+        :garde-fous="risque.pourLeTicket"
+        :comptes="risque.fiches"
+        :avec-validation="false"
+        origine="mes-paris"
+        @retirer="retirerDuTicketMesParis"
+      />
+
       <div class="bet-slip__form">
         <AppNumberField v-model="slipStake" label="Mise (€)" :min="1" class="bet-slip__stake" />
         <AppButton variant="primary" :loading="submittingSlip" :disabled="!slipStake || slipStake <= 0" @click="submitSlip">
-          Valider {{ selectedLegs.length > 1 ? `le combiné (${selectedLegs.length})` : 'le pari' }}
+          J'ai parié : {{ selectedLegs.length > 1 ? `le combiné (${selectedLegs.length})` : 'le pari' }}
         </AppButton>
       </div>
     </div>
@@ -772,6 +922,13 @@ onMounted(() => {
                               <p class="bet-card__date">Statut global déduit des sélections ci-dessous</p>
                             </template>
                             <p class="bet-card__date"><AppIcon name="clock" :size="11" />Pari créé le {{ formatDateTime(bet.createdAt) }}</p>
+                            <!-- Étape 10 : chez qui, ce que donnait le moteur au moment du pari, l'heure de la cote prise et le gain attendu (« non noté » pour un pari d'avant). -->
+                            <p class="bet-card__date bet-card__taken">
+                              <AppIcon name="wallet" :size="11" />{{ bookmakerDuPari(bet, bet.legs.length === 1 ? bet.legs[0] : null) }}
+                              <template v-if="bet.legs.length === 1"> · {{ probabiliteAuPari(bet.legs[0]) }}<template v-if="heureDeLaCotePrise(bet.legs[0])"> · {{ heureDeLaCotePrise(bet.legs[0]) }}</template></template>
+                              <template v-else-if="bet.nature"> · {{ NATURES[bet.nature] }}<template v-if="bet.produitDesCotes"> · produit des cotes {{ formatOdds(bet.produitDesCotes) }}</template></template>
+                              · gain attendu {{ gainAttenduDit(bet) }}
+                            </p>
                           </div>
 
                           <dl class="figures">
@@ -828,6 +985,10 @@ onMounted(() => {
                                 <PickCrest :item="leg" :home="leg.homeName" :away="leg.awayName" :league="leg.league" :size="14" />{{ leg.pick }}
                                 <span class="cm-pill bet-leg__odds">@ {{ formatOdds(leg.odds) }}</span>
                               </p>
+                              <!-- Étape 10 : la probabilité du moteur au moment du pari et l'heure de la cote de cette sélection. -->
+                              <p v-if="leg.probabiliteMoteur || leg.coteReleveeA" class="bet-leg__market cm-truncate">
+                                {{ probabiliteAuPari(leg) }}<template v-if="heureDeLaCotePrise(leg)"> · {{ heureDeLaCotePrise(leg) }}</template>
+                              </p>
                             </div>
                             <span class="bet-status is-sm" :class="`is-${legStatus(bet, i)}`">{{ STATUS_LABELS[legStatus(bet, i)] }}</span>
                             <div class="bet-leg__actions">
@@ -869,6 +1030,31 @@ onMounted(() => {
           <AppTextField v-model="valueBetsSearchQuery" placeholder="Rechercher (équipe, marché, pick)…">
             <template #icon><AppIcon name="search" :size="14" /></template>
           </AppTextField>
+
+          <!-- Étape 8 : une seule source de verdict — celui de cette liste est celui de la page Opportunités du jour. -->
+          <div v-if="scanned" class="cm-note is-info">
+            <span class="cm-icon-box is-info is-sm"><AppIcon name="bolt" :size="14" /></span>
+            <div>
+              <p class="cm-note__title">Le même verdict que la page Opportunités</p>
+              <p class="cm-note__text">
+                Ces value bets sont le verdict du moteur au moment du scan ; la pastille le suit à l'horloge (une cote qui vieillit passe « à rafraîchir »).
+                La page <RouterLink to="/opportunites" class="scanner__link">Matchs › Opportunités</RouterLink> donne le même verdict, issue par issue, avec les chutes de cotes et l'état des compositions, sans scan.
+              </p>
+            </div>
+          </div>
+
+          <!-- Étape 7 : une value sur une cote à rafraîchir n'est pas un value bet — elle est dite ici, jamais en vert. -->
+          <div v-if="scanned && valuesARafraichir.length" class="cm-note is-warning">
+            <span class="cm-icon-box is-warning is-sm"><AppIcon name="clock" :size="14" /></span>
+            <div>
+              <p class="cm-note__title">{{ valuesARafraichir.length }} value{{ valuesARafraichir.length > 1 ? 's' : '' }} à rafraîchir</p>
+              <p class="cm-note__text">
+                Sur des cotes trop vieilles, ou relevées avant l'annonce des compositions :
+                <span v-for="(v, i) in valuesARafraichir" :key="v.matchId" :title="v.raison ?? ''">{{ i ? ' ; ' : '' }}{{ v.homeName }} – {{ v.awayName }}, « {{ v.pick }} » à {{ v.odds }} chez {{ v.bookmaker }}</span>.
+                Elles ne sont pas listées ici tant que les cotes ne sont pas relevées de nouveau (Réglages › Données › Actualiser), puis le scan relancé.
+              </p>
+            </div>
+          </div>
 
           <LoadingSpinner v-if="scanning && activeValueBets.length === 0" label="Analyse des matchs…" />
           <EmptyState
@@ -929,13 +1115,18 @@ onMounted(() => {
                         <dt class="cm-truncate" title="Le bookmaker qui paie le mieux cette issue">{{ c.bookmaker ?? 'marché' }}</dt>
                         <dd><span class="cm-pill is-section">{{ formatOdds(c.odds) }}</span></dd>
                       </div>
+                      <!-- Étape 8 : le verdict du moteur, la même pastille que la page Opportunités (vert : value jouable sur une cote fraîche). -->
+                      <div v-if="c.verdict" class="figure">
+                        <dt>Verdict</dt>
+                        <dd><ValueBadge v-if="c.verdict" taille="sm" :verdict="c.verdict" :fraicheur="c.verdict.fraicheur ?? null" class="vb-card__verdict" /></dd>
+                      </div>
                       <div class="figure">
                         <dt>Edge</dt>
-                        <dd class="cm-numeric cm-positive figure__edge">{{ c.edgePercent == null ? '—' : `+${c.edgePercent.toFixed(1)}%` }}</dd>
+                        <dd class="cm-numeric figure__edge">{{ c.edgePercent == null ? '—' : `+${c.edgePercent.toFixed(1)}%` }}</dd>
                       </div>
                       <div class="figure">
                         <dt>Kelly</dt>
-                        <dd class="cm-numeric">{{ formatCurrency(c.recommendedStake) }}</dd>
+                        <dd class="cm-numeric" :title="c.misePlafonnee?.texte ?? 'Kelly fractionné sur la bankroll du scanner'">{{ formatCurrency(c.recommendedStake) }}<template v-if="c.misePlafonnee"> · plafond</template></dd>
                       </div>
                     </dl>
 
@@ -1129,6 +1320,17 @@ onMounted(() => {
 
 .bet-slip__stake {
   width: 120px;
+}
+
+/* Étape 10 : le ticket « J'ai parié » prend toute la largeur du bordereau, sous les sélections. */
+.bet-slip__ticket {
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+/* Étape 10 : dans le carnet, chez qui et ce que donnait le moteur au moment du pari — du texte, sans couleur. */
+.bet-card__taken {
+  flex-wrap: wrap;
 }
 
 /* ================================================================ onglets */
@@ -1722,16 +1924,22 @@ onMounted(() => {
   color: var(--cm-text-primary);
 }
 
-/* La probabilité juste, en vert comme l'anneau de l'onglet Analyse IA. */
+/* La probabilité juste : neutre depuis l'étape 8 — le vert d'un value bet est celui de sa pastille
+   de verdict (ValueBadge), qui passe « à rafraîchir » quand la cote vieillit ; une probabilité n'est pas une value. */
 .probability {
   display: inline-block;
   margin-left: 6px;
   padding: 1px 7px;
   border-radius: 999px;
-  background: var(--cm-accent-soft);
-  color: var(--cm-accent);
+  background: var(--cm-surface-hover);
+  color: var(--cm-text-secondary);
   font-size: 10.5px;
   font-weight: 700;
+  vertical-align: middle;
+}
+
+/* Le verdict du moteur, parmi les chiffres du pari (étape 8). */
+.vb-card__verdict {
   vertical-align: middle;
 }
 

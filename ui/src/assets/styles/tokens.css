@@ -117,8 +117,8 @@
 
 /* ---- Couleur de section : posée par AppShell sur sa racine ---------------
    Matchs : émeraude (la marque). Mes paris : or. Historique moteur : violet.
-   Réglages : cyan. Les pages de détail (match, équipe, joueur) suivent la
-   section d'où l'on vient (cf. router meta.section). */
+   Feuille de route : rose. Réglages : cyan. Les pages de détail (match,
+   équipe, joueur) suivent la section d'où l'on vient (cf. router meta.section). */
 [data-section='matches'] {
   --cm-section: #34d399;
   --cm-section-rgb: 52 211 153;
@@ -145,4 +145,20 @@
   --cm-section-rgb: 56 189 248;
   --cm-section-glow-2: rgba(148, 163, 184, 0.12);
   --cm-section-on: #06202d;
+}
+
+/* Feuille de route (étape 5 du plan) : rose, avec une seconde tache violette,
+   loin du rouge sémantique (--cm-danger) qui garde son sens d'erreur.
+   Les trois jetons dérivés sont redéclarés ICI : posés sur :root avec
+   var(--cm-section-rgb), ils sont calculés à la racine (émeraude) et hérités tels
+   quels — sans cela, les fonds teintés, la lueur et l'ombre de la page
+   resteraient verts. Les autres sections gardent leur comportement actuel. */
+[data-section='roadmap'] {
+  --cm-section: #f472b6;
+  --cm-section-rgb: 244 114 182;
+  --cm-section-soft: rgba(var(--cm-section-rgb) / 0.12);
+  --cm-section-glow: rgba(var(--cm-section-rgb) / 0.2);
+  --cm-shadow-section: 0 6px 20px rgba(var(--cm-section-rgb) / 0.28);
+  --cm-section-glow-2: rgba(167, 139, 250, 0.13);
+  --cm-section-on: #2d0a1d;
 }

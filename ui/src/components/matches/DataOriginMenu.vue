@@ -45,8 +45,21 @@ const court = (option) => LIBELLES_COURTS[option.value] ?? option.label;
 
 // ------------------------------------------------------------ comptes
 const total = computed(() => props.matches.length);
-const avecCotes = computed(() => props.matches.filter((m) => m.hasOdds !== false));
-const sansCotes = computed(() => props.matches.filter((m) => m.hasOdds === false).length);
+// Trois origines des cotes de la liste (04/10/2026) : le relevé The Odds
+// API (fait à la main), les cotes GRATUITES relevées par l'appli (ESPN,
+// football-data, 365Scores, Kalshi, Smarkets — marketOdds.source « gratuit »),
+// et rien du tout (le calendrier seul).
+const gratuites = computed(() => props.matches.filter((m) => m.marketOdds?.source === 'gratuit'));
+const avecCotes = computed(() => props.matches.filter((m) => m.hasOdds !== false && m.marketOdds?.source !== 'gratuit'));
+const sansCotes = computed(() => props.matches.filter((m) => m.hasOdds === false && m.marketOdds?.source !== 'gratuit').length);
+const relevesGratuits = computed(() => {
+  const sources = props.origins?.freeOdds?.sources ?? [];
+  return {
+    rencontres: sources.reduce((n, x) => n + (x.events ?? 0), 0),
+    dernier: sources.map((x) => x.lastSeenAt).filter(Boolean).sort().at(-1) ?? null,
+    noms: sources.map((x) => x.name)
+  };
+});
 const coteesAVenir = computed(() => avecCotes.value.filter((m) => Date.parse(m.commenceTime) > liveNow.value).length);
 
 // ------------------------------------------------------------- dates
@@ -125,6 +138,18 @@ const lignes = computed(() => {
       fichier: o.odds?.file ?? null,
       compte: avecCotes.value.length,
       lien: true
+    },
+    {
+      cle: 'freeOdds',
+      icone: 'percent',
+      ton: 'is-accent',
+      nom: 'Cotes gratuites',
+      fournisseur: relevesGratuits.value.noms.join(', ') || 'ESPN, football-data, 365Scores, Kalshi, Smarkets',
+      texte: relevesGratuits.value.rencontres
+        ? `Relevées par l'appli, sans clé : ${relevesGratuits.value.rencontres.toLocaleString('fr-FR')} rencontres en base, dernier passage ${quand(relevesGratuits.value.dernier)}. Ce qui manque est détaillé dans chaque match (onglet Cotes) et dans Réglages › Cotes gratuites.`
+        : "Aucune cote gratuite relevée pour l'instant : la collecte tourne avec l'actualisation automatique. Ce qui manque est détaillé dans Réglages › Cotes gratuites.",
+      fichier: props.origins?.freeOdds?.file ?? null,
+      compte: gratuites.value.length
     },
     {
       cle: 'store',

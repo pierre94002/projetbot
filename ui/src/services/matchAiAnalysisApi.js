@@ -12,5 +12,7 @@ export const matchAiAnalysisApi = {
   },
   runPreMatch: (matchId, { home, away, league, engineResult }) =>
     httpClient.post(`/match-ai-analysis/match/${encodeURIComponent(matchId)}`, { home, away, league, engineResult }),
-  runPostMatch: (matchId) => httpClient.post(`/match-ai-analysis/match/${encodeURIComponent(matchId)}/post-match-review`)
+  runPostMatch: (matchId) => httpClient.post(`/match-ai-analysis/match/${encodeURIComponent(matchId)}/post-match-review`),
+  // Étape 21 du plan : le carnet de notes de l'IA (lecture seule ; refait chaque nuit par l'actualisation).
+  scorecard: () => httpClient.get('/match-ai/scorecard')
 };

@@ -3,8 +3,22 @@ import { computed, onMounted } from 'vue';
 import { useBetsStore } from '@/stores/betsStore.js';
 import AppCard from '@/components/common/AppCard.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
+import ClosingValuePanel from '@/components/analysis/ClosingValuePanel.vue';
 import { formatDay, formatCurrency, formatPercent } from '@/utils/format.js';
 import { marketBreakdownLabel, legStatus } from '@/utils/betTrends.js';
+// Étape 11 du plan (06/10/2026) : le SUIVI DES PARIS — gain réel face au gain attendu, valeur de clôture de chaque
+// pari, résultats par marché / championnat / bookmaker / tranche de cote / confiance, zone normale des séries de
+// pertes et garde-fous. Tout est calculé par le serveur (GET /api/bets/suivi, server/src/data/suiviParis.js) ;
+// la page met en forme. Les blocs d'avant (bandeau, jour par jour, taux par marché) restent tels quels.
+import { ref } from 'vue';
+import { betsApi } from '@/services/betsApi.js';
+import AppButton from '@/components/common/AppButton.vue';
+import HelpTip from '@/components/common/HelpTip.vue';
+import GainCurvesChart from '@/components/betting/GainCurvesChart.vue';
+import LossStreakBand from '@/components/betting/LossStreakBand.vue';
+import BetBreakdownTable from '@/components/betting/BetBreakdownTable.vue';
+import BetLedgerTable from '@/components/betting/BetLedgerTable.vue';
+import { eurosSignes, pourcentSigne, pourcent, tableauxVides, tonSigne } from '@/utils/suiviParis.js';
 
 const betsStore = useBetsStore();
 
@@ -153,11 +167,38 @@ const profitParJour = computed(() => {
   return jours.map((d) => ({ day: d.day, netProfit: d.netProfit, hauteur: (Math.abs(d.netProfit) / plafond) * 100 }));
 });
 
+// ------------------------------------------------------- étape 11 : le suivi
+const suivi = ref({ loading: false, error: null, data: null });
+// Une réponse arrivée après une demande plus récente ne l'écrase pas.
+let derniereDemandeSuivi = 0;
+async function chargerSuivi() {
+  const numero = ++derniereDemandeSuivi;
+  suivi.value = { ...suivi.value, loading: true, error: null };
+  try {
+    const data = await betsApi.suivi();
+    if (numero === derniereDemandeSuivi) suivi.value = { loading: false, error: null, data };
+  } catch (error) {
+    if (numero === derniereDemandeSuivi) suivi.value = { loading: false, error: error.message, data: suivi.value.data };
+  }
+}
+const s = computed(() => suivi.value.data);
+/** Les cinq tableaux du serveur ; sans réponse, leur structure vide (la règle de Pierre : le tableau d'abord). */
+const tableauxDuSuivi = computed(() => s.value?.tableaux ?? tableauxVides());
+const alertesDuSuivi = computed(() => s.value?.gardeFous?.alertes ?? []);
+const attenduDuSuivi = computed(() => s.value?.attendu ?? null);
+const tonDe = (x) => {
+  const t = tonSigne(x);
+  return t === 'is-positive' ? 'cm-positive' : t === 'is-negative' ? 'cm-negative' : '';
+};
+/** « 1 pari réglé », « 34 paris réglés » : chaque mot s'accorde. */
+const nombreDe = (n, un, plusieurs) => `${n} ${n > 1 ? plusieurs : un}`;
+
 // Toujours réactualisé à l'ouverture (pas seulement si vide) — cf. même
 // remarque que Mes tickets : un match réglé pendant que cette vue était
 // démontée ne remonterait sinon jamais sans ce refetch systématique.
 onMounted(() => {
   betsStore.fetchBets();
+  chargerSuivi();
 });
 </script>
 
@@ -213,6 +254,98 @@ onMounted(() => {
         </div>
       </div>
     </section>
+
+    <!-- 1 bis (étape 11). GAGNÉ FACE À L'ATTENDU : les garde-fous, les chiffres clés, les courbes, la zone normale des séries de pertes. -->
+    <AppCard
+      icon="activity"
+      eyebrow="Suivi des paris"
+      title="Gagné face à l'attendu"
+      subtitle="Le gain réel du carnet et, sur les paris qui ont leur probabilité du moment, le gain attendu au moment du pari : l'écart entre les deux sépare la chance de la méthode."
+    >
+      <template #actions>
+        <AppButton variant="secondary" size="sm" :loading="suivi.loading" @click="chargerSuivi">
+          <template #icon><AppIcon name="refresh" :size="14" /></template>
+          Recalculer
+        </AppButton>
+      </template>
+
+      <div class="perf-suivi">
+        <div v-if="suivi.error" class="cm-note is-danger">
+          <span class="cm-icon-box is-danger is-sm"><AppIcon name="alert" :size="14" /></span>
+          <div>
+            <p class="cm-note__title">{{ s ? 'Recalcul impossible — dernier calcul affiché' : 'Suivi des paris indisponible' }}</p>
+            <p class="cm-note__text">{{ suivi.error }} — les tableaux restent affichés, sans valeurs.</p>
+          </div>
+        </div>
+
+        <!-- Les garde-fous : ce qu'ils signalent (plafond atteint, série hors de sa zone, pari au-delà de la mise maximale). -->
+        <ul v-if="alertesDuSuivi.length" class="perf-alertes">
+          <li v-for="a in alertesDuSuivi" :key="a.code" class="cm-note" :class="a.niveau === 'danger' ? 'is-danger' : 'is-warning'">
+            <span class="cm-icon-box is-sm" :class="a.niveau === 'danger' ? 'is-danger' : 'is-warning'"><AppIcon name="shield" :size="14" /></span>
+            <div>
+              <p class="cm-note__title">Garde-fou</p>
+              <p class="cm-note__text">{{ a.texte }} <RouterLink to="/reglages" class="cm-link">Réglages</RouterLink></p>
+            </div>
+          </li>
+        </ul>
+
+        <div class="cm-kpis">
+          <div class="cm-kpi is-section" title="La somme des gains réels de tous les paris réglés : le profit net du carnet.">
+            <span class="cm-kpi__label">Gagné · carnet</span>
+            <span class="cm-kpi__value" :class="tonDe(s?.carnet?.gainReel)">{{ s ? eurosSignes(s.carnet.gainReel) : '—' }}</span>
+            <span class="cm-kpi__detail">{{ s ? `${nombreDe(s.carnet.regles, 'pari réglé', 'paris réglés')} · ROI ${pourcentSigne(s.carnet.roi)}` : 'suivi non lu' }}</span>
+          </div>
+          <div class="cm-kpi" title="Mise × (probabilité du moteur × cote prise − 1), au moment du pari — seulement pour les paris réglés qui ont leur probabilité.">
+            <span class="cm-kpi__label">Attendu</span>
+            <span class="cm-kpi__value" :class="tonDe(attenduDuSuivi?.gainAttendu)">{{ attenduDuSuivi?.regles ? eurosSignes(attenduDuSuivi.gainAttendu) : 'non noté' }}</span>
+            <span class="cm-kpi__detail">{{ attenduDuSuivi ? `sur ${nombreDe(attenduDuSuivi.regles, 'pari réglé', 'paris réglés')} avec leur probabilité` : 'suivi non lu' }}</span>
+          </div>
+          <div class="cm-kpi" title="Le gain réel de ces mêmes paris, et son écart au gain attendu.">
+            <span class="cm-kpi__label">Gagné · mêmes paris</span>
+            <span class="cm-kpi__value" :class="tonDe(attenduDuSuivi?.gainReel)">{{ attenduDuSuivi?.regles ? eurosSignes(attenduDuSuivi.gainReel) : '—' }}</span>
+            <span class="cm-kpi__detail">{{ attenduDuSuivi?.regles ? `écart ${eurosSignes(attenduDuSuivi.ecart)}` : 'aucun pari réglé avec sa probabilité' }}</span>
+          </div>
+          <div class="cm-kpi" title="Les paris dont la probabilité du moteur au moment du pari est notée (« J'ai parié », étape 10). Les paris d'avant n'en ont pas ; un combiné attend l'étape 28.">
+            <span class="cm-kpi__label">Avec leur probabilité</span>
+            <span class="cm-kpi__value cm-numeric">{{ s ? `${attenduDuSuivi.parisAvecProbabilite} / ${s.carnet.paris}` : '—' }}</span>
+            <span class="cm-kpi__detail">{{ s ? `${attenduDuSuivi.sansProbabilite.nonNote} non noté${attenduDuSuivi.sansProbabilite.nonNote > 1 ? 's' : ''} · ${attenduDuSuivi.sansProbabilite.combines} combiné${attenduDuSuivi.sansProbabilite.combines > 1 ? 's' : ''}` : 'suivi non lu' }}</span>
+          </div>
+          <div class="cm-kpi" title="Moyenne de la cote prise × probabilité juste de clôture − 1, sur les paris simples mesurés (le détail : carte « Valeur de clôture »).">
+            <span class="cm-kpi__label">Valeur de clôture <HelpTip terme="valeur-de-cloture" /></span>
+            <span class="cm-kpi__value" :class="tonDe(s?.cloture?.moyenne)">{{ s?.cloture?.parisSimplesMesures ? pourcentSigne(s.cloture.moyenne) : '—' }}</span>
+            <span class="cm-kpi__detail">{{ s ? (s.cloture.disponible ? `${nombreDe(s.cloture.parisSimplesMesures, 'pari simple mesuré', 'paris simples mesurés')}${s.cloture.parisSimplesMesures ? ` · ${pourcent((s.cloture.positifs / s.cloture.parisSimplesMesures) * 100)} au-dessus de 0` : ''}` : 'indisponible') : 'suivi non lu' }}</span>
+          </div>
+        </div>
+
+        <GainCurvesChart :courbe="s?.courbe ?? null" :attendu="attenduDuSuivi" />
+        <LossStreakBand :series="s?.series ?? null" />
+      </div>
+    </AppCard>
+
+    <!-- 1 ter. LA VALEUR DE CLÔTURE : tes paris ont-ils battu la cote de clôture ? (04/10/2026) -->
+    <ClosingValuePanel scope="bets" />
+
+    <!-- 1 quater (étape 11). LES RÉSULTATS par marché, championnat, bookmaker, tranche de cote et confiance. -->
+    <AppCard
+      icon="barChart"
+      eyebrow="Suivi des paris"
+      title="Résultats par marché, championnat, bookmaker, cote et confiance"
+      subtitle="Chaque pari compte dans une ligne de chaque tableau : la somme d'une colonne de montants retombe sur le carnet. Au pied, le total (Σ, jamais une somme de pourcentages) et la moyenne par pari (⌀)."
+    >
+      <div class="perf-tables">
+        <BetBreakdownTable v-for="t in tableauxDuSuivi" :key="t.cle" :tableau="t" />
+      </div>
+    </AppCard>
+
+    <!-- 1 quinquies (étape 11). LE CARNET, pari par pari : gain réel, gain attendu, valeur de clôture, ce qu'il faut signaler. -->
+    <AppCard
+      icon="list"
+      eyebrow="Suivi des paris"
+      title="Le carnet, pari par pari"
+      subtitle="Du plus récent au plus ancien : ce qui a été joué, chez qui, à quelle cote, son gain réel, son gain attendu au moment du pari et sa valeur de clôture."
+    >
+      <BetLedgerTable :paris="s?.paris ?? []" />
+    </AppCard>
 
     <!-- 2. JOUR PAR JOUR -->
     <AppCard
@@ -568,6 +701,27 @@ onMounted(() => {
 .perf-sign.is-negative {
   background: var(--cm-danger-soft);
   color: var(--cm-danger);
+}
+
+/* ------------------------------------------------- étape 11 : le suivi */
+.perf-suivi,
+.perf-tables {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.perf-tables {
+  gap: 22px;
+}
+
+.perf-alertes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 /* ----------------------------------------------------------- étroit */

@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 // `meta.section` : la couleur d'ambiance de la page (cf. tokens.css [data-section]
-// et AppShell.vue) — Matchs, Mes paris, Historique moteur, Réglages.
+// et AppShell.vue) — Matchs, Mes paris, Historique moteur, Feuille de route, Réglages.
 const routes = [
   {
     path: '/',
@@ -29,6 +29,15 @@ const routes = [
     name: 'predictions-history',
     component: () => import('@/views/PredictionsHistoryView.vue'),
     meta: { title: 'Historique moteur', section: 'history' }
+  },
+  {
+    // « Santé du moteur » (étape 24 du plan) : le tableau de bord du moteur — les feux, la note face au marché,
+    // la calibration, la valeur de clôture, ce qu'il faut vérifier. Même couleur que Historique moteur (section
+    // « history ») ; `meta.nav` la distingue dans le menu (une entrée active à la fois).
+    path: '/sante-moteur',
+    name: 'engine-health',
+    component: () => import('@/views/EngineHealthView.vue'),
+    meta: { title: 'Santé du moteur', section: 'history', nav: 'sante-moteur' }
   },
   {
     // Page de match detaillee (resume, evenements, compositions,
@@ -80,10 +89,31 @@ const routes = [
     redirect: '/historique-moteur'
   },
   {
+    // La feuille de route (étape 5 du plan) : les 9 lots et 49 étapes, leur
+    // état, ce qui a changé, et les notes de Pierre.
+    path: '/feuille-de-route',
+    name: 'roadmap',
+    component: () => import('@/views/RoadmapView.vue'),
+    meta: { title: 'Feuille de route', section: 'roadmap' }
+  },
+  {
     path: '/reglages',
     name: 'settings',
     component: () => import('@/views/SettingsView.vue'),
     meta: { title: 'Réglages', section: 'settings' }
+  },
+  {
+    // La page « Opportunités du jour » (étape 8 du plan) : un onglet de la page
+    // Matchs ; cette adresse y mène (lien direct, clic sur une notification).
+    path: '/opportunites',
+    name: 'opportunities',
+    redirect: { path: '/matches', query: { onglet: 'opportunites' } }
+  },
+  {
+    // Le banc d'essai (étape 19 du plan) : un onglet d'Historique moteur ; cette adresse y mène.
+    path: '/banc-d-essai',
+    name: 'bench',
+    redirect: { path: '/historique-moteur', query: { onglet: 'banc' } }
   },
   {
     path: '/:pathMatch(.*)*',

@@ -16,6 +16,7 @@ import MatchStatusBadge from '@/components/common/MatchStatusBadge.vue';
 import LeagueBadge from '@/components/matches/LeagueBadge.vue';
 import TeamCrest from '@/components/matches/TeamCrest.vue';
 import PickCrest from '@/components/matches/PickCrest.vue';
+import AVerifierBadge from '@/components/common/AVerifierBadge.vue';
 import MatchAiAnalysisPanel from '@/components/analysis/MatchAiAnalysisPanel.vue';
 import { matchResultsApi } from '@/services/matchResultsApi.js';
 import { formatOdds, formatDay } from '@/utils/format.js';
@@ -195,6 +196,8 @@ onMounted(() => {
               <span class="pmd-pick__market">
                 <span class="cm-truncate">{{ entry.market }}</span>
                 <span v-if="entry.market === 'Résultat' && entry.action === 'RECOMMENDED'" class="cm-chip is-accent pmd-pick__value">value bet</span>
+                <!-- Étape 14 : « à vérifier » quand les données lues par ce pronostic sont douteuses (contrôle quotidien) ; son statut ne change pas. -->
+                <AVerifierBadge v-if="entry.aVerifier" :a-verifier="entry.aVerifier" />
               </span>
               <span class="pmd-pick__label">
                 <PickCrest :item="entry" :home="group.homeName" :away="group.awayName" :league="group.league" :size="18" />

@@ -75,6 +75,15 @@ const progression = computed(() => {
 // correction les lève, et non effacées par la passe suivante.
 const contradictions = computed(() => props.overview?.alerts?.contradictions ?? null);
 const audit = computed(() => props.overview?.alerts?.audit ?? null);
+// Une source de cotes gratuites muette ou en panne (04/10/2026).
+const cotesEnPanne = computed(() => props.overview?.alerts?.cotes?.sources ?? []);
+// Sauvegardes (étape 1 du plan, 06/10/2026) : ce qui manque, posé par l'étape
+// « sauvegarde » de la nuit ; le détail est dans la carte « Sauvegardes ».
+const sauvegardes = computed(() => props.overview?.alerts?.sauvegarde?.alertes ?? []);
+const sauvegardesGraves = computed(() => sauvegardes.value.some((a) => a.niveau === 'danger'));
+// Enregistreurs (étape E du plan) : un relevé arrêté ou en erreur ; le détail
+// est dans la carte « Enregistreurs ».
+const enregistreurs = computed(() => props.overview?.alerts?.enregistreurs?.releves ?? []);
 const autreProcessus = computed(() => props.overview?.lockedByOther ?? null);
 /** Les lignes affichées, seules corrigées si l'utilisateur confirme. */
 const clesAffichees = computed(() => (contradictions.value?.samples ?? []).map((c) => c.key).filter(Boolean));
@@ -181,7 +190,37 @@ const ageCotes = computed(() => {
         </li>
       </ol>
 
-      <!-- 4. Les alertes durables : contradictions, anomalies, cotes à relever. -->
+      <!-- 4. Les alertes durables : sauvegardes, contradictions, anomalies, cotes à relever. -->
+      <div v-if="sauvegardes.length && !running" class="cm-note" :class="sauvegardesGraves ? 'is-danger' : 'is-warning'">
+        <span class="cm-icon-box" :class="sauvegardesGraves ? 'is-danger' : 'is-warning'"><AppIcon name="shield" :size="17" /></span>
+        <div class="refresh-panel__alert">
+          <p class="cm-note__title" :class="sauvegardesGraves ? 'refresh-panel__note-title--danger' : 'refresh-panel__note-title--warning'">Sauvegardes : à vérifier</p>
+          <ul class="refresh-panel__list">
+            <li v-for="a in sauvegardes" :key="a.code">{{ a.texte }}</li>
+          </ul>
+          <p class="cm-note__text refresh-panel__note-text">Le détail est dans la carte « Sauvegardes », juste en dessous.</p>
+        </div>
+      </div>
+      <div v-if="enregistreurs.length && !running" class="cm-note is-warning">
+        <span class="cm-icon-box is-warning"><AppIcon name="activity" :size="17" /></span>
+        <div class="refresh-panel__alert">
+          <p class="cm-note__title refresh-panel__note-title--warning">Enregistreurs : à vérifier</p>
+          <ul class="refresh-panel__list">
+            <li v-for="(a, i) in enregistreurs" :key="`${a.cle}-${i}`">{{ a.nom }} — {{ a.probleme }}</li>
+          </ul>
+          <p class="cm-note__text refresh-panel__note-text">Le détail est dans la carte « Enregistreurs », plus bas.</p>
+        </div>
+      </div>
+      <div v-if="cotesEnPanne.length && !running" class="cm-note is-warning">
+        <span class="cm-icon-box is-warning"><AppIcon name="percent" :size="17" /></span>
+        <div class="refresh-panel__alert">
+          <p class="cm-note__title refresh-panel__note-title--warning">Cotes gratuites : source sans réponse</p>
+          <p class="cm-note__text refresh-panel__note-text">
+            <strong>{{ cotesEnPanne.length }} source{{ cotesEnPanne.length > 1 ? 's' : '' }} n'{{ cotesEnPanne.length > 1 ? 'ont' : 'a' }} rien rendu à la dernière passe :</strong>
+            {{ cotesEnPanne.map((s) => `${s.name} (${s.error})`).join(' ; ') }}. Leurs cotes manquent jusqu'à la passe qui les retrouve ; le détail est dans la carte « Cotes gratuites ».
+          </p>
+        </div>
+      </div>
       <div v-if="contradictions?.count && !running" class="cm-note is-warning">
         <span class="cm-icon-box is-warning"><AppIcon name="alert" :size="17" /></span>
         <div class="refresh-panel__alert">
@@ -273,8 +312,9 @@ const ageCotes = computed(() => {
             Tourne tant que l'appli est ouverte, sans Claude et sans quota payant (FotMob, football-data.co.uk) : une passe une minute après le
             démarrage, qui rattrape tout ce qui s'est joué depuis la dernière passe réussie (jusqu'à 60 jours), puis toutes les
             {{ Math.round((overview.intervalMinutes ?? 180) / 60) }} heures. Le contrôle des scores et la relance des feuilles tardives passent
-            une fois par jour, les cotes passées toutes les douze heures, la sauvegarde de la base une fois par semaine (deux copies
-            automatiques gardées dans CoteMaster\sauvegardes).
+            une fois par jour, les cotes passées toutes les douze heures, le gel des pronostics du moteur chaque nuit (détail dans la carte
+            « Enregistreurs »), la sauvegarde de la base chaque nuit (copie compressée gardée 7 jours,
+            4 semaines ou 12 mois dans CoteMaster\sauvegardes, restauration d'essai chaque semaine — détail dans la carte « Sauvegardes »).
           </p>
         </div>
       </div>

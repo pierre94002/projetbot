@@ -71,11 +71,11 @@ function coteFavorite(match) {
            (divisions inférieures, Russie, Chine : les bookmakers
            n'ouvrent qu'à l'approche). Trois tirets se liraient comme
            un échec de chargement, d'où la mention explicite. -->
-      <span v-if="match.hasOdds === false" class="match-row__odds match-row__odds--none" title="Aucun bookmaker n'a encore publié de cote pour ce match">
+      <span v-if="match.hasOdds === false && !match.marketOdds" class="match-row__odds match-row__odds--none" title="Aucune cote relevée pour ce match, ni par The Odds API ni par les sources gratuites : le détail est dans l'onglet Cotes du match">
         pas encore coté
       </span>
       <!-- Les trois cotes, chacune sous son repère 1 / N / 2 ; le favori en couleur de section. -->
-      <span v-else class="match-row__odds" title="Cotes 1 / N / 2">
+      <span v-else class="match-row__odds" :title="match.marketOdds?.source === 'gratuit' ? `Cotes 1 / N / 2 relevées gratuitement (${(match.marketOdds.sources ?? []).join(', ')}) : moyenne des bookmakers, pour le calcul seulement` : 'Cotes 1 / N / 2'">
         <span class="match-row__odd" :class="{ 'is-favori': coteFavorite(match) === '1' }"><i>1</i>{{ formatOdds(match.marketOdds?.odds1) }}</span>
         <span class="match-row__odd match-row__odd--draw" :class="{ 'is-favori': coteFavorite(match) === 'N' }"><i>N</i>{{ formatOdds(match.marketOdds?.oddsDraw) }}</span>
         <span class="match-row__odd" :class="{ 'is-favori': coteFavorite(match) === '2' }"><i>2</i>{{ formatOdds(match.marketOdds?.odds2) }}</span>

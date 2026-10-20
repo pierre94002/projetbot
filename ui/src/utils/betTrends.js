@@ -1,6 +1,4 @@
 export const TEAM_GOAL_LINES = [0.5, 1.5, 2.5, 3.5];
-export const SHOTS_ON_TARGET_LINES = [5.5, 6.5, 7.5, 8.5];
-export const CORNER_LINES = [7.5, 8.5, 9.5, 10.5];
 
 // Correspondance ligne de buts -> champ trueOdds (cf. computeScoreMatrix côté
 // serveur, qui calcule désormais une vraie probabilité Poisson/Dixon-Coles

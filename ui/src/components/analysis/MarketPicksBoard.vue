@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import TeamCrest from '@/components/matches/TeamCrest.vue';
 import PickCrest from '@/components/matches/PickCrest.vue';
+import AVerifierBadge from '@/components/common/AVerifierBadge.vue';
 import { campsDe } from '@/utils/pronosticEquipe.js';
 
 /**
@@ -25,6 +26,9 @@ const props = defineProps({
   match: { type: Object, required: true }, // { home, away, league }
   homeId: { type: String, default: null },
   awayId: { type: String, default: null },
+  // Étape 14 : les raisons « à vérifier » du match (contrôle quotidien), jointes à
+  // l'analyse par le serveur ; chaque carte ne montre que celles de sa famille de marché.
+  aVerifier: { type: Object, default: null },
   // Avis de l'IA d'avant-match (`analysis.marketViews`) : la phrase qui
   // explique chaque pourcentage, sous son pronostic (01/10/2026).
   views: { type: Array, default: () => [] }
@@ -129,6 +133,9 @@ const tableau = computed(() => {
     const away = prendre((x) => x.marketId === f.equipe && x.params?.team === 'away');
     return {
       ...f,
+      // Correction du 07/10/2026 : l'IDENTIFIANT du marché du total de la famille (`f.total`, avant qu'il ne devienne sa carte juste dessous) —
+      // le badge « à vérifier » du titre en tire la famille (buts, corners, tirs), ce qu'il ne sait pas faire d'une carte.
+      idMarche: f.total,
       total: total && fiche(total),
       home: home && fiche(home, sansEquipe(home, props.match.home)),
       away: away && fiche(away, sansEquipe(away, props.match.away))
@@ -184,12 +191,20 @@ const visesEquipe = (p) => campsDe(p, { home: props.match.home, away: props.matc
             <span class="mboard__odds-label">bookmaker</span>
             {{ f.bookmaker ?? '—' }}
           </span>
+          <AVerifierBadge v-if="aVerifier" :a-verifier="aVerifier" :marche="f.p.marketId ?? f.p.market ?? null" class="mboard__averif-carte" />
         </span>
       </div>
     </section>
 
+    <!-- Le badge du titre d'une famille reçoit l'IDENTIFIANT d'un marché de la famille (celui de son total, fam.idMarche) : c'est lui que
+         AVerifierBadge range en « buts », « corners », « tirs ». Jusqu'au 07/10/2026 il recevait :marche="fam.total", la carte du total (un
+         objet) : Vue avertissait « Expected String », la famille était lue « [object Object] » donc « buts », et un constat « corners »
+         n'apparaissait jamais sur le titre « Corners ». -->
     <section v-for="fam in tableau.familles" :key="fam.cle" class="mboard__section">
-      <p class="mboard__title">{{ fam.titre }}</p>
+      <p class="mboard__title">
+        {{ fam.titre }}
+        <AVerifierBadge v-if="aVerifier" :a-verifier="aVerifier" :marche="fam.idMarche" class="mboard__averif" />
+      </p>
       <div class="mboard__duel">
         <div class="mboard__side is-home">
           <span v-if="fam.home" class="mboard__side-text">
@@ -278,6 +293,10 @@ const visesEquipe = (p) => campsDe(p, { home: props.match.home, away: props.matc
 }
 
 .mboard__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
   margin: 0;
   font-size: 10.5px;
   font-weight: 700;
@@ -358,6 +377,18 @@ const visesEquipe = (p) => campsDe(p, { home: props.match.home, away: props.matc
   grid-template-columns: 58px 58px 74px;
   align-items: center;
   gap: 8px;
+}
+
+/* Étape 14 : le badge « à vérifier » d'une carte, sur sa propre ligne sous les trois chiffres. */
+.mboard__averif-carte {
+  grid-column: 1 / -1;
+  justify-self: end;
+}
+
+/* … et celui d'une famille, dans son titre en petites capitales : il garde ses propres mots. */
+.mboard__averif {
+  text-transform: none;
+  letter-spacing: normal;
 }
 
 .mboard__pill {

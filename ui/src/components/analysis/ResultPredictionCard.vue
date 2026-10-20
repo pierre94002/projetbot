@@ -4,6 +4,9 @@
  * resultPrediction.js et valueFinder.js) : les probabilités 1N2, l'issue
  * la plus probable, la fiabilité que l'historique lui prête, et l'état des
  * paris value chez vos bookmakers — y compris quand il n'y en a pas.
+ * Étape 7 du plan : la value dit l'heure du relevé de sa cote, et une value
+ * sur une cote à rafraîchir (trop vieille, ou relevée avant les compositions)
+ * est dite « Value à rafraîchir », en ambre, jamais conseillée.
  *
  * Dessin (refonte du 01/10/2026, au niveau de l'onglet Analyse IA) : une
  * carte à icône ; l'issue annoncée en grand avec son logo et sa probabilité
@@ -14,6 +17,8 @@ import AppCard from '@/components/common/AppCard.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
 import PickCrest from '@/components/matches/PickCrest.vue';
 import ProbabilityRing from './ProbabilityRing.vue';
+import { pariDuMoteur, quandDit } from '@/utils/langageParis.js';
+import { liveNow } from '@/utils/liveClock.js';
 
 const props = defineProps({
   result: { type: Object, required: true }
@@ -58,16 +63,34 @@ const fiabilite = computed(() => {
 const affichee = (c) => c.displayedOdds ?? c.odds;
 const offre = (c) => `« ${c.label} » à ${cote(affichee(c))} chez ${c.bookmakerTitle}`;
 
+// Étape 7 du plan : le pari du moteur et la fraîcheur de sa cote, réévaluée à l'horloge partagée
+// (pariDuMoteur, utils/langageParis.js : la même décision que la page du match).
+const pari = computed(() => pariDuMoteur(staking.value, liveNow.value));
+const fraicheur = computed(() => pari.value.fraicheur);
+const releve = (c) => (c?.releveAt ? ` Cote relevée ${quandDit(c.releveAt, liveNow.value)}.` : '');
+/** Une value qui n'existe que sur une cote à rafraîchir (dite par le serveur, ou devenue trop vieille depuis) : ambre, jamais verte. */
+function aRafraichir(o) {
+  return {
+    ton: 'alerte',
+    titre: 'Value à rafraîchir',
+    camp: o.outcome ?? null,
+    texte: `${offre(o)} paierait au-dessus de la cote juste de ${cote(o.fairOdds)} (avantage de ${pct(o.ev, 1)} au dernier relevé), mais la cote est à rafraîchir : ${fraicheur.value?.raison ?? 'heure du relevé inconnue.'} Relevez les cotes (Réglages › Données) avant de parier : aucun pari recommandé d'ici là.`
+  };
+}
+
 const value = computed(() => {
   const s = staking.value;
   if (!s) return null;
   if (s.action === 'RECOMMENDED') {
+    if (pari.value.aRafraichir) return aRafraichir(s);
     return {
       ton: 'positif',
       camp: s.outcome ?? null,
+      releve: releve(s),
       texte: `${s.label} à ${cote(affichee(s))} chez ${s.bookmakerTitle}. Cote juste ${cote(s.fairOdds)}, soit un avantage de ${pct(s.ev, 1)}. Mise conseillée : ${euros(s.stake)}.`
     };
   }
+  if (s.reason === 'a_rafraichir' && s.aRafraichir) return aRafraichir(s.aRafraichir);
   if (s.action === 'CIRCUIT_BREAKER_ACTIVE') return { ton: 'alerte', texte: 'Coupe-circuit actif : aucun pari recommandé.' };
   const candidats = s.candidates ?? [];
   const meilleure = (liste) => (liste.length ? liste.reduce((m, x) => (x.ev > m.ev ? x : m)) : null);
@@ -106,6 +129,8 @@ const NOTES = {
   neutre: { classe: 'is-info', boite: 'is-info', titre: 'Value chez vos bookmakers' }
 };
 const note = computed(() => NOTES[value.value?.ton] ?? NOTES.neutre);
+// Un titre propre à la note quand elle en a un (« Value à rafraîchir », étape 7).
+const titreNote = computed(() => value.value?.titre ?? note.value.titre);
 </script>
 
 <template>
@@ -163,9 +188,15 @@ const note = computed(() => NOTES[value.value?.ton] ?? NOTES.neutre);
           <AppIcon :name="value.ton === 'positif' ? 'check' : value.ton === 'alerte' ? 'alert' : 'info'" :size="14" />
         </span>
         <div>
-          <p class="cm-note__title">{{ note.titre }}</p>
+          <p v-if="value.titre" class="cm-note__title">{{ titreNote }}</p>
+          <p v-else class="cm-note__title">{{ note.titre }}</p>
           <p class="cm-note__text rpc__value-text">
-            <PickCrest v-if="value.camp" :side="value.camp" :home="home" :away="away" :league="result.league ?? null" :size="16" />{{ value.texte }}
+            <PickCrest v-if="value.camp" :side="value.camp" :home="home" :away="away" :league="result.league ?? null" :size="16" />{{ value.texte }}<template v-if="value.releve">{{ value.releve }}</template>
+          </p>
+          <!-- Étape 11 : la mise conseillée ramenée à un plafond de vos garde-fous, ou le garde-fou qui a enclenché le coupe-circuit. -->
+          <p v-if="staking?.action === 'RECOMMENDED' && staking.misePlafonnee" class="cm-note__text rpc__value-text">{{ staking.misePlafonnee.texte }}</p>
+          <p v-if="staking?.action === 'CIRCUIT_BREAKER_ACTIVE' && staking.coupeCircuit?.texte && staking.coupeCircuit.motif !== 'manuel'" class="cm-note__text rpc__value-text">
+            Enclenché par un garde-fou : {{ staking.coupeCircuit.texte }}.
           </p>
         </div>
       </div>

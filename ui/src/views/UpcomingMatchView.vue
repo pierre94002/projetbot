@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from 'vue';
+import { computed, nextTick, ref, watch } from 'vue';
 import { useMatchesStore } from '@/stores/matchesStore.js';
 import { useMatchAiAnalysisStore } from '@/stores/matchAiAnalysisStore.js';
 import { useToastStore } from '@/stores/toastStore.js';
@@ -14,6 +14,7 @@ import MatchupHeader from '@/components/matches/MatchupHeader.vue';
 import MarketPicksBoard from '@/components/analysis/MarketPicksBoard.vue';
 import { rencontreVueParEquipe } from '@/utils/rencontres.js';
 import { matchStatsApi } from '@/services/matchStatsApi.js';
+import { oddsApi } from '@/services/oddsApi.js';
 import { teamStatsApi } from '@/services/teamStatsApi.js';
 import { useMatchStatus } from '@/composables/useMatchStatus.js';
 import { useLineupPolling, compositionAttendue } from '@/composables/useLineupPolling.js';
@@ -33,9 +34,30 @@ import ResultPredictionCard from '@/components/analysis/ResultPredictionCard.vue
 import ScorePredictionCard from '@/components/analysis/ScorePredictionCard.vue';
 import TeamNewsCard from '@/components/analysis/TeamNewsCard.vue';
 import OddsProfilePanel from '@/components/analysis/OddsProfilePanel.vue';
+import FreeOddsPanel from '@/components/analysis/FreeOddsPanel.vue';
 import MatchAiAnalysisPanel from '@/components/analysis/MatchAiAnalysisPanel.vue';
 import AiLineupSnapshot from '@/components/analysis/AiLineupSnapshot.vue';
+import ManualOddsEntry from '@/components/analysis/ManualOddsEntry.vue';
+import MarketVerdictBoard from '@/components/analysis/MarketVerdictBoard.vue';
+import OddsTimelineChart from '@/components/analysis/OddsTimelineChart.vue';
+import PercentageWhyCard from '@/components/analysis/PercentageWhyCard.vue';
+import PaidOddsAdvicePanel from '@/components/settings/PaidOddsAdvicePanel.vue';
+import ValueBadge from '@/components/common/ValueBadge.vue';
+import KickoffCountdown from '@/components/common/KickoffCountdown.vue';
+import ProvenanceChip from '@/components/common/ProvenanceChip.vue';
+import HelpTip from '@/components/common/HelpTip.vue';
+import { pariDuMoteur } from '@/utils/langageParis.js';
+import { phraseSansPari } from '@/utils/verdictParMarche.js';
+import { liveNow } from '@/utils/liveClock.js';
 import { TEAM_STAT_GROUPS } from '@/constants/matchDetailTabs.js';
+// Étape 10 du plan : le comparateur de vos bookmakers et le ticket (« J'ai parié »).
+import { reactive } from 'vue';
+import BookmakerComparator from '@/components/betting/BookmakerComparator.vue';
+import TicketDuPari from '@/components/betting/TicketDuPari.vue';
+import { useBetsStore } from '@/stores/betsStore.js';
+import { prendre as prendreDansLeTicket, bookmakerPropose, cleDeSelection } from '@/utils/ticket.js';
+// Étape 11 du plan : vos garde-fous et les fiches de vos comptes, pour que le ticket signale une mise au-delà (jamais un refus).
+import { useRisqueStore } from '@/stores/risqueStore.js';
 
 /**
  * Page d'un match À VENIR, construite comme celle d'un match joué
@@ -53,6 +75,15 @@ import { TEAM_STAT_GROUPS } from '@/constants/matchDetailTabs.js';
  * Le bloc « Meilleures chances » (calcul de l'interface, en Poisson, trop
  * optimiste) a été retiré à la demande de Pierre le 01/10/2026 : les marchés
  * du moteur couvrent désormais corners et tirs.
+ *
+ * Étape 9 du plan (06/10/2026) : le Résumé se lit dans l'ordre d'une DÉCISION —
+ * (a) le verdict par marché (probabilité et cote juste du moteur, meilleure cote de
+ * vos bookmakers et son heure, value, confiance), (b) la place du « pourquoi ce
+ * pourcentage » (réservée, remplie à l'étape 40), (c) les compositions et les
+ * absents, (d) la courbe des cotes de l'ouverture à maintenant, (e) l'avis de
+ * l'IA, (f) le détail. Aucun calcul de plus : la page réordonne ce qu'elle
+ * affichait et pose, en tête, le verdict que le serveur rend déjà. Les onglets
+ * restent tous là, avec leur contenu d'avant.
  */
 const props = defineProps({ matchId: { type: String, required: true } });
 
@@ -72,6 +103,16 @@ const page = ref({ loading: false, error: null, data: null }); // page FotMob du
 const moyennes = ref({ loading: false, home: null, away: null });
 const forme = ref({ loading: false, home: [], away: [] });
 const liveMatchDetails = ref(null);
+// Étape 9 : ce que lisent le verdict par marché et la courbe des cotes — le magasin local, jamais un appel payant.
+const cotes = ref({ loading: false, error: null, data: null }); // GET /api/odds/fixture : cotes relevées gratuitement et leurs mouvements
+const saisies = ref({ loading: false, error: null, data: null }); // GET /api/odds/saisies : cotes saisies à la main (onglet Marchés)
+// Étape 10 : le ticket de la page — les sélections prises dans le comparateur, la cote prise, le bookmaker, la mise ;
+// « J'ai parié » l'enregistre dans Mes paris (POST /api/bets), seulement au clic. Rien n'est lu ni écrit au chargement.
+const betsStore = useBetsStore();
+const ticketVide = () => ({ selections: [], edition: { bookmaker: null, cotes: {}, coteCombinee: null }, mise: 10, memeMatch: false, enCours: false, dernier: null });
+const ticket = reactive(ticketVide());
+// Étape 11 : lus seulement quand une cote est prise (jamais au chargement de la page).
+const risque = useRisqueStore();
 
 const TABS = [
   { id: 'resume', label: 'Résumé' },
@@ -80,6 +121,9 @@ const TABS = [
   { id: 'form', label: 'Forme' },
   { id: 'markets', label: 'Marchés' },
   { id: 'ai', label: 'Analyse IA' },
+  // Les cotes relevées gratuitement (ESPN, football-data, 365Scores, Kalshi,
+  // Smarkets) et ce qui manque (04/10/2026) : toujours là, même sans cote.
+  { id: 'cotes', label: 'Cotes' },
   { id: 'odds', label: 'Profilage de cotes' }
 ];
 const availableTabs = computed(() => TABS.filter((t) => t.id !== 'odds' || match.value?.marketOdds?.odds1 > 1));
@@ -88,7 +132,8 @@ const availableTabs = computed(() => TABS.filter((t) => t.id !== 'odds' || match
 // cotes. Un match du calendrier sans elle ne connaît que son jour (l'appli le
 // date à midi UTC, cf. seasonCalendarAdapter.js côté serveur).
 const duCalendrier = computed(() => String(match.value?.matchId ?? '').startsWith('cal-'));
-const coupDEnvoi = computed(() => page.value.data?.kickoff ?? (duCalendrier.value ? null : match.value?.commenceTime ?? null));
+// Un match du calendrier coté gratuitement (ESPN, 365Scores, Kalshi, Smarkets…) connaît son heure par la source de ses cotes.
+const coupDEnvoi = computed(() => page.value.data?.kickoff ?? (duCalendrier.value ? match.value?.marketOdds?.kickoff ?? null : match.value?.commenceTime ?? null));
 const matchStatus = useMatchStatus(() => coupDEnvoi.value);
 const meta = computed(() => page.value.data?.meta ?? null);
 // FotMob donne un numéro (« 35 ») ; le calendrier, « Round 35 » ou « Journée 2 ».
@@ -182,10 +227,44 @@ async function chargerForme() {
   };
 }
 
+// Les cotes relevées gratuitement (la courbe) : la même lecture que l'onglet Cotes, une fois pour la page.
+async function chargerCotes() {
+  const m = match.value;
+  if (!m?.commenceTime) {
+    cotes.value = { loading: false, error: 'La date du match est inconnue : les cotes relevées ne peuvent pas être lues.', data: null };
+    return;
+  }
+  cotes.value = { ...cotes.value, loading: true, error: null };
+  try {
+    const data = await oddsApi.fixture({ home: m.home, away: m.away, league: m.league, commenceTime: m.commenceTime });
+    cotes.value = { loading: false, error: null, data };
+  } catch (error) {
+    cotes.value = { loading: false, error: error.message, data: null };
+  }
+}
+
+// Les cotes saisies à la main (verdict des marchés que The Odds API ne relève pas) : relues au retour de l'onglet Marchés.
+async function chargerSaisies() {
+  const m = match.value;
+  if (!m?.matchId) return;
+  saisies.value = { ...saisies.value, loading: true, error: null };
+  try {
+    const data = await oddsApi.saisies(m.matchId);
+    saisies.value = { loading: false, error: null, data };
+  } catch (error) {
+    // Les saisies sont un plus : sans elles, le verdict garde ses lignes et dit « pas de cote ».
+    saisies.value = { loading: false, error: error.message, data: null };
+  }
+}
+
 async function load() {
   chargement.value = true;
   tab.value = 'resume';
   liveMatchDetails.value = null;
+  cotes.value = { loading: false, error: null, data: null };
+  saisies.value = { loading: false, error: null, data: null };
+  // Étape 10 : un autre match, un ticket neuf.
+  Object.assign(ticket, ticketVide());
   try {
     await chargerMatch();
   } finally {
@@ -197,6 +276,8 @@ async function load() {
   chargerPage();
   chargerMoyennes();
   chargerForme();
+  chargerCotes();
+  chargerSaisies();
   aiStore.fetchStatus().catch(() => {});
   aiStore.fetchForMatch(props.matchId).catch(() => {});
 }
@@ -211,6 +292,19 @@ useLineupPolling(
     if (!page.value.loading) chargerPage();
   }
 );
+
+// Étape 9 : les compositions sont aussi dans le Résumé — la même relecture toutes les 5 min tant qu'il est ouvert.
+useLineupPolling(
+  () => tab.value === 'resume' && Boolean(page.value.data) && !page.value.data.lineups && compositionAttendue(coupDEnvoi.value),
+  () => {
+    if (!page.value.loading) chargerPage();
+  }
+);
+
+// Au retour de l'onglet Marchés, une cote a pu être saisie, corrigée ou retirée : le verdict la relit.
+watch(tab, (_, avant) => {
+  if (avant === 'markets') chargerSaisies();
+});
 
 async function lancerAnalyseIa() {
   if (!analyse.value.result) {
@@ -257,11 +351,121 @@ const attendusBarres = computed(() => ({
   away: Object.fromEntries(attendus.value.map((a) => [a.cle, a.away]))
 }));
 const nombre1 = (x) => (Number.isFinite(Number(x)) ? Number(x).toLocaleString('fr-FR', { maximumFractionDigits: 1, minimumFractionDigits: 1 }) : '—');
-const pariConseille = computed(() => {
+// Étape 7 du plan : la value n'est conseillée que sur une cote FRAÎCHE de vos
+// bookmakers. Le serveur la juge à l'analyse (staking.fraicheur, ou
+// reason « a_rafraichir ») ; la page la réévalue à l'horloge partagée : une
+// value qui vieillit pendant qu'on regarde passe « à rafraîchir » d'elle-même
+// (pariDuMoteur, utils/langageParis.js, testée par le serveur).
+const pariDuMatch = computed(() => pariDuMoteur(analyse.value.result?.staking, liveNow.value));
+const pariRecommande = computed(() => {
   const s = analyse.value.result?.staking;
   return s?.action === 'RECOMMENDED' ? s : null;
 });
+/** Le pari conseillé : recommandé par le moteur ET sur une cote encore fraîche à l'heure qu'il est. */
+const pariConseille = computed(() => {
+  const s = pariRecommande.value;
+  return s && pariDuMatch.value.conseille === s ? s : null;
+});
+/** La value qui n'existe que sur une cote à rafraîchir : dite, jamais conseillée. */
+const pariARafraichir = computed(() => pariDuMatch.value.aRafraichir);
+/** Les seuils du moteur, tels que findValueBet les a appliqués (en %), pour la pastille. */
+const regleDuPari = computed(() => {
+  const l = analyse.value.result?.staking?.limits;
+  const regle = l ? { min: Number((l.edgeThresholdMin * 100).toFixed(6)), max: Number((l.edgeThresholdMax * 100).toFixed(6)), coteMax: Number(l.maxValueOdds) } : null;
+  return regle && Object.values(regle).every(Number.isFinite) ? regle : null;
+});
+const delaiFraicheurHeures = computed(() => {
+  const m = analyse.value.result?.fraicheurCotes?.reglage?.maxAgeMinutes;
+  return Number.isFinite(m) ? m / 60 : 3;
+});
+const origineDuReleve = (pari) =>
+  pari?.origineReleve === 'instantane'
+    ? "Heure du fichier du relevé (data/fixtures/odds/odds-snapshot.json) : il n'est pas encore archivé, ce sera fait à la minute qui suit."
+    : pari?.origineReleve === 'archive'
+      ? 'Heure lue dans les archives des cotes (relevés The Odds API gardés par les Enregistreurs).'
+      : null;
 const issues = computed(() => ({ home: `${match.value?.home} gagne`, draw: 'Match nul', away: `${match.value?.away} gagne` }));
+
+// ------------------------------------------------ étape 9 : la décision d'abord
+/** Les blocs du Résumé, dans l'ordre d'une décision : chacun a son ancre (« upcoming-<id> »). */
+const BLOCS = [
+  { id: 'verdict', label: 'Verdict' },
+  { id: 'pourquoi', label: 'Pourquoi' },
+  { id: 'compos', label: 'Compositions' },
+  { id: 'courbe', label: 'Courbe des cotes' },
+  { id: 'ia', label: 'Avis de l’IA' },
+  { id: 'detail', label: 'Détail' }
+];
+/** Les onglets du détail, rappelés au bas du Résumé (ceux qui existent pour ce match : le profilage demande une cote). */
+const ongletsDuDetail = computed(() => availableTabs.value.filter((t) => ['stats', 'form', 'markets', 'cotes', 'odds'].includes(t.id)));
+// Le compte à rebours du verdict : l'heure exacte quand une source la donne, sinon le jour du calendrier (« demain », « dans 4 jours »).
+const coupPourCompteARebours = computed(() => coupDEnvoi.value ?? match.value?.commenceTime?.slice(0, 10) ?? null);
+
+const mouvementReduit = () => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function defiler(element) {
+  element?.scrollIntoView?.({ behavior: mouvementReduit() ? 'auto' : 'smooth', block: 'start' });
+}
+/** Un lien d'ancre : va au bloc de la décision (le Résumé est l'onglet ouvert). */
+function allerA(id) {
+  defiler(document.getElementById(`upcoming-${id}`));
+}
+/** Ouvre un onglet du détail et ramène la barre d'onglets en haut de l'écran. */
+async function ouvrirOnglet(id) {
+  tab.value = id;
+  await nextTick();
+  defiler(document.querySelector('.upcoming__tabs'));
+}
+/** Du tableau des marchés au verdict, en tête du Résumé. */
+async function voirLeVerdict() {
+  tab.value = 'resume';
+  await nextTick();
+  allerA('verdict');
+}
+/** « Saisir une cote » du verdict : la saisie express est sur la carte de l'onglet Marchés. */
+async function saisirUneCote() {
+  tab.value = 'markets';
+  await nextTick();
+  defiler(document.getElementById('upcoming-saisie'));
+}
+
+// ------------------------------------------------ étape 10 : le comparateur et le ticket
+/** Vos bookmakers, pour le ticket : ceux du comparateur (Réglages), à défaut ceux de la saisie express. */
+const vosBookmakersDuMatch = computed(() => analyse.value.result?.comparateur?.vosBookmakers ?? saisies.value.data?.bookmakers ?? []);
+/** Une case du comparateur (ou « Autre cote ») : sur le ticket, avec son bookmaker — la règle du ticket (utils/ticket.js). */
+function prendreUneCote(selection) {
+  risque.charger();
+  const r = prendreDansLeTicket(ticket.selections, selection, { memeMatch: ticket.memeMatch });
+  ticket.selections = r.selections;
+  ticket.dernier = null;
+  if (r.message) toastStore.push(r.message, 'info');
+  // Un ticket se joue chez UN bookmaker : celui de la cote qu'on vient de prendre, sinon celui déjà choisi.
+  const bookmaker = r.action !== 'retiree' && selection.bookmaker ? selection.bookmaker : ticket.edition.bookmaker ?? bookmakerPropose(ticket.selections);
+  // Une cote tapée pour une sélection retirée ou remplacée ne sert plus.
+  const gardees = Object.fromEntries(Object.entries(ticket.edition.cotes ?? {}).filter(([cle]) => ticket.selections.some((s) => cleDeSelection(s) === cle)));
+  ticket.edition = { ...ticket.edition, bookmaker, cotes: gardees };
+}
+function retirerDuTicket(cle) {
+  ticket.selections = ticket.selections.filter((s) => cleDeSelection(s) !== cle);
+}
+function viderLeTicket() {
+  Object.assign(ticket, ticketVide());
+}
+/** « J'ai parié » : le pari part dans Mes paris (POST /api/bets) avec la cote prise, le bookmaker, la probabilité du moteur et l'heure de la cote. */
+async function enregistrerLePari(corps) {
+  ticket.enCours = true;
+  try {
+    const pari = await betsStore.createBet(corps);
+    ticket.dernier = pari;
+    toastStore.success('Pari noté dans Mes paris : la cote prise, le bookmaker et la probabilité du moteur au moment du pari.');
+    ticket.selections = [];
+    ticket.edition = { ...ticket.edition, cotes: {}, coteCombinee: null };
+  } catch (error) {
+    toastStore.error(`Pari non enregistré : ${error.message}`);
+  } finally {
+    ticket.enCours = false;
+  }
+}
+const cote2 = (x) => (Number.isFinite(x) ? x.toFixed(2).replace('.', ',') : '—');
 </script>
 
 <template>
@@ -353,11 +557,205 @@ const issues = computed(() => ({ home: `${match.value?.home} gagne`, draw: 'Matc
         </button>
       </nav>
 
-      <!-- RÉSUMÉ -->
+      <!-- RÉSUMÉ : la page dans l'ordre d'une DÉCISION (étape 9 du plan). (a) Le verdict par marché, (b) la place du « pourquoi », (c) les compositions et
+           les absents, (d) la courbe des cotes, (e) l'avis de l'IA, (f) le détail — les onglets d'avant restent tous là, avec leur contenu. -->
       <template v-if="tab === 'resume'">
-        <LoadingSpinner v-if="analyse.loading" label="Analyse du moteur…" />
-        <EmptyState v-else-if="analyse.error" icon="alert" title="Analyse du moteur impossible" :description="analyse.error" />
-        <div v-else-if="analyse.result" class="upcoming__grid cm-stagger">
+        <nav class="upcoming__jump" aria-label="Aller à un bloc de la décision">
+          <span class="upcoming__jump-label">Aller à</span>
+          <button v-for="b in BLOCS" :key="b.id" type="button" class="upcoming__jump-btn" @click="allerA(b.id)">{{ b.label }}</button>
+        </nav>
+
+        <!-- (a) LE VERDICT PAR MARCHÉ : probabilité et cote juste du moteur, meilleure cote de vos bookmakers et son heure, value, confiance. -->
+        <AppCard
+          id="upcoming-verdict"
+          class="upcoming__block"
+          title="Verdict par marché"
+          subtitle="Pour chaque marché : ce que dit le moteur, ce que paient vos bookmakers, et si c'est une value."
+          icon="target"
+          eyebrow="La décision"
+          tone="section"
+        >
+          <template #actions>
+            <KickoffCountdown :coup-d-envoi="coupPourCompteARebours" :heure-sure="Boolean(coupDEnvoi)" />
+          </template>
+          <LoadingSpinner v-if="analyse.loading" label="Analyse du moteur…" />
+          <EmptyState v-else-if="analyse.error" icon="alert" title="Analyse du moteur impossible" :description="analyse.error" />
+          <template v-else-if="analyse.result">
+            <!-- Le pari conseillé : une carte soulignée de la couleur d'accent (value = positif, quelle que soit la section). -->
+            <div v-if="pariConseille" class="upcoming__advice">
+              <span class="cm-icon-box is-accent"><AppIcon name="bolt" :size="17" /></span>
+              <PickCrest v-if="pariConseille.outcome !== 'draw'" :side="pariConseille.outcome" :home="match.home" :away="match.away" :league="match.league" :size="30" class="upcoming__advice-crest" />
+              <span v-else class="upcoming__advice-duo">
+                <TeamCrest :name="match.home" :league="match.league" :size="24" />
+                <TeamCrest :name="match.away" :league="match.league" :size="24" class="upcoming__advice-duo-away" />
+              </span>
+              <span class="upcoming__advice-text">
+                <span class="upcoming__advice-label">Pari conseillé par le moteur</span>
+                <strong class="upcoming__advice-pick">{{ issues[pariConseille.outcome] ?? pariConseille.outcome }}</strong>
+                <span v-if="pariConseille.bookmakerTitle || pariConseille.stake" class="upcoming__advice-where">
+                  <template v-if="pariConseille.bookmakerTitle">chez {{ pariConseille.bookmakerTitle }}</template>
+                  <template v-if="pariConseille.stake"> · mise {{ pariConseille.stake }}</template>
+                </span>
+              </span>
+              <span class="upcoming__advice-odds cm-numeric" title="Cote affichée par le bookmaker">{{ cote(pariConseille.displayedOdds ?? pariConseille.odds) }}</span>
+              <!-- Étape 7 : la value, la cote et le bookmaker, et l'heure du relevé. -->
+              <span class="upcoming__advice-freshness">
+                <ValueBadge
+                  taille="sm"
+                  :pourcent="Number.isFinite(pariConseille.ev) ? pariConseille.ev * 100 : null"
+                  :jouable="true"
+                  :cote="pariConseille.odds"
+                  :regle="regleDuPari"
+                  :fraicheur="pariConseille.fraicheur ?? null"
+                  :bookmaker="pariConseille.bookmakerTitle"
+                />
+                <ProvenanceChip
+                  source="The Odds API"
+                  :releve-le="pariConseille.releveAt ?? null"
+                  :vieux-apres-heures="delaiFraicheurHeures"
+                  :detail="origineDuReleve(pariConseille)"
+                  payant
+                  variante="ligne"
+                />
+              </span>
+            </div>
+            <!-- Une value qui n'existe que sur une cote trop vieille : dite, jamais conseillée (étape 7). -->
+            <div v-else-if="pariARafraichir" class="upcoming__stale">
+              <div class="upcoming__stale-head">
+                <span class="cm-icon-box is-warning"><AppIcon name="clock" :size="17" /></span>
+                <span class="upcoming__advice-text">
+                  <span class="upcoming__stale-label">Value à rafraîchir <HelpTip terme="a-rafraichir" /></span>
+                  <strong class="upcoming__advice-pick">{{ issues[pariARafraichir.outcome] ?? pariARafraichir.label ?? pariARafraichir.outcome }}</strong>
+                  <span class="upcoming__advice-where">chez {{ pariARafraichir.bookmakerTitle }} à {{ cote(pariARafraichir.displayedOdds ?? pariARafraichir.odds) }} au dernier relevé</span>
+                </span>
+                <ValueBadge
+                  :pourcent="Number.isFinite(pariARafraichir.ev) ? pariARafraichir.ev * 100 : null"
+                  :jouable="true"
+                  :cote="pariARafraichir.odds"
+                  :regle="regleDuPari"
+                  :fraicheur="pariARafraichir.fraicheur ?? { etat: 'a-rafraichir', raison: 'heure du relevé inconnue.' }"
+                  :bookmaker="pariARafraichir.bookmakerTitle"
+                />
+              </div>
+              <ProvenanceChip
+                source="The Odds API"
+                :releve-le="pariARafraichir.releveAt ?? null"
+                :vieux-apres-heures="delaiFraicheurHeures"
+                :detail="origineDuReleve(pariARafraichir)"
+                payant
+                variante="ligne"
+              />
+              <PaidOddsAdvicePanel variante="compacte" />
+            </div>
+            <!-- Aucun pari conseillé : la raison, jamais un simple « aucun pari ». -->
+            <div v-else class="cm-note upcoming__nopick">
+              <span class="cm-icon-box is-muted is-sm"><AppIcon name="minus" :size="14" /></span>
+              <div>
+                <p class="cm-note__title">Aucun pari conseillé</p>
+                <p class="cm-note__text">{{ phraseSansPari(analyse.result.staking) }}</p>
+              </div>
+            </div>
+            <MarketVerdictBoard :result="analyse.result" :match="match" :saisies="saisies.data" @saisir="saisirUneCote" />
+            <!-- Étape 10 : le comparateur de vos bookmakers (la cote de chacun, son heure, sa value, la cote minimale à prendre) et le ticket (« J'ai parié »). -->
+            <div id="upcoming-comparateur" class="upcoming__compare">
+              <h4 class="upcoming__compare-title">
+                <AppIcon name="layers" :size="14" />Comparateur de vos bookmakers
+                <span class="upcoming__compare-hint">la cote de chacun, son heure, sa value et la cote minimale à prendre <HelpTip terme="cote-minimale" /></span>
+              </h4>
+              <BookmakerComparator :result="analyse.result" :match="match" :saisies="saisies.data" :cotes="cotes.data" :pris="ticket.selections" @prendre="prendreUneCote" />
+              <TicketDuPari
+                v-model:edition="ticket.edition"
+                v-model:mise="ticket.mise"
+                v-model:memeMatch="ticket.memeMatch"
+                :selections="ticket.selections"
+                :bookmakers="vosBookmakersDuMatch"
+                :garde-fous="risque.pourLeTicket"
+                :comptes="risque.fiches"
+                :en-cours="ticket.enCours"
+                origine="page-du-match"
+                @jai-parie="enregistrerLePari"
+                @retirer="retirerDuTicket"
+                @vider="viderLeTicket"
+              />
+              <div v-if="ticket.dernier" class="cm-note is-info upcoming__bet-done">
+                <span class="cm-icon-box is-info is-sm"><AppIcon name="check" :size="14" /></span>
+                <div>
+                  <p class="cm-note__title">Parié, noté dans Mes paris</p>
+                  <p class="cm-note__text">
+                    {{ ticket.dernier.legs.map((l) => l.pick).join(' + ') }} à {{ cote2(ticket.dernier.odds) }}<template v-if="ticket.dernier.bookmakerTitle"> chez {{ ticket.dernier.bookmakerTitle }}</template>, mise {{ ticket.dernier.stake }} €.
+                    <RouterLink to="/paris" class="upcoming__moved-link">Voir Mes paris</RouterLink>
+                  </p>
+                  <!-- Étape 11 : ce que vos garde-fous et la fiche du compte signalent sur ce pari (déjà enregistré). -->
+                  <p v-for="a in ticket.dernier.alertes ?? []" :key="a.code" class="cm-note__text">
+                    <AppIcon name="alert" :size="12" /> {{ a.texte }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </template>
+        </AppCard>
+
+        <!-- (b) La place du « pourquoi ce pourcentage » : réservée, remplie à l'étape 40. -->
+        <PercentageWhyCard id="upcoming-pourquoi" class="upcoming__block" />
+
+        <!-- (c) Les compositions et les absents. -->
+        <AppCard id="upcoming-compos" class="upcoming__block" title="Compositions et absents" subtitle="Le onze de chaque équipe, publié par FotMob ; à défaut, le dernier aligné." icon="users">
+          <template #actions>
+            <AppButton variant="secondary" size="sm" :loading="page.loading" @click="chargerPage">
+              <template #icon><AppIcon name="refresh" :size="14" /></template>
+              Relire chez FotMob
+            </AppButton>
+          </template>
+          <LoadingSpinner v-if="page.loading && !page.data" label="Lecture de la composition…" />
+          <EmptyState v-else-if="page.error" icon="alert" title="Composition indisponible" :description="page.error" />
+          <AiLineupSnapshot v-else-if="page.data?.lineups" :snapshot="page.data.lineups" pitch />
+          <template v-else-if="page.data?.lastLineups">
+            <div class="cm-note is-warning upcoming__lineup-note">
+              <span class="cm-icon-box is-warning"><AppIcon name="users" :size="16" /></span>
+              <div>
+                <p class="cm-note__title">Dernière composition alignée</p>
+                <p class="cm-note__text">FotMob n'a pas encore publié le onze de ce match : voici le dernier aligné par chaque équipe, relu toutes les 5 minutes à l'approche du coup d'envoi.</p>
+              </div>
+            </div>
+            <AiLineupSnapshot :snapshot="page.data.lastLineups" pitch />
+          </template>
+          <EmptyState
+            v-else-if="!page.data?.available"
+            icon="matches"
+            title="Match introuvable chez FotMob"
+            description="FotMob ne liste pas encore ce match : ni composition, ni stade, ni arbitre pour l'instant."
+          />
+          <EmptyState
+            v-else
+            icon="matches"
+            title="Composition pas encore publiée"
+            description="FotMob publie les compositions officielles en général une heure avant le coup d'envoi (parfois une prévision la veille pour les grosses affiches)."
+          />
+        </AppCard>
+
+        <!-- Les absents : blessures, suspensions et changement d'entraîneur, avec la note libre de Pierre. -->
+        <TeamNewsCard v-if="analyse.result" :result="analyse.result" />
+
+        <!-- (d) La courbe des cotes, de l'ouverture à maintenant : les mouvements relevés gratuitement (les mêmes que l'onglet Cotes). -->
+        <OddsTimelineChart id="upcoming-courbe" class="upcoming__block" :etat="cotes" @voir-cotes="ouvrirOnglet('cotes')" />
+
+        <!-- (e) L'avis de l'IA. -->
+        <AppCard id="upcoming-ia" class="upcoming__block" title="Avis de l'IA" subtitle="La lecture du match par l'IA, marché par marché, à partir des pronostics du moteur." icon="sparkles">
+          <MatchAiAnalysisPanel
+            :connected="aiStore.connected"
+            :running="aiStore.running"
+            :entry="aiEntry"
+            :has-result="false"
+            @run-pre-match="lancerAnalyseIa"
+          />
+        </AppCard>
+
+        <!-- (f) Le détail : ce que montrait le Résumé d'avant, puis les autres onglets. -->
+        <h3 id="upcoming-detail" class="cm-section-title upcoming__block upcoming__detail-title">
+          Le détail
+          <span class="cm-section-title__hint">le pronostic du résultat et du score, les statistiques, le cadre du match — puis les autres onglets.</span>
+        </h3>
+        <div v-if="analyse.result" class="upcoming__grid cm-stagger">
           <ResultPredictionCard :result="analyse.result" />
           <ScorePredictionCard :result="analyse.result" />
         </div>
@@ -368,8 +766,6 @@ const issues = computed(() => ({ home: `${match.value?.home} gagne`, draw: 'Matc
           <MatchStatBars v-else-if="moyennesDispo" :group="TEAM_STAT_GROUPS[0]" :home="moyennesDuMatch.home ?? {}" :away="moyennesDuMatch.away ?? {}" />
           <EmptyState v-else icon="trendUp" title="Aucune statistique" description="Aucune statistique importée pour ces équipes." />
         </AppCard>
-
-        <TeamNewsCard v-if="analyse.result" :result="analyse.result" />
 
         <AppCard v-if="meta && (meta.stadium || meta.referee || meta.weather)" title="Rencontre" subtitle="Stade, arbitre et météo publiés par FotMob." icon="mapPin">
           <MatchInfoPanel :meta="meta" />
@@ -409,6 +805,12 @@ const issues = computed(() => ({ home: `${match.value?.home} gagne`, draw: 'Matc
             />
           </template>
         </AppCard>
+
+        <!-- Plus de détail : les onglets du haut, à portée de clic depuis le bas de la page. -->
+        <p class="upcoming__more">
+          <span class="upcoming__more-label">Plus de détail</span>
+          <button v-for="o in ongletsDuDetail" :key="o.id" type="button" class="upcoming__jump-btn" @click="ouvrirOnglet(o.id)">{{ o.label }}</button>
+        </p>
       </template>
 
       <!-- COMPOSITIONS -->
@@ -506,25 +908,23 @@ const issues = computed(() => ({ home: `${match.value?.home} gagne`, draw: 'Matc
             icon="layers"
             eyebrow="Le moteur"
           >
-            <!-- Le pari conseillé : une carte soulignée de la couleur d'accent (value = positif, quelle que soit la section). -->
-            <div v-if="pariConseille" class="upcoming__advice">
-              <span class="cm-icon-box is-accent"><AppIcon name="bolt" :size="17" /></span>
-              <PickCrest v-if="pariConseille.outcome !== 'draw'" :side="pariConseille.outcome" :home="match.home" :away="match.away" :league="match.league" :size="30" class="upcoming__advice-crest" />
-              <span v-else class="upcoming__advice-duo">
-                <TeamCrest :name="match.home" :league="match.league" :size="24" />
-                <TeamCrest :name="match.away" :league="match.league" :size="24" class="upcoming__advice-duo-away" />
-              </span>
-              <span class="upcoming__advice-text">
-                <span class="upcoming__advice-label">Pari conseillé par le moteur</span>
-                <strong class="upcoming__advice-pick">{{ issues[pariConseille.outcome] ?? pariConseille.outcome }}</strong>
-                <span v-if="pariConseille.bookmakerTitle || pariConseille.stake" class="upcoming__advice-where">
-                  <template v-if="pariConseille.bookmakerTitle">chez {{ pariConseille.bookmakerTitle }}</template>
-                  <template v-if="pariConseille.stake"> · mise {{ pariConseille.stake }}</template>
-                </span>
-              </span>
-              <span class="upcoming__advice-odds cm-numeric" title="Cote affichée par le bookmaker">{{ cote(pariConseille.displayedOdds ?? pariConseille.odds) }}</span>
-            </div>
-            <MarketPicksBoard :predictions="analyse.result.marketPredictions ?? []" :match="match" :views="aiEntry?.analysis?.marketViews ?? []" />
+            <!-- Étape 9 : le pari conseillé et la value à rafraîchir sont en tête du Résumé (le verdict) ; ici, le tableau des pronostics. -->
+            <p class="upcoming__moved">
+              Le pari conseillé par le moteur, ou la value à rafraîchir, et le verdict de chaque marché (cote, heure du relevé, value) sont en tête du Résumé.
+              <button type="button" class="cm-link upcoming__moved-link" @click="voirLeVerdict">Voir le verdict</button>
+            </p>
+            <MarketPicksBoard :predictions="analyse.result.marketPredictions ?? []" :match="match" :views="aiEntry?.analysis?.marketViews ?? []" :a-verifier="analyse.result.aVerifier ?? null" />
+          </AppCard>
+
+          <!-- Étape 7 : la saisie express d'une cote vue chez un de vos bookmakers (corners, cartons, buteurs, plus/moins…). -->
+          <AppCard
+            id="upcoming-saisie"
+            title="Saisir une cote de vos bookmakers"
+            subtitle="Sa value face au moteur aussitôt, et l'archive avec son heure. Une saisie se corrige ou se retire."
+            icon="edit"
+            eyebrow="Vos bookmakers"
+          >
+            <ManualOddsEntry :match-id="match.matchId" :home="match.home" :away="match.away" />
           </AppCard>
         </template>
       </template>
@@ -538,6 +938,16 @@ const issues = computed(() => ({ home: `${match.value?.home} gagne`, draw: 'Matc
           :has-result="false"
           @run-pre-match="lancerAnalyseIa"
         />
+      </AppCard>
+
+      <!-- COTES : toutes les cotes relevées, la probabilité qu'elles donnent, ce qui manque. -->
+      <AppCard
+        v-else-if="tab === 'cotes'"
+        title="Cotes"
+        subtitle="Relevées gratuitement chez ESPN, football-data.co.uk, 365Scores, Kalshi et Smarkets."
+        icon="percent"
+      >
+        <FreeOddsPanel :match="match" :kickoff="coupDEnvoi" />
       </AppCard>
 
       <!-- PROFILAGE DE COTES -->
@@ -852,6 +1262,154 @@ const issues = computed(() => ({ home: `${match.value?.home} gagne`, draw: 'Matc
   font-size: 14px;
   font-weight: 800;
   white-space: nowrap;
+}
+
+/* Sous le pari conseillé : sa pastille de value et l'heure du relevé (étape 7). */
+.upcoming__advice-freshness {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+}
+
+/* Une value à rafraîchir : l'ambre d'un relevé ancien, jamais le vert d'un pari. */
+.upcoming__stale {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  border-radius: var(--cm-radius-md);
+  border: 1px dashed rgba(var(--cm-warning-rgb) / 0.45);
+  background: var(--cm-surface-alt);
+}
+
+.upcoming__stale-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.upcoming__stale-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--cm-warning);
+}
+
+/* ------------------------------------------------ la décision d'abord (étape 9) */
+/* Le sommaire du Résumé : un lien d'ancre par bloc, à portée de pouce. */
+.upcoming__jump,
+.upcoming__more {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  margin: 0;
+}
+
+.upcoming__jump-label,
+.upcoming__more-label {
+  margin-right: 2px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--cm-text-muted);
+}
+
+.upcoming__jump-btn {
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--cm-border-soft);
+  background: transparent;
+  color: var(--cm-text-secondary);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--cm-transition), color var(--cm-transition), border-color var(--cm-transition);
+}
+
+.upcoming__jump-btn:hover {
+  border-color: rgba(var(--cm-section-rgb) / 0.4);
+  background: rgba(var(--cm-section-rgb) / 0.08);
+  color: var(--cm-text-primary);
+}
+
+/* Un bloc de la décision : l'ancre ne se cache pas sous la barre du haut. */
+.upcoming__block {
+  scroll-margin-top: 84px;
+}
+
+/* Sur un téléphone, le titre d'un bloc ne se serre pas à côté de son bouton ou de sa provenance : l'un passe sous l'autre. */
+.upcoming__block :deep(.card__header) {
+  flex-wrap: wrap;
+}
+
+.upcoming__block :deep(.card__heading) {
+  flex: 1 1 240px;
+}
+
+.upcoming__detail-title {
+  margin: 8px 0 -4px;
+}
+
+/* Aucun pari conseillé : la raison, sous le même dessin que les autres notes. */
+.upcoming__nopick {
+  margin-bottom: 16px;
+}
+
+/* Le renvoi de l'onglet Marchés vers le verdict. */
+.upcoming__moved {
+  margin: 0 0 14px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--cm-text-muted);
+}
+
+.upcoming__moved-link {
+  margin-left: 4px;
+  font-size: 12px;
+}
+
+/* ------------------------------------- le comparateur et le ticket (étape 10) */
+/* Sous le verdict, dans la même carte : où parier, à quel prix minimum, puis « J'ai parié ». */
+.upcoming__compare {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--cm-border-soft);
+  scroll-margin-top: 84px;
+}
+
+.upcoming__compare-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--cm-text-primary);
+}
+
+.upcoming__compare-hint {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--cm-text-muted);
+}
+
+.upcoming__bet-done {
+  margin: 0;
 }
 
 /* ------------------------------------------------------ largeurs */

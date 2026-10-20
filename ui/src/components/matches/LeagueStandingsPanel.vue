@@ -3,8 +3,10 @@ import { computed, ref, watch } from 'vue';
 import AppCard from '@/components/common/AppCard.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
 import AppSelect from '@/components/common/AppSelect.vue';
+import TabbedView from '@/components/common/TabbedView.vue';
 import TeamCrest from './TeamCrest.vue';
 import StandingsTable from './StandingsTable.vue';
+import ExpectedPointsTable from './ExpectedPointsTable.vue';
 import { standingsApi } from '@/services/standingsApi.js';
 import { matchStatsApi } from '@/services/matchStatsApi.js';
 import { nomNormalise } from '@/utils/favoris.js';
@@ -250,6 +252,18 @@ const infos = computed(() => {
     maintien
   };
 });
+
+// ------------------------------------------ le classement corrigé par les xG
+// 04/10/2026 : la même table refaite sur les occasions (points attendus, cf.
+// ExpectedPointsTable) — qui prend plus, ou moins, de points que ses
+// occasions ne le justifient. Le choix tient d'une compétition à l'autre :
+// on compare les championnats sous le même angle. Les tuiles du dessus
+// restent celles du classement réel.
+const VUES = [
+  { value: 'classement', label: 'Classement' },
+  { value: 'xg', label: 'Corrigé par les xG' }
+];
+const vue = ref('classement');
 </script>
 
 <template>
@@ -343,7 +357,11 @@ const infos = computed(() => {
       </div>
     </div>
 
+    <!-- Deux lectures de la même table : le classement réel, ou corrigé par les xG. -->
+    <TabbedView v-model="vue" :tabs="VUES" class="lst__views" />
+
     <StandingsTable
+      v-if="vue === 'classement'"
       :loading="etat.loading"
       :error="etat.error"
       :rows="rows"
@@ -353,6 +371,16 @@ const infos = computed(() => {
       :season-label="etat.data?.seasonLabel ?? null"
       :postponed="etat.data?.postponed ?? []"
       :form-of="formeDe"
+    />
+    <!-- La saison du classement affiché, et ses lignes pour le VRAI rang de chaque équipe. -->
+    <ExpectedPointsTable
+      v-else
+      :league="league"
+      :season="etat.data?.season ?? null"
+      :standings-rows="rows"
+      :official="etat.data?.official ?? false"
+      :table-name="etat.data?.table ?? null"
+      :pending="etat.loading"
     />
   </AppCard>
 </template>
@@ -471,5 +499,10 @@ const infos = computed(() => {
 
 .lst__bar {
   height: 5px;
+}
+
+/* --------------------------------- classement réel / corrigé par les xG */
+.lst__views {
+  margin-bottom: 12px;
 }
 </style>

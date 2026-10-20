@@ -6,6 +6,7 @@ import LineupBench from '@/components/matches/LineupBench.vue';
 import TeamCrest from '@/components/matches/TeamCrest.vue';
 import PlayerFlag from '@/components/matches/PlayerFlag.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
+import LineupStateBadge from '@/components/common/LineupStateBadge.vue';
 
 /**
  * Les compositions que l'IA a eues sous les yeux pour son analyse d'avant
@@ -130,6 +131,7 @@ const equipes = computed(() =>
     <div v-if="derniere" class="ais__status is-last">
       <span class="cm-icon-box is-warning is-sm"><AppIcon name="clock" :size="14" /></span>
       <p class="ais__status-text">
+        <LineupStateBadge :snapshot="snapshot" class="ais__state" />
         Composition du match pas encore publiée : voici la dernière composition alignée {{ seule ? "par l'équipe" : 'par chaque équipe' }}.
         Elle sera remplacée par la composition d'avant-match dès que FotMob la publie.
       </p>
@@ -139,6 +141,8 @@ const equipes = computed(() =>
       <span class="ais__status-text">Compositions FotMob relevées</span>
       <span v-if="heure" class="cm-chip"><AppIcon name="clock" :size="11" />à {{ heure }}</span>
       <span v-if="snapshot.minutesBeforeKickoff != null" class="cm-chip is-section">{{ snapshot.minutesBeforeKickoff }} min avant le coup d'envoi</span>
+      <!-- Officielle ou probable : FotMob ne le dit pas, l'état se déduit de l'heure de la lecture (LineupStateBadge). -->
+      <LineupStateBadge :snapshot="snapshot" />
     </div>
 
     <!-- Version terrain : le dessin de LineupPitch, puis les bancs côte à côte quand la place existe. -->
@@ -245,6 +249,12 @@ const equipes = computed(() =>
 .ais__status-text {
   margin: 0;
   line-height: 1.5;
+}
+
+/* L'état de la composition, dans le fil de la phrase du bandeau ambré. */
+.ais__state {
+  margin-right: 6px;
+  vertical-align: 1px;
 }
 
 /* La dernière composition alignée, pas celle du match : bandeau ambré. */

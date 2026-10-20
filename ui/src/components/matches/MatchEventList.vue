@@ -64,7 +64,9 @@ function idDe(cote, nom) {
 }
 
 // Repli textuel pour un type d'évènement que le dessin ne connaît pas.
-const ICONS = { goal: '⚽', card: '▮', substitution: '⇄' };
+// « missedpenalty » (étape 43, 07/10/2026) : un penalty manqué, lu chez FotMob
+// depuis cette étape — sans libellé, il s'afficherait comme une carte vide.
+const ICONS = { goal: '⚽', card: '▮', substitution: '⇄', missedpenalty: '✕' };
 
 function label(event) {
   if (event.type === 'goal') {
@@ -73,6 +75,7 @@ function label(event) {
     return parts.filter(Boolean).join(' ');
   }
   if (event.type === 'card') return event.player;
+  if (event.type === 'missedpenalty') return [event.player, '(penalty manqué)'].filter(Boolean).join(' ');
   return null;
 }
 

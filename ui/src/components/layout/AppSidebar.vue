@@ -4,7 +4,7 @@ import { RouterLink, useRoute } from 'vue-router';
 import AppIcon from '@/components/common/AppIcon.vue';
 
 /**
- * La barre latérale : la marque, puis les quatre sections de l'appli, chacune
+ * La barre latérale : la marque, puis les cinq sections de l'appli, chacune
  * avec son icône et sa couleur (cf. tokens.css [data-section]) — l'entrée
  * active prend la couleur de sa section, les autres restent sobres.
  */
@@ -12,11 +12,16 @@ const NAV_ITEMS = [
   { to: '/matches', section: 'matches', label: 'Matchs', hint: 'Cotes, calendrier, stats', icon: 'matches' },
   { to: '/paris', section: 'bets', label: 'Mes paris', hint: 'Value bets et carnet', icon: 'wallet' },
   { to: '/historique-moteur', section: 'history', label: 'Historique moteur', hint: 'Pronostics et bilans', icon: 'history' },
+  { to: '/sante-moteur', section: 'history', nav: 'sante-moteur', label: 'Santé du moteur', hint: 'Feux, note, à vérifier', icon: 'activity' },
+  { to: '/feuille-de-route', section: 'roadmap', label: 'Feuille de route', hint: 'Plan, étapes, notes', icon: 'flag' },
   { to: '/reglages', section: 'settings', label: 'Réglages', hint: 'Moteur, données, IA', icon: 'sliders' }
 ];
 
 const route = useRoute();
 const sectionActive = computed(() => route.meta?.section ?? 'matches');
+// Deux entrées partagent la couleur « history » (Historique moteur, Santé du moteur) : `nav` désigne celle de la page.
+const entreeActive = computed(() => route.meta?.nav ?? sectionActive.value);
+const estActive = (item) => (item.nav ? entreeActive.value === item.nav : entreeActive.value === item.section);
 </script>
 
 <template>
@@ -32,7 +37,7 @@ const sectionActive = computed(() => route.meta?.section ?? 'matches');
         :key="item.to"
         :to="item.to"
         class="sidebar__link"
-        :class="{ 'is-active': sectionActive === item.section }"
+        :class="{ 'is-active': estActive(item) }"
         :data-section="item.section"
       >
         <span class="sidebar__icon"><AppIcon :name="item.icon" :size="17" /></span>

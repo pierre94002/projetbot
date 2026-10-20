@@ -9,12 +9,17 @@ import AppButton from '@/components/common/AppButton.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
 import AppTextField from '@/components/common/AppTextField.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
+import AVerifierBadge from '@/components/common/AVerifierBadge.vue';
 import MatchStatusBadge from '@/components/common/MatchStatusBadge.vue';
 import LeagueBadge from '@/components/matches/LeagueBadge.vue';
 import MatchCard from '@/components/matches/MatchCard.vue';
 import TabbedView from '@/components/common/TabbedView.vue';
 import BetsPerformanceView from '@/views/BetsPerformanceView.vue';
 import BetsTicketsView from '@/views/BetsTicketsView.vue';
+import BenchView from '@/views/BenchView.vue';
+import ClosingValuePanel from '@/components/analysis/ClosingValuePanel.vue';
+import CalibrationPanel from '@/components/analysis/CalibrationPanel.vue';
+import AiScorecardPanel from '@/components/analysis/AiScorecardPanel.vue';
 import { formatDay, formatPercent } from '@/utils/format.js';
 import { marketBreakdownLabel } from '@/utils/betTrends.js';
 import { matchResultsApi } from '@/services/matchResultsApi.js';
@@ -37,8 +42,10 @@ const { settling, settleMatch } = usePredictionSettlement();
 // propres) — intégrés ici comme de simples onglets plutôt que des pages
 // séparées, même principe que Statistiques ligue dans Matchs : l'onglet
 // prioritaire (moteur) reste le défaut, les autres s'ouvrent au clic.
+// Étape 19 du plan (13/10/2026) : le banc d'essai — le moteur rejoué sur le passé —, à côté de son historique.
 const TABS = [
   { value: 'moteur', label: 'Historique moteur' },
+  { value: 'banc', label: 'Banc d’essai' },
   { value: 'performance', label: 'Performance paris' },
   { value: 'tickets', label: 'Mes tickets' }
 ];
@@ -251,6 +258,16 @@ function onScoreInput(matchId, side, event) {
 
 // Compte par statut pour le résumé compact de chaque match (le détail
 // marché-par-marché vit désormais sur sa propre page, cf. "Voir le détail").
+/**
+ * Étape 14 : les raisons « à vérifier » d'un match, réunies depuis ses pronostics
+ * (le serveur les joint à chacun ; une même raison n'est dite qu'une fois).
+ */
+function aVerifierDuGroupe(group) {
+  const raisons = new Map();
+  for (const e of group.entries) for (const r of e.aVerifier?.raisons ?? []) if (!raisons.has(r.id)) raisons.set(r.id, r);
+  return raisons.size ? { raisons: [...raisons.values()] } : null;
+}
+
 function countByStatus(group, status) {
   return group.entries.filter((e) => e.status === status).length;
 }
@@ -315,6 +332,7 @@ onMounted(() => {
     <Transition name="view" mode="out-in">
       <BetsPerformanceView v-if="activeTab === 'performance'" key="performance" />
       <BetsTicketsView v-else-if="activeTab === 'tickets'" key="tickets" />
+      <BenchView v-else-if="activeTab === 'banc'" key="banc" />
 
       <div v-else key="moteur" class="hist__tab cm-page">
         <!-- 1. LE BANDEAU : ce que vaut le moteur, d'un coup d'œil -->
@@ -385,6 +403,15 @@ onMounted(() => {
             </div>
           </div>
         </section>
+
+        <!-- 1 bis. LA VALEUR DE CLÔTURE : le marché a-t-il ensuite donné raison au moteur ? (04/10/2026) -->
+        <ClosingValuePanel scope="predictions" />
+
+        <!-- 1 ter. LA CALIBRATION DU MOIS : annoncé face au réalisé, sur les pronostics GELÉS (étape 20 du plan, 13/10/2026) -->
+        <CalibrationPanel />
+
+        <!-- 1 quater. LE CARNET DE L'IA : ses avis d'avant-match face au résultat, à la clôture et au moteur seul (étape 21 du plan, 14/10/2026) -->
+        <AiScorecardPanel />
 
         <!-- 2. LE TABLEAU PAR MARCHÉ -->
         <AppCard
@@ -564,6 +591,7 @@ onMounted(() => {
                         <span v-if="countByStatus(group, 'correct')" class="cm-chip is-accent"><AppIcon name="check" :size="11" />{{ countByStatus(group, 'correct') }} correct(s)</span>
                         <span v-if="countByStatus(group, 'incorrect')" class="cm-chip is-danger"><AppIcon name="x" :size="11" />{{ countByStatus(group, 'incorrect') }} incorrect(s)</span>
                         <span v-if="countByStatus(group, 'pending')" class="cm-chip"><AppIcon name="clock" :size="11" />{{ countByStatus(group, 'pending') }} en attente</span>
+                        <AVerifierBadge v-if="aVerifierDuGroupe(group)" :a-verifier="aVerifierDuGroupe(group)" avec-raison />
                         <RouterLink :to="`/historique-moteur/${group.matchId}`" class="cm-link hist-match__detail">
                           Voir le détail <AppIcon name="chevronRight" :size="12" />
                         </RouterLink>
