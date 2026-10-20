@@ -50,6 +50,33 @@ const REAL_PLAYER_KEYS = new Set([
  */
 export const POSITIVE_TEAM_KEYS = new Set();
 
+/**
+ * Statistiques où un 0 signifie « la source ne publie pas ce champ » et non
+ * « la valeur est nulle » : aucune équipe ne termine un match avec zéro passe,
+ * zéro tacle ou zéro dégagement. ESPN renvoie 0 plutôt que d'omettre la ligne
+ * pour les championnats qu'il ne couvre que partiellement — la Super League
+ * chinoise avant juin, par exemple. Ces zéros sont écartés À L'ENTRÉE par le
+ * fournisseur (espnMatchStatsProvider.js) : le champ reste vide plutôt que faux.
+ *
+ * Les autres clés gardent leur 0, qui y est une vraie valeur : un match sans
+ * carton, sans hors-jeu ou sans corner est banal.
+ *
+ * Une seule définition, ici, pour deux lecteurs : le fournisseur ESPN, et le
+ * carnet de santé (étape 12 du plan, dataHealth.js), qui SIGNALE les zéros de
+ * ce genre déjà entrés dans le magasin — FotMob en publie lui aussi en
+ * couverture réduite — sans jamais les corriger : le magasin ne contredit pas
+ * une source (cf. POSITIVE_TEAM_KEYS ci-dessus).
+ */
+export const ZERO_MEANS_ABSENT = new Set([
+  'Total passes',
+  'Passes accurate',
+  'tackles',
+  'clearances',
+  'interceptions',
+  'crosses',
+  'long_balls'
+]);
+
 /** Les cinq familles de postes réellement publiées ; « Substitute » n'en est pas un. */
 export const POSITIONS = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward', 'Sweeper'];
 

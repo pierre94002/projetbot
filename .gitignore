@@ -71,3 +71,11 @@ server/data/runtime/auto-ai-analysis-status.json
 # Journees de match par saison decouvertes chez ESPN (cache de l'import
 # historique) : se reconstruit tout seul, sans valeur d'historique.
 server/data/runtime/espn-season-days.json
+
+# Instantanés recalculés chaque jour par l'actualisation (étapes 20 et 21) :
+# le bilan du mois en cours (les mois figés sont dans la base, table
+# calibration_monthly) et le carnet de notes de l'IA. Sans valeur
+# d'historique. (controle-quotidien.json, lui, reste suivi : il garde la
+# date de découverte des constats et l'historique des feux.)
+server/data/runtime/calibration-en-cours.json
+server/data/runtime/carnet-ia.json

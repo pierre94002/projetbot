@@ -5,6 +5,8 @@ import { readJsonFile, writeJsonAtomic } from '../../utils/atomicJson.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const BETS_FILE_PATH = path.resolve(__dirname, '../../../data/runtime/bets.json');
+/** Le fichier du carnet (étape 11 : le coupe-circuit relit les garde-fous quand il change). */
+export const fichierDesParis = () => BETS_FILE_PATH;
 
 // Un carnet illisible fait échouer la lecture au lieu de passer pour un
 // carnet vide : un pari saisi à ce moment-là l'aurait réécrit avec ce seul
@@ -21,13 +23,35 @@ export function listBets() {
   return readBets().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 }
 
+/**
+ * La nature d'un pari (étape 10) : « simple » (une sélection), « combine » (des
+ * sélections de matchs différents : la cote est le produit des cotes) ou
+ * « combine-meme-match » (au moins deux sélections d'un même match : elles sont
+ * liées, la cote est celle que donne le bookmaker, jamais le produit). Un pari
+ * d'avant l'étape 10 n'a pas ce champ : il se lit de la même façon.
+ */
+export const NATURES_DE_PARI = Object.freeze(['simple', 'combine', 'combine-meme-match']);
+const cleDeMatch = (leg) => leg?.matchId ?? `${leg?.homeName ?? ''}|${leg?.awayName ?? ''}|${leg?.commenceTime ?? ''}`;
+export function natureDuPari(legs = []) {
+  if (legs.length <= 1) return 'simple';
+  return new Set(legs.map(cleDeMatch)).size < legs.length ? 'combine-meme-match' : 'combine';
+}
+
 // `legs` : 1 entrée = pari simple, plusieurs = combiné. La cote enregistrée
 // (`odds`) est le produit des cotes de chaque jambe — c'est la vraie cote
 // combinée telle qu'un bookmaker la calculerait pour un pari accumulateur
 // (contrairement à "Meilleures chances", qui liste des paris INDÉPENDANTS
 // sans jamais les multiplier : ici l'utilisateur choisit lui-même de les
 // combiner en un seul pari réel, ce n'est pas une suggestion du moteur).
-export function createBet({ stake, legs }) {
+//
+// Étape 10 (« J'ai parié ») : tout s'AJOUTE au format d'avant, rien ne le
+// remplace — `nature`, le bookmaker du pari, son origine, et pour un combiné
+// la cote prise chez le bookmaker (`cotePrise`, obligatoire pour un combiné du
+// même match : ses sélections sont liées, le produit n'est pas le prix) ; le
+// produit des cotes reste alors noté à côté (`produitDesCotes`). Chaque
+// sélection garde, en plus, ce que le contrôleur a validé (bookmaker,
+// probabilité du moteur au moment du pari, heure de la cote).
+export function createBet({ stake, legs, cotePrise = null, nature = null, origine = null }) {
   const bets = readBets();
   const odds = Number(legs.reduce((product, leg) => product * leg.odds, 1).toFixed(4));
   const entry = {
@@ -39,9 +63,43 @@ export function createBet({ stake, legs }) {
     odds,
     legs: legs.map((leg) => ({ ...leg, status: 'pending' }))
   };
+  if (nature) entry.nature = nature;
+  if (legs.length > 1 && Number.isFinite(cotePrise) && cotePrise > 1) {
+    entry.produitDesCotes = odds;
+    entry.odds = Number(cotePrise.toFixed(4));
+    entry.cotePrise = entry.odds;
+  }
+  const livre = legs.find((leg) => leg.bookmaker);
+  if (livre) {
+    entry.bookmaker = livre.bookmaker;
+    if (livre.bookmakerTitle) entry.bookmakerTitle = livre.bookmakerTitle;
+  }
+  if (origine) entry.origine = origine;
   bets.push(entry);
   writeBets(bets);
   return entry;
+}
+
+const deuxDecimales = (x) => Math.round(x * 100) / 100;
+
+/**
+ * Le gain attendu d'un pari AU MOMENT où il a été pris (étape 10) : mise ×
+ * (probabilité du moteur × cote prise − 1). Seulement pour un pari SIMPLE dont
+ * la probabilité du moteur est notée. Un combiné n'en a pas encore : le prix
+ * juste d'un combiné (sélections liées) viendra avec la simulation complète
+ * (étape 28 du plan) ; un pari d'avant l'étape 10 n'a pas de probabilité notée.
+ * Calculé à la lecture, jamais écrit dans le carnet.
+ * @returns {{ montant: number|null, pourcent: number|null, raison: 'combine'|'non-note'|'vide'|null }}
+ */
+export function gainAttenduDuPari(bet) {
+  const legs = bet?.legs ?? [];
+  if (!legs.length) return { montant: null, pourcent: null, raison: 'vide' };
+  if (legs.length > 1) return { montant: null, pourcent: null, raison: 'combine' };
+  const p = legs[0].probabiliteMoteur;
+  const cote = Number(bet.odds);
+  const mise = Number(bet.stake);
+  if (!(typeof p === 'number' && p > 0 && p < 1) || !(cote > 1) || !(mise > 0)) return { montant: null, pourcent: null, raison: 'non-note' };
+  return { montant: deuxDecimales(mise * (p * cote - 1)), pourcent: deuxDecimales((p * cote - 1) * 100), raison: null };
 }
 
 // Le statut global d'un pari est TOUJOURS déduit du statut de chaque

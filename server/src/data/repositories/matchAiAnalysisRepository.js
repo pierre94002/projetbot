@@ -74,7 +74,8 @@ export function findPreMatchAnalysisByTeams({ homeName, awayName, league, day = 
 
 const JOUR_MS = 86_400_000;
 
-const TYPES_DE_MARCHE = {
+/** Les types de marché, dans l'ordre de l'écran, et leur nom pour Pierre (repris par le carnet de l'IA, étape 21). */
+export const TYPES_DE_MARCHE = {
   result: 'Résultat',
   totalGoals: 'Total buts',
   bothTeamsScore: 'Les 2 équipes marquent',
@@ -97,12 +98,53 @@ const PREFIXES_PAR_EQUIPE = [
 ];
 
 /** Type d'un marché : son identifiant structuré, ou à défaut son libellé (« Buts — X » regroupés). */
-function typeDeMarche(revue) {
+export function typeDeMarche(revue) {
   if (revue.marketId && TYPES_DE_MARCHE[revue.marketId]) return revue.marketId;
   const libelle = String(revue.market ?? '');
   const parEquipe = PREFIXES_PAR_EQUIPE.find(([prefixe]) => libelle.startsWith(prefixe));
   if (parEquipe) return parEquipe[1];
   return Object.keys(TYPES_DE_MARCHE).find((k) => TYPES_DE_MARCHE[k] === revue.market) ?? null;
+}
+
+/**
+ * LA RÈGLE DE L'AVIS TENU, écrite une seule fois (étape 21 : la revue d'après-match, issuesDesMarches, et le
+ * carnet de l'IA, data/aiScorecard.js, s'en servent) : confirmer un pronostic qui s'est réalisé, ou contredire
+ * un pronostic qui ne s'est pas réalisé, c'est avoir eu raison. Un avis « nuance » n'est jamais compté (null),
+ * ni un avis absent, ni un pronostic dont l'issue n'est pas connue (`juste` ni vrai ni faux).
+ * @returns {boolean|null}
+ */
+export function avisTenu(verdict, juste) {
+  if (juste !== true && juste !== false) return null;
+  if (verdict === 'confirme') return juste;
+  if (verdict === 'contredit') return !juste;
+  return null;
+}
+
+/** Le bilan vide d'un type de marché, à la forme de aiMarketExperience (mêmes clés, même ordre). */
+export function bilanVide(marketType) {
+  return { marketType, label: TYPES_DE_MARCHE[marketType] ?? marketType, matches: 0, engineRight: 0, aiVerdicts: 0, aiRight: 0, byConfidence: {} };
+}
+
+/**
+ * Ajoute UN pronostic jugé à un bilan : l'issue du pronostic du moteur (« juste » / « faux », sinon rien) et,
+ * si l'avis de l'IA est compté (`aiWasRight` vrai ou faux), sa tenue, en tout et par confiance annoncée.
+ * Les mêmes comptes pour l'expérience redonnée à l'IA et pour son carnet (étape 21) : jamais deux façons de compter.
+ */
+export function compterAuBilan(t, { outcome, aiWasRight, aiConfidence }) {
+  if (outcome === 'juste' || outcome === 'faux') {
+    t.matches++;
+    if (outcome === 'juste') t.engineRight++;
+  }
+  if (aiWasRight === true || aiWasRight === false) {
+    t.aiVerdicts++;
+    if (aiWasRight) t.aiRight++;
+    if (aiConfidence) {
+      const c = (t.byConfidence[aiConfidence] ??= { verdicts: 0, right: 0 });
+      c.verdicts++;
+      if (aiWasRight) c.right++;
+    }
+  }
+  return t;
 }
 
 /**
@@ -116,6 +158,12 @@ function typeDeMarche(revue) {
  * Seuls comptent les pronostics choisis sous la cote minimale (`minOdds`,
  * cf. sports/football/markets.js) : avant elle, « Plus de 0.5 buts » à 1,05
  * tombait juste 94 fois sur 100 et aurait faussé chaque bilan.
+ *
+ * Étape 21 (14/10/2026) : le CARNET DE L'IA (data/aiScorecard.js) étend ce
+ * bilan — championnat, valeur de clôture, comparaison au moteur seul, rattachement
+ * par identifiants FotMob et règlement du banc d'essai — avec les mêmes comptes
+ * (bilanVide, compterAuBilan, avisTenu). Ce bilan-ci, redonné à l'IA dans les
+ * deux formes de la fiche, ne change pas (l'ancienne forme revient à l'octet).
  */
 export function aiMarketExperience({ lessonsPerType = 3 } = {}) {
   const revues = readAll()
@@ -127,22 +175,10 @@ export function aiMarketExperience({ lessonsPerType = 3 } = {}) {
       const type = typeDeMarche(r);
       if (!type || !r.minOdds) continue;
       if (!parType.has(type)) {
-        parType.set(type, { marketType: type, label: TYPES_DE_MARCHE[type], matches: 0, engineRight: 0, aiVerdicts: 0, aiRight: 0, byConfidence: {}, recentLessons: [] });
+        parType.set(type, { ...bilanVide(type), recentLessons: [] });
       }
       const t = parType.get(type);
-      if (r.outcome === 'juste' || r.outcome === 'faux') {
-        t.matches++;
-        if (r.outcome === 'juste') t.engineRight++;
-      }
-      if (r.aiWasRight === true || r.aiWasRight === false) {
-        t.aiVerdicts++;
-        if (r.aiWasRight) t.aiRight++;
-        if (r.aiConfidence) {
-          const c = (t.byConfidence[r.aiConfidence] ??= { verdicts: 0, right: 0 });
-          c.verdicts++;
-          if (r.aiWasRight) c.right++;
-        }
-      }
+      compterAuBilan(t, r);
       if (r.lesson && t.recentLessons.length < lessonsPerType) {
         t.recentLessons.push({ match: `${e.homeName} - ${e.awayName}`, pick: r.pick ?? null, outcome: r.outcome ?? null, aiVerdict: r.aiVerdict ?? null, lesson: r.lesson });
       }

@@ -35,8 +35,14 @@ import os from 'node:os';
 import { DatabaseSync } from 'node:sqlite';
 import { slug, sharesNameToken } from '../../utils/nameIdentity.js';
 import { TEAM_COLUMNS, PLAYER_COLUMNS, PERCENT_TEAM_KEYS, POSITIVE_TEAM_KEYS, POSITIONS } from './columns.js';
+import { modeBacASable, cheminBaseDuBac, assertFichierDuBac } from '../../config/bacASable.js';
 
 export function resolveDbPath() {
+  // Bac à sable (cf. config/bacASable.js) : la copie du bac, jamais la vraie
+  // base — même pour un script lancé depuis la copie sans MATCH_STATS_DB, qui
+  // aurait sinon pris le chemin par défaut ci-dessous. Lève si la base
+  // demandée sort du bac.
+  if (modeBacASable()) return cheminBaseDuBac();
   if (process.env.MATCH_STATS_DB) return process.env.MATCH_STATS_DB;
   const home = os.homedir();
   // Une tâche planifiée lancée sous un autre compte (SYSTEM) a un autre
@@ -300,6 +306,869 @@ const BIRTHDATES_DDL = [
 ) WITHOUT ROWID;`
 ];
 
+/**
+ * Cotes et prix de marché GRATUITS (03/10/2026, Pierre : « récupère les
+ * cotes gratuitement, de la même façon que les données de match »). Sources :
+ * football-data.co.uk (fichiers de saison et fixtures.csv), ESPN (DraftKings,
+ * ESPN BET, Bet 365…), Kalshi (marché de prédiction : probabilité + volume),
+ * Smarkets (bourse : carnet + volume), 365Scores (Bet365). Lecture et
+ * écriture dans oddsQuotesRepository.js, par le seul processus serveur
+ * (étapes de l'actualisation et boucle oddsWatch).
+ *
+ * DEUX tables, et non une : une rencontre vue par une source
+ * (`odds_events` : compétition, jour, noms, identifiants FotMob, provenance)
+ * et ses cotes (`odds_quotes` : bookmaker, marché, sélection, ligne, prix).
+ * Une table unique répétait la rencontre sur chacune de ses dizaines de
+ * cotes : plusieurs centaines de Mo de plus pour l'historique, dans une base
+ * qui en fait déjà 1,6 Go.
+ *
+ * `match_key` se remplit APRÈS coup (rattachement par identifiants et jour
+ * ± 1) : une rencontre à venir n'entre jamais dans `matches`, ses cotes
+ * doivent pouvoir l'attendre.
+ *
+ * `kind` : open (première valeur connue, jamais écrasée), preclose (relevé
+ * du vendredi/mardi de football-data), close (dernière valeur avant le coup
+ * d'envoi, écrasée à chaque relevé), snapshot (série avant match), live
+ * (série en match). `seq` porte cette politique dans la clé : vide pour les
+ * trois premiers (une ligne par sélection), l'heure du relevé pour les deux
+ * séries (une ligne par relevé). `line` vaut 0 quand le marché n'a pas de
+ * ligne. `prob` est la probabilité implicite BRUTE d'un prix d'échange (mid
+ * Kalshi/Smarkets) : les trois sélections d'un 1x2 ne font pas 100 %, on
+ * normalise à la lecture, jamais en base.
+ */
+const ODDS_QUOTES_DDL = [
+  `CREATE TABLE IF NOT EXISTS odds_events (
+  id INTEGER PRIMARY KEY,
+  source TEXT NOT NULL,
+  source_event TEXT NOT NULL,
+  league TEXT NOT NULL,
+  date TEXT NOT NULL,
+  kickoff TEXT,
+  home_name TEXT NOT NULL,
+  away_name TEXT NOT NULL,
+  home_id TEXT,
+  away_id TEXT,
+  match_key TEXT,
+  provenance TEXT,
+  updated_at TEXT NOT NULL
+);`,
+  `CREATE TABLE IF NOT EXISTS odds_quotes (
+  event_id INTEGER NOT NULL REFERENCES odds_events(id) ON DELETE CASCADE,
+  bookmaker TEXT NOT NULL,
+  market TEXT NOT NULL,
+  selection TEXT NOT NULL,
+  line REAL NOT NULL DEFAULT 0,
+  kind TEXT NOT NULL,
+  seq TEXT NOT NULL DEFAULT '',
+  releve_at TEXT NOT NULL,
+  price REAL,
+  prob REAL,
+  volume REAL,
+  open_interest REAL,
+  PRIMARY KEY (event_id, bookmaker, market, selection, line, kind, seq)
+) WITHOUT ROWID;`,
+  // Nom (ou « id:… », « uuid:… ») d'un club chez une source -> identifiant
+  // FotMob. Appris par vote (jour ± 1 + score d'une rencontre jouée) ou par
+  // l'annuaire strict ; jamais par ressemblance. Sert aux rencontres à
+  // venir, qui n'ont pas de score à voter.
+  `CREATE TABLE IF NOT EXISTS team_source_aliases (
+  source TEXT NOT NULL,
+  name TEXT NOT NULL,
+  league TEXT NOT NULL,
+  team_id TEXT NOT NULL,
+  evidence TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  PRIMARY KEY (source, name, league)
+) WITHOUT ROWID;`,
+  // Ce qui MANQUE (04/10/2026, Pierre : « pour toutes les données que tu
+  // n'as pas sur les cotes, il faut que tu le notifies, que je le voie dans
+  // CôteMaster ») : pour chaque rencontre qu'une source couvre mais n'a pas
+  // pu coter, la raison qu'elle a donnée (« match introuvable chez Kalshi »,
+  // « nom d'équipe non reconnu : Man United »…) et l'heure de la vérification.
+  // Les clubs par identifiant FotMob, sinon « nom:… ». Purgée après 30 jours.
+  `CREATE TABLE IF NOT EXISTS odds_fixture_misses (
+  source TEXT NOT NULL,
+  date TEXT NOT NULL,
+  home_key TEXT NOT NULL,
+  away_key TEXT NOT NULL,
+  league TEXT NOT NULL,
+  home_name TEXT NOT NULL,
+  away_name TEXT NOT NULL,
+  reason TEXT NOT NULL,
+  checked_at TEXT NOT NULL,
+  PRIMARY KEY (source, date, home_key, away_key)
+) WITHOUT ROWID;`,
+  // Curseur des rattrapages historiques (par source et par compétition),
+  // pour reprendre où la passe précédente s'est arrêtée.
+  `CREATE TABLE IF NOT EXISTS odds_source_state (
+  source TEXT NOT NULL,
+  scope TEXT NOT NULL,
+  cursor TEXT,
+  done INTEGER NOT NULL DEFAULT 0,
+  detail TEXT,
+  updated_at TEXT NOT NULL,
+  PRIMARY KEY (source, scope)
+) WITHOUT ROWID;`
+];
+
+/**
+ * LES ENREGISTREURS (étape E du plan, 05/10/2026) : ce qui se perd si on ne
+ * le note pas sur le moment, gardé sans un token Claude. Tables écrites par le
+ * SEUL serveur (data/enregistreurs/), en petites tranches, jamais pendant un
+ * import ni quand une autre tâche tient le verrou d'actualisation (cf.
+ * data/enregistreurs/file.js). Rencontres, clubs et joueurs par identifiant
+ * FotMob — jamais l'identifiant 0, partagé par tous les inconnus d'une feuille.
+ *
+ *   live_snapshots     l'état d'un match EN COURS, au plus toutes les cinq
+ *                      minutes : score, minute, rouges, statistiques du
+ *                      moment (xG compris quand FotMob les donne). `stats` :
+ *                      JSON compact { clé: [domicile, extérieur] }, treize
+ *                      clés de TEAM_STAT_MAP (STATS_DU_DIRECT, liveWatch.js).
+ *                      Un champ que la source ne publie pas reste NULL.
+ *   unavailable_reads  pour chaque jour (de Paris) et chaque match à venir
+ *   unavailable_daily  sous 48 h : la lecture faite (ou reprise du cache des
+ *                      compositions), puis un joueur indisponible par ligne
+ *                      — blessé, suspendu, en sélection. `upcoming_lineups`
+ *                      est purgée deux jours après le match : ceci reste.
+ *   engine_picks       les pronostics de marché du moteur (marketPredictions),
+ *                      gelés chaque nuit et à chaque analyse automatique.
+ *                      Ajout seulement, JAMAIS de mise à jour : la version 1
+ *                      est la PREMIÈRE valeur de chaque pronostic, et ne
+ *                      change plus ; chaque changement ajoute une version
+ *                      datée. Pas dans predictions.json (sous OneDrive,
+ *                      alimenté par le seul scan de Mes paris, qui réécrit
+ *                      predictedOdds). ATTENTION : `version` est le numéro de
+ *                      RÉVISION du pronostic, pas une version du moteur.
+ *                      Depuis l'étape 25 du plan (07/10/2026), deux colonnes
+ *                      de plus : `engine_version` (le numéro de la VERSION DU
+ *                      MOTEUR qui a calculé la valeur, cf.
+ *                      core/engine/engineVersions.js) et `distribution`
+ *                      (JSON : toutes les issues du marché et leur
+ *                      probabilité, à la ligne du pronostic). Les lignes
+ *                      gelées avant ne sont jamais réécrites : NULL, « sans
+ *                      version ».
+ *   engine_candidate_picks  (étape 25) les chiffres de la VERSION CANDIDATE,
+ *                      calculée « à blanc » chaque nuit à côté de la version
+ *                      en service, seulement pour les marchés qu'elle change :
+ *                      les deux distributions (candidate et en service) sur
+ *                      la même ligne, pour le juge de l'étape 16. Écrite par
+ *                      le seul serveur (data/enregistreurs/moteurABlanc.js),
+ *                      ajout seulement (`revision` comme `version` ci-dessus),
+ *                      lue par AUCUN écran, aucun pari, aucune analyse IA.
+ *   recorder_counts    lignes gardées par enregistreur et par jour de Paris,
+ *   recorder_state     et depuis quand chacun tourne : l'état que lit la carte
+ *                      « Enregistreurs » de Réglages sans rien recompter.
+ *
+ * Les cotes payantes (The Odds API) vont dans odds_events/odds_quotes, source
+ * « odds-api » (cf. data/enregistreurs/cotesPayantes.js), écartées des
+ * lectures des cotes GRATUITES (SOURCES_PAYANTES, oddsQuotesRepository.js).
+ */
+const ENREGISTREURS_DDL = [
+  `CREATE TABLE IF NOT EXISTS live_snapshots (
+  fotmob_id TEXT NOT NULL,
+  taken_at TEXT NOT NULL,
+  kind TEXT NOT NULL,
+  date TEXT NOT NULL,
+  kickoff TEXT,
+  league TEXT,
+  league_key TEXT,
+  home_id TEXT,
+  away_id TEXT,
+  home_name TEXT,
+  away_name TEXT,
+  status TEXT NOT NULL,
+  minute INTEGER,
+  added_time INTEGER,
+  minute_label TEXT,
+  home_goals INTEGER,
+  away_goals INTEGER,
+  home_red INTEGER,
+  away_red INTEGER,
+  xg_home REAL,
+  xg_away REAL,
+  stats TEXT,
+  coverage TEXT,
+  detail_at TEXT,
+  source TEXT NOT NULL,
+  PRIMARY KEY (fotmob_id, taken_at)
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS unavailable_reads (
+  day TEXT NOT NULL,
+  fotmob_id TEXT NOT NULL,
+  date TEXT,
+  kickoff TEXT,
+  league TEXT,
+  home_id TEXT,
+  away_id TEXT,
+  home_name TEXT,
+  away_name TEXT,
+  read_at TEXT NOT NULL,
+  origin TEXT NOT NULL,
+  status TEXT NOT NULL,
+  home_count INTEGER,
+  away_count INTEGER,
+  PRIMARY KEY (day, fotmob_id)
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS unavailable_daily (
+  day TEXT NOT NULL,
+  fotmob_id TEXT NOT NULL,
+  side TEXT NOT NULL,
+  player_key TEXT NOT NULL,
+  player_id TEXT,
+  player_name TEXT NOT NULL,
+  team_id TEXT,
+  reason TEXT,
+  expected_return TEXT,
+  read_at TEXT NOT NULL,
+  PRIMARY KEY (day, fotmob_id, side, player_key)
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS engine_picks (
+  fixture_key TEXT NOT NULL,
+  market_key TEXT NOT NULL,
+  version INTEGER NOT NULL,
+  recorded_at TEXT NOT NULL,
+  origin TEXT NOT NULL,
+  match_id TEXT,
+  league TEXT,
+  date TEXT NOT NULL,
+  kickoff TEXT,
+  home_name TEXT,
+  away_name TEXT,
+  home_id TEXT,
+  away_id TEXT,
+  market_id TEXT NOT NULL,
+  market TEXT,
+  params TEXT,
+  choice TEXT,
+  label TEXT,
+  probability REAL,
+  predicted_odds REAL,
+  market_odds REAL,
+  min_odds REAL,
+  odds_source TEXT,
+  odds_at TEXT,
+  lineup_state TEXT,
+  lineup_at TEXT,
+  engine_hash TEXT,
+  engine_version INTEGER,
+  distribution TEXT,
+  PRIMARY KEY (fixture_key, market_key, version)
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS engine_candidate_picks (
+  candidate_id TEXT NOT NULL,
+  fixture_key TEXT NOT NULL,
+  market_key TEXT NOT NULL,
+  revision INTEGER NOT NULL,
+  recorded_at TEXT NOT NULL,
+  candidate_hash TEXT NOT NULL,
+  service_version INTEGER,
+  match_id TEXT,
+  league TEXT,
+  date TEXT NOT NULL,
+  kickoff TEXT,
+  home_name TEXT,
+  away_name TEXT,
+  home_id TEXT,
+  away_id TEXT,
+  market_id TEXT NOT NULL,
+  market TEXT,
+  params TEXT,
+  choice TEXT,
+  label TEXT,
+  probability REAL,
+  predicted_odds REAL,
+  distribution TEXT,
+  service_params TEXT,
+  service_choice TEXT,
+  service_probability REAL,
+  service_predicted_odds REAL,
+  service_distribution TEXT,
+  odds_source TEXT,
+  odds_at TEXT,
+  lineup_state TEXT,
+  PRIMARY KEY (candidate_id, fixture_key, market_key, revision)
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS recorder_counts (
+  recorder TEXT NOT NULL,
+  day TEXT NOT NULL,
+  rows INTEGER NOT NULL DEFAULT 0,
+  last_at TEXT,
+  PRIMARY KEY (recorder, day)
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS recorder_state (
+  recorder TEXT PRIMARY KEY,
+  first_at TEXT,
+  last_at TEXT,
+  source_at TEXT,
+  detail TEXT,
+  updated_at TEXT NOT NULL
+) WITHOUT ROWID;`
+];
+
+/**
+ * L'HISTORIQUE FOOTBALL-DATA (étape 13 du plan, 06/10/2026) : les fichiers
+ * gratuits de football-data.co.uk depuis 2000-01 — 22 divisions européennes
+ * à fichier saisonnier et 16 fichiers par pays —, une ligne COMPACTE par
+ * match (la base pèse déjà 1,8 Go). Écrit par footballDataHistory.js, dans
+ * l'actualisation du serveur (ou, dans le bac à sable, par
+ * scripts/import-fd-history.mjs) ; jamais dans match_odds.
+ *
+ *   fd_teams    l'identité d'un club chez football-data : son PAYS (ENG, SCO,
+ *               GER… ou le code du fichier par pays) et son nom tel que le
+ *               site l'écrit — stable d'une saison à l'autre, jamais
+ *               rapproché d'un autre nom. `team_id` : l'identifiant FotMob que
+ *               lui donne le VOTE (jour + score, sur les saisons communes avec
+ *               le magasin, depuis 2023), quand il existe ; un club disparu
+ *               avant 2023 garde sa seule identité football-data.
+ *   fd_history  un match : division ou fichier par pays (`code`), saison,
+ *               jour UTC du coup d'envoi (`date`) et jour écrit dans le fichier
+ *               (`date_fichier`, la clé de la rencontre chez la source), heure
+ *               UTC quand le fichier la donne, les deux clubs (fd_teams), la
+ *               rencontre FotMob désignée (`match_key`) et l'issue du
+ *               rattachement (`lien` : 0 hors de la période du magasin ou
+ *               championnat non suivi, 1 même score, 2 score différent — la
+ *               rencontre est gardée pour qu'on dise laquelle —, 3 club sans
+ *               identifiant, 4 aucune rencontre de ces deux clubs) ; scores
+ *               (fin, mi-temps), statistiques (tirs, cadrés, corners, fautes —
+ *               ou coups francs concédés quand le fichier n'a qu'eux —,
+ *               jaunes, rouges, xG), arbitre ; les COTES en centièmes
+ *               (INTEGER : 2,25 -> 225, deux octets au lieu de huit) :
+ *               moyenne (moy) et maximum (max) du marché, Pinnacle (pin),
+ *               Bet365 (b365), William Hill (wh), d'avant-match (sans c) et de
+ *               clôture (avec c) — 1X2 (1, n, 2), plus/moins 2,5 buts (p25,
+ *               m25, sauf William Hill que le site ne donne pas) et handicap
+ *               asiatique à la ligne du marché (ahd, ahe ; ligne en centièmes
+ *               de but, côté domicile). Une case vide = la source ne la donne
+ *               pas, jamais 0. Rien d'autre pour les buts : ni 1,5, ni 3,5,
+ *               ni « les deux marquent ».
+ *   fd_fichiers l'état de chaque fichier (importé, absent chez la source, en
+ *               échec avec la raison), sa date de relevé, son empreinte : le
+ *               curseur de reprise de l'import, qui s'étale sur plusieurs
+ *               passes.
+ */
+const COTES_FD = [
+  ...['moy', 'max', 'pin', 'b365', 'wh'].flatMap((l) => ['1', 'n', '2', 'c1', 'cn', 'c2'].map((s) => `${l}_${s}`)),
+  ...['moy', 'max', 'pin', 'b365'].flatMap((l) => ['p25', 'm25', 'cp25', 'cm25'].map((s) => `${l}_${s}`)),
+  'ah_ligne',
+  'ah_cligne',
+  ...['moy', 'max', 'pin', 'b365'].flatMap((l) => ['ahd', 'ahe', 'cahd', 'cahe'].map((s) => `${l}_${s}`))
+];
+/** Colonnes de cotes de fd_history (centièmes), dans l'ordre de la table. */
+export const COLONNES_COTES_FD = Object.freeze(COTES_FD);
+
+const FD_HISTORY_DDL = [
+  `CREATE TABLE IF NOT EXISTS fd_teams (
+  id INTEGER PRIMARY KEY,
+  pays TEXT NOT NULL,
+  nom TEXT NOT NULL,
+  team_id TEXT,
+  votes INTEGER,
+  total INTEGER,
+  etat TEXT,
+  UNIQUE (pays, nom)
+);`,
+  `CREATE TABLE IF NOT EXISTS fd_history (
+  id INTEGER PRIMARY KEY,
+  code TEXT NOT NULL,
+  saison TEXT NOT NULL,
+  date TEXT NOT NULL,
+  date_fichier TEXT NOT NULL,
+  heure TEXT,
+  dom INTEGER NOT NULL REFERENCES fd_teams(id),
+  ext INTEGER NOT NULL REFERENCES fd_teams(id),
+  match_key TEXT,
+  lien INTEGER NOT NULL DEFAULT 0,
+  bd INTEGER NOT NULL,
+  be INTEGER NOT NULL,
+  mtd INTEGER,
+  mte INTEGER,
+  tirs_d INTEGER,
+  tirs_e INTEGER,
+  cadres_d INTEGER,
+  cadres_e INTEGER,
+  corners_d INTEGER,
+  corners_e INTEGER,
+  fautes_d INTEGER,
+  fautes_e INTEGER,
+  cf_d INTEGER,
+  cf_e INTEGER,
+  jaunes_d INTEGER,
+  jaunes_e INTEGER,
+  rouges_d INTEGER,
+  rouges_e INTEGER,
+  xg_d INTEGER,
+  xg_e INTEGER,
+  arbitre TEXT,
+${COTES_FD.map((c) => `  ${c} INTEGER`).join(',\n')}
+);`,
+  `CREATE TABLE IF NOT EXISTS fd_fichiers (
+  fichier TEXT PRIMARY KEY,
+  code TEXT NOT NULL,
+  saison TEXT,
+  statut TEXT NOT NULL,
+  lu_le TEXT,
+  version TEXT,
+  sha1 TEXT,
+  octets INTEGER,
+  lignes INTEGER,
+  ignorees INTEGER,
+  encodage TEXT,
+  erreur TEXT,
+  essais INTEGER NOT NULL DEFAULT 0,
+  importe_le TEXT,
+  updated_at TEXT NOT NULL
+) WITHOUT ROWID;`
+];
+
+/**
+ * LES REPÈRES DE CHAQUE CHAMPIONNAT (étape 15 du plan, 07/10/2026) : ce
+ * qu'est un match « normal » dans un championnat, saison par saison, calculé
+ * chaque nuit par l'étape « reperes » de l'actualisation (leagueBenchmarks.js),
+ * lu par GET /api/match-stats/benchmarks. Une ligne par championnat, saison
+ * et repère : la valeur (moyenne par match, ou part de 0 à 1), le nombre de
+ * matchs qui la portent, l'écart-type d'un match, la SOURCE de la saison
+ * (« fotmob » ou « football-data » : une seule par saison), le détail (mois
+ * par mois, scores, empreinte de ce qui a été lu) et la date du calcul.
+ * Lignes spéciales : la saison « toutes » (toutes les saisons d'un
+ * championnat réunies, la dispersion et le facteur de terrain mesurés) et le
+ * championnat « * » (tous les championnats). Rien ici n'entre dans le moteur.
+ * La clé primaire sert toutes les lectures (par championnat) : aucun index de
+ * plus.
+ */
+const LEAGUE_BENCHMARKS_DDL = `CREATE TABLE IF NOT EXISTS league_benchmarks (
+  league TEXT NOT NULL,
+  saison TEXT NOT NULL,
+  repere TEXT NOT NULL,
+  debut INTEGER,
+  valeur REAL,
+  matchs INTEGER NOT NULL DEFAULT 0,
+  ecart REAL,
+  source TEXT NOT NULL,
+  detail TEXT,
+  calcule_le TEXT NOT NULL,
+  PRIMARY KEY (league, saison, repere)
+) WITHOUT ROWID;`;
+
+/**
+ * LA TABLE DU JOUR J (étape 17 du plan, 07/10/2026) : pour chaque rencontre
+ * et chacun de ses deux camps, ce qui s'est passé (les faits du match) et ce
+ * qu'on savait LA VEILLE (les entrées exactes que lit le moteur, calculées
+ * avec les seuls matchs d'un jour UTC strictement antérieur) ; la même chose
+ * pour chaque joueur identifié sur chaque feuille ; les moyennes de chaque
+ * championnat avant chacun de ses jours de match. Calculée chaque nuit par
+ * l'étape « tableJourJ » de l'actualisation (dayTable.js), mesurée
+ * seulement : le moteur ne la lit pas encore (étape 19).
+ *
+ * Ce sont des tables DÉRIVÉES, reconstructibles en quelques minutes, comme les
+ * annuaires : aucune clé étrangère vers `matches` (une suppression de
+ * rencontre balaierait sinon deux millions de lignes joueur sans index) ; la
+ * cohérence est refaite chaque nuit par le registre `day_matches`. Clubs et
+ * joueurs par le NUMÉRO de leur identifiant FotMob (« fotmob-8456 » → 8456),
+ * jamais par leur nom. Notes ×100, xG ×1000 : des entiers, que le lecteur
+ * divise. L'état (version, repères de la nuit, contrôle anti-fuite) vit dans
+ * la base, dans `day_state` : une base restaurée amène le sien.
+ */
+const DAY_TABLE_DDL = [
+  `CREATE TABLE IF NOT EXISTS day_matches (
+  rencontre INTEGER PRIMARY KEY AUTOINCREMENT,
+  match_key TEXT NOT NULL UNIQUE,
+  fotmob_id TEXT,
+  date TEXT NOT NULL,
+  league TEXT NOT NULL,
+  saison INTEGER NOT NULL,
+  home INTEGER NOT NULL,
+  away INTEGER NOT NULL,
+  updated_at TEXT
+);`,
+  `CREATE TABLE IF NOT EXISTS team_day (
+  rencontre INTEGER NOT NULL,
+  camp INTEGER NOT NULL,
+  club INTEGER NOT NULL,
+  adversaire INTEGER NOT NULL,
+  date TEXT NOT NULL,
+  league TEXT NOT NULL,
+  saison INTEGER NOT NULL,
+  attribue INTEGER NOT NULL,
+  prolongation INTEGER NOT NULL,
+  compte INTEGER NOT NULL,
+  coupe INTEGER NOT NULL,
+  releve INTEGER NOT NULL,
+  bp INTEGER NOT NULL,
+  bc INTEGER NOT NULL,
+  bp90 INTEGER,
+  bc90 INTEGER,
+  xg_p REAL,
+  xg_c REAL,
+  tirs_p INTEGER,
+  tirs_c INTEGER,
+  cadres_p INTEGER,
+  cadres_c INTEGER,
+  corners_p INTEGER,
+  corners_c INTEGER,
+  jaunes_p INTEGER,
+  jaunes_c INTEGER,
+  rouges_p INTEGER,
+  rouges_c INTEGER,
+  fautes_p INTEGER,
+  fautes_c INTEGER,
+  occasions_p INTEGER,
+  occasions_c INTEGER,
+  possession_p REAL,
+  f10_corners_p INTEGER,
+  f10_corners_c INTEGER,
+  f10_corners_n INTEGER,
+  f10_tirs_p INTEGER,
+  f10_tirs_c INTEGER,
+  f10_tirs_n INTEGER,
+  f10_cadres_p INTEGER,
+  f10_cadres_c INTEGER,
+  f10_cadres_n INTEGER,
+  f5_1 INTEGER,
+  f5_2 INTEGER,
+  f5_3 INTEGER,
+  f5_4 INTEGER,
+  f5_5 INTEGER,
+  s_bp_dom INTEGER,
+  s_bc_dom INTEGER,
+  s_n_dom INTEGER,
+  s_bp_ext INTEGER,
+  s_bc_ext INTEGER,
+  s_n_ext INTEGER,
+  s_en_saison INTEGER,
+  g_saison INTEGER,
+  g_bp_dom INTEGER,
+  g_bc_dom INTEGER,
+  g_n_dom INTEGER,
+  g_bp_ext INTEGER,
+  g_bc_ext INTEGER,
+  g_n_ext INTEGER,
+  PRIMARY KEY (rencontre, camp)
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS league_day (
+  league TEXT NOT NULL,
+  date TEXT NOT NULL,
+  l_source TEXT NOT NULL,
+  l_n INTEGER NOT NULL,
+  l_bd INTEGER NOT NULL,
+  l_be INTEGER NOT NULL,
+  l_xg_n INTEGER NOT NULL,
+  l_xd REAL NOT NULL,
+  l_xe REAL NOT NULL,
+  l_cad_n INTEGER NOT NULL,
+  l_cd INTEGER NOT NULL,
+  l_ce INTEGER NOT NULL,
+  c_saison INTEGER,
+  c_n INTEGER NOT NULL,
+  c_bd INTEGER NOT NULL,
+  c_be INTEGER NOT NULL,
+  PRIMARY KEY (league, date)
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS player_day (
+  joueur INTEGER NOT NULL,
+  date TEXT NOT NULL,
+  rencontre INTEGER NOT NULL,
+  club INTEGER NOT NULL,
+  camp INTEGER NOT NULL,
+  joue INTEGER NOT NULL,
+  titulaire INTEGER,
+  entre INTEGER,
+  poste INTEGER,
+  minutes INTEGER,
+  note INTEGER,
+  buts INTEGER,
+  passes_d INTEGER,
+  tirs INTEGER,
+  cadres INTEGER,
+  xg INTEGER,
+  xa INTEGER,
+  xgnp INTEGER,
+  xgot INTEGER,
+  pc INTEGER,
+  recup INTEGER,
+  duels_g INTEGER,
+  duels_t INTEGER,
+  buts_evites INTEGER,
+  buts_concedes INTEGER,
+  jaunes INTEGER,
+  rouges INTEGER,
+  entre_min INTEGER,
+  sorti_min INTEGER,
+  csc INTEGER,
+  a10_n INTEGER,
+  a10_min INTEGER,
+  a10_note_s INTEGER,
+  a10_note_n INTEGER,
+  a10_buts INTEGER,
+  a10_xg INTEGER,
+  PRIMARY KEY (joueur, date, rencontre)
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS day_state (
+  cle TEXT PRIMARY KEY,
+  valeur TEXT NOT NULL
+) WITHOUT ROWID;`,
+  // Les faits d'un club dans le temps : la lecture « club par club » de la
+  // nuit et de faitsEquipe. Aucun index sur player_day.rencontre (il coûterait
+  // ~30 Mo) : la nuit balaie la table par tranches de joueurs quand une
+  // rencontre disparaît ou change.
+  'CREATE INDEX IF NOT EXISTS idx_team_day_club ON team_day(club, date);'
+];
+
+/**
+ * LE BANC D'ESSAI (étape 19 du plan, 13/10/2026) : une ligne par rejeu, son
+ * RÉSUMÉ seulement (les cases, leurs verdicts, les paris, la carte, la
+ * reproduction du 23/09 ; quelques centaines de Ko) — jamais les lignes
+ * détaillées (1,4 million par rejeu complet, que rien ne lit à l'écran ; elles
+ * se refont en quelques minutes et s'exportent en JSON Lines). Écrite par le
+ * banc seul (src/bench/depotBanc.js), sous le verrou d'actualisation : un
+ * INSERT au lancement (fini_le, bilan et resume vides — un rejeu interrompu se
+ * voit), un UPDATE à la fin, jamais deux, jamais sur une ligne finie.
+ *   ou             'bac' (scripts/bench.mjs) ou 'serveur' (le bouton de l'appli) ;
+ *   version_moteur le numéro de version du moteur rejoué, ou NULL (sans version) ;
+ *   options        JSON : périodes, jeux de prix, marchés, bornes, graine, tirages, réglages, vues ;
+ *   bilan          JSON : comptes, écartées, durées par partie, mémoire, plus long blocage, erreur ;
+ *   resume         JSON : le résumé (src/bench/resume.js).
+ */
+const BENCH_DDL = [
+  `CREATE TABLE IF NOT EXISTS bench_runs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  lance_le TEXT NOT NULL,
+  fini_le TEXT,
+  ou TEXT NOT NULL,
+  version_banc INTEGER NOT NULL,
+  format_lignes INTEGER NOT NULL,
+  empreinte_moteur TEXT NOT NULL,
+  empreinte_code TEXT NOT NULL,
+  version_moteur INTEGER,
+  options TEXT NOT NULL,
+  bilan TEXT,
+  resume TEXT
+);`
+];
+
+/**
+ * LA VALEUR DE CHAQUE STATISTIQUE (étape 18 du plan, 13/10/2026) : fiabilité,
+ * stabilisation, pouvoir prédictif, demi-vie et fenêtre conseillée de chaque
+ * statistique d'équipe et de joueur, mesurées sur la table du jour J
+ * (src/bench/statValue.js). Écrites par ce calcul seul, sous le verrou
+ * d'actualisation (nom « valeur-des-stats » ; le script du bac, ou le serveur
+ * au clic) : un INSERT dans stat_value_runs au lancement (un calcul
+ * interrompu se voit), puis les lignes de stat_value et l'UPDATE du calcul
+ * dans UNE transaction, jamais sur un calcul fini. Lues par la route
+ * GET /api/bench/stat-value et par les étapes 27, 29, 30
+ * (lireParametresStatistique). Quelques dizaines de lignes par calcul.
+ *   stat_value_runs  ou : 'bac' | 'serveur' | 'essai' ; options et bilan en JSON ;
+ *   stat_value       une ligne par (calcul, statistique, échelle, source) : les
+ *                    mesures et leurs fourchettes en colonnes, tout le détail
+ *                    (courbes, jugements, étiquettes « déjà vu ») en JSON.
+ */
+const STAT_VALUE_DDL = [
+  `CREATE TABLE IF NOT EXISTS stat_value_runs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  lance_le TEXT NOT NULL,
+  fini_le TEXT,
+  ou TEXT NOT NULL,
+  version INTEGER NOT NULL,
+  options TEXT NOT NULL,
+  bilan TEXT
+);`,
+  `CREATE TABLE IF NOT EXISTS stat_value (
+  calcul INTEGER NOT NULL,
+  statistique TEXT NOT NULL,
+  echelle TEXT NOT NULL,
+  source TEXT NOT NULL,
+  cible TEXT NOT NULL,
+  fiabilite REAL,
+  fiabilite_bas REAL,
+  fiabilite_haut REAL,
+  fiabilite_n INTEGER,
+  fiabilite_10 REAL,
+  stabilisation REAL,
+  stabilisation_bas REAL,
+  stabilisation_haut REAL,
+  pouvoir REAL,
+  pouvoir_bas REAL,
+  pouvoir_haut REAL,
+  pouvoir_n INTEGER,
+  demi_vie REAL,
+  demi_vie_bas REAL,
+  demi_vie_haut REAL,
+  fenetre_actuelle INTEGER NOT NULL,
+  fenetre_conseillee INTEGER,
+  fenetre_bas INTEGER,
+  fenetre_haut INTEGER,
+  verdict_fenetre TEXT NOT NULL,
+  verdict TEXT,
+  detail TEXT NOT NULL,
+  PRIMARY KEY (calcul, statistique, echelle, source)
+) WITHOUT ROWID;`
+];
+
+/**
+ * LA CALIBRATION MENSUELLE (étape 20 du plan, 13/10/2026) : le bilan FIGÉ de
+ * chaque mois écoulé — ce que le moteur avait annoncé (pronostics gelés,
+ * engine_picks) face à ce qui s'est passé, tranche par tranche, par marché et
+ * par championnat, la valeur de clôture des pronostics et des paris de Pierre
+ * (src/data/calibration.js). Une ligne par mois, écrite UNE fois par le
+ * serveur seul (étape « calibrationMensuelle » de l'actualisation, sous son
+ * verrou), jamais réécrite : le déclencheur refuse tout UPDATE — un mois figé
+ * reste comparable aux suivants, même si le calcul change (sa `version` le
+ * dit). Le mois en cours n'y est jamais : il se calcule à la demande.
+ *   bilan   JSON : le bilan complet (les deux lectures, première valeur et
+ *           dernière avant le coup d'envoi ; les juges ; les comptes écartés) ;
+ *   resume  JSON : ses chiffres clés, pour la liste des mois (sans relire
+ *           chaque bilan).
+ */
+const CALIBRATION_DDL = [
+  `CREATE TABLE IF NOT EXISTS calibration_monthly (
+  mois TEXT PRIMARY KEY,
+  version INTEGER NOT NULL,
+  fige_le TEXT NOT NULL,
+  du TEXT NOT NULL,
+  au TEXT NOT NULL,
+  pronostics INTEGER NOT NULL,
+  paris INTEGER NOT NULL,
+  resume TEXT NOT NULL,
+  bilan TEXT NOT NULL
+) WITHOUT ROWID;`,
+  `CREATE TRIGGER IF NOT EXISTS calibration_monthly_jamais_reecrit BEFORE UPDATE ON calibration_monthly
+BEGIN
+  SELECT RAISE(ABORT, 'calibration_monthly : un mois figé ne se réécrit jamais');
+END;`
+];
+
+/**
+ * CONNAÎTRE LE MARCHÉ (étape 22 du plan, 13/10/2026) : la justesse, la vitesse, les biais et la marge de
+ * chaque bookmaker, et le meilleur moment pour parier de chaque championnat, mesurés sur les cotes
+ * archivées (src/data/marketKnowledge.js). Écrites par le serveur seul (étape « connaitreMarche » de
+ * l'actualisation, sous son verrou ; scripts/market-knowledge.mjs dans le bac), le calcul ayant tourné
+ * dans un processus à part en lecture seule. Lues par les étapes 23 et 31 (lireConnaissanceDuMarche).
+ *   market_knowledge_runs  une ligne par calcul : INSERT au lancement (fini_le vide : un calcul
+ *                          interrompu se voit), `fini_le` posé dans la dernière transaction du rangement
+ *                          — les lecteurs ne lisent que le dernier calcul FINI ; `empreinte` (JSON) : les
+ *                          sources lues (rien de neuf : rien recalculé) ; `bilan`, `resume` (JSON) ;
+ *   market_knowledge       le résumé chiffré du DERNIER calcul fini (les autres sont retirés par
+ *                          tranches après lui) : une ligne par mesure × portée (« * » = tous les
+ *                          championnats) × moment × livre × clé, avec son nombre de matchs `n`, sa
+ *                          valeur, sa fourchette et le verdict du juge de l'étape 16 ; le détail en JSON.
+ *                          Une table à rowid : le ménage retire par tranches (rowid IN … LIMIT).
+ */
+const MARKET_KNOWLEDGE_DDL = [
+  `CREATE TABLE IF NOT EXISTS market_knowledge_runs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  lance_le TEXT NOT NULL,
+  fini_le TEXT,
+  ou TEXT NOT NULL,
+  version INTEGER NOT NULL,
+  empreinte TEXT NOT NULL,
+  bilan TEXT,
+  resume TEXT
+);`,
+  `CREATE TABLE IF NOT EXISTS market_knowledge (
+  calcul INTEGER NOT NULL,
+  mesure TEXT NOT NULL,
+  portee TEXT NOT NULL,
+  moment TEXT NOT NULL,
+  livre TEXT NOT NULL,
+  cle TEXT NOT NULL,
+  n INTEGER NOT NULL,
+  valeur REAL,
+  bas REAL,
+  haut REAL,
+  verdict TEXT,
+  detail TEXT NOT NULL,
+  PRIMARY KEY (calcul, mesure, portee, moment, livre, cle)
+);`
+];
+
+/**
+ * L'INDICE DE FORCE DES ÉQUIPES (étape 29 du plan, 14/10/2026 ; data/db/teamStrength.js) : pour chaque club
+ * et chaque jour où il joue, sa force « avant ce jour » (rien du jour même ni d'après), et sa ligne ACTUELLE
+ * (actuel = 1 ; jour = le premier jour où elle vaut, le lendemain du dernier jour pris en compte), au total,
+ * à domicile et à l'extérieur (lieu). Clubs par le NUMÉRO de leur identifiant FotMob, jamais par leur nom ;
+ * league = son championnat ce jour-là. Entiers : valeurs par match ×100, note (force, buts d'écart attendus
+ * face à une équipe moyenne du championnat) ×1000, percentiles 0-100 dans le championnat (plus haut = mieux,
+ * même pour ce qu'on concède). formule : 'xg', ou 'sans-xg' (le repli sur les buts et les tirs). Table
+ * DÉRIVÉE, refaite en quelques minutes ; écrite par le serveur seul (étape « indiceForce » de
+ * l'actualisation ; scripts/team-strength.mjs dans le bac), sous le verrou de la passe. L'état (version,
+ * réglages, empreinte des rencontres, bilan, mesure au banc) vit dans team_strength_state.
+ */
+const TEAM_STRENGTH_DDL = [
+  `CREATE TABLE IF NOT EXISTS team_strength (
+  club INTEGER NOT NULL,
+  jour TEXT NOT NULL,
+  lieu TEXT NOT NULL,
+  actuel INTEGER NOT NULL,
+  league TEXT NOT NULL,
+  saison INTEGER NOT NULL,
+  formule TEXT,
+  n INTEGER,
+  n_xg INTEGER,
+  force INTEGER,
+  rang INTEGER,
+  equipes INTEGER,
+  pct_force INTEGER,
+  xg_p INTEGER,
+  xg_c INTEGER,
+  tirs_p INTEGER,
+  tirs_c INTEGER,
+  cadres_p INTEGER,
+  cadres_c INTEGER,
+  occasions_p INTEGER,
+  occasions_c INTEGER,
+  buts_p INTEGER,
+  buts_c INTEGER,
+  corners_p INTEGER,
+  corners_c INTEGER,
+  possession INTEGER,
+  pct_xg_p INTEGER,
+  pct_xg_c INTEGER,
+  pct_tirs_p INTEGER,
+  pct_tirs_c INTEGER,
+  pct_cadres_p INTEGER,
+  pct_cadres_c INTEGER,
+  pct_occasions_p INTEGER,
+  pct_occasions_c INTEGER,
+  pct_buts_p INTEGER,
+  pct_buts_c INTEGER,
+  pct_corners_p INTEGER,
+  pct_corners_c INTEGER,
+  pct_possession INTEGER,
+  PRIMARY KEY (club, jour, lieu)
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS team_strength_state (
+  cle TEXT PRIMARY KEY,
+  valeur TEXT NOT NULL
+) WITHOUT ROWID;`,
+  // Les lignes d'un championnat à partir d'un jour (la nuit les réécrit) ; ses lignes actuelles (l'écran).
+  'CREATE INDEX IF NOT EXISTS idx_team_strength_ligue ON team_strength(league, jour);',
+  'CREATE INDEX IF NOT EXISTS idx_team_strength_actuel ON team_strength(league, lieu) WHERE actuel = 1;'
+];
+
+const FD_HISTORY_INDEXES = [
+  'CREATE INDEX IF NOT EXISTS idx_fd_history_code_date ON fd_history(code, date);',
+  'CREATE INDEX IF NOT EXISTS idx_fd_history_dom ON fd_history(dom);',
+  'CREATE INDEX IF NOT EXISTS idx_fd_history_ext ON fd_history(ext);',
+  'CREATE INDEX IF NOT EXISTS idx_fd_history_match ON fd_history(match_key) WHERE match_key IS NOT NULL;',
+  'CREATE INDEX IF NOT EXISTS idx_fd_teams_team ON fd_teams(team_id) WHERE team_id IS NOT NULL;'
+];
+
+const ENREGISTREURS_INDEXES = [
+  'CREATE INDEX IF NOT EXISTS idx_live_snapshots_date ON live_snapshots(date);',
+  'CREATE INDEX IF NOT EXISTS idx_unavailable_daily_match ON unavailable_daily(fotmob_id);',
+  'CREATE INDEX IF NOT EXISTS idx_unavailable_daily_player ON unavailable_daily(player_id) WHERE player_id IS NOT NULL;',
+  'CREATE INDEX IF NOT EXISTS idx_engine_picks_date ON engine_picks(date);',
+  'CREATE INDEX IF NOT EXISTS idx_engine_picks_match ON engine_picks(match_id) WHERE match_id IS NOT NULL;'
+];
+
+const ODDS_QUOTES_INDEXES = [
+  'CREATE UNIQUE INDEX IF NOT EXISTS idx_oe_source_event ON odds_events(source, source_event);',
+  'CREATE INDEX IF NOT EXISTS idx_oe_match ON odds_events(match_key) WHERE match_key IS NOT NULL;',
+  'CREATE INDEX IF NOT EXISTS idx_oe_fixture ON odds_events(home_id, away_id, date);',
+  'CREATE INDEX IF NOT EXISTS idx_oe_league_date ON odds_events(league, date);',
+  'CREATE INDEX IF NOT EXISTS idx_oe_date ON odds_events(date);',
+  'CREATE INDEX IF NOT EXISTS idx_ofm_fixture ON odds_fixture_misses(home_key, away_key, date);'
+];
+
 const DDL = [
   MATCHES_DDL,
   teamDdl(),
@@ -307,6 +1176,19 @@ const DDL = [
   UPCOMING_LINEUPS_DDL,
   ...BIRTHDATES_DDL,
   ...REGISTRY_DDL,
+  ...ODDS_QUOTES_DDL,
+  ...ODDS_QUOTES_INDEXES,
+  ...ENREGISTREURS_DDL,
+  ...ENREGISTREURS_INDEXES,
+  ...FD_HISTORY_DDL,
+  ...FD_HISTORY_INDEXES,
+  LEAGUE_BENCHMARKS_DDL,
+  ...DAY_TABLE_DDL,
+  ...BENCH_DDL,
+  ...STAT_VALUE_DDL,
+  ...CALIBRATION_DDL,
+  ...MARKET_KNOWLEDGE_DDL,
+  ...TEAM_STRENGTH_DDL,
   'CREATE INDEX IF NOT EXISTS idx_matches_date ON matches(date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_league_date ON matches(league, date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_home ON matches(home_name);',
@@ -337,6 +1219,15 @@ const DDL = [
 ];
 
 /**
+ * Noms des index que ce code crée à chaque ouverture en écriture. La
+ * restauration d'essai (scripts/restore-test-db.mjs) vérifie qu'une copie les
+ * a tous : un index absent ne fausse rien, mais rend une requête lente.
+ */
+export function indexAttendus() {
+  return [...new Set(DDL.flatMap((sql) => [...String(sql).matchAll(/CREATE\s+(?:UNIQUE\s+)?INDEX\s+IF\s+NOT\s+EXISTS\s+(\w+)/gi)].map((m) => m[1])))].sort();
+}
+
+/**
  * Colonnes ajoutées après coup. `CREATE TABLE IF NOT EXISTS` ne voit rien
  * d'une table déjà créée : sans ceci, une base existante garderait à jamais
  * l'ancienne forme, et le DDL ci-dessus ne vaudrait que pour une base neuve.
@@ -353,7 +1244,11 @@ const ADDED_COLUMNS = [
   // Nationalité des joueurs (01/10/2026), à côté de leur date de naissance.
   ['player_birthdates', 'country_code', 'TEXT'],
   ['player_birthdates', 'country_name', 'TEXT'],
-  ['team_squad_reads', 'version', 'INTEGER']
+  ['team_squad_reads', 'version', 'INTEGER'],
+  // Étape 25 du plan (07/10/2026) : la version du moteur et la distribution
+  // complète de chaque pronostic gelé ; NULL pour les lignes d'avant.
+  ['engine_picks', 'engine_version', 'INTEGER'],
+  ['engine_picks', 'distribution', 'TEXT']
 ];
 
 function migrateSchema(db) {
@@ -368,6 +1263,34 @@ function migrateSchema(db) {
     }
   }
   dropPositiveChecks(db);
+  migrateOddsQuotes(db);
+}
+
+/**
+ * La table des cotes a changé de forme pendant sa construction (04/10/2026) :
+ * une première version, à plat (une ligne par cote avec la rencontre
+ * répétée), a été créée dans la base de Pierre par un serveur lancé entre
+ * deux étapes. `CREATE TABLE IF NOT EXISTS` la laissait en place et chaque
+ * écriture de la nouvelle forme échouait (« no column named event_id ») :
+ * plus aucune cote gratuite. Vide, elle est recréée ; non vide (jamais vu),
+ * elle est mise de côté sous un autre nom, jamais supprimée.
+ */
+function migrateOddsQuotes(db) {
+  const colonnes = db.prepare('SELECT name FROM pragma_table_info(?)').all('odds_quotes').map((r) => r.name);
+  if (!colonnes.length || colonnes.includes('event_id')) return;
+  const ddl = ODDS_QUOTES_DDL.find((sql) => sql.startsWith('CREATE TABLE IF NOT EXISTS odds_quotes'));
+  const lignes = db.prepare('SELECT COUNT(*) n FROM odds_quotes').get().n;
+  db.exec('BEGIN IMMEDIATE');
+  try {
+    if (lignes === 0) db.exec('DROP TABLE odds_quotes;');
+    else db.exec(`ALTER TABLE odds_quotes RENAME TO odds_quotes_ancienne_forme_${new Date().toISOString().slice(0, 10).replace(/-/g, '')};`);
+    db.exec(ddl);
+    db.exec('COMMIT');
+    console.error(`[base] table odds_quotes remise à la forme actuelle (${lignes === 0 ? 'ancienne table vide supprimée' : `${lignes} ligne(s) de l'ancienne forme mises de côté`}).`);
+  } catch (error) {
+    try { db.exec('ROLLBACK'); } catch { /* déjà annulée */ }
+    throw error;
+  }
 }
 
 /**
@@ -412,6 +1335,9 @@ export function openDb({ file = resolveDbPath(), readonly = false } = {}) {
   const chemin = path.resolve(file);
   const ouverte = connexions.get(chemin);
   if (ouverte) return ouverte;
+  // Bac à sable : un fichier passé explicitement (option --db d'un script)
+  // passe le même contrôle que resolveDbPath, avant tout accès au disque.
+  if (modeBacASable()) assertFichierDuBac(chemin);
   fs.mkdirSync(path.dirname(chemin), { recursive: true });
   // Avant toute ouverture : ouvrir puis fermer une base masquée suffit à la
   // vider pour de bon.

@@ -25,7 +25,22 @@ import { findTeams, canonicalTeamNames, ensureRegistries } from './identityRegis
 import { nameTokens } from '../../utils/nameIdentity.js';
 import { teamNamesEqual } from '../../utils/teamNameMatch.js';
 import { seasonOf, seasonBounds, seasonLabel } from '../providers/seasonWindows.js';
-import { LIGUES_AVEC_COTES, SOURCE } from '../providers/footballDataOdds.js';
+import { SOURCE } from '../providers/footballDataOdds.js';
+
+/**
+ * Compétitions qui ont des cotes passées au profilage (match_odds). Lu dans
+ * la base, et non plus dans la liste des fichiers de football-data : depuis
+ * le 04/10/2026, les cotes gratuites (ESPN, 365Scores…) complètent
+ * match_odds pour les compétitions que football-data ne couvre pas — la
+ * Ligue des champions, la Colombie, les coupes. Gardé dix minutes.
+ */
+let liguesCotees = { at: 0, set: null };
+function competitionsAvecCotes(database) {
+  if (liguesCotees.set && Date.now() - liguesCotees.at < 600_000) return liguesCotees.set;
+  const set = new Set(database.prepare('SELECT DISTINCT m.league FROM match_odds o JOIN matches m ON m.match_key = o.match_key').all().map((r) => r.league));
+  liguesCotees = { at: Date.now(), set };
+  return set;
+}
 
 export const PORTEES = ['championnat-2', 'championnat-1', 'championnat-tout', 'equipe-domicile', 'equipe-exterieur'];
 export const SEGMENTS = ['complet', 'mt1', 'mt2'];
@@ -93,6 +108,25 @@ function butsDuSegment(m, segment) {
   return segment === 'mt1' ? mt1 : [m.home_goals - mt1[0], m.away_goals - mt1[1]];
 }
 
+/**
+ * Les écritures (alias) des clubs qui ont joué dans une compétition, gardées
+ * 30 min : la requête relit les rencontres de la compétition, et les cotes
+ * gratuites résolvent des centaines de noms par passe (0,3 s chacun sans ce
+ * cache, mesuré le 04/10/2026).
+ */
+const ecrituresParCompetition = new Map();
+function ecrituresDe(league, database) {
+  const connu = ecrituresParCompetition.get(league);
+  if (connu && connu.database === database && Date.now() - connu.at < 30 * 60_000) return connu.liste;
+  const liste = database
+    .prepare(`SELECT a.team_id, a.alias FROM team_aliases a
+              WHERE a.team_id IN (SELECT home_id FROM matches WHERE league = ? UNION SELECT away_id FROM matches WHERE league = ?)`)
+    .all(league, league)
+    .map((e) => ({ id: e.team_id, alias: e.alias, mots: nameTokens(e.alias) }));
+  ecrituresParCompetition.set(league, { at: Date.now(), database, liste });
+  return liste;
+}
+
 export function clubDuMagasin(nom, league, database) {
   if (!nom) return null;
   ensureRegistries({ database });
@@ -110,11 +144,7 @@ export function clubDuMagasin(nom, league, database) {
   // Jamais une ressemblance approximative : « Port » ne vaut pas « Porto ».
   const mots = nameTokens(nom);
   const cle = mots.join(' ');
-  const ecritures = database
-    .prepare(`SELECT a.team_id, a.alias FROM team_aliases a
-              WHERE a.team_id IN (SELECT home_id FROM matches WHERE league = ? UNION SELECT away_id FROM matches WHERE league = ?)`)
-    .all(league, league)
-    .map((e) => ({ id: e.team_id, alias: e.alias, mots: nameTokens(e.alias) }));
+  const ecritures = ecrituresDe(league, database);
   const unique = (liste) => {
     const ids = new Set(liste.map((e) => e.id));
     return ids.size === 1 ? [...ids][0] : null;
@@ -150,12 +180,12 @@ export function oddsProfile({ league, home, away, kickoff, odds, scope = 'champi
   const base = { league, scope: portee, segment: seg, tolerance: ecart, odds, season: seasonLabel(league, saison), source: SOURCE, minimum: MINIMUM_FIABLE };
 
   const avertissements = [];
-  if (!LIGUES_AVEC_COTES.has(league)) {
-    return { ...base, analyzed: 0, markets: [], matches: [], history: { count: 0 }, warnings: ["Pas d'historique de cotes pour cette compétition : football-data.co.uk ne la couvre pas."] };
+  if (!competitionsAvecCotes(database).has(league)) {
+    return { ...base, analyzed: 0, markets: [], matches: [], history: { count: 0 }, warnings: ["Pas encore d'historique de cotes pour cette compétition : ni football-data.co.uk ni les sources gratuites (ESPN, 365Scores) n'en ont relevé."] };
   }
 
   const colonnes = `m.match_key, m.date, m.home_id, m.away_id, m.home_name, m.away_name, m.home_goals, m.away_goals, m.events,
-    json_extract(m.meta, '$.awarded') AS awarded, o.home AS oh, o.draw AS od, o.away AS oa`;
+    json_extract(m.meta, '$.awarded') AS awarded, o.home AS oh, o.draw AS od, o.away AS oa, o.source AS osrc, o.basis AS obasis`;
   const joue = 'm.home_goals IS NOT NULL AND m.away_goals IS NOT NULL';
   let lignes;
   let semblable;
@@ -241,5 +271,21 @@ export function oddsProfile({ league, home, away, kickoff, odds, scope = 'champi
     odds: { home: r.oh, draw: r.od, away: r.oa }
   }));
 
-  return { ...base, team: equipe, analyzed: n, markets, matches, history: { count: historique }, warnings: avertissements };
+  // D'où viennent les cotes passées retenues : football-data.co.uk (moyenne
+  // du marché à la clôture) pour 32 championnats, les sources gratuites
+  // ailleurs (« DraftKings clôture » via ESPN…). Dit tel quel, compté.
+  const parOrigine = new Map();
+  for (const r of retenus) {
+    const cle = `${r.osrc ?? SOURCE}|${r.obasis ?? ''}`;
+    parOrigine.set(cle, (parOrigine.get(cle) ?? 0) + 1);
+  }
+  const origines = [...parOrigine.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([cle, count]) => {
+      const [source, basis] = cle.split('|');
+      return { source, basis, count };
+    });
+  const source = origines.length ? origines.slice(0, 3).map((o) => `${o.source} (${o.basis})`).join(' · ') : base.source;
+
+  return { ...base, source, origins: origines, team: equipe, analyzed: n, markets, matches, history: { count: historique }, warnings: avertissements };
 }

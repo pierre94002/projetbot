@@ -41,12 +41,15 @@ export function startKickoffAiAnalysis({ intervalMinutes = 5, startupDelayMinute
   const lancer = async () => {
     try {
       const r = await passeCoupDEnvoi();
-      if (!r || r.nonConfigure || (!r.ok && !r.failed && !r.laisses)) return;
+      if (!r || r.nonConfigure || (!r.ok && !r.failed && !r.laisses && !r.reprisesEvitees)) return;
       console.log(
         `[ia coup d'envoi] ${r.ok} analyse(s) faite(s)` +
           (r.ok ? ` (${r.avecCompo} avec la composition${r.reprises ? `, ${r.reprises} refaite(s) après un changement de composition` : ''})` : '') +
           (r.failed ? `, ${r.failed} échec(s) : ${r.samples.join(' ; ')}` : '') +
           (r.laisses ? `, ${r.laisses} match(s) sans analyse : plafond du jour atteint` : '') +
+          // Mode économe du budget Claude (étape 4) : moins de deux titulaires habituels changés.
+          (r.reprisesEvitees ? `, ${r.reprisesEvitees} reprise(s) évitée(s) : moins de deux titulaires habituels changés` : '') +
+          (r.mode === 'econome' ? ` — ${String(r.raisonMode ?? 'mode économe du budget Claude').replace(/\.$/, '')}` : '') +
           (r.interrompu ? " — arrêt après plusieurs pannes de Claude Code d'affilée" : '') +
           '.'
       );

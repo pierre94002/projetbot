@@ -77,7 +77,9 @@ export async function resolveLineupViaWeb({ home, away, league, commenceTimeIso 
       messages,
       tools: [WEB_SEARCH_TOOL, SUBMIT_LINEUP_TOOL],
       toolChoice: SUBMIT_LINEUP_TOOL_CHOICE,
-      maxTokens: MAX_RESPONSE_TOKENS
+      maxTokens: MAX_RESPONSE_TOKENS,
+      // Journal des appels (étape 4) : API à la clé, hors budget de l'abonnement.
+      appel: { type: 'autre', detail: 'recherche web : composition', match: { matchId: null, home, away, league: league ?? null } }
     });
   } catch (error) {
     return { available: false, reason: 'web_lookup_failed', message: error.message };
@@ -129,7 +131,8 @@ export async function resolvePlayersViaWeb({ teamName, league }) {
       messages,
       tools: [WEB_SEARCH_TOOL, SUBMIT_PLAYER_STATS_TOOL],
       toolChoice: SUBMIT_PLAYER_STATS_TOOL_CHOICE,
-      maxTokens: MAX_RESPONSE_TOKENS
+      maxTokens: MAX_RESPONSE_TOKENS,
+      appel: { type: 'autre', detail: `recherche web : effectif de ${teamName}` }
     });
   } catch (error) {
     throw toWebLookupError(error);
@@ -185,7 +188,8 @@ export async function resolveTeamProfileViaWeb({ teamName, league }) {
       messages,
       tools: [WEB_SEARCH_TOOL, SUBMIT_TEAM_PROFILE_TOOL],
       toolChoice: { type: 'auto' },
-      maxTokens: MAX_RESPONSE_TOKENS_PROFILE
+      maxTokens: MAX_RESPONSE_TOKENS_PROFILE,
+      appel: { type: 'autre', detail: `recherche web : profil de ${teamName}` }
     });
   } catch (error) {
     throw toWebLookupError(error);

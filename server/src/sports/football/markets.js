@@ -9,7 +9,7 @@
 // libellé français `market`/`predictedLabel` (jamais à la place) — ce sont
 // ces deux champs que la migration de bets.json/predictions.json vient
 // ajouter aux enregistrements existants (cf. server/scripts/migrate-market-shape.js).
-import { STAT_KINDS, lineCandidates } from './statMarkets.js';
+import { STAT_KINDS, lineCandidates, probabilitesLigne } from './statMarkets.js';
 
 export const MARKET_LABELS = {
   result: 'Résultat',
@@ -259,4 +259,76 @@ export function deriveMarketPredictions(match, analysisResult) {
   }
 
   return predictions;
+}
+
+// ------------------------------------------- étape 25 : la distribution complète
+
+/**
+ * Les familles de marchés que le moteur pronostique (les identifiants de
+ * MARKET_LABELS) : ce qu'une version candidate peut déclarer changer (étape 25
+ * du plan, core/engine/engineVersions.js).
+ */
+export const MARCHES_CONNUS = Object.freeze(Object.keys(MARKET_LABELS));
+
+/** Corners, tirs et tirs cadrés : la statistique et sa portée (match entier ou une équipe). */
+const STAT_PAR_MARCHE = Object.freeze(
+  Object.fromEntries(Object.entries(STAT_MARKET_IDS).flatMap(([kind, ids]) => [[ids.total, { kind, portee: 'total' }], [ids.team, { kind, portee: 'team' }]]))
+);
+
+const p4 = (x) => (Number.isFinite(x) ? Number(x.toFixed(4)) : null);
+const arrondirIssues = (issues) => Object.fromEntries(Object.entries(issues).map(([cle, p]) => [cle, p4(p)]));
+const ouMoins = (b) => (b && Number.isFinite(b.over) && Number.isFinite(b.under) ? { over: b.over, under: b.under } : null);
+
+/**
+ * Étape 25 du plan (versions du moteur) : la DISTRIBUTION COMPLÈTE d'un
+ * marché, à la ligne et pour l'équipe d'un pronostic — chaque issue et sa
+ * probabilité, arrondie à 4 décimales —, lue dans `distributions` (les
+ * probabilités exactes que rend analyzeMatch, sans passer par la cote juste
+ * arrondie) ; pour les corners et les tirs, recalculée par la même binomiale
+ * négative que lineCandidates, sur l'attendu du match. C'est ce que gèlent les
+ * enregistreurs avec chaque pronostic : le juge de l'étape 16 a besoin des
+ * trois probabilités du 1N2, de la ligne et de ses deux probabilités pour un
+ * plus/moins (perte log complète), pas seulement de l'issue choisie.
+ *   result          { issues: { home, draw, away } }
+ *   bothTeamsScore  { issues: { yes, no } }
+ *   totalGoals      { ligne, issues: { over, under } }
+ *   teamGoals       { equipe, ligne, issues: { over, under } }
+ *   resultAndTotal  { ligne, issues: { homeOver, homeUnder, drawOver, drawUnder, awayOver, awayUnder } }
+ *   corners / tirs  { [equipe,] ligne, attendu, issues: { over, under } }
+ * null quand le marché, la ligne ou les probabilités manquent (jamais 0).
+ */
+export function distributionDuMarche(analysisResult, { marketId, params } = {}) {
+  const d = analysisResult?.distributions ?? null;
+  const ligne = Number(params?.line);
+  const equipe = params?.team === 'home' || params?.team === 'away' ? params.team : null;
+  if (marketId === 'result') {
+    const r = d?.result;
+    return r && [r.home, r.draw, r.away].every(Number.isFinite) ? { issues: arrondirIssues({ home: r.home, draw: r.draw, away: r.away }) } : null;
+  }
+  if (marketId === 'bothTeamsScore') {
+    const b = d?.bothTeamsScore;
+    return b && [b.yes, b.no].every(Number.isFinite) ? { issues: arrondirIssues({ yes: b.yes, no: b.no }) } : null;
+  }
+  if (marketId === 'totalGoals') {
+    const b = ouMoins(d?.totalGoals?.[ligne]);
+    return b ? { ligne, issues: arrondirIssues(b) } : null;
+  }
+  if (marketId === 'teamGoals') {
+    const b = equipe ? ouMoins(d?.teamGoals?.[equipe]?.[ligne]) : null;
+    return b ? { equipe, ligne, issues: arrondirIssues(b) } : null;
+  }
+  if (marketId === 'resultAndTotal') {
+    const b = d?.resultAndTotal?.[ligne];
+    const cles = ['homeOver', 'homeUnder', 'drawOver', 'drawUnder', 'awayOver', 'awayUnder'];
+    return b && cles.every((c) => Number.isFinite(b[c])) ? { ligne, issues: arrondirIssues(Object.fromEntries(cles.map((c) => [c, b[c]]))) } : null;
+  }
+  const stat = STAT_PAR_MARCHE[marketId];
+  if (!stat) return null;
+  if (stat.portee === 'team' && !equipe) return null;
+  const attendus = analysisResult?.statExpectations?.[stat.kind];
+  const mu = stat.portee === 'total' ? attendus?.total : attendus?.[equipe];
+  const loi = STAT_KINDS[stat.kind];
+  const p = probabilitesLigne(mu, stat.portee === 'total' ? loi.invKTotal : loi.invKTeam, ligne);
+  if (!p) return null;
+  return { ...(stat.portee === 'team' ? { equipe } : {}), ligne, attendu: mu, issues: arrondirIssues({ over: p.over, under: p.under }) };
 }

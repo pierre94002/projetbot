@@ -26,6 +26,7 @@ import { openDb, upsertUpcomingLineup, upcomingLineupByFotmobId } from '../db/ma
 import { clubDuMagasin } from '../db/oddsProfileRead.js';
 import { ageAt, infosOf, ensureSquadsBirthdates } from '../db/playerBirthdates.js';
 import { currentSeason, seasonBounds } from './seasonWindows.js';
+import { derniereFeuille } from '../db/derniereComposition.js';
 
 const JOUR_MS = 86_400_000;
 /** En début de saison, trop peu de matchs pour savoir qui est titulaire : on remonte plus loin. */
@@ -33,9 +34,6 @@ const MATCHS_MIN_SAISON = 3;
 const REPLI_JOURS = 300;
 /** Titulaire habituel : au moins la moitié des matchs de l'équipe sur la période (et 2 au minimum). */
 const PART_TITULAIRE_HABITUEL = 0.5;
-/** Dernière composition : les feuilles des derniers matchs examinées, et le onze minimal pour en être une. */
-const FEUILLES_A_EXAMINER = 5;
-const TITULAIRES_MIN = 9;
 
 const MOTIFS = { injury: 'blessé', suspension: 'suspendu', internationalDuty: 'en sélection' };
 
@@ -105,7 +103,11 @@ function decrireEquipe(team, league, jour, database) {
   const onze = team.startXI ?? [];
   const banc = team.substitutes ?? [];
   const ids = [...onze, ...banc].map((j) => j.id).filter(Boolean).map(String);
-  const stats = statsDesJoueurs(ids, debut, fin, database);
+  // Les absents annoncés aussi (étape 41) : la fiche compacte de l'IA met en
+  // avant ceux qui ont joué cette saison. Jamais l'identifiant 0, partagé par
+  // les joueurs que FotMob ne connaît pas.
+  const idsAbsents = (team.unavailable ?? []).map((a) => a.id).filter((id) => id && String(id) !== '0').map(String);
+  const stats = statsDesJoueurs([...new Set([...ids, ...idsAbsents])], debut, fin, database);
   // L'âge et la nationalité de chacun (01/10/2026) : ce qu'on sait de lui
   // (effectif FotMob de son club), sinon ce que publie la composition.
   const infos = infosOf([...ids, ...(team.unavailable ?? []).map((a) => a.id), ...effectif.joueurs.map((j) => j.pid)], { database });
@@ -117,13 +119,18 @@ function decrireEquipe(team, league, jour, database) {
     return s ? { apps: s.apps, starts: s.starts, minutes: s.minutes, goals: s.goals, assists: s.assists, xg: s.xg, rating: s.rating } : null;
   };
 
+  // Le poste et les chiffres de la saison d'un absent (étape 41) : lus dans
+  // l'effectif et le magasin par son identifiant FotMob ; null s'il est inconnu.
+  const posteEffectif = new Map(effectif.joueurs.map((j) => [String(j.pid), j.position ?? null]));
   const absents = (team.unavailable ?? []).map((a) => ({
     id: a.id ?? null,
     age: age(a),
     ...pays(a),
     name: a.name,
     reason: MOTIFS[a.type] ?? 'indisponible',
-    expectedReturn: a.expectedReturn ?? null
+    expectedReturn: a.expectedReturn ?? null,
+    position: a.id && String(a.id) !== '0' ? (posteEffectif.get(String(a.id)) ?? null) : null,
+    stats: a.id && String(a.id) !== '0' ? chiffres(a) : null
   }));
 
   // Les titulaires habituels qui ne sont PAS dans le onze : ce qui change le
@@ -251,51 +258,8 @@ export async function buildLineupContext({ homeName, awayName, commenceTimeIso, 
   };
 }
 
-/**
- * La dernière composition alignée par un club, lue dans le magasin : la
- * feuille de son dernier match joué avant `avant` qui porte un onze de départ
- * (une feuille sans composition, ça arrive selon les championnats, est
- * sautée). `null` si aucune des dernières n'en a.
- */
-function derniereFeuille(teamId, avant, database) {
-  const matchs = database
-    .prepare(
-      `SELECT * FROM (SELECT match_key AS cle, date, league, home_name AS domicile, away_name AS exterieur,
-                             home_goals AS butsDom, away_goals AS butsExt, lineups, 'home' AS side
-                      FROM matches WHERE home_id = ? AND date < ? AND home_goals IS NOT NULL ORDER BY date DESC LIMIT ${FEUILLES_A_EXAMINER})
-       UNION ALL
-       SELECT * FROM (SELECT match_key, date, league, home_name, away_name, home_goals, away_goals, lineups, 'away'
-                      FROM matches WHERE away_id = ? AND date < ? AND away_goals IS NOT NULL ORDER BY date DESC LIMIT ${FEUILLES_A_EXAMINER})
-       ORDER BY date DESC`
-    )
-    .all(teamId, avant, teamId, avant);
-  const feuille = database.prepare(
-    'SELECT player_id AS id, name, shirt_number AS number, position, starter, x, y FROM players WHERE match_key = ? AND side = ? ORDER BY ord'
-  );
-  for (const m of matchs) {
-    const joueurs = feuille.all(m.cle, m.side);
-    const onze = joueurs.filter((j) => Number(j.starter) === 1);
-    if (onze.length < TITULAIRES_MIN) continue;
-    let cadre = {};
-    try {
-      cadre = JSON.parse(m.lineups || '{}')?.[m.side] ?? {};
-    } catch {
-      // Feuille sans formation ni entraîneur : le onze suffit.
-    }
-    const joueur = (j) => ({ id: j.id ?? null, name: j.name, number: j.number ?? null, position: j.position ?? null, x: j.x ?? null, y: j.y ?? null });
-    return {
-      team: {
-        teamId,
-        formation: cadre.formation ?? null,
-        coach: cadre.coach ?? null,
-        startXI: onze.map(joueur),
-        substitutes: joueurs.filter((j) => Number(j.starter) !== 1).map(joueur)
-      },
-      match: { date: m.date, league: m.league, home: m.domicile, away: m.exterieur, homeGoals: m.butsDom, awayGoals: m.butsExt }
-    };
-  }
-  return null;
-}
+// La dernière composition alignée par un club (derniereFeuille) vit dans data/db/derniereComposition.js
+// depuis l'étape 8 : la page « Opportunités du jour » en lit l'état sans charger ce module.
 
 /**
  * Tant que FotMob n'a publié aucune composition pour le match : la dernière
@@ -384,20 +348,64 @@ export async function compositionPourAnalyseIA({ homeName, awayName, commenceTim
   return dernieres ? { ...dernieres, matchInfo } : null;
 }
 
+/** La clé d'un joueur dans une composition : son identifiant FotMob, sinon son nom. */
+const cleJoueur = (j) => String(j?.id ?? j?.name);
+
+/** Les clés des deux onzes de départ : { home: [...], away: [...] }. */
+export function onzesDe(context) {
+  return { home: (context?.home?.startXI ?? []).map(cleJoueur), away: (context?.away?.startXI ?? []).map(cleJoueur) };
+}
+
 /** Signature des deux onzes de départ, pour savoir si une composition a changé depuis l'analyse. */
 export function signatureDesOnzes(context) {
-  const ids = (side) => (context?.[side]?.startXI ?? []).map((j) => String(j.id ?? j.name)).sort().join(',');
+  const ids = (side) => (context?.[side]?.startXI ?? []).map(cleJoueur).sort().join(',');
   return `${ids('home')}|${ids('away')}`;
+}
+
+/**
+ * Les TITULAIRES HABITUELS dont la place a changé entre la composition lue
+ * par une analyse (`instantane`, la composition décrite par decrireEquipe :
+ * `teamMatches`, `startXI[].stats.starts`, `usualStartersMissing`) et la
+ * dernière connue (`onzes` : { home: [clés], away: [clés] }, cf. onzesDe) :
+ * sortis du onze, ou entrés dedans. Habituel = titularisé dans au moins la
+ * moitié des matchs de l'équipe sur la période, et au moins 2 fois — la
+ * règle de usualStartersMissing. Un titulaire habituel remplacé par un autre
+ * compte pour DEUX (l'un sort, l'autre entre) ; un remplaçant remplacé par un
+ * autre remplaçant ne compte pas. Sert au mode économe (étape 4 du plan) :
+ * la reprise d'une analyse après un changement de onze n'a lieu que si au
+ * moins deux titulaires habituels changent.
+ *
+ * @returns {Array<{ side: 'home'|'away', name: string, sens: 'sorti'|'entré' }>}
+ */
+export function titulairesHabituelsChanges(instantane, onzes) {
+  const changes = [];
+  for (const side of ['home', 'away']) {
+    const equipe = instantane?.[side];
+    const apres = onzes?.[side];
+    if (!equipe || !Array.isArray(apres) || !apres.length) continue;
+    const seuil = Math.max(2, Math.ceil(Number(equipe.teamMatches ?? 0) * PART_TITULAIRE_HABITUEL));
+    const avant = new Set((equipe.startXI ?? []).map(cleJoueur));
+    const maintenant = new Set(apres.map(String));
+    const habituels = new Map();
+    for (const j of equipe.startXI ?? []) if (Number(j?.stats?.starts ?? 0) >= seuil) habituels.set(cleJoueur(j), j.name);
+    for (const j of equipe.usualStartersMissing ?? []) habituels.set(cleJoueur(j), j.name);
+    for (const [cle, name] of habituels) {
+      const etait = avant.has(cle);
+      const est = maintenant.has(cle);
+      if (etait !== est) changes.push({ side, name, sens: est ? 'entré' : 'sorti' });
+    }
+  }
+  return changes;
 }
 
 /**
  * La composition que la boucle des compositions a relue en dernier (elle
  * revérifie toutes les 5 min à moins de 20 min du coup d'envoi), sans appel
- * réseau : `{ signature, fetchedAt }`, ou `null` si rien d'utilisable.
+ * réseau : `{ signature, fetchedAt, onzes }`, ou `null` si rien d'utilisable.
  */
 export function derniereCompositionConnue(fotmobMatchId, { database = openDb() } = {}) {
   if (!fotmobMatchId) return null;
   const lineup = upcomingLineupByFotmobId(fotmobMatchId, { database });
   if (!lineup?.available) return null;
-  return { signature: signatureDesOnzes(lineup), fetchedAt: lineup.fetchedAt ?? null };
+  return { signature: signatureDesOnzes(lineup), fetchedAt: lineup.fetchedAt ?? null, onzes: onzesDe(lineup) };
 }

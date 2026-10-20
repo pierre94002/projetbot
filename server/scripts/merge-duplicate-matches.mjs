@@ -20,23 +20,24 @@
  *
  *   node server/scripts/merge-duplicate-matches.mjs            (essai a blanc)
  *   node server/scripts/merge-duplicate-matches.mjs --apply    (applique)
+ *
+ * La RECHERCHE des doublons vit dans src/data/db/doublons.js (étape 12 du
+ * plan, 06/10/2026), que le carnet de santé des données réutilise ; ce script
+ * garde la fusion. Les rencontres inversées (mêmes clubs, même jour, dans
+ * l'autre sens), que le carnet signale aussi, ne sont pas fusionnées ici : le
+ * sens juste ne se devine pas.
  */
 
 import { openDb, upsertMatches, backupTo, resolveDbPath } from '../src/data/db/matchStatsDb.js';
 import { loadEntry } from '../src/data/db/matchStatsRead.js';
 import { rebuildRegistries } from '../src/data/db/identityRegistry.js';
+import { rencontresEnDouble } from '../src/data/db/doublons.js';
 
 const APPLY = process.argv.includes('--apply');
 const db = openDb();
 
-const groupes = db.prepare(`
-  SELECT date, home_id, away_id, COUNT(*) AS n, GROUP_CONCAT(match_key, '|') AS cles
-  FROM matches
-  WHERE home_id IS NOT NULL AND away_id IS NOT NULL
-  GROUP BY date, home_id, away_id
-  HAVING n > 1
-  ORDER BY date DESC
-`).all();
+// Même forme qu'avant : `cles` en texte « a|b », comme le rendait le GROUP_CONCAT.
+const groupes = rencontresEnDouble(db).map((g) => ({ date: g.date, home_id: g.homeId, away_id: g.awayId, n: g.cles.length, cles: g.cles.join('|') }));
 
 console.log(`${groupes.length} rencontre(s) en double${APPLY ? '' : ' — essai à blanc, rien ne sera écrit'}.`);
 if (!groupes.length) process.exit(0);
@@ -107,8 +108,7 @@ console.log(`\n${fusionnees} rencontre(s) ${APPLY ? 'fusionnées' : 'à fusionne
 if (APPLY) {
   console.log('\nReconstruction des annuaires…');
   console.log(rebuildRegistries({ database: db }));
-  const reste = db.prepare(`SELECT COUNT(*) n FROM (SELECT date FROM matches WHERE home_id IS NOT NULL AND away_id IS NOT NULL GROUP BY date, home_id, away_id HAVING COUNT(*) > 1)`).get().n;
-  console.log('doublons restants :', reste);
+  console.log('doublons restants :', rencontresEnDouble(db).length);
 } else {
   console.log(`\nPour appliquer : sauvegardez d'abord (${resolveDbPath()}), puis relancez avec --apply.`);
   void backupTo;

@@ -17,8 +17,37 @@ function writePredictions(entries) {
   writeJsonAtomic(PREDICTIONS_FILE_PATH, entries);
 }
 
+/** Un numéro de version du moteur connu (entier ≥ 1) — étape 25. */
+const versionConnue = (v) => Number.isInteger(v) && v >= 1;
+
 export function listPredictions() {
   return readPredictions().sort((a, b) => new Date(b.lastSeenAt) - new Date(a.lastSeenAt));
+}
+
+/**
+ * Étape 14 du plan (07/10/2026) : le champ « aVerifier » de chaque pronostic —
+ * absent, ou { raisons, texte } quand les données qu'il a lues sont douteuses
+ * (contrôle quotidien : un score à vérifier dans les rencontres récentes d'un
+ * des deux clubs, des cartons non relevés dans son championnat, le magasin
+ * pas à jour, FotMob en panne…). CALCULÉ À LA LECTURE, JAMAIS ÉCRIT : le
+ * journal est réécrit par le scan et par le règlement ; une marque gardée
+ * dedans vieillirait (une donnée corrigée resterait « à vérifier ») et
+ * demanderait une écriture de plus à chaque passe. `aVerifierDe(entree)` :
+ * la règle (data/controleQuotidien.js), passée par l'appelant. Le statut,
+ * la cote et le verdict du pronostic ne changent jamais.
+ */
+export function avecAVerifier(entries, aVerifierDe) {
+  if (typeof aVerifierDe !== 'function') return entries;
+  return entries.map((entree) => {
+    let a = null;
+    try {
+      a = aVerifierDe(entree);
+    } catch {
+      a = null;
+    }
+    // Le champ n'existe que s'il y a une raison : un pronostic sans doute reste tel qu'avant.
+    return a ? { ...entree, aVerifier: a } : entree;
+  });
 }
 
 /**
@@ -35,6 +64,13 @@ export function listPredictions() {
  * `commenceTime` (coup d'envoi) est gardé : c'est lui qui permet au
  * règlement automatique de retrouver le résultat d'un match scanné plusieurs
  * jours avant d'être joué — `day` n'est que la date du premier scan.
+ *
+ * Étape 25 du plan (07/10/2026) : `engineVersion`, le numéro de la VERSION DU
+ * MOTEUR qui a calculé les chiffres de l'entrée (cf.
+ * core/engine/engineVersions.js). Écrit seulement quand il est connu ; un
+ * rescan le remplace avec les chiffres qu'il remplace, et un rescan sans
+ * version le retire (les chiffres ne sont plus ceux de l'ancienne version).
+ * Les entrées d'avant ne sont jamais réécrites pour lui : « sans version ».
  */
 export function upsertPredictions(entries) {
   const log = readPredictions();
@@ -56,6 +92,8 @@ export function upsertPredictions(entries) {
       // nouveau format à cette occasion, sans script à relancer.
       if (entry.marketId) existing.marketId = entry.marketId;
       if (entry.params) existing.params = entry.params;
+      if (versionConnue(entry.engineVersion)) existing.engineVersion = entry.engineVersion;
+      else delete existing.engineVersion;
     } else {
       log.push({
         id: crypto.randomUUID(),
@@ -73,6 +111,7 @@ export function upsertPredictions(entries) {
         predictedOdds: entry.predictedOdds,
         action: entry.action,
         edgePercent: entry.edgePercent,
+        ...(versionConnue(entry.engineVersion) ? { engineVersion: entry.engineVersion } : {}),
         status: 'pending',
         settledAt: null,
         firstSeenAt: now,

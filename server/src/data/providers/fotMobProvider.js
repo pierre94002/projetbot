@@ -23,6 +23,10 @@
  * -----------------------------------------------------------------------
  */
 
+// Étape 14 du plan : la note de chaque réponse (santé des sources, plan de
+// secours) — un module feuille, sans autre import de l'appli.
+import { noterReponseFotmob } from '../relevesDesSources.js';
+
 /**
  * Revision de la lecture. A incrementer des que la table de correspondance
  * change : les entrees portant une revision anterieure sont alors reprises,
@@ -431,27 +435,43 @@ const PLAYER_FRACTION_MAP = {
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+/**
+ * Étape 14 du plan (07/10/2026), santé des sources : chaque réponse que
+ * l'appli reçoit déjà est NOTÉE (data/relevesDesSources.js) — réussie ou non,
+ * la nature d'un échec (accès refusé, limite, serveur, réponse illisible,
+ * réseau) et la FORME du JSON (les champs que ce module lit sont-ils là ?).
+ * Une fois par requête, après ses nouvelles tentatives ; aucune requête de
+ * plus, rien d'écrit sur le disque ici (la passe d'actualisation enregistre
+ * le suivi à sa fin). La note ne change jamais ce que rend fetchJson.
+ */
 async function fetchJson(url, { retries = 2, timeoutMs = 25000 } = {}) {
   let lastError = null;
+  let dernierStatut = null;
   for (let attempt = 0; attempt <= retries; attempt++) {
     if (attempt > 0) await sleep(600 * attempt);
+    dernierStatut = null;
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeoutMs);
     try {
       const response = await fetch(url, { headers: { 'User-Agent': USER_AGENT, Accept: 'application/json' }, signal: controller.signal });
+      dernierStatut = response.status ?? null;
       if (response.status >= 500 || response.status === 429) {
         lastError = new Error(`HTTP ${response.status}`);
         continue;
       }
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      return await response.json();
+      const payload = await response.json();
+      noterReponseFotmob({ url, ok: true, payload });
+      return payload;
     } catch (error) {
       lastError = error;
     } finally {
       clearTimeout(timer);
     }
   }
-  throw lastError ?? new Error('échec inconnu');
+  const echec = lastError ?? new Error('échec inconnu');
+  noterReponseFotmob({ url, ok: false, statut: dernierStatut, erreur: echec });
+  throw echec;
 }
 
 /** Premier nombre d'une valeur FotMob : 76, "1.08" ou "215 (78%)". */
@@ -670,11 +690,52 @@ function reconcileGoalsConceded(players, events, [homeGoals, awayGoals]) {
 }
 
 /**
- * Toutes les rencontres d'une journée, toutes compétitions confondues — un
- * seul appel couvre les 18 championnats suivis, là où ESPN en demande un par
- * championnat.
+ * Le direct, tel que la liste du jour le publie (étape E du plan, 05/10/2026) :
+ * la minute de jeu (`status.liveTime`) et les cartons rouges. Lus SEULEMENT
+ * s'ils sont publiés : un champ absent reste `null`, jamais un 0 déduit de
+ * son absence — ce serait dire « aucun rouge » là où la source se tait (le
+ * piège du zéro qui veut dire « absent », déjà payé avec ESPN).
+ *
+ * FotMob écrit la minute dans `liveTime.short` (« 34’ », « 45+2’ », « HT » à
+ * la mi-temps) et le temps écoulé dans `liveTime.long` (« 33:12 ») ; les
+ * rouges dans `status.numberOfHomeRedCards` / `numberOfAwayRedCards`, à
+ * défaut dans `home.redCards` / `away.redCards`. Formes relevées dans les
+ * réponses connues, à confirmer sur un vrai match en direct : la lecture
+ * tolère qu'un champ manque ou change de forme.
+ *
+ * Mêmes champs, mêmes règles pour le détail d'un match (fetchLiveDetail).
  */
-export async function fetchMatchesByDate(isoDate) {
+function lireDirect(status = {}, home = {}, away = {}) {
+  const entier = (v) => (v === null || v === undefined || v === '' || !Number.isFinite(Number(v)) ? null : Math.trunc(Number(v)));
+  const temps = status?.liveTime ?? null;
+  const court = temps?.short != null && String(temps.short).trim() ? String(temps.short).trim() : null;
+  let minute = null;
+  let ajout = null;
+  const lu = court?.match(/^(\d{1,3})\s*(?:\+\s*(\d{1,2}))?/);
+  if (lu) {
+    minute = Number(lu[1]);
+    if (lu[2] != null) ajout = Number(lu[2]);
+  } else {
+    // « 33:12 » : 33 minutes pleines écoulées, on joue la 34e.
+    const long = temps?.long != null ? String(temps.long).match(/^(\d{1,3}):(\d{2})/) : null;
+    if (long) minute = Number(long[1]) + 1;
+  }
+  const miTemps = Boolean(court && /^(HT|MT|Pause|Half[\s-]?time|Mi-temps)$/i.test(court));
+  return {
+    liveMinute: minute,
+    liveAddedTime: ajout,
+    liveLabel: court,
+    // Durée réglementaire annoncée (90, 120 en prolongation) : sert à
+    // reconnaître une prolongation sans la deviner.
+    liveMaxTime: entier(temps?.maxTime),
+    halfTime: miTemps,
+    homeRedCards: entier(status?.numberOfHomeRedCards ?? home?.redCards),
+    awayRedCards: entier(status?.numberOfAwayRedCards ?? away?.redCards)
+  };
+}
+
+/** La liste d'une journée, lue chez FotMob (sans cache : voir fetchMatchesByDate). */
+async function lireListeDuJour(isoDate) {
   const payload = await fetchJson(`${BASE}/matches?date=${isoDate.replace(/-/g, '')}`);
   const out = [];
   for (const league of payload?.leagues ?? []) {
@@ -682,6 +743,13 @@ export async function fetchMatchesByDate(isoDate) {
     for (const match of league.matches ?? []) {
       const score = String(match.status?.scoreStr ?? '');
       const [homeGoals, awayGoals] = score.includes('-') ? score.split('-').map((s) => firstNumber(s)) : [null, null];
+      const started = Boolean(match.status?.started);
+      const finished = Boolean(match.status?.finished);
+      // Champs du direct seulement pour un match commencé et pas fini : avant
+      // et après, FotMob n'y met rien qui vaille (et la liste ne grossit pas).
+      const direct = started && !finished
+        ? lireDirect(match.status, match.home, match.away)
+        : { liveMinute: null, liveAddedTime: null, liveLabel: null, liveMaxTime: null, halfTime: false, homeRedCards: null, awayRedCards: null };
       out.push({
         matchId: String(match.id),
         leagueKey: key,
@@ -708,11 +776,135 @@ export async function fetchMatchesByDate(isoDate) {
         // des compositions avant le coup d'envoi (cf. lineupPrefetch.js). La
         // liste du jour le publie déjà ; il ne manquait qu'à le lire.
         kickoff: match.status?.utcTime ?? null,
-        started: Boolean(match.status?.started)
+        started,
+        // Le direct (étape E) : minute, mi-temps, rouges — null si non publié.
+        ...direct
       });
     }
   }
   return out;
+}
+
+/**
+ * LECTURE PARTAGÉE de la liste du jour (étape E du plan, 05/10/2026).
+ *
+ * Quatre boucles lisaient chacune la liste du jour toutes les cinq minutes,
+ * sans rien partager : compositions (lineupPrefetch.js), cotes gratuites
+ * (oddsWatch.js), analyse d'avant coup d'envoi (autoMatchAiTrigger.js) et
+ * l'actualisation — et la boucle du direct (jobs/liveWatch.js) la lit chaque
+ * minute pendant les matchs. Plutôt que de refaire ces boucles (règle de
+ * Pierre : les petites boucles existantes restent telles quelles), la
+ * lecture est partagée ICI : une liste lue il y a moins d'une minute sert
+ * tous les appelants, et une lecture EN COURS sert aussi ceux qui arrivent
+ * pendant qu'elle se fait (une seule requête pour tous).
+ *
+ * Jamais une erreur en cache : une lecture ratée rejette pour tous ceux qui
+ * l'attendaient, puis est oubliée — l'appel suivant redemande. Chaque
+ * appelant reçoit SA copie de la liste (les rencontres sont des objets plats) :
+ * qu'un appelant la modifie ne touche pas les autres. Au plus huit journées
+ * gardées (l'actualisation en lit soixante d'affilée) : la plus ancienne
+ * sort la première.
+ */
+const LISTE_TTL_MS = 60_000;
+const LISTE_JOURS_MAX = 8;
+const listesDuJour = new Map();
+const reglageListes = { ttlMs: LISTE_TTL_MS, decalageMs: 0 };
+const compteListes = { requetes: 0, servies: 0, echecs: 0 };
+const horlogeListes = () => Date.now() + reglageListes.decalageMs;
+
+function oublierListesPerimees(maintenant) {
+  for (const [cle, entree] of listesDuJour) {
+    if (!entree.enCours && maintenant - entree.lueA >= reglageListes.ttlMs) listesDuJour.delete(cle);
+  }
+  // La plus ancienne d'abord (ordre d'insertion), jamais une lecture en cours.
+  for (const [cle, entree] of listesDuJour) {
+    if (listesDuJour.size <= LISTE_JOURS_MAX) break;
+    if (!entree.enCours) listesDuJour.delete(cle);
+  }
+}
+
+const copieDeListe = (liste) => liste.map((m) => ({ ...m }));
+
+/**
+ * Toutes les rencontres d'une journée, toutes compétitions confondues — un
+ * seul appel couvre les 18 championnats suivis, là où ESPN en demande un par
+ * championnat. Partagée entre appelants pendant une minute (voir ci-dessus).
+ */
+export async function fetchMatchesByDate(isoDate) {
+  const cle = String(isoDate).replace(/-/g, '');
+  const maintenant = horlogeListes();
+  oublierListesPerimees(maintenant);
+  const connue = listesDuJour.get(cle);
+  if (connue && (connue.enCours || maintenant - connue.lueA < reglageListes.ttlMs)) {
+    compteListes.servies++;
+    return copieDeListe(await connue.promesse);
+  }
+  const entree = { enCours: true, lueA: maintenant, promesse: null };
+  entree.promesse = lireListeDuJour(String(isoDate)).then(
+    (liste) => {
+      entree.enCours = false;
+      entree.lueA = horlogeListes();
+      return liste;
+    },
+    (error) => {
+      compteListes.echecs++;
+      if (listesDuJour.get(cle) === entree) listesDuJour.delete(cle);
+      throw error;
+    }
+  );
+  listesDuJour.set(cle, entree);
+  compteListes.requetes++;
+  return copieDeListe(await entree.promesse);
+}
+
+/** Lectures de la liste du jour depuis le démarrage : faites chez FotMob, servies par le partage, en échec. */
+export function sharedDayListStats() {
+  return { ...compteListes, ttlMs: reglageListes.ttlMs, gardees: listesDuJour.size };
+}
+
+/**
+ * Le détail d'un match EN COURS (étape E, boucle du direct) : score, minute,
+ * rouges, et les statistiques du moment — xG compris quand FotMob les donne
+ * pour ce championnat (couverture « xG »). Même page que les feuilles de
+ * match (matchDetails), lue SANS les statistiques des joueurs : plus légère,
+ * et le direct n'en a pas besoin. `null` si la page n'existe pas.
+ *
+ * Les rouges : ceux du statut s'ils y sont, sinon la ligne « Red cards » des
+ * statistiques, sinon le compte des cartons rouges du déroulé ; `null` si
+ * rien de tout cela n'est publié.
+ */
+export async function fetchLiveDetail(matchId) {
+  const payload = await fetchJson(`${BASE}/matchDetails?matchId=${encodeURIComponent(matchId)}`, { retries: 1, timeoutMs: 15000 });
+  if (!payload?.general?.homeTeam?.id || !payload?.general?.awayTeam?.id) return null;
+  const statut = payload?.header?.status ?? {};
+  const equipes = payload?.header?.teams ?? [];
+  const direct = lireDirect(statut, equipes[0] ?? {}, equipes[1] ?? {});
+  const stats = mapTeamStats(payload?.content?.stats?.Periods?.All?.stats ?? []);
+  const evenements = mapEvents(payload);
+  const rougesDuDeroule = (side) => evenements.filter((e) => e.type === 'card' && e.side === side && /red/.test(String(e.card ?? ''))).length;
+  const aDesStats = Object.keys(stats.home).length > 0 || Object.keys(stats.away).length > 0;
+  const rouges = (side, publie) => {
+    if (publie !== null) return publie;
+    const ligne = stats[side]['Red Cards'];
+    if (Number.isFinite(ligne)) return ligne;
+    return evenements.some((e) => e.type === 'card') ? rougesDuDeroule(side) : null;
+  };
+  const [homeGoals, awayGoals] = scoreOf(statut.scoreStr);
+  return {
+    matchId: String(matchId),
+    started: Boolean(statut.started),
+    finished: Boolean(statut.finished),
+    cancelled: Boolean(statut.cancelled),
+    homeGoals,
+    awayGoals,
+    ...direct,
+    homeRedCards: rouges('home', direct.homeRedCards),
+    awayRedCards: rouges('away', direct.awayRedCards),
+    xgHome: Number.isFinite(stats.home.expected_goals) ? stats.home.expected_goals : null,
+    xgAway: Number.isFinite(stats.away.expected_goals) ? stats.away.expected_goals : null,
+    stats: aDesStats ? stats : null,
+    coverage: payload?.general?.coverageLevel ? String(payload.general.coverageLevel) : null
+  };
 }
 
 function mapTeamStats(groups) {
@@ -800,20 +992,45 @@ function mapPlayer(entry) {
 }
 
 /**
- * Déroulé du match : buts avec passeur, remplacements, cartons.
+ * Déroulé du match : buts avec passeur, remplacements, cartons, penalties manqués.
  *
  * Le drapeau `ownGoal` est essentiel — un but contre son camp compte au score
  * de l'équipe adverse mais n'est attribué à aucun de ses joueurs, ce qui
  * explique les écarts entre la somme des buts d'une feuille et le score.
+ * Pour un but contre son camp, `side` est donc le camp CRÉDITÉ du but (celui
+ * qui en profite) et `player` un joueur de l'AUTRE camp : vérifié sur les
+ * 4 186 buts contre leur camp du magasin dont le joueur est connu, aucun
+ * contraire. Pour tout autre événement, `side` est le camp du joueur.
+ *
+ * Ajouts de l'étape 43 (07/10/2026) — tous facultatifs, absents des matchs
+ * déjà au magasin, que les lecteurs savent lire sans (cf.
+ * core/ai/derouleDuMatch.js : le penalty se lit aussi dans `detail`, le
+ * penalty manqué dans la carte des tirs) :
+ *   - but : `penalty: true` (goalDescriptionKey « penalty ») ; `detail`, lu
+ *     par les repères de championnat (« Penalty »), ne change pas ;
+ *   - carton : `reason` (la clé de FotMob sans son préfixe : foul,
+ *     time_wasting, dissent…) quand il la donne, et `note` quand il décrit le
+ *     carton (« not_on_pitch » : jaune montré à un remplaçant resté sur le
+ *     banc, que la statistique d'équipe ne compte pas) ;
+ *   - remplacement : `injured: true` quand FotMob dit que le sortant était
+ *     blessé (`injuredPlayerOut`) ;
+ *   - type `missedpenalty` : un penalty manqué (arrêté, sur le poteau ou à
+ *     côté), `player`, `minute`, `side` = camp de celui qui tirait. Jamais
+ *     rangé sous le type « goal » : tous les lecteurs de buts (score, mi-temps,
+ *     repères, contrôle quotidien) comptent les événements de ce type. Les tirs
+ *     de la séance de tirs au but n'y sont jamais (`isPenaltyShootoutEvent`) :
+ *     leur « minute » ferait croire à une prolongation (matchDuration).
+ * Les types « Half », « AddedTime » et « Comment » restent ignorés.
  */
-function mapEvents(payload) {
+export function mapEvents(payload) {
   const raw = payload?.content?.matchFacts?.events?.events;
   if (!Array.isArray(raw)) return [];
   const homeId = payload?.general?.homeTeam?.id;
   const out = [];
   for (const event of raw) {
     const type = String(event.type ?? '');
-    if (!['Goal', 'Card', 'Substitution'].includes(type)) continue;
+    if (!['Goal', 'Card', 'Substitution', 'MissedPenalty'].includes(type)) continue;
+    if (type === 'MissedPenalty' && event.isPenaltyShootoutEvent === true) continue;
     const entry = {
       type: type.toLowerCase(),
       minute: firstNumber(event.time),
@@ -827,14 +1044,24 @@ function mapEvents(payload) {
       if (event.assistStr) entry.assist = String(event.assistStr).replace(/^.*?by\s+/i, '');
       if (event.ownGoal) entry.ownGoal = true;
       if (event.goalDescription) entry.detail = event.goalDescription;
+      if (!event.ownGoal && (event.goalDescriptionKey === 'penalty' || /^\s*penalty\s*$/i.test(String(event.goalDescription ?? '')))) entry.penalty = true;
     } else if (type === 'Card') {
       entry.player = event.player?.name ?? event.nameStr ?? null;
       const acteur = fotMobIdOf(event.player?.id ?? event.playerId);
       if (acteur) entry.playerId = acteur;
       entry.card = event.card ? String(event.card).toLowerCase() : 'yellow';
+      const motif = event.cardReason?.localizedKey ?? event.cardReason?.defaultText;
+      if (motif) entry.reason = String(motif).trim().toLowerCase().replace(/^card_desc_/, '').replace(/\s+/g, '_');
+      const note = event.cardDescription?.localizedKey ?? event.cardDescription?.defaultText;
+      if (note) entry.note = String(note).trim().toLowerCase().replace(/\s+/g, '_');
     } else if (type === 'Substitution' && Array.isArray(event.swap)) {
       entry.playerIn = event.swap[0]?.name ?? null;
       entry.playerOut = event.swap[1]?.name ?? null;
+      if (event.injuredPlayerOut === true) entry.injured = true;
+    } else if (type === 'MissedPenalty') {
+      entry.player = event.player?.name ?? event.nameStr ?? null;
+      const acteur = fotMobIdOf(event.player?.id ?? event.playerId);
+      if (acteur) entry.playerId = acteur;
     }
     out.push(entry);
   }
@@ -880,6 +1107,13 @@ function mapMeta(payload) {
   if (general.leagueId != null) meta.leagueId = Number(general.leagueId);
   if (general.parentLeagueId != null) meta.parentLeagueId = Number(general.parentLeagueId);
   if (general.coverageLevel) meta.coverage = String(general.coverageLevel);
+  // Les langues du TEXTE MINUTE PAR MINUTE de FotMob (étape 43, 07/10/2026) :
+  // « en », « en_gen », « fr_gen »… — le nom des fichiers de
+  // data.fotmob.com/webcl/ltc/gsm/<identifiant>_<langue>.json.gz. Chaîne vide :
+  // pas de texte pour ce match. Absent (matchs déjà au magasin) : inconnu,
+  // le lecteur essaie « en » puis « en_gen » (providers/fotMobCommentaire.js).
+  const langues = payload?.content?.liveticker?.langs;
+  if (typeof langues === 'string') meta.tickerLangs = langues.trim();
   // Résultat décidé hors du terrain (« Awarded win ») : le score de
   // l'en-tête est celui de la fédération, pas celui du jeu, et la feuille —
   // quand elle existe — décrit un autre match (Union Berlin - Bochum, joué
@@ -896,6 +1130,17 @@ function mapMeta(payload) {
   const capacity = firstNumber(stadium.capacity);
   if (capacity !== null) meta.capacity = capacity;
   if (stadium.surface) meta.surface = String(stadium.surface);
+  // Pays et coordonnées du stade (06/10/2026, étape 13 du plan) : FotMob les
+  // donne sur chaque page de match ; gardés pour la distance du déplacement
+  // (étape 32). Une rencontre déjà au magasin ne les a pas : la table de
+  // référence (data/reference/venues.json) porte le stade de chaque club.
+  if (stadium.country) meta.country = String(stadium.country);
+  const lat = firstNumber(stadium.lat);
+  const long = firstNumber(stadium.long);
+  if (lat !== null && long !== null && Math.abs(lat) <= 90 && Math.abs(long) <= 180 && !(lat === 0 && long === 0)) {
+    meta.lat = lat;
+    meta.long = long;
+  }
 
   const attendance = firstNumber(info.Attendance);
   if (attendance !== null) meta.attendance = attendance;
@@ -1515,4 +1760,32 @@ function mapTable(name, table, legende) {
   return { name: String(name ?? ''), rows };
 }
 
-export const __testing = { firstNumber, mapTeamStats, mapPlayer, TEAM_STAT_MAP, PLAYER_STAT_MAP, roleOfGridPosition, roleOfUsualPosition, roleOfLineupEntry, lineupUsesRoleCodes, nomNormalise, reconcileGoalsConceded, scoreOf };
+export const __testing = {
+  firstNumber,
+  mapMeta,
+  mapTeamStats,
+  mapPlayer,
+  TEAM_STAT_MAP,
+  PLAYER_STAT_MAP,
+  roleOfGridPosition,
+  roleOfUsualPosition,
+  roleOfLineupEntry,
+  lineupUsesRoleCodes,
+  nomNormalise,
+  reconcileGoalsConceded,
+  scoreOf,
+  lireDirect,
+  // Lecture partagée de la liste du jour, pour les tests : tout oublier,
+  // avancer l'horloge du partage (le temps est figé dans les tests), lire les compteurs.
+  listes: {
+    vider() {
+      listesDuJour.clear();
+      Object.assign(compteListes, { requetes: 0, servies: 0, echecs: 0 });
+      reglageListes.decalageMs = 0;
+    },
+    avancer(ms) {
+      reglageListes.decalageMs += ms;
+    },
+    compteurs: () => ({ ...compteListes, gardees: listesDuJour.size })
+  }
+};

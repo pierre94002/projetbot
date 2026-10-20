@@ -4,6 +4,7 @@ import { getByMatchId, listAll, findAnalysisForFixture, aiMarketExperience } fro
 import { listPredictions } from '../../data/repositories/predictionsRepository.js';
 import { teamNamesLikelyMatch } from '../../utils/teamNameMatch.js';
 import { requireStringParam } from '../middlewares/errorHandler.js';
+import { carnetPourLaRoute } from '../../data/aiScorecard.js';
 
 const JOUR_MS = 86_400_000;
 
@@ -47,13 +48,29 @@ export function getAll(req, res) {
   res.json({ entries: listAll() });
 }
 
+// Un clic de Pierre : noté « manuel » au journal des appels (étape 4), jamais
+// compté sur le plafond des analyses automatiques, jamais bloqué par le mode économe.
 export async function postPreMatch(req, res) {
   const { home, away, league, engineResult } = req.body ?? {};
-  const result = await runPreMatchAnalysis({ matchId: req.params.matchId, home, away, league, engineResult });
+  const result = await runPreMatchAnalysis({ matchId: req.params.matchId, home, away, league, engineResult, appel: { type: 'manuel', detail: 'avant-match' } });
   res.status(201).json(result);
 }
 
 export async function postPostMatch(req, res) {
-  const result = await runPostMatchAnalysis({ matchId: req.params.matchId });
+  const result = await runPostMatchAnalysis({ matchId: req.params.matchId, appel: { type: 'manuel', detail: 'après-match' } });
   res.status(201).json(result);
+}
+
+/**
+ * Étape 21 du plan : le CARNET DE NOTES DE L'IA, tel que l'actualisation l'a écrit cette nuit
+ * (data/runtime/carnet-ia.json) — LECTURE SEULE, rien n'est recalculé ici. Pas encore calculé : 200 avec
+ * `carnet: null` (l'écran garde toute sa structure et le dit). Illisible : 503, jamais pris pour vide.
+ */
+export function getScorecard(req, res) {
+  const r = carnetPourLaRoute();
+  if (r.etat === 'illisible') {
+    res.status(503).json({ ...r, error: `Carnet de l’IA illisible pour l’instant : ${r.erreur ?? 'fichier illisible'}. Il sera refait à la prochaine actualisation.` });
+    return;
+  }
+  res.json(r);
 }

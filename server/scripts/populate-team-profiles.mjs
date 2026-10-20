@@ -5,8 +5,9 @@
  * Peuple server/data/runtime/team-profiles.json (effectif + forme +
  * moyennes, via recherche web Claude — cf. resolveTeamProfileViaWeb dans
  * webLookupService.js) pour les équipes des 3 coupes européennes — pas
- * d'équivalent local pour elles (contrairement aux 16 championnats couverts
- * par historicalMatchesProvider.js, ~55 pays différents ici).
+ * d'équivalent local pour elles (contrairement aux ~38 championnats que lit
+ * historicalMatchesProvider.js dans la table fd_history, de 2000-01 à la
+ * saison en cours, 2026-27 ; ~55 pays différents ici).
  *
  * Saute toute équipe déjà présente dans team-profiles.json (pas de
  * re-recherche inutile) — relançable sans risque, reprend là où ça s'était

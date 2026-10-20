@@ -27,7 +27,7 @@ const SELECTION = `SELECT m.date, m.home_id AS homeId,
        JOIN team_stats th ON th.match_key = m.match_key AND th.side = 'home'
        JOIN team_stats ta ON ta.match_key = m.match_key AND ta.side = 'away'`;
 
-function moyennesEquipe(teamId, avant, database) {
+export function moyennesEquipe(teamId, avant, database) {
   const rows = database
     .prepare(
       `SELECT * FROM (${SELECTION} WHERE m.home_id = ? AND m.date < ? AND m.home_goals IS NOT NULL ORDER BY m.date DESC LIMIT 30)

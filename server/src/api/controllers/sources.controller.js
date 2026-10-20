@@ -5,6 +5,8 @@ import { CALENDAR_FILE_PATH } from '../../data/repositories/seasonCalendarReposi
 import { resolveDbPath } from '../../data/db/matchStatsDb.js';
 import { DATA_SOURCE_KEYS } from '../../data/matchSources.js';
 import { refreshLiveOdds, refreshLiveCompetitions } from '../../data/providers/liveDataSync.js';
+import { quotesSummary } from '../../data/db/oddsQuotesRepository.js';
+import { NOMS_DES_SOURCES } from '../../data/freeMarketOdds.js';
 
 /** Un fichier : son chemin absolu et sa dernière modification (null s'il manque). */
 function fichier(chemin) {
@@ -33,9 +35,18 @@ function originesDesDonnees() {
   } catch {
     base = null; // Profil de service : la base n'a pas de chemin sûr, l'interface le tait.
   }
+  // Cotes gratuites (04/10/2026) : relevées par l'appli, gardées dans la
+  // base locale, une ligne par source avec son dernier relevé.
+  let gratuites = [];
+  try {
+    gratuites = quotesSummary().sources.map((s) => ({ ...s, name: NOMS_DES_SOURCES[s.source] ?? s.source }));
+  } catch {
+    gratuites = []; // base d'avant les cotes gratuites
+  }
   return {
     calendar: { provider: 'FotMob', ...fichier(CALENDAR_FILE_PATH) },
     odds: { provider: 'The Odds API', ...fichier(chemins.odds) },
+    freeOdds: { provider: gratuites.map((s) => s.name).join(', ') || null, file: base, sources: gratuites },
     store: { provider: 'FotMob', file: base },
     sample: { provider: null, ...fichier(chemins.sampleMatches) }
   };

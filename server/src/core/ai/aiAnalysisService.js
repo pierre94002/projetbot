@@ -33,7 +33,9 @@ export async function runAnalysis({ limit } = {}) {
       messages,
       tools: [SUBMIT_ANALYSIS_TOOL],
       toolChoice: SUBMIT_ANALYSIS_TOOL_CHOICE,
-      maxTokens: MAX_RESPONSE_TOKENS
+      maxTokens: MAX_RESPONSE_TOKENS,
+      // Journal des appels (étape 4) : API à la clé, hors budget de l'abonnement.
+      appel: { type: 'autre', detail: 'audit des pronostics (Réglages)' }
     });
   } catch (error) {
     throw new DomainError(`Analyse IA impossible : ${error.message}`, { status: 502 });

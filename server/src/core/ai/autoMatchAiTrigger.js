@@ -23,6 +23,17 @@
  * sans revue après-match. Le score est lu DIRECTEMENT dans le magasin FotMob
  * (jamais via match-results.json, qui exigerait une saisie manuelle
  * redondante — cf. Historique moteur > Score final).
+ *
+ * BUDGET CLAUDE (étape 4 du plan, cf. claudeBudget.js) : chaque appel dit son
+ * type au journal (avance, coup d'envoi, reprise, revue). En MODE ÉCONOME —
+ * 80 % du budget du jour ou de la semaine fixé par Pierre, ou son choix —
+ * l'analyse d'avance est réservée aux favoris (vérifié avant CHAQUE analyse :
+ * une passe qui franchit les 80 % s'arrête là pour les autres), la reprise
+ * après changement de onze demande au moins deux titulaires habituels
+ * changés, et les favoris passent d'abord dans chaque liste. La priorité
+ * actuelle ne bouge pas (analyses d'avant coup d'envoi mises de côté d'abord,
+ * cf. reserveCoupDEnvoi) et le plafond quotidien de 150 reste la seule
+ * limite dure. En mode normal, rien ne change.
  * -----------------------------------------------------------------------
  */
 
@@ -38,9 +49,12 @@ import { fetchMatchesByDate } from '../../data/providers/fotMobProvider.js';
 import { teamNamesLikelyMatch } from '../../utils/teamNameMatch.js';
 import { getByMatchId, findPreMatchAnalysisByTeams } from '../../data/repositories/matchAiAnalysisRepository.js';
 import { enregistrerUsage, jourParis, finDuJourParis } from '../../data/repositories/autoAiAnalysisRepository.js';
-import { buildLineupContext, derniereCompositionConnue, signatureDesOnzes } from '../../data/providers/lineupContext.js';
+import { buildLineupContext, derniereCompositionConnue, signatureDesOnzes, titulairesHabituelsChanges } from '../../data/providers/lineupContext.js';
 import { runPreMatchAnalysis, runPostMatchAnalysis, CODE_CLAUDE_CODE_INDISPONIBLE } from './matchAiAnalysisService.js';
 import { isClaudeCodeAuthenticated } from './claudeCodeClient.js';
+import { modeBudget, lireFavoris, estFavori, favorisDabord, noterEffetEconome } from './claudeBudget.js';
+import { gelerAnalyse, ORIGINES } from '../../data/enregistreurs/gelPronostics.js';
+import { env } from '../../config/env.js';
 
 const FENETRE_AVANT_MATCH_MS = 48 * 60 * 60 * 1000;
 /**
@@ -78,21 +92,38 @@ const PANNES_CONSECUTIVES_MAX = 3;
 
 // Jamais de repli API-Football dans une chaîne automatique (quota payant de
 // 100/jour) : une équipe inconnue du magasin garde la base de la ligue.
-async function calculerEngineResult(match) {
+//
+// Le résultat du moteur de CHAQUE analyse automatique est aussi gelé (étape
+// E du plan, correction 7 : data/enregistreurs/gelPronostics.js) — avec la
+// composition qu'elle a lue. Mis en file, écrit quand le verrou est libre ;
+// un gel raté n'empêche jamais l'analyse.
+async function calculerEngineResult(match, { lineups = null, origine = ORIGINES.avance } = {}) {
   const enrichi = await enrichMatchWithRealAverages(match, { sansRepliPayant: true });
-  return analyzeMatch(enrichi, getEngineConfig('football'), getTiltState(), getSport('football'));
+  const engineResult = await analyzeMatch(enrichi, getEngineConfig('football'), getTiltState(), getSport('football'));
+  if (env.enregistreurs?.enabled && env.matchStatsRefresh.enabled) gelerAnalyse({ match, engineResult, lineups, origine });
+  return engineResult;
 }
 
 /**
- * @returns {{ ok: number, failed: number, candidates: number, samples: string[], interrompu: boolean }}
+ * `ecarter(candidat)` (facultatif) : regardé juste avant chaque analyse ; vrai
+ * = laissé sans analyse à cette passe (mode économe), compté à part de ce que
+ * le plafond laisse pour demain. Il ne prend pas de place sur le plafond.
+ *
+ * @returns {{ ok: number, failed: number, candidates: number, ecartes: number, samples: string[], interrompu: boolean }}
  */
-async function analyserEnSerie(candidats, limit, analyser, libelle) {
+async function analyserEnSerie(candidats, limit, analyser, libelle, ecarter = null) {
   let ok = 0;
   let failed = 0;
+  let ecartes = 0;
   let pannes = 0;
   let interrompu = false;
   const samples = [];
-  for (const candidat of candidats.slice(0, limit)) {
+  for (const candidat of candidats) {
+    if (ok + failed >= limit) break;
+    if (ecarter?.(candidat)) {
+      ecartes++;
+      continue;
+    }
     try {
       await analyser(candidat);
       ok++;
@@ -106,17 +137,22 @@ async function analyserEnSerie(candidats, limit, analyser, libelle) {
       }
     }
   }
-  return { ok, failed, candidates: candidats.length, samples, interrompu };
+  return { ok, failed, ecartes, candidates: candidats.length, samples, interrompu };
 }
 
-const VIDE = { ok: 0, failed: 0, candidates: 0, samples: [], interrompu: false };
+const VIDE = { ok: 0, failed: 0, ecartes: 0, candidates: 0, samples: [], interrompu: false };
 
+/**
+ * Les analyses D'AVANCE (3 h à 48 h avant). Mode économe (étape 4) : réservées
+ * aux favoris — le mode est relu avant chaque analyse, et un match non favori
+ * laissé de côté ne prend pas de place sur le plafond.
+ */
 export async function runAutoPreMatchAnalyses({ limit }) {
   if (limit <= 0) return VIDE;
   if (!isClaudeCodeAuthenticated()) return { ...VIDE, nonConfigure: true };
 
   const maintenant = Date.now();
-  const candidats = listAdaptedMatches('odds-api', 10000)
+  let candidats = listAdaptedMatches('odds-api', 10000)
     .filter((m) => {
       const coupEnvoi = Date.parse(m.commenceTime ?? '');
       return Number.isFinite(coupEnvoi) && coupEnvoi - maintenant > AVANCE_MIN_MS && coupEnvoi - maintenant <= FENETRE_AVANT_MATCH_MS;
@@ -124,15 +160,37 @@ export async function runAutoPreMatchAnalyses({ limit }) {
     .filter((m) => !getByMatchId(m.matchId))
     .sort((a, b) => Date.parse(a.commenceTime) - Date.parse(b.commenceTime));
 
-  return analyserEnSerie(
+  let budget = modeBudget();
+  const favoris = lireFavoris();
+  const database = openDb();
+  const favori = (m) => estFavori({ home: m.home, away: m.away, league: m.league }, favoris, database);
+  if (budget.politique.favorisDabord) candidats = favorisDabord(candidats, (m) => ({ home: m.home, away: m.away, league: m.league }), favoris, database);
+
+  const r = await analyserEnSerie(
     candidats,
     limit,
     async (m) => {
       const engineResult = await calculerEngineResult(m);
-      await runPreMatchAnalysis({ matchId: m.matchId, home: m.home, away: m.away, league: m.league, engineResult, sansRepliPayant: true });
+      await runPreMatchAnalysis({
+        matchId: m.matchId,
+        home: m.home,
+        away: m.away,
+        league: m.league,
+        engineResult,
+        sansRepliPayant: true,
+        appel: { type: 'avance', mode: budget.mode }
+      });
     },
-    (m) => `${m.home} - ${m.away}`
+    (m) => `${m.home} - ${m.away}`,
+    (m) => {
+      // La consommation de l'instant décide : la passe qui franchit les 80 % s'arrête là pour les non-favoris.
+      budget = modeBudget();
+      if (!budget.politique.avanceFavorisSeulement || favori(m)) return false;
+      noterEffetEconome('avance', m.matchId);
+      return true;
+    }
   );
+  return { ...r, mode: budget.mode, raisonMode: budget.raison };
 }
 
 const normaliser = (nom) =>
@@ -220,26 +278,54 @@ function compositionChangee(entree) {
 }
 
 /**
+ * Mode économe (étape 4) : une reprise n'a lieu que si au moins
+ * `politique.repriseTitulairesHabituelsMin` titulaires habituels ont changé
+ * entre la composition analysée et la dernière connue (cf.
+ * titulairesHabituelsChanges, lineupContext.js). En mode normal (minimum 1),
+ * tout changement de onze suffit, comme avant.
+ * @returns {{ reprendre: boolean, habituels: Array|null }}
+ */
+function reprisePermise(entree, politique) {
+  if (!(politique.repriseTitulairesHabituelsMin > 1)) return { reprendre: true, habituels: null };
+  const derniere = derniereCompositionConnue(entree.lineupSnapshot?.fotmobMatchId);
+  const habituels = titulairesHabituelsChanges(entree.lineupSnapshot, derniere?.onzes);
+  return { reprendre: habituels.length >= politique.repriseTitulairesHabituelsMin, habituels };
+}
+
+/**
  * Une passe d'avant coup d'envoi (cf. jobs/kickoffAiAnalysis.js, toutes les
  * 5 min). Chaque analyse réussie est comptée sur le plafond du jour aussitôt
  * faite, pas en fin de passe : l'actualisation complète peut tourner en même
  * temps et doit lire le vrai reste.
  *
- * @returns {{ ok, failed, candidates, enAttente, avecCompo, reprises, laisses, samples, interrompu }}
+ * Mode économe (étape 4) : une seule analyse dès la composition — la reprise
+ * après un changement de onze seulement si au moins deux titulaires
+ * habituels changent (`reprisesEvitees` sinon) — et les favoris d'abord.
+ *
+ * @returns {{ ok, failed, candidates, enAttente, avecCompo, reprises, reprisesEvitees, laisses, samples, interrompu, mode, raisonMode }}
  */
 export async function runKickoffPreMatchAnalyses({ limit }) {
-  const bilan = { ok: 0, failed: 0, candidates: 0, enAttente: 0, avecCompo: 0, reprises: 0, laisses: 0, samples: [], interrompu: false };
+  const bilan = { ok: 0, failed: 0, candidates: 0, enAttente: 0, avecCompo: 0, reprises: 0, reprisesEvitees: 0, laisses: 0, samples: [], interrompu: false };
   if (!isClaudeCodeAuthenticated()) return { ...bilan, nonConfigure: true };
 
-  const aFaire = [];
+  const budget = modeBudget();
+  bilan.mode = budget.mode;
+  bilan.raisonMode = budget.raison;
+  let aFaire = [];
   for (const { m, minutes, fotmobMatchId, kickoff } of await matchsAuCoupDEnvoi()) {
     const entree = getByMatchId(m.matchId);
     if (faiteAuCoupDEnvoi(entree, kickoff)) {
-      if (compositionChangee(entree)) aFaire.push({ m, minutes, fotmobMatchId, reprise: true });
+      if (compositionChangee(entree)) {
+        const { reprendre } = reprisePermise(entree, budget.politique);
+        if (reprendre) aFaire.push({ m, minutes, fotmobMatchId, reprise: true });
+        // Comptée une fois par match et par composition, même si la boucle repasse.
+        else if (noterEffetEconome('reprise', `${m.matchId}|${derniereCompositionConnue(entree.lineupSnapshot?.fotmobMatchId)?.signature ?? ''}`)) bilan.reprisesEvitees++;
+      }
       continue;
     }
     aFaire.push({ m, minutes, fotmobMatchId, reprise: false });
   }
+  if (budget.politique.favorisDabord) aFaire = favorisDabord(aFaire, ({ m }) => ({ home: m.home, away: m.away, league: m.league }));
   bilan.candidates = aFaire.length;
 
   let pannes = 0;
@@ -259,7 +345,7 @@ export async function runKickoffPreMatchAnalyses({ limit }) {
       continue;
     }
     try {
-      const engineResult = await calculerEngineResult(m);
+      const engineResult = await calculerEngineResult(m, { lineups, origine: ORIGINES.coupDEnvoi });
       await runPreMatchAnalysis({
         matchId: m.matchId,
         home: m.home,
@@ -268,7 +354,8 @@ export async function runKickoffPreMatchAnalyses({ limit }) {
         engineResult,
         sansRepliPayant: true,
         lineups,
-        timing: 'coup-d-envoi'
+        timing: 'coup-d-envoi',
+        appel: { type: reprise ? 'reprise' : 'coup-d-envoi', mode: budget.mode }
       });
       enregistrerUsage(jourParis(), { preMatch: 1 });
       bilan.ok++;
@@ -303,22 +390,30 @@ export async function reserveCoupDEnvoi(maintenant = Date.now()) {
   }).length;
 }
 
+/** Les revues d'après-match. Mode économe (étape 4) : les favoris d'abord. */
 export async function runAutoPostMatchReviews({ limit }) {
   if (limit <= 0) return VIDE;
   if (!isClaudeCodeAuthenticated()) return { ...VIDE, nonConfigure: true };
 
   const since = new Date(Date.now() - FENETRE_APRES_MATCH_JOURS * 86_400_000).toISOString().slice(0, 10);
-  const candidats = [];
+  let candidats = [];
   for (const m of recentlyFinished({ since })) {
     const prior = findPreMatchAnalysisByTeams({ homeName: m.homeName, awayName: m.awayName, league: m.league, day: m.date });
     // Date et nom FotMob : l'analyse après-match relit les buts et statistiques du match dans le magasin.
     if (prior) candidats.push({ prior, resultat: { homeGoals: m.homeGoals, awayGoals: m.awayGoals, date: m.date, homeName: m.homeName } });
   }
 
-  return analyserEnSerie(
+  const budget = modeBudget();
+  if (budget.politique.favorisDabord) candidats = favorisDabord(candidats, ({ prior }) => ({ home: prior.homeName, away: prior.awayName, league: prior.league }));
+
+  const r = await analyserEnSerie(
     candidats,
     limit,
-    ({ prior, resultat }) => runPostMatchAnalysis({ matchId: prior.matchId, result: resultat }),
+    ({ prior, resultat }) => runPostMatchAnalysis({ matchId: prior.matchId, result: resultat, appel: { type: 'revue', mode: budget.mode } }),
     ({ prior }) => `${prior.homeName} - ${prior.awayName}`
   );
+  return { ...r, mode: budget.mode, raisonMode: budget.raison };
 }
+
+/** Pour les tests : la décision de reprise, telle que la passe d'avant coup d'envoi la prend. */
+export const __testing = { compositionChangee, reprisePermise, faiteAuCoupDEnvoi };

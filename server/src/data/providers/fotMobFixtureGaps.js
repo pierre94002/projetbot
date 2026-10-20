@@ -25,8 +25,8 @@ import { FOTMOB_LEAGUE_IDS } from './fotMobLeagueIds.js';
 import { importFotmobIds } from './fotMobRefresh.js';
 import { seasonFromFotmobLabel, currentSeason } from './seasonWindows.js';
 
-/** Première saison tenue par le magasin. */
-const PREMIERE_SAISON = 2023;
+/** Première saison tenue par le magasin (le carnet de santé la lit aussi). */
+export const PREMIERE_SAISON = 2023;
 
 async function pool(items, size, worker) {
   let index = 0;
@@ -43,8 +43,15 @@ async function pool(items, size, worker) {
  * Les rencontres jouées que la page de la compétition connaît et que le
  * magasin ignore. `scope: 'current'` ne regarde que la saison en cours (la
  * passe automatique) ; `'all'` remonte à 2023.
+ *
+ * `premiereSaison` (étape 12 du plan, carnet de santé) : remonter plus loin.
+ * Le magasin commence le 04/01/2023 (championnats d'année civile), mais ses
+ * championnats européens commencent à la saison 2023/2024 : le carnet lit
+ * aussi les pages 2022/2023 pour COMPTER ce qui manque avant (hors du
+ * périmètre du magasin, jamais une anomalie). Ce module ne fait que lire
+ * FotMob et le magasin ; l'import est dans fillFixtureGaps.
  */
-export async function findFixtureGaps({ leagues = null, scope = 'all', concurrency = 4, database = openDb() } = {}) {
+export async function findFixtureGaps({ leagues = null, scope = 'all', concurrency = 4, premiereSaison = PREMIERE_SAISON, database = openDb() } = {}) {
   const connus = new Set(
     database.prepare('SELECT fotmob_id FROM matches WHERE fotmob_id IS NOT NULL').all().map((r) => String(r.fotmob_id))
   );
@@ -57,7 +64,7 @@ export async function findFixtureGaps({ leagues = null, scope = 'all', concurren
       const actuelle = currentSeason(league);
       const libelles = page.seasons.filter((s) => {
         const an = seasonFromFotmobLabel(s);
-        return an !== null && an >= PREMIERE_SAISON && an <= actuelle && (scope !== 'current' || an === actuelle);
+        return an !== null && an >= premiereSaison && an <= actuelle && (scope !== 'current' || an === actuelle);
       });
       for (const libelle of libelles) {
         const calendrier = libelle === page.selectedSeason ? page : await fetchLeagueFixtures(id, libelle);

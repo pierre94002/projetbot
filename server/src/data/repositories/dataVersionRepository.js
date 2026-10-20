@@ -17,8 +17,29 @@ const ODDS_SNAPSHOT_PATH = path.resolve(__dirname, '../../../data/fixtures/odds/
  * dans l'empreinte : c'est ce qui les synchronise entre deux onglets.
  */
 // favorites.json (03/10/2026) : cocher une étoile ne doit pas faire recharger
-// toutes les pages comme une vraie nouvelle donnée.
-const SETTINGS_FILES = new Set(['engine-config.json', 'ai-config.json', 'favorites.json']);
+// toutes les pages comme une vraie nouvelle donnée. sauvegarde-hors-disque.json
+// (05/10/2026) : la destination de la copie hors disque, choisie dans Réglages.
+// budget-claude.json (étape 4 du plan) : le budget Claude, choisi dans Réglages.
+// roadmap.json (étape 5 du plan) : les notes de Pierre sur la feuille de route ;
+// écrire une note ne doit pas faire annoncer « nouvelles données » partout.
+// fraicheur-cotes.json (étape 7 du plan) : le délai de fraîcheur des cotes de
+// vos bookmakers, choisi dans Réglages.
+// registre-mesure.json (étape 16 du plan) : le registre du garde-fou de la
+// mesure (dates de lancement, variantes essayées, jugements), lu par la seule
+// feuille de route ; un jugement rangé ne doit pas faire annoncer « nouvelles
+// données » partout.
+// engine-versions.json (étape 25 du plan) : le registre des versions du moteur,
+// écrit avec les réglages du moteur (déjà hors de l'empreinte) et lu par la
+// seule carte « Versions du moteur ».
+const SETTINGS_FILES = new Set(['engine-config.json', 'ai-config.json', 'favorites.json', 'sauvegarde-hors-disque.json', 'budget-claude.json', 'roadmap.json', 'fraicheur-cotes.json', 'registre-mesure.json', 'engine-versions.json']);
+
+/**
+ * Dossiers hors de l'empreinte : le journal des appels Claude (étape 4) est
+ * réécrit à chaque appel, et seule la carte « Budget Claude » l'affiche, qui
+ * se relit elle-même. Le compter ferait annoncer « nouvelles données » à
+ * chaque appel, même raté.
+ */
+const DOSSIERS_HORS_EMPREINTE = new Set(['journal-claude']);
 
 /**
  * Fichiers de TRAVAIL de l'actualisation, exclus eux aussi : le verrou, les
@@ -80,8 +101,9 @@ function walk(dir, baseDir, parts, state) {
   }
   for (const entry of [...entries].sort((a, b) => a.name.localeCompare(b.name))) {
     const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) walk(fullPath, baseDir, parts, state);
-    else if (entry.isFile() && !SETTINGS_FILES.has(entry.name) && !isWorkFile(entry.name)) {
+    if (entry.isDirectory()) {
+      if (!DOSSIERS_HORS_EMPREINTE.has(entry.name)) walk(fullPath, baseDir, parts, state);
+    } else if (entry.isFile() && !SETTINGS_FILES.has(entry.name) && !isWorkFile(entry.name)) {
       collectFile(fullPath, path.relative(baseDir, fullPath).replace(/\\/g, '/'), parts, state);
     }
   }

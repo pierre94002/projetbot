@@ -185,7 +185,13 @@ export function tauxStatistiques(inputs) {
 
 // --- Matrice des scores ------------------------------------------------
 
-function matrice(lambda, mu, rho) {
+/**
+ * La matrice de Dixon-Coles des scores 0-0 à 8-8 : 81 cases { home, away, p }
+ * dans l'ordre home × 9 + away, somme 1. Exportée pour le banc d'essai
+ * (étape 19), qui en tire son repère du score exact (la grille aux moyennes du
+ * championnat) au lieu de la recopier ; rien n'a changé dans le calcul.
+ */
+export function matrice(lambda, mu, rho) {
   const px = [];
   const py = [];
   for (let k = 0; k <= BUTS_MAX; k++) {
@@ -319,13 +325,11 @@ const arrondi = (x, d = 4) => Number(x.toFixed(d));
 const issueDe = (c) => (c.home > c.away ? 'home' : c.home === c.away ? 'draw' : 'away');
 
 /**
- * @param {object} p
- * @param {object|null} p.inputs  entrées lues dans le magasin (scoreInputsFromStore)
- * @param {number[]|null} p.fair  probabilités justes [domicile, nul, extérieur] des cotes, ou null
- * @param {string|null} p.predictedOutcome  issue du pronostic du résultat ('home' | 'draw' | 'away')
- * @returns {object|null} null s'il n'y a ni cote ni historique
+ * Les buts attendus du pronostic du score : le modèle retenu (cotes, cotes
+ * seules ou statistiques), ses taux, lambda et mu. null s'il n'y a ni cote ni
+ * historique. UN SEUL calcul, partagé par predictScore et grilleDesScores.
  */
-export function predictScore({ inputs = null, fair = null, predictedOutcome = null }) {
+function parametresDuScore({ inputs = null, fair = null }) {
   const connues = (inputs?.home?.last?.length ?? 0) + (inputs?.away?.last?.length ?? 0);
   const avecCotes = Array.isArray(fair) && fair.every((p) => Number.isFinite(p) && p > 0);
   if (!avecCotes && (!inputs || !connues)) return null;
@@ -339,8 +343,37 @@ export function predictScore({ inputs = null, fair = null, predictedOutcome = nu
   }
   const lambda = borne(Math.exp(melange(modele.lambda, taux, 'lambda')), MELANGE_MIN, MELANGE_MAX);
   const mu = borne(Math.exp(melange(modele.mu, taux, 'mu')), MELANGE_MIN, MELANGE_MAX);
+  return { avecCotes, modele, taux, lambda, mu };
+}
 
-  const cases = matrice(lambda, mu, modele.rho).sort((a, b) => b.p - a.p);
+/**
+ * Étape 19 (banc d'essai) : la GRILLE COMPLÈTE des 81 scores que predictScore
+ * calcule (mêmes entrées, mêmes buts attendus, même matrice), NON TRIÉE —
+ * l'indice d'un score est home × 9 + away, la somme vaut 1. Le banc en tire la
+ * perte log du score exact sur toute la grille, pas seulement le score favori.
+ * @returns {{ source: 'cotes'|'statistiques', lambda: number, mu: number, rho: number, cases: {home, away, p}[] }|null}
+ */
+export function grilleDesScores({ inputs = null, fair = null } = {}) {
+  const parametres = parametresDuScore({ inputs, fair });
+  if (!parametres) return null;
+  const { avecCotes, modele, lambda, mu } = parametres;
+  return { source: avecCotes ? 'cotes' : 'statistiques', lambda, mu, rho: modele.rho, cases: matrice(lambda, mu, modele.rho) };
+}
+
+/**
+ * @param {object} p
+ * @param {object|null} p.inputs  entrées lues dans le magasin (scoreInputsFromStore)
+ * @param {number[]|null} p.fair  probabilités justes [domicile, nul, extérieur] des cotes, ou null
+ * @param {string|null} p.predictedOutcome  issue du pronostic du résultat ('home' | 'draw' | 'away')
+ * @returns {object|null} null s'il n'y a ni cote ni historique
+ */
+export function predictScore({ inputs = null, fair = null, predictedOutcome = null }) {
+  const parametres = parametresDuScore({ inputs, fair });
+  if (!parametres) return null;
+  const { avecCotes, modele, taux, lambda, mu } = parametres;
+
+  // Le tri se fait sur une COPIE : la grille, elle, reste dans l'ordre home × 9 + away (grilleDesScores).
+  const cases = [...matrice(lambda, mu, modele.rho)].sort((a, b) => b.p - a.p);
   const top = cases.slice(0, 5).map((c) => ({ home: c.home, away: c.away, probability: arrondi(c.p) }));
   const dansIssue = predictedOutcome ? cases.find((c) => issueDe(c) === predictedOutcome) : null;
   const probaIssue = (issue) => arrondi(cases.filter((c) => issueDe(c) === issue).reduce((s, c) => s + c.p, 0));

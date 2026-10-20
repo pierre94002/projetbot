@@ -30,7 +30,9 @@ export async function postConnect(req, res) {
       model: trimmedModel,
       system: 'ping',
       messages: [{ role: 'user', content: 'ping' }],
-      maxTokens: 1
+      maxTokens: 1,
+      // Journal des appels (étape 4) : API à la clé, hors budget de l'abonnement.
+      appel: { type: 'autre', detail: 'test de la clé API (Réglages)' }
     });
   } catch (error) {
     throw new ApiError(400, error.message);

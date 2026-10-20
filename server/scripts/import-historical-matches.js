@@ -19,12 +19,26 @@
  *
  * Source : https://www.football-data.co.uk (réutilisation libre, usage non
  * commercial / personnel — voir leurs conditions avant un usage commercial).
+ *
+ * REMPLACÉ le 06/10/2026 (étape 13 du plan) : l'historique football-data vit
+ * dans la base (table fd_history, toutes les saisons depuis 2000-01), tenu à
+ * jour par l'actualisation du serveur (étape « historiqueFd ») ; plus rien ne
+ * lit server/data/fixtures/historique. Ce script refuse de tourner : il
+ * referait une seconde copie de ce que la base a déjà.
  * -------------------------------------------------------------------------
  */
 
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+
+if (!process.argv.includes("--quand-meme")) {
+  console.error(
+    "Ce script est remplacé (étape 13 du plan, 06/10/2026) : l'historique football-data est dans la base (table fd_history), " +
+      "tenu à jour par l'actualisation du serveur ; server/data/fixtures/historique n'est plus lu. Rien n'a été téléchargé."
+  );
+  process.exit(1);
+}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = path.resolve(__dirname, "..", "data", "fixtures", "historique");

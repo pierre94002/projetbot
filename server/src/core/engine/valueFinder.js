@@ -127,6 +127,34 @@ export function fairFromAllValid(byBookmaker = []) {
 const BOURSES = { betfair_ex_eu: 0.05, betfair_ex_uk: 0.05, betfair_ex_au: 0.05, matchbook: 0.02, smarkets: 0.02 };
 const coteNette = (b, champ) => (b.key in BOURSES ? 1 + (b[champ] - 1) * (1 - BOURSES[b.key]) : b[champ]);
 
+/**
+ * Un bookmaker où un pari peut être conseillé, avec LA MÊME règle que
+ * findValueBet : jamais une cote de référence (cotes gratuites), les
+ * bookmakers cochés dans Réglages (sinon tous sauf les bourses), et une ligne
+ * complète et cohérente. Exportée pour l'écran de repérage (04/10/2026), qui
+ * montrait sinon Betfair ou 1xBet comme « cote jouable ».
+ */
+export function estJouable(b, config = {}) {
+  return estAutorise(b, config) && ligneSaine(b);
+}
+
+/**
+ * Un de VOS bookmakers, que sa ligne soit saine ou non : jamais une cote de
+ * référence, les bookmakers cochés dans Réglages (sinon tous sauf les
+ * bourses) — le filtre `permis` de findValueBet. Exportée pour le comparateur
+ * (étape 10), qui montre aussi une ligne incohérente de vos bookmakers, en le
+ * disant, plutôt que de la taire.
+ */
+export function estAutorise(b, config = {}) {
+  const autorises = new Set(config.valueBookmakers ?? []);
+  return !b.referenceOnly && (autorises.size ? autorises.has(b.key) : !(b.key in BOURSES));
+}
+
+/** La cote réellement payée par un bookmaker jouable (commission déduite pour une bourse). */
+export function coteJouable(b, champ) {
+  return coteNette(b, champ);
+}
+
 /** Une ligne n'est jouable que complète et cohérente — une cote périmée ne l'est pas. */
 function ligneSaine(b) {
   if (!complet(b)) return false;
@@ -158,7 +186,10 @@ export function findValueBet({ byBookmaker = [], fair, referenceKeys = [], confi
   // Où l'on peut jouer : les bookmakers cochés ; « aucun coché » vaut tous,
   // sauf les bourses d'échange, qui doivent être cochées explicitement.
   const autorises = new Set(config.valueBookmakers ?? []);
-  const permis = byBookmaker.filter((b) => (autorises.size ? autorises.has(b.key) : !(b.key in BOURSES)));
+  // Une ligne « de référence » (cotes gratuites : DraftKings, bourse Betfair,
+  // Kalshi… — cf. freeMarketOdds.js) sert à la cote juste, JAMAIS à parier :
+  // aucun de ces bookmakers n'est jouable depuis la France.
+  const permis = byBookmaker.filter((b) => !b.referenceOnly && (autorises.size ? autorises.has(b.key) : !(b.key in BOURSES)));
   if (!permis.length) return passe('aucun_bookmaker_autorise');
   // Jamais chez un bookmaker qui a fixé la cote juste de CE match : son prix
   // est la cote juste, marge en plus.

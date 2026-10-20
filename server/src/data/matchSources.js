@@ -1,4 +1,5 @@
 import { adaptOddsApiMatch, indexCompetitionsByName } from './adapters/oddsApiAdapter.js';
+import { freeMarketOddsFor } from './freeMarketOdds.js';
 import { adaptSampleMatch } from './adapters/sampleMatchAdapter.js';
 import { adaptSeasonCalendarMatch } from './adapters/seasonCalendarAdapter.js';
 import { loadOddsMatches, loadCompetitions, loadSampleMatches } from './repositories/fixturesRepository.js';
@@ -92,6 +93,32 @@ function reportsDuCalendrier(calendrier) {
  * sont pas complétées du tout — sans quoi un même match apparaîtrait deux
  * fois, une fois avec sa cote et une fois sans.
  */
+/**
+ * Les cotes GRATUITES d'un match du calendrier (04/10/2026) : relevées par
+ * l'appli chez ESPN, football-data, 365Scores, Kalshi, Smarkets (cf.
+ * freeOdds.js). Le moteur en tire sa probabilité au lieu du modèle de buts ;
+ * elles ne deviennent jamais un pari (referenceOnly, cf. freeMarketOdds.js).
+ * `hasOdds` ne passe à vrai qu'avec l'heure exacte du coup d'envoi : la page
+ * Matchs déduit « en cours » ou « terminé » de cette heure, et l'heure de
+ * repli du calendrier (midi UTC) le ferait à tort.
+ */
+function avecCotesGratuites(adapted, entry) {
+  let marche = null;
+  try {
+    marche = freeMarketOddsFor({ league: entry.league, date: entry.date, homeName: entry.homeName, awayName: entry.awayName });
+  } catch {
+    marche = null;
+  }
+  if (!marche) return adapted;
+  return {
+    ...adapted,
+    marketOdds: marche,
+    oddsSource: 'gratuit',
+    hasOdds: Boolean(marche.kickoff),
+    commenceTime: marche.kickoff ?? adapted.commenceTime
+  };
+}
+
 function listUpcomingCalendarMatches(calendrier, coveredLeagues, bankroll) {
   const today = new Date().toISOString().slice(0, 10);
   // Un match reporté n'a plus de date : il attend la nouvelle pour réapparaître.
@@ -111,7 +138,7 @@ function listUpcomingCalendarMatches(calendrier, coveredLeagues, bankroll) {
     const dayGap = (Date.parse(entry.date) - Date.parse(first)) / 86400000;
     if (dayGap > MATCHDAY_SPAN_DAYS) continue;
     const adapted = adaptSeasonCalendarMatch(entry, bankroll);
-    if (adapted) out.push(adapted);
+    if (adapted) out.push(avecCotesGratuites(adapted, entry));
   }
   return out;
 }
@@ -187,5 +214,5 @@ export function findAdaptedMatch(source, matchId, bankroll = 10000) {
   if (listed || source !== 'odds-api' || !String(matchId).startsWith('cal-')) return listed ?? null;
   const entry = listSeasonCalendar({ allSeasons: true }).find((e) => e.matchId === matchId && e.status !== 'finished' && e.homeGoals == null);
   const adapted = entry ? adaptSeasonCalendarMatch(entry, bankroll) : null;
-  return adapted ? { ...adapted, postponed: entry.status === 'postponed' } : null;
+  return adapted ? { ...avecCotesGratuites(adapted, entry), postponed: entry.status === 'postponed' } : null;
 }

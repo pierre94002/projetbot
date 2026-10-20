@@ -17,10 +17,18 @@ import { playerSeasonStats, playerProfile, seasonsForLeague, leagueLeaders, cupB
 import { cupsForLeague } from '../../data/providers/leagueCups.js';
 import { seasonLabel, seasonBounds } from '../../data/providers/seasonWindows.js';
 import { oddsProfile } from '../../data/db/oddsProfileRead.js';
+import { expectedPointsTable } from '../../data/db/expectedPoints.js';
 import { buildMatchPreview } from '../../data/providers/lineupContext.js';
 import { ageAt, birthdatesOf, infosOf, ensurePlayerBirthdate, ensureSquadBirthdates, ensureSquadsBirthdates, ensurePlayersInfo } from '../../data/db/playerBirthdates.js';
 import { resolveTeamIds } from '../../data/db/teamIdResolver.js';
-import { ApiError, requireStringParam, optionalPositiveInt } from '../middlewares/errorHandler.js';
+import { lireCarnet } from '../../data/repositories/dataHealthRepository.js';
+import { TYPES, GRAVITES, DONNEES, SEUILS, SORTES } from '../../data/db/dataHealth.js';
+import { lireEtatImport, lireResume, listeDesFichiers, REQUETES_PAR_PASSE } from '../../data/providers/footballDataHistory.js';
+import { lireReperes } from '../../data/db/leagueBenchmarks.js';
+import { etatTableJourJ } from '../../data/db/dayTable.js';
+import { etatIndiceDeForce, lireIndiceDeForce, LIEUX } from '../../data/db/teamStrength.js';
+import { resolveDbPath, openDb } from '../../data/db/matchStatsDb.js';
+import { ApiError, requireStringParam, optionalPositiveInt, optionalStringParam } from '../middlewares/errorHandler.js';
 
 /**
  * Profilage de cotes d'un match à venir : les matchs passés dont les cotes
@@ -286,6 +294,18 @@ export function getCupBracket(req, res) {
 }
 
 /** Saisons disponibles pour une compétition, la plus récente d'abord. */
+/**
+ * Le classement corrigé par les xG d'une compétition (cf. expectedPoints.js).
+ * `season` : année de début de saison ; absente, la plus récente du magasin.
+ */
+export function getXgTable(req, res) {
+  const league = requireStringParam(req.query.league, 'league');
+  const season = optionalPositiveInt(req.query.season, 'season');
+  const table = expectedPointsTable(league, { season: season ?? null });
+  if (!table) throw new ApiError(404, `Aucun match joué au magasin pour "${league}"${season ? ` en ${seasonLabel(league, season)}` : ''}.`);
+  res.json(table);
+}
+
 export function getLeagueSeasons(req, res) {
   const league = requireStringParam(req.query.league, 'league');
   res.json({ league, seasons: seasonsForLeague(league) });
@@ -298,6 +318,176 @@ export function getMatchStatsCoverage(req, res) {
   // rafraîchissement ESPN.
   const etat = readRefreshStatus();
   res.json({ ...getCoverage(), refresh: { running: isRefreshRunning(), last: etat.history?.[0] ?? null } });
+}
+
+/**
+ * Carnet de santé des données (étape 12 du plan, 06/10/2026) : LIT l'état
+ * préparé par le contrôle (scripts/data-health.mjs ; étape « carnetSante » de
+ * l'actualisation, chaque nuit), ne recalcule rien et n'écrit rien. Le carnet
+ * (une ligne par championnat et saison) est rendu en entier ; les anomalies
+ * se filtrent par `type`, `gravite`, `ligue`, `saison`, et se limitent par
+ * `limite` (300 par défaut, 5 000 au plus). Jamais contrôlé ou fichier
+ * illisible : la même forme, vide, avec `etat` qui le dit — l'écran garde
+ * son tableau.
+ */
+const LIMITE_ANOMALIES = 300;
+const LIMITE_ANOMALIES_MAX = 5000;
+export function getMatchStatsHealth(req, res) {
+  const type = optionalStringParam(req.query.type, 'type');
+  const gravite = optionalStringParam(req.query.gravite, 'gravite');
+  const ligue = optionalStringParam(req.query.ligue, 'ligue');
+  const saison = optionalStringParam(req.query.saison, 'saison');
+  const limite = Math.min(LIMITE_ANOMALIES_MAX, optionalPositiveInt(req.query.limite, 'limite') ?? LIMITE_ANOMALIES);
+  if (type && !TYPES.some((t) => t.cle === type)) throw new ApiError(400, `Type d'anomalie inconnu : « ${type} » (attendu : ${TYPES.map((t) => t.cle).join(', ')}).`);
+  if (gravite && !GRAVITES.some((g) => g.cle === gravite)) throw new ApiError(400, `Gravité inconnue : « ${gravite} » (attendu : ${GRAVITES.map((g) => g.cle).join(', ')}).`);
+  const reference = { types: TYPES, gravites: GRAVITES, sortes: SORTES, donnees: DONNEES, seuils: SEUILS, generatedAt: new Date().toISOString() };
+  const lu = lireCarnet();
+  if (lu.etat !== 'pret') {
+    return res.json({
+      etat: lu.etat === 'absent' ? 'jamais' : 'illisible',
+      erreur: lu.erreur ?? null,
+      fichier: lu.fichier,
+      ...reference,
+      controle: null,
+      complet: null,
+      historique: [],
+      recoupement: null,
+      carnet: [],
+      totaux: null,
+      parType: null,
+      anomaliesTotal: 0,
+      anomaliesFiltrees: 0,
+      limite,
+      anomalies: []
+    });
+  }
+  const c = lu.carnet;
+  const filtrees = c.anomalies.filter(
+    (a) => (!type || a.type === type) && (!gravite || a.gravite === gravite) && (!ligue || a.league === ligue) && (!saison || String(a.season) === saison)
+  );
+  res.json({
+    etat: 'pret',
+    fichier: lu.fichier,
+    ecritLe: lu.modifieLe ?? null,
+    base: c.base ?? null,
+    ...reference,
+    premiereDate: c.premiereDate ?? null,
+    controle: c.controle,
+    complet: c.complet ?? null,
+    historique: c.historique ?? [],
+    recoupement: c.recoupement ?? null,
+    carnet: c.carnet,
+    totaux: c.totaux,
+    parType: c.parType,
+    anomaliesTotal: c.anomalies.length,
+    anomaliesFiltrees: filtrees.length,
+    limite,
+    // `portee` ne sert qu'au contrôle suivant : pas à l'écran.
+    anomalies: filtrees.slice(0, limite).map(({ portee, ...a }) => a)
+  });
+}
+
+/**
+ * Historique football-data depuis 2000 (étape 13 du plan, 06/10/2026) : LIT
+ * l'état de l'import et le résumé préparé à la fin de chaque passe
+ * (footballDataHistory.js, étape « historiqueFd » de l'actualisation) ; ne
+ * télécharge rien, ne recompte rien, n'écrit rien. Jamais importé : `etat`
+ * « jamais », la même forme, vide — l'écran garde ses tableaux.
+ */
+export function getFdHistory(req, res) {
+  const commun = { parPasse: REQUETES_PAR_PASSE, fichiersAttendus: listeDesFichiers().length, generatedAt: new Date().toISOString() };
+  let etatImport;
+  let resume;
+  try {
+    etatImport = lireEtatImport();
+    resume = lireResume();
+  } catch (error) {
+    return res.json({ etat: 'illisible', erreur: error.message, import: null, resume: null, base: null, ...commun });
+  }
+  const jamais = !etatImport?.commenceLe && !resume;
+  res.json({
+    etat: jamais ? 'jamais' : etatImport.complet ? 'complet' : 'en-cours',
+    import: jamais ? null : etatImport,
+    resume: resume ?? null,
+    base: resolveDbPath(),
+    ...commun
+  });
+}
+
+/**
+ * Repères d'un championnat (étape 15 du plan, 07/10/2026 ; onglet
+ * « Statistiques ligue », bloc « Repères du championnat ») : LIT la table
+ * league_benchmarks que remplit chaque nuit l'étape « reperes » de
+ * l'actualisation (leagueBenchmarks.js) — saison par saison avec la source
+ * de chacune, toutes les saisons réunies et la valeur retenue, la moyenne des
+ * championnats, la dispersion et le facteur de terrain mesurés. Ne calcule
+ * rien, n'écrit rien. Jamais calculé, coupe, championnat inconnu : la même
+ * forme, vide, avec `etat` et `raison` qui le disent — l'écran garde ses
+ * tableaux.
+ */
+export function getLeagueBenchmarks(req, res) {
+  const league = requireStringParam(req.query.league, 'league');
+  res.json({ ...lireReperes(league), base: resolveDbPath(), generatedAt: new Date().toISOString() });
+}
+
+/**
+ * La table du jour J (étape 17 du plan, 12/10/2026 ; carte « Table du jour J »
+ * de Réglages) : LIT l'état noté à la fin de la dernière construction ou nuit
+ * (dayTable.js, étape « tableJourJ » de l'actualisation) — comptes, dernier
+ * jour, repères, dernier contrôle anti-fuite. Ne calcule rien, ne recompte
+ * rien, n'écrit rien, pas même l'état. Jamais construite : `absente: true` et
+ * la même forme, vide — l'écran garde ses quatre lignes. `dernierJourMagasin` :
+ * le jour de la rencontre la plus récente du magasin (par l'index de la date),
+ * pour dire quand la table est en retard sur lui.
+ */
+export function getDayTable(req, res) {
+  const database = openDb();
+  const dernierJourMagasin = database.prepare('SELECT MAX(date) d FROM matches').get()?.d ?? null;
+  res.json({ ...etatTableJourJ({ database }), dernierJourMagasin, base: resolveDbPath(), generatedAt: new Date().toISOString() });
+}
+
+/**
+ * L'indice de force des équipes (étape 29 du plan, 14/10/2026) : LIT la table team_strength que remplit
+ * chaque nuit l'étape « indiceForce » de l'actualisation (teamStrength.js) — ne calcule rien, n'écrit rien.
+ * `club` (identifiant FotMob, « fotmob-8456 » ou 8456) : ses lignes actuelles au total, à domicile et à
+ * l'extérieur, ou celles d'avant `jour` (AAAA-MM-JJ) ; `historique=oui` : sa note dans le temps.
+ * `league` : les clubs du championnat rangés par note (`lieu` : tous, dom, ext). Sans rien : l'état et la
+ * liste des championnats. Jamais calculé : `etat: 'jamais'` et `lecture: null`, la même forme.
+ * L'écran viendra à l'étape 31 ; les modèles (27, 30) lisent lireIndiceDeForce directement.
+ */
+export function getTeamStrength(req, res) {
+  const club = optionalStringParam(req.query.club, 'club');
+  const league = optionalStringParam(req.query.league, 'league');
+  const lieu = optionalStringParam(req.query.lieu, 'lieu');
+  const jour = optionalStringParam(req.query.jour, 'jour');
+  const historique = req.query.historique === 'oui' || req.query.historique === 'true';
+  if (club !== undefined && !/^(fotmob-)?[1-9]\d*$/.test(club)) throw new ApiError(400, `Le paramètre "club" doit être un identifiant FotMob (« fotmob-8456 » ou 8456), reçu « ${club} ».`);
+  if (lieu !== undefined && !LIEUX.includes(lieu)) throw new ApiError(400, `Le paramètre "lieu" doit valoir ${LIEUX.join(', ')}.`);
+  if (jour !== undefined && !/^\d{4}-\d{2}-\d{2}$/.test(jour)) throw new ApiError(400, 'Le paramètre "jour" doit être un jour AAAA-MM-JJ.');
+  const database = openDb();
+  const etat = etatIndiceDeForce({ database });
+  const b = etat.bilan;
+  const banc = etat.banc;
+  const commun = {
+    etat: etat.absent ? 'jamais' : etat.aJour ? 'a-jour' : 'pas-a-jour',
+    version: etat.version,
+    versionAttendue: etat.versionAttendue,
+    calculeLe: etat.calculeLe,
+    jusquA: etat.jusquA,
+    enCours: etat.enCours,
+    bilan: b ? { complet: b.complet ?? null, portee: b.portee ?? null, ecrites: b.ecrites ?? null, retirees: b.retirees ?? null, utilisees: b.utilisees ?? null, ecartees: b.ecartees ?? null, nonConvergees: b.nonConvergees ?? null, dureeMs: b.dureeMs ?? null } : null,
+    banc: banc ? { le: banc.le ?? null, reponse: banc.reponse ?? null, jugements: (banc.jugements ?? []).map((j) => ({ id: j.id, periode: j.periode, preuve: j.preuve, matchs: j.n, gainPourcent: j.gainPourcent, fourchettePourcent: j.fourchettePourcent, verdict: j.verdict })) } : null,
+    base: resolveDbPath(),
+    generatedAt: new Date().toISOString()
+  };
+  if (etat.absent) return res.json({ ...commun, lecture: null });
+  let lecture;
+  try {
+    lecture = lireIndiceDeForce({ database, club: club ?? null, league: league ?? null, lieu: lieu ?? null, jour: jour ?? null, historique });
+  } catch (error) {
+    throw new ApiError(400, error.message);
+  }
+  res.json({ ...commun, lecture });
 }
 
 /**

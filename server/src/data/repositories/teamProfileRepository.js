@@ -22,8 +22,9 @@ function writeAll(data) {
  * Profils d'équipe (effectif + forme + moyennes) peuplés par recherche web —
  * cf. resolveTeamProfileViaWeb (webLookupService.js) — pour les équipes des
  * coupes européennes (Ligue des champions/Europa/Conference), qui viennent de
- * ~55 championnats sans équivalent local (contrairement aux 16 championnats
- * couverts par historicalMatchesProvider.js). Peuplé par petits lots au fil
+ * ~55 championnats sans équivalent local (contrairement aux ~38 championnats
+ * que lit historicalMatchesProvider.js dans la table fd_history, de 2000-01 à
+ * la saison en cours, 2026-27). Peuplé par petits lots au fil
  * des exécutions de la tâche planifiée quotidienne, jamais en direct sur une
  * page consultée par l'utilisateur (contrairement à resolvePlayersByName qui,
  * lui, peut interroger le web à la demande) — ce fichier n'est qu'un CACHE

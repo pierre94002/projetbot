@@ -21,6 +21,10 @@
  * -----------------------------------------------------------------------
  */
 
+// Les zéros qui veulent dire « non publié » : UNE définition, dans columns.js,
+// lue ici à l'entrée et par le carnet de santé (étape 12 du plan) dans le magasin.
+import { ZERO_MEANS_ABSENT } from '../db/columns.js';
+
 const BASE = 'https://cdn.espn.com/core/soccer';
 const USER_AGENT = 'Mozilla/5.0 (compatible; CoteMaster/1.0)';
 
@@ -79,26 +83,8 @@ const TEAM_STAT_MAP = {
   saves: 'Goalkeeper Saves'
 };
 
-/**
- * Statistiques où un 0 signifie « la source ne publie pas ce champ » et non
- * « la valeur est nulle » : aucune équipe ne termine un match avec zéro passe,
- * zéro tacle ou zéro dégagement. ESPN renvoie 0 plutôt que d'omettre la ligne
- * pour les championnats qu'il ne couvre que partiellement — la Super League
- * chinoise avant juin, par exemple. Ces zéros sont écartés : le champ reste
- * vide plutôt que faux.
- *
- * Les autres clés gardent leur 0, qui y est une vraie valeur : un match sans
- * carton, sans hors-jeu ou sans corner est banal.
- */
-const ZERO_MEANS_ABSENT = new Set([
-  'Total passes',
-  'Passes accurate',
-  'tackles',
-  'clearances',
-  'interceptions',
-  'crosses',
-  'long_balls'
-]);
+// ZERO_MEANS_ABSENT (columns.js) : les statistiques où un 0 d'ESPN veut dire
+// « la source ne publie pas ce champ » — écartées à l'entrée, voir mapTeamStatistics.
 
 /** Statistique de joueur ESPN -> clé PLAYER_STAT_KEYS. */
 const PLAYER_STAT_MAP = {

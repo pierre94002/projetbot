@@ -55,7 +55,17 @@ export async function resolveBaseRates(match, config) {
 
 /** Moyenne de ligue réelle (classement, sans coût API dédié) avec repli sur le barème par palier si indisponible. */
 async function resolveLeagueAverages(match) {
-  const real = match.league ? await getLeagueGoalAverages(match.league).catch(() => null) : null;
+  // Entrée POSÉE par celui qui prépare le match (le banc d'essai, étape 19) : la seule entrée lue par le
+  // moteur lui-même, comme scoreInputs et statInputs. PRÉSENTE, même nulle, la clé veut dire « voici la
+  // moyenne d'avant le jour du match » : jamais le magasin d'aujourd'hui (une moyenne nulle prend le barème,
+  // comme l'appli quand le classement est vide). Aucun appelant de l'appli ne pose cette clé : rien ne change.
+  if (Object.hasOwn(match, 'leagueGoalAverages')) {
+    const l = match.leagueGoalAverages;
+    if (Number.isFinite(l?.home) && Number.isFinite(l?.away)) return l;
+    const b = getLeagueBaselineXg(match.sportKey, {});
+    return { home: b.xgHome, away: b.xgAway };
+  }
+  const real =match.league ? await getLeagueGoalAverages(match.league).catch(() => null) : null;
   if (real) return real;
 
   const fallback = getLeagueBaselineXg(match.sportKey, {});

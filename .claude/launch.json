@@ -24,22 +24,22 @@
       "port": 4000
     },
     {
-      "name": "cotemaster-server-test",
+      "name": "cotemaster-bac-serveur",
       "runtimeExecutable": "cmd",
       "runtimeArgs": [
         "/c",
-        "cd server && set PORT=4001&& set MATCH_STATS_AUTO_REFRESH=false&& set CORS_ORIGIN=http://localhost:5174&& node src/server.js"
+        "cd /d C:\\Users\\PC\\CoteMaster\\bac-a-sable\\code\\server && set CM_BAC_A_SABLE=1&& set MATCH_STATS_DB=C:\\Users\\PC\\CoteMaster\\bac-a-sable\\base\\match-stats.db&& set PORT=4600&& set CORS_ORIGIN=http://localhost:5600&& set AUTO_AI_ANALYSIS=false&& set MATCH_STATS_AUTO_REFRESH=false&& set FREE_ODDS=false&& node src/server.js"
       ],
-      "port": 4001
+      "port": 4600
     },
     {
-      "name": "cotemaster-ui-test",
+      "name": "cotemaster-bac-interface",
       "runtimeExecutable": "cmd",
       "runtimeArgs": [
         "/c",
-        "cd ui && set VITE_API_URL=http://localhost:4001/api&& npx vite --port 5174 --strictPort"
+        "cd /d C:\\Users\\PC\\CoteMaster\\bac-a-sable\\code\\ui && set CM_BAC_A_SABLE=1&& set VITE_API_URL=http://localhost:4600/api&& node node_modules\\vite\\bin\\vite.js --port 5600 --strictPort"
       ],
-      "port": 5174
+      "port": 5600
     }
   ]
 }

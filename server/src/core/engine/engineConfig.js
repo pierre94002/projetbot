@@ -154,3 +154,35 @@ export function resetEngineConfig(sportId = 'football') {
   persistConfig(next);
   return next[sportId];
 }
+
+/**
+ * Étape 25 du plan (versions du moteur) : les réglages EFFECTIFS de chaque
+ * sport — les valeurs par défaut du code complétées par engine-config.json —,
+ * ce que fige une version du moteur. L'objet rendu est celui du cache : on le
+ * lit, on ne le modifie jamais (une copie si besoin). Lève comme
+ * getEngineConfig quand le fichier est illisible et qu'aucune lecture
+ * réussie n'est en mémoire.
+ */
+export function lireReglagesDuMoteur() {
+  return getConfigBySport();
+}
+
+/**
+ * Étape 25 : le RETOUR ARRIÈRE remet d'un bloc les réglages d'une version
+ * (tous les sports, toutes les clés, valeurs par défaut comprises) : une seule
+ * écriture atomique de engine-config.json (utils/atomicJson.js), puis le
+ * cache réaligné. Seul engineVersions.js l'appelle, hors d'une passe
+ * d'actualisation.
+ */
+export function remplacerReglagesDuMoteur(configBySport) {
+  const next = {};
+  for (const sportId of Object.keys(DEFAULT_ENGINE_CONFIG_BY_SPORT)) {
+    const reglages = configBySport?.[sportId];
+    if (!reglages || typeof reglages !== 'object' || Array.isArray(reglages)) {
+      throw new TypeError(`remplacerReglagesDuMoteur : les réglages du sport « ${sportId} » manquent.`);
+    }
+    next[sportId] = JSON.parse(JSON.stringify(reglages));
+  }
+  persistConfig(next);
+  return next;
+}

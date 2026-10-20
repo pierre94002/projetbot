@@ -19,14 +19,20 @@ export async function getSportOddsRaw(sportKey, { regions = 'eu', markets = 'h2h
   url.searchParams.set('oddsFormat', oddsFormat);
 
   const response = await fetch(url);
+  // `last` : le coût de CETTE requête (en-tête x-requests-last de The Odds
+  // API), gardé avec le bilan du relevé (étape 7, relevePayantRepository.js).
   const quota = {
     remaining: parseIntHeader(response.headers.get('x-requests-remaining')),
-    used: parseIntHeader(response.headers.get('x-requests-used'))
+    used: parseIntHeader(response.headers.get('x-requests-used')),
+    last: parseIntHeader(response.headers.get('x-requests-last'))
   };
 
   if (!response.ok) {
     const body = await response.json().catch(() => ({}));
-    throw new Error(`The Odds API a répondu ${response.status} : ${body.message ?? 'erreur inconnue'}`);
+    const erreur = new Error(`The Odds API a répondu ${response.status} : ${body.message ?? 'erreur inconnue'}`);
+    // Une réponse en erreur porte aussi le quota : le bilan du relevé le garde.
+    erreur.quota = quota;
+    throw erreur;
   }
 
   const matches = await response.json();
@@ -34,6 +40,8 @@ export async function getSportOddsRaw(sportKey, { regions = 'eu', markets = 'h2h
 }
 
 function parseIntHeader(value) {
+  // Un en-tête absent (null) n'est pas 0 : Number(null) vaudrait 0.
+  if (value === null || value === undefined || value === '') return null;
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : null;
 }

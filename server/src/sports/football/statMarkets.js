@@ -62,15 +62,57 @@ function lgamma(x) {
 
 /** P(X ≤ k) d'une binomiale négative de moyenne `mu` (Poisson si 1/k ≈ 0). */
 function cdf(k, mu, invK) {
+  // Les mêmes termes que loiDesComptes, additionnés dans le même ordre : aucun chiffre ne change.
+  const { pmf } = loiDesComptes(mu, invK, k + 1);
   let s = 0;
+  for (const terme of pmf) s += terme;
+  return Math.min(1, s);
+}
+
+/**
+ * Étape 19 (banc d'essai) : la LOI COMPLÈTE d'un compte (corners, tirs, tirs
+ * cadrés) de moyenne `mu` — `pmf[i]` = P(X = i) pour i = 0 … N − 1, le terme
+ * même que cdf additionne, et `queue` = P(X ≥ N) = max(0, 1 − Σ pmf). Le banc
+ * en tire la perte log du compte réalisé, quelle que soit la ligne. Binomiale
+ * négative de 1/k = `invK` (Poisson si 1/k ≈ 0).
+ */
+export function loiDesComptes(mu, invK, N) {
+  const pmf = new Array(N);
   if (invK <= 1e-6) {
-    for (let i = 0; i <= k; i++) s += Math.exp(-mu + i * Math.log(mu) - lgamma(i + 1));
+    for (let i = 0; i < N; i++) pmf[i] = Math.exp(-mu + i * Math.log(mu) - lgamma(i + 1));
   } else {
     const r = 1 / invK;
     const p = r / (r + mu);
-    for (let i = 0; i <= k; i++) s += Math.exp(lgamma(i + r) - lgamma(r) - lgamma(i + 1) + r * Math.log(p) + i * Math.log(1 - p));
+    for (let i = 0; i < N; i++) pmf[i] = Math.exp(lgamma(i + r) - lgamma(r) - lgamma(i + 1) + r * Math.log(p) + i * Math.log(1 - p));
   }
-  return Math.min(1, s);
+  let somme = 0;
+  for (const terme of pmf) somme += terme;
+  return { pmf, queue: Math.max(0, 1 - somme) };
+}
+
+/**
+ * La cote juste d'UNE demi-ligne (« plus » ou « moins » de `line`), même loi
+ * et même arrondi que lineCandidates — pour une cote saisie à la main sur une
+ * ligne que lineCandidates ne propose pas (étape 7 du plan). null si l'attendu
+ * manque, si la ligne n'est pas une demi-ligne ou si la probabilité est 0 ou 1.
+ */
+export function coteJusteLigne(mu, invK, line, side) {
+  if (!(mu > 0) || !Number.isFinite(line) || line <= 0 || Math.abs(line - Math.floor(line) - 0.5) > 1e-9) return null;
+  const pMoins = cdf(Math.floor(line), mu, invK);
+  const p = side === 'under' ? pMoins : side === 'over' ? 1 - pMoins : Number.NaN;
+  return p > 0 && p < 1 ? arrondi(1 / p) : null;
+}
+
+/**
+ * Étape 25 du plan : les DEUX probabilités d'une demi-ligne, sans arrondi à la
+ * cote — `{ under, over }`, même loi que lineCandidates —, pour geler la
+ * distribution complète d'un pronostic de corners ou de tirs. null comme
+ * coteJusteLigne (attendu manquant, ligne qui n'est pas une demi-ligne).
+ */
+export function probabilitesLigne(mu, invK, line) {
+  if (!(mu > 0) || !Number.isFinite(line) || line <= 0 || Math.abs(line - Math.floor(line) - 0.5) > 1e-9) return null;
+  const pMoins = cdf(Math.floor(line), mu, invK);
+  return { under: pMoins, over: 1 - pMoins };
 }
 
 /**
@@ -87,4 +129,37 @@ export function lineCandidates(mu, invK) {
     }
   }
   return candidats;
+}
+
+/**
+ * Les cotes justes de TOUTES les lignes de chaque statistique — au total et
+ * pour chaque équipe —, exactement celles de lineCandidates (même loi, mêmes
+ * lignes, même arrondi), regroupées par ligne : `{ line, under, over }`.
+ * Étape 8 du plan : l'onglet « Paris les plus probables » de Mes paris (ui
+ * safestPicks.js) les lit dans l'analyse au lieu de refaire une loi de Poisson,
+ * trop optimiste de 2 à 7 points. `null` sans attendus.
+ */
+export function statLines(attendus) {
+  if (!attendus) return null;
+  const parLigne = (candidats) => {
+    const lignes = new Map();
+    for (const c of candidats) {
+      const l = lignes.get(c.line) ?? { line: c.line, under: null, over: null };
+      l[c.side] = c.odds;
+      lignes.set(c.line, l);
+    }
+    return [...lignes.values()];
+  };
+  const out = {};
+  for (const [kind, e] of Object.entries(attendus)) {
+    const loi = STAT_KINDS[kind];
+    if (!loi || !e) continue;
+    out[kind] = {
+      unit: loi.unit,
+      total: parLigne(lineCandidates(e.total, loi.invKTotal)),
+      home: parLigne(lineCandidates(e.home, loi.invKTeam)),
+      away: parLigne(lineCandidates(e.away, loi.invKTeam))
+    };
+  }
+  return Object.keys(out).length ? out : null;
 }

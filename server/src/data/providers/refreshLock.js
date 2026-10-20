@@ -58,6 +58,7 @@ const STALE_OLD_FORMAT_MS = 60 * 60_000;
 /** Un verrou illisible n'est tenu pour abandonné qu'après ce délai. */
 const UNREADABLE_GRACE_MS = 60_000;
 
+/** La tâche en cours dans ce processus : { promesse, nom } (étape 19 : le nom distingue l'actualisation du banc), ou null. */
 let inFlight = null;
 let jeton = null;
 let battement = null;
@@ -234,22 +235,32 @@ function releaseLock({ stamp }) {
  * écritures.
  *
  * @param {() => Promise<any>} task
- * @param {{ stamp?: boolean }} options  `stamp: false` : ne pas poser la
- *   marque de données en libérant (l'actualisation du serveur pose la sienne)
+ * @param {{ stamp?: boolean, nom?: string }} options  `stamp: false` : ne pas
+ *   poser la marque de données en libérant (l'actualisation du serveur pose
+ *   la sienne) ; `nom` : CE qui tient le verrou (« actualisation » par défaut,
+ *   « banc » pour le banc d'essai, étape 19). Une tâche d'un AUTRE nom en
+ *   cours dans ce processus : reportée (`{ skipped }`), jamais sa promesse —
+ *   une passe d'actualisation déclenchée pendant le banc recevait sinon le
+ *   bilan du banc comme le sien.
  */
-export function withRefreshLock(task, { stamp = true } = {}) {
-  if (inFlight) return inFlight;
-  if (!acquireLock()) {
-    return Promise.resolve({ skipped: 'verrou détenu par un autre processus', considered: 0, merged: 0, playersMerged: 0, unmatched: 0, failed: 0 });
-  }
-  inFlight = Promise.resolve()
+export function withRefreshLock(task, { stamp = true, nom = 'actualisation' } = {}) {
+  if (inFlight) return inFlight.nom === nom ? inFlight.promesse : reporte(`${inFlight.nom} en cours dans ce processus`);
+  if (!acquireLock()) return reporte('verrou détenu par un autre processus');
+  const promesse = Promise.resolve()
     .then(task)
     .finally(() => {
       releaseLock({ stamp });
       inFlight = null;
     });
-  return inFlight;
+  inFlight = { promesse, nom };
+  return promesse;
 }
+
+/** Le rapport « reporté » : rien n'a été fait, et pourquoi. */
+const reporte = (skipped) => Promise.resolve({ skipped, considered: 0, merged: 0, playersMerged: 0, unmatched: 0, failed: 0 });
+
+/** Ce qui tient le verrou DANS ce processus (« actualisation », « banc »…), ou null. */
+export const tacheEnCours = () => inFlight?.nom ?? null;
 
 /** Une passe tourne-t-elle, dans ce processus ou dans un autre ? */
 export function isRefreshRunning() {

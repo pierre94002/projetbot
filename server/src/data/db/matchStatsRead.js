@@ -544,7 +544,11 @@ function rencontresJouees(teamName, { league = null, database = openDb() } = {})
 
   const COLONNES = 'match_key, fotmob_id, date, home_name, away_name, home_id, away_id, home_goals, away_goals';
   const joue = 'home_goals IS NOT NULL AND away_goals IS NOT NULL';
-  const filtreLigue = league ? ' AND league = ?' : '';
+  // « +league » : le + empêche SQLite de prendre l'index (league, date), qui
+  // lui faisait balayer tout le championnat au lieu des seuls matchs du club
+  // (555 ms contre 46 ms pour deux équipes, mesuré le 04/10/2026) — chaque
+  // analyse de match en payait une seconde.
+  const filtreLigue = league ? ' AND +league = ?' : '';
   const cote = (colonne, camp) => `SELECT ${COLONNES}, '${camp}' AS camp FROM matches WHERE ${colonne} = ? AND ${joue}${filtreLigue}`;
 
   // Deux requêtes réunies plutôt qu'un OR : un OR sur deux colonnes
@@ -766,8 +770,17 @@ export function lineupsFromStore(homeName, isoDate, { database = openDb() } = {}
 /**
  * Score et statistiques d'une rencontre, au format de
  * `getLiveMatchDetails()`.
+ *
+ * `avecDeroule` (étape 43, analyse IA d'après-match) : ajoute `deroule`, ce
+ * dont la lecture du déroulé a besoin et que la réponse d'avant ne portait
+ * pas — les événements TELS QUE STOCKÉS (`null` quand FotMob n'a publié aucun
+ * déroulé : ce n'est pas la même chose qu'une liste vide), la carte des tirs
+ * (pour les penalties manqués des matchs d'avant l'étape 43), le cadre
+ * (résultat attribué, prolongation, langues du texte minute par minute) et
+ * l'identifiant FotMob. Sans l'option, la réponse est celle d'avant, octet pour
+ * octet : elle sert aussi des écrans.
  */
-export function matchDetailsFromStore(homeName, isoDate, { database = openDb() } = {}) {
+export function matchDetailsFromStore(homeName, isoDate, { database = openDb(), avecDeroule = false } = {}) {
   const m = rencontreParReference({ homeName, date: String(isoDate).slice(0, 10), database });
   if (!m) return { available: false, reason: 'fixture_not_found' };
   if (m.home_goals === null || m.away_goals === null) return { available: false, reason: 'not_played_yet' };
@@ -783,7 +796,10 @@ export function matchDetailsFromStore(homeName, isoDate, { database = openDb() }
     score: { home: m.home_goals, away: m.away_goals },
     teams: { home: { name: home?.teamName ?? m.home_name, id: m.home_id }, away: { name: away?.teamName ?? m.away_name, id: m.away_id } },
     stats: { home: home?.stats ?? {}, away: away?.stats ?? {} },
-    events: parse(m.events) ?? []
+    events: parse(m.events) ?? [],
+    ...(avecDeroule
+      ? { deroule: { events: parse(m.events) ?? null, shotmap: parse(m.shotmap) ?? null, meta: parse(m.meta) ?? null, fotmobId: m.fotmob_id ?? null } }
+      : {})
   };
 }
 

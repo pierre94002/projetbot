@@ -1,4 +1,11 @@
 import 'dotenv/config';
+import { modeBacASable, preparerEnvironnementBac } from './bacASable.js';
+
+// Bac à sable (cf. bacASable.js) : clés payantes et jeton Claude vidés, IA
+// automatique coupée, actualisation et cotes gratuites coupées sauf essai
+// explicite — AVANT de lire l'environnement, quel que soit le point d'entrée
+// (serveur, ou script lancé depuis la copie du bac). Hors bac : rien.
+if (modeBacASable()) preparerEnvironnementBac();
 
 export const env = {
   port: Number(process.env.PORT) || 4000,
@@ -64,6 +71,20 @@ export const env = {
     windowMinutes: Number(process.env.LINEUP_PREFETCH_WINDOW_MIN) || 120,
     startupDelayMinutes: Number(process.env.LINEUP_PREFETCH_DELAY_MIN ?? 1)
   },
+  // Cotes GRATUITES (04/10/2026, Pierre : « récupère-les gratuitement, de la
+  // même façon que les données de match ») : ESPN, football-data.co.uk,
+  // 365Scores, Kalshi, Smarkets, sans clé (cf. data/providers/freeOdds.js).
+  // Relevées par l'actualisation complète (matchs à venir) et par une boucle
+  // à part (cf. jobs/oddsWatch.js) : avant le coup d'envoi, en direct, et le
+  // rattrapage de l'historique par tranches de `backfillBudget` requêtes par
+  // source. Désactivées avec l'actualisation (MATCH_STATS_AUTO_REFRESH).
+  freeOdds: {
+    enabled: process.env.FREE_ODDS !== 'false',
+    intervalMinutes: Number(process.env.FREE_ODDS_INTERVAL_MIN) || 5,
+    backfill: process.env.FREE_ODDS_BACKFILL !== 'false',
+    backfillBudget: Number(process.env.FREE_ODDS_BACKFILL_BUDGET) || 150,
+    startupDelayMinutes: Number(process.env.FREE_ODDS_DELAY_MIN ?? 2)
+  },
   // Analyse IA automatique (avant-match ET après-match), pour TOUS les
   // championnats suivis — décision explicite de Pierre le 26/09/2026. Un
   // samedi avec les 60+ championnats peut produire 180+ matchs terminés en
@@ -83,5 +104,53 @@ export const env = {
   autoAiAnalysis: {
     enabled: process.env.AUTO_AI_ANALYSIS !== 'false',
     dailyLimit: Number(process.env.AUTO_AI_ANALYSIS_DAILY_LIMIT) || 150
+  },
+  // Fiche envoyée à l'IA d'analyse de match (étape 41 du plan, 06/10/2026,
+  // cf. core/ai/compactContext.js) : la fiche COMPACTE par défaut — petits
+  // tableaux, consignes fixes relues depuis la mémoire cache de Claude, au
+  // clic comme en automatique, en mode normal comme en mode économe.
+  // AI_ANALYSIS_FICHE=ancienne revient à l'ancienne forme (blocs JSON,
+  // consignes avec le nom des équipes) : pour comparer, ou par prudence si la
+  // fiche compacte faisait baisser la qualité des avis. Chaque appel note sa
+  // forme au journal des appels Claude (étape 4), chaque analyse l'enregistre.
+  ficheIa: /^\s*ancienne\s*$/i.test(process.env.AI_ANALYSIS_FICHE ?? '') ? 'ancienne' : 'compacte',
+  // Texte minute par minute de FotMob dans la revue d'après-match (étape 43,
+  // 07/10/2026, cf. data/providers/fotMobCommentaire.js) : quelques lignes
+  // (VAR, penalties concédés, blessures, grosses occasions) lues chez FotMob,
+  // gratuitement, quand le match a un texte — au plus 5 lignes de 130
+  // caractères. Activé par défaut ; AI_COMMENTAIRE_MATCH=non (ou 0, false, off)
+  // le retire, le déroulé des événements restant. Jamais avec l'ancienne fiche.
+  commentaireMatch: !/^\s*(0|false|non|no|off)\s*$/i.test(process.env.AI_COMMENTAIRE_MATCH ?? ''),
+  // Enregistreurs (étape E du plan, 05/10/2026, cf. jobs/enregistreurs.js) :
+  // ce qui se perd si on ne le note pas sur le moment — absents du jour,
+  // état des matchs en direct, chaque cote payante relevée, pronostics du
+  // moteur gelés. Gratuits (FotMob, fichiers locaux), sans Claude. Tournent
+  // avec l'actualisation (MATCH_STATS_AUTO_REFRESH) — donc coupés dans le bac
+  // à sable sauf CM_BAC_ACTUALISATION=1 — et ENREGISTREURS=false les coupe.
+  // Direct : un instantané par match au plus toutes les `directPasMinutes`
+  // (5 au moins), au plus `directMaxDetailsParMinute` lectures du détail d'un
+  // match par minute (charge FotMob d'un samedi chargé).
+  enregistreurs: {
+    enabled: process.env.ENREGISTREURS !== 'false',
+    direct: process.env.ENREGISTREURS_DIRECT !== 'false',
+    directPasMinutes: Math.max(5, Number(process.env.ENREGISTREURS_DIRECT_PAS_MIN) || 5),
+    directMaxDetailsParMinute: Math.max(1, Number(process.env.ENREGISTREURS_DIRECT_MAX_PAR_MIN) || 6),
+    absentsIntervalleMinutes: Math.max(10, Number(process.env.ENREGISTREURS_ABSENTS_INTERVALLE_MIN) || 30),
+    absentsMaxLecturesParPasse: Math.max(1, Number(process.env.ENREGISTREURS_ABSENTS_MAX_PAR_PASSE) || 25),
+    startupDelayMinutes: Number(process.env.ENREGISTREURS_DELAY_MIN ?? 2)
+  },
+  // Sauvegardes (étape 1 du plan, cf. scripts/backup-db.mjs) : une copie de
+  // nuit compressée dans CoteMaster\sauvegardes, et une fois par semaine une
+  // copie HORS DU DISQUE. Sa destination se choisit dans l'appli (Réglages ›
+  // Sauvegardes : OneDrive, clé USB ou autre dossier, aucune), enregistrée
+  // dans data/runtime/sauvegarde-hors-disque.json — Pierre ne touche jamais à
+  // ce fichier .env. Ordre (cf. data/sauvegardes/destinationHorsDisque.js) :
+  // le choix enregistré, sinon cette variable si elle existe, sinon OneDrive
+  // quand il est détecté (décision de Pierre du 05/10/2026, une seule copie
+  // gardée là-bas), sinon rien. « aucune » = refus explicite, sans alerte.
+  // Sur un dossier ou une clé : 1 ou 2 copies (…_GARDER), jamais plus.
+  sauvegarde: {
+    horsDisque: (process.env.CM_SAUVEGARDE_HORS_DISQUE ?? '').trim(),
+    horsDisqueGarder: Math.min(2, Math.max(1, Number(process.env.CM_SAUVEGARDE_HORS_DISQUE_GARDER) || 2))
   }
 };

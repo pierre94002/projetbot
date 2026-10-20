@@ -115,8 +115,9 @@ export function buildPlayerStatsSearchRequest({ teamName, league }) {
  * Profil complet d'une équipe (effectif + forme + moyennes historiques) EN UN
  * SEUL appel — utilisé pour les équipes des coupes européennes (Ligue des
  * champions/Europa/Conference), qui viennent de ~55 championnats différents
- * et n'ont donc pas d'équivalent local (contrairement aux 16 championnats
- * couverts par historicalMatchesProvider.js). Combiner effectif + forme +
+ * et n'ont donc pas d'équivalent local (contrairement aux ~38 championnats
+ * que lit historicalMatchesProvider.js dans la table fd_history, de 2000-01 à
+ * la saison en cours, 2026-27). Combiner effectif + forme +
  * moyennes dans une seule recherche plutôt que deux appels séparés (un pour
  * submit_player_stats, un pour la forme) — sur ~100 équipes, ça divise par
  * deux le nombre d'appels Anthropic nécessaires pour peupler

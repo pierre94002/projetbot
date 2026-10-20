@@ -3,8 +3,10 @@ import { computeExogenousFactor } from '../risk/exogenousFactors.js';
 import { removeMargin } from '../market/marginRemoval.js';
 import { computeCornersAdjustment } from '../signals/cornersSignal.js';
 import { predictResult, temperer } from './resultPrediction.js';
-import { findValueBet, fairFromBookmakers, fairFromAllValid } from './valueFinder.js';
+import { fairFromBookmakers, fairFromAllValid } from './valueFinder.js';
+import { stakingDuMatch, verdictsDuMatch, comparateurDuMatch } from './verdictPari.js';
 import { predictScore } from './scorePrediction.js';
+import { numeroDeVersion } from './engineVersions.js';
 
 const EXPECTED_GOALS_BOUNDS = { min: 0.5, max: 2.8 };
 
@@ -154,19 +156,15 @@ export async function analyzeMatch(match, config, tiltState, sport) {
   // valueFinder.js). Le moteur précédent comparait son propre modèle au
   // marché, à domicile seulement, et perdait 5 à 8 % de ses mises sur
   // l'historique. Sans bookmaker de référence, aucune recommandation.
-  const staking = marketOddsAvailable && !reference
-    ? { action: 'PASS', stake: null, reason: 'trop_peu_de_bookmakers', candidates: [] }
-    : marketOddsAvailable
-    ? findValueBet({
-        byBookmaker: match.marketOdds?.byBookmaker ?? [],
-        fair: reference.probabilities,
-        referenceKeys: reference.keys,
-        config,
-        tiltState,
-        bankroll: match.bankroll,
-        labels: { home: `${match.home ?? 'Domicile'} gagne`, draw: 'Match nul', away: `${match.away ?? 'Extérieur'} gagne` }
-      })
-    : { action: 'PASS', stake: null, reason: 'no_market_odds', candidates: [] };
+  // Étape 7 du plan : quand l'appelant fournit l'heure des cotes de vos
+  // bookmakers (`match.fraicheurCotes`, cf. data/cotesDeVosBookmakers.js),
+  // une value sur une cote à rafraîchir n'est plus recommandée (cf.
+  // fraicheurCotes.js). Sans elle, rien ne change.
+  // Étape 8 : la décision vit dans verdictPari.js (stakingDuMatch), le même
+  // code qu'ici auparavant, pour que le Repérage et la page « Opportunités du
+  // jour », qui lisent un état préparé, prennent EXACTEMENT la même.
+  const decision = { disponible: marketOddsAvailable, reference };
+  const staking = stakingDuMatch(match, decision, config, tiltState);
   // Avantage du meilleur pari JOUABLE (dans les limites), recommandé ou non.
   const meilleurAvantage = staking.action === 'RECOMMENDED'
     ? staking.ev
@@ -227,8 +225,36 @@ export async function analyzeMatch(match, config, tiltState, sport) {
     // Avantage du meilleur pari trouvé (recommandé ou non), en pour cent.
     edgePercent: meilleurAvantage === null ? null : round(meilleurAvantage * 100, 2),
     staking,
+    // Étape 8 : le verdict de CHACUNE des trois issues (value seulement pour
+    // celle que le moteur recommande, sur une cote fraîche ; la raison pour
+    // les autres, dont « juge et partie »), le même que lisent le Repérage et
+    // la page « Opportunités du jour » (cf. verdictPari.js). Hors du résumé
+    // donné à l'IA (curateEngineSummary) : rien ne change pour elle.
+    verdicts: verdictsDuMatch(match, { ...decision, staking }, config, tiltState),
     corners
   };
+  // Étape 25 du plan (versions du moteur) : le NUMÉRO de la version qui a fait
+  // ce calcul (réglages + code du moteur, cf. engineVersions.js), ou null
+  // (« sans version ») — repris par chaque pronostic enregistré (journal des
+  // pronostics, pronostics gelés, engineSnapshot de l'analyse IA) ; et les
+  // probabilités COMPLÈTES de chaque marché, sans passer par la cote juste
+  // arrondie, que les enregistreurs gèlent avec chaque pronostic (le juge de
+  // l'étape 16 en a besoin). Ni l'un ni l'autre n'entre dans le résumé donné
+  // à l'IA (curateEngineSummary).
+  result.engineVersion = numeroDeVersion(config, sport.id ?? 'football');
+  result.distributions = distributionsDuMoteur(probabilities);
+
+  // L'heure des cotes de vos bookmakers et le réglage qui les juge (étape 7),
+  // seulement quand l'appelant les a fournis : la page du match les affiche.
+  if (match.fraicheurCotes) {
+    result.fraicheurCotes = {
+      reglage: match.fraicheurCotes.reglage ?? null,
+      coupDEnvoi: match.fraicheurCotes.coupDEnvoi ?? null,
+      heureSure: match.fraicheurCotes.heureSure !== false,
+      source: match.fraicheurCotes.source ?? null,
+      parBookmaker: match.fraicheurCotes.parBookmaker ?? {}
+    };
+  }
 
   // Dérivation du pronostic par marché (source UNIQUE — cf. markets.js) : a
   // besoin du DTO déjà construit (trueOdds/market), donc calculée ici plutôt
@@ -239,9 +265,23 @@ export async function analyzeMatch(match, config, tiltState, sport) {
   if (typeof sport.markets?.statExpectations === 'function') {
     result.statExpectations = sport.markets.statExpectations(match);
   }
+  // Étape 8 : la cote juste de chaque ligne de corners, tirs et tirs cadrés,
+  // par la binomiale négative mesurée (statMarkets.js, lineCandidates) — ce
+  // que lit l'onglet « Paris les plus probables » de Mes paris au lieu de
+  // refaire une loi de Poisson dans l'interface.
+  if (typeof sport.markets?.statLines === 'function') {
+    result.statLines = sport.markets.statLines(result.statExpectations ?? null);
+  }
   if (typeof sport.markets?.deriveMarketPredictions === 'function') {
     result.marketPredictions = sport.markets.deriveMarketPredictions(match, result);
   }
+
+  // Étape 10 : le comparateur de vos bookmakers — la cote de chacun, côte à
+  // côte, l'heure de son relevé, son verdict (findValueBet appliqué à ce seul
+  // bookmaker, et la décision du moteur sur le match) et la cote minimale à
+  // prendre pour qu'il reste de la value (cf. verdictPari.js, coteMinimale.js).
+  // Hors du résumé donné à l'IA (curateEngineSummary) : rien ne change pour elle.
+  result.comparateur = comparateurDuMatch(match, { ...decision, staking }, config, tiltState, { marketPredictions: result.marketPredictions ?? [] });
 
   return result;
 }
@@ -267,6 +307,32 @@ function alignResultAndTotal(resultAndTotal, resultat) {
     aligned[line] = out;
   }
   return aligned;
+}
+
+/**
+ * Étape 25 du plan : les probabilités de CHAQUE issue de chaque marché que le
+ * moteur pronostique, à 6 décimales — le 1N2 final (celui du pronostic), le
+ * total de buts et les buts de chaque équipe sur les quatre lignes, les deux
+ * équipes marquent, le combiné aligné sur le 1N2. La distribution d'un
+ * pronostic se lit ensuite à sa ligne (sports/football/markets.js,
+ * distributionDuMarche).
+ */
+const LIGNES_DE_BUTS = [0.5, 1.5, 2.5, 3.5];
+const suffixeDeLigne = (ligne) => String(ligne).replace('.', '');
+
+function distributionsDuMoteur(p) {
+  const p6 = (x) => (Number.isFinite(x) ? round(x, 6) : null);
+  const equipe = (bucket) =>
+    Object.fromEntries(LIGNES_DE_BUTS.map((l) => [l, { over: p6(bucket?.[`over${suffixeDeLigne(l)}`]), under: p6(bucket?.[`under${suffixeDeLigne(l)}`]) }]));
+  return {
+    result: { home: p6(p.home), draw: p6(p.draw), away: p6(p.away) },
+    totalGoals: Object.fromEntries(LIGNES_DE_BUTS.map((l) => [l, { over: p6(p[`over${suffixeDeLigne(l)}`]), under: p6(1 - p[`over${suffixeDeLigne(l)}`]) }])),
+    bothTeamsScore: { yes: p6(p.bothTeamsScore), no: p6(1 - p.bothTeamsScore) },
+    teamGoals: { home: equipe(p.homeTeamGoals), away: equipe(p.awayTeamGoals) },
+    resultAndTotal: Object.fromEntries(
+      LIGNES_DE_BUTS.map((l) => [l, Object.fromEntries(['homeOver', 'homeUnder', 'drawOver', 'drawUnder', 'awayOver', 'awayUnder'].map((k) => [k, p6(p.resultAndTotal?.[l]?.[k])]))])
+    )
+  };
 }
 
 function clamp(value, min, max) {

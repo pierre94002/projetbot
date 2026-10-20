@@ -2,14 +2,41 @@ import {
   listPredictions,
   upsertPredictions,
   updatePredictionStatus,
-  deletePrediction
+  deletePrediction,
+  avecAVerifier
 } from '../../data/repositories/predictionsRepository.js';
+import { preparerAVerifierParNoms, familleDuMarche } from '../../data/controleQuotidien.js';
+import { lireControle } from '../../data/repositories/controleQuotidienRepository.js';
 import { ApiError } from '../middlewares/errorHandler.js';
 
 const VALID_STATUSES = new Set(['pending', 'correct', 'incorrect', 'void']);
 
+/**
+ * Étape 14 : la règle « à vérifier » d'un pronostic du journal. Seuls ceux que
+ * le contrôle quotidien peut concerner sont regardés : en attente, ou joués
+ * depuis le début de sa fenêtre (30 jours) ; les plus anciens restent sans
+ * marque. Les raisons générales (magasin pas à jour, FotMob en panne) ne
+ * valent que pour un pronostic en attente.
+ */
+function regleAVerifier() {
+  let verifier;
+  try {
+    verifier = preparerAVerifierParNoms();
+  } catch {
+    return null;
+  }
+  const lu = lireControle();
+  const debut = lu.etat === 'pret' ? lu.controle.fenetre?.du ?? null : null;
+  return (p) => {
+    const jour = String(p.commenceTime ?? p.day ?? '').slice(0, 10);
+    const enAttente = p.status === 'pending';
+    if (!enAttente && (!debut || !jour || jour < debut)) return null;
+    return verifier({ league: p.league ?? null, date: jour, homeName: p.homeName, awayName: p.awayName, famille: familleDuMarche(p.marketId ?? p.market), global: enAttente });
+  };
+}
+
 export function getPredictions(req, res) {
-  res.json({ entries: listPredictions() });
+  res.json({ entries: avecAVerifier(listPredictions(), regleAVerifier()) });
 }
 
 function validateEntry(entry, index) {
@@ -40,7 +67,10 @@ function validateEntry(entry, index) {
     // migration, jamais requis ici pour ne pas casser un futur sport qui
     // n'aurait pas encore cette dérivation.
     marketId: entry.marketId ?? null,
-    params: entry.params ?? null
+    params: entry.params ?? null,
+    // Étape 25 du plan : la version du moteur qui a calculé ce pronostic (engineVersion de l'analyse) ;
+    // absente ou illisible : « sans version », jamais un numéro deviné.
+    engineVersion: Number.isInteger(entry.engineVersion) && entry.engineVersion >= 1 ? entry.engineVersion : null
   };
 }
 

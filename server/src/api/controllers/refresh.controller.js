@@ -20,6 +20,8 @@ import { refreshNow, nextRefreshAt, REFRESH_STEPS } from '../../jobs/matchStatsA
 import { resettleContradictions } from '../../data/providers/settlementService.js';
 import { env } from '../../config/env.js';
 import { ApiError } from '../middlewares/errorHandler.js';
+import { getTiltState } from '../../core/engine/tiltState.js';
+import { resumeDuControle } from '../../data/controleQuotidien.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ODDS_SNAPSHOT = path.resolve(__dirname, '../../../data/fixtures/odds/odds-snapshot.json');
@@ -43,6 +45,34 @@ function coteAVenir() {
     return { updatedAt: v.updatedAt, matches: v.matches, upcoming: v.commenceTimes.filter((t) => Date.parse(t) > maintenant).length };
   } catch {
     return null;
+  }
+}
+
+/**
+ * Étape 11 du plan : les alertes des garde-fous de Pierre (plafond atteint,
+ * série de pertes hors de sa zone normale, pari au-delà de la mise maximale),
+ * calculées à la lecture — la puce du haut de l'appli les montre sans
+ * interroger une route de plus.
+ */
+function alertesDesGardeFous() {
+  try {
+    const t = getTiltState();
+    return { alertes: t.gardeFous?.alertes ?? [], probleme: t.gardeFous?.probleme ?? null, coupeCircuit: { actif: t.circuitBreakerActive, manuel: t.coupeCircuitManuel, automatique: t.automatique } };
+  } catch (error) {
+    return { alertes: [], probleme: error.message, coupeCircuit: null };
+  }
+}
+
+/**
+ * Étape 14 du plan : le feu du contrôle quotidien (vert, orange, rouge) et les
+ * contrôles en échec, lus dans l'état de la dernière passe et les sources du
+ * moment — la puce du haut de l'appli le montre sans route de plus.
+ */
+function feuDuControle(refresh) {
+  try {
+    return resumeDuControle({ refresh });
+  } catch (error) {
+    return { etat: 'illisible', feu: null, le: null, compte: null, enEchec: [], erreur: error.message };
   }
 }
 
@@ -83,7 +113,9 @@ export function getRefreshOverview(req, res) {
     steps: REFRESH_STEPS,
     lastPass: derniere ? resumePasse(derniere) : null,
     history: precedentes.slice(0, 9).map(resumePasse),
-    upcomingOdds: coteAVenir()
+    upcomingOdds: coteAVenir(),
+    gardeFous: alertesDesGardeFous(),
+    controleQuotidien: feuDuControle(etat)
   });
 }
 

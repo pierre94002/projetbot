@@ -1,5 +1,16 @@
 import { callClaudeCode, isClaudeCodeAuthenticated, ClaudeCodeIndisponible } from './claudeCodeClient.js';
-import { buildPreMatchAnalysisRequest, buildPostMatchReviewRequest, SUBMIT_PRE_MATCH_ANALYSIS_TOOL, SUBMIT_POST_MATCH_REVIEW_TOOL } from './matchAiAnalysisPrompt.js';
+import {
+  buildPreMatchAnalysisRequest,
+  buildPostMatchReviewRequest,
+  buildPreMatchAnalysisRequestCompacte,
+  buildPostMatchReviewRequestCompacte,
+  SUBMIT_PRE_MATCH_ANALYSIS_TOOL,
+  SUBMIT_POST_MATCH_REVIEW_TOOL
+} from './matchAiAnalysisPrompt.js';
+import { FICHES, formeDeLaFiche, marchesPourIA, cleMarche, rattacherAuxMarches } from './compactContext.js';
+import { lireDeroule } from './derouleDuMatch.js';
+import { commentaireDuMatch } from '../../data/providers/fotMobCommentaire.js';
+import { env } from '../../config/env.js';
 import { getStandingsByLeagueLabel } from '../../data/providers/standingsService.js';
 import { resolveAverageStatsByName, resolveTeamFormByName } from '../../data/providers/matchEnrichment.js';
 import { DEFAULT_FORM_SAMPLE_SIZE } from '../../data/providers/teamStatsService.js';
@@ -8,7 +19,8 @@ import { resolveHistoricalStatsByName, resolveHistoricalFormByName, resolveHisto
 import { getTeamProfile } from '../../data/repositories/teamProfileRepository.js';
 import { getMatchNote } from '../../data/repositories/matchNotesRepository.js';
 import { resolveTeamNews } from '../../data/providers/teamNewsResolver.js';
-import { getByMatchId, savePreMatchAnalysis, savePostMatchReview, aiMarketExperience } from '../../data/repositories/matchAiAnalysisRepository.js';
+import { getByMatchId, savePreMatchAnalysis, savePostMatchReview, aiMarketExperience, avisTenu, typeDeMarche, TYPES_DE_MARCHE } from '../../data/repositories/matchAiAnalysisRepository.js';
+import { lireLesMarchesCoupes } from '../../data/aiScorecard.js';
 import { createResultLookup } from '../../data/repositories/matchResultsRepository.js';
 import { listPredictions } from '../../data/repositories/predictionsRepository.js';
 import { matchDetailsFromStore } from '../../data/db/matchStatsRead.js';
@@ -169,7 +181,22 @@ function sanitizeToolInput(input) {
   return sanitized;
 }
 
-function curateEngineSummary(engineResult) {
+/**
+ * Le résumé chiffré du moteur. Sans option : celui qu'on GARDE avec l'analyse (engineSnapshot : le relevé
+ * complet du moteur, que la revue d'après-match et l'écran relisent) et celui de l'ancienne forme de la fiche.
+ *
+ * `sansApport` (étape 21, le carnet de l'IA ; partage décidé avec l'étape 41 : la 41 compacte, la 21 filtre) :
+ * les types de marché où l'IA, sur assez de matchs, ne fait pas mieux que le moteur seul
+ * (data/aiScorecard.js). Seule la FICHE COMPACTE reçoit ce résumé filtré : ces marchés ne sont plus dans
+ * la liste qu'on lui donne à commenter. L'ancienne forme et l'engineSnapshot ne sont jamais filtrés.
+ */
+function curateEngineSummary(engineResult, { sansApport = null } = {}) {
+  const resume = resumeDuMoteur(engineResult);
+  if (!(sansApport instanceof Set) || !sansApport.size) return resume;
+  return { ...resume, marketPredictions: resume.marketPredictions.filter((m) => !sansApport.has(typeDeMarche(m))) };
+}
+
+function resumeDuMoteur(engineResult) {
   return {
     label: engineResult.label ?? null,
     expectedGoals: engineResult.expectedGoals ?? null,
@@ -196,25 +223,28 @@ function curateEngineSummary(engineResult) {
   };
 }
 
-/** Libellé de marché comparable : l'IA recopie parfois « Buts — X » avec un autre tiret ou sans accent. */
-const cleMarche = (libelle) =>
-  String(libelle ?? '')
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .replace(/[‐-―-]+/g, '-')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .toLowerCase();
-
 /**
- * Chaque élément écrit par l'IA (avis ou bilan) rattaché au marché du moteur
- * qu'il commente : par libellé, à défaut par position (le schéma exige le
- * même ordre) quand l'IA en a rendu autant.
+ * Étape 25 du plan : le résumé du moteur GARDÉ avec l'analyse (engineSnapshot) porte le numéro de la
+ * version du moteur qui l'a calculé (engineVersion de analyzeMatch), quand il est connu. Ce numéro
+ * n'est JAMAIS envoyé à l'IA (pourIA) : il ne lui apprend rien, et il changerait le message qu'elle
+ * relit depuis sa mémoire cache (l'ancienne fiche doit revenir à l'octet).
  */
-function rattacherAuxMarches(ecrits = [], marches = []) {
-  const parCle = new Map(ecrits.map((e) => [cleMarche(e.market), e]));
-  return marches.map((m, i) => parCle.get(cleMarche(m.market)) ?? (ecrits.length === marches.length ? ecrits[i] : null));
+function avecLaVersion(engineSummary, engineResult) {
+  const v = engineResult?.engineVersion;
+  return Number.isInteger(v) && v >= 1 ? { ...engineSummary, engineVersion: v } : engineSummary;
 }
+
+/** Le résumé du moteur tel que l'IA le lit : sans le numéro de version du moteur (étape 25). */
+function pourIA(engineSnapshot) {
+  if (!engineSnapshot || typeof engineSnapshot !== 'object') return engineSnapshot;
+  const { engineVersion, ...resume } = engineSnapshot;
+  return resume;
+}
+
+// Le rattachement des avis et des bilans de l'IA aux marchés du moteur
+// (libellé, puis libellé souple, puis position, puis pronostic recopié) vit
+// dans compactContext.js depuis l'étape 41 : fonctions pures, testées seules.
+export { cleMarche, rattacherAuxMarches };
 
 /**
  * Pronostics du moteur sur chaque marché pour une analyse enregistrée : ceux
@@ -246,7 +276,8 @@ function issuesDesMarches(prior, pronostics, result, stats = null) {
     const reel = deriveActualOutcome({ ...p, homeName: prior.homeName, awayName: prior.awayName }, result.homeGoals, result.awayGoals, stats);
     const juste = reel === null ? null : reel === p.predictedOutcome;
     const avis = avisParMarche[i];
-    const aiWasRight = juste === null || !avis ? null : avis.verdict === 'confirme' ? juste : avis.verdict === 'contredit' ? !juste : null;
+    // La règle de l'avis tenu, écrite une fois (matchAiAnalysisRepository.js) : le carnet de l'IA (étape 21) compte de même.
+    const aiWasRight = avis ? avisTenu(avis.verdict, juste) : null;
     return {
       market: p.market,
       marketId: p.marketId ?? null,
@@ -263,20 +294,40 @@ function issuesDesMarches(prior, pronostics, result, stats = null) {
 
 const STATS_CLES = ['expected_goals', 'Total Shots', 'Shots on Goal', 'big_chances', 'Ball Possession', 'Corner Kicks', 'Yellow Cards', 'Red Cards'];
 
-/** Faits du match dans le magasin FotMob (buts et leurs minutes, cartons rouges, statistiques clés), pour expliquer chaque marché. */
+/**
+ * Faits du match dans le magasin FotMob, pour expliquer chaque marché.
+ *
+ * Les quatre premières clés (score, goals, redCards, stats) sont CELLES D'AVANT
+ * l'étape 43, octet pour octet : l'ancienne forme du message
+ * (AI_ANALYSIS_FICHE=ancienne) les envoie telles quelles, et `stats` sert au
+ * règlement (statsPourReglement). On n'y a rien corrigé : `penalty` y vaut
+ * toujours Boolean(e.penalty) — faux pour tout match d'avant l'étape —,
+ * seuls les rouges directs y sont (la deuxième jaune n'y est pas), un déroulé
+ * absent y donne « aucun but ».
+ *
+ * `deroule` (étape 43, cf. derouleDuMatch.js) : la lecture complète des mêmes
+ * événements — penalties (aussi ceux d'avant l'étape), deuxièmes jaunes,
+ * jaunes, remplacements, blessés, penalties manqués, but contre son camp
+ * écrit pour le bon camp, déroulé « non publié » dit tel quel. Seule la fiche
+ * compacte l'envoie. `pageFotMob` : où lire le texte minute par minute de ce
+ * match (identifiant, langues connues) — jamais envoyé.
+ */
 function faitsDuMatch(homeName, date) {
   if (!date) return null;
   try {
-    const d = matchDetailsFromStore(homeName, date);
+    const d = matchDetailsFromStore(homeName, date, { avecDeroule: true });
     if (!d?.available) return null;
     const garder = (stats) => Object.fromEntries(STATS_CLES.filter((k) => stats?.[k] !== undefined && stats?.[k] !== null).map((k) => [k, stats[k]]));
+    const brut = d.deroule ?? {};
     return {
       score: d.score,
       goals: (d.events ?? [])
         .filter((e) => e.type === 'goal')
         .map((e) => ({ minute: e.minute, side: e.side, player: e.player, ownGoal: Boolean(e.ownGoal), penalty: Boolean(e.penalty) })),
       redCards: (d.events ?? []).filter((e) => e.type === 'card' && e.card === 'red').map((e) => ({ minute: e.minute, side: e.side, player: e.player })),
-      stats: { home: garder(d.stats?.home), away: garder(d.stats?.away) }
+      stats: { home: garder(d.stats?.home), away: garder(d.stats?.away) },
+      deroule: lireDeroule({ events: brut.events ?? null, shotmap: brut.shotmap ?? null, meta: brut.meta ?? null, score: d.score }),
+      pageFotMob: { fotmobId: brut.fotmobId ?? null, langs: typeof brut.meta?.tickerLangs === 'string' ? brut.meta.tickerLangs : null }
     };
   } catch {
     return null;
@@ -357,9 +408,10 @@ async function gatherQualitativeContext(home, away, league, { matchId, commenceT
     // Snapshot corrompu ou absent : ignoré, le contexte reste utilisable sans.
   }
 
-  // Historique local gratuit (football-data.co.uk, 16 grands championnats,
-  // 5 saisons — cf. historicalMatchesProvider.js) : même lecture fichier,
-  // même filet de sécurité que FlashScore ci-dessus. Le classement local ne
+  // Historique local gratuit (football-data.co.uk depuis 2000, table
+  // fd_history de la base, club retrouvé par identifiant — cf.
+  // historicalMatchesProvider.js, étape 13 du plan) : même filet de sécurité
+  // que FlashScore ci-dessus. Le classement local ne
   // sert QUE de repli, équipe par équipe, quand la ligne live (web ou
   // API-Football) n'a pas été trouvée — jamais un remplacement d'une ligne
   // déjà obtenue en direct.
@@ -411,7 +463,7 @@ async function gatherQualitativeContext(home, away, league, { matchId, commenceT
     // peut dater de plusieurs jours (`collectedAt`).
     homeFlashscoreStats: homeMoyennes ? null : homeFlashscoreStats,
     awayFlashscoreStats: awayMoyennes ? null : awayFlashscoreStats,
-    // Locale et gratuite (football-data.co.uk) — moyennes sur les 5 dernières saisons.
+    // Locale et gratuite (football-data.co.uk, table fd_history) — moyennes sur les derniers matchs du club.
     homeHistoricalStats: homeMoyennes ? null : homeHistoricalStats,
     awayHistoricalStats: awayMoyennes ? null : awayHistoricalStats,
     homeHistoricalForm: !formeHome && homeHistoricalForm ? { results: homeHistoricalForm.results, sampleSize: homeHistoricalForm.sampleSize } : null,
@@ -507,27 +559,25 @@ function compositionPourIA(lineups) {
 }
 
 /**
- * `sansRepliPayant` : vrai pour le déclenchement AUTOMATIQUE — le contexte ne
- * se complète jamais par API-Football (quota payant de 100/jour) quand le
- * magasin ne connaît pas une équipe ; la donnée manque, c'est tout. Un clic
- * de l'utilisateur garde le repli.
+ * Ce qu'on enverrait à l'IA pour l'avant-match, SANS l'appeler : la forme de
+ * la fiche, les consignes, le message du match, le schéma de sortie, et ce
+ * qui sert ensuite (résumé du moteur gardé avec l'analyse, marchés commentés
+ * dans l'ordre de la fiche, composition lue). Lectures gratuites seulement
+ * (magasin, FotMob) ; jamais Claude.
  *
- * `timing` : 'avance' (jusqu'à 48 h avant, ou un clic) ou 'coup-d-envoi'
- * (environ une heure avant, cf. autoMatchAiTrigger.js), avec `lineups` (cf.
- * lineupContext.js) quand FotMob a publié la composition. L'analyse d'avant
- * coup d'envoi devient celle de référence (écran, revue après-match,
- * expérience de l'IA) ; celle de la veille reste consultable.
+ * Fiche COMPACTE (forme normale) : consignes fixes, marchés à cote juste
+ * ≥ 1,20, composition décrite par lineupContext.js (les absents avec leurs
+ * chiffres quand le magasin les a). Ancienne forme : exactement le message
+ * d'avant l'étape 41.
  */
-export async function runPreMatchAnalysis({ matchId, home, away, league, engineResult, sansRepliPayant = false, lineups = null, timing = 'avance' }) {
-  if (!isClaudeCodeAuthenticated()) {
-    throw new DomainError(CLAUDE_CODE_NON_CONNECTE, { status: 400, code: CODE_CLAUDE_CODE_INDISPONIBLE });
-  }
+export async function preparerAnalyseAvantMatch({ matchId, home, away, league, engineResult, sansRepliPayant = false, lineups = null, timing = 'avance', fiche = null }) {
   if (!matchId || !home || !away) {
     throw new DomainError('Match invalide : "matchId", "home" et "away" sont requis.', { status: 400 });
   }
   if (!engineResult || typeof engineResult !== 'object') {
     throw new DomainError("Résultat du moteur manquant : l'analyse du match doit être chargée avant de lancer l'analyse IA.", { status: 400 });
   }
+  const forme = formeDeLaFiche(fiche, env.ficheIa);
 
   const engineSummary = curateEngineSummary(engineResult);
   const context = await gatherQualitativeContext(home, away, league, { matchId, commenceTime: engineResult.commenceTime, sansRepliPayant });
@@ -543,31 +593,115 @@ export async function runPreMatchAnalysis({ matchId, home, away, league, engineR
       compo = null;
     }
   }
-  if (compo) context.lineups = compositionPourIA(compo);
   let experience = [];
   try {
     experience = aiMarketExperience();
   } catch {
     // Analyses illisibles à cet instant : l'avis se donne sans le bilan passé.
   }
-  const { system, messages } = buildPreMatchAnalysisRequest({ home, away, league, engineSummary, context, experience });
+
+  let demande;
+  let marches;
+  let marchesRetires = [];
+  if (forme === FICHES.ancienne) {
+    // L'ancienne forme est celle d'avant l'étape 41, octet pour octet : jamais filtrée par le carnet (étape 21).
+    if (compo) context.lineups = compositionPourIA(compo);
+    marches = engineSummary.marketPredictions;
+    demande = buildPreMatchAnalysisRequest({ home, away, league, engineSummary, context, experience });
+  } else {
+    // Étape 21 : les types de marché où l'IA n'apporte rien (carnet de la nuit) sortent de sa liste — et de son
+    // bilan, inutile pour des marchés qu'elle ne commente plus ; une ligne de la fiche le lui dit. Carnet absent
+    // ou illisible : rien n'est retiré (lireLesMarchesCoupes ne lève jamais). Rien de coupé : la fiche d'avant, à l'octet.
+    const coupes = lireLesMarchesCoupes();
+    const pourLaFiche = curateEngineSummary(engineResult, { sansApport: coupes });
+    marches = marchesPourIA(pourLaFiche.marketPredictions);
+    // Seuls les marchés que la fiche aurait donnés (cote juste ≥ 1,20) sont dits retirés.
+    marchesRetires = [...new Set(marchesPourIA(engineSummary.marketPredictions).flatMap((m) => (coupes.has(typeDeMarche(m)) ? [typeDeMarche(m)] : [])))];
+    const retires = marchesRetires.map((type) => ({ type, label: TYPES_DE_MARCHE[type] ?? type }));
+    demande = buildPreMatchAnalysisRequestCompacte({
+      home,
+      away,
+      league,
+      engineSummary: pourLaFiche,
+      marches,
+      context,
+      lineups: compo,
+      experience: coupes.size ? experience.filter((t) => !coupes.has(t.marketType)) : experience,
+      commenceTime: engineResult.commenceTime ?? null,
+      timing,
+      retires
+    });
+  }
+  return {
+    forme,
+    system: demande.system,
+    userMessage: demande.messages[0].content,
+    jsonSchema: SUBMIT_PRE_MATCH_ANALYSIS_TOOL.input_schema,
+    engineSummary,
+    marches,
+    // Étape 21 : les types de marché retirés de CETTE fiche (gardés avec l'analyse, pour que la revue ne les redonne pas à juger).
+    marchesRetires,
+    compo: compo ?? null
+  };
+}
+
+/**
+ * `sansRepliPayant` : vrai pour le déclenchement AUTOMATIQUE — le contexte ne
+ * se complète jamais par API-Football (quota payant de 100/jour) quand le
+ * magasin ne connaît pas une équipe ; la donnée manque, c'est tout. Un clic
+ * de l'utilisateur garde le repli.
+ *
+ * `timing` : 'avance' (jusqu'à 48 h avant, ou un clic) ou 'coup-d-envoi'
+ * (environ une heure avant, cf. autoMatchAiTrigger.js), avec `lineups` (cf.
+ * lineupContext.js) quand FotMob a publié la composition. L'analyse d'avant
+ * coup d'envoi devient celle de référence (écran, revue après-match,
+ * expérience de l'IA) ; celle de la veille reste consultable.
+ *
+ * `appel` (journal des appels Claude, étape 4) : ce que l'appelant dit de
+ * cet appel — { type: 'avance' | 'coup-d-envoi' | 'reprise' | 'manuel' |
+ * 'autre', detail?, mode? } ; le match est ajouté ici, et la forme de la
+ * fiche avec la taille des consignes et du message (étape 41). Le journal
+ * garde l'usage de CHAQUE appel, y compris celui que ce fichier perd
+ * (l'analyse d'avance gardée dans `earlierAnalysis` sans son usage, la
+ * reprise qui écrase l'usage de la précédente).
+ *
+ * `fiche` (étape 41) : 'compacte' ou 'ancienne' pour CET appel (essai,
+ * comparaison) ; absent, le réglage AI_ANALYSIS_FICHE (compacte par défaut).
+ */
+export async function runPreMatchAnalysis({ matchId, home, away, league, engineResult, sansRepliPayant = false, lineups = null, timing = 'avance', appel = null, fiche = null }) {
+  if (!isClaudeCodeAuthenticated()) {
+    throw new DomainError(CLAUDE_CODE_NON_CONNECTE, { status: 400, code: CODE_CLAUDE_CODE_INDISPONIBLE });
+  }
+  const demande = await preparerAnalyseAvantMatch({ matchId, home, away, league, engineResult, sansRepliPayant, lineups, timing, fiche });
+  const { engineSummary, marches, compo, forme, marchesRetires } = demande;
 
   let reponse;
   try {
-    reponse = await callClaudeCode({ system, userMessage: messages[0].content, jsonSchema: SUBMIT_PRE_MATCH_ANALYSIS_TOOL.input_schema });
+    reponse = await callClaudeCode({
+      system: demande.system,
+      userMessage: demande.userMessage,
+      jsonSchema: demande.jsonSchema,
+      appel: {
+        type: appel?.type ?? 'autre',
+        detail: appel?.detail ?? `avant-match (${timing})`,
+        mode: appel?.mode ?? null,
+        match: { matchId, home, away, league: league ?? null },
+        fiche: forme,
+        taille: { consignes: demande.system.length, message: demande.userMessage.length }
+      }
+    });
   } catch (error) {
     throw echecAppel('Analyse IA pré-match impossible', error);
   }
 
   const analysis = sanitizeToolInput(reponse.structuredOutput);
   // Chaque avis sous le libellé exact du marché du moteur, pour que l'onglet
-  // et la revue après-match le retrouvent.
-  if (engineSummary.marketPredictions.length && Array.isArray(analysis.marketViews)) {
-    const rattaches = rattacherAuxMarches(analysis.marketViews, engineSummary.marketPredictions);
+  // et la revue après-match le retrouvent : les marchés que la fiche a donnés
+  // à commenter, dans son ordre (le rattachement par position en dépend).
+  if (marches.length && Array.isArray(analysis.marketViews)) {
+    const rattaches = rattacherAuxMarches(analysis.marketViews, marches);
     // Avec le pourcentage que l'explication commente (il bouge avec les cotes).
-    analysis.marketViews = engineSummary.marketPredictions.flatMap((m, i) =>
-      rattaches[i] ? [{ ...rattaches[i], market: m.market, probability: m.probability ?? null }] : []
-    );
+    analysis.marketViews = marches.flatMap((m, i) => (rattaches[i] ? [{ ...rattaches[i], market: m.market, probability: m.probability ?? null }] : []));
   }
 
   const existante = getByMatchId(matchId);
@@ -581,12 +715,19 @@ export async function runPreMatchAnalysis({ matchId, home, away, league, engineR
     // quand l'après-match automatique ne connaît que l'identifiant FotMob.
     commenceTime: engineResult.commenceTime ?? null,
     model: 'claude-code:sonnet',
-    engineSnapshot: engineSummary,
+    // Étape 25 : avec le numéro de la version du moteur (jamais donné à l'IA).
+    engineSnapshot: avecLaVersion(engineSummary, engineResult),
     usage: reponse.usage ?? null,
     costUsd: reponse.costUsd,
     // `createdAt` reste celui de la toute première analyse du match.
     analysedAt: new Date().toISOString(),
     timing,
+    // La forme de la fiche lue par l'IA (étape 41) : la qualité des avis se
+    // compare ensuite forme par forme (carnet de l'étape 21).
+    fiche: forme,
+    // Étape 21 : les types de marché retirés de la fiche par le carnet de l'IA ; la revue ne les lui redonne pas à
+    // juger. Rien de retiré : la clé n'est pas écrite (celle d'une analyse précédente du match est effacée).
+    ...(marchesRetires?.length ? { marchesRetires } : existante?.marchesRetires ? { marchesRetires: undefined } : {}),
     lineupSnapshot: compo ?? null,
     analysis
   };
@@ -619,8 +760,15 @@ export async function runPreMatchAnalysis({ matchId, home, away, league, engineR
  * de matchId, puisque ce fichier porte des identifiants `web-...` distincts
  * de celui sous lequel l'analyse avant-match a été enregistrée (cf.
  * matchResultsRepository.js, createResultLookup).
+ *
+ * `appel` (journal des appels Claude, étape 4) : { type: 'revue' | 'manuel' |
+ * 'autre', detail?, mode? } ; le match est ajouté ici, et la forme de la
+ * fiche avec la taille des consignes et du message (étape 41).
+ *
+ * `fiche` (étape 41) : 'compacte' ou 'ancienne' pour CET appel ; absent, le
+ * réglage AI_ANALYSIS_FICHE (compacte par défaut).
  */
-export async function runPostMatchAnalysis({ matchId, result: resultFourni = null }) {
+export async function runPostMatchAnalysis({ matchId, result: resultFourni = null, appel = null, fiche = null }) {
   if (!isClaudeCodeAuthenticated()) {
     throw new DomainError(CLAUDE_CODE_NON_CONNECTE, { status: 400, code: CODE_CLAUDE_CODE_INDISPONIBLE });
   }
@@ -640,42 +788,125 @@ export async function runPostMatchAnalysis({ matchId, result: resultFourni = nul
     throw new DomainError("Le résultat de ce match n'a pas encore été saisi (Historique moteur > Score final).", { status: 400 });
   }
 
-  // Date réelle du match : fournie (automatique), lue dans l'identifiant du
-  // résultat (« web-AAAA-MM-JJ-… »), ou à défaut le coup d'envoi enregistré.
-  const dateMatch = result.date ?? /(\d{4}-\d{2}-\d{2})/.exec(String(result.matchId ?? ''))?.[1] ?? prior.commenceTime?.slice(0, 10) ?? null;
-  // Les faits du match d'abord : ils jugent aussi les marchés de corners et de tirs.
-  const matchStats = faitsDuMatch(result.homeName ?? prior.homeName, dateMatch);
-  const marketOutcomes = issuesDesMarches(prior, pronosticsDeMarches(prior), result, statsPourReglement(matchStats));
-  const { system, messages } = buildPostMatchReviewRequest({
-    home: prior.homeName,
-    away: prior.awayName,
-    league: prior.league,
-    priorAnalysis: prior.analysis,
-    engineSummary: prior.engineSnapshot,
-    result: { homeGoals: result.homeGoals, awayGoals: result.awayGoals },
-    marketOutcomes,
-    matchStats
-  });
+  let demande = preparerRevueApresMatch({ prior, result, fiche });
+  // Étape 43 : le texte minute par minute de FotMob (VAR, penalties, blessures,
+  // occasions), quand il existe pour ce match — une lecture gratuite de plus au
+  // plus trois fichiers, jamais avec l'ancienne forme, jamais bloquante : une
+  // erreur ou l'absence de texte laisse la revue partir sans cette section.
+  if (demande.forme === FICHES.compacte && env.commentaireMatch && demande.pageFotMob?.fotmobId) {
+    try {
+      const commentaire = await commentaireDuMatch(demande.pageFotMob);
+      if (commentaire.length) demande = preparerRevueApresMatch({ prior, result, fiche, commentaire });
+    } catch {
+      // jamais bloquant
+    }
+  }
+  const { marketOutcomes, aJuger, forme } = demande;
 
   let reponse;
   try {
-    reponse = await callClaudeCode({ system, userMessage: messages[0].content, jsonSchema: SUBMIT_POST_MATCH_REVIEW_TOOL.input_schema });
+    reponse = await callClaudeCode({
+      system: demande.system,
+      userMessage: demande.userMessage,
+      jsonSchema: demande.jsonSchema,
+      appel: {
+        type: appel?.type ?? 'autre',
+        detail: appel?.detail ?? 'après-match',
+        mode: appel?.mode ?? null,
+        match: { matchId, home: prior.homeName ?? null, away: prior.awayName ?? null, league: prior.league ?? null },
+        fiche: forme,
+        taille: { consignes: demande.system.length, message: demande.userMessage.length }
+      }
+    });
   } catch (error) {
     throw echecAppel('Analyse IA après-match impossible', error);
   }
 
   // Le bilan de chaque marché : l'issue et la tenue de l'avis (calculées
-  // ici), l'explication et la leçon (écrites par l'IA).
+  // ici), l'explication et la leçon (écrites par l'IA) — pour CHAQUE marché
+  // du moteur, comme avant ; ceux que la fiche n'a pas donnés à juger (cote
+  // juste sous 1,20) gardent leur issue, sans explication.
   const brut = sanitizeToolInput(reponse.structuredOutput);
-  const ecrites = rattacherAuxMarches(brut.marketReviews ?? [], marketOutcomes);
-  const marketReviews = marketOutcomes.map((o, i) => ({ ...o, explanation: ecrites[i]?.explanation ?? null, lesson: ecrites[i]?.lesson ?? null }));
+  const ecrites = rattacherAuxMarches(brut.marketReviews ?? [], aJuger);
+  const ecriteDe = new Map(aJuger.map((o, i) => [o, ecrites[i]]));
+  const marketReviews = marketOutcomes.map((o) => ({ ...o, explanation: ecriteDe.get(o)?.explanation ?? null, lesson: ecriteDe.get(o)?.lesson ?? null }));
+  const faits = demande.matchStats;
   const revue = {
     ...brut,
     marketReviews,
     model: 'claude-code:sonnet',
+    fiche: forme,
+    // Étape 43 : ce que la revue a reçu du déroulé — pour juger ensuite les bilans (carnet de l'étape 21).
+    ...(forme === FICHES.compacte && faits?.deroule ? { deroule: { disponible: faits.deroule.disponible, faits: faits.deroule.faits.length, commentaire: faits.commentaire?.length ?? 0 } } : {}),
     usage: reponse.usage ?? null,
     costUsd: reponse.costUsd,
     createdAt: new Date().toISOString()
   };
   return enregistrerSansPerdre(() => savePostMatchReview(matchId, revue), 'analyse IA');
 }
+
+/**
+ * Ce qu'on enverrait à l'IA pour la revue d'après-match, SANS l'appeler : la
+ * forme, les consignes, le message, le schéma, l'issue de CHAQUE marché
+ * (`marketOutcomes`, calculée ici — jamais laissée à l'IA) et ceux que la
+ * fiche donne à juger (`aJuger` : tous dans l'ancienne forme, ceux à cote
+ * juste ≥ 1,20 dans la fiche compacte, comme avant le match). `result` :
+ * { homeGoals, awayGoals, date?, homeName?, matchId? } ; lecture du magasin
+ * seulement.
+ */
+export function preparerRevueApresMatch({ prior, result, fiche = null, commentaire = null }) {
+  const forme = formeDeLaFiche(fiche, env.ficheIa);
+  // Date réelle du match : fournie (automatique), lue dans l'identifiant du
+  // résultat (« web-AAAA-MM-JJ-… »), ou à défaut le coup d'envoi enregistré.
+  const dateMatch = result.date ?? /(\d{4}-\d{2}-\d{2})/.exec(String(result.matchId ?? ''))?.[1] ?? prior.commenceTime?.slice(0, 10) ?? null;
+  // Les faits du match d'abord : ils jugent aussi les marchés de corners et de tirs.
+  const faits = faitsDuMatch(result.homeName ?? prior.homeName, dateMatch);
+  const pronostics = pronosticsDeMarches(prior);
+  const marketOutcomes = issuesDesMarches(prior, pronostics, result, statsPourReglement(faits));
+  const resultat = { homeGoals: result.homeGoals, awayGoals: result.awayGoals };
+  const pageFotMob = faits?.pageFotMob ?? null;
+
+  if (forme === FICHES.ancienne) {
+    // L'ancienne forme est celle d'avant l'étape 43, octet pour octet : ni le
+    // déroulé, ni le texte minute par minute, ni la référence de la page.
+    const { deroule, commentaire: texteDuMatch, pageFotMob: page, ...matchStats } = faits ?? {};
+    const envoye = faits ? matchStats : null;
+    const { system, messages } = buildPostMatchReviewRequest({
+      home: prior.homeName,
+      away: prior.awayName,
+      league: prior.league,
+      priorAnalysis: prior.analysis,
+      engineSummary: pourIA(prior.engineSnapshot),
+      result: resultat,
+      marketOutcomes,
+      matchStats: envoye
+    });
+    return { forme, system, userMessage: messages[0].content, jsonSchema: SUBMIT_POST_MATCH_REVIEW_TOOL.input_schema, marketOutcomes, aJuger: marketOutcomes, matchStats: envoye, pageFotMob };
+  }
+
+  // Fiche compacte : le déroulé, et les extraits du texte minute par minute
+  // quand l'appelant les a lus (cf. runPostMatchAnalysis) et que le match est au magasin.
+  const matchStats = faits && Array.isArray(commentaire) && commentaire.length ? { ...faits, commentaire } : faits;
+  const gardes = new Set(marchesPourIA(pronostics));
+  // Étape 21 : un marché retiré de la fiche d'avant-match par le carnet de l'IA n'est pas redonné à juger (elle
+  // n'en a rien dit) ; son issue reste notée dans le bilan, comme celle d'un marché sous 1,20.
+  const retires = new Set(Array.isArray(prior.marchesRetires) ? prior.marchesRetires : []);
+  const aJuger = marketOutcomes.filter((_, i) => gardes.has(pronostics[i]) && !retires.has(typeDeMarche(pronostics[i])));
+  const { system, messages } = buildPostMatchReviewRequestCompacte({
+    home: prior.homeName,
+    away: prior.awayName,
+    league: prior.league,
+    commenceTime: prior.commenceTime ?? null,
+    timing: prior.timing ?? null,
+    analysedAt: prior.analysedAt ?? prior.createdAt ?? null,
+    priorAnalysis: prior.analysis,
+    engineSummary: pourIA(prior.engineSnapshot),
+    result: resultat,
+    marketOutcomes: aJuger,
+    matchStats
+  });
+  return { forme, system, userMessage: messages[0].content, jsonSchema: SUBMIT_POST_MATCH_REVIEW_TOOL.input_schema, marketOutcomes, aJuger, matchStats, pageFotMob };
+}
+
+/** Pour les tests et l'estimation hors ligne de l'étape 41 : les briques internes, sans Claude. */
+export const __testing = { gatherQualitativeContext, compositionPourIA, curateEngineSummary, faitsDuMatch, issuesDesMarches, pronosticsDeMarches, statsPourReglement, avecLaVersion, pourIA };

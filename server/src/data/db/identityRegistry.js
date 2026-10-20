@@ -42,6 +42,7 @@
  */
 
 import { openDb } from './matchStatsDb.js';
+import { prendreLeVerrouEcriture } from './verrouEcriture.js';
 import { slug } from '../../utils/nameIdentity.js';
 // La règle de fabrication d'un identifiant appartient à la source qui les
 // émet, et une seule définition doit exister : deux copies finiraient par
@@ -118,9 +119,39 @@ function dominante(carte, { recent = false, plusLong = false } = {}) {
  * Le slug se calcule dans la même passe, ce qui supprime au passage la
  * seconde boucle d'UPDATE qu'imposait SQLite, incapable de retirer les
  * accents.
+ *
+ * Deux temps (retouche du 12/10/2026) : la LECTURE (lireLeMagasin, 13 à 24 s
+ * sur la base de Pierre, sans aucun verrou d'écriture), puis l'ÉCRITURE
+ * (ecrireEtCompter, une seule transaction : tout ou rien). Ici, comme avant,
+ * un seul `BEGIN IMMEDIATE` qui attend le busy_timeout de la connexion ; le
+ * processus à part de l'actualisation passe par rebuildRegistriesPatiemment.
  */
 export function rebuildRegistries({ database = openDb() } = {}) {
-  const db = database;
+  const lu = lireLeMagasin(database);
+  database.exec('BEGIN IMMEDIATE');
+  return ecrireEtCompter(database, lu);
+}
+
+/**
+ * La même reconstruction, pour scripts/rebuild-registries.mjs (le processus à
+ * part de l'actualisation) : la base peut être tenue un moment par un autre
+ * écrivain — le verrou de la passe arrête les imports, pas les boucles du
+ * serveur (cotes gratuites autour du coup d'envoi, compositions, pages). Le
+ * verrou d'écriture est donc pris EN PATIENTANT (verrouEcriture.js : nouveaux
+ * essais espacés, ~3 min au plus) ; rien n'est écrit tant qu'il n'est pas
+ * pris, et un échec (VerrouIndisponible) laisse les annuaires tels quels.
+ * La lecture est faite une fois, avant : pendant la passe, rien ne change
+ * `matches` ni `players` (les imports attendent la fin de la passe).
+ * Rend le bilan de rebuildRegistries, plus `essais` et `attenteVerrouMs`.
+ */
+export async function rebuildRegistriesPatiemment({ database = openDb(), ...attente } = {}) {
+  const lu = lireLeMagasin(database);
+  const verrou = await prendreLeVerrouEcriture(database, attente);
+  return { ...ecrireEtCompter(database, lu), essais: verrou.essais, attenteVerrouMs: verrou.attenteMs };
+}
+
+/** La lecture : une passe sur chaque table, aucun tri, aucun verrou d'écriture. */
+function lireLeMagasin(db) {
   const horodatage = now();
 
   // --- LECTURE : une passe sur chaque table, aucun tri -----------------
@@ -156,9 +187,16 @@ export function rebuildRegistries({ database = openDb() } = {}) {
     if (m.date > g.last) g.last = m.date;
     g.appearances++;
   }
+  return { clubs, gens, horodatage };
+}
 
+/**
+ * L'écriture, la transaction d'écriture déjà ouverte par l'appelant : les deux
+ * annuaires refaits, puis COMMIT ; à la première panne, ROLLBACK et l'erreur
+ * remontée (rien de partiel). Rend les comptes.
+ */
+function ecrireEtCompter(db, { clubs, gens, horodatage }) {
   // --- ÉCRITURE -------------------------------------------------------
-  db.exec('BEGIN IMMEDIATE');
   try {
     // --- ÉQUIPES ------------------------------------------------------
     // Le nom canonique est celui que la source emploie le plus souvent, ni
@@ -242,14 +280,21 @@ export function rebuildRegistries({ database = openDb() } = {}) {
  * l'annuaire est VIDE : un annuaire simplement en retard reste utilisable,
  * et le refaire à chaque lecture coûterait huit secondes pour rien. Après
  * un import, c'est à l'import d'appeler `rebuildRegistries()`.
+ *
+ * Le magasin n'est compté que si l'annuaire est vide (07/10/2026) : avec un
+ * annuaire rempli, le résultat ne dépend pas du nombre de joueurs, et compter
+ * deux millions de lignes coûtait 400 ms au premier classement lu de chaque
+ * processus (le contrôle complet du carnet de santé, lancé à part, y était
+ * tenu pour rien). Le résultat est le même.
  */
 let verifie = false;
 export function ensureRegistries({ database = openDb() } = {}) {
   if (verifie) return;
   verifie = true;
   const vide = database.prepare('SELECT COUNT(*) n FROM people').get().n === 0;
+  if (!vide) return;
   const desMatchs = database.prepare('SELECT COUNT(*) n FROM players').get().n > 0;
-  if (!vide || !desMatchs) return;
+  if (!desMatchs) return;
   console.warn("[identités] annuaire vide : reconstruction depuis le magasin…");
   const debut = Date.now();
   const bilan = rebuildRegistries({ database });

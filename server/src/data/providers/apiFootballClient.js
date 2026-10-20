@@ -1,10 +1,17 @@
 import { env } from '../../config/env.js';
+import { noterAppelApiFootball } from '../relevesDesSources.js';
 
 /**
  * Client HTTP brut pour l'API-Sports Football v3 (compte direct sur
  * api-football.com, authentification par l'en-tête x-apisports-key — pas la
  * variante RapidAPI). Ne fait aucune transformation métier : ce sont les
  * fonctions de `teamStatsService.js` qui interprètent les réponses.
+ *
+ * Étape 14 du plan (07/10/2026) : chaque appel RÉEL est noté
+ * (data/relevesDesSources.js) — heure, statut, chemin, et le compteur du jour
+ * que la source renvoie dans ses en-têtes (plan gratuit : 100 par jour). La
+ * santé des sources lit ces notes : on n'appelle jamais API-Football pour
+ * lire son compteur. Un appel refusé faute de clé n'est pas un appel.
  */
 async function callApiFootball(path, params = {}, { fullBody = false } = {}) {
   if (!env.apiFootball.apiKey) {
@@ -16,9 +23,16 @@ async function callApiFootball(path, params = {}, { fullBody = false } = {}) {
     if (value !== undefined && value !== null) url.searchParams.set(key, String(value));
   }
 
-  const response = await fetch(url, {
-    headers: { 'x-apisports-key': env.apiFootball.apiKey }
-  });
+  let response;
+  try {
+    response = await fetch(url, {
+      headers: { 'x-apisports-key': env.apiFootball.apiKey }
+    });
+  } catch (error) {
+    noterAppelApiFootball({ chemin: path, ok: false, erreur: error });
+    throw error;
+  }
+  noterAppelApiFootball({ chemin: path, ok: response.ok, statut: response.status, entetes: response.headers });
 
   if (response.status === 429) {
     throw new Error('Limite de débit API-Football atteinte (plan gratuit : 100 requêtes/jour) — réessayez plus tard.');

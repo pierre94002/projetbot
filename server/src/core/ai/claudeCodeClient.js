@@ -26,6 +26,13 @@
  * système), `--tools ""` (aucun accès fichier/bash — le modèle n'a qu'à lire
  * ce qu'on lui donne), `--no-session-persistence` (50 analyses/jour ne
  * doivent pas encombrer l'historique Claude Code de Pierre).
+ *
+ * LE JOURNAL (étape 4 du plan, data/repositories/claudeUsageLedger.js) : C'EST
+ * ICI, et seulement ici, que chaque appel est noté — réussi ou en échec, avec
+ * ses tokens et son équivalent au tarif de l'API — quel que soit l'appelant
+ * (analyse d'avance, d'avant coup d'envoi, reprise, revue, clic). L'appelant
+ * dit seulement de quoi il s'agit (`appel` : type, match, mode du budget).
+ * Un appel refusé avant de partir (bac à sable) n'a rien coûté : pas de ligne.
  * -----------------------------------------------------------------------
  */
 
@@ -33,6 +40,8 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import os from 'node:os';
 import { env } from '../../config/env.js';
+import { autorisationIaBac } from '../../config/bacASable.js';
+import { journaliserAppel } from '../../data/repositories/claudeUsageLedger.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -47,8 +56,14 @@ const CWD = os.tmpdir();
  */
 export class ClaudeCodeIndisponible extends Error {}
 
+/**
+ * TESTS SEULEMENT (cf. __testing) : remplace le lancement du CLI par une
+ * réponse fabriquée. Aucun Claude n'est alors appelé.
+ */
+let claudeSimule = null;
+
 export function isClaudeCodeAuthenticated() {
-  return Boolean(env.claudeCode.oauthToken);
+  return Boolean(env.claudeCode.oauthToken) || Boolean(claudeSimule);
 }
 
 /**
@@ -65,25 +80,10 @@ function childEnv() {
 }
 
 /**
- * @param {{system: string, userMessage: string, jsonSchema: object, model?: string, effort?: string}} params
- * `model` accepte un alias ('sonnet', 'opus'...) — jamais un nom figé, pour
- * suivre la dernière version de la gamme sans dépendre d'un id précis.
- * @returns {Promise<{structuredOutput: object, usage: object|null, costUsd: number}>}
+ * Lance le CLI et rend sa réponse JSON ; lève ClaudeCodeIndisponible s'il ne
+ * répond pas ou répond de façon illisible.
  */
-export async function callClaudeCode({ system, userMessage, jsonSchema, model = 'sonnet', effort = 'low' }) {
-  const args = [
-    '-p',
-    '--output-format', 'json',
-    '--json-schema', JSON.stringify(jsonSchema),
-    '--system-prompt', system,
-    '--tools', '',
-    '--no-session-persistence',
-    '--setting-sources', 'user',
-    '--permission-prompts', 'none',
-    '--model', model,
-    '--effort', effort
-  ];
-
+async function lancerClaude({ args, userMessage }) {
   let stdout;
   try {
     // Jamais `shell: true` : les arguments (prompt, schéma) partent tels quels,
@@ -108,19 +108,100 @@ export async function callClaudeCode({ system, userMessage, jsonSchema, model = 
     if (!stdout) throw new ClaudeCodeIndisponible(`Claude Code (headless) n'a pas répondu : ${error.message}`);
   }
 
-  let payload;
   try {
-    payload = JSON.parse(stdout);
+    return JSON.parse(stdout);
   } catch {
     throw new ClaudeCodeIndisponible(`Claude Code (headless) : sortie illisible (${stdout.slice(0, 200)}).`);
   }
+}
 
-  if (payload.is_error) {
+/** Note l'appel au journal ; ne fait jamais échouer l'appel (le journal garde en mémoire ce qu'il ne peut écrire). */
+function noterAppel({ appel, model, debut, statut, erreur = null, payload = null }) {
+  try {
+    journaliserAppel({
+      canal: 'claude-code',
+      appel,
+      modele: `claude-code:${model}`,
+      statut,
+      erreur,
+      usage: payload?.usage ?? null,
+      coutUsd: payload?.total_cost_usd ?? null,
+      debut,
+      fin: Date.now()
+    });
+  } catch (error) {
+    console.warn(`[journal Claude] appel non noté : ${error.message}`);
+  }
+}
+
+/**
+ * @param {{system: string, userMessage: string, jsonSchema: object, model?: string, effort?: string, appel?: object}} params
+ * `model` accepte un alias ('sonnet', 'opus'...) — jamais un nom figé, pour
+ * suivre la dernière version de la gamme sans dépendre d'un id précis.
+ * `appel` (journal, étape 4) : { type: 'avance' | 'coup-d-envoi' | 'reprise' |
+ * 'revue' | 'manuel' | 'autre', detail?, match?: { matchId, home, away,
+ * league }, mode?: 'normal' | 'econome' } ; absent, l'appel est noté « autre ».
+ * @returns {Promise<{structuredOutput: object, usage: object|null, costUsd: number}>}
+ */
+export async function callClaudeCode({ system, userMessage, jsonSchema, model = 'sonnet', effort = 'low', appel = null }) {
+  // Bac à sable (cf. config/bacASable.js) : aucun appel Claude réel, sauf
+  // l'autorisation COMPTÉE (CM_BAC_IA_MAX), prévue mais pas branchée — Pierre
+  // ne l'a pas encore décidée (l'étape 41 s'est construite sans appel réel).
+  // Hors bac : toujours accordé.
+  // Une réponse SIMULÉE (tests) ne lance aucun CLI : rien à refuser.
+  if (!claudeSimule) {
+    const accordBac = autorisationIaBac();
+    if (!accordBac.ok) throw new ClaudeCodeIndisponible(`Bac à sable : ${accordBac.raison}.`);
+  }
+  const args = [
+    '-p',
+    '--output-format', 'json',
+    '--json-schema', JSON.stringify(jsonSchema),
+    '--system-prompt', system,
+    '--tools', '',
+    '--no-session-persistence',
+    '--setting-sources', 'user',
+    '--permission-prompts', 'none',
+    '--model', model,
+    '--effort', effort
+  ];
+
+  const debut = Date.now();
+  let payload;
+  try {
+    payload = claudeSimule ? await claudeSimule({ args, userMessage, model, effort, appel }) : await lancerClaude({ args, userMessage });
+  } catch (error) {
+    // Sans réponse : ses tokens sont inconnus (jamais comptés zéro en silence).
+    noterAppel({ appel, model, debut, statut: 'echec', erreur: error.message });
+    throw error;
+  }
+
+  if (payload?.is_error) {
+    noterAppel({ appel, model, debut, statut: 'echec', erreur: payload.result || 'échec inconnu', payload });
     throw new ClaudeCodeIndisponible(`Claude Code (headless) : ${payload.result || 'échec inconnu'}.`);
   }
-  if (!payload.structured_output) {
+  if (!payload?.structured_output) {
+    // Le schéma n'est pas respecté, mais la réponse a consommé ses tokens.
+    noterAppel({ appel, model, debut, statut: 'echec', erreur: 'réponse sans sortie structurée (schéma non respecté)', payload });
     throw new Error('Claude Code (headless) : réponse sans sortie structurée (schéma non respecté).');
   }
 
+  noterAppel({ appel, model, debut, statut: 'ok', payload });
   return { structuredOutput: payload.structured_output, usage: payload.usage ?? null, costUsd: payload.total_cost_usd ?? 0 };
 }
+
+/**
+ * Pour les tests seulement. `simulerClaude(fn)` remplace le lancement du CLI
+ * par `fn({ args, userMessage, model, effort, appel })`, qui rend la réponse
+ * JSON du CLI ({ structured_output, usage, total_cost_usd } ou is_error) ou
+ * lève ; `simulerClaude(null)` le rétablit. Tout le reste de callClaudeCode
+ * (contrôles, journal) tourne pour de vrai. Refusé hors d'une copie d'essai
+ * (test/aides/isolement.mjs pose CM_TEST_DOSSIER) : l'appli ne peut pas
+ * s'en servir.
+ */
+export const __testing = {
+  simulerClaude(fn) {
+    if (fn && !process.env.CM_TEST_DOSSIER) throw new Error('Simulation de Claude réservée aux tests (copie isolée, CM_TEST_DOSSIER).');
+    claudeSimule = typeof fn === 'function' ? fn : null;
+  }
+};
