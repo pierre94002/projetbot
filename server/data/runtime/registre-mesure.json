@@ -1,7 +1,1931 @@
 {
   "version": 1,
-  "majLe": "2026-10-20T20:02:10.016Z",
+  "majLe": "2026-10-22T15:45:40.596Z",
   "etapes": {
+    "27": {
+      "variantes": [
+        {
+          "id": "modele-buts-v1",
+          "quoi": "Un seul modèle de buts : une grille des scores (Poisson et Dixon-Coles, rho −0,05) calée sur les cotes (1N2, et plus/moins 2,5 gratuit quand il existe), mélangée aux forces d’attaque et de défense tirées des xG ou des buts, pondérées dans le temps (demi-vies 35/25 remesurées sur 2024-25 et football-data 2001-2012 ; celles de l’étape 18, jugées sur 2019-2023, lues comme point de départ) ; tous les marchés de buts et le score en sortent ; démarrage à froid : retenu après mesure (m7).",
+          "ou": "a-blanc",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-v1-1n2-seul-rho-m0-04",
+          "quoi": "m1 calage sur les cotes : v1 1N2 seul (rho −0,04)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-v2-total-par-plusmoins-2-5-equilibre-par-1n2-rho-m0-04",
+          "quoi": "m1 calage sur les cotes : v2 total par +/−2,5, équilibre par 1N2 (rho −0,04)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-v3-moindres-carres-h-a-o-rho-m0-04",
+          "quoi": "m1 calage sur les cotes : v3 moindres carrés H,A,O (rho −0,04)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-v4-rho-libre-par-match",
+          "quoi": "m1 calage sur les cotes : v4 rho libre par match",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-v2-borne-0-5-2-8",
+          "quoi": "m1 calage sur les cotes : v2 borné [0,5 ; 2,8]",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-v2-grille-0-10",
+          "quoi": "m1 calage sur les cotes : v2 grille 0-10",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-v2-grille-0-12",
+          "quoi": "m1 calage sur les cotes : v2 grille 0-12",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-v2-avec-plusmoins-maximum-du-marche",
+          "quoi": "m1 calage sur les cotes : v2 avec +/− maximum du marché",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-v2-avec-marge-proportionnelle-sur-le-plusmoins",
+          "quoi": "m1 calage sur les cotes : v2 avec marge proportionnelle sur le +/−",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-v2-avec-1n2-pinnacle-depuis-2012-07",
+          "quoi": "m1 calage sur les cotes : v2 avec 1N2 Pinnacle (≥ 2012-07)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-v2-avec-1n2-moyenne-depuis-2012-07-meme-matchs",
+          "quoi": "m1 calage sur les cotes : v2 avec 1N2 moyenne (≥ 2012-07, même matchs)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-v1-1n2-seul-pinnacle-depuis-2012-07",
+          "quoi": "m1 calage sur les cotes : v1 1N2 seul Pinnacle (≥ 2012-07)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-rho-m0.14",
+          "quoi": "m1 corrélation des petits scores rho = -0.14 (tour 2)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-rho-m0.12",
+          "quoi": "m1 corrélation des petits scores rho = -0.12 (tour 2)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-rho-m0.1",
+          "quoi": "m1 corrélation des petits scores rho = -0.1 (tour 2)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-rho-m0.08",
+          "quoi": "m1 corrélation des petits scores rho = -0.08 (tour 2)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-rho-m0.07",
+          "quoi": "m1 corrélation des petits scores rho = -0.07 (tour 2)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-rho-m0.06",
+          "quoi": "m1 corrélation des petits scores rho = -0.06 (tour 2)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-rho-m0.05",
+          "quoi": "m1 corrélation des petits scores rho = -0.05 (tour 2)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-rho-m0.04",
+          "quoi": "m1 corrélation des petits scores rho = -0.04 (tour 2)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-rho-m0.03",
+          "quoi": "m1 corrélation des petits scores rho = -0.03 (tour 2)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-rho-m0.02",
+          "quoi": "m1 corrélation des petits scores rho = -0.02 (tour 2)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-rho-m0.01",
+          "quoi": "m1 corrélation des petits scores rho = -0.01 (tour 2)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-rho-0",
+          "quoi": "m1 corrélation des petits scores rho = 0 (tour 2)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-rho-0.02",
+          "quoi": "m1 corrélation des petits scores rho = 0.02 (tour 2)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-loi-poisson-et-dc",
+          "quoi": "m1 loi des scores : Poisson + DC",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-loi-poisson-sans-dc-rho-0",
+          "quoi": "m1 loi des scores : Poisson sans DC (rho 0)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-loi-binomiale-negative-a-0.01-et-dc",
+          "quoi": "m1 loi des scores : Binomiale négative a=0.01 + DC",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-loi-binomiale-negative-a-0.02-et-dc",
+          "quoi": "m1 loi des scores : Binomiale négative a=0.02 + DC",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-loi-binomiale-negative-a-0.04-et-dc",
+          "quoi": "m1 loi des scores : Binomiale négative a=0.04 + DC",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m1-loi-binomiale-negative-a-0.08-et-dc",
+          "quoi": "m1 loi des scores : Binomiale négative a=0.08 + DC",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m6-nuls-delta-0",
+          "quoi": "m6 nuls ≥ 2-2 gonflés de δ = 0",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m6-nuls-delta-0.05",
+          "quoi": "m6 nuls ≥ 2-2 gonflés de δ = 0.05",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m6-nuls-delta-0.1",
+          "quoi": "m6 nuls ≥ 2-2 gonflés de δ = 0.1",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m6-nuls-delta-0.15",
+          "quoi": "m6 nuls ≥ 2-2 gonflés de δ = 0.15",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m6-nuls-delta-0.2",
+          "quoi": "m6 nuls ≥ 2-2 gonflés de δ = 0.2",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-hatt-6",
+          "quoi": "m2 forces des équipes : fd: tour 1 hAtt=6",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-hatt-8",
+          "quoi": "m2 forces des équipes : fd: tour 1 hAtt=8",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-hatt-13",
+          "quoi": "m2 forces des équipes : fd: tour 1 hAtt=13",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-hatt-18",
+          "quoi": "m2 forces des équipes : fd: tour 1 hAtt=18",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-hatt-25",
+          "quoi": "m2 forces des équipes : fd: tour 1 hAtt=25",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-hatt-35",
+          "quoi": "m2 forces des équipes : fd: tour 1 hAtt=35",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-hatt-50",
+          "quoi": "m2 forces des équipes : fd: tour 1 hAtt=50",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-hatt-100",
+          "quoi": "m2 forces des équipes : fd: tour 1 hAtt=100",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-hatt-inf",
+          "quoi": "m2 forces des équipes : fd: tour 1 hAtt=Infinity",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-hdef-6",
+          "quoi": "m2 forces des équipes : fd: tour 1 hDef=6",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-hdef-8",
+          "quoi": "m2 forces des équipes : fd: tour 1 hDef=8",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-hdef-13",
+          "quoi": "m2 forces des équipes : fd: tour 1 hDef=13",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-hdef-18",
+          "quoi": "m2 forces des équipes : fd: tour 1 hDef=18",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-hdef-25",
+          "quoi": "m2 forces des équipes : fd: tour 1 hDef=25",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-hdef-35",
+          "quoi": "m2 forces des équipes : fd: tour 1 hDef=35",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-hdef-50",
+          "quoi": "m2 forces des équipes : fd: tour 1 hDef=50",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-hdef-100",
+          "quoi": "m2 forces des équipes : fd: tour 1 hDef=100",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-hdef-inf",
+          "quoi": "m2 forces des équipes : fd: tour 1 hDef=Infinity",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-k0-0.5",
+          "quoi": "m2 forces des équipes : fd: tour 1 k0=0.5",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-k0-1",
+          "quoi": "m2 forces des équipes : fd: tour 1 k0=1",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-k0-2",
+          "quoi": "m2 forces des équipes : fd: tour 1 k0=2",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-k0-4",
+          "quoi": "m2 forces des équipes : fd: tour 1 k0=4",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-k0-8",
+          "quoi": "m2 forces des équipes : fd: tour 1 k0=8",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-k0-16",
+          "quoi": "m2 forces des équipes : fd: tour 1 k0=16",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-stat-buts",
+          "quoi": "m2 forces des équipes : fd: tour 1 stat=buts",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-fligue-1",
+          "quoi": "m2 forces des équipes : fd: tour 1 fLigue=1",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-fligue-0.5",
+          "quoi": "m2 forces des équipes : fd: tour 1 fLigue=0.5",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-1-fligue-0",
+          "quoi": "m2 forces des équipes : fd: tour 1 fLigue=0",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-hatt-6",
+          "quoi": "m2 forces des équipes : fd: tour 2 hAtt=6",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-hatt-8",
+          "quoi": "m2 forces des équipes : fd: tour 2 hAtt=8",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-hatt-13",
+          "quoi": "m2 forces des équipes : fd: tour 2 hAtt=13",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-hatt-18",
+          "quoi": "m2 forces des équipes : fd: tour 2 hAtt=18",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-hatt-25",
+          "quoi": "m2 forces des équipes : fd: tour 2 hAtt=25",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-hatt-35",
+          "quoi": "m2 forces des équipes : fd: tour 2 hAtt=35",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-hatt-50",
+          "quoi": "m2 forces des équipes : fd: tour 2 hAtt=50",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-hatt-100",
+          "quoi": "m2 forces des équipes : fd: tour 2 hAtt=100",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-hatt-inf",
+          "quoi": "m2 forces des équipes : fd: tour 2 hAtt=Infinity",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-hdef-6",
+          "quoi": "m2 forces des équipes : fd: tour 2 hDef=6",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-hdef-8",
+          "quoi": "m2 forces des équipes : fd: tour 2 hDef=8",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-hdef-13",
+          "quoi": "m2 forces des équipes : fd: tour 2 hDef=13",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-hdef-18",
+          "quoi": "m2 forces des équipes : fd: tour 2 hDef=18",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-hdef-25",
+          "quoi": "m2 forces des équipes : fd: tour 2 hDef=25",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-hdef-35",
+          "quoi": "m2 forces des équipes : fd: tour 2 hDef=35",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-hdef-50",
+          "quoi": "m2 forces des équipes : fd: tour 2 hDef=50",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-hdef-100",
+          "quoi": "m2 forces des équipes : fd: tour 2 hDef=100",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-hdef-inf",
+          "quoi": "m2 forces des équipes : fd: tour 2 hDef=Infinity",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-k0-0.5",
+          "quoi": "m2 forces des équipes : fd: tour 2 k0=0.5",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-k0-1",
+          "quoi": "m2 forces des équipes : fd: tour 2 k0=1",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-k0-2",
+          "quoi": "m2 forces des équipes : fd: tour 2 k0=2",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-k0-4",
+          "quoi": "m2 forces des équipes : fd: tour 2 k0=4",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-k0-8",
+          "quoi": "m2 forces des équipes : fd: tour 2 k0=8",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-k0-16",
+          "quoi": "m2 forces des équipes : fd: tour 2 k0=16",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-stat-buts",
+          "quoi": "m2 forces des équipes : fd: tour 2 stat=buts",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-fligue-1",
+          "quoi": "m2 forces des équipes : fd: tour 2 fLigue=1",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-fligue-0.5",
+          "quoi": "m2 forces des équipes : fd: tour 2 fLigue=0.5",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-tour-2-fligue-0",
+          "quoi": "m2 forces des équipes : fd: tour 2 fLigue=0",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-avantage-global-1.15",
+          "quoi": "m2 forces des équipes : fd: avantage global 1.15",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-avantage-global-1.2",
+          "quoi": "m2 forces des équipes : fd: avantage global 1.2",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-avantage-global-1.25",
+          "quoi": "m2 forces des équipes : fd: avantage global 1.25",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-avantage-global-1.3",
+          "quoi": "m2 forces des équipes : fd: avantage global 1.3",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-avantage-global-1.35",
+          "quoi": "m2 forces des équipes : fd: avantage global 1.35",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-avantage-par-championnat-retenu",
+          "quoi": "m2 forces des équipes : fd: avantage par championnat (retenu)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-rho-stats-m0.14",
+          "quoi": "m2 forces des équipes : fd: rho stats -0.14",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-rho-stats-m0.12",
+          "quoi": "m2 forces des équipes : fd: rho stats -0.12",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-rho-stats-m0.1",
+          "quoi": "m2 forces des équipes : fd: rho stats -0.1",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-rho-stats-m0.08",
+          "quoi": "m2 forces des équipes : fd: rho stats -0.08",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-rho-stats-m0.06",
+          "quoi": "m2 forces des équipes : fd: rho stats -0.06",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-rho-stats-m0.05",
+          "quoi": "m2 forces des équipes : fd: rho stats -0.05",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-rho-stats-m0.04",
+          "quoi": "m2 forces des équipes : fd: rho stats -0.04",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-rho-stats-m0.03",
+          "quoi": "m2 forces des équipes : fd: rho stats -0.03",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-rho-stats-m0.02",
+          "quoi": "m2 forces des équipes : fd: rho stats -0.02",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-fd-rho-stats-0",
+          "quoi": "m2 forces des équipes : fd: rho stats 0",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-hatt-6",
+          "quoi": "m2 forces des équipes : magasin: tour 1 hAtt=6",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-hatt-8",
+          "quoi": "m2 forces des équipes : magasin: tour 1 hAtt=8",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-hatt-13",
+          "quoi": "m2 forces des équipes : magasin: tour 1 hAtt=13",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-hatt-18",
+          "quoi": "m2 forces des équipes : magasin: tour 1 hAtt=18",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-hatt-25",
+          "quoi": "m2 forces des équipes : magasin: tour 1 hAtt=25",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-hatt-35",
+          "quoi": "m2 forces des équipes : magasin: tour 1 hAtt=35",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-hatt-50",
+          "quoi": "m2 forces des équipes : magasin: tour 1 hAtt=50",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-hatt-100",
+          "quoi": "m2 forces des équipes : magasin: tour 1 hAtt=100",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-hatt-inf",
+          "quoi": "m2 forces des équipes : magasin: tour 1 hAtt=Infinity",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-hdef-6",
+          "quoi": "m2 forces des équipes : magasin: tour 1 hDef=6",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-hdef-8",
+          "quoi": "m2 forces des équipes : magasin: tour 1 hDef=8",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-hdef-13",
+          "quoi": "m2 forces des équipes : magasin: tour 1 hDef=13",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-hdef-18",
+          "quoi": "m2 forces des équipes : magasin: tour 1 hDef=18",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-hdef-25",
+          "quoi": "m2 forces des équipes : magasin: tour 1 hDef=25",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-hdef-35",
+          "quoi": "m2 forces des équipes : magasin: tour 1 hDef=35",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-hdef-50",
+          "quoi": "m2 forces des équipes : magasin: tour 1 hDef=50",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-hdef-100",
+          "quoi": "m2 forces des équipes : magasin: tour 1 hDef=100",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-hdef-inf",
+          "quoi": "m2 forces des équipes : magasin: tour 1 hDef=Infinity",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-k0-0.5",
+          "quoi": "m2 forces des équipes : magasin: tour 1 k0=0.5",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-k0-1",
+          "quoi": "m2 forces des équipes : magasin: tour 1 k0=1",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-k0-2",
+          "quoi": "m2 forces des équipes : magasin: tour 1 k0=2",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-k0-4",
+          "quoi": "m2 forces des équipes : magasin: tour 1 k0=4",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-k0-8",
+          "quoi": "m2 forces des équipes : magasin: tour 1 k0=8",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-k0-16",
+          "quoi": "m2 forces des équipes : magasin: tour 1 k0=16",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-stat-xg",
+          "quoi": "m2 forces des équipes : magasin: tour 1 stat=xg",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-stat-buts",
+          "quoi": "m2 forces des équipes : magasin: tour 1 stat=buts",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-stat-mix",
+          "quoi": "m2 forces des équipes : magasin: tour 1 stat=mix",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-fligue-1",
+          "quoi": "m2 forces des équipes : magasin: tour 1 fLigue=1",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-fligue-0.5",
+          "quoi": "m2 forces des équipes : magasin: tour 1 fLigue=0.5",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-fligue-0",
+          "quoi": "m2 forces des équipes : magasin: tour 1 fLigue=0",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-wxg-0.3",
+          "quoi": "m2 forces des équipes : magasin: tour 1 wXg=0.3",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-wxg-0.5",
+          "quoi": "m2 forces des équipes : magasin: tour 1 wXg=0.5",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-wxg-0.7",
+          "quoi": "m2 forces des équipes : magasin: tour 1 wXg=0.7",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-1-wxg-0.85",
+          "quoi": "m2 forces des équipes : magasin: tour 1 wXg=0.85",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-hatt-6",
+          "quoi": "m2 forces des équipes : magasin: tour 2 hAtt=6",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-hatt-8",
+          "quoi": "m2 forces des équipes : magasin: tour 2 hAtt=8",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-hatt-13",
+          "quoi": "m2 forces des équipes : magasin: tour 2 hAtt=13",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-hatt-18",
+          "quoi": "m2 forces des équipes : magasin: tour 2 hAtt=18",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-hatt-25",
+          "quoi": "m2 forces des équipes : magasin: tour 2 hAtt=25",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-hatt-35",
+          "quoi": "m2 forces des équipes : magasin: tour 2 hAtt=35",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-hatt-50",
+          "quoi": "m2 forces des équipes : magasin: tour 2 hAtt=50",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-hatt-100",
+          "quoi": "m2 forces des équipes : magasin: tour 2 hAtt=100",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-hatt-inf",
+          "quoi": "m2 forces des équipes : magasin: tour 2 hAtt=Infinity",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-hdef-6",
+          "quoi": "m2 forces des équipes : magasin: tour 2 hDef=6",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-hdef-8",
+          "quoi": "m2 forces des équipes : magasin: tour 2 hDef=8",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-hdef-13",
+          "quoi": "m2 forces des équipes : magasin: tour 2 hDef=13",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-hdef-18",
+          "quoi": "m2 forces des équipes : magasin: tour 2 hDef=18",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-hdef-25",
+          "quoi": "m2 forces des équipes : magasin: tour 2 hDef=25",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-hdef-35",
+          "quoi": "m2 forces des équipes : magasin: tour 2 hDef=35",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-hdef-50",
+          "quoi": "m2 forces des équipes : magasin: tour 2 hDef=50",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-hdef-100",
+          "quoi": "m2 forces des équipes : magasin: tour 2 hDef=100",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-hdef-inf",
+          "quoi": "m2 forces des équipes : magasin: tour 2 hDef=Infinity",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-k0-0.5",
+          "quoi": "m2 forces des équipes : magasin: tour 2 k0=0.5",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-k0-1",
+          "quoi": "m2 forces des équipes : magasin: tour 2 k0=1",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-k0-2",
+          "quoi": "m2 forces des équipes : magasin: tour 2 k0=2",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-k0-4",
+          "quoi": "m2 forces des équipes : magasin: tour 2 k0=4",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-k0-8",
+          "quoi": "m2 forces des équipes : magasin: tour 2 k0=8",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-k0-16",
+          "quoi": "m2 forces des équipes : magasin: tour 2 k0=16",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-stat-xg",
+          "quoi": "m2 forces des équipes : magasin: tour 2 stat=xg",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-stat-buts",
+          "quoi": "m2 forces des équipes : magasin: tour 2 stat=buts",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-stat-mix",
+          "quoi": "m2 forces des équipes : magasin: tour 2 stat=mix",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-fligue-1",
+          "quoi": "m2 forces des équipes : magasin: tour 2 fLigue=1",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-fligue-0.5",
+          "quoi": "m2 forces des équipes : magasin: tour 2 fLigue=0.5",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-fligue-0",
+          "quoi": "m2 forces des équipes : magasin: tour 2 fLigue=0",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-wxg-0.3",
+          "quoi": "m2 forces des équipes : magasin: tour 2 wXg=0.3",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-wxg-0.5",
+          "quoi": "m2 forces des équipes : magasin: tour 2 wXg=0.5",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-wxg-0.7",
+          "quoi": "m2 forces des équipes : magasin: tour 2 wXg=0.7",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-tour-2-wxg-0.85",
+          "quoi": "m2 forces des équipes : magasin: tour 2 wXg=0.85",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-avantage-global-1.15",
+          "quoi": "m2 forces des équipes : magasin: avantage global 1.15",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-avantage-global-1.2",
+          "quoi": "m2 forces des équipes : magasin: avantage global 1.2",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-avantage-global-1.25",
+          "quoi": "m2 forces des équipes : magasin: avantage global 1.25",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-avantage-global-1.3",
+          "quoi": "m2 forces des équipes : magasin: avantage global 1.3",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-avantage-global-1.35",
+          "quoi": "m2 forces des équipes : magasin: avantage global 1.35",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-avantage-par-championnat-retenu",
+          "quoi": "m2 forces des équipes : magasin: avantage par championnat (retenu)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-rho-stats-m0.14",
+          "quoi": "m2 forces des équipes : magasin: rho stats -0.14",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-rho-stats-m0.12",
+          "quoi": "m2 forces des équipes : magasin: rho stats -0.12",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-rho-stats-m0.1",
+          "quoi": "m2 forces des équipes : magasin: rho stats -0.1",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-rho-stats-m0.08",
+          "quoi": "m2 forces des équipes : magasin: rho stats -0.08",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-rho-stats-m0.06",
+          "quoi": "m2 forces des équipes : magasin: rho stats -0.06",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-rho-stats-m0.05",
+          "quoi": "m2 forces des équipes : magasin: rho stats -0.05",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-rho-stats-m0.04",
+          "quoi": "m2 forces des équipes : magasin: rho stats -0.04",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-rho-stats-m0.03",
+          "quoi": "m2 forces des équipes : magasin: rho stats -0.03",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-rho-stats-m0.02",
+          "quoi": "m2 forces des équipes : magasin: rho stats -0.02",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-rho-stats-0",
+          "quoi": "m2 forces des équipes : magasin: rho stats 0",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m2-magasin-indice-de-force-de-l-etape-29-comme-forces",
+          "quoi": "m2 forces des équipes : magasin: indice de force de l’étape 29 comme forces",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-w-0",
+          "quoi": "m3 mélange : fd 1N2 seul w=0",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-w-0.05",
+          "quoi": "m3 mélange : fd 1N2 seul w=0.05",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-w-0.1",
+          "quoi": "m3 mélange : fd 1N2 seul w=0.1",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-w-0.15",
+          "quoi": "m3 mélange : fd 1N2 seul w=0.15",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-w-0.2",
+          "quoi": "m3 mélange : fd 1N2 seul w=0.2",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-w-0.25",
+          "quoi": "m3 mélange : fd 1N2 seul w=0.25",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-w-0.3",
+          "quoi": "m3 mélange : fd 1N2 seul w=0.3",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-w-0.35",
+          "quoi": "m3 mélange : fd 1N2 seul w=0.35",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-w-0.4",
+          "quoi": "m3 mélange : fd 1N2 seul w=0.4",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-w-0.45",
+          "quoi": "m3 mélange : fd 1N2 seul w=0.45",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-w-0.5",
+          "quoi": "m3 mélange : fd 1N2 seul w=0.5",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-w-0.55",
+          "quoi": "m3 mélange : fd 1N2 seul w=0.55",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-w-0.6",
+          "quoi": "m3 mélange : fd 1N2 seul w=0.6",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-w-0.65",
+          "quoi": "m3 mélange : fd 1N2 seul w=0.65",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-w-0.7",
+          "quoi": "m3 mélange : fd 1N2 seul w=0.7",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-w-0.75",
+          "quoi": "m3 mélange : fd 1N2 seul w=0.75",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-w-0.8",
+          "quoi": "m3 mélange : fd 1N2 seul w=0.8",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-w-0.85",
+          "quoi": "m3 mélange : fd 1N2 seul w=0.85",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-w-0.9",
+          "quoi": "m3 mélange : fd 1N2 seul w=0.9",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-w-0.95",
+          "quoi": "m3 mélange : fd 1N2 seul w=0.95",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-w-1",
+          "quoi": "m3 mélange : fd 1N2 seul w=1",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-grille-wt-ws-126-couples",
+          "quoi": "m3 mélange : fd 1N2 seul grille (wT, wS) 126 couples",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-poids-par-championnat-k-0",
+          "quoi": "m3 mélange : fd 1N2 seul poids par championnat k=0",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-poids-par-championnat-k-100",
+          "quoi": "m3 mélange : fd 1N2 seul poids par championnat k=100",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-poids-par-championnat-k-300",
+          "quoi": "m3 mélange : fd 1N2 seul poids par championnat k=300",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-poids-par-championnat-k-1000",
+          "quoi": "m3 mélange : fd 1N2 seul poids par championnat k=1000",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-seul-poids-par-championnat-k-3000",
+          "quoi": "m3 mélange : fd 1N2 seul poids par championnat k=3000",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-w-0",
+          "quoi": "m3 mélange : fd 1N2+plus/moins w=0",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-w-0.05",
+          "quoi": "m3 mélange : fd 1N2+plus/moins w=0.05",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-w-0.1",
+          "quoi": "m3 mélange : fd 1N2+plus/moins w=0.1",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-w-0.15",
+          "quoi": "m3 mélange : fd 1N2+plus/moins w=0.15",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-w-0.2",
+          "quoi": "m3 mélange : fd 1N2+plus/moins w=0.2",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-w-0.25",
+          "quoi": "m3 mélange : fd 1N2+plus/moins w=0.25",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-w-0.3",
+          "quoi": "m3 mélange : fd 1N2+plus/moins w=0.3",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-w-0.35",
+          "quoi": "m3 mélange : fd 1N2+plus/moins w=0.35",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-w-0.4",
+          "quoi": "m3 mélange : fd 1N2+plus/moins w=0.4",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-w-0.45",
+          "quoi": "m3 mélange : fd 1N2+plus/moins w=0.45",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-w-0.5",
+          "quoi": "m3 mélange : fd 1N2+plus/moins w=0.5",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-w-0.55",
+          "quoi": "m3 mélange : fd 1N2+plus/moins w=0.55",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-w-0.6",
+          "quoi": "m3 mélange : fd 1N2+plus/moins w=0.6",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-w-0.65",
+          "quoi": "m3 mélange : fd 1N2+plus/moins w=0.65",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-w-0.7",
+          "quoi": "m3 mélange : fd 1N2+plus/moins w=0.7",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-w-0.75",
+          "quoi": "m3 mélange : fd 1N2+plus/moins w=0.75",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-w-0.8",
+          "quoi": "m3 mélange : fd 1N2+plus/moins w=0.8",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-w-0.85",
+          "quoi": "m3 mélange : fd 1N2+plus/moins w=0.85",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-w-0.9",
+          "quoi": "m3 mélange : fd 1N2+plus/moins w=0.9",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-w-0.95",
+          "quoi": "m3 mélange : fd 1N2+plus/moins w=0.95",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-w-1",
+          "quoi": "m3 mélange : fd 1N2+plus/moins w=1",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-grille-wt-ws-126-couples",
+          "quoi": "m3 mélange : fd 1N2+plus/moins grille (wT, wS) 126 couples",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-poids-par-championnat-k-0",
+          "quoi": "m3 mélange : fd 1N2+plus/moins poids par championnat k=0",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-poids-par-championnat-k-100",
+          "quoi": "m3 mélange : fd 1N2+plus/moins poids par championnat k=100",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-poids-par-championnat-k-300",
+          "quoi": "m3 mélange : fd 1N2+plus/moins poids par championnat k=300",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-poids-par-championnat-k-1000",
+          "quoi": "m3 mélange : fd 1N2+plus/moins poids par championnat k=1000",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-1n2-et-plus-moins-poids-par-championnat-k-3000",
+          "quoi": "m3 mélange : fd 1N2+plus/moins poids par championnat k=3000",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-rho-du-melange-m0.08",
+          "quoi": "m3 mélange : fd rho du mélange -0.08",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-rho-du-melange-m0.06",
+          "quoi": "m3 mélange : fd rho du mélange -0.06",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-rho-du-melange-m0.05",
+          "quoi": "m3 mélange : fd rho du mélange -0.05",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-rho-du-melange-m0.04",
+          "quoi": "m3 mélange : fd rho du mélange -0.04",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-rho-du-melange-m0.03",
+          "quoi": "m3 mélange : fd rho du mélange -0.03",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-rho-du-melange-m0.02",
+          "quoi": "m3 mélange : fd rho du mélange -0.02",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-fd-rho-du-melange-0",
+          "quoi": "m3 mélange : fd rho du mélange 0",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-w-0",
+          "quoi": "m3 mélange : magasin 1N2 seul w=0",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-w-0.05",
+          "quoi": "m3 mélange : magasin 1N2 seul w=0.05",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-w-0.1",
+          "quoi": "m3 mélange : magasin 1N2 seul w=0.1",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-w-0.15",
+          "quoi": "m3 mélange : magasin 1N2 seul w=0.15",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-w-0.2",
+          "quoi": "m3 mélange : magasin 1N2 seul w=0.2",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-w-0.25",
+          "quoi": "m3 mélange : magasin 1N2 seul w=0.25",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-w-0.3",
+          "quoi": "m3 mélange : magasin 1N2 seul w=0.3",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-w-0.35",
+          "quoi": "m3 mélange : magasin 1N2 seul w=0.35",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-w-0.4",
+          "quoi": "m3 mélange : magasin 1N2 seul w=0.4",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-w-0.45",
+          "quoi": "m3 mélange : magasin 1N2 seul w=0.45",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-w-0.5",
+          "quoi": "m3 mélange : magasin 1N2 seul w=0.5",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-w-0.55",
+          "quoi": "m3 mélange : magasin 1N2 seul w=0.55",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-w-0.6",
+          "quoi": "m3 mélange : magasin 1N2 seul w=0.6",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-w-0.65",
+          "quoi": "m3 mélange : magasin 1N2 seul w=0.65",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-w-0.7",
+          "quoi": "m3 mélange : magasin 1N2 seul w=0.7",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-w-0.75",
+          "quoi": "m3 mélange : magasin 1N2 seul w=0.75",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-w-0.8",
+          "quoi": "m3 mélange : magasin 1N2 seul w=0.8",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-w-0.85",
+          "quoi": "m3 mélange : magasin 1N2 seul w=0.85",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-w-0.9",
+          "quoi": "m3 mélange : magasin 1N2 seul w=0.9",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-w-0.95",
+          "quoi": "m3 mélange : magasin 1N2 seul w=0.95",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-w-1",
+          "quoi": "m3 mélange : magasin 1N2 seul w=1",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-grille-wt-ws-126-couples",
+          "quoi": "m3 mélange : magasin 1N2 seul grille (wT, wS) 126 couples",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-poids-par-championnat-k-0",
+          "quoi": "m3 mélange : magasin 1N2 seul poids par championnat k=0",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-poids-par-championnat-k-100",
+          "quoi": "m3 mélange : magasin 1N2 seul poids par championnat k=100",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-poids-par-championnat-k-300",
+          "quoi": "m3 mélange : magasin 1N2 seul poids par championnat k=300",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-poids-par-championnat-k-1000",
+          "quoi": "m3 mélange : magasin 1N2 seul poids par championnat k=1000",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-seul-poids-par-championnat-k-3000",
+          "quoi": "m3 mélange : magasin 1N2 seul poids par championnat k=3000",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-w-0",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins w=0",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-w-0.05",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.05",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-w-0.1",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.1",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-w-0.15",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.15",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-w-0.2",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.2",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-w-0.25",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.25",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-w-0.3",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.3",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-w-0.35",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.35",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-w-0.4",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.4",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-w-0.45",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.45",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-w-0.5",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.5",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-w-0.55",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.55",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-w-0.6",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.6",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-w-0.65",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.65",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-w-0.7",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.7",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-w-0.75",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.75",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-w-0.8",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.8",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-w-0.85",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.85",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-w-0.9",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.9",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-w-0.95",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.95",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-w-1",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins w=1",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-grille-wt-ws-126-couples",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins grille (wT, wS) 126 couples",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-poids-par-championnat-k-0",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins poids par championnat k=0",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-poids-par-championnat-k-100",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins poids par championnat k=100",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-poids-par-championnat-k-300",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins poids par championnat k=300",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-poids-par-championnat-k-1000",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins poids par championnat k=1000",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-1n2-et-plus-moins-poids-par-championnat-k-3000",
+          "quoi": "m3 mélange : magasin 1N2+plus/moins poids par championnat k=3000",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-rho-du-melange-m0.08",
+          "quoi": "m3 mélange : magasin rho du mélange -0.08",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-rho-du-melange-m0.06",
+          "quoi": "m3 mélange : magasin rho du mélange -0.06",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-rho-du-melange-m0.05",
+          "quoi": "m3 mélange : magasin rho du mélange -0.05",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-rho-du-melange-m0.04",
+          "quoi": "m3 mélange : magasin rho du mélange -0.04",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-rho-du-melange-m0.03",
+          "quoi": "m3 mélange : magasin rho du mélange -0.03",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-rho-du-melange-m0.02",
+          "quoi": "m3 mélange : magasin rho du mélange -0.02",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m3-magasin-rho-du-melange-0",
+          "quoi": "m3 mélange : magasin rho du mélange 0",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m4-livres-moyenne-fd",
+          "quoi": "m4 plus/moins 2,5 : la moyenne football-data (pré-clôture), retenue",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m4-livres-pinnacle-fd",
+          "quoi": "m4 plus/moins 2,5 : Pinnacle (football-data, pré-clôture)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m4-livres-espn",
+          "quoi": "m4 plus/moins 2,5 : la moyenne des livres ESPN admis",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "m7-demarrage-n0-8",
+          "quoi": "m7 démarrage à froid : le total statistique rapproché de celui du championnat tant que le club le moins connu a moins de 8 matchs (retenu)",
+          "ou": "construction",
+          "le": "2026-10-22T15:45:40.552Z"
+        }
+      ]
+    },
     "29": {
       "lancements": [
         {
@@ -9,6 +1933,17 @@
           "quoi": "Indice de force des équipes : note et statistiques corrigées de la force des adversaires, pondérées dans le temps (demi-vies de l’étape 18), au total, à domicile et à l’extérieur ; proposé aux modèles, jamais lu par le moteur.",
           "le": "2026-10-14",
           "heure": null,
+          "source": "code"
+        }
+      ]
+    },
+    "30": {
+      "lancements": [
+        {
+          "version": "fiches-v1",
+          "quoi": "Fiches des joueurs par poste (par 90 min, pondérées dans le temps, corrigées des adversaires et du championnat, ramenées vers la moyenne du poste) et force du onze face à l’équipe habituelle ; affichées et mesurées à blanc, jamais lues par le moteur.",
+          "le": "2026-10-22",
+          "heure": "2026-10-22T15:45:40.596Z",
           "source": "code"
         }
       ]
