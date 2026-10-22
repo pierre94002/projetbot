@@ -296,8 +296,19 @@ const ouMoins = (b) => (b && Number.isFinite(b.over) && Number.isFinite(b.under)
  *   resultAndTotal  { ligne, issues: { homeOver, homeUnder, drawOver, drawUnder, awayOver, awayUnder } }
  *   corners / tirs  { [equipe,] ligne, attendu, issues: { over, under } }
  * null quand le marché, la ligne ou les probabilités manquent (jamais 0).
+ * Étape 27 : quand le modèle de buts unique a calculé le match (`modeleDeButs`), la distribution d'un marché de
+ * buts porte aussi sa `provenance` (« cotes-plusmoins-xg »…) — le gel, l'essai à blanc et la calibration séparent
+ * ainsi les régimes ; jamais sans lui.
  */
+const MARCHES_DU_MODELE_DE_BUTS = new Set(['totalGoals', 'bothTeamsScore', 'teamGoals', 'resultAndTotal']);
+
 export function distributionDuMarche(analysisResult, { marketId, params } = {}) {
+  const brute = distributionBrute(analysisResult, { marketId, params });
+  const provenance = analysisResult?.modeleDeButs?.provenance?.code ?? null;
+  return brute && provenance && MARCHES_DU_MODELE_DE_BUTS.has(marketId) ? { ...brute, provenance } : brute;
+}
+
+function distributionBrute(analysisResult, { marketId, params } = {}) {
   const d = analysisResult?.distributions ?? null;
   const ligne = Number(params?.line);
   const equipe = params?.team === 'home' || params?.team === 'away' ? params.team : null;

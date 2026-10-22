@@ -55,8 +55,9 @@ import {
 import { prixFd, prixGratuits, prixVosBookmakers, lectureDirecte, plusMoins25, temoinsDeCloture } from './prix.js';
 import {
   LecteurDuMagasin, MemoireFd, ReperesCourants, matchDuBanc, faitsDuMagasin, faitsDuFd, reglementDuMatch, contributionAuRepere, distributionsDuRepere,
-  loiDuCompte, dispersionDe, cleDuMagasin, cleDuFd, ligueDuCode, TILT_NEUTRE, COLONNES_FD
+  loiDuCompte, dispersionDe, cleDuMagasin, cleDuFd, ligueDuCode, TILT_NEUTRE, COLONNES_FD, ForcesCourantes
 } from './entrees.js';
+import { reglagesDuModeleDeButs } from '../core/engine/goalModel.js';
 import { decisionsDesVariantes, parisDUnMatch } from './simulateBets.js';
 import { Accumulateurs, resumer, nouvelleReproduction } from './resume.js';
 
@@ -64,7 +65,9 @@ import { Accumulateurs, resumer, nouvelleReproduction } from './resume.js';
 export class OptionsDuBancInvalides extends Error {}
 
 const JOUR = /^\d{4}-\d{2}-\d{2}$/;
-const OPTIONS = Object.freeze(['periodes', 'prix', 'marches', 'de', 'a', 'config', 'vues', 'coupure', 'database', 'rendreLaMain', 'journal', 'avancement', 'surLigne', 'graine', 'tirages', 'minBlocs', 'reproduction', 'declaration']);
+// `surAnalyse` (étape 27, pour l'oracle de la copie tronquée des tests) : reçoit chaque analyse rejouée, telle quelle
+// ({ jeu, match, analyse, rencontre }) — le match porte les entrées du modèle de buts posées par le banc.
+const OPTIONS = Object.freeze(['periodes', 'prix', 'marches', 'de', 'a', 'config', 'vues', 'coupure', 'database', 'rendreLaMain', 'journal', 'avancement', 'surLigne', 'surAnalyse', 'graine', 'tirages', 'minBlocs', 'reproduction', 'declaration']);
 const fini = (x) => typeof x === 'number' && Number.isFinite(x);
 const copie = (v) => JSON.parse(JSON.stringify(v));
 
@@ -116,6 +119,7 @@ function lireOptions(options) {
     journal: options.journal ?? null,
     avancement: options.avancement ?? null,
     surLigne: options.surLigne ?? null,
+    surAnalyse: options.surAnalyse ?? null,
     graine: options.graine ?? 1,
     tirages: options.tirages ?? 1000,
     minBlocs: options.minBlocs ?? undefined,
@@ -290,8 +294,18 @@ function construireLignes({ analyse, match, mo, jeu, m, ctx }) {
       case 'scoreExact': {
         const sp = analyse.scorePrediction;
         if (grille === undefined) {
-          grille = sp ? grilleDesScores({ inputs: match.scoreInputs ?? null, fair: analyse.prediction.source === 'cotes' && ref ? ref.probabilities : null }) : null;
-          if (grille && sp && (Number(grille.lambda.toFixed(2)) !== sp.expectedGoals.home || Number(grille.mu.toFixed(2)) !== sp.expectedGoals.away)) ctx.bilan.grilleDifferente++;
+          const unique = d.scoreExact;
+          if (unique && sp) {
+            // Étape 27 : le modèle de buts unique rend LA grille du score (81 cases telles quelles, distributions.scoreExact) ;
+            // contrôle : la case la plus probable est bien le score annoncé.
+            let max = 0;
+            for (let k = 1; k < unique.cases.length; k++) if (unique.cases[k] > unique.cases[max]) max = k;
+            grille = { source: sp.source, cases: unique.cases.map((p, k) => ({ home: Math.floor(k / (BUTS_MAX + 1)), away: k % (BUTS_MAX + 1), p })) };
+            if (unique.cases[max] !== unique.cases[indiceDuScore(sp.mostLikely.home, sp.mostLikely.away)]) ctx.bilan.grilleDifferente++;
+          } else {
+            grille = sp ? grilleDesScores({ inputs: match.scoreInputs ?? null, fair: analyse.prediction.source === 'cotes' && ref ? ref.probabilities : null }) : null;
+            if (grille && sp && (Number(grille.lambda.toFixed(2)) !== sp.expectedGoals.home || Number(grille.mu.toFixed(2)) !== sp.expectedGoals.away)) ctx.bilan.grilleDifferente++;
+          }
         }
         if (!grille) {
           l.nonReglable = 'sansPronostic';
@@ -419,22 +433,32 @@ async function rejouerUnMatch(ctx, m) {
   if (!m.entrees.statInputs?.home?.corners || !m.entrees.statInputs?.away?.corners) acc.compter(tranche, 'fenetreIncomplete');
   if (m.entrees.leagueGoalAverages === null) acc.compter(tranche, 'sansMoyenneDeLigue');
   const analyses = [];
+  // Étape 27 : le régime du modèle de buts de chaque analyse (sa provenance), compté pour le bilan.
+  const regime = (analyse) => {
+    const code = analyse?.modeleDeButs?.provenance?.code;
+    if (code) ctx.bilan.regimes[code] = (ctx.bilan.regimes[code] ?? 0) + 1;
+    return analyse;
+  };
+  const observer = (x) => {
+    if (ctx.surAnalyse) ctx.surAnalyse({ jeu: x.jeu, match: x.match, analyse: x.analyse, rencontre: m.rencontre });
+  };
   for (const jeu of m.jeux) {
     const mo = m.prix[jeu] ?? null;
     if (!mo) {
       acc.compter(tranche, 'sansPrix', 1, jeu);
       continue;
     }
-    const match = matchDuBanc({ rencontre: m.rencontre, entrees: m.entrees, marketOdds: mo });
-    analyses.push({ jeu, match, mo, analyse: await analyzeMatch(match, ctx.config, TILT_NEUTRE, ctx.sport) });
+    const match = matchDuBanc({ rencontre: m.rencontre, entrees: m.entrees, marketOdds: mo, entreesButs: entreesButsDuMatch(ctx, m, mo) });
+    analyses.push({ jeu, match, mo, analyse: regime(await analyzeMatch(match, ctx.config, TILT_NEUTRE, ctx.sport)) });
     ctx.bilan.analyses++;
   }
   let jeux = analyses;
   if (!analyses.length) {
-    const match = matchDuBanc({ rencontre: m.rencontre, entrees: m.entrees, marketOdds: null });
-    jeux = [{ jeu: SANS_COTE, match, mo: null, analyse: await analyzeMatch(match, ctx.config, TILT_NEUTRE, ctx.sport) }];
+    const match = matchDuBanc({ rencontre: m.rencontre, entrees: m.entrees, marketOdds: null, entreesButs: entreesButsDuMatch(ctx, m, null) });
+    jeux = [{ jeu: SANS_COTE, match, mo: null, analyse: regime(await analyzeMatch(match, ctx.config, TILT_NEUTRE, ctx.sport)) }];
     ctx.bilan.analyses++;
   }
+  jeux.forEach(observer);
   const parJeu = jeux.map((x) => ({ ...x, lignes: construireLignes({ analyse: x.analyse, match: x.match, mo: x.mo, jeu: x.jeu, m, ctx }) }));
   const avecCotes = parJeu.filter((p) => p.jeu !== SANS_COTE && p.analyse.prediction.source === 'cotes');
   const versees = (p, l) => {
@@ -495,11 +519,21 @@ async function rejouerUnMatch(ctx, m) {
     if (x) ajouterAReproduction(ctx, m.ligneFd, x.analyse, x.mo);
     else {
       // Le jeu « fd-cloture » n'est pas rejoué : une analyse de plus, pour la seule reproduction (jamais versée aux cases).
-      const match = matchDuBanc({ rencontre: m.rencontre, entrees: m.entrees, marketOdds: m.prixReproduction });
+      const match = matchDuBanc({ rencontre: m.rencontre, entrees: m.entrees, marketOdds: m.prixReproduction, entreesButs: entreesButsDuMatch(ctx, m, m.prixReproduction) });
       ajouterAReproduction(ctx, m.ligneFd, await analyzeMatch(match, ctx.config, TILT_NEUTRE, ctx.sport), m.prixReproduction);
       ctx.bilan.reproductionAnalyses++;
     }
   }
+}
+
+/**
+ * Étape 27 : les entrées du modèle de buts d'un match du banc (ForcesCourantes : forces et moyennes du championnat
+ * « avant J » ; le plus/moins du jeu de prix `mo`) — null quand les réglages rejoués n'ont pas le modèle : la clé
+ * `entreesButs` est alors posée nulle, rien n'est calculé.
+ */
+function entreesButsDuMatch(ctx, m, mo) {
+  if (!ctx.forces || !m.butsCles) return null;
+  return ctx.forces.entrees({ ...m.butsCles, jour: m.rencontre.date, plusMoins: mo?.plusMoins ?? null });
 }
 
 /** Une rencontre de P4b dans la reproduction : la lecture directe (formule de t24), et le chemin du moteur hors anomalies. */
@@ -608,10 +642,25 @@ export async function rejouer(options = {}) {
     sport: getSport('football'),
     specs: MARCHES_DU_BANC.filter((s) => o.marches.includes(s.famille)),
     surLigne: o.surLigne,
+    surAnalyse: o.surAnalyse,
     bilan,
     prochainBloc: 0,
-    reproduction: Boolean(acc.reproduction)
+    reproduction: Boolean(acc.reproduction),
+    forces: null
   };
+  // Étape 27 : des réglages avec le modèle de buts unique — ses entrées, « avant J », tenues par le banc lui-même
+  // (ForcesCourantes) ; des réglages fautifs arrêtent le rejeu (bilan.erreur), jamais un calcul à moitié.
+  let reglagesButs = null;
+  try {
+    reglagesButs = reglagesDuModeleDeButs(config);
+  } catch (error) {
+    Object.assign(bilan, { fin: new Date().toISOString(), dureeMs: Math.round(performance.now() - debut), ...pauses.bilan(), ...retardDeLaBoucle(), erreur: error.message });
+    return { bilan, resume: null, moteur };
+  }
+  if (reglagesButs) {
+    ctx.forces = new ForcesCourantes(reglagesButs);
+    bilan.regimes = {};
+  }
   const database = o.database;
   const lecteur = new LecteurDuMagasin(database);
   const dernierJour = [database.prepare('SELECT MAX(date) d FROM day_matches').get()?.d, database.prepare('SELECT MAX(date) d FROM fd_history').get()?.d].filter(Boolean).sort().at(-1) ?? null;
@@ -639,7 +688,10 @@ export async function rejouer(options = {}) {
     const codes = database.prepare('SELECT DISTINCT code FROM fd_history').all().map((r) => r.code);
     const lireFd = codes.length ? database.prepare(`SELECT ${COLONNES_FD.join(', ')} FROM fd_history WHERE code IN (${codes.map(() => '?').join(', ')}) AND date >= ? AND date < ?`) : null;
     const t0 = performance.now();
-    const rencontres = lecteur.rencontresEntre([debutRepere, PERIODES.P3.de].sort().at(-1), finRejeu);
+    // Étape 27 : avec le modèle de buts, le magasin est lu dès son premier fait (2023-01) — les forces du banc sont
+    // celles de la table de nuit ; les jours d'avant le repère ne nourrissent QUE les forces.
+    const debutMagasin = ctx.forces ? PERIODES.P3.de : [debutRepere, PERIODES.P3.de].sort().at(-1);
+    const rencontres = lecteur.rencontresEntre(debutMagasin, finRejeu);
     tracer('lecture', t0);
     const magParJour = new Map();
     for (const r of rencontres) {
@@ -683,8 +735,8 @@ export async function rejouer(options = {}) {
     const totalFd = memoire ? fdRejeu.reduce((s, f) => s + (compterFd.get(f.de, [f.a, finFd].sort()[0])?.n ?? 0), 0) : 0;
     let faitesFd = 0;
 
-    // Les mois de la passe : du premier jour utile au dernier.
-    const debutPasse = [debutFd, debutRepere].sort()[0];
+    // Les mois de la passe : du premier jour utile au dernier (étape 27 : le premier fait du magasin, avec le modèle de buts).
+    const debutPasse = [debutFd, debutRepere, debutMagasin].sort()[0];
     for (let mois = `${debutPasse.slice(0, 7)}-01`; mois <= finRejeu; mois = moisSuivant(mois)) {
       const finMois = moisSuivant(mois);
       const t1 = performance.now();
@@ -714,12 +766,15 @@ export async function rejouer(options = {}) {
           bilan.rencontres.magasin++;
           const nm = noms.get(r.matchKey) ?? { homeName: null, awayName: null };
           if (!fenetreMag) {
-            // Avant les périodes demandées : le repère seulement.
+            // Avant les périodes demandées : le repère seulement (et les forces de buts, étape 27 — seules, avant le repère).
             const camps = lecteur.st.camps.all(r.rencontre);
             const dom = camps.find((x) => x.camp === 1);
             if (dom) {
-              const reg = reglementDuMatch(faitsDuMagasin(dom));
-              contribuer(r.league, r.saison, contributionAuRepere(reg));
+              if (date >= debutRepere) {
+                const reg = reglementDuMatch(faitsDuMagasin(dom));
+                contribuer(r.league, r.saison, contributionAuRepere(reg));
+              }
+              if (ctx.forces) ctx.forces.ajouter('magasin', dom);
             }
             continue;
           }
@@ -730,6 +785,8 @@ export async function rejouer(options = {}) {
             bilan.ecartees.sansLigneJourJ++;
             continue;
           }
+          // Étape 27 : la rencontre entre dans les forces de buts en fin de journée (jamais avant son propre calcul).
+          if (ctx.forces) ctx.forces.ajouter('magasin', e.dom);
           const faits = faitsDuMagasin(e.dom);
           const reglement = reglementDuMatch(faits);
           contribuer(r.league, r.saison, contributionAuRepere(reglement));
@@ -755,8 +812,8 @@ export async function rejouer(options = {}) {
           const t3 = performance.now();
           for (const jeu of o.prix) {
             if (jeu === 'fd-avant-match' || jeu === 'fd-cloture') prix[jeu] = ligneFd ? prixFd(ligneFd, { jeu }) : null;
-            else if (jeu === 'gratuites-avant-match') prix[jeu] = prixGratuits(r.matchKey, { coupure, database });
-            else if (jeu === 'vos-bookmakers') prix[jeu] = prixVosBookmakers(r.matchKey, { coupure, database });
+            else if (jeu === 'gratuites-avant-match') prix[jeu] = prixGratuits(r.matchKey, { coupure, database, plusMoins: Boolean(ctx.forces) });
+            else if (jeu === 'vos-bookmakers') prix[jeu] = prixVosBookmakers(r.matchKey, { coupure, database, plusMoins: Boolean(ctx.forces) });
           }
           // Le prix de la reproduction (moyenne de clôture), lu une fois : celui du jeu « fd-cloture » s'il est rejoué.
           const prixReproduction = ctx.reproduction && tranche === 'P4b' && ligneFd ? (o.prix.includes('fd-cloture') ? prix['fd-cloture'] : prixFd(ligneFd, { jeu: 'fd-cloture' })) : null;
@@ -775,7 +832,9 @@ export async function rejouer(options = {}) {
             temoins: ligneFd ? temoinsDeCloture(ligneFd) : null,
             repere: repere(r.league, date, r.saison),
             vues: vues(date),
-            huisClos: estHuisClos(date)
+            huisClos: estHuisClos(date),
+            // Étape 27 : les clés des entrées du modèle de buts (identifiants FotMob, championnat, saison).
+            butsCles: { source: 'magasin', home: r.home, away: r.away, league: r.league, saison: r.saison }
           };
           const t4 = performance.now();
           if (reglement.attribue) {
@@ -783,7 +842,7 @@ export async function rejouer(options = {}) {
             bilan.ecartees.attribue++;
             // La reproduction compte les rencontres attribuées comme t24 (lecture du fichier football-data).
             if (prixReproduction) {
-              const match = matchDuBanc({ rencontre, entrees: e.entrees, marketOdds: prixReproduction });
+              const match = matchDuBanc({ rencontre, entrees: e.entrees, marketOdds: prixReproduction, entreesButs: entreesButsDuMatch(ctx, m, prixReproduction) });
               ajouterAReproduction(ctx, ligneFd, await analyzeMatch(match, config, TILT_NEUTRE, ctx.sport), prixReproduction);
               acc.reproduction.attribuees++;
               bilan.reproductionAnalyses++;
@@ -851,7 +910,9 @@ export async function rejouer(options = {}) {
               temoins: temoinsDeCloture(ligne),
               repere: repere(league, date, saison),
               vues: vues(date),
-              huisClos: estHuisClos(date)
+              huisClos: estHuisClos(date),
+              // Étape 27 : les clés des entrées du modèle de buts (identifiants fd_teams, code du championnat, saison).
+              butsCles: { source: 'fd', home: Number(ligne.dom), away: Number(ligne.ext), league: ligne.code, saison }
             });
             bilan.rencontres.rejouees++;
           }
@@ -867,8 +928,12 @@ export async function rejouer(options = {}) {
           memoire.publier(faitsDuJour);
           bilan.fd.faits += faitsDuJour.length;
           bilan.fd.lignes += lignesDuJour.length;
+          // Étape 27 : les mêmes faits football-data entrent dans les forces de buts (le camp qui reçoit porte la rencontre).
+          if (ctx.forces) for (const f of faitsDuJour) if (f.home) ctx.forces.ajouter('fd', f);
           tracer('entrees', t5);
         }
+        // Étape 27 : les forces de buts et les moyennes à la 90e avancent, comme le repère, en fin de journée.
+        if (ctx.forces) ctx.forces.finDeJournee();
         for (const c of contributions.values()) reperes.ajouterJournee(c.league, date, c.liste, { saison: c.saison });
         reperesDuJour.clear();
         bilan.rssMax = Math.max(bilan.rssMax, process.memoryUsage.rss());

@@ -31,6 +31,7 @@ import {
   enregistrerLancements,
   declarerLancement,
   declarerVariante,
+  declarerVariantes,
   lancementDe,
   variantesDe,
   compterVariantes,
@@ -210,9 +211,9 @@ test('preuve : rendement et valeur de clôture — le pourcentage est « × 100 
 // --------------------------------------------------------------- 12. le registre
 
 test('registre : enregistrerLancements crée le fichier, daté du jour de PARIS du démarrage (23 h 30 UTC = le lendemain) ; rejoué, il n’écrit rien ; un « le » fixe est recopié tel quel ; rien à noter, aucun fichier créé', () => {
-  // Rien à noter (une liste vide ; celle du code a l'étape 29 depuis le 19/10) : aucun fichier créé.
+  // Rien à noter (une liste vide ; celle du code a l'étape 29 depuis le 19/10, l'étape 30 depuis le 22/10) : aucun fichier créé.
   const vide = nouveauFichier();
-  assert.deepEqual(LANCEMENTS.map((l) => [l.etape, l.version, l.le]), [['29', 'indice-v1', '2026-10-14']]);
+  assert.deepEqual(LANCEMENTS.map((l) => [l.etape, l.version, l.le]), [['29', 'indice-v1', '2026-10-14'], ['30', 'fiches-v1', null]]);
   assert.deepEqual(enregistrerLancements({ fichier: vide, lancements: [] }), { nouveaux: [], source: 'absent', probleme: null });
   assert.equal(fs.existsSync(vide), false);
 
@@ -398,9 +399,13 @@ test('juge de preuve, « déjà vu » par PORTÉE (correction du 19/10) : DONNEE
   const j = jugerEtape({ etape: '27', lignes, mesure: 'perte-log', maintenant: Date.parse('2026-12-02T08:00:00Z'), registre: { fichier, lancements }, enregistrer: false });
   assert.deepEqual(j.ecartees, { avantLancement: 0, donneesVues: 3 }, 'la vue « moteur » d’une autre étape lancée : écartée ; sa vue « indice » : gardée');
   assert.equal(j.n.lignes, 7);
-  // Le vrai code : l'étape 29 est lancée le 14/10 (date fixe), sa preuve écarte ses six vues, « indice » comprises.
+  // Le vrai code : l'étape 29 est lancée le 14/10 (date fixe), sa preuve écarte ses six vues, « indice » comprises ;
+  // l'étape 30 (22/10/2026, « le: null ») est datée du démarrage.
   const vrai = nouveauFichier();
-  assert.deepEqual(enregistrerLancements({ fichier: vrai, maintenant: Date.parse('2026-10-19T08:00:00Z') }).nouveaux, [{ etape: '29', version: 'indice-v1', le: '2026-10-14' }]);
+  assert.deepEqual(enregistrerLancements({ fichier: vrai, maintenant: Date.parse('2026-10-19T08:00:00Z') }).nouveaux, [
+    { etape: '29', version: 'indice-v1', le: '2026-10-14' },
+    { etape: '30', version: 'fiches-v1', le: '2026-10-19' }
+  ]);
   assert.equal(lancementDe('29', { fichier: vrai }).le, '2026-10-14');
   assert.deepEqual(fenetresVues('29', { fichier: vrai }).map((f) => [f.de, f.a]).sort(), [['2000-07-01', '2019-06-30'], ['2019-07-01', '2023-06-30'], ['2023-01-01', '2024-06-30'], ['2023-07-01', '2024-06-30'], ['2024-07-01', '2025-06-30'], ['2025-07-01', '2026-09-23'], ['2025-07-01', '2026-10-07']]);
   // … et le jugement d'une autre étape (27, une candidate du moteur) n'en écarte aucune : l'indice n'est pas lu par le moteur.
@@ -475,7 +480,8 @@ test('feuille de route : un registre illisible ne fait pas tomber la page — pl
   const mesure = etatPourFeuilleDeRoute({ fichier });
   const etat = etatFeuilleDeRoute({ maintenant: MIDI, pierre: PIERRE_VIDE, mesure });
   assert.equal(etat.lots.flatMap((l) => l.etapes).length, 49);
-  assert.equal(etat.avancement.terminees, new Set(HISTORIQUE.map((h) => h.etape)).size);
+  // Étape 27 : une étape que l'historique ne raconte qu'en partie (lignes « partielle ») n'est pas terminée.
+  assert.equal(etat.avancement.terminees, new Set(HISTORIQUE.filter((h) => !h.partielle).map((h) => h.etape)).size);
   assert.equal(etat.mesureRegistre.source, 'illisible');
   assert.match(etat.mesureRegistre.probleme, /forme inattendue \(« etapes » n’est pas un objet\)/);
   for (const e of etat.lots.flatMap((l) => l.etapes)) {
@@ -519,4 +525,62 @@ test('les tests passent leur registre : aucun appel à la page sans « mesure »
     assert.doesNotMatch(source, new RegExp(`${['etatPour', 'FeuilleDeRoute'].join('')}\\(\\s*\\)`), `${nom} : le registre lu sans fichier d'essai`);
   }
   assert.ok(appels >= 15, `${appels} appels trouvés : la recherche ne voit plus les appels`);
+});
+
+/** Compte les écritures d'un fichier pendant `faire` (writeJsonAtomic finit chaque écriture par un renommage vers lui). */
+function ecrituresDe(fichier, faire) {
+  const vrai = fs.renameSync;
+  let n = 0;
+  fs.renameSync = (de, vers) => {
+    if (path.resolve(String(vers)) === path.resolve(fichier)) n++;
+    return vrai(de, vers);
+  };
+  try {
+    const r = faire();
+    return { r, ecritures: n };
+  } finally {
+    fs.renameSync = vrai;
+  }
+}
+
+test('étape 27 (vérification du branchement, constat 3) — declarerVariantes : la candidate et ses 319 variantes en UNE écriture du registre de la mesure (sous OneDrive, 320 de suite étaient un risque de verrou), aucun doublon, K = 320 ; rien de neuf → aucune écriture ; une variante fautive → rien d’écrit ; même contenu qu’une par une ; mettreLaCandidateEnEssai s’en sert', async () => {
+  const { CANDIDATE_EN_ESSAI } = await import('../src/core/engine/engineVersions.js');
+  const fichier = nouveauFichier();
+  const options = { fichier, maintenant: Date.parse('2026-10-22T05:00:00Z') };
+  const liste = [{ id: CANDIDATE_EN_ESSAI.id, quoi: CANDIDATE_EN_ESSAI.quoi, ou: 'a-blanc' }, ...CANDIDATE_EN_ESSAI.variantes.map((v) => ({ id: v.id, quoi: v.quoi, ou: 'construction' }))];
+  assert.equal(liste.length, 320);
+  const premiere = ecrituresDe(fichier, () => declarerVariantes('27', liste, options));
+  assert.equal(premiere.ecritures, 1, 'une seule écriture pour 320 variantes');
+  assert.equal(premiere.r.ajoutees.length, 320);
+  assert.deepEqual(premiere.r.variantes[0], { id: 'modele-buts-v1', change: true, variante: { id: 'modele-buts-v1', quoi: CANDIDATE_EN_ESSAI.quoi, ou: 'a-blanc', le: '2026-10-22T05:00:00.000Z' } });
+  const rangees = lire(fichier).etapes['27'].variantes;
+  assert.equal(rangees.length, 320);
+  assert.equal(new Set(rangees.map((v) => v.id)).size, 320, 'aucun doublon');
+  assert.equal(compterVariantes('27', options), 320, 'K = 320');
+  // Rien de neuf : aucune écriture, le fichier intact.
+  const avant = photo(fichier);
+  const seconde = ecrituresDe(fichier, () => declarerVariantes('27', liste, options));
+  assert.equal(seconde.ecritures, 0);
+  assert.ok(seconde.r.variantes.every((v) => v.change === false && v.variante === null));
+  assert.deepEqual(photo(fichier), avant);
+  // Un identifiant répété DANS la liste : compté une fois.
+  const autre = nouveauFichier();
+  const double = declarerVariantes('27', [{ id: 'x', quoi: 'a' }, { id: 'x', quoi: 'b' }], { ...options, fichier: autre });
+  assert.deepEqual(double.variantes.map((v) => v.change), [true, false]);
+  assert.equal(lire(autre).etapes['27'].variantes.length, 1);
+  // Une variante fautive : rien d'écrit (tout est vérifié avant d'écrire).
+  const fautif = nouveauFichier();
+  assert.throws(() => declarerVariantes('27', [{ id: 'y' }, { id: '' }], { ...options, fichier: fautif }), /l’identifiant d’une variante est vide/);
+  assert.equal(fs.existsSync(fautif), false);
+  // Le même contenu que la déclaration une par une (même ordre, mêmes champs), en 320 écritures au lieu d'une.
+  const unParUn = nouveauFichier();
+  const lent = ecrituresDe(unParUn, () => {
+    for (const v of liste) declarerVariante('27', v, { ...options, fichier: unParUn });
+  });
+  assert.equal(lent.ecritures, 320);
+  assert.deepEqual(lire(unParUn).etapes, lire(fichier).etapes);
+  // La mise en essai de la candidate s'en sert : plus de boucle d'écritures.
+  const code = fs.readFileSync(path.join(SERVEUR, 'src', 'core', 'engine', 'engineVersions.js'), 'utf8');
+  assert.match(code, /const declarees = declarerVariantes\(/);
+  assert.doesNotMatch(code, /for \(const v of c\.variantes \?\? \[\]\) declarerVariante\(/);
 });

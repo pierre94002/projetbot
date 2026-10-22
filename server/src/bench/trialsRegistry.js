@@ -256,6 +256,39 @@ export function declarerVariante(etape, { id, quoi = '', ou = 'a-blanc' } = {}, 
   return { change: true, variante };
 }
 
+/**
+ * PLUSIEURS variantes d'une étape d'un coup (étape 27, vérification du branchement, constat 3 : la candidate mise à
+ * blanc et les 319 variantes de sa construction) : UNE lecture et UNE écriture du registre (aucune si rien de neuf) —
+ * le fichier vit sous OneDrive, 320 écritures de suite y étaient un risque de verrou. Même règle que declarerVariante :
+ * un identifiant déjà déclaré (dans le code ou au registre), ou répété dans la liste, est sauté. Tout est vérifié
+ * avant d'écrire (rien d'écrit si une variante est fautive). Rend { ajoutees, variantes } — `variantes` dans l'ordre
+ * de la liste : { id, change, variante }. Lève RegistreIllisible.
+ */
+export function declarerVariantes(etape, liste, options) {
+  const idEtape = idConnu(etape, 'declarerVariantes');
+  if (!Array.isArray(liste)) throw new TypeError('declarerVariantes : une liste de variantes est attendue.');
+  for (const v of liste) {
+    if (!texte(v?.id)) throw new TypeError('declarerVariantes : l’identifiant d’une variante est vide.');
+    if (!texte(v.ou ?? 'a-blanc')) throw new TypeError('declarerVariantes : « ou » est vide (a-blanc, banc, appli…).');
+  }
+  const { fichier, lancements, maintenant } = optionsDe(options);
+  const brut = lireOuLever(fichier).brut ?? registreNeuf();
+  const deja = new Set(variantesFusionnees(idEtape, brut, lancements).map((v) => v.id));
+  const ajoutees = [];
+  const variantes = liste.map(({ id, quoi = '', ou = 'a-blanc' }) => {
+    if (deja.has(id)) return { id, change: false, variante: null };
+    deja.add(id);
+    const variante = { id, quoi: typeof quoi === 'string' ? quoi : '', ou, le: iso(maintenant) };
+    ajoutees.push(variante);
+    return { id, change: true, variante };
+  });
+  if (ajoutees.length) {
+    const entree = brut.etapes?.[idEtape] ?? {};
+    ecrire(fichier, brut, { ...(brut.etapes ?? {}), [idEtape]: { ...entree, variantes: [...(entree.variantes ?? []), ...ajoutees] } }, maintenant);
+  }
+  return { ajoutees, variantes };
+}
+
 /** Ajoute un jugement (JAMAIS de remplacement : chaque jugement garde sa date) ; rend l'objet rangé. Lève RegistreIllisible. */
 export function enregistrerJugement(etape, jugement, options) {
   const id = idConnu(etape, 'enregistrerJugement');

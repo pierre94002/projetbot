@@ -16,6 +16,12 @@
  * Chaque ligne porte aussi l'état de la composition (cache des compositions
  * FotMob, sans requête ; sinon « dernière alignée » si le magasin en a une)
  * et la confiance, « pas encore mesurée » tant que l'étape 38 n'existe pas.
+ * Étape 23 (22/10/2026) : chaque ligne porte aussi la CASE de la carte « où
+ * parier » de son championnat et de son marché (verte, grise, rouge, et la
+ * phrase) ; le tri met les lignes des cases ROUGES à la fin de la liste, et,
+ * à verdict égal, celles des cases VERTES d'abord. Rien n'est masqué ; le
+ * verdict, la pastille de value et les notifications ne changent pas de
+ * décision. Sans carte (aucun rejeu du banc encore), rien ne change.
  *
  * RIEN DE LOURD À LA LECTURE : tout vient de l'état préparé du Repérage
  * (screener.js, calculé en arrière-plan et gardé 30 minutes) ; seuls le
@@ -31,6 +37,7 @@ import { getScreener, MARCHES } from './screener.js';
 import { getFixturePaths } from './repositories/fixturesRepository.js';
 import { ETATS_AVEC_OFFRE } from '../core/engine/verdictPari.js';
 import { preparerAVerifier, familleDuMarche } from './controleQuotidien.js';
+import { carteDesLecteurs, caseDuPari, rangDeLaCase } from './bettingMap.js';
 
 const JOUR_MS = 86_400_000;
 const AVEC_OFFRE = new Set(ETATS_AVEC_OFFRE);
@@ -124,13 +131,20 @@ export function rangDeTri(verdict) {
   return 3;
 }
 
-/** Tri par défaut : rang, puis value (la plus forte d'abord), puis chute, puis coup d'envoi. */
+/**
+ * Tri par défaut : les lignes des cases ROUGES de la carte « où parier » à la fin (étape 23), puis le rang, puis
+ * la case (verte avant grise), puis value (la plus forte d'abord), puis chute, puis coup d'envoi. Sans carte,
+ * toutes les lignes ont le même rang de case : l'ordre d'avant.
+ */
 export function trierLesLignes(lignes) {
   const valeur = (l) => (rangDeTri(l.verdict) <= 2 && Number.isFinite(l.verdict?.pourcent) ? l.verdict.pourcent : -Infinity);
   const chute = (l) => (l.mouvement?.chute ? l.mouvement.dropPct : -Infinity);
+  const rouge = (l) => (l.carte?.couleur === 'rouge' ? 1 : 0);
   return [...lignes].sort(
     (a, b) =>
+      rouge(a) - rouge(b) ||
       rangDeTri(a.verdict) - rangDeTri(b.verdict) ||
+      rangDeLaCase(a.carte) - rangDeLaCase(b.carte) ||
       valeur(b) - valeur(a) ||
       chute(b) - chute(a) ||
       String(a.commenceTime).localeCompare(String(b.commenceTime)) ||
@@ -181,7 +195,7 @@ function releveDesCotesDeVosBookmakers() {
  * verdicts et leur fraîcheur, pris à la lecture). Pur, à part l'état des
  * compositions qu'on lui passe : de quoi le rejouer dans les tests.
  */
-export function lignesDesOpportunites(donnees, { compositions = new Map() } = {}) {
+export function lignesDesOpportunites(donnees, { compositions = new Map(), carte = null } = {}) {
   const lignes = [];
   for (const m of donnees?.matches ?? []) {
     const compo = compositionDe(m, compositions);
@@ -224,7 +238,9 @@ export function lignesDesOpportunites(donnees, { compositions = new Map() } = {}
         chute,
         compo,
         // L'étape 38 du plan la mesurera ; d'ici là, rien n'est inventé.
-        confiance: null
+        confiance: null,
+        // Étape 23 : la case de la carte « où parier » (championnat × marché) ; absente tant qu'aucune carte n'existe.
+        ...(carte ? { carte: caseDuPari(carte, m.league, k.key) } : {})
       });
     }
   }
@@ -249,7 +265,14 @@ export function getOpportunities({ force = false, calculSiPerime = true, mainten
   } catch {
     compositions = new Map();
   }
-  const lignes = marquerAVerifier(lignesDesOpportunites(lu.data, { compositions }), { maintenant });
+  // Étape 23 : la carte « où parier » (une requête d'une ligne ; relue seulement quand une nouvelle carte est rangée).
+  let carte = null;
+  try {
+    carte = carteDesLecteurs({ database: database ?? openDb() });
+  } catch {
+    carte = null;
+  }
+  const lignes = marquerAVerifier(lignesDesOpportunites(lu.data, { compositions, carte }), { maintenant });
   const matchs = lu.data.matches ?? [];
   const avecVosCotes = matchs.filter((m) => (m.markets ?? []).some((k) => aUneOffre(k.verdict)));
   return {
@@ -273,8 +296,12 @@ export function getOpportunities({ force = false, calculSiPerime = true, mainten
         chutes: lignes.filter((l) => l.chute).length,
         chutesSansVosCotes: lignes.filter((l) => l.chute && !l.avecOffre).length,
         // Le coupe-circuit de Réglages enclenché : aucun pari n'est conseillé, la page le dit.
-        coupeCircuit: lignes.some((l) => l.verdict?.etat === 'coupe-circuit')
+        coupeCircuit: lignes.some((l) => l.verdict?.etat === 'coupe-circuit'),
+        // Étape 23 : combien de lignes tombent dans une case verte, rouge de la carte « où parier » (seulement quand une carte existe).
+        ...(carte ? { enCaseVerte: lignes.filter((l) => l.carte?.couleur === 'vert').length, enCaseRouge: lignes.filter((l) => l.carte?.couleur === 'rouge').length } : {})
       },
+      // Étape 23 : la carte lue (null sans carte) ; `aJour` faux : réglages du moteur changés, couleurs suspendues.
+      carte: carte ? { id: carte.id, mois: carte.mois, calculeLe: carte.calculeLe, aJour: carte.aJour, resume: carte.resume } : null,
       failures: lu.data.failures ?? []
     }
   };
@@ -287,6 +314,13 @@ export function getOpportunities({ force = false, calculSiPerime = true, mainten
  */
 export function getOpportunitesVertes({ maintenant = Date.now() } = {}) {
   const lu = getScreener({ calculSiPerime: false, maintenant });
+  // Étape 23 : la case de la carte, pour dire « case rouge » dans la notification (jamais pour en retirer une).
+  let carte = null;
+  try {
+    carte = lu.data ? carteDesLecteurs() : null;
+  } catch {
+    carte = null;
+  }
   const vertes = [];
   for (const m of lu.data?.matches ?? []) {
     for (const k of m.markets ?? []) {
@@ -301,7 +335,8 @@ export function getOpportunitesVertes({ maintenant = Date.now() } = {}) {
         commenceTime: m.commenceTime,
         exactKickoff: Boolean(m.exactKickoff),
         pari: libelleDuPari(k.key, m),
-        verdict: v
+        verdict: v,
+        ...(carte ? { carte: caseDuPari(carte, m.league, k.key) } : {})
       });
     }
   }

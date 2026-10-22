@@ -98,7 +98,8 @@ export function kpiCandidate(etat) {
   const c = etat?.candidate;
   if (etat?.candidateProbleme) return { valeur: 'refusée', detail: etat.candidateProbleme, ton: 'is-danger' };
   if (!c) return { valeur: 'aucune', detail: 'la première viendra de l’étape 27', ton: '' };
-  return { valeur: c.id, detail: `étape ${c.etape} · ${c.quoi}`, ton: '' };
+  // Étape 27 : la phrase en mots simples quand la candidate en a une (le « quoi » technique reste au registre).
+  return { valeur: c.id, detail: `étape ${c.etape} · ${c.enMots ?? c.quoi}`, ton: '' };
 }
 
 /** La place de chaque version précédente dans le retour arrière : la prochaine, plus loin, ou hors du chemin. */
@@ -378,4 +379,177 @@ export const PHRASES = Object.freeze({
     'Adopter remplace les réglages du moteur par ceux de la candidate, en une fois, seulement si le juge de l’étape 16 la dit meilleure sur des matchs joués après sa mise à blanc. Jamais pendant une actualisation ; on revient en arrière en un clic.',
   banc: 'Le banc d’essai la rejoue tout de suite sur les matchs passés : utile pour se faire une idée, jamais une preuve — ces matchs ont pu servir à la construire, et ils ne disent rien des matchs à venir.',
   derive: 'Il y a dérive quand l’écart entre ce que le moteur annonce et ce qui arrive grandit au-delà du hasard, par rapport à son départ (le banc d’essai, 2019-2023).'
+});
+
+// ------------------------------------------------------------------------
+// Étape 27 du plan (21/10/2026) : la candidate du MODÈLE DE BUTS UNIQUE.
+// La carte de la candidate, étendue (EngineGoalModelTrial) : le verdict de
+// chaque famille en mots, la calibration de chaque version, les régimes des
+// matchs calculés à blanc, la porte de l'adoption et l'horizon ; la porte 1
+// du banc d'essai (2019-2023) et sa réserve acceptée. Le serveur décide
+// (essaiCandidate.js, engineVersions.js, noteDuModeleDeButs.js) ; ici, on
+// l'écrit en mots simples. Jamais le vert : rien ici n'est une value.
+// ------------------------------------------------------------------------
+
+/** Les familles du modèle de buts, dans l'ordre de la carte. */
+export const FAMILLES_DE_BUTS = Object.freeze([
+  Object.freeze({ cle: 'totalGoals', nom: 'Plus/moins buts' }),
+  Object.freeze({ cle: 'bothTeamsScore', nom: 'Les 2 équipes marquent' }),
+  Object.freeze({ cle: 'teamGoals', nom: 'Buts d’une équipe' }),
+  Object.freeze({ cle: 'resultAndTotal', nom: 'Résultat + total' })
+]);
+const NOMS_DES_MARCHES = Object.freeze({ ...Object.fromEntries(FAMILLES_DE_BUTS.map((f) => [f.cle, f.nom])), scoreExact: 'Score exact' });
+
+/** Les marchés d'une candidate en mots (« Plus/moins buts, Les 2 équipes marquent… ») ; un marché inconnu, tel quel. */
+export function marchesDits(marches) {
+  return (Array.isArray(marches) ? marches : []).map((m) => NOMS_DES_MARCHES[m] ?? m).join(', ');
+}
+
+/** La candidate est-elle un modèle de buts unique (la clé `modeleDeButs` dans ses modifications) ? */
+export const estUnModeleDeButs = (candidate) => Boolean(candidate?.modifications?.football?.modeleDeButs);
+
+/** Le verdict d'une famille en mots (juge de l'étape 16) — « pas prouvé » est l'issue normale à 800 matchs. */
+const VERDICTS_DE_FAMILLE = Object.freeze({
+  retenu: Object.freeze({ valeur: 'retenu', detail: 'meilleure que la version en service, au-delà du hasard', ton: '' }),
+  'pas-prouve': Object.freeze({ valeur: 'pas prouvé', detail: 'normal à 800 matchs : l’écart peut venir du hasard', ton: 'is-warn' }),
+  'moins-bon': Object.freeze({ valeur: 'moins bon', detail: 'moins bonne au-delà du hasard : refuse toute l’adoption', ton: 'is-danger' }),
+  'pas-assez-de-matchs': Object.freeze({ valeur: 'trop peu', detail: 'trop peu de matchs pour juger', ton: '' })
+});
+
+/** Une famille du banc d'essai en une phrase courte : « au banc 2019-2023 : +7,9 % d’erreur de prévision en moins, retenu ». */
+function familleAuBanc(porte1, cle) {
+  const x = porte1?.familles?.[cle];
+  if (!x) return null;
+  return `au banc 2019-2023 : ${pourcentSigne(x.gainPct)} d’erreur de prévision en moins, ${verdictDit(x.verdict).court}`;
+}
+
+/**
+ * Le chiffre clé de chaque famille : le verdict de l'ESSAI À BLANC quand il est tombé ; avant l'horizon, « pas
+ * encore » (jamais de verdict par famille avant l'horizon) ; en détail, le chiffre du banc d'essai (2019-2023).
+ * Rend [{ cle, nom, valeur, detail, ton }].
+ */
+export function famillesDuModele(candidate) {
+  const j = candidate?.jugement ?? null;
+  return FAMILLES_DE_BUTS.map(({ cle, nom }) => {
+    const banc = familleAuBanc(candidate?.porte1, cle);
+    const x = j?.parFamille?.[cle] ?? null;
+    if (!x) {
+      return { cle, nom, valeur: 'pas encore', detail: ['verdict à l’horizon de l’essai', banc].filter(Boolean).join(' · '), ton: '' };
+    }
+    const v = VERDICTS_DE_FAMILLE[x.verdict] ?? { valeur: String(x.verdict ?? 'aucun'), detail: 'verdict non décrit', ton: '' };
+    const gain = typeof x.gainPct === 'number' && Number.isFinite(x.gainPct) ? `${pourcentSigne(x.gainPct)} d’erreur de prévision en moins sur ${nMatchs(x.matchs)}` : null;
+    return { cle, nom, valeur: v.valeur, detail: [v.detail, gain, banc].filter(Boolean).join(' · '), ton: v.ton };
+  });
+}
+
+/** Le biais d'une version en mots : « annonce trop haut de 9,5 points », « dans le hasard (écart −0,5 point) »… */
+function biaisDit(c, { avecVerdict }) {
+  if (!c || typeof c.biais !== 'number' || !Number.isFinite(c.biais)) return 'pas encore de pronostic réglé';
+  const ecart = points(c.biais);
+  if (!avecVerdict || !c.verdict) return `écart ${ecart} sur ${nMatchs(c.matchs ?? c.pronostics)}`;
+  if (c.verdict === 'trop-haut') return `annonce trop haut de ${points(-c.biais).replace(/^\+/, '')} (au-delà du hasard)`;
+  if (c.verdict === 'trop-bas') return `annonce trop bas de ${points(c.biais).replace(/^\+/, '')} (au-delà du hasard)`;
+  if (c.verdict === 'trop-peu') return `trop peu de pronostics pour juger (écart ${ecart})`;
+  return `dans le hasard (écart ${ecart})`;
+}
+
+/**
+ * La CALIBRATION du pronostic retenu de chaque version, famille par famille : celle du jugement de l'essai (juge de
+ * l'étape 20) quand il est tombé, sinon ses premiers chiffres (sans verdict avant l'horizon). Rend { quand, lignes:
+ * [{ cle, nom, texte }] } ; `quand` dit d'où viennent les chiffres.
+ */
+export function calibrationDuModele(candidate) {
+  const j = candidate?.jugement ?? null;
+  const pc = candidate?.premiersChiffres ?? null;
+  const source = j?.calibration ? j.calibration : (pc?.calibration ?? null);
+  const avecVerdict = Boolean(j?.calibration);
+  const quand = j?.calibration
+    ? `Au jugement de l’essai (${jourParis(j.le)}) : ce que chaque version annonçait face à ce qui est arrivé.`
+    : pc?.calibration
+      ? 'Premiers chiffres de l’essai à blanc, sans verdict avant l’horizon : ce que chaque version annonce face à ce qui arrive (un écart négatif : elle annonce trop haut).'
+      : 'Pas encore de match joué calculé à blanc : la calibration de chaque version se lira ici.';
+  const lignes = FAMILLES_DE_BUTS.map(({ cle, nom }) => ({
+    cle,
+    nom,
+    texte: source ? `en service : ${biaisDit(source.a?.[cle], { avecVerdict })} ; candidate : ${biaisDit(source.b?.[cle], { avecVerdict })}` : 'pas encore mesurée'
+  }));
+  return { quand, lignes };
+}
+
+/** Les régimes du modèle (la provenance des buts de chaque match calculé à blanc), regroupés pour Pierre. */
+const GROUPES_DE_REGIMES = Object.freeze([
+  Object.freeze({ cle: 'plusMoins', nom: 'cotes + plus/moins', codes: Object.freeze(['cotes-plusmoins-xg', 'cotes-plusmoins-buts']) }),
+  Object.freeze({ cle: 'unN2', nom: 'cotes 1N2 seule', codes: Object.freeze(['cotes-1n2-xg', 'cotes-1n2-buts']) }),
+  Object.freeze({ cle: 'sansCote', nom: 'sans cote', codes: Object.freeze(['xg-seuls', 'buts-seuls', 'moyennes-seules']) })
+]);
+
+/**
+ * Les RÉGIMES des matchs calculés à blanc : « cotes + plus/moins 61 % · cotes 1N2 seule 34 % — sur ces 34 %, le
+ * plus/moins ne vient pas du marché · sans cote 5 % : trop peu pour juger » (moins de 200 matchs). Rend { texte,
+ * groupes: [{ cle, nom, matchs, part }] } ; sans match, la phrase le dit.
+ */
+export function regimesDuModele(candidate) {
+  const r = candidate?.jugement?.regimes ?? candidate?.premiersChiffres?.regimes ?? null;
+  const total = r ? Object.values(r).reduce((s, n) => s + (Number.isFinite(n) ? n : 0), 0) : 0;
+  if (!total) return { texte: 'Pas encore de match calculé à blanc : les régimes (avec ou sans cote plus/moins, sans cote) se compteront ici.', groupes: [] };
+  const groupes = GROUPES_DE_REGIMES.map((g) => {
+    const matchs = g.codes.reduce((s, c) => s + (Number.isFinite(r[c]) ? r[c] : 0), 0);
+    return { cle: g.cle, nom: g.nom, matchs, part: Math.round((matchs / total) * 100) };
+  });
+  const morceaux = groupes
+    .filter((g) => g.matchs > 0)
+    .map((g) => {
+      let t = `${g.nom} ${g.part} %`;
+      if (g.matchs < 200) t += ' : trop peu pour juger';
+      if (g.cle === 'unN2') t += ` — sur ces ${g.part} %, le plus/moins ne vient pas du marché`;
+      return t;
+    });
+  return { texte: `${morceaux.join(' · ')} (sur ${nMatchs(total)} calculés à blanc).`, groupes };
+}
+
+/** La PORTE DE L'ADOPTION (la porte 2 de l'étape 27), en mots, et son état quand l'essai est jugé. */
+export function porteDeLAdoption(candidate) {
+  const regle =
+    'Pour être adoptée : aucune famille « moins bon » — une seule refuse tout le modèle, rien n’est adopté par morceaux ; sur le plus/moins 2,5 et « les 2 équipes marquent », la candidate ne doit annoncer ni trop haut ni trop bas au-delà d’une borne large (environ ± 3,5 points à 800 matchs) ; « pas prouvé » sur une famille est toléré.';
+  const s = candidate?.jugement?.surete ?? null;
+  if (!s) return { regle, etat: 'Jugée une seule fois, à l’horizon de l’essai.' };
+  const nom = (cle) => (cle === 'totalGoals|2.5' ? 'plus/moins 2,5' : cle === 'bothTeamsScore' ? 'les 2 équipes marquent' : cle);
+  const morceaux = Object.entries(s).map(([cle, c]) => `${nom(cle)} : ${biaisDit(c, { avecVerdict: true })}`);
+  return { regle, etat: `Porte de sûreté : ${morceaux.join(' ; ')}.` };
+}
+
+/** L'horizon de l'essai en une ligne : « 412 matchs sur 800, jour 11 sur 21 ». */
+export function avancementDuModele(candidate) {
+  const h = candidate?.horizon ?? { matchs: 800, jours: 21 };
+  const pc = candidate?.premiersChiffres ?? null;
+  if (candidate?.jugement) return `Jugée le ${jourParis(candidate.jugement.le)} sur ${nMatchs(candidate.jugement.matchs)} (horizon : ${h.matchs} matchs et ${h.jours} jours).`;
+  if (!candidate?.essai) return `Pas encore à blanc : en essai dès le redémarrage de l’appli, puis calculée à blanc chaque nuit (horizon : ${h.matchs} matchs et ${h.jours} jours).`;
+  const n = pc?.matchs ?? 0;
+  const j = pc?.joursEcoules ?? 0;
+  return `${nombreFr(n, 0)} match${n > 1 ? 's' : ''} sur ${h.matchs}, jour ${j} sur ${h.jours}.`;
+}
+
+/**
+ * La PORTE 1 du banc d'essai (2019-2023, jamais vu, prix d'avant-match), telle que le serveur la joint à la candidate
+ * (`porte1`, de noteDuModeleDeButs.js, seulement pour CETTE candidate) ; null sinon. Rend { franchie, titre, phrase,
+ * criteres: [texte], reserves: [texte] } — la réserve acceptée écrite telle quelle.
+ */
+export function porte1DuBanc(candidate) {
+  const p = candidate?.porte1 ?? null;
+  if (!p) return null;
+  const b = p.enBloc ?? {};
+  const f = Array.isArray(b.fourchettePct) ? ` [${pourcentSigne(b.fourchettePct[0]).replace(' %', '')} ; ${pourcentSigne(b.fourchettePct[1]).replace(' %', '')}]` : '';
+  return {
+    franchie: Boolean(p.franchie),
+    titre: p.franchie ? 'Porte 1 franchie au banc d’essai' : 'Porte 1 pas franchie au banc d’essai',
+    phrase: `Sur ${nMatchs(p.matchs)} jamais vus (${p.periode ?? '2019-2023'}), aux cotes d’avant-match : en bloc ${pourcentSigne(b.gainPct)}${f} d’erreur de prévision en moins, ${verdictDit(b.verdict).court} (${p.K ?? '?'} variantes comptées). Football-data n’a pas d’xG : ce banc juge le modèle « cotes + buts ».`,
+    criteres: (p.criteres ?? []).map((c) => c.texte),
+    reserves: (p.reservesAcceptees ?? []).map((r) => r.texte)
+  };
+}
+
+/** Les phrases fixes de la carte du modèle de buts. */
+export const PHRASES_DU_MODELE_DE_BUTS = Object.freeze({
+  pasProuveNormal: 'Une famille « pas prouvé » à 800 matchs est l’issue normale ; seul « moins bon » est un échec.',
+  temoin: 'Le score exact est calculé à blanc pour être regardé (témoin), jamais jugé : sa précision ne se prouve pas à 800 matchs.'
 });

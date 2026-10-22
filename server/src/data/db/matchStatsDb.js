@@ -1037,6 +1037,48 @@ END;`
 ];
 
 /**
+ * LA CARTE « OÙ PARIER » (étape 23 du plan, 22/10/2026) : championnat × marché, l'avantage du moteur jugé
+ * par le juge de l'étape 16 (src/data/bettingMap.js). Une ligne par carte calculée (le 1er du mois, à un
+ * nouveau rejeu du banc, à un changement de réglages), écrite UNE fois par le serveur seul (étape
+ * « carteOuParier » de l'actualisation, sous son verrou ; le calcul a tourné dans un processus à part en
+ * lecture seule), jamais réécrite (la base refuse un UPDATE) ; toutes gardées (~0,3 Mo chacune) : l'évolution
+ * se relit, et les REGARDS de la mesure en direct se comptent dessus.
+ *   mois             'AAAA-MM' (heure de Paris) du calcul ;
+ *   raison           'premiere' | 'nouveau-banc' | 'reglages' | 'mensuelle' ;
+ *   empreinte_*      le moteur mesuré (code + réglages ; réglages seuls) : une carte d'autres réglages ne
+ *                    colore plus rien ;
+ *   banc_*, k_banc   le rejeu du banc relu, son étiquette ('exact' | 'code-precedent' | 'k-insuffisant' |
+ *                    'aucun') et son K' (le nombre de cases de SA carte) ;
+ *   k_vivant, regards  le K de la mesure en direct (cases jugées) et ses regards (max(24, cartes + 1)) ;
+ *   fenetre, resume, contenu   JSON : la fenêtre du direct, les comptes, les championnats et les cases.
+ */
+const BETTING_MAP_DDL = [
+  `CREATE TABLE IF NOT EXISTS betting_map (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  mois TEXT NOT NULL,
+  calcule_le TEXT NOT NULL,
+  raison TEXT NOT NULL,
+  version_carte INTEGER NOT NULL,
+  moteur_version INTEGER,
+  empreinte_moteur TEXT NOT NULL,
+  empreinte_reglages TEXT NOT NULL,
+  banc_id INTEGER,
+  banc_etiquette TEXT,
+  k_banc INTEGER,
+  k_vivant INTEGER NOT NULL,
+  regards INTEGER NOT NULL,
+  fenetre TEXT NOT NULL,
+  resume TEXT NOT NULL,
+  contenu TEXT NOT NULL
+);`,
+  'CREATE INDEX IF NOT EXISTS idx_betting_map_mois ON betting_map(mois, id);',
+  `CREATE TRIGGER IF NOT EXISTS betting_map_jamais_reecrit BEFORE UPDATE ON betting_map
+BEGIN
+  SELECT RAISE(ABORT, 'betting_map : une carte calculée ne se réécrit jamais');
+END;`
+];
+
+/**
  * CONNAÎTRE LE MARCHÉ (étape 22 du plan, 13/10/2026) : la justesse, la vitesse, les biais et la marge de
  * chaque bookmaker, et le meilleur moment pour parier de chaque championnat, mesurés sur les cotes
  * archivées (src/data/marketKnowledge.js). Écrites par le serveur seul (étape « connaitreMarche » de
@@ -1144,6 +1186,135 @@ const TEAM_STRENGTH_DDL = [
   'CREATE INDEX IF NOT EXISTS idx_team_strength_actuel ON team_strength(league, lieu) WHERE actuel = 1;'
 ];
 
+/**
+ * LES FORCES DE BUTS (étape 27 du plan, 21/10/2026) : ce que le modèle de buts unique (core/engine/goalModel.js)
+ * lit de chaque club et de chaque championnat, « avant le jour J ». Tables DÉRIVÉES de la table du jour J, refaites
+ * en quelques secondes ; écrites par le serveur seul (étape « forcesButs » de l'actualisation ;
+ * scripts/forces-buts.mjs dans le bac), sous le verrou de la passe ; calculées dans un processus à part en lecture
+ * seule (data/db/forcesButs.js).
+ *   forces_buts         l'état d'un club APRÈS ses matchs du jour `jour` (huit sommes pondérées dans le temps, n,
+ *                       nx, dernier championnat) : il vaut pour tout jour > `jour` ; `reglages` = empreinteDesForces
+ *                       (version des forces, demi-vies, remise à zéro) ; `club` = numéro FotMob ;
+ *   forces_buts_ligues  les sommes QUOTIDIENNES d'un championnat à la 90e minute (matchs qui comptent au
+ *                       classement, ni attribués ; xG retirés d'un match prolongé) ;
+ *   forces_buts_state   version, empreintes servies, empreinte des rencontres, jusqua, calcule_le, bilan, en_cours,
+ *                       controle.
+ * Tant que `en_cours` est posé (rangement interrompu), le lecteur du moteur les ignore.
+ */
+const FORCES_BUTS_DDL = [
+  `CREATE TABLE IF NOT EXISTS forces_buts (
+  reglages TEXT NOT NULL,
+  club INTEGER NOT NULL,
+  jour TEXT NOT NULL,
+  ligue TEXT,
+  n INTEGER NOT NULL,
+  nx INTEGER NOT NULL,
+  sa REAL NOT NULL,
+  wa REAL NOT NULL,
+  sd REAL NOT NULL,
+  wd REAL NOT NULL,
+  sga REAL NOT NULL,
+  wga REAL NOT NULL,
+  sgd REAL NOT NULL,
+  wgd REAL NOT NULL,
+  PRIMARY KEY (reglages, club, jour)
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS forces_buts_ligues (
+  league TEXT NOT NULL,
+  jour TEXT NOT NULL,
+  saison INTEGER NOT NULL,
+  n INTEGER NOT NULL,
+  bd INTEGER NOT NULL,
+  be INTEGER NOT NULL,
+  nx INTEGER NOT NULL,
+  xd REAL NOT NULL,
+  xe REAL NOT NULL,
+  PRIMARY KEY (league, jour)
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS forces_buts_state (
+  cle TEXT PRIMARY KEY,
+  valeur TEXT NOT NULL
+) WITHOUT ROWID;`
+];
+
+/**
+ * LES FICHES DES JOUEURS (étape 30 du plan, 22/10/2026 ; data/db/playerRatings.js) : ce qu'on sait de chaque joueur
+ * et de l'équipe habituelle de chaque club « au lendemain du dernier jour de la table du jour J » — rien du jour
+ * même ni d'après. Tables DÉRIVÉES de la table du jour J, refaites en ~1 min ; écrites par le serveur seul (étape
+ * « fichesJoueurs » de l'actualisation ; scripts/player-ratings.mjs dans le bac), sous le verrou de la passe ;
+ * calculées dans un processus à part en lecture seule. JAMAIS lues par le moteur (règle de Pierre) : la page du
+ * match (lineupContext.js, force du onze) et l'écran de l'étape 31.
+ *   player_ratings        une ligne par joueur (numéro FotMob, jamais 0) : jour (1er jour où la fiche vaut),
+ *                         poste dominant (1 gardien … 4 attaquant), minutes, `etablie` (≥ 270 min), `formule`
+ *                         ('xg' ou 'tirs', le repli sans xG), `facteur` du championnat (×1000) ; les composantes
+ *                         par 90 min rétrécies et corrigées (×1000 ; la note FotMob par apparition) ; les poids de
+ *                         leur histoire (matchs de 90 min ×100) ; les APPORTS offensif et défensif (buts par 90 au-
+ *                         dessus de la moyenne du poste, ×1000) et leurs percentiles dans championnat × poste ; la
+ *                         courbe (JSON, 20 derniers points) ; l'empreinte des réglages ;
+ *   player_ratings_teams  une ligne par club : l'équipe habituelle (JSON [[joueur, part ×1000, part gardien ×1000,
+ *                         ligne]]), les moyennes offensives de chaque ligne dans son championnat (titulaires
+ *                         inconnus), ses apports habituels, son gardien habituel ;
+ *   player_ratings_state  version, réglages, empreinte, jusqua, calcule_le, en_cours, bilan, contrôle, mesure à
+ *                         blanc, banc.
+ */
+const PLAYER_RATINGS_DDL = [
+  `CREATE TABLE IF NOT EXISTS player_ratings (
+  joueur INTEGER PRIMARY KEY,
+  jour TEXT NOT NULL,
+  dernier_match TEXT,
+  club INTEGER,
+  league TEXT,
+  poste INTEGER,
+  part_poste INTEGER,
+  apparitions INTEGER NOT NULL,
+  minutes INTEGER NOT NULL,
+  etablie INTEGER NOT NULL,
+  formule TEXT NOT NULL,
+  facteur INTEGER NOT NULL,
+  xgnp INTEGER,
+  xa INTEGER,
+  xgot INTEGER,
+  tirs INTEGER,
+  pc INTEGER,
+  recup INTEGER,
+  duels INTEGER,
+  xga INTEGER,
+  note INTEGER,
+  buts_evites INTEGER,
+  w_xg INTEGER,
+  w_tirs INTEGER,
+  w_def INTEGER,
+  w_xga INTEGER,
+  w_note INTEGER,
+  w_gardien INTEGER,
+  apport_off INTEGER NOT NULL,
+  apport_def INTEGER,
+  pct_off INTEGER,
+  pct_def INTEGER,
+  courbe TEXT,
+  reglages TEXT NOT NULL
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS player_ratings_teams (
+  club INTEGER PRIMARY KEY,
+  jour TEXT NOT NULL,
+  league TEXT,
+  feuilles INTEGER NOT NULL,
+  habituels TEXT NOT NULL,
+  moy_off TEXT NOT NULL,
+  hab_off INTEGER,
+  hab_def INTEGER,
+  gardien INTEGER,
+  reglages TEXT NOT NULL
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS player_ratings_state (
+  cle TEXT PRIMARY KEY,
+  valeur TEXT NOT NULL
+) WITHOUT ROWID;`,
+  // Les fiches d'un club (l'écran de l'étape 31) ; celles d'un championnat × poste (percentiles, écran).
+  'CREATE INDEX IF NOT EXISTS idx_player_ratings_club ON player_ratings(club);',
+  'CREATE INDEX IF NOT EXISTS idx_player_ratings_ligue ON player_ratings(league, poste);'
+];
+
 const FD_HISTORY_INDEXES = [
   'CREATE INDEX IF NOT EXISTS idx_fd_history_code_date ON fd_history(code, date);',
   'CREATE INDEX IF NOT EXISTS idx_fd_history_dom ON fd_history(dom);',
@@ -1187,8 +1358,11 @@ const DDL = [
   ...BENCH_DDL,
   ...STAT_VALUE_DDL,
   ...CALIBRATION_DDL,
+  ...BETTING_MAP_DDL,
   ...MARKET_KNOWLEDGE_DDL,
   ...TEAM_STRENGTH_DDL,
+  ...FORCES_BUTS_DDL,
+  ...PLAYER_RATINGS_DDL,
   'CREATE INDEX IF NOT EXISTS idx_matches_date ON matches(date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_league_date ON matches(league, date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_home ON matches(home_name);',

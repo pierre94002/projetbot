@@ -57,7 +57,13 @@ import { lecteurDesRencontres, cleNumerique } from '../calibration.js';
 import { jugerEtape } from '../../bench/guard.js';
 import { jugementsDe } from '../../bench/trialsRegistry.js';
 import { LANCEMENTS } from '../../bench/lancements.js';
-import { lignesDeLEssai, premiersChiffres, resumeDuJugement, MESURE_DE_L_ESSAI, horizonDe, horizonAtteint, lancementDeLEssai } from '../../bench/essaiCandidate.js';
+import {
+  lignesDeLEssai, premiersChiffres, resumeDuJugement, MESURE_DE_L_ESSAI, horizonDe, horizonAtteint, lancementDeLEssai, complementsDeLEssai, temoinDuScore, distributionDuScore
+} from '../../bench/essaiCandidate.js';
+import { referenceDuBanc } from '../../bench/runner.js';
+import { grilleDesScores } from '../../core/engine/scorePrediction.js';
+import { reglagesDuModeleDeButs, empreinteDesForces } from '../../core/engine/goalModel.js';
+import { etatForcesButs } from '../db/forcesButs.js';
 import { creerPauses, executerEnRendantLaMain } from '../../utils/travailCooperatif.js';
 
 /** Matchs par transaction : quelques dizaines de millisecondes d'écriture au plus. */
@@ -77,8 +83,11 @@ const parametres = (params) => (params ? JSON.stringify(Object.fromEntries(Objec
  * sinon celle de la version en service ; le Résultat (1N2) a toujours sa ligne, même sans pronostic (sa
  * distribution existe toujours). Les autres marchés ne sont pas gardés : ceux que la candidate change
  * quand même sont comptés dans `horsDeclaration`.
+ * Étape 27 : pour chaque TÉMOIN déclaré (`temoins: ['scoreExact']`), une ligne de plus — les 81 cases et
+ * « autre score » de la candidate, la grille du score de la version en service (`temoins.scoreExact.service`,
+ * refaite comme au banc) — jamais dans `horsDeclaration`, jamais dans le jugement principal.
  */
-export function lignesDuMatch({ a, b, candidate, commun }) {
+export function lignesDuMatch({ a, b, candidate, commun, temoins = null }) {
   const declares = new Set(candidate.marches);
   const parCleA = new Map((a?.marketPredictions ?? []).map((p) => [cleDuMarche(p), p]));
   const parCleB = new Map((b?.marketPredictions ?? []).map((p) => [cleDuMarche(p), p]));
@@ -120,7 +129,41 @@ export function lignesDuMatch({ a, b, candidate, commun }) {
       serviceDistribution: da
     });
   }
+  // Les témoins : le score exact, rapporté à côté (jamais jugé).
+  const service = temoins?.scoreExact?.service ?? null;
+  const scoreB = b?.distributions?.scoreExact ?? null;
+  if ((candidate.temoins ?? []).includes('scoreExact') && scoreB && b?.scorePrediction?.mostLikely) {
+    const ml = b.scorePrediction.mostLikely;
+    const mlA = a?.scorePrediction?.mostLikely ?? null;
+    lignes.push({
+      ...commun,
+      marketKey: 'scoreExact',
+      marketId: 'scoreExact',
+      market: 'Score exact',
+      params: null,
+      choice: `${ml.home}-${ml.away}`,
+      label: `Score exact ${ml.home}-${ml.away}`,
+      probability: nombre(ml.probability),
+      predictedOdds: null,
+      distribution: JSON.stringify(distributionDuScore(scoreB.cases, scoreB.horsGrille)),
+      serviceParams: null,
+      serviceChoice: mlA ? `${mlA.home}-${mlA.away}` : null,
+      serviceProbability: mlA ? nombre(mlA.probability) : null,
+      servicePredictedOdds: null,
+      serviceDistribution: service ? JSON.stringify(distributionDuScore(service.cases.map((c) => c.p), 0)) : null
+    });
+  }
   return { lignes, horsDeclaration };
+}
+
+/**
+ * Étape 27 : la grille du score de la VERSION EN SERVICE pour le témoin, refaite comme au banc (runner.js) : mêmes
+ * entrées, la référence 1N2 du moteur (referenceDuBanc) quand le pronostic du résultat vient des cotes.
+ */
+export function grilleDuScoreEnService({ a, enrichi, config }) {
+  if (!a?.scorePrediction) return null;
+  const ref = referenceDuBanc(enrichi?.marketOdds ?? null, config);
+  return grilleDesScores({ inputs: enrichi?.scoreInputs ?? null, fair: a.prediction?.source === 'cotes' && ref ? ref.probabilities : null });
 }
 
 /**
@@ -161,6 +204,23 @@ export async function calculerABlanc({ maintenant = Date.now(), database = null,
   const sport = getSport('football');
   const enService = getEngineConfig('football');
   const configCandidate = configDeLaCandidate(enService, enEssai, 'football');
+  // Étape 27 (vérification du branchement, constat 1) : une candidate au modèle de buts n'est calculée qu'avec SES
+  // forces de buts à jour — sinon le modèle tournerait sur des forces neutres et les moyennes par défaut, ce qui n'est
+  // pas ce que l'essai doit juger. Rien n'est calculé ni écrit ; la passe suivante refait le calcul (étape de nuit).
+  const reglagesButs = reglagesDuModeleDeButs(configCandidate);
+  if (reglagesButs) {
+    const etatForces = etatForcesButs({ database: base, empreintes: [empreinteDesForces(reglagesButs)] });
+    if (!etatForces.aJour) {
+      const pourquoi = etatForces.enCours
+        ? 'rangement en cours'
+        : etatForces.absent
+          ? 'jamais calculées'
+          : etatForces.version !== etatForces.versionAttendue
+            ? 'calculées par une version précédente'
+            : 'pas encore calculées pour ses réglages';
+      return { ...bilan, attente: `forces de buts pas à jour (${pourquoi})`, dureeMs: Date.now() - debut };
+    }
+  }
   const liste = matchs ?? matchsAVenir(maintenant);
   bilan.matchs = liste.length;
   const club = resolveur(base);
@@ -177,8 +237,9 @@ export async function calculerABlanc({ maintenant = Date.now(), database = null,
     try {
       const enrichi = await enrichMatchWithRealAverages(match, { sansRepliPayant: true });
       const tilt = getTiltState();
-      const a = await analyzeMatch(enrichi, enService, tilt, sport);
-      const b = await analyzeMatch(enrichi, configCandidate, tilt, sport);
+      // L'heure de la passe (étape 27) : la candidate lit le magasin elle-même, rien d'après ce moment.
+      const a = await analyzeMatch(enrichi, enService, tilt, sport, { maintenant });
+      const b = await analyzeMatch(enrichi, configCandidate, tilt, sport, { maintenant });
       const homeId = club(match.home, match.league);
       const awayId = club(match.away, match.league);
       const date = jourUtc(Date.parse(match.commenceTime));
@@ -202,7 +263,8 @@ export async function calculerABlanc({ maintenant = Date.now(), database = null,
         oddsAt: cotes.oddsAt,
         lineupState: compo.lineupState
       };
-      const { lignes, horsDeclaration } = lignesDuMatch({ a, b, candidate: enEssai, commun });
+      const temoins = (enEssai.temoins ?? []).includes('scoreExact') ? { scoreExact: { service: grilleDuScoreEnService({ a, enrichi, config: enService }) } } : null;
+      const { lignes, horsDeclaration } = lignesDuMatch({ a, b, candidate: enEssai, commun, temoins });
       aEcrire.push(...lignes);
       for (const [m, n] of Object.entries(horsDeclaration)) bilan.horsDeclaration[m] = (bilan.horsDeclaration[m] ?? 0) + n;
       bilan.calcules++;
@@ -273,7 +335,9 @@ export async function jugerLEssai({ candidate, database, maintenant = Date.now()
     const lecteur = await executerEnRendantLaMain(lecteurDesRencontres(database, { du, au }), pauses.siLongtemps);
     lire = (f) => (!cleNumerique(f.fixtureKey) || !f.homeId || !f.awayId ? { raison: 'sansIdentifiant' } : lecteur(f));
   }
-  const reglement = lignesDeLEssai(revisions, { empreinte: candidate.empreinte, versionEnService: essai.versionEnService, lire, aujourdhui });
+  // Étape 27 : les TÉMOINS (le score exact) restent hors du jugement principal — rapportés à part.
+  const temoinsRev = revisions.filter((r) => r.marketId === 'scoreExact');
+  const reglement = lignesDeLEssai(revisions.filter((r) => r.marketId !== 'scoreExact'), { empreinte: candidate.empreinte, versionEnService: essai.versionEnService, lire, aujourdhui });
   await pauses.pause('lignes de l’essai');
   const horizon = horizonDe(candidate);
   const registre = { ...mesure, lancements: [...LANCEMENTS, lancementDeLEssai(candidate, essai)] };
@@ -287,9 +351,13 @@ export async function jugerLEssai({ candidate, database, maintenant = Date.now()
   } catch (error) {
     return { calcule: false, raison: 'juge', erreur: String(error?.message ?? error).slice(0, 300) };
   }
+  // Étape 27 (une candidate du modèle de buts) : par famille, calibration, porte de sûreté, régimes, témoins.
+  const avecModeleDeButs = Boolean(candidate.modifications?.football?.modeleDeButs);
+  const complementsDe = (j) => (avecModeleDeButs ? complementsDeLEssai(reglement, { variantes: j?.seuil?.variantes ?? 1 }) : null);
+  const temoins = temoinsRev.length ? temoinDuScore(temoinsRev, { empreinte: candidate.empreinte, versionEnService: essai.versionEnService, lire, aujourdhui }) : null;
   const etat = horizonAtteint({ matchs: provisoire.n.matchs, depuis: essai.depuis, maintenant, horizon });
   if (!etat.atteint) {
-    const r = ecrire({ premiersChiffres: premiersChiffres(provisoire, { essai, horizon, maintenant, reglement }) });
+    const r = ecrire({ premiersChiffres: premiersChiffres(provisoire, { essai, horizon, maintenant, reglement, complements: complementsDe(provisoire), temoins }) });
     return { calcule: true, principal: false, matchs: provisoire.n.matchs, horizon, joursEcoules: etat.jours, auPlusTotLe: etat.auPlusTotLe, ecrit: r.ecrit };
   }
   // L'HORIZON : le jugement qui décide, une seule fois (repris s'il est déjà rangé pour CET essai).
@@ -299,9 +367,10 @@ export async function jugerLEssai({ candidate, database, maintenant = Date.now()
   } catch (error) {
     return { calcule: false, raison: 'juge', erreur: String(error?.message ?? error).slice(0, 300) };
   }
+  const complements = complementsDe(principal);
   const r = ecrire({
-    premiersChiffres: premiersChiffres(principal, { essai, horizon, maintenant, reglement }),
-    jugement: resumeDuJugement(principal, { essai, versionEnService: essai.versionEnService, empreinte: candidate.empreinte, reglement })
+    premiersChiffres: premiersChiffres(principal, { essai, horizon, maintenant, reglement, complements, temoins }),
+    jugement: resumeDuJugement(principal, { essai, versionEnService: essai.versionEnService, empreinte: candidate.empreinte, reglement, complements, temoins })
   });
   return { calcule: true, principal: true, verdict: principal.verdict, matchs: principal.n?.matchs ?? 0, horizon, ecrit: r.ecrit };
 }

@@ -15,6 +15,7 @@
 import { fork } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { monitorEventLoopDelay } from 'node:perf_hooks';
+import { commencerCalculLourd } from '../../utils/calculLourd.js';
 
 const ENFANT = fileURLToPath(new URL('./bancEnfant.js', import.meta.url));
 /** Le rejeu de la configuration de Pierre prend 11 à 12 min sur la base du bac (13/10/2026) : au-delà de 45 min, l'enfant est arrêté. */
@@ -26,6 +27,17 @@ export const DELAI_REJEU_MS = 45 * 60_000;
  * porte alors `serveur` (la mesure du serveur jusque-là). `avancement(a)` reçoit ce que l'enfant envoie.
  */
 export function rejouerAPart({ chemin, options = {}, delaiMs = DELAI_REJEU_MS, avancement = null }) {
+  // Étape 27 : un calcul lourd à la fois (utils/calculLourd.js) — un autre en cours, le rejeu est refusé (reporté).
+  let rendre;
+  try {
+    rendre = commencerCalculLourd('banc d’essai');
+  } catch (error) {
+    return Promise.reject(error);
+  }
+  return rejouerAPartSousJeton({ chemin, options, delaiMs, avancement }).finally(rendre);
+}
+
+function rejouerAPartSousJeton({ chemin, options, delaiMs, avancement }) {
   const boucle = monitorEventLoopDelay({ resolution: 10 });
   boucle.enable();
   const rssAvantOctets = process.memoryUsage.rss();

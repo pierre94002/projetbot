@@ -28,7 +28,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { SERVEUR } from './aides/isolement.mjs';
+import { SERVEUR, RACINE_ESSAIS } from './aides/isolement.mjs';
 import { comparer, generateur, loiNormale, zPour, LignesInvalides } from '../src/bench/guard.js';
 import { perteLog, perteLogBinaire, brier, rps, gainMiseFixe, valeurCloture, MESURES, PROBA_MIN } from '../src/bench/metrics.js';
 import { apparierPronostics, resultatsDuMagasin, cleAppariement, blocParMatch, blocParJournee } from '../src/bench/lignesEnginePicks.js';
@@ -304,7 +304,8 @@ test('écart-type des tirages : sur un petit cas, celui du calcul exact — K bl
  */
 const LECTEURS_PERMIS_AU_BANC = Object.freeze({
   'prix.js': ['../data/db/oddsQuotesRepository.js', '../data/freeMarketOdds.js'],
-  'entrees.js': ['../data/db/dayTable.js', '../data/db/identityRegistry.js', '../data/db/leagueBenchmarks.js', '../data/enregistreurs/gelPronostics.js', '../data/providers/footballDataOdds.js'],
+  // Étape 27 : l'accumulateur des forces de buts (pur, celui de la nuit) — le banc ne lit jamais la table forces_buts.
+  'entrees.js': ['../data/db/dayTable.js', '../data/db/identityRegistry.js', '../data/db/leagueBenchmarks.js', '../data/enregistreurs/gelPronostics.js', '../data/providers/footballDataOdds.js', '../data/db/forcesButs.js'],
   'apparier.js': ['../data/enregistreurs/gelPronostics.js', '../data/enregistreurs/depot.js'],
   'statValue.js': ['../data/db/dayTable.js', '../data/db/leagueBenchmarks.js']
 });
@@ -313,8 +314,10 @@ test('src/bench : aucun hasard non semé, aucune base ouverte, ni réseau, ni Cl
   const dossier = path.join(SERVEUR, 'src', 'bench');
   const fichiers = fs.readdirSync(dossier).filter((f) => f.endsWith('.js'));
   assert.deepEqual(fichiers.sort(), [
-    'apparier.js', 'bancCandidate.js', 'depotBanc.js', 'entrees.js', 'essaiCandidate.js', 'guard.js', 'horizonEssai.js', 'jugeAPart.js', 'jugeAPartFil.js', 'lancements.js', 'lignesEnginePicks.js', 'metrics.js', 'noteDeDepart.js', 'periodes.js', 'prix.js', 'resume.js', 'runner.js', 'simulateBets.js', 'statValue.js', 'trialsRegistry.js'
+    'apparier.js', 'bancCandidate.js', 'depotBanc.js', 'entrees.js', 'essaiCandidate.js', 'guard.js', 'horizonEssai.js', 'jugeAPart.js', 'jugeAPartFil.js', 'lancements.js', 'libellesDesCases.js', 'lignesEnginePicks.js', 'metrics.js', 'noteDeDepart.js', 'periodes.js', 'prix.js', 'resume.js', 'runner.js', 'simulateBets.js', 'statValue.js', 'trialsRegistry.js'
   ]);
+  // Étape 27 (21/10/2026) : le nom des cases du banc pour Pierre, léger et sans aucun import (la porte 1 et la feuille de route).
+  assert.doesNotMatch(fs.readFileSync(path.join(dossier, 'libellesDesCases.js'), 'utf8'), /^\s*import\s/m, 'libellesDesCases.js : aucun import');
   for (const f of fichiers) {
     const source = fs.readFileSync(path.join(dossier, f), 'utf8');
     assert.doesNotMatch(source, /Math\.random/, `${f} : seul le générateur à graine de guard.js tire au sort`);
@@ -677,4 +680,108 @@ test('lecteur d’appoint : par identifiants FotMob et jour, seulement les match
   assert.deepEqual(r.get('fotmob:10|20|2026-11-12'), { homeGoals: 2, awayGoals: 1, date: '2026-11-12', stats: { home: { corners: 6, shots: 14, shotsOnTarget: 5 }, away: { corners: 3, shots: 9, shotsOnTarget: 2 } } });
   assert.deepEqual(r.get('fotmob:50|60|2026-11-13').stats, { home: { corners: null, shots: null, shotsOnTarget: 3 }, away: { corners: null, shots: null, shotsOnTarget: 2 } });
   assert.throws(() => resultatsDuMagasin(['fotmob:10|20|2026-11-12']), TypeError, 'la base vient toujours de l’appelant');
+});
+
+// ---------------------------------------- 16. étape 27 : le modèle de buts unique, sur le texte du code
+
+/** Le texte d'un fichier sans ses commentaires (les phrases qui EXPLIQUENT une règle ne sont pas du code). */
+const sansCommentaires = (texte) => texte.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`])\/\/.*$/gm, '$1');
+const lire = (rel) => fs.readFileSync(path.join(SERVEUR, 'src', ...rel.split('/')), 'utf8');
+
+test('étape 27 : aucune horloge lue dans le modèle de buts, son lecteur du direct et les forces de la nuit (Date.now(), new Date() sans argument) — « maintenant » passé par l’appelant ; seul analyzeMatch a un défaut, en bout de chaîne', () => {
+  for (const rel of ['core/engine/goalModel.js', 'data/db/entreesButs.js', 'data/db/forcesButs.js', 'data/db/forcesButsEnfant.js']) {
+    const code = sansCommentaires(lire(rel));
+    assert.doesNotMatch(code, /Date\.now\s*\(/, `${rel} : Date.now()`);
+    assert.doesNotMatch(code, /new Date\(\s*\)/, `${rel} : new Date() sans argument`);
+    assert.doesNotMatch(code, /Math\.random/, `${rel} : du hasard`);
+  }
+  assert.match(lire('core/engine/oddsEngine.js'), /export async function analyzeMatch\(match, config, tiltState, sport, \{ maintenant = Date\.now\(\) \} = \{\}\)/);
+});
+
+test('étape 27 : dans oddsEngine.js, le modèle de buts (modeleDeButs, resolveGoalInputs) n’est appelé QUE dans la branche `if (reglagesButs)` — sans la clé, aucune ligne nouvelle ne s’exécute', () => {
+  const code = sansCommentaires(lire('core/engine/oddsEngine.js'));
+  const debut = code.indexOf('if (reglagesButs) {');
+  assert.ok(debut > 0, 'la branche if (reglagesButs) existe');
+  let profondeur = 0;
+  let fin = -1;
+  for (let i = code.indexOf('{', debut); i < code.length; i++) {
+    if (code[i] === '{') profondeur++;
+    else if (code[i] === '}' && --profondeur === 0) {
+      fin = i;
+      break;
+    }
+  }
+  assert.ok(fin > debut);
+  for (const appel of [/\bmodeleDeButs\(/g, /\.resolveGoalInputs\(/g]) {
+    const positions = [...code.matchAll(appel)].map((m) => m.index);
+    assert.ok(positions.length >= 1, `${appel} : appelé`);
+    for (const p of positions) assert.ok(p > debut && p < fin, `${appel} hors de la branche if (reglagesButs) (position ${p})`);
+  }
+  // Les autres usages ne lisent que `buts`, nul sans la clé.
+  assert.match(code, /let buts = null;\s*if \(reglagesButs\) \{/);
+  assert.match(code, /const reglagesButs = reglagesDuModeleDeButs\(config\);/);
+});
+
+test('étape 27 : le chemin du moteur (les fichiers de son empreinte) n’importe ni l’indice de force, ni la valeur des statistiques, ni la table du jour J ; le modèle de buts est PUR (aucun module de données) ; son lecteur du direct ne lit ni stat_value ni team_strength, n’écrit jamais', async () => {
+  const { fichiersDuMoteur, MODULES_DU_MOTEUR } = await import('../src/core/engine/engineVersions.js');
+  const fichiers = fichiersDuMoteur();
+  assert.ok(fichiers.includes('core/engine/goalModel.js') && fichiers.includes('data/db/entreesButs.js'), 'goalModel.js et entreesButs.js DANS l’empreinte');
+  for (const dehors of ['data/db/forcesButs.js', 'data/db/forcesButsEnfant.js', 'core/engine/noteDuModeleDeButs.js', 'core/engine/motsDuModeleDeButs.js']) assert.ok(!fichiers.includes(dehors), `${dehors} HORS de l’empreinte`);
+  assert.ok(MODULES_DU_MOTEUR.horsEmpreinte.includes('core/engine/noteDuModeleDeButs.js'));
+  for (const rel of fichiers) {
+    const importes = [...lire(rel).matchAll(/^\s*import\s[^;]*?from\s+['"]([^'"]+)['"]/gm)].map((m) => m[1]);
+    for (const spec of importes) assert.doesNotMatch(spec, /teamStrength|statValue|dayTable/, `${rel} importe ${spec}`);
+  }
+  const imports = (rel) => [...lire(rel).matchAll(/^\s*import\s[^;]*?from\s+['"]([^'"]+)['"]/gm)].map((m) => m[1]);
+  for (const spec of imports('core/engine/goalModel.js')) assert.match(spec, /^\.\.?\/(\.\.\/)?(model|market|engine)?\/?[A-Za-z]+\.js$|^\.\/[A-Za-z]+\.js$|^\.\.\/(model|market)\/[A-Za-z]+\.js$/, `goalModel.js importe ${spec}`);
+  for (const spec of imports('core/engine/goalModel.js')) assert.doesNotMatch(spec, /data\/|node:|db/, `goalModel.js importe ${spec}`);
+  const lecteur = sansCommentaires(lire('data/db/entreesButs.js'));
+  assert.doesNotMatch(lecteur, /stat_value|team_strength/i, 'entreesButs.js lit l’indice de force ou la valeur des statistiques');
+  assert.doesNotMatch(lecteur, /\b(INSERT|UPDATE|DELETE|CREATE|DROP|BEGIN)\b|\.run\(|(database|db)\.exec\(/, 'entreesButs.js écrit');
+  assert.match(lecteur, /if \(instant\(maintenant\) === null\) throw/, '« maintenant » obligatoire');
+  assert.match(lecteur, /q\.kind <> 'live'/, 'jamais le direct');
+});
+
+test('étape 27 — LES MOTS du modèle de buts vivent HORS de l’empreinte (motsDuModeleDeButs.js) : changer une phrase ne change ni l’empreinte du code du moteur ni celle de la candidate ; changer une formule de goalModel.js les change ; goalModel.js ne garde que des codes', async () => {
+  const { empreinteDuCode, empreinteDeLaCandidate, CANDIDATE_EN_ESSAI, MODULES_DU_MOTEUR, fichiersDuMoteur } = await import('../src/core/engine/engineVersions.js');
+  assert.ok(MODULES_DU_MOTEUR.horsEmpreinte.includes('core/engine/motsDuModeleDeButs.js'));
+  assert.ok(!fichiersDuMoteur().includes('core/engine/motsDuModeleDeButs.js'), 'les mots HORS de l’empreinte');
+  assert.ok(fichiersDuMoteur().includes('core/engine/goalModel.js'), 'le modèle DANS l’empreinte');
+  // goalModel.js ne garde que des codes : aucune phrase pour Pierre.
+  const code = sansCommentaires(lire('core/engine/goalModel.js'));
+  assert.doesNotMatch(code, /court:|phrase:|pas d’xG|moyenne du marché\)|réglages fautifs|un objet est attendu|attendue/, 'goalModel.js : des mots pour Pierre');
+  assert.match(code, /from '\.\/motsDuModeleDeButs\.js'/);
+  // Aucune chaîne de mots non plus : seulement des codes (champs, régimes, sources, « 365 jours » / « défaut » des moyennes).
+  const chaines = [...code.matchAll(/'([^'\n]*)'|`([^`\n]*)`/g)].map((m) => m[1] ?? m[2]).filter((s) => / [a-zà-ü’]{3,} [a-zà-ü’]{3,}/i.test(s));
+  assert.deepEqual(chaines, [], 'goalModel.js : une phrase restée dans le code');
+  assert.doesNotMatch(lire('core/engine/motsDuModeleDeButs.js'), /^\s*import\s/m, 'les mots : aucun import');
+  // Les messages déplacés sont rendus tels quels (le comportement ne change pas).
+  const { faitsDeLaRencontre, reglagesDuModeleDeButs, ReglagesDuModeleDeButsInvalides } = await import('../src/core/engine/goalModel.js');
+  const { MOTS_DES_ERREURS, MOTS_DES_REGLAGES } = await import('../src/core/engine/motsDuModeleDeButs.js');
+  assert.throws(() => faitsDeLaRencontre({ club: 1, adversaire: 2, camp: 2, date: '2026-10-01', league: 47, saison: 2026, bp: 1, bc: 0 }), { message: MOTS_DES_ERREURS.pasLeCampQuiRecoit });
+  assert.equal(MOTS_DES_ERREURS.pasLeCampQuiRecoit, 'faitsDeLaRencontre : la ligne du camp qui reçoit est attendue.');
+  assert.throws(() => reglagesDuModeleDeButs({ modeleDeButs: 42 }), (e) => e instanceof ReglagesDuModeleDeButsInvalides && e.message === MOTS_DES_REGLAGES.objetAttendu);
+  // Une copie de src (dans le dossier d'essais) : la référence, une phrase changée, puis une formule changée.
+  fs.mkdirSync(RACINE_ESSAIS, { recursive: true });
+  const dossier = fs.mkdtempSync(path.join(RACINE_ESSAIS, 'cm-mots-'));
+  try {
+    fs.cpSync(path.join(SERVEUR, 'src'), dossier, { recursive: true });
+    const avant = empreinteDuCode({ racine: dossier, rafraichir: true }).empreinte;
+    assert.equal(avant, empreinteDuCode({ rafraichir: true }).empreinte, 'la copie = le code');
+    const candidateAvant = empreinteDeLaCandidate(CANDIDATE_EN_ESSAI, { racine: dossier });
+    const mots = path.join(dossier, 'core', 'engine', 'motsDuModeleDeButs.js');
+    const texteMots = fs.readFileSync(mots, 'utf8');
+    assert.ok(texteMots.includes("court: 'cotes + xG'"));
+    fs.writeFileSync(mots, texteMots.replace("court: 'cotes + xG'", "court: 'cotes et xG'"));
+    assert.equal(empreinteDuCode({ racine: dossier, rafraichir: true }).empreinte, avant, 'une phrase changée : même empreinte du moteur');
+    assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI, { racine: dossier }), candidateAvant, 'une phrase changée : même empreinte de la candidate (l’essai continue)');
+    const modele = path.join(dossier, 'core', 'engine', 'goalModel.js');
+    const texteModele = fs.readFileSync(modele, 'utf8');
+    assert.ok(texteModele.includes('const RESOLU = 1e-24;'));
+    fs.writeFileSync(modele, texteModele.replace('const RESOLU = 1e-24;', 'const RESOLU = 1e-23;'));
+    assert.notEqual(empreinteDuCode({ racine: dossier, rafraichir: true }).empreinte, avant, 'une formule changée : une autre empreinte du moteur');
+    assert.notEqual(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI, { racine: dossier }), candidateAvant, 'une formule changée : une autre empreinte de la candidate');
+  } finally {
+    fs.rmSync(dossier, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 });
+  }
 });

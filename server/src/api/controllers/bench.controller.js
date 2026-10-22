@@ -28,14 +28,14 @@
  * -----------------------------------------------------------------------
  */
 
-import { openDb, resolveDbPath } from '../../data/db/matchStatsDb.js';
-import { rejouerAPart } from '../../data/db/bancAPart.js';
+import { openDb } from '../../data/db/matchStatsDb.js';
 import { isRefreshRunning, withRefreshLock, tacheEnCours } from '../../data/providers/refreshLock.js';
 import { lireReglagesDuMoteur } from '../../core/engine/engineConfig.js';
 import { moteurDuRejeu } from '../../bench/runner.js';
-import { ouvrirRejeu, finirRejeu, dernierRejeu, dernierRejeuReussi, rejeuxDe, rejeuEnCours, commencerRejeu, avancerRejeu, terminerRejeu } from '../../bench/depotBanc.js';
+import { dernierRejeu, dernierRejeuReussi, rejeuxDe, rejeuEnCours, commencerRejeu, terminerRejeu } from '../../bench/depotBanc.js';
+import { tacheDeRejeu, etatDuBancDuMois } from '../../data/rejeuDuServeur.js';
 import { NOTE_DE_DEPART } from '../../bench/noteDeDepart.js';
-import { PERIODES, JEUX_DE_PRIX, PERIODES_PAR_DEFAUT, PRIX_PAR_DEFAUT, FAMILLES_DU_BANC, DECISIONS_DE_PIERRE, HUIS_CLOS, BORNES_DES_LIVRES, VERSION_BANC } from '../../bench/periodes.js';
+import { PERIODES, JEUX_DE_PRIX, PERIODES_PAR_DEFAUT, PRIX_PAR_DEFAUT, FAMILLES_DU_BANC, DECISIONS_DE_PIERRE, HUIS_CLOS, BORNES_DES_LIVRES } from '../../bench/periodes.js';
 import { REGLES_DE_PARI } from '../../bench/simulateBets.js';
 import { FIABILITE } from '../../core/engine/resultPrediction.js';
 import { FIABILITE_SCORE } from '../../core/engine/scorePrediction.js';
@@ -74,6 +74,8 @@ export function getBench(req, res) {
     dernierRejeuReussi: dernierRejeuReussi({ database, avecResume }),
     enCours: rejeuEnCours(),
     dernierRefus,
+    // Étape 23 : ce qu'a dit la dernière vérification du banc du mois (relancé le 1er si le moteur a changé).
+    bancDuMois: etatDuBancDuMois(),
     rejeux: rejeuxDe({ database, limite: 10 }),
     periodes: PERIODES,
     jeux: JEUX_DE_PRIX,
@@ -106,21 +108,9 @@ export function postBenchRun(req, res) {
   const reglages = JSON.parse(JSON.stringify(lireReglagesDuMoteur().football));
   const moteur = moteurDuRejeu(reglages);
   const options = { periodes, prix, ...(marches ? { marches } : {}), graine: 1, tirages: 1000 };
-  const tache = async () => {
-    const id = ouvrirRejeu({ database, ou: 'serveur', moteur, options: { ...options, config: { empreinte: moteur.empreinteReglages, reglages } } });
-    commencerRejeu({ id });
-    let r;
-    try {
-      // Le rejeu dans un PROCESSUS À PART, base en lecture seule ; le serveur ne fait qu'attendre et ranger.
-      r = await rejouerAPart({ chemin: resolveDbPath(), options: { ...options, config: reglages }, avancement: avancerRejeu });
-      r.bilan = { ...r.bilan, serveur: r.serveur };
-    } catch (error) {
-      // L'enfant arrêté ou en panne : le rejeu est fini « en erreur » (jamais laissé ouvert), sans résumé ; l'erreur est rangée.
-      r = { bilan: { versionBanc: VERSION_BANC, erreur: error.message, serveur: error.serveur ?? null }, resume: null };
-    }
-    finirRejeu({ database, id, bilan: r.bilan, resume: r.resume });
-    return r;
-  };
+  // La tâche partagée avec le banc du mois (étape 23, data/rejeuDuServeur.js) : ligne ouverte, rejeu dans un
+  // PROCESSUS À PART (base en lecture seule), ligne finie — en erreur si l'enfant tombe, jamais laissée ouverte.
+  const tache = tacheDeRejeu({ database, options, reglages, moteur });
   let promesse;
   try {
     promesse = withRefreshLock(tache, { stamp: false, nom: 'banc' });

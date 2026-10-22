@@ -34,8 +34,17 @@ import { ETAPES, LOTS } from '../src/data/roadmap/plan.js';
 
 // Ce qui est terminé, CALCULÉ à partir de l'historique du code (étape 7 du plan) : une étape
 // suivante ajoute sa ligne à HISTORIQUE, et aucun compte de ce fichier n'est à retoucher.
-const TERMINEES = new Set(HISTORIQUE.map((h) => h.etape));
+// Étape 27 (21/10/2026) : une ligne PARTIELLE ne finit pas l'étape (la 27 : en essai à blanc, adoption à venir) —
+// l'étape est « en cours », et son lot s'ouvre au premier affichage comme tout lot où l'on travaille.
+const TERMINEES = new Set(HISTORIQUE.filter((h) => !h.partielle).map((h) => h.etape));
 const NB = TERMINEES.size;
+const PARTIELLES = new Set(HISTORIQUE.filter((h) => h.partielle && !TERMINEES.has(h.etape)).map((h) => h.etape));
+const NB_PARTIELLES = PARTIELLES.size;
+/** Les étapes rendues au premier affichage quand les lots `numeros` sont ouverts, plus ceux d'une étape en cours par l'historique. */
+const rendues = (numeros) => {
+  const ouverts = new Set([...numeros, ...ETAPES.filter((e) => PARTIELLES.has(e.id)).map((e) => e.lot)]);
+  return ETAPES.filter((e) => ouverts.has(e.lot)).sort((a, b) => a.lot - b.lot).map((e) => e.id);
+};
 /** Les notes du scénario mettent la 11 de côté (la 9, qui l'était avant le 06/10/2026, est terminée) : tant qu'elle n'est pas terminée (terminée prime). */
 const MISES_DE_COTE = ['11'].filter((id) => !TERMINEES.has(id));
 const accord = (n, singulier, pluriel) => `${n} ${n === 1 ? singulier : pluriel}`;
@@ -255,9 +264,9 @@ test('page : bandeau, avancement général, ligne « Tests », sauvegardes en va
   assert.ok(texte.includes(`${accord(NB, 'étape', 'étapes')} sur 49 ${NB === 1 ? 'terminée' : 'terminées'} (${pourcentDit(NB)})`), 'l’avancement en pourcentage');
   // Les quatre états, toujours dits.
   assert.ok(texte.includes(accord(NB, 'terminée', 'terminées')));
-  assert.match(texte, /0 en cours/);
+  assert.ok(texte.includes(`${NB_PARTIELLES} en cours`), `${NB_PARTIELLES} en cours`);
   assert.ok(texte.includes(accord(MISES_DE_COTE.length, 'mise de côté', 'mises de côté')));
-  assert.ok(texte.includes(`${49 - NB - MISES_DE_COTE.length} à faire`));
+  assert.ok(texte.includes(`${49 - NB - NB_PARTIELLES - MISES_DE_COTE.length} à faire`));
   // La ligne « Tests » : celle de l'historique du code.
   const t = etat.tests;
   assert.match(texte, new RegExp(`Tests : ${t.reussis} réussis \\+ ${t.todo} constats à suivre \\(non bloquants\\), aucun échec — dernier passage le ${echapper(jourComplet(t.le))}, à la fin de l’étape ${t.etape}`));
@@ -286,21 +295,24 @@ test('page : bandeau, avancement général, ligne « Tests », sauvegardes en va
 test('page : seuls les lots où l’on travaille cette semaine sont ouverts ; ceux d’une autre semaine restent repliés (leurs étapes ne sont pas rendues)', options, async () => {
   // Semaine 1 : le lot 1 (toutes ses étapes sont de la semaine 1) ; rien d'autre.
   const jour = await contexte.page('jour');
-  assert.equal(compter(jour.html, /data-etape="/g), 7, 'lot 1 seul : 7 étapes rendues');
-  assert.deepEqual([...jour.html.matchAll(/data-etape="([^"]+)"/g)].map((m) => m[1]), ['0', '1', '2', '3', '4', '5', 'E']);
+  assert.equal(compter(jour.html, /data-etape="/g), rendues([1]).length, 'le lot 1 (et celui d’une étape en cours par l’historique : la 27)');
+  assert.deepEqual([...jour.html.matchAll(/data-etape="([^"]+)"/g)].map((m) => m[1]), rendues([1]));
+  assert.deepEqual(rendues([1]).slice(0, 7), ['0', '1', '2', '3', '4', '5', 'E']);
   // Semaine 2 (la 6 dite « en cours » — terminée depuis, terminée l'emporte) : le lot 2 (étapes de la semaine 2) et le lot 7 (la 41) s'ouvrent, pas le lot 1.
   const deux = await contexte.page('enCours');
-  const rendues = [...deux.html.matchAll(/data-etape="([^"]+)"/g)].map((m) => m[1]);
-  assert.deepEqual(rendues, ['6', '7', '8', '9', '10', '11', '41', '42', '43', '44', '45']);
+  const rendu = [...deux.html.matchAll(/data-etape="([^"]+)"/g)].map((m) => m[1]);
+  assert.deepEqual(rendu, rendues([2, 7]));
+  for (const id of ['6', '7', '8', '9', '10', '11', '41', '42', '43', '44', '45']) assert.ok(rendu.includes(id), `étape ${id}`);
   assert.match(deux.texte, /Lot 1 — Sécurité 7 étapes · semaine 1 Lot terminé 7 \/ 7/);
-  // Hors du plan : la page le dit, et ouvre le premier lot pas fini.
+  // Hors du plan : la page le dit, et ouvre le lot d'une étape en cours (la 27, par l'historique) — à défaut, le premier lot pas fini.
   const hors = await contexte.page('horsPlan');
   assert.deepEqual(hors.avertissements, []);
   assert.match(hors.texte, /Les 12 semaines du plan sont passées/);
   const premierLotPasFini = LOTS.find((l) => !ETAPES.filter((e) => e.lot === l.numero).every((e) => TERMINEES.has(e.id)));
+  const lotOuvert = NB_PARTIELLES ? Math.min(...ETAPES.filter((e) => PARTIELLES.has(e.id)).map((e) => e.lot)) : premierLotPasFini.numero;
   assert.deepEqual(
     [...new Set([...hors.html.matchAll(/data-etape="([^"]+)"/g)].map((m) => m[1]))].slice(0, 3),
-    ETAPES.filter((e) => e.lot === premierLotPasFini.numero).slice(0, 3).map((e) => e.id)
+    ETAPES.filter((e) => e.lot === lotOuvert).slice(0, 3).map((e) => e.id)
   );
   // Rien de fait, aucun test noté : la page le dit.
   const vide = await contexte.page('vide');
@@ -335,7 +347,7 @@ test('étapes : les 49, avec leur état, leur réglage, leur semaine prévue, «
     assert.equal(compter(texte, /Note de Pierre/g), lot.etapes.length);
   }
   assert.equal(total, 49);
-  const attendu = Object.fromEntries(Object.entries({ terminee: NB, 'mise-de-cote': MISES_DE_COTE.length, 'a-faire': 49 - NB - MISES_DE_COTE.length }).filter(([, n]) => n > 0));
+  const attendu = Object.fromEntries(Object.entries({ terminee: NB, 'mise-de-cote': MISES_DE_COTE.length, 'a-faire': 49 - NB - NB_PARTIELLES - MISES_DE_COTE.length, 'en-cours': NB_PARTIELLES }).filter(([, n]) => n > 0));
   assert.deepEqual(parEtat, attendu);
 });
 
@@ -398,7 +410,9 @@ test('étapes : une note de Pierre s’affiche, « Modifier la note » ; sans no
   // Un lot replié ne rend aucune étape.
   const replie = await contexte.lot(etat, 4, { ouvert: false });
   assert.equal(compter(replie.html, /data-etape="/g), 0);
-  assert.match(replie.texte, new RegExp(`Lot 4 — Mesure 9 étapes · semaines 3 à 6 ${ETAPES.filter((e) => e.lot === 4 && TERMINEES.has(e.id)).length} \\/ 9`));
+  // Étape 23 (22/10/2026) : le lot 4 est complet (9 / 9), la puce « Lot terminé » s'affiche avant le compte.
+  const finiesDuLot4 = ETAPES.filter((e) => e.lot === 4 && TERMINEES.has(e.id)).length;
+  assert.match(replie.texte, new RegExp(`Lot 4 — Mesure 9 étapes · semaines 3 à 6 ${finiesDuLot4 === 9 ? 'Lot terminé ' : ''}${finiesDuLot4} \\/ 9`));
 });
 
 test('fichier des notes illisible : la page le dit, garde le plan, et désactive l’écriture de chaque note', options, async () => {

@@ -1,6 +1,6 @@
 import { listAdaptedMatches } from '../../data/matchSources.js';
 import { enrichMatchWithRealAverages } from '../../data/providers/matchEnrichment.js';
-import { resolveBaseRates, computeMarketProbabilities } from './model.js';
+import { resolveBaseRates, computeMarketProbabilities, resolveGoalInputs } from './model.js';
 import { deriveMarketPredictions, MARKET_LABELS, MARCHES_CONNUS, distributionDuMarche } from './markets.js';
 import { statExpectations, statLines } from './statMarkets.js';
 
@@ -15,7 +15,9 @@ export const football = {
   id: 'football',
   model: {
     resolveBaseRates,
-    computeMarketProbabilities
+    computeMarketProbabilities,
+    // Étape 27 : les entrées du modèle de buts unique (lues seulement avec la clé `modeleDeButs`).
+    resolveGoalInputs
   },
   markets: {
     deriveMarketPredictions,

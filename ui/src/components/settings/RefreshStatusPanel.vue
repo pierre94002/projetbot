@@ -14,6 +14,7 @@ import { computed, ref } from 'vue';
 import AppButton from '@/components/common/AppButton.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
 import { formatDateTime } from '@/utils/format.js';
+import { controlesAntiFuiteDits } from '@/utils/controlesAntiFuite.js';
 
 const props = defineProps({
   overview: { type: Object, default: null },
@@ -85,6 +86,10 @@ const sauvegardesGraves = computed(() => sauvegardes.value.some((a) => a.niveau 
 // est dans la carte « Enregistreurs ».
 const enregistreurs = computed(() => props.overview?.alerts?.enregistreurs?.releves ?? []);
 const autreProcessus = computed(() => props.overview?.lockedByOther ?? null);
+// Étape 27 (vérification du branchement, constat 4) : les contrôles anti-fuite de la nuit — la table du jour J et les
+// forces de buts — gardent leurs écarts en alertes durables ; dits ici en mots simples (utils/controlesAntiFuite.js),
+// jusqu'à la nuit qui n'en trouve plus.
+const fuites = computed(() => controlesAntiFuiteDits(props.overview?.alerts ?? null));
 /** Les lignes affichées, seules corrigées si l'utilisateur confirme. */
 const clesAffichees = computed(() => (contradictions.value?.samples ?? []).map((c) => c.key).filter(Boolean));
 
@@ -190,7 +195,7 @@ const ageCotes = computed(() => {
         </li>
       </ol>
 
-      <!-- 4. Les alertes durables : sauvegardes, contradictions, anomalies, cotes à relever. -->
+      <!-- 4. Les alertes durables : sauvegardes, enregistreurs, contrôles anti-fuite, cotes, contradictions, anomalies. -->
       <div v-if="sauvegardes.length && !running" class="cm-note" :class="sauvegardesGraves ? 'is-danger' : 'is-warning'">
         <span class="cm-icon-box" :class="sauvegardesGraves ? 'is-danger' : 'is-warning'"><AppIcon name="shield" :size="17" /></span>
         <div class="refresh-panel__alert">
@@ -209,6 +214,19 @@ const ageCotes = computed(() => {
             <li v-for="(a, i) in enregistreurs" :key="`${a.cle}-${i}`">{{ a.nom }} — {{ a.probleme }}</li>
           </ul>
           <p class="cm-note__text refresh-panel__note-text">Le détail est dans la carte « Enregistreurs », plus bas.</p>
+        </div>
+      </div>
+      <div v-if="fuites.length && !running" class="cm-note is-warning" data-controle-anti-fuite>
+        <span class="cm-icon-box is-warning"><AppIcon name="shield" :size="17" /></span>
+        <div class="refresh-panel__alert">
+          <p class="cm-note__title refresh-panel__note-title--warning">Contrôle anti-fuite de la nuit : à regarder</p>
+          <ul class="refresh-panel__list">
+            <li v-for="f in fuites" :key="f.cle">{{ f.texte }}</li>
+          </ul>
+          <p class="cm-note__text refresh-panel__note-text">
+            Un écart veut dire qu'un chiffre « d'avant le match » a pu voir le match lui-même. Rien n'est corrigé d'office ;
+            l'alerte reste jusqu'à la nuit qui n'en trouve plus.
+          </p>
         </div>
       </div>
       <div v-if="cotesEnPanne.length && !running" class="cm-note is-warning">

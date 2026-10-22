@@ -9,6 +9,16 @@
  * probable en très grand entre les deux logos ; les autres scores en
  * pastilles ; les buts attendus en chiffres clés ; la forme de chaque équipe
  * en bloc (cartes de rencontre), sur deux colonnes quand la place existe.
+ *
+ * Étape 27 du plan (21/10/2026) : quand le modèle de buts unique a calculé le
+ * match (`result.modeleDeButs`), le score sort de LA grille des marchés de buts :
+ * la puce dit son régime (« cotes + xG »…), la provenance réelle est dite
+ * (GoalModelProvenance), le bloc « Ce que disent les xG » dit l'attaque et la
+ * défense de chaque équipe face à une équipe moyenne de son championnat,
+ * « autre score » est dit dès 0,5 %, la fiabilité est celle du banc d'essai
+ * (2019-2023) ou « pas encore mesurée », et la forme n'est plus qu'un contexte.
+ * Les mots viennent de utils/modeleDeButs.js. Sans le modèle de buts (la clé
+ * absente des réglages en service), la carte est exactement celle d'avant.
  */
 import { computed } from 'vue';
 import AppCard from '@/components/common/AppCard.vue';
@@ -17,12 +27,18 @@ import FormBadges from '@/components/matches/FormBadges.vue';
 import MatchCard from '@/components/matches/MatchCard.vue';
 import TeamCrest from '@/components/matches/TeamCrest.vue';
 import PickCrest from '@/components/matches/PickCrest.vue';
+import GoalModelProvenance from '@/components/analysis/GoalModelProvenance.vue';
+import { provenanceDesButs, forcesDites, autreScoreDit, fiabiliteDuModele, NOTE_DE_LA_FORME } from '@/utils/modeleDeButs.js';
 
 const props = defineProps({
   result: { type: Object, required: true }
 });
 
 const score = computed(() => props.result.scorePrediction ?? null);
+// Étape 27 : le modèle de buts unique (null sans lui : tout ce qui suit garde la lecture d'avant).
+const provenanceButs = computed(() => provenanceDesButs(props.result));
+const forces = computed(() => forcesDites(props.result));
+const autreScore = computed(() => (provenanceButs.value ? autreScoreDit(score.value) : null));
 const home = computed(() => props.result.teamStats?.home?.name ?? props.result.label?.split(' vs ')[0] ?? 'Domicile');
 const away = computed(() => props.result.teamStats?.away?.name ?? props.result.label?.split(' vs ')[1] ?? 'Extérieur');
 
@@ -45,6 +61,8 @@ const dansIssue = computed(() => {
 const source = computed(() =>
   score.value?.source === 'cotes' ? "d'après les cotes, la forme et la saison" : "d'après la forme et la saison, faute de cote"
 );
+// Étape 27 : la puce dit le régime du modèle de buts (« cotes + xG »…), sa phrase au survol.
+const titreSource = computed(() => (provenanceButs.value?.phrase ? `Ce qui fonde le pronostic : ${provenanceButs.value.phrase}.` : 'Ce qui fonde le pronostic'));
 
 const equipes = computed(() => {
   const s = score.value;
@@ -95,7 +113,10 @@ const moyennes = (f) => {
   return parties.length ? `Par match : ${parties.join(' ; ')}.` : '';
 };
 
+const fiabiliteDuModeleDeButs = computed(() => (provenanceButs.value ? fiabiliteDuModele(score.value, provenanceButs.value.code) : null));
+const titreFiabilite = computed(() => (fiabiliteDuModeleDeButs.value && !fiabiliteDuModeleDeButs.value.mesuree ? 'Fiabilité' : 'Fiabilité mesurée'));
 const fiabilite = computed(() => {
+  if (fiabiliteDuModeleDeButs.value) return fiabiliteDuModeleDeButs.value.texte;
   const r = score.value?.reliability;
   if (!r) return null;
   const debut = new Date(`${r.since}T00:00:00Z`).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
@@ -117,7 +138,8 @@ const note = computed(() =>
 <template>
   <AppCard v-if="score" title="Pronostic du score" icon="ball" eyebrow="Le moteur" class="spc">
     <template #actions>
-      <span class="cm-chip spc__source" title="Ce qui fonde le pronostic">{{ source }}</span>
+      <span v-if="provenanceButs" class="cm-chip spc__source" :title="titreSource">{{ provenanceButs.court }}</span>
+      <span v-else class="cm-chip spc__source" title="Ce qui fonde le pronostic">{{ source }}</span>
     </template>
 
     <div class="spc__body">
@@ -138,6 +160,11 @@ const note = computed(() =>
         </div>
       </div>
 
+      <!-- Étape 27 : d'où vient le score (le modèle de buts unique seulement). -->
+      <p v-if="provenanceButs" class="spc__prov">
+        <GoalModelProvenance :provenance="provenanceButs" aide />
+      </p>
+
       <div v-if="dansIssue" class="cm-note is-info">
         <span class="cm-icon-box is-info is-sm"><AppIcon name="target" :size="14" /></span>
         <div>
@@ -156,6 +183,7 @@ const note = computed(() =>
           <span v-for="c in score.top.slice(1)" :key="marque(c)" class="cm-pill spc__chip" :title="`${marque(c)} : ${pct(c.probability)} de chances`">
             {{ marque(c) }} <span class="spc__chip-p">{{ pct(c.probability) }}</span>
           </span>
+          <span v-if="autreScore" class="cm-pill spc__chip spc__autre" data-modele-de-buts title="Tous les scores où une équipe marque 9 buts ou plus : la part de la grille que les pastilles ne montrent pas.">{{ autreScore }}</span>
         </div>
       </div>
 
@@ -171,6 +199,22 @@ const note = computed(() =>
           <span class="cm-kpi__value">{{ virgule(score.expectedGoals.away, 2) }}</span>
           <span class="cm-kpi__detail spc__xg-team"><TeamCrest :name="away" :league="result.league" :size="14" /> <span class="cm-truncate">{{ away }}</span></span>
         </div>
+      </div>
+
+      <!-- Étape 27 : ce que disent les xG (ou les buts) de chaque équipe, face à une équipe moyenne de son championnat. -->
+      <div v-if="forces" class="spc__forces" data-modele-de-buts>
+        <p class="cm-group-title">{{ forces.titre }}</p>
+        <div class="cm-kpis spc__forces-kpis">
+          <div v-for="e in [{ ...forces.equipes.home, nom: home }, { ...forces.equipes.away, nom: away }]" :key="e.cle" class="cm-kpi spc__force" :title="e.titre">
+            <span class="cm-kpi__label spc__xg-team"><TeamCrest :name="e.nom" :league="result.league" :size="14" /> <span class="cm-truncate">{{ e.nom }}</span></span>
+            <span class="cm-kpi__value spc__force-value">{{ e.resume }}</span>
+            <span class="cm-kpi__detail">{{ e.matchs }}</span>
+          </div>
+        </div>
+        <p class="spc__team-note">
+          {{ forces.note }}
+          <template v-if="forces.demarrage">{{ forces.demarrage }}</template>
+        </p>
       </div>
 
       <!-- La forme de chaque équipe : ses cinq derniers matchs en cartes de rencontre. -->
@@ -206,14 +250,15 @@ const note = computed(() =>
         <span class="cm-icon-box is-muted is-sm"><AppIcon name="info" :size="14" /></span>
         <div>
           <p class="cm-note__title">Le poids de la forme</p>
-          <p class="cm-note__text spc__note-text">{{ note }}</p>
+          <p v-if="provenanceButs" class="cm-note__text spc__note-text">{{ NOTE_DE_LA_FORME }}</p>
+          <p v-else class="cm-note__text spc__note-text">{{ note }}</p>
         </div>
       </div>
 
       <div v-if="fiabilite" class="cm-note spc__reliability">
         <span class="cm-icon-box is-muted is-sm"><AppIcon name="history" :size="14" /></span>
         <div>
-          <p class="cm-note__title">Fiabilité mesurée</p>
+          <p class="cm-note__title">{{ titreFiabilite }}</p>
           <p class="cm-note__text spc__note-text">{{ fiabilite }}</p>
         </div>
       </div>
@@ -383,6 +428,35 @@ const note = computed(() =>
   color: var(--cm-text-muted);
 }
 
+/* --------------------------------------- étape 27 : le modèle de buts unique */
+.spc__prov {
+  margin: 0;
+}
+
+.spc__autre {
+  color: var(--cm-text-secondary);
+}
+
+.spc__forces {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.spc__forces-kpis {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* Les statistiques en violet (ui/DESIGN.md) : un filet et le chiffre, lisibles sans la couleur. */
+.spc__force {
+  border-color: rgba(var(--cm-violet-rgb) / 0.3);
+}
+
+.spc__force-value {
+  font-size: 15px;
+  color: var(--cm-violet);
+}
+
 /* ------------------------------------------------------------- notes finales */
 .spc__note-text {
   font-size: 12px;
@@ -424,7 +498,8 @@ const note = computed(() =>
     font-size: 30px;
   }
 
-  .spc__xg {
+  .spc__xg,
+  .spc__forces-kpis {
     grid-template-columns: minmax(0, 1fr);
   }
 }

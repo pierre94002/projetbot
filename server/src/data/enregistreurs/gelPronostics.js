@@ -201,7 +201,8 @@ export async function gelerLaNuit({ maintenant = Date.now(), database = openDb()
   for (const match of liste) {
     try {
       const enrichi = await enrichMatchWithRealAverages(match, { sansRepliPayant: true });
-      const resultat = await analyzeMatch(enrichi, config, getTiltState(), sport);
+      // L'heure de la nuit (étape 27) : le modèle de buts ne lit rien d'après ce moment.
+      const resultat = await analyzeMatch(enrichi, config, getTiltState(), sport, { maintenant });
       const homeId = club(match.home, match.league);
       const awayId = club(match.away, match.league);
       if (!homeId || !awayId) bilan.sansIdentifiant++;

@@ -14,7 +14,11 @@
  *     actif seulement sur « retenu », avec une confirmation (EngineCandidateTrial) ;
  *   - l'ALERTE DE DÉRIVE du moteur en service (durable, posée par la calibration du mois)
  *     et la place du réglage refait chaque mois (étape 26) ; la place d'avant (« après la
- *     calibration ») n'est plus montrée que par un serveur pas encore relancé.
+ *     calibration ») n'est plus montrée que par un serveur pas encore relancé ;
+ *   - (étape 27, 21/10/2026) la phrase en mots de la candidate (`enMots`), son « quoi »
+ *     technique replié dans « Détail technique » ; pour la candidate du modèle de buts unique, son détail famille
+ *     par famille (EngineGoalModelTrial : porte 1 du banc et sa réserve acceptée, verdicts,
+ *     calibration, régimes, porte de l'adoption, horizon) ; ses marchés et témoins en mots.
  * Tout est LU (GET /api/config/versions, un état du serveur qui n'écrit rien) ;
  * les écritures sont le retour arrière (POST /api/config/versions/retour) et
  * l'adoption (POST /api/config/versions/adopter), chacune avec ce qui est vu à
@@ -30,6 +34,7 @@ import HelpTip from '@/components/common/HelpTip.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import ProvenanceChip from '@/components/common/ProvenanceChip.vue';
 import EngineCandidateTrial from '@/components/settings/EngineCandidateTrial.vue';
+import EngineGoalModelTrial from '@/components/settings/EngineGoalModelTrial.vue';
 import { configApi } from '@/services/configApi.js';
 import {
   PHRASES,
@@ -46,6 +51,8 @@ import {
   etatDeLaDerive,
   texteDeConfirmationAdoption,
   messageApresAdoption,
+  marchesDits,
+  estUnModeleDeButs,
   messageApresRetour
 } from '@/utils/versionsMoteur.js';
 import { useConfigStore } from '@/stores/configStore.js';
@@ -289,9 +296,20 @@ async function revenir() {
         <dt>Identifiant</dt>
         <dd>{{ candidate.id }}</dd>
         <dt>Étape</dt>
-        <dd>{{ candidate.etape }} — {{ candidate.quoi }}</dd>
+        <dd>
+          {{ candidate.etape }} — {{ candidate.enMots ?? candidate.quoi }}
+          <!-- Étape 27 : une candidate qui a sa phrase en mots garde son « quoi » technique (celui du registre), replié. -->
+          <details v-if="candidate.enMots" class="ev__technique">
+            <summary class="ev__technique-titre"><AppIcon name="chevronRight" :size="12" class="ev__technique-chevron" />Détail technique</summary>
+            <p class="ev__petit ev__technique-texte">{{ candidate.quoi }}</p>
+          </details>
+        </dd>
         <dt>Marchés calculés à blanc</dt>
-        <dd>{{ (candidate.marches ?? []).join(', ') }}</dd>
+        <dd :title="(candidate.marches ?? []).join(', ')">{{ marchesDits(candidate.marches) }}</dd>
+        <template v-if="candidate.temoins?.length">
+          <dt>Témoins (regardés, jamais jugés)</dt>
+          <dd>{{ marchesDits(candidate.temoins) }}</dd>
+        </template>
         <dt>En essai depuis</dt>
         <dd>{{ quandParis(candidate.enEssaiDepuis, 'pas encore mise en essai : au prochain démarrage du serveur') }}</dd>
         <dt>D’où elle vient</dt>
@@ -305,7 +323,10 @@ async function revenir() {
       </p>
     </div>
 
-    <!-- 4 bis. L'essai de la candidate, ses deux verdicts et son adoption (étape 25, seconde moitié). -->
+    <!-- 4 bis. Étape 27 : la candidate du modèle de buts unique, famille par famille (seulement pour elle). -->
+    <EngineGoalModelTrial v-if="candidate && estUnModeleDeButs(candidate)" :candidate="candidate" />
+
+    <!-- 4 ter. L'essai de la candidate, ses deux verdicts et son adoption (étape 25, seconde moitié). -->
     <EngineCandidateTrial
       v-if="candidate"
       :etat="d"
@@ -445,6 +466,34 @@ async function revenir() {
   font-size: 11.5px;
   line-height: 1.5;
   color: var(--cm-text-muted);
+}
+
+/* Étape 27 : le « quoi » technique d'une candidate qui a sa phrase en mots — replié, ouvert au clic. */
+.ev__technique {
+  margin-top: 4px;
+}
+
+.ev__technique-titre {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--cm-text-muted);
+  list-style: none;
+}
+
+.ev__technique-titre::-webkit-details-marker {
+  display: none;
+}
+
+.ev__technique[open] .ev__technique-chevron {
+  transform: rotate(90deg);
+}
+
+.ev__technique-texte {
+  margin-top: 4px;
 }
 
 .ev__entete {

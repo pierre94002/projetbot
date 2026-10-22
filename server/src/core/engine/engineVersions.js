@@ -94,11 +94,13 @@ import { readJsonFile, writeJsonAtomic } from '../../utils/atomicJson.js';
 import { getEngineConfig, lireReglagesDuMoteur, remplacerReglagesDuMoteur } from './engineConfig.js';
 import { titreBookmaker } from './vosBookmakers.js';
 import { isRefreshRunning } from '../../data/providers/refreshLock.js';
-import { declarerVariante, declarerLancement, lireRegistre } from '../../bench/trialsRegistry.js';
-import { LANCEMENTS, ETAPES_A_JUGER, jourValide } from '../../bench/lancements.js';
+import { declarerVariante, declarerVariantes, declarerLancement, lireRegistre } from '../../bench/trialsRegistry.js';
+import { LANCEMENTS, ETAPES_A_JUGER, jourValide, VARIANTES_DE_L_ETAPE_27 } from '../../bench/lancements.js';
 import { problemeDHorizon, horizonDe } from '../../bench/horizonEssai.js';
 import { normaliserIdEtape } from '../../data/roadmap/plan.js';
 import { MARCHES_CONNUS } from '../../sports/football/markets.js';
+import { reglagesDuModeleDeButs } from './goalModel.js';
+import { NOTE_DU_MODELE_DE_BUTS } from './noteDuModeleDeButs.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 /** Le dossier src du serveur : les chemins des modules du moteur partent de là. */
@@ -118,6 +120,11 @@ export const FORMAT_VERSIONS = 1;
  * Hors de la liste : les lectures générales de l'appli, les écrans, l'IA, le
  * règlement — une donnée qui change n'est pas une version (elle change chaque
  * nuit), un écran non plus.
+ * Étape 27 : le lecteur du modèle de buts unique (data/db/entreesButs.js) entre
+ * dans l'empreinte ; le calcul de nuit des forces (data/db/forcesButs*.js) n'y
+ * entre pas (un producteur de données, comme la table du jour J : ses formules
+ * sont dans goalModel.js) ; la note mesurée au banc (noteDuModeleDeButs.js) non
+ * plus (la remplir ne crée pas de version).
  */
 export const MODULES_DU_MOTEUR = Object.freeze({
   dossiers: Object.freeze(['core/engine', 'core/market', 'core/model', 'core/risk', 'core/signals', 'core/xg', 'sports']),
@@ -126,16 +133,26 @@ export const MODULES_DU_MOTEUR = Object.freeze({
     'data/db/statInputsRead.js',
     'data/db/scoreFormRead.js',
     'data/db/matchStatsRead.js',
-    'data/providers/standingsService.js'
+    'data/providers/standingsService.js',
+    'data/db/entreesButs.js'
   ]),
-  horsEmpreinte: Object.freeze(['core/engine/engineVersions.js'])
+  // Étape 27 : les mots du modèle de buts (motsDuModeleDeButs.js) — corriger une phrase ne crée pas de version.
+  horsEmpreinte: Object.freeze(['core/engine/engineVersions.js', 'core/engine/noteDuModeleDeButs.js', 'core/engine/motsDuModeleDeButs.js'])
 });
+
+/**
+ * Étape 27 : les TÉMOINS qu'une candidate peut demander à blanc — calculés et rapportés à côté de ses familles,
+ * hors du jugement principal, hors de son empreinte (`temoins`). Le score exact seulement : sa précision ne se
+ * prouve ni à l'horizon de l'essai ni sûrement au banc ; on la regarde, on ne la juge pas.
+ */
+export const TEMOINS_CONNUS = Object.freeze(['scoreExact']);
 
 /**
  * LA CANDIDATE, déclarée dans le CODE comme les lancements de l'étape 16 (les
  * données d'exécution du bac ne sont jamais recopiées chez Pierre : une
  * candidate notée seulement dans data/runtime disparaîtrait à la mise en
- * service). Aucune à l'étape 25 : la première viendra de l'étape 27. Forme :
+ * service). Aucune à l'étape 25 ; la première est celle de l'étape 27 (le
+ * modèle de buts unique, 21/10/2026). Forme :
  *   {
  *     id:            identifiant court et stable — celui de la VARIANTE au
  *                    registre de la mesure (étape 16) ;
@@ -154,7 +171,16 @@ export const MODULES_DU_MOTEUR = Object.freeze({
  *                    registre de la mesure dès la mise à blanc (le juge élargit sa
  *                    fourchette d'autant) ;
  *     vues:          [{ de, a, quoi }] — les fenêtres de matchs regardées pendant
- *                    sa construction : le banc avant l'essai les dit « déjà vues ».
+ *                    sa construction : le banc avant l'essai les dit « déjà vues » ;
+ *   étape 27 :
+ *     temoins:       ['scoreExact'] — calculés à blanc et rapportés à côté, jamais
+ *                    jugés, hors de son empreinte (TEMOINS_CONNUS) ;
+ *     enMots:        la phrase pour Pierre, sans jargon, que la carte « Versions du
+ *                    moteur » et la santé du moteur montrent à la place de `quoi`
+ *                    (qui reste au registre de la mesure, et sur la carte dans un
+ *                    « Détail technique » replié) ; hors de son empreinte, comme
+ *                    `variantes`, `vues` et `temoins` (la changer ne recommence pas
+ *                    l'essai).
  *   }
  * UNE ÉTAPE LIVRÉE COMME CANDIDATE N'AJOUTE PAS SON ENTRÉE À LANCEMENTS
  * (lancements.js) : la date de mise en service serait celle du premier
@@ -162,8 +188,53 @@ export const MODULES_DU_MOTEUR = Object.freeze({
  * le lancement (declarerLancement, « a-chaud »), daté du jour de l'adoption.
  * Une candidate peut aussi être PROPOSÉE par un module (proposerUneCandidate,
  * avec son origine) : elle vit alors dans le registre des versions.
+ *
+ * ÉTAPE 27 (conception §2.2) : le modèle de buts unique (core/engine/goalModel.js),
+ * mesuré au banc P2 (noteDuModeleDeButs.js : porte 1 franchie, une réserve
+ * acceptée). K = 320 : elle-même et les 319 autres variantes regardées
+ * (VARIANTES_DE_L_ETAPE_27). Ses deux fenêtres vues : football-data P1 et le
+ * magasin 2023-07 → 2026-09-23 ; P2 (2019-2023) reste jamais vue.
  */
-export const CANDIDATE_EN_ESSAI = null;
+export const CANDIDATE_EN_ESSAI = Object.freeze({
+  id: 'modele-buts-v1',
+  etape: '27',
+  enMots:
+    'Un seul modèle pour tous les marchés de buts et le score : les pourcentages partent des cotes (1N2, et plus/moins 2,5 quand il est relevé) et sont ajustés par les xG des deux équipes ; sans cote, les xG (ou, à défaut, les buts) seuls.',
+  quoi: 'Un seul modèle de buts : une grille des scores (Poisson et Dixon-Coles, rho −0,05) calée sur les cotes (1N2, et plus/moins 2,5 gratuit quand il existe), mélangée aux forces d’attaque et de défense tirées des xG ou des buts, pondérées dans le temps (demi-vies 35/25 remesurées sur 2024-25 et football-data 2001-2012 ; celles de l’étape 18, jugées sur 2019-2023, lues comme point de départ) ; tous les marchés de buts et le score en sortent ; démarrage à froid : retenu après mesure (m7).',
+  modifications: Object.freeze({
+    football: Object.freeze({
+      modeleDeButs: Object.freeze({
+        version: 1,
+        rho: -0.05,
+        demiVies: Object.freeze({ attaque: 35, defense: 25 }),
+        prior: 8,
+        statistique: 'mix',
+        poidsXg: 0.7,
+        changementDeChampionnat: 'remise-a-zero',
+        ancrage: Object.freeze({ ligne: 2.5, methode: 'total-equilibre' }),
+        melange: Object.freeze({ avecPlusMoins: Object.freeze({ wT: 0.1, wS: 0.1 }), sans: Object.freeze({ wT: 0.55, wS: 0.1 }) }),
+        demarrageAFroid: Object.freeze({ matchs: 8 }),
+        bornes: Object.freeze([0.2, 6])
+      })
+    })
+  }),
+  marches: Object.freeze(['totalGoals', 'bothTeamsScore', 'teamGoals', 'resultAndTotal']),
+  temoins: Object.freeze(['scoreExact']),
+  horizon: Object.freeze({ matchs: 800, jours: 21 }),
+  variantes: Object.freeze(VARIANTES_DE_L_ETAPE_27.filter((v) => v.id !== 'modele-buts-v1')),
+  vues: Object.freeze([
+    Object.freeze({
+      de: '2000-07-01',
+      a: '2019-06-30',
+      quoi: 'football-data P1 : rho, calage sur les cotes, loi des scores, livres et marge (cotes 2005-07-29 → 2019-06-30) ; forces apprises 2001-07 → 2012-06, mélange appris 2005-07 → 2012-06, vérifiés 2012-07 → 2019-06 ; promus et démarrage à froid (m5, m7).'
+    }),
+    Object.freeze({
+      de: '2023-07-01',
+      a: '2026-09-23',
+      quoi: 'Magasin : forces chauffées 2023-07 → 2024-06 ; demi-vies, rétrécissement, statistique, changement de championnat, rho, poids du mélange et démarrage à froid appris sur 2024-07 → 2025-06, vérifiés sur 2025-07 → 2026-09-23 ; livres et heures de relevé ; puissance du juge et score face au score en service sur 2025-07 → 2026-09-23.'
+    })
+  ])
+});
 
 /**
  * Ce qui reste à venir sur la carte : le réglage refait chaque mois (la boucle de correction, étape 26). Son
@@ -209,7 +280,25 @@ export const LIBELLES_REGLAGES = Object.freeze({
   maxExpectedRateGap: Object.freeze({ libelle: 'Écart maximal de buts attendus (garde-fou des mises)', format: 'nombre' }),
   'weights.market': Object.freeze({ libelle: 'Poids du marché dans le 1N2', format: 'pourcent' }),
   'weights.structural': Object.freeze({ libelle: 'Poids des facteurs structurels', format: 'pourcent' }),
-  'weights.exogenous': Object.freeze({ libelle: 'Poids des facteurs exogènes', format: 'pourcent' })
+  'weights.exogenous': Object.freeze({ libelle: 'Poids des facteurs exogènes', format: 'pourcent' }),
+  // Étape 27 : le modèle de buts unique (posé en entier : « activé » / « absent : ancien modèle ») et ses réglages.
+  modeleDeButs: Object.freeze({ libelle: 'Modèle de buts unique (étape 27)', format: 'modele-de-buts' }),
+  'modeleDeButs.version': Object.freeze({ libelle: 'Modèle de buts : version', format: 'nombre' }),
+  'modeleDeButs.rho': Object.freeze({ libelle: 'Modèle de buts : corrélation des petits scores (rho)', format: 'nombre' }),
+  'modeleDeButs.demiVies.attaque': Object.freeze({ libelle: 'Modèle de buts : mémoire de l’attaque, en matchs', format: 'nombre' }),
+  'modeleDeButs.demiVies.defense': Object.freeze({ libelle: 'Modèle de buts : mémoire de la défense, en matchs', format: 'nombre' }),
+  'modeleDeButs.prior': Object.freeze({ libelle: 'Modèle de buts : matchs « moyens » ajoutés à chaque équipe', format: 'nombre' }),
+  'modeleDeButs.statistique': Object.freeze({ libelle: 'Modèle de buts : statistique des forces (xG, buts ou les deux)', format: 'brut' }),
+  'modeleDeButs.poidsXg': Object.freeze({ libelle: 'Modèle de buts : part des xG dans les forces', format: 'pourcent' }),
+  'modeleDeButs.changementDeChampionnat': Object.freeze({ libelle: 'Modèle de buts : forces d’un club qui change de championnat', format: 'brut' }),
+  'modeleDeButs.ancrage.ligne': Object.freeze({ libelle: 'Modèle de buts : ligne plus/moins qui cale le total', format: 'nombre' }),
+  'modeleDeButs.ancrage.methode': Object.freeze({ libelle: 'Modèle de buts : façon de caler sur les cotes', format: 'brut' }),
+  'modeleDeButs.melange.avecPlusMoins.wT': Object.freeze({ libelle: 'Modèle de buts : part des statistiques dans le total, avec cote plus/moins', format: 'pourcent' }),
+  'modeleDeButs.melange.avecPlusMoins.wS': Object.freeze({ libelle: 'Modèle de buts : part des statistiques dans l’écart entre équipes, avec cote plus/moins', format: 'pourcent' }),
+  'modeleDeButs.melange.sans.wT': Object.freeze({ libelle: 'Modèle de buts : part des statistiques dans le total, sans cote plus/moins', format: 'pourcent' }),
+  'modeleDeButs.melange.sans.wS': Object.freeze({ libelle: 'Modèle de buts : part des statistiques dans l’écart entre équipes, sans cote plus/moins', format: 'pourcent' }),
+  'modeleDeButs.demarrageAFroid.matchs': Object.freeze({ libelle: 'Modèle de buts : matchs connus avant de croire au total des statistiques', format: 'nombre' }),
+  'modeleDeButs.bornes': Object.freeze({ libelle: 'Modèle de buts : buts attendus minimum et maximum', format: 'brut' })
 });
 
 /** Le registre ne se lit pas : rien n'y est écrit, aucun réglage n'est enregistré tant qu'il ne l'est pas. */
@@ -673,6 +762,16 @@ function reglagesAdoptes(reglages, candidate) {
 
 const VERDICTS_DITS = Object.freeze({ retenu: 'retenu', 'pas-prouve': 'pas prouvé', 'moins-bon': 'moins bon', 'pas-assez-de-matchs': 'pas assez de matchs' });
 
+/** Le nom d'une famille de marchés (ou d'une case de la porte de sûreté) pour Pierre. */
+const NOMS_DE_FAMILLE = Object.freeze({
+  totalGoals: 'Total buts',
+  'totalGoals|2.5': 'Plus/moins 2,5 buts',
+  bothTeamsScore: 'Les 2 équipes marquent',
+  teamGoals: 'Buts d’une équipe',
+  resultAndTotal: 'Résultat + Total buts'
+});
+const libelleDeFamille = (cle) => NOMS_DE_FAMILLE[cle] ?? String(cle);
+
 /**
  * Peut-on adopter la candidate notée au registre ? Pur. Rend { possible, raison, texte } — dans l'ordre : aucune
  * candidate, pas encore jugée (l'horizon n'est pas atteint), jugée face à une autre version en service, moins
@@ -708,6 +807,31 @@ function etatDeLAdoption(brut, notee, { enCours, enSynchro, empreinte }) {
     };
   }
   if (j.verdict !== 'retenu') return { possible: false, raison: 'pas-encore-jugee', verdict: j.verdict, texte: `Verdict « ${VERDICTS_DITS[j.verdict] ?? j.verdict} » : rien à adopter.` };
+  // Étape 27 (la porte de l'essai) : UN SEUL MODÈLE — une famille « moins bon » (même K que le jugement principal) refuse
+  // toute l'adoption, nommée (jamais d'adoption par morceaux : une correction est une nouvelle candidate) ; puis la porte
+  // de SÛRETÉ, à K = 1 (une borne large, environ ± 3,5 points à 800 matchs) : la candidate n'annonce ni trop haut ni trop
+  // bas sur le plus/moins 2,5 et les deux marquent. « Pas prouvé » par famille est l'issue normale : toléré.
+  const moinsBonne = Object.entries(j.parFamille ?? {}).find(([, x]) => x?.verdict === 'moins-bon');
+  if (moinsBonne) {
+    return {
+      possible: false,
+      raison: 'famille-moins-bonne',
+      verdict: j.verdict,
+      famille: moinsBonne[0],
+      texte: `Refusée : la famille « ${libelleDeFamille(moinsBonne[0])} » fait moins bien que la version en service, au-delà du hasard (${contexte}). Un seul modèle de buts : rien n’est adopté par morceaux ; une correction sera une nouvelle candidate.`
+    };
+  }
+  const horsSurete = Object.entries(j.surete ?? {}).find(([, x]) => x?.verdict === 'trop-haut' || x?.verdict === 'trop-bas');
+  if (horsSurete) {
+    const [cle, x] = horsSurete;
+    return {
+      possible: false,
+      raison: 'calibration',
+      verdict: j.verdict,
+      famille: cle,
+      texte: `Refusée : sur « ${libelleDeFamille(cle)} », la candidate annonce trop ${x.verdict === 'trop-haut' ? 'haut' : 'bas'} au-delà d’une borne large (porte de sûreté de la calibration). Rien n’est adopté.`
+    };
+  }
   if (enCours) return { possible: false, raison: 'passe-en-cours', verdict: j.verdict, texte: 'Une passe d’actualisation (ou un import, ou un banc) est en cours : l’adoption attend qu’elle soit finie.' };
   if (enSynchro === false) return { possible: false, raison: 'pas-en-synchro', verdict: j.verdict, texte: 'Le moteur tourne avec des réglages pas encore notés : ils le seront au prochain calcul ; relisez ensuite la carte.' };
   return { possible: true, raison: null, verdict: j.verdict, texte: null };
@@ -881,6 +1005,8 @@ export function validerCandidate(candidate) {
   if (!idEtape || idEtape !== etape) throw new CandidateInvalide(`Candidate « ${id} » : étape « ${String(etape)} » inconnue du plan (ou mal écrite).`);
   if (!ETAPES_A_JUGER.includes(idEtape)) throw new CandidateInvalide(`Candidate « ${id} » : l’étape ${idEtape} n’est pas une étape dont les chiffres se jugent (ETAPES_A_JUGER).`);
   if (!texte(quoi)) throw new CandidateInvalide(`Candidate « ${id} » : la phrase « quoi » est vide.`);
+  // Étape 27 : la phrase en mots simples (facultative) — une chaîne non vide sur une ligne, sinon refusée.
+  if (candidate.enMots !== undefined && (!texte(candidate.enMots) || /[\r\n]/.test(candidate.enMots))) throw new CandidateInvalide(`Candidate « ${id} » : la phrase « enMots » est vide ou sur plusieurs lignes.`);
   if (!objetSimple(modifications) || !Object.keys(modifications).length) throw new CandidateInvalide(`Candidate « ${id} » : aucune modification des réglages.`);
   for (const [sport, mods] of Object.entries(modifications)) {
     if (sport !== 'football') throw new CandidateInvalide(`Candidate « ${id} » : sport inconnu « ${sport} ».`);
@@ -893,7 +1019,14 @@ export function validerCandidate(candidate) {
     if (vus.has(m)) throw new CandidateInvalide(`Candidate « ${id} » : le marché « ${m} » est écrit deux fois.`);
     vus.add(m);
   }
+  // Étape 27 : des réglages du modèle de buts fautifs refusent la candidate (jamais calculée à moitié).
+  try {
+    reglagesDuModeleDeButs(configDeLaCandidate({}, candidate, 'football'));
+  } catch (error) {
+    throw new CandidateInvalide(`Candidate « ${id} » : ${error.message}`);
+  }
   const sortie = { id, etape: idEtape, quoi, modifications: copie(modifications), marches: [...marches] };
+  if (candidate.enMots !== undefined) sortie.enMots = candidate.enMots;
   // Les champs facultatifs (seconde moitié) : rendus seulement quand ils sont déclarés — l'empreinte d'une
   // candidate qui ne les déclare pas ne change pas.
   if (candidate.horizon !== undefined) {
@@ -921,6 +1054,17 @@ export function validerCandidate(candidate) {
     }
     sortie.vues = candidate.vues.map((f) => ({ de: f.de, a: f.a, quoi: typeof f.quoi === 'string' ? f.quoi : '' }));
   }
+  // Étape 27 : les TÉMOINS (le score exact) — calculés à blanc et rapportés, jamais jugés, hors de l'empreinte.
+  if (candidate.temoins !== undefined) {
+    if (!Array.isArray(candidate.temoins)) throw new CandidateInvalide(`Candidate « ${id} » : « temoins » est une liste (${TEMOINS_CONNUS.join(', ')}).`);
+    const vusT = new Set();
+    for (const t of candidate.temoins) {
+      if (!TEMOINS_CONNUS.includes(t)) throw new CandidateInvalide(`Candidate « ${id} » : témoin inconnu « ${String(t)} » (connus : ${TEMOINS_CONNUS.join(', ')}).`);
+      if (vusT.has(t) || marches.includes(t)) throw new CandidateInvalide(`Candidate « ${id} » : le témoin « ${t} » est écrit deux fois (ou aussi parmi les marchés).`);
+      vusT.add(t);
+    }
+    sortie.temoins = [...candidate.temoins];
+  }
   return sortie;
 }
 
@@ -933,7 +1077,8 @@ export function configDeLaCandidate(enService, candidate, sportId = 'football') 
 
 /**
  * L'empreinte d'une candidate (ses modifications, ses marchés, le code ; son horizon quand elle en déclare un —
- * le changer en cours d'essai recommence l'essai) : les chiffres à blanc la portent.
+ * le changer en cours d'essai recommence l'essai) : les chiffres à blanc la portent. Jamais ses variantes, ses vues,
+ * ses témoins ni sa phrase en mots (`enMots`) : les changer ne recommence pas l'essai.
  */
 export function empreinteDeLaCandidate(candidate, { racine = SRC_DU_SERVEUR } = {}) {
   const base = { id: candidate.id, modifications: formeStable(candidate.modifications), marches: [...candidate.marches].sort(ordre), code: empreinteDuCode({ racine }).empreinte };
@@ -1038,8 +1183,15 @@ export function mettreLaCandidateEnEssai(options = {}) {
   const adoptee = adopteeDuRegistre(brut, c.id);
   if (adoptee) return { candidate: null, change: false, dejaAdoptee: { id: c.id, version: adoptee.version ?? null, le: adoptee.finLe ?? null } };
   const mesure = { ...(options.mesure ?? {}), maintenant };
-  const variante = declarerVariante(c.etape, { id: c.id, quoi: c.quoi, ou: 'a-blanc' }, mesure);
-  for (const v of c.variantes ?? []) declarerVariante(c.etape, { id: v.id, quoi: v.quoi, ou: 'construction' }, mesure);
+  // La candidate (« a-blanc ») et les variantes de sa construction en UNE écriture du registre de la mesure (étape 27,
+  // vérification du branchement, constat 3) ; `variante` garde sa forme : { change, variante } de la candidate.
+  const declarees = declarerVariantes(
+    c.etape,
+    [{ id: c.id, quoi: c.quoi, ou: 'a-blanc' }, ...(c.variantes ?? []).map((v) => ({ id: v.id, quoi: v.quoi, ou: 'construction' }))],
+    mesure
+  );
+  const { change: varianteChange, variante: varianteDeclaree } = declarees.variantes[0];
+  const variante = { change: varianteChange, variante: varianteDeclaree };
   const empreinte = empreinteDeLaCandidate(c, options);
   // Le registre des versions doit exister pour noter la candidate : sinon l'état en service y est noté d'abord.
   let base = brut;
@@ -1202,6 +1354,33 @@ const resumeVersion = (v, { dansLaPile = false, enService = false } = {}) =>
       }
     : null;
 
+/**
+ * Étape 27 : la PORTE 1 du banc d'essai (2019-2023, jamais vu, prix d'avant-match) de la candidate, telle que la note
+ * du modèle de buts la garde (noteDuModeleDeButs.js, hors empreinte) — SEULEMENT pour la candidate mesurée (même
+ * identifiant, même empreinte) : une autre candidate, ou celle-ci retouchée, n'a pas de porte 1. Le résumé pour la
+ * carte : en bloc et par famille, les critères en mots, la réserve acceptée telle quelle, et la calibration du
+ * pronostic retenu de chaque version par famille. null sinon.
+ */
+export function porte1DeLaCandidate(c, empreinte, note = NOTE_DU_MODELE_DE_BUTS) {
+  const p = note?.porte1 ?? null;
+  if (!p || !c || p.candidate?.id !== c.id || p.candidate?.empreinte !== empreinte) return null;
+  const l = p.avecCotes ?? {};
+  const verdictDe = (x) => (x ? { gainPct: x.gainPct ?? null, fourchettePct: x.fourchettePct ?? null, verdict: x.verdict ?? null, matchs: x.matchs ?? null } : null);
+  const calib = (x) => (x ? { biais: x.biais ?? null, verdict: x.verdict ?? null, pronostics: x.pronostics ?? null, matchs: x.matchs ?? null } : null);
+  const familles = Object.keys(l.parFamille ?? {});
+  return {
+    periode: '2019-2023',
+    matchs: l.matchs ?? null,
+    K: p.K ?? null,
+    franchie: Boolean(p.verdict?.franchie),
+    enBloc: verdictDe(l.enBloc),
+    familles: Object.fromEntries(familles.map((k) => [k, verdictDe(l.parFamille[k])])),
+    criteres: (p.verdict?.criteres ?? []).map((x) => ({ cle: x.cle, ok: Boolean(x.ok), texte: x.texte })),
+    reservesAcceptees: (p.reservesAcceptees ?? []).map((r) => ({ cle: r.cle, sens: r.sens, texte: r.texte, le: r.le ?? null })),
+    calibration: Object.fromEntries(familles.map((k) => [k, { enService: calib(l.calibration?.enService?.parFamille?.[k]), candidate: calib(l.calibration?.candidate?.parFamille?.[k]) }]))
+  };
+}
+
 /** La candidate telle que la carte la montre : sa déclaration, son origine, son horizon, et ce que le registre sait de SON essai. */
 function vueDeLaCandidate(c, brut, { racine }) {
   const notee = brut?.candidate?.id === c.id ? brut.candidate : null;
@@ -1226,7 +1405,9 @@ function vueDeLaCandidate(c, brut, { racine }) {
     premiersChiffres: meme ? notee.premiersChiffres ?? null : null,
     jugement: meme ? notee.jugement ?? null : null,
     jugementsPerimes: meme ? (notee.jugementsPerimes ?? []).length : 0,
-    banc: meme ? notee.banc ?? null : null
+    banc: meme ? notee.banc ?? null : null,
+    // Étape 27 : la porte 1 du banc d'essai, seulement pour la candidate mesurée (rien pour une autre candidate).
+    ...(porte1DeLaCandidate(c, empreinte) ? { porte1: porte1DeLaCandidate(c, empreinte) } : {})
   };
 }
 

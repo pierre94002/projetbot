@@ -31,6 +31,7 @@
 
 import { poissonProbability } from '../model/poisson.js';
 import { dixonColesAdjustment } from '../model/dixonColes.js';
+import { FIABILITE_SCORE_MODELE_DE_BUTS } from './noteDuModeleDeButs.js';
 
 const BUTS_MAX = 8;
 const TAUX_MIN = 0.1;
@@ -361,13 +362,50 @@ export function grilleDesScores({ inputs = null, fair = null } = {}) {
 }
 
 /**
+ * Étape 27 : le pronostic du score lu dans LA grille du modèle de buts unique (core/engine/goalModel.js,
+ * modeleDeButs) — la même que celle des marchés de buts : plus de MODELES_SCORE ni de rho à part. Les 81 cases
+ * rendues (0-0 à 8-8, telles quelles) font le top 5 et le score le plus probable ; les issues sont celles de la
+ * grille de calcul entière ; « autre score » est la masse hors des 81 cases. La forme (cinq derniers matchs) reste
+ * un contexte ; aucun effet de forme n'est calculé (`formEffect: null`). Fiabilité : celle du banc P2 du modèle
+ * (FIABILITE_SCORE_MODELE_DE_BUTS), null tant qu'elle n'est pas mesurée.
+ */
+function scoreDeLaGrille({ grille, inputs, predictedOutcome }) {
+  const cases = [...grille.cases].sort((a, b) => b.p - a.p);
+  const top = cases.slice(0, 5).map((c) => ({ home: c.home, away: c.away, probability: arrondi(c.p) }));
+  const dansIssue = predictedOutcome ? cases.find((c) => issueDe(c) === predictedOutcome) : null;
+  const source = grille.avecCotes ? 'cotes' : 'statistiques';
+  const fiabilite = FIABILITE_SCORE_MODELE_DE_BUTS?.[source] ?? null;
+  const bande = fiabilite?.bands?.find((b) => top[0].probability * 100 >= b.range[0] && top[0].probability * 100 < b.range[1]) ?? null;
+  const p = grille.probabilites;
+  return {
+    source,
+    provenance: { code: grille.provenance.code, court: grille.provenance.court, phrase: grille.provenance.phrase },
+    expectedGoals: { home: arrondi(grille.lambda, 2), away: arrondi(grille.mu, 2) },
+    mostLikely: top[0],
+    inPredictedOutcome: dansIssue
+      ? { outcome: predictedOutcome, home: dansIssue.home, away: dansIssue.away, probability: arrondi(dansIssue.p) }
+      : null,
+    top,
+    outcomes: { home: arrondi(p.home), draw: arrondi(p.draw), away: arrondi(p.away) },
+    autreScore: arrondi(grille.horsGrille),
+    formEffect: null,
+    form: inputs
+      ? { home: resumeForme(inputs.home), away: resumeForme(inputs.away), leagueSource: inputs.league?.source ?? null }
+      : null,
+    reliability: fiabilite ? { ...fiabilite, band: bande } : null
+  };
+}
+
+/**
  * @param {object} p
  * @param {object|null} p.inputs  entrées lues dans le magasin (scoreInputsFromStore)
  * @param {number[]|null} p.fair  probabilités justes [domicile, nul, extérieur] des cotes, ou null
  * @param {string|null} p.predictedOutcome  issue du pronostic du résultat ('home' | 'draw' | 'away')
+ * @param {object|null} p.grille  étape 27 : le modèle de buts unique (goalModel.js, modeleDeButs) ; absent, le chemin d'avant
  * @returns {object|null} null s'il n'y a ni cote ni historique
  */
-export function predictScore({ inputs = null, fair = null, predictedOutcome = null }) {
+export function predictScore({ inputs = null, fair = null, predictedOutcome = null, grille = null }) {
+  if (grille) return scoreDeLaGrille({ grille, inputs, predictedOutcome });
   const parametres = parametresDuScore({ inputs, fair });
   if (!parametres) return null;
   const { avecCotes, modele, taux, lambda, mu } = parametres;

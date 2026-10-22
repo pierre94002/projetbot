@@ -37,12 +37,23 @@
  * « calibrationMensuelle », seulement quand elle fige un mois — elle reste
  * jusqu'au mois figé suivant. La carte « Versions du moteur » et la feuille de
  * route la montrent. Rien ici n'écrit ; evaluerDerive est pure.
+ *
+ * Étape 27 (le modèle de buts unique) : quand la version en service porte la
+ * clé `modeleDeButs`, la référence des familles de buts (plus/moins, les deux
+ * marquent, buts d'une équipe, résultat + total) devient la note du banc P2 du
+ * nouveau modèle (noteDuModeleDeButs.js) — sinon le nouveau modèle serait
+ * « mieux » pour toujours face à l'ancien ; le mois de son adoption, qui mêle
+ * deux modèles, est dit « changement de modèle » pour ces familles, jamais jugé.
  * -----------------------------------------------------------------------
  */
 
 import { NOTE_DE_DEPART } from '../bench/noteDeDepart.js';
 import { JUGE, MARCHES, listeDesMoisFiges, bilanFige } from './calibration.js';
 import { lireAlerteDerive, CLE_ALERTE_DERIVE } from './alerteDerive.js';
+import { NOTE_DU_MODELE_DE_BUTS } from '../core/engine/noteDuModeleDeButs.js';
+import { getEngineConfig } from '../core/engine/engineConfig.js';
+import { FICHIER_VERSIONS } from '../core/engine/engineVersions.js';
+import { readJsonFile } from '../utils/atomicJson.js';
 
 export { lireAlerteDerive, CLE_ALERTE_DERIVE };
 
@@ -86,12 +97,46 @@ export function ecartsDeDepart(note = NOTE_DE_DEPART) {
   return Object.fromEntries([...parFamille.entries()].map(([marche, f]) => [marche, { ecart: f.somme / f.n, n: f.n, lignes: [...f.lignes].sort() }]));
 }
 
+/** Étape 27 : les familles que calcule le modèle de buts unique. */
+export const FAMILLES_DU_MODELE_DE_BUTS = Object.freeze(['totalGoals', 'bothTeamsScore', 'teamGoals', 'resultAndTotal']);
+
+/**
+ * Étape 27 : les écarts de référence du moteur EN SERVICE — ceux de la note de départ ; quand ses réglages portent
+ * le modèle de buts unique et que sa note est mesurée (NOTE_DU_MODELE_DE_BUTS), ceux de cette note pour les familles
+ * de buts. Pure. Rend { depart, modeleDeButs: boolean }.
+ */
+export function referencesDuMoteur({ reglages = null, note = NOTE_DE_DEPART, noteButs = NOTE_DU_MODELE_DE_BUTS } = {}) {
+  const depart = ecartsDeDepart(note);
+  if (!reglages?.modeleDeButs || !noteButs?.marches) return { depart, modeleDeButs: false };
+  const buts = ecartsDeDepart({ depart: { P2: { marches: noteButs.marches } } });
+  for (const f of FAMILLES_DU_MODELE_DE_BUTS) {
+    if (buts[f]) depart[f] = buts[f];
+    else delete depart[f];
+  }
+  return { depart, modeleDeButs: true };
+}
+
+/**
+ * Étape 27 : le mois (AAAA-MM) où le modèle de buts unique est entré en service — la première version du registre
+ * dont les réglages du football portent `modeleDeButs` —, ou null. Lecture seule ; jamais une exception.
+ */
+export function moisDuChangementDeModele({ fichier = FICHIER_VERSIONS } = {}) {
+  try {
+    const brut = readJsonFile(fichier, null);
+    const v = [...(brut?.versions ?? [])].sort((a, b) => a.numero - b.numero).find((x) => x?.reglages?.football?.modeleDeButs);
+    return typeof v?.creeeLe === 'string' ? v.creeeLe.slice(0, 7) : null;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * LA RÈGLE sur le bilan d'un mois (calibration.js, figé ou non). Pure. Rend { regle, mois, figeLe, vue, derive,
  * signaux (ce qui fait la dérive), examines (chaque marché : statut « derive », « stable », « mieux »,
- * « trop-peu », « sans-reference » ou « pas-juge »), cloture, minimum }.
+ * « trop-peu », « sans-reference », « pas-juge » ou, étape 27, « changement-de-modele »), cloture, minimum }.
+ * `moisChangement` : le mois de l'adoption du modèle de buts unique (ses familles n'y sont pas jugées).
  */
-export function evaluerDerive(bilan, { note = NOTE_DE_DEPART, minimum = JUGE.minBlocs, depart = ecartsDeDepart(note) } = {}) {
+export function evaluerDerive(bilan, { note = NOTE_DE_DEPART, minimum = JUGE.minBlocs, depart = ecartsDeDepart(note), moisChangement = null } = {}) {
   if (!bilan) return { regle: VERSION_REGLE_DE_DERIVE, mois: null, figeLe: null, vue: 'premiere', derive: false, signaux: [], examines: [], cloture: null, minimum };
   const v = bilan.vues?.premiere ?? null;
   const examines = (v?.parMarche ?? []).map((c) => {
@@ -110,7 +155,8 @@ export function evaluerDerive(bilan, { note = NOTE_DE_DEPART, minimum = JUGE.min
       reference: reference ? { ecart: reference.ecart, n: reference.n } : null
     };
     let statut;
-    if (c.juge?.verdict === 'trop-peu' || matchs < minimum) statut = 'trop-peu';
+    if (moisChangement && bilan.mois === moisChangement && FAMILLES_DU_MODELE_DE_BUTS.includes(c.marche)) statut = 'changement-de-modele';
+    else if (c.juge?.verdict === 'trop-peu' || matchs < minimum) statut = 'trop-peu';
     else if (!reference) statut = 'sans-reference';
     else if (!fourchette || ligne.ecart === null) statut = 'pas-juge';
     else {
@@ -146,11 +192,14 @@ export function valeurDeLAlerte(evaluation, maintenant = Date.now()) {
  * figé jugé (evaluerDerive, recalculée à la lecture : rien n'est écrit) et l'alerte durable. Ne lève jamais :
  * une base qui ne se lit pas est dite (`probleme`).
  */
-export function deriveDuMoteur({ database, alerte = lireAlerteDerive() } = {}) {
+export function deriveDuMoteur({ database, alerte = lireAlerteDerive(), reglages = null, fichierVersions = FICHIER_VERSIONS } = {}) {
   try {
     const figes = listeDesMoisFiges({ database });
     const dernier = figes[0] ?? null;
-    const evaluation = dernier ? evaluerDerive(bilanFige(dernier.mois, { database })) : null;
+    // Étape 27 : la référence des familles de buts suit le modèle de buts en service (sa note du banc P2).
+    const refs = referencesDuMoteur({ reglages: reglages ?? getEngineConfig('football') });
+    const moisChangement = refs.modeleDeButs ? moisDuChangementDeModele({ fichier: fichierVersions }) : null;
+    const evaluation = dernier ? evaluerDerive(bilanFige(dernier.mois, { database }), { depart: refs.depart, moisChangement }) : null;
     return { regle: REGLE_DE_DERIVE, dernierMois: evaluation, moisFiges: figes.length, alerte, probleme: null };
   } catch (error) {
     return { regle: REGLE_DE_DERIVE, dernierMois: null, moisFiges: null, alerte, probleme: String(error?.message ?? error).slice(0, 300) };

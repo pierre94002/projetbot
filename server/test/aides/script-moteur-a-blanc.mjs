@@ -210,6 +210,55 @@ if (phase === 'sans-candidate') {
     candidate: { marches: ['totalGoals'] },
     commun: {}
   });
+} else if (phase === 'modele-de-buts') {
+  // Étape 27 : une candidate au MODÈLE DE BUTS UNIQUE (la clé modeleDeButs), ses familles de buts déclarées et le
+  // TÉMOIN du score exact. Le 1N2 ne change pas : jamais « hors déclaration » ; le témoin n'y est jamais compté non
+  // plus ; sa ligne porte les 81 cases et « autre score » de la candidate, et la grille du score en service.
+  const { reglagesDuModele } = await import('./modeleDeButsCommun.mjs');
+  await ecrireInstantane(imp);
+  fs.writeFileSync(path.join(RUNTIME, 'bets.json'), '[]');
+  fs.writeFileSync(path.join(RUNTIME, 'predictions.json'), '[]');
+  V.demarrerVersions();
+  const BUTS = Object.freeze({
+    id: 'essai-buts-unique',
+    etape: '27',
+    quoi: 'Modèle de buts unique (candidate d’essai)',
+    modifications: { football: { modeleDeButs: reglagesDuModele() } },
+    marches: ['totalGoals', 'teamGoals', 'bothTeamsScore', 'resultAndTotal'],
+    temoins: ['scoreExact']
+  });
+  const { temoins: _temoins, ...sansTemoin } = BUTS;
+  // Vérification du branchement (constat 1) : sans SES forces de buts à jour, la candidate n'est pas calculée à blanc
+  // — « en attente », rien en base — et l'étape de nuit revient à la passe suivante.
+  const F = await imp('data/db/forcesButs.js');
+  const T = await imp('data/db/dayTable.js');
+  const GM = await imp('core/engine/goalModel.js');
+  const empreinteForces = GM.empreinteDesForces(GM.reglagesDuModeleDeButs({ modeleDeButs: reglagesDuModele() }));
+  const enAttente = async () => {
+    const r = await calculerABlanc({ dansLaPasse: true, candidate: BUTS, mesure: { fichier: REGISTRE_MESURE } });
+    return { attente: r.attente, calcules: r.calcules, lignes: r.lignes, ecrites: r.ecrites, enBase: pronosticsABlanc(BUTS.id, { database }).length };
+  };
+  s.sansForces = await enAttente();
+  await T.construireTableJourJ({ database, rendreLaMain: null, controle: { lignes: 0 } });
+  await F.forcesDeButs({ empreintes: [empreinteForces], database, aPart: false, maintenant: () => Date.now() });
+  s.forcesAJour = F.etatForcesButs({ database, empreintes: [empreinteForces] }).aJour;
+  // Un rangement interrompu (`en_cours` resté posé) : pas à jour non plus.
+  database.prepare("INSERT OR REPLACE INTO forces_buts_state (cle, valeur) VALUES ('en_cours', ?)").run(new Date().toISOString());
+  s.rangementEnCours = await enAttente();
+  const passe = await job.__testing.passeMoteurABlanc({}, { candidate: BUTS, mesure: { fichier: REGISTRE_MESURE } });
+  s.passeEnAttente = { status: passe.status, summary: passe.summary, attente: passe.details?.attente ?? null, changed: passe.changed };
+  const tout = new Date().toISOString();
+  s.due = {
+    apresAttente: job.__testing.dueMoteurABlanc({ derniere: () => tout, derniersDetails: () => ({ attente: s.passeEnAttente.attente }) }),
+    apresCalcul: job.__testing.dueMoteurABlanc({ derniere: () => tout, derniersDetails: () => ({ attente: null }) }),
+    jamaisFaite: job.__testing.dueMoteurABlanc({ derniere: () => null, derniersDetails: () => null })
+  };
+  database.prepare("DELETE FROM forces_buts_state WHERE cle = 'en_cours'").run();
+  const nuit = await calculerABlanc({ dansLaPasse: true, candidate: BUTS, mesure: { fichier: REGISTRE_MESURE } });
+  s.nuit = { candidate: nuit.candidate, matchs: nuit.matchs, calcules: nuit.calcules, echecs: nuit.echecs, erreur: nuit.erreur, lignes: nuit.lignes, horsDeclaration: nuit.horsDeclaration };
+  const lignes = pronosticsABlanc(BUTS.id, { database });
+  s.lignes = lignes.map((l) => ({ marche: l.marketKey, choix: l.choice, distribution: l.distribution ? JSON.parse(l.distribution) : null, distributionEnService: l.serviceDistribution ? JSON.parse(l.serviceDistribution) : null }));
+  s.empreintes = { avec: V.empreinteDeLaCandidate(V.validerCandidate(BUTS)), sans: V.empreinteDeLaCandidate(V.validerCandidate(sansTemoin)), notee: nuit.candidate?.empreinte ?? null, temoinsRetires: _temoins.length };
 } else {
   throw new Error(`Phase inconnue : ${phase}`);
 }

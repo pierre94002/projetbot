@@ -97,3 +97,33 @@ test('tout s’efface ensemble : la copie ET le faux dossier personnel — aucun
   // Rien d'autre n'est tombé dans le dossier d'essais : aucun « cm-maison-… » de ce test n'y traîne.
   assert.ok(!fs.readdirSync(RACINE_ESSAIS).includes(path.basename(maison)));
 });
+
+// ------------------------------------------------------------ étape 27 : la première nuit de la candidate
+
+test('étape 27 — la PREMIÈRE NUIT simulée dans un bac, comme chez Pierre après la recopie : « forcesButs » (avant « moteurABlanc ») construit les forces pour l’empreinte de la candidate déclarée ; « moteurABlanc » la met à blanc et le registre de la mesure compte K = 320 (elle « a-blanc », 319 « construction ») ; le banc compte 320 aussi ; la version en service n’a ni la clé ni un réglage changé', () => {
+  const copie = preparerCopieDeBac({});
+  try {
+    const r = executerDansLeBac(copie, path.join(SERVEUR, 'test', 'aides', 'script-premiere-nuit.mjs'), { timeout: 300_000, env: { CLAUDE_CODE_BIN: path.join(copie.dossier, 'pas-de-claude-ici.exe') } });
+    assert.equal(r.code, 0, `${r.erreurs.slice(-3000)}\n${r.sortie.slice(-1500)}`);
+    assert.equal(r.reseau, false);
+    const s = r.json;
+    assert.equal(s.bac, true, 'le code se reconnaît dans le bac');
+    assert.deepEqual(s.candidate, { id: 'modele-buts-v1', variantes: 319, temoins: ['scoreExact'], horizon: { matchs: 800, jours: 21 } });
+    assert.ok(s.ordre.forcesButs >= 0 && s.ordre.forcesButs < s.ordre.moteurABlanc, 'les forces avant la mise à blanc');
+    assert.equal(s.forces.status, 'ok', JSON.stringify(s.forces));
+    assert.equal(s.forces.mode, 'premier');
+    assert.deepEqual(s.forces.empreintes, [s.forces.empreinte]);
+    assert.equal(s.forces.empreinte, 'v1|35|25|remise-a-zero');
+    assert.deepEqual(s.forces.controle, { lignes: 40, ecarts: 0 });
+    assert.equal(s.forces.etat, true, 'forces à jour pour l’empreinte de la candidate');
+    assert.equal(s.aBlanc.erreur, null, JSON.stringify(s.aBlanc));
+    assert.equal(s.registre.K, 320);
+    assert.deepEqual(s.registre.parOu, { 'a-blanc': 1, construction: 319 });
+    assert.equal(s.registre.premiere, 'modele-buts-v1');
+    assert.equal(s.banc.K, 320);
+    assert.equal(s.enService.sansCle, true, 'la clé modeleDeButs reste absente des réglages en service');
+    assert.deepEqual(s.enService.apres, s.enService.avant, 'aucun réglage en service changé');
+  } finally {
+    copie.nettoyer();
+  }
+});

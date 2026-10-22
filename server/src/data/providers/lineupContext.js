@@ -27,6 +27,7 @@ import { clubDuMagasin } from '../db/oddsProfileRead.js';
 import { ageAt, infosOf, ensureSquadsBirthdates } from '../db/playerBirthdates.js';
 import { currentSeason, seasonBounds } from './seasonWindows.js';
 import { derniereFeuille } from '../db/derniereComposition.js';
+import { forceDuOnzeDeLaComposition } from '../db/playerRatings.js';
 
 const JOUR_MS = 86_400_000;
 /** En début de saison, trop peu de matchs pour savoir qui est titulaire : on remonte plus loin. */
@@ -289,6 +290,29 @@ function dernieresCompositions({ homeName, awayName, league, jour, page, databas
 }
 
 /**
+ * LA FORCE DU ONZE de chaque camp d'une composition décrite (étape 30 du plan, 22/10/2026) : les apports des
+ * titulaires face à ceux de l'équipe habituelle, ligne par ligne, lus dans les fiches de la nuit (data/db/
+ * playerRatings.js : deux lectures par clé, quelques millisecondes). Pour la PAGE DU MATCH seulement (étape 31) :
+ * ni l'analyse IA (compositionPourAnalyseIA), ni le moteur ne la lisent — règle de Pierre, les compositions ne
+ * servent qu'à l'écran et au commentaire. Sans fiches (jamais calculées, club sans équipe habituelle) : null ; une
+ * lecture qui échoue ne casse jamais la page.
+ */
+export function avecForceDuOnze(compo, database) {
+  if (!compo) return compo;
+  const force = (equipe) => {
+    if (!equipe) return equipe;
+    let forceDuOnze = null;
+    try {
+      forceDuOnze = forceDuOnzeDeLaComposition(equipe, { database });
+    } catch (error) {
+      console.warn(`[compositions] force du onze illisible : ${error.message}`);
+    }
+    return { ...equipe, forceDuOnze };
+  };
+  return { ...compo, home: force(compo.home), away: force(compo.away) };
+}
+
+/**
  * Tout ce que FotMob publie d'un match à venir, pour sa page : coup d'envoi
  * exact (le calendrier ne connaît que le jour), cadre (stade, météo,
  * arbitre) et composition décrite si elle est sortie — sinon, la dernière
@@ -309,11 +333,13 @@ export async function buildMatchPreview({ homeName, awayName, commenceTimeIso, l
     console.warn(`[compositions] âges indisponibles : ${error.message}`);
   }
   const kickoff = lu?.page.meta?.kickoff ?? null;
-  const lineups = lu?.page.available
-    ? composition(lu.page, { league, commenceTimeIso: kickoff ?? commenceTimeIso, fotmobMatchId: lu.fotmobMatchId, fetchedAt: lu.fetchedAt, database })
-    : null;
+  // Étape 30 : la force du onze de chaque camp, pour la page du match (affichage seulement).
+  const lineups = avecForceDuOnze(
+    lu?.page.available ? composition(lu.page, { league, commenceTimeIso: kickoff ?? commenceTimeIso, fotmobMatchId: lu.fotmobMatchId, fetchedAt: lu.fetchedAt, database }) : null,
+    database
+  );
   const jour = String(kickoff ?? commenceTimeIso).slice(0, 10);
-  const lastLineups = lineups ? null : dernieresCompositions({ homeName, awayName, league, jour, page: lu?.page, database });
+  const lastLineups = lineups ? null : avecForceDuOnze(dernieresCompositions({ homeName, awayName, league, jour, page: lu?.page, database }), database);
   if (!lu) return { available: false, reason: 'fixture_not_found', lastLineups };
   return {
     available: true,

@@ -27,6 +27,7 @@ import { lireEtatImport, lireResume, listeDesFichiers, REQUETES_PAR_PASSE } from
 import { lireReperes } from '../../data/db/leagueBenchmarks.js';
 import { etatTableJourJ } from '../../data/db/dayTable.js';
 import { etatIndiceDeForce, lireIndiceDeForce, LIEUX } from '../../data/db/teamStrength.js';
+import { etatDesFiches, lireLesFiches } from '../../data/db/playerRatings.js';
 import { resolveDbPath, openDb } from '../../data/db/matchStatsDb.js';
 import { ApiError, requireStringParam, optionalPositiveInt, optionalStringParam } from '../middlewares/errorHandler.js';
 
@@ -487,6 +488,52 @@ export function getTeamStrength(req, res) {
   } catch (error) {
     throw new ApiError(400, error.message);
   }
+  res.json({ ...commun, lecture });
+}
+
+/**
+ * Les fiches des joueurs par poste (étape 30 du plan, 22/10/2026) : LIT les tables que remplit chaque nuit l'étape
+ * « fichesJoueurs » de l'actualisation (playerRatings.js) — ne calcule rien, n'écrit rien. `player` (identifiant
+ * FotMob, « fotmob-123 » ou 123) : sa fiche ; `club` : les fiches de son effectif et son équipe habituelle ;
+ * `league` (+ `poste` 1-4) : les fiches établies du championnat, de la meilleure attaque à la moins bonne. Sans rien :
+ * l'état. Jamais calculé : `etat: 'jamais'` et `lecture: null`, la même forme. AFFICHAGE SEULEMENT : le moteur ne lit
+ * pas les fiches (règle de Pierre) ; l'écran viendra à l'étape 31.
+ */
+export function getPlayerRatings(req, res) {
+  const player = optionalStringParam(req.query.player, 'player');
+  const club = optionalStringParam(req.query.club, 'club');
+  const league = optionalStringParam(req.query.league, 'league');
+  const poste = optionalStringParam(req.query.poste, 'poste');
+  for (const [nom, v] of [['player', player], ['club', club]]) {
+    if (v !== undefined && !/^(fotmob-)?[1-9]\d*$/.test(v)) throw new ApiError(400, `Le paramètre "${nom}" doit être un identifiant FotMob (« fotmob-123 » ou 123), reçu « ${v} ».`);
+  }
+  if (poste !== undefined && !/^[1-4]$/.test(poste)) throw new ApiError(400, 'Le paramètre "poste" doit valoir 1 (gardien), 2 (défenseur), 3 (milieu) ou 4 (attaquant).');
+  const database = openDb();
+  const etat = etatDesFiches({ database });
+  const b = etat.bilan;
+  const commun = {
+    etat: etat.absent ? 'jamais' : etat.aJour ? 'a-jour' : 'pas-a-jour',
+    version: etat.version,
+    versionAttendue: etat.versionAttendue,
+    calculeLe: etat.calculeLe,
+    jusqua: etat.jusqua,
+    enCours: etat.enCours,
+    bilan: b ? { joueurs: b.joueurs ?? null, etablies: b.etablies ?? null, clubs: b.clubs ?? null, ecrites: b.ecrites ?? null, retirees: b.retirees ?? null, dureeMs: b.dureeMs ?? null } : null,
+    controle: etat.controle ? { lignes: etat.controle.lignes ?? null, ecarts: etat.controle.ecarts?.length ?? 0, le: etat.controle.le ?? null } : null,
+    mesure: etat.mesure ?? null,
+    banc: etat.banc ? { le: etat.banc.le ?? null, jugements: etat.banc.jugements ?? null, fiches: etat.banc.fiches ?? null, verification: etat.banc.verification ?? null } : null,
+    regle: 'Affichage seulement : les fiches et la force du onze n’entrent jamais dans les chiffres du moteur.',
+    base: resolveDbPath(),
+    generatedAt: new Date().toISOString()
+  };
+  if (etat.absent) return res.json({ ...commun, lecture: null });
+  let lecture;
+  try {
+    lecture = lireLesFiches({ database, joueur: player ?? null, club: club ?? null, league: league ?? null, poste: poste ?? null });
+  } catch (error) {
+    throw new ApiError(400, error.message);
+  }
+  if (player !== undefined && !lecture.fiche) throw new ApiError(404, `Aucune fiche pour le joueur « ${player} ».`);
   res.json({ ...commun, lecture });
 }
 

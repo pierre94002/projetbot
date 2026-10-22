@@ -26,6 +26,8 @@
  *   ecran      les réponses de GET /api/bench pour l’écran : vide, en cours, après le rejeu par défaut, refus
  *   preparer   la table du jour J et les plantations, pour lancer scripts/bench.mjs ensuite (le test)
  *   fumee      un rejeu P2 + P4 complet, pour regarder
+ *   oracleButs étape 27 : l'oracle de la copie tronquée avec le modèle de buts unique (la candidate), plus/moins
+ *              plantés, forces de nuit refaites « avant J », 9-0 du jour J, clôture et direct plantés
  */
 
 import fs from 'node:fs';
@@ -35,6 +37,7 @@ import vm from 'node:vm';
 import v8 from 'node:v8';
 import { Socket } from 'node:net';
 import { pathToFileURL } from 'node:url';
+import { avecLeModele } from './modeleDeButsCommun.mjs';
 
 const [serveur, phase, grainePassee] = process.argv.slice(2);
 const imp = (rel) => import(pathToFileURL(path.join(serveur, 'src', rel)).href);
@@ -619,6 +622,181 @@ if (phase === 'route') {
     second = error.constructor.name;
   }
   sortie.depot = { ouverte, finie, second, apresSecond: db.prepare('SELECT fini_le, bilan, resume FROM bench_runs WHERE id = ?').get(id) };
+}
+
+if (phase === 'oracleButs') {
+  // Étape 27 — L'ORACLE DE LA COPIE TRONQUÉE avec le MODÈLE DE BUTS UNIQUE (conception §5.1). Les lignes rattachées
+  // aux rencontres de Premier League (P4b) reçoivent un plus/moins 2,5 d'avant-match (fd_history) ET le même relevé
+  // au magasin des cotes (odds_quotes, pré-clôture football-data). Le banc rejoue la CANDIDATE (la clé modeleDeButs) ;
+  // puis, pour six rencontres, du plus récent au plus ancien : (1) tout ce qui est daté du jour J ou après supprimé ;
+  // (2) la table du jour J et l'étape de nuit « forcesButs » refaites dans la copie (la table vaut « avant J ») ;
+  // (3) l'heure du calcul = la coupure (coup d'envoi − 60 min) ; (4) le chemin de l'appli, enrichMatchWithRealAverages
+  // puis analyzeMatch(…, { maintenant }) avec la candidate ; (5) face au banc : les distributions, les 81 cases et
+  // « autre score », les buts attendus, la provenance ; les entrées lues au magasin = celles posées par le banc ;
+  // (6) un 9-0 planté le jour J (le club qui reçoit, un autre match) ne change rien au jour J ; (7) une clôture
+  // plantée à H − 5 et un relevé en direct à H + 10 ne changent rien (la pré-clôture est prise).
+  const F = await imp('data/db/forcesButs.js');
+  const G = await imp('core/engine/goalModel.js');
+  const { enrichMatchWithRealAverages } = await imp('data/providers/matchEnrichment.js');
+  const { analyzeMatch } = await imp('core/engine/oddsEngine.js');
+  const { getSport } = await imp('sports/index.js');
+  const { lireReglagesDuMoteur } = await imp('core/engine/engineConfig.js');
+  const { prixFd } = await imp('bench/prix.js');
+  const sport = getSport('football');
+  const MAINTENANT = new Date().toISOString();
+  await preparer({ fd: false });
+  // Le plus/moins 2,5 d'avant-match de chaque ligne rattachée, et le même relevé au magasin des cotes.
+  const rattachees = db.prepare("SELECT f.id, f.match_key, m.date, m.league, m.home_name, m.away_name, m.home_id, m.away_id FROM fd_history f JOIN matches m ON m.match_key = f.match_key WHERE f.lien = 1 ORDER BY f.id").all();
+  const majFd = db.prepare('UPDATE fd_history SET moy_p25 = ?, moy_m25 = ? WHERE id = ?');
+  const evenement = db.prepare(`INSERT INTO odds_events (source, source_event, league, date, kickoff, home_name, away_name, home_id, away_id, match_key, provenance, updated_at)
+                                VALUES ('football-data.co.uk', ?, ?, ?, ?, ?, ?, ?, ?, ?, 'essai étape 27', ?)`);
+  const coteOu = db.prepare(`INSERT INTO odds_quotes (event_id, bookmaker, market, selection, line, kind, seq, releve_at, price) VALUES (?, ?, 'ou', ?, 2.5, ?, '', ?, ?)`);
+  const evenements = new Map();
+  rattachees.forEach((r, k) => {
+    const over = 160 + ((k * 7) % 45);
+    const under = Math.round(100 / (1.06 - 100 / over));
+    majFd.run(over, under, r.id);
+    const ev = Number(evenement.run(`essai:${r.match_key}`, r.league, r.date, `${r.date}T12:00:00.000Z`, r.home_name, r.away_name, r.home_id, r.away_id, r.match_key, MAINTENANT).lastInsertRowid);
+    const veille = new Date(Date.parse(`${r.date}T12:00:00.000Z`) - 86_400_000).toISOString();
+    coteOu.run(ev, 'Moyenne du marché', 'over', 'preclose', veille, over / 100);
+    coteOu.run(ev, 'Moyenne du marché', 'under', 'preclose', veille, under / 100);
+    evenements.set(r.match_key, ev);
+  });
+  sortie.plusMoinsPlantes = rattachees.length;
+  // Le plus/moins GRATUIT du banc (jeux « gratuites » et « vos bookmakers ») à la coupure H − 60 d'une heure sûre :
+  // des livres ESPN — relevé de H − 90 (pris), clôture de H − 5 et direct de H + 10 (écartés) ; Smarkets seul : rien.
+  {
+    const { plusMoinsGratuit } = await imp('bench/prix.js');
+    const autreSource = db.prepare(`INSERT INTO odds_events (source, source_event, league, date, kickoff, home_name, away_name, match_key, provenance, updated_at)
+                                    VALUES (?, ?, 'EPL', '2026-09-26', '2026-09-26T14:00:00.000Z', 'Essai A', 'Essai B', ?, 'essai étape 27', ?)`);
+    const H = Date.parse('2026-09-26T14:00:00.000Z');
+    const a = (minutes) => new Date(H - minutes * 60_000).toISOString();
+    const espn = Number(autreSource.run('espn', 'essai:espn', 'essai-plus-moins-espn', MAINTENANT).lastInsertRowid);
+    for (const livre of ['Bet365', 'DraftKings']) {
+      coteOu.run(espn, livre, 'over', 'snapshot', a(90), 1.9);
+      coteOu.run(espn, livre, 'under', 'snapshot', a(90), 1.95);
+      coteOu.run(espn, livre, 'over', 'close', a(5), 3.4);
+      coteOu.run(espn, livre, 'under', 'close', a(5), 1.28);
+      coteOu.run(espn, livre, 'over', 'live', a(-10), 9.5);
+      coteOu.run(espn, livre, 'under', 'live', a(-10), 1.02);
+    }
+    const smarkets = Number(autreSource.run('smarkets', 'essai:smarkets', 'essai-plus-moins-smarkets', MAINTENANT).lastInsertRowid);
+    coteOu.run(smarkets, 'Smarkets', 'over', 'snapshot', a(90), 1.9);
+    coteOu.run(smarkets, 'Smarkets', 'under', 'snapshot', a(90), 1.95);
+    const coupure = P.coupureDe({ date: '2026-09-26', kickoff: '2026-09-26T14:00:00.000Z' });
+    sortie.plusMoinsGratuit = {
+      coupure: coupure.instant,
+      espn: plusMoinsGratuit('essai-plus-moins-espn', { coupure, database: db }),
+      apresLeCoupDEnvoi: plusMoinsGratuit('essai-plus-moins-espn', { coupure: { ...coupure, instant: '2026-09-26T14:20:00.000Z' }, database: db }),
+      smarkets: plusMoinsGratuit('essai-plus-moins-smarkets', { coupure, database: db })
+    };
+  }
+
+  // Le banc de la CANDIDATE, ses lignes et l'analyse de chaque rencontre (les entrées posées par le banc).
+  const reglagesService = lireReglagesDuMoteur().football;
+  const candidate = avecLeModele(reglagesService);
+  const reglages = G.reglagesDuModeleDeButs(candidate);
+  const empreinte = G.empreinteDesForces(reglages);
+  const lignes = [];
+  const parMatch = new Map();
+  const rb = await R.rejouer({
+    database: db,
+    periodes: ['P4'],
+    prix: ['fd-avant-match'],
+    de: '2026-08-15',
+    tirages: 100,
+    minBlocs: 20,
+    reproduction: false,
+    config: candidate,
+    surLigne: (l) => lignes.push(l),
+    surAnalyse: ({ jeu, match, analyse, rencontre }) => {
+      if (jeu === 'fd-avant-match' && rencontre.matchKey) parMatch.set(rencontre.matchKey, { entrees: match.entreesButs, buts: analyse.expectedGoals, provenance: analyse.modeleDeButs?.provenance?.code ?? null, scoreExact: analyse.distributions.scoreExact ?? null, distributions: analyse.distributions });
+    }
+  });
+  sortie.bancButs = { erreur: rb.bilan.erreur, grilleDifferente: rb.bilan.grilleDifferente, regimes: rb.bilan.regimes ?? null, analyses: rb.bilan.analyses };
+  const lignesBanc = lignes.filter((l) => l.type === 'ligne' && l.prix === 'fd-avant-match' && l.periode === 'P4b');
+  const cibles = [...new Set(lignesBanc.map((l) => l.matchKey))].filter(Boolean).sort().reverse().filter((_, i) => i % 9 === 0).slice(0, 6);
+  const DIST = ['result', 'totalGoals', 'bothTeamsScore', 'teamGoals:home', 'teamGoals:away', 'resultAndTotal'];
+  const SOMMES = ['sa', 'wa', 'sd', 'wd', 'sga', 'wga', 'sgd', 'wgd'];
+  const ecartEtat = (a, b) => {
+    if (!a || !b) return a || b ? Infinity : 0;
+    if (a.n !== b.n || a.nx !== b.nx || (a.ligue ?? null) !== (b.ligue ?? null)) return Infinity;
+    return Math.max(...SOMMES.map((s) => Math.abs(a[s] - b[s])));
+  };
+  const ecartLigue = (a, b) => {
+    if (!a || !b) return a || b ? Infinity : 0;
+    if (a.matchs !== b.matchs || a.source !== b.source) return Infinity;
+    return Math.max(...['home', 'away'].flatMap((c) => [Math.abs(a.buts[c] - b.buts[c]), Math.abs(a.xg[c] - b.xg[c])]));
+  };
+  const nombre = (x) => (Number.isFinite(x) ? x : 'infini');
+  sortie.oracleButs = [];
+  let planteN = 0;
+  for (const k of cibles) {
+    const m = db.prepare('SELECT match_key, date, league, home_name, away_name, home_id, away_id FROM matches WHERE match_key = ?').get(k);
+    const ligneFd = db.prepare('SELECT * FROM fd_history WHERE match_key = ? AND lien = 1').get(k);
+    const autreAvant = db.prepare("SELECT match_key FROM matches WHERE league = 'EPL' AND date < ? AND home_id <> ? AND away_id <> ? ORDER BY date DESC, match_key LIMIT 1").get(m.date, m.home_id, m.home_id)?.match_key ?? null;
+    const gabarit = autreAvant ? entreeDe(autreAvant) : null;
+    deleteMatches(db.prepare('SELECT match_key FROM matches WHERE date >= ?').all(m.date).map((x) => x.match_key), { database: db });
+    await T.construireTableJourJ({ database: db, rendreLaMain: null, controle: { lignes: 0 } });
+    const nuit = await F.forcesDeButs({ empreintes: [empreinte], database: db, aPart: false, maintenant: () => MAINTENANT });
+    const mo = prixFd(ligneFd, { jeu: 'fd-avant-match' });
+    const coupure = Date.parse(`${m.date}T12:00:00.000Z`) - 60 * 60_000;
+    const match = { matchId: k, home: m.home_name, away: m.away_name, league: m.league, commenceTime: `${m.date}T12:00:00.000Z`, sportKey: 'football', bankroll: 1000, hasOdds: true, marketOdds: { odds1: mo.odds1, oddsDraw: mo.oddsDraw, odds2: mo.odds2, bookmakersCount: mo.bookmakersCount, byBookmaker: mo.byBookmaker } };
+    const enrichi = await enrichMatchWithRealAverages(match, { sansRepliPayant: true });
+    const a = await analyzeMatch(enrichi, candidate, { currentDownswing: 0, circuitBreakerActive: false }, sport, { maintenant: coupure });
+    const e = await sport.model.resolveGoalInputs(enrichi, reglages, { maintenant: coupure });
+    const banc = parMatch.get(k);
+    let ecartMax = 0;
+    let comparees = 0;
+    for (const l of lignesBanc.filter((x) => x.matchKey === k && DIST.includes(x.marketKey))) {
+      const [famille, equipe] = l.marketKey.split(':');
+      const d = famille === 'result' ? a.distributions.result : famille === 'bothTeamsScore' ? a.distributions.bothTeamsScore : famille === 'teamGoals' ? a.distributions.teamGoals[equipe][l.ligne] : a.distributions[famille][l.ligne];
+      for (const [cle, p] of Object.entries(l.moteur.distribution)) {
+        ecartMax = Math.max(ecartMax, Math.abs(p - d[cle]));
+        comparees++;
+      }
+    }
+    const score = lignesBanc.find((x) => x.matchKey === k && x.marketKey === 'scoreExact');
+    const cases = a.distributions.scoreExact?.cases ?? [];
+    let ecartScore = score && cases.length === 81 ? 0 : Infinity;
+    if (score && cases.length === 81) score.moteur.distribution.forEach((p, i) => (ecartScore = Math.max(ecartScore, Math.abs(p - cases[i]))));
+    const ecartAutreScore = Math.abs((banc?.scoreExact?.horsGrille ?? Infinity) - (a.distributions.scoreExact?.horsGrille ?? -Infinity));
+    // (6) Un 9-0 planté le jour J : le club qui reçoit, contre l'adversaire d'un autre match d'avant.
+    let neufZero = null;
+    if (gabarit) {
+      upsertMatches([{ ...gabarit, date: m.date, fotmobId: String(990000500 + planteN++), homeId: m.home_id, homeName: m.home_name, homeGoals: 9, awayGoals: 0, meta: { ...(gabarit.meta ?? {}), kickoff: `${m.date}T09:00:00.000Z` } }], { database: db });
+      await T.construireTableJourJ({ database: db, rendreLaMain: null, controle: { lignes: 0 } });
+      const nuit2 = await F.forcesDeButs({ empreintes: [empreinte], database: db, aPart: false, maintenant: () => MAINTENANT });
+      const e2 = await sport.model.resolveGoalInputs(enrichi, reglages, { maintenant: coupure });
+      neufZero = { mode: nuit2.mode, matchsDuJour: db.prepare('SELECT COUNT(*) n FROM matches WHERE date = ?').get(m.date).n, ecartForces: nombre(Math.max(ecartEtat(e2.forces?.home, e.forces?.home), ecartEtat(e2.forces?.away, e.forces?.away))), ecartLigue: nombre(ecartLigue(e2.ligue, e.ligue)) };
+    }
+    // (7) Une clôture plantée à H − 5 (cotes absurdes) et un relevé en direct à H + 10 : rien ne change, la pré-clôture est prise.
+    const ev = evenements.get(k);
+    const ko = Date.parse(`${m.date}T12:00:00.000Z`);
+    coteOu.run(ev, 'Moyenne du marché', 'over', 'close', new Date(ko - 5 * 60_000).toISOString(), 3.6);
+    coteOu.run(ev, 'Moyenne du marché', 'under', 'close', new Date(ko - 5 * 60_000).toISOString(), 1.25);
+    coteOu.run(ev, 'Moyenne du marché', 'over', 'live', new Date(ko + 10 * 60_000).toISOString(), 9.5);
+    coteOu.run(ev, 'Moyenne du marché', 'under', 'live', new Date(ko + 10 * 60_000).toISOString(), 1.02);
+    const e3 = await sport.model.resolveGoalInputs(enrichi, reglages, { maintenant: coupure });
+    sortie.oracleButs.push({
+      matchKey: k,
+      nuit: { mode: nuit.mode, controle: nuit.controle ? { lignes: nuit.controle.lignes, ecarts: nuit.controle.ecarts.length } : null },
+      comparees,
+      ecartMax,
+      ecartScore: nombre(ecartScore),
+      ecartAutreScore: nombre(ecartAutreScore),
+      buts: { banc: banc?.buts ?? null, appli: a.expectedGoals },
+      provenance: { banc: banc?.provenance ?? null, appli: a.modeleDeButs?.provenance?.code ?? null },
+      entrees: {
+        ecartForces: nombre(Math.max(ecartEtat(e.forces?.home, banc?.entrees?.forces?.home), ecartEtat(e.forces?.away, banc?.entrees?.forces?.away))),
+        ecartLigue: nombre(ecartLigue(e.ligue, banc?.entrees?.ligue)),
+        connus: Boolean(e.forces?.home && e.forces?.away),
+        plusMoins: { banc: banc?.entrees?.plusMoins?.pOver ?? null, appli: e.plusMoins?.pOver ?? null, sourceBanc: banc?.entrees?.plusMoins?.source ?? null, sourceAppli: e.plusMoins?.source ?? null }
+      },
+      neufZero,
+      clotureEtDirect: { identique: JSON.stringify(e3.plusMoins) === JSON.stringify(e.plusMoins), pOver: e3.plusMoins?.pOver ?? null }
+    });
+  }
 }
 
 if (phase === 'moteur') {

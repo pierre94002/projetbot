@@ -14,6 +14,7 @@
 
 import { fork } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { commencerCalculLourd } from '../../utils/calculLourd.js';
 
 const ENFANT = fileURLToPath(new URL('./valeurStatsEnfant.js', import.meta.url));
 /** Le calcul complet prend 3 à 4 min sur la base du bac (13/10/2026) : au-delà de 30 min, l'enfant est arrêté. */
@@ -25,6 +26,17 @@ export const DELAI_CALCUL_MS = 30 * 60_000;
  * `avancement(a)` reçoit l'avancement que l'enfant envoie (partie, fait, total).
  */
 export function calculerAPart({ chemin, options = {}, delaiMs = DELAI_CALCUL_MS, avancement = null }) {
+  // Étape 27 : un calcul lourd à la fois (utils/calculLourd.js) — un autre en cours, celui-ci est refusé (reporté).
+  let rendre;
+  try {
+    rendre = commencerCalculLourd('valeur des statistiques');
+  } catch (error) {
+    return Promise.reject(error);
+  }
+  return calculerSousJeton({ chemin, options, delaiMs, avancement }).finally(rendre);
+}
+
+function calculerSousJeton({ chemin, options, delaiMs, avancement }) {
   return new Promise((resolve, reject) => {
     let fini = false;
     let erreurs = '';

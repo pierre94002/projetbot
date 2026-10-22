@@ -31,6 +31,79 @@ export function calculerPronostics() {
   }
 }
 
+// ------------------------------------------------- étape 27 : le résultat ENTIER du moteur, figé
+
+/**
+ * Le résultat entier de analyzeMatch, figé (empreintes sha1 du JSON normalisé de chaque cible et JSON entier de
+ * cinq) : `node scripts/test-figer.mjs --complet`. Figé AVANT de toucher au moteur de l'étape 27 ; le moteur
+ * livré, sans la clé `modeleDeButs`, doit le redonner à l'octet (test/moteurCleEteinte.test.mjs).
+ */
+export const FICHIER_COMPLET = path.join(FIXTURES, 'moteur-complet-figes.json');
+
+/** Calcule le résultat entier du moteur pour toutes les cibles et toutes les variantes d'entrée (script-pronostics --complet). */
+export function calculerMoteurComplet() {
+  if (!fs.existsSync(ECHANTILLON) || !fs.existsSync(MANIFESTE_ECHANTILLON)) {
+    throw new Error("Base d'essai absente : node scripts/test-echantillon.mjs");
+  }
+  const copie = preparerCopie();
+  try {
+    const debut = Date.now();
+    const r = executer(copie, SCRIPT, { args: [MANIFESTE_ECHANTILLON, '--complet'], maintenant: MAINTENANT_FIGE, timeout: 300_000 });
+    if (r.code !== 0 || !r.json?.ok) {
+      throw new Error(`Calcul du résultat entier impossible (code ${r.code}) :\n${r.erreurs.slice(-3000)}\n${r.sortie.slice(-1000)}`);
+    }
+    return { ...r.json, dureeMs: Date.now() - debut, reseau: r.reseau, erreurs: r.erreurs };
+  } finally {
+    copie.nettoyer();
+  }
+}
+
+/** Le fichier du résultat entier figé, ou null. */
+export function lireComplet() {
+  if (!fs.existsSync(FICHIER_COMPLET)) return null;
+  return JSON.parse(fs.readFileSync(FICHIER_COMPLET, 'utf8'));
+}
+
+/** Contenu du fichier figé du résultat entier : seulement la variante `brut` (celle de l'appli), une cible par ligne. */
+export function contenuComplet(calcul) {
+  return {
+    version: 1,
+    note: "Résultat ENTIER du moteur (analyzeMatch, JSON normalisé sans engineVersion ni comparateur.calculeLe) sur la base d'essai, figé AVANT l'étape 27 avec l'ancien code. Le moteur sans la clé modeleDeButs doit le redonner à l'octet, quelles que soient les entrées du modèle de buts posées sur le match. Se refige seulement à la main : node scripts/test-figer.mjs --complet --refiger.",
+    figeLe: new Date().toISOString(),
+    maintenant: calcul.maintenant,
+    node: process.version,
+    echantillon: { sha1: sha1Fichier(ECHANTILLON), cibles: calcul.complets.length },
+    complets: calcul.complets.map((c) => ({ cle: c.cle, avecCotes: c.avecCotes, sha1: c.variantes.brut, ...(c.json ? { json: c.json } : {}) }))
+  };
+}
+
+/** Texte du fichier : l'en-tête lisible, puis une cible par ligne (JSON valide). */
+export function serialiserComplet(contenu) {
+  const { complets, ...entete } = contenu;
+  const tete = JSON.stringify(entete, null, 1).replace(/\n}$/, '');
+  return `${tete},\n "complets": [\n${complets.map((c) => `  ${JSON.stringify(c)}`).join(',\n')}\n ]\n}\n`;
+}
+
+/**
+ * Les écarts entre le résultat entier figé et celui d'aujourd'hui : pour chaque cible, chaque variante dont
+ * l'empreinte diffère de l'empreinte figée ; pour les cinq gardées en entier, les chemins qui diffèrent.
+ */
+export function ecartsDuComplet(figes, actuels) {
+  const ecarts = [];
+  const parCle = new Map(actuels.map((c) => [c.cle, c]));
+  for (const f of figes.complets) {
+    const a = parCle.get(f.cle);
+    if (!a) {
+      ecarts.push({ cle: f.cle, quoi: 'cible absente' });
+      continue;
+    }
+    for (const [variante, sha] of Object.entries(a.variantes)) if (sha !== f.sha1) ecarts.push({ cle: f.cle, quoi: `variante ${variante}`, avant: f.sha1, apres: sha });
+    if (f.json && a.json) for (const d of chemins(f.json, a.json, 'resultat', [])) ecarts.push({ cle: f.cle, ...d });
+  }
+  if (actuels.length !== figes.complets.length) ecarts.push({ cle: '—', quoi: 'nombre de cibles', avant: figes.complets.length, apres: actuels.length });
+  return ecarts;
+}
+
 /** Ce qui identifie un marché dans un match : son identifiant, et l'équipe pour les marchés par équipe. */
 const cleMarche = (m) => `${m.id}${m.params?.team ? `:${m.params.team}` : ''}`;
 const libelleMarche = (m) => `${m.id}${m.params?.team ? ` (${m.params.team === 'home' ? 'domicile' : 'extérieur'})` : ''}`;

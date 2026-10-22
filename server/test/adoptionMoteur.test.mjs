@@ -21,10 +21,12 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { preparerCopie, executer, SERVEUR, RACINE_ESSAIS } from './aides/isolement.mjs';
+import { preparerCopie, executer, sansCandidateDuCode, SERVEUR, RACINE_ESSAIS } from './aides/isolement.mjs';
 import { HORIZON_PAR_DEFAUT, HORIZON_MINIMUM, problemeDHorizon, horizonDe, horizonAtteint, lancementDeLEssai } from '../src/bench/horizonEssai.js';
-import { lignesDeLEssai, issueDeLaLigne } from '../src/bench/essaiCandidate.js';
-import { jugerLaCandidateAuBanc, FAMILLE_DU_BANC } from '../src/bench/bancCandidate.js';
+import { lignesDeLEssai, issueDeLaLigne, complementsDeLEssai } from '../src/bench/essaiCandidate.js';
+import { jugerLaCandidateAuBanc, FAMILLE_DU_BANC, variantesDuBanc, porteDuBanc, libelleDeLaCase } from '../src/bench/bancCandidate.js';
+import { NOTE_DU_MODELE_DE_BUTS } from '../src/core/engine/noteDuModeleDeButs.js';
+import { reglagesDuModele } from './aides/modeleDeButsCommun.mjs';
 import { evaluerDerive, ecartsDeDepart, valeurDeLAlerte, familleDeLaNote, REGLE_DE_DERIVE } from '../src/data/deriveMoteur.js';
 import { validerCandidate, empreinteDeLaCandidate, A_VENIR, ORIGINES, __testing as V } from '../src/core/engine/engineVersions.js';
 import { JUGE } from '../src/data/calibration.js';
@@ -41,7 +43,8 @@ const JOUR = 86_400_000;
 let parcours;
 function lePacours() {
   if (parcours) return parcours;
-  const copie = preparerCopie({});
+  // Étape 27 : sans la candidate du code (elle passerait d’abord) — le parcours fabrique ses trois candidates.
+  const copie = sansCandidateDuCode(preparerCopie({}));
   try {
     const r = executer(copie, SCRIPT, {
       args: ['parcours'],
@@ -518,4 +521,165 @@ test('le code : routes et branchements ; l’essai jugé dans l’étape de nuit
     for (const f of ecrivains) assert.doesNotMatch(source, new RegExp(`\\b${f}\\s*\\(`), `${nom} appelle ${f} dans le processus des tests`);
   }
   assert.match(fs.readFileSync(SCRIPT, 'utf8'), /if \(path\.resolve\(T\.FICHIER_REGISTRE\)\.toLowerCase\(\) !== path\.resolve\(FICHIER_MESURE\)\.toLowerCase\(\)\) throw/);
+});
+
+// ================================================================ 9. étape 27 : témoins, familles, porte de sûreté, K
+
+test('étape 27 — les TÉMOINS : `temoins: ["scoreExact"]` reste HORS de l’empreinte de la candidate (même empreinte avec ou sans) ; un témoin inconnu, ou aussi parmi les marchés, est refusé ; une candidate au modèle de buts unique est validée, des réglages du modèle fautifs la refusent ; un réglage du modèle change l’empreinte', () => {
+  const base = { id: 'buts-unique-essai', etape: '27', quoi: 'Modèle de buts unique', modifications: { football: { modeleDeButs: reglagesDuModele() } }, marches: ['totalGoals', 'teamGoals', 'bothTeamsScore', 'resultAndTotal'] };
+  const avec = { ...base, temoins: ['scoreExact'] };
+  assert.deepEqual(validerCandidate(avec).temoins, ['scoreExact']);
+  assert.equal(empreinteDeLaCandidate(avec), empreinteDeLaCandidate(base), 'le témoin ne change pas l’empreinte');
+  assert.throws(() => validerCandidate({ ...base, temoins: ['buteurs'] }), /témoin inconnu « buteurs »/);
+  assert.throws(() => validerCandidate({ ...base, temoins: 'scoreExact' }), /« temoins » est une liste/);
+  assert.throws(() => validerCandidate({ ...base, modifications: { football: { modeleDeButs: { ...reglagesDuModele(), rho: 0.9 } } } }), /modeleDeButs : réglages fautifs — rho/);
+  assert.throws(() => validerCandidate({ ...base, modifications: { football: { modeleDeButs: { ...reglagesDuModele(), poidsDuMarche: 1 } } } }), /clés inconnues \(poidsDuMarche\)/);
+  assert.notEqual(empreinteDeLaCandidate({ ...base, modifications: { football: { modeleDeButs: reglagesDuModele({ rho: -0.06 }) } } }), empreinteDeLaCandidate(base));
+});
+
+test('étape 27 — la phrase EN MOTS de la candidate (`enMots`) : facultative, rendue telle quelle, HORS de l’empreinte (comme variantes, vues et témoins) ; vide ou sur plusieurs lignes, refusée ; la candidate du code garde son empreinte f01dd8496f56a415', async () => {
+  const { CANDIDATE_EN_ESSAI } = await import('../src/core/engine/engineVersions.js');
+  const base = { id: 'buts-unique-essai', etape: '27', quoi: 'Modèle de buts unique (Poisson et Dixon-Coles, rho −0,05)', modifications: { football: { modeleDeButs: reglagesDuModele() } }, marches: ['totalGoals'] };
+  const avec = { ...base, enMots: 'Les pourcentages de buts partent des cotes.' };
+  assert.equal(validerCandidate(avec).enMots, 'Les pourcentages de buts partent des cotes.');
+  assert.equal('enMots' in validerCandidate(base), false, 'absente, elle ne s’ajoute pas');
+  assert.equal(empreinteDeLaCandidate(avec), empreinteDeLaCandidate(base), 'la phrase en mots ne change pas l’empreinte');
+  assert.equal(empreinteDeLaCandidate({ ...avec, enMots: 'Une autre phrase.' }), empreinteDeLaCandidate(base));
+  for (const mauvaise of ['', '   ', 'deux\nlignes', 42]) assert.throws(() => validerCandidate({ ...base, enMots: mauvaise }), /la phrase « enMots » est vide ou sur plusieurs lignes/, JSON.stringify(mauvaise));
+  // La candidate du code : sa phrase, sans jargon ; son empreinte d'avant la phrase.
+  assert.match(CANDIDATE_EN_ESSAI.enMots, /^Un seul modèle pour tous les marchés de buts et le score : les pourcentages partent des cotes/);
+  assert.doesNotMatch(CANDIDATE_EN_ESSAI.enMots, /Poisson|Dixon|rho|demi-vie|m7|ancr/i);
+  assert.equal(validerCandidate(CANDIDATE_EN_ESSAI).enMots, CANDIDATE_EN_ESSAI.enMots);
+  assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), 'f01dd8496f56a415');
+  const { enMots, ...sansLaPhrase } = CANDIDATE_EN_ESSAI;
+  assert.ok(enMots);
+  assert.equal(empreinteDeLaCandidate(sansLaPhrase), 'f01dd8496f56a415');
+});
+
+/** Un essai réglé fabriqué : 300 matchs, deux familles, la perte log de chaque version et le pronostic retenu de la candidate. */
+function reglementFabrique({ butsB, bttsB, pTotal, realiseTotal }) {
+  const lignes = [];
+  for (let i = 0; i < 300; i++) {
+    const bloc = `m${i}`;
+    const provenance = i % 3 ? 'cotes-plusmoins-xg' : 'cotes-1n2-xg';
+    lignes.push({ marketId: 'totalGoals', ligne: 2.5, bloc, match: bloc, cle: `${bloc}|totalGoals|2.5`, a: 0.68, b: butsB + (i % 7) / 1000, calibB: { p: pTotal, realise: i < realiseTotal * 300 }, provenance });
+    // Les deux marquent : des pertes bruitées (±0,05), la candidate décalée de bttsB − 0,69 en moyenne.
+    lignes.push({ marketId: 'bothTeamsScore', ligne: null, bloc, match: bloc, cle: `${bloc}|bothTeamsScore`, a: 0.69 + 0.05 * Math.sin(i), b: bttsB + 0.05 * Math.cos(1.7 * i), calibB: { p: 0.5, realise: i % 2 === 0 }, provenance });
+  }
+  return { lignes };
+}
+
+test('étape 27 — la PORTE DE L’ESSAI, un seul modèle : une famille « moins bon » (même K) refuse toute l’adoption, nommée ; un plus/moins 2,5 qui annonce « trop haut » à K = 1 (porte de sûreté) aussi ; « pas prouvé » par famille est toléré ; les régimes comptés par match', () => {
+  const brut = { enService: 3 };
+  const notee = (complements) => ({ empreinte: 'e', horizon: { matchs: 600, jours: 14 }, jugement: { verdict: 'retenu', versionEnService: 3, matchs: 900, variantes: 320, ...complements } });
+  const d = (n) => V.etatDeLAdoption(brut, n, { enCours: false, enSynchro: true, empreinte: 'e' });
+  // Une famille clairement moins bonne (les deux marquent) : refusée, nommée.
+  const moinsBon = complementsDeLEssai(reglementFabrique({ butsB: 0.66, bttsB: 0.75, pTotal: 0.55, realiseTotal: 0.55 }), { variantes: 320 });
+  assert.equal(moinsBon.parFamille.bothTeamsScore.verdict, 'moins-bon');
+  assert.equal(moinsBon.parFamille.totalGoals.verdict, 'retenu');
+  const r1 = d(notee({ parFamille: moinsBon.parFamille, surete: moinsBon.surete }));
+  assert.deepEqual([r1.possible, r1.raison, r1.famille], [false, 'famille-moins-bonne', 'bothTeamsScore']);
+  assert.match(r1.texte, /^Refusée : la famille « .+ » fait moins bien que la version en service, au-delà du hasard \(900 matchs joués, 320 variantes essayées\)\. Un seul modèle de buts/);
+  // Le plus/moins 2,5 annoncé à 80 % pour 50 % réalisés : « trop haut » à K = 1 → refusée par la porte de sûreté.
+  const tropHaut = complementsDeLEssai(reglementFabrique({ butsB: 0.66, bttsB: 0.69, pTotal: 0.8, realiseTotal: 0.5 }), { variantes: 320 });
+  assert.equal(tropHaut.surete['totalGoals|2.5'].verdict, 'trop-haut');
+  assert.equal(tropHaut.surete['totalGoals|2.5'].variantes, 1, 'la porte de sûreté juge à K = 1');
+  assert.notEqual(tropHaut.parFamille.bothTeamsScore.verdict, 'moins-bon');
+  const r2 = d(notee({ parFamille: tropHaut.parFamille, surete: tropHaut.surete }));
+  assert.deepEqual([r2.possible, r2.raison, r2.famille], [false, 'calibration', 'totalGoals|2.5']);
+  assert.match(r2.texte, /annonce trop haut au-delà d’une borne large/);
+  // Tout dans le hasard ou meilleur, une famille « pas prouvé » : l'adoption est possible.
+  const bon = complementsDeLEssai(reglementFabrique({ butsB: 0.66, bttsB: 0.69, pTotal: 0.55, realiseTotal: 0.55 }), { variantes: 320 });
+  assert.equal(bon.surete['totalGoals|2.5'].verdict, 'dans-le-hasard');
+  assert.equal(bon.parFamille.bothTeamsScore.verdict, 'pas-prouve');
+  assert.deepEqual(d(notee({ parFamille: bon.parFamille, surete: bon.surete })), { possible: true, raison: null, verdict: 'retenu', texte: null });
+  assert.deepEqual(bon.regimes, { 'cotes-1n2-xg': 100, 'cotes-plusmoins-xg': 200 });
+  assert.equal(bon.matchsAvecRegime, 300);
+});
+
+test('étape 27 — le K du banc de la candidate : AU MOINS la candidate et ses variantes déclarées (320), même avant sa mise en essai (au redémarrage de l’appli) quand le registre de la mesure n’en compte aucune ; plus si le registre en compte plus', async () => {
+  fs.mkdirSync(RACINE_ESSAIS, { recursive: true });
+  const dossier = fs.mkdtempSync(path.join(RACINE_ESSAIS, 'cm-k-etape-27-'));
+  try {
+    const vide = path.join(dossier, 'registre-vide.json');
+    fs.writeFileSync(vide, JSON.stringify({ version: 1, etapes: {} }));
+    const plein = path.join(dossier, 'registre-plein.json');
+    fs.writeFileSync(plein, JSON.stringify({ version: 1, etapes: { 27: { variantes: Array.from({ length: 400 }, (_, i) => ({ id: `r${i}`, ou: 'banc', le: '2026-10-01T00:00:00.000Z' })) } } }));
+    const variantes = Array.from({ length: 319 }, (_, i) => ({ id: `m-${i}`, quoi: 'mesurée' }));
+    const candidate = { id: 'buts-unique-essai', etape: '27', marches: ['bothTeamsScore'], empreinte: 'abc', variantes };
+    assert.equal(variantesDuBanc(candidate, { fichier: vide }), 320);
+    assert.equal(variantesDuBanc(candidate, { fichier: plein }), 400);
+    assert.equal(variantesDuBanc({ ...candidate, variantes: undefined }, { fichier: vide }), 1);
+    const ligne = (i, v) => ({ type: 'ligne', cle: `f${i}|bothTeamsScore|-|fd-avant-match`, fixtureKey: `f${i}`, date: '2020-03-01', marketKey: 'bothTeamsScore', prix: 'fd-avant-match', mesures: { moteur: { perteLog: v } } });
+    const faux = async (o) => {
+      const b = o.config.marque === 'b';
+      for (let i = 0; i < 260; i++) o.surLigne(ligne(i, b ? 0.6 + (i % 5) / 100 : 0.7 + (i % 5) / 100));
+      return { bilan: { erreur: null }, resume: {}, moteur: { empreinte: b ? 'eB' : 'eA' } };
+    };
+    const r = await jugerLaCandidateAuBanc({ candidate, reglagesEnService: { marque: 'a' }, reglagesCandidate: { marque: 'b' }, database: null, rejouer: faux, registre: { fichier: vide } });
+    assert.equal(r.variantes, 320, 'avant la mise en essai : K = 1 + 319 variantes déclarées');
+  } finally {
+    fs.rmSync(dossier, { recursive: true, force: true });
+  }
+});
+
+// ================================================================ 10. étape 27 : la porte 1 au banc (porteDuBanc)
+
+/** Un jugement du banc de la candidate fabriqué (forme de jugerLaCandidateAuBanc) : tout « retenu », deux lignes de calibration. */
+function jugementDuBanc({ verdict = 'retenu', famille = 'retenu', deuxCinq = 'dans-le-hasard', rt25 = { a: [90, 0.0193], b: [164, 0.0407] }, autre = { a: [3000, -0.12], b: [3100, -0.01] } } = {}) {
+  const cal = (n, biais, v = 'dans-le-hasard') => ({ pronostics: n, matchs: n, biais, ece: Math.abs(biais), verdict: n < 200 ? 'trop-peu' : v });
+  return {
+    verdict,
+    parFamille: { totalGoals: { verdict: famille }, bothTeamsScore: { verdict: 'retenu' }, teamGoals: { verdict: 'retenu' }, resultAndTotal: { verdict: 'retenu' } },
+    parCase: { 'totalGoals|2.5': { verdict: 'retenu' }, 'resultAndTotal|2.5': { verdict: 'retenu' } },
+    faceAuRepere: { 'totalGoals|2.5': { verdict: 'retenu' } },
+    calibration: {
+      a: { parCase: { 'totalGoals|2.5': cal(10323, -0.144, 'trop-haut'), 'resultAndTotal|2.5': cal(...rt25.a), 'teamGoals:home|1.5': cal(...autre.a, 'trop-haut') } },
+      b: { parCase: { 'totalGoals|2.5': cal(3218, -0.0047, deuxCinq), 'resultAndTotal|2.5': cal(...rt25.b), 'teamGoals:home|1.5': cal(...autre.b) } }
+    }
+  };
+}
+
+test('étape 27 — la PORTE 1 au banc (porteDuBanc) : le critère « |biais| de la candidate ≤ celui de la version en service » ne vaut que sur les lignes que le juge peut trancher (200 pronostics retenus ou plus, des DEUX côtés) ; ailleurs la ligne est « non jugée » et, si l’écart est plus grand, une réserve dit son sens ; tout le reste de la porte compte', () => {
+  // Le cas mesuré au banc P2 : résultat + total 2,5 à 164 contre 90 pronostics, +4,07 contre +1,93 pt → non jugée, réserve « prudent ».
+  const p = porteDuBanc(jugementDuBanc());
+  assert.equal(p.franchie, true, JSON.stringify(p.criteres.filter((c) => !c.ok)));
+  assert.deepEqual(p.nonJugees.map((x) => x.cle), ['resultAndTotal|2.5']);
+  assert.deepEqual(p.reserves, [{ cle: 'resultAndTotal|2.5', sens: 'prudent', texte: 'trop peu de pronostics pour juger la calibration de résultat + total 2,5 ; l’écart va du côté prudent' }]);
+  assert.equal(JUGE.minBlocs, 200, 'le seuil est celui du juge de la calibration');
+  // La même ligne avec assez de pronostics : le critère s'applique, et la porte se ferme en nommant la ligne.
+  const fermee = porteDuBanc(jugementDuBanc({ rt25: { a: [250, 0.0193], b: [300, 0.0407] } }));
+  assert.equal(fermee.franchie, false);
+  const c = fermee.criteres.find((x) => x.cle === 'calibration-lignes');
+  assert.equal(c.ok, false);
+  assert.match(c.texte, /Résultat \+ total 2,5/);
+  assert.deepEqual(fermee.reserves, []);
+  // Juste au seuil (200 et 200) : jugée.
+  assert.equal(porteDuBanc(jugementDuBanc({ rt25: { a: [200, 0.0193], b: [200, 0.0407] } })).franchie, false);
+  // Un écart plus grand du côté optimiste (la candidate annonce plus que ce qui arrive) : réserve « optimiste ».
+  assert.equal(porteDuBanc(jugementDuBanc({ rt25: { a: [90, -0.01], b: [164, -0.03] } })).reserves[0].sens, 'optimiste');
+  // Un écart plus petit sur une ligne non jugée : ni critère, ni réserve.
+  assert.deepEqual(porteDuBanc(jugementDuBanc({ rt25: { a: [90, 0.05], b: [164, 0.01] } })).reserves, []);
+  // Le reste de la porte : en bloc, une famille, le +/−2,5 de la candidate.
+  assert.equal(porteDuBanc(jugementDuBanc({ verdict: 'pas-prouve' })).franchie, false);
+  assert.equal(porteDuBanc(jugementDuBanc({ famille: 'moins-bon' })).criteres.find((x) => x.cle === 'famille:totalGoals').ok, false);
+  assert.equal(porteDuBanc(jugementDuBanc({ deuxCinq: 'trop-haut' })).criteres.find((x) => x.cle === 'calibration-2,5').ok, false);
+  assert.equal(libelleDeLaCase('teamGoals:away|1.5'), 'Buts de l’équipe qui se déplace 1,5');
+});
+
+test('étape 27 — la porte 1 MESURÉE (noteDuModeleDeButs.js, banc P2 n° 9, K = 320) : franchie ; la réserve ACCEPTÉE est écrite telle quelle ; recalculée sur les chiffres de la note, la règle des 200 pronostics redonne la même réserve et aucune ligne jugée où la candidate se trompe davantage', () => {
+  const p1 = NOTE_DU_MODELE_DE_BUTS.porte1;
+  assert.equal(p1.K, 320);
+  assert.equal(p1.candidate.id, 'modele-buts-v1');
+  assert.equal(p1.verdict.franchie, true);
+  assert.deepEqual(p1.reservesAcceptees.map((r) => [r.cle, r.sens, r.texte]), [['resultAndTotal|2.5', 'prudent', 'Réserve acceptée : trop peu de pronostics pour juger la calibration de résultat + total 2,5 ; l’écart va du côté prudent']]);
+  // La règle refaite sur les chiffres recopiés de la note (calibration du pronostic retenu, lecture « avec cotes »).
+  const A = p1.avecCotes.calibration.enService.parLigne;
+  const B = p1.avecCotes.calibration.candidate.parLigne;
+  const jugees = Object.keys(B).filter((k) => A[k] && A[k].matchs >= 200 && B[k].matchs >= 200);
+  assert.ok(jugees.length >= 13, `${jugees.length} lignes jugées`);
+  for (const k of jugees) assert.ok(Math.abs(B[k].biais) <= Math.abs(A[k].biais), `${k} : ${B[k].biais} contre ${A[k].biais}`);
+  const rt = ['resultAndTotal|2.5'].map((k) => [A[k].matchs, B[k].matchs, Math.abs(B[k].biais) > Math.abs(A[k].biais), B[k].biais > 0]);
+  assert.deepEqual(rt, [[90, 164, true, true]], '164 contre 90 pronostics, écart plus grand, du côté prudent');
+  assert.equal(B['totalGoals|2.5'].verdict, 'dans-le-hasard');
 });

@@ -7,6 +7,7 @@ import { fairFromBookmakers, fairFromAllValid } from './valueFinder.js';
 import { stakingDuMatch, verdictsDuMatch, comparateurDuMatch } from './verdictPari.js';
 import { predictScore } from './scorePrediction.js';
 import { numeroDeVersion } from './engineVersions.js';
+import { reglagesDuModeleDeButs, modeleDeButs } from './goalModel.js';
 
 const EXPECTED_GOALS_BOUNDS = { min: 0.5, max: 2.8 };
 
@@ -32,15 +33,25 @@ const EXPECTED_GOALS_BOUNDS = { min: 0.5, max: 2.8 };
  * (cf. sports/sportPort.js) plutôt que d'être importés en dur ici — c'est la
  * frontière qui permettra d'ajouter un futur sport sans toucher ce fichier.
  *
+ * Étape 27 du plan (21/10/2026) : avec la clé `modeleDeButs` dans les
+ * réglages, TOUS les marchés de buts et le score sortent d'une seule grille,
+ * calée sur les cotes et mélangée aux forces des équipes (goalModel.js) ; le
+ * 1N2 ne change pas. Sans la clé, aucune ligne nouvelle ne s'exécute : les
+ * chiffres d'avant, à l'octet (test/moteurCleEteinte.test.mjs).
+ *
  * @param {object} match - voir `docs contrat` dans matchAdapter.js pour le format attendu.
  * @param {object} config - configuration du moteur (cf. engineConfig.js).
  * @param {object} tiltState - état du coupe-circuit (cf. tiltState.js).
  * @param {object} sport - implémentation Sport active (cf. sports/sportPort.js).
+ * @param {object} [options] - { maintenant } : l'heure du calcul (les cotes relevées après ne comptent pas pour le
+ *   modèle de buts) ; par défaut maintenant — le seul endroit où l'horloge est lue, en bout de chaîne.
  */
-export async function analyzeMatch(match, config, tiltState, sport) {
+export async function analyzeMatch(match, config, tiltState, sport, { maintenant = Date.now() } = {}) {
   if (!match) throw new Error('Données de match manquantes.');
   if (!sport) throw new Error('Sport manquant (cf. sports/sportPort.js#getSport).');
 
+  // Étape 27 : les réglages du modèle de buts unique — null sans la clé (rien ne change) ; fautifs, on lève ici.
+  const reglagesButs = reglagesDuModeleDeButs(config);
   const base = await sport.model.resolveBaseRates(match, config);
   const structuralHome = computeStructuralFactor(match.structural?.home);
   const structuralAway = computeStructuralFactor(match.structural?.away);
@@ -113,16 +124,28 @@ export async function analyzeMatch(match, config, tiltState, sport) {
     draw: weights.market * marketProbDraw + weights.structural * probabilitiesStructural.draw + weights.exogenous * probabilitiesExogenous.draw,
     away: weights.market * marketProbAway + weights.structural * probabilitiesStructural.away + weights.exogenous * probabilitiesExogenous.away
   };
+  // Étape 27 : avec la clé, les marchés de buts et le score sortent de la grille du modèle de buts unique, calée
+  // sur la MÊME référence 1N2 que le pronostic du résultat ; le combiné reste aligné sur le 1N2 final. Les entrées
+  // (forces, moyennes du championnat, plus/moins relevé avant `maintenant`) : posées par le banc, sinon lues dans le
+  // magasin ; null (xG saisis à la main) → le chemin d'avant.
+  let buts = null;
+  if (reglagesButs) {
+    const entrees = typeof sport.model.resolveGoalInputs === 'function' ? await sport.model.resolveGoalInputs(match, reglagesButs, { maintenant }) : null;
+    if (entrees !== null && entrees !== undefined) {
+      buts = modeleDeButs({ fair: pronosticSurCotes ? [marketProbHome, marketProbDraw, marketProbAway] : null, entrees, reglages: reglagesButs });
+    }
+  }
+  const pButs = buts ? buts.probabilites : probabilitiesExogenous;
   const probabilities = {
     ...resultat,
-    over05: probabilitiesExogenous.over05,
-    over15: probabilitiesExogenous.over15,
-    over25: probabilitiesExogenous.over25,
-    over35: probabilitiesExogenous.over35,
-    homeTeamGoals: probabilitiesExogenous.homeTeamGoals,
-    awayTeamGoals: probabilitiesExogenous.awayTeamGoals,
-    bothTeamsScore: probabilitiesExogenous.bothTeamsScore,
-    resultAndTotal: alignResultAndTotal(probabilitiesExogenous.resultAndTotal, resultat)
+    over05: pButs.over05,
+    over15: pButs.over15,
+    over25: pButs.over25,
+    over35: pButs.over35,
+    homeTeamGoals: pButs.homeTeamGoals,
+    awayTeamGoals: pButs.awayTeamGoals,
+    bothTeamsScore: pButs.bothTeamsScore,
+    resultAndTotal: alignResultAndTotal(pButs.resultAndTotal, resultat)
   };
 
   // Pronostic du résultat : l'issue la plus probable, sa fiabilité mesurée,
@@ -145,7 +168,8 @@ export async function analyzeMatch(match, config, tiltState, sport) {
     scorePrediction = predictScore({
       inputs: match.scoreInputs ?? null,
       fair: pronosticSurCotes ? [marketProbHome, marketProbDraw, marketProbAway] : null,
-      predictedOutcome: prediction?.outcome ?? null
+      predictedOutcome: prediction?.outcome ?? null,
+      ...(buts ? { grille: buts } : {})
     });
   } catch (error) {
     console.warn(`[score] pronostic impossible pour ${match.home} - ${match.away} : ${error.message}`);
@@ -178,8 +202,8 @@ export async function analyzeMatch(match, config, tiltState, sport) {
     league: match.league ?? null,
     commenceTime: match.commenceTime ?? null,
     expectedGoals: {
-      home: round(lambda, 3),
-      away: round(mu, 3),
+      home: round(buts ? buts.lambda : lambda, 3),
+      away: round(buts ? buts.mu : mu, 3),
       source: match.expectedGoals?.provider ?? null
     },
     teamStats: match.teamStats ?? null,
@@ -242,7 +266,10 @@ export async function analyzeMatch(match, config, tiltState, sport) {
   // l'étape 16 en a besoin). Ni l'un ni l'autre n'entre dans le résumé donné
   // à l'IA (curateEngineSummary).
   result.engineVersion = numeroDeVersion(config, sport.id ?? 'football');
-  result.distributions = distributionsDuMoteur(probabilities);
+  result.distributions = distributionsDuMoteur(probabilities, buts);
+  // Étape 27 : d'où viennent les buts attendus (provenance, parties du mélange) — seulement avec la clé ; jamais
+  // donné à l'IA (resumeDuMoteur ne le prend pas).
+  if (buts) result.modeleDeButs = resumeDuModeleDeButs(buts);
 
   // L'heure des cotes de vos bookmakers et le réglage qui les juge (étape 7),
   // seulement quand l'appelant les a fournis : la page du match les affiche.
@@ -281,7 +308,10 @@ export async function analyzeMatch(match, config, tiltState, sport) {
   // bookmaker, et la décision du moteur sur le match) et la cote minimale à
   // prendre pour qu'il reste de la value (cf. verdictPari.js, coteMinimale.js).
   // Hors du résumé donné à l'IA (curateEngineSummary) : rien ne change pour elle.
-  result.comparateur = comparateurDuMatch(match, { ...decision, staking }, config, tiltState, { marketPredictions: result.marketPredictions ?? [] });
+  result.comparateur = comparateurDuMatch(match, { ...decision, staking }, config, tiltState, {
+    marketPredictions: result.marketPredictions ?? [],
+    ...(buts ? { origineDesButs: `modèle de buts unique, ${buts.provenance.phrase}` } : {})
+  });
 
   return result;
 }
@@ -320,7 +350,7 @@ function alignResultAndTotal(resultAndTotal, resultat) {
 const LIGNES_DE_BUTS = [0.5, 1.5, 2.5, 3.5];
 const suffixeDeLigne = (ligne) => String(ligne).replace('.', '');
 
-function distributionsDuMoteur(p) {
+function distributionsDuMoteur(p, buts = null) {
   const p6 = (x) => (Number.isFinite(x) ? round(x, 6) : null);
   const equipe = (bucket) =>
     Object.fromEntries(LIGNES_DE_BUTS.map((l) => [l, { over: p6(bucket?.[`over${suffixeDeLigne(l)}`]), under: p6(bucket?.[`under${suffixeDeLigne(l)}`]) }]));
@@ -331,7 +361,34 @@ function distributionsDuMoteur(p) {
     teamGoals: { home: equipe(p.homeTeamGoals), away: equipe(p.awayTeamGoals) },
     resultAndTotal: Object.fromEntries(
       LIGNES_DE_BUTS.map((l) => [l, Object.fromEntries(['homeOver', 'homeUnder', 'drawOver', 'drawUnder', 'awayOver', 'awayUnder'].map((k) => [k, p6(p.resultAndTotal?.[l]?.[k])]))])
-    )
+    ),
+    // Étape 27, seulement avec la clé : le score exact, les 81 cases (0-0 à 8-8, indice home × 9 + away, telles
+    // quelles) et « autre score » (la masse hors de ces cases).
+    ...(buts ? { scoreExact: { cases: buts.cases.map((c) => p6(c.p)), horsGrille: p6(buts.horsGrille) } } : {})
+  };
+}
+
+/** Étape 27 : le résumé du modèle de buts gardé avec le résultat (provenance, buts attendus, parties du mélange). */
+function resumeDuModeleDeButs(b) {
+  const r3 = (x) => (Number.isFinite(x) ? round(x, 3) : null);
+  const forces = (x) => (x ? { attaque: r3(x.attaque), defense: r3(x.defense), matchs: x.matchs, matchsXg: x.matchsXg } : null);
+  const st = b.parties.statistiques;
+  return {
+    version: 1,
+    provenance: { code: b.provenance.code, court: b.provenance.court, phrase: b.provenance.phrase },
+    expectedGoals: { home: r3(b.lambda), away: r3(b.mu) },
+    rho: b.rho,
+    marche: b.parties.marche ? { home: r3(b.parties.marche.lambda), away: r3(b.parties.marche.mu), methode: b.parties.marche.methode } : null,
+    plusMoins: b.parties.plusMoins ? { ligne: b.parties.plusMoins.ligne, pOver: round(b.parties.plusMoins.pOver, 4), source: b.parties.plusMoins.source, releveAt: b.parties.plusMoins.releveAt } : null,
+    statistiques: {
+      home: r3(st.lambda),
+      away: r3(st.mu),
+      demarrage: st.demarrage ? { nMin: st.demarrage.nMin, part: r3(st.demarrage.f) } : null,
+      forces: { home: forces(st.forces.home), away: forces(st.forces.away) },
+      ligue: { buts: { home: r3(st.ligue.buts.home), away: r3(st.ligue.buts.away) }, xg: { home: r3(st.ligue.xg.home), away: r3(st.ligue.xg.away) }, matchs: st.ligue.matchs, source: st.ligue.source }
+    },
+    poids: b.parties.poids ? { ...b.parties.poids } : null,
+    autreScore: round(b.horsGrille, 4)
   };
 }
 

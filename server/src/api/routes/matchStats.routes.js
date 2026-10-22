@@ -23,7 +23,8 @@ import {
   getFdHistory,
   getLeagueBenchmarks,
   getDayTable,
-  getTeamStrength
+  getTeamStrength,
+  getPlayerRatings
 } from '../controllers/matchStats.controller.js';
 
 const router = Router();
@@ -38,6 +39,8 @@ router.get('/fd-history', asyncHandler(getFdHistory));
 router.get('/day-table', asyncHandler(getDayTable));
 // L'indice de force des équipes (étape 29 du plan) : calculé chaque nuit, en lecture seule.
 router.get('/team-strength', asyncHandler(getTeamStrength));
+// Les fiches des joueurs par poste (étape 30 du plan) : calculées chaque nuit, en lecture seule ; affichage seulement.
+router.get('/player-ratings', asyncHandler(getPlayerRatings));
 router.post('/refresh', asyncHandler(postMatchStatsRefresh));
 router.get('/team', asyncHandler(getTeamMatchStats));
 router.get('/team-averages', asyncHandler(getTeamMatchStatsAverages));

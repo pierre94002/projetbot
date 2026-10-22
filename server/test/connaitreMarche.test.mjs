@@ -525,7 +525,11 @@ test('la nuit : l’étape « connaitreMarche » après les cotes gratuites et a
   assert.equal(n.etapes[i - 1], 'cotesGratuites');
   // Étape 29 (14/10/2026) : l'indice de force s'intercale juste après, toujours avant le gel.
   assert.equal(n.etapes[i + 1], 'indiceForce');
-  assert.equal(n.etapes[i + 2], 'gelPronostics');
+  // Étape 27 (21/10/2026) : les forces de buts s'intercalent après l'indice de force, toujours avant le gel.
+  assert.equal(n.etapes[i + 2], 'forcesButs');
+  // Étape 30 (22/10/2026) : les fiches des joueurs s'intercalent après les forces de buts, toujours avant le gel.
+  assert.equal(n.etapes[i + 3], 'fichesJoueurs');
+  assert.equal(n.etapes[i + 4], 'gelPronostics');
   assert.ok(n.etapes.indexOf('sauvegarde') > i, 'dans la sauvegarde de la nuit');
   assert.equal(n.etapes.filter((k) => k === 'connaitreMarche').length, 1);
   assert.equal(n.dueAvant, true);

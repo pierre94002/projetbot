@@ -68,7 +68,15 @@
  *       puis la CALIBRATION DU MOIS ÉCOULÉ (étape 20 du plan, 13/10/2026 :
  *       le 1er du mois à partir de 6 h, ou la première passe d'après, le
  *       bilan annoncé / réalisé du mois écoulé est figé une fois pour toutes
- *       dans la base — cf. data/calibration.js) ;
+ *       dans la base — cf. data/calibration.js), puis la CARTE « OÙ PARIER »
+ *       (étape 23 du plan, 22/10/2026 : championnat × marché, l'avantage
+ *       du moteur jugé par le juge de l'étape 16 ; dès qu'un rejeu du banc
+ *       existe, puis le 1er du mois, à un nouveau rejeu ou à un changement
+ *       de réglages — calculée dans un processus à part, rangée une fois
+ *       dans la base ; cf. data/bettingMap.js). Après la passe, le verrou
+ *       rendu, le BANC DU MOIS : relancé le 1er du mois si le moteur a
+ *       changé depuis le dernier rejeu (jamais le premier rejeu, jamais
+ *       pendant une passe ; cf. data/rejeuDuServeur.js) ;
  *   11. sauvegarde de la base, CHAQUE NUIT (étape 1 du plan, 06/10/2026) :
  *       copie compressée + données de l'appli, rotation 7 quotidiennes /
  *       4 hebdomadaires / 12 mensuelles, restauration d'essai chaque semaine
@@ -115,7 +123,7 @@ import { collectUpcomingOdds, finalizeOdds } from '../data/providers/freeOdds.js
 import { readSourceState, writeSourceState } from '../data/db/oddsQuotesRepository.js';
 import { invalidateFreeMarketOdds } from '../data/freeMarketOdds.js';
 import { settlePending } from '../data/providers/settlementService.js';
-import { recentNoSheet, openDb } from '../data/db/matchStatsDb.js';
+import { recentNoSheet, openDb, resolveDbPath } from '../data/db/matchStatsDb.js';
 import { markRunning, markStep, recordPass, readRefreshStatus, clearStaleRunning } from '../data/repositories/refreshStatusRepository.js';
 import { runAutoPreMatchAnalyses, runAutoPostMatchReviews, reserveCoupDEnvoi } from '../core/ai/autoMatchAiTrigger.js';
 import { budgetRestant, enregistrerUsage } from '../data/repositories/autoAiAnalysisRepository.js';
@@ -130,7 +138,19 @@ import { figerLesMoisEcoules, moisAFiger, preparerLeMoisEnCours, preparationAFai
 import { calculerEtEcrireLeCarnet } from '../data/aiScorecard.js';
 import { deriveDuMoteur, valeurDeLAlerte, CLE_ALERTE_DERIVE } from '../data/deriveMoteur.js';
 import { indiceDeForce, etatIndiceDeForce } from '../data/db/teamStrength.js';
+import { forcesDeButs, etatForcesButs, empreintesDemandees } from '../data/db/forcesButs.js';
+import { fichesDesJoueurs, etatDesFiches } from '../data/db/playerRatings.js';
+import { lancementDe } from '../bench/trialsRegistry.js';
+import { candidatePourLeBanc } from '../core/engine/engineVersions.js';
+import { getEngineConfig } from '../core/engine/engineConfig.js';
 import { executerControleQuotidien } from '../data/controleQuotidien.js';
+import { rejeuxUtilesALaCarte, rejeuDeLaCarte, lireLaCarte, ecrireLaCarte } from '../data/bettingMap.js';
+import { carteAFaire, calculerAPart as calculerLaCarteAPart } from '../data/bettingMapCalcul.js';
+import { relancerLeBancDuMoisSiBesoin } from '../data/rejeuDuServeur.js';
+import { moteurDuRejeu } from '../bench/runner.js';
+import { lireReglagesDuMoteur } from '../core/engine/engineConfig.js';
+import { FICHIER_VERSIONS } from '../core/engine/engineVersions.js';
+import { readJsonFile } from '../utils/atomicJson.js';
 import { env } from '../config/env.js';
 
 const execFileAsync = promisify(execFile);
@@ -535,6 +555,12 @@ async function passeControleQuotidien(ctx, options = {}) {
 /** Un verdict du juge en mots simples. */
 const verdictDit = (v) => ({ retenu: 'retenu', 'pas-prouve': 'pas prouvé', 'moins-bon': 'moins bon', 'pas-assez-de-matchs': 'pas assez de matchs' })[v] ?? String(v);
 
+/**
+ * L'étape « moteurABlanc » : une fois par jour de Paris, avec l'interrupteur des enregistreurs — et, depuis l'étape 27,
+ * refaite à la passe suivante quand la dernière était « en attente » (les forces de buts de la candidate pas à jour).
+ */
+const dueMoteurABlanc = (ctx) => Boolean(env.enregistreurs?.enabled) && (!faitAujourdhui(ctx.derniere('moteurABlanc')) || Boolean(ctx.derniersDetails?.('moteurABlanc')?.attente));
+
 async function passeMoteurABlanc(ctx, options = {}) {
   const r = await calculerABlanc({ dansLaPasse: true, ...options });
   if (!r.candidate) {
@@ -550,6 +576,15 @@ async function passeMoteurABlanc(ctx, options = {}) {
     return {
       status: 'ok',
       summary: `Candidate « ${r.candidate.id} » (étape ${r.candidate.etape}) jugée sur ${pluriel(r.essai.matchs ?? 0, 'match joué', 'matchs joués')} : « ${verdictDit(r.essai.verdict)} » — sa décision attend dans Réglages › Versions du moteur ; plus rien calculé à blanc.`,
+      details: r,
+      changed: false
+    };
+  }
+  // Étape 27 : ses forces de buts pas à jour — rien calculé ; l'étape est refaite à la passe suivante (`due`).
+  if (r.attente) {
+    return {
+      status: 'warn',
+      summary: `Candidate « ${r.candidate.id} » (étape ${r.candidate.etape}) en attente : ${r.attente} — rien calculé à blanc cette fois, la passe suivante refera le calcul.`,
       details: r,
       changed: false
     };
@@ -891,14 +926,308 @@ const dueIndiceForce = (ctx, { database = null } = {}) => {
   }
 };
 
-/** Pour les tests : l'étape d'analyse IA automatique telle que la passe la lance (plafond, réserve, bilan) ; l'étape du carnet de santé ; celle de l'historique football-data ; celle des repères ; celle de la table du jour J ; celle du contrôle quotidien ; celle de la candidate à blanc ; celle de la calibration du mois écoulé ; celle de connaître le marché ; celle de l'indice de force ; celle du carnet de l'IA. */
-export const __testing = { passeIaAuto, passeCarnetSante, passeHistoriqueFd, dueHistoriqueFd, passeReperes, dueReperes, passeTableJourJ, dueTableJourJ, passeControleQuotidien, passeMoteurABlanc, passeCalibrationMensuelle, dueCalibrationMensuelle, passeConnaitreMarche, dueConnaitreMarche, passeIndiceForce, dueIndiceForce, passeCarnetIA };
+/**
+ * Étape 27 : les empreintes des forces de buts que lisent la version en service et la candidate en essai (la clé
+ * `modeleDeButs` de leurs réglages) — aucune tant qu'aucune version ne porte le modèle de buts unique.
+ */
+function empreintesDeLaNuit() {
+  let reglagesCandidate = null;
+  try {
+    reglagesCandidate = candidatePourLeBanc()?.reglagesCandidate ?? null;
+  } catch {
+    reglagesCandidate = null;
+  }
+  return empreintesDemandees({ reglagesEnService: getEngineConfig('football'), reglagesCandidate });
+}
+
+/** Un écart du contrôle anti-fuite des forces de buts en quelques mots : le club, le jour, la colonne. */
+const ecartDesForcesEnClair = (e) => `club ${e.club} avant le ${e.J} (${e.colonne})`;
+
+/**
+ * L'étape « forcesButs » (étape 27 du plan, 21/10/2026) : LES FORCES DE BUTS de chaque club et les moyennes de chaque
+ * championnat à la 90e minute, « avant le jour J », que lit le modèle de buts unique (core/engine/goalModel.js) —
+ * seulement pour les réglages qui le portent (version en service, candidate en essai) ; aucun : rien à faire. Le calcul
+ * complet se fait dans un PROCESSUS À PART, base en lecture seule (data/db/forcesButs.js) : l'empreinte des rencontres
+ * — rien de neuf : rien —, sinon le calcul, la différence avec la table et un contrôle anti-fuite (40 couples
+ * recalculés par un second chemin) ; le serveur range seul, sous le verrou de la passe, par tranches courtes en rendant
+ * la main. Un autre calcul lourd en cours (un banc) : REPORTÉ, la passe suivante le fera. La table du jour J pas à jour :
+ * rien, la passe suivante le fera. APRÈS « indiceForce », AVANT le gel et la candidate à blanc (ils trouvent les forces
+ * de la veille) et la sauvegarde (la copie de la nuit les contient).
+ */
+async function passeForcesButs(ctx, options = {}) {
+  const { etatDeLaTable = () => etatTableJourJ(), empreintes = empreintesDeLaNuit(), ...reste } = options;
+  let table;
+  try {
+    table = etatDeLaTable();
+  } catch (error) {
+    table = { aJour: false, raison: error.message };
+  }
+  if (!table?.aJour) {
+    const pourquoi = table?.absente ? 'jamais construite' : table?.enCours ? 'passe interrompue' : table?.raison ?? 'autre version';
+    return {
+      status: 'warn',
+      summary: `La table du jour J n’est pas à jour (${pourquoi}) : les forces de buts ne sont pas recalculées ; la passe suivante le fera.`,
+      details: { mode: 'attente', pourquoi },
+      changed: false
+    };
+  }
+  // L'heure est lue ici (la passe), jamais dans forcesButs.js.
+  const r = await forcesDeButs({ empreintes, force: Boolean(reste.force), maintenant: () => new Date().toISOString(), ...reste });
+  const tenu = `le serveur jamais tenu plus de ${nombre(Math.round(r.blocMaxMs ?? 0))} ms d'affilée`;
+  if (r.mode === 'rien') {
+    return {
+      status: 'ok',
+      summary: r.raison ? `Rien à faire : ${r.raison}.` : `Rien à refaire : aucune rencontre de la table du jour J n’a bougé depuis le calcul du ${r.calculeLe ? new Date(r.calculeLe).toLocaleString('fr-FR', { timeZone: 'Europe/Paris' }) : '?'} (${duree(r.dureeMs)}, ${tenu}).`,
+      details: { mode: r.mode, empreintes: r.empreintes, dureeMs: r.dureeMs },
+      changed: false
+    };
+  }
+  if (r.mode === 'reporte') {
+    return {
+      status: 'warn',
+      summary: `Reporté : ${String(r.raison).replace(/\.$/, '')} — les forces de buts seront calculées à la passe suivante.`,
+      details: { mode: r.mode, reporte: true, raison: r.raison },
+      changed: false
+    };
+  }
+  if (r.mode === 'echec') {
+    return {
+      status: 'error',
+      summary: `En échec : ${String(r.erreur).slice(0, 240)} — rien d’avancé, les forces précédentes restent lues ; la passe suivante recommence (${duree(r.dureeMs)}).`,
+      details: { mode: r.mode, erreur: r.erreur, dureeMs: r.dureeMs },
+      changed: false
+    };
+  }
+  const b = r.bilanDuCalcul ?? {};
+  const ecarts = r.controle?.ecarts ?? [];
+  const retirees = r.empreintesRetirees ?? [];
+  const details = { mode: r.mode, empreintes: r.empreintes, empreintesRetirees: retirees, lignes: r.lignes, ecrites: r.ecrites, retirees: r.retirees, clubs: r.clubs, championnats: r.championnats, jusqua: r.jusqua, dureeMs: r.dureeMs, rangementMs: r.rangementMs, blocMaxMs: r.blocMaxMs, controle: r.controle ? { lignes: r.controle.lignes, ecarts: ecarts.length } : null, calculAPart: { dureeMs: b.dureeMs ?? null, rssMax: b.aPart?.rssMaxOctets ?? null, parties: b.parties ?? null } };
+  // Plus aucune version du moteur ne lit les forces : la nuit retire ce qui était rangé, et le dit.
+  if (!r.empreintes?.length) {
+    return {
+      status: 'ok',
+      summary: `Plus aucune version du moteur ne lit les forces de buts : ${pluriel(r.retirees, 'ligne retirée', 'lignes retirées')} (${duree(r.dureeMs)}, ${tenu}).`,
+      details,
+      changed: false
+    };
+  }
+  const controle = r.controle
+    ? `contrôle anti-fuite : ${pluriel(r.controle.lignes, 'ligne recalculée', 'lignes recalculées')} par un second chemin, ${pluriel(ecarts.length, 'écart', 'écarts')}` +
+      (ecarts.length ? ` (${ecarts.slice(0, 3).map(ecartDesForcesEnClair).join(' ; ')}${ecarts.length > 3 ? ' ; …' : ''}) — à regarder` : '')
+    : 'contrôle anti-fuite non fait';
+  return {
+    status: ecarts.length ? 'warn' : 'ok',
+    summary:
+      `${r.mode === 'premier' ? 'Premier calcul' : 'Forces de buts'} : ${pluriel(r.ecrites, 'ligne écrite', 'lignes écrites')} (${pluriel(r.clubs, 'club', 'clubs')}), ` +
+      `${pluriel(r.championnats, 'championnat mis à jour', 'championnats mis à jour')}, ${duree(b.dureeMs ?? 0)} à part (${Math.round((b.aPart?.rssMaxOctets ?? 0) / 1048576)} Mo), ` +
+      `rangement ${duree(r.rangementMs)}, ${tenu} ; ${controle}` +
+      (retirees.length ? ` ; ${pluriel(retirees.length, 'réglage que plus aucune version ne lit', 'réglages que plus aucune version ne lit')} : ${retirees.length > 1 ? 'leurs' : 'ses'} lignes retirées` : '') +
+      '.',
+    details,
+    // Les écarts du contrôle restent visibles jusqu'à la nuit qui n'en trouve plus (comme ceux de la table du jour J).
+    ...(r.controle ? { alert: { key: 'forcesButs', value: ecarts.length ? { ecarts: ecarts.slice(0, 20), total: ecarts.length, lignes: r.controle.lignes, updatedAt: new Date().toISOString() } : null } } : {}),
+    // Aucun écran ne lit les forces tant que le modèle de buts n'est pas en service : rien à recharger.
+    changed: false
+  };
+}
+
+/**
+ * Due : au clic, une fois par jour civil de Paris, quand la passe d'avant l'a REPORTÉE (un banc tournait), ou quand les
+ * forces ne sont pas à jour (jamais calculées, rangement interrompu, autre version, une empreinte demandée manquante).
+ * LIT seulement (forces_buts_state).
+ */
+const dueForcesButs = (ctx, { database = null, empreintes = null } = {}) => {
+  if (ctx.manuel || !faitAujourdhui(ctx.derniere('forcesButs'))) return true;
+  if (ctx.derniersDetails?.('forcesButs')?.reporte) return true;
+  try {
+    const demandees = empreintes ?? empreintesDeLaNuit();
+    return demandees.length > 0 && etatForcesButs({ ...(database ? { database } : {}), empreintes: demandees }).aJour === false;
+  } catch {
+    // Base illisible à cet instant : l'étape tourne et dira pourquoi.
+    return true;
+  }
+};
+
+/** Le jour du lancement de l'étape 30 au registre de la mesure (la mesure à blanc ne lit que les matchs d'après), ou null. */
+function lancementDesFiches() {
+  try {
+    return lancementDe('30')?.le ?? null;
+  } catch {
+    // Registre illisible : la mesure à blanc attend (les fiches, elles, se calculent).
+    return null;
+  }
+}
+
+/**
+ * L'étape « fichesJoueurs » (étape 30 du plan, 22/10/2026) : LES FICHES DES JOUEURS PAR POSTE et l'équipe habituelle
+ * de chaque club, « au lendemain du dernier jour de la table du jour J » (data/db/playerRatings.js) — par 90 minutes,
+ * pondérées dans le temps, corrigées des adversaires et du championnat, ramenées vers la moyenne du poste. Le calcul
+ * COMPLET se fait dans un PROCESSUS À PART, base en lecture seule : l'empreinte de la table du jour J — rien de neuf :
+ * rien —, sinon le rejeu, la différence avec ce qui est rangé, un contrôle anti-fuite (40 couples recalculés par un
+ * second chemin) et la mesure à blanc depuis le lancement de l'étape ; le serveur range seul, sous le verrou de la
+ * passe, par tranches courtes en rendant la main. Un autre calcul lourd en cours (un banc) : REPORTÉ. La table du
+ * jour J pas à jour : rien. APRÈS « forcesButs », AVANT le gel et la candidate à blanc, et la sauvegarde (la copie de
+ * la nuit les contient). AFFICHAGE SEULEMENT : le moteur ne lit pas les fiches (règle de Pierre).
+ */
+async function passeFichesJoueurs(ctx, options = {}) {
+  const { etatDeLaTable = () => etatTableJourJ(), depuis = lancementDesFiches(), ...reste } = options;
+  let table;
+  try {
+    table = etatDeLaTable();
+  } catch (error) {
+    table = { aJour: false, raison: error.message };
+  }
+  if (!table?.aJour) {
+    const pourquoi = table?.absente ? 'jamais construite' : table?.enCours ? 'passe interrompue' : table?.raison ?? 'autre version';
+    return {
+      status: 'warn',
+      summary: `La table du jour J n’est pas à jour (${pourquoi}) : les fiches des joueurs ne sont pas recalculées ; la passe suivante le fera.`,
+      details: { mode: 'attente', pourquoi },
+      changed: false
+    };
+  }
+  // L'heure est lue ici (la passe), jamais dans playerRatings.js.
+  const r = await fichesDesJoueurs({ force: Boolean(reste.force), maintenant: () => new Date().toISOString(), depuis, ...reste });
+  const tenu = `le serveur jamais tenu plus de ${nombre(Math.round(r.blocMaxMs ?? 0))} ms d'affilée`;
+  const affichage = ' Affichage seulement : le moteur ne lit pas les fiches.';
+  if (r.mode === 'rien') {
+    return {
+      status: 'ok',
+      summary: `Rien à refaire : la table du jour J n’a pas bougé depuis le calcul du ${r.calculeLe ? new Date(r.calculeLe).toLocaleString('fr-FR', { timeZone: 'Europe/Paris' }) : '?'} (${duree(r.dureeMs)}, ${tenu}).${affichage}`,
+      details: { mode: r.mode, dureeMs: r.dureeMs },
+      changed: false
+    };
+  }
+  if (r.mode === 'reporte') {
+    return {
+      status: 'warn',
+      summary: `Reporté : ${String(r.raison).replace(/\.$/, '')} — les fiches des joueurs seront calculées à la passe suivante.`,
+      details: { mode: r.mode, reporte: true, raison: r.raison },
+      changed: false
+    };
+  }
+  if (r.mode === 'echec') {
+    return {
+      status: 'error',
+      summary: `En échec : ${String(r.erreur).slice(0, 240)} — rien d’avancé, les fiches précédentes restent lues ; la passe suivante recommence (${duree(r.dureeMs)}).`,
+      details: { mode: r.mode, erreur: r.erreur, dureeMs: r.dureeMs },
+      changed: false
+    };
+  }
+  const b = r.bilanDuCalcul ?? {};
+  const ecarts = r.controle?.ecarts ?? [];
+  const controle = r.controle
+    ? `contrôle anti-fuite : ${pluriel(r.controle.lignes, 'joueur recalculé', 'joueurs recalculés')} par un second chemin, ${pluriel(ecarts.length, 'écart', 'écarts')}` +
+      (ecarts.length ? ` (${ecarts.slice(0, 3).map((e) => `joueur ${e.joueur} avant le ${e.J} (${e.colonne})`).join(' ; ')}${ecarts.length > 3 ? ' ; …' : ''}) — à regarder` : '')
+    : 'contrôle anti-fuite non fait';
+  const mesure = r.mesure?.lancee ? ` ; mesure à blanc depuis le ${r.mesure.depuis} : ${pluriel(r.mesure.matchs ?? 0, 'match mesuré', 'matchs mesurés')}` : '';
+  return {
+    status: ecarts.length ? 'warn' : 'ok',
+    summary:
+      `${r.mode === 'premier' ? 'Premier calcul' : 'Fiches des joueurs'} : ${pluriel(r.fiches ?? 0, 'joueur', 'joueurs')} (${pluriel(b.etablies ?? 0, 'fiche établie', 'fiches établies')}), ${pluriel(r.equipes ?? 0, 'équipe habituelle', 'équipes habituelles')} ; ` +
+      `${pluriel(r.ecrites, 'ligne écrite', 'lignes écrites')}, ${pluriel(r.retirees, 'retirée', 'retirées')} en ${duree(r.dureeMs)} (calcul à part ${duree(b.dureeMs ?? 0)}, ${Math.round((b.aPart?.rssMaxOctets ?? 0) / 1048576)} Mo chez lui ; rangement ${duree(r.rangementMs)}, ${tenu}) ; ${controle}${mesure}.${affichage}`,
+    details: {
+      mode: r.mode,
+      fiches: r.fiches,
+      equipes: r.equipes,
+      ecrites: r.ecrites,
+      retirees: r.retirees,
+      jusqua: r.jusqua,
+      dureeMs: r.dureeMs,
+      rangementMs: r.rangementMs,
+      blocMaxMs: r.blocMaxMs,
+      controle: r.controle ? { lignes: r.controle.lignes, ecarts: ecarts.length } : null,
+      mesure: r.mesure ? { lancee: Boolean(r.mesure.lancee), depuis: r.mesure.depuis ?? null, matchs: r.mesure.matchs ?? 0 } : null,
+      calculAPart: { dureeMs: b.dureeMs ?? null, rssMax: b.aPart?.rssMaxOctets ?? null, parties: b.parties ?? null }
+    },
+    // Les écarts du contrôle restent visibles jusqu'à la nuit qui n'en trouve plus (comme ceux des forces de buts).
+    ...(r.controle ? { alert: { key: 'fichesJoueurs', value: ecarts.length ? { ecarts: ecarts.slice(0, 20), total: ecarts.length, lignes: r.controle.lignes, updatedAt: new Date().toISOString() } : null } } : {}),
+    // Aucun écran ne lit encore les fiches (étape 31) ; la page du match les relit à chaque ouverture : rien à recharger.
+    changed: false
+  };
+}
+
+/**
+ * Due : au clic, une fois par jour civil de Paris, quand la passe d'avant l'a REPORTÉE (un banc tournait), ou quand les
+ * fiches ne sont pas à jour (jamais calculées, rangement interrompu, autre version ou d'autres réglages). LIT seulement
+ * (player_ratings_state).
+ */
+const dueFichesJoueurs = (ctx, { database = null } = {}) => {
+  if (ctx.manuel || !faitAujourdhui(ctx.derniere('fichesJoueurs'))) return true;
+  if (ctx.derniersDetails?.('fichesJoueurs')?.reporte) return true;
+  try {
+    return etatDesFiches(database ? { database } : {}).aJour === false;
+  } catch {
+    // Base illisible à cet instant : l'étape tourne et dira pourquoi.
+    return true;
+  }
+};
+
+/** Pour les tests : l'étape d'analyse IA automatique telle que la passe la lance (plafond, réserve, bilan) ; l'étape du carnet de santé ; celle de l'historique football-data ; celle des repères ; celle de la table du jour J ; celle du contrôle quotidien ; celle de la candidate à blanc ; celle de la calibration du mois écoulé ; celle de connaître le marché ; celle de l'indice de force ; celle des forces de buts ; celle des fiches des joueurs ; celle du carnet de l'IA. */
+export const __testing = { passeCarteOuParier, dueCarteOuParier, dueMoteurABlanc, passeIaAuto, passeCarnetSante, passeHistoriqueFd, dueHistoriqueFd, passeReperes, dueReperes, passeTableJourJ, dueTableJourJ, passeControleQuotidien, passeMoteurABlanc, passeCalibrationMensuelle, dueCalibrationMensuelle, passeConnaitreMarche, dueConnaitreMarche, passeIndiceForce, dueIndiceForce, passeForcesButs, dueForcesButs, passeFichesJoueurs, dueFichesJoueurs, passeCarnetIA };
 
 /**
  * Les étapes. `due(ctx)` dit si l'étape tourne à cette passe (les autres
  * sont notées « non due »), `run(ctx)` rend { status, summary, details }.
  * status : 'ok', 'warn' (fait, avec des points à regarder), 'error'.
  */
+/**
+ * L'étape « carteOuParier » (étape 23 du plan, 22/10/2026) : la CARTE « OÙ PARIER », championnat × marché. Elle
+ * relit le dernier rejeu du banc d'essai du moteur en service (sa carte déjà jugée), mesure la valeur de clôture
+ * des pronostics gelés depuis la dernière adoption, juge chaque case par le juge de l'étape 16 (K compté), et la
+ * range UNE fois (table betting_map, jamais réécrite). Le calcul dans un PROCESSUS À PART, base en lecture seule,
+ * sous le jeton du calcul lourd ; le serveur range. Due (carteAFaire) : dès qu'un rejeu existe et qu'aucune carte
+ * n'est faite ; à un nouveau rejeu ; quand les réglages ont changé (et qu'un rejeu les mesure) ; le 1er du mois à
+ * partir de 6 h. Un clic ne la refait pas : chaque calcul est un regard de plus, que le juge compte. Sans rejeu du
+ * banc : rien (« pas encore mesuré »). Ne change aucun chiffre du moteur : elle trie et avertit.
+ */
+function etatDeLaCarte(ctx, { database = null, maintenant = Date.now() } = {}) {
+  const db = database ?? openDb();
+  const reglages = JSON.parse(JSON.stringify(lireReglagesDuMoteur().football));
+  const r = moteurDuRejeu(reglages);
+  const moteur = { empreinte: r.empreinte, empreinteReglages: r.empreinteReglages?.football ?? null, version: Number.isInteger(r.version) ? r.version : null };
+  const rejeu = rejeuDeLaCarte(rejeuxUtilesALaCarte({ database: db }), moteur);
+  const derniere = lireLaCarte({ database: db, avecContenu: false });
+  return { db, moteur, rejeu, derniere, avis: carteAFaire({ derniere, rejeu, moteur, maintenant, manuel: Boolean(ctx?.manuel) }) };
+}
+
+async function passeCarteOuParier(ctx, options = {}) {
+  const maintenant = options.maintenant ?? Date.now();
+  const { db, moteur, rejeu, avis } = etatDeLaCarte(ctx, { database: options.database, maintenant });
+  if (!avis.du) return { status: 'ok', summary: `Rien à faire : ${avis.pourquoi}.`, details: { fait: false, pourquoi: avis.pourquoi }, changed: false };
+  const debut = Date.now();
+  let r;
+  try {
+    r = await (options.calculer ?? calculerLaCarteAPart)({ chemin: options.chemin ?? resolveDbPath(), options: { moteur, versions: readJsonFile(FICHIER_VERSIONS, null), maintenant, raison: avis.raison } });
+  } catch (error) {
+    const message = String(error?.message ?? error).slice(0, 300);
+    if (error?.reporte) return { status: 'warn', summary: `Carte reportée — ${message}`, details: { fait: false, reporte: true, erreur: message }, changed: false };
+    return { status: 'error', summary: `Carte non calculée : ${message} — rien d’écrit, la passe suivante recommence.`, details: { fait: false, erreur: message }, changed: false };
+  }
+  const carte = r.carte;
+  const id = ecrireLaCarte({ database: db, carte });
+  const s = carte.resume;
+  const banc = rejeu ? `banc d’essai n° ${rejeu.id}${rejeu.etiquette === 'code-precedent' ? ' (version de code précédente du moteur)' : ''}` : 'sans banc';
+  return {
+    status: 'ok',
+    summary:
+      `Carte n° ${id} (${avis.pourquoi}) : ${pluriel(s.cases, 'case', 'cases')} sur ${pluriel(s.championnats, 'championnat', 'championnats')} — ` +
+      `${pluriel(s.vertes, 'verte', 'vertes')}, ${pluriel(s.rouges, 'rouge', 'rouges')}, ${pluriel(s.grises, 'grise', 'grises')} ; ${banc} ; ` +
+      `direct : ${pluriel(s.direct.mesures, 'pronostic mesuré', 'pronostics mesurés')} sur ${nombre(s.direct.pronostics)} gelés, ${pluriel(carte.kVivant, 'case jugée', 'cases jugées')} (juge à ${nombre(carte.kVivant)} × ${nombre(carte.regards)} regards) ; en ${duree(Date.now() - debut)}. Rien ne change dans les chiffres du moteur.`,
+    details: { fait: true, id, raison: avis.raison, resume: s, banc: carte.banc, kVivant: carte.kVivant, regards: carte.regards, dureeMs: Date.now() - debut, calculAPart: { dureeMs: r.dureeMs ?? null, rssFinOctets: r.rssFinOctets ?? null } },
+    changed: false
+  };
+}
+
+/** Due : la règle de carteAFaire, LUE seulement ; une base illisible fait tourner l'étape, qui dira pourquoi. */
+function dueCarteOuParier(ctx, options = {}) {
+  try {
+    return etatDeLaCarte(ctx, options).avis.du;
+  } catch {
+    return true;
+  }
+}
+
 const ETAPES = [
   {
     key: 'calendrier',
@@ -1269,6 +1598,27 @@ const ETAPES = [
     run: (ctx) => passeIndiceForce(ctx)
   },
   {
+    key: 'forcesButs',
+    label: 'Forces de buts des équipes (modèle de buts unique)',
+    // Étape 27 du plan (21/10/2026) : APRÈS « indiceForce » (et la table du jour J qu'il lit), sans toucher à
+    // l'ordre des étapes d'avant, AVANT le gel des pronostics et la candidate à blanc (ils trouvent les forces de la
+    // veille) et la sauvegarde (la copie de la nuit les contient) ; une fois par jour civil de Paris, au clic, quand
+    // la passe d'avant l'a reportée, ou quand les forces ne sont pas à jour. Cf. passeForcesButs.
+    due: (ctx) => dueForcesButs(ctx),
+    run: (ctx) => passeForcesButs(ctx)
+  },
+  {
+    key: 'fichesJoueurs',
+    label: 'Fiches des joueurs par poste et équipes habituelles (force du onze)',
+    // Étape 30 du plan (22/10/2026) : APRÈS « forcesButs » (et la table du jour J qu'elles lisent), sans toucher à
+    // l'ordre des étapes d'avant, AVANT le gel des pronostics et la candidate à blanc (une candidate future trouvera
+    // les fiches de la veille) et la sauvegarde (la copie de la nuit les contient) ; une fois par jour civil de Paris,
+    // au clic, quand la passe d'avant l'a reportée, ou quand les fiches ne sont pas à jour. Affichage seulement : le
+    // moteur ne les lit pas. Cf. passeFichesJoueurs.
+    due: (ctx) => dueFichesJoueurs(ctx),
+    run: (ctx) => passeFichesJoueurs(ctx)
+  },
+  {
     key: 'gelPronostics',
     label: 'Gel des pronostics du moteur (enregistreurs)',
     // Étape E du plan (correction 7) : une fois par jour civil de Paris — la
@@ -1306,7 +1656,7 @@ const ETAPES = [
     // de la nuit contient les chiffres à blanc) ; une fois par jour civil de
     // Paris, avec le même interrupteur que les enregistreurs. Sans candidate
     // en essai, l'étape ne fait rien. Cf. passeMoteurABlanc.
-    due: (ctx) => Boolean(env.enregistreurs?.enabled) && !faitAujourdhui(ctx.derniere('moteurABlanc')),
+    due: (ctx) => dueMoteurABlanc(ctx),
     run: (ctx) => passeMoteurABlanc(ctx)
   },
   {
@@ -1325,6 +1675,19 @@ const ETAPES = [
     // passeCalibrationMensuelle.
     due: (ctx) => dueCalibrationMensuelle({}, ctx),
     run: (ctx) => passeCalibrationMensuelle(ctx)
+  },
+  {
+    key: 'carteOuParier',
+    label: 'Carte « où parier » : championnat × marché (avantage du moteur jugé)',
+    // Étape 23 du plan (22/10/2026) : APRÈS la calibration (les pronostics de
+    // la nuit gelés, le mois écoulé figé) et AVANT la sauvegarde (la copie de
+    // la nuit contient la carte). Due dès qu'un rejeu du banc existe sans
+    // carte, à un nouveau rejeu, à un changement de réglages, le 1er du mois
+    // à partir de 6 h ; jamais au simple clic quand une carte existe. Pas
+    // d'interrupteur : ni réseau, ni Claude, une ligne par carte. Cf.
+    // passeCarteOuParier.
+    due: (ctx) => dueCarteOuParier(ctx),
+    run: (ctx) => passeCarteOuParier(ctx)
   },
   {
     key: 'sauvegarde',
@@ -1386,7 +1749,9 @@ async function runOnce(reason) {
         concurrency,
         ecrit: false,
         annuairesDus: Boolean(statut.registryRebuildPending),
-        derniere: (cle) => statut.stepsLastSuccess?.[cle] ?? null
+        derniere: (cle) => statut.stepsLastSuccess?.[cle] ?? null,
+        // Étape 27 : ce qu'a dit une étape à la dernière passe où elle a tourné (« reportée » ?).
+        derniersDetails: (cle) => (statut.history ?? []).map((p) => p?.steps?.find((e) => e?.key === cle && e.status !== 'skipped')).find(Boolean)?.details ?? null
       };
       const startedAt = new Date().toISOString();
       markRunning({ reason, steps: ETAPES.length });
@@ -1459,6 +1824,10 @@ function planifier(delaiMs, reason) {
   prochainePasse = new Date(Date.now() + delaiMs).toISOString();
   timer = setTimeout(async () => {
     await runOnce(reason);
+    // Étape 23 : le banc du mois, APRÈS la passe (verrou rendu), seulement s'il est dû (rejeuDuServeur.js) ; il
+    // tourne ensuite seul, sous le verrou « banc » et le jeton du calcul lourd. Ne lève jamais.
+    const banc = relancerLeBancDuMoisSiBesoin();
+    if (banc.lance) console.log(`[banc du mois] lancé : ${banc.raison}.`);
     planifier(env.matchStatsRefresh.intervalMinutes * 60_000, 'périodique');
   }, delaiMs);
   // Le minuteur ne doit pas retenir le processus à l'arrêt.

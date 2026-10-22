@@ -12,6 +12,7 @@ import PickCrest from '@/components/matches/PickCrest.vue';
 import { liveNow } from '@/utils/liveClock.js';
 import { formatOdds } from '@/utils/format.js';
 import { verdictsParMarche, pourcentageEntier, precisionDeLaSaisie, COTE_MINIMALE_DU_PRONOSTIC } from '@/utils/verdictParMarche.js';
+import { deuxCinqCale, PHRASE_DE_LA_VALUE_DU_DEUX_CINQ } from '@/utils/modeleDeButs.js';
 
 /**
  * LE VERDICT PAR MARCHÉ (étape 9 du plan, 06/10/2026) : la première chose que dit
@@ -66,6 +67,11 @@ const phraseDesValues = computed(() => {
 });
 
 const cote = (x) => formatOdds(x);
+
+// Étape 27 : quand le modèle de buts unique part de la cote plus/moins 2,5 relevée pour ce match, la ligne 2,5 du
+// plus/moins le dit — une value n'y vient que d'un écart entre votre bookmaker et ce marché. Sans lui : rien.
+const deuxCinqSurLaCote = computed(() => deuxCinqCale(props.result));
+const surLeDeuxCinq = (l) => l.marketId === 'totalGoals' && Number(l.pronostic?.params?.line ?? l.saisie?.ligne) === 2.5;
 /** La phrase au survol de la case du moteur : d'où vient le pourcentage. */
 function titreDuMoteur(l) {
   if (l.probabilite === null) return l.manqueDetail ?? 'Le moteur ne donne pas de probabilité pour cette ligne.';
@@ -138,6 +144,7 @@ function titreDeLaCote(l) {
                 {{ l.marche }}
                 <span v-if="l.choisi && g.cle === 'resultat'" class="mvb__flag" title="L'issue la plus probable du résultat selon le moteur."><AppIcon name="target" :size="10" />pronostic du moteur</span>
               </span>
+              <small v-if="deuxCinqSurLaCote && surLeDeuxCinq(l)" class="mvb__sub mvb__deux-cinq" data-modele-de-buts>{{ PHRASE_DE_LA_VALUE_DU_DEUX_CINQ }}</small>
             </span>
           </div>
 
@@ -432,6 +439,14 @@ function titreDeLaCote(l) {
 
 .mvb__judge {
   font-style: italic;
+}
+
+/* Étape 27 : d'où vient une value sur le plus/moins 2,5 calé sur la cote du marché — une phrase, sur sa propre ligne. */
+.mvb__deux-cinq {
+  display: block;
+  margin-top: 2px;
+  line-height: 1.45;
+  white-space: normal;
 }
 
 .mvb__absent {

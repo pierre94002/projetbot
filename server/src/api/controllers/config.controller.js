@@ -18,6 +18,7 @@ import { isRefreshRunning, withRefreshLock } from '../../data/providers/refreshL
 import { deriveDuMoteur } from '../../data/deriveMoteur.js';
 import { jugerLaCandidateAuBanc, bancDeLaCandidateEnCours, dernierRefusDuBanc, commencerLeBanc, avancerLeBanc, refuserLeBanc, terminerLeBanc } from '../../bench/bancCandidate.js';
 import { ApiError } from '../middlewares/errorHandler.js';
+import { reglagesDuModeleDeButs, ReglagesDuModeleDeButsInvalides } from '../../core/engine/goalModel.js';
 
 function resolveSportId(req) {
   return req.query.sport || 'football';
@@ -42,8 +43,30 @@ function enregistrerAvecUneVersion(ecrire, origine) {
   }
 }
 
+/**
+ * Étape 27 (vérification du branchement, constat 2) : une clé `modeleDeButs` fautive est REFUSÉE (400) avant toute
+ * écriture — enregistrée, elle ferait échouer chaque analyse. `null` (ou l'absence) reste accepté : la sortie de
+ * secours, le chemin d'avant. Le message dit la faute en mots simples (ceux de motsDuModeleDeButs.js).
+ */
+function verifierLeModeleDeButs(corps) {
+  const r = corps?.modeleDeButs;
+  if (r === undefined || r === null) return;
+  try {
+    reglagesDuModeleDeButs({ modeleDeButs: r });
+  } catch (error) {
+    if (!(error instanceof ReglagesDuModeleDeButsInvalides)) throw error;
+    // « modeleDeButs : réglages fautifs — a ; b. » (MOTS_DES_REGLAGES) → « 2 réglages à revoir (a, b) ».
+    const m = String(error.message);
+    const tete = 'modeleDeButs : réglages fautifs — ';
+    const liste = m.startsWith(tete) ? m.slice(tete.length).replace(/\.$/, '').split(' ; ') : null;
+    const faute = liste ? `${liste.length} réglage${liste.length > 1 ? 's' : ''} à revoir (${liste.join(', ')})` : m.replace(/^modeleDeButs : /, '').replace(/\.$/, '');
+    throw new ApiError(400, `Réglages du modèle de buts refusés, rien n’a changé : ${faute}.`);
+  }
+}
+
 export function putConfig(req, res) {
   const sportId = resolveSportId(req);
+  verifierLeModeleDeButs(req.body);
   const { resultat: config, version } = enregistrerAvecUneVersion(() => updateEngineConfig(sportId, req.body ?? {}), 'reglages');
   res.json({ config, version });
 }

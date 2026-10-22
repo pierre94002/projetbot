@@ -175,6 +175,8 @@ export const COLONNES_CLOTURE = Object.freeze(['moy_c1', 'moy_cn', 'moy_c2', 'pi
 /**
  * LES JEUX DE PRIX, jamais mélangés. `colonnes` : ce que prix.js a le droit de lire dans fd_history pour
  * nourrir le moteur ; `decision` : un pari peut-il en sortir (jamais sur une clôture : ce serait voir l'avenir).
+ * Étape 27 : l'avant-match lit aussi la moyenne du plus/moins 2,5 d'avant-match (moy_p25, moy_m25) — l'ancre du
+ * total du modèle de buts ; la clôture n'en donne aucune.
  */
 export const JEUX_DE_PRIX = Object.freeze({
   'fd-avant-match': Object.freeze({
@@ -184,7 +186,7 @@ export const JEUX_DE_PRIX = Object.freeze({
     source: 'fd',
     decision: true,
     cloture: false,
-    colonnes: Object.freeze(['moy_1', 'moy_n', 'moy_2', 'max_1', 'max_n', 'max_2', 'pin_1', 'pin_n', 'pin_2', 'b365_1', 'b365_n', 'b365_2', 'wh_1', 'wh_n', 'wh_2'])
+    colonnes: Object.freeze(['moy_1', 'moy_n', 'moy_2', 'max_1', 'max_n', 'max_2', 'pin_1', 'pin_n', 'pin_2', 'b365_1', 'b365_n', 'b365_2', 'wh_1', 'wh_n', 'wh_2', 'moy_p25', 'moy_m25'])
   }),
   'fd-cloture': Object.freeze({
     id: 'fd-cloture',

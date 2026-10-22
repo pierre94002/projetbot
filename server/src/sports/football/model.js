@@ -3,6 +3,7 @@ import { computeStructuralExpectedGoals } from '../../core/xg/xgStructural.js';
 import { getLeagueGoalAverages } from '../../data/providers/standingsService.js';
 import { getLeagueBaselineXg } from './xgBaseline.js';
 import { computeScoreMatrix } from './scoreMatrix.js';
+import { lireEntreesButs } from '../../data/db/entreesButs.js';
 
 // Sources d'xG fournies explicitement par un humain (Simulateur libre, jeu de
 // données de test) : on respecte ce chiffre tel quel plutôt que de le
@@ -70,6 +71,20 @@ async function resolveLeagueAverages(match) {
 
   const fallback = getLeagueBaselineXg(match.sportKey, {});
   return { home: fallback.xgHome, away: fallback.xgAway };
+}
+
+/**
+ * Étape 27 : les ENTRÉES du modèle de buts unique (core/engine/goalModel.js), appelé par analyzeMatch seulement
+ * quand les réglages portent la clé `modeleDeButs`. PRÉSENTE, même nulle, la clé `entreesButs` du match veut dire
+ * « voici ce qu'on savait avant le jour du match » (le banc d'essai, les tests) : rendue telle quelle, jamais le
+ * magasin. xG fournis à la main (Simulateur libre, jeu de test) : null — le chemin d'avant. Sinon le magasin
+ * (data/db/entreesButs.js), lu avant J et avant `maintenant`.
+ */
+export async function resolveGoalInputs(match, reglages, { maintenant } = {}) {
+  if (Object.hasOwn(match, 'entreesButs')) return match.entreesButs;
+  const provider = match.expectedGoals?.provider;
+  if (provider && MANUAL_XG_PROVIDERS.has(provider)) return null;
+  return lireEntreesButs({ match, reglages, maintenant });
 }
 
 /** Implémentation football de `sport.model.computeMarketProbabilities(rateHome, rateAway, config)`. */

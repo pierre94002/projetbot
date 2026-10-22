@@ -5,6 +5,7 @@ import { useApiHealth } from '@/composables/useApiHealth.js';
 import { refreshApi } from '@/services/refreshApi.js';
 import AppIcon from '@/components/common/AppIcon.vue';
 import { etatDuFeu, titreDuFeu } from '@/utils/controleQuotidien.js';
+import { controlesAntiFuiteDits } from '@/utils/controlesAntiFuite.js';
 
 const route = useRoute();
 const router = useRouter();
@@ -42,13 +43,16 @@ const alertesSauvegarde = computed(() => refresh.value?.alerts?.sauvegarde?.aler
 const sauvegardeGrave = computed(() => alertesSauvegarde.value.some((a) => a.niveau === 'danger'));
 /** Enregistreurs (étape E du plan) : un relevé arrêté ou en erreur, posé par le serveur. */
 const alertesEnregistreurs = computed(() => refresh.value?.alerts?.enregistreurs?.releves ?? []);
-/** Des alertes durables (contradictions, anomalies du contrôle, cotes, sauvegardes, enregistreurs) sont en cours. */
+/** Contrôles anti-fuite de la nuit (étape 27) : des écarts dans la table du jour J ou dans les forces de buts. */
+const alertesFuite = computed(() => controlesAntiFuiteDits(refresh.value?.alerts ?? null));
+/** Des alertes durables (contradictions, anomalies du contrôle, cotes, sauvegardes, enregistreurs, contrôles anti-fuite) sont en cours. */
 const alertes = computed(() =>
   Boolean(
     refresh.value?.alerts?.contradictions?.count ||
       refresh.value?.alerts?.audit?.anomalies ||
       refresh.value?.alerts?.cotes?.sources?.length ||
       alertesSauvegarde.value.length ||
+      alertesFuite.value.length ||
       alertesEnregistreurs.value.length
   )
 );
@@ -56,6 +60,7 @@ const titreRepere = computed(() =>
   [
     'Actualisation automatique — détails dans Réglages',
     ...alertesSauvegarde.value.map((a) => `Sauvegardes : ${a.texte}`),
+    ...alertesFuite.value.map((f) => `Contrôle anti-fuite de la nuit — ${f.texte}`),
     ...alertesEnregistreurs.value.map((a) => `Enregistreurs — ${a.nom} : ${a.probleme}`)
   ].join('\n')
 );

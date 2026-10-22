@@ -45,6 +45,8 @@ import { cleDuMatch } from '../data/enregistreurs/gelPronostics.js';
 import { FD_SAISONNIERS, FD_PAYS } from '../data/providers/footballDataOdds.js';
 import { matrice, MODELES_SCORE } from '../core/engine/scorePrediction.js';
 import { statExpectations, STAT_KINDS, loiDesComptes } from '../sports/football/statMarkets.js';
+import { empreinteDesForces, faitsDeLaRencontre, saisonEnNombre } from '../core/engine/goalModel.js';
+import { AccumulateurDesForces } from '../data/db/forcesButs.js';
 import { COLONNES_AVANT_MATCH, COLONNES_CLOTURE } from './periodes.js';
 
 /** Le coupe-circuit NEUTRE : jamais getTiltState() (celui de Pierre, enclenché, supprimerait tous les paris simulés en silence). */
@@ -333,8 +335,10 @@ export class MemoireFd {
  * L'objet `match` donné à analyzeMatch, champ pour champ comme enrichMatchWithRealAverages le rend aujourd'hui
  * (sans le mélange avec match-results.json, la saisie de Pierre). `rencontre` : { fixtureKey, home, away,
  * league, date, kickoff } ; `entrees` : assembler ; `marketOdds` : un jeu de prix (prix.js) ou null.
+ * Étape 27 : TOUJOURS la clé `entreesButs` (null quand les réglages rejoués n'ont pas le modèle de buts) — « voici
+ * ce qu'on savait avant le jour du match » : le moteur ne lit alors jamais le magasin (ForcesCourantes).
  */
-export function matchDuBanc({ rencontre, entrees, marketOdds = null }) {
+export function matchDuBanc({ rencontre, entrees, marketOdds = null, entreesButs = null }) {
   const gh = entrees?.teamGoals?.home ?? null;
   const ga = entrees?.teamGoals?.away ?? null;
   const match = {
@@ -353,7 +357,9 @@ export function matchDuBanc({ rencontre, entrees, marketOdds = null }) {
     scoreInputs: entrees?.scoreInputs ?? null,
     statInputs: entrees?.statInputs ?? null,
     // TOUJOURS la clé (amendement A1) : nulle → le barème, jamais le classement d'aujourd'hui.
-    leagueGoalAverages: entrees?.leagueGoalAverages ?? null
+    leagueGoalAverages: entrees?.leagueGoalAverages ?? null,
+    // Étape 27 : TOUJOURS la clé (nulle sans le modèle de buts) — le moteur ne lit jamais le magasin au banc.
+    entreesButs
   };
   // Comme resolveGoalsFromStore : sans aucun des deux clubs, le match part sans teamStats (moyennes de ligue) ;
   // l'xG d'affichage seulement quand les deux sont connus (« fotmob » : hors des fournisseurs manuels).
@@ -362,6 +368,47 @@ export function matchDuBanc({ rencontre, entrees, marketOdds = null }) {
     if (gh?.for?.total != null && ga?.for?.total != null) match.expectedGoals = { home: gh.for.total, away: ga.for.total, provider: 'fotmob' };
   }
   return match;
+}
+
+// ===================================================================== les forces de buts (étape 27)
+
+/**
+ * LES FORCES COURANTES du modèle de buts unique (étape 27), au banc : l'accumulateur de la nuit
+ * (data/db/forcesButs.js, AccumulateurDesForces — les mêmes formules, jouerUnMatch et moyennesAvant), un par
+ * source (le magasin, football-data : deux espaces d'identifiants et de championnats), nourri dès le PREMIER fait
+ * de chaque source (football-data 2000-07, magasin 2023-01) quelle que soit la période rejouée — sinon les forces
+ * du banc différeraient de la table de nuit —, publié en FIN de journée (patron ReperesCourants) ; il porte aussi
+ * les moyennes de chaque championnat à la 90e minute (ButsDeLigue90). `entrees(...)` rend les `entreesButs` d'un
+ * match, toutes « avant J ».
+ */
+export class ForcesCourantes {
+  constructor(reglages) {
+    this.empreinte = empreinteDesForces(reglages);
+    this.sources = { magasin: new AccumulateurDesForces({ empreintes: [this.empreinte] }), fd: new AccumulateurDesForces({ empreintes: [this.empreinte] }) };
+  }
+
+  /** Une rencontre du jour : la ligne de son camp qui reçoit (team_day camp 1, ou le fait football-data `home`). Un match attribué n'entre pas. */
+  ajouter(source, ligneDuCampQuiRecoit) {
+    const f = faitsDeLaRencontre(ligneDuCampQuiRecoit);
+    if (f) this.sources[source].ajouter(f.dom, f.ext);
+  }
+
+  /** La fin de la journée : les deux sources publient. */
+  finDeJournee() {
+    for (const a of Object.values(this.sources)) a.finDeJournee();
+  }
+
+  /** Les entrées du modèle de buts d'un match du jour `jour` : états des deux clubs et moyennes du championnat avant J ; le plus/moins du jeu de prix. */
+  entrees({ source, home, away, league, jour, saison, plusMoins = null }) {
+    const acc = this.sources[source];
+    return {
+      forces: { home: acc.etat(this.empreinte, Number(home)), away: acc.etat(this.empreinte, Number(away)) },
+      ligue: acc.moyennes(league, jour, saisonEnNombre(saison)),
+      plusMoins: plusMoins ?? null,
+      origine: 'banc',
+      manques: []
+    };
+  }
 }
 
 /** La clé d'une rencontre du magasin (celle des pronostics gelés) et celle d'une ligne football-data. */

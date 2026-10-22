@@ -358,6 +358,9 @@ const ORIGINES_DES_MARCHES = Object.freeze({
   teamShotsOnTarget: 'tirs cadrés attendus par le moteur (binomiale négative mesurée)'
 });
 
+/** Étape 27 : les marchés que calcule le modèle de buts unique — leur origine dit sa provenance quand il tourne. */
+const MARCHES_DU_MODELE_DE_BUTS = new Set(['totalGoals', 'teamGoals', 'bothTeamsScore', 'resultAndTotal']);
+
 /** La clé d'un pronostic de marché (la même que la ligne du verdict par marché, ui/src/utils/verdictParMarche.js). */
 export const cleDuPronostic = (p) => `${p.marketId}:${p.params?.team ?? ''}:${p.params?.side ?? p.params?.outcome ?? p.params?.key ?? ''}:${p.params?.line ?? ''}`;
 
@@ -386,7 +389,7 @@ export const cleDuPronostic = (p) => `${p.marketId}:${p.params?.team ?? ''}:${p.
  * cotes de référence gratuites vont dans `references` : jamais jouables.
  * Pur : ni disque, ni base, ni réseau.
  */
-export function comparateurDuMatch(match, { disponible, reference, staking }, config, tiltState, { marketPredictions = [] } = {}) {
+export function comparateurDuMatch(match, { disponible, reference, staking }, config, tiltState, { marketPredictions = [], origineDesButs = null } = {}) {
   const byBookmaker = match?.marketOdds?.byBookmaker ?? [];
   const libelles = libellesDuMatch(match);
   const limites = limitesDe(config);
@@ -535,7 +538,7 @@ export function comparateurDuMatch(match, { disponible, reference, staking }, co
         libelle: p.predictedLabel,
         coteJuste: Number(p.predictedOdds),
         probabilite,
-        origine: ORIGINES_DES_MARCHES[p.marketId] ?? 'moteur',
+        origine: (origineDesButs && MARCHES_DU_MODELE_DE_BUTS.has(p.marketId) ? origineDesButs : null) ?? ORIGINES_DES_MARCHES[p.marketId] ?? 'moteur',
         bornes: bornesDeLaRegle(probabilite, regle)
       });
     });

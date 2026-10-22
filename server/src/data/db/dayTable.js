@@ -99,6 +99,8 @@ import { canonicalTeamNames } from './identityRegistry.js';
 import { paireRelevee, cartonsReleves } from './leagueBenchmarks.js';
 import { seasonOf, seasonBounds } from '../providers/seasonWindows.js';
 import { isCup } from '../providers/leagueCups.js';
+// Étape 27 : un calcul lourd à la fois (le contrôle anti-fuite part dans un processus à part).
+import { commencerCalculLourd } from '../../utils/calculLourd.js';
 // Le second chemin du contrôle anti-fuite SEULEMENT : les lecteurs du moteur eux-mêmes.
 import { moyennesEquipe } from './statInputsRead.js';
 import { scoreInputsFromStore, leagueAveragesBefore } from './scoreFormRead.js';
@@ -2576,6 +2578,17 @@ export const graineDuJour = (instant = new Date()) => Number(new Date(instant).t
  * le processus échoue, meurt sans répondre, ou ne répond pas dans `delaiMs` (il est alors arrêté).
  */
 function controleAPart({ chemin, lignes, graine, delaiMs = DELAI_CONTROLE_MS }) {
+  // Étape 27 : un calcul lourd à la fois (utils/calculLourd.js) — un autre en cours, le contrôle est refusé (pas fait, refait à la passe suivante).
+  let rendre;
+  try {
+    rendre = commencerCalculLourd('contrôle de la table du jour J');
+  } catch (error) {
+    return Promise.reject(error);
+  }
+  return controleSousJeton({ chemin, lignes, graine, delaiMs }).finally(rendre);
+}
+
+function controleSousJeton({ chemin, lignes, graine, delaiMs }) {
   return new Promise((resolve, reject) => {
     let fini = false;
     let erreurs = '';

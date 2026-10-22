@@ -406,8 +406,9 @@ function blocVersions({ versions: v, derive: d }) {
     return pasMesure(base, v?.source === 'absent' ? 'aucune version n’est notée pour l’instant ; la première le sera au prochain démarrage du serveur.' : 'le registre des versions est illisible pour l’instant.');
   }
   const candidate = v.candidate ?? null;
+  // Étape 27 : la phrase en mots simples de la candidate quand elle en a une (son « quoi » technique reste au registre).
   const phraseCandidate = candidate
-    ? `Candidate en essai : « ${candidate.quoi ?? candidate.id} » (${STATUTS_DE_CANDIDATE[candidate.statut] ?? candidate.statut}${candidate.jugement?.verdict ? `, verdict : ${candidate.jugement.verdict}` : ''}).`
+    ? `Candidate en essai : « ${candidate.enMots ?? candidate.quoi ?? candidate.id} » (${STATUTS_DE_CANDIDATE[candidate.statut] ?? candidate.statut}${candidate.jugement?.verdict ? `, verdict : ${candidate.jugement.verdict}` : ''}).`
     : 'Aucune candidate en essai.';
   const dernierMois = d?.dernierMois ?? null;
   let phraseDerive;

@@ -397,7 +397,7 @@ test('« quand » et « il y a » : hier, un autre jour, une autre année, les m
 // ------------------------------------------------ 4. le guide de lecture
 
 test('guide de lecture : les sept phrases demandées (la sixième, « à rafraîchir », depuis l’étape 7 ; la septième, « juge et partie », depuis l’étape 8), simples, sans balise — et la huitième, « cote minimale », depuis l’étape 10', options, () => {
-  assert.deepEqual(Object.keys(L.GUIDE_DE_LECTURE).sort(), ['a-rafraichir', 'banc-d-essai', 'calibration', 'cote-juste', 'cote-minimale', 'donnees-deja-vues', 'fourchette-du-hasard', 'juge-et-partie', 'note-de-depart', 'preuve-apres-lancement', 'series-de-pertes', 'sur-fragile', 'table-du-jour-j', 'valeur-de-cloture', 'value', 'variantes-essayees']);
+  assert.deepEqual(Object.keys(L.GUIDE_DE_LECTURE).sort(), ['a-rafraichir', 'banc-d-essai', 'calibration', 'carte-ou-parier', 'cote-juste', 'cote-minimale', 'donnees-deja-vues', 'fourchette-du-hasard', 'juge-et-partie', 'modele-de-buts', 'note-de-depart', 'preuve-apres-lancement', 'series-de-pertes', 'sur-fragile', 'table-du-jour-j', 'valeur-de-cloture', 'value', 'variantes-essayees']);
   assert.ok(Object.isFrozen(L.GUIDE_DE_LECTURE));
   for (const [terme, { titre, phrase }] of Object.entries(L.GUIDE_DE_LECTURE)) {
     assert.ok(titre.length >= 4, terme);
@@ -435,6 +435,10 @@ test('guide de lecture : les sept phrases demandées (la sixième, « à rafraî
   // Étape 20 : la calibration du mois (annoncé face au réalisé, tranche par tranche, le hasard dit).
   assert.match(g.calibration.phrase, /60 fois sur 100/);
   assert.match(g.calibration.phrase, /hasard/);
+  // Étape 27 : le modèle de buts unique (la phrase de la conception, §4), sans jargon (« calé sur la cote », jamais « ancrage »).
+  assert.match(g['modele-de-buts'].phrase, /partent des cotes/);
+  assert.match(g['modele-de-buts'].phrase, /de 10 % quand une cote plus\/moins existe, de moitié pour le total sinon ; sans cote, les xG \(ou, à défaut, les buts\) seuls/);
+  assert.doesNotMatch(g['modele-de-buts'].phrase, /ancr|Poisson|Dixon|rho/i);
 });
 
 /** Tous les fichiers .vue de l'interface. */
@@ -457,7 +461,7 @@ test('chaque « ? » posé dans l\'interface désigne une phrase du guide ; et l
     }
   }
   // Les sept notions sont expliquées quelque part dans l'appli, dans les pages où elles s'affichent.
-  assert.deepEqual([...utilises.keys()].sort(), ['a-rafraichir', 'banc-d-essai', 'calibration', 'cote-juste', 'cote-minimale', 'donnees-deja-vues', 'fourchette-du-hasard', 'juge-et-partie', 'note-de-depart', 'preuve-apres-lancement', 'series-de-pertes', 'sur-fragile', 'table-du-jour-j', 'valeur-de-cloture', 'value', 'variantes-essayees']);
+  assert.deepEqual([...utilises.keys()].sort(), ['a-rafraichir', 'banc-d-essai', 'calibration', 'carte-ou-parier', 'cote-juste', 'cote-minimale', 'donnees-deja-vues', 'fourchette-du-hasard', 'juge-et-partie', 'modele-de-buts', 'note-de-depart', 'preuve-apres-lancement', 'series-de-pertes', 'sur-fragile', 'table-du-jour-j', 'valeur-de-cloture', 'value', 'variantes-essayees']);
   // Étape 10 : « cote minimale » dans le comparateur de vos bookmakers, sur la page du match et dans le ticket.
   assert.ok(utilises.get('cote-minimale').includes('components/betting/BookmakerComparator.vue'));
   assert.ok(utilises.get('cote-minimale').includes('components/betting/TicketDuPari.vue'));
@@ -485,6 +489,9 @@ test('chaque « ? » posé dans l\'interface désigne une phrase du guide ; et l
   assert.ok(utilises.get('donnees-deja-vues').includes('components/analysis/BenchSummaryTable.vue'));
   // Étape 20 : la calibration sur son bloc d'Historique moteur.
   assert.ok(utilises.get('calibration').includes('components/analysis/CalibrationPanel.vue'));
+  // Étape 27 : le modèle de buts unique, sur sa pastille de provenance (page du match) et sur la carte de sa candidate (Réglages).
+  assert.ok(utilises.get('modele-de-buts').includes('components/analysis/GoalModelProvenance.vue'));
+  assert.ok(utilises.get('modele-de-buts').includes('components/settings/EngineGoalModelTrial.vue'));
 });
 
 // ------------------------------------------------ 5. la bulle d'aide

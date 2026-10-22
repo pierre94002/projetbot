@@ -667,6 +667,29 @@ test('câblage : la page pose les trois blocs dans l’ordre, le verdict reçoit
   }
 });
 
+// ------------------------------------------------------------------ 7. étape 27 : rien ne change pendant l'essai
+
+test('étape 27 — pendant l’essai à blanc, la page du match ne change pas : le VRAI serveur (réglages en service, la clé `modeleDeButs` absente) ne pose ni le modèle ni sa provenance, et aucun onglet ne porte une marque ou un mot du modèle de buts unique', options, async () => {
+  const s = lesScenarios();
+  for (const [nom, sc] of [['avecCotes', s.avecCotes], ['sansCotes', s.sansCotes]]) {
+    // Ce que le serveur répond : aucune trace du modèle (moteurCleEteinte prouve l'identité à l'octet sur 201 cibles).
+    assert.equal('modeleDeButs' in sc.analyse, false, nom);
+    assert.equal(sc.analyse.distributions?.scoreExact, undefined, nom);
+    assert.equal('autreScore' in (sc.analyse.scorePrediction ?? {}), false, nom);
+    for (const d of Object.values(sc.analyse.distributions ?? {})) assert.equal(d?.provenance, undefined, nom);
+    scenario = sc;
+    const id = nom === 'avecCotes' ? 'essai-a' : sc.match.matchId;
+    for (const onglet of ['resume', 'lineups', 'stats', 'form', 'markets', 'ai', 'cotes', 'odds']) {
+      const r = await contexte.rendre(id, { onglet });
+      assert.deepEqual(r.avertissements, [], `${nom} / ${onglet}`);
+      assert.equal(r.html.includes('data-modele-de-buts'), false, `${nom} / ${onglet} : une marque de l’étape 27`);
+      for (const mot of [/Ce que disent les/, /autre score/, /Modèle de buts unique/, /Moteur CôteMaster · (cote 1N2|xG FotMob|buts FotMob)/, /Écart sur le 2,5/, /calé sur/i]) {
+        assert.doesNotMatch(r.texte, mot, `${nom} / ${onglet} : « ${mot} »`);
+      }
+    }
+  }
+});
+
 test('aucun appel hors liste pendant ces rendus — ni API payante, ni FotMob, ni Claude, ni la vraie appli — et aucun avertissement de Vue', options, () => {
   assert.deepEqual(interdits, [], 'appels refusés');
   assert.deepEqual(avertissements, [], 'avertissements de Vue');

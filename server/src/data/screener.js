@@ -49,6 +49,7 @@ import { lireReglageFraicheur } from './repositories/fraicheurCotesRepository.js
 import { getFixturePaths } from './repositories/fixturesRepository.js';
 import { decisionDePari } from '../core/engine/verdictPari.js';
 import { aUneDerniereComposition } from './db/derniereComposition.js';
+import { carteDesLecteurs, avecLaCarteSurLeReperage } from './bettingMap.js';
 
 const TTL_MS = 30 * 60 * 1000;
 const JOURS = 7;
@@ -77,10 +78,15 @@ export const MARCHES = [
 
 const inverse = (cote) => (Number(cote) > 1 ? 1 / Number(cote) : null);
 
-/** Les probabilités du moteur par marché, lues dans `trueOdds` (cotes justes). */
+/**
+ * Les probabilités du moteur par marché, lues dans `trueOdds` (cotes justes). Étape 27 : quand le modèle de buts
+ * unique a calculé le match (`modeleDeButs`), les marchés de buts se lisent dans `distributions` (6 décimales) —
+ * l'arrondi des cotes justes au centième (jusqu'à 0,23 point) vaudrait l'écart attendu avec le marché sur la ligne
+ * 2,5, où le moteur part de la cote ; sans lui, rien ne change.
+ */
 function probabilitesMoteur(resultat) {
   const t = resultat?.trueOdds ?? {};
-  return {
+  const base = {
     home: inverse(t.home),
     draw: inverse(t.draw),
     away: inverse(t.away),
@@ -90,6 +96,34 @@ function probabilitesMoteur(resultat) {
     over35: inverse(t.over35),
     bttsYes: inverse(t.bothTeamsScore),
     bttsNo: inverse(t.bothTeamsScoreNo)
+  };
+  const d = resultat?.modeleDeButs ? resultat.distributions : null;
+  if (!d) return base;
+  const fini = (x) => (Number.isFinite(x) ? x : null);
+  return {
+    ...base,
+    over15: fini(d.totalGoals?.[1.5]?.over),
+    over25: fini(d.totalGoals?.[2.5]?.over),
+    under25: fini(d.totalGoals?.[2.5]?.under),
+    over35: fini(d.totalGoals?.[3.5]?.over),
+    bttsYes: fini(d.bothTeamsScore?.yes),
+    bttsNo: fini(d.bothTeamsScore?.no)
+  };
+}
+
+/** Étape 27 : le régime du modèle de buts d'un match du Repérage, avec ce que la pastille de provenance dit (utils/modeleDeButs.js de l'écran). */
+function butsProvenanceDe(resultat) {
+  const m = resultat.modeleDeButs;
+  const surCotes = resultat.prediction?.source === 'cotes';
+  return {
+    ...m.provenance,
+    plusMoins: m.plusMoins ? { source: m.plusMoins.source ?? null, releveAt: m.plusMoins.releveAt ?? null } : null,
+    poids: m.poids ?? null,
+    livres: surCotes ? (resultat.prediction?.referenceBooks ?? null) : null,
+    titres: surCotes ? (resultat.market?.byBookmaker ?? []).map((x) => x?.title ?? x?.key ?? null).filter(Boolean) : null,
+    bookmakers: resultat.market?.bookmakersCount ?? null,
+    // « défaut » : les moyennes par défaut du moteur (le championnat est inconnu du magasin) — dites telles quelles.
+    ligueSource: m.statistiques?.ligue?.source ?? null
   };
 }
 
@@ -362,6 +396,10 @@ async function calculer() {
         exactKickoff: Boolean(match.hasOdds),
         oddsSource: match.oddsSource ?? (match.hasOdds ? 'odds-api' : null),
         expectedGoals: resultat?.expectedGoals ?? null,
+        // Étape 27 : d'où viennent les buts attendus (le régime du modèle de buts unique), seulement quand il tourne — avec
+        // le VRAI fournisseur de chaque morceau pour la pastille de l'écran : les bookmakers de la cote 1N2, la source et
+        // l'heure du plus/moins 2,5, la part des statistiques dans le mélange (la bulle de la colonne 2,5).
+        ...(resultat?.modeleDeButs ? { butsProvenance: butsProvenanceDe(resultat) } : {}),
         // Étape 8 : la dernière composition alignée d'un des deux clubs est-elle au magasin (pour l'état de la composition) ?
         lastLineupKnown: aUneFeuille(homeId, String(match.commenceTime).slice(0, 10)) || aUneFeuille(awayId, String(match.commenceTime).slice(0, 10)),
         markets: marches
@@ -435,6 +473,14 @@ export function avecVerdicts(data, internes, { maintenant = Date.now(), reglage 
  * relance le calcul même récent.
  */
 export function getScreener({ force = false, calculSiPerime = true, maintenant = Date.now() } = {}) {
+  // Étape 23 : la carte « où parier », lue maintenant (une requête d'une ligne) ; null sans carte : rien ne change.
+  // Seulement quand le Repérage a des données (un calcul fait) : sans elles, aucune base n'est ouverte ici.
+  let carte = null;
+  try {
+    carte = etat.data ? carteDesLecteurs() : null;
+  } catch {
+    carte = null;
+  }
   // Un nouveau relevé The Odds API depuis le calcul : les cotes de vos bookmakers ont changé, le tableau est périmé.
   const nouveauReleve = Boolean(etat.data) && etat.instantane !== dateDeLInstantane();
   const perime = !etat.data || nouveauReleve || (calculSiPerime && Date.now() - etat.computedAt > TTL_MS);
@@ -461,6 +507,6 @@ export function getScreener({ force = false, calculSiPerime = true, maintenant =
     error: etat.error,
     // La fraîcheur de chaque cote jouable, jugée maintenant (lireReglageFraicheur ne lève jamais : un réglage illisible donne celui par défaut),
     // et le verdict du moteur sur chaque issue 1N2, pris maintenant (étape 8).
-    data: avecVerdicts(avecFraicheur(etat.data, { maintenant, reglage }), etat.internes, { maintenant, reglage })
+    data: avecLaCarteSurLeReperage(avecVerdicts(avecFraicheur(etat.data, { maintenant, reglage }), etat.internes, { maintenant, reglage }), carte)
   };
 }

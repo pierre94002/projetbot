@@ -40,6 +40,7 @@ import SourceHealthPanel from '@/components/settings/SourceHealthPanel.vue';
 // Étape 25 du plan : les versions du moteur (numéro de chaque état, candidate à blanc, retour arrière).
 import EngineVersionsPanel from '@/components/settings/EngineVersionsPanel.vue';
 import { phraseDeLEnregistrement } from '@/utils/versionsMoteur.js';
+import { avertissementDeLaRemiseAZero } from '@/utils/modeleDeButs.js';
 
 /**
  * Réglages — section cyan. Refonte visuelle du 01/10/2026 (guide ui/DESIGN.md) :
@@ -179,6 +180,10 @@ async function handleSaveConfig(partialConfig) {
 }
 
 async function handleResetConfig() {
+  // Étape 27 : les valeurs par défaut n'ont pas le modèle de buts unique — quand il est en service, la remise à zéro le
+  // retirerait : une confirmation le dit d'abord (utils/modeleDeButs.js) ; sans lui, rien ne change.
+  const avertissement = avertissementDeLaRemiseAZero(configStore.config);
+  if (avertissement && !window.confirm(avertissement)) return;
   try {
     await configStore.resetConfig();
     toastStore.success('Configuration réinitialisée aux valeurs par défaut.');

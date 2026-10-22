@@ -15,13 +15,25 @@
  * (même forme que freeMarketOdds.js : une ligne referenceOnly, jamais jouable).
  *
  * Sortie : une ligne JSON { ok, maintenant, base, resultats: [...] }.
+ *
+ * Étape 27 (« la clé éteinte ne change rien ») : avec `--complet`, le résultat
+ * ENTIER de analyzeMatch est rendu pour chaque cible, normalisé (sans
+ * engineVersion ni comparateur.calculeLe), sous forme d'empreinte sha1 — et en
+ * entier pour cinq cibles (les trois premières à cotes, les deux premières
+ * sans) —, pour chaque VARIANTE d'entrée : `brut` (le chemin de l'appli),
+ * `entreesButsNulle` et `entreesButsPosee` (la clé `entreesButs` du banc posée
+ * sur le match), `cleNulle` (réglages avec `modeleDeButs: null`). Le moteur
+ * sans la clé `modeleDeButs` doit rendre la même empreinte pour les quatre :
+ * test/moteurCleEteinte.test.mjs. Sortie : { ok, maintenant, base, complets }.
  */
 
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 
-const [serveur, fichierManifeste] = process.argv.slice(2);
+const [serveur, fichierManifeste, ...options] = process.argv.slice(2);
+const complet = options.includes('--complet');
 const imp = (rel) => import(pathToFileURL(path.join(serveur, 'src', rel)).href);
 
 const { resolveDbPath, openDb } = await imp('data/db/matchStatsDb.js');
@@ -110,14 +122,54 @@ function resumer(cible, r, coteDe) {
   };
 }
 
+/** Le résultat entier, normalisé : sans le numéro de version (le code change) ni l'heure du comparateur. */
+function normaliser(analyse) {
+  const c = JSON.parse(JSON.stringify(analyse));
+  delete c.engineVersion;
+  if (c.comparateur) delete c.comparateur.calculeLe;
+  return JSON.stringify(c);
+}
+const sha1 = (texte) => crypto.createHash('sha1').update(texte).digest('hex');
+/** Des entrées du modèle de buts posées sur le match (forme de bench/entrees.js) : sans la clé, rien ne doit les lire. */
+const ENTREES_BUTS_POSEES = Object.freeze({
+  forces: {
+    home: { sa: 7.2, wa: 6.5, sd: 5.1, wd: 6.5, sga: 7.9, wga: 6.5, sgd: 4.8, wgd: 6.5, n: 9, nx: 9, ligue: 'Championship' },
+    away: null
+  },
+  ligue: { buts: { home: 1.41, away: 1.12 }, xg: { home: 1.38, away: 1.15 }, matchs: 120, source: 'saison' },
+  plusMoins: { ligne: 2.5, pOver: 0.531, source: 'football-data (moyenne du marché)', releveAt: '2026-09-01T10:00:00.000Z' },
+  origine: 'banc',
+  manques: []
+});
+
 const resultats = [];
+const complets = [];
+let avecCotes = 0;
+let sansCotes = 0;
 for (const cible of manifeste.cibles) {
   const r = lire.get(cible.cle);
   if (!r) throw new Error(`Cible absente de la base d'essai : ${cible.cle}`);
   const match = matchAdapte(r);
   const enrichi = await enrichMatchWithRealAverages(match, { sansRepliPayant: true });
   const analyse = await analyzeMatch(enrichi, getEngineConfig('football'), getTiltState(), getSport('football'));
-  resultats.push(resumer(cible, analyse, match.marketOdds ? r.basis : null));
+  if (!complet) {
+    resultats.push(resumer(cible, analyse, match.marketOdds ? r.basis : null));
+    continue;
+  }
+  const brut = normaliser(analyse);
+  const garder = match.marketOdds ? avecCotes++ < 3 : sansCotes++ < 2;
+  const variantes = { brut: sha1(brut) };
+  const config = getEngineConfig('football');
+  for (const [nom, m, cfg] of [
+    ['entreesButsNulle', { ...enrichi, entreesButs: null }, config],
+    ['entreesButsPosee', { ...enrichi, entreesButs: JSON.parse(JSON.stringify(ENTREES_BUTS_POSEES)) }, config],
+    ['cleNulle', enrichi, { ...config, modeleDeButs: null }]
+  ]) {
+    variantes[nom] = sha1(normaliser(await analyzeMatch(m, cfg, getTiltState(), getSport('football'))));
+  }
+  // Les distributions que le gel garde (markets.distributionDuMarche) : sans la clé, jamais de `provenance`.
+  const gelAvecProvenance = (analyse.marketPredictions ?? []).some((p) => 'provenance' in (getSport('football').markets.distributionDuMarche(analyse, p) ?? {}));
+  complets.push({ cle: cible.cle, avecCotes: Boolean(match.marketOdds), variantes, gelAvecProvenance, ...(garder ? { json: JSON.parse(brut) } : {}) });
 }
 
-console.log(JSON.stringify({ ok: true, maintenant: new Date().toISOString(), base: path.basename(chemin), resultats }));
+console.log(JSON.stringify({ ok: true, maintenant: new Date().toISOString(), base: path.basename(chemin), ...(complet ? { complets } : { resultats }) }));

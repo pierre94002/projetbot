@@ -87,6 +87,22 @@ export function preparerCopie({ runtime = {}, base = true, racine = RACINE_ESSAI
   }
 }
 
+/**
+ * Étape 27 (21/10/2026) : la copie SANS la candidate déclarée dans le code — CANDIDATE_EN_ESSAI remis à null dans
+ * SA copie de core/engine/engineVersions.js (jamais dans le code du bac ni du dépôt), la déclaration gardée sous un
+ * autre nom. Pour les essais des étapes 25 et 26 qui FABRIQUENT leurs candidates : la candidate du code passerait
+ * d'abord (« elle passe d'abord, rien d'autre n'est proposé »). engineVersions.js est hors de l'empreinte du
+ * moteur : les chiffres et les versions de la copie ne bougent pas. Lève si la déclaration a changé de forme.
+ */
+export function sansCandidateDuCode(copie) {
+  const fichier = path.join(copie.serveur, 'src', 'core', 'engine', 'engineVersions.js');
+  const texte = fs.readFileSync(fichier, 'utf8');
+  const avant = 'export const CANDIDATE_EN_ESSAI = Object.freeze({';
+  if (texte.split(avant).length !== 2) throw new Error('sansCandidateDuCode : la déclaration de CANDIDATE_EN_ESSAI a changé de forme — rien retiré.');
+  fs.writeFileSync(fichier, texte.replace(avant, 'export const CANDIDATE_EN_ESSAI = null;\nexport const CANDIDATE_RETIREE_POUR_CET_ESSAI = Object.freeze({'));
+  return copie;
+}
+
 /** Variables qui désignent le vrai OneDrive de Windows : jamais transmises à un essai. */
 export const VARIABLES_ONEDRIVE = /^OneDrive/i;
 

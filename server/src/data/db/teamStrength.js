@@ -88,6 +88,7 @@ import { canonicalTeamNames } from './identityRegistry.js';
 import { seasonOf, seasonBounds } from '../providers/seasonWindows.js';
 import { poidsDemiVie } from '../../bench/statValue.js';
 import { creerPauses, executerEnRendantLaMain, rendreLaMainParDefaut } from '../../utils/travailCooperatif.js';
+import { commencerCalculLourd } from '../../utils/calculLourd.js';
 
 // ======================================================= réglages (versionnés)
 
@@ -1361,6 +1362,17 @@ export const OPTIONS_DE_L_ENFANT = Object.freeze(['--max-old-space-size=512', '-
  * arrêté) ou s'arrête sans répondre.
  */
 export function calculerAPart({ chemin, precedente = null, force = false, options = {}, delaiMs = DELAI_CALCUL_MS }) {
+  // Étape 27 : un calcul lourd à la fois (utils/calculLourd.js) — un autre en cours, celui-ci est refusé (reporté).
+  let rendre;
+  try {
+    rendre = commencerCalculLourd('indice de force');
+  } catch (error) {
+    return Promise.reject(error);
+  }
+  return calculerSousJeton({ chemin, precedente, force, options, delaiMs }).finally(rendre);
+}
+
+function calculerSousJeton({ chemin, precedente, force, options, delaiMs }) {
   return new Promise((resolve, reject) => {
     let fini = false;
     let erreurs = '';

@@ -14,8 +14,10 @@ import HelpTip from '@/components/common/HelpTip.vue';
 import KickoffCountdown from '@/components/common/KickoffCountdown.vue';
 import ProvenanceChip from '@/components/common/ProvenanceChip.vue';
 import ValueBadge from '@/components/common/ValueBadge.vue';
+import BettingMapChip from '@/components/common/BettingMapChip.vue';
 import LeagueBadge from '@/components/matches/LeagueBadge.vue';
 import TeamCrest from '@/components/matches/TeamCrest.vue';
+import GoalModelProvenance from '@/components/analysis/GoalModelProvenance.vue';
 import { configApi } from '@/services/configApi.js';
 import { screenerApi } from '@/services/screenerApi.js';
 import { useFavoritesStore } from '@/stores/favoritesStore.js';
@@ -23,6 +25,7 @@ import { useSourcesStore } from '@/stores/sourcesStore.js';
 import { formatOdds } from '@/utils/format.js';
 import { formatLeagueOptionLabel, parseLeagueLabel } from '@/utils/leagueDisplay.js';
 import { liveNow } from '@/utils/liveClock.js';
+import { provenanceDuRegime, bulleDuDeuxCinq } from '@/utils/modeleDeButs.js';
 
 /**
  * L'onglet « Repérage » de la page Matchs (04/10/2026, Pierre : « lance les
@@ -313,12 +316,16 @@ const matchsVisibles = computed(() => {
 
 // --------------------------------------------------------------- tri
 const TRIS = { engine: 'Probabilité du moteur', gap: 'Écart moteur – marché', edge: 'Valeur chez vos bookmakers' };
+// Étape 23 : le tri par la carte « où parier » (cases vertes d'abord, rouges à la fin), seulement quand une carte existe.
+TRIS.carte = 'Carte « où parier » (cases vertes d’abord)';
 const tri = ref('engine');
 // La valeur chez un bookmaker n'existe qu'en 1 / N / 2 : seul marché du
 // relevé The Odds API, le seul à donner des cotes jouables.
 const triOptions = computed(() => [
   { value: 'engine', label: TRIS.engine },
   { value: 'gap', label: TRIS.gap },
+  // Étape 23 : seulement quand une carte existe (les couleurs viennent du serveur avec chaque marché).
+  ...(donnees.value?.carte ? [{ value: 'carte', label: TRIS.carte, hint: 'étape 23' }] : []),
   ...(en1N2.value ? [{ value: 'edge', label: TRIS.edge, hint: '1 / N / 2' }] : [])
 ]);
 watch(en1N2, (oui) => {
@@ -330,6 +337,9 @@ function trierPar(cle) {
 }
 
 const seulementAvecMarche = ref(false);
+
+/** Étape 23 : le rang de la case de la carte « où parier » d'un marché — verte 0, grise ou sans carte 1, rouge 2. */
+const rangCarte = (k) => (k?.carte?.couleur === 'vert' ? 0 : k?.carte?.couleur === 'rouge' ? 2 : 1);
 
 /** Du plus grand au plus petit, les valeurs absentes en dernier. */
 const decroissant = (x, y) => (x == null ? (y == null ? 0 : 1) : y == null ? -1 : y - x);
@@ -350,10 +360,25 @@ function quandDuMatch(m) {
 
 function celluleMoteur(m, k, libelle) {
   if (k.engineProb == null) return absent('non calculée', `Le moteur n'a pas rendu de probabilité pour « ${libelle} » sur ce match.`);
+  if (m.butsProvenance) return celluleMoteurDuModele(m, k, libelle);
   const xg = m.expectedGoals;
   const buts =
     xg && Number.isFinite(xg.home) && Number.isFinite(xg.away)
       ? ` Buts attendus par le moteur : ${m.home} ${deuxDecimales(xg.home)}, ${m.away} ${deuxDecimales(xg.away)}${xg.source === 'fotmob' ? ' (moyennes de buts du magasin FotMob)' : xg.source ? ` (source : ${xg.source})` : ''}.`
+      : '';
+  return {
+    texte: pct(k.engineProb),
+    sous: `cote juste ${coteJuste(k.engineProb)}`,
+    titre: `Le moteur donne ${pct(k.engineProb)} à « ${libelle} », soit une cote juste de ${coteJuste(k.engineProb)}.${buts}`
+  };
+}
+
+/** Étape 27 : la case du moteur quand le modèle de buts unique a calculé le match — ses buts attendus sortent de sa grille, son régime le dit. */
+function celluleMoteurDuModele(m, k, libelle) {
+  const xg = m.expectedGoals;
+  const buts =
+    xg && Number.isFinite(xg.home) && Number.isFinite(xg.away)
+      ? ` Buts attendus par le moteur : ${m.home} ${deuxDecimales(xg.home)}, ${m.away} ${deuxDecimales(xg.away)} (modèle de buts unique : ${m.butsProvenance.phrase ?? m.butsProvenance.court ?? 'régime non dit'}).`
       : '';
   return {
     texte: pct(k.engineProb),
@@ -527,9 +552,18 @@ function vueDeLigne(m, k, rang, libelle, prior) {
     fraicheur: k.bestOdds != null ? (k.freshness ?? null) : null,
     // Étape 8 : le verdict du moteur sur cette issue (findValueBet, « juge et partie » compris) — il décide seul du vert.
     verdict: k.verdict ?? null,
+    // Étape 27 : d'où viennent les pourcentages de buts de ce match (le modèle de buts unique seulement), et la bulle de
+    // la colonne 2,5 (« petit écart attendu » quand le moteur part de la cote plus/moins). null sans lui : rien ne change.
+    buts: m.butsProvenance ? provenanceDuRegime({ ...m.butsProvenance, calculeLe: m.butsProvenance.calculeLe ?? donnees.value?.generatedAt ?? null }) : null,
+    bulleDeuxCinq: m.butsProvenance && DEUX_CINQ.has(k.key) && k.gapPoints != null ? bulleDuDeuxCinq(m.butsProvenance) : null,
+    // Étape 23 : la case de la carte « où parier » de ce championnat et de ce marché (absente sans carte).
+    carte: k.carte ?? null,
     contexte: celluleContexte(m, k, libelle, prior)
   };
 }
+
+/** Étape 27 : les deux marchés de la ligne 2,5, où le moteur part de la cote plus/moins quand elle existe. */
+const DEUX_CINQ = new Set(['over25', 'under25']);
 
 const lignes = computed(() => {
   const cle = marche.value;
@@ -544,6 +578,9 @@ const lignes = computed(() => {
   rangees.sort(
     (a, b) => decroissant(valeur(a), valeur(b)) || decroissant(a.k.engineProb, b.k.engineProb) || String(a.m.commenceTime).localeCompare(String(b.m.commenceTime))
   );
+  // Étape 23 : « carte » = les cases vertes d'abord, puis grises, les rouges à la fin ; à case égale, l'ordre du
+  // moteur ci-dessus (le tri de JavaScript est stable).
+  if (tri.value === 'carte') rangees.sort((a, b) => rangCarte(a.k) - rangCarte(b.k));
   const libelle = libelleMarche.value;
   const prior = donnees.value?.priorMatches ?? null;
   return rangees.map(({ m, k }, i) => vueDeLigne(m, k, i + 1, libelle, prior));
@@ -895,6 +932,7 @@ const descriptionVide = computed(() => {
                           <FavoriteStar v-if="r.fav.away" active :interactive="false" :label="r.m.away" :size="11" />
                         </span>
                       </RouterLink>
+                      <GoalModelProvenance v-if="r.buts" :provenance="r.buts" compacte class="screener__buts" />
                     </td>
 
                     <td class="cm-numeric" :class="{ 'is-sorted': tri === 'engine' }" :title="r.moteur.titre">
@@ -920,6 +958,10 @@ const descriptionVide = computed(() => {
                     <td class="cm-numeric" :class="[r.ecart.absent ? '' : sensDeLEcart(r.ecart.classe), { 'is-sorted': tri === 'gap' }]" :title="r.ecart.titre">
                       <span v-if="r.ecart.absent" class="screener__absent">{{ r.ecart.texte }}</span>
                       <strong v-else>{{ r.ecart.texte }}</strong>
+                      <HelpTip v-if="r.bulleDeuxCinq" :titre="r.bulleDeuxCinq.titre" :texte="r.bulleDeuxCinq.texte" />
+                      <!-- Étape 23 : vert « Prouvé » ou rouge « Moins bien » ici ; le gris se lit au survol. -->
+                      <BettingMapChip v-if="r.carte && r.carte.couleur !== 'gris'" :case-carte="r.carte" compacte class="screener__carte" />
+                      <small v-else-if="r.carte" class="screener__sub" :title="r.carte.phrase">carte : {{ r.carte.mot }}</small>
                     </td>
 
                     <td class="cm-numeric" :class="{ 'is-sorted': tri === 'edge' }" :title="r.cote.titre">
@@ -1310,6 +1352,11 @@ const descriptionVide = computed(() => {
   display: inline-flex;
   min-width: 0;
   max-width: 170px;
+}
+
+/* Étape 27 : le régime du modèle de buts du match (le mot court ; le fournisseur et l'heure au survol). */
+.screener__buts {
+  margin-top: 4px;
 }
 
 .screener__teams {

@@ -12,7 +12,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { preparerCopie, executer, SERVEUR } from './aides/isolement.mjs';
 import { preparerCopieDeBac, executerDansLeBac } from './aides/bacSimule.mjs';
 import { gainMiseFixe } from '../src/bench/metrics.js';
-import { COMMIT_DU_MOTEUR_DE_DEPART } from '../src/bench/noteDeDepart.js';
+import { COMMIT_DU_MOTEUR_DE_DEPART, NOTE_DE_DEPART } from '../src/bench/noteDeDepart.js';
 import { removeMargin } from '../src/core/market/marginRemoval.js';
 
 const SCRIPT = path.join(SERVEUR, 'test', 'aides', 'script-banc.mjs');
@@ -275,11 +275,17 @@ test('scripts/bench.mjs dans un bac simulé : bilan JSON, la main rendue, une li
     assert.ok(c.json.paires > 0);
     assert.deepEqual([c.json.empreintes.a.empreinte, c.json.empreintes.b.empreinte], [r1.json.moteur.empreinte, r2.json.moteur.empreinte]);
     // L'étape 47 : « le moteur de départ » (--depart) refusé tant que la note de départ n'a pas de commit — et dit pourquoi ;
-    // une fois le commit écrit dans noteDeDepart.js, accepté (le fichier A est ce moteur : le code du moteur n'a pas changé).
+    // une fois le commit écrit dans noteDeDepart.js, accepté si le fichier A est ce moteur (même empreinte du code) ; depuis
+    // l'étape 27 (21/10/2026), le code du moteur a changé (goalModel.js, entreesButs.js dans l'empreinte, mêmes chiffres
+    // sans la clé) : un rejeu du code d'aujourd'hui n'est plus « le moteur de départ » — refusé, et dit (il se rejoue
+    // depuis son commit, étape 47).
     const depart = run(['--comparer', a, b, '--mesure', 'perte-log', '--tirages', '100', '--depart']);
     if (COMMIT_DU_MOTEUR_DE_DEPART === null) {
       assert.notEqual(depart.code, 0);
       assert.match(depart.erreurs, /moteur de départ ne se rejoue pas : la note de départ n’a pas de commit/);
+    } else if (r1.json.moteur.empreinteCode !== NOTE_DE_DEPART.moteur.empreinteCode) {
+      assert.notEqual(depart.code, 0);
+      assert.match(depart.erreurs, new RegExp(`Le fichier A n’est pas le moteur de départ : empreinte du code ${r1.json.moteur.empreinteCode}, la note de départ dit ${NOTE_DE_DEPART.moteur.empreinteCode}`));
     } else {
       assert.equal(depart.code, 0, depart.erreurs.slice(-2000));
       assert.equal(depart.json.paires, c.json.paires);

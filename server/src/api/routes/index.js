@@ -31,6 +31,7 @@ import bookmakerAccountsRoutes from './bookmakerAccounts.routes.js';
 import healthRoutes from './health.routes.js';
 import benchRoutes from './bench.routes.js';
 import engineHealthRoutes from './engineHealth.routes.js';
+import bettingMapRoutes from './bettingMap.routes.js';
 
 const router = Router();
 
@@ -75,5 +76,7 @@ router.use('/bookmaker-accounts', bookmakerAccountsRoutes);
 router.use('/bench', benchRoutes);
 // Étape 24 du plan : « Santé du moteur » — les feux et les résumés des autres étapes, assemblés sans rien calculer.
 router.use('/engine-health', engineHealthRoutes);
+// Étape 23 du plan : la carte « où parier », championnat × marché (lecture seule ; calculée par l'actualisation).
+router.use('/betting-map', bettingMapRoutes);
 
 export default router;

@@ -105,13 +105,23 @@ export function rangVivant(ligne, maintenant = Date.now()) {
   return 2;
 }
 
-/** Triées par value : le rang (vivant), puis l'avantage (le plus fort d'abord), puis la chute, puis le coup d'envoi. */
+/** La case de la carte « où parier » d'une ligne (étape 23) : 0 verte, 1 grise ou sans carte, 2 rouge. */
+export const rangDeLaCase = (l) => (l?.carte?.couleur === 'vert' ? 0 : l?.carte?.couleur === 'rouge' ? 2 : 1);
+const estRouge = (l) => (l?.carte?.couleur === 'rouge' ? 1 : 0);
+
+/**
+ * Triées par value : les lignes des cases ROUGES de la carte « où parier » à la fin (étape 23), puis le rang
+ * (vivant), puis la case (verte avant grise), puis l'avantage (le plus fort d'abord), puis la chute, puis le coup
+ * d'envoi. Sans carte, toutes les lignes ont la même case : l'ordre d'avant.
+ */
 export function trierLesOpportunites(lignes, maintenant = Date.now()) {
   const avantage = (l) => (rangVivant(l, maintenant) <= 2 && Number.isFinite(l.verdict?.pourcent) ? l.verdict.pourcent : -Infinity);
   const chute = (l) => (l.mouvement?.chute ? l.mouvement.dropPct : -Infinity);
   return [...(lignes ?? [])].sort(
     (a, b) =>
+      estRouge(a) - estRouge(b) ||
       rangVivant(a, maintenant) - rangVivant(b, maintenant) ||
+      rangDeLaCase(a) - rangDeLaCase(b) ||
       avantage(b) - avantage(a) ||
       chute(b) - chute(a) ||
       String(a.commenceTime).localeCompare(String(b.commenceTime)) ||
@@ -123,17 +133,19 @@ export function trierLesOpportunites(lignes, maintenant = Date.now()) {
  * La liste telle que la page la montre : filtrée, triée par value, puis
  * FAVORIS D'ABORD (`favoritesFirst` du magasin des favoris : les lignes qui
  * touchent une équipe favorite, puis les championnats favoris, puis le reste —
- * le tri par value gardé dans chaque bloc).
+ * le tri par value gardé dans chaque bloc). Étape 23 : les lignes des cases ROUGES de la carte « où parier »
+ * restent à la FIN de la liste, même pour un favori (visibles, avec leur avertissement).
  */
 export function opportunitesAffichees(lignes, { filtres = {}, maintenant = Date.now(), favoritesFirst = (x) => x } = {}) {
   const triees = trierLesOpportunites(filtrerLesOpportunites(lignes, { ...filtres, maintenant }), maintenant);
-  return favoritesFirst(triees, {
+  const rangees = favoritesFirst(triees, {
     league: (l) => l.league,
     teams: (l) => [
       [l.home, l.league, l.homeId ?? undefined],
       [l.away, l.league, l.awayId ?? undefined]
     ]
   });
+  return [...rangees.filter((l) => !estRouge(l)), ...rangees.filter((l) => estRouge(l))];
 }
 
 // ------------------------------------------------- les notifications
@@ -182,7 +194,8 @@ export function contenuDeNotification(o) {
   const quand = o.exactKickoff && Number.isFinite(t) ? ` · coup d'envoi ${HEURE.format(new Date(t))}` : '';
   return {
     titre: `Value ${Number.isFinite(v.pourcent) ? pourcentSigne(v.pourcent) : ''} : ${o.pari}`.replace(/\s+:/, ' :'),
-    corps: `${o.home} – ${o.away}${v.bookmakerTitle ? ` · ${v.bookmakerTitle} ${Number(v.cote).toFixed(2)}` : ''}${quand}`,
+    // Étape 23 : une value dans une case rouge de la carte « où parier » le dit (la notification part quand même).
+    corps: `${o.home} – ${o.away}${v.bookmakerTitle ? ` · ${v.bookmakerTitle} ${Number(v.cote).toFixed(2)}` : ''}${quand}${o.carte?.couleur === 'rouge' ? ' · case rouge de la carte « où parier »' : ''}`,
     tag: `cotemaster-opportunite|${cleDeNotification(o)}`,
     silent: true
   };

@@ -17,6 +17,10 @@ import OddsMoveArrow from '@/components/common/OddsMoveArrow.vue';
 import ProvenanceChip from '@/components/common/ProvenanceChip.vue';
 import ValueBadge from '@/components/common/ValueBadge.vue';
 import AVerifierBadge from '@/components/common/AVerifierBadge.vue';
+import BettingMapChip from '@/components/common/BettingMapChip.vue';
+import BettingMapGrid from '@/components/analysis/BettingMapGrid.vue';
+import { bettingMapApi } from '@/services/bettingMapApi.js';
+import { moisDit } from '@/utils/carteOuParier.js';
 import LeagueBadge from '@/components/matches/LeagueBadge.vue';
 import TeamCrest from '@/components/matches/TeamCrest.vue';
 import PaidOddsAdvicePanel from '@/components/settings/PaidOddsAdvicePanel.vue';
@@ -103,6 +107,31 @@ const enCalcul = computed(() => reponse.value?.status === 'computing' && !lectur
 const erreurCalcul = computed(() => (!enCalcul.value && donnees.value ? (reponse.value?.error ?? null) : null));
 const toutes = computed(() => donnees.value?.lignes ?? []);
 const resume = computed(() => donnees.value?.resume ?? null);
+
+// ------------------------------------------------- la carte « où parier » (étape 23)
+// Les couleurs arrivent sur chaque ligne (`carte`) ; la grille entière (~0,3 Mo) ne se lit qu'au clic.
+const carteDuServeur = computed(() => donnees.value?.carte ?? null);
+const grilleOuverte = ref(false);
+const grille = ref({ reponse: null, erreur: null, chargement: false });
+async function afficherLaCarte() {
+  grilleOuverte.value = !grilleOuverte.value;
+  if (!grilleOuverte.value || grille.value.reponse || grille.value.chargement) return;
+  grille.value = { reponse: null, erreur: null, chargement: true };
+  try {
+    grille.value = { reponse: await bettingMapApi.get(), erreur: null, chargement: false };
+  } catch (error) {
+    grille.value = { reponse: null, erreur: String(error?.message ?? error), chargement: false };
+  }
+}
+const resumeDeLaCarte = computed(() => {
+  const c = carteDuServeur.value;
+  if (!c) return 'Pas encore mesuré : la carte a besoin d’un premier rejeu du banc d’essai (Historique moteur › Banc d’essai › « Lancer le banc », 10 à 13 minutes) ; elle se calcule à l’actualisation qui suit.';
+  const r = c.resume ?? {};
+  const base = `Carte de ${moisDit(c.mois)} : ${r.vertes ?? 0} case${(r.vertes ?? 0) > 1 ? 's' : ''} verte${(r.vertes ?? 0) > 1 ? 's' : ''}, ${r.rouges ?? 0} rouge${(r.rouges ?? 0) > 1 ? 's' : ''}, ${r.grises ?? 0} grise${(r.grises ?? 0) > 1 ? 's' : ''}.`;
+  const lignes = resume.value ? ` Dans cette liste : ${resume.value.enCaseVerte ?? 0} pari${(resume.value.enCaseVerte ?? 0) > 1 ? 's' : ''} en case verte (en tête), ${resume.value.enCaseRouge ?? 0} en case rouge (à la fin, avec l’avertissement).` : '';
+  const suspendue = c.aJour ? '' : ' Les réglages du moteur ont changé depuis : couleurs suspendues jusqu’au prochain banc d’essai.';
+  return `${base}${lignes}${suspendue}${r.vertes ? '' : ' Rien n’est prouvé gagnant : c’est une information, pas une panne.'}`;
+});
 
 // ------------------------------------------------------------ format
 const nombre = (n) => Number(n ?? 0).toLocaleString('fr-FR');
@@ -561,6 +590,8 @@ const descriptionVide = computed(() => {
                   <td class="is-left opps__bet">
                     <strong class="opps__pick">{{ r.l.pari }}</strong>
                     <small class="opps__sub">{{ r.l.groupe ?? r.l.libelleMarche }}</small>
+                    <!-- Étape 23 : la case rouge de la carte « où parier » le dit en toutes lettres (la ligne reste, à la fin). -->
+                    <small v-if="r.l.carte?.couleur === 'rouge'" class="opps__avert" role="note">{{ r.l.carte.phrase }}</small>
                   </td>
 
                   <td class="cm-numeric" :title="r.moteur.titre">
@@ -587,6 +618,8 @@ const descriptionVide = computed(() => {
                     <span v-else class="opps__absent" title="Aucune cote de vos bookmakers pour ce pari : le moteur n'a pas de verdict de value à donner.">pas de verdict</span>
                     <!-- Étape 14 : « à vérifier » quand les données de ce match sont douteuses (contrôle quotidien) ; le verdict ne change pas. -->
                     <AVerifierBadge v-if="r.l.aVerifier" :a-verifier="r.l.aVerifier" :marche="r.l.marche" class="opps__averif" />
+                    <!-- Étape 23 : la case de la carte « où parier » (verte « Prouvé », rouge, grise) ; le verdict ne change pas. -->
+                    <BettingMapChip v-if="r.l.carte" :case-carte="r.l.carte" compacte class="opps__carte" />
                   </td>
 
                   <td class="cm-numeric" :title="r.mouvement.titre">
@@ -622,17 +655,52 @@ const descriptionVide = computed(() => {
                 Une ligne par pari possible : chaque issue 1 / N / 2 que l'un de vos bookmakers cote, et chaque issue dont la cote juste a chuté d'au moins 5 % depuis l'ouverture.
                 Le vert est le verdict du moteur, le même que l'onglet « Value bets » de Mes paris : il ne recommande qu'un pari par match, jamais chez un bookmaker qui a fixé la cote juste (<HelpTip terme="juge-et-partie" />), et seulement sur une cote fraîche — une cote qui vieillit pendant que la page est ouverte passe « à rafraîchir ».
                 La probabilité et la cote juste sont celles du Repérage ; le mouvement, celui des Chutes de cotes.
+                La puce « Prouvé » / « Moins bien que le marché » / « Pas prouvé » est la case de la carte « où parier » (sa règle sous « Afficher la carte », plus bas) : les paris des cases vertes passent en tête, ceux des cases rouges à la fin, avec leur avertissement — rien n'est retiré.
                 Survolez une case pour le détail ou la raison d'une absence.
               </p>
             </div>
           </div>
         </div>
       </AppCard>
+
+      <!-- Étape 23 : la carte « où parier », championnat × marché (lue au clic). -->
+      <AppCard icon="grid" eyebrow="Où parier" title="La carte du mois : championnat × marché" :subtitle="resumeDeLaCarte">
+        <template #action>
+          <AppButton variant="secondary" size="sm" :aria-expanded="grilleOuverte ? 'true' : 'false'" @click="afficherLaCarte">
+            <template #icon><AppIcon name="grid" :size="13" /></template>
+            {{ grilleOuverte ? 'Masquer la carte' : 'Afficher la carte' }}
+          </AppButton>
+        </template>
+        <template v-if="grilleOuverte">
+          <p v-if="grille.chargement" class="cm-note is-info opps__carte-note">Lecture de la carte…</p>
+          <p v-else-if="grille.erreur" class="cm-note is-danger opps__carte-note">Carte illisible : {{ grille.erreur }}</p>
+          <BettingMapGrid v-else-if="grille.reponse" :reponse="grille.reponse" />
+        </template>
+      </AppCard>
     </template>
   </div>
 </template>
 
 <style scoped>
+/* Étape 23 : l'avertissement d'une case rouge de la carte « où parier », sous le pari. */
+.opps__avert {
+  display: block;
+  margin-top: 3px;
+  max-width: 340px;
+  color: var(--cm-danger);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: normal;
+}
+
+.opps__carte {
+  margin-top: 4px;
+}
+
+.opps__carte-note {
+  margin: 0;
+}
+
 .opps {
   /* Se règle sur SA largeur : l'onglet vit dans la page Matchs. */
   container: opps / inline-size;

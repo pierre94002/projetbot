@@ -18,6 +18,15 @@
  * « Preuve après lancement » — lancement, matchs jugés, gain et fourchette,
  * variantes essayées, verdict —, toujours ses cinq lignes, mises en forme par
  * utils/preuve.js à partir de `etape.mesure` (le juge du serveur a tout décidé).
+ *
+ * Étape 27 (21/10/2026) : une étape « en cours » dont l'historique n'a que des
+ * lignes partielles dit ce qui lui reste (`etape.reste`) sous « pas encore
+ * terminée ». Et pour l'étape qui porte `etape.bancAvantApres` (lu dans le code
+ * par le serveur, jamais dans la base), le bloc « Banc d'essai sur des matchs jamais vus
+ * (2019-2023) : avant / après », AVANT la preuve après lancement : un tableau toujours
+ * complet (marché, version en service, nouveau modèle, verdict en mots, calibration du
+ * pronostic retenu), la phrase sur les xG, la réserve acceptée, et où en est l'étape
+ * (candidate à blanc, adoption à venir). Mots : utils/bancAvantApres.js.
  */
 import { computed, ref } from 'vue';
 import AppButton from '@/components/common/AppButton.vue';
@@ -28,6 +37,7 @@ import { roadmapApi } from '@/services/roadmapApi.js';
 import { useBrouillonsNotes } from '@/composables/useBrouillonsNotes.js';
 import { formatDateTime } from '@/utils/format.js';
 import { lignesPreuve } from '@/utils/preuve.js';
+import { blocDuBancAvantApres } from '@/utils/bancAvantApres.js';
 
 const props = defineProps({
   etape: { type: Object, required: true },
@@ -81,6 +91,9 @@ const mesures = computed(() => lignes.value.filter((l) => l.mesure));
 
 /** La preuve après lancement (étape 16) : null pour une étape qui ne touche pas aux chiffres (pas de bloc). */
 const preuve = computed(() => lignesPreuve(props.etape.mesure));
+
+/** Étape 27 : le banc d'essai « avant / après » (null pour toute autre étape : pas de bloc). */
+const banc = computed(() => blocDuBancAvantApres(props.etape.bancAvantApres ?? null, props.etape.mesure ?? null));
 
 // ------------------------------------------------------------- la note
 const brouillons = useBrouillonsNotes();
@@ -168,6 +181,8 @@ async function enregistrer() {
         <dd>
           <template v-if="dateFin">{{ dateFin }}</template>
           <span v-else class="rstep__manque">{{ etape.etat === 'mise-de-cote' ? 'mise de côté, pas terminée' : 'pas encore terminée' }}</span>
+          <!-- Étape 27 : une étape « en cours » que l'historique raconte déjà dit ce qui lui reste (« en essai à blanc, adoption à venir »). -->
+          <small v-if="etape.reste" class="rstep__petit rstep__reste">{{ etape.reste }}</small>
         </dd>
       </div>
     </dl>
@@ -199,6 +214,53 @@ async function enregistrer() {
         <p v-else class="rstep__manque">pas encore mesuré</p>
       </section>
     </div>
+
+    <!-- Étape 27 : le banc d'essai « avant / après », lu dans le code ; le tableau est toujours complet, même avant la mesure. -->
+    <section v-if="banc" class="rstep__banc" data-modele-de-buts>
+      <h5 class="cm-eyebrow rstep__preuve-titre">
+        {{ banc.titre }}
+        <HelpTip terme="banc-d-essai" />
+      </h5>
+      <p class="rstep__petit">{{ banc.entete }}</p>
+      <div class="cm-table-wrap">
+        <table class="cm-table rstep__banc-table">
+          <thead>
+            <tr>
+              <th class="is-left">Marché</th>
+              <th title="Erreur de prévision (perte log) de l’ancien modèle de buts, en service avant l’étape 27 : plus petite = mieux">Avant (ancien modèle)</th>
+              <th title="Erreur de prévision (perte log) du modèle de buts unique, sur les mêmes matchs : plus petite = mieux">Après (modèle de buts unique)</th>
+              <th class="is-left" title="Le juge de l’étape 16 : la différence d’erreur sur les mêmes matchs, et la fourchette de ce que le hasard explique">Verdict</th>
+              <th class="is-left" title="Ce que chaque version annonçait pour son pronostic retenu face à ce qui est arrivé (réalisé − annoncé), version en service → nouveau modèle">Calibration du pronostic retenu</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="l in banc.lignes" :key="l.cle">
+              <td class="is-left rstep__banc-marche">{{ l.marche }}</td>
+              <td class="cm-numeric" :class="{ rstep__manque: l.avant === 'pas encore mesuré' }">{{ l.avant }}</td>
+              <td class="cm-numeric is-strong" :class="{ rstep__manque: l.apres === 'pas encore mesuré' }">{{ l.apres }}</td>
+              <td class="is-left">
+                <span class="cm-chip" :class="l.verdict.ton">
+                  <AppIcon :name="l.verdict.icone" :size="11" />
+                  {{ l.verdict.texte }}
+                </span>
+                <small v-if="l.gain" class="rstep__petit rstep__banc-gain">{{ l.gain }}</small>
+              </td>
+              <td class="is-left rstep__banc-calib">{{ l.calibration }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td class="is-left is-strong">{{ banc.pied.libelle }}</td>
+              <td class="is-left" colspan="4">{{ banc.pied.texte }}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <p class="rstep__petit">{{ banc.phrase }}</p>
+      <p class="rstep__petit">{{ banc.porte1 }}</p>
+      <p v-for="(r, i) in banc.reserves" :key="i" class="rstep__reserve">{{ r }}</p>
+      <p class="rstep__texte rstep__banc-etat">{{ banc.etat }}</p>
+    </section>
 
     <!-- La preuve après lancement (étape 16) : seulement quand l'étape a une mesure, et alors toujours ses cinq lignes. -->
     <section v-if="preuve" class="rstep__preuve">
@@ -406,6 +468,12 @@ async function enregistrer() {
   color: var(--cm-text-muted);
 }
 
+/* Étape 27 : ce qui reste d'une étape en cours que l'historique raconte déjà. */
+.rstep__reste {
+  margin-top: 2px;
+  color: var(--cm-section);
+}
+
 .rstep__petit.is-danger {
   color: var(--cm-danger);
 }
@@ -483,6 +551,55 @@ async function enregistrer() {
   line-height: 1.55;
   color: var(--cm-text-secondary);
   overflow-wrap: anywhere;
+}
+
+/* Étape 27 : le banc d'essai « avant / après » — un bloc teinté comme la preuve, un tableau qui défile s'il est trop large. */
+.rstep__banc {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--cm-border-soft);
+  border-radius: var(--cm-radius-sm);
+  background: var(--cm-surface-alt);
+}
+
+.rstep__banc p {
+  margin: 0;
+}
+
+.rstep__banc-table td {
+  font-size: 12px;
+}
+
+.rstep__banc-marche {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.rstep__banc-gain {
+  display: block;
+  margin-top: 2px;
+}
+
+.rstep__banc-calib {
+  min-width: 220px;
+  color: var(--cm-text-secondary);
+}
+
+/* La réserve acceptée : l'ambre (à regarder), lisible sans la couleur (« Réserve acceptée » ouvre la phrase). */
+.rstep__reserve {
+  margin: 0;
+  padding: 6px 10px;
+  border-radius: var(--cm-radius-sm);
+  border: 1px dashed rgba(var(--cm-warning-rgb) / 0.4);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--cm-warning);
+}
+
+.rstep__banc-etat {
+  font-weight: 600;
 }
 
 /* La preuve après lancement (étape 16) : un bloc teinté, cinq lignes en grille (deux colonnes quand l'étape est large). */

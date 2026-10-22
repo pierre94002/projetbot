@@ -41,18 +41,23 @@ import { etatPourFeuilleDeRoute } from '../src/bench/trialsRegistry.js';
 
 // Ce qui est terminé, CALCULÉ à partir de l'historique du code (étape 7 du plan) :
 // une étape suivante ajoute sa ligne à HISTORIQUE, et aucun compte ci-dessous n'est à retoucher.
-const TERMINEES = new Set(HISTORIQUE.map((h) => h.etape));
+// Étape 27 (21/10/2026) : une ligne PARTIELLE ne finit pas l'étape — une étape qui n'a que des lignes partielles
+// est « en cours » (la 27 : en essai à blanc, adoption à venir).
+const TERMINEES = new Set(HISTORIQUE.filter((h) => !h.partielle).map((h) => h.etape));
 const NB_TERMINEES = TERMINEES.size;
-/** Le jour de fin de chaque étape terminée : celui de sa DERNIÈRE ligne (un complément la repousse). */
-const FINS = Object.fromEntries([...TERMINEES].map((id) => [id, HISTORIQUE.filter((h) => h.etape === id).at(-1).fin]));
-/** Les étapes pas encore terminées, dans l'ordre du plan : de quoi fabriquer des cas sans toucher à l'histoire. */
-const LIBRES = IDS_ETAPES.filter((id) => !TERMINEES.has(id));
+/** Les étapes que l'historique raconte sans les finir (seulement des lignes partielles) : « en cours ». */
+const PARTIELLES = new Set(HISTORIQUE.filter((h) => h.partielle && !TERMINEES.has(h.etape)).map((h) => h.etape));
+const NB_PARTIELLES = PARTIELLES.size;
+/** Le jour de fin de chaque étape terminée : celui de sa DERNIÈRE ligne qui la finit (un complément la repousse). */
+const FINS = Object.fromEntries([...TERMINEES].map((id) => [id, HISTORIQUE.filter((h) => h.etape === id && !h.partielle).at(-1).fin]));
+/** Les étapes à faire (ni terminées ni racontées en partie), dans l'ordre du plan : de quoi fabriquer des cas sans toucher à l'histoire. */
+const LIBRES = IDS_ETAPES.filter((id) => !TERMINEES.has(id) && !PARTIELLES.has(id));
 const avancementAttendu = ({ enCours = 0, miseDeCote = 0, enPlus = 0 } = {}) => ({
   total: 49,
   terminees: NB_TERMINEES + enPlus,
-  enCours,
+  enCours: enCours + NB_PARTIELLES,
   miseDeCote,
-  aFaire: 49 - NB_TERMINEES - enPlus - enCours - miseDeCote,
+  aFaire: 49 - NB_TERMINEES - enPlus - enCours - NB_PARTIELLES - miseDeCote,
   part: (NB_TERMINEES + enPlus) / 49
 });
 
@@ -251,7 +256,7 @@ test('historique : le lot 1 (0 à 5 et E) dans l’ordre où il a été fait —
   for (const [i, h] of HISTORIQUE.entries()) {
     if (HISTORIQUE.findIndex((x) => x.etape === h.etape) !== i) assert.ok(h.titre, `ligne ${i} (étape ${h.etape}) : un complément ou une correction a son titre`);
   }
-  assert.equal(NB_TERMINEES, new Set(HISTORIQUE.map((h) => h.etape)).size);
+  assert.equal(NB_TERMINEES + NB_PARTIELLES, new Set(HISTORIQUE.map((h) => h.etape)).size);
   assert.ok(NB_TERMINEES >= 8, 'le lot 1 et la 6, au moins');
   // Les chiffres du journal d'avancement.
   const ligne = (etape) => HISTORIQUE.find((h) => h.etape === etape && !h.titre);
@@ -378,6 +383,45 @@ test('état : la ligne « Tests » vient de la dernière ligne de l’historique
   assert.equal(e.lots[0].termine, true);
 });
 
+test('étape 27 — une ligne PARTIELLE ne finit pas l’étape : la 27 est « en cours » (« en essai à blanc, adoption à venir »), sans date de fin, son histoire racontée ; mise de côté prime ; une ligne qui la finit la rend « terminée »', () => {
+  const e = etatFeuilleDeRoute({ maintenant: MIDI, pierre: PIERRE_VIDE, mesure: MESURE_ABSENTE });
+  const e27 = toutesLesEtapes(e).find((x) => x.id === '27');
+  assert.deepEqual([e27.etat, e27.reste, e27.fin, e27.heureFin], ['en-cours', 'en essai à blanc, adoption à venir', null, null], 'pas de date de fin : l’étape n’est pas finie');
+  assert.equal(e27.historique.length, 1);
+  assert.equal(e27.historique[0].partielle, 'en essai à blanc, adoption à venir');
+  assert.match(e27.historique[0].change, /l’étape n’est pas finie/);
+  assert.ok(e27.historique[0].mesure.length > 100, 'ce qui a été mesuré reste dit');
+  // La page compte la 27 « en cours », pas « terminée » (le 21/10/2026 : 29 terminées, 1 en cours).
+  assert.deepEqual([...PARTIELLES], ['27']);
+  assert.equal(e.avancement.terminees, NB_TERMINEES);
+  assert.equal(e.avancement.enCours, 1);
+  assert.ok(!TERMINEES.has('27'));
+  assert.equal(toutesLesEtapes(e).filter((x) => x.etat === 'terminee').length, NB_TERMINEES);
+  const lot5 = e.lots.find((l) => l.numero === 5);
+  assert.equal(lot5.enCours, 1);
+  assert.equal(lot5.termine, false);
+  // Les autres étapes n'ont rien qui reste dit.
+  assert.deepEqual(toutesLesEtapes(e).filter((x) => x.reste).map((x) => x.id), ['27']);
+  // Chaque ligne partielle dit ce qui reste (une chaîne, au moins quelques mots) ; les autres valent null.
+  for (const h of HISTORIQUE) {
+    assert.ok(h.partielle === null || (typeof h.partielle === 'string' && h.partielle.trim().length >= 10), `étape ${h.etape} du ${h.fin} : « partielle » dit ce qui reste, ou vaut null`);
+  }
+  // Mise de côté par Pierre : son choix prime sur une étape en cours par l'historique.
+  const pierre = { ...PIERRE_VIDE, source: 'enregistre', etapes: { 27: { note: null, noteLe: null, miseDeCote: { le: '2026-10-21T08:00:00.000Z', raison: 'plus tard' } } } };
+  const cote = toutesLesEtapes(etatFeuilleDeRoute({ maintenant: MIDI, pierre, mesure: MESURE_ABSENTE })).find((x) => x.id === '27');
+  assert.deepEqual([cote.etat, cote.reste], ['mise-de-cote', null]);
+  // L'adoption, plus tard : une ligne qui FINIT l'étape (pas partielle) la rend « terminée », avec sa date ; plus rien ne reste.
+  const adoption = { etape: '27', fin: '2026-11-15', heure: '~9 h', titre: 'Adoption', change: 'La candidate adoptée d’un clic : le modèle de buts unique en service.', mesure: 'ok', partielle: null, tests: null };
+  const fini = etatFeuilleDeRoute({ maintenant: MIDI, pierre: PIERRE_VIDE, historique: [...HISTORIQUE, adoption], mesure: MESURE_ABSENTE });
+  const f27 = toutesLesEtapes(fini).find((x) => x.id === '27');
+  assert.deepEqual([f27.etat, f27.fin, f27.heureFin, f27.reste, f27.historique.length], ['terminee', '2026-11-15', '~9 h', null, 2]);
+  assert.deepEqual([fini.avancement.terminees, fini.avancement.enCours], [NB_TERMINEES + 1, 0]);
+  // Une étape dans ETAPES_EN_COURS sans ligne reste « en cours », sans rien qui reste dit.
+  const libre = LIBRES[0];
+  const enCours = toutesLesEtapes(etatFeuilleDeRoute({ maintenant: MIDI, pierre: PIERRE_VIDE, enCours: [libre], mesure: MESURE_ABSENTE })).find((x) => x.id === libre);
+  assert.deepEqual([enCours.etat, enCours.reste, enCours.historique], ['en-cours', null, []]);
+});
+
 test('état : terminée prime sur mise de côté, qui prime sur en cours, qui prime sur à faire ; une note n’y change rien', () => {
   // Des étapes encore libres pour la mise de côté et les « en cours » ; la 5 et la 0, terminées pour toujours.
   const [x, y, z, w] = LIBRES;
@@ -404,11 +448,11 @@ test('état : terminée prime sur mise de côté, qui prime sur en cours, qui pr
   const lot = e.lots.find((l) => l.etapes.some((s) => s.id === x));
   const ids = ETAPES.filter((s) => s.lot === lot.numero).map((s) => s.id);
   const faites = ids.filter((id) => TERMINEES.has(id)).length;
-  const enCours = [y, z].filter((id) => ids.includes(id)).length;
+  const enCours = [y, z].filter((id) => ids.includes(id)).length + ids.filter((id) => PARTIELLES.has(id)).length;
   assert.deepEqual(lot, { ...lot, total: ids.length, terminees: faites, enCours, miseDeCote: 1, aFaire: ids.length - faites - enCours - 1, termine: false });
   // Une étape inconnue dans « en cours » est ignorée, une note sur une étape inconnue est signalée, jamais perdue.
   const orphelines = etatFeuilleDeRoute({ maintenant: MIDI, enCours: ['99'], pierre: { ...pierre, etapes: { ...pierre.etapes, 99: { note: 'Orpheline', noteLe: null, miseDeCote: null } } }, mesure: MESURE_ABSENTE });
-  assert.equal(orphelines.avancement.enCours, 0);
+  assert.equal(orphelines.avancement.enCours, NB_PARTIELLES, 'seules les étapes racontées en partie par l’historique');
   assert.deepEqual(orphelines.notesOrphelines, [{ id: '99', note: 'Orpheline', noteLe: null, miseDeCote: null }]);
   assert.equal(toutesLesEtapes(orphelines).length, 49);
 });

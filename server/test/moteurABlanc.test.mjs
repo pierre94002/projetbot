@@ -20,13 +20,15 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { preparerCopie, executer, SERVEUR } from './aides/isolement.mjs';
+import { preparerCopie, executer, sansCandidateDuCode, SERVEUR } from './aides/isolement.mjs';
 
 const SCRIPT = path.join(SERVEUR, 'test', 'aides', 'script-moteur-a-blanc.mjs');
 const SRC = path.join(SERVEUR, 'src');
 
 function lancer(phase) {
-  const copie = preparerCopie({});
+  // Étape 27 : « sans-candidate » simule l’état d’avant la déclaration (la candidate du code retirée de la copie) ; les
+  // autres phases passent leur candidate explicitement.
+  const copie = phase === 'sans-candidate' ? sansCandidateDuCode(preparerCopie({})) : preparerCopie({});
   try {
     // Ni exécutable Claude (un chemin qui n'existe pas, même depuis le dépôt), ni actualisation.
     const r = executer(copie, SCRIPT, { args: [phase], timeout: 300_000, env: { CLAUDE_CODE_BIN: path.join(copie.dossier, 'pas-de-claude-ici.exe'), MATCH_STATS_AUTO_REFRESH: 'false' } });
@@ -137,8 +139,12 @@ test('l’étape « moteurABlanc » de la passe : après le gel et avant la sauv
   assert.equal(cles.indexOf('moteurABlanc'), cles.indexOf('gelPronostics') + 1, 'juste après le gel');
   // Étape 20 : la calibration du mois écoulé s'intercale entre la candidate et la sauvegarde (la copie de la nuit contient le mois figé).
   assert.equal(cles.indexOf('calibrationMensuelle'), cles.indexOf('moteurABlanc') + 1, 'puis la calibration du mois écoulé');
-  assert.equal(cles.indexOf('sauvegarde'), cles.indexOf('calibrationMensuelle') + 1, 'juste avant la sauvegarde');
-  assert.match(job, /key: 'moteurABlanc',\n {4}label: 'Version candidate du moteur, calculée à blanc',\n(?: {4}\/\/.*\n)*? {4}due: \(ctx\) => Boolean\(env\.enregistreurs\?\.enabled\) && !faitAujourdhui\(ctx\.derniere\('moteurABlanc'\)\),\n {4}run: \(ctx\) => passeMoteurABlanc\(ctx\)\n/);
+  // Étape 23 : la carte « où parier » vient juste après la calibration, et la sauvegarde juste après elle (la copie de la nuit la contient).
+  assert.equal(cles.indexOf('carteOuParier'), cles.indexOf('calibrationMensuelle') + 1, 'puis la carte « où parier »');
+  assert.equal(cles.indexOf('sauvegarde'), cles.indexOf('carteOuParier') + 1, 'juste avant la sauvegarde');
+  assert.match(job, /key: 'moteurABlanc',\n {4}label: 'Version candidate du moteur, calculée à blanc',\n(?: {4}\/\/.*\n)*? {4}due: \(ctx\) => dueMoteurABlanc\(ctx\),\n {4}run: \(ctx\) => passeMoteurABlanc\(ctx\)\n/);
+  // Une fois par jour avec l'interrupteur des enregistreurs ; refaite à la passe suivante après une passe « en attente » (étape 27).
+  assert.match(job, /const dueMoteurABlanc = \(ctx\) => Boolean\(env\.enregistreurs\?\.enabled\) && \(!faitAujourdhui\(ctx\.derniere\('moteurABlanc'\)\) \|\| Boolean\(ctx\.derniersDetails\?\.\('moteurABlanc'\)\?\.attente\)\);/);
   assert.match(job, /const r = await calculerABlanc\(\{ dansLaPasse: true, \.\.\.options \}\);/);
   const ablanc = fs.readFileSync(path.join(SRC, 'data', 'enregistreurs', 'moteurABlanc.js'), 'utf8');
   assert.equal((ablanc.match(/await rendreLaMain\(\);/g) ?? []).length, 2, 'la main rendue entre deux matchs et entre deux tranches');
@@ -178,4 +184,39 @@ test('le code : la table à part n’est écrite et lue que par le dépôt des e
   }
   // Rien de planifié dans Windows.
   for (const f of ['data/enregistreurs/moteurABlanc.js', 'core/engine/engineVersions.js']) assert.doesNotMatch(sansCommentaires(f), /schtasks|ScheduledTask|setInterval\s*\(|setTimeout\s*\(/, f);
+});
+
+// ------------------------------------------------- 7. étape 27 : une candidate au modèle de buts unique
+
+test('étape 27 — une candidate au MODÈLE DE BUTS UNIQUE à blanc : ses quatre familles de buts déclarées, rien « hors déclaration » (le 1N2 ne bouge pas) ; le TÉMOIN du score exact a sa ligne (81 cases et « autre score » de la candidate, la grille du score en service), jamais compté hors déclaration ; même empreinte avec ou sans témoin', () => {
+  const s = lancer('modele-de-buts');
+  // Vérification du branchement (constat 1) : sans SES forces de buts à jour, rien calculé à blanc — « en attente » —,
+  // rien en base ; la passe le dit et l'étape revient à la passe suivante ; à jour, le calcul se fait.
+  assert.deepEqual(s.sansForces, { attente: 'forces de buts pas à jour (jamais calculées)', calcules: 0, lignes: 0, ecrites: 0, enBase: 0 });
+  assert.equal(s.forcesAJour, true, 'les forces de la candidate calculées');
+  assert.deepEqual(s.rangementEnCours, { attente: 'forces de buts pas à jour (rangement en cours)', calcules: 0, lignes: 0, ecrites: 0, enBase: 0 });
+  assert.deepEqual(s.passeEnAttente, {
+    status: 'warn',
+    summary: 'Candidate « essai-buts-unique » (étape 27) en attente : forces de buts pas à jour (rangement en cours) — rien calculé à blanc cette fois, la passe suivante refera le calcul.',
+    attente: 'forces de buts pas à jour (rangement en cours)',
+    changed: false
+  });
+  assert.deepEqual(s.due, { apresAttente: true, apresCalcul: false, jamaisFaite: true }, 'refaite à la passe suivante seulement après une attente');
+  assert.equal(s.nuit.erreur, null);
+  assert.deepEqual([s.nuit.matchs, s.nuit.calcules, s.nuit.echecs], [2, 2, 0]);
+  assert.deepEqual(s.nuit.horsDeclaration, {}, 'aucun marché non déclaré ne change — le 1N2 compris');
+  const familles = [...new Set(s.lignes.map((l) => l.marche.split(':')[0]))].sort();
+  assert.deepEqual(familles, ['bothTeamsScore', 'resultAndTotal', 'scoreExact', 'teamGoals', 'totalGoals']);
+  assert.ok(!s.lignes.some((l) => l.marche === 'result'), 'le 1N2 n’est pas déclaré : pas de ligne');
+  const temoins = s.lignes.filter((l) => l.marche === 'scoreExact');
+  assert.equal(temoins.length, 2, 'une ligne témoin par match');
+  for (const t of temoins) {
+    assert.equal(Object.keys(t.distribution.issues).length, 81);
+    assert.ok(Number.isFinite(t.distribution.horsGrille));
+    assert.equal(Object.keys(t.distributionEnService.issues).length, 81, 'la grille du score de la version en service');
+    const somme = Object.values(t.distribution.issues).reduce((x, y) => x + y, 0) + t.distribution.horsGrille;
+    assert.ok(Math.abs(somme - 1) < 1e-4, `81 cases + autre score = ${somme}`);
+    assert.match(t.choix, /^\d-\d$/);
+  }
+  assert.deepEqual([s.empreintes.avec, s.empreintes.notee], [s.empreintes.sans, s.empreintes.sans], 'le témoin hors de l’empreinte');
 });

@@ -170,6 +170,17 @@ export const GUIDE_DE_LECTURE = Object.freeze({
     titre: 'Calibration',
     phrase:
       "Quand le moteur annonce 60 %, l'issue doit arriver à peu près 60 fois sur 100. Chaque mois, on compare ce qu'il annonçait à ce qui est arrivé, tranche par tranche ; un écart ne compte que s'il dépasse ce que le hasard explique."
+  }),
+  // Étape 27 du plan (21/10/2026) : le modèle de buts unique (MarketPicksBoard, ScorePredictionCard, carte de la candidate).
+  'carte-ou-parier': Object.freeze({
+    titre: 'Carte « où parier »',
+    phrase:
+      'Une case est verte seulement si l’avantage du moteur au prix est prouvé sur au moins 200 matchs, rouge s’il fait prouvé moins bien que le marché, grise sinon : « pas prouvé » veut dire que l’écart peut venir du hasard.'
+  }),
+  'modele-de-buts': Object.freeze({
+    titre: 'Modèle de buts unique',
+    phrase:
+      'Les pourcentages de buts partent des cotes ; les xG des deux équipes les ajustent de 10 % quand une cote plus/moins existe, de moitié pour le total sinon ; sans cote, les xG (ou, à défaut, les buts) seuls.'
   })
 });
 

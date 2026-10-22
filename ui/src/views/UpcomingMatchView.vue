@@ -48,6 +48,7 @@ import ProvenanceChip from '@/components/common/ProvenanceChip.vue';
 import HelpTip from '@/components/common/HelpTip.vue';
 import { pariDuMoteur } from '@/utils/langageParis.js';
 import { phraseSansPari } from '@/utils/verdictParMarche.js';
+import { provenanceDesButs } from '@/utils/modeleDeButs.js';
 import { liveNow } from '@/utils/liveClock.js';
 import { TEAM_STAT_GROUPS } from '@/constants/matchDetailTabs.js';
 // Étape 10 du plan : le comparateur de vos bookmakers et le ticket (« J'ai parié »).
@@ -350,6 +351,8 @@ const attendusBarres = computed(() => ({
   home: Object.fromEntries(attendus.value.map((a) => [a.cle, a.home])),
   away: Object.fromEntries(attendus.value.map((a) => [a.cle, a.away]))
 }));
+// Étape 27 : d'où viennent les pourcentages de buts (le modèle de buts unique) ; null sans lui — la page ne change pas.
+const provenanceButs = computed(() => provenanceDesButs(analyse.value.result));
 const nombre1 = (x) => (Number.isFinite(Number(x)) ? Number(x).toLocaleString('fr-FR', { maximumFractionDigits: 1, minimumFractionDigits: 1 }) : '—');
 // Étape 7 du plan : la value n'est conseillée que sur une cote FRAÎCHE de vos
 // bookmakers. Le serveur la juge à l'analyse (staking.fraicheur, ou
@@ -913,7 +916,7 @@ const cote2 = (x) => (Number.isFinite(x) ? x.toFixed(2).replace('.', ',') : '—
               Le pari conseillé par le moteur, ou la value à rafraîchir, et le verdict de chaque marché (cote, heure du relevé, value) sont en tête du Résumé.
               <button type="button" class="cm-link upcoming__moved-link" @click="voirLeVerdict">Voir le verdict</button>
             </p>
-            <MarketPicksBoard :predictions="analyse.result.marketPredictions ?? []" :match="match" :views="aiEntry?.analysis?.marketViews ?? []" :a-verifier="analyse.result.aVerifier ?? null" />
+            <MarketPicksBoard :predictions="analyse.result.marketPredictions ?? []" :match="match" :views="aiEntry?.analysis?.marketViews ?? []" :a-verifier="analyse.result.aVerifier ?? null" :provenance-buts="provenanceButs" />
           </AppCard>
 
           <!-- Étape 7 : la saisie express d'une cote vue chez un de vos bookmakers (corners, cartons, buteurs, plus/moins…). -->

@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import TeamCrest from '@/components/matches/TeamCrest.vue';
 import PickCrest from '@/components/matches/PickCrest.vue';
 import AVerifierBadge from '@/components/common/AVerifierBadge.vue';
+import GoalModelProvenance from '@/components/analysis/GoalModelProvenance.vue';
 import { campsDe } from '@/utils/pronosticEquipe.js';
 
 /**
@@ -20,6 +21,12 @@ import { campsDe } from '@/utils/pronosticEquipe.js';
  * Probabilité = 1 / cote juste : le moteur ne donne pas l'une sans l'autre.
  * La cote du bookmaker n'existe que pour le résultat (The Odds API ne cote
  * que le 1N2 de vos bookmakers).
+ *
+ * Étape 27 du plan (21/10/2026) : quand le modèle de buts unique a calculé le
+ * match (`provenanceButs`, utils/modeleDeButs.js), sa provenance est dite sous
+ * « Buts » (pastille complète et bulle d'aide) et sur « Les 2 équipes marquent »
+ * et « Résultat + total » (le mot court, le fournisseur au survol). Sans lui
+ * (null : la clé est absente des réglages en service), rien ne change.
  */
 const props = defineProps({
   predictions: { type: Array, default: () => [] },
@@ -29,6 +36,8 @@ const props = defineProps({
   // Étape 14 : les raisons « à vérifier » du match (contrôle quotidien), jointes à
   // l'analyse par le serveur ; chaque carte ne montre que celles de sa famille de marché.
   aVerifier: { type: Object, default: null },
+  // Étape 27 : provenanceDesButs(analyse) — d'où viennent les pourcentages de buts ; null sans le modèle de buts.
+  provenanceButs: { type: Object, default: null },
   // Avis de l'IA d'avant-match (`analysis.marketViews`) : la phrase qui
   // explique chaque pourcentage, sous son pronostic (01/10/2026).
   views: { type: Array, default: () => [] }
@@ -41,6 +50,8 @@ const FAMILLES = [
   { cle: 'cadres', titre: 'Tirs cadrés', total: 'totalShotsOnTarget', equipe: 'teamShotsOnTarget' }
 ];
 const DU_MATCH = ['result', 'resultAndTotal', 'bothTeamsScore'];
+// Étape 27 : les cartes « du match » que calcule le modèle de buts unique (le résultat reste celui des cotes).
+const DU_MODELE_DE_BUTS = new Set(['resultAndTotal', 'bothTeamsScore']);
 
 const virgule = (x) => Number(x).toFixed(2).replace('.', ',');
 const cote = (x) => (Number.isFinite(Number(x)) && Number(x) > 1 ? virgule(x) : null);
@@ -180,6 +191,7 @@ const visesEquipe = (p) => campsDe(p, { home: props.match.home, away: props.matc
             <span class="mboard__why-tag">IA</span>{{ f.ia.texte }}<span v-if="f.ia.alors !== null" class="mboard__why-then"> (analyse faite à {{ f.ia.alors }} %)</span>
           </span>
           <span v-else-if="f.simple" class="mboard__why">{{ f.simple }}</span>
+          <GoalModelProvenance v-if="provenanceButs && DU_MODELE_DE_BUTS.has(f.p.marketId)" :provenance="provenanceButs" compacte class="mboard__prov" />
         </span>
         <span class="mboard__figures">
           <span class="mboard__pill is-proba" title="Probabilité selon le moteur (1 / cote juste)">{{ f.proba ?? '—' }}</span>
@@ -204,6 +216,10 @@ const visesEquipe = (p) => campsDe(p, { home: props.match.home, away: props.matc
       <p class="mboard__title">
         {{ fam.titre }}
         <AVerifierBadge v-if="aVerifier" :a-verifier="aVerifier" :marche="fam.idMarche" class="mboard__averif" />
+      </p>
+      <!-- Étape 27 : d'où viennent les pourcentages de buts (seulement quand le modèle de buts unique a calculé le match). -->
+      <p v-if="fam.cle === 'buts' && provenanceButs" class="mboard__prov-buts">
+        <GoalModelProvenance :provenance="provenanceButs" aide />
       </p>
       <div class="mboard__duel">
         <div class="mboard__side is-home">
@@ -585,6 +601,15 @@ const visesEquipe = (p) => campsDe(p, { home: props.match.home, away: props.matc
 
 .mboard__why-then {
   color: var(--cm-text-muted);
+}
+
+/* Étape 27 : la provenance des pourcentages de buts, sous son pronostic ou sous le titre « Buts ». */
+.mboard__prov {
+  margin-top: 4px;
+}
+
+.mboard__prov-buts {
+  margin: 0;
 }
 
 /* Panneau étroit : la carte du match passe ses chiffres dessous, le face à

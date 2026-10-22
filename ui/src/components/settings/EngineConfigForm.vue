@@ -3,6 +3,7 @@ import { computed, reactive, watch } from 'vue';
 import AppSlider from '@/components/common/AppSlider.vue';
 import AppButton from '@/components/common/AppButton.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
+import { etatDuModeleDansLesReglages } from '@/utils/modeleDeButs.js';
 
 /**
  * Les réglages du moteur (seuils, Kelly, mise, corrélation, cote plafond) et
@@ -10,6 +11,11 @@ import AppIcon from '@/components/common/AppIcon.vue';
  * 01/10/2026 (guide ui/DESIGN.md) : curseurs sur deux colonnes, bookmakers
  * en puces cochables, explication en note, enregistrement en vert de la
  * marque. Aucune donnée ni action n'a bougé.
+ *
+ * Étape 27 du plan (21/10/2026) : le modèle de buts unique dit en mots (activé, ou
+ * absent : l'ancien modèle) ; « Réinitialiser les valeurs par défaut » le retire
+ * (les valeurs par défaut ne l'ont pas) : quand il est en service, Réglages
+ * (SettingsView) le dit dans une confirmation avant toute remise à zéro.
  */
 const props = defineProps({
   config: { type: Object, required: true },
@@ -78,6 +84,9 @@ function handleSave() {
 }
 
 const asPercent = (value) => `${(value * 100).toFixed(1)}%`;
+
+// Étape 27 : le modèle de buts unique dans les réglages en service, en mots.
+const modeleDeButs = computed(() => etatDuModeleDansLesReglages(props.config));
 </script>
 
 <template>
@@ -132,6 +141,12 @@ const asPercent = (value) => `${(value * 100).toFixed(1)}%`;
         </div>
       </div>
     </fieldset>
+
+    <!-- Étape 27 : le modèle de buts unique, en mots (activé, ou absent : l'ancien modèle). -->
+    <p class="config-form__modele" :class="{ 'is-actif': modeleDeButs.actif }">
+      <AppIcon name="layers" :size="13" />
+      <span>{{ modeleDeButs.texte }}</span>
+    </p>
 
     <!-- 3. Enregistrer (vert de la marque) ou revenir aux valeurs par défaut. -->
     <div class="config-form__actions">
@@ -259,5 +274,20 @@ const asPercent = (value) => `${(value * 100).toFixed(1)}%`;
   gap: 10px;
   padding-top: 16px;
   border-top: 1px solid var(--cm-border-soft);
+}
+
+/* Étape 27 : le modèle de buts unique en une ligne ; le mot dit l'état, la couleur des statistiques s'il est activé. */
+.config-form__modele {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--cm-text-secondary);
+}
+
+.config-form__modele.is-actif {
+  color: var(--cm-violet);
 }
 </style>

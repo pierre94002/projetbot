@@ -38,9 +38,10 @@
  * -----------------------------------------------------------------------
  */
 
-import { perteLog } from './metrics.js';
-import { issueDuPronostic, revisionsRetenues } from '../data/calibration.js';
+import { perteLog, PROBA_MIN } from './metrics.js';
+import { issueDuPronostic, revisionsRetenues, jugerLaCase } from '../data/calibration.js';
 import { horizonAtteint } from './horizonEssai.js';
+import { comparer } from './guard.js';
 
 /** La note du juge pour l'essai : la perte log (metrics.js), celle du banc d'essai et de la note de départ. */
 export const MESURE_DE_L_ESSAI = 'perte-log';
@@ -189,9 +190,188 @@ export function lignesDeLEssai(revisions, { empreinte, versionEnService, lire, a
       compter(ecartees, 'issueAbsente');
       continue;
     }
-    lignes.push({ bloc: r.fixtureKey, match: r.fixtureKey, cle, date: r.date, marketId: r.marketId, issue: reglee.issue, a: a.valeur, b: b.valeur, ecreteeA: a.ecretee, ecreteeB: b.ecretee });
+    // Étape 27 : de quoi rapporter la calibration du pronostic retenu de chaque version (sur SA ligne : la candidate
+    // par sa distribution ; la version en service par sa probabilité gelée, 1/cote juste arrondie), et le régime
+    // (provenance) du modèle de buts de la candidate.
+    const calibB = r.choice !== null && r.choice !== undefined && Object.hasOwn(db.issues, r.choice) ? { p: db.issues[r.choice], realise: reglee.issue === r.choice } : null;
+    lignes.push({
+      bloc: r.fixtureKey,
+      match: r.fixtureKey,
+      cle,
+      date: r.date,
+      marketId: r.marketId,
+      issue: reglee.issue,
+      a: a.valeur,
+      b: b.valeur,
+      ecreteeA: a.ecretee,
+      ecreteeB: b.ecretee,
+      ligne: Number.isFinite(db.ligne) ? db.ligne : null,
+      provenance: typeof db.provenance === 'string' ? db.provenance : null,
+      calibB,
+      calibA: calibrationDuService(r, rencontre.reglement)
+    });
   }
   return { lignes, ecartees, aVenir: { pronostics: aVenir.pronostics, matchs: aVenir.matchs.size }, parMarche: parMarche(lignes) };
+}
+
+/** Le pronostic de la version en service sur SA ligne, réglé (issueDuPronostic) : { p (probabilité gelée), realise } ou null. */
+function calibrationDuService(r, reglement) {
+  const p = Number(r.serviceProbability);
+  if (!(p > 0 && p < 1) || r.serviceChoice === null || r.serviceChoice === undefined) return null;
+  let params = null;
+  try {
+    params = r.serviceParams ? JSON.parse(r.serviceParams) : {};
+  } catch {
+    return null;
+  }
+  const ligne = Number(params?.line);
+  const x = issueDuPronostic(
+    { choice: r.serviceChoice, marketId: r.marketId, market: MARCHE_DU_REGLEMENT[r.marketId] ?? '', label: r.marketId === 'resultAndTotal' && Number.isFinite(ligne) ? `Plus de ${ligne} buts` : null, params, homeName: null, awayName: null },
+    reglement
+  );
+  return x.raison ? null : { p, realise: x.realise };
+}
+
+// ------------------------------------------------------------ étape 27 : familles, calibration, régimes, témoins
+
+/** Le nom d'une case de la porte de sûreté : le plus/moins 2,5 et les deux marquent. */
+const CASES_DE_SURETE = Object.freeze([
+  Object.freeze({ cle: 'totalGoals|2.5', garder: (l) => l.marketId === 'totalGoals' && l.ligne === 2.5 }),
+  Object.freeze({ cle: 'bothTeamsScore', garder: (l) => l.marketId === 'bothTeamsScore' })
+]);
+
+/** La calibration rapportée d'une liste de pronostics retenus : biais (réalisé − annoncé), ECE par dixième, juge de l'étape 20. */
+function calibrationRapportee(lignes, variantes) {
+  if (!lignes.length) return null;
+  let somme = 0;
+  const dn = new Float64Array(10);
+  const de = new Float64Array(10);
+  for (const l of lignes) {
+    somme += (l.realise ? 1 : 0) - l.p;
+    const d = Math.min(9, Math.max(0, Math.floor(l.p * 10)));
+    dn[d]++;
+    de[d] += (l.realise ? 1 : 0) - l.p;
+  }
+  let ece = 0;
+  for (let d = 0; d < 10; d++) if (dn[d]) ece += Math.abs(de[d]);
+  const j = jugerLaCase(lignes, { variantes });
+  return { pronostics: lignes.length, matchs: j.matchs, biais: nombre(somme / lignes.length), ece: nombre(ece / lignes.length), verdict: j.verdict, variantes: j.variantes ?? variantes };
+}
+
+/**
+ * Ce que l'étape 27 ajoute au jugement de l'essai, toujours RAPPORTÉ à côté du jugement principal : le juge par
+ * FAMILLE (même K) ; la calibration du pronostic retenu de chaque version par famille (juge de l'étape 20, même K :
+ * rapportée seulement) ; la porte de SÛRETÉ de la candidate à K = 1 (plus/moins 2,5, les deux marquent) ; les
+ * régimes du modèle de buts (matchs par provenance). `reglement` : lignesDeLEssai.
+ */
+export function complementsDeLEssai(reglement, { variantes = 1, graine = 1, tirages = 1000 } = {}) {
+  const parFamille = {};
+  const familles = new Map();
+  for (const l of reglement.lignes) {
+    if (!familles.has(l.marketId)) familles.set(l.marketId, []);
+    familles.get(l.marketId).push(l);
+  }
+  for (const [famille, ls] of familles) {
+    const j = comparer(ls.map((l) => ({ bloc: l.bloc, match: l.match, cle: l.cle, a: l.a, b: l.b })), { mode: 'moyenne', sens: 'min', variantes, graine, tirages });
+    const echelle = Number.isFinite(j.a.moyenne) && j.a.moyenne !== 0 ? 100 / Math.abs(j.a.moyenne) : 100;
+    parFamille[famille] = {
+      lignes: j.n.lignes,
+      matchs: j.n.matchs,
+      a: nombre(j.a.moyenne),
+      b: nombre(j.b.moyenne),
+      gainPct: Number.isFinite(j.gain) ? nombre(j.gain * echelle, 3) : null,
+      fourchettePct: Array.isArray(j.fourchette) ? j.fourchette.map((x) => nombre(x * echelle, 3)) : null,
+      verdict: j.verdict,
+      variantes: j.seuil?.variantes ?? variantes
+    };
+  }
+  const calib = (cote) => {
+    const out = {};
+    for (const [famille, ls] of familles) {
+      const c = ls.filter((l) => l[cote]).map((l) => ({ fixtureKey: l.bloc, cle: l.cle, p: l[cote].p, realise: l[cote].realise }));
+      out[famille] = calibrationRapportee(c, variantes);
+    }
+    return out;
+  };
+  const surete = {};
+  for (const s of CASES_DE_SURETE) {
+    const c = reglement.lignes.filter((l) => s.garder(l) && l.calibB).map((l) => ({ fixtureKey: l.bloc, cle: l.cle, p: l.calibB.p, realise: l.calibB.realise }));
+    surete[s.cle] = calibrationRapportee(c, 1);
+  }
+  const regimes = {};
+  const vus = new Set();
+  for (const l of reglement.lignes) {
+    if (!l.provenance || vus.has(l.bloc)) continue;
+    vus.add(l.bloc);
+    regimes[l.provenance] = (regimes[l.provenance] ?? 0) + 1;
+  }
+  return { parFamille, calibration: { a: calib('calibA'), b: calib('calibB') }, surete, regimes, matchsAvecRegime: vus.size };
+}
+
+/** La distribution gelée d'un TÉMOIN « score exact » : les 81 cases (« h-a ») et la masse hors de la grille, 6 décimales. */
+export function distributionDuScore(cases, horsGrille = 0) {
+  const p6 = (x) => (Number.isFinite(x) ? Number(x.toFixed(6)) : null);
+  const issues = {};
+  for (let k = 0; k < cases.length; k++) issues[`${Math.floor(k / 9)}-${k % 9}`] = p6(cases[k]);
+  return { issues, horsGrille: p6(horsGrille) };
+}
+
+/**
+ * LE TÉMOIN DU SCORE EXACT de l'essai (étape 27, `temoins: ['scoreExact']`) : rapporté, JAMAIS jugé — la dernière
+ * révision avant le coup d'envoi de chaque match, réglée au score de la 90e minute ; un score hors des 81 cases vaut
+ * la probabilité plancher pour les deux versions (compté). Rend { matchs, a, b, exactA, exactB, horsGrille, ecartees }.
+ */
+export function temoinDuScore(revisions, { empreinte, versionEnService, lire, aujourdhui }) {
+  const parMatch = new Map();
+  for (const r of revisions ?? []) {
+    if (r.marketId !== 'scoreExact' || r.candidateHash !== empreinte || r.serviceVersion !== versionEnService) continue;
+    if (!parMatch.has(r.fixtureKey)) parMatch.set(r.fixtureKey, []);
+    parMatch.get(r.fixtureKey).push(r);
+  }
+  const ecartees = {};
+  let n = 0;
+  let sa = 0;
+  let sb = 0;
+  let ea = 0;
+  let eb = 0;
+  let hors = 0;
+  for (const [, revs] of parMatch) {
+    const premiere = revs[0];
+    if (premiere.date > aujourdhui) continue;
+    const rencontre = lire({ fixtureKey: premiere.fixtureKey, homeId: premiere.homeId, awayId: premiere.awayId, date: premiere.date });
+    if (rencontre.raison) {
+      compter(ecartees, rencontre.raison);
+      continue;
+    }
+    const retenues = revisionsRetenues(revs.map((r) => ({ ...r, version: r.revision })), { coupDEnvoi: rencontre.coupDEnvoi ?? revs.find((r) => r.kickoff)?.kickoff ?? null, jour: premiere.date });
+    const r = retenues.derniere;
+    if (!r) {
+      compter(ecartees, retenues.raisonDerniere ?? 'heureInconnue');
+      continue;
+    }
+    const buts = rencontre.reglement?.buts;
+    if (!buts) {
+      compter(ecartees, rencontre.reglement?.nonReglableButs ?? 'sansScore');
+      continue;
+    }
+    const da = lireDistribution(r.serviceDistribution);
+    const db = lireDistribution(r.distribution);
+    if (!da || !db) {
+      compter(ecartees, 'sansDistribution');
+      continue;
+    }
+    const cle = `${buts.home}-${buts.away}`;
+    const dans = buts.home <= 8 && buts.away <= 8;
+    if (!dans) hors++;
+    const pa = dans ? da.issues[cle] ?? 0 : 0;
+    const pb = dans ? db.issues[cle] ?? 0 : 0;
+    n++;
+    sa += -Math.log(Math.max(pa, PROBA_MIN));
+    sb += -Math.log(Math.max(pb, PROBA_MIN));
+    if (r.serviceChoice === cle) ea++;
+    if (r.choice === cle) eb++;
+  }
+  return { matchs: n, a: n ? nombre(sa / n) : null, b: n ? nombre(sb / n) : null, exactA: n ? nombre((100 * ea) / n, 2) : null, exactB: n ? nombre((100 * eb) / n, 2) : null, horsGrille: hors, ecartees, juge: false };
 }
 
 /** Par marché, dans l'ordre d'apparition : lignes, matchs, perte log moyenne de chaque version. */
@@ -214,10 +394,17 @@ export function parMarche(lignes) {
 
 const nombre = (x, d = 6) => (typeof x === 'number' && Number.isFinite(x) ? Number(x.toFixed(d)) : null);
 
-/** Les « premiers chiffres » (avant l'horizon) : comptes et moyennes, JAMAIS de verdict ni de fourchette. */
-export function premiersChiffres(jugement, { essai, horizon, maintenant, reglement }) {
+/**
+ * Les « premiers chiffres » (avant l'horizon) : comptes et moyennes, JAMAIS de verdict ni de fourchette. Étape 27 :
+ * avec `complements` (complementsDeLEssai), les régimes du modèle de buts et la calibration rapportée (biais, ECE,
+ * sans verdict) ; avec `temoins`, le témoin du score exact.
+ */
+export function premiersChiffres(jugement, { essai, horizon, maintenant, reglement, complements = null, temoins = null }) {
   const etat = horizonAtteint({ matchs: jugement?.n?.matchs ?? 0, depuis: essai.depuis, maintenant, horizon });
+  const sansVerdict = (c) => (c ? Object.fromEntries(Object.entries(c).map(([k, x]) => [k, x ? { pronostics: x.pronostics, matchs: x.matchs, biais: x.biais, ece: x.ece } : null])) : null);
   return {
+    ...(complements ? { regimes: complements.regimes, calibration: { a: sansVerdict(complements.calibration.a), b: sansVerdict(complements.calibration.b) } } : {}),
+    ...(temoins ? { temoins } : {}),
     calculeLe: new Date(maintenant).toISOString(),
     matchs: jugement?.n?.matchs ?? 0,
     lignes: jugement?.n?.lignes ?? 0,
@@ -233,9 +420,15 @@ export function premiersChiffres(jugement, { essai, horizon, maintenant, regleme
   };
 }
 
-/** Le jugement PRINCIPAL rangé avec la candidate (le registre de la mesure garde le jugement complet). */
-export function resumeDuJugement(j, { essai, versionEnService, empreinte, reglement }) {
+/**
+ * Le jugement PRINCIPAL rangé avec la candidate (le registre de la mesure garde le jugement complet). Étape 27 :
+ * avec `complements`, le juge par famille (même K), la calibration rapportée, la porte de sûreté (K = 1) et les
+ * régimes — ce que lit etatDeLAdoption (engineVersions.js) ; avec `temoins`, le témoin du score exact (jamais jugé).
+ */
+export function resumeDuJugement(j, { essai, versionEnService, empreinte, reglement, complements = null, temoins = null }) {
   return {
+    ...(complements ? { parFamille: complements.parFamille, calibration: complements.calibration, surete: complements.surete, regimes: complements.regimes } : {}),
+    ...(temoins ? { temoins } : {}),
     le: j.le,
     principal: true,
     verdict: j.verdict,

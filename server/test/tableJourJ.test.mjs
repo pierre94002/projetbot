@@ -1013,7 +1013,8 @@ test('les constantes recopiées sont celles des lecteurs du moteur ; dayTable.js
   assert.match(lire('data/db/matchStatsRead.js'), /const MINIMUM_SAISON = 6;/);
   const code = lire('data/db/dayTable.js');
   const imports = [...code.matchAll(/^import .* from '([^']+)';$/gm)].map((m) => m[1]).sort();
-  assert.deepEqual(imports, ['../providers/leagueCups.js', '../providers/seasonWindows.js', './columns.js', './identityRegistry.js', './leagueBenchmarks.js', './matchStatsDb.js', './matchStatsRead.js', './scoreFormRead.js', './statInputsRead.js', 'node:child_process', 'node:fs', 'node:sqlite', 'node:url']);
+  // Étape 27 : le jeton « un calcul lourd à la fois » (utils/calculLourd.js) autour du contrôle à part.
+  assert.deepEqual(imports, ['../../utils/calculLourd.js', '../providers/leagueCups.js', '../providers/seasonWindows.js', './columns.js', './identityRegistry.js', './leagueBenchmarks.js', './matchStatsDb.js', './matchStatsRead.js', './scoreFormRead.js', './statInputsRead.js', 'node:child_process', 'node:fs', 'node:sqlite', 'node:url']);
   // Le contrôle de la nuit dans un processus à part : en lecture seule, rien d'autre que dayTable.js.
   const aPart = lire('data/db/dayTableControle.js');
   assert.deepEqual([...aPart.matchAll(/^import .* from '([^']+)';$/gm)].map((m) => m[1]).sort(), ['./dayTable.js', 'node:sqlite']);

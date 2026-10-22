@@ -424,6 +424,24 @@ if (phase === 'cycle') {
   fs.writeFileSync(FICHIER_VERSIONS, '{"format":1,"versions":[');
   e.illisible = await etat();
   s.etats = e;
+} else if (phase === 'modele-de-buts-fautif') {
+  // Étape 27 (vérification du branchement, constat 2) : PUT /api/config refuse (400) une clé modeleDeButs fautive,
+  // en mots simples, sans rien écrire (ni réglages, ni version) ; null reste accepté (la sortie de secours) ; une clé
+  // juste passe.
+  const { reglagesDuModele } = await import('./modeleDeButsCommun.mjs');
+  V.demarrerVersions();
+  await requete('PUT', '/api/config', { defaultCorrelation: -0.15 });
+  const avant = { config: photo(FICHIER_CONFIG), versions: photo(FICHIER_VERSIONS) };
+  s.fautifs = [];
+  for (const modeleDeButs of [{ version: 2 }, 42, { ...reglagesDuModele(), rho: 5 }]) {
+    const r = await requete('PUT', '/api/config', { modeleDeButs, edgeThresholdMin: 0.04 });
+    s.fautifs.push({ code: r.code, erreur: r.corps?.error ?? null });
+  }
+  s.rienEcrit = { config: photo(FICHIER_CONFIG) === avant.config, versions: photo(FICHIER_VERSIONS) === avant.versions };
+  const nul = await requete('PUT', '/api/config', { modeleDeButs: null });
+  s.nul = { code: nul.code, cle: nul.corps?.config ? (nul.corps.config.modeleDeButs ?? null) : 'pas de réglages rendus' };
+  const juste = await requete('PUT', '/api/config', { modeleDeButs: reglagesDuModele() });
+  s.juste = { code: juste.code, cle: Boolean(juste.corps?.config?.modeleDeButs), version: juste.corps?.version?.numero ?? null };
 } else {
   throw new Error(`Phase inconnue : ${phase}`);
 }

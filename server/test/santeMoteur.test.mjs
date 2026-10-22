@@ -420,6 +420,15 @@ test('la version du moteur, la candidate et la dérive : la version en service, 
   assert.deepEqual(derive.derive, { jugee: true, derive: true, mois: '2026-09', moisFiges: 1, alerte: true });
   const illisible = S.assemblerLaSante({ maintenant, lecteurs: { ...LECTEURS_VIDES, versions: versions({ dernierMois: null, moisFiges: null, alerte: null, probleme: 'base occupée' }) } }).blocs.versions;
   assert.match(illisible.phrase, /Dérive : pas lisible pour l’instant \(base occupée\)\./);
+  // Étape 27 : une candidate qui a sa phrase en mots simples (`enMots`) est dite par elle, jamais par son « quoi » technique.
+  const candidate = { id: 'modele-buts-v1', quoi: 'Un seul modèle de buts : une grille des scores (Poisson et Dixon-Coles, rho −0,05) calée sur les cotes…', enMots: 'Un seul modèle pour tous les marchés de buts et le score : les pourcentages partent des cotes.', statut: 'en-essai', jugement: null };
+  const avecLaCandidate = (c) => () => ({ versions: { ...versions(null)().versions, candidate: c }, derive: { dernierMois: null, moisFiges: 0, alerte: null, probleme: null } });
+  const enMots = S.assemblerLaSante({ maintenant, lecteurs: { ...LECTEURS_VIDES, versions: avecLaCandidate(candidate) } }).blocs.versions;
+  assert.match(enMots.phrase, /^Candidate en essai : « Un seul modèle pour tous les marchés de buts et le score : les pourcentages partent des cotes\. » \(/);
+  assert.doesNotMatch(enMots.phrase, /Poisson|Dixon|rho/);
+  // Sans `enMots` (une candidate d'avant l'étape 27) : son « quoi », comme avant.
+  const sansMots = S.assemblerLaSante({ maintenant, lecteurs: { ...LECTEURS_VIDES, versions: avecLaCandidate({ ...candidate, enMots: undefined }) } }).blocs.versions;
+  assert.match(sansMots.phrase, /^Candidate en essai : « Un seul modèle de buts : une grille des scores \(Poisson/);
 });
 
 test('la note du moteur face au marché vient de la note de départ écrite dans le code : le 1N2 et le plus/moins 2,5 face au marché, les autres marchés face au championnat seul — rien n’est recalculé', async () => {

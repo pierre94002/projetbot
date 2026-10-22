@@ -23,7 +23,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { preparerCopie, executer, SERVEUR, RACINE_ESSAIS, MANIFESTE_ECHANTILLON } from './aides/isolement.mjs';
+import { preparerCopie, executer, sansCandidateDuCode, SERVEUR, RACINE_ESSAIS, MANIFESTE_ECHANTILLON } from './aides/isolement.mjs';
 
 const UI = path.resolve(SERVEUR, '..', 'ui');
 const pret = ['vite', '@vitejs/plugin-vue', 'vue', 'pinia'].every((p) => fs.existsSync(path.join(UI, 'node_modules', p)));
@@ -32,9 +32,9 @@ const options = { skip: pret ? false : 'ui/node_modules (vite, plugin-vue, vue, 
 const R = await imp(path.join(UI, 'src', 'utils', 'versionsMoteur.js'));
 const MOINS = '−';
 
-/** Les réponses du vrai serveur, produites une fois dans une copie isolée. */
+/** Les réponses du vrai serveur, produites une fois dans une copie isolée (étape 27 : sans la candidate du code — le cycle des versions sans candidate). */
 function etatsDuServeur() {
-  const copie = preparerCopie({});
+  const copie = sansCandidateDuCode(preparerCopie({}));
   try {
     const env = { CLAUDE_CODE_BIN: path.join(copie.dossier, 'pas-de-claude-ici.exe'), MATCH_STATS_AUTO_REFRESH: 'false' };
     const r = executer(copie, path.join(SERVEUR, 'test', 'aides', 'script-versions-moteur.mjs'), { args: ['etats', MANIFESTE_ECHANTILLON], timeout: 300_000, env });
@@ -282,7 +282,7 @@ test('la carte, une candidate en essai (fabriquée) : sa fiche — identifiant, 
   const r = await contexte.carte({ reponse: etats.avecCandidate });
   assert.deepEqual(r.avertissements, []);
   assert.match(r.texte, /Version candidate en essai essai-rho-015/);
-  assert.match(r.texte, /Identifiant essai-rho-015 Étape 27 — Corrélation Dixon-Coles à −0,15 \(candidate d’essai\) Marchés calculés à blanc totalGoals, bothTeamsScore En essai depuis pas encore mise en essai : au prochain démarrage du serveur/);
+  assert.match(r.texte, /Identifiant essai-rho-015 Étape 27 — Corrélation Dixon-Coles à −0,15 \(candidate d’essai\) Marchés calculés à blanc Plus\/moins buts, Les 2 équipes marquent En essai depuis pas encore mise en essai : au prochain démarrage du serveur/);
   assert.match(r.texte, /jamais montrés comme pronostic, jamais pariés, jamais envoyés à l’IA/);
   const fautive = await contexte.carte({ reponse: etats.candidateFautive });
   assert.match(fautive.texte, /Candidate en essai refusée Candidate « essai-rho-015 » : marché inconnu « buteurs »/);

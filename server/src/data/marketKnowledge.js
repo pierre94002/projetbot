@@ -60,6 +60,7 @@ import { FD_SAISONNIERS, FD_PAYS } from './providers/footballDataOdds.js';
 import { SOURCES_PAYANTES, SOURCES_SAISIES } from './db/oddsQuotesRepository.js';
 import { openDb, resolveDbPath } from './db/matchStatsDb.js';
 import { creerPauses, executerSansPause, executerEnRendantLaMain, rendreLaMainParDefaut } from '../utils/travailCooperatif.js';
+import { commencerCalculLourd } from '../utils/calculLourd.js';
 
 // ================================================================ réglages, écrits ici
 
@@ -2042,6 +2043,17 @@ export const OPTIONS_DE_L_ENFANT = Object.freeze(['--max-old-space-size=384', '-
  * gardent leur garde-fou), plus le plafond de mémoire (OPTIONS_DE_L_ENFANT).
  */
 export function calculerAPart({ chemin, options = {}, empreintePrecedente = null, delaiMs = DELAI_CALCUL_MS, avancement = null }) {
+  // Étape 27 : un calcul lourd à la fois (utils/calculLourd.js) — un autre en cours, celui-ci est refusé (reporté).
+  let rendre;
+  try {
+    rendre = commencerCalculLourd('connaissance du marché');
+  } catch (error) {
+    return Promise.reject(error);
+  }
+  return calculerSousJeton({ chemin, options, empreintePrecedente, delaiMs, avancement }).finally(rendre);
+}
+
+function calculerSousJeton({ chemin, options, empreintePrecedente, delaiMs, avancement }) {
   return new Promise((resolve, reject) => {
     let fini = false;
     let erreurs = '';

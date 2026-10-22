@@ -28,6 +28,10 @@
  *     ni aucune cote relevée après la coupure (gratuites, vos bookmakers) ;
  *   - la clôture ne sert qu'à MESURER, après coup : probaCloture (Pinnacle
  *     clôture, sinon moyenne de clôture, jamais le maximum), les témoins.
+ * Étape 27 : chaque jeu rend aussi `plusMoins`, l'ancre du total du modèle de buts unique — la moyenne
+ * football-data d'avant-match (moy_p25, moy_m25, par `colonne`) pour « fd-avant-match », rien pour la clôture,
+ * les cotes plus/moins gratuites admises à la coupure pour les deux autres (livresDuPlusMoins et
+ * ancrageDuPlusMoins de goalModel.js : les fonctions du direct) ; marge retirée par la méthode puissance.
  * Lit la base de l'appelant (`database`), n'en ouvre jamais.
  * -----------------------------------------------------------------------
  */
@@ -35,6 +39,7 @@
 import { removeMargin } from '../core/market/marginRemoval.js';
 import { computeMarketConsensus } from '../sports/football/bookmakerConsensus.js';
 import { titreBookmaker } from '../core/engine/vosBookmakers.js';
+import { livresDuPlusMoins, ancrageDuPlusMoins, SOURCE_FD_PLUS_MOINS, SOURCE_ESPN_PLUS_MOINS } from '../core/engine/goalModel.js';
 import { coteDuMarcheDesLivres } from '../data/freeMarketOdds.js';
 import { SOURCES_PAYANTES, SOURCES_SAISIES } from '../data/db/oddsQuotesRepository.js';
 import { JEUX_DE_PRIX, avantLaCoupure } from './periodes.js';
@@ -100,8 +105,38 @@ export function prixFd(ligne, { jeu } = {}) {
     byBookmaker,
     jeu,
     // Affiché seulement : jamais recopié dans le match donné au moteur.
-    affichage: { maximum: maximum ? { odds1: maximum[0], oddsDraw: maximum[1], odds2: maximum[2] } : null }
+    affichage: { maximum: maximum ? { odds1: maximum[0], oddsDraw: maximum[1], odds2: maximum[2] } : null },
+    // Étape 27 : l'ancre du total (la moyenne du plus/moins 2,5 d'avant-match) ; jamais de la clôture.
+    plusMoins: cloture ? null : plusMoinsAvantMatch(ligne, jeu)
   };
+}
+
+/**
+ * Étape 27 : le plus/moins 2,5 d'avant-match d'une ligne de fd_history (la moyenne du marché, par `colonne` : une
+ * colonne de clôture lèverait), marge retirée par la méthode puissance ; null sans les deux cotes ou si la marge est
+ * incohérente. La même forme que ancrageDuPlusMoins (goalModel.js).
+ */
+export function plusMoinsAvantMatch(ligne, jeu) {
+  const o = [colonne(ligne, 'moy_p25', jeu), colonne(ligne, 'moy_m25', jeu)];
+  if (o.some((x) => x === null)) return null;
+  return ancrageDuPlusMoins([{ source: SOURCE_FD_PLUS_MOINS.source, bookmaker: SOURCE_FD_PLUS_MOINS.bookmaker, over: o[0], under: o[1], releveAt: null }]);
+}
+
+/**
+ * Étape 27 : le plus/moins 2,5 GRATUIT d'une rencontre du magasin, tel qu'il était à la coupure — les fonctions du
+ * direct (livresDuPlusMoins, ancrageDuPlusMoins) sur les cotes `ou` de ses événements (moyenne football-data,
+ * livres ESPN ; jamais live). null s'il n'y en a pas.
+ */
+export function plusMoinsGratuit(matchKey, { coupure, database } = {}) {
+  if (!coupure) throw new RangeError('plusMoinsGratuit : la coupure est obligatoire.');
+  const cotes = requete(
+    database,
+    'plus-moins',
+    `SELECT e.source, q.bookmaker, q.selection, q.line, q.kind, q.releve_at AS releveAt, q.price
+     FROM odds_events e JOIN odds_quotes q ON q.event_id = e.id
+     WHERE e.match_key = ? AND e.source IN ('${SOURCE_FD_PLUS_MOINS.source}', '${SOURCE_ESPN_PLUS_MOINS}') AND q.market = 'ou' AND q.line = 2.5 AND q.kind <> 'live'`
+  ).all(matchKey);
+  return ancrageDuPlusMoins(livresDuPlusMoins(cotes, coupure));
 }
 
 /**
@@ -210,8 +245,13 @@ function choisirGratuit(actuel, l, coupure) {
  * de freeMarketOddsFor : sans le maximum, bourses à volume suffisant, moyenne des bookmakers, tout en
  * référence). null sans livre complet.
  */
-export function prixGratuits(matchKey, { coupure, database } = {}) {
+export function prixGratuits(matchKey, { coupure, database, plusMoins = false } = {}) {
   if (!coupure) throw new RangeError('prixGratuits : la coupure est obligatoire.');
+  // Étape 27 : avec `plusMoins` (le modèle de buts rejoué), l'ancre du total gratuite, à la même coupure.
+  if (plusMoins) {
+    const m = prixGratuits(matchKey, { coupure, database });
+    return m ? { ...m, plusMoins: plusMoinsGratuit(matchKey, { coupure, database }) } : null;
+  }
   const lignes = requete(
     database,
     'gratuites',
@@ -253,8 +293,13 @@ export function prixGratuits(matchKey, { coupure, database } = {}) {
  * et la liste par bookmaker sont celles de l'appli (computeMarketConsensus, sports/football). Chaque livre
  * garde l'heure de son relevé (`releveAt`) : la fraîcheur s'étiquette après la décision (simulateBets.js).
  */
-export function prixVosBookmakers(matchKey, { coupure, database } = {}) {
+export function prixVosBookmakers(matchKey, { coupure, database, plusMoins = false } = {}) {
   if (!coupure) throw new RangeError('prixVosBookmakers : la coupure est obligatoire.');
+  // Étape 27 : avec `plusMoins`, l'ancre du total est le plus/moins GRATUIT à la même coupure (vos bookmakers n'en relèvent pas).
+  if (plusMoins) {
+    const m = prixVosBookmakers(matchKey, { coupure, database });
+    return m ? { ...m, plusMoins: plusMoinsGratuit(matchKey, { coupure, database }) } : null;
+  }
   const lignes = requete(
     database,
     'payantes',

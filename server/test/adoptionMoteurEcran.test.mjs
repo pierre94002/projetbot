@@ -20,7 +20,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { preparerCopie, executer, SERVEUR, RACINE_ESSAIS } from './aides/isolement.mjs';
+import { preparerCopie, executer, sansCandidateDuCode, SERVEUR, RACINE_ESSAIS } from './aides/isolement.mjs';
 
 const UI = path.resolve(SERVEUR, '..', 'ui');
 const pret = ['vite', '@vitejs/plugin-vue', 'vue', 'pinia'].every((p) => fs.existsSync(path.join(UI, 'node_modules', p)));
@@ -29,9 +29,9 @@ const options = { skip: pret ? false : 'ui/node_modules (vite, plugin-vue, vue, 
 const R = await imp(path.join(UI, 'src', 'utils', 'versionsMoteur.js'));
 const MOINS = '−';
 
-/** Les réponses du vrai serveur à chaque moment du parcours, produites une fois dans une copie isolée. */
+/** Les réponses du vrai serveur à chaque moment du parcours, produites une fois dans une copie isolée (étape 27 : sans la candidate du code, qui passerait d’abord — le parcours fabrique les siennes). */
 function leParcours() {
-  const copie = preparerCopie({});
+  const copie = sansCandidateDuCode(preparerCopie({}));
   try {
     const r = executer(copie, path.join(SERVEUR, 'test', 'aides', 'script-adoption-moteur.mjs'), {
       args: ['parcours'],

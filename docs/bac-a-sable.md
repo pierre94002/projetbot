@@ -568,3 +568,237 @@ Une nouvelle page du menu, **« Santé du moteur »** (`/sante-moteur`, juste ap
 
 **Après la recopie** : aucun fichier du moteur touché (pas de nouvelle version au démarrage) ; `bench_runs` inchangée. « Lancer le banc » tourne dans un processus à part : le serveur garde sa mémoire (~+8 Mo au lieu de ~+0,9 Go) ; le premier rejeu calcule aussi la reproduction du 23/09 (à ± 1 % de matchs et 0,001 de perte log chez Pierre). Le commit du moteur de départ est écrit dans la note (`2e602ea…`) ; la note entre dans le commit qui suit cette recopie. `server/data/runtime/jeton-claude.json`, entré dans `2e602ea`, ne contient PAS le jeton : seulement `version`, `expireLe` (une date) et `majLe` (vérifié par les noms et les longueurs des champs, sans afficher les valeurs) ; aucun secret de `server/.env` ni de `ai-config.json` dans les 504 versions de fichiers envoyées (contrôle avant l'envoi) — pas de réécriture d'historique.
 
+
+
+## Mise en service du 22/10/2026 à 17 h 39 : étapes 27, 23 et 30 (une seule recopie, 119 fichiers ; versions précédentes dans bac-a-sable/recopies/2026-10-22_17h39m11/avant)
+
+### Étape 27 — le modèle de buts unique, calé sur le marché (lot 5, écrite dans le bac le 21/10/2026 ; la première moitié : écrite, mesurée au banc, déclarée candidate à blanc — l'adoption viendra après l'essai)
+
+**Un seul modèle pour tous les marchés de buts** (plus/moins 0,5 à 3,5, les deux équipes marquent, buts d'une équipe, résultat + total) **et le score** : une grille des scores (Poisson et Dixon-Coles, ρ −0,05, calculée sur 0-20 buts, 81 cases rendues 0-8 telles quelles, la masse au-delà dite « autre score ») **calée sur les cotes** — la référence 1N2 du moteur (les bookmakers de référence, Pinnacle d'abord) et, quand elle est relevée gratuitement, la cote plus/moins 2,5 (moyenne football-data, sinon les livres ESPN ; jamais Smarkets, une cote payante ni une saisie) —, mélangée aux **forces d'attaque et de défense** des deux équipes tirées de leurs xG (70 %) et de leurs buts, pondérées dans le temps (demi-vies 35/25 matchs, 8 matchs « moyens » ajoutés à chaque club, remise à zéro au premier match d'un nouveau championnat), face aux moyennes de leur championnat à la 90e minute. Le mélange : 10 % de statistiques sur le total et sur l'écart quand le plus/moins existe ; sinon 55 % sur le total, 10 % sur l'écart ; sans cote, les statistiques seules (le 1N2 reste alors l'ancien modèle statistique). Démarrage à froid (E6, retenu après la mesure m7) : sous 8 matchs connus, le total statistique s'appuie sur la moyenne du championnat à proportion. **Pendant l'essai, aucun chiffre ni aucun écran de match ne change** : la clé `modeleDeButs` n'est que dans la déclaration de la candidate, jamais dans les réglages en service.
+
+**La preuve au banc (porte 1)** — P2 = 2019-07-01 → 2023-06-30, football-data, jamais vue, prix d'avant-match, juge de l'étape 16 à **K = 320** (la candidate et ses 319 variantes déclarées) : **30 158 matchs, en bloc +6,10 % [5,53 ; 6,67] d'erreur de prévision en moins, retenu** ; plus/moins +7,87 % [6,94 ; 8,81], buts d'une équipe +8,89 % [8,15 ; 9,64], les deux marquent +5,57 % [4,72 ; 6,43], résultat + total +3,19 % [2,80 ; 3,57] : les quatre familles et les 16 lignes « retenu », aucune moins bonne que le repère ; plus/moins 2,5 face au marché : −0,03 % [−0,07 ; +0,02], au niveau du marché (la version en service : −8,45 %, moins bon) ; ce que le moteur annonce pour son pronostic retenu du plus/moins 2,5 : −14,4 points (trop haut) en service, −0,5 point (dans le hasard) pour la candidate ; score exact (témoin) +0,146 % [0,063 ; 0,229], 13,25 → 13,33 % de scores justes, top 3 34,73 → 34,86 %. Sans cote (16 349 matchs, buts seuls) : +5,20 % [4,43 ; 5,96], mais le plus/moins 2,5 y annonce encore trop haut de 6,1 points (contre 14,8 pour la version en service). **Réserve acceptée** (décision de la coordination du 21/10/2026, écrite telle quelle dans `noteDuModeleDeButs.js`, sur la carte de la candidate et sur la feuille de route) : « Réserve acceptée : trop peu de pronostics pour juger la calibration de résultat + total 2,5 ; l'écart va du côté prudent » (avec sa majuscule partout où elle s'affiche) (+4,07 points pour 164 pronostics retenus contre +1,93 pour 90). Dans le code de la porte (`bancCandidate.porteDuBanc`) : le critère « l'écart de la candidate pas plus grand que celui de la version en service » ne vaut que sur les lignes que le juge peut trancher (200 pronostics ou plus des DEUX côtés, `JUGE.minBlocs`) ; ailleurs, la ligne est « non jugée » et, si l'écart y est plus grand, une réserve dit son sens (prudent / optimiste) — testé (`adoptionMoteur`).
+
+**Où ça vit.** Nouveaux : `core/engine/goalModel.js` (le modèle, pur, que des CODES ; DANS l'empreinte du moteur), `core/engine/motsDuModeleDeButs.js` (TOUS les mots du modèle pour Pierre : mot court et phrase de chaque régime, nom des sources du plus/moins, messages d'un réglage fautif ou d'une erreur du calcul ; HORS de l'empreinte, comme la note : corriger une phrase ne crée pas de version et ne recommence pas l'essai), `data/db/entreesButs.js` (le lecteur du direct : forces « avant J », moyennes, plus/moins relevé avant `maintenant` ; dans l'empreinte), `data/db/forcesButs.js` + `forcesButsEnfant.js` (l'étape de nuit « forcesButs » : calcul dans un processus à part, en lecture seule, différence, rangement par tranches de 250 en rendant la main, contrôle anti-fuite par un second chemin ; hors empreinte), `utils/calculLourd.js` (un calcul lourd à la fois), `core/engine/noteDuModeleDeButs.js` (la note du banc P2 et la fiabilité du score, recopiées d'un rejeu ; hors empreinte), `bench/libellesDesCases.js`, `data/roadmap/bancEtape27.js`, `scripts/forces-buts.mjs`. Retouchés, tout sous la clé : `oddsEngine.js`, `scorePrediction.js`, `verdictPari.js`, `sports/football/{markets,model,index}.js` ; le banc (`entrees`, `prix`, `periodes`, `runner`, `bancCandidate`, `essaiCandidate`, `lancements` — les 320 `VARIANTES_DE_L_ETAPE_27`), `engineVersions.js` (`CANDIDATE_EN_ESSAI`, la porte de l'essai, `porte1DeLaCandidate`), `matchStatsDb.js` (trois tables neuves), l'actualisation (`matchStatsAutoRefresh.js` : l'étape « forcesButs » entre l'indice de force et le gel), le gel, l'essai à blanc, la dérive, le Repérage (`data/screener.js`), la feuille de route. Écrans : `components/analysis/GoalModelProvenance.vue` (neuf), `MarketPicksBoard`, `ScorePredictionCard`, `MarketVerdictBoard`, `views/UpcomingMatchView`, `views/ScreenerView`, `components/settings/EngineGoalModelTrial.vue` (neuf), `EngineVersionsPanel`, `EngineConfigForm`, `views/SettingsView`, `components/roadmap/RoadmapStep`, `utils/modeleDeButs.js` et `utils/bancAvantApres.js` (neufs), `utils/versionsMoteur.js`, `utils/langageParis.js` (le terme « modele-de-buts »), `ui/DESIGN.md`.
+
+**L'empreinte du moteur** : code `16f2459db183a99576365047da98b7777687ef05` (37 fichiers ; en service chez Pierre : `6ed7e010…`). Elle a bougé une dernière fois après la vérification des écrans (21/10 au soir) : les mots du modèle de buts sont sortis de `goalModel.js` vers `motsDuModeleDeButs.js`, hors empreinte (avant : `a7d0f398…`) — un test le garde (changer une phrase de `motsDuModeleDeButs.js` ne change PAS l'empreinte, changer une formule de `goalModel.js` la change) ; les deux bancs P2 rejoués avec ce code (bench_runs n° 9 pour la candidate, n° 10 pour la version en service) sont identiques, ligne à ligne, aux rejeux d'avant (1 256 244 lignes chacun, 0 différente) : aucun chiffre ne bouge. Candidate `modele-buts-v1`, empreinte `f01dd8496f56a415` (avant : `7efbc829…`) ; la note (`noteDuModeleDeButs.js`) régénérée sur le rejeu n° 9 porte cette empreinte, la porte 1 reste sur la carte. Dès ce commit, plus rien ne bouge dans le moteur avant la mise à blanc.
+
+**À l'écran.** Pendant l'essai, seulement Réglages, la santé du moteur et la feuille de route : la carte « Versions du moteur » dit la phrase en mots simples de la candidate (`enMots` de la déclaration, hors de son empreinte : « Un seul modèle pour tous les marchés de buts et le score : les pourcentages partent des cotes (1N2, et plus/moins 2,5 quand il est relevé) et sont ajustés par les xG des deux équipes ; sans cote, les xG (ou, à défaut, les buts) seuls. » ; son « quoi » technique reste au registre de la mesure, et sur la carte seulement dans « Détail technique », replié ; la page « Santé du moteur » dit la même phrase), ses marchés et son témoin en mots, puis, sous la fiche de la candidate, **« Le modèle de buts unique, famille par famille »** — la porte 1 du banc et sa réserve acceptée, un chiffre clé par famille (le verdict de l'essai en mots ; « pas encore » avant l'horizon, le chiffre du banc en détail : « au banc 2019-2023 : +7,9 % d'erreur de prévision en moins, retenu », fourchettes signées comme sur la feuille de route), « Une famille « pas prouvé » à 800 matchs est l'issue normale ; seul « moins bon » est un échec. », la calibration de chaque version, les régimes (« cotes + plus/moins 61 % · cotes 1N2 seule 34 % — sur ces 34 %, le plus/moins ne vient pas du marché · sans cote 5 % : trop peu pour juger »), la porte de l'adoption et l'horizon (« 412 matchs sur 800, jour 11 sur 21 ») ; « Paramètres du moteur » : « Modèle de buts unique : absent — ancien modèle de buts (son essai éventuel se lit dans la carte « Versions du moteur ») » — une phrase qui ne vieillit pas ; la feuille de route, étape 27 — « En cours » (« en essai à blanc, adoption à venir », sans date de fin ; la page dit 29 terminées et 1 en cours) : le tableau « Banc d'essai sur des matchs jamais vus (2019-2023) : avant / après » (17 lignes, « Avant (ancien modèle) » et « Après (modèle de buts unique) » — des en-têtes qui restent justes après l'adoption —, verdict en mots, calibration du pronostic retenu, Σ en bloc), la phrase « football-data n'a pas d'xG : ce banc juge le modèle « cotes + buts » ; les xG se jugent pendant l'essai à blanc », la réserve, où en est l'étape. **Après l'adoption seulement** (la clé en service) : sur la page du match, la provenance des pourcentages de buts (« cotes + xG · Moteur CôteMaster · cote 1N2 Pinnacle + plus/moins 2,5 football-data (moyenne du marché) + xG FotMob · plus/moins relevé … », ambre au-delà de 24 h ; sans plus/moins : « … · aucune cote plus/moins relevée pour ce match » ; sans cote : « … · aucune cote pour ce match · 1N2 : ancien modèle statistique » ; un championnat inconnu du magasin : « moyennes par défaut du moteur », jamais « magasin FotMob ») sous « Buts » et sur « Les 2 équipes marquent » / « Résultat + total », la bulle « Modèle de buts unique » ; la carte du score : la puce du régime, la provenance, « Ce que disent les xG » (par équipe « crée +18 % · concède −9 % », ses matchs connus ; « Ce que disent les buts » quand trop peu d'xG sont connus pour l'une des deux équipes — décidé club par club, jamais « pas d'xG pour ce championnat »), « autre score » dès 0,5 %, la fiabilité selon le régime : « mesurée sur 2019-2023, championnats européens, matchs avec une cote plus/moins 2,5, sans xG » (calé sur la cote 1N2 seule : « pas encore mesurée pour un match sans cote plus/moins relevée (le banc 2019-2023 n'en comptait que 2 sur 30 158) » ; sans cote : « championnats d'Europe, d'Amérique et d'Asie, matchs sans cote d'avant-match ») ; le verdict par marché : sur le 2,5 calé, « une value sur cette ligne ne vient que d'un écart entre votre bookmaker et ce marché » ; le Repérage : la pastille du régime par match (tous les bookmakers comptés : « et 9 autres » sur 12) et la bulle de la colonne 2,5 (« les xG des deux équipes ne comptent que pour 10 % dans le total de buts ») ; « Réinitialiser les valeurs par défaut » demande d'abord confirmation (« Cela retire le modèle de buts unique (étape 27) »).
+
+**Mesures dans le bac** (base du 18/10). Avant tout changement du moteur : le rejeu P2 de la version en service = la note de départ (1 707 feuilles égales, les fourchettes seules suivent le K), le moteur entier figé sur 201 cibles × 4 variantes (`test-figer.mjs --complet`). Forces de la nuit, premier calcul : 122 006 lignes (3 060 clubs, 69 championnats, 61 005 rencontres) en 6,6 s (enfant 4,1 s, 123 Mo ; rangement 1,07 s, plus longue tranche 62 ms) ; contrôle anti-fuite 40 couples, 0 écart. Banc P2 : version en service 3 min 51 s (823 Mo), candidate 4 min 10 s (794 Mo), 46 507 rencontres ; le banc de la version en service identique, ligne à ligne, à celui de l'ancien code (1 256 244 lignes). P3a (2023-01 → 2023-06, rapporté, jamais une porte) : +9,6 % [7,2 ; 12,0] retenu. **La preuve « rien ne change »** : moteur — `moteurCleEteinte` (201 cibles × 4 variantes à l'octet face au calcul figé AVANT le premier changement) ; écrans — la page du match (huit onglets, un match à cotes et un sans cote, réponses du vrai serveur), la carte du score, la planche des pronostics et le verdict par marché sur 12 analyses en service, et le Repérage, rendus avec le code de l'interface du DÉPÔT et celui du bac : **55 rendus identiques** (les commentaires HTML invisibles mis à part : ceux que Vue pose pour un bloc absent, et ceux du gabarit), aucune marque de l'étape 27, aucun appel refusé ; en permanence : `modeleDeButsEcran` (aucune marque ni aucun mot sans la clé, tous avec) et `pageMatchDecisionEcran` (la page en service, ses huit onglets).
+
+**Tests** : `npm test` : **914 tests, 912 réussis + 2 constats « # TODO », 0 échec, ~242 s** (846 avant l'étape) — quatre fichiers neufs (`moteurCleEteinte`, `modeleDeButs`, `forcesButs`, `modeleDeButsEcran`) et quinze complétés ou ajustés, puis, aux trois retouches du soir, `feuilleDeRoute` (+1 : une ligne partielle ne finit pas l'étape), `adoptionMoteur` (+1 : `enMots` hors de l'empreinte), `santeMoteur`, `feuilleDeRouteEcran`, `registreMesure`, puis, à la vérification des écrans, `gardeFou` (+1 : les mots du modèle hors de l'empreinte), `modeleDeButsEcran`, `adoptionMoteur`, `langageParis`, puis, aux retouches de la vérification Fable, `versionsMoteur` (+1), `registreMesure` (+1), `modeleDeButsEcran` (+1), `moteurABlanc` et `forcesButs` (voir `TESTS.md`). Bugs volontaires (copie du code dans le scratchpad, resynchronisée et vérifiée identique au bac, 496 fichiers, `node_modules` recopiés) : **32 sur 32 détectés**, 33 poses — le 23 en deux moitiés : l'import de l'indice de force (garde-fou) et, à l'étape 3, la lecture de stat_value avec les fenêtres de l'étape 18 déclarées par la candidate (23b), qui fait tomber le garde-fou ET « P2 jamais vue » ; le code du bac identique avant et après la série (731 fichiers, sha1 `74d80955…`) ; rejouée après les trois retouches du soir : 33 sur 33 (témoin : 119 tests verts), code identique avant et après (sha1 `a9211a9b…`) ; puis après la vérification des écrans : 33 sur 33 (témoin : 120 tests verts), code identique avant et après (732 fichiers, sha1 `4de113c1…`) ; enfin après les retouches de la vérification Fable, sur le code final : 33 sur 33 (témoin : 120 tests verts), code identique avant et après (733 fichiers, sha1 `bdebe772…`). `verifier-interface --avant` (le src du dépôt) : 137 composants compilés, construction ok ; une ligne signalée « disparue », voulue : les marchés de la candidate dits en mots (les identifiants gardés au survol).
+
+**Écarts à la conception** (le détail dans l'état de l'étape) : sans plus/moins, le marché est rendu exact sur la grille 0-20 en partant de `tauxDuMarche` ; un match prolongé sans score de la 90e compte 0-0 (comme la mesure) ; départs de secours de l'ajustement ; « maintenant » obligatoire dans les forces ; la fiabilité du score dit son périmètre mesuré (« championnats européens » n'est vrai que pour les matchs à cotes : les 22 championnats principaux de football-data ; sans cote, des championnats d'Europe, d'Amérique et d'Asie) ; sans plus/moins, la pastille dit l'heure du calcul et la cote absente ; le 1N2 sans bookmaker de référence se dit par les livres relevés ; la ligne du Repérage porte les vrais fournisseurs ; la confirmation de la remise à zéro est posée dans Réglages (le bouton du formulaire émet comme avant) ; le détail du modèle de buts est un composant à part, posé avant l'essai et l'adoption ; le nom des cases dans un fichier léger, les phrases de la porte en mots ; l'état de l'étape sur la feuille de route : une ligne d'historique PARTIELLE (`partielle` : ce qui reste) ne finit pas l'étape — une étape qui n'a que des lignes partielles est « en cours », elle devient « terminée » à sa première ligne qui ne l'est pas (l'adoption) ; la candidate a sa phrase en mots (`enMots`, hors de son empreinte) ; les mots du modèle de buts dans un module hors empreinte (`motsDuModeleDeButs.js`) ; le régime « buts » se dit club par club (« trop peu d'xG connus pour l'une des deux équipes ») ; les essais des étapes 25-26 qui fabriquent leurs candidates tournent sans la candidate du code.
+
+**Pièges** : un rendu côté serveur de Vite (`middlewareMode`) ouvre encore le port de rechargement à chaud sans `server.ws: false` (les essais d'écran d'avant affichent « Port is already in use » ; le nouveau le ferme) ; pour comparer deux rendus, retirer les commentaires HTML (Vue pose `<!---->` pour un bloc absent, le rendu de développement garde ceux du gabarit) ; `validerCandidate` refuse l'identifiant de la candidate parmi ses variantes : la déclaration les filtre (319 + elle = 320).
+
+**Regardé en direct par la coordination dans le bac** (serveurs 4600/5600, le 21/10 au soir), d'où les trois retouches ; puis **la vérification des écrans** (relecture du code des écrans, 21/10 au soir) : 10 constats, tous corrigés le soir même (les phrases du régime « buts », la fiabilité selon le régime, « et N autres » compté sur la liste entière, le chiffre du banc qui dit ce qu'il mesure, la bulle du 2,5, deux phrases qui ne vieillissent pas, le 2,5 sans cote dans l'historique, « les xG (ou, à défaut, les buts) », les moyennes par défaut dites telles quelles) ; **pas encore regardé après elles** : le « Détail technique » replié de la carte de la candidate, la 27 « En cours » sur la feuille de route (à 375 px aussi) ; les éléments de la page du match, du Repérage et du verdict ne paraissent qu'avec la clé en service (après l'adoption) — pour les voir dans le bac, mettre la clé de la candidate dans les réglages du bac, jamais chez Pierre.
+
+**Après la recopie** (CôteMaster fermé ; `sandbox-apply --appliquer`, puis `demarrer-cotemaster.bat`) : au démarrage, une version « code » de plus (n° 4 : le code du moteur passe de `6ed7e010…` à `16f2459d…`, les chiffres ne changent pas) ; la candidate est en essai dès ce redémarrage de l'appli (K = 320 au registre de la mesure, en une seule écriture), puis calculée à blanc chaque nuit : à la première passe d'actualisation, l'étape « forcesButs » construit les forces pour l'empreinte de la candidate (10 à 15 s chez Pierre) ; « moteurABlanc », une fois par nuit, la calcule à blanc (« en attente » et refait à la passe suivante tant que ses forces ne sont pas à jour) ; la carte de la candidate montre ses régimes et « pas prouvé est l'issue normale » dès le premier calcul à blanc ; l'adoption, d'un clic, après 800 matchs joués et 21 jours, seulement sur « retenu » et la porte de l'adoption franchie. Les trois tables neuves (`forces_buts`, `forces_buts_ligues`, `forces_buts_state`) se créent au démarrage.
+
+**Retouches mineures après la vérification Fable en ultracode** (21/10 au soir ; quatre angles « prêt », aucun constat non mineur ; toutes HORS de l'empreinte : moteur `16f2459d…` et candidate `f01dd8496f56a415` inchangés, vérifiés) : la candidate au modèle de buts n'est pas calculée à blanc tant que SES forces de buts ne sont pas à jour (jamais calculées, rangement interrompu, autre version) — le bilan de la nuit dit « en attente : forces de buts pas à jour (…) — rien calculé à blanc cette fois, la passe suivante refera le calcul », et l'étape revient à la passe suivante (`moteurABlanc.js`, `matchStatsAutoRefresh.js`) ; `PUT /api/config` refuse (400) une clé `modeleDeButs` fautive, « Réglages du modèle de buts refusés, rien n’a changé : 1 réglage à revoir (rho). », sans rien écrire (`null` reste accepté : la sortie de secours ; `api/controllers/config.controller.js`) ; la candidate et ses 319 variantes sont comptées au registre de la mesure en UNE écriture (`declarerVariantes`, `trialsRegistry.js`) au lieu de 320 de suite sous OneDrive ; les écarts des contrôles anti-fuite de la nuit (table du jour J et forces de buts) se lisent enfin à l'écran — la carte « Actualisation automatique » de Réglages (« Contrôle anti-fuite de la nuit : à regarder », une ligne par contrôle, en mots simples ; `RefreshStatusPanel`) et la puce du haut (`AppTopbar`) — les mots dans `utils/controlesAntiFuite.js` (neuf) ; le contrôle anti-fuite de la nuit porte sur TOUTES les empreintes demandées (la version en service et la candidate, 40 couples chacune), chaque écart nomme son empreinte (`forcesButs.js`).
+
+**Limites connues** (écrites, sans correctif avant la mise en service) : au banc et la nuit, les moyennes de championnat sont bornées « au jour près » — un coup d'envoi juste après minuit UTC voit, dans les moyennes de la veille, des matchs finis après sa coupure (5,1 % des rencontres du magasin, moyennes de ligue seulement ; jamais le direct ni P2) ; la décision m7 (démarrage à froid) a été mesurée, côté football-data, avec les forces retenues par m2 (35/35, k0 16, buts, 0,6), pas celles de la candidate — côté magasin, avec celles de la candidate ; la décision est la même ; un match prolongé sans score de la 90e compte 0-0, comme la mesure ; le banc de la candidate tourne dans le serveur, exclu des autres calculs lourds par le verrou de l'actualisation (pas par le jeton) : sa mémoire est à mesurer chez Pierre avant de l'offrir au clic sur un PC chargé.
+
+**Pour la candidate suivante** (chacune change l'empreinte : K + 1, rejeux à refaire) : le lecteur du direct et le banc lisent le jour UTC de « coup d'envoi − 3 h » quand l'heure est sûre, et `coupureDuDirect` rend l'`heureSure` reçue au lieu de toujours vrai (fuites 1 et 3) ; un drapeau `borne` quand l'ancrage reste collé à une borne [0,05 ; 6], compté dans les analyses à blanc (modèle 1) ; un plancher de 0,05 dans `moyennesAvant` (modèle 2) ; la même précision (6 décimales) pour la grille du score de la version en service et pour celle de la candidate dans le témoin du banc (modèle 3) ; Smarkets et les autres lignes de plus/moins (1,5, 3,5) comme ancres du total. **À l'horizon de l'essai** (800 matchs, 21 jours), avant le clic d'adoption : exiger le verdict du juge (K = 320) sur les matchs « cote 1N2 seule » (régimes `cotes-1n2-xg` et `cotes-1n2-buts`), famille par famille ; « moins bon » → la candidate retourne au modèle (nouvelle candidate, K + 1), jamais d'adoption par morceaux (modèle 4).
+
+**Historique** : une ligne pour l'étape 27 (21/10, « la première moitié de l'étape — l'étape n'est pas finie »), marquée `partielle: 'en essai à blanc, adoption à venir'` (elle dit « en essai dès le redémarrage de l’appli, puis calculé à blanc chaque nuit ») : la feuille de route compte la 27 « en cours » (29 terminées, 1 en cours), sans date de fin, et le dit sous « pas encore terminée » ; son bloc dit où elle en est (« En service comme candidate à blanc … Adoption à venir »). À l'adoption, une ligne qui n'est pas partielle la finira.
+
+
+### Étape 23 — Où parier : la carte championnat × marché (lot 4, écrite dans le bac le 22/10/2026, par-dessus l'étape 27 ; mise en service avec les étapes 27 et 30)
+
+**Ce que c'est.** Une carte, championnats en lignes, marchés en colonnes (13 : résultat 1N2, plus/moins 1,5 / 2,5 / 3,5, les deux équipes marquent, buts d'une équipe, résultat + total, corners, tirs, tirs cadrés — du match et d'une équipe). Chaque case dit si le moteur a un avantage **prouvé** à cet endroit, avec son nombre de matchs. **Verte** seulement si l'avantage AU PRIX est prouvé : la valeur de clôture (la cote a ensuite donné raison au moteur) dépasse le hasard sur au moins 200 matchs. **Rouge** si le moteur fait prouvé moins bien que le marché (ses probabilités se trompent plus que la cote, ou la cote part contre lui après ses choix). **Grise** sinon : pas prouvé, trop peu de matchs (« 46 / 200 »), pas encore mesurée, contradictoire, ou pas de cote archivée pour ce marché (corners, tirs, buts d'une équipe, résultat + total : impossible de mesurer un avantage contre le bookmaker). La carte ne change AUCUN chiffre du moteur : elle trie et avertit.
+
+**D'où viennent les mesures (rien n'est rejoué, rien n'est re-jugé pour l'historique).**
+- Le **banc d'essai** (étape 19) : sa carte championnat × marché sur 2019-2023 (football-data, jamais vue, prix d'avant-match), déjà jugée par le juge de l'étape 16 avec K' = toutes ses cases. La carte en relit deux épreuves : la perte log face au marché (1N2 et plus/moins 2,5 ; elle peut rendre une case ROUGE, jamais verte — être plus juste que la cote juste ne paie pas la marge) et la valeur de clôture des paris simulés (1N2 ; verte ou rouge). Le rejeu lu est le dernier du moteur EN SERVICE (même empreinte) ; à défaut, le dernier aux mêmes réglages (« version de code précédente », dit) ; aux réglages différents, aucun. 2023-2024 (déjà regardé) : indicatif seulement.
+- La **valeur de clôture des pronostics gelés** du moteur (engine_picks, première valeur ; la mesure de la calibration de l'étape 20), depuis le 24/09/2026 ou la dernière ADOPTION qui touche la famille de marchés (une adoption du modèle de buts repart à zéro pour les buts et les deux équipes marquent ; un retour arrière, pour tout). Écartés ET comptés : avant la fenêtre, déjà vu, sans identifiant de club, mesures « à l'ouverture » (le prix du moment du gel inconnu : pour le 1N2, le moteur suit la cote, un mouvement d'avant le gel lui serait crédité).
+- **Pour information seulement** (jamais une couleur) : vos vrais paris (nombre, valeur de clôture, rendement), la comparaison à la moyenne du championnat (repère), 2023-2024, le meilleur moment pour parier (étape 22).
+
+**Le juge** : celui de l'étape 16 (`comparer`), jamais recodé (un test le garde). Pour la mesure en direct : une ligne par pronostic, bloc = le match, minimum 200 matchs (jamais baissé), et `variantes` = Kv × R — Kv = toutes les cases qui ont au moins une mesure, comptées avant le premier verdict ; R = max(24, cartes déjà calculées + 1) : chaque carte regarde à nouveau les mêmes données grossies, 24 regards prévus d'avance (deux ans de cartes). Une case maigre ne prend JAMAIS de couleur, même si on lui donnait un verdict (défense en profondeur dans la règle).
+
+**Quand elle se calcule.** Étape « carteOuParier » de l'actualisation, juste après la calibration du mois et avant la sauvegarde : dès qu'un rejeu du banc existe et qu'aucune carte n'est faite ; à un nouveau rejeu ; quand les réglages du moteur ont changé (et qu'un rejeu les mesure) ; le 1er du mois à partir de 6 h (Paris). Un clic « Actualiser » ne la refait pas (chaque calcul rend le juge plus sévère). Le calcul tourne dans un processus à part (base en lecture seule, jeton du calcul lourd ; ~15 s sur la base du bac), le serveur range la carte UNE fois dans la table `betting_map` (jamais réécrite, toutes gardées, ~0,3 Mo chacune). **Le banc du mois** : après une passe (verrou rendu, jamais pendant), le 1er du mois à partir de 6 h, si un rejeu réussi existe mais qu'aucun ne mesure le moteur en service, et si le moteur a changé AVANT le 1er : un rejeu P2 + P3 au prix d'avant-match (~5 min, ~1,1 Go dans son processus, jeton du calcul lourd), une tentative par mois. Jamais le PREMIER rejeu : tant que le bouton « Lancer le banc » n'a jamais servi, rien ne part tout seul.
+
+**Où ça se voit.**
+- **Opportunités** : chaque ligne porte la puce de sa case (« Prouvé » en vert, « Moins bien » en rouge, « Pas prouvé » / « Trop peu » en gris) ; les paris des cases vertes en tête (à verdict égal), ceux des cases ROUGES à la fin de la liste — même un favori —, avec l'avertissement sous le pari (« Moins bien que le marché : ici le moteur se trompe plus que la cote (−9,5 % … sur 2 208 matchs, 2019-2023) — son écart avec la cote n'est pas une value. ») ; rien n'est retiré, le verdict et la pastille de value ne changent pas ; une notification d'une value en case rouge le dit. En bas de la page, la carte « Où parier — la carte du mois » : le résumé, et au clic « Afficher la carte » la grille (`BettingMapGrid` : sélecteur de groupe de marchés, « seulement les championnats jugés », favoris en tête, Σ par colonne, le détail d'une case au clic — ses épreuves et ses informations —, les championnats à ajouter, la règle en mots).
+- **Repérage** : la puce sur le marché choisi (vert / rouge ; le gris au survol), et un tri « Carte « où parier » (cases vertes d'abord) » quand une carte existe.
+- **Route** : `GET /api/betting-map` (lecture seule ; `?mois=AAAA-MM`, `?id=N`, `?resume=oui`). La page du banc d'essai dit aussi ce qu'a fait le banc du mois.
+- **Couleur** : le MÊME vert que la value pour « Prouvé » (décision de Pierre du 22/10/2026), avec le mot et la coche ; l'exception est écrite dans `ui/DESIGN.md` § 3 bis.
+
+**Où ça vit.** Neufs : `server/src/data/bettingMap.js` (léger : colonnes, règle de couleur, phrases, table, lecteurs), `bettingMapCalcul.js` (le calcul), `bettingMapEnfant.js` (le processus à part), `rejeuDuServeur.js` (la tâche de rejeu partagée avec le bouton, et le banc du mois), `api/controllers/bettingMap.controller.js`, `api/routes/bettingMap.routes.js` ; `ui/src/components/analysis/BettingMapGrid.vue`, `ui/src/components/common/BettingMapChip.vue`, `ui/src/utils/carteOuParier.js`, `ui/src/services/bettingMapApi.js`. Retouchés : `matchStatsDb.js` (table `betting_map` et son trigger), `matchStatsAutoRefresh.js` (l'étape, et le banc du mois après la passe), `bench.controller.js` (la tâche partagée ; `bancDuMois` dans GET /api/bench), `routes/index.js`, `opportunities.js`, `screener.js` (à la lecture seulement), `ui/src/utils/opportunites.js`, `ui/src/utils/langageParis.js` (le terme « carte-ou-parier »), `OpportunitiesView.vue`, `ScreenerView.vue`, `ui/DESIGN.md`, la feuille de route. Aucun fichier du moteur (empreinte inchangée : `16f2459d…`, candidate `f01dd8496f56a415`).
+
+**Le chiffre attendu (base du bac, banc n° 10, moteur en service)** : 73 championnats × 13 colonnes = 949 cases — **0 verte, 19 rouges** (le plus/moins 2,5 dans 18 championnats suivis + la National League anglaise : le moteur en service y est prouvé moins juste que le marché, −6 à −12 % de perte log), **930 grises** (584 sans cote archivée, 244 pas encore mesurées, 77 trop peu de matchs — la plus remplie en direct : 47 matchs, MLS 1N2 —, 25 pas prouvé). Avec la candidate de l'étape 27 adoptée (banc n° 9) : il ne reste qu'une rouge (Bundesliga 2). Rien de vert, c'est une information : le moteur ne bat pas le marché là où on peut le mesurer ; il faudrait, à 200 matchs, une valeur de clôture d'au moins +2,6 % en 1N2 (+1,5 % plus/moins, +0,8 % les deux marquent) — elle est de −0,1 % tous championnats réunis.
+
+**Après la recopie chez Pierre** (avec les étapes 27 et 30) : au premier démarrage, la table `betting_map` se crée, vide. **Aucun rejeu du banc n'existe chez lui** : la carte dit « Pas encore mesuré : la carte a besoin d'un premier rejeu du banc d'essai… », les lignes d'Opportunités n'ont pas de puce, le Repérage n'a pas le tri « carte », et rien ne part tout seul — ni le 01/11 (le banc du mois ne lance jamais le premier rejeu). **Pour avoir une carte tout de suite** : Historique moteur › Banc d'essai › « Lancer le banc » (10 à 13 minutes, P2 à P5) ; la carte se calcule à la passe d'actualisation qui suit (ou « Actualiser » dans Réglages, tant qu'aucune carte n'existe), puis le 1er de chaque mois ; le banc est relancé tout seul le 1er du mois quand le moteur a changé. La feuille de route compte la 23 « terminée » : le **lot 4 (Mesure) est complet, 9 / 9**, et son bilan de fin de lot reste à faire avec Pierre.
+
+**Tests** : `carteOuParier.test.mjs` (25 tests : petit échantillon jamais vert ni rouge — 199 matchs à +20 %, 300 tirages au sort, deux lignes par match, verdict fabriqué sous 200 — ; K compté — Kv × max(24, regards + 1), réglages du juge par défaut, un vrai petit avantage « retenu » seul reste « pas prouvé » parmi 100 cases ; jamais recoder le juge ; rouge prouvée ; sans cote toujours grise ; contradictoire ; banc relu, K' insuffisant, rejeu exact / code précédent / aucun ; vos paris ne décident jamais ; fenêtre du direct et ses écarts comptés ; table jamais réécrite ; lecteurs et carte d'autres réglages ; colonnes ; quand la carte, quand le banc du mois ; l'étape de la passe ; Opportunités ; la route ; le bandeau honnête) et `carteOuParierEcran.test.mjs` (8 tests : règles de l'écran, rendu de la grille avec et sans carte, une case verte, hygiène du vert, câblage). Ajustés : `moteurABlanc` (l'ordre des étapes : la carte entre la calibration et la sauvegarde), `langageParis` (le terme « carte-ou-parier »), `feuilleDeRouteEcran` (le lot 4 désormais terminé). **`npm test` : 947 tests, 945 réussis + 2 constats « # TODO », 0 échec, ~228 s** (914 avant l'étape). **Bugs volontaires** : 25 sur 25 détectés (copie du code serveur + interface dans le scratchpad, `node_modules` en jonctions vers le dépôt), code du bac identique avant et après (745 fichiers, sha1 `8d046437…` sur le code final). La campagne de l'étape 27 rejouée : 33 poses (32 bugs), 33 tombent, code du bac identique avant et après (`93d1ef0f…`). `verifier-interface --avant` (le src du dépôt) : 139 composants, construction ok, seule la ligne « disparue » voulue de l'étape 27 (EngineVersionsPanel) — les ajouts du Repérage posés à côté des lignes d'origine, sans en changer une.
+
+**Écarts à la conception** : le module du banc du mois est dans `src/data` et non `src/bench` (le garde-fou interdit toute base dans `src/bench`) ; la grille est sur la page Opportunités, lue au clic (aucune lecture au chargement de la page) ; une carte d'autres réglages suspend ses couleurs dans Opportunités et le Repérage au lieu d'être recalculée sans banc ; le banc du mois ne lance jamais le premier rejeu, et attend le 1er du mois suivant pour un moteur changé dans le mois ; la mesure en direct lit tous les pronostics gelés (le filtre de date se fait dans le code, pour compter ce qui est écarté).
+
+**Limites** : les colonnes 1,5 et 3,5 se rempliront lentement (le gel ne garde qu'une ligne de buts par match, 2,5 le plus souvent) ; le 1N2 historique repose sur des prix disparus (William Hill, Pinnacle) : une case verte « paris simulés 2019-2023 » dit un avantage passé ; ouvrir la base du bac en lecture seule touche son fichier `-shm` (mémoire partagée du journal, normal en mode WAL).
+
+
+### Étape 30 — Fiches des joueurs par poste et force du onze (lot 5, écrite dans le bac le 22/10/2026, par-dessus les étapes 27 et 23 ; mise en service avec elles)
+
+**Ce que c'est.** Chaque nuit, une **fiche par joueur** : ce qu'il produit par 90 minutes, composante par composante, telle qu'elle vaut « au lendemain du dernier jour de la table du jour J ». Les composantes :
+- xG hors penalty, xA, xG cadrés, tirs, passes clés ;
+- récupérations et duels gagnés, corrigés de la possession ;
+- xG concédés pendant qu'il est sur le terrain, d'après les cartes de tirs complètes, penalties retirés ;
+- note FotMob ;
+- buts évités pour les gardiens.
+
+Chaque composante est :
+- pondérée dans le temps (demi-vie en apparitions, remesurée) ;
+- **corrigée** de l'adversaire (ses xG concédés ou produits d'avant le match, la formule de l'étape 27) et du niveau du championnat (28 facteurs appris) ;
+- **ramenée vers la moyenne de son poste** dans son championnat (365 jours) : un joueur de 5 minutes ne vaut jamais 18 xG par 90.
+
+Sous 270 minutes, la fiche est « peu jouée » et ramenée vers 0,85 × la moyenne. Elle donne deux **apports**, en buts par 90 :
+- offensif : xG + xA au-dessus de la moyenne du poste (repli tirs / passes clés sans xG) ;
+- défensif : la moyenne du poste moins ses xG concédés.
+
+Chaque club a aussi son **équipe habituelle** : les parts de titularisation, demi-vie 5 feuilles, seulement sur les feuilles d'au moins 9 titulaires identifiés. La **force du onze** d'une composition compare, ligne par ligne, les apports des onze annoncés à ceux de l'équipe habituelle. Elle dit aussi :
+- les inconnus (0,80 × la moyenne de la ligne) ;
+- les non établis ;
+- la part des habituels absents ;
+- si le gardien habituel joue.
+
+**Règle de Pierre : affichage seulement.** La force du onze n'entre JAMAIS dans les calculs du moteur. La règle tient à quatre gardes :
+- aucun fichier de l'empreinte du moteur n'atteint ces modules (test) ;
+- l'analyse IA ne la reçoit pas ;
+- empreinte du moteur inchangée `16f2459d…`, candidate `f01dd8496f56a415` ;
+- elle est **mesurée à blanc** depuis le lancement de l'étape.
+
+Le banc de la construction (2023-07-01 → 2026-09-23, la seule fenêtre permise ; K = 19 variantes) dit :
+- **1N2 : rien de prouvé** :
+  - à la clôture, 0,00 % [−0,05 ; +0,04] ;
+  - à la pré-clôture, 0,00 % [−0,12 ; +0,12] ;
+  - la cote sait déjà qui joue ;
+- **tirs d'équipe : +0,16 % [+0,11 ; +0,21], retenu**.
+
+Le brancher un jour (tirs, corners, buteurs, aux étapes 33-34) est une **question posée à Pierre** ; rien n'est branché ici.
+
+**Justesse des fiches face à la moyenne du poste** (apparitions d'au moins 20 minutes, 2024-07 → 2026-09-23, en unités corrigées) :
+
+| Composante | Gain |
+|---|---|
+| xG hors penalty | 6,2 % |
+| xA | 9,7 % |
+| xG cadrés | 3,8 % |
+| tirs | 9,8 % |
+| passes clés | 11,5 % |
+| récupérations | 11,2 % |
+| duels | 12,3 % |
+| xG concédés | 2,8 % |
+| note | 5,4 % |
+| buts évités | ≈ 0, jamais utilisés dans la force du onze |
+
+**Quand ça se calcule.** L'étape de nuit « fichesJoueurs » :
+- place : après « forcesButs », avant le gel des pronostics, la candidate à blanc et la sauvegarde ;
+- fréquence : une fois par jour civil de Paris, au clic, quand la passe d'avant l'a reportée, ou quand les fiches ne sont pas à jour.
+
+Le calcul se fait dans un **processus à part**, base en lecture seule, tas plafonné à 768 Mo, jeton du calcul lourd (un banc qui tourne → « reporté »). Il suit ces étapes :
+1. l'empreinte de la table du jour J (rencontres, comptes, fusions ; jamais une heure) — rien de changé → « rien », 0,4 s ;
+2. sinon, le rejeu complet ;
+3. la différence avec ce qui est rangé ;
+4. le **contrôle anti-fuite** : 40 joueurs recalculés « avant J » par un second chemin en SQL, tolérance 1e-9 ;
+5. la mesure à blanc.
+
+Le serveur range seul, par tranches de 250 lignes, une transaction chacune, jamais ouverte pendant qu'il rend la main. Un écart du contrôle pose l'alerte durable « Fiches des joueurs (force du onze) » (Réglages › Actualisation, puce du haut).
+
+**Le premier calcul sur la base du bac** (serveur arrêté, `node scripts/player-ratings.mjs --banc`) :
+
+| Mesure | Résultat |
+|---|---|
+| Fiches | 53 194 joueurs, dont 33 401 établies |
+| Équipes habituelles | 1 678 |
+| Lignes rangées | 54 872 |
+| Durée totale | 41,6 s |
+| Calcul à part | 39,1 s : lecture 12,0 s, rejeu 23,7 s, différence 1,5 s, contrôle 2,0 s |
+| Mémoire de l'enfant | 479 Mo au plus |
+| Rangement | 2,0 s, plus longue tranche 43 ms |
+| Boucle du serveur | jamais tenue plus de 63 ms d'affilée |
+| Journal (-wal) | 5,1 Mo au plus |
+| Contrôle anti-fuite | 40 joueurs, 0 écart |
+| Banc | 59 s, rangé dans `player_ratings_state` (« banc ») |
+| Seconde passe | « rien » en 0,4 s |
+
+En tête des apports offensifs : Olise, Messi, Raphinha, Lamine Yamal, Luis Díaz.
+
+**Où ça se voit.**
+- Pas encore d'écran (étape 31).
+- La page du match à venir reçoit `forceDuOnze` pour chaque camp, dans la composition annoncée et dans la dernière alignée (`lineupContext.avecForceDuOnze`), lue dans les tables en quelques millisecondes ; null sans fiches ou sans équipe habituelle.
+- Route `GET /api/match-stats/player-ratings`, en lecture seule. Elle prend :
+  - `?player=fotmob-N` : la fiche et sa courbe des 20 dernières valeurs ;
+  - `?club=N` : les fiches du club et son équipe habituelle ;
+  - `?league=…&poste=1-4` : les fiches établies, des meilleurs aux moins bons.
+
+  Toujours avec l'état, le bilan, le contrôle, la mesure à blanc et le banc.
+- Réglages › Actualisation : la ligne de l'étape, et l'alerte anti-fuite s'il y a un écart.
+
+**Où ça vit.**
+- Neufs :
+  - `server/src/data/db/playerRatings.js` : réglages versionnés, rejeu, force du onze pure, lecture en colonnes typées, différence, contrôle, rangement, état, lecteurs ;
+  - `playerRatingsEnfant.js` : le processus à part ;
+  - `playerRatingsBanc.js` : mesure à blanc, banc, facteurs, repli ;
+  - `server/scripts/player-ratings.mjs` : bac seulement, serveur arrêté ;
+  - `server/test/fichesJoueurs.test.mjs` et `test/aides/script-fiches-joueurs.mjs`.
+- Retouchés :
+  - `matchStatsDb.js` : les tables `player_ratings`, `player_ratings_teams`, `player_ratings_state` ;
+  - `matchStatsAutoRefresh.js` : l'étape ;
+  - `bench/lancements.js` : la portée « joueurs », l'étape 30 `fiches-v1`, 19 variantes, deux vues pour les joueurs seulement, datée au premier démarrage ;
+  - `lineupContext.js` ;
+  - `matchStats.controller.js` et `matchStats.routes.js` ;
+  - `ui/src/utils/controlesAntiFuite.js` ;
+  - la feuille de route.
+- Aucun fichier du moteur.
+
+**Après la recopie chez Pierre** (avec 27 et 23) :
+1. Au premier démarrage, les trois tables se créent vides et l'étape 30 est datée au registre de la mesure (la mesure à blanc commence ce jour-là).
+2. La première passe de nuit (ou « Actualiser ») fait le premier calcul :
+   - ~40 s dans un processus à part, ~480 Mo chez lui ;
+   - quelques secondes de rangement.
+
+   Ensuite, une nuit sans rien de neuf : « rien ».
+3. Aucun écran ne change avant l'étape 31, et aucun chiffre du moteur ne change.
+
+**Tests** : `fichesJoueurs.test.mjs`, 17 tests :
+- les pièges FotMob des postes ;
+- l'identifiant 0 ;
+- les feuilles de moins de 9 titulaires et les drapeaux manquants ;
+- les minutes minimales (formule à la main) ;
+- les xG concédés et le signe de l'apport défensif ;
+- les dribbles jamais lus ;
+- les corrections (adversaire, championnat, possession) ;
+- l'ordre du temps (fuite refusée, 9-0 planté) ;
+- le banc (inclinaison, tirs, fenêtre, date du lancement) ;
+- la règle de Pierre (graphe des imports du moteur, analyse IA, enfant en lecture seule, aucune horloge) ;
+- le lancement ;
+- l'alerte à l'écran ;
+- la nuit (à part, rien, tardive, fusion, interrompu, transactions, reporté, échec, ordre) ;
+- **l'oracle de la copie tronquée** (fiches, équipes habituelles et force du onze lues = celles du rejeu avant J, 0 écart ; contrôle anti-fuite honnête 0 écart, fuite plantée trouvée) ;
+- le lecteur de la page du match et la route.
+
+Ajustés : `connaitreMarche`, `indiceForce` (l'ordre des étapes) et `registreMesure` (l'étape 30 aux lancements).
+
+**`npm test` : 964 tests, 962 réussis + 2 constats « # TODO », 0 échec, ~216 s** (947 avant l'étape).
+
+**Bugs volontaires** : 43 sur 43 détectés, chacun sur le test qu’il vise (copie du code serveur + interface dans le scratchpad, `node_modules` en jonctions vers le dépôt ; témoin : 17 tests verts) — au premier passage 42 sur 43 : « l’identifiant 0 lu » ne tombait que sur l’essai pur, l’essai de lecture plante désormais une ligne 0 dans la table ; code du bac identique avant et après (751 fichiers, sha1 `26c37865…` sur le code final).
+
+**Campagnes rejouées** : 27 — témoin 120 verts, 33 poses (32 bugs, le 23 en deux moitiés), 33 tombent ; 23 — témoin 33 verts, 25 sur 25 ; code du bac identique avant et après chacune (`26c37865…`).
+
+**`verifier-interface --avant`** : 139 composants, 0 erreur, construction ok (5,9 s, dossier temporaire, dossier de l’interface intact) ; seule la ligne « disparue » voulue de l’étape 27 (EngineVersionsPanel).
+
+**Écarts à la conception** :
+- La justesse des fiches est mesurée sur les apparitions d'au moins 20 minutes et en unités corrigées : l'adversaire du jour est retiré des deux côtés, la fiche est jugée seule. Au prototype, la correction était créditée à la fiche, d'où xG concédés 7,9 % → 2,8 % ici.
+- L'empreinte « rien » est celle des rencontres de l'étape 29, plus les comptes de la table et le repère des fusions, jamais une heure.
+- Sans part d'au moins 2 %, pas d'équipe habituelle.
+- La force du onze du banc prend les moyennes du championnat du club, comme le lecteur.
+- 43 bugs volontaires au lieu de 22.
+- Le banc range son rapport dans `player_ratings_state`.
+- Le script refuse la vraie base, OneDrive, une base occupée et un verrou tenu.
+
+**Limites** :
+- Les fiches suivent la table du jour J : un joueur sans identifiant FotMob n'en a pas.
+- Les coupes n'entrent pas dans les moyennes de poste.
+- Le libéro (poste 5) n'existe pas au magasin.
+- Ouvrir la base du bac en lecture seule touche son `-shm` (normal en mode WAL).
+

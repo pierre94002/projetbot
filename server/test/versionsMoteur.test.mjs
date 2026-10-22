@@ -25,7 +25,7 @@ import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { preparerCopie, executer, SERVEUR, RACINE_ESSAIS, MANIFESTE_ECHANTILLON } from './aides/isolement.mjs';
+import { preparerCopie, executer, sansCandidateDuCode, SERVEUR, RACINE_ESSAIS, MANIFESTE_ECHANTILLON } from './aides/isolement.mjs';
 import { empreinteDesReglages, empreinteDuCode, fichiersDuMoteur, changementsEntre, validerCandidate, configDeLaCandidate, MODULES_DU_MOTEUR, CANDIDATE_EN_ESSAI, A_VENIR, __testing as V } from '../src/core/engine/engineVersions.js';
 import { memeDistribution, ECART_DE_DISTRIBUTION, __testing as depotEssai } from '../src/data/enregistreurs/depot.js';
 import { distributionDuMarche, MARCHES_CONNUS, MARKET_LABELS } from '../src/sports/football/markets.js';
@@ -34,9 +34,13 @@ import { DEFAULT_ENGINE_CONFIG_BY_SPORT } from '../src/core/engine/engineConfig.
 const SCRIPT = path.join(SERVEUR, 'test', 'aides', 'script-versions-moteur.mjs');
 const SRC = path.join(SERVEUR, 'src');
 
-/** Une phase dans une copie neuve (ou dans `copie`, gardée par l'appelant). */
+/**
+ * Une phase dans une copie neuve (ou dans `copie`, gardée par l'appelant). Étape 27 : la copie neuve SANS la candidate
+ * déclarée dans le code (sansCandidateDuCode) — ces essais disent la vie des versions sans candidate ; la candidate
+ * de l'étape 27 a les siens (bacSimule, moteurABlanc, adoptionMoteur, modeleDeButs).
+ */
 function lancer(phase, { runtime = {}, copie = null } = {}) {
-  const propre = copie ?? preparerCopie({ runtime });
+  const propre = copie ?? sansCandidateDuCode(preparerCopie({ runtime }));
   try {
     // Un exécutable Claude qui n'existe pas (dans la copie), même lancé depuis le dépôt : la simulation refuse sinon.
     const env = { CLAUDE_CODE_BIN: path.join(propre.dossier, 'pas-de-claude-ici.exe'), MATCH_STATS_AUTO_REFRESH: 'false' };
@@ -453,8 +457,17 @@ test('la distribution complète d’un marché (règle du sport) et la règle «
 
 // ------------------------------------------------------------ candidate (pure)
 
-test('une candidate déclarée se vérifie (étape à juger, marchés connus, au moins une modification) ; ses réglages sont ceux en service plus les siens ; aucune n’est déclarée à l’étape 25', () => {
-  assert.equal(CANDIDATE_EN_ESSAI, null, 'la première viendra de l’étape 27');
+test('une candidate déclarée se vérifie (étape à juger, marchés connus, au moins une modification) ; ses réglages sont ceux en service plus les siens ; la première déclarée est celle de l’étape 27 (le modèle de buts unique)', () => {
+  // Étape 27 (21/10/2026) : la candidate du code — valide, la clé modeleDeButs et rien d'autre, ses quatre familles de buts, le témoin du score.
+  assert.equal(CANDIDATE_EN_ESSAI.id, 'modele-buts-v1');
+  assert.equal(CANDIDATE_EN_ESSAI.etape, '27');
+  assert.deepEqual(Object.keys(CANDIDATE_EN_ESSAI.modifications.football), ['modeleDeButs']);
+  assert.deepEqual([...CANDIDATE_EN_ESSAI.marches], ['totalGoals', 'bothTeamsScore', 'teamGoals', 'resultAndTotal']);
+  assert.deepEqual([...CANDIDATE_EN_ESSAI.temoins], ['scoreExact']);
+  assert.deepEqual({ ...CANDIDATE_EN_ESSAI.horizon }, { matchs: 800, jours: 21 });
+  assert.equal(validerCandidate(CANDIDATE_EN_ESSAI).id, 'modele-buts-v1');
+  assert.equal(configDeLaCandidate(DEFAULT_ENGINE_CONFIG_BY_SPORT.football, CANDIDATE_EN_ESSAI).modeleDeButs.demarrageAFroid.matchs, 8);
+  assert.equal(DEFAULT_ENGINE_CONFIG_BY_SPORT.football.modeleDeButs, undefined, 'jamais dans les valeurs par défaut avant l’adoption');
   const ok = { id: 'score-marche-v1', etape: '27', quoi: 'Modèle de score ancré sur le marché', modifications: { football: { defaultCorrelation: -0.1, weights: { market: 0.9 } } }, marches: ['totalGoals'] };
   assert.deepEqual(validerCandidate(ok), ok);
   for (const [faute, motif] of [
@@ -513,7 +526,8 @@ test('branchements : le serveur accorde les versions AVANT d’écouter, sans ja
   assert.match(serveur.slice(serveur.lastIndexOf('try {', serveur.indexOf(APPEL)), serveur.indexOf('app.listen(')), /\} catch \(error\) \{\n {2}console\.warn\(/);
   const moteur = lire('core', 'engine', 'oddsEngine.js');
   assert.match(moteur, /result\.engineVersion = numeroDeVersion\(config, sport\.id \?\? 'football'\);/);
-  assert.match(moteur, /result\.distributions = distributionsDuMoteur\(probabilities\);/);
+  // Étape 27 : avec la grille du modèle de buts unique quand la clé existe (sinon `buts` est nul : les distributions d'avant).
+  assert.match(moteur, /result\.distributions = distributionsDuMoteur\(probabilities, buts\);/);
   assert.match(lire('data', 'repositories', 'dataVersionRepository.js'), /SETTINGS_FILES = new Set\([^)]*'engine-versions\.json'/);
   const routes = lire('api', 'routes', 'config.routes.js');
   assert.match(routes, /router\.get\('\/versions', asyncHandler\(getVersions\)\);/);
@@ -527,4 +541,18 @@ test('branchements : le serveur accorde les versions AVANT d’écouter, sans ja
   const ia = lire('core', 'ai', 'matchAiAnalysisService.js');
   assert.match(ia, /engineSnapshot: avecLaVersion\(engineSummary, engineResult\),/);
   assert.equal((ia.match(/engineSummary: pourIA\(prior\.engineSnapshot\),/g) ?? []).length, 2);
+});
+
+test('étape 27 (vérification du branchement, constat 2) — PUT /api/config REFUSE (400) une clé modeleDeButs fautive, en mots simples, sans rien écrire (ni réglages, ni version) ; null reste accepté (la sortie de secours) ; une clé juste passe', () => {
+  const s = lancer('modele-de-buts-fautif');
+  assert.deepEqual(s.fautifs.map((f) => f.code), [400, 400, 400]);
+  assert.match(s.fautifs[0].erreur, /^Réglages du modèle de buts refusés, rien n’a changé : \d+ réglages à revoir \(version 2 \(1 attendue\), rho, /);
+  assert.equal(s.fautifs[1].erreur, 'Réglages du modèle de buts refusés, rien n’a changé : un objet est attendu.');
+  assert.equal(s.fautifs[2].erreur, 'Réglages du modèle de buts refusés, rien n’a changé : 1 réglage à revoir (rho).');
+  for (const f of s.fautifs) assert.doesNotMatch(f.erreur, /modeleDeButs|Invalides|undefined/, 'en mots simples');
+  assert.deepEqual(s.rienEcrit, { config: true, versions: true }, 'rien d’écrit — pas même le seuil envoyé avec la clé fautive');
+  assert.deepEqual(s.nul, { code: 200, cle: null }, 'null : la sortie de secours, le chemin d’avant');
+  assert.equal(s.juste.code, 200);
+  assert.equal(s.juste.cle, true);
+  assert.ok(Number.isInteger(s.juste.version) && s.juste.version > 0, 'une clé juste : une version notée');
 });

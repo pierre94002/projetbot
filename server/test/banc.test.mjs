@@ -705,3 +705,82 @@ test('ORACLE : sur une copie tronquée (tout ce qui suit J supprimé), le chemin
     assert.equal(o.corners.banc, o.corners.appli, `${o.matchKey} : corners attendus`);
   }
 });
+
+// ==================================================================== 7. étape 27 : l'oracle avec le modèle de buts unique
+
+const oracleButs = uneFois(() => lancer('oracleButs'));
+
+test('ORACLE (étape 27, modèle de buts unique) : la candidate au banc ; sur une copie tronquée où la nuit refait les forces « avant J », le chemin de l’appli (heure = coupure) redonne EXACTEMENT les distributions, les 81 cases et « autre score », les buts attendus et la provenance ; les entrées lues au magasin = celles posées par le banc (forces, moyennes, plus/moins)', () => {
+  const j = oracleButs();
+  assert.equal(j.bancButs.erreur, null);
+  assert.equal(j.bancButs.grilleDifferente, 0, 'le score exact du banc est celui de la grille unique de la candidate');
+  assert.ok(j.bancButs.regimes?.['cotes-plusmoins-xg'] > 0, JSON.stringify(j.bancButs.regimes));
+  assert.ok(j.plusMoinsPlantes > 20);
+  assert.ok(j.oracleButs.length >= 4, `${j.oracleButs.length} rencontres`);
+  for (const o of j.oracleButs) {
+    assert.deepEqual(o.nuit.controle, { lignes: 40, ecarts: 0 }, `${o.matchKey} : contrôle anti-fuite de la nuit`);
+    assert.equal(o.comparees, 47, `${o.matchKey} : 1N2, 4 + 1 + 8 lignes binaires, 3 combinés`);
+    assert.ok(o.ecartMax <= 1e-6, `${o.matchKey} : écart ${o.ecartMax}`);
+    assert.ok(o.ecartScore <= 1e-6, `${o.matchKey} : 81 cases, écart ${o.ecartScore}`);
+    assert.ok(o.ecartAutreScore <= 1e-6, `${o.matchKey} : « autre score », écart ${o.ecartAutreScore}`);
+    assert.deepEqual(o.buts.appli, o.buts.banc, `${o.matchKey} : buts attendus`);
+    assert.equal(o.provenance.appli, o.provenance.banc, `${o.matchKey} : provenance`);
+    assert.equal(o.provenance.appli, 'cotes-plusmoins-xg', `${o.matchKey} : cotes + plus/moins + xG`);
+    assert.equal(o.entrees.connus, true);
+    assert.ok(o.entrees.ecartForces <= 1e-12, `${o.matchKey} : forces lues ≠ banc (${o.entrees.ecartForces})`);
+    assert.ok(o.entrees.ecartLigue <= 1e-12, `${o.matchKey} : moyennes du championnat ≠ banc (${o.entrees.ecartLigue})`);
+    assert.equal(o.entrees.plusMoins.appli, o.entrees.plusMoins.banc, `${o.matchKey} : plus/moins (fd_history au banc, odds_quotes au direct)`);
+    assert.equal(o.entrees.plusMoins.sourceAppli, 'football-data (moyenne du marché)');
+  }
+});
+
+test('ORACLE (étape 27) : un 9-0 planté le jour J ne change rien aux entrées du jour J ; une clôture plantée à H − 5 et un relevé en direct à H + 10 non plus (la pré-clôture est prise)', () => {
+  const j = oracleButs();
+  for (const o of j.oracleButs) {
+    assert.ok(o.neufZero, `${o.matchKey} : 9-0 planté`);
+    assert.equal(o.neufZero.matchsDuJour, 1, `${o.matchKey} : le 9-0 est bien au magasin le jour J`);
+    assert.equal(o.neufZero.ecartForces, 0, `${o.matchKey} : forces`);
+    assert.equal(o.neufZero.ecartLigue, 0, `${o.matchKey} : moyennes du championnat`);
+    assert.equal(o.clotureEtDirect.identique, true, `${o.matchKey} : clôture H − 5 et direct ignorés`);
+  }
+});
+
+test('banc, plus/moins GRATUIT (jeux « gratuites » et « vos bookmakers ») : à la coupure H − 60, le relevé ESPN de H − 90 pris, la clôture de H − 5 et le direct écartés ; après le coup d’envoi, la clôture ; Smarkets seul : pas d’ancre', () => {
+  const g = oracleButs().plusMoinsGratuit;
+  assert.equal(g.coupure, '2026-09-26T13:00:00.000Z');
+  assert.equal(g.espn.pOver, removeMargin([1.9, 1.95]).probabilities[0]);
+  assert.equal(g.espn.source, 'ESPN (moyenne de 2 livres)');
+  assert.equal(g.apresLeCoupDEnvoi.pOver, removeMargin([3.4, 1.28]).probabilities[0], 'plus tard, la clôture (jamais le direct)');
+  assert.equal(g.smarkets, null);
+});
+
+// ==================================================================== 8. étape 27 : ce que la candidate déclarée a vu
+
+test('étape 27 — la candidate DÉCLARÉE (CANDIDATE_EN_ESSAI) : P2 (2019-07-01 → 2023-06-30) jamais vue pour elle ; P1 et 2023-09 étiquetées « candidate:modele-buts-v1:… » ; ses deux fenêtres seulement ; ses 319 variantes sans elle, K = 320', async () => {
+  const { CANDIDATE_EN_ESSAI } = await import('../src/core/engine/engineVersions.js');
+  const { VARIANTES_DE_L_ETAPE_27 } = await import('../src/bench/lancements.js');
+  const c = CANDIDATE_EN_ESSAI;
+  assert.equal(c.id, 'modele-buts-v1');
+  const declaration = { etape: c.etape, version: c.id, vues: c.vues };
+  const f = fenetresDeclarees({ portee: 'moteur', declaration });
+  const candidates = f.filter((x) => x.candidate);
+  assert.deepEqual(candidates.map((x) => [x.id, x.de, x.a]), [['candidate:modele-buts-v1:1', '2000-07-01', '2019-06-30'], ['candidate:modele-buts-v1:2', '2023-07-01', '2026-09-23']]);
+  // P2 : aucun jour de 2019-07-01 à 2023-06-30 n'est couvert par une fenêtre du moteur, de la candidate ou de tous.
+  for (const jour of ['2019-07-01', '2020-03-14', '2021-01-10', '2022-08-01', '2023-06-30']) {
+    assert.deepEqual(P.fenetresDuJour(jour, f), [], `${jour} : P2 jamais vue pour la candidate`);
+    assert.deepEqual(P.fenetresDuJour(jour, P.fenetresDuBanc({ declaration })), [], `${jour} : P2 jamais vue au banc de la candidate`);
+  }
+  assert.ok(f.every((x) => x.a < '2019-07-01' || x.de > '2023-06-30'), 'aucune fenêtre ne recoupe P2');
+  // P1 et 2023-09 : la candidate les a vues (étiquettes « candidate:… »).
+  assert.deepEqual(P.fenetresDuJour('2010-03-15', f), ['candidate:modele-buts-v1:1']);
+  assert.ok(P.fenetresDuJour('2023-09-16', f).includes('candidate:modele-buts-v1:2'));
+  assert.match(P.texteDesVues(['candidate:modele-buts-v1:1']), /candidate/);
+  // Les variantes : 320 au total, la candidate en tête, jamais parmi les siennes.
+  assert.equal(VARIANTES_DE_L_ETAPE_27.length, 320);
+  assert.equal(VARIANTES_DE_L_ETAPE_27[0].id, 'modele-buts-v1');
+  assert.equal(new Set(VARIANTES_DE_L_ETAPE_27.map((v) => v.id)).size, 320);
+  assert.equal(c.variantes.length, 319);
+  assert.ok(!c.variantes.some((v) => v.id === c.id));
+  const parMesure = Object.fromEntries(['m1', 'm6', 'm2', 'm3', 'm4', 'm7'].map((m) => [m, VARIANTES_DE_L_ETAPE_27.filter((v) => v.id.startsWith(`${m}-`)).length]));
+  assert.deepEqual(parMesure, { m1: 31, m6: 5, m2: 157, m3: 122, m4: 3, m7: 1 });
+});

@@ -17,11 +17,18 @@
  *     chiffres, lue dans data/runtime/registre-mesure.json
  *     (bench/trialsRegistry.js) : date de lancement, variantes essayées,
  *     dernier jugement. Le nombre de matchs jugés est celui du dernier
- *     jugement : la page n'ouvre jamais la base, elle ne peut pas compter.
+ *     jugement : la page n'ouvre jamais la base, elle ne peut pas compter ;
+ *   - (étape 27, 21/10/2026) le bloc « Banc d'essai sur des matchs jamais vus
+ *     (2019-2023) : avant / après » de l'étape 27, lu dans le code (note de
+ *     départ et note du modèle de buts, data/roadmap/bancEtape27.js).
  *
  * L'état d'une étape, dans cet ordre : « terminée » si l'historique a une
- * ligne pour elle ; sinon « mise de côté » si Pierre l'a choisi ; sinon « en
- * cours » si elle est dans ETAPES_EN_COURS ; sinon « à faire ».
+ * ligne qui la FINIT (une ligne `partielle` ne la finit pas : étape 27,
+ * 21/10/2026) ; sinon « mise de côté » si Pierre l'a choisi ; sinon « en
+ * cours » si elle est dans ETAPES_EN_COURS ou si l'historique n'a pour elle que
+ * des lignes partielles — `reste` dit alors ce qui reste (« en essai à blanc,
+ * adoption à venir ») ; sinon « à faire ». La date de fin est celle de sa
+ * dernière ligne qui la finit.
  *
  * Aucun appel à la base, au réseau ni à Claude : ce fichier ne lit que le code,
  * le petit fichier des notes et le registre de la mesure. La page est donc ouverte tout de suite, comme
@@ -34,6 +41,7 @@ import { DEBUT_PLAN, SEMAINES_PLAN, LOTS, ETAPES, REGLAGES, dateDebutSemaine, da
 import { HISTORIQUE, ETAPES_EN_COURS, BILANS_DE_LOT } from './historique.js';
 import { lireDonneesPierre, FICHIER_FEUILLE_DE_ROUTE, LONGUEUR_NOTE_MAX } from '../repositories/roadmapRepository.js';
 import { etatPourFeuilleDeRoute, FICHIER_REGISTRE } from '../../bench/trialsRegistry.js';
+import { blocDuBancEtape27 } from './bancEtape27.js';
 
 export const ETATS = Object.freeze(['a-faire', 'en-cours', 'terminee', 'mise-de-cote']);
 export const VERSION_ETAT = 1;
@@ -61,12 +69,14 @@ export function etatFeuilleDeRoute({
 } = {}) {
   const etapes = ETAPES.map((e) => {
     const lignes = historique.filter((h) => h.etape === e.id);
-    const derniere = lignes.at(-1) ?? null;
+    // Une ligne partielle raconte ce qui a changé, sans finir l'étape (étape 27 : la candidate à blanc, l'adoption à venir).
+    const finies = lignes.filter((h) => !h.partielle);
+    const derniere = finies.at(-1) ?? null;
     const donnees = pierre.etapes[e.id] ?? null;
     let etat = 'a-faire';
-    if (lignes.length) etat = 'terminee';
+    if (finies.length) etat = 'terminee';
     else if (donnees?.miseDeCote) etat = 'mise-de-cote';
-    else if (enCours.includes(e.id)) etat = 'en-cours';
+    else if (enCours.includes(e.id) || lignes.length) etat = 'en-cours';
     return {
       id: e.id,
       nom: e.nom,
@@ -77,11 +87,15 @@ export function etatFeuilleDeRoute({
       etat,
       fin: derniere?.fin ?? null,
       heureFin: derniere?.heure ?? null,
-      historique: lignes.map((h) => ({ fin: h.fin, heure: h.heure ?? null, titre: h.titre ?? null, change: h.change, mesure: h.mesure ?? null })),
+      historique: lignes.map((h) => ({ fin: h.fin, heure: h.heure ?? null, titre: h.titre ?? null, change: h.change, mesure: h.mesure ?? null, partielle: h.partielle ?? null })),
+      // Ce qui reste d'une étape en cours que l'historique raconte déjà (sa dernière ligne partielle), ou null.
+      reste: etat === 'en-cours' ? (lignes.filter((h) => h.partielle).at(-1)?.partielle ?? null) : null,
       note: donnees?.note ? { texte: donnees.note, le: donnees.noteLe ?? null } : null,
       miseDeCote: donnees?.miseDeCote ?? null,
       // La preuve après lancement (étape 16) : null pour une étape qui ne touche pas aux chiffres et sans entrée au registre.
-      mesure: mesure.etapes?.[e.id] ?? null
+      mesure: mesure.etapes?.[e.id] ?? null,
+      // Étape 27 : le banc d'essai « avant / après » (lu dans le code, jamais dans la base) ; seulement pour elle.
+      ...(e.id === '27' ? { bancAvantApres: blocDuBancEtape27() } : {})
     };
   });
 

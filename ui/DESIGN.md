@@ -126,6 +126,10 @@ fournisseur puis table de la base, chemin de la base au-dessus du tableau —, d
 aujourd'hui, dernier relevé, état `actif` / `coupé` / `en erreur` en `.cm-chip` avec sa raison ; Σ et ⌀ au pied du
 tableau ; puis les deux relevés déjà en place avant l'étape E). LIT `/api/recorders`, un état préparé, sans rien
 lancer. Son alerte durable (`alerts.enregistreurs`) passe aussi par `AppTopbar` (« à vérifier ») et `RefreshStatusPanel`.
+Depuis l'étape 27 (vérification du 21/10/2026) : les alertes durables des contrôles anti-fuite de la nuit (`alerts.tableJourJ`,
+`alerts.forcesButs`) passent par `RefreshStatusPanel` (une `.cm-note` `is-warning`, icône `shield`, « Contrôle anti-fuite de la nuit : à
+regarder », une ligne par contrôle en mots simples, `data-controle-anti-fuite`, rien pendant une passe) et par `AppTopbar` (le repère et
+son survol) ; mots : `utils/controlesAntiFuite.js`.
 Depuis l'étape 4 du plan : `ClaudeBudgetPanel` (Réglages, carte « Budget Claude ») — UN seul composant pour le budget
 Claude, repris tel quel par la feuille de route, la santé du moteur et la page Bulletin. `variante="complete"` : le mode
 (`.cm-chip` « Mode normal » / « Mode économe ») et sa raison, la puce « réglage provisoire, à confirmer » tant que rien
@@ -320,6 +324,29 @@ mois »). La place d'avant (« après la calibration (étape 20) ») n'est plus 
 `preuve-apres-lancement`, `fourchette-du-hasard`, `banc-d-essai`, `variantes-essayees`, `calibration` — aucun terme nouveau. La feuille de route :
 une `.cm-note is-danger` « Dérive du moteur » au-dessus des lots quand l'alerte est posée (`phraseDeLAlerteDerive`, la même phrase que la carte).
 Rejoué par `server/test/adoptionMoteurEcran.test.mjs` sur les réponses du vrai serveur.
+Depuis l'étape 27 du plan (21/10/2026, le modèle de buts unique) : sous la fiche de la candidate et AVANT son essai, SEULEMENT pour une candidate
+au modèle de buts (`estUnModeleDeButs`), `EngineGoalModelTrial` (pur affichage, `.cm-block`, `container: egm`, icône `layers` en `is-violet`,
+`HelpTip terme="modele-de-buts"`) : la porte 1 du banc d'essai (2019-2023) — ses critères en mots et la réserve ACCEPTÉE écrite telle quelle, en
+ambre pointillé —, un `.cm-kpi` par famille (verdict de l'essai en mots, « pas encore » avant l'horizon, le chiffre du banc en détail, « +7,9 % d’erreur de prévision en moins, retenu », fourchettes signées comme
+sur la feuille de route ; « pas
+prouvé » en `is-warn` avec « normal à 800 matchs », « moins bon » en `is-danger`, jamais le vert), la phrase « Une famille « pas prouvé » à 800
+matchs est l'issue normale ; seul « moins bon » est un échec. », la calibration de chaque version par famille (`HelpTip terme="calibration"`), les
+régimes (« cotes + plus/moins 61 % · cotes 1N2 seule 34 % — … · sans cote 5 % : trop peu pour juger »), la porte de l'adoption et l'horizon
+(« 412 matchs sur 800, jour 11 sur 21 »). La fiche dit les marchés et les témoins en mots (les identifiants au survol), et la phrase en mots simples de la candidate (`enMots`, le chiffre clé
+aussi) : son « quoi » technique (celui du registre) n'est plus qu'au fond d'un `<details>` replié, « Détail technique ». Les mots viennent de
+`utils/versionsMoteur.js`. « Paramètres du moteur » dit le modèle (« Modèle de buts unique : activé… » / « absent — ancien modèle de buts ») ;
+quand il est en service, « Réinitialiser les valeurs par défaut » le dit dans une confirmation (`SettingsView`, `avertissementDeLaRemiseAZero`).
+Les écrans de match ne changent qu'avec la clé `modeleDeButs` en service : `GoalModelProvenance` (une `ProvenanceChip variante="ligne"` : le mot
+court du régime en violet en tête, le vrai fournisseur de chaque morceau, l'heure du relevé du plus/moins ou du calcul, la cote absente dite ;
+`compacte` : le mot seul, le fournisseur au survol) sous « Buts » et sur « Les 2 équipes marquent » / « Résultat + total » (`MarketPicksBoard`,
+prop `provenanceButs`) et sur la carte du score (avec « Ce que disent les xG » en `.cm-kpi` violets, « autre score » dès 0,5 %, la fiabilité du banc
+et son périmètre selon le régime — « pas encore mesurée » pour un match calé sur la cote 1N2 seule) ; le Repérage (la pastille compacte par match, la bulle de la colonne 2,5) ; le verdict par marché (la phrase de la value sur
+le 2,5 calé sur la cote). Mots : `utils/modeleDeButs.js` (le mot court et la phrase de chaque régime viennent du serveur, `core/engine/motsDuModeleDeButs.js`,
+HORS de l'empreinte du moteur : corriger une phrase ne crée pas de version), rejoué par `server/test/modeleDeButsEcran.test.mjs` sur les analyses du vrai moteur ;
+chaque élément porte `data-modele-de-buts`, et aucun ne paraît sans la clé (même test, et `pageMatchDecisionEcran.test.mjs`). La feuille de route :
+le bloc « Banc d'essai sur des matchs jamais vus (2019-2023) : avant / après » de l'étape 27 (`RoadmapStep`, `.cm-table` toujours complet, en-têtes « Avant (ancien modèle) » / « Après (modèle de buts unique) » qui
+restent justes après l'adoption, avant la preuve après lancement ; `utils/bancAvantApres.js`) ; une étape que l'historique ne raconte qu'en partie (lignes `partielle`) est « En cours » et
+dit ce qui lui reste sous « pas encore terminée » (`etape.reste`, en couleur de section : « en essai à blanc, adoption à venir »).
 Depuis l'étape 17 du plan (12/10/2026) : `DayTablePanel` (Réglages, carte « Table du jour J », icône `calendar`, sur-titre « Statistiques », juste après
 « Historique football-data ») — LIT `GET /api/match-stats/day-table`, l'état noté à la fin de la dernière construction ou nuit par l'étape « Table du
 jour J (ce qu’on savait la veille) » de l'actualisation (`server/src/data/db/dayTable.js`), sans rien calculer ni recompter ; relue à la fin de chaque
@@ -482,6 +509,15 @@ tant qu'ils manquent la pastille dit « seuil inconnu » et reste neutre. Tout l
 sans la couleur (icône, mot, phrase complète au survol et dans `aria-label`). Les six autres composants n'emploient jamais
 `--cm-accent` ni la couleur de section, et dans `ValueBadge` seule la règle `.is-value` est verte (test).
 
+**L'exception de l'étape 23 (22/10/2026) : « Prouvé » sur la carte « où parier ».** Une case de la carte championnat ×
+marché (`BettingMapChip`, le seul dessin d'une case : grille `BettingMapGrid`, page Opportunités, Repérage) prend le MÊME vert
+(`--cm-accent`) quand le serveur l'a dite « Prouvé » : l'avantage du moteur AU PRIX (valeur de clôture) dépasse le hasard sur au
+moins 200 matchs, juge de l'étape 16, K compté (décision de Pierre du 22/10/2026). Toujours avec le mot « Prouvé » et l'icône
+coche ; jamais pour une probabilité, un écart, un repère ou un pari passé. Rouge (`--cm-danger`) « Moins bien que le marché »,
+prouvé ; gris en pointillés : pas prouvé, trop peu de matchs (« 46 / 200 »), pas encore mesurée, contradictoire, suspendue (réglages
+changés) ; gris hachuré : pas de cote archivée. La couleur vit dans `BettingMapChip` seul : les vues qui la posent n'écrivent
+ni vert ni rouge de case (l'avertissement d'une case rouge sous le pari, dans Opportunités, est en `--cm-danger`).
+
 | Notion | Composant | Ce qu'il dit | Couleur | Sans la couleur |
 | --- | --- | --- | --- | --- |
 | Value | `ValueBadge` | « Value +4,1 % » ; sinon « +0,4 % sous le seuil », « −3,2 % », « trop beau pour être vrai », « cote trop haute », « non jouable », « référence », « +6,2 % à rafraîchir » (étape 7), « seuil inconnu », « valeur inconnue » ; avec le verdict du moteur (étape 8) aussi « +3,0 % pas retenue », « +4,3 % juge et partie », « non cotée », « sans cote juste », « cotes incohérentes », « coupe-circuit » | vert = value ; ambre = à écarter ; ambre en pointillés = à rafraîchir ; gris, pointillés = rien à jouer | coche, tiret, alerte, cadenas, horloge, info, bouclier, pause + mot |
@@ -492,6 +528,7 @@ sans la couleur (icône, mot, phrase complète au survol et dans `aria-label`). 
 | Provenance | `ProvenanceChip` | le fournisseur RÉEL et l'heure du relevé ; ancien (24 h) : ambre ET « il y a 15 jours » | ambre = ancien, heure ou source inconnue | mots |
 | Aide | `HelpTip` | la petite bulle « ? » : une phrase par notion | neutre | Tab, Échap, `aria-describedby` |
 | Données à vérifier (étape 14) | `AVerifierBadge` | « À vérifier », et avec `avec-raison` la raison courte : « Score à vérifier : Millwall – Bolton du 05/09/2026 (FotMob 4-0, football-data 3-0) », « Cartons jaunes non relevés par FotMob en EPL… » (et N autres raisons) | ambre (`--cm-warning`) en pointillés ; jamais vert ni rouge : il ne touche ni au verdict ni à la pastille de value | icône alerte + mot, `role="note"`, toutes les raisons au survol et dans `aria-label` |
+| Case de la carte « où parier » (étape 23) | `BettingMapChip` | « Prouvé · 412 matchs », « Moins bien · 2 208 matchs », « Pas prouvé · 1 520 matchs », « Trop peu · 46 / 200 », « Pas mesurée », « Pas de cote », « Suspendue » ; avec `avec-ecart` l'écart (« −9,5 % ») ; `compacte` : le mot seul | vert = « Prouvé » seulement (l'exception ci-dessus) ; rouge = moins bien que le marché, prouvé ; gris en pointillés ; gris hachuré = pas de cote archivée | icône (coche, alerte, tiret, croix, horloge) + mot, `role="note"`, la phrase du serveur au survol et dans `aria-label` |
 
 - **`ValueBadge`** : `pourcent` (l'avantage en %, tel que le serveur le donne), `jouable` (la cote vient de vos bookmakers),
   `reference` (cote gratuite), `cote` (nette de commission), `regle` `{ min, max, coteMax }` (min et max en %), `bookmaker`,
@@ -541,7 +578,8 @@ Cote jouable ; Opportunités, colonne Value), `cote-juste` (Repérage colonne Mo
 (Repérage, bandeau ; Opportunités, colonne Confiance), `valeur-de-cloture` (carte de la valeur de clôture : Historique moteur et
 Performance paris), `series-de-pertes` (coupe-circuit de Réglages), `a-rafraichir` (étape 7 : saisie express et carte « Value à
 rafraîchir » de la page du match, carte « Cotes de vos bookmakers » de Réglages), `juge-et-partie` (étape 8 : la note de lecture de la
-page Opportunités), `cote-minimale` (étape 10 : le comparateur de vos bookmakers, son titre sur la page du match, le ticket). Un terme de
+page Opportunités), `cote-minimale` (étape 10 : le comparateur de vos bookmakers, son titre sur la page du match, le ticket),
+`modele-de-buts` (étape 27 : la provenance des pourcentages de buts, `GoalModelProvenance`, et la carte de la candidate du modèle de buts). Un terme de
 plus : une entrée au guide (le test refuse un `<HelpTip terme>` qui n'y est pas).
 
 **Où c'est posé** : Repérage (`ScreenerView` : pastille de value dans la colonne Cote jouable, bandeau avec le prochain coup d'envoi,
