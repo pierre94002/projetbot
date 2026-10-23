@@ -1,11 +1,12 @@
 {
   "format": 1,
-  "enService": 4,
+  "enService": 5,
   "pile": [
     1,
     2,
     3,
-    4
+    4,
+    5
   ],
   "versions": [
     {
@@ -387,6 +388,151 @@
           "retires": []
         }
       ]
+    },
+    {
+      "numero": 5,
+      "creeeLe": "2026-10-23T23:14:26.405Z",
+      "origine": "reglages",
+      "pourquoi": "réglages enregistrés dans Réglages › Paramètres du moteur",
+      "empreinte": "fc14ea5a3e7827dd3d6f7a3eefde72a66207021b",
+      "empreinteReglages": {
+        "football": "eaa8f94128d82d7fd71696e91a08774b34eb1fa1"
+      },
+      "reglages": {
+        "football": {
+          "edgeThresholdMin": 0.02,
+          "edgeThresholdMax": 0.25,
+          "valueBookmakers": [
+            "williamhill",
+            "sport888",
+            "betsson",
+            "nordicbet",
+            "unibet_nl",
+            "unibet_se",
+            "leovegas_se",
+            "tipico_de",
+            "coolbet",
+            "codere_it",
+            "betclic_fr",
+            "unibet_fr",
+            "winamax_fr",
+            "pmu_fr"
+          ],
+          "maxValueOdds": 5,
+          "defaultCorrelation": -0.075,
+          "kellyFraction": 0.125,
+          "maxStakePercent": 0.02,
+          "homeAdvantage": 1.06,
+          "cornersAdjustmentMax": 0.08,
+          "maxExpectedRateGap": 0.4,
+          "weights": {
+            "market": 1,
+            "structural": 0,
+            "exogenous": 0
+          }
+        }
+      },
+      "code": {
+        "empreinte": "16f2459db183a99576365047da98b7777687ef05",
+        "fichiers": {
+          "core/engine/coteMinimale.js": "0ea5dee5c0b3e1fa",
+          "core/engine/engineConfig.js": "87b6ac0fd2ebafa4",
+          "core/engine/fraicheurCotes.js": "d7f4bf125d8b7902",
+          "core/engine/goalModel.js": "236a33d7f952b12d",
+          "core/engine/oddsEngine.js": "c376393d980ca569",
+          "core/engine/resultPrediction.js": "df32c8d76e8c720c",
+          "core/engine/scorePrediction.js": "44bb6ed76ed72498",
+          "core/engine/tiltState.js": "de63bb4a3c63d88f",
+          "core/engine/valueFinder.js": "25e4757198fc09a1",
+          "core/engine/verdictPari.js": "368d73a39b081948",
+          "core/engine/vosBookmakers.js": "9abf1962a1c47d85",
+          "core/market/marginRemoval.js": "b3deabcfcf1fe1d7",
+          "core/model/dixonColes.js": "83c4cf5111c071ca",
+          "core/model/poisson.js": "78be7262cce935f7",
+          "core/risk/exogenousFactors.js": "fd7749a7d45ba0fd",
+          "core/risk/gardeFous.js": "2edd957379facdb0",
+          "core/risk/seriesDePertes.js": "84ad459c0c2794a2",
+          "core/risk/staking.js": "6522d9ea3662ea39",
+          "core/risk/structuralFactors.js": "4a21c27362e21c93",
+          "core/signals/cornersSignal.js": "28e6d8c721386a52",
+          "core/xg/xgSmoothing.js": "3a125f8d663be5c0",
+          "core/xg/xgStructural.js": "724a35bcf329112a",
+          "data/db/entreesButs.js": "85ef724fc5749bc9",
+          "data/db/matchStatsRead.js": "7dc674629218dc54",
+          "data/db/scoreFormRead.js": "46e2c8b26c722bec",
+          "data/db/statInputsRead.js": "45470ac1777308c6",
+          "data/providers/matchEnrichment.js": "22c9be3d901c23c3",
+          "data/providers/standingsService.js": "5ff06688e36c3035",
+          "sports/football/bookmakerConsensus.js": "70ee1711b3040108",
+          "sports/football/index.js": "7862358c3a6c3564",
+          "sports/football/markets.js": "c1296b56003be5cb",
+          "sports/football/model.js": "253a664344483f8a",
+          "sports/football/scoreMatrix.js": "d04ef225bae98fa8",
+          "sports/football/statMarkets.js": "86fe12b131b4315e",
+          "sports/football/xgBaseline.js": "1774c087b4d30769",
+          "sports/index.js": "963bc8caf965c7bc",
+          "sports/sportPort.js": "433369bfb949df9c"
+        }
+      },
+      "lancements": [
+        {
+          "etape": "29",
+          "version": "indice-v1"
+        },
+        {
+          "etape": "30",
+          "version": "fiches-v1"
+        },
+        {
+          "etape": "37",
+          "version": "style-v1"
+        }
+      ],
+      "depuis": 4,
+      "changements": [
+        {
+          "type": "reglage",
+          "sport": "football",
+          "cle": "valueBookmakers",
+          "libelle": "Vos bookmakers (un pari n’est recommandé que chez eux)",
+          "format": "liste",
+          "avant": [
+            "williamhill",
+            "sport888",
+            "betsson",
+            "nordicbet",
+            "unibet_nl",
+            "unibet_se",
+            "leovegas_se",
+            "tipico_de",
+            "coolbet",
+            "codere_it"
+          ],
+          "apres": [
+            "williamhill",
+            "sport888",
+            "betsson",
+            "nordicbet",
+            "unibet_nl",
+            "unibet_se",
+            "leovegas_se",
+            "tipico_de",
+            "coolbet",
+            "codere_it",
+            "betclic_fr",
+            "unibet_fr",
+            "winamax_fr",
+            "pmu_fr"
+          ],
+          "ajoutes": [
+            "betclic_fr",
+            "unibet_fr",
+            "winamax_fr",
+            "pmu_fr"
+          ],
+          "retires": []
+        }
+      ]
     }
   ],
   "journal": [
@@ -416,6 +562,13 @@
       "version": 4,
       "depuis": 3,
       "origine": "code"
+    },
+    {
+      "le": "2026-10-23T23:14:26.405Z",
+      "action": "creation",
+      "version": 5,
+      "depuis": 4,
+      "origine": "reglages"
     }
   ],
   "candidate": {
@@ -1825,11 +1978,132 @@
       "numero": 1,
       "variante": "modele-buts-v1"
     },
-    "premiersChiffres": null,
+    "premiersChiffres": {
+      "regimes": {
+        "cotes-plusmoins-xg": 15,
+        "cotes-1n2-xg": 4,
+        "cotes-1n2-buts": 14,
+        "cotes-plusmoins-buts": 8,
+        "buts-seuls": 1
+      },
+      "calibration": {
+        "a": {
+          "bothTeamsScore": {
+            "pronostics": 42,
+            "matchs": 42,
+            "biais": -0.111419,
+            "ece": 0.143624
+          },
+          "resultAndTotal": {
+            "pronostics": 42,
+            "matchs": 42,
+            "biais": -0.078521,
+            "ece": 0.090869
+          },
+          "teamGoals": {
+            "pronostics": 84,
+            "matchs": 42,
+            "biais": -0.07415,
+            "ece": 0.14965
+          },
+          "totalGoals": {
+            "pronostics": 42,
+            "matchs": 42,
+            "biais": 0.054995,
+            "ece": 0.064762
+          }
+        },
+        "b": {
+          "bothTeamsScore": {
+            "pronostics": 42,
+            "matchs": 42,
+            "biais": 0.109114,
+            "ece": 0.109114
+          },
+          "resultAndTotal": {
+            "pronostics": 42,
+            "matchs": 42,
+            "biais": -0.013871,
+            "ece": 0.036895
+          },
+          "teamGoals": {
+            "pronostics": 84,
+            "matchs": 42,
+            "biais": 0.027174,
+            "ece": 0.034536
+          },
+          "totalGoals": {
+            "pronostics": 42,
+            "matchs": 42,
+            "biais": 0.042933,
+            "ece": 0.042933
+          }
+        }
+      },
+      "temoins": {
+        "matchs": 42,
+        "a": 2.765181,
+        "b": 2.739973,
+        "exactA": 11.9,
+        "exactB": 11.9,
+        "horsGrille": 0,
+        "ecartees": {
+          "sansResultat": 7
+        },
+        "juge": false
+      },
+      "calculeLe": "2026-10-23T23:11:45.181Z",
+      "matchs": 42,
+      "lignes": 210,
+      "a": 0.808543,
+      "b": 0.743402,
+      "gainPct": 8.057,
+      "horizon": {
+        "matchs": 800,
+        "jours": 21
+      },
+      "joursEcoules": 1,
+      "auPlusTotLe": "2026-11-12T15:45:40.552Z",
+      "aVenir": {
+        "pronostics": 3425,
+        "matchs": 685
+      },
+      "ecartees": {},
+      "parMarche": [
+        {
+          "marketId": "bothTeamsScore",
+          "lignes": 42,
+          "matchs": 42,
+          "a": 0.726881,
+          "b": 0.639101
+        },
+        {
+          "marketId": "resultAndTotal",
+          "lignes": 42,
+          "matchs": 42,
+          "a": 1.58512,
+          "b": 1.500825
+        },
+        {
+          "marketId": "teamGoals",
+          "lignes": 84,
+          "matchs": 42,
+          "a": 0.588791,
+          "b": 0.540889
+        },
+        {
+          "marketId": "totalGoals",
+          "lignes": 42,
+          "matchs": 42,
+          "a": 0.553132,
+          "b": 0.495306
+        }
+      ]
+    },
     "jugement": null,
     "jugementsPerimes": [],
     "banc": null
   },
   "candidatesPassees": [],
-  "majLe": "2026-10-22T15:45:40.552Z"
+  "majLe": "2026-10-23T23:11:45.181Z"
 }
