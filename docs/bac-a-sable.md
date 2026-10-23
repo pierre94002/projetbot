@@ -987,3 +987,17 @@ Les chiffres qui justifient l'étiquette sont rangés avec elle, à côté de la
 **L'analyse réelle.** Impossible dans le bac (Claude coupé). Script pour Pierre, après la mise en service : `node scripts/essai-dossier-ia.mjs` (aperçu seulement, aucun appel) puis, **avec son accord**, `node scripts/essai-dossier-ia.mjs --accord-de-pierre` : UNE analyse d'un match à venir, demandée à l'appli qui tourne (le serveur reste le seul écrivain), puis ses tokens réels, la mémoire remise et si l'analyse cite une leçon.
 
 
+
+
+## Correctif du 23/10/2026 à 23 h 25 : la garde des chiffres et les milliers (étape 42)
+
+**Le défaut.** Le premier bilan de la semaine a été refusé à tort : « 1385 ; 1797 ; 4166 ; 5493 absents de la fiche ». Pourtant, ce sont de vrais chiffres du carnet de l'IA. `espacesSimples` (server/src/core/ai/gardeDesChiffres.js) devait ramener les espaces insécables et fines à l'espace simple. Mais sa classe contenait trois espaces ordinaires : les codes spéciaux avaient été perdus à l'écriture du fichier. Résultat : les milliers que `toLocaleString('fr-FR')` écrit avec une espace fine insécable (U+202F, « 1 385 ») n'étaient jamais réunis. La fiche donnait alors « 1 » et « 385 », jamais 1385.
+
+**La correction.** La classe s'écrit maintenant en codes (`\u00A0\u2009\u202F`), vérifiés octet par octet. Un test de non-régression a été ajouté, en ASCII seul :
+- il bâtit une fiche par `toLocaleString('fr-FR')` ;
+- il vérifie que les vrais nombres passent et qu'un faux nombre est toujours refusé ;
+- il vérifie que le fichier source garde bien les codes.
+
+**À retenir** : les outils d'écriture changent les codes « \uXXXX » en vrais caractères. Pour une espace spéciale dans une expression régulière, il faut écrire le code et vérifier les octets.
+
+**Mesures.** npm test dans le dépôt : 1 110 tests (1 105 réussis, 3 sautés, 2 à faire), 0 échec. 2 fichiers recopiés (versions précédentes dans bac-a-sable/recopies/2026-10-23_23h25m00/avant).

@@ -64,7 +64,7 @@ export const NOMBRES_EN_LETTRES = Object.freeze({
 const EXTRAIT = 48;
 
 /** Les espaces insécables (nombres français), fines et étroites, ramenées à l'espace simple. */
-const espacesSimples = (t) => String(t ?? '').replace(/[   ]/g, ' ');
+const espacesSimples = (t) => String(t ?? '').replace(/[\u00A0\u2009\u202F]/g, ' ');
 
 /**
  * Le texte prêt à lire : espaces simples, groupes de milliers réunis (« 1 234 » → « 1234 », seulement pour des groupes de

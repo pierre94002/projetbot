@@ -70,7 +70,7 @@ const unePhase = {
 };
 
 /** Les nombres français s'écrivent avec des espaces insécables (milliers) : comparés en espaces simples. */
-const espaces = (t) => String(t).replace(/[  ]/g, ' ');
+const espaces = (t) => String(t).replace(/[\u00A0\u2009\u202F]/g, ' ');
 const proche = (a, b, tolerance, message) => assert.ok(Math.abs(a - b) <= tolerance, `${message ?? ''} : ${a} ≠ ${b} (à ${tolerance} près)`);
 
 // ================================================================================ 1. la garde des chiffres
@@ -88,6 +88,25 @@ test('garde : les nombres d’un texte, quelle que soit l’écriture — virgul
   assert.deepEqual(cles('le marché 1N2 et 1X2, N2, U21, J7, xG2'), [], 'les noms ne sont pas des nombres');
   assert.deepEqual(cles('1er'), ['1'], 'un quantième « 1er » est le nombre 1');
   assert.deepEqual(G.nombresEnChiffres('x 1,95').map((n) => [n.texte, n.valeur]), [['1,95', 1.95]]);
+});
+
+test('garde : les milliers écrits par toLocaleString (espace fine insécable U+202F) sont des nombres entiers — le refus du bilan du 23/10/2026', () => {
+  const fr = (n) => Number(n).toLocaleString('fr-FR');
+  assert.ok(fr(1385).includes(String.fromCharCode(0x202f)), 'le séparateur des milliers de fr-FR est l’espace fine insécable');
+  const fiche = `avis tenus : ${fr(1385)} sur ${fr(1797)} (77 %) ; depuis le 30/09 : ${fr(4166)} sur ${fr(5493)} (76 %).`;
+  const valeurs = [...G.autorisationsDeLaFiche(fiche).valeurs];
+  for (const v of ['1385', '1797', '4166', '5493']) assert.ok(valeurs.includes(v), `la fiche donne ${v}, jamais ses morceaux`);
+  for (const v of ['385', '797', '166', '493']) assert.ok(!valeurs.includes(v), `« ${v} » n’est pas un nombre de la fiche`);
+  for (const texte of ['Sur 1797 avis jugés, 1385 ont été tenus (77 %).', `Sur ${fr(1797)} avis, ${fr(1385)} tenus (77 %) ; 4166 sur 5493 (76 %).`]) {
+    assert.equal(G.verifierLesChiffres({ textes: { resume: texte }, fiche }).ok, true, texte);
+  }
+  const faux = G.verifierLesChiffres({ textes: { resume: 'Sur 1797 avis, 1386 tenus.' }, fiche });
+  assert.equal(faux.ok, false);
+  assert.deepEqual(faux.refuses.map((r) => r.nombre), ['1386'], 'un nombre faux reste refusé');
+  const source = fs.readFileSync(path.join(SERVEUR, 'src', 'core', 'ai', 'gardeDesChiffres.js'), 'utf8');
+  const b = String.fromCharCode(92);
+  const attendu = '.replace(/[' + b + 'u00A0' + b + 'u2009' + b + 'u202F' + "]/g, ' ')";
+  assert.ok(source.includes(attendu), 'les espaces spéciales s’écrivent en codes (barre oblique inverse + u00A0…) : une espace invisible se perd à l’écriture du fichier');
 });
 
 test('garde : un nombre qui n’est pas dans la fiche fait refuser le texte — cote inventée, pourcentage arrondi ou recalculé, total fait par l’IA', () => {
