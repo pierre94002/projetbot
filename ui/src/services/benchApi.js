@@ -9,5 +9,8 @@ export const benchApi = {
   /** L'avancement pendant un rejeu : le dernier rejeu sans son résumé (la page garde celui qu'elle a déjà). */
   avancement: () => httpClient.get('/bench?resume=non'),
   /** `options` : { periodes?, prix?, marches? } — par défaut P2 à P5, avant-match, cotes gratuites, vos bookmakers. Rend 202 et { lance, options, enCours }. */
-  lancer: (options = {}) => httpClient.post('/bench/run', options)
+  lancer: (options = {}) => httpClient.post('/bench/run', options),
+  // La valeur de chaque statistique (étape 18 du plan) : le dernier calcul fini et ses lignes — le tableau « ce qui prédit /
+  // ce qui trompe » (étape 31). Lecture seule ; le calcul se lance à la main (POST /bench/stat-value/run), jamais d'ici.
+  valeurDesStatistiques: () => httpClient.get('/bench/stat-value')
 };

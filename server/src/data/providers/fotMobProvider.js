@@ -1079,6 +1079,10 @@ function mapLineups(payload) {
     if (team.rating != null) out.rating = firstNumber(team.rating);
     const coach = Array.isArray(team.coach) ? team.coach[0] : team.coach;
     if (coach?.name) out.coach = coach.name;
+    // Étape 37 (22/10/2026) : l'IDENTIFIANT de l'entraîneur, que FotMob publie et qu'on jetait — deux homonymes
+    // (« Diego Martinez ») ne font plus un seul entraîneur. Jamais 0 (l'identifiant 0 est partagé chez FotMob).
+    const coachId = Number(coach?.id);
+    if (coach?.name && Number.isInteger(coachId) && coachId > 0) out.coachId = coachId;
     return Object.keys(out).length ? out : null;
   };
   const home = side(lineup.homeTeam);
@@ -1763,6 +1767,8 @@ function mapTable(name, table, legende) {
 export const __testing = {
   firstNumber,
   mapMeta,
+  mapLineups,
+  mapShotmap,
   mapTeamStats,
   mapPlayer,
   TEAM_STAT_MAP,

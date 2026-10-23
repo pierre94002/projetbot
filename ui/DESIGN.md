@@ -490,6 +490,111 @@ Depuis l'étape 9 du plan (06/10/2026) : la **page d'un match à venir** (`Upcom
 changer d'onglet : `MarketVerdictBoard` (le verdict par marché, LA carte importante de la page : `AppCard tone="section"`), `PercentageWhyCard`
 (la place réservée du « pourquoi ce pourcentage »), les compositions et les absents, `OddsTimelineChart` (les cotes de l'ouverture à maintenant),
 l'avis de l'IA, puis le détail. Voir « La page d'un match, pour décider » plus bas.
+Depuis l'étape 31 du plan (22/10/2026) : **les fiches à l'écran** — des écrans qui LISENT des résultats déjà calculés par les étapes 15, 18, 22, 29 et 30,
+sans rien recalculer à l'ouverture ni appeler le moindre service payant. Règles communes aux quatre écrans : chaque bloc dit sa SOURCE réelle et l'HEURE de
+son calcul (`ProvenanceChip`, jamais « Cotes marché (Odds API) ») ; il reste TOUJOURS affiché, même vide (« pas encore calculé », « pas assez de matchs »,
+« non relevé », « pas coté », jamais un tiret ni un zéro inventé) ; une lecture qui échoue garde ses tableaux (en-têtes, toutes les lignes, Σ et ⌀) avec la
+raison en `.cm-note` (`data-raison`) ; Σ = des COMPTES (matchs, cotes, statistiques, livres), ⌀ = des moyennes, jamais une somme de pourcentages ; le vrai signe moins
+« − » ; le logo du club sur chaque ligne qui nomme une équipe ou un joueur (`TeamCrest`, `PlayerFlag`) ; **un championnat se dit par le nom que l'appli lui donne** (celui du
+badge de la compétition, `parseLeagueLabel` de `utils/leagueDisplay.js` : « EPL », « Bundesliga » pour « Bundesliga - Germany »), jamais par le libellé brut de l'API ni par un code
+collé à une préposition : « devant 98 % des clubs du championnat (EPL) », « devant 99 % des milieux du championnat (EPL) » ; seule une ligne qui se lit SANS le badge (les cartes de la
+page Bookmakers) emploie le libellé non ambigu des listes de l'appli, `formatLeagueOptionLabel` : « EPL (ENG) », « Besta deildin (ISL) ». Quatre endroits, UNE SEULE PLACE par information :
+(1) **Page d'une équipe** (`TeamView`, onglet Résumé, après « Meilleures statistiques ») : `components/matches/TeamStrengthCard.vue`, « Indice de force » (étape 29),
+LIT `GET /api/match-stats/team-strength?club=…&historique=oui` (une lecture, relue quand le club change : `watch` sur `clubId`) — cinq `.cm-kpi` (note de force
+en buts d'écart avec un club moyen, place dans son championnat, à domicile / à l'extérieur, matchs en mémoire dont ceux avec xG), les POINTS FORTS (place ≥ 75 %,
+bleu `is-info`) et les POINTS FAIBLES (≤ 25 %, ambre) — jamais le vert ni le rouge : une force n'est pas une value —, le tableau des TREIZE statistiques
+(`data-tableau="statistiques"`, trois lieux : au total, à domicile, à l'extérieur ; chaque case = la valeur et SA PLACE en % des clubs du championnat, « non relevé »
+quand FotMob ne publie pas le xG) avec **Σ** (statistiques relevées, forts, faibles) et **⌀** (place moyenne, entre 0 et 100), puis LA FORME : une petite courbe
+de la note sur les 30 derniers matchs (le dernier cerclé), « Aujourd'hui / il y a 5 / 10 / 20 matchs » et une phrase (en hausse, en baisse, stable), et la mesure
+au banc d'essai (« pas encore mesuré » ou le verdict). États : club non reconnu (aucune lecture ne part), chargement, jamais calculé, pas d'indice pour ce club,
+erreur, serveur à relancer, calcul d'une autre version (lu, signalé).
+(2) **Fiche d'un joueur** (`PlayerView`, entre la saison et « Match par match ») : `components/matches/PlayerRatingCard.vue`, « Note par poste » (étape 30), LIT
+`GET /api/match-stats/player-ratings?player=…` (`watch` sur `playerId`) — le joueur (drapeau, club et logo, poste, « fiche établie » ou « peu joué »), les deux
+APPORTS (offensif et défensif, en buts par match, et SA PLACE parmi les joueurs du même poste du championnat ; « sans objet » pour l'apport offensif d'un gardien ;
+« pas de place : fiche pas encore établie » sous 270 minutes), les dix TUILES de composantes (celles qui comptent à SON poste d'abord, en couleur de section, avec
+la mémoire derrière ; un gardien : les buts évités en tête, jamais des zéros de joueur de champ), la COURBE des vingt dernières apparitions (deux traits, un seul pour
+un gardien, la ligne du zéro = la moyenne du poste) et le tableau `data-tableau="apparitions"` (la date, l'adversaire avec son logo quand la page connaît le match,
+l'apport offensif et défensif) avec **Σ** (nombre d'apparitions, de … à …) et **⌀** (apport moyen). **Les notes des joueurs n'apparaissent JAMAIS sur le terrain des
+compositions** (`LineupPitch`, `LineupBench`, `MatchLineups`, `AiLineupSnapshot` n'importent rien de la fiche : un test le garde) ; les « juste les notes » de match et de saison y restent.
+(3) **Statistiques ligue** (`TeamStatsView`) : les repères du championnat et leur évolution sont ceux de l'étape 15 (`LeagueBenchmarksPanel`, plus haut) ; **sous eux**,
+le tableau « Ce qui prédit, ce qui trompe » (`components/analysis/PredictorsTable.vue`, étape 18) — LE seul endroit de l'appli où il vit (aucune autre page
+ne le copie, un test le garde : une information, une place ; c'est la page des statistiques, il n'appartient à aucun match ni à aucune équipe). Il LIT `GET /api/bench/stat-value` (calculé à la main, jamais chaque nuit : aucun bouton ne le lance d'ici)
+et dit qu'il porte sur tous les championnats réunis, pas sur celui qu'on a choisi plus haut. Quatre tableaux toujours complets : les statistiques d'équipe FotMob
+(26 lignes), d'équipe football-data (18), de joueur FotMob (16) et la fenêtre du moteur (6) ; par ligne la fiabilité, les matchs nécessaires, le pouvoir de prédiction,
+la demi-vie, la bonne fenêtre et le VERDICT. **Exception à la règle d'or de « 3 bis »** (demande du cahier de l'étape 18) : ici le vert (`--cm-accent`) dit « cette statistique
+COMPTE » (la borne basse de sa fourchette atteint au moins 1 %, jugée sur des matchs que le calcul n'a pas vus) et le rouge (`--cm-danger`) « elle TROMPE » (rien de prouvé) ; l'ambre
+dit « trop peu de matchs », le gris « compte un peu ». Jamais pour autre chose qu'un verdict de ce tableau. Pied : **Σ** par verdict, **⌀** de la fiabilité.
+(4) **La page « Bookmakers »** (`BookmakersView`, route `/bookmakers`, entrée du menu juste après « Mes paris », icône `euro`) : ce que l'étape 22 a mesuré du marché sur
+toutes les cotes archivées. Même couleur de section que Mes paris (`meta.section: 'bets'`, la couleur de l'argent : aucune couleur de plus) et `meta.nav: 'bookmakers'`
+pour qu'UNE seule entrée du menu soit active. LIT `GET /api/market-knowledge[?championnat=…]` (route de lecture ajoutée, hors des fichiers du moteur : un championnat
+à la fois, 0,2 à 0,3 Mo, « * » = tous) ; le championnat vit dans l'adresse (`?championnat=`, `router.replace`, jamais un `push`), un lien le partage, une réponse tardive est ignorée,
+une relecture ratée garde la dernière page avec l'erreur au-dessus. Le bandeau (`cm-hero`) : titre, `.cm-chip` « calcul n° N », « Relire », le sélecteur de championnat
+(`AppSelect`, favoris d'abord et étoilés ; un lien vers un championnat inconnu garde son nom, « non mesuré »), la provenance (football-data.co.uk · ESPN · 365Scores · Kalshi ·
+Smarkets · The Odds API, l'heure de la fin du calcul) et quatre `.cm-kpi`. Puis SIX cartes, toujours entières : `MarketMomentsCard` (quand parier ? la conclusion, la valeur de
+clôture de chaque moment, « tôt contre tard » jugé par le hasard, championnat par championnat — un clic le choisit), `BookmakerRankingCard` ×2 (qui est le plus JUSTE : la perte log ;
+qui bouge le PREMIER : l'avance ; un onglet par moment du prix ; le meneur est celui qui bat le plus d'autres livres sur leurs matchs communs), `BookmakerMarginsCard` (ce que
+chaque bookmaker garde ; une bourse montre sa COMMISSION, jamais une marge), `BookmakerBiasCard` (ce qu'il se trompe à dire : l'écart signé « réalisé moins annoncé », en points)
+et `MarketReproductionCard` (retrouve-t-on la mesure du 23/09 ?). **Aucun vert, aucun rouge** (rien ici n'est une value) : un écart prouvé est bleu `is-info`, « trop peu de matchs »
+ambre. **Une case vide ne dit sa CAUSE que si le calcul est lu** (`calculLu` ; « pas de relevé daté à ce moment dans ce championnat ») : sans lecture elle dit ce qu'elle sait (« pas encore
+mesuré », « serveur à relancer », « championnat non mesuré »), jamais une cause inventée. Un championnat où le calcul n'a comparé AUCUN match (n = 0) n'a pas de conclusion :
+« Trop peu de matchs pour juger », jamais « pas de moment meilleur prouvé » (ce serait dire qu'on a comparé et rien trouvé). Σ = des cotes lues, des livres, des championnats
+(victoires = défaites), ⌀ = des moyennes (« somme sans objet » pour une perte log). **Vos bookmakers (The Odds API) portent leur NOM, jamais leur clé** : « Winamax (FR) », « PMU »,
+« Betclic », « Unibet (FR) », « Winamax (DE) », « Betfair Exchange (EU) » — suivi de « (vos bookmakers) », qui distingue le Pinnacle de vos relevés de celui de football-data. UNE seule liste,
+`utils/vosBookmakers.js` : celle que Réglages › « Vos bookmakers » fait cocher (`EngineConfigForm` la lit, il n'en garde pas de copie), complétée pour les clés que Réglages ne propose pas
+mais que vos relevés contiennent par le titre que The Odds API leur donne (`betfair_ex_eu` : l'API dit « Betfair », la bourse que l'appli nomme « Betfair Exchange » ailleurs) ; une clé jamais
+vue reçoit un nom fabriqué lisible (« foo_bar_nl » donne « Foo Bar (NL) ») : un test vérifie qu'aucune clé « mot_mot » n'apparaît dans le texte de la page. Mots : `utils/bookmakers.js`,
+`utils/vosBookmakers.js`, `utils/indiceDeForce.js`, `utils/ficheJoueur.js`, `utils/predicteurs.js` (purs, sans Vue : les tests les rejouent sur les vraies réponses du serveur ; ils ne
+lisent que d'autres règles pures du même dossier).
+
+Depuis l'étape 42 du plan (22/10/2026) : **le bulletin du jour et le bilan de la semaine** — deux textes écrits par l'IA (un appel à Claude Code le matin, un le lundi,
+sur une fiche chiffrée que le code prépare sans token), en attendant la page « Bulletin » de l'étape 45. Ils se lisent dans Réglages, dans UNE carte,
+`components/settings/BulletinsPanel.vue` (« Bulletin du jour et bilan de la semaine », juste sous « Actualisation automatique » : ce sont deux ÉTAPES de l'actualisation,
+« Bulletin du jour » et « Bilan de la semaine », qui figurent aussi dans la liste de ses étapes — `RefreshStatusPanel` n'a pas changé ; une étape pas due y dit POURQUOI
+(« le bulletin du 05/10/2026 est déjà écrit… »), jamais seulement « pas due à cette passe »). La carte LIT `GET /api/match-ai-analysis/bulletins` (une lecture à
+l'ouverture et à chaque fin de passe, « Relire » ; une réponse tardive est ignorée ; une relecture ratée garde le dernier texte) et ne lance RIEN : son seul bouton est
+« Relire » (un test le garde), aucune route n'écrit un bulletin. Règles de dessin : **deux blocs toujours là** (`data-bloc="bulletin"`, `data-bloc="bilan"`), texte écrit ou
+non ; chacun dit son ÉTAT en une puce `.cm-chip` et une phrase (« Écrit », « Rien à commenter », « Attend le matin » avant 6 h, « Coupé » si les analyses automatiques le sont,
+« Abandonné » après trois essais ratés, « Illisible », « Pas encore écrit » avec sa raison — jamais un texte inventé ni un bloc qui disparaît) ; le TEXTE de l'IA (titre, résumé,
+une section par rubrique `data-section`, « à retenir ») ; sa **provenance réelle** (`ProvenanceChip` : Claude Sonnet, par Claude Code — le quota de l'abonnement —, l'heure d'écriture),
+ses tokens et le mode du budget Claude (normal ou économe) ; **la preuve que ses chiffres sont ceux du code** : la phrase de la garde (« Chiffres vérifiés par le code : N nombres
+cités, tous dans la fiche ») et la fiche chiffrée envoyée à l'IA, dépliable (`<details data-fiche>`) — un texte qui cite un nombre absent de la fiche est REFUSÉ et n'est jamais montré :
+ses essais ratés sont dits (`data-essais`, « Essai 1 raté à 14 h 00 — texte refusé : chiffres absents de la fiche (4321,7) »). Le texte d'aujourd'hui pas encore écrit : le dernier
+reste lisible, dit pour ce qu'il est (« Le dernier texte écrit, 04/10/2026 »). En dessous, le tableau des derniers textes (`data-tableau="textes"`, bulletins et bilans mêlés,
+les plus récents d'abord) avec **Σ** (textes, dont appels à Claude, tokens) et **⌀** (tokens par texte QUI A COÛTÉ : un texte « rien à commenter » n'a pas d'appel, il ne tire pas la
+moyenne vers zéro, et sans aucun appel la moyenne est « – »), puis la note « Comment ça tourne ». **Aucun vert ni rouge de value** (rien ici n'en est une) : l'état écrit est vert
+`is-accent` comme tout ce qui est fait, l'abandon rouge, le « pas encore » bleu `is-info`. La carte « Budget Claude » montre les deux types d'appel dans son tableau par type
+(« automatique · compté sur le plafond ») et dit combien de places des 150 ils ont prises (« dont 2 bulletin ou bilan »). Mots : `utils/bulletins.js` (pur, sans Vue : les tests le
+rejouent sur les vraies réponses du serveur).
+
+Depuis l'étape 37 du plan (22/10/2026) : **les styles de jeu** — deux blocs, chacun à UNE place. Sur la page d'une équipe, juste sous « Indice de force »,
+`components/matches/TeamStyleCard.vue` (« Style de jeu », `data-bloc="style-de-jeu"`) ; sur la page d'un match à venir, juste avant « Meilleures statistiques »,
+`components/matches/StyleDuelCard.vue` (« Duel de styles », `data-bloc="duel-de-styles"`). Ils LISENT `GET /api/match-stats/team-style?club=` et
+`/style-duel` (les clubs par identifiant FotMob, ou par nom et championnat quand la page ne les connaît pas), ne calculent rien, n'écrivent rien ; une réponse tardive
+(changement de club) est ignorée. Règles de dessin : l'étiquette en puce de section (`.cm-chip.is-section`, avec `data-style-id`), « provisoire » en puce ambre ; la
+phrase qui la JUSTIFIE avec les chiffres du club ET ceux de son championnat (« part des longs ballons 7,4 % (moyenne du championnat (EPL) : 4,8 %) ») ; les prudences en
+ambre (provisoire, début de saison, nouvel entraîneur, carte des tirs absente) ; la **vraie provenance** (« FotMob (magasin) · styles de jeu », l'heure du calcul) ; le tableau
+des huit chiffres (`data-tableau="chiffres-du-style"` : le club, son championnat, l'écart DIT EN MOTS — « au-dessus », « dans la moyenne »…, jamais un écart-type à l'écran —,
+en gras les chiffres qui portent l'étiquette) avec **Σ** (chiffres mesurés sur 8, matchs lus) et **⌀** (ce que sont les valeurs), toujours ses huit lignes même vide
+(« pas encore calculé », « pas assez de matchs », « non mesuré (carte des tirs absente) », jamais 0) ; l'entraîneur (logo de chacun de ses clubs, son style, l'homonyme dit en
+mots) ; le style mois par mois (`data-tableau="style-par-mois"`, Σ mois et changements, ⌀ matchs lus). Un style n'est ni bon ni mauvais : **ni vert ni rouge**, l'écart
+au-dessus en bleu `--cm-info`, en dessous en ambre. Le duel : les deux clubs face à face (logo, style, possession), le scénario en une phrase, et la MENTION en pastille —
+« Explication seulement » (gris) tant que le banc n'a rien prouvé, « Effet mesuré » en vert `--cm-accent` (la seule exception, comme « Prouvé » de l'étape 23) avec l'effet
+en points ; sous le scénario, ce que le banc a mesuré en mots (matchs jugés, essais comptés, « pas prouvé »). Mots : `utils/stylesDeJeu.js` (pur, sans Vue : les tests le
+rejouent sur les vraies réponses du serveur).
+
+Depuis l'étape 44 du plan (23/10/2026) : **la mémoire de l'IA** — un bloc, à UNE place pour l'instant : sur la page d'une équipe, juste sous « Style de jeu »,
+`components/analysis/AiDossierCard.vue` (« Mémoire de l'IA », `data-bloc="memoire-ia"`, icône `sparkles`) ; la page « Bulletin » de l'étape 45 le réutilisera tel
+quel (et `GET …/dossiers?league=` pour un championnat seul). Il LIT `GET /api/match-ai-analysis/dossiers?club=fotmob-…` (le club par son IDENTIFIANT FotMob, jamais
+par son nom : sans identifiant, il le dit et ne lit rien), ne calcule rien, n'écrit rien ; une réponse tardive (changement de club) est ignorée. Ce qu'il montre, dans
+l'ordre : le club (logo, championnat) ; la **vraie provenance** (« Écrit par le code · magasin FotMob et carnet de l'IA », « mis à jour le … », le fichier
+`data/runtime/ai-dossiers.json` au survol) et « matchs pris en compte jusqu'au … » ; les faits du moment en phrases à icône (classement, séries, entraîneur, style,
+carnet de l'IA sur ce club) — les phrases viennent du serveur, ce sont LES MÊMES MOTS que l'IA lit ; cinq tableaux toujours là, même vides, chacun avec **Σ** et **⌀** :
+la forme (`data-tableau="forme"`, 10 matchs, logo de chaque adversaire), les absents connus (`absents`, lus avant quel match), les **leçons confirmées par le carnet**
+(`lecons` : leur jour, le match d'origine avec ses deux logos, le marché et le pronostic, la leçon entre guillemets, ce que le carnet a vu en mots, « confirmée le »),
+les leçons retirées (`retirees` : démenties ou jamais confirmées, et pourquoi), les leçons du championnat (`lecons-championnat`), sous le profil de la saison et la tête
+du classement (logos) ; puis, repliable, « Ce que l'IA lit de ce dossier » (le texte exact, ses mots et ses tokens estimés comme le budget de l'étape 41) ; et la règle en
+pied (écrit par le code, jamais un chiffre au moteur, la note manuscrite n'y entre pas). Une leçon n'est ni bonne ni mauvaise : **ni vert ni rouge** ; « le moteur s'y est
+trompé » se lit en mots. Mots : `utils/dossiersIA.js` (pur, sans Vue : les tests le rejouent sur les vraies réponses du serveur).
 
 ## 3 bis. Le langage visuel des paris (étape 6 du plan, 06/10/2026)
 
@@ -774,7 +879,13 @@ des garde-fous, des fiches, du coupe-circuit et du ticket), `server/test/reperes
 `server/test/preuveEcran.test.mjs` (étape 16 : le bloc « Preuve après lancement » de la feuille de route, ses règles et son rendu
 dans chacun de ses états), `server/test/versionsMoteurEcran.test.mjs` (étape 25 : la carte « Versions du moteur », ses règles et son rendu
 dans chacun de ses états, avec les réponses du vrai serveur), `server/test/adoptionMoteurEcran.test.mjs` (étape 25, seconde moitié : l'essai de la
-candidate, ses deux verdicts, le bouton « Adopter » et l'alerte de dérive, dans chacun de leurs états), puis `ui/scripts/verifier-interface.mjs --avant <src d'avant>`.
+candidate, ses deux verdicts, le bouton « Adopter » et l'alerte de dérive, dans chacun de leurs états), `server/test/fichesEcran.test.mjs` (étape 31 : l'indice de force
+d'une équipe, la note par poste d'un joueur et « ce qui prédit, ce qui trompe » — règles recomptées à la main, chaque bloc dans chacun de ses états, aucune note de joueur sur le terrain
+des compositions), `server/test/bookmakers.test.mjs` (la route de lecture `GET /api/market-knowledge` : même forme avant et après le calcul, un championnat à la fois, lecture
+seule, les règles de la page recomptées sur les vraies réponses) et `server/test/bookmakersEcran.test.mjs` (la page Bookmakers rendue dans ses états : prête, un championnat, inconnu,
+jamais calculé, serveur en erreur ou pas à jour, autre version — huit tableaux toujours complets), `server/test/bulletins.test.mjs` (étape 42 : la garde des chiffres, les fiches du jour et de la semaine lues dans la base d'essai
+et recomptées par un autre chemin, le service avec un faux Claude — une fois par jour et par semaine, le budget, le mode économe, les pannes — et la route) et `server/test/bulletinsEcran.test.mjs` (la carte rendue dans chacun
+de ses états, les deux étapes dans la liste de l'actualisation, le tableau par type de la carte « Budget Claude »), puis `ui/scripts/verifier-interface.mjs --avant <src d'avant>`.
 
 ## 4. Utilitaires (`src/assets/styles/utilities.css`, préfixe `cm-`)
 

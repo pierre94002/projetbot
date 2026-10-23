@@ -72,7 +72,8 @@ function noms(texte) {
  * des compositions et la page des matchs) — sans requête FotMob. Indexées par
  * « identifiant du club qui reçoit | identifiant du club qui se déplace ».
  */
-function compositionsDuCache(database, debut, fin) {
+// Exportée (étape 42) : le bulletin du jour lit les compositions par la MÊME règle que cette page.
+export function compositionsDuCache(database, debut, fin) {
   const index = new Map();
   let lignes = [];
   try {
@@ -105,7 +106,7 @@ function compositionsDuCache(database, debut, fin) {
  *   - sinon, la dernière composition alignée gardée au magasin : { source: 'magasin' } ;
  *   - sinon : null (« Compo non publiée »).
  */
-function compositionDe(m, index) {
+export function compositionDe(m, index) {
   const t = Date.parse(m.commenceTime ?? '');
   const lue = m.homeId && m.awayId ? (index.get(`${m.homeId}|${m.awayId}`) ?? []).find((l) => Number.isFinite(t) && Math.abs(Date.parse(`${l.date}T12:00:00Z`) - t) <= 1.5 * JOUR_MS) : null;
   if (lue) {

@@ -613,8 +613,24 @@ function lettre(i) {
   return s;
 }
 
-function blocExperience(experience) {
+/**
+ * `sansLecons` (étape 44, la mémoire de l'IA) : les comptes seulement — les leçons confirmées par le carnet sont
+ * dans la section « dossiers », à la place des trois dernières leçons de chaque type prises sans tri.
+ */
+function blocExperience(experience, { sansLecons = false } = {}) {
   if (!Array.isArray(experience) || !experience.length) return [];
+  if (sansLecons) {
+    const lignes = ['## experience — ton bilan par type de marché (tes leçons confirmées sont dans les dossiers)'];
+    const rang = (niveau) => (NIVEAUX.includes(niveau) ? NIVEAUX.indexOf(niveau) : NIVEAUX.length);
+    for (const t of experience) {
+      const conf = Object.entries(t.byConfidence ?? {})
+        .sort(([a], [b]) => rang(a) - rang(b))
+        .map(([niveau, c]) => avecReste(`${niveau} ${texte(c?.right)}/${texte(c?.verdicts)}`, c, ['right', 'verdicts']));
+      const autres = reste(t, ['marketType', 'label', 'matches', 'engineRight', 'aiVerdicts', 'aiRight', 'byConfidence', 'recentLessons']);
+      lignes.push(`${texte(t.label ?? t.marketType)} : moteur ${texte(t.engineRight)}/${texte(t.matches)} · tes avis ${texte(t.aiRight)}/${texte(t.aiVerdicts)}${conf.length ? ` (${conf.join(' · ')})` : ''}${autres ? ` · autres : ${autres}` : ''}`);
+    }
+    return lignes;
+  }
   // Les matchs d'où viennent les leçons, écrits une fois chacun en légende ([a], [b]…).
   const matchs = [];
   for (const t of experience) {
@@ -654,7 +670,7 @@ const MOMENTS = { avance: "d'avance (la veille ou quelques heures avant)", 'coup
  * liste ([{ type, label }]) — UNE ligne sous le tableau ; aucun : la fiche
  * d'avant, à l'octet.
  */
-export function ficheAvantMatch({ home, away, league = null, commenceTime = null, timing = null, engineSummary, marches = null, context = {}, lineups = null, experience = [], retires = [] }) {
+export function ficheAvantMatch({ home, away, league = null, commenceTime = null, timing = null, engineSummary, marches = null, context = {}, lineups = null, experience = [], retires = [], dossiers = null }) {
   const equipes = { home, away };
   const ctx = context ?? {};
   const compo = lineups ?? ctx.lineups ?? null;
@@ -690,7 +706,11 @@ export function ficheAvantMatch({ home, away, league = null, commenceTime = null
   if (secondaires.length) lignes.push('', '## sources secondaires (équipe inconnue du magasin)', ...secondaires);
   const autres = Object.entries(ctx).filter(([cle, v]) => !CLES_CONTEXTE.includes(cle) && !estVide(v));
   if (autres.length) lignes.push('', '## autres données', ...autres.map(([cle, v]) => `${cle} : ${enLigne(v)}`));
-  const exp = blocExperience(experience);
+  // Étape 44 : les DOSSIERS (texte choisi par le code, 300 à 500 mots : aiMemory.js) remplacent les trois dernières leçons
+  // de chaque type. Sans dossiers (fichier absent ou illisible), la fiche d'avant, à l'octet.
+  const avecDossiers = typeof dossiers === 'string' && dossiers.trim() !== '';
+  if (avecDossiers) lignes.push('', dossiers.trim());
+  const exp = blocExperience(experience, { sansLecons: avecDossiers });
   if (exp.length) lignes.push('', ...exp);
   return lignes.join('\n');
 }

@@ -28,6 +28,7 @@ import { lireReperes } from '../../data/db/leagueBenchmarks.js';
 import { etatTableJourJ } from '../../data/db/dayTable.js';
 import { etatIndiceDeForce, lireIndiceDeForce, LIEUX } from '../../data/db/teamStrength.js';
 import { etatDesFiches, lireLesFiches } from '../../data/db/playerRatings.js';
+import { lireLeStyleDuClub, lireLeDuelDeStyles } from '../../data/db/teamStyle.js';
 import { resolveDbPath, openDb } from '../../data/db/matchStatsDb.js';
 import { ApiError, requireStringParam, optionalPositiveInt, optionalStringParam } from '../middlewares/errorHandler.js';
 
@@ -489,6 +490,48 @@ export function getTeamStrength(req, res) {
     throw new ApiError(400, error.message);
   }
   res.json({ ...commun, lecture });
+}
+
+/**
+ * Le style de jeu d'un club (étape 37 du plan, 22/10/2026) : LIT les tables que remplit chaque nuit l'étape
+ * « stylesDeJeu » de l'actualisation (teamStyle.js) — ne calcule rien, n'écrit rien. `club` (identifiant FotMob,
+ * « fotmob-123 » ou 123) : son style actuel et les chiffres qui le justifient (et ceux de son championnat), ses 13
+ * derniers mois, son entraîneur et le style de l'entraîneur. Jamais calculé : la même forme, `style: null`.
+ * EXPLICATION SEULEMENT : le moteur ne lit pas les styles.
+ */
+export function getTeamStyle(req, res) {
+  const club = requireStringParam(req.query.club, 'club');
+  if (!/^(fotmob-)?[1-9]\d*$/.test(club)) throw new ApiError(400, `Le paramètre "club" doit être un identifiant FotMob (« fotmob-123 » ou 123), reçu « ${club} ».`);
+  const lecture = lireLeStyleDuClub(club, { database: openDb() });
+  res.json({ ...lecture, base: resolveDbPath(), generatedAt: new Date().toISOString() });
+}
+
+/**
+ * Le DUEL DE STYLES d'un match (étape 37) : le style actuel des deux clubs et ce que le banc en dit — « explication
+ * seulement », ou l'effet mesuré si la case a passé le seuil sévère. Les clubs par leur identifiant FotMob (`home`,
+ * `away`), ou par leur nom (`homeName`, `awayName`, `league`) reconnu dans l'annuaire du magasin (jamais le
+ * rapprocheur souple). LIT seulement.
+ */
+export function getStyleDuel(req, res) {
+  const database = openDb();
+  const ids = {};
+  for (const camp of ['home', 'away']) {
+    const id = optionalStringParam(req.query[camp], camp);
+    const nom = optionalStringParam(req.query[`${camp}Name`], `${camp}Name`);
+    if (id !== undefined) {
+      if (!/^(fotmob-)?[1-9]\d*$/.test(id)) throw new ApiError(400, `Le paramètre "${camp}" doit être un identifiant FotMob (« fotmob-123 » ou 123), reçu « ${id} ».`);
+      ids[camp] = id;
+    } else if (nom !== undefined) {
+      const league = optionalStringParam(req.query.league, 'league') ?? null;
+      ids[camp] = resolveTeamIds([{ name: nom, league }], { database })[0]?.teamId ?? null;
+      if (!ids[camp]) throw new ApiError(404, `Club inconnu du magasin : « ${nom} »${league ? ` (${league})` : ''}.`);
+    } else {
+      throw new ApiError(400, `Le paramètre "${camp}" (identifiant FotMob) ou "${camp}Name" (nom du club) est obligatoire.`);
+    }
+  }
+  const lecture = lireLeDuelDeStyles(ids.home, ids.away, { database });
+  const enId = (x) => (/^\d+$/.test(String(x)) ? `fotmob-${x}` : String(x));
+  res.json({ ...lecture, homeId: enId(ids.home), awayId: enId(ids.away), base: resolveDbPath(), generatedAt: new Date().toISOString() });
 }
 
 /**

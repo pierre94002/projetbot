@@ -14,6 +14,8 @@ import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 // Étape 15 du plan : les repères de chaque championnat (calculés chaque nuit par l'actualisation).
 import LeagueBenchmarksPanel from '@/components/team-stats/LeagueBenchmarksPanel.vue';
+// Étape 31 du plan : « ce qui prédit / ce qui trompe » (étape 18) — UNE SEULE place, ici, où l'on lit les statistiques.
+import PredictorsTable from '@/components/analysis/PredictorsTable.vue';
 import { formatLeagueOptionLabel } from '@/utils/leagueDisplay.js';
 import { MATCH_STAT_SECTIONS, parseNumeric } from '@/constants/matchStatFields.js';
 
@@ -355,6 +357,11 @@ watch(() => favoris.leagues.map((l) => l.name).join('|'), choisirParDefaut);
     >
       <LeagueBenchmarksPanel :league="selectedLeague" />
     </AppCard>
+
+    <!-- 4. CE QUI PRÉDIT / CE QUI TROMPE (étape 31 du plan, 22/10/2026) : ce que vaut chaque statistique d'équipe et de
+         joueur — fiabilité, matchs nécessaires, pouvoir de prédiction, demi-vie, bonne fenêtre. Mesuré sur tous les
+         championnats réunis : affiché même sans championnat choisi. -->
+    <PredictorsTable />
   </div>
 </template>
 

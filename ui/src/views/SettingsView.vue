@@ -19,6 +19,8 @@ import AiConnectionForm from '@/components/settings/AiConnectionForm.vue';
 import AiAnalysisPanel from '@/components/settings/AiAnalysisPanel.vue';
 import MatchStatsCoveragePanel from '@/components/settings/MatchStatsCoveragePanel.vue';
 import RefreshStatusPanel from '@/components/settings/RefreshStatusPanel.vue';
+// Étape 42 du plan : le bulletin du jour et le bilan de la semaine, deux textes écrits par l'IA (deux étapes de l'actualisation).
+import BulletinsPanel from '@/components/settings/BulletinsPanel.vue';
 import FavoritesPanel from '@/components/settings/FavoritesPanel.vue';
 import FreeOddsCoveragePanel from '@/components/settings/FreeOddsCoveragePanel.vue';
 import BackupStatusPanel from '@/components/settings/BackupStatusPanel.vue';
@@ -430,6 +432,16 @@ async function handleRunAiAnalysis(limit) {
           @run="handleRunRefresh"
           @resettle="handleResettle"
         />
+      </AppCard>
+
+      <!-- Le bulletin du jour et le bilan de la semaine (étape 42 du plan, 22/10/2026) : deux textes écrits par l'IA, un appel à Claude Code par jour et par semaine, sur une fiche chiffrée du code. -->
+      <AppCard
+        title="Bulletin du jour et bilan de la semaine"
+        subtitle="Chaque matin, ce qui vaut le coup aujourd'hui et pourquoi ; chaque semaine, ce qui a marché, ce qui a perdu et où l'IA s'est trompée — écrits par l'IA sur des chiffres calculés par le code, jamais les siens"
+        eyebrow="Intelligence artificielle"
+        icon="sparkles"
+      >
+        <BulletinsPanel :passe-terminee-le="refreshOverview?.lastCompletedAt ?? null" />
       </AppCard>
 
       <!-- Le contrôle quotidien (étape 14 du plan, 07/10/2026) : le feu vert / orange / rouge de chaque passe, les contrôles en échec, puis la santé de chaque source. -->

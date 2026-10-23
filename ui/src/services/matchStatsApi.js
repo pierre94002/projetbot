@@ -17,6 +17,27 @@ export const matchStatsApi = {
   // Les repères d'un championnat (étape 15 du plan) : calculés chaque nuit par
   // l'actualisation (server/src/data/db/leagueBenchmarks.js), lus tels quels.
   benchmarks: (league) => httpClient.get(`/match-stats/benchmarks?league=${encodeURIComponent(league)}`),
+  // L'indice de force d'un club (étape 29 du plan) : calculé chaque nuit par l'actualisation
+  // (server/src/data/db/teamStrength.js), lu tel quel — jamais recalculé. `club` : « fotmob-8456 » ; `historique` :
+  // sa note dans le temps (la forme).
+  teamStrength: (club, { historique = false } = {}) =>
+    httpClient.get(`/match-stats/team-strength?club=${encodeURIComponent(club)}${historique ? '&historique=oui' : ''}`),
+  // La fiche par poste d'un joueur (étape 30 du plan) : calculée chaque nuit (server/src/data/db/playerRatings.js), lue
+  // telle quelle. Affichage seulement : le moteur ne la lit pas. `player` : « fotmob-123456 ».
+  playerRatings: (player) => httpClient.get(`/match-stats/player-ratings?player=${encodeURIComponent(player)}`),
+  // Le style de jeu d'un club et de son entraîneur (étape 37 du plan) : calculé chaque nuit
+  // (server/src/data/db/teamStyle.js), lu tel quel. Explication seulement : le moteur ne le lit pas. `club` : « fotmob-8456 ».
+  teamStyle: (club) => httpClient.get(`/match-stats/team-style?club=${encodeURIComponent(club)}`),
+  // Le duel de styles d'un match (étape 37) : les clubs par identifiant FotMob s'il est connu, sinon par nom et championnat.
+  styleDuel: ({ homeId = null, awayId = null, homeName = null, awayName = null, league = null }) => {
+    const params = new URLSearchParams();
+    if (homeId) params.set('home', homeId);
+    else if (homeName) params.set('homeName', homeName);
+    if (awayId) params.set('away', awayId);
+    else if (awayName) params.set('awayName', awayName);
+    if (league && (!homeId || !awayId)) params.set('league', league);
+    return httpClient.get(`/match-stats/style-duel?${params.toString()}`);
+  },
   get: (matchId) => httpClient.get(`/match-stats/${encodeURIComponent(matchId)}`),
   // Page d'un match à venir : coup d'envoi exact, stade, météo, arbitre et
   // composition décrite (FotMob, gratuit — cf. lineupContext.js côté serveur).

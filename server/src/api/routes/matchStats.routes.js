@@ -24,7 +24,9 @@ import {
   getLeagueBenchmarks,
   getDayTable,
   getTeamStrength,
-  getPlayerRatings
+  getPlayerRatings,
+  getTeamStyle,
+  getStyleDuel
 } from '../controllers/matchStats.controller.js';
 
 const router = Router();
@@ -41,6 +43,9 @@ router.get('/day-table', asyncHandler(getDayTable));
 router.get('/team-strength', asyncHandler(getTeamStrength));
 // Les fiches des joueurs par poste (étape 30 du plan) : calculées chaque nuit, en lecture seule ; affichage seulement.
 router.get('/player-ratings', asyncHandler(getPlayerRatings));
+// Les styles de jeu (étape 37 du plan) : calculés chaque nuit, en lecture seule ; explication seulement.
+router.get('/team-style', asyncHandler(getTeamStyle));
+router.get('/style-duel', asyncHandler(getStyleDuel));
 router.post('/refresh', asyncHandler(postMatchStatsRefresh));
 router.get('/team', asyncHandler(getTeamMatchStats));
 router.get('/team-averages', asyncHandler(getTeamMatchStatsAverages));

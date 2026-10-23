@@ -12,6 +12,8 @@ import LeagueBadge from '@/components/matches/LeagueBadge.vue';
 import MatchCard from '@/components/matches/MatchCard.vue';
 import TeamCrest from '@/components/matches/TeamCrest.vue';
 import PlayerFlag from '@/components/matches/PlayerFlag.vue';
+// Étape 31 du plan : la note par poste du joueur (calculée chaque nuit, étape 30) et sa courbe de forme.
+import PlayerRatingCard from '@/components/matches/PlayerRatingCard.vue';
 import { rencontreVueParEquipe } from '@/utils/rencontres.js';
 import { photoJoueur, formatNote, classeNote } from '@/utils/playerVisuals.js';
 
@@ -233,6 +235,17 @@ const formeRecente = computed(() => (j.value?.matches ?? []).filter((m) => forma
           </div>
         </AppCard>
       </div>
+
+      <PlayerRatingCard
+        :player-id="j.playerId ?? props.playerId"
+        :player-name="j.name"
+        :country-code="j.countryCode ?? null"
+        :country-name="j.countryName ?? null"
+        :team="j.team ?? null"
+        :team-id="j.teamId ?? null"
+        :league="j.league ?? null"
+        :matches="j.matches"
+      />
 
       <AppCard icon="matches" title="Match par match" :subtitle="`${j.matches.length} feuille${j.matches.length > 1 ? 's' : ''} de match cette saison`">
         <EmptyState v-if="!j.matches.length" icon="matches" title="Aucun match cette saison." description="Aucune feuille de match de ce joueur sur la saison choisie." />

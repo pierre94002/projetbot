@@ -21,6 +21,7 @@ import { getMatchNote } from '../../data/repositories/matchNotesRepository.js';
 import { resolveTeamNews } from '../../data/providers/teamNewsResolver.js';
 import { getByMatchId, savePreMatchAnalysis, savePostMatchReview, aiMarketExperience, avisTenu, typeDeMarche, TYPES_DE_MARCHE } from '../../data/repositories/matchAiAnalysisRepository.js';
 import { lireLesMarchesCoupes } from '../../data/aiScorecard.js';
+import { memoireDuMatch } from '../../data/aiDossiers.js';
 import { createResultLookup } from '../../data/repositories/matchResultsRepository.js';
 import { listPredictions } from '../../data/repositories/predictionsRepository.js';
 import { matchDetailsFromStore } from '../../data/db/matchStatsRead.js';
@@ -603,6 +604,7 @@ export async function preparerAnalyseAvantMatch({ matchId, home, away, league, e
   let demande;
   let marches;
   let marchesRetires = [];
+  let memoire = null;
   if (forme === FICHES.ancienne) {
     // L'ancienne forme est celle d'avant l'étape 41, octet pour octet : jamais filtrée par le carnet (étape 21).
     if (compo) context.lineups = compositionPourIA(compo);
@@ -618,6 +620,10 @@ export async function preparerAnalyseAvantMatch({ matchId, home, away, league, e
     // Seuls les marchés que la fiche aurait donnés (cote juste ≥ 1,20) sont dits retirés.
     marchesRetires = [...new Set(marchesPourIA(engineSummary.marketPredictions).flatMap((m) => (coupes.has(typeDeMarche(m)) ? [typeDeMarche(m)] : [])))];
     const retires = marchesRetires.map((type) => ({ type, label: TYPES_DE_MARCHE[type] ?? type }));
+    // Étape 44 : la MÉMOIRE de l'IA — les dossiers des deux clubs (par identifiant FotMob) et du championnat, 300 à 500
+    // mots choisis par le code, à la place des trois dernières leçons de chaque type. Dossiers absents ou illisibles :
+    // null, la fiche d'avant à l'octet. Jamais la note de Pierre (elle reste dans sa section), jamais un chiffre au moteur.
+    memoire = memoireDuMatch({ matchId, home, away, league, compo, context });
     demande = buildPreMatchAnalysisRequestCompacte({
       home,
       away,
@@ -629,7 +635,8 @@ export async function preparerAnalyseAvantMatch({ matchId, home, away, league, e
       experience: coupes.size ? experience.filter((t) => !coupes.has(t.marketType)) : experience,
       commenceTime: engineResult.commenceTime ?? null,
       timing,
-      retires
+      retires,
+      dossiers: memoire?.texte ?? null
     });
   }
   return {
@@ -641,7 +648,22 @@ export async function preparerAnalyseAvantMatch({ matchId, home, away, league, e
     marches,
     // Étape 21 : les types de marché retirés de CETTE fiche (gardés avec l'analyse, pour que la revue ne les redonne pas à juger).
     marchesRetires,
-    compo: compo ?? null
+    compo: compo ?? null,
+    // Étape 44 : ce que la mémoire a remis à l'IA (texte, mots, tokens estimés, leçons citables, clubs reconnus), ou null.
+    memoire
+  };
+}
+
+/** Ce qu'on garde avec l'analyse de la mémoire remise à l'IA (étape 44) : sans le texte, refait chaque nuit. */
+function memoireGardee(m) {
+  if (!m) return null;
+  return {
+    mots: m.mots,
+    tokens: m.tokens,
+    lecons: m.lecons,
+    dossiersDu: m.calculeLe ?? null,
+    equipes: { home: { id: m.equipes.home.id, dossier: m.equipes.home.dossier }, away: { id: m.equipes.away.id, dossier: m.equipes.away.dossier } },
+    championnat: m.championnat
   };
 }
 
@@ -673,7 +695,7 @@ export async function runPreMatchAnalysis({ matchId, home, away, league, engineR
     throw new DomainError(CLAUDE_CODE_NON_CONNECTE, { status: 400, code: CODE_CLAUDE_CODE_INDISPONIBLE });
   }
   const demande = await preparerAnalyseAvantMatch({ matchId, home, away, league, engineResult, sansRepliPayant, lineups, timing, fiche });
-  const { engineSummary, marches, compo, forme, marchesRetires } = demande;
+  const { engineSummary, marches, compo, forme, marchesRetires, memoire } = demande;
 
   let reponse;
   try {
@@ -728,6 +750,8 @@ export async function runPreMatchAnalysis({ matchId, home, away, league, engineR
     // Étape 21 : les types de marché retirés de la fiche par le carnet de l'IA ; la revue ne les lui redonne pas à
     // juger. Rien de retiré : la clé n'est pas écrite (celle d'une analyse précédente du match est effacée).
     ...(marchesRetires?.length ? { marchesRetires } : existante?.marchesRetires ? { marchesRetires: undefined } : {}),
+    // Étape 44 : la mémoire remise à l'IA (mots, tokens estimés, leçons citables) ; sans dossiers, la clé n'est pas écrite.
+    ...(memoire ? { memoire: memoireGardee(memoire) } : existante?.memoire ? { memoire: undefined } : {}),
     lineupSnapshot: compo ?? null,
     analysis
   };

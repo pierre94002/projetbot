@@ -4,6 +4,7 @@ import AppSlider from '@/components/common/AppSlider.vue';
 import AppButton from '@/components/common/AppButton.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
 import { etatDuModeleDansLesReglages } from '@/utils/modeleDeButs.js';
+import { BOOKMAKERS } from '@/utils/vosBookmakers.js';
 
 /**
  * Les réglages du moteur (seuils, Kelly, mise, corrélation, cote plafond) et
@@ -37,24 +38,7 @@ watch(
 // d'abord (cf. server/src/core/engine/valueFinder.js) — et un bookmaker qui
 // l'a fixée n'est jamais recommandé pour ce match. Les « fiables » sont
 // réglementés par une autorité européenne ; aucun n'est agréé en France.
-const BOOKMAKERS = [
-  { key: 'williamhill', title: 'William Hill', groupe: 'fiable' },
-  { key: 'sport888', title: '888sport', groupe: 'fiable' },
-  { key: 'betsson', title: 'Betsson', groupe: 'fiable' },
-  { key: 'nordicbet', title: 'Nordic Bet', groupe: 'fiable' },
-  { key: 'unibet_nl', title: 'Unibet (NL)', groupe: 'fiable' },
-  { key: 'unibet_se', title: 'Unibet (SE)', groupe: 'fiable' },
-  { key: 'leovegas_se', title: 'LeoVegas (SE)', groupe: 'fiable' },
-  { key: 'tipico_de', title: 'Tipico', groupe: 'fiable' },
-  { key: 'coolbet', title: 'Coolbet', groupe: 'fiable' },
-  { key: 'codere_it', title: 'Codere (IT)', groupe: 'fiable' },
-  { key: 'betclic_fr', title: 'Betclic', groupe: 'france' },
-  { key: 'unibet_fr', title: 'Unibet (FR)', groupe: 'france' },
-  { key: 'winamax_fr', title: 'Winamax (FR)', groupe: 'france' },
-  { key: 'pmu_fr', title: 'PMU', groupe: 'france' },
-  { key: 'marathonbet', title: 'Marathon Bet', groupe: 'autre' },
-  { key: 'onexbet', title: '1xBet', groupe: 'autre' }
-];
+// La liste (clés The Odds API, noms, groupes) vit dans utils/vosBookmakers.js : la page Bookmakers dit les mêmes noms.
 const NOTES = { france: 'agréé en France, marge 11 à 15 %', autre: 'non retenu par défaut' };
 
 // Présentation seulement : combien de bookmakers sont cochés (aucun = tous).

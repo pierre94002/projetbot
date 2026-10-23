@@ -340,8 +340,9 @@ test('câblage : l’onglet « Opportunités » de la page Matchs, l’adresse /
   assert.match(matchs, /watch\(\s*\(\) => route\.query\.onglet,/);
   const routeur = lireUi('router', 'index.js');
   assert.match(routeur, /path: '\/opportunites',[\s\S]*?redirect: \{ path: '\/matches', query: \{ onglet: 'opportunites' \} \}/);
-  // Le menu garde ses cinq sections ; l'étape 24 (14/10/2026) y ajoute « Santé du moteur » (même couleur qu'Historique moteur) : six entrées.
-  assert.equal(compter(lireUi('components', 'layout', 'AppSidebar.vue'), /\{ to: '\//g), 6);
+  // Le menu garde ses cinq sections ; l'étape 24 (14/10/2026) y ajoute « Santé du moteur » (même couleur qu'Historique moteur), l'étape 31
+  // (22/10/2026) « Bookmakers » (même couleur que Mes paris) : sept entrées.
+  assert.equal(compter(lireUi('components', 'layout', 'AppSidebar.vue'), /\{ to: '\//g), 7);
   // Mes paris : la pastille du verdict, le même que la page ; l'avantage n'est plus vert à part.
   const mesParis = lireUi('views', 'MyBetsView.vue');
   assert.match(mesParis, /verdict: data\.verdicts\?\.\[pari\.outcome\] \?\? null,/);

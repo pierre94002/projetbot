@@ -14,5 +14,9 @@ export const matchAiAnalysisApi = {
     httpClient.post(`/match-ai-analysis/match/${encodeURIComponent(matchId)}`, { home, away, league, engineResult }),
   runPostMatch: (matchId) => httpClient.post(`/match-ai-analysis/match/${encodeURIComponent(matchId)}/post-match-review`),
   // Étape 21 du plan : le carnet de notes de l'IA (lecture seule ; refait chaque nuit par l'actualisation).
-  scorecard: () => httpClient.get('/match-ai/scorecard')
+  scorecard: () => httpClient.get('/match-ai/scorecard'),
+  // Étape 44 du plan : la mémoire de l'IA — le dossier d'une équipe (par son identifiant FotMob) et de son championnat,
+  // ou d'un championnat seul (lecture seule ; écrits chaque nuit par l'actualisation).
+  dossierEquipe: (clubId) => httpClient.get(`/match-ai-analysis/dossiers?club=${encodeURIComponent(clubId)}`),
+  dossierChampionnat: (league) => httpClient.get(`/match-ai-analysis/dossiers?league=${encodeURIComponent(league)}`)
 };

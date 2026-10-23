@@ -677,8 +677,9 @@ test('l’étape « controleQuotidien » : la DERNIÈRE de la passe, sous le ver
   assert.equal(e.etapes.at(-1), 'controleQuotidien');
   // Étape 21 (14/10/2026) : le carnet de l'IA (un fichier de data/runtime refait chaque nuit, après les clôtures
   // de la veille) s'intercale entre la sauvegarde et le contrôle quotidien, qui reste le dernier.
-  assert.equal(e.etapes.at(-2), 'carnetIA');
-  assert.equal(e.etapes.at(-3), 'sauvegarde');
+  // Étape 42 (22/10/2026) : le bulletin du jour et le bilan de la semaine s'intercalent à leur tour entre le carnet et le contrôle.
+  // Étape 44 (23/10/2026) : la mémoire de l'IA (dossiers des équipes) suit le carnet, avant le bulletin.
+  assert.deepEqual(e.etapes.slice(-6), ['sauvegarde', 'carnetIA', 'dossiersIA', 'bulletin', 'bilanSemaine', 'controleQuotidien']);
   assert.equal(e.etapes.filter((k) => k === 'controleQuotidien').length, 1);
   assert.equal(e.passe.status, 'warn');
   assert.match(e.passe.summary, /^Feu rouge : 35 contrôles en [\d,]+ s sur \d+ rencontres des 30 derniers jours \(le serveur jamais tenu plus de \d+ ms d'affilée\) — rouge : score différent de football-data, classement officiel, match joué absent du magasin — orange : .*\. Rien n'est corrigé automatiquement ; le détail est dans Réglages › Contrôle quotidien\.$/);

@@ -480,7 +480,7 @@ const heureDeLAnalyse = (e) => e.analysedAt ?? e.createdAt ?? null;
  * référence, rattaché, réglé et mesuré à la clôture — ou sa raison d'être écarté. N'écrit RIEN.
  * `analyses` : la liste des analyses ; `database` : la base (lecture seule).
  */
-export function* casDesAnalyses(analyses, { database, maintenant = Date.now() } = {}) {
+export function* casDesAnalyses(analyses, { database, maintenant = Date.now(), avecCloture = true } = {}) {
   const ecartes = {};
   const cas = [];
   const comptes = { lues: 0, avecAvis: 0, reglees: 0, aVenir: 0 };
@@ -544,7 +544,7 @@ export function* casDesAnalyses(analyses, { database, maintenant = Date.now() } 
         const type = typeDeMarche(p);
         if (!type) return ecarter('typeInconnu');
         if (!p.minOdds) return ecarter('avantLaRegle');
-        retenus.push({ p, type, avis: avis[i] ?? null });
+        retenus.push({ p, type, avis: avis[i] ?? null, index: i });
       });
       if (!retenus.length) continue;
       const ko = instant(e.commenceTime);
@@ -591,7 +591,7 @@ export function* casDesAnalyses(analyses, { database, maintenant = Date.now() } 
   for (const { e, retenus, ids, rencontre, coupDEnvoi, heure } of parRencontre.values()) {
     comptes.reglees++;
     const fiche = e.fiche === 'compacte' ? 'compacte' : 'ancienne';
-    for (const { p, type, avis: a } of retenus) {
+    for (const { p, type, avis: a, index } of retenus) {
       const pick = { choice: p.predictedOutcome, params: p.params ?? {}, marketId: p.marketId ?? type, market: p.market, label: p.predictedLabel, homeName: e.homeName, awayName: e.awayName };
       const r = issueDuPronostic(pick, rencontre.reglement);
       if (r.raison) {
@@ -618,10 +618,21 @@ export function* casDesAnalyses(analyses, { database, maintenant = Date.now() } 
         gains: tenu === null ? null : gainsDeLAvis({ p: prob, realise: r.realise, verdict }),
         clotureEligible: TYPES_AVEC_CLOTURE.includes(type) && tenu !== null,
         cloture: null,
-        raisonCloture: null
+        raisonCloture: null,
+        // Étape 44 (la mémoire de l'IA) : de quoi rattacher la LEÇON écrite après ce match à ce cas — l'analyse, la place du
+        // pronostic dans ses pronostics gardés (celle de son bilan d'après-match), le marché, et les identifiants FotMob des
+        // clubs déjà trouvés ici (jamais une seconde lecture par les noms). Le carnet n'en lit rien : ses comptes ne changent pas.
+        matchId: e.matchId ?? null,
+        index,
+        market: p.market ?? null,
+        pick: p.predictedLabel ?? null,
+        marche: cleDuMarche({ ...p, marketId: p.marketId ?? type }),
+        equipe: p.params?.team === 'home' || p.params?.team === 'away' ? p.params.team : null,
+        homeId: ids.homeId,
+        awayId: ids.awayId
       };
-      // 4. La clôture : seulement un avis compté, sur un marché à cotes gratuites.
-      if (k.clotureEligible) {
+      // 4. La clôture : seulement un avis compté, sur un marché à cotes gratuites (étape 44 : pas demandée par les dossiers).
+      if (k.clotureEligible && avecCloture) {
         const m = mesurerUneEntree(
           {
             marketId: type,
@@ -706,10 +717,11 @@ export function lireLesMarchesCoupes({ fichier = FICHIER_CARNET, coupureActive =
 export async function calculerEtEcrireLeCarnet({ database = openDb(), maintenant = Date.now(), pauses = creerPauses(), fichier = FICHIER_CARNET, analyses = null, coupureActive = COUPURE_ACTIVE } = {}) {
   const debut = performance.now();
   const avant = lireLesMarchesCoupes({ fichier, coupureActive });
-  const { carnet } = await executerEnRendantLaMain(travailDuCarnet({ analyses, database, maintenant, coupureActive }), pauses.siLongtemps);
+  const { carnet, cas } = await executerEnRendantLaMain(travailDuCarnet({ analyses, database, maintenant, coupureActive }), pauses.siLongtemps);
   writeJsonAtomic(fichier, carnet);
   const b = pauses.bilan();
-  return { carnet, dureeMs: Math.round(performance.now() - debut), blocMaxMs: b.blocMaxMs, coupesAvant: [...avant], nouvellesCoupes: carnet.coupes.filter((t) => !avant.has(t)) };
+  // `cas` (étape 44) : les cas réglés de cette nuit, que l'étape « dossiersIA » qui suit reprend au lieu de tout relire.
+  return { carnet, cas, dureeMs: Math.round(performance.now() - debut), blocMaxMs: b.blocMaxMs, coupesAvant: [...avant], nouvellesCoupes: carnet.coupes.filter((t) => !avant.has(t)) };
 }
 
 /** Ce que rend la route GET /api/match-ai/scorecard : le carnet tel qu'écrit par la nuit, et les règles fixes. */

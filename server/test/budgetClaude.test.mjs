@@ -317,7 +317,8 @@ test('réglage : provisoire (1 200 000 / 6 000 000) tant que rien n’est enregi
   assert.equal(s.provisoire.source, 'defaut');
   assert.equal(s.get.reglage.provisoire, true);
   assert.equal(s.get.fichierExiste, false, 'la lecture n’écrit rien');
-  assert.deepEqual(s.get.parType, ['avance', 'coup-d-envoi', 'reprise', 'revue', 'manuel', 'autre']);
+  // Étape 42 : le bulletin du jour et le bilan de la semaine ont leur type d'appel (automatiques, comptés sur le plafond).
+  assert.deepEqual(s.get.parType, ['avance', 'coup-d-envoi', 'reprise', 'revue', 'bulletin', 'bilan-semaine', 'manuel', 'autre']);
 
   assert.equal(s.put.premier.change, true, 'enregistrer les valeurs provisoires les confirme');
   assert.equal(s.put.reglageApres.source, 'enregistre');

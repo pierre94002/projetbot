@@ -25,6 +25,15 @@ const routes = [
     meta: { title: 'Mes paris', section: 'bets' }
   },
   {
+    // « Bookmakers » (étape 31 du plan) : ce que l'étape 22 a mesuré du marché — le meilleur moment pour parier, qui est le
+    // plus juste, qui bouge le premier, les marges et les biais. Couleur de « Mes paris » (aucune couleur de plus) ;
+    // `meta.nav` la distingue dans le menu (une entrée active à la fois). Le championnat choisi vit dans ?championnat=.
+    path: '/bookmakers',
+    name: 'bookmakers',
+    component: () => import('@/views/BookmakersView.vue'),
+    meta: { title: 'Bookmakers', section: 'bets', nav: 'bookmakers' }
+  },
+  {
     path: '/historique-moteur',
     name: 'predictions-history',
     component: () => import('@/views/PredictionsHistoryView.vue'),

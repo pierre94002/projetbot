@@ -86,7 +86,17 @@
  *       jour ou au clic, chaque avis d'avant-match de l'IA réglé au magasin,
  *       sa clôture, sa fiabilité par marché et par championnat, et les
  *       marchés où elle n'apporte rien retirés de sa liste — 0 token,
- *       cf. data/aiScorecard.js) ;
+ *       cf. data/aiScorecard.js), puis la MÉMOIRE DE L'IA (étape 44 du plan,
+ *       23/10/2026 : un dossier par équipe et par championnat écrit par le
+ *       code, refait seulement pour les équipes qui ont joué, ses leçons
+ *       confirmées par le carnet — 0 token, cf. data/aiDossiers.js), puis le
+ *       BULLETIN DU JOUR et le BILAN DE LA
+ *       SEMAINE (étape 42 du plan, 22/10/2026 : deux textes écrits par l'IA —
+ *       un appel à Claude Code le matin, un le lundi — à partir d'une fiche
+ *       chiffrée que le code prépare sans token ; les chiffres du texte sont
+ *       vérifiés, il est rangé dans data/runtime/ai-bulletins.json ; ils
+ *       comptent dans le budget Claude de l'étape 4, jamais forcés par un clic,
+ *       cf. core/ai/bulletinService.js) ;
  *   12. le CONTRÔLE QUOTIDIEN (étape 14 du plan, 07/10/2026), à CHAQUE
  *       passe et en dernier, quand tout ce qui écrit a écrit : une trentaine
  *       de contrôles rapides (ceux de l'étape 12 sur les 30 derniers jours,
@@ -127,6 +137,7 @@ import { recentNoSheet, openDb, resolveDbPath } from '../data/db/matchStatsDb.js
 import { markRunning, markStep, recordPass, readRefreshStatus, clearStaleRunning } from '../data/repositories/refreshStatusRepository.js';
 import { runAutoPreMatchAnalyses, runAutoPostMatchReviews, reserveCoupDEnvoi } from '../core/ai/autoMatchAiTrigger.js';
 import { budgetRestant, enregistrerUsage } from '../data/repositories/autoAiAnalysisRepository.js';
+import { produireLeBulletin, produireLeBilan, decisionDuBulletin, decisionDuBilan } from '../core/ai/bulletinService.js';
 import { passeSauvegarde } from '../data/sauvegardes/etapeSauvegarde.js';
 import { gelerLaNuit } from '../data/enregistreurs/gelPronostics.js';
 import { calculerABlanc } from '../data/enregistreurs/moteurABlanc.js';
@@ -136,10 +147,12 @@ import { calculerReperes } from '../data/db/leagueBenchmarks.js';
 import { construireTableJourJ, etatTableJourJ } from '../data/db/dayTable.js';
 import { figerLesMoisEcoules, moisAFiger, preparerLeMoisEnCours, preparationAFaire } from '../data/calibration.js';
 import { calculerEtEcrireLeCarnet } from '../data/aiScorecard.js';
+import { calculerEtEcrireLesDossiers } from '../data/aiDossiers.js';
 import { deriveDuMoteur, valeurDeLAlerte, CLE_ALERTE_DERIVE } from '../data/deriveMoteur.js';
 import { indiceDeForce, etatIndiceDeForce } from '../data/db/teamStrength.js';
 import { forcesDeButs, etatForcesButs, empreintesDemandees } from '../data/db/forcesButs.js';
 import { fichesDesJoueurs, etatDesFiches } from '../data/db/playerRatings.js';
+import { stylesDeJeu, etatDesStyles } from '../data/db/teamStyle.js';
 import { lancementDe } from '../bench/trialsRegistry.js';
 import { candidatePourLeBanc } from '../core/engine/engineVersions.js';
 import { getEngineConfig } from '../core/engine/engineConfig.js';
@@ -262,6 +275,9 @@ async function passeIaAuto(ctx, { lancer, usage, candidats, faits }) {
   // ne sont pas « laissés pour demain » par le plafond : comptés à part.
   const ecartes = r.ecartes ?? 0;
   const skipped = r.interrompu ? 0 : Math.max(0, r.candidates - r.ok - r.failed - ecartes);
+  // Étape 42 : des pannes d'affilée de Claude Code (quota, jeton, réseau) valent pour le reste de la passe — le bulletin et le
+  // bilan, plus bas, n'enchaînent pas un appel de plus sur une panne que les analyses viennent de constater.
+  if (r.interrompu) ctx.claudeEnPanne = true;
   if (r.ok || r.failed) enregistrerUsage(jour, usage(r.ok, skipped));
   ctx.ecrit ||= r.ok > 0;
   return {
@@ -728,6 +744,8 @@ const pourcent0 = (n, d) => (d ? `${Math.round((100 * n) / d)} %` : '—');
  */
 async function passeCarnetIA(ctx, options = {}) {
   const r = await calculerEtEcrireLeCarnet(options);
+  // Étape 44 : les cas réglés de cette nuit, repris par l'étape « dossiersIA » qui suit (rien à relire).
+  if (ctx && Array.isArray(r.cas)) ctx.casDuCarnet = r.cas;
   const c = r.carnet;
   const t = c.total;
   const tenu = `en ${duree(r.dureeMs)} (le serveur jamais tenu plus de ${nombre(Math.round(r.blocMaxMs ?? 0))} ms d'affilée)`;
@@ -748,6 +766,59 @@ async function passeCarnetIA(ctx, options = {}) {
     changed: false
   };
 }
+
+/**
+ * L'étape « dossiersIA » (étape 44 du plan, 23/10/2026) : LA MÉMOIRE DE L'IA — un dossier par équipe et par championnat,
+ * écrit par le code (faits du moment, forme, absents, entraîneur, style, et les seules leçons que le carnet confirme sur
+ * plusieurs matchs ; une leçon démentie est retirée pour de bon), refait SEULEMENT pour les équipes qui ont joué et les
+ * championnats qui ont eu un match (data/aiDossiers.js). Juste APRÈS le carnet (ses cas de la nuit sont repris, rien
+ * n'est relu) ; dans le serveur, en rendant la main ; écrit d'un bloc (data/runtime/ai-dossiers.json, atomicJson). Aucun
+ * appel à Claude ; la base n'est que LUE ; le moteur ne lit jamais les dossiers.
+ */
+async function passeDossiersIA(ctx, options = {}) {
+  const r = await calculerEtEcrireLesDossiers({ cas: ctx?.casDuCarnet ?? null, force: Boolean(options.force), ...options });
+  const b = r.bilan;
+  const tenu = `en ${duree(r.dureeMs)} (le serveur jamais tenu plus de ${nombre(Math.round(r.blocMaxMs ?? 0))} ms d'affilée)`;
+  const quoi =
+    b.mode === 'rien'
+      ? `Rien à refaire : aucune équipe n'a joué depuis la nuit d'avant (${pluriel(b.clubs.gardes, 'dossier gardé', 'dossiers gardés')})`
+      : b.mode === 'nuit'
+        ? `Dossiers : ${pluriel(b.clubs.refaits, 'équipe qui a joué', 'équipes qui ont joué')} et ${pluriel(b.championnats.refaits, 'championnat', 'championnats')} mis à jour, ${pluriel(b.clubs.gardes, 'dossier gardé', 'dossiers gardés')} tel quel`
+        : `${b.mode === 'premier' ? 'Premier calcul' : 'Tout refait'} : ${pluriel(b.clubs.refaits, 'équipe', 'équipes')} (jouées dans l'année) et ${pluriel(b.championnats.refaits, 'championnat', 'championnats')}`;
+  const lecons =
+    `leçons : ${pluriel(b.lecons.rattachees, 'leçon rattachée', 'leçons rattachées')} à leur match (sur ${nombre(b.lecons.ecrites)} écrites), ` +
+    `${pluriel(b.lecons.confirmees, 'confirmée', 'confirmées')} par le carnet (${nombre(b.lecons.nouvellesConfirmees)} cette nuit), ${pluriel(b.lecons.retirees, 'retirée', 'retirées')} (${nombre(b.lecons.nouvellesRetirees)} cette nuit)`;
+  return {
+    status: 'ok',
+    summary: `${quoi} ; ${lecons} ; fichier de ${nombre(Math.round(r.octets / 1024))} Ko ${tenu}. Aucun appel à Claude ; le moteur ne lit pas les dossiers.`,
+    details: { mode: b.mode, casDuCarnet: Array.isArray(ctx?.casDuCarnet), clubs: b.clubs, championnats: b.championnats, lecons: b.lecons, sourcesDesMatchs: b.sourcesDesMatchs, octets: r.octets, dureeMs: r.dureeMs, blocMaxMs: r.blocMaxMs },
+    // La page de l'équipe relit la route quand on l'ouvre : rien à recharger.
+    changed: false
+  };
+}
+
+/**
+ * Les étapes « bulletin » et « bilanSemaine » (étape 42 du plan, 22/10/2026) : le BULLETIN DU JOUR (un appel à Claude Code par
+ * jour, le matin) et le BILAN DE LA SEMAINE (un par semaine, le lundi) — des textes écrits par l'IA sur une fiche chiffrée que
+ * le code prépare sans token ; tout nombre du texte doit être dans la fiche (sinon il est refusé) ; rangés dans
+ * data/runtime/ai-bulletins.json. Ils comptent dans le budget Claude de l'étape 4 (journal, plafond de 150, mode économe, pannes)
+ * et ne sont JAMAIS forcés : ni par un clic « Actualiser maintenant », ni contre l'interrupteur AUTO_AI_ANALYSIS. Due : le texte
+ * n'est pas encore écrit, l'heure est venue (pas avant 6 h à Paris), moins de trois essais ratés. LIT seulement (le fichier des
+ * textes) ; tout le travail est dans core/ai/bulletinService.js.
+ */
+async function passeBulletin(ctx, options = {}) {
+  const r = await produireLeBulletin({ maintenant: options.maintenant ?? Date.now(), ctx, options });
+  return { status: r.statut, summary: r.resume, details: { code: r.code, ...r.details }, changed: false };
+}
+
+async function passeBilanSemaine(ctx, options = {}) {
+  const r = await produireLeBilan({ maintenant: options.maintenant ?? Date.now(), ctx, options });
+  return { status: r.statut, summary: r.resume, details: { code: r.code, ...r.details }, changed: false };
+}
+
+/** Due : la règle « une fois » lue dans le fichier des textes (jamais dans l'historique des passes), l'interrupteur des analyses IA, l'heure. */
+const dueBulletin = (ctx, options = {}) => decisionDuBulletin({ maintenant: options.maintenant ?? Date.now() }).du;
+const dueBilanSemaine = (ctx, options = {}) => decisionDuBilan({ maintenant: options.maintenant ?? Date.now() }).du;
 
 /**
  * L'étape « connaitreMarche » (étape 22 du plan, 13/10/2026) : CONNAÎTRE LE MARCHÉ — la justesse, la
@@ -1163,8 +1234,98 @@ const dueFichesJoueurs = (ctx, { database = null } = {}) => {
   }
 };
 
-/** Pour les tests : l'étape d'analyse IA automatique telle que la passe la lance (plafond, réserve, bilan) ; l'étape du carnet de santé ; celle de l'historique football-data ; celle des repères ; celle de la table du jour J ; celle du contrôle quotidien ; celle de la candidate à blanc ; celle de la calibration du mois écoulé ; celle de connaître le marché ; celle de l'indice de force ; celle des forces de buts ; celle des fiches des joueurs ; celle du carnet de l'IA. */
-export const __testing = { passeCarteOuParier, dueCarteOuParier, dueMoteurABlanc, passeIaAuto, passeCarnetSante, passeHistoriqueFd, dueHistoriqueFd, passeReperes, dueReperes, passeTableJourJ, dueTableJourJ, passeControleQuotidien, passeMoteurABlanc, passeCalibrationMensuelle, dueCalibrationMensuelle, passeConnaitreMarche, dueConnaitreMarche, passeIndiceForce, dueIndiceForce, passeForcesButs, dueForcesButs, passeFichesJoueurs, dueFichesJoueurs, passeCarnetIA };
+/**
+ * L'étape « stylesDeJeu » (étape 37 du plan, 22/10/2026) : LE STYLE DE JEU de chaque club et de chaque entraîneur
+ * (data/db/teamStyle.js) — possession, jeu direct, contre-attaque, coups de pied arrêtés, lus sur les 20 derniers matchs
+ * de championnat et comparés aux clubs du même championnat. La carte des tirs est lourde (~185 Mo de JSON) : le
+ * PROCESSUS À PART (base en lecture seule) ne relit que les rencontres NOUVELLES ou CHANGÉES depuis la nuit d'avant (leur
+ * signature), recalcule les styles en mémoire depuis son cache, fait la différence et un contrôle anti-fuite (20
+ * instantanés recalculés par un second chemin) ; le serveur range seul, sous le verrou de la passe, par tranches
+ * courtes. Rien de neuf : rien. Un autre calcul lourd en cours : REPORTÉ. APRÈS « fichesJoueurs », AVANT le gel et la
+ * sauvegarde (la copie de la nuit les contient). EXPLICATION SEULEMENT : le moteur ne lit pas les styles.
+ */
+async function passeStylesDeJeu(ctx, options = {}) {
+  // L'heure est lue ici (la passe), jamais dans teamStyle.js.
+  const r = await stylesDeJeu({ force: Boolean(options.force), maintenant: () => new Date().toISOString(), ...options });
+  const tenu = `le serveur jamais tenu plus de ${nombre(Math.round(r.blocMaxMs ?? 0))} ms d'affilée`;
+  const regle = ' Explication seulement : le moteur ne lit pas les styles.';
+  if (r.mode === 'rien') {
+    return {
+      status: 'ok',
+      summary: `Rien à refaire : aucune rencontre nouvelle ou changée depuis le calcul du ${r.calculeLe ? new Date(r.calculeLe).toLocaleString('fr-FR', { timeZone: 'Europe/Paris' }) : '?'} (${duree(r.dureeMs)}, ${tenu}).${regle}`,
+      details: { mode: r.mode, dureeMs: r.dureeMs },
+      changed: false
+    };
+  }
+  if (r.mode === 'reporte') {
+    return {
+      status: 'warn',
+      summary: `Reporté : ${String(r.raison).replace(/\.$/, '')} — les styles de jeu seront calculés à la passe suivante.`,
+      details: { mode: r.mode, reporte: true, raison: r.raison },
+      changed: false
+    };
+  }
+  if (r.mode === 'echec') {
+    return {
+      status: 'error',
+      summary: `En échec : ${String(r.erreur).slice(0, 240)} — rien d’avancé, les styles précédents restent lus ; la passe suivante recommence (${duree(r.dureeMs)}).`,
+      details: { mode: r.mode, erreur: r.erreur, dureeMs: r.dureeMs },
+      changed: false
+    };
+  }
+  const b = r.bilanDuCalcul ?? {};
+  const ecarts = r.controle?.ecarts ?? [];
+  const controle = r.controle
+    ? `contrôle anti-fuite : ${pluriel(r.controle.lignes, 'instantané recalculé', 'instantanés recalculés')} par un second chemin, ${pluriel(ecarts.length, 'écart', 'écarts')}` +
+      (ecarts.length ? ` (${ecarts.slice(0, 3).map((e) => `club ${e.club} avant le ${e.J} (${e.colonne})`).join(' ; ')}${ecarts.length > 3 ? ' ; …' : ''}) — à regarder` : '')
+    : 'contrôle anti-fuite non fait';
+  const lecture = r.mode === 'incremental' ? `${pluriel(b.relues ?? 0, 'rencontre relue', 'rencontres relues')} (nouvelles ou changées)` : `${pluriel(b.relues ?? 0, 'rencontre lue', 'rencontres lues')} en entier`;
+  return {
+    status: ecarts.length ? 'warn' : 'ok',
+    summary:
+      `${r.mode === 'premier' ? 'Premier calcul' : 'Styles de jeu'} : ${pluriel(r.actuels ?? 0, 'club', 'clubs')} et ${pluriel(r.entraineurs ?? 0, 'entraîneur', 'entraîneurs')} au ${r.jourActuel ?? '?'} ; ${lecture} ; ` +
+      `${pluriel(r.ecrites, 'ligne écrite', 'lignes écrites')}, ${pluriel(r.retirees, 'retirée', 'retirées')} en ${duree(r.dureeMs)} (calcul à part ${duree(b.dureeMs ?? 0)}, ${Math.round((b.aPart?.rssMaxOctets ?? 0) / 1048576)} Mo chez lui ; rangement ${duree(r.rangementMs)}, ${tenu}) ; ${controle}.${regle}`,
+    details: {
+      mode: r.mode,
+      styles: r.styles,
+      actuels: r.actuels,
+      entraineurs: r.entraineurs,
+      ecrites: r.ecrites,
+      retirees: r.retirees,
+      relues: b.relues ?? null,
+      jusqua: r.jusqua,
+      jourActuel: r.jourActuel,
+      dureeMs: r.dureeMs,
+      rangementMs: r.rangementMs,
+      blocMaxMs: r.blocMaxMs,
+      repartition: b.repartition ?? null,
+      controle: r.controle ? { lignes: r.controle.lignes, ecarts: ecarts.length } : null,
+      calculAPart: { dureeMs: b.dureeMs ?? null, rssMax: b.aPart?.rssMaxOctets ?? null, parties: b.parties ?? null }
+    },
+    // Les écarts du contrôle restent visibles jusqu'à la nuit qui n'en trouve plus (comme ceux des fiches des joueurs).
+    ...(r.controle ? { alert: { key: 'stylesDeJeu', value: ecarts.length ? { ecarts: ecarts.slice(0, 20), total: ecarts.length, lignes: r.controle.lignes, updatedAt: new Date().toISOString() } : null } } : {}),
+    // La page de l'équipe et la page du match relisent à chaque ouverture : rien à recharger.
+    changed: false
+  };
+}
+
+/**
+ * Due : au clic, une fois par jour civil de Paris, quand la passe d'avant l'a REPORTÉE, ou quand les styles ne sont pas
+ * à jour (jamais calculés, rangement interrompu, autre version ou d'autres réglages). LIT seulement (team_style_state).
+ */
+const dueStylesDeJeu = (ctx, { database = null } = {}) => {
+  if (ctx.manuel || !faitAujourdhui(ctx.derniere('stylesDeJeu'))) return true;
+  if (ctx.derniersDetails?.('stylesDeJeu')?.reporte) return true;
+  try {
+    return etatDesStyles(database ? { database } : {}).aJour === false;
+  } catch {
+    // Base illisible à cet instant : l'étape tourne et dira pourquoi.
+    return true;
+  }
+};
+
+/** Pour les tests : l'étape d'analyse IA automatique telle que la passe la lance (plafond, réserve, bilan) ; l'étape du carnet de santé ; celle de l'historique football-data ; celle des repères ; celle de la table du jour J ; celle du contrôle quotidien ; celle de la candidate à blanc ; celle de la calibration du mois écoulé ; celle de connaître le marché ; celle de l'indice de force ; celle des forces de buts ; celle des fiches des joueurs ; celle du carnet de l'IA ; celles du bulletin du jour et du bilan de la semaine. */
+export const __testing = { ETAPES: () => ETAPES, passeBulletin, passeBilanSemaine, dueBulletin, dueBilanSemaine, passeCarteOuParier, dueCarteOuParier, dueMoteurABlanc, passeIaAuto, passeCarnetSante, passeHistoriqueFd, dueHistoriqueFd, passeReperes, dueReperes, passeTableJourJ, dueTableJourJ, passeControleQuotidien, passeMoteurABlanc, passeCalibrationMensuelle, dueCalibrationMensuelle, passeConnaitreMarche, dueConnaitreMarche, passeIndiceForce, dueIndiceForce, passeForcesButs, dueForcesButs, passeFichesJoueurs, dueFichesJoueurs, passeStylesDeJeu, dueStylesDeJeu, passeCarnetIA, passeDossiersIA };
 
 /**
  * Les étapes. `due(ctx)` dit si l'étape tourne à cette passe (les autres
@@ -1619,6 +1780,16 @@ const ETAPES = [
     run: (ctx) => passeFichesJoueurs(ctx)
   },
   {
+    key: 'stylesDeJeu',
+    label: 'Styles de jeu des équipes et des entraîneurs (explication seulement)',
+    // Étape 37 du plan (22/10/2026) : APRÈS « fichesJoueurs », sans toucher à l'ordre des étapes d'avant, AVANT le gel
+    // des pronostics et la sauvegarde (la copie de la nuit les contient) ; une fois par jour civil de Paris, au clic,
+    // quand la passe d'avant l'a reportée, ou quand les styles ne sont pas à jour. La carte des tirs est relue pour les
+    // seules rencontres nouvelles ou changées. Le moteur ne les lit pas. Cf. passeStylesDeJeu.
+    due: (ctx) => dueStylesDeJeu(ctx),
+    run: (ctx) => passeStylesDeJeu(ctx)
+  },
+  {
     key: 'gelPronostics',
     label: 'Gel des pronostics du moteur (enregistreurs)',
     // Étape E du plan (correction 7) : une fois par jour civil de Paris — la
@@ -1719,6 +1890,36 @@ const ETAPES = [
     run: (ctx) => passeCarnetIA(ctx)
   },
   {
+    key: 'dossiersIA',
+    label: "Mémoire de l'IA (dossiers des équipes et des championnats)",
+    // Étape 44 du plan (23/10/2026) : juste APRÈS le carnet de l'IA (ses cas de la nuit sont repris ; une leçon n'entre que
+    // confirmée par lui) et AVANT le bulletin, le bilan et le contrôle quotidien (toujours dernier). Une fois par jour civil
+    // de Paris, au clic, ou quand le fichier n'a jamais été écrit. Pas d'interrupteur : aucun appel à Claude, ni réseau, ni
+    // écriture dans la base. Seules les équipes qui ont joué sont refaites. Cf. passeDossiersIA.
+    due: (ctx) => ctx.manuel || !faitAujourdhui(ctx.derniere('dossiersIA')),
+    run: (ctx) => passeDossiersIA(ctx)
+  },
+  {
+    key: 'bulletin',
+    label: "Bulletin du jour (texte de l'IA, un seul appel par jour)",
+    // Étape 42 du plan (22/10/2026) : APRÈS les analyses de match (une panne qu'elles ont vue l'arrête), le règlement, le carnet de l'IA
+    // et les cotes du jour, AVANT le contrôle quotidien (toujours dernier). Interrupteur pur comme les étapes d'analyse : AUTO_AI_ANALYSIS=false
+    // le coupe, un clic ne le force JAMAIS. Une fois par jour, le matin (pas avant 6 h à Paris) ; rattrapé par la première passe qui suit un arrêt.
+    // Cf. passeBulletin.
+    due: (ctx) => env.autoAiAnalysis.enabled && dueBulletin(ctx),
+    pourquoiPasDue: () => decisionDuBulletin().pourquoi,
+    run: (ctx) => passeBulletin(ctx)
+  },
+  {
+    key: 'bilanSemaine',
+    label: "Bilan de la semaine (texte de l'IA, un seul appel par semaine)",
+    // Étape 42 du plan : à la suite du bulletin, mêmes règles ; une fois par semaine, pour la dernière semaine COMPLÈTE (lundi → dimanche,
+    // jours de Paris), à la première passe d'après sa fin. Cf. passeBilanSemaine.
+    due: (ctx) => env.autoAiAnalysis.enabled && dueBilanSemaine(ctx),
+    pourquoiPasDue: () => decisionDuBilan().pourquoi,
+    run: (ctx) => passeBilanSemaine(ctx)
+  },
+  {
     key: 'controleQuotidien',
     label: 'Contrôle quotidien des données et santé des sources',
     // Étape 14 du plan (07/10/2026) : à CHAQUE passe (pas de `due`), en
@@ -1728,6 +1929,18 @@ const ETAPES = [
 ];
 
 export const REFRESH_STEPS = ETAPES.map((e) => ({ key: e.key, label: e.label }));
+
+/**
+ * Ce que dit une étape « pas due » : par défaut « Pas due à cette passe. » ; une étape peut dire POURQUOI (`pourquoiPasDue`,
+ * étape 42 : « le bulletin du 22/10 est déjà écrit », « pas avant 6 h », « essais épuisés »…). Ne lève jamais.
+ */
+function pourquoiPasDue(etape, ctx) {
+  try {
+    return etape.pourquoiPasDue?.(ctx) || 'Pas due à cette passe.';
+  } catch {
+    return 'Pas due à cette passe.';
+  }
+}
 
 function issue(etapes) {
   const faites = etapes.filter((e) => e.status !== 'skipped');
@@ -1760,7 +1973,7 @@ async function runOnce(reason) {
       try {
         for (const [index, etape] of ETAPES.entries()) {
           if (etape.due && !etape.due(ctx)) {
-            etapes.push({ key: etape.key, label: etape.label, status: 'skipped', summary: 'Pas due à cette passe.', durationMs: 0 });
+            etapes.push({ key: etape.key, label: etape.label, status: 'skipped', summary: pourquoiPasDue(etape, ctx), durationMs: 0 });
             continue;
           }
           markStep({ key: etape.key, label: etape.label, index: index + 1 });

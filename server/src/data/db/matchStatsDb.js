@@ -1315,6 +1315,137 @@ const PLAYER_RATINGS_DDL = [
   'CREATE INDEX IF NOT EXISTS idx_player_ratings_ligue ON player_ratings(league, poste);'
 ];
 
+/**
+ * LES STYLES DE JEU (étape 37 du plan, 22/10/2026 ; data/db/teamStyle.js) : le style de chaque club au 1er de chaque
+ * mois et au lendemain de son dernier match, et celui de chaque entraîneur. Tables DÉRIVÉES de `matches` et
+ * `team_stats` (FotMob), refaites en quelques secondes ; écrites par le serveur seul (étape « stylesDeJeu » de
+ * l'actualisation ; scripts/team-style.mjs dans le bac), sous le verrou de la passe ; calculées dans un processus à
+ * part en lecture seule. JAMAIS lues par le moteur : la page de l'équipe et la page du match (explication seulement).
+ *   team_style_matches  le CACHE de la lecture incrémentale : les ingrédients de chaque camp de chaque rencontre
+ *                       (possession, passes, longs ballons, centres, passes dans le dernier tiers ; tirs hors
+ *                       penalties de la carte des tirs, par situation ; entraîneur, nom et identifiant) et la
+ *                       signature de la rencontre (`sig`) : seules les rencontres dont la signature change sont
+ *                       relues ;
+ *   team_style          un club × un jour (le 1er du mois, ou l'actuel : `actuel` = 1) : son style, sa seconde
+ *                       tendance, ses chiffres (taux bruts, z face à son championnat, scores), ceux de son championnat
+ *                       (l_*), son entraîneur (clé) et le nombre de ses matchs dans la fenêtre ;
+ *   coach_style         un entraîneur (clé : « id:… », « nom:… », ou « nom:…|club:… » pour un homonyme) à l'instantané
+ *                       actuel : son style sur ses 20 derniers matchs de championnat, ses clubs (JSON) ;
+ *   team_style_state    version, réglages, jusqua, jour_actuel, calcule_le, en_cours, bilan, contrôle.
+ */
+const TEAM_STYLE_DDL = [
+  `CREATE TABLE IF NOT EXISTS team_style_matches (
+  match_key TEXT NOT NULL,
+  camp INTEGER NOT NULL,
+  club INTEGER NOT NULL,
+  adversaire INTEGER NOT NULL,
+  date TEXT NOT NULL,
+  league TEXT NOT NULL,
+  coupe INTEGER NOT NULL,
+  sig TEXT NOT NULL,
+  coach TEXT,
+  coach_id INTEGER,
+  poss REAL,
+  passes INTEGER,
+  longs INTEGER,
+  centres INTEGER,
+  tiers INTEGER,
+  carte INTEGER NOT NULL,
+  tirs INTEGER,
+  contre INTEGER,
+  corner INTEGER,
+  coup_franc INTEGER,
+  touche INTEGER,
+  autres INTEGER,
+  PRIMARY KEY (match_key, camp)
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS team_style (
+  club INTEGER NOT NULL,
+  jour TEXT NOT NULL,
+  actuel INTEGER NOT NULL,
+  league TEXT NOT NULL,
+  n INTEGER NOT NULL,
+  n_carte INTEGER NOT NULL,
+  n_saison INTEGER,
+  dernier_match TEXT,
+  style TEXT NOT NULL,
+  second TEXT,
+  provisoire INTEGER NOT NULL,
+  entraineur TEXT,
+  sous_lui INTEGER,
+  poss REAL,
+  longs REAL,
+  longs_match REAL,
+  centres REAL,
+  tiers REAL,
+  contre REAL,
+  cpa REAL,
+  corner REAL,
+  coup_franc REAL,
+  tirs INTEGER,
+  z_poss REAL,
+  z_longs REAL,
+  z_centres REAL,
+  z_tiers REAL,
+  z_contre REAL,
+  z_cpa REAL,
+  s_possession REAL,
+  s_direct REAL,
+  s_contre REAL,
+  s_cpa REAL,
+  l_poss REAL,
+  l_longs REAL,
+  l_centres REAL,
+  l_tiers REAL,
+  l_contre REAL,
+  l_cpa REAL,
+  l_corner REAL,
+  l_coup_franc REAL,
+  l_equipes INTEGER,
+  reglages TEXT NOT NULL,
+  PRIMARY KEY (club, jour)
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS coach_style (
+  entraineur TEXT NOT NULL,
+  jour TEXT NOT NULL,
+  nom TEXT,
+  coach_id INTEGER,
+  homonyme INTEGER NOT NULL,
+  club INTEGER,
+  clubs TEXT,
+  n INTEGER NOT NULL,
+  n_carte INTEGER NOT NULL,
+  style TEXT NOT NULL,
+  second TEXT,
+  provisoire INTEGER NOT NULL,
+  poss REAL,
+  longs REAL,
+  centres REAL,
+  tiers REAL,
+  contre REAL,
+  cpa REAL,
+  z_poss REAL,
+  z_longs REAL,
+  z_centres REAL,
+  z_tiers REAL,
+  z_contre REAL,
+  z_cpa REAL,
+  s_possession REAL,
+  s_direct REAL,
+  s_contre REAL,
+  s_cpa REAL,
+  reglages TEXT NOT NULL,
+  PRIMARY KEY (entraineur, jour)
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS team_style_state (
+  cle TEXT PRIMARY KEY,
+  valeur TEXT NOT NULL
+) WITHOUT ROWID;`,
+  // Le style actuel d'un club (la page de l'équipe, la page du match) ; le cache d'un club (depuis quand l'entraîneur).
+  'CREATE INDEX IF NOT EXISTS idx_team_style_actuel ON team_style(club) WHERE actuel = 1;',
+  'CREATE INDEX IF NOT EXISTS idx_team_style_matches_club ON team_style_matches(club, date);'
+];
+
 const FD_HISTORY_INDEXES = [
   'CREATE INDEX IF NOT EXISTS idx_fd_history_code_date ON fd_history(code, date);',
   'CREATE INDEX IF NOT EXISTS idx_fd_history_dom ON fd_history(dom);',
@@ -1363,6 +1494,7 @@ const DDL = [
   ...TEAM_STRENGTH_DDL,
   ...FORCES_BUTS_DDL,
   ...PLAYER_RATINGS_DDL,
+  ...TEAM_STYLE_DDL,
   'CREATE INDEX IF NOT EXISTS idx_matches_date ON matches(date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_league_date ON matches(league, date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_home ON matches(home_name);',

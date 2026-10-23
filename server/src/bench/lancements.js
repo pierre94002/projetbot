@@ -76,13 +76,15 @@ export const DONNEES_VUES = Object.freeze([
  *   statistiques  la valeur des statistiques (étape 18 : demi-vies, fenêtres, pentes) ;
  *   marche        la connaissance du marché (étape 22 : justesse et vitesse des bookmakers) ;
  *   indice        l'indice de force des équipes (étape 29, jamais lu par le moteur) ;
- *   joueurs       les fiches des joueurs et la force du onze (étape 30, 22/10/2026 ; jamais lues par le moteur).
+ *   joueurs       les fiches des joueurs et la force du onze (étape 30, 22/10/2026 ; jamais lues par le moteur) ;
+ *   style         les styles de jeu des équipes et des entraîneurs, et les duels de styles (étape 37, 22/10/2026 ;
+ *                 jamais lus par le moteur : explication seulement).
  * Une étape qui fait LIRE au moteur une grandeur apprise ailleurs (27 lisant l'indice ou une demi-vie de 18)
  * recopie ces fenêtres dans SON lancement avec `pour: ['moteur']` : c'est son lancement qui dit ce que le
  * moteur a vu. Sans cette règle, une fenêtre regardée pour l'indice étiquetait « déjà vu » les lignes du
  * MOTEUR sur 2019-2023 (la note de départ), alors qu'aucun chiffre du moteur ne les avait vues.
  */
-export const PORTEES = Object.freeze(['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs']);
+export const PORTEES = Object.freeze(['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style']);
 
 /** Une fenêtre vaut-elle pour cette mesure ? `tout` vaut pour toutes. */
 export const pourLaPortee = (pour, portee) => Array.isArray(pour) && (pour.includes(portee) || pour.includes('tout'));
@@ -174,6 +176,39 @@ export const VARIANTES_DE_L_ETAPE_30 = Object.freeze([
   Object.freeze({ id: 'onze-tirs', quoi: 'Écart de tirs du onze sur les tirs d’une équipe (marché sans cote).' }),
   Object.freeze({ id: 'gardien-remplacant', quoi: 'Le gardien remplaçant face au marché (vérification descriptive).' })
 ]);
+
+/**
+ * Les fenêtres REGARDÉES par l'étape 37 (les styles de jeu, 22/10/2026), portée « style » : le magasin 2023-07-01 →
+ * 2026-09-23 où les duels de styles ont été appris puis jugés face à la clôture football-data (histoire ET cibles, rien
+ * avant ni après), et le magasin entier de la base du bac (2023-01 → 2026-10-18) où les réglages du style ont été
+ * choisis sur la STABILITÉ d'un mois sur l'autre — sans lire un seul résultat, déclaré quand même. teamStyleBanc.js les
+ * ré-exporte. Une candidate du MOTEUR qui lirait un jour le style recopierait ces fenêtres avec `pour: ['moteur']`.
+ */
+export const VUES_DE_L_ETAPE_37 = Object.freeze([
+  Object.freeze({ de: '2023-07-01', a: '2026-09-23', quoi: 'Étape 37 : décalages des duels de styles appris sur 2023-07 → 2025-06, jugés sur 2025-07 → 2026-09-23 face à la cote de clôture football-data (1N2 et plus/moins 2,5).' }),
+  Object.freeze({ de: '2023-01-01', a: '2026-10-18', quoi: 'Étape 37 : fenêtre, seuil, cran et rétrécissement du style choisis sur la stabilité d’un mois sur l’autre (aucun résultat lu).' })
+]);
+
+/** Les cinq étiquettes de l'étape 37, dans l'ordre de teamStyle.js (STYLES_ET_EQUILIBRE) : un test vérifie l'égalité. */
+const ETIQUETTES_DE_L_ETAPE_37 = Object.freeze(['possession', 'direct', 'contre', 'cpa', 'equilibre']);
+
+/**
+ * Les 53 variantes de l'étape 37, toutes regardées face à des matchs joués pendant sa construction : le style retenu
+ * (style-v1, en tête : il n'a lu aucun résultat, mais la version retenue fait partie de ses variantes), les deux
+ * jugements globaux des duels (1N2, plus/moins 2,5) et les 50 cases jugées une à une (5 × 5 styles × 2 marchés).
+ * teamStyleBanc.js les ré-exporte : le juge du banc compte K = 53 (z ≈ 3,31), le seuil sévère du cahier.
+ */
+export const VARIANTES_DE_L_ETAPE_37 = Object.freeze([
+  Object.freeze({ id: 'style-v1', quoi: 'Style retenu : 20 derniers matchs de championnat (400 jours au plus), z face aux clubs du championnat, seuil 0,75, cran 0,25, parts de tirs ramenées vers le championnat (150 tirs).' }),
+  Object.freeze({ id: 'duels-1n2', quoi: 'Duels de styles sur le 1N2 : une inclinaison domicile/extérieur par case, toutes les cases ensemble, face à la clôture.' }),
+  Object.freeze({ id: 'duels-plusmoins', quoi: 'Duels de styles sur le plus/moins 2,5 : un décalage par case, toutes les cases ensemble, face à la clôture.' }),
+  ...['un2', 'pm'].flatMap((marche) =>
+    ETIQUETTES_DE_L_ETAPE_37.flatMap((dom) =>
+      ETIQUETTES_DE_L_ETAPE_37.map((ext) => Object.freeze({ id: `case-${marche}-${dom}-${ext}`, quoi: `Case ${dom} (domicile) × ${ext} (extérieur), ${marche === 'un2' ? '1N2' : 'plus/moins 2,5'}, jugée seule face à la clôture.` }))
+    )
+  )
+]);
+export const ETIQUETTES_DE_L_ETAPE_37_POUR_LES_TESTS = ETIQUETTES_DE_L_ETAPE_37;
 
 /** Les variantes de l'indice de l'étape 29, toutes regardées (la retenue d'abord, choisie avant de regarder). teamStrengthBanc.js les ré-exporte. */
 export const VARIANTES_INDICE = Object.freeze([
@@ -557,6 +592,17 @@ export const LANCEMENTS = Object.freeze([
     le: null,
     variantes: VARIANTES_DE_L_ETAPE_30,
     vues: Object.freeze(VUES_DE_L_ETAPE_30.map((f) => Object.freeze({ ...f, pour: Object.freeze(['joueurs']) })))
+  }),
+  // Étape 37 (22/10/2026) : les styles de jeu des équipes et des entraîneurs ; ils ne règlent aucun chiffre du moteur
+  // (portée 'style' : explication seulement, sauf un duel qui passerait le seuil sévère — et même lui reste affiché,
+  // jamais calculé). Datée du premier démarrage de l'appli avec ce code ; ses 53 variantes et ses vues.
+  Object.freeze({
+    etape: '37',
+    version: 'style-v1',
+    quoi: 'Styles de jeu des équipes et des entraîneurs (possession, jeu direct, contre-attaque, coups de pied arrêtés) lus sur leurs 20 derniers matchs de championnat ; duels de styles jugés au banc face à la clôture avec un seuil sévère ; affichés, jamais lus par le moteur.',
+    le: null,
+    variantes: VARIANTES_DE_L_ETAPE_37,
+    vues: Object.freeze(VUES_DE_L_ETAPE_37.map((f) => Object.freeze({ ...f, pour: Object.freeze(['style']) })))
   })
 ]);
 

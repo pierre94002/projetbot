@@ -32,6 +32,7 @@ import healthRoutes from './health.routes.js';
 import benchRoutes from './bench.routes.js';
 import engineHealthRoutes from './engineHealth.routes.js';
 import bettingMapRoutes from './bettingMap.routes.js';
+import marketKnowledgeRoutes from './marketKnowledge.routes.js';
 
 const router = Router();
 
@@ -78,5 +79,7 @@ router.use('/bench', benchRoutes);
 router.use('/engine-health', engineHealthRoutes);
 // Étape 23 du plan : la carte « où parier », championnat × marché (lecture seule ; calculée par l'actualisation).
 router.use('/betting-map', bettingMapRoutes);
+// Étape 31 du plan : la page « Bookmakers » — ce que l'étape 22 a mesuré du marché (lecture seule ; calculé chaque nuit par l'actualisation).
+router.use('/market-knowledge', marketKnowledgeRoutes);
 
 export default router;

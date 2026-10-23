@@ -33,6 +33,7 @@ import MatchStatsPanel from '@/components/matches/MatchStatsPanel.vue';
 import ResultPredictionCard from '@/components/analysis/ResultPredictionCard.vue';
 import ScorePredictionCard from '@/components/analysis/ScorePredictionCard.vue';
 import TeamNewsCard from '@/components/analysis/TeamNewsCard.vue';
+import StyleDuelCard from '@/components/matches/StyleDuelCard.vue';
 import OddsProfilePanel from '@/components/analysis/OddsProfilePanel.vue';
 import FreeOddsPanel from '@/components/analysis/FreeOddsPanel.vue';
 import MatchAiAnalysisPanel from '@/components/analysis/MatchAiAnalysisPanel.vue';
@@ -137,6 +138,12 @@ const duCalendrier = computed(() => String(match.value?.matchId ?? '').startsWit
 const coupDEnvoi = computed(() => page.value.data?.kickoff ?? (duCalendrier.value ? match.value?.marketOdds?.kickoff ?? null : match.value?.commenceTime ?? null));
 const matchStatus = useMatchStatus(() => coupDEnvoi.value);
 const meta = computed(() => page.value.data?.meta ?? null);
+// Étape 37 : les identifiants FotMob des deux clubs, quand la composition (publiée ou dernière alignée) les donne.
+const idsDesClubs = computed(() => {
+  const compo = page.value.data?.lineups ?? page.value.data?.lastLineups ?? null;
+  const id = (x) => (/^fotmob-\d+$/.test(String(x ?? '')) ? String(x) : null);
+  return { home: id(compo?.home?.teamId), away: id(compo?.away?.teamId) };
+});
 // FotMob donne un numéro (« 35 ») ; le calendrier, « Round 35 » ou « Journée 2 ».
 const journee = computed(() => {
   const brut = String(meta.value?.round ?? match.value?.round ?? '');
@@ -762,6 +769,9 @@ const cote2 = (x) => (Number.isFinite(x) ? x.toFixed(2).replace('.', ',') : '—
           <ResultPredictionCard :result="analyse.result" />
           <ScorePredictionCard :result="analyse.result" />
         </div>
+
+        <!-- Étape 37 : le duel de styles (explication seulement, sauf effet mesuré au banc). -->
+        <StyleDuelCard :home-name="match.home" :away-name="match.away" :league="match.league" :home-id="idsDesClubs.home" :away-id="idsDesClubs.away" />
 
         <AppCard title="Meilleures statistiques" subtitle="Moyennes par match sur les 10 dernières rencontres." icon="barChart">
           <MatchupHeader :home="match.home" :away="match.away" :league="match.league" home-note="à domicile" away-note="à l'extérieur" label="10 derniers" />

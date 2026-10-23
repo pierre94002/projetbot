@@ -24,6 +24,10 @@ import MatchResultBadge from '@/components/matches/MatchResultBadge.vue';
 import AiLineupSnapshot from '@/components/analysis/AiLineupSnapshot.vue';
 import FixtureCard from '@/components/matches/FixtureCard.vue';
 import MatchCard from '@/components/matches/MatchCard.vue';
+// Étape 31 du plan : l'indice de force du club (calculé chaque nuit, étape 29), points forts et faibles, forme.
+import TeamStrengthCard from '@/components/matches/TeamStrengthCard.vue';
+import TeamStyleCard from '@/components/matches/TeamStyleCard.vue';
+import AiDossierCard from '@/components/analysis/AiDossierCard.vue';
 import { rencontreVueParEquipe } from '@/utils/rencontres.js';
 import { TEAM_STAT_GROUPS } from '@/constants/matchDetailTabs.js';
 
@@ -365,6 +369,14 @@ watch(() => [props.name, props.league, props.matchId], load, { immediate: true }
           <MatchStatBars v-if="pour.echantillon" :group="TEAM_STAT_GROUPS[0]" :home="pour.valeurs" :away="contre.valeurs" />
           <EmptyState v-else icon="trendUp" title="Aucune statistique" description="Aucune statistique importée pour cette équipe." />
         </AppCard>
+
+        <TeamStrengthCard :club-id="idClub ?? null" :club-name="nom" :league="ligue" />
+
+        <!-- Étape 37 : le style de jeu du club et de son entraîneur (explication seulement). -->
+        <TeamStyleCard :club-id="idClub ?? null" :club-name="nom" :league="ligue" />
+
+        <!-- Étape 44 : la mémoire de l'IA — le dossier écrit par le code pour ce club et son championnat. -->
+        <AiDossierCard :club-id="idClub ?? null" :club-name="nom" :league="ligue" />
 
         <div class="team__grid">
           <AppCard icon="history" title="Derniers matchs" subtitle="Les cinq derniers résultats, du plus récent au plus ancien">

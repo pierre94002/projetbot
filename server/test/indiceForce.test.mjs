@@ -614,7 +614,9 @@ test('la nuit : l’étape « indiceForce » après « connaitreMarche » et ava
   assert.equal(n.etapes[i + 1], 'forcesButs');
   // Étape 30 (22/10/2026) : les fiches des joueurs juste après les forces, toujours avant le gel.
   assert.equal(n.etapes[i + 2], 'fichesJoueurs');
-  assert.equal(n.etapes[i + 3], 'gelPronostics');
+  // Étape 37 (22/10/2026) : les styles de jeu juste après les fiches, toujours avant le gel.
+  assert.equal(n.etapes[i + 3], 'stylesDeJeu');
+  assert.equal(n.etapes[i + 4], 'gelPronostics');
   assert.ok(n.etapes.indexOf('tableJourJ') < i && n.etapes.indexOf('sauvegarde') > i);
   assert.equal(n.etapes.filter((k) => k === 'indiceForce').length, 1);
   assert.deepEqual(n.dueAvant, { jamais: true, aujourdhui: true });

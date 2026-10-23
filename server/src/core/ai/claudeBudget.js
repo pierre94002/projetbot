@@ -375,6 +375,9 @@ export function etatBudgetClaude({ maintenant = Date.now() } = {}) {
       aujourdhui: compteur?.count ?? null,
       avantMatch: compteur?.preMatch ?? null,
       apresMatch: compteur?.postMatch ?? null,
+      // Étape 42 : le bulletin du jour et le bilan de la semaine prennent leur place sur le même plafond.
+      bulletin: compteur?.bulletin ?? null,
+      bilanSemaine: compteur?.bilanSemaine ?? null,
       laissesAvantMatch: compteur?.skippedPreMatch ?? null,
       laissesApresMatch: compteur?.skippedPostMatch ?? null,
       restant: compteur ? Math.max(0, env.autoAiAnalysis.dailyLimit - compteur.count) : null,

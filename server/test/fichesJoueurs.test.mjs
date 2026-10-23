@@ -404,7 +404,7 @@ test('T15 lancement : l’étape 30 déclarée (fiches-v1, datée du premier dé
 
 test('T17 l’alerte durable « fichesJoueurs » dite à l’écran (Réglages › Actualisation, puce du haut) : son nom, ses écarts, le joueur et le jour en mots simples ; rien quand la nuit n’a trouvé aucun écart', async () => {
   const A = await import(pathToFileURL(path.join(SERVEUR, '..', 'ui', 'src', 'utils', 'controlesAntiFuite.js')).href);
-  assert.deepEqual(A.CONTROLES_ANTI_FUITE.map((c) => c.cle), ['tableJourJ', 'forcesButs', 'fichesJoueurs'], 'dans l’ordre de la nuit');
+  assert.deepEqual(A.CONTROLES_ANTI_FUITE.map((c) => c.cle), ['tableJourJ', 'forcesButs', 'fichesJoueurs', 'stylesDeJeu'], 'dans l’ordre de la nuit (étape 37 : les styles de jeu après les fiches)');
   assert.deepEqual(A.controlesAntiFuiteDits({ fichesJoueurs: null }), []);
   const alerte = { ecarts: [{ joueur: 123, J: '2026-10-12', colonne: 'S.xgnp', attendu: 1, lu: 2 }, { joueur: 123, J: '2026-10-12', colonne: 'W.xgnp', attendu: 1, lu: 2 }], total: 2, lignes: 40, updatedAt: '2026-10-22T03:20:00.000Z' };
   assert.deepEqual(A.controlesAntiFuiteDits({ fichesJoueurs: alerte }).map((d) => d.texte), ['Fiches des joueurs (force du onze) : 2 écarts sur 40 lignes recalculées (contrôle du 22/10/2026 à 05:20) — par exemple joueur n° 123 avant le 12/10/2026.']);
@@ -416,7 +416,9 @@ test('T13 la nuit : « maintenant » obligatoire ; table du jour J pas à jour �
   const s = nuit();
   const i = s.etapes.indexOf('fichesJoueurs');
   assert.equal(s.etapes[i - 1], 'forcesButs');
-  assert.equal(s.etapes[i + 1], 'gelPronostics');
+  // Étape 37 (22/10/2026) : les styles de jeu s'intercalent après les fiches, toujours avant le gel.
+  assert.equal(s.etapes[i + 1], 'stylesDeJeu');
+  assert.equal(s.etapes[i + 2], 'gelPronostics');
   assert.ok(s.etapes.indexOf('sauvegarde') > i && s.etapes.indexOf('tableJourJ') < i);
   assert.equal(s.etapes.filter((k) => k === 'fichesJoueurs').length, 1);
   assert.match(s.sansMaintenant, /« maintenant » .* est obligatoire/);

@@ -61,17 +61,26 @@ export const DOSSIER_JOURNAL = path.resolve(__dirname, '../../../data/runtime/jo
 
 const VERSION = 1;
 
-/** Les types d'appel, dans l'ordre d'affichage. */
+/**
+ * Les types d'appel, dans l'ordre d'affichage. Étape 42 (22/10/2026) : le bulletin du matin et le bilan de la
+ * semaine sont deux types de plus — des appels de l'actualisation (un par jour, un par semaine), comptés comme
+ * les analyses automatiques.
+ */
 export const TYPES_APPEL = Object.freeze({
   avance: "Avant-match d'avance",
   'coup-d-envoi': "Avant-match au coup d'envoi",
   reprise: 'Reprise après changement de onze',
   revue: "Revue d'après-match",
+  bulletin: 'Bulletin du jour',
+  'bilan-semaine': 'Bilan de la semaine',
   manuel: 'Clic manuel',
   autre: 'Autre'
 });
-/** Ceux que fait l'analyse automatique — ceux que compte le plafond quotidien. */
-export const TYPES_AUTOMATIQUES = Object.freeze(['avance', 'coup-d-envoi', 'reprise', 'revue']);
+/**
+ * Ceux que fait l'actualisation automatique — ceux que compte le plafond quotidien (les analyses de match, et depuis
+ * l'étape 42 le bulletin du jour et le bilan de la semaine : un appel de l'un ou de l'autre prend une place sur les 150).
+ */
+export const TYPES_AUTOMATIQUES = Object.freeze(['avance', 'coup-d-envoi', 'reprise', 'revue', 'bulletin', 'bilan-semaine']);
 
 /** Les deux points de passage. Seul le premier entre dans le budget (quota de l'abonnement). */
 export const CANAUX = Object.freeze({

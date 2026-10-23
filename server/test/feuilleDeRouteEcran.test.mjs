@@ -269,7 +269,9 @@ test('page : bandeau, avancement général, ligne « Tests », sauvegardes en va
   assert.ok(texte.includes(`${49 - NB - NB_PARTIELLES - MISES_DE_COTE.length} à faire`));
   // La ligne « Tests » : celle de l'historique du code.
   const t = etat.tests;
-  assert.match(texte, new RegExp(`Tests : ${t.reussis} réussis \\+ ${t.todo} constats à suivre \\(non bloquants\\), aucun échec — dernier passage le ${echapper(jourComplet(t.le))}, à la fin de l’étape ${t.etape}`));
+  // Au-delà de 999, la page écrit « 1 009 » (nombres à la française, espace fine) : le texte rendu la ramène à une espace.
+  const reussis = t.reussis.toLocaleString('fr-FR').replace(/[  ]/g, ' ');
+  assert.match(texte, new RegExp(`Tests : ${reussis} réussis \\+ ${t.todo} constats à suivre \\(non bloquants\\), aucun échec — dernier passage le ${echapper(jourComplet(t.le))}, à la fin de l’étape ${t.etape}`));
   // Les 9 lots, dans l'ordre.
   const lots = [...texte.matchAll(/Lot (\d) — ([^0-9]*?) (?=\d+ étapes?)/g)].map((m) => `${m[1]}:${m[2].trim()}`);
   assert.deepEqual(lots, ['1:Sécurité', '2:Design des paris', '3:Données', '4:Mesure', '5:Cœur : les buts', '6:Reste du match et décision', '7:IA', '8:Direct', '9:Recette']);

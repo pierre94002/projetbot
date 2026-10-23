@@ -206,9 +206,11 @@ export const CONSIGNES_APRES_MATCH = [
  * que la décrit lineupContext.js), `commenceTime` et `timing`.
  * `retires` (étape 21) : les types de marché que le carnet de l'IA a retirés de
  * sa liste ([{ type, label }]) — une ligne de la fiche, jamais les consignes.
+ * `dossiers` (étape 44) : le texte des dossiers de la mémoire de l'IA (aiMemory.js, 300 à 500 mots), à la place des
+ * trois dernières leçons de chaque type ; null : la fiche d'avant. Il va dans la fiche, jamais dans les consignes fixes.
  */
-export function buildPreMatchAnalysisRequestCompacte({ home, away, league, engineSummary, marches, context, lineups = null, experience = [], commenceTime = null, timing = null, retires = [] }) {
-  const user = ficheAvantMatch({ home, away, league, commenceTime, timing, engineSummary, marches, context, lineups, experience, retires });
+export function buildPreMatchAnalysisRequestCompacte({ home, away, league, engineSummary, marches, context, lineups = null, experience = [], commenceTime = null, timing = null, retires = [], dossiers = null }) {
+  const user = ficheAvantMatch({ home, away, league, commenceTime, timing, engineSummary, marches, context, lineups, experience, retires, dossiers });
   return { system: CONSIGNES_AVANT_MATCH, messages: [{ role: 'user', content: user }] };
 }
 

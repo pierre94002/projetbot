@@ -73,6 +73,9 @@ const TYPES = [
   { type: 'coup-d-envoi', libelle: "Avant-match au coup d'envoi" },
   { type: 'reprise', libelle: 'Reprise après changement de onze' },
   { type: 'revue', libelle: "Revue d'après-match" },
+  // Étape 42 : le bulletin du matin et le bilan de la semaine, deux appels de l'actualisation.
+  { type: 'bulletin', libelle: 'Bulletin du jour' },
+  { type: 'bilan-semaine', libelle: 'Bilan de la semaine' },
   { type: 'manuel', libelle: 'Clic manuel' },
   { type: 'autre', libelle: 'Autre' }
 ];
@@ -126,9 +129,11 @@ const kpiPlafond = computed(() => {
   if (!p) return { valeur: 'non lu', detail: 'état indisponible', ton: '' };
   if (p.aujourdhui === null) return { valeur: `? / ${p.limite}`, detail: `compteur illisible : ${p.erreur ?? 'raison inconnue'}`, ton: 'is-warn' };
   const laisses = (p.laissesAvantMatch ?? 0) + (p.laissesApresMatch ?? 0);
+  // Étape 42 : le bulletin du jour et le bilan de la semaine prennent leur place sur les mêmes 150.
+  const textes = (p.bulletin ?? 0) + (p.bilanSemaine ?? 0);
   return {
     valeur: `${nombre(p.aujourdhui)} / ${p.limite}`,
-    detail: `${nombre(p.avantMatch)} avant-match, ${nombre(p.apresMatch)} revue(s)${laisses ? ` ; ${nombre(laisses)} laissée(s) pour demain` : ''}${p.actif ? '' : ' — analyses automatiques coupées'}`,
+    detail: `${nombre(p.avantMatch)} avant-match, ${nombre(p.apresMatch)} revue(s)${textes ? `, ${nombre(textes)} bulletin ou bilan` : ''}${laisses ? ` ; ${nombre(laisses)} laissée(s) pour demain` : ''}${p.actif ? '' : ' — analyses automatiques coupées'}`,
     ton: p.aujourdhui >= p.limite ? 'is-warn' : ''
   };
 });
