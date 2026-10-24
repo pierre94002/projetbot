@@ -18,5 +18,8 @@ export const matchAiAnalysisApi = {
   // Étape 44 du plan : la mémoire de l'IA — le dossier d'une équipe (par son identifiant FotMob) et de son championnat,
   // ou d'un championnat seul (lecture seule ; écrits chaque nuit par l'actualisation).
   dossierEquipe: (clubId) => httpClient.get(`/match-ai-analysis/dossiers?club=${encodeURIComponent(clubId)}`),
-  dossierChampionnat: (league) => httpClient.get(`/match-ai-analysis/dossiers?league=${encodeURIComponent(league)}`)
+  dossierChampionnat: (league) => httpClient.get(`/match-ai-analysis/dossiers?league=${encodeURIComponent(league)}`),
+  // Étape 45 du plan : l'INDEX des dossiers (page « Bulletin ») — les championnats, les équipes, toutes les leçons gardées avec leur match
+  // d'origine (lecture seule ; écrits chaque nuit par l'actualisation).
+  dossiersResume: () => httpClient.get('/match-ai-analysis/dossiers/resume')
 };

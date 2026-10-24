@@ -38,6 +38,25 @@
  * une seule fois et rangé au registre de la mesure (principal) ; ensuite, plus
  * rien n'est calculé à blanc pour cette candidate, qui attend la décision de
  * Pierre (adopter, seulement sur « retenu »).
+ *
+ * RENDRE LA MAIN (24/10/2026) : la nuit du 23 au 24/10, l'étape a annoncé « le
+ * serveur jamais tenu plus de 2 191 ms d'affilée » — et sa mesure ne comptait
+ * même pas l'essai jugé. Mesuré dans le bac sur un essai fabriqué : l'essai
+ * jugé tenait le serveur en TROIS tronçons d'un seul tenant qui grandissent avec
+ * le nombre de matchs joués (la relecture de toute la table, les lignes de
+ * l'essai, puis juge + témoin du score + compléments) : ~190 ms à 42 matchs,
+ * ~270 ms à 400, ~460 à 510 ms à 800 (machine au repos ; deux à quatre fois plus
+ * cette nuit-là chez Pierre) ; et chaque match à calculer, ~170 ms d'un tenant
+ * (jusqu'à ~340 ms : l'enrichissement du match ~120 à 250 ms, puis les deux
+ * analyses). Désormais TOUT passe par UNE série de pauses (creerPauses,
+ * utils/travailCooperatif.js) : entre l'enrichissement et chacune des deux
+ * analyses d'un match, entre deux matchs, entre deux tranches d'écriture, et
+ * dans l'essai jugé (la table relue par pages, les lignes de l'essai, le témoin
+ * et les compléments en générateurs, chaque juge à part). `blocMaxMs` est le
+ * plus long moment entre deux pauses de TOUTE l'étape, essai jugé compris, et
+ * `blocMaxOu` dit où il s'est terminé. Aucun calcul ne change : mêmes fonctions,
+ * mêmes entrées, même ordre (prouvé ligne à ligne et verdict compris :
+ * reactiviteEssai.test.mjs, et la mesure du 24/10 dans le bac).
  * -----------------------------------------------------------------------
  */
 
@@ -50,7 +69,7 @@ import { getEngineConfig } from '../../core/engine/engineConfig.js';
 import { getTiltState } from '../../core/engine/tiltState.js';
 import { candidateEnEssai, configDeLaCandidate, mettreLaCandidateEnEssai, noterLEssai } from '../../core/engine/engineVersions.js';
 import { getSport } from '../../sports/index.js';
-import { ecrirePronosticsABlanc, memeDistribution, pronosticsABlanc } from './depot.js';
+import { ecrirePronosticsABlanc, memeDistribution, pronosticsABlancParPages } from './depot.js';
 import { matchsAVenir, cleDuMatch, cleDuMarche, resolveur, sourceDesCotes, etatDeLaCompo, distributionGelee, versionDuResultat } from './gelPronostics.js';
 import { jourUtc, iso } from './communs.js';
 import { lecteurDesRencontres, cleNumerique } from '../calibration.js';
@@ -58,7 +77,16 @@ import { jugerEtape } from '../../bench/guard.js';
 import { jugementsDe } from '../../bench/trialsRegistry.js';
 import { LANCEMENTS } from '../../bench/lancements.js';
 import {
-  lignesDeLEssai, premiersChiffres, resumeDuJugement, MESURE_DE_L_ESSAI, horizonDe, horizonAtteint, lancementDeLEssai, complementsDeLEssai, temoinDuScore, distributionDuScore
+  lignesDeLEssaiParEtapes,
+  premiersChiffres,
+  resumeDuJugement,
+  MESURE_DE_L_ESSAI,
+  horizonDe,
+  horizonAtteint,
+  lancementDeLEssai,
+  complementsDeLEssaiParEtapes,
+  temoinDuScoreParEtapes,
+  distributionDuScore
 } from '../../bench/essaiCandidate.js';
 import { referenceDuBanc } from '../../bench/runner.js';
 import { grilleDesScores } from '../../core/engine/scorePrediction.js';
@@ -69,8 +97,6 @@ import { creerPauses, executerEnRendantLaMain } from '../../utils/travailCoopera
 /** Matchs par transaction : quelques dizaines de millisecondes d'écriture au plus. */
 export const TRANCHE_A_BLANC = 30;
 
-/** Rendre la main au serveur (les requêtes de l'interface passent entre deux matchs). */
-const rendreLaMain = () => new Promise((fin) => setImmediate(fin));
 
 const nombre = (x) => (x === null || x === undefined || x === '' || !Number.isFinite(Number(x)) ? null : Number(x));
 const probabiliteDe = (p) => (nombre(p?.predictedOdds) > 1 ? Number((1 / nombre(p.predictedOdds)).toFixed(4)) : null);
@@ -173,7 +199,7 @@ export function grilleDuScoreEnService({ a, enrichi, config }) {
  * `candidate` (sinon celle du code), `versions` (le registre des versions d'essai : { fichier, racine }),
  * `mesure` (le registre de la mesure d'essai : { fichier }), `database`.
  */
-export async function calculerABlanc({ maintenant = Date.now(), database = null, matchs = null, dansLaPasse = true, candidate = undefined, versions = {}, mesure = {} } = {}) {
+export async function calculerABlanc({ maintenant = Date.now(), database = null, matchs = null, dansLaPasse = true, candidate = undefined, versions = {}, mesure = {}, pauses = creerPauses() } = {}) {
   const debut = Date.now();
   const bilan = { candidate: null, matchs: 0, calcules: 0, echecs: 0, echantillons: [], lignes: 0, ecrites: 0, horsDeclaration: {}, reporte: false, erreur: null, dureeMs: 0, blocMaxMs: 0 };
   let enEssai;
@@ -200,6 +226,12 @@ export async function calculerABlanc({ maintenant = Date.now(), database = null,
     return { ...bilan, dureeMs: Date.now() - debut };
   }
 
+  // Les pauses de TOUTE l'étape : le plus long moment sans rendre la main, essai jugé compris (`blocMaxMs`, `blocMaxOu`).
+  const tenu = () => {
+    const b = pauses.bilan();
+    return { blocMaxMs: b.blocMaxMs, blocMaxOu: b.blocMaxOu, pauses: b.pauses };
+  };
+  await pauses.pause('début de la nuit à blanc');
   const base = database ?? openDb();
   const sport = getSport('football');
   const enService = getEngineConfig('football');
@@ -218,11 +250,13 @@ export async function calculerABlanc({ maintenant = Date.now(), database = null,
           : etatForces.version !== etatForces.versionAttendue
             ? 'calculées par une version précédente'
             : 'pas encore calculées pour ses réglages';
-      return { ...bilan, attente: `forces de buts pas à jour (${pourquoi})`, dureeMs: Date.now() - debut };
+      return { ...bilan, attente: `forces de buts pas à jour (${pourquoi})`, dureeMs: Date.now() - debut, ...tenu() };
     }
   }
+  await pauses.pause('réglages et forces de buts');
   const liste = matchs ?? matchsAVenir(maintenant);
   bilan.matchs = liste.length;
+  await pauses.pause('liste des matchs à venir');
   const club = resolveur(base);
   let heureInstantanePayant = null;
   try {
@@ -231,15 +265,20 @@ export async function calculerABlanc({ maintenant = Date.now(), database = null,
     heureInstantanePayant = null;
   }
 
+  await pauses.pause('annuaire des clubs');
+
   const aEcrire = [];
-  let depuis = Date.now();
   for (const match of liste) {
     try {
+      // La main rendue entre l'enrichissement et chacune des deux analyses (un match tenait ~170 ms d'un seul tenant).
       const enrichi = await enrichMatchWithRealAverages(match, { sansRepliPayant: true });
+      await pauses.pause('enrichissement d’un match');
       const tilt = getTiltState();
       // L'heure de la passe (étape 27) : la candidate lit le magasin elle-même, rien d'après ce moment.
       const a = await analyzeMatch(enrichi, enService, tilt, sport, { maintenant });
+      await pauses.pause('analyse en service d’un match');
       const b = await analyzeMatch(enrichi, configCandidate, tilt, sport, { maintenant });
+      await pauses.pause('analyse de la candidate d’un match');
       const homeId = club(match.home, match.league);
       const awayId = club(match.away, match.league);
       const date = jourUtc(Date.parse(match.commenceTime));
@@ -272,9 +311,7 @@ export async function calculerABlanc({ maintenant = Date.now(), database = null,
       bilan.echecs++;
       if (bilan.echantillons.length < 5) bilan.echantillons.push(`${match.home} - ${match.away} : ${String(error?.message ?? error).slice(0, 160)}`);
     }
-    bilan.blocMaxMs = Math.max(bilan.blocMaxMs, Date.now() - depuis);
-    await rendreLaMain();
-    depuis = Date.now();
+    await pauses.pause('fin d’un match');
   }
   bilan.lignes = aEcrire.length;
 
@@ -291,26 +328,24 @@ export async function calculerABlanc({ maintenant = Date.now(), database = null,
       break;
     }
     const tranche = groupes.slice(i, i + TRANCHE_A_BLANC).flat();
-    const avant = Date.now();
     try {
       bilan.ecrites += ecrirePronosticsABlanc(tranche, { database: base });
     } catch (error) {
       bilan.erreur = `écriture en échec : ${String(error?.message ?? error).slice(0, 200)}`;
       break;
     }
-    bilan.blocMaxMs = Math.max(bilan.blocMaxMs, Date.now() - avant);
-    await rendreLaMain();
+    await pauses.pause('tranche d’écriture à blanc');
   }
   // L'essai jugé : sur les matchs joués depuis le début de l'essai (rien pendant la passe d'un autre).
   if (essaiEnCours && !bilan.reporte && (dansLaPasse || !isRefreshRunning())) {
     try {
-      bilan.essai = await jugerLEssai({ candidate: essaiEnCours, database: base, maintenant, versions, mesure });
+      bilan.essai = await jugerLEssai({ candidate: essaiEnCours, database: base, maintenant, versions, mesure, pauses });
     } catch (error) {
       bilan.essai = { calcule: false, raison: 'erreur', erreur: String(error?.message ?? error).slice(0, 300) };
     }
   }
   bilan.dureeMs = Date.now() - debut;
-  return bilan;
+  return { ...bilan, ...tenu() };
 }
 
 /**
@@ -326,7 +361,9 @@ export async function jugerLEssai({ candidate, database, maintenant = Date.now()
   if (!candidate || !essai) return { calcule: false, raison: 'pas-d-essai' };
   if (candidate.jugement) return { calcule: false, raison: 'deja-jugee', verdict: candidate.jugement.verdict };
   const aujourdhui = jourUtc(maintenant);
-  const revisions = pronosticsABlanc(candidate.id, { database });
+  // Toute la table de la candidate, relue par pages (24 000 lignes à 800 matchs joués : ~360 ms d'une seule requête).
+  const revisions = await executerEnRendantLaMain(pronosticsABlancParPages(candidate.id, { database }), pauses.siLongtemps);
+  await pauses.pause('lignes à blanc de la candidate');
   const dates = revisions.map((r) => r.date).filter(Boolean).sort();
   let lire = () => ({ raison: 'sansResultat' });
   const du = dates[0] ?? null;
@@ -337,7 +374,10 @@ export async function jugerLEssai({ candidate, database, maintenant = Date.now()
   }
   // Étape 27 : les TÉMOINS (le score exact) restent hors du jugement principal — rapportés à part.
   const temoinsRev = revisions.filter((r) => r.marketId === 'scoreExact');
-  const reglement = lignesDeLEssai(revisions.filter((r) => r.marketId !== 'scoreExact'), { empreinte: candidate.empreinte, versionEnService: essai.versionEnService, lire, aujourdhui });
+  const reglement = await executerEnRendantLaMain(
+    lignesDeLEssaiParEtapes(revisions.filter((r) => r.marketId !== 'scoreExact'), { empreinte: candidate.empreinte, versionEnService: essai.versionEnService, lire, aujourdhui }),
+    pauses.siLongtemps
+  );
   await pauses.pause('lignes de l’essai');
   const horizon = horizonDe(candidate);
   const registre = { ...mesure, lancements: [...LANCEMENTS, lancementDeLEssai(candidate, essai)] };
@@ -351,13 +391,20 @@ export async function jugerLEssai({ candidate, database, maintenant = Date.now()
   } catch (error) {
     return { calcule: false, raison: 'juge', erreur: String(error?.message ?? error).slice(0, 300) };
   }
+  await pauses.pause('juge de l’essai');
   // Étape 27 (une candidate du modèle de buts) : par famille, calibration, porte de sûreté, régimes, témoins.
   const avecModeleDeButs = Boolean(candidate.modifications?.football?.modeleDeButs);
-  const complementsDe = (j) => (avecModeleDeButs ? complementsDeLEssai(reglement, { variantes: j?.seuil?.variantes ?? 1 }) : null);
-  const temoins = temoinsRev.length ? temoinDuScore(temoinsRev, { empreinte: candidate.empreinte, versionEnService: essai.versionEnService, lire, aujourdhui }) : null;
+  const complementsDe = async (j) =>
+    avecModeleDeButs ? await executerEnRendantLaMain(complementsDeLEssaiParEtapes(reglement, { variantes: j?.seuil?.variantes ?? 1 }), pauses.siLongtemps) : null;
+  const temoins = temoinsRev.length
+    ? await executerEnRendantLaMain(temoinDuScoreParEtapes(temoinsRev, { empreinte: candidate.empreinte, versionEnService: essai.versionEnService, lire, aujourdhui }), pauses.siLongtemps)
+    : null;
+  await pauses.pause('témoin du score');
   const etat = horizonAtteint({ matchs: provisoire.n.matchs, depuis: essai.depuis, maintenant, horizon });
   if (!etat.atteint) {
-    const r = ecrire({ premiersChiffres: premiersChiffres(provisoire, { essai, horizon, maintenant, reglement, complements: complementsDe(provisoire), temoins }) });
+    const complements = await complementsDe(provisoire);
+    await pauses.pause('compléments de l’essai');
+    const r = ecrire({ premiersChiffres: premiersChiffres(provisoire, { essai, horizon, maintenant, reglement, complements, temoins }) });
     return { calcule: true, principal: false, matchs: provisoire.n.matchs, horizon, joursEcoules: etat.jours, auPlusTotLe: etat.auPlusTotLe, ecrit: r.ecrit };
   }
   // L'HORIZON : le jugement qui décide, une seule fois (repris s'il est déjà rangé pour CET essai).
@@ -367,7 +414,9 @@ export async function jugerLEssai({ candidate, database, maintenant = Date.now()
   } catch (error) {
     return { calcule: false, raison: 'juge', erreur: String(error?.message ?? error).slice(0, 300) };
   }
-  const complements = complementsDe(principal);
+  await pauses.pause('jugement principal');
+  const complements = await complementsDe(principal);
+  await pauses.pause('compléments de l’essai');
   const r = ecrire({
     premiersChiffres: premiersChiffres(principal, { essai, horizon, maintenant, reglement, complements, temoins }),
     jugement: resumeDuJugement(principal, { essai, versionEnService: essai.versionEnService, empreinte: candidate.empreinte, reglement, complements, temoins })

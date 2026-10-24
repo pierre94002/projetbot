@@ -37,6 +37,25 @@ export function etatDuDossier({ chargement = false, erreur = null, reponse = nul
   return { cle: 'pret', ton: '', titre: null, texte: null };
 }
 
+/**
+ * L'état du bloc quand il montre un CHAMPIONNAT seul (page « Bulletin », étape 45) : { cle, ton, titre, texte }. Mêmes mots que
+ * celui d'un club pour les cas qu'ils partagent (serveur à relancer, jamais calculé, autre forme).
+ */
+export function etatDuDossierChampionnat({ chargement = false, erreur = null, reponse = null, league = null } = {}) {
+  const garde = 'Les tableaux ci-dessous restent affichés, sans valeurs.';
+  if (!league) return { cle: 'sans-championnat', ton: 'is-info', titre: 'Aucun championnat choisi', texte: `Choisissez un championnat pour lire son dossier. ${garde}` };
+  if (erreur) {
+    return SERVEUR_PAS_A_JOUR.test(erreur)
+      ? { cle: 'pas-a-jour-serveur', ton: 'is-warning', titre: 'Serveur à relancer', texte: `${erreur} ${garde}` }
+      : { cle: 'erreur', ton: 'is-danger', titre: 'Dossier illisible', texte: `${erreur} ${garde}` };
+  }
+  if (chargement || !reponse) return { cle: 'chargement', ton: '', titre: 'Lecture en cours', texte: 'Lecture du dossier…' };
+  if (reponse.etat === 'absent') return { cle: 'jamais', ton: 'is-info', titre: 'Pas encore calculé', texte: `Les dossiers de l’IA n’ont pas encore été écrits : la prochaine passe de nuit de l’actualisation le fera (quelques secondes, sans aucun appel à Claude). ${garde}` };
+  if (reponse.etat === 'autreVersion') return { cle: 'autre-version', ton: 'is-warning', titre: 'Dossier d’une autre forme', texte: `Ce dossier a été écrit par une autre forme du calcul : la prochaine passe de nuit le refait, et l’IA ne le lit pas en attendant. ${garde}` };
+  if (!reponse.championnat) return { cle: 'sans-dossier', ton: 'is-info', titre: 'Pas de dossier pour ce championnat', texte: `Un dossier de championnat s’écrit pour chaque compétition où un club a joué dans l’année (match relevé au magasin FotMob). ${garde}` };
+  return { cle: 'pret', ton: '', titre: null, texte: null };
+}
+
 /** La vraie provenance : qui écrit le dossier, d'où viennent ses morceaux, quand il a été mis à jour, où il est rangé. */
 export function provenanceDuDossier(reponse) {
   const d = reponse?.dossier ?? null;
@@ -78,7 +97,7 @@ export function lignesDeForme(dossier) {
 }
 
 /** Une leçon, en ligne de tableau. */
-function ligneDeLecon(l, preuves = {}) {
+export function ligneDeLecon(l, preuves = {}) {
   return {
     cle: l.id,
     jour: jourDit(l.date),

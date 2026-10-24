@@ -49,6 +49,16 @@ const routes = [
     meta: { title: 'Santé du moteur', section: 'history', nav: 'sante-moteur' }
   },
   {
+    // « Bulletin » (étape 45 du plan) : l'IA à l'écran — le budget Claude, le bulletin du jour et le bilan de la semaine, la fiabilité de l'IA
+    // marché par marché, la mémoire de l'IA (dossiers et leçons). Même couleur que Historique moteur (section « history » : les bilans du
+    // moteur et de l'IA, aucune couleur de plus) ; `meta.nav` la distingue dans le menu (une entrée active à la fois). Le dossier ouvert vit
+    // dans l'adresse : ?championnat=…&equipe=fotmob-….
+    path: '/bulletin',
+    name: 'bulletin',
+    component: () => import('@/views/BulletinView.vue'),
+    meta: { title: 'Bulletin', section: 'history', nav: 'bulletin' }
+  },
+  {
     // Page de match detaillee (resume, evenements, compositions,
     // statistiques d equipe et de joueurs), alimentee par match-stats.
     path: '/match/:matchId',

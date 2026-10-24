@@ -39,6 +39,9 @@ export const matchStatsApi = {
     return httpClient.get(`/match-stats/style-duel?${params.toString()}`);
   },
   get: (matchId) => httpClient.get(`/match-stats/${encodeURIComponent(matchId)}`),
+  // Le déroulé d'un match joué (étape 45 du plan) : les événements déjà rangés au magasin, lus par la fonction de l'étape 43 (celle de la
+  // revue d'après-match de l'IA) — buts avec le score qui suit, penalties, expulsions, blessés. Lecture seule, rien n'est redemandé à FotMob.
+  deroule: (matchId) => httpClient.get(`/match-stats/${encodeURIComponent(matchId)}/deroule`),
   // Page d'un match à venir : coup d'envoi exact, stade, météo, arbitre et
   // composition décrite (FotMob, gratuit — cf. lineupContext.js côté serveur).
   preview: ({ home, away, league, commenceTime }) => {

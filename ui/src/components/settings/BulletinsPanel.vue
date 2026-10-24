@@ -21,14 +21,23 @@ import { bulletinsApi } from '@/services/bulletinsApi.js';
 import { essaiDit, etatDuTexte, gardeDite, jourCourt, jourEnLettres, jourEtHeureDits, modeDit, nombreDit, pluriel, sectionsDuTexte, tableauDesTextes, tokensDits } from '@/utils/bulletins.js';
 
 const props = defineProps({
+  /**
+   * Étape 45 : la lecture { loading, error, data } faite par la page « Bulletin », qui en a besoin pour son bandeau — la carte ne lit alors
+   * rien elle-même (une seule lecture de la route pour les deux) et « Relire » demande à la page de relire (événement `relire`).
+   * Sans elle (Réglages), la carte lit toute seule, comme avant.
+   */
+  lecture: { type: Object, default: null },
   /** Fin de la dernière passe d'actualisation : la carte se relit quand elle change. */
   passeTermineeLe: { type: String, default: null }
 });
+
+const emit = defineEmits(['relire']);
 
 const etat = ref({ loading: false, error: null, data: null });
 let derniereDemande = 0;
 
 async function charger() {
+  if (props.lecture) return;
   const numero = ++derniereDemande;
   etat.value = { ...etat.value, loading: true, error: null };
   try {
@@ -39,6 +48,18 @@ async function charger() {
     if (numero === derniereDemande) etat.value = { loading: false, error: error.message, data: etat.value.data };
   }
 }
+
+// Étape 45 : quand la page donne sa lecture, la carte la montre telle quelle (même état, rien relu pour son compte).
+watch(
+  () => props.lecture,
+  (lecture) => {
+    if (lecture) etat.value = lecture;
+  },
+  { immediate: true, deep: true }
+);
+
+/** Le bouton « Relire » : la page relit pour tout le monde quand elle a donné la lecture, la carte sinon. */
+const relire = () => (props.lecture ? emit('relire') : charger());
 
 onMounted(charger);
 watch(
@@ -104,7 +125,7 @@ const sections = (b) => sectionsDuTexte(b.entree);
         <AppIcon name="cpu" :size="11" />
         {{ budget ? `Budget Claude : ${modeDit(budget.mode)}` : 'Budget Claude : non lu' }}
       </span>
-      <AppButton variant="secondary" size="sm" :loading="etat.loading" @click="charger">
+      <AppButton variant="secondary" size="sm" :loading="etat.loading" @click="relire">
         <template #icon><AppIcon name="refresh" :size="13" /></template>
         Relire
       </AppButton>

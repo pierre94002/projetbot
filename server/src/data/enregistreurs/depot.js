@@ -402,16 +402,42 @@ export function ecrirePronosticsABlanc(lignes, { database = openDb() } = {}) {
   });
 }
 
-/** Les chiffres à blanc d'une candidate (toutes les révisions), pour les essais et le juge à venir. */
-export function pronosticsABlanc(candidateId, { database = openDb() } = {}) {
-  return database
-    .prepare(`SELECT candidate_id AS candidateId, fixture_key AS fixtureKey, market_key AS marketKey, revision, recorded_at AS recordedAt, candidate_hash AS candidateHash,
+const COLONNES_A_BLANC = `candidate_id AS candidateId, fixture_key AS fixtureKey, market_key AS marketKey, revision, recorded_at AS recordedAt, candidate_hash AS candidateHash,
                      service_version AS serviceVersion, match_id AS matchId, league, date, kickoff, home_name AS homeName, away_name AS awayName, home_id AS homeId, away_id AS awayId,
                      market_id AS marketId, market, params, choice, label, probability, predicted_odds AS predictedOdds, distribution,
                      service_params AS serviceParams, service_choice AS serviceChoice, service_probability AS serviceProbability,
-                     service_predicted_odds AS servicePredictedOdds, service_distribution AS serviceDistribution, odds_source AS oddsSource, odds_at AS oddsAt, lineup_state AS lineupState
-              FROM engine_candidate_picks WHERE candidate_id = ? ORDER BY fixture_key, market_key, revision`)
-    .all(candidateId);
+                     service_predicted_odds AS servicePredictedOdds, service_distribution AS serviceDistribution, odds_source AS oddsSource, odds_at AS oddsAt, lineup_state AS lineupState`;
+
+/** Les chiffres à blanc d'une candidate (toutes les révisions), pour les essais et le juge à venir. */
+export function pronosticsABlanc(candidateId, { database = openDb() } = {}) {
+  return database.prepare(`SELECT ${COLONNES_A_BLANC} FROM engine_candidate_picks WHERE candidate_id = ? ORDER BY fixture_key, market_key, revision`).all(candidateId);
+}
+
+/** Lignes par page de pronosticsABlancParPages : ~15 ms de lecture chacune (les distributions du score exact pèsent ~1,5 Ko). */
+export const PAGE_A_BLANC = 1000;
+
+/**
+ * Les MÊMES lignes que pronosticsABlanc (mêmes colonnes, même ordre, mêmes objets), lues PAR PAGES — un générateur
+ * qui `yield` entre deux pages (cf. utils/travailCooperatif.js) : l'essai jugé de la nuit relit toute la table de la
+ * candidate (24 000 lignes à 800 matchs joués : ~360 ms d'une seule requête, mesuré le 24/10/2026). Chaque page est
+ * une requête courte, reprise après la clé de la précédente (fixture_key, market_key, revision : la clé primaire,
+ * aucun curseur laissé ouvert pendant que la main est rendue). Rend la liste complète.
+ */
+export function* pronosticsABlancParPages(candidateId, { database = openDb(), page = PAGE_A_BLANC } = {}) {
+  const premiere = database.prepare(`SELECT ${COLONNES_A_BLANC} FROM engine_candidate_picks WHERE candidate_id = ? ORDER BY fixture_key, market_key, revision LIMIT ?`);
+  const suivante = database.prepare(
+    `SELECT ${COLONNES_A_BLANC} FROM engine_candidate_picks WHERE candidate_id = ? AND (fixture_key, market_key, revision) > (?, ?, ?) ORDER BY fixture_key, market_key, revision LIMIT ?`
+  );
+  const lignes = [];
+  let lot = premiere.all(candidateId, page);
+  while (lot.length) {
+    for (const l of lot) lignes.push(l);
+    if (lot.length < page) break;
+    yield 'lignes à blanc de la candidate';
+    const d = lot.at(-1);
+    lot = suivante.all(candidateId, d.fixtureKey, d.marketKey, d.revision, page);
+  }
+  return lignes;
 }
 
 // --------------------------------------------------- les cotes payantes

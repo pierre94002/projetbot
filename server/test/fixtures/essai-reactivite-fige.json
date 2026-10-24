@@ -1,0 +1,562 @@
+{
+ "quoi": "Ce que la nuit range pour l’essai fabriqué de reactiviteEssai.test.mjs, calculé par le code d’AVANT le correctif de réactivité (24/10/2026) : la référence des chiffres.",
+ "lignesABlanc": 29611,
+ "horizon": {
+  "essai": {
+   "calcule": true,
+   "principal": true,
+   "verdict": "pas-prouve",
+   "matchs": 1200,
+   "horizon": {
+    "matchs": 800,
+    "jours": 21
+   },
+   "ecrit": true
+  },
+  "range": {
+   "premiersChiffres": {
+    "regimes": {
+     "buts-seuls": 205,
+     "moyennes-seules": 187,
+     "xg-seuls": 203,
+     "cotes-1n2-xg": 192,
+     "cotes-1n2-buts": 220,
+     "cotes-plusmoins-xg": 193
+    },
+    "calibration": {
+     "a": {
+      "bothTeamsScore": {
+       "pronostics": 1200,
+       "matchs": 1200,
+       "biais": -0.102533,
+       "ece": 0.102533
+      },
+      "resultAndTotal": {
+       "pronostics": 1200,
+       "matchs": 1200,
+       "biais": -0.115039,
+       "ece": 0.115039
+      },
+      "teamGoals": {
+       "pronostics": 2400,
+       "matchs": 1200,
+       "biais": -0.142772,
+       "ece": 0.142772
+      },
+      "totalGoals": {
+       "pronostics": 1200,
+       "matchs": 1200,
+       "biais": -0.136105,
+       "ece": 0.136105
+      }
+     },
+     "b": {
+      "bothTeamsScore": {
+       "pronostics": 1200,
+       "matchs": 1200,
+       "biais": -0.112362,
+       "ece": 0.112362
+      },
+      "resultAndTotal": {
+       "pronostics": 1200,
+       "matchs": 1200,
+       "biais": -0.09265,
+       "ece": 0.09265
+      },
+      "teamGoals": {
+       "pronostics": 2400,
+       "matchs": 1200,
+       "biais": -0.117408,
+       "ece": 0.117408
+      },
+      "totalGoals": {
+       "pronostics": 1200,
+       "matchs": 1200,
+       "biais": -0.139312,
+       "ece": 0.139312
+      }
+     }
+    },
+    "temoins": {
+     "matchs": 1200,
+     "a": 2.956447,
+     "b": 2.936157,
+     "exactA": 8.17,
+     "exactB": 8.25,
+     "horsGrille": 0,
+     "ecartees": {},
+     "juge": false
+    },
+    "calculeLe": "2026-10-19T03:00:00.000Z",
+    "matchs": 1200,
+    "lignes": 6000,
+    "a": 0.962791,
+    "b": 0.965071,
+    "gainPct": -0.237,
+    "horizon": {
+     "matchs": 800,
+     "jours": 21
+    },
+    "joursEcoules": 25,
+    "auPlusTotLe": "2026-10-14T20:00:00.000Z",
+    "aVenir": {
+     "pronostics": 3380,
+     "matchs": 676
+    },
+    "ecartees": {},
+    "parMarche": [
+     {
+      "marketId": "bothTeamsScore",
+      "lignes": 1200,
+      "matchs": 1200,
+      "a": 0.734073,
+      "b": 0.736415
+     },
+     {
+      "marketId": "resultAndTotal",
+      "lignes": 1200,
+      "matchs": 1200,
+      "a": 1.823849,
+      "b": 1.832897
+     },
+     {
+      "marketId": "teamGoals",
+      "lignes": 2400,
+      "matchs": 1200,
+      "a": 0.751124,
+      "b": 0.748963
+     },
+     {
+      "marketId": "totalGoals",
+      "lignes": 1200,
+      "matchs": 1200,
+      "a": 0.753784,
+      "b": 0.758116
+     }
+    ]
+   },
+   "jugement": {
+    "parFamille": {
+     "bothTeamsScore": {
+      "lignes": 1200,
+      "matchs": 1200,
+      "a": 0.734073,
+      "b": 0.736415,
+      "gainPct": -0.319,
+      "fourchettePct": [
+       -0.849,
+       0.211
+      ],
+      "verdict": "pas-prouve",
+      "variantes": 320
+     },
+     "resultAndTotal": {
+      "lignes": 1200,
+      "matchs": 1200,
+      "a": 1.823849,
+      "b": 1.832897,
+      "gainPct": -0.496,
+      "fourchettePct": [
+       -2.359,
+       1.367
+      ],
+      "verdict": "pas-prouve",
+      "variantes": 320
+     },
+     "teamGoals": {
+      "lignes": 2400,
+      "matchs": 1200,
+      "a": 0.751124,
+      "b": 0.748963,
+      "gainPct": 0.288,
+      "fourchettePct": [
+       -1.74,
+       2.315
+      ],
+      "verdict": "pas-prouve",
+      "variantes": 320
+     },
+     "totalGoals": {
+      "lignes": 1200,
+      "matchs": 1200,
+      "a": 0.753784,
+      "b": 0.758116,
+      "gainPct": -0.575,
+      "fourchettePct": [
+       -2.564,
+       1.415
+      ],
+      "verdict": "pas-prouve",
+      "variantes": 320
+     }
+    },
+    "calibration": {
+     "a": {
+      "bothTeamsScore": {
+       "pronostics": 1200,
+       "matchs": 1200,
+       "biais": -0.102533,
+       "ece": 0.102533,
+       "verdict": "trop-haut",
+       "variantes": 320
+      },
+      "resultAndTotal": {
+       "pronostics": 1200,
+       "matchs": 1200,
+       "biais": -0.115039,
+       "ece": 0.115039,
+       "verdict": "trop-haut",
+       "variantes": 320
+      },
+      "teamGoals": {
+       "pronostics": 2400,
+       "matchs": 1200,
+       "biais": -0.142772,
+       "ece": 0.142772,
+       "verdict": "trop-haut",
+       "variantes": 320
+      },
+      "totalGoals": {
+       "pronostics": 1200,
+       "matchs": 1200,
+       "biais": -0.136105,
+       "ece": 0.136105,
+       "verdict": "trop-haut",
+       "variantes": 320
+      }
+     },
+     "b": {
+      "bothTeamsScore": {
+       "pronostics": 1200,
+       "matchs": 1200,
+       "biais": -0.112362,
+       "ece": 0.112362,
+       "verdict": "trop-haut",
+       "variantes": 320
+      },
+      "resultAndTotal": {
+       "pronostics": 1200,
+       "matchs": 1200,
+       "biais": -0.09265,
+       "ece": 0.09265,
+       "verdict": "trop-haut",
+       "variantes": 320
+      },
+      "teamGoals": {
+       "pronostics": 2400,
+       "matchs": 1200,
+       "biais": -0.117408,
+       "ece": 0.117408,
+       "verdict": "trop-haut",
+       "variantes": 320
+      },
+      "totalGoals": {
+       "pronostics": 1200,
+       "matchs": 1200,
+       "biais": -0.139312,
+       "ece": 0.139312,
+       "verdict": "trop-haut",
+       "variantes": 320
+      }
+     }
+    },
+    "surete": {
+     "totalGoals|2.5": {
+      "pronostics": 1200,
+      "matchs": 1200,
+      "biais": -0.139312,
+      "ece": 0.139312,
+      "verdict": "trop-haut",
+      "variantes": 1
+     },
+     "bothTeamsScore": {
+      "pronostics": 1200,
+      "matchs": 1200,
+      "biais": -0.112362,
+      "ece": 0.112362,
+      "verdict": "trop-haut",
+      "variantes": 1
+     }
+    },
+    "regimes": {
+     "buts-seuls": 205,
+     "moyennes-seules": 187,
+     "xg-seuls": 203,
+     "cotes-1n2-xg": 192,
+     "cotes-1n2-buts": 220,
+     "cotes-plusmoins-xg": 193
+    },
+    "temoins": {
+     "matchs": 1200,
+     "a": 2.956447,
+     "b": 2.936157,
+     "exactA": 8.17,
+     "exactB": 8.25,
+     "horsGrille": 0,
+     "ecartees": {},
+     "juge": false
+    },
+    "le": "2026-10-19T03:00:00.000Z",
+    "principal": true,
+    "verdict": "pas-prouve",
+    "raison": "La fourchette contient zéro : l’écart peut venir du hasard (1 200 matchs, 320 variantes essayées).",
+    "matchs": 1200,
+    "lignes": 6000,
+    "a": 0.962791,
+    "b": 0.965071,
+    "gainPct": -0.237,
+    "fourchettePct": [
+     -1.715,
+     1.241
+    ],
+    "quoi": "de perte log en moins",
+    "variantes": 320,
+    "fenetre": {
+     "de": "2026-09-24",
+     "a": "2026-10-18"
+    },
+    "lancement": "2026-09-23",
+    "ecartees": {
+     "avantLancement": 0,
+     "donneesVues": 0
+    },
+    "parMarche": [
+     {
+      "marketId": "bothTeamsScore",
+      "lignes": 1200,
+      "matchs": 1200,
+      "a": 0.734073,
+      "b": 0.736415
+     },
+     {
+      "marketId": "resultAndTotal",
+      "lignes": 1200,
+      "matchs": 1200,
+      "a": 1.823849,
+      "b": 1.832897
+     },
+     {
+      "marketId": "teamGoals",
+      "lignes": 2400,
+      "matchs": 1200,
+      "a": 0.751124,
+      "b": 0.748963
+     },
+     {
+      "marketId": "totalGoals",
+      "lignes": 1200,
+      "matchs": 1200,
+      "a": 0.753784,
+      "b": 0.758116
+     }
+    ],
+    "versionEnService": 1,
+    "empreinte": "f01dd8496f56a415",
+    "essai": 1
+   }
+  },
+  "jugementsPrincipaux": [
+   {
+    "mode": "moyenne",
+    "sens": "min",
+    "n": {
+     "lignes": 6000,
+     "blocs": 1200,
+     "matchs": 1200
+    },
+    "a": {
+     "moyenne": 0.9627908984317329
+    },
+    "b": {
+     "moyenne": 0.9650708796690067
+    },
+    "gain": -0.0022799812372718224,
+    "ecartType": 0.0037636539579609845,
+    "seuil": {
+     "alpha": 0.05,
+     "variantes": 320,
+     "alphaCorrige": 0.00015625,
+     "z": 3.7810010045357867
+    },
+    "fourchette": [
+     -0.016510360633047394,
+     0.01195039815850375
+    ],
+    "p": 0.5446545862935093,
+    "verdict": "pas-prouve",
+    "raison": "La fourchette contient zéro : l’écart peut venir du hasard (1 200 matchs, 320 variantes essayées).",
+    "controle": {
+     "percentile95": [
+      -0.0097261927847731,
+      0.005198472482922856
+     ],
+     "tiragesIgnores": 0
+    },
+    "tirages": 1000,
+    "graine": 1,
+    "etape": "27",
+    "mesure": "perte-log",
+    "quoi": "Essai à blanc n° 1 de la candidate « modele-buts-v1 » face à la version en service n° 1",
+    "principal": true,
+    "le": "2026-10-19T03:00:00.000Z",
+    "lancement": "2026-09-23",
+    "version": "modele-buts-v1",
+    "fenetre": {
+     "de": "2026-09-24",
+     "a": "2026-10-18"
+    },
+    "ecartees": {
+     "avantLancement": 0,
+     "donneesVues": 0
+    },
+    "enPourcent": {
+     "gain": -0.2368095960385198,
+     "fourchette": [
+      -1.7148438627682008,
+      1.2412246706911612
+     ],
+     "quoi": "de perte log en moins"
+    }
+   }
+  ]
+ },
+ "avant": {
+  "essai": {
+   "calcule": true,
+   "principal": false,
+   "matchs": 912,
+   "horizon": {
+    "matchs": 800,
+    "jours": 21
+   },
+   "joursEcoules": 18,
+   "auPlusTotLe": "2026-10-14T20:00:00.000Z",
+   "ecrit": true
+  },
+  "range": {
+   "premiersChiffres": {
+    "regimes": {
+     "buts-seuls": 153,
+     "moyennes-seules": 150,
+     "xg-seuls": 156,
+     "cotes-1n2-xg": 139,
+     "cotes-1n2-buts": 160,
+     "cotes-plusmoins-xg": 154
+    },
+    "calibration": {
+     "a": {
+      "bothTeamsScore": {
+       "pronostics": 912,
+       "matchs": 912,
+       "biais": -0.110151,
+       "ece": 0.110151
+      },
+      "resultAndTotal": {
+       "pronostics": 912,
+       "matchs": 912,
+       "biais": -0.104717,
+       "ece": 0.104717
+      },
+      "teamGoals": {
+       "pronostics": 1824,
+       "matchs": 912,
+       "biais": -0.132532,
+       "ece": 0.132532
+      },
+      "totalGoals": {
+       "pronostics": 912,
+       "matchs": 912,
+       "biais": -0.126436,
+       "ece": 0.126436
+      }
+     },
+     "b": {
+      "bothTeamsScore": {
+       "pronostics": 912,
+       "matchs": 912,
+       "biais": -0.114854,
+       "ece": 0.114854
+      },
+      "resultAndTotal": {
+       "pronostics": 912,
+       "matchs": 912,
+       "biais": -0.089029,
+       "ece": 0.089029
+      },
+      "teamGoals": {
+       "pronostics": 1824,
+       "matchs": 912,
+       "biais": -0.112135,
+       "ece": 0.112135
+      },
+      "totalGoals": {
+       "pronostics": 912,
+       "matchs": 912,
+       "biais": -0.123479,
+       "ece": 0.123898
+      }
+     }
+    },
+    "temoins": {
+     "matchs": 912,
+     "a": 2.952114,
+     "b": 2.924441,
+     "exactA": 8.44,
+     "exactB": 8,
+     "horsGrille": 0,
+     "ecartees": {},
+     "juge": false
+    },
+    "calculeLe": "2026-10-12T03:00:00.000Z",
+    "matchs": 912,
+    "lignes": 4560,
+    "a": 0.957612,
+    "b": 0.958154,
+    "gainPct": -0.057,
+    "horizon": {
+     "matchs": 800,
+     "jours": 21
+    },
+    "joursEcoules": 18,
+    "auPlusTotLe": "2026-10-14T20:00:00.000Z",
+    "aVenir": {
+     "pronostics": 4820,
+     "matchs": 964
+    },
+    "ecartees": {},
+    "parMarche": [
+     {
+      "marketId": "bothTeamsScore",
+      "lignes": 912,
+      "matchs": 912,
+      "a": 0.736964,
+      "b": 0.738728
+     },
+     {
+      "marketId": "resultAndTotal",
+      "lignes": 912,
+      "matchs": 912,
+      "a": 1.814204,
+      "b": 1.818263
+     },
+     {
+      "marketId": "teamGoals",
+      "lignes": 1824,
+      "matchs": 912,
+      "a": 0.745495,
+      "b": 0.74154
+     },
+     {
+      "marketId": "totalGoals",
+      "lignes": 912,
+      "matchs": 912,
+      "a": 0.745904,
+      "b": 0.7507
+     }
+    ]
+   },
+   "jugement": null
+  },
+  "jugementsPrincipaux": []
+ }
+}

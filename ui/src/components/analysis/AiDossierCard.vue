@@ -24,6 +24,7 @@ import { matchAiAnalysisApi } from '@/services/matchAiAnalysisApi.js';
 import {
   jourDit,
   etatDuDossier,
+  etatDuDossierChampionnat,
   provenanceDuDossier,
   lignesDeForme,
   lignesDesLecons,
@@ -37,12 +38,32 @@ const props = defineProps({
   /** L'identifiant FotMob du club (« fotmob-8456 ») ; sans lui, le bloc le dit et garde ses tableaux. */
   clubId: { type: String, default: null },
   clubName: { type: String, default: '' },
+  /** 'equipe' (défaut) : le dossier d'un club et, dessous, celui de son championnat. 'championnat' : celui d'un championnat seul (page « Bulletin », étape 45). */
+  portee: { type: String, default: 'equipe' },
   league: { type: String, default: null }
 });
+const soloChampionnat = computed(() => props.portee === 'championnat');
 
 const etat = ref({ loading: false, error: null, data: null });
 
+/** Le dossier d'un championnat seul : la même route, par son nom. Une réponse arrivée après un changement de championnat est ignorée. */
+async function chargerChampionnat() {
+  const ligue = props.league;
+  if (!ligue) {
+    etat.value = { loading: false, error: null, data: null };
+    return;
+  }
+  etat.value = { ...etat.value, loading: true, error: null };
+  try {
+    const data = await matchAiAnalysisApi.dossierChampionnat(ligue);
+    if (props.league === ligue && soloChampionnat.value) etat.value = { loading: false, error: null, data };
+  } catch (error) {
+    if (props.league === ligue && soloChampionnat.value) etat.value = { loading: false, error: error.message, data: null };
+  }
+}
+
 async function charger() {
+  if (soloChampionnat.value) return chargerChampionnat();
   const club = props.clubId;
   if (!club) {
     etat.value = { loading: false, error: null, data: null };
@@ -68,8 +89,21 @@ watch(
   }
 );
 
+watch(
+  () => [props.league, props.portee],
+  (apres, avant) => {
+    if (!soloChampionnat.value || (apres[0] === avant[0] && apres[1] === avant[1])) return;
+    etat.value = { loading: false, error: null, data: null };
+    charger();
+  }
+);
+
 const reponse = computed(() => etat.value.data);
-const lu = computed(() => etatDuDossier({ chargement: etat.value.loading, erreur: etat.value.error, reponse: reponse.value, clubId: props.clubId }));
+const lu = computed(() =>
+  soloChampionnat.value
+    ? etatDuDossierChampionnat({ chargement: etat.value.loading, erreur: etat.value.error, reponse: reponse.value, league: props.league })
+    : etatDuDossier({ chargement: etat.value.loading, erreur: etat.value.error, reponse: reponse.value, clubId: props.clubId })
+);
 const pret = computed(() => lu.value.cle === 'pret');
 const dossier = computed(() => (pret.value ? reponse.value?.dossier ?? null : null));
 const phrases = computed(() => (pret.value ? reponse.value?.phrases ?? null : null));
@@ -94,18 +128,22 @@ const iconeDeLaNote = (ton) => (ton === 'is-danger' ? 'x' : ton === 'is-warning'
     title="Mémoire de l’IA"
     subtitle="Le dossier que l’IA relit avant chaque analyse : faits du moment, forme, absents, entraîneur, style, et les leçons que son carnet a confirmées"
     :data-etat="lu.cle"
+    :data-portee="portee"
     data-bloc="memoire-ia"
   >
     <template #actions>
-      <AppButton variant="secondary" size="sm" :loading="etat.loading" :disabled="!clubId" @click="charger">
+      <AppButton variant="secondary" size="sm" :loading="etat.loading" :disabled="soloChampionnat ? !league : !clubId" @click="charger">
         <template #icon><AppIcon name="refresh" :size="13" /></template>
         Relire
       </AppButton>
     </template>
 
     <div class="aid__corps">
-      <!-- 0. Le club (logo) et son championnat. -->
-      <p class="aid__club">
+      <!-- 0. Le club (logo) et son championnat — ou, pour un championnat seul, son badge. -->
+      <p v-if="soloChampionnat" class="aid__club" data-portee-ligue>
+        <span class="cm-chip aid__ligue"><LeagueBadge :league="league" /></span>
+      </p>
+      <p v-else class="aid__club">
         <TeamCrest :name="clubName" :league="championnat" :team-id="clubId" :size="26" />
         <strong class="cm-truncate">{{ dossier?.nom ?? clubName }}</strong>
         <span v-if="championnat" class="cm-chip aid__ligue"><LeagueBadge :league="championnat" /></span>
@@ -125,8 +163,11 @@ const iconeDeLaNote = (ton) => (ton === 'is-danger' ? 'x' : ton === 'is-warning'
       <div class="aid__entete">
         <ProvenanceChip :source="provenance.source" :releve-le="provenance.releveLe" :action="provenance.action" :fichier="provenance.fichier" :detail="provenance.detail" :vieux-apres-heures="72" />
         <span v-if="dossier?.jusquAu" class="aid__petit-texte">Matchs pris en compte jusqu’au {{ jourDit(dossier.jusquAu) }}</span>
+        <span v-else-if="soloChampionnat && champ?.jusquAu" class="aid__petit-texte">Matchs pris en compte jusqu’au {{ jourDit(champ.jusquAu) }}</span>
       </div>
 
+      <!-- 2 à 6. Les morceaux d'un club : faits, forme, absents, leçons confirmées et retirées (pas pour un championnat seul). -->
+      <template v-if="!soloChampionnat">
       <!-- 2. Les faits du moment. -->
       <h4 class="cm-group-title aid__groupe">Faits du moment</h4>
       <ul class="aid__faits" data-dossier="faits">
@@ -308,9 +349,11 @@ const iconeDeLaNote = (ton) => (ton === 'is-danger' ? 'x' : ton === 'is-warning'
         </table>
       </div>
 
-      <!-- 7. Son championnat. -->
+      </template>
+
+      <!-- 7. Son championnat (ou le championnat seul). -->
       <h4 class="cm-group-title aid__groupe">
-        Son championnat
+        {{ soloChampionnat ? 'Le championnat' : 'Son championnat' }}
         <span v-if="championnat" class="cm-chip"><LeagueBadge :league="championnat" /></span>
       </h4>
       <section class="cm-block aid__champ" data-dossier="championnat">
@@ -365,7 +408,7 @@ const iconeDeLaNote = (ton) => (ton === 'is-danger' ? 'x' : ton === 'is-warning'
       </div>
 
       <!-- 8. Ce que l'IA en lit. -->
-      <details class="aid__ia" data-dossier="lu-par-ia">
+      <details v-if="!soloChampionnat" class="aid__ia" data-dossier="lu-par-ia">
         <summary>Ce que l’IA lit de ce dossier · {{ luParIA.resume }}</summary>
         <pre v-if="luParIA.texte" class="aid__pre">{{ luParIA.texte }}</pre>
       </details>

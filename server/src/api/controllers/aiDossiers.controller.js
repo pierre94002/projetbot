@@ -8,6 +8,9 @@
  * GET /api/match-ai-analysis/dossiers/apercu?home=&away=&league=&matchId=
  *                                                         le texte que l'IA recevrait pour ce match (300 à 500 mots), sans
  *                                                         la composition du jour (l'analyse la lit au moment de partir).
+ * GET /api/match-ai-analysis/dossiers/resume             l'INDEX des dossiers (étape 45, page « Bulletin ») : les championnats, les
+ *                                                         équipes (pour en choisir une) et toutes les leçons gardées, confirmées
+ *                                                         puis retirées, chacune avec son jour, son match d'origine et sa portée.
  * LECTURE SEULE : data/runtime/ai-dossiers.json, écrit par l'actualisation (étape « dossiersIA »). Ne lance rien, n'écrit
  * rien, n'appelle jamais Claude. Pas encore calculé : 200 avec `dossier: null` (l'écran garde toute sa structure et le
  * dit). Illisible : 503, jamais pris pour vide.
@@ -17,6 +20,7 @@
 import { lireLesDossiers } from '../../data/repositories/aiDossiersRepository.js';
 import { memoireDuMatch } from '../../data/aiDossiers.js';
 import { ETATS_LECON, REGLES_LECONS, MOTS_POUR_IA, PROVENANCE_DOSSIERS, CARACTERES_PAR_TOKEN, texteDUneEquipePourIA, phrasesDuDossier, phrasesDuChampionnat } from '../../core/ai/aiMemory.js';
+import { resumeDesDossiers } from '../../core/ai/resumeDesDossiers.js';
 import { requireStringParam } from '../middlewares/errorHandler.js';
 
 const CLUB = /^fotmob-\d+$/;
@@ -83,4 +87,18 @@ export function getApercu(req, res) {
   }
   const memoire = memoireDuMatch({ matchId, home, away, league });
   res.json({ ...communs(lu), home, away, league, matchId, memoire, sansComposition: true });
+}
+
+/**
+ * L'INDEX des dossiers (étape 45, page « Bulletin ») : de quoi LISTER ce que les routes d'au-dessus donnent une équipe à la fois.
+ * Lecture seule, rien n'est recalculé (core/ai/resumeDesDossiers.js range le fichier tel que la nuit l'a écrit). Pas encore calculé :
+ * 200 avec des listes vides et `etat: 'absent'` (la page garde toute sa structure et le dit). Illisible : 503, jamais pris pour vide.
+ */
+export function getResume(req, res) {
+  const lu = lireLesDossiers();
+  if (lu.etat === 'illisible') {
+    illisible(res, lu);
+    return;
+  }
+  res.json({ ...communs(lu), ...resumeDesDossiers(lu.donnees) });
 }

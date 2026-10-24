@@ -1,0 +1,3183 @@
+{
+ "version": 1,
+ "calculeLe": "2026-10-22T23:29:53.757Z",
+ "regles": {
+  "equipe": {
+   "minMatchs": 3,
+   "z": 2,
+   "ecartMin": 0.15,
+   "fenetre": 12
+  },
+  "championnat": {
+   "minMatchs": 10,
+   "z": 2,
+   "ecartMin": 0.05,
+   "fenetre": 60
+  },
+  "zDementi": -1,
+  "expireApresJours": 120,
+  "pourIA": {
+   "parEquipe": 2,
+   "parChampionnat": 2
+  },
+  "gardees": {
+   "confirmees": 12,
+   "retirees": 10
+  }
+ },
+ "provenance": {
+  "faits": "magasin FotMob : rencontres et scores (table du jour J, étape 17), classement officiel FotMob",
+  "absents": "absents annoncés par FotMob, relevés avant chaque match (enregistreurs, étape E)",
+  "entraineur": "entraîneurs des compositions FotMob (étape 37)",
+  "style": "styles de jeu calculés chaque nuit (étape 37)",
+  "championnat": "repères du championnat (étape 15) et classement officiel FotMob",
+  "lecons": "bilans d’après-match écrits par l’IA, gardés seulement quand son carnet (étape 21) les confirme",
+  "regle": "écrit par le code, jamais par l’IA ; lu par l’IA seule, jamais par le moteur"
+ },
+ "equipes": {
+  "fotmob-10272": {
+   "club": "fotmob-10272",
+   "nom": "Atlético-MG",
+   "league": "Brazil Série A",
+   "majLe": "2026-10-22T23:29:53.757Z",
+   "jusquAu": "2026-10-17",
+   "signature": "2026-10-17|224|45|33",
+   "classement": {
+    "league": "Brazil Série A",
+    "saison": 2026,
+    "table": null,
+    "luLe": "2026-10-18T18:43:01.119Z",
+    "rang": 5,
+    "equipes": 20,
+    "points": 50,
+    "joues": 31,
+    "v": 14,
+    "n": 8,
+    "d": 9,
+    "bp": 42,
+    "bc": 35,
+    "zone": "Copa Libertadores qualification",
+    "premier": {
+     "id": "fotmob-10283",
+     "nom": "Palmeiras",
+     "points": 66
+    },
+    "second": null
+   },
+   "series": [
+    {
+     "cle": "victoires",
+     "n": 3,
+     "texte": "3 victoires de suite"
+    },
+    {
+     "cle": "marque",
+     "n": 8,
+     "texte": "a marqué lors de ses 8 derniers matchs"
+    },
+    {
+     "cle": "propre",
+     "n": 2,
+     "texte": "n’a pas encaissé de but depuis 2 matchs"
+    },
+    {
+     "cle": "invaincu-dom",
+     "n": 10,
+     "texte": "invaincu à domicile en championnat depuis 10 matchs"
+    }
+   ],
+   "forme": {
+    "derniers": [
+     {
+      "date": "2026-10-17",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-9767",
+      "adversaire": "Coritiba",
+      "lieu": "dom",
+      "bp": 1,
+      "bc": 0,
+      "issue": "V"
+     },
+     {
+      "date": "2026-10-14",
+      "league": "Copa Sudamericana",
+      "coupe": true,
+      "adversaireId": "fotmob-395613",
+      "adversaire": "Montevideo City Torque",
+      "lieu": "dom",
+      "bp": 3,
+      "bc": 0,
+      "issue": "V"
+     },
+     {
+      "date": "2026-10-11",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-8514",
+      "adversaire": "Santos",
+      "lieu": "dom",
+      "bp": 2,
+      "bc": 1,
+      "issue": "V"
+     },
+     {
+      "date": "2026-10-08",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-10273",
+      "adversaire": "Athletico Paranaense",
+      "lieu": "ext",
+      "bp": 2,
+      "bc": 2,
+      "issue": "N"
+     },
+     {
+      "date": "2026-10-03",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-109705",
+      "adversaire": "RB Bragantino",
+      "lieu": "dom",
+      "bp": 1,
+      "bc": 0,
+      "issue": "V"
+     },
+     {
+      "date": "2026-09-19",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-197693",
+      "adversaire": "Chapecoense",
+      "lieu": "dom",
+      "bp": 1,
+      "bc": 1,
+      "issue": "N"
+     },
+     {
+      "date": "2026-09-16",
+      "league": "Copa Sudamericana",
+      "coupe": true,
+      "adversaireId": "fotmob-8514",
+      "adversaire": "Santos",
+      "lieu": "dom",
+      "bp": 4,
+      "bc": 2,
+      "issue": "V"
+     },
+     {
+      "date": "2026-09-12",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-9863",
+      "adversaire": "Fluminense",
+      "lieu": "dom",
+      "bp": 3,
+      "bc": 1,
+      "issue": "V"
+     },
+     {
+      "date": "2026-09-09",
+      "league": "Copa Sudamericana",
+      "coupe": true,
+      "adversaireId": "fotmob-8514",
+      "adversaire": "Santos",
+      "lieu": "ext",
+      "bp": 0,
+      "bc": 2,
+      "issue": "D"
+     },
+     {
+      "date": "2026-09-05",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-10277",
+      "adversaire": "São Paulo",
+      "lieu": "ext",
+      "bp": 0,
+      "bc": 2,
+      "issue": "D"
+     }
+    ],
+    "bilan": {
+     "matchs": 10,
+     "v": 6,
+     "n": 2,
+     "d": 2,
+     "bp": 17,
+     "bc": 11,
+     "points": 20
+    },
+    "tendance": {
+     "cinq": 2.6,
+     "avant": 1.4
+    },
+    "dernierMatch": "2026-10-17"
+   },
+   "entraineur": {
+    "nom": "Eduardo Domínguez",
+    "coachId": null,
+    "depuis": "2026-03-11",
+    "auMoins": false,
+    "bilan": {
+     "matchs": 44,
+     "v": 23,
+     "n": 10,
+     "d": 11
+    },
+    "precedent": {
+     "nom": "Lucas Gonçalves",
+     "dernierMatch": "2026-02-26"
+    },
+    "nouveau": false
+   },
+   "style": {
+    "style": "equilibre",
+    "libelle": "sans style marqué",
+    "second": null,
+    "secondLibelle": null,
+    "provisoire": false,
+    "n": 20,
+    "jour": "2026-10-19"
+   },
+   "absents": {
+    "lusLe": "2026-10-13T22:23:37.819Z",
+    "match": {
+     "date": "2026-10-14",
+     "adversaireId": "fotmob-395613",
+     "adversaire": "Montevideo City Torque"
+    },
+    "liste": [
+     {
+      "nom": "Everson",
+      "id": "fotmob-268171",
+      "motif": "injury",
+      "retour": "Mid October 2026"
+     },
+     {
+      "nom": "Fred",
+      "id": "fotmob-322049",
+      "motif": "injury",
+      "retour": "About 1-2 weeks"
+     },
+     {
+      "nom": "Gustavo Scarpa",
+      "id": "fotmob-544424",
+      "motif": "injury",
+      "retour": "Mid October 2026"
+     },
+     {
+      "nom": "Mateo Cassierra",
+      "id": "fotmob-639061",
+      "motif": "injury",
+      "retour": "Late October 2026"
+     },
+     {
+      "nom": "Ruan",
+      "id": "fotmob-905494",
+      "motif": "injury",
+      "retour": "Mid October 2026"
+     }
+    ]
+   },
+   "carnet": {
+    "matchs": 3,
+    "pronostics": 33,
+    "justes": 21,
+    "avis": 25,
+    "tenus": 19
+   },
+   "lecons": {
+    "confirmees": [],
+    "retirees": [
+     {
+      "id": "cal-2026-10-03-atletico-mg-rb-bragantino|teamCorners:home",
+      "date": "2026-10-03",
+      "match": {
+       "matchId": "cal-2026-10-03-atletico-mg-rb-bragantino",
+       "home": "Atlético-MG",
+       "away": "RB Bragantino",
+       "homeId": "fotmob-10272",
+       "awayId": "fotmob-109705",
+       "date": "2026-10-03",
+       "league": "Brazil Série A"
+      },
+      "type": "teamCorners",
+      "market": "Corners — Atlético-MG",
+      "pick": "Atlético-MG — Plus de 2.5 corners",
+      "issue": "juste",
+      "sens": 1,
+      "verdict": "confirme",
+      "texte": "Une ligne très basse reste sûre même dans un scénario défavorable ; à garder.",
+      "ecriteLe": "2026-10-04T09:48:50.987Z",
+      "etat": "dementie",
+      "confirmeeLe": null,
+      "retireeLe": "2026-10-22",
+      "raison": "démentie par les matchs suivants",
+      "preuve": {
+       "matchs": 14,
+       "cas": 28,
+       "annonce": 0.8042368550313025,
+       "realises": 17,
+       "ecart": -0.155383139487546,
+       "z": -2.076318492157059,
+       "base": -0.041710858400899394,
+       "du": "2026-10-07",
+       "au": "2026-10-13"
+      }
+     }
+    ],
+    "enAttente": 0,
+    "confirmeesEnTout": 0,
+    "retireesEnTout": 1
+   },
+   "sources": {
+    "matchs": "magasin FotMob, table du jour J (étape 17)",
+    "classementLuLe": "2026-10-18T18:43:01.119Z",
+    "styleDu": "2026-10-19",
+    "absentsLusLe": "2026-10-13T22:23:37.819Z"
+   }
+  },
+  "fotmob-109705": {
+   "club": "fotmob-109705",
+   "nom": "RB Bragantino",
+   "league": "Brazil Série A",
+   "majLe": "2026-10-22T23:29:53.757Z",
+   "jusquAu": "2026-10-13",
+   "signature": "2026-10-13|190|45|33",
+   "classement": {
+    "league": "Brazil Série A",
+    "saison": 2026,
+    "table": null,
+    "luLe": "2026-10-18T18:43:01.119Z",
+    "rang": 10,
+    "equipes": 20,
+    "points": 40,
+    "joues": 30,
+    "v": 11,
+    "n": 7,
+    "d": 12,
+    "bp": 38,
+    "bc": 35,
+    "zone": "Copa Sudamericana",
+    "premier": {
+     "id": "fotmob-10283",
+     "nom": "Palmeiras",
+     "points": 66
+    },
+    "second": null
+   },
+   "series": [
+    {
+     "cle": "sansVictoire-ext",
+     "n": 6,
+     "texte": "sans victoire à l’extérieur en championnat depuis 6 matchs"
+    }
+   ],
+   "forme": {
+    "derniers": [
+     {
+      "date": "2026-10-13",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-9781",
+      "adversaire": "Cruzeiro",
+      "lieu": "dom",
+      "bp": 4,
+      "bc": 2,
+      "issue": "V"
+     },
+     {
+      "date": "2026-10-07",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-163782",
+      "adversaire": "Mirassol",
+      "lieu": "dom",
+      "bp": 1,
+      "bc": 1,
+      "issue": "N"
+     },
+     {
+      "date": "2026-10-03",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-10272",
+      "adversaire": "Atlético-MG",
+      "lieu": "ext",
+      "bp": 0,
+      "bc": 1,
+      "issue": "D"
+     },
+     {
+      "date": "2026-09-20",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-9770",
+      "adversaire": "Flamengo",
+      "lieu": "ext",
+      "bp": 1,
+      "bc": 2,
+      "issue": "D"
+     },
+     {
+      "date": "2026-09-12",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-8517",
+      "adversaire": "Botafogo",
+      "lieu": "ext",
+      "bp": 1,
+      "bc": 1,
+      "issue": "N"
+     },
+     {
+      "date": "2026-09-05",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-7877",
+      "adversaire": "Bahia",
+      "lieu": "dom",
+      "bp": 2,
+      "bc": 3,
+      "issue": "D"
+     },
+     {
+      "date": "2026-08-29",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-10277",
+      "adversaire": "São Paulo",
+      "lieu": "ext",
+      "bp": 1,
+      "bc": 2,
+      "issue": "D"
+     },
+     {
+      "date": "2026-08-23",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-9769",
+      "adversaire": "Grêmio",
+      "lieu": "dom",
+      "bp": 1,
+      "bc": 0,
+      "issue": "V"
+     },
+     {
+      "date": "2026-08-19",
+      "league": "Copa Sudamericana",
+      "coupe": true,
+      "adversaireId": "fotmob-10272",
+      "adversaire": "Atlético-MG",
+      "lieu": "ext",
+      "bp": 2,
+      "bc": 2,
+      "issue": "N"
+     },
+     {
+      "date": "2026-08-15",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-10273",
+      "adversaire": "Athletico Paranaense",
+      "lieu": "ext",
+      "bp": 1,
+      "bc": 1,
+      "issue": "N"
+     }
+    ],
+    "bilan": {
+     "matchs": 10,
+     "v": 2,
+     "n": 4,
+     "d": 4,
+     "bp": 14,
+     "bc": 15,
+     "points": 10
+    },
+    "tendance": {
+     "cinq": 1,
+     "avant": 1
+    },
+    "dernierMatch": "2026-10-13"
+   },
+   "entraineur": {
+    "nom": "Vágner Mancini",
+    "coachId": null,
+    "depuis": "2025-11-05",
+    "auMoins": false,
+    "bilan": {
+     "matchs": 49,
+     "v": 19,
+     "n": 11,
+     "d": 19
+    },
+    "precedent": {
+     "nom": "Fernando Seabra",
+     "dernierMatch": "2025-11-02"
+    },
+    "nouveau": false
+   },
+   "style": {
+    "style": "equilibre",
+    "libelle": "sans style marqué",
+    "second": "direct",
+    "secondLibelle": "jeu direct",
+    "provisoire": false,
+    "n": 20,
+    "jour": "2026-10-19"
+   },
+   "absents": {
+    "lusLe": "2026-10-18T18:44:07.475Z",
+    "match": {
+     "date": "2026-10-18",
+     "adversaireId": "fotmob-1626",
+     "adversaire": "Remo"
+    },
+    "liste": [
+     {
+      "nom": "Alix",
+      "id": "fotmob-1231596",
+      "motif": "injury",
+      "retour": "Doubtful"
+     },
+     {
+      "nom": "Rodriguinho",
+      "id": "fotmob-1382475",
+      "motif": "injury",
+      "retour": "Doubtful"
+     },
+     {
+      "nom": "Henry Mosquera",
+      "id": "fotmob-1407217",
+      "motif": "injury",
+      "retour": "Doubtful"
+     },
+     {
+      "nom": "Davi Gomes",
+      "id": "fotmob-1719148",
+      "motif": "injury",
+      "retour": "Mid December 2026"
+     }
+    ]
+   },
+   "carnet": {
+    "matchs": 3,
+    "pronostics": 33,
+    "justes": 23,
+    "avis": 27,
+    "tenus": 21
+   },
+   "lecons": {
+    "confirmees": [],
+    "retirees": [],
+    "enAttente": 0,
+    "confirmeesEnTout": 0,
+    "retireesEnTout": 0
+   },
+   "sources": {
+    "matchs": "magasin FotMob, table du jour J (étape 17)",
+    "classementLuLe": "2026-10-18T18:43:01.119Z",
+    "styleDu": "2026-10-19",
+    "absentsLusLe": "2026-10-18T18:44:07.475Z"
+   }
+  },
+  "fotmob-10277": {
+   "club": "fotmob-10277",
+   "nom": "São Paulo",
+   "league": "Brazil Série A",
+   "majLe": "2026-10-22T23:29:53.757Z",
+   "jusquAu": "2026-10-18",
+   "signature": "2026-10-18|207|30|22",
+   "classement": {
+    "league": "Brazil Série A",
+    "saison": 2026,
+    "table": null,
+    "luLe": "2026-10-18T18:43:01.119Z",
+    "rang": 8,
+    "equipes": 20,
+    "points": 42,
+    "joues": 31,
+    "v": 12,
+    "n": 6,
+    "d": 13,
+    "bp": 36,
+    "bc": 35,
+    "zone": "Copa Sudamericana",
+    "premier": {
+     "id": "fotmob-10283",
+     "nom": "Palmeiras",
+     "points": 66
+    },
+    "second": null
+   },
+   "series": [
+    {
+     "cle": "sansVictoire-ext",
+     "n": 12,
+     "texte": "sans victoire à l’extérieur en championnat depuis 12 matchs"
+    }
+   ],
+   "forme": {
+    "derniers": [
+     {
+      "date": "2026-10-18",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-10276",
+      "adversaire": "Vasco da Gama",
+      "lieu": "dom",
+      "bp": 1,
+      "bc": 0,
+      "issue": "V"
+     },
+     {
+      "date": "2026-10-11",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-7733",
+      "adversaire": "Vitória",
+      "lieu": "dom",
+      "bp": 2,
+      "bc": 1,
+      "issue": "V"
+     },
+     {
+      "date": "2026-10-08",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-9781",
+      "adversaire": "Cruzeiro",
+      "lieu": "ext",
+      "bp": 0,
+      "bc": 2,
+      "issue": "D"
+     },
+     {
+      "date": "2026-10-02",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-8514",
+      "adversaire": "Santos",
+      "lieu": "dom",
+      "bp": 1,
+      "bc": 2,
+      "issue": "D"
+     },
+     {
+      "date": "2026-09-20",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-8702",
+      "adversaire": "Internacional",
+      "lieu": "dom",
+      "bp": 1,
+      "bc": 0,
+      "issue": "V"
+     },
+     {
+      "date": "2026-09-16",
+      "league": "Copa Sudamericana",
+      "coupe": true,
+      "adversaireId": "fotmob-10077",
+      "adversaire": "Boca Juniors",
+      "lieu": "dom",
+      "bp": 1,
+      "bc": 1,
+      "issue": "N"
+     },
+     {
+      "date": "2026-09-12",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-10283",
+      "adversaire": "Palmeiras",
+      "lieu": "ext",
+      "bp": 0,
+      "bc": 2,
+      "issue": "D"
+     },
+     {
+      "date": "2026-09-09",
+      "league": "Copa Sudamericana",
+      "coupe": true,
+      "adversaireId": "fotmob-10077",
+      "adversaire": "Boca Juniors",
+      "lieu": "ext",
+      "bp": 0,
+      "bc": 1,
+      "issue": "D"
+     },
+     {
+      "date": "2026-09-05",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-10272",
+      "adversaire": "Atlético-MG",
+      "lieu": "dom",
+      "bp": 2,
+      "bc": 0,
+      "issue": "V"
+     },
+     {
+      "date": "2026-08-29",
+      "league": "Brazil Série A",
+      "coupe": false,
+      "adversaireId": "fotmob-109705",
+      "adversaire": "RB Bragantino",
+      "lieu": "dom",
+      "bp": 2,
+      "bc": 1,
+      "issue": "V"
+     }
+    ],
+    "bilan": {
+     "matchs": 10,
+     "v": 5,
+     "n": 1,
+     "d": 4,
+     "bp": 10,
+     "bc": 10,
+     "points": 16
+    },
+    "tendance": {
+     "cinq": 1.8,
+     "avant": 1.4
+    },
+    "dernierMatch": "2026-10-18"
+   },
+   "entraineur": {
+    "nom": "Dorival Júnior",
+    "coachId": null,
+    "depuis": "2026-05-20",
+    "auMoins": false,
+    "bilan": {
+     "matchs": 21,
+     "v": 7,
+     "n": 6,
+     "d": 8
+    },
+    "precedent": {
+     "nom": "Mílton Cruz",
+     "dernierMatch": "2026-05-16"
+    },
+    "nouveau": false
+   },
+   "style": {
+    "style": "equilibre",
+    "libelle": "sans style marqué",
+    "second": null,
+    "secondLibelle": null,
+    "provisoire": false,
+    "n": 20,
+    "jour": "2026-10-19"
+   },
+   "absents": {
+    "lusLe": "2026-10-09T21:10:55.292Z",
+    "match": {
+     "date": "2026-10-11",
+     "adversaireId": "fotmob-7733",
+     "adversaire": "Vitória"
+    },
+    "liste": [
+     {
+      "nom": "Rafael",
+      "id": "fotmob-127892",
+      "motif": "injury",
+      "retour": "About 1-2 weeks"
+     },
+     {
+      "nom": "Nicolas",
+      "id": "fotmob-1800648",
+      "motif": "injury",
+      "retour": "Early December 2026"
+     },
+     {
+      "nom": "Lucas Moura",
+      "id": "fotmob-215299",
+      "motif": "injury",
+      "retour": "Late October 2026"
+     },
+     {
+      "nom": "Luciano",
+      "id": "fotmob-399130",
+      "motif": "injury",
+      "retour": "About 1-2 weeks"
+     },
+     {
+      "nom": "Danielzinho",
+      "id": "fotmob-493553",
+      "motif": "injury",
+      "retour": "Late October 2026"
+     },
+     {
+      "nom": "Domingos Duarte",
+      "id": "fotmob-566425",
+      "motif": "injury",
+      "retour": "Out for season"
+     },
+     {
+      "nom": "Aurélio Buta",
+      "id": "fotmob-767716",
+      "motif": "injury",
+      "retour": "Late November 2026"
+     },
+     {
+      "nom": "Iago",
+      "id": "fotmob-845984",
+      "motif": "injury",
+      "retour": "About 1-2 weeks"
+     }
+    ]
+   },
+   "carnet": {
+    "matchs": 2,
+    "pronostics": 22,
+    "justes": 12,
+    "avis": 15,
+    "tenus": 8
+   },
+   "lecons": {
+    "confirmees": [
+     {
+      "id": "cal-2026-10-02-sao-paulo-santos|teamCorners:home",
+      "date": "2026-10-02",
+      "match": {
+       "matchId": "cal-2026-10-02-sao-paulo-santos",
+       "home": "São Paulo",
+       "away": "Santos",
+       "homeId": "fotmob-10277",
+       "awayId": "fotmob-8514",
+       "date": "2026-10-02",
+       "league": "Brazil Série A"
+      },
+      "type": "teamCorners",
+      "market": "Corners — São Paulo",
+      "pick": "São Paulo — Moins de 8.5 corners",
+      "issue": "faux",
+      "sens": -1,
+      "verdict": "confirme",
+      "texte": "Ma moyenne à domicile (7) masquait une grande dispersion. Ne pas afficher une confiance moyenne sur un « moins de » d'une équipe qui peut être menée à domicile.",
+      "ecriteLe": "2026-10-03T15:56:49.671Z",
+      "etat": "confirmee",
+      "confirmeeLe": "2026-10-22",
+      "retireeLe": null,
+      "raison": null,
+      "preuve": {
+       "matchs": 4,
+       "cas": 8,
+       "annonce": 0.7821,
+       "realises": 2,
+       "ecart": 0.2179,
+       "z": 2.31,
+       "base": -0.041710858400899394,
+       "du": "2026-10-03",
+       "au": "2026-10-13"
+      }
+     }
+    ],
+    "retirees": [],
+    "enAttente": 2,
+    "confirmeesEnTout": 1,
+    "retireesEnTout": 0
+   },
+   "sources": {
+    "matchs": "magasin FotMob, table du jour J (étape 17)",
+    "classementLuLe": "2026-10-18T18:43:01.119Z",
+    "styleDu": "2026-10-19",
+    "absentsLusLe": "2026-10-09T21:10:55.292Z"
+   }
+  },
+  "fotmob-10004": {
+   "club": "fotmob-10004",
+   "nom": "Millwall",
+   "league": "Championship",
+   "majLe": "2026-10-22T23:29:53.757Z",
+   "jusquAu": "2026-10-17",
+   "signature": "2026-10-17|165|30|22",
+   "classement": {
+    "league": "Championship",
+    "saison": 2026,
+    "table": null,
+    "luLe": "2026-10-18T18:42:55.533Z",
+    "rang": 12,
+    "equipes": 24,
+    "points": 15,
+    "joues": 11,
+    "v": 4,
+    "n": 3,
+    "d": 4,
+    "bp": 18,
+    "bc": 18,
+    "zone": null,
+    "premier": {
+     "id": "fotmob-10003",
+     "nom": "Swansea City",
+     "points": 23
+    },
+    "second": null
+   },
+   "series": [],
+   "forme": {
+    "derniers": [
+     {
+      "date": "2026-10-17",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-8430",
+      "adversaire": "Lincoln City",
+      "lieu": "dom",
+      "bp": 2,
+      "bc": 2,
+      "issue": "N"
+     },
+     {
+      "date": "2026-10-13",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-10003",
+      "adversaire": "Swansea City",
+      "lieu": "dom",
+      "bp": 0,
+      "bc": 1,
+      "issue": "D"
+     },
+     {
+      "date": "2026-10-10",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-8411",
+      "adversaire": "Preston North End",
+      "lieu": "ext",
+      "bp": 1,
+      "bc": 0,
+      "issue": "V"
+     },
+     {
+      "date": "2026-09-19",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-8654",
+      "adversaire": "West Ham United",
+      "lieu": "dom",
+      "bp": 2,
+      "bc": 2,
+      "issue": "N"
+     },
+     {
+      "date": "2026-09-15",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-8549",
+      "adversaire": "Middlesbrough",
+      "lieu": "ext",
+      "bp": 2,
+      "bc": 2,
+      "issue": "N"
+     },
+     {
+      "date": "2026-09-12",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-8655",
+      "adversaire": "Blackburn Rovers",
+      "lieu": "ext",
+      "bp": 1,
+      "bc": 3,
+      "issue": "D"
+     },
+     {
+      "date": "2026-09-08",
+      "league": "EFL Cup",
+      "coupe": true,
+      "adversaireId": "fotmob-10261",
+      "adversaire": "Newcastle United",
+      "lieu": "dom",
+      "bp": 0,
+      "bc": 1,
+      "issue": "D"
+     },
+     {
+      "date": "2026-09-05",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-8559",
+      "adversaire": "Bolton Wanderers",
+      "lieu": "dom",
+      "bp": 4,
+      "bc": 0,
+      "issue": "V"
+     },
+     {
+      "date": "2026-09-02",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-9841",
+      "adversaire": "Wrexham",
+      "lieu": "dom",
+      "bp": 0,
+      "bc": 3,
+      "issue": "D"
+     },
+     {
+      "date": "2026-08-29",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-8466",
+      "adversaire": "Southampton",
+      "lieu": "ext",
+      "bp": 1,
+      "bc": 5,
+      "issue": "D"
+     }
+    ],
+    "bilan": {
+     "matchs": 10,
+     "v": 2,
+     "n": 3,
+     "d": 5,
+     "bp": 13,
+     "bc": 19,
+     "points": 9
+    },
+    "tendance": {
+     "cinq": 1.2,
+     "avant": 0.6
+    },
+    "dernierMatch": "2026-10-17"
+   },
+   "entraineur": {
+    "nom": "Alex Neil",
+    "coachId": null,
+    "depuis": "2025-01-01",
+    "auMoins": false,
+    "bilan": {
+     "matchs": 58,
+     "v": 27,
+     "n": 15,
+     "d": 16
+    },
+    "precedent": {
+     "nom": "David Livermore",
+     "dernierMatch": "2024-12-29"
+    },
+    "nouveau": false
+   },
+   "style": {
+    "style": "direct",
+    "libelle": "jeu direct",
+    "second": "cpa",
+    "secondLibelle": "coups de pied arrêtés",
+    "provisoire": false,
+    "n": 20,
+    "jour": "2026-10-19"
+   },
+   "absents": {
+    "lusLe": "2026-10-15T20:24:04.134Z",
+    "match": {
+     "date": "2026-10-17",
+     "adversaireId": "fotmob-8430",
+     "adversaire": "Lincoln City"
+    },
+    "liste": [
+     {
+      "nom": "Josh Coburn",
+      "id": "fotmob-1113907",
+      "motif": "injury",
+      "retour": "Doubtful"
+     },
+     {
+      "nom": "Mathis Servais",
+      "id": "fotmob-1215608",
+      "motif": "injury",
+      "retour": "Late October 2026"
+     },
+     {
+      "nom": "Mihailo Ivanović",
+      "id": "fotmob-1439831",
+      "motif": "injury",
+      "retour": "Doubtful"
+     },
+     {
+      "nom": "Casper de Norre",
+      "id": "fotmob-688991",
+      "motif": "injury",
+      "retour": "Doubtful"
+     },
+     {
+      "nom": "Lukas Bornhøft Jensen",
+      "id": "fotmob-937535",
+      "motif": "injury",
+      "retour": "Late October 2026"
+     }
+    ]
+   },
+   "carnet": {
+    "matchs": 2,
+    "pronostics": 22,
+    "justes": 12,
+    "avis": 15,
+    "tenus": 9
+   },
+   "lecons": {
+    "confirmees": [],
+    "retirees": [],
+    "enAttente": 0,
+    "confirmeesEnTout": 0,
+    "retireesEnTout": 0
+   },
+   "sources": {
+    "matchs": "magasin FotMob, table du jour J (étape 17)",
+    "classementLuLe": "2026-10-18T18:42:55.533Z",
+    "styleDu": "2026-10-19",
+    "absentsLusLe": "2026-10-15T20:24:04.134Z"
+   }
+  },
+  "fotmob-10003": {
+   "club": "fotmob-10003",
+   "nom": "Swansea City",
+   "league": "Championship",
+   "majLe": "2026-10-22T23:29:53.757Z",
+   "jusquAu": "2026-10-17",
+   "signature": "2026-10-17|162|30|22",
+   "classement": {
+    "league": "Championship",
+    "saison": 2026,
+    "table": null,
+    "luLe": "2026-10-18T18:42:55.533Z",
+    "rang": 1,
+    "equipes": 24,
+    "points": 23,
+    "joues": 11,
+    "v": 7,
+    "n": 2,
+    "d": 2,
+    "bp": 16,
+    "bc": 8,
+    "zone": "Promotion",
+    "premier": null,
+    "second": {
+     "id": "fotmob-8654",
+     "nom": "West Ham United",
+     "points": 22
+    }
+   },
+   "series": [],
+   "forme": {
+    "derniers": [
+     {
+      "date": "2026-10-17",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-8654",
+      "adversaire": "West Ham United",
+      "lieu": "dom",
+      "bp": 0,
+      "bc": 1,
+      "issue": "D"
+     },
+     {
+      "date": "2026-10-13",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-10004",
+      "adversaire": "Millwall",
+      "lieu": "ext",
+      "bp": 1,
+      "bc": 0,
+      "issue": "V"
+     },
+     {
+      "date": "2026-10-10",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-9850",
+      "adversaire": "Norwich City",
+      "lieu": "dom",
+      "bp": 2,
+      "bc": 1,
+      "issue": "V"
+     },
+     {
+      "date": "2026-09-19",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-8430",
+      "adversaire": "Lincoln City",
+      "lieu": "ext",
+      "bp": 2,
+      "bc": 1,
+      "issue": "V"
+     },
+     {
+      "date": "2026-09-12",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-8191",
+      "adversaire": "Burnley",
+      "lieu": "dom",
+      "bp": 3,
+      "bc": 1,
+      "issue": "V"
+     },
+     {
+      "date": "2026-09-08",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-8466",
+      "adversaire": "Southampton",
+      "lieu": "ext",
+      "bp": 1,
+      "bc": 3,
+      "issue": "D"
+     },
+     {
+      "date": "2026-09-05",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-9841",
+      "adversaire": "Wrexham",
+      "lieu": "dom",
+      "bp": 0,
+      "bc": 0,
+      "issue": "N"
+     },
+     {
+      "date": "2026-09-01",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-9817",
+      "adversaire": "Watford",
+      "lieu": "dom",
+      "bp": 2,
+      "bc": 0,
+      "issue": "V"
+     },
+     {
+      "date": "2026-08-29",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-10170",
+      "adversaire": "Derby County",
+      "lieu": "ext",
+      "bp": 3,
+      "bc": 0,
+      "issue": "V"
+     },
+     {
+      "date": "2026-08-22",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-8657",
+      "adversaire": "Sheffield United",
+      "lieu": "dom",
+      "bp": 0,
+      "bc": 0,
+      "issue": "N"
+     }
+    ],
+    "bilan": {
+     "matchs": 10,
+     "v": 6,
+     "n": 2,
+     "d": 2,
+     "bp": 14,
+     "bc": 7,
+     "points": 20
+    },
+    "tendance": {
+     "cinq": 2.4,
+     "avant": 1.6
+    },
+    "dernierMatch": "2026-10-17"
+   },
+   "entraineur": {
+    "nom": "Vitor Matos",
+    "coachId": null,
+    "depuis": "2025-11-25",
+    "auMoins": false,
+    "bilan": {
+     "matchs": 43,
+     "v": 21,
+     "n": 8,
+     "d": 14
+    },
+    "precedent": {
+     "nom": "Darren O'Dea",
+     "dernierMatch": "2025-11-22"
+    },
+    "nouveau": false
+   },
+   "style": {
+    "style": "equilibre",
+    "libelle": "sans style marqué",
+    "second": null,
+    "secondLibelle": null,
+    "provisoire": false,
+    "n": 20,
+    "jour": "2026-10-19"
+   },
+   "absents": {
+    "lusLe": "2026-10-12T22:15:50.039Z",
+    "match": {
+     "date": "2026-10-13",
+     "adversaireId": "fotmob-10004",
+     "adversaire": "Millwall"
+    },
+    "liste": [
+     {
+      "nom": "Cameron Burgess",
+      "id": "fotmob-564842",
+      "motif": "injury",
+      "retour": "Out for season"
+     },
+     {
+      "nom": "Stephen Eustaquio",
+      "id": "fotmob-816223",
+      "motif": "injury",
+      "retour": "Late October 2026"
+     },
+     {
+      "nom": "Adam Idah",
+      "id": "fotmob-846009",
+      "motif": "injury",
+      "retour": "Doubtful"
+     },
+     {
+      "nom": "Josh Key",
+      "id": "fotmob-877763",
+      "motif": "injury",
+      "retour": "Late October 2026"
+     }
+    ]
+   },
+   "carnet": {
+    "matchs": 2,
+    "pronostics": 22,
+    "justes": 16,
+    "avis": 14,
+    "tenus": 11
+   },
+   "lecons": {
+    "confirmees": [],
+    "retirees": [],
+    "enAttente": 0,
+    "confirmeesEnTout": 0,
+    "retireesEnTout": 0
+   },
+   "sources": {
+    "matchs": "magasin FotMob, table du jour J (étape 17)",
+    "classementLuLe": "2026-10-18T18:42:55.533Z",
+    "styleDu": "2026-10-19",
+    "absentsLusLe": "2026-10-12T22:15:50.039Z"
+   }
+  },
+  "fotmob-8191": {
+   "club": "fotmob-8191",
+   "nom": "Burnley",
+   "league": "EPL",
+   "majLe": "2026-10-22T23:29:53.757Z",
+   "jusquAu": "2026-10-16",
+   "signature": "2026-10-16|147|30|22",
+   "classement": null,
+   "series": [
+    {
+     "cle": "marque",
+     "n": 9,
+     "texte": "a marqué lors de ses 9 derniers matchs"
+    },
+    {
+     "cle": "sansVictoire-dom",
+     "n": 21,
+     "texte": "sans victoire à domicile en championnat depuis 21 matchs"
+    }
+   ],
+   "forme": {
+    "derniers": [
+     {
+      "date": "2026-10-16",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-8602",
+      "adversaire": "Wolverhampton Wanderers",
+      "lieu": "dom",
+      "bp": 1,
+      "bc": 2,
+      "issue": "D"
+     },
+     {
+      "date": "2026-10-13",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-8451",
+      "adversaire": "Charlton Athletic",
+      "lieu": "dom",
+      "bp": 2,
+      "bc": 2,
+      "issue": "N"
+     },
+     {
+      "date": "2026-10-10",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-9817",
+      "adversaire": "Watford",
+      "lieu": "ext",
+      "bp": 4,
+      "bc": 0,
+      "issue": "V"
+     },
+     {
+      "date": "2026-09-19",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-10170",
+      "adversaire": "Derby County",
+      "lieu": "dom",
+      "bp": 1,
+      "bc": 1,
+      "issue": "N"
+     },
+     {
+      "date": "2026-09-12",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-10003",
+      "adversaire": "Swansea City",
+      "lieu": "ext",
+      "bp": 1,
+      "bc": 3,
+      "issue": "D"
+     },
+     {
+      "date": "2026-09-08",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-9841",
+      "adversaire": "Wrexham",
+      "lieu": "ext",
+      "bp": 1,
+      "bc": 1,
+      "issue": "N"
+     },
+     {
+      "date": "2026-09-05",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-8427",
+      "adversaire": "Bristol City",
+      "lieu": "dom",
+      "bp": 1,
+      "bc": 2,
+      "issue": "D"
+     },
+     {
+      "date": "2026-09-02",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-8549",
+      "adversaire": "Middlesbrough",
+      "lieu": "dom",
+      "bp": 1,
+      "bc": 1,
+      "issue": "N"
+     },
+     {
+      "date": "2026-08-29",
+      "league": "Championship",
+      "coupe": false,
+      "adversaireId": "fotmob-9850",
+      "adversaire": "Norwich City",
+      "lieu": "ext",
+      "bp": 1,
+      "bc": 4,
+      "issue": "D"
+     },
+     {
+      "date": "2026-08-26",
+      "league": "EFL Cup",
+      "coupe": true,
+      "adversaireId": "fotmob-8484",
+      "adversaire": "Bradford City",
+      "lieu": "ext",
+      "bp": 0,
+      "bc": 0,
+      "issue": "N"
+     }
+    ],
+    "bilan": {
+     "matchs": 10,
+     "v": 1,
+     "n": 5,
+     "d": 4,
+     "bp": 13,
+     "bc": 16,
+     "points": 8
+    },
+    "tendance": {
+     "cinq": 1,
+     "avant": 0.6
+    },
+    "dernierMatch": "2026-10-16"
+   },
+   "entraineur": {
+    "nom": "Nicky Hayen",
+    "coachId": null,
+    "depuis": "2026-08-08",
+    "auMoins": false,
+    "bilan": {
+     "matchs": 13,
+     "v": 1,
+     "n": 7,
+     "d": 5
+    },
+    "precedent": {
+     "nom": "Mike Jackson",
+     "dernierMatch": "2026-05-24"
+    },
+    "nouveau": true
+   },
+   "style": {
+    "style": "equilibre",
+    "libelle": "sans style marqué",
+    "second": null,
+    "secondLibelle": null,
+    "provisoire": false,
+    "n": 20,
+    "jour": "2026-10-19"
+   },
+   "absents": {
+    "lusLe": "2026-10-15T19:53:56.668Z",
+    "match": {
+     "date": "2026-10-16",
+     "adversaireId": "fotmob-8602",
+     "adversaire": "Wolverhampton Wanderers"
+    },
+    "liste": [
+     {
+      "nom": "Zeki Amdouni",
+      "id": "fotmob-1067168",
+      "motif": "injury",
+      "retour": "Doubtful"
+     },
+     {
+      "nom": "Ashley Barnes",
+      "id": "fotmob-107280",
+      "motif": "injury",
+      "retour": "Doubtful"
+     },
+     {
+      "nom": "Hannibal Mejbri",
+      "id": "fotmob-1113785",
+      "motif": "injury",
+      "retour": "Early January 2027"
+     },
+     {
+      "nom": "Bashir Humphreys",
+      "id": "fotmob-1238058",
+      "motif": "injury",
+      "retour": "Doubtful"
+     },
+     {
+      "nom": "Josh Cullen",
+      "id": "fotmob-623716",
+      "motif": "injury",
+      "retour": "Doubtful"
+     },
+     {
+      "nom": "Anel Ahmedhodžić",
+      "id": "fotmob-793820",
+      "motif": "injury",
+      "retour": "Doubtful"
+     },
+     {
+      "nom": "Jordan Beyer",
+      "id": "fotmob-861447",
+      "motif": "injury",
+      "retour": "Late October 2026"
+     }
+    ]
+   },
+   "carnet": {
+    "matchs": 2,
+    "pronostics": 22,
+    "justes": 15,
+    "avis": 16,
+    "tenus": 10
+   },
+   "lecons": {
+    "confirmees": [],
+    "retirees": [],
+    "enAttente": 0,
+    "confirmeesEnTout": 0,
+    "retireesEnTout": 0
+   },
+   "sources": {
+    "matchs": "magasin FotMob, table du jour J (étape 17)",
+    "classementLuLe": null,
+    "styleDu": "2026-10-19",
+    "absentsLusLe": "2026-10-15T19:53:56.668Z"
+   }
+  },
+  "fotmob-10252": {
+   "club": "fotmob-10252",
+   "nom": "Aston Villa",
+   "league": "EPL",
+   "majLe": "2026-10-22T23:29:53.757Z",
+   "jusquAu": "2026-10-17",
+   "signature": "2026-10-17|179|30|22",
+   "classement": {
+    "league": "EPL",
+    "saison": 2026,
+    "table": null,
+    "luLe": "2026-10-18T18:42:54.873Z",
+    "rang": 12,
+    "equipes": 20,
+    "points": 8,
+    "joues": 7,
+    "v": 2,
+    "n": 2,
+    "d": 3,
+    "bp": 7,
+    "bc": 11,
+    "zone": null,
+    "premier": {
+     "id": "fotmob-8456",
+     "nom": "Manchester City",
+     "points": 21
+    },
+    "second": null
+   },
+   "series": [
+    {
+     "cle": "invaincu",
+     "n": 5,
+     "texte": "invaincu depuis 5 matchs"
+    },
+    {
+     "cle": "marque",
+     "n": 7,
+     "texte": "a marqué lors de ses 7 derniers matchs"
+    },
+    {
+     "cle": "propre",
+     "n": 2,
+     "texte": "n’a pas encaissé de but depuis 2 matchs"
+    }
+   ],
+   "forme": {
+    "derniers": [
+     {
+      "date": "2026-10-17",
+      "league": "EPL",
+      "coupe": false,
+      "adversaireId": "fotmob-10261",
+      "adversaire": "Newcastle United",
+      "lieu": "ext",
+      "bp": 1,
+      "bc": 0,
+      "issue": "V"
+     },
+     {
+      "date": "2026-10-14",
+      "league": "UEFA Champions League",
+      "coupe": true,
+      "adversaireId": "fotmob-8695",
+      "adversaire": "Fenerbahçe",
+      "lieu": "dom",
+      "bp": 6,
+      "bc": 0,
+      "issue": "V"
+     },
+     {
+      "date": "2026-10-10",
+      "league": "EPL",
+      "coupe": false,
+      "adversaireId": "fotmob-9937",
+      "adversaire": "Brentford",
+      "lieu": "dom",
+      "bp": 2,
+      "bc": 2,
+      "issue": "N"
+     },
+     {
+      "date": "2026-09-19",
+      "league": "EPL",
+      "coupe": false,
+      "adversaireId": "fotmob-8586",
+      "adversaire": "Tottenham Hotspur",
+      "lieu": "ext",
+      "bp": 3,
+      "bc": 2,
+      "issue": "V"
+     },
+     {
+      "date": "2026-09-16",
+      "league": "EFL Cup",
+      "coupe": true,
+      "adversaireId": "fotmob-8669",
+      "adversaire": "Coventry City",
+      "lieu": "ext",
+      "bp": 3,
+      "bc": 1,
+      "issue": "V"
+     },
+     {
+      "date": "2026-09-12",
+      "league": "EPL",
+      "coupe": false,
+      "adversaireId": "fotmob-10203",
+      "adversaire": "Nottingham Forest",
+      "lieu": "dom",
+      "bp": 1,
+      "bc": 2,
+      "issue": "D"
+     },
+     {
+      "date": "2026-09-08",
+      "league": "UEFA Champions League",
+      "coupe": true,
+      "adversaireId": "fotmob-8342",
+      "adversaire": "Club Brugge",
+      "lieu": "ext",
+      "bp": 3,
+      "bc": 2,
+      "issue": "V"
+     },
+     {
+      "date": "2026-09-05",
+      "league": "EPL",
+      "coupe": false,
+      "adversaireId": "fotmob-8667",
+      "adversaire": "Hull City",
+      "lieu": "ext",
+      "bp": 0,
+      "bc": 0,
+      "issue": "N"
+     },
+     {
+      "date": "2026-08-31",
+      "league": "EPL",
+      "coupe": false,
+      "adversaireId": "fotmob-9825",
+      "adversaire": "Arsenal",
+      "lieu": "dom",
+      "bp": 0,
+      "bc": 1,
+      "issue": "D"
+     },
+     {
+      "date": "2026-08-23",
+      "league": "EPL",
+      "coupe": false,
+      "adversaireId": "fotmob-10204",
+      "adversaire": "Brighton & Hove Albion",
+      "lieu": "ext",
+      "bp": 0,
+      "bc": 4,
+      "issue": "D"
+     }
+    ],
+    "bilan": {
+     "matchs": 10,
+     "v": 5,
+     "n": 2,
+     "d": 3,
+     "bp": 19,
+     "bc": 14,
+     "points": 17
+    },
+    "tendance": {
+     "cinq": 2.6,
+     "avant": 0.8
+    },
+    "dernierMatch": "2026-10-17"
+   },
+   "entraineur": {
+    "nom": "Unai Emery",
+    "coachId": null,
+    "depuis": "2025-01-29",
+    "auMoins": false,
+    "bilan": {
+     "matchs": 61,
+     "v": 38,
+     "n": 8,
+     "d": 15
+    },
+    "precedent": {
+     "nom": "Pako Ayestarán",
+     "dernierMatch": "2025-01-26"
+    },
+    "nouveau": false
+   },
+   "style": {
+    "style": "equilibre",
+    "libelle": "sans style marqué",
+    "second": null,
+    "secondLibelle": null,
+    "provisoire": false,
+    "n": 20,
+    "jour": "2026-10-19"
+   },
+   "absents": {
+    "lusLe": "2026-10-15T19:33:36.279Z",
+    "match": {
+     "date": "2026-10-17",
+     "adversaireId": "fotmob-10261",
+     "adversaire": "Newcastle United"
+    },
+    "liste": [
+     {
+      "nom": "Matteo Ruggeri",
+      "id": "fotmob-1051097",
+      "motif": "injury",
+      "retour": "Late October 2026"
+     },
+     {
+      "nom": "Amadou Onana",
+      "id": "fotmob-1185748",
+      "motif": "injury",
+      "retour": "Mid April 2027"
+     },
+     {
+      "nom": "George Hemmings",
+      "id": "fotmob-1607333",
+      "motif": "injury",
+      "retour": "A few days"
+     },
+     {
+      "nom": "Modou Kéba Cissé",
+      "id": "fotmob-1714552",
+      "motif": "injury",
+      "retour": "Late October 2026"
+     },
+     {
+      "nom": "Ian Maatsen",
+      "id": "fotmob-966026",
+      "motif": "injury",
+      "retour": "Late October 2026"
+     }
+    ]
+   },
+   "carnet": {
+    "matchs": 2,
+    "pronostics": 22,
+    "justes": 11,
+    "avis": 17,
+    "tenus": 10
+   },
+   "lecons": {
+    "confirmees": [],
+    "retirees": [],
+    "enAttente": 0,
+    "confirmeesEnTout": 0,
+    "retireesEnTout": 0
+   },
+   "sources": {
+    "matchs": "magasin FotMob, table du jour J (étape 17)",
+    "classementLuLe": "2026-10-18T18:42:54.873Z",
+    "styleDu": "2026-10-19",
+    "absentsLusLe": "2026-10-15T19:33:36.279Z"
+   }
+  }
+ },
+ "championnats": {
+  "Brazil Série A": {
+   "league": "Brazil Série A",
+   "majLe": "2026-10-22T23:29:53.757Z",
+   "jusquAu": "2026-10-18",
+   "matchs": 399,
+   "signature": "2026-10-18|399|240|240",
+   "profil": {
+    "saison": "2026",
+    "matchs": 304,
+    "buts": 2.6546052631578947,
+    "victoiresDom": 0.48026315789473684,
+    "nuls": 0.27631578947368424,
+    "victoiresExt": 0.24342105263157895,
+    "plus25": 0.5098684210526315,
+    "deuxMarquent": 0.5888157894736842,
+    "corners": 10.388157894736842,
+    "toutes": {
+     "matchs": 5621,
+     "buts": 2.4009962640099625,
+     "victoiresDom": 0.48496708770681374,
+     "nuls": 0.2688133784024195,
+     "victoiresExt": 0.24621953389076676,
+     "plus25": 0.43711083437110837,
+     "deuxMarquent": 0.48318804483188044,
+     "corners": 10.254507628294036
+    }
+   },
+   "tete": [
+    {
+     "id": "fotmob-10283",
+     "nom": "Palmeiras",
+     "points": 66,
+     "joues": 31
+    },
+    {
+     "id": "fotmob-9770",
+     "nom": "Flamengo",
+     "points": 64,
+     "joues": 30
+    },
+    {
+     "id": "fotmob-10273",
+     "nom": "Athletico Paranaense",
+     "points": 53,
+     "joues": 31
+    }
+   ],
+   "table": {
+    "nom": "Série A",
+    "saison": 2026,
+    "luLe": "2026-10-18T18:43:01.119Z"
+   },
+   "carnet": {
+    "avis": 188,
+    "tenus": 135,
+    "types": [
+     {
+      "type": "teamCorners",
+      "label": "Corners d'une équipe",
+      "avis": 30,
+      "tenus": 18
+     },
+     {
+      "type": "teamShotsOnTarget",
+      "label": "Tirs cadrés d'une équipe",
+      "avis": 28,
+      "tenus": 18
+     },
+     {
+      "type": "teamShots",
+      "label": "Tirs d'une équipe",
+      "avis": 27,
+      "tenus": 22
+     },
+     {
+      "type": "teamGoals",
+      "label": "Buts d'une équipe",
+      "avis": 26,
+      "tenus": 22
+     }
+    ],
+    "typesEnTout": 10
+   },
+   "lecons": {
+    "confirmees": [
+     {
+      "id": "cal-2026-10-03-atletico-mg-rb-bragantino|teamCorners:away",
+      "date": "2026-10-03",
+      "match": {
+       "matchId": "cal-2026-10-03-atletico-mg-rb-bragantino",
+       "home": "Atlético-MG",
+       "away": "RB Bragantino",
+       "homeId": "fotmob-10272",
+       "awayId": "fotmob-109705",
+       "date": "2026-10-03",
+       "league": "Brazil Série A"
+      },
+      "type": "teamCorners",
+      "market": "Corners — RB Bragantino",
+      "pick": "RB Bragantino — Moins de 8.5 corners",
+      "issue": "faux",
+      "sens": -1,
+      "verdict": "confirme",
+      "texte": "Pour le visiteur mené, les moyennes de corners sous-estiment l'effet du scénario : éviter les plafonds de corners/tirs sur une équipe qui devra courir après le score.",
+      "ecriteLe": "2026-10-04T09:48:50.987Z",
+      "etat": "confirmee",
+      "confirmeeLe": "2026-10-22",
+      "retireeLe": null,
+      "raison": null,
+      "preuve": {
+       "matchs": 14,
+       "cas": 28,
+       "annonce": 0.8042368550313025,
+       "realises": 17,
+       "ecart": 0.155383139487546,
+       "z": 2.076318492157059,
+       "base": -0.041710858400899394,
+       "du": "2026-10-07",
+       "au": "2026-10-13"
+      }
+     },
+     {
+      "id": "cal-2026-10-02-sao-paulo-santos|teamCorners:home",
+      "date": "2026-10-02",
+      "match": {
+       "matchId": "cal-2026-10-02-sao-paulo-santos",
+       "home": "São Paulo",
+       "away": "Santos",
+       "homeId": "fotmob-10277",
+       "awayId": "fotmob-8514",
+       "date": "2026-10-02",
+       "league": "Brazil Série A"
+      },
+      "type": "teamCorners",
+      "market": "Corners — São Paulo",
+      "pick": "São Paulo — Moins de 8.5 corners",
+      "issue": "faux",
+      "sens": -1,
+      "verdict": "confirme",
+      "texte": "Ma moyenne à domicile (7) masquait une grande dispersion. Ne pas afficher une confiance moyenne sur un « moins de » d'une équipe qui peut être menée à domicile.",
+      "ecriteLe": "2026-10-03T15:56:49.671Z",
+      "etat": "confirmee",
+      "confirmeeLe": "2026-10-22",
+      "retireeLe": null,
+      "raison": null,
+      "preuve": {
+       "matchs": 15,
+       "cas": 30,
+       "annonce": 0.8057212468452448,
+       "realises": 18,
+       "ecart": 0.1640103884443455,
+       "z": 2.2750419897776455,
+       "base": -0.041710858400899394,
+       "du": "2026-10-03",
+       "au": "2026-10-13"
+      }
+     }
+    ],
+    "retirees": [
+     {
+      "id": "cal-2026-10-03-atletico-mg-rb-bragantino|teamCorners:home",
+      "date": "2026-10-03",
+      "match": {
+       "matchId": "cal-2026-10-03-atletico-mg-rb-bragantino",
+       "home": "Atlético-MG",
+       "away": "RB Bragantino",
+       "homeId": "fotmob-10272",
+       "awayId": "fotmob-109705",
+       "date": "2026-10-03",
+       "league": "Brazil Série A"
+      },
+      "type": "teamCorners",
+      "market": "Corners — Atlético-MG",
+      "pick": "Atlético-MG — Plus de 2.5 corners",
+      "issue": "juste",
+      "sens": 1,
+      "verdict": "confirme",
+      "texte": "Une ligne très basse reste sûre même dans un scénario défavorable ; à garder.",
+      "ecriteLe": "2026-10-04T09:48:50.987Z",
+      "etat": "dementie",
+      "confirmeeLe": null,
+      "retireeLe": "2026-10-22",
+      "raison": "démentie par les matchs suivants",
+      "preuve": {
+       "matchs": 14,
+       "cas": 28,
+       "annonce": 0.8042368550313025,
+       "realises": 17,
+       "ecart": -0.155383139487546,
+       "z": -2.076318492157059,
+       "base": -0.041710858400899394,
+       "du": "2026-10-07",
+       "au": "2026-10-13"
+      }
+     },
+     {
+      "id": "cal-2026-10-03-atletico-mg-rb-bragantino|teamShots:home",
+      "date": "2026-10-03",
+      "match": {
+       "matchId": "cal-2026-10-03-atletico-mg-rb-bragantino",
+       "home": "Atlético-MG",
+       "away": "RB Bragantino",
+       "homeId": "fotmob-10272",
+       "awayId": "fotmob-109705",
+       "date": "2026-10-03",
+       "league": "Brazil Série A"
+      },
+      "type": "teamShots",
+      "market": "Tirs — Atlético-MG",
+      "pick": "Atlético-MG — Plus de 10.5 tirs",
+      "issue": "faux",
+      "sens": -1,
+      "verdict": "confirme",
+      "texte": "Ne pas se fier à la moyenne à domicile (18,3) sur un échantillon de 6 matchs ; un but précoce fait baisser le volume d'une équipe qui défend l'avance, même en confiance forte.",
+      "ecriteLe": "2026-10-04T09:48:50.987Z",
+      "etat": "dementie",
+      "confirmeeLe": null,
+      "retireeLe": "2026-10-22",
+      "raison": "démentie par les matchs suivants",
+      "preuve": {
+       "matchs": 14,
+       "cas": 28,
+       "annonce": 0.8265102097942861,
+       "realises": 25,
+       "ecart": -0.0835390738877095,
+       "z": -1.167580706878663,
+       "base": -0.017192140824852837,
+       "du": "2026-10-07",
+       "au": "2026-10-13"
+      }
+     },
+     {
+      "id": "cal-2026-10-03-atletico-mg-rb-bragantino|teamShots:away",
+      "date": "2026-10-03",
+      "match": {
+       "matchId": "cal-2026-10-03-atletico-mg-rb-bragantino",
+       "home": "Atlético-MG",
+       "away": "RB Bragantino",
+       "homeId": "fotmob-10272",
+       "awayId": "fotmob-109705",
+       "date": "2026-10-03",
+       "league": "Brazil Série A"
+      },
+      "type": "teamShots",
+      "market": "Tirs — RB Bragantino",
+      "pick": "RB Bragantino — Moins de 19.5 tirs",
+      "issue": "faux",
+      "sens": -1,
+      "verdict": "confirme",
+      "texte": "Pour une équipe menée, la moyenne de 17,7 tirs n'est pas un plafond ; l'ajouter à la liste des risques de scénario.",
+      "ecriteLe": "2026-10-04T09:48:50.987Z",
+      "etat": "dementie",
+      "confirmeeLe": null,
+      "retireeLe": "2026-10-22",
+      "raison": "démentie par les matchs suivants",
+      "preuve": {
+       "matchs": 14,
+       "cas": 28,
+       "annonce": 0.8265102097942861,
+       "realises": 25,
+       "ecart": -0.0835390738877095,
+       "z": -1.167580706878663,
+       "base": -0.017192140824852837,
+       "du": "2026-10-07",
+       "au": "2026-10-13"
+      }
+     },
+     {
+      "id": "cal-2026-10-03-atletico-mg-rb-bragantino|totalShotsOnTarget",
+      "date": "2026-10-03",
+      "match": {
+       "matchId": "cal-2026-10-03-atletico-mg-rb-bragantino",
+       "home": "Atlético-MG",
+       "away": "RB Bragantino",
+       "homeId": "fotmob-10272",
+       "awayId": "fotmob-109705",
+       "date": "2026-10-03",
+       "league": "Brazil Série A"
+      },
+      "type": "totalShotsOnTarget",
+      "market": "Total tirs cadrés",
+      "pick": "Plus de 6.5 tirs cadrés",
+      "issue": "juste",
+      "sens": 1,
+      "verdict": "confirme",
+      "texte": "Marché confirmé ; à garder, tirs cadrés combinés des deux équipes stables.",
+      "ecriteLe": "2026-10-04T09:48:50.987Z",
+      "etat": "dementie",
+      "confirmeeLe": null,
+      "retireeLe": "2026-10-22",
+      "raison": "démentie par les matchs suivants",
+      "preuve": {
+       "matchs": 14,
+       "cas": 14,
+       "annonce": 0.8063794750247447,
+       "realises": 8,
+       "ecart": -0.19910507012527393,
+       "z": -1.887299311152191,
+       "base": -0.035845833470899216,
+       "du": "2026-10-07",
+       "au": "2026-10-13"
+      }
+     },
+     {
+      "id": "cal-2026-10-03-atletico-mg-rb-bragantino|teamShotsOnTarget:home",
+      "date": "2026-10-03",
+      "match": {
+       "matchId": "cal-2026-10-03-atletico-mg-rb-bragantino",
+       "home": "Atlético-MG",
+       "away": "RB Bragantino",
+       "homeId": "fotmob-10272",
+       "awayId": "fotmob-109705",
+       "date": "2026-10-03",
+       "league": "Brazil Série A"
+      },
+      "type": "teamShotsOnTarget",
+      "market": "Tirs cadrés — Atlético-MG",
+      "pick": "Atlético-MG — Moins de 7.5 tirs cadrés",
+      "issue": "juste",
+      "sens": 1,
+      "verdict": "confirme",
+      "texte": "Plafond sur les cadrés correct ; à garder, même si la raison (repli) n'était pas celle attendue.",
+      "ecriteLe": "2026-10-04T09:48:50.987Z",
+      "etat": "dementie",
+      "confirmeeLe": null,
+      "retireeLe": "2026-10-22",
+      "raison": "démentie par les matchs suivants",
+      "preuve": {
+       "matchs": 14,
+       "cas": 28,
+       "annonce": 0.8008210194071897,
+       "realises": 19,
+       "ecart": -0.1183808316298586,
+       "z": -1.5724951993799712,
+       "base": -0.003868759205902814,
+       "du": "2026-10-07",
+       "au": "2026-10-13"
+      }
+     },
+     {
+      "id": "cal-2026-10-03-atletico-mg-rb-bragantino|teamShotsOnTarget:away",
+      "date": "2026-10-03",
+      "match": {
+       "matchId": "cal-2026-10-03-atletico-mg-rb-bragantino",
+       "home": "Atlético-MG",
+       "away": "RB Bragantino",
+       "homeId": "fotmob-10272",
+       "awayId": "fotmob-109705",
+       "date": "2026-10-03",
+       "league": "Brazil Série A"
+      },
+      "type": "teamShotsOnTarget",
+      "market": "Tirs cadrés — RB Bragantino",
+      "pick": "RB Bragantino — Plus de 2.5 tirs cadrés",
+      "issue": "juste",
+      "sens": 1,
+      "verdict": "confirme",
+      "texte": "Confirmé ; la domination visiteuse l'a même largement dépassé : la ligne était prudente.",
+      "ecriteLe": "2026-10-04T09:48:50.987Z",
+      "etat": "dementie",
+      "confirmeeLe": null,
+      "retireeLe": "2026-10-22",
+      "raison": "démentie par les matchs suivants",
+      "preuve": {
+       "matchs": 14,
+       "cas": 28,
+       "annonce": 0.8008210194071897,
+       "realises": 19,
+       "ecart": -0.1183808316298586,
+       "z": -1.5724951993799712,
+       "base": -0.003868759205902814,
+       "du": "2026-10-07",
+       "au": "2026-10-13"
+      }
+     },
+     {
+      "id": "cal-2026-10-02-sao-paulo-santos|result",
+      "date": "2026-10-02",
+      "match": {
+       "matchId": "cal-2026-10-02-sao-paulo-santos",
+       "home": "São Paulo",
+       "away": "Santos",
+       "homeId": "fotmob-10277",
+       "awayId": "fotmob-8514",
+       "date": "2026-10-02",
+       "league": "Brazil Série A"
+      },
+      "type": "result",
+      "market": "Résultat",
+      "pick": "São Paulo gagne",
+      "issue": "faux",
+      "sens": -1,
+      "verdict": "nuance",
+      "texte": "La domination (xG, tirs) ne garantit pas la victoire. Garder la prudence sur un favori à moins de 50 %, surtout face à un attaquant en forme comme Gabigol.",
+      "ecriteLe": "2026-10-03T15:56:49.671Z",
+      "etat": "dementie",
+      "confirmeeLe": null,
+      "retireeLe": "2026-10-22",
+      "raison": "démentie par les matchs suivants",
+      "preuve": {
+       "matchs": 15,
+       "cas": 15,
+       "annonce": 0.5034160642211258,
+       "realises": 10,
+       "ecart": -0.15864550955847073,
+       "z": -1.246243765669628,
+       "base": 0.0046050928870701975,
+       "du": "2026-10-03",
+       "au": "2026-10-13"
+      }
+     },
+     {
+      "id": "cal-2026-10-02-sao-paulo-santos|teamGoals:away",
+      "date": "2026-10-02",
+      "match": {
+       "matchId": "cal-2026-10-02-sao-paulo-santos",
+       "home": "São Paulo",
+       "away": "Santos",
+       "homeId": "fotmob-10277",
+       "awayId": "fotmob-8514",
+       "date": "2026-10-02",
+       "league": "Brazil Série A"
+      },
+      "type": "teamGoals",
+      "market": "Buts — Santos",
+      "pick": "Santos — Moins de 1.5 buts",
+      "issue": "faux",
+      "sens": -1,
+      "verdict": "nuance",
+      "texte": "Pour une équipe avec un buteur de premier plan comme Gabigol (17 buts), un faible volume de tirs ne protège pas du doublé. Garder la nuance.",
+      "ecriteLe": "2026-10-03T15:56:49.671Z",
+      "etat": "dementie",
+      "confirmeeLe": null,
+      "retireeLe": "2026-10-22",
+      "raison": "démentie par les matchs suivants",
+      "preuve": {
+       "matchs": 15,
+       "cas": 30,
+       "annonce": 0.7424435839753641,
+       "realises": 23,
+       "ecart": -0.10383473708166083,
+       "z": -1.3255914767558619,
+       "base": -0.07961165439035826,
+       "du": "2026-10-03",
+       "au": "2026-10-13"
+      }
+     },
+     {
+      "id": "cal-2026-10-02-sao-paulo-santos|teamCorners:away",
+      "date": "2026-10-02",
+      "match": {
+       "matchId": "cal-2026-10-02-sao-paulo-santos",
+       "home": "São Paulo",
+       "away": "Santos",
+       "homeId": "fotmob-10277",
+       "awayId": "fotmob-8514",
+       "date": "2026-10-02",
+       "league": "Brazil Série A"
+      },
+      "type": "teamCorners",
+      "market": "Corners — Santos",
+      "pick": "Santos — Moins de 6.5 corners",
+      "issue": "juste",
+      "sens": 1,
+      "verdict": "confirme",
+      "texte": "Un Santos qui mène et se replie obtient peu de corners. À garder, avec le scénario de match en tête.",
+      "ecriteLe": "2026-10-03T15:56:49.671Z",
+      "etat": "dementie",
+      "confirmeeLe": null,
+      "retireeLe": "2026-10-22",
+      "raison": "démentie par les matchs suivants",
+      "preuve": {
+       "matchs": 15,
+       "cas": 30,
+       "annonce": 0.8057212468452448,
+       "realises": 18,
+       "ecart": -0.1640103884443455,
+       "z": -2.2750419897776455,
+       "base": -0.041710858400899394,
+       "du": "2026-10-03",
+       "au": "2026-10-13"
+      }
+     },
+     {
+      "id": "cal-2026-10-02-sao-paulo-santos|teamShotsOnTarget:away",
+      "date": "2026-10-02",
+      "match": {
+       "matchId": "cal-2026-10-02-sao-paulo-santos",
+       "home": "São Paulo",
+       "away": "Santos",
+       "homeId": "fotmob-10277",
+       "awayId": "fotmob-8514",
+       "date": "2026-10-02",
+       "league": "Brazil Série A"
+      },
+      "type": "teamShotsOnTarget",
+      "market": "Tirs cadrés — Santos",
+      "pick": "Santos — Plus de 1.5 tirs cadrés",
+      "issue": "juste",
+      "sens": 1,
+      "verdict": "confirme",
+      "texte": "Confirmé : avec Gabigol titulaire, Santos cadre assez de tirs. À garder.",
+      "ecriteLe": "2026-10-03T15:56:49.671Z",
+      "etat": "dementie",
+      "confirmeeLe": null,
+      "retireeLe": "2026-10-22",
+      "raison": "démentie par les matchs suivants",
+      "preuve": {
+       "matchs": 15,
+       "cas": 30,
+       "annonce": 0.7995290035427625,
+       "realises": 21,
+       "ecart": -0.09566024433685993,
+       "z": -1.3119980289088085,
+       "base": -0.003868759205902814,
+       "du": "2026-10-03",
+       "au": "2026-10-13"
+      }
+     }
+    ],
+    "enAttente": 18,
+    "confirmeesEnTout": 2,
+    "retireesEnTout": 10
+   },
+   "sources": {
+    "reperes": "repères du championnat (étape 15)",
+    "classementLuLe": "2026-10-18T18:43:01.119Z",
+    "carnetDu": "2026-10-18T19:20:55.570Z"
+   }
+  },
+  "Championship": {
+   "league": "Championship",
+   "majLe": "2026-10-22T23:29:53.757Z",
+   "jusquAu": "2026-10-17",
+   "matchs": 559,
+   "signature": "2026-10-17|559|344|344",
+   "profil": {
+    "saison": "2026-27",
+    "matchs": 131,
+    "buts": 2.885496183206107,
+    "victoiresDom": 0.3969465648854962,
+    "nuls": 0.2748091603053435,
+    "victoiresExt": 0.3282442748091603,
+    "plus25": 0.6183206106870229,
+    "deuxMarquent": 0.6335877862595419,
+    "corners": 10.358778625954198,
+    "toutes": {
+     "matchs": 14483,
+     "buts": 2.5681143409514604,
+     "victoiresDom": 0.4363736794862943,
+     "nuls": 0.27204308499620244,
+     "victoiresExt": 0.29158323551750326,
+     "plus25": 0.4771110957674515,
+     "deuxMarquent": 0.5199199060968032,
+     "corners": 10.728195566604516
+    }
+   },
+   "tete": [
+    {
+     "id": "fotmob-10003",
+     "nom": "Swansea City",
+     "points": 23,
+     "joues": 11
+    },
+    {
+     "id": "fotmob-8654",
+     "nom": "West Ham United",
+     "points": 22,
+     "joues": 11
+    },
+    {
+     "id": "fotmob-8549",
+     "nom": "Middlesbrough",
+     "points": 22,
+     "joues": 11
+    }
+   ],
+   "table": {
+    "nom": "Championship",
+    "saison": 2026,
+    "luLe": "2026-10-18T18:42:55.533Z"
+   },
+   "carnet": {
+    "avis": 259,
+    "tenus": 187,
+    "types": [
+     {
+      "type": "teamCorners",
+      "label": "Corners d'une équipe",
+      "avis": 44,
+      "tenus": 28
+     },
+     {
+      "type": "teamShots",
+      "label": "Tirs d'une équipe",
+      "avis": 42,
+      "tenus": 34
+     },
+     {
+      "type": "teamShotsOnTarget",
+      "label": "Tirs cadrés d'une équipe",
+      "avis": 39,
+      "tenus": 30
+     },
+     {
+      "type": "teamGoals",
+      "label": "Buts d'une équipe",
+      "avis": 38,
+      "tenus": 28
+     }
+    ],
+    "typesEnTout": 10
+   },
+   "lecons": {
+    "confirmees": [
+     {
+      "id": "23b8467e4efdab4833d7e38ccfc06353|teamCorners:home",
+      "date": "2026-10-10",
+      "match": {
+       "matchId": "23b8467e4efdab4833d7e38ccfc06353",
+       "home": "Bolton Wanderers",
+       "away": "Stoke City",
+       "homeId": "fotmob-8559",
+       "awayId": "fotmob-10194",
+       "date": "2026-10-10",
+       "league": "Championship"
+      },
+      "type": "teamCorners",
+      "market": "Corners — Bolton Wanderers",
+      "pick": "Bolton Wanderers — Moins de 7.5 corners",
+      "issue": "faux",
+      "sens": -1,
+      "verdict": "confirme",
+      "texte": "Avec le rouge, la moyenne à domicile (6) ne vaut plus. Un under sur un favori à domicile est risqué, surtout contre un adversaire qui défend bas.",
+      "ecriteLe": "2026-10-11T23:06:09.767Z",
+      "etat": "confirmee",
+      "confirmeeLe": "2026-10-22",
+      "retireeLe": null,
+      "raison": null,
+      "preuve": {
+       "matchs": 12,
+       "cas": 24,
+       "annonce": 0.7965376312783129,
+       "realises": 14,
+       "ecart": 0.1714934395440798,
+       "z": 2.0908993988757656,
+       "base": -0.041710858400899394,
+       "du": "2026-10-13",
+       "au": "2026-10-14"
+      }
+     },
+     {
+      "id": "6e370faecd2f841fc843ec49c641a9e3|teamCorners:away",
+      "date": "2026-10-10",
+      "match": {
+       "matchId": "6e370faecd2f841fc843ec49c641a9e3",
+       "home": "Sheffield United",
+       "away": "Lincoln City",
+       "homeId": "fotmob-8657",
+       "awayId": "fotmob-8430",
+       "date": "2026-10-10",
+       "league": "Championship"
+      },
+      "type": "teamCorners",
+      "market": "Corners — Lincoln City",
+      "pick": "Lincoln City — Plus de 2.5 corners",
+      "issue": "faux",
+      "sens": -1,
+      "verdict": "confirme",
+      "texte": "J'avais bien signalé le risque d'un bloc défensif (2,5 en déplacement) mais je l'ai écarté. Une ligne à 2.5 reste fragile pour une équipe qui obtient peu de corners en déplacement.",
+      "ecriteLe": "2026-10-13T06:44:50.796Z",
+      "etat": "confirmee",
+      "confirmeeLe": "2026-10-22",
+      "retireeLe": null,
+      "raison": null,
+      "preuve": {
+       "matchs": 12,
+       "cas": 24,
+       "annonce": 0.7965376312783129,
+       "realises": 14,
+       "ecart": 0.1714934395440798,
+       "z": 2.0908993988757656,
+       "base": -0.041710858400899394,
+       "du": "2026-10-13",
+       "au": "2026-10-14"
+      }
+     },
+     {
+      "id": "713bc529f655efc0aff6109cb2396c11|teamCorners:home",
+      "date": "2026-10-10",
+      "match": {
+       "matchId": "713bc529f655efc0aff6109cb2396c11",
+       "home": "Blackburn Rovers",
+       "away": "Cardiff City",
+       "homeId": "fotmob-8655",
+       "awayId": "fotmob-8344",
+       "date": "2026-10-10",
+       "league": "Championship"
+      },
+      "type": "teamCorners",
+      "market": "Corners — Blackburn Rovers",
+      "pick": "Blackburn Rovers — Moins de 8.5 corners",
+      "issue": "faux",
+      "sens": -1,
+      "verdict": "confirme",
+      "texte": "La moyenne à domicile sous-estime une équipe qui domine les occasions. Un under de corners d'une équipe qui mène et attaque est risqué.",
+      "ecriteLe": "2026-10-11T23:05:03.623Z",
+      "etat": "confirmee",
+      "confirmeeLe": "2026-10-22",
+      "retireeLe": null,
+      "raison": null,
+      "preuve": {
+       "matchs": 12,
+       "cas": 24,
+       "annonce": 0.7965376312783129,
+       "realises": 14,
+       "ecart": 0.1714934395440798,
+       "z": 2.0908993988757656,
+       "base": -0.041710858400899394,
+       "du": "2026-10-13",
+       "au": "2026-10-14"
+      }
+     },
+     {
+      "id": "92f161645aed415d240b06de729f5015|teamCorners:away",
+      "date": "2026-10-10",
+      "match": {
+       "matchId": "92f161645aed415d240b06de729f5015",
+       "home": "Watford",
+       "away": "Burnley",
+       "homeId": "fotmob-9817",
+       "awayId": "fotmob-8191",
+       "date": "2026-10-10",
+       "league": "Championship"
+      },
+      "type": "teamCorners",
+      "market": "Corners — Burnley",
+      "pick": "Burnley — Plus de 2.5 corners",
+      "issue": "faux",
+      "sens": -1,
+      "verdict": "confirme",
+      "texte": "Pour un favori qui marque tôt, la ligne de corners est fragile : il n'a plus besoin d'attaquer. Se méfier de ces overs quand le scénario est favorable.",
+      "ecriteLe": "2026-10-13T06:56:52.778Z",
+      "etat": "confirmee",
+      "confirmeeLe": "2026-10-22",
+      "retireeLe": null,
+      "raison": null,
+      "preuve": {
+       "matchs": 12,
+       "cas": 24,
+       "annonce": 0.7965376312783129,
+       "realises": 14,
+       "ecart": 0.1714934395440798,
+       "z": 2.0908993988757656,
+       "base": -0.041710858400899394,
+       "du": "2026-10-13",
+       "au": "2026-10-14"
+      }
+     },
+     {
+      "id": "9f2bb19d00e60d89a304ff8c8da85e2c|teamCorners:away",
+      "date": "2026-10-10",
+      "match": {
+       "matchId": "9f2bb19d00e60d89a304ff8c8da85e2c",
+       "home": "Derby County",
+       "away": "Wrexham AFC",
+       "homeId": "fotmob-10170",
+       "awayId": "fotmob-9841",
+       "date": "2026-10-10",
+       "league": "Championship"
+      },
+      "type": "teamCorners",
+      "market": "Corners — Wrexham AFC",
+      "pick": "Wrexham AFC — Moins de 6.5 corners",
+      "issue": "faux",
+      "sens": -1,
+      "verdict": "confirme",
+      "texte": "Une équipe qui court après le score voit ses corners dépasser sa moyenne extérieure. Ne pas confirmer un under de corners quand l'équipe est favorite du xG, même avec peu de possession habituelle.",
+      "ecriteLe": "2026-10-13T06:18:45.092Z",
+      "etat": "confirmee",
+      "confirmeeLe": "2026-10-22",
+      "retireeLe": null,
+      "raison": null,
+      "preuve": {
+       "matchs": 12,
+       "cas": 24,
+       "annonce": 0.7965376312783129,
+       "realises": 14,
+       "ecart": 0.1714934395440798,
+       "z": 2.0908993988757656,
+       "base": -0.041710858400899394,
+       "du": "2026-10-13",
+       "au": "2026-10-14"
+      }
+     }
+    ],
+    "retirees": [
+     {
+      "id": "3e8a2baae4566a7c7fcc390dc089e9b8|bothTeamsScore",
+      "date": "2026-10-10",
+      "match": {
+       "matchId": "3e8a2baae4566a7c7fcc390dc089e9b8",
+       "home": "West Bromwich Albion",
+       "away": "Birmingham City",
+       "homeId": "fotmob-8659",
+       "awayId": "fotmob-8658",
+       "date": "2026-10-10",
+       "league": "Championship"
+      },
+      "type": "bothTeamsScore",
+      "market": "Les 2 équipes marquent",
+      "pick": "Non",
+      "issue": "juste",
+      "sens": 1,
+      "verdict": "nuance",
+      "texte": "Ma nuance prudente était correcte. Le Non était soutenu par l'attaque faible de WBA (2 tirs cadrés), mais il restait fragile.",
+      "ecriteLe": "2026-10-13T06:57:39.384Z",
+      "etat": "dementie",
+      "confirmeeLe": null,
+      "retireeLe": "2026-10-22",
+      "raison": "démentie par les matchs suivants",
+      "preuve": {
+       "matchs": 12,
+       "cas": 12,
+       "annonce": 0.6321502999096689,
+       "realises": 4,
+       "ecart": -0.1808432588811365,
+       "z": -1.312612184584062,
+       "base": -0.11797370769519902,
+       "du": "2026-10-13",
+       "au": "2026-10-14"
+      }
+     },
+     {
+      "id": "3e8a2baae4566a7c7fcc390dc089e9b8|teamGoals:home",
+      "date": "2026-10-10",
+      "match": {
+       "matchId": "3e8a2baae4566a7c7fcc390dc089e9b8",
+       "home": "West Bromwich Albion",
+       "away": "Birmingham City",
+       "homeId": "fotmob-8659",
+       "awayId": "fotmob-8658",
+       "date": "2026-10-10",
+       "league": "Championship"
+      },
+      "type": "teamGoals",
+      "market": "Buts — West Bromwich Albion",
+      "pick": "West Bromwich Albion — Moins de 1.5 buts",
+      "issue": "juste",
+      "sens": 1,
+      "verdict": "confirme",
+      "texte": "La méfiance sur une attaque WBA peu efficace est confirmée. Ce type de ligne à moins de 1,5 but est à garder.",
+      "ecriteLe": "2026-10-13T06:57:39.384Z",
+      "etat": "dementie",
+      "confirmeeLe": null,
+      "retireeLe": "2026-10-22",
+      "raison": "démentie par les matchs suivants",
+      "preuve": {
+       "matchs": 12,
+       "cas": 24,
+       "annonce": 0.7513205264274179,
+       "realises": 14,
+       "ecart": -0.0883755387037262,
+       "z": -1.017390957062076,
+       "base": -0.07961165439035826,
+       "du": "2026-10-13",
+       "au": "2026-10-14"
+      }
+     },
+     {
+      "id": "3e8a2baae4566a7c7fcc390dc089e9b8|teamGoals:away",
+      "date": "2026-10-10",
+      "match": {
+       "matchId": "3e8a2baae4566a7c7fcc390dc089e9b8",
+       "home": "West Bromwich Albion",
+       "away": "Birmingham City",
+       "homeId": "fotmob-8659",
+       "awayId": "fotmob-8658",
+       "date": "2026-10-10",
+       "league": "Championship"
+      },
+      "type": "teamGoals",
+      "market": "Buts — Birmingham City",
+      "pick": "Birmingham City — Moins de 1.5 buts",
+      "issue": "juste",
+      "sens": 1,
+      "verdict": "confirme",
+      "texte": "Le marché a passé mais de justesse : le xG de 2,55 montre un risque plus élevé que prévu.",
+      "ecriteLe": "2026-10-13T06:57:39.384Z",
+      "etat": "dementie",
+      "confirmeeLe": null,
+      "retireeLe": "2026-10-22",
+      "raison": "démentie par les matchs suivants",
+      "preuve": {
+       "matchs": 12,
+       "cas": 24,
+       "annonce": 0.7513205264274179,
+       "realises": 14,
+       "ecart": -0.0883755387037262,
+       "z": -1.017390957062076,
+       "base": -0.07961165439035826,
+       "du": "2026-10-13",
+       "au": "2026-10-14"
+      }
+     },
+     {
+      "id": "3e8a2baae4566a7c7fcc390dc089e9b8|teamCorners:home",
+      "date": "2026-10-10",
+      "match": {
+       "matchId": "3e8a2baae4566a7c7fcc390dc089e9b8",
+       "home": "West Bromwich Albion",
+       "away": "Birmingham City",
+       "homeId": "fotmob-8659",
+       "awayId": "fotmob-8658",
+       "date": "2026-10-10",
+       "league": "Championship"
+      },
+      "type": "teamCorners",
+      "market": "Corners — West Bromwich Albion",
+      "pick": "West Bromwich Albion — Moins de 7.5 corners",
+      "issue": "juste",
+      "sens": 1,
+      "verdict": "confirme",
+      "texte": "Le marché est passé de peu. Le volume de corners de WBA était sous-estimé, la marge était plus fine que prévu.",
+      "ecriteLe": "2026-10-13T06:57:39.384Z",
+      "etat": "dementie",
+      "confirmeeLe": null,
+      "retireeLe": "2026-10-22",
+      "raison": "démentie par les matchs suivants",
+      "preuve": {
+       "matchs": 12,
+       "cas": 24,
+       "annonce": 0.7965376312783129,
+       "realises": 14,
+       "ecart": -0.1714934395440798,
+       "z": -2.0908993988757656,
+       "base": -0.041710858400899394,
+       "du": "2026-10-13",
+       "au": "2026-10-14"
+      }
+     },
+     {
+      "id": "3e8a2baae4566a7c7fcc390dc089e9b8|teamCorners:away",
+      "date": "2026-10-10",
+      "match": {
+       "matchId": "3e8a2baae4566a7c7fcc390dc089e9b8",
+       "home": "West Bromwich Albion",
+       "away": "Birmingham City",
+       "homeId": "fotmob-8659",
+       "awayId": "fotmob-8658",
+       "date": "2026-10-10",
+       "league": "Championship"
+      },
+      "type": "teamCorners",
+      "market": "Corners — Birmingham City",
+      "pick": "Birmingham City — Plus de 2.5 corners",
+      "issue": "juste",
+      "sens": 1,
+      "verdict": "confirme",
+      "texte": "Cette ligne basse est sûre et mérite d'être gardée.",
+      "ecriteLe": "2026-10-13T06:57:39.384Z",
+      "etat": "dementie",
+      "confirmeeLe": null,
+      "retireeLe": "2026-10-22",
+      "raison": "démentie par les matchs suivants",
+      "preuve": {
+       "matchs": 12,
+       "cas": 24,
+       "annonce": 0.7965376312783129,
+       "realises": 14,
+       "ecart": -0.1714934395440798,
+       "z": -2.0908993988757656,
+       "base": -0.041710858400899394,
+       "du": "2026-10-13",
+       "au": "2026-10-14"
+      }
+     },
+     {
+      "id": "4e129a33a3e42b361294e9dd393c9513|teamGoals:home",
+      "date": "2026-10-10",
+      "match": {
+       "matchId": "4e129a33a3e42b361294e9dd393c9513",
+       "home": "Charlton Athletic",
+       "away": "Bristol City",
+       "homeId": "fotmob-8451",
+       "awayId": "fotmob-8427",
+       "date": "2026-10-10",
+       "league": "Championship"
+      },
+      "type": "teamGoals",
+      "market": "Buts — Charlton Athletic",
+      "pick": "Charlton Athletic — Moins de 1.5 buts",
+      "issue": "juste",
+      "sens": 1,
+      "verdict": "confirme",
+      "texte": "Confirmé : cette attaque dépasse rarement un but. Garder cette lecture, même avec 1,78 xG.",
+      "ecriteLe": "2026-10-11T23:10:07.577Z",
+      "etat": "dementie",
+      "confirmeeLe": null,
+      "retireeLe": "2026-10-22",
+      "raison": "démentie par les matchs suivants",
+      "preuve": {
+       "matchs": 12,
+       "cas": 24,
+       "annonce": 0.7513205264274179,
+       "realises": 14,
+       "ecart": -0.0883755387037262,
+       "z": -1.017390957062076,
+       "base": -0.07961165439035826,
+       "du": "2026-10-13",
+       "au": "2026-10-14"
+      }
+     },
+     {
+      "id": "4e129a33a3e42b361294e9dd393c9513|totalCorners",
+      "date": "2026-10-10",
+      "match": {
+       "matchId": "4e129a33a3e42b361294e9dd393c9513",
+       "home": "Charlton Athletic",
+       "away": "Bristol City",
+       "homeId": "fotmob-8451",
+       "awayId": "fotmob-8427",
+       "date": "2026-10-10",
+       "league": "Championship"
+      },
+      "type": "totalCorners",
+      "market": "Total corners",
+      "pick": "Moins de 14.5 corners",
+      "issue": "juste",
+      "sens": 1,
+      "verdict": "confirme",
+      "texte": "Garder : une marge d'environ 3 corners sur le total attendu a de nouveau tenu.",
+      "ecriteLe": "2026-10-11T23:10:07.577Z",
+      "etat": "dementie",
+      "confirmeeLe": null,
+      "retireeLe": "2026-10-22",
+      "raison": "démentie par les matchs suivants",
+      "preuve": {
+       "matchs": 12,
+       "cas": 12,
+       "annonce": 0.8126467696379193,
+       "realises": 8,
+       "ecart": -0.1314903934049828,
+       "z": -1.1679369246820979,
+       "base": -0.014489709566269835,
+       "du": "2026-10-13",
+       "au": "2026-10-14"
+      }
+     },
+     {
+      "id": "4e129a33a3e42b361294e9dd393c9513|teamCorners:home",
+      "date": "2026-10-10",
+      "match": {
+       "matchId": "4e129a33a3e42b361294e9dd393c9513",
+       "home": "Charlton Athletic",
+       "away": "Bristol City",
+       "homeId": "fotmob-8451",
+       "awayId": "fotmob-8427",
+       "date": "2026-10-10",
+       "league": "Championship"
+      },
+      "type": "teamCorners",
+      "market": "Corners — Charlton Athletic",
+      "pick": "Charlton Athletic — Moins de 8.5 corners",
+      "issue": "juste",
+      "sens": 1,
+      "verdict": "confirme",
+      "texte": "Garder : la ligne est large par rapport à la moyenne de 4,4.",
+      "ecriteLe": "2026-10-11T23:10:07.577Z",
+      "etat": "dementie",
+      "confirmeeLe": null,
+      "retireeLe": "2026-10-22",
+      "raison": "démentie par les matchs suivants",
+      "preuve": {
+       "matchs": 12,
+       "cas": 24,
+       "annonce": 0.7965376312783129,
+       "realises": 14,
+       "ecart": -0.1714934395440798,
+       "z": -2.0908993988757656,
+       "base": -0.041710858400899394,
+       "du": "2026-10-13",
+       "au": "2026-10-14"
+      }
+     },
+     {
+      "id": "4e129a33a3e42b361294e9dd393c9513|teamCorners:away",
+      "date": "2026-10-10",
+      "match": {
+       "matchId": "4e129a33a3e42b361294e9dd393c9513",
+       "home": "Charlton Athletic",
+       "away": "Bristol City",
+       "homeId": "fotmob-8451",
+       "awayId": "fotmob-8427",
+       "date": "2026-10-10",
+       "league": "Championship"
+      },
+      "type": "teamCorners",
+      "market": "Corners — Bristol City",
+      "pick": "Bristol City — Moins de 7.5 corners",
+      "issue": "juste",
+      "sens": 1,
+      "verdict": "confirme",
+      "texte": "Garder : la marge d'environ 2 corners suffit sur ce type de ligne.",
+      "ecriteLe": "2026-10-11T23:10:07.577Z",
+      "etat": "dementie",
+      "confirmeeLe": null,
+      "retireeLe": "2026-10-22",
+      "raison": "démentie par les matchs suivants",
+      "preuve": {
+       "matchs": 12,
+       "cas": 24,
+       "annonce": 0.7965376312783129,
+       "realises": 14,
+       "ecart": -0.1714934395440798,
+       "z": -2.0908993988757656,
+       "base": -0.041710858400899394,
+       "du": "2026-10-13",
+       "au": "2026-10-14"
+      }
+     },
+     {
+      "id": "34156ace068fbe5b24944791e752b43d|resultAndTotal",
+      "date": "2026-10-10",
+      "match": {
+       "matchId": "34156ace068fbe5b24944791e752b43d",
+       "home": "Swansea City",
+       "away": "Norwich City",
+       "homeId": "fotmob-10003",
+       "awayId": "fotmob-9850",
+       "date": "2026-10-10",
+       "league": "Championship"
+      },
+      "type": "resultAndTotal",
+      "market": "Résultat + Total buts",
+      "pick": "Swansea City & Moins de 3.5 buts",
+      "issue": "juste",
+      "sens": 1,
+      "verdict": "nuance",
+      "texte": "Le volet buts était acquis, tout reposait sur le résultat. Le combiné suit le 1N2 et n'apporte pas d'information propre.",
+      "ecriteLe": "2026-10-13T06:49:29.894Z",
+      "etat": "dementie",
+      "confirmeeLe": null,
+      "retireeLe": "2026-10-22",
+      "raison": "démentie par les matchs suivants",
+      "preuve": {
+       "matchs": 12,
+       "cas": 12,
+       "annonce": 0.4532797924590381,
+       "realises": 2,
+       "ecart": -0.21375955013845224,
+       "z": -1.5149924077427142,
+       "base": -0.07285357565391912,
+       "du": "2026-10-13",
+       "au": "2026-10-14"
+      }
+     }
+    ],
+    "enAttente": 115,
+    "confirmeesEnTout": 5,
+    "retireesEnTout": 44
+   },
+   "sources": {
+    "reperes": "repères du championnat (étape 15)",
+    "classementLuLe": "2026-10-18T18:42:55.533Z",
+    "carnetDu": "2026-10-18T19:20:55.570Z"
+   }
+  },
+  "EPL": {
+   "league": "EPL",
+   "majLe": "2026-10-22T23:29:53.757Z",
+   "jusquAu": "2026-10-18",
+   "matchs": 369,
+   "signature": "2026-10-18|369|195|195",
+   "profil": {
+    "saison": "2026-27",
+    "matchs": 69,
+    "buts": 2.8840579710144927,
+    "victoiresDom": 0.391304347826087,
+    "nuls": 0.2898550724637681,
+    "victoiresExt": 0.3188405797101449,
+    "plus25": 0.5362318840579711,
+    "deuxMarquent": 0.5217391304347826,
+    "corners": 9.405797101449275,
+    "toutes": {
+     "matchs": 9949,
+     "buts": 2.7207759573826515,
+     "victoiresDom": 0.4562267564579355,
+     "nuls": 0.24836667001708715,
+     "victoiresExt": 0.2954065735249774,
+     "plus25": 0.5149261232284652,
+     "deuxMarquent": 0.5124133078701377,
+     "corners": 10.76289074278822
+    }
+   },
+   "tete": [
+    {
+     "id": "fotmob-8456",
+     "nom": "Manchester City",
+     "points": 21,
+     "joues": 7
+    },
+    {
+     "id": "fotmob-9825",
+     "nom": "Arsenal",
+     "points": 18,
+     "joues": 7
+    },
+    {
+     "id": "fotmob-10204",
+     "nom": "Brighton & Hove Albion",
+     "points": 16,
+     "joues": 7
+    }
+   ],
+   "table": {
+    "nom": "Premier League",
+    "saison": 2026,
+    "luLe": "2026-10-18T18:42:54.873Z"
+   },
+   "carnet": {
+    "avis": 146,
+    "tenus": 114,
+    "types": [
+     {
+      "type": "teamCorners",
+      "label": "Corners d'une équipe",
+      "avis": 25,
+      "tenus": 21
+     },
+     {
+      "type": "teamShots",
+      "label": "Tirs d'une équipe",
+      "avis": 22,
+      "tenus": 18
+     },
+     {
+      "type": "teamGoals",
+      "label": "Buts d'une équipe",
+      "avis": 21,
+      "tenus": 15
+     },
+     {
+      "type": "teamShotsOnTarget",
+      "label": "Tirs cadrés d'une équipe",
+      "avis": 21,
+      "tenus": 17
+     }
+    ],
+    "typesEnTout": 9
+   },
+   "lecons": {
+    "confirmees": [],
+    "retirees": [],
+    "enAttente": 0,
+    "confirmeesEnTout": 0,
+    "retireesEnTout": 0
+   },
+   "sources": {
+    "reperes": "repères du championnat (étape 15)",
+    "classementLuLe": "2026-10-18T18:42:54.873Z",
+    "carnetDu": "2026-10-18T19:20:55.570Z"
+   }
+  }
+ },
+ "lecons": {},
+ "bilan": {
+  "le": "2026-10-22T23:29:53.757Z",
+  "mode": "complet",
+  "clubs": {
+   "actifs": 1936,
+   "refaits": 1936,
+   "gardes": 0
+  },
+  "championnats": {
+   "actifs": 72,
+   "refaits": 72
+  },
+  "sourcesDesMatchs": {
+   "team_day": 1936,
+   "matches": 0
+  },
+  "lecons": {
+   "ecrites": 5579,
+   "rattachees": 5552,
+   "sansCas": 27,
+   "jugees": 13706,
+   "nouvellesConfirmees": 20,
+   "nouvellesRetirees": 115,
+   "confirmees": 20,
+   "retirees": 115
+  },
+  "analyses": 445,
+  "cas": 5554,
+  "calculMs": 2694
+ },
+ "fabrication": "Extrait réel de ai-dossiers.json du bac (23/10/2026) ; deux leçons ramenées au niveau d’un club (São Paulo : confirmée ; Atlético-MG : démentie) pour essayer les deux portées. Fabriqué par scratchpad/etape45/ecriture/fabriquer-fixture-dossiers.mjs."
+}

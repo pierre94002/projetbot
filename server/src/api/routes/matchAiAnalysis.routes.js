@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { asyncHandler } from '../middlewares/asyncHandler.js';
 import { getForMatch, getForFixture, getAll, getStatus, postPreMatch, postPostMatch } from '../controllers/matchAiAnalysis.controller.js';
 import { getBulletins } from '../controllers/bulletins.controller.js';
-import { getDossiers, getApercu } from '../controllers/aiDossiers.controller.js';
+import { getDossiers, getApercu, getResume } from '../controllers/aiDossiers.controller.js';
 
 const router = Router();
 
@@ -12,6 +12,8 @@ router.get('/bulletins', asyncHandler(getBulletins));
 // Étape 44 du plan : la mémoire de l'IA, les dossiers des équipes et des championnats (lecture seule ; écrits par l'actualisation).
 router.get('/dossiers', asyncHandler(getDossiers));
 router.get('/dossiers/apercu', asyncHandler(getApercu));
+// Étape 45 du plan : l'index des dossiers (les championnats, les équipes, toutes les leçons) pour la page « Bulletin » — lecture seule.
+router.get('/dossiers/resume', asyncHandler(getResume));
 router.get('/', asyncHandler(getAll));
 router.get('/fixture', asyncHandler(getForFixture));
 router.get('/match/:matchId', asyncHandler(getForMatch));

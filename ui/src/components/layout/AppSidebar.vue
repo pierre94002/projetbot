@@ -14,13 +14,14 @@ const NAV_ITEMS = [
   { to: '/bookmakers', section: 'bets', nav: 'bookmakers', label: 'Bookmakers', hint: 'Justesse, marges, bon moment', icon: 'euro' },
   { to: '/historique-moteur', section: 'history', label: 'Historique moteur', hint: 'Pronostics et bilans', icon: 'history' },
   { to: '/sante-moteur', section: 'history', nav: 'sante-moteur', label: 'Santé du moteur', hint: 'Feux, note, à vérifier', icon: 'activity' },
+  { to: '/bulletin', section: 'history', nav: 'bulletin', label: 'Bulletin', hint: 'Texte du jour, fiabilité IA', icon: 'sparkles' },
   { to: '/feuille-de-route', section: 'roadmap', label: 'Feuille de route', hint: 'Plan, étapes, notes', icon: 'flag' },
   { to: '/reglages', section: 'settings', label: 'Réglages', hint: 'Moteur, données, IA', icon: 'sliders' }
 ];
 
 const route = useRoute();
 const sectionActive = computed(() => route.meta?.section ?? 'matches');
-// Deux entrées partagent la couleur « history » (Historique moteur, Santé du moteur), deux autres la couleur « bets » (Mes paris,
+// Trois entrées partagent la couleur « history » (Historique moteur, Santé du moteur, Bulletin), deux autres la couleur « bets » (Mes paris,
 // Bookmakers) : `nav` désigne celle de la page.
 const entreeActive = computed(() => route.meta?.nav ?? sectionActive.value);
 const estActive = (item) => (item.nav ? entreeActive.value === item.nav : entreeActive.value === item.section);

@@ -4,6 +4,7 @@ import { matchStatsApi } from '@/services/matchStatsApi.js';
 import { matchAiAnalysisApi } from '@/services/matchAiAnalysisApi.js';
 import { useMatchAiAnalysisStore } from '@/stores/matchAiAnalysisStore.js';
 import MatchAiReviewPanel from '@/components/analysis/MatchAiReviewPanel.vue';
+import KeyMomentsList from '@/components/analysis/KeyMomentsList.vue';
 import AppCard from '@/components/common/AppCard.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
 import BackButton from '@/components/common/BackButton.vue';
@@ -44,6 +45,8 @@ const TAB_ICONS = { resume: 'list', events: 'clock', lineups: 'users', stats: 'b
 const aiStore = useMatchAiAnalysisStore();
 const ai = ref({ loading: false, error: null, entry: null, predictions: [], experience: [], loadedFor: null });
 const aiRunning = ref(false);
+// L'instant où l'analyse et l'expérience de l'IA ont été lues (ISO) : l'heure de leur relevé, dite sous le tableau de l'expérience (étape 45).
+const aiLueLe = ref(null);
 
 async function loadAi({ force = false } = {}) {
   const match = entry.value;
@@ -59,6 +62,7 @@ async function loadAi({ force = false } = {}) {
       aiStore.fetchStatus().catch(() => false)
     ]);
     ai.value = { loading: false, error: null, entry: r.entry ?? null, predictions: r.predictions ?? [], experience: r.experience ?? [], loadedFor: cle };
+    aiLueLe.value = new Date().toISOString();
   } catch (e) {
     ai.value = { loading: false, error: e.message, entry: null, predictions: [], experience: [], loadedFor: null };
   }
@@ -193,8 +197,18 @@ const topStats = computed(() => TEAM_STAT_GROUPS[0]);
         </button>
       </nav>
 
-      <!-- RÉSUMÉ : les meilleures statistiques à gauche, le cadre de la rencontre à droite. -->
+      <!-- RÉSUMÉ : les moments clés en tête (étape 45, tirés du déroulé), puis les meilleures statistiques à gauche et le cadre de la rencontre à droite. -->
       <div v-if="tab === 'resume'" class="match-detail__grid cm-stagger">
+        <KeyMomentsList
+          class="match-detail__moments"
+          :match-id="matchId"
+          :home-name="entry.homeName"
+          :away-name="entry.awayName"
+          :league="entry.league ?? null"
+          :home-id="entry.homeId ?? null"
+          :away-id="entry.awayId ?? null"
+          :players="entry.players ?? null"
+        />
         <AppCard title="Meilleures statistiques" subtitle="Les neuf chiffres qui résument la rencontre, comme sur la page source." icon="barChart">
           <MatchupHeader :home="entry.homeName" :away="entry.awayName" :league="entry.league" :home-id="entry.homeId ?? null" :away-id="entry.awayId ?? null" :size="22" />
           <MatchStatBars :group="topStats" :home="entry.teamStats?.home" :away="entry.teamStats?.away" />
@@ -239,6 +253,7 @@ const topStats = computed(() => TEAM_STAT_GROUPS[0]);
           :experience="ai.experience"
           :connected="aiStore.connected"
           :running="aiRunning"
+          :lue-le="aiLueLe"
           @run-post-match="runPostMatchAi"
         />
       </AppCard>
@@ -430,7 +445,8 @@ const topStats = computed(() => TEAM_STAT_GROUPS[0]);
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .match-detail__stats > :first-child {
+  .match-detail__stats > :first-child,
+  .match-detail__grid > .match-detail__moments {
     grid-column: 1 / -1;
   }
 }

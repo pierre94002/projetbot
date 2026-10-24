@@ -147,8 +147,10 @@ test('l’étape « moteurABlanc » de la passe : après le gel et avant la sauv
   assert.match(job, /const dueMoteurABlanc = \(ctx\) => Boolean\(env\.enregistreurs\?\.enabled\) && \(!faitAujourdhui\(ctx\.derniere\('moteurABlanc'\)\) \|\| Boolean\(ctx\.derniersDetails\?\.\('moteurABlanc'\)\?\.attente\)\);/);
   assert.match(job, /const r = await calculerABlanc\(\{ dansLaPasse: true, \.\.\.options \}\);/);
   const ablanc = fs.readFileSync(path.join(SRC, 'data', 'enregistreurs', 'moteurABlanc.js'), 'utf8');
-  assert.equal((ablanc.match(/await rendreLaMain\(\);/g) ?? []).length, 2, 'la main rendue entre deux matchs et entre deux tranches');
-  assert.match(ablanc, /const rendreLaMain = \(\) => new Promise\(\(fin\) => setImmediate\(fin\)\);/);
+  // Depuis le 24/10/2026 : la main rendue par UNE série de pauses (creerPauses) — entre deux matchs, entre deux tranches,
+  // et bien plus (chaque match en trois morceaux, l'essai jugé) : reactiviteEssai.test.mjs le mesure.
+  assert.match(ablanc, /await pauses\.pause\('fin d’un match'\);/, 'la main rendue entre deux matchs');
+  assert.match(ablanc, /await pauses\.pause\('tranche d’écriture à blanc'\);/, 'la main rendue entre deux tranches');
 });
 
 // ------------------------------------------------------------------- 6. le code

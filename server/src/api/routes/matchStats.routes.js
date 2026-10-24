@@ -28,6 +28,7 @@ import {
   getTeamStyle,
   getStyleDuel
 } from '../controllers/matchStats.controller.js';
+import { getDerouleDuMatch } from '../controllers/derouleMatch.controller.js';
 
 const router = Router();
 
@@ -67,6 +68,8 @@ router.get('/bracket', asyncHandler(getCupBracket));
 router.get('/odds-profile', asyncHandler(getOddsProfile));
 // Avant les routes à paramètre : « preview » n'est pas un identifiant de match.
 router.get('/preview', asyncHandler(getMatchPreview));
+// Étape 45 du plan : le déroulé d'un match joué (les moments clés de sa page), lecture seule. Deux segments : il ne croise pas « /:matchId ».
+router.get('/:matchId/deroule', asyncHandler(getDerouleDuMatch));
 // En dernier : ce motif attrape tout ce qui précède s'il est déclaré avant.
 router.get('/:matchId', asyncHandler(getMatchStats));
 

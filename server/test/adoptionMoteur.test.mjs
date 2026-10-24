@@ -496,7 +496,8 @@ test('le code : routes et branchements ; l’essai jugé dans l’étape de nuit
   assert.match(ctrl, /\{ stamp: false, nom: 'banc-candidate' \}/, 'le banc de la candidate sous le verrou de l’actualisation');
   assert.match(ctrl, /if \(!r\.erreur\) noterLeBancDeLaCandidate\(r, \{ id: candidate\.id, empreinte: candidate\.empreinte \}\);/);
   const blanc = lire('data', 'enregistreurs', 'moteurABlanc.js');
-  assert.match(blanc, /bilan\.essai = await jugerLEssai\(\{ candidate: essaiEnCours, database: base, maintenant, versions, mesure \}\);/);
+  // Depuis le 24/10/2026 : l'essai jugé dans la même série de pauses que toute l'étape (reactiviteEssai.test.mjs).
+  assert.match(blanc, /bilan\.essai = await jugerLEssai\(\{ candidate: essaiEnCours, database: base, maintenant, versions, mesure, pauses \}\);/);
   assert.match(blanc, /registre = \{ \.\.\.mesure, lancements: \[\.\.\.LANCEMENTS, lancementDeLEssai\(candidate, essai\)\] \}/, 'le lancement de l’essai, jamais écrit au registre');
   const job = lire('jobs', 'matchStatsAutoRefresh.js');
   assert.match(job, /if \(r\.figes\.some\(\(f\) => f\.ecrit\)\) \{\n {4}const d = deriveDuMoteur\(\{ database: options\.database, alerte: null \}\);/);

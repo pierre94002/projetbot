@@ -35,6 +35,15 @@
  *
  * Pur : ne lit ni base ni fichier ; `lire` (la rencontre d'un match) vient de
  * l'appelant. Aucun hasard.
+ *
+ * RENDRE LA MAIN (24/10/2026) : la nuit du 23 au 24/10, l'essai jugé tenait le
+ * serveur de Pierre d'un seul tenant — à 800 matchs joués, mesuré sur un essai
+ * fabriqué : ~460 ms pour les lignes de l'essai, ~230 ms pour le témoin du score,
+ * ~140 ms pour les compléments, sans compter la relecture de la table. Les trois
+ * existent donc aussi en GÉNÉRATEURS (…ParEtapes : mêmes calculs, dans le même
+ * ordre, avec des points d'arrêt `yield` entre deux groupes de lignes ou deux
+ * juges ; cf. utils/travailCooperatif.js) ; les fonctions d'avant les exécutent
+ * sans pause (executerSansPause) : mêmes résultats, mêmes appels.
  * -----------------------------------------------------------------------
  */
 
@@ -42,6 +51,12 @@ import { perteLog, PROBA_MIN } from './metrics.js';
 import { issueDuPronostic, revisionsRetenues, jugerLaCase } from '../data/calibration.js';
 import { horizonAtteint } from './horizonEssai.js';
 import { comparer } from './guard.js';
+import { executerSansPause } from '../utils/travailCooperatif.js';
+
+/** Un point d'arrêt tous les tant de groupes (match × marché) ou de matchs : quelques millisecondes de travail chacun. */
+const GROUPES_PAR_ARRET = 100;
+const REVISIONS_PAR_ARRET = 2000;
+const MATCHS_PAR_ARRET = 50;
 
 /** La note du juge pour l'essai : la perte log (metrics.js), celle du banc d'essai et de la note de départ. */
 export const MESURE_DE_L_ESSAI = 'perte-log';
@@ -118,18 +133,27 @@ const lireDistribution = (texte) => {
  * Rend { lignes, ecartees, aVenir: { pronostics, matchs }, parMarche } ; chaque match × marché est exactement
  * une chose : une ligne, écarté (sa raison) ou à venir.
  */
-export function lignesDeLEssai(revisions, { empreinte, versionEnService, lire, aujourdhui }) {
+export function lignesDeLEssai(revisions, options) {
+  return executerSansPause(lignesDeLEssaiParEtapes(revisions, options));
+}
+
+/** LES LIGNES DE L'ESSAI, en générateur (mêmes options, même résultat) : un `yield` tous les GROUPES_PAR_ARRET groupes. */
+export function* lignesDeLEssaiParEtapes(revisions, { empreinte, versionEnService, lire, aujourdhui }) {
   const groupes = new Map();
+  let vues = 0;
   for (const r of revisions ?? []) {
     const cle = `${r.fixtureKey}|${r.marketKey}`;
     if (!groupes.has(cle)) groupes.set(cle, []);
     groupes.get(cle).push(r);
+    if (++vues % REVISIONS_PAR_ARRET === 0) yield 'lignes de l’essai';
   }
   const lignes = [];
   const ecartees = {};
   const aVenir = { pronostics: 0, matchs: new Set() };
   const rencontres = new Map();
+  let k = 0;
   for (const [cle, revs] of groupes) {
+    if (++k % GROUPES_PAR_ARRET === 0) yield 'lignes de l’essai';
     const premiere = revs[0];
     const deCetteCandidate = revs.filter((r) => r.candidateHash === empreinte);
     if (!deCetteCandidate.length) {
@@ -264,13 +288,19 @@ function calibrationRapportee(lignes, variantes) {
  * rapportée seulement) ; la porte de SÛRETÉ de la candidate à K = 1 (plus/moins 2,5, les deux marquent) ; les
  * régimes du modèle de buts (matchs par provenance). `reglement` : lignesDeLEssai.
  */
-export function complementsDeLEssai(reglement, { variantes = 1, graine = 1, tirages = 1000 } = {}) {
+export function complementsDeLEssai(reglement, options = {}) {
+  return executerSansPause(complementsDeLEssaiParEtapes(reglement, options));
+}
+
+/** Les compléments de l'essai, en générateur (mêmes options, même résultat) : un `yield` après chaque juge. */
+export function* complementsDeLEssaiParEtapes(reglement, { variantes = 1, graine = 1, tirages = 1000 } = {}) {
   const parFamille = {};
   const familles = new Map();
   for (const l of reglement.lignes) {
     if (!familles.has(l.marketId)) familles.set(l.marketId, []);
     familles.get(l.marketId).push(l);
   }
+  yield 'compléments de l’essai';
   for (const [famille, ls] of familles) {
     const j = comparer(ls.map((l) => ({ bloc: l.bloc, match: l.match, cle: l.cle, a: l.a, b: l.b })), { mode: 'moyenne', sens: 'min', variantes, graine, tirages });
     const echelle = Number.isFinite(j.a.moyenne) && j.a.moyenne !== 0 ? 100 / Math.abs(j.a.moyenne) : 100;
@@ -284,19 +314,24 @@ export function complementsDeLEssai(reglement, { variantes = 1, graine = 1, tira
       verdict: j.verdict,
       variantes: j.seuil?.variantes ?? variantes
     };
+    yield 'compléments de l’essai';
   }
-  const calib = (cote) => {
+  function* calib(cote) {
     const out = {};
     for (const [famille, ls] of familles) {
       const c = ls.filter((l) => l[cote]).map((l) => ({ fixtureKey: l.bloc, cle: l.cle, p: l[cote].p, realise: l[cote].realise }));
       out[famille] = calibrationRapportee(c, variantes);
+      yield 'compléments de l’essai';
     }
     return out;
-  };
+  }
+  const calibA = yield* calib('calibA');
+  const calibB = yield* calib('calibB');
   const surete = {};
   for (const s of CASES_DE_SURETE) {
     const c = reglement.lignes.filter((l) => s.garder(l) && l.calibB).map((l) => ({ fixtureKey: l.bloc, cle: l.cle, p: l.calibB.p, realise: l.calibB.realise }));
     surete[s.cle] = calibrationRapportee(c, 1);
+    yield 'compléments de l’essai';
   }
   const regimes = {};
   const vus = new Set();
@@ -305,7 +340,7 @@ export function complementsDeLEssai(reglement, { variantes = 1, graine = 1, tira
     vus.add(l.bloc);
     regimes[l.provenance] = (regimes[l.provenance] ?? 0) + 1;
   }
-  return { parFamille, calibration: { a: calib('calibA'), b: calib('calibB') }, surete, regimes, matchsAvecRegime: vus.size };
+  return { parFamille, calibration: { a: calibA, b: calibB }, surete, regimes, matchsAvecRegime: vus.size };
 }
 
 /** La distribution gelée d'un TÉMOIN « score exact » : les 81 cases (« h-a ») et la masse hors de la grille, 6 décimales. */
@@ -321,9 +356,16 @@ export function distributionDuScore(cases, horsGrille = 0) {
  * révision avant le coup d'envoi de chaque match, réglée au score de la 90e minute ; un score hors des 81 cases vaut
  * la probabilité plancher pour les deux versions (compté). Rend { matchs, a, b, exactA, exactB, horsGrille, ecartees }.
  */
-export function temoinDuScore(revisions, { empreinte, versionEnService, lire, aujourdhui }) {
+export function temoinDuScore(revisions, options) {
+  return executerSansPause(temoinDuScoreParEtapes(revisions, options));
+}
+
+/** Le témoin du score exact, en générateur (mêmes options, même résultat) : un `yield` tous les MATCHS_PAR_ARRET matchs. */
+export function* temoinDuScoreParEtapes(revisions, { empreinte, versionEnService, lire, aujourdhui }) {
   const parMatch = new Map();
+  let vues = 0;
   for (const r of revisions ?? []) {
+    if (++vues % REVISIONS_PAR_ARRET === 0) yield 'témoin du score';
     if (r.marketId !== 'scoreExact' || r.candidateHash !== empreinte || r.serviceVersion !== versionEnService) continue;
     if (!parMatch.has(r.fixtureKey)) parMatch.set(r.fixtureKey, []);
     parMatch.get(r.fixtureKey).push(r);
@@ -335,7 +377,9 @@ export function temoinDuScore(revisions, { empreinte, versionEnService, lire, au
   let ea = 0;
   let eb = 0;
   let hors = 0;
+  let k = 0;
   for (const [, revs] of parMatch) {
+    if (++k % MATCHS_PAR_ARRET === 0) yield 'témoin du score';
     const premiere = revs[0];
     if (premiere.date > aujourdhui) continue;
     const rencontre = lire({ fixtureKey: premiere.fixtureKey, homeId: premiere.homeId, awayId: premiere.awayId, date: premiere.date });

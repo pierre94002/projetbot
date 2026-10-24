@@ -1,12 +1,15 @@
 <script setup>
 import { computed } from 'vue';
+import { RouterLink } from 'vue-router';
 import AppButton from '@/components/common/AppButton.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
+import ProvenanceChip from '@/components/common/ProvenanceChip.vue';
 import AiLineupSnapshot from './AiLineupSnapshot.vue';
-import ProbabilityRing from './ProbabilityRing.vue';
+import AiMarketCard from './AiMarketCard.vue';
 import TeamCrest from '@/components/matches/TeamCrest.vue';
 import PickCrest from '@/components/matches/PickCrest.vue';
+import { LIEN_VERS_LA_FIABILITE, PROVENANCE_DE_L_EXPERIENCE, groupesDeMarches, tableauDeLExperience } from '@/utils/bilanApresMatch.js';
 
 /**
  * Onglet « Analyse IA » de la page de match : ce qui était prédit AVANT
@@ -15,17 +18,24 @@ import PickCrest from '@/components/matches/PickCrest.vue';
  * validé ou à corriger, leçons), et l'expérience de l'IA par type de marché.
  *
  * Dessin refait le 02/10/2026 sur le modèle de l'onglet Analyse IA d'avant
- * match (MatchAiAnalysisPanel) : la lecture de l'IA en bandeau, les clés du
- * match en cartes à icône, le 1N2 du moteur en tuiles, chaque marché en carte
- * dépliable (anneau de probabilité, pronostic, avis, issue, leçon), puis
- * l'après-match : score, « validé » en vert / « à corriger » en rouge,
- * synthèse, et l'expérience de l'IA en tableau. Mêmes données qu'avant.
+ * match (MatchAiAnalysisPanel), puis ACHEVÉ à l'étape 45 (24/10/2026) : les
+ * marchés ne sont plus des cartes à part mais la MÊME carte que l'onglet
+ * d'avant-match (AiMarketCard, rangée dans les mêmes familles : Le match,
+ * Buts, Corners, Tirs, Tirs cadrés), à laquelle le bilan ajoute l'issue du
+ * pronostic, l'avis de l'IA tenu ou démenti, ce qui s'est passé et la leçon.
+ * Le tableau de l'expérience de l'IA a son Σ et son ⌀, sa provenance réelle
+ * et l'heure de sa lecture, et renvoie à la page « Bulletin » pour la
+ * fiabilité championnat par championnat. Rien n'est calculé ici hors de la
+ * mise en forme (utils/bilanApresMatch.js, testé sans navigateur) ; aucun
+ * appel, hors le bouton « Lancer l'analyse après-match » qui existait déjà.
  */
 const props = defineProps({
   match: { type: Object, required: true }, // { homeName, awayName, homeGoals, awayGoals }
   entry: { type: Object, default: null }, // analyse IA : { matchId, analysis, postMatchReview?, engineSnapshot, createdAt }
   predictions: { type: Array, default: () => [] }, // pronostics du moteur sur nos marchés
   experience: { type: Array, default: () => [] }, // bilan de l'IA par type de marché (cf. aiMarketExperience)
+  // L'instant où la page a lu l'analyse et l'expérience (ISO) : l'heure de leur relevé, dite sous le tableau de l'expérience.
+  lueLe: { type: String, default: null },
   connected: { type: Boolean, default: false },
   running: { type: Boolean, default: false }
 });
@@ -95,43 +105,10 @@ const bilanMarches = computed(() => {
 const leconsValidees = computed(() => lignes.value.filter((l) => l.revue?.lesson && (l.revue.aiWasRight === true || (l.revue.aiWasRight == null && l.status === 'correct'))));
 const leconsACorriger = computed(() => lignes.value.filter((l) => l.revue?.lesson && (l.revue.aiWasRight === false || (l.revue.aiWasRight == null && l.status === 'incorrect'))));
 
-// Les cinq types de marché, toujours affichés : « — » tant qu'aucun match du
-// type n'a été réglé sous la règle actuelle (cote minimale, cf. markets.js).
-const TYPES_DE_MARCHE = [
-  ['result', 'Résultat'],
-  ['totalGoals', 'Total buts'],
-  ['bothTeamsScore', 'Les 2 équipes marquent'],
-  ['resultAndTotal', 'Résultat + Total buts'],
-  ['teamGoals', "Buts d'une équipe"],
-  ['totalCorners', 'Total corners'],
-  ['teamCorners', "Corners d'une équipe"],
-  ['totalShots', 'Total tirs'],
-  ['teamShots', "Tirs d'une équipe"],
-  ['totalShotsOnTarget', 'Total tirs cadrés'],
-  ['teamShotsOnTarget', "Tirs cadrés d'une équipe"]
-];
-const experienceComplete = computed(() =>
-  TYPES_DE_MARCHE.map(
-    ([marketType, label]) =>
-      props.experience.find((t) => t.marketType === marketType) ?? { marketType, label, matches: 0, engineRight: 0, aiVerdicts: 0, aiRight: 0, byConfidence: {} }
-  )
-);
-
-const VERDICTS = { confirme: 'Confirme', nuance: 'Nuance', contredit: 'Contredit' };
-const avisTenu = (r) => (r?.aiWasRight === true ? 'IA juste' : r?.aiWasRight === false ? 'IA fausse' : null);
-const ratio = (n, d) => (d ? `${n}/${d} (${Math.round((100 * n) / d)} %)` : '—');
-// Au survol : les avis tenus selon la confiance que l'IA avait annoncée.
-const parConfiance = (t) =>
-  ['forte', 'moyenne', 'faible']
-    .filter((c) => t.byConfidence?.[c]?.verdicts)
-    .map((c) => `Confiance ${c} : ${t.byConfidence[c].right}/${t.byConfidence[c].verdicts}`)
-    .join(' · ') || null;
-
-const statut = (s) => (s === 'correct' ? 'Juste' : s === 'incorrect' ? 'Faux' : 'En attente');
 const pct = (x) => `${Math.round(x * 100)} %`;
-// 1,00 ou moins : pas de vraie cote relevée pour ce marché (buts par équipe).
-const cote = (x) => (Number.isFinite(Number(x)) && Number(x) > 1 ? Number(x).toFixed(2) : '—');
 const nombre = (x, d = 2) => (Number.isFinite(Number(x)) ? Number(x).toLocaleString('fr-FR', { minimumFractionDigits: d, maximumFractionDigits: d }) : '—');
+// 1,00 ou moins : pas de vraie cote relevée pour ce marché (buts par équipe) — dit, jamais un tiret.
+const cote = (x) => (Number.isFinite(Number(x)) && Number(x) > 1 ? nombre(x, 2) : 'pas de cote');
 const jour = (iso) => (iso ? new Date(iso).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }) : '');
 
 const decision = computed(() => {
@@ -140,7 +117,7 @@ const decision = computed(() => {
   return s.action === 'RECOMMENDED' ? `mise recommandée${s.stake ? ` : ${s.stake}` : ''}` : 'pas de mise';
 });
 
-// ---- présentation (refonte du 02/10/2026) ---------------------------------
+// ---- présentation ---------------------------------------------------------
 // La probabilité du moteur montrée en anneau sur chaque marché : celle que
 // l'IA a expliquée (enregistrée avec son avis), sinon 1 / cote du pronostic.
 const probaDe = (l) => {
@@ -149,8 +126,21 @@ const probaDe = (l) => {
   return Number(l.odds) > 1 ? Math.round(100 / Number(l.odds)) : null;
 };
 
+// Les marchés rangés par famille, comme l'onglet d'avant-match (étape 45) : la carte de chacun porte son avis d'avant-match
+// (ou « pas d'avis de l'IA » quand elle n'en a donné aucun), l'issue du pronostic et le bilan de l'IA.
+const familles = computed(() =>
+  groupesDeMarches(
+    lignes.value.map((l) => ({ ...l, carte: l.vue ?? { market: l.market, pick: l.pick, verdict: 'aucun', confidence: null, explanation: null, reasoning: null } })),
+    (l) => l.source?.marketId ?? null
+  )
+);
+const coteDe = (l) => (Number.isFinite(Number(l.odds)) ? Number(l.odds) : 0);
+
+// L'expérience de l'IA par type de marché : toujours les onze types, avec Σ et ⌀.
+const xp = computed(() => tableauDeLExperience(props.experience));
+
 // D'un coup d'œil : combien de pronostics du moteur l'IA avait confirmés,
-// nuancés, contredits (barre du bandeau, comme dans l'onglet d'avant-match).
+// nuancés, contredits (barre du bandeau, comme dans l'onglet d'avant match).
 const bilanAvis = computed(() => {
   const b = { confirme: 0, nuance: 0, contredit: 0, total: 0 };
   for (const l of lignes.value) {
@@ -162,7 +152,7 @@ const bilanAvis = computed(() => {
 });
 
 // L'icône et le ton d'une clé du match d'après son thème (même grille que
-// l'onglet Analyse IA d'avant-match).
+// l'onglet Analyse IA d'avant match).
 const sansAccents = (t) =>
   String(t ?? '')
     .normalize('NFD')
@@ -179,9 +169,8 @@ const THEMES = [
 ];
 const themeDe = (facteur) => THEMES.find(([motif]) => motif.test(sansAccents(facteur)))?.[1] ?? { icone: 'info', ton: 'muted' };
 
-// Le ton d'une leçon : vert si l'avis de l'IA a tenu, rouge s'il a été
-// démenti, bleu (information) quand elle n'avait pas donné d'avis.
-const tonLecon = (r) => (r?.aiWasRight === true ? 'is-ok' : r?.aiWasRight === false ? 'is-ko' : '');
+// Où en est le bilan, pour la page et ses tests : pas d'analyse du tout, l'avant-match seul, ou le bilan fait.
+const etatDuBilan = computed(() => (review.value ? 'bilan' : props.entry?.analysis ? 'avant-match-seul' : 'sans-analyse'));
 </script>
 
 <template>
@@ -192,10 +181,10 @@ const tonLecon = (r) => (r?.aiWasRight === true ? 'is-ok' : r?.aiWasRight === fa
     description="L'IA analyse les matchs dans les 48 heures qui précèdent le coup d'envoi ; celui-ci n'a pas été analysé avant d'être joué."
   />
 
-  <div v-else class="match-ai-review">
+  <div v-else class="match-ai-review" data-bloc="bilan-apres-match" :data-etat="etatDuBilan">
     <!-- 1. LA LECTURE DE L'IA AVANT LE MATCH : synthèse, moment, clés, compositions. -->
     <div v-if="entry?.analysis" class="ai-group">
-      <section class="ai-hero">
+      <section class="ai-hero" data-section="lecture">
         <div class="ai-hero__top">
           <span class="ai-hero__brand">
             <span class="ai-hero__logo"><AppIcon name="sparkles" :size="15" /></span>
@@ -228,7 +217,7 @@ const tonLecon = (r) => (r?.aiWasRight === true ? 'is-ok' : r?.aiWasRight === fa
       </section>
 
       <section v-if="entry.analysis.keyFactors?.length" class="ai-section">
-        <h4 class="cm-section-title">Les clés du match</h4>
+        <h4 class="ai-section__title">Les clés du match</h4>
         <div class="ai-factors cm-stagger">
           <article v-for="(f, i) in entry.analysis.keyFactors" :key="i" class="ai-factor" :class="`is-${themeDe(f.factor).ton}`">
             <span class="ai-factor__icon"><AppIcon :name="themeDe(f.factor).icone" :size="17" /></span>
@@ -242,7 +231,7 @@ const tonLecon = (r) => (r?.aiWasRight === true ? 'is-ok' : r?.aiWasRight === fa
       </section>
 
       <section v-if="entry.analysis.lineupImpact || entry.lineupSnapshot" class="ai-section">
-        <h4 class="cm-section-title">Les compositions</h4>
+        <h4 class="ai-section__title">Les compositions</h4>
         <div class="ai-lineups">
           <span class="cm-icon-box is-info"><AppIcon name="users" :size="18" /></span>
           <div class="ai-lineups__body">
@@ -257,10 +246,10 @@ const tonLecon = (r) => (r?.aiWasRight === true ? 'is-ok' : r?.aiWasRight === fa
     </div>
 
     <!-- 2. LE PRONOSTIC DU MATCH PAR LE MOTEUR : le 1N2 en tuiles, les buts attendus, l'écart avec le marché. -->
-    <section v-if="outcomes.length" class="ai-section">
-      <h4 class="cm-section-title">
+    <section v-if="outcomes.length" class="ai-section" data-section="moteur">
+      <h4 class="ai-section__title">
         Pronostic du match (moteur)
-        <span class="cm-section-title__hint">ses probabilités 1N2, tirées de ses cotes justes</span>
+        <span class="ai-section__hint">ses probabilités 1N2, tirées de ses cotes justes</span>
       </h4>
       <div class="ai-outcomes">
         <article v-for="o in outcomes" :key="o.key" class="ai-outcome" :class="{ 'is-favori': o.key === favori?.key }">
@@ -293,59 +282,33 @@ const tonLecon = (r) => (r?.aiWasRight === true ? 'is-ok' : r?.aiWasRight === fa
       </div>
     </section>
 
-    <!-- 3. NOS MARCHÉS, UN PAR UN : pronostic, avis de l'IA, issue ; le détail se déplie. -->
-    <section v-if="lignes.length" class="ai-section">
-      <h4 class="cm-section-title">
-        Nos marchés, un par un
-        <span class="cm-section-title__hint">Pronostic du moteur, avis de l'IA avant le match, puis issue. Cliquez un marché pour le détail.</span>
+    <!-- 3. MARCHÉ PAR MARCHÉ : la carte de l'onglet d'avant-match, rangée dans les mêmes familles, avec l'issue, ce qui s'est passé et la leçon. -->
+    <section v-if="familles.length" class="ai-section" data-section="marches">
+      <h4 class="ai-section__title">
+        Marché par marché
+        <span class="ai-section__hint">le pronostic du moteur, l'avis de l'IA avant le match, puis l'issue et la leçon</span>
       </h4>
-      <div class="ai-markets cm-stagger">
-        <details
-          v-for="l in lignes"
-          :key="l.market"
-          class="ai-mk"
-          :class="[`is-${l.status === 'correct' || l.status === 'incorrect' ? l.status : 'pending'}`, { 'is-static': !l.vue && !l.revue }]"
-        >
-          <summary class="ai-mk__head">
-            <ProbabilityRing :value="probaDe(l)" :size="50" />
-            <span class="ai-mk__what">
-              <span class="ai-mk__market">{{ l.market }}</span>
-              <span class="ai-mk__pick">
-                <PickCrest :item="l.source ?? l.pick" :home="match.homeName" :away="match.awayName" :league="match.league ?? null" :home-id="match.homeId ?? null" :away-id="match.awayId ?? null" :size="18" />{{ l.pick }}
-              </span>
-              <span class="ai-mk__meta">
-                <span class="cm-pill ai-mk__odds cm-numeric" title="Cote du pronostic">{{ cote(l.odds) }}</span>
-                <span v-if="l.action === 'RECOMMENDED'" class="cm-chip is-info ai-mk__advised" title="Mise recommandée par le moteur">conseillé</span>
-              </span>
-            </span>
-            <span class="ai-mk__badges">
-              <span class="ai-mk__status">
-                <AppIcon v-if="l.status === 'correct'" name="check" :size="11" />
-                <AppIcon v-else-if="l.status === 'incorrect'" name="x" :size="11" />
-                {{ statut(l.status) }}
-              </span>
-              <span class="ai-mk__verdict" :class="l.vue ? `is-${l.vue.verdict}` : ''" :title="l.vue ? `Confiance ${l.vue.confidence}` : 'Pas d\'avis de l\'IA sur ce marché'">
-                <AppIcon name="sparkles" :size="10" />{{ l.vue ? VERDICTS[l.vue.verdict] ?? l.vue.verdict : '—' }}
-              </span>
-            </span>
-            <span class="ai-mk__chevron"><AppIcon name="chevronDown" :size="14" /></span>
-          </summary>
-
-          <div v-if="l.vue || l.revue" class="ai-mk__body">
-            <p v-if="l.vue?.explanation" class="ai-mk__text">
-              <strong>Pourquoi {{ l.vue.probability ?? '' }}{{ l.vue.probability != null ? ' %' : 'ce pourcentage' }} : </strong>{{ l.vue.explanation }}
-            </p>
-            <blockquote v-if="l.vue" class="ai-mk__quote" :class="`is-${l.vue.verdict}`">
-              <span class="ai-mk__quote-label">Avant le match ({{ (VERDICTS[l.vue.verdict] ?? l.vue.verdict).toLowerCase() }}, confiance {{ l.vue.confidence }})</span>
-              {{ l.vue.reasoning }}
-            </blockquote>
-            <p v-if="l.revue?.explanation" class="ai-mk__text"><strong>Ce qui s'est passé : </strong>{{ l.revue.explanation }}</p>
-            <blockquote v-if="l.revue?.lesson" class="ai-mk__quote is-lesson" :class="tonLecon(l.revue)">
-              <span class="ai-mk__quote-label">{{ avisTenu(l.revue) ? `${avisTenu(l.revue)} — leçon` : 'Leçon' }}</span>
-              {{ l.revue.lesson }}
-            </blockquote>
-          </div>
-        </details>
+      <div v-for="fam in familles" :key="fam.cle" class="ai-family" :data-famille="fam.cle">
+        <p class="ai-family__title">{{ fam.titre }}</p>
+        <div class="ai-markets cm-stagger">
+          <AiMarketCard
+            v-for="l in fam.lignes"
+            :key="`${fam.cle}-${l.market}`"
+            :view="l.carte"
+            :sans-avis="!l.vue"
+            :probability="probaDe(l)"
+            :prediction="l.source ?? null"
+            :home="match.homeName"
+            :away="match.awayName"
+            :league="match.league ?? null"
+            :home-id="match.homeId ?? null"
+            :away-id="match.awayId ?? null"
+            :revue="l.revue"
+            :statut="l.status"
+            :cote="coteDe(l)"
+            :conseille="l.action === 'RECOMMENDED'"
+          />
+        </div>
       </div>
     </section>
 
@@ -368,7 +331,7 @@ const tonLecon = (r) => (r?.aiWasRight === true ? 'is-ok' : r?.aiWasRight === fa
     </div>
 
     <!-- 5. APRÈS LE MATCH : le score, le favori du moteur, le bilan de nos marchés. -->
-    <section class="ai-hero is-post">
+    <section class="ai-hero is-post" data-section="apres">
       <div class="ai-hero__top">
         <span class="ai-hero__brand">
           <span class="ai-hero__logo"><AppIcon name="check" :size="15" /></span>
@@ -406,13 +369,13 @@ const tonLecon = (r) => (r?.aiWasRight === true ? 'is-ok' : r?.aiWasRight === fa
 
     <!-- 6. LE BILAN DE L'IA : validé en vert, à corriger en rouge, puis sa synthèse. -->
     <template v-if="review">
-      <div class="ai-duo">
+      <div class="ai-duo" data-section="bilan">
         <article class="ai-duo__card is-right">
           <span class="ai-duo__title"><AppIcon name="check" :size="14" />Validé : ce que l'IA avait vu juste</span>
           <p class="ai-duo__text">{{ review.whatWasRight }}</p>
           <ul v-if="leconsValidees.length" class="ai-duo__lessons">
             <li v-for="l in leconsValidees" :key="l.market">
-              <strong><PickCrest :item="l.source ?? l.pick" :home="match.homeName" :away="match.awayName" :league="match.league ?? null" :size="14" />{{ l.market }} ({{ l.pick }}) : </strong>{{ l.revue.lesson }}
+              <strong><PickCrest :item="l.source ?? l.pick" :home="match.homeName" :away="match.awayName" :league="match.league ?? null" :home-id="match.homeId ?? null" :away-id="match.awayId ?? null" :size="14" />{{ l.market }} ({{ l.pick }}) : </strong>{{ l.revue.lesson }}
             </li>
           </ul>
         </article>
@@ -421,16 +384,16 @@ const tonLecon = (r) => (r?.aiWasRight === true ? 'is-ok' : r?.aiWasRight === fa
           <p class="ai-duo__text">{{ review.whatWasMissed }}</p>
           <ul v-if="leconsACorriger.length" class="ai-duo__lessons">
             <li v-for="l in leconsACorriger" :key="l.market">
-              <strong><PickCrest :item="l.source ?? l.pick" :home="match.homeName" :away="match.awayName" :league="match.league ?? null" :size="14" />{{ l.market }} ({{ l.pick }}) : </strong>{{ l.revue.lesson }}
+              <strong><PickCrest :item="l.source ?? l.pick" :home="match.homeName" :away="match.awayName" :league="match.league ?? null" :home-id="match.homeId ?? null" :away-id="match.awayId ?? null" :size="14" />{{ l.market }} ({{ l.pick }}) : </strong>{{ l.revue.lesson }}
             </li>
           </ul>
         </article>
       </div>
 
-      <section class="ai-section">
-        <h4 class="cm-section-title">
+      <section class="ai-section" data-section="synthese">
+        <h4 class="ai-section__title">
           Synthèse
-          <span v-if="review.createdAt" class="cm-section-title__hint">du {{ jour(review.createdAt) }}</span>
+          <span v-if="review.createdAt" class="ai-section__hint">du {{ jour(review.createdAt) }}</span>
         </h4>
         <p class="ai-summary">{{ review.summary }}</p>
         <div class="ai-note is-engine">
@@ -450,7 +413,7 @@ const tonLecon = (r) => (r?.aiWasRight === true ? 'is-ok' : r?.aiWasRight === fa
       </section>
     </template>
 
-    <div v-else-if="entry?.analysis" class="ai-note is-muted">
+    <div v-else-if="entry?.analysis" class="ai-note is-muted" data-section="bilan-a-faire">
       <span class="ai-note__icon"><AppIcon name="sparkles" :size="16" /></span>
       <div class="ai-pending">
         <p class="ai-note__title">Après-match</p>
@@ -463,7 +426,7 @@ const tonLecon = (r) => (r?.aiWasRight === true ? 'is-ok' : r?.aiWasRight === fa
       </div>
     </div>
 
-    <div v-else class="ai-note is-muted">
+    <div v-else class="ai-note is-muted" data-section="sans-analyse">
       <span class="ai-note__icon"><AppIcon name="info" :size="16" /></span>
       <div>
         <p class="ai-note__title">Après-match</p>
@@ -471,18 +434,18 @@ const tonLecon = (r) => (r?.aiWasRight === true ? 'is-ok' : r?.aiWasRight === fa
       </div>
     </div>
 
-    <!-- 7. L'EXPÉRIENCE DE L'IA, PAR MARCHÉ (tous les matchs). -->
-    <section class="ai-section">
-      <h4 class="cm-section-title">
+    <!-- 7. L'EXPÉRIENCE DE L'IA, PAR MARCHÉ (tous les matchs) : toujours les onze types, Σ et ⌀, d'où ça vient. -->
+    <section class="ai-section" data-section="experience">
+      <h4 class="ai-section__title">
         Expérience de l'IA, par marché
-        <span class="cm-section-title__hint">tous les matchs</span>
+        <span class="ai-section__hint">tous les matchs</span>
       </h4>
       <p class="ai-hint">
         Pronostics à la cote minimale de 1,20 (depuis le 30/09) : se remplit à chaque analyse après-match, et redonnée à l'IA avant chaque nouveau match. Sur
         peu de matchs, ce n'est pas encore significatif.
       </p>
       <div class="cm-table-wrap">
-        <table class="cm-table">
+        <table class="cm-table ai-xp" data-tableau="experience-ia">
           <thead>
             <tr>
               <th>Marché</th>
@@ -491,15 +454,37 @@ const tonLecon = (r) => (r?.aiWasRight === true ? 'is-ok' : r?.aiWasRight === fa
             </tr>
           </thead>
           <tbody>
-            <template v-for="t in experienceComplete" :key="t.marketType">
-              <tr>
-                <td class="is-strong">{{ t.label }}</td>
-                <td class="cm-numeric">{{ ratio(t.engineRight, t.matches) }}</td>
-                <td class="cm-numeric" :title="parConfiance(t)">{{ ratio(t.aiRight, t.aiVerdicts) }}</td>
-              </tr>
-            </template>
+            <tr v-for="t in xp.lignes" :key="t.cle" :class="{ 'ai-xp__vide': t.vide }" :data-marche="t.cle">
+              <td class="is-strong">{{ t.libelle }}</td>
+              <td class="cm-numeric">{{ t.moteur }}</td>
+              <td class="cm-numeric" :title="t.parConfiance">{{ t.ia }}</td>
+            </tr>
           </tbody>
+          <tfoot>
+            <tr class="ai-xp__total">
+              <td class="is-strong">Σ Tous les marchés</td>
+              <td class="cm-numeric is-strong">{{ xp.total.moteur }}</td>
+              <td class="cm-numeric is-strong">{{ xp.total.ia }}</td>
+            </tr>
+            <tr class="ai-xp__moyenne">
+              <td>⌀ Par marché<template v-if="xp.moyenne.marchesMoteur || xp.moyenne.marchesIA"> (chacun pèse autant)</template></td>
+              <td class="cm-numeric">{{ xp.moyenne.moteur }}</td>
+              <td class="cm-numeric">{{ xp.moyenne.ia }}</td>
+            </tr>
+          </tfoot>
         </table>
+      </div>
+      <div class="ai-xp__pied">
+        <ProvenanceChip
+          :source="PROVENANCE_DE_L_EXPERIENCE.source"
+          :releve-le="lueLe"
+          :action="PROVENANCE_DE_L_EXPERIENCE.action"
+          :fichier="PROVENANCE_DE_L_EXPERIENCE.fichier"
+          :detail="PROVENANCE_DE_L_EXPERIENCE.detail"
+          :vieux-apres-heures="null"
+          variante="ligne"
+        />
+        <RouterLink :to="LIEN_VERS_LA_FIABILITE.to" class="cm-link ai-xp__lien" data-lien="fiabilite"><AppIcon name="arrowRight" :size="13" />{{ LIEN_VERS_LA_FIABILITE.texte }}</RouterLink>
       </div>
     </section>
   </div>
@@ -736,6 +721,27 @@ const tonLecon = (r) => (r?.aiWasRight === true ? 'is-ok' : r?.aiWasRight === fa
   gap: 12px;
 }
 
+.ai-section__title {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--cm-text-secondary);
+}
+
+.ai-section__hint {
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--cm-text-muted);
+}
+
 .ai-hint {
   margin: -4px 0 0;
   font-size: 12px;
@@ -970,7 +976,7 @@ const tonLecon = (r) => (r?.aiWasRight === true ? 'is-ok' : r?.aiWasRight === fa
   border-radius: 999px;
   background: var(--cm-section-soft);
   color: var(--cm-section);
-  font-size: 9.5px;
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -1019,225 +1025,36 @@ const tonLecon = (r) => (r?.aiWasRight === true ? 'is-ok' : r?.aiWasRight === fa
 }
 
 /* ------------------------------------------------- marché par marché */
+.ai-family {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ai-family__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 2px 0 0;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--cm-text-muted);
+}
+
+.ai-family__title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--cm-border-soft);
+}
+
 .ai-markets {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-items: start;
   gap: 10px;
-}
-
-/* Une carte par marché, dépliable : même dessin que les cartes de l'onglet
-   d'avant-match (anneau, pronostic, verdict), plus l'issue et la leçon. */
-.ai-mk {
-  --ton: var(--cm-text-muted);
-  --ton-doux: var(--cm-surface-hover);
-  border-radius: 14px;
-  border: 1px solid var(--cm-border-soft);
-  background: linear-gradient(180deg, rgb(var(--cm-glass-tint) / var(--cm-glass-alpha-1)), transparent), var(--cm-surface-alt);
-  transition: border-color var(--cm-transition);
-}
-
-.ai-mk:hover {
-  border-color: var(--cm-border);
-}
-
-/* Le liseré de gauche dit l'issue : vert juste, rouge faux. */
-.ai-mk.is-correct {
-  --ton: var(--cm-accent);
-  --ton-doux: var(--cm-accent-soft);
-  box-shadow: inset 3px 0 0 var(--cm-accent);
-}
-
-.ai-mk.is-incorrect {
-  --ton: var(--cm-danger);
-  --ton-doux: var(--cm-danger-soft);
-  box-shadow: inset 3px 0 0 var(--cm-danger);
-}
-
-.ai-mk__head {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto auto;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 16px;
-  list-style: none;
-  cursor: pointer;
-}
-
-.ai-mk__head::-webkit-details-marker {
-  display: none;
-}
-
-.ai-mk.is-static .ai-mk__head {
-  cursor: default;
-}
-
-.ai-mk.is-static .ai-mk__chevron {
-  visibility: hidden;
-}
-
-.ai-mk__what {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-}
-
-.ai-mk__market {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: var(--cm-text-muted);
-}
-
-.ai-mk__pick {
-  display: inline-flex;
-  align-items: center;
-  min-width: 0;
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1.3;
-  color: var(--cm-text-primary);
-}
-
-.ai-mk__meta {
-  display: inline-flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.ai-mk__odds {
-  min-width: 0;
-  padding: 2px 8px;
-  font-size: 11.5px;
-}
-
-.ai-mk__advised {
-  padding: 1px 8px;
-  font-size: 10px;
-}
-
-.ai-mk__badges {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 5px;
-}
-
-.ai-mk__status {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: var(--ton-doux);
-  color: var(--ton);
-  font-size: 11.5px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.ai-mk__verdict {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: var(--cm-surface-hover);
-  color: var(--cm-text-muted);
-  font-size: 10.5px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.ai-mk__verdict.is-confirme {
-  background: var(--cm-accent-soft);
-  color: var(--cm-accent);
-}
-
-.ai-mk__verdict.is-nuance {
-  background: var(--cm-warning-soft);
-  color: var(--cm-warning);
-}
-
-.ai-mk__verdict.is-contredit {
-  background: var(--cm-danger-soft);
-  color: var(--cm-danger);
-}
-
-.ai-mk__chevron {
-  display: inline-flex;
-  color: var(--cm-text-muted);
-  transition: transform var(--cm-transition);
-}
-
-.ai-mk[open] .ai-mk__chevron {
-  transform: rotate(180deg);
-}
-
-.ai-mk__body {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin: 0 16px;
-  padding: 12px 0 14px;
-  border-top: 1px solid var(--cm-border-soft);
-}
-
-.ai-mk__text {
-  margin: 0;
-  font-size: 13px;
-  line-height: 1.55;
-  color: var(--cm-text-primary);
-}
-
-.ai-mk__text strong {
-  font-weight: 700;
-  color: var(--cm-text-secondary);
-}
-
-/* L'avis d'avant-match (ton du verdict) et la leçon (tenue : vert, démentie :
-   rouge, sans avis : bleu). */
-.ai-mk__quote {
-  --quote: var(--cm-info);
-  --quote-doux: var(--cm-info-soft);
-  margin: 0;
-  padding: 8px 12px;
-  border-left: 3px solid var(--quote);
-  border-radius: 0 10px 10px 0;
-  background: var(--quote-doux);
-  font-size: 12.5px;
-  line-height: 1.5;
-  color: var(--cm-text-secondary);
-}
-
-.ai-mk__quote.is-confirme,
-.ai-mk__quote.is-ok {
-  --quote: var(--cm-accent);
-  --quote-doux: var(--cm-accent-soft);
-}
-
-.ai-mk__quote.is-nuance {
-  --quote: var(--cm-warning);
-  --quote-doux: var(--cm-warning-soft);
-}
-
-.ai-mk__quote.is-contredit,
-.ai-mk__quote.is-ko {
-  --quote: var(--cm-danger);
-  --quote-doux: var(--cm-danger-soft);
-}
-
-.ai-mk__quote-label {
-  display: block;
-  margin-bottom: 2px;
-  font-size: 9.5px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: var(--quote);
 }
 
 /* --------------------------------------------- face au moteur, limites */
@@ -1393,6 +1210,37 @@ const tonLecon = (r) => (r?.aiWasRight === true ? 'is-ok' : r?.aiWasRight === fa
   color: var(--cm-text-primary);
 }
 
+/* ------------------------------------------------- l'expérience de l'IA */
+.ai-xp td {
+  font-size: 12.5px;
+}
+
+.ai-xp__vide td {
+  color: var(--cm-text-muted);
+}
+
+.ai-xp__total td {
+  border-top: 1px solid var(--cm-border);
+}
+
+.ai-xp__moyenne td {
+  color: var(--cm-text-secondary);
+}
+
+.ai-xp__pied {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+}
+
+.ai-xp__lien {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+}
+
 /* ------------------------------------------------- selon la largeur */
 /* Assez de place : clés, bilan et faits sur deux colonnes. */
 @container aireview (min-width: 760px) {
@@ -1409,7 +1257,7 @@ const tonLecon = (r) => (r?.aiWasRight === true ? 'is-ok' : r?.aiWasRight === fa
   }
 }
 
-/* Panneau étroit : tout s'empile, les badges d'un marché passent sous son pronostic. */
+/* Panneau étroit : tout s'empile. */
 @container aireview (max-width: 560px) {
   .ai-hero {
     padding: 14px;
@@ -1432,22 +1280,6 @@ const tonLecon = (r) => (r?.aiWasRight === true ? 'is-ok' : r?.aiWasRight === fa
   .ai-score__team.is-home {
     flex-direction: row;
     text-align: left;
-  }
-
-  .ai-mk__head {
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    gap: 10px 12px;
-  }
-
-  .ai-mk__chevron {
-    grid-area: 1 / 3;
-  }
-
-  .ai-mk__badges {
-    grid-column: 2 / -1;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
   }
 }
 </style>

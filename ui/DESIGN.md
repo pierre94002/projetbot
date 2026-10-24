@@ -447,8 +447,9 @@ Pierre. » et pourquoi ; (6) les pronostics commentés qui n'entrent pas dans le
 (ce n'est pas une value), jetons seulement. Terme `fourchette-du-hasard` au guide de lecture (`HelpTip` du titre). Les mots viennent de
 `utils/carnetIA.js` (pur, rejoué par `server/test/aiScorecardEcran.test.mjs` sur les vraies réponses de la route ; il reprend `nombreDit`,
 `pluriel`, `cloturePourcentDit`, `jourHeureDit` de `utils/calibration.js`). Lisible en panneau étroit : `container: carnetia`, les tableaux
-défilent dans leur cadre. Le « Bilan de l'IA » de l'onglet Analyse IA d'un match (`MatchAiReviewPanel`, l'expérience redonnée à l'IA, lue
-dans ses revues) reste tel quel : l'étape 45 (« l'IA à l'écran ») décidera s'il renvoie ici.
+défilent dans leur cadre. L'étape 45 (24/10/2026, « l'IA à l'écran ») a décidé : ce bloc reste le carnet COMPLET, à cette place ; la page « Bulletin » en montre
+le RÉSUMÉ (marché par marché et championnat par championnat, `AiReliabilityTable`, aux mêmes mots, avec un lien vers ce bloc) et le « Bilan de l'IA » de l'onglet
+Analyse IA d'un match (`MatchAiReviewPanel`, l'expérience redonnée à l'IA, lue dans ses revues) renvoie vers la page « Bulletin ».
 Retouche du 14/10/2026 (le même jour) : **la coupure est désactivée tant que Pierre n'a pas décidé de la règle** (`COUPURE_ACTIVE` du
 serveur, dite par la route : `coupureActive`, `decisionEnAttente`). La `.cm-note` dit alors, en premier, « Aucun marché n’est retiré pour
 l’instant : c’est à vous de décider de la règle. » puis ce que la règle retirerait si elle était en service (« Même en service, la règle ne
@@ -547,7 +548,7 @@ vue reçoit un nom fabriqué lisible (« foo_bar_nl » donne « Foo Bar (NL) »)
 lisent que d'autres règles pures du même dossier).
 
 Depuis l'étape 42 du plan (22/10/2026) : **le bulletin du jour et le bilan de la semaine** — deux textes écrits par l'IA (un appel à Claude Code le matin, un le lundi,
-sur une fiche chiffrée que le code prépare sans token), en attendant la page « Bulletin » de l'étape 45. Ils se lisent dans Réglages, dans UNE carte,
+sur une fiche chiffrée que le code prépare sans token) ; la page « Bulletin » de l'étape 45 les reprend (voir plus bas). Ils se lisent dans Réglages, dans UNE carte,
 `components/settings/BulletinsPanel.vue` (« Bulletin du jour et bilan de la semaine », juste sous « Actualisation automatique » : ce sont deux ÉTAPES de l'actualisation,
 « Bulletin du jour » et « Bilan de la semaine », qui figurent aussi dans la liste de ses étapes — `RefreshStatusPanel` n'a pas changé ; une étape pas due y dit POURQUOI
 (« le bulletin du 05/10/2026 est déjà écrit… »), jamais seulement « pas due à cette passe »). La carte LIT `GET /api/match-ai-analysis/bulletins` (une lecture à
@@ -582,9 +583,9 @@ au-dessus en bleu `--cm-info`, en dessous en ambre. Le duel : les deux clubs fac
 en points ; sous le scénario, ce que le banc a mesuré en mots (matchs jugés, essais comptés, « pas prouvé »). Mots : `utils/stylesDeJeu.js` (pur, sans Vue : les tests le
 rejouent sur les vraies réponses du serveur).
 
-Depuis l'étape 44 du plan (23/10/2026) : **la mémoire de l'IA** — un bloc, à UNE place pour l'instant : sur la page d'une équipe, juste sous « Style de jeu »,
-`components/analysis/AiDossierCard.vue` (« Mémoire de l'IA », `data-bloc="memoire-ia"`, icône `sparkles`) ; la page « Bulletin » de l'étape 45 le réutilisera tel
-quel (et `GET …/dossiers?league=` pour un championnat seul). Il LIT `GET /api/match-ai-analysis/dossiers?club=fotmob-…` (le club par son IDENTIFIANT FotMob, jamais
+Depuis l'étape 44 du plan (23/10/2026) : **la mémoire de l'IA** — un bloc, sur la page d'une équipe, juste sous « Style de jeu »,
+`components/analysis/AiDossierCard.vue` (« Mémoire de l'IA », `data-bloc="memoire-ia"`, icône `sparkles`) ; la page « Bulletin » de l'étape 45 le réutilise tel
+quel pour une équipe, et en mode `portee="championnat"` (`GET …/dossiers?league=`) pour un championnat seul. Il LIT `GET /api/match-ai-analysis/dossiers?club=fotmob-…` (le club par son IDENTIFIANT FotMob, jamais
 par son nom : sans identifiant, il le dit et ne lit rien), ne calcule rien, n'écrit rien ; une réponse tardive (changement de club) est ignorée. Ce qu'il montre, dans
 l'ordre : le club (logo, championnat) ; la **vraie provenance** (« Écrit par le code · magasin FotMob et carnet de l'IA », « mis à jour le … », le fichier
 `data/runtime/ai-dossiers.json` au survol) et « matchs pris en compte jusqu'au … » ; les faits du moment en phrases à icône (classement, séries, entraîneur, style,
@@ -595,6 +596,41 @@ les leçons retirées (`retirees` : démenties ou jamais confirmées, et pourquo
 du classement (logos) ; puis, repliable, « Ce que l'IA lit de ce dossier » (le texte exact, ses mots et ses tokens estimés comme le budget de l'étape 41) ; et la règle en
 pied (écrit par le code, jamais un chiffre au moteur, la note manuscrite n'y entre pas). Une leçon n'est ni bonne ni mauvaise : **ni vert ni rouge** ; « le moteur s'y est
 trompé » se lit en mots. Mots : `utils/dossiersIA.js` (pur, sans Vue : les tests le rejouent sur les vraies réponses du serveur).
+
+Depuis l'étape 45 du plan (24/10/2026) : **l'IA à l'écran** — trois écrans qui LISENT ce que l'IA a déjà écrit (étapes 4, 21, 42, 43 et 44), sans rien calculer à l'ouverture
+et sans appeler Claude ni une API payante.
+**1. La page « Bulletin »** (`views/BulletinView.vue`, `/bulletin`, entrée du menu juste après « Santé du moteur », section `history` : la couleur d'Historique moteur, aucune
+couleur de plus ; mots dans `utils/pageBulletin.js` et `utils/indexDesDossiers.js`, purs). Quatre lectures : `GET /api/match-ai-analysis/bulletins`, `GET /api/match-ai/scorecard`,
+`GET /api/match-ai-analysis/dossiers/resume` (route de l'étape 45 : l'index des dossiers, au plus 80 leçons par liste, le total dit le reste) et `GET /api/claude-budget` (lue par
+le composant du budget lui-même) ; une réponse tardive est ignorée, une lecture ratée garde la dernière réponse à l'écran, la page se relit sur le signal des données
+(`dataVersion`). Dans l'ordre : le bandeau (titre, jour, « Tout relire », quatre chiffres clés — le bulletin, le bilan, les avis de l'IA tenus, les leçons confirmées —, toujours
+quatre, « illisible » ou « pas encore calculé » quand une lecture manque) ; **le budget Claude**, en tête, du jour et de la semaine : `ClaudeBudgetPanel variante="compacte"`
+dans une `AppCard` — UN SEUL composant du budget (feuille de route, Réglages, Bulletin ; aucune troisième version, un test garde qu'aucun autre fichier ne lit `claudeBudgetApi`) ;
+**les deux textes** : la carte de Réglages `BulletinsPanel` reprise telle quelle, nourrie par la lecture de la page (propriété `lecture` : une seule lecture de la route pour les
+deux, « Relire » la redemande à la page ; sans elle, Réglages lit seule comme avant) ; **la fiabilité de l'IA** (`AiReliabilityTable`) : le carnet en résumé, onze marchés TOUJOURS
+là (un marché sans avis dit « aucun avis compté »), **Σ** des avis et **⌀** par marché (chaque marché pèse autant ; jamais une somme de pourcentages ; « — » quand aucun marché
+n'a d'avis), puis championnat par championnat avec « Voir N lignes de plus » et le lien vers le carnet complet d'Historique moteur ; **la mémoire de l'IA** (`AiDossiersBoard`) :
+les leçons confirmées et les leçons retirées de tous les dossiers, deux tableaux toujours là (le jour, le match d'origine avec ses deux logos, le marché et le pronostic, la
+leçon, sa preuve en mots, la portée — le club ou le championnat qui la garde, un clic ouvre son dossier), avec **Σ** et **⌀** ; un choix du championnat (favoris d'abord, étoilés)
+puis d'une équipe ouvre le dossier COMPLET : l'équipe par `AiDossierCard` (le bloc de la page d'une équipe, repris tel quel) ou « Le championnat seul » par
+`AiDossierCard portee="championnat"` (le dossier du championnat sans les morceaux d'un club ; ses états sont dits : aucun choisi, pas de dossier, pas encore écrit, autre forme,
+serveur à relancer, illisible) ; le dossier ouvert vit dans l'adresse (`?championnat=…&equipe=fotmob-…`, remplacée, jamais empilée) ; enfin « D'où viennent ces données » : les
+quatre sources, leur fichier réel et leur heure. **Un texte refusé par la garde des chiffres n'est JAMAIS montré** : la route garde la phrase refusée (`refuses[].extrait`),
+l'écran n'en dit que le motif (« chiffres absents de la fiche (4321,7) »), et un test cherche l'extrait dans le rendu.
+**2. Les moments clés** d'un match joué (`components/analysis/KeyMomentsList.vue`, onglet Résumé de la page du match, juste avant « Meilleures statistiques ») :
+`GET /api/match-stats/:matchId/deroule` (route de l'étape 45 : la fonction de l'IA, `lireDeroule`, sur les événements déjà rangés au magasin) ; quatre comptes toujours là
+(buts, penalties manqués, expulsions, blessures) ; un tableau (minute, équipe avec son logo, moment avec le drapeau du joueur, score qui suit) avec **Σ** et **⌀** (la minute
+moyenne, jamais une somme de minutes) ; ce qu'on ne sait pas se DIT (déroulé non publié, seuls les buts publiés — il ne faut pas en conclure « aucune expulsion » —, 0-0 sans moment,
+liste vide publiée, match pas joué), jamais « aucun but » ; provenance réelle « FotMob · événements du match rangés au magasin », relevé le …, la table au survol. Mots :
+`utils/momentsCles.js` et `utils/joueursDuMatch.js`.
+**3. Le bilan d'après-match** (`MatchAiReviewPanel`, onglet « Analyse IA » d'un match joué) refait au dessin de l'onglet d'avant-match : les mêmes familles de marchés
+(`utils/bilanApresMatch.js` reprend celles de `MatchAiAnalysisPanel`, un test les compare) et la MÊME carte de marché `AiMarketCard`, qui gagne — sans rien changer pour l'onglet
+d'avant-match, un test le garde — l'issue du pronostic (liseré et « Pronostic juste / faux / pas encore réglé »), l'avis de l'IA tenu ou démenti, ce qui s'est passé, la leçon, la
+cote (à la virgule, « 1,87 »), « conseillé » et « pas d'avis de l'IA » ; puis l'expérience de l'IA par type de marché (`data-tableau="experience-ia"`, onze types toujours là, **Σ** du
+ratio de TOUS les cas, **⌀** des marchés qui ont des cas, l'avis tenu par confiance au survol, provenance réelle avec l'heure de lecture, lien vers la page « Bulletin »). Le bouton
+« Lancer l'analyse après-match », qui existait déjà, reste le seul qui appelle quelque chose. **Le vert et le rouge n'y disent jamais « value »** : ils marquent l'état « écrit »
+d'un texte et l'issue d'un pronostic ou d'un avis de l'IA (juste en vert, faux en rouge, toujours avec le mot et l'icône) ; jetons `--cm-*` seulement, aucune couleur en dur
+(l'appli n'a qu'un thème, le sombre).
 
 ## 3 bis. Le langage visuel des paris (étape 6 du plan, 06/10/2026)
 
@@ -983,3 +1019,9 @@ Le second compare au code d'avant la refonte : toute expression du gabarit ou li
 disparue est listée et doit être justifiée (seule une ligne de pure présentation peut
 disparaître). Le rendu se contrôle ensuite dans un bac à sable (jamais sur les serveurs de
 Pierre, ports 4000/5173).
+
+Depuis l'étape 45 (24/10/2026), les deux contrôles ci-dessus sont ceux de `node scripts/verifier-interface.mjs --avant <ancien src>` (compilation de chaque composant, construction
+dans un dossier temporaire, rien de perdu face à l'ancien `src` : chaque ligne disparue est listée et se justifie), et les écrans de l'IA ont leurs essais de rendu côté serveur, sans
+navigateur : `server/test/bulletinPageEcran.test.mjs` (la page « Bulletin »), `momentsClesEcran.test.mjs` (les moments clés), `bilanApresMatchEcran.test.mjs` (le bilan d'après-match et
+la carte de marché commune) et `bulletinPage.test.mjs` (les deux routes de lecture). Une règle d'écran qui se teste dans le texte du composant (un « Relire » qui relit SA route, une adresse
+remplacée et non empilée) se garde par une expression sur le source : un rendu côté serveur ne clique pas.

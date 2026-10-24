@@ -362,7 +362,15 @@ test('câblage : Historique moteur pose le carnet juste après la calibration ; 
   const bloc = fs.readFileSync(path.join(UI, 'src', 'components', 'analysis', 'AiScorecardPanel.vue'), 'utf8');
   assert.doesNotMatch(bloc, /httpClient\.(post|put|patch|delete)|runPreMatch|runPostMatch/);
   assert.doesNotMatch(bloc, /#[0-9a-f]{3,6}\b|!important|--cm-section-soft\)/i);
-  // Aucun autre écran ne recopie le carnet : une seule place.
+  // Aucun autre écran ne recopie ce bloc : une seule place pour le BLOC « Carnet de l'IA ».
+  // Étape 45 : la page « Bulletin » est la seconde place du CARNET (par marché et par championnat, avec Σ et ⌀), dans son propre composant
+  // AiReliabilityTable que la page nourrit — jamais par ce bloc ni par une lecture de la route dans un composant (bulletinPageEcran.test.mjs).
+  // Ces deux fichiers parlent de la route en commentaire ; ils ne montent ni n'importent AiScorecardPanel.
+  const pageBulletin = /AiReliabilityTable|BulletinView/;
   const ailleurs = fs.readdirSync(path.join(UI, 'src'), { recursive: true }).filter((f) => /\.vue$/.test(String(f)) && !/AiScorecardPanel|PredictionsHistoryView/.test(String(f)));
-  for (const f of ailleurs) assert.doesNotMatch(fs.readFileSync(path.join(UI, 'src', String(f)), 'utf8'), /AiScorecardPanel|match-ai\/scorecard/, String(f));
+  for (const f of ailleurs) {
+    const code = fs.readFileSync(path.join(UI, 'src', String(f)), 'utf8');
+    if (pageBulletin.test(String(f))) assert.doesNotMatch(code, /import AiScorecardPanel|<AiScorecardPanel/, String(f));
+    else assert.doesNotMatch(code, /AiScorecardPanel|match-ai\/scorecard/, String(f));
+  }
 });

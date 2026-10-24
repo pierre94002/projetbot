@@ -178,14 +178,15 @@ test('mémoire de l’IA rendue — jamais calculé, autre forme, club sans doss
 
 // ================================================ 3. le câblage et l'hygiène
 
-test('câblage : le bloc sur la page de l’équipe, juste sous le style de jeu, avant les derniers matchs ; nulle part ailleurs ; une lecture GET par identifiant', () => {
+test('câblage : le bloc sur la page de l’équipe, juste sous le style de jeu, avant les derniers matchs ; ailleurs seulement dans le tableau des dossiers de la page Bulletin (étape 45) ; une lecture GET par identifiant', () => {
   const equipe = lireUi('views', 'TeamView.vue');
   assert.equal((equipe.match(/<AiDossierCard /g) ?? []).length, 1);
   assert.match(equipe, /<AiDossierCard :club-id="idClub \?\? null" :club-name="nom" :league="ligue" \/>/);
   assert.ok(equipe.indexOf('<TeamStyleCard') < equipe.indexOf('<AiDossierCard') && equipe.indexOf('<AiDossierCard') < equipe.indexOf('<div class="team__grid">'));
   const toutes = fs.readdirSync(path.join(UI, 'src'), { recursive: true }).filter((f) => /\.(vue|js)$/.test(f)).map((f) => String(f).split(path.sep).join('/'));
   const emplois = toutes.filter((f) => lireUi(...f.split('/')).includes('AiDossierCard') && !f.endsWith('AiDossierCard.vue'));
-  assert.deepEqual(emplois, ['utils/dossiersIA.js', 'views/TeamView.vue']);
+  // Étape 45 : la page « Bulletin » REPREND la carte (le dossier d'une équipe ou d'un championnat, aux mêmes mots) par AiDossiersBoard — la seule autre place.
+  assert.deepEqual([...emplois].sort(), ['components/analysis/AiDossiersBoard.vue', 'utils/dossiersIA.js', 'views/TeamView.vue']);
   const api = lireUi('services', 'matchAiAnalysisApi.js');
   assert.match(api, /dossierEquipe: \(clubId\) => httpClient\.get\(`\/match-ai-analysis\/dossiers\?club=\$\{encodeURIComponent\(clubId\)\}`\),/);
 });
