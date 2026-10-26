@@ -24,9 +24,26 @@
  *     « 58 » n'est pas « 57,6 » : l'IA n'arrondit pas, elle reprend ;
  *   - un nombre écrit en lettres, de trois à seize, et vingt, trente, quarante, cinquante, soixante, cent, mille : il doit
  *     valoir un nombre de la fiche (ou être un mot de la fiche). « un », « une » et « deux » ne sont PAS contrôlés
- *     (« les deux équipes », « un match » : des mots de tous les jours, pas des chiffres) ; « pour cent » non plus.
+ *     (« les deux équipes », « un match » : des mots de tous les jours, pas des chiffres) ; « pour cent » non plus, ni
+ *     « le onze » ou « les onze » quand le mot nomme la composition (voir plus bas).
  * CE QUI N'EN EST PAS UN : un chiffre collé à une lettre qui le précède (« N2 », « U21 », « J7 » : un nom), et « 1N2 » /
  * « 1X2 » (le nom du marché du résultat).
+ *
+ * « ONZE », LE NOM (correctif du 26/10/2026) : au football, « le onze » est la composition d'une équipe, pas le nombre 11.
+ * Le bulletin du 25/10 a été refusé trois fois puis abandonné pour « FotMob ne publie les onze qu'environ une heure avant
+ * le coup d'envoi ». LA RÈGLE, la plus simple qui reste sûre : « onze » est le NOM, et n'est pas contrôlé, seulement quand
+ * DEUX conditions tiennent ensemble —
+ *   1. un déterminant juste avant : le, les, un, des, du, au, aux, ce, cet, ces, son, ses, leur, leurs, mon, mes, ton,
+ *      tes, notre, nos, votre, vos ;
+ *   2. et juste après, rien qui puisse être compté : la fin du texte, une ponctuation, un début de proposition (« qu' »,
+ *      « que », « qui », « dont »), ou un complément du nom (« de départ », « de base », « type », « titulaire »,
+ *      « probable », « officiel », « habituel », au singulier ou au pluriel).
+ * Tout le reste compte : « les onze matchs », « les onze derniers matchs », « onze sur douze », « onze points », « à onze
+ * contre dix », « le onze novembre » restent des nombres contrôlés. La règle dit ce qui SUIT le mot plutôt que la liste
+ * des noms qu'il pourrait compter (une liste qu'on ne finit jamais) : un mot inattendu après « onze » le laisse compté —
+ * le texte est refusé à tort, jamais accepté à tort. La limite connue : « les onze qu'il a gagnés », où « onze » compte
+ * un nom dit plus tôt (« matchs »), passe — mais ce nom a d'abord été compté là où il était écrit (« onze matchs »), et
+ * c'est là que la garde le refuse. Seul « onze » est concerné : « le dix », « les trois » n'ont pas ce sens au football.
  *
  * LES NOMBRES AUTORISÉS sont ceux du texte de la fiche TELLE QUE L'IA L'A LUE (le message envoyé), pas ceux d'un objet
  * plus riche que le code garde de son côté : ce que l'IA n'a pas vu, elle ne peut pas le citer.
@@ -103,13 +120,31 @@ export function nombresEnChiffres(texte) {
 
 const MOTIF_LETTRES = new RegExp(`(?<![\\p{L}\\p{N}])(${Object.keys(NOMBRES_EN_LETTRES).join('|')})(?![\\p{L}\\p{N}])`, 'giu');
 
-/** Les nombres écrits en lettres (ceux de NOMBRES_EN_LETTRES) : [{ texte, valeur, cle, mot, debut }]. « pour cent » n'en est pas un. */
+/** « onze », le NOM (la composition) : un déterminant juste avant (le texte qui PRÉCÈDE le mot finit ainsi). */
+const AVANT_LE_ONZE_NOM = /(?:^|[^\p{L}\p{N}])(?:le|les|un|des|du|au|aux|ce|cet|ces|son|ses|leur|leurs|mon|mes|ton|tes|notre|nos|votre|vos)\s+$/iu;
+/**
+ * … et juste après, rien qui puisse être compté (le texte qui SUIT le mot commence ainsi) : la fin du texte, une
+ * ponctuation, « qu' » / « que » / « qui » / « dont », ou un complément du nom. « qu » suivi d'autre chose qu'une lettre :
+ * l'apostrophe droite comme la courbe, sans avoir à écrire la seconde.
+ */
+const APRES_LE_ONZE_NOM = /^(?:\s*$|\s*[^\p{L}\p{N}\s]|\s+(?:qu(?!\p{L})|que|qui|dont|de\s+départ|de\s+base|types?|titulaires?|probables?|officiels?|habituels?)(?![\p{L}\p{N}]))/iu;
+
+/** Vrai quand « onze » (de `debut` à `fin` dans le texte normalisé `t`) est le NOM — la composition —, pas le nombre 11. */
+export function onzeEstLeNom(t, debut, fin) {
+  return AVANT_LE_ONZE_NOM.test(t.slice(0, debut)) && APRES_LE_ONZE_NOM.test(t.slice(fin));
+}
+
+/**
+ * Les nombres écrits en lettres (ceux de NOMBRES_EN_LETTRES) : [{ texte, valeur, cle, mot, debut }]. « pour cent » n'en est
+ * pas un, « le onze » / « les onze » (la composition) non plus — voir l'en-tête.
+ */
 export function nombresEnLettres(texte) {
   const t = normaliser(texte);
   const liste = [];
   for (const m of t.matchAll(MOTIF_LETTRES)) {
     const mot = m[1].toLowerCase();
     if (mot === 'cent' && /pour\s*$/i.test(t.slice(Math.max(0, m.index - 6), m.index))) continue;
+    if (mot === 'onze' && onzeEstLeNom(t, m.index, m.index + m[1].length)) continue;
     const valeur = NOMBRES_EN_LETTRES[mot];
     liste.push({ texte: m[1], valeur, cle: cleDuNombre(valeur), mot, debut: m.index });
   }

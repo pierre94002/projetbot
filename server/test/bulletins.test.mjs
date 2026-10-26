@@ -162,6 +162,46 @@ test('garde : les nombres en lettres — dizaines, cent, mille ; une partie d’
   assert.equal(G.nombresEnLettres('Quarante ans').length, 1, 'la casse ne compte pas');
 });
 
+test('garde : "le onze" et "les onze" (la composition) ne sont pas des nombres ; "onze" qui compte quelque chose reste controle (correctif du 26/10)', () => {
+  // Une fiche SANS 11 (ni en chiffres ni en lettres), avec 12 pour isoler "onze" dans "onze sur douze".
+  const fiche = 'Arsenal - Chelsea | 21 h 00 | cote 2,20 | 3 lignes lues | 12 matchs';
+  const autorise = G.autorisationsDeLaFiche(fiche);
+  assert.ok(!autorise.valeurs.has('11') && !autorise.mots.has('onze'), 'la fiche d essai ne donne pas 11');
+  const refuses = (texte, f = fiche) => G.verifierLesChiffres({ fiche: f, textes: { t: texte } }).refuses.map((r) => r.nombre);
+  // La VRAIE phrase du bulletin du 25/10 (refuse trois fois, puis abandonne) : elle passe, avec l'apostrophe droite comme courbe.
+  const vraie = "Les autres ne le sont pas : FotMob ne publie les onze qu'environ une heure avant le coup d'envoi. Des compositions probables.";
+  assert.deepEqual(refuses(vraie), [], 'la phrase du 25/10 passe');
+  assert.deepEqual(refuses(vraie.replace("qu'", 'qu' + String.fromCharCode(0x2019))), [], 'avec une apostrophe courbe aussi');
+  const ficheDuJour = P.rendreLaFicheDuJour(F.construireLaFicheDuJour(entreesDuJour()));
+  assert.ok(!G.autorisationsDeLaFiche(ficheDuJour).valeurs.has('11'), 'la fiche du jour d essai ne donne pas 11');
+  assert.deepEqual(refuses(vraie, ficheDuJour), [], 'sur la fiche du jour d essai aussi');
+  assert.deepEqual(refuses('Les onze matchs.', ficheDuJour), ['onze'], 'et "onze" qui compte y reste refuse');
+  // Le nom : un determinant avant, et apres rien qui puisse etre compte.
+  for (const texte of ['Le onze de départ est connu.', 'Il garde son onze type.', 'Les onze titulaires de Liverpool sont publiés.', 'Leur onze probable.', 'Pas de changement au onze de base', 'Le onze.', 'Ce onze, enfin, qui gagne.', 'LES ONZE DE DÉPART']) {
+    assert.deepEqual(refuses(texte), [], texte);
+    assert.equal(G.nombresEnLettres(texte).length, 0, texte);
+  }
+  // Le nombre : "onze" qui compte quelque chose reste refuse si 11 n'est pas dans la fiche...
+  assert.deepEqual(refuses('Les onze matchs de la saison.'), ['onze'], 'les onze matchs : refuse sans 11 dans la fiche');
+  // ... et accepte s'il y est (en chiffres ou en lettres).
+  assert.deepEqual(refuses('Les onze matchs de la saison.', `${fiche} | 11 victoires`), [], 'les onze matchs : accepte avec 11 dans la fiche');
+  assert.deepEqual(refuses('Les onze matchs de la saison.', `${fiche} | onze victoires`), [], 'le mot est dans la fiche');
+  assert.deepEqual(refuses('Liverpool a gagné onze sur douze.'), ['onze'], 'onze sur douze : douze est dans la fiche (12), onze non');
+  for (const texte of ['les onze sur douze', 'les onze derniers matchs', 'les onze de ses matchs', 'ses onze buts', 'onze points', 'le onze novembre', 'ils jouent à onze contre douze', 'ils en ont gagné onze.', 'les onze 2-1']) {
+    assert.ok(refuses(texte).includes('onze'), `${texte} : onze compte ici, il reste controle`);
+  }
+  // "dix" ou "quatre" apres un determinant n'ont pas ce sens : toujours controles.
+  assert.deepEqual(refuses('les quatre qu il reste, le dix.'), ['quatre', 'dix']);
+});
+
+test('consignes du bulletin et du bilan : "les compositions", jamais "les onze", et aucun nombre en lettres', () => {
+  for (const consignes of [P.CONSIGNES_BULLETIN, P.CONSIGNES_BILAN]) {
+    assert.doesNotMatch(consignes, /(?<![\p{L}])onze(?![\p{L}])/iu, 'les consignes n ecrivent plus "les onze" (l IA le recopiait)');
+    assert.match(consignes, /Pour les compositions d'équipe, écris .{1,2}les compositions.{1,2} ;/);
+    assert.match(consignes, /n'écris aucun autre nombre en lettres/);
+  }
+});
+
 test('garde : sur la VRAIE fiche, chaque nombre du texte envoyé passe, et un seul nombre de plus la fait refuser', () => {
   const textes = [P.rendreLaFicheDuJour(F.construireLaFicheDuJour(entreesDuJour())), P.rendreLaFicheDeLaSemaine(F.construireLaFicheDeLaSemaine(entreesDeLaSemaine()))];
   for (const fiche of textes) {

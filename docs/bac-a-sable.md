@@ -1170,3 +1170,34 @@ La ligne de l'étape 45, à la suite de celle de l'étape 44 (dans `HISTORIQUE`)
   })
 ```
 
+
+
+## Correctif du 26/10/2026 : « les onze » (les compositions) ne sont plus pris pour le nombre 11 (étape 42)
+
+### Correctif « onze » de la garde des chiffres (étape 42, écrit dans le bac le 26/10/2026)
+
+**Le défaut.** Le bulletin du 25/10/2026 a été refusé trois fois puis abandonné (essais rangés dans `data/runtime/ai-bulletins.json`, clé `essais`, « bulletin:2026-10-25 », 24 750 tokens perdus) pour une seule phrase : « FotMob ne publie les onze qu'environ une heure avant le coup d'envoi ». La garde lisait « onze » comme le nombre 11, absent de la fiche. Au football, « les onze », ce sont les compositions. L'IA avait pris la phrase… dans nos propres consignes du bulletin, qui l'écrivaient mot pour mot.
+
+**La règle choisie** (`server/src/core/ai/gardeDesChiffres.js`, fonction `onzeEstLeNom`, expliquée dans l'en-tête du fichier) : « onze » est le NOM, et n'est pas contrôlé, seulement quand deux conditions tiennent ensemble :
+1. un déterminant juste avant (le, les, un, des, du, au, aux, ce, cet, ces, son, ses, leur, leurs, mon, mes, ton, tes, notre, nos, votre, vos) ;
+2. et juste après, rien qui puisse être compté : la fin du texte, une ponctuation, « qu' », « que », « qui », « dont », ou un complément du nom (« de départ », « de base », « type », « titulaire », « probable », « officiel », « habituel », au singulier ou au pluriel).
+
+Tout le reste reste un nombre contrôlé : « les onze matchs », « les onze derniers matchs », « les onze de ses matchs », « onze sur douze », « onze points », « le onze novembre », « à onze contre douze », « ils en ont gagné onze. ». Un mot inattendu après « onze » le laisse compté : le texte est refusé à tort, jamais accepté à tort. Limite connue, écrite dans le code : « les onze qu'il a gagnés » (« onze » qui reprend un nom dit plus tôt) passe, mais ce nom a d'abord été compté là où il était écrit, et la garde l'y refuse. Seul « onze » est concerné : « le dix », « les quatre » restent contrôlés.
+
+**Les consignes** (`server/src/core/ai/bulletinPrompt.js`) : la règle des chiffres, commune au bulletin et au bilan, dit maintenant « Pour les compositions d'équipe, écris « les compositions » ; et n'écris aucun autre nombre en lettres. » (« un » et « deux » restent permis, comme avant). La phrase des consignes du bulletin qui disait « FotMob ne publie les onze » dit « FotMob ne publie les compositions officielles ».
+
+**Les tests** (`server/test/bulletins.test.mjs`, 2 tests de plus, 33 en tout) :
+- la vraie phrase du 25/10 passe (apostrophe droite et courbe), sur une fiche d'essai et sur la fiche du jour d'essai, qui ne donnent pas 11 ;
+- « le onze de départ », « son onze type », « les onze titulaires », « leur onze probable », « au onze de base », « Le onze. »… passent ;
+- « les onze matchs » est refusé sans 11 dans la fiche, accepté avec 11 (en chiffres ou en lettres) ;
+- « onze sur douze » est refusé sans 11 (douze, lui, est dans la fiche) ; de même les autres « onze » qui comptent ; « le dix » et « les quatre qu'il reste » restent refusés ;
+- les consignes du bulletin et du bilan n'écrivent plus « onze » et contiennent la nouvelle phrase.
+
+**Les bugs volontaires** : 11, un à la fois, dans la copie `etape42\bugs\code` (liste `liste-onze.mjs`, campagne `campagne-onze.mjs`), copie resynchronisée et vérifiée identique au bac (830 fichiers), témoin vert (33 tests) : 11 sur 11 tombent — déterminant plus exigé, suite plus regardée, règle étendue à tous les nombres en lettres, correctif retiré, « qu' » oublié, n'importe quel mot accepté après, un chiffre pris pour une ponctuation, « de » seul au lieu de « de départ », « les » retiré des déterminants, consignes qui réécrivent « les onze », nouvelle phrase des consignes retirée. Code du bac identique avant et après (831 fichiers, sha1 `8af81449…`).
+
+**`npm test`** dans le bac : 1 179 tests, 1 177 réussis + 2 constats « # TODO » (non bloquants), 0 échec, ~427 s ; `bulletins.test.mjs` seul relancé sur le code final : 33 sur 33.
+
+**`sandbox-diff`** (depuis le dépôt, lecture seule) : 3 fichiers source changés dans le bac (`gardeDesChiffres.js`, `bulletinPrompt.js`, `bulletins.test.mjs`), plus `TESTS.md` (bilan du 26/10, ligne de `bulletins.test.mjs`, paragraphe des bugs volontaires) ; 0 changement du dépôt seul.
+
+**Empreinte du moteur** : `core/ai` n'est pas dans `MODULES_DU_MOTEUR` ; code du moteur `16f2459db183a99576365047da98b7777687ef05` (37 fichiers), inchangé — la candidate en essai n'est pas touchée.
+

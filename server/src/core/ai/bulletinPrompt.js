@@ -266,7 +266,7 @@ export function rendreLaFicheDeLaSemaine(f) {
 
 const REGLE_DES_CHIFFRES =
   "RÈGLE ABSOLUE — LES CHIFFRES : tu n'écris JAMAIS un chiffre qui n'est pas dans la fiche. Reprends chaque nombre tel qu'il y est écrit (cotes, pourcentages, euros, heures, dates, comptes), sans l'arrondir, le recalculer, l'additionner, le déplacer ni le déduire ; si un total ou un pourcentage t'est utile, il est dans la fiche, sinon n'en parle pas. " +
-  "Écris les nombres en CHIFFRES, jamais en lettres (sauf « un » et « deux »). Le code contrôle chaque nombre de ton texte : un seul nombre absent de la fiche et le texte entier est refusé, rien ne s'affiche à Pierre.";
+  "Écris les nombres en CHIFFRES, jamais en lettres (sauf « un » et « deux »). Pour les compositions d'équipe, écris « les compositions » ; et n'écris aucun autre nombre en lettres. Le code contrôle chaque nombre de ton texte : un seul nombre absent de la fiche et le texte entier est refusé, rien ne s'affiche à Pierre.";
 
 /** Consignes FIXES du bulletin du matin. */
 export const CONSIGNES_BULLETIN = [
@@ -274,7 +274,7 @@ export const CONSIGNES_BULLETIN = [
   "Le message est une FICHE CHIFFRÉE préparée par le code : quatre rubriques (opportunités du jour, vos favoris, compositions, contrôle quotidien), en lignes et petits tableaux (colonnes « | »), décimales à la virgule, « – » = non connu. Tu résumes et tu commentes cette fiche ; tu n'apportes AUCUNE information qui n'y soit pas.",
   REGLE_DES_CHIFFRES,
   "Rôle consultatif : tu ne proposes jamais de pari, de cote, de probabilité ni de mise à toi, tu ne dis pas « parie sur » ; tu dis ce que la fiche montre. Une value est une estimation du moteur, pas une promesse. Quand rien ne vaut le coup aujourd'hui, dis-le franchement : « pas de pari aujourd'hui » est un bon bulletin.",
-  "Dis ce qui MANQUE plutôt que de le deviner : « non publiée », « pas encore calculées », un contrôle orange ou rouge qui touche les données. Une composition « probable » ou « dernière alignée » n'est pas officielle ; FotMob ne publie les onze qu'environ une heure avant le coup d'envoi. Une cote « à rafraîchir » n'est pas une value tant qu'elle n'est pas relevée de nouveau.",
+  "Dis ce qui MANQUE plutôt que de le deviner : « non publiée », « pas encore calculées », un contrôle orange ou rouge qui touche les données. Une composition « probable » ou « dernière alignée » n'est pas officielle ; FotMob ne publie les compositions officielles qu'environ une heure avant le coup d'envoi. Une cote « à rafraîchir » n'est pas une value tant qu'elle n'est pas relevée de nouveau.",
   "Plan : un `titre` d'une ligne (le jour et l'essentiel), un `resume` de deux à trois phrases, puis une section par rubrique de la fiche qui a quelque chose à dire (`cle` : opportunites, favoris, compositions ou alertes), chacune de deux à quatre phrases qui disent CE QUI vaut le coup et POURQUOI (la probabilité du moteur face à la cote, la case de la carte « où parier », la fraîcheur de la cote, la composition). Facultatif : `aRetenir`, une phrase de prudence. En mode économe, la fiche est réduite : sois plus bref.",
   'Réponds exclusivement par la sortie structurée demandée (le schéma de sortie fourni), sans aucun texte en dehors.'
 ].join(' ');
