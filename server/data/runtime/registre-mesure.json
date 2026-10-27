@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "majLe": "2026-10-23T20:46:36.026Z",
+  "majLe": "2026-10-27T21:59:54.653Z",
   "etapes": {
     "27": {
       "variantes": [
@@ -1923,6 +1923,23 @@
           "quoi": "m7 démarrage à froid : le total statistique rapproché de celui du championnat tant que le club le moins connu a moins de 8 matchs (retenu)",
           "ou": "construction",
           "le": "2026-10-22T15:45:40.552Z"
+        },
+        {
+          "id": "modele-buts-v1~2",
+          "quoi": "Un seul modèle de buts : une grille des scores (Poisson et Dixon-Coles, rho −0,05) calée sur les cotes (1N2, et plus/moins 2,5 gratuit quand il existe), mélangée aux forces d’attaque et de défense tirées des xG ou des buts, pondérées dans le temps (demi-vies 35/25 remesurées sur 2024-25 et football-data 2001-2012 ; celles de l’étape 18, jugées sur 2019-2023, lues comme point de départ) ; tous les marchés de buts et le score en sortent ; démarrage à froid : retenu après mesure (m7). — nouvel essai face à la version n° 5",
+          "ou": "a-blanc",
+          "le": "2026-10-24T14:48:31.802Z"
+        }
+      ]
+    },
+    "28": {
+      "lancements": [
+        {
+          "version": "simulation-v1",
+          "quoi": "Simulation complète : le déroulé de chaque match des 48 prochaines heures (10 000 matchs par créneaux d’une minute, effets du score et cartons rouges, recalés sur la grille du modèle de buts), le prix juste des combinés d’un même match, les fins de saison des championnats et l’enjeu de chaque rencontre ; calculée chaque nuit à blanc, montrée d’un clic, jamais lue par le moteur.",
+          "le": "2026-10-27",
+          "heure": "2026-10-27T21:59:54.653Z",
+          "source": "code"
         }
       ]
     },
