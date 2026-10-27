@@ -1,0 +1,1499 @@
+{
+ "format": 1,
+ "mode": "reelles",
+ "quoi": "Porte 1 de l’étape 28 sur football-data P2 : LE passage unique sur les vraies issues.",
+ "debut": "2026-10-27T09:20:24.375Z",
+ "fin": "2026-10-27T10:25:43.197Z",
+ "empreintes": {
+  "regles": {
+   "fichier": "porte1-regles.md",
+   "sha1": "a5d5d737226320a085bcaafde60df4afb7c0306a"
+  },
+  "fichiers": [
+   {
+    "fichier": "C:/Users/PC/CoteMaster/bac-a-sable/code/server/src/data/simulation/simulationBanc.js",
+    "sha1": "d02b56566d9129d1874d22725731c920e2d22e6c"
+   },
+   {
+    "fichier": "C:/Users/PC/CoteMaster/bac-a-sable/code/server/src/data/simulation/simulationMatch.js",
+    "sha1": "a429d807e19399403887f74cf866a630a3b95b29"
+   },
+   {
+    "fichier": "C:/Users/PC/CoteMaster/bac-a-sable/code/server/src/data/simulation/jambes.js",
+    "sha1": "2bf25041052215ca588be63dd0f128162f0500a0"
+   },
+   {
+    "fichier": "C:/Users/PC/CoteMaster/bac-a-sable/code/server/src/data/simulation/reglages.js",
+    "sha1": "a61b139a9d8904bfa09d09a0080f96972b79f554"
+   },
+   {
+    "fichier": "C:/Users/PC/CoteMaster/bac-a-sable/code/server/src/data/simulation/simulationMatchsEnfant.js",
+    "sha1": "4e93366ba4af35cb81eddcbb2e287c35663a844f"
+   },
+   {
+    "fichier": "C:/Users/PC/CoteMaster/bac-a-sable/code/server/src/core/engine/goalModel.js",
+    "sha1": "236a33d7f952b12d4596b02ecb7c6090afca137d"
+   },
+   {
+    "fichier": "C:/Users/PC/CoteMaster/bac-a-sable/code/server/src/bench/guard.js",
+    "sha1": "60551323d356d5502684ca32276793fcb946ef84"
+   },
+   {
+    "fichier": "C:/Users/PC/CoteMaster/bac-a-sable/code/server/src/bench/periodes.js",
+    "sha1": "d8b5264a88fd7ef241fb16bd209f3928c53ac628"
+   },
+   {
+    "fichier": "C:/Users/PC/CoteMaster/bac-a-sable/code/server/src/bench/lancements.js",
+    "sha1": "819cc3d2f4b27357e6d62080b555ddda6c44de20"
+   },
+   {
+    "fichier": "echantillon-p2.json",
+    "sha1": "659271bac17f1298384fcf78e80fed896a9fa099"
+   },
+   {
+    "fichier": "porte1.mjs",
+    "sha1": "165c29bcf9a36cd9d919c310ab2fbeb7b36f36b8"
+   },
+   {
+    "fichier": "C:/Users/PC/AppData/Local/Temp/claude/C--Users-PC-OneDrive-Bureau-developement-ProjetBot/c4b41134-df35-4d3f-be49-63a4f15181fd/scratchpad/etape28/partieA/candidate-modele-buts-essai2.json",
+    "sha1": "6c0cb1a6d8b83905b49a5db9b78e0ae165ee019c"
+   },
+   {
+    "fichier": "C:/Users/PC/AppData/Local/Temp/claude/C--Users-PC-OneDrive-Bureau-developement-ProjetBot/c4b41134-df35-4d3f-be49-63a4f15181fd/scratchpad/etape27/mesures/ecriture/rejeux/a1-p2.jsonl",
+    "sha1": "3123337dc7957ad0954094aeadf186fb8657b352"
+   },
+   {
+    "fichier": "C:/Users/PC/AppData/Local/Temp/claude/C--Users-PC-OneDrive-Bureau-developement-ProjetBot/c4b41134-df35-4d3f-be49-63a4f15181fd/scratchpad/etape28/rejeux/b-p2-28.jsonl",
+    "sha1": "d31555c7b3da3d64711730f357a2a934f3b45d25"
+   }
+  ]
+ },
+ "echantillon": {
+  "fichier": "echantillon-p2.json",
+  "sha1": "659271bac17f1298384fcf78e80fed896a9fa099",
+  "rencontres": 30149,
+  "limite": null
+ },
+ "n": 4000,
+ "rho": -0.05,
+ "graine": "graineDuMatch({ cle: fixtureKey, role: « porte1-p2 », λ, μ, ρ }) : la même pour avec et sans effets ; synthétiques : rôle « porte1-p2-synthetique » et tirage fnv1a(« <clé>|porte1-p2|tirage-synthetique »)",
+ "juge": {
+  "mode": "moyenne",
+  "sens": "min",
+  "variantes": 27,
+  "tirages": 1000,
+  "graine": 28
+ },
+ "lectureRejeuA": {
+  "lignes": 1256245,
+  "scoreExact": 46507,
+  "gardees": 30149,
+  "sourceCotes": 30149
+ },
+ "lectureIssues": {
+  "mode": "reelles",
+  "base": "C:/Users/PC/CoteMaster/bac-a-sable/base/match-stats.db",
+  "sql": "SELECT code, date_fichier, date, dom, ext, bd, be, mtd, mte, rouges_d, rouges_e FROM fd_history WHERE date BETWEEN '2019-07-01' AND '2023-06-30'",
+  "lues": 30149
+ },
+ "porte": "ouverte",
+ "f3a": {
+  "bloc": {
+   "verdict": "retenu",
+   "gainMillieme": 15.465,
+   "fourchetteMillieme": [
+    14.522931,
+    16.407232
+   ],
+   "matchs": 30149,
+   "lignes": 422086,
+   "variantes": 27,
+   "z": 3.113,
+   "raison": "L’amélioration dépasse ce que le hasard explique : la fourchette est entièrement au-dessus de zéro (30 149 matchs, 27 variantes essayées)."
+  },
+  "retenu": true,
+  "seuilNet": 1.5,
+  "combines": [
+   {
+    "nom": "1 & plus de 2,5",
+    "jambes": [
+     "result|[[\"outcome\",\"home\"]]",
+     "totalGoals|[[\"line\",2.5],[\"side\",\"over\"]]"
+    ],
+    "annonce": 25.79,
+    "produit": 21.67,
+    "rhoZero": 25.79,
+    "realise": 25.08,
+    "brut": 0.71,
+    "heriteDesJambes": 0.45,
+    "net": 0.26,
+    "netAdditif": -0.08,
+    "perteLog": {
+     "grille": 0.52435,
+     "produit": 0.52832,
+     "rhoZero": 0.52435
+    },
+    "eteint": false,
+    "ancien": {
+     "annonce": 24.93,
+     "produit": 20.9,
+     "realise": 25.08,
+     "brut": -0.15,
+     "net": 0.33
+    }
+   },
+   {
+    "nom": "1 & moins de 2,5",
+    "jambes": [
+     "result|[[\"outcome\",\"home\"]]",
+     "totalGoals|[[\"line\",2.5],[\"side\",\"under\"]]"
+    ],
+    "annonce": 17.49,
+    "produit": 21.62,
+    "rhoZero": 18.06,
+    "realise": 17.67,
+    "brut": -0.18,
+    "heriteDesJambes": 0.13,
+    "net": -0.3,
+    "netAdditif": -0.45,
+    "perteLog": {
+     "grille": 0.4541,
+     "produit": 0.45922,
+     "rhoZero": 0.45418
+    },
+    "eteint": false,
+    "ancien": {
+     "annonce": 17.82,
+     "produit": 21.85,
+     "realise": 17.67,
+     "brut": 0.15,
+     "net": -0.17
+    }
+   },
+   {
+    "nom": "N & moins de 2,5",
+    "jambes": [
+     "result|[[\"outcome\",\"draw\"]]",
+     "totalGoals|[[\"line\",2.5],[\"side\",\"under\"]]"
+    ],
+    "annonce": 19.94,
+    "produit": 13.25,
+    "rhoZero": 18.8,
+    "realise": 20.07,
+    "brut": -0.13,
+    "heriteDesJambes": -0.66,
+    "net": 0.53,
+    "netAdditif": 0.84,
+    "perteLog": {
+     "grille": 0.4937,
+     "produit": 0.51194,
+     "rhoZero": 0.49425
+    },
+    "eteint": false,
+    "ancien": {
+     "annonce": 20.31,
+     "produit": 13.72,
+     "realise": 20.07,
+     "brut": 0.23,
+     "net": 0.24
+    }
+   },
+   {
+    "nom": "2 & plus de 2,5",
+    "jambes": [
+     "result|[[\"outcome\",\"away\"]]",
+     "totalGoals|[[\"line\",2.5],[\"side\",\"over\"]]"
+    ],
+    "annonce": 17.94,
+    "produit": 15.37,
+    "rhoZero": 17.94,
+    "realise": 17.8,
+    "brut": 0.14,
+    "heriteDesJambes": 0.2,
+    "net": -0.07,
+    "netAdditif": -0.31,
+    "perteLog": {
+     "grille": 0.4338,
+     "produit": 0.43667,
+     "rhoZero": 0.4338
+    },
+    "eteint": false,
+    "ancien": {
+     "annonce": 17.74,
+     "produit": 15.18,
+     "realise": 17.8,
+     "brut": -0.07,
+     "net": 0.01
+    }
+   },
+   {
+    "nom": "1 & les deux marquent",
+    "jambes": [
+     "result|[[\"outcome\",\"home\"]]",
+     "bothTeamsScore|[[\"outcome\",\"yes\"]]"
+    ],
+    "annonce": 18.89,
+    "produit": 21.77,
+    "rhoZero": 18.89,
+    "realise": 18.59,
+    "brut": 0.3,
+    "heriteDesJambes": -0.08,
+    "net": 0.38,
+    "netAdditif": 0.6,
+    "perteLog": {
+     "grille": 0.46479,
+     "produit": 0.46786,
+     "rhoZero": 0.46479
+    },
+    "eteint": false,
+    "ancien": {
+     "annonce": 18.39,
+     "produit": 21.26,
+     "realise": 18.59,
+     "brut": -0.2,
+     "net": 0.36
+    }
+   },
+   {
+    "nom": "2 & les deux marquent",
+    "jambes": [
+     "result|[[\"outcome\",\"away\"]]",
+     "bothTeamsScore|[[\"outcome\",\"yes\"]]"
+    ],
+    "annonce": 14.28,
+    "produit": 16.04,
+    "rhoZero": 14.28,
+    "realise": 14.34,
+    "brut": -0.06,
+    "heriteDesJambes": -0.15,
+    "net": 0.09,
+    "netAdditif": 0.58,
+    "perteLog": {
+     "grille": 0.39131,
+     "produit": 0.39261,
+     "rhoZero": 0.39131
+    },
+    "eteint": false,
+    "ancien": {
+     "annonce": 14.13,
+     "produit": 15.95,
+     "realise": 14.34,
+     "brut": -0.21,
+     "net": 0.01
+    }
+   },
+   {
+    "nom": "N & les deux marquent",
+    "jambes": [
+     "result|[[\"outcome\",\"draw\"]]",
+     "bothTeamsScore|[[\"outcome\",\"yes\"]]"
+    ],
+    "annonce": 17.56,
+    "produit": 12.92,
+    "rhoZero": 16.99,
+    "realise": 18.62,
+    "brut": -1.07,
+    "heriteDesJambes": -0.78,
+    "net": -0.29,
+    "netAdditif": 0.48,
+    "perteLog": {
+     "grille": 0.47778,
+     "produit": 0.49045,
+     "rhoZero": 0.47834
+    },
+    "eteint": false,
+    "ancien": {
+     "annonce": 17.5,
+     "produit": 12.8,
+     "realise": 18.62,
+     "brut": -1.13,
+     "net": -0.27
+    }
+   },
+   {
+    "nom": "plus de 2,5 & les deux marquent",
+    "jambes": [
+     "totalGoals|[[\"line\",2.5],[\"side\",\"over\"]]",
+     "bothTeamsScore|[[\"outcome\",\"yes\"]]"
+    ],
+    "annonce": 38.76,
+    "produit": 25.36,
+    "rhoZero": 38.76,
+    "realise": 39.11,
+    "brut": -0.35,
+    "heriteDesJambes": -0.43,
+    "net": 0.08,
+    "netAdditif": 0.23,
+    "perteLog": {
+     "grille": 0.66177,
+     "produit": 0.70973,
+     "rhoZero": 0.66177
+    },
+    "eteint": false,
+    "ancien": {
+     "annonce": 38,
+     "produit": 24.53,
+     "realise": 39.11,
+     "brut": -1.11,
+     "net": 0.78
+    }
+   },
+   {
+    "nom": "1 & dom. plus de 1,5",
+    "jambes": [
+     "result|[[\"outcome\",\"home\"]]",
+     "teamGoals|[[\"line\",1.5],[\"side\",\"over\"],[\"team\",\"home\"]]"
+    ],
+    "annonce": 33.5,
+    "produit": 20.25,
+    "rhoZero": 33.5,
+    "realise": 32.47,
+    "brut": 1.03,
+    "heriteDesJambes": 0.76,
+    "net": 0.28,
+    "netAdditif": 0.07,
+    "perteLog": {
+     "grille": 0.57871,
+     "produit": 0.6262,
+     "rhoZero": 0.57871
+    },
+    "eteint": false,
+    "ancien": {
+     "annonce": 32.6,
+     "produit": 19.43,
+     "realise": 32.47,
+     "brut": 0.13,
+     "net": 0.65
+    }
+   },
+   {
+    "nom": "1 sans encaisser",
+    "jambes": [
+     "result|[[\"outcome\",\"home\"]]",
+     "teamGoals|[[\"line\",0.5],[\"side\",\"under\"],[\"team\",\"away\"]]"
+    ],
+    "annonce": 24.39,
+    "produit": 15.45,
+    "rhoZero": 24.96,
+    "realise": 24.16,
+    "brut": 0.23,
+    "heriteDesJambes": 0.73,
+    "net": -0.5,
+    "netAdditif": -0.88,
+    "perteLog": {
+     "grille": 0.52377,
+     "produit": 0.55495,
+     "rhoZero": 0.52397
+    },
+    "eteint": false,
+    "ancien": {
+     "annonce": 24.37,
+     "produit": 15.24,
+     "realise": 24.16,
+     "brut": 0.2,
+     "net": -0.44
+    }
+   },
+   {
+    "nom": "1 & plus de 1,5",
+    "jambes": [
+     "result|[[\"outcome\",\"home\"]]",
+     "totalGoals|[[\"line\",1.5],[\"side\",\"over\"]]"
+    ],
+    "annonce": 33.5,
+    "produit": 32.37,
+    "rhoZero": 33.5,
+    "realise": 32.47,
+    "brut": 1.03,
+    "heriteDesJambes": 0.55,
+    "net": 0.48,
+    "netAdditif": 0.19,
+    "perteLog": {
+     "grille": 0.57871,
+     "produit": 0.57921,
+     "rhoZero": 0.57871
+    },
+    "eteint": false,
+    "ancien": {
+     "annonce": 32.6,
+     "produit": 31.52,
+     "realise": 32.47,
+     "brut": 0.13,
+     "net": 0.48
+    }
+   },
+   {
+    "nom": "1 & plus de 2,5 & les deux marquent",
+    "jambes": [
+     "result|[[\"outcome\",\"home\"]]",
+     "totalGoals|[[\"line\",2.5],[\"side\",\"over\"]]",
+     "bothTeamsScore|[[\"outcome\",\"yes\"]]"
+    ],
+    "annonce": 18.89,
+    "produit": 11.03,
+    "rhoZero": 18.89,
+    "realise": 18.59,
+    "brut": 0.3,
+    "heriteDesJambes": 0.02,
+    "net": 0.28,
+    "netAdditif": 0.34,
+    "perteLog": {
+     "grille": 0.46479,
+     "produit": 0.49204,
+     "rhoZero": 0.46479
+    },
+    "eteint": false,
+    "ancien": {
+     "annonce": 18.39,
+     "produit": 10.57,
+     "realise": 18.59,
+     "brut": -0.2,
+     "net": 0.72
+    }
+   },
+   {
+    "nom": "moins de 3,5 & les deux marquent",
+    "jambes": [
+     "totalGoals|[[\"line\",3.5],[\"side\",\"under\"]]",
+     "bothTeamsScore|[[\"outcome\",\"yes\"]]"
+    ],
+    "annonce": 26.84,
+    "produit": 36.25,
+    "rhoZero": 26.27,
+    "realise": 28.14,
+    "brut": -1.3,
+    "heriteDesJambes": -0.67,
+    "net": -0.63,
+    "netAdditif": 0.14,
+    "perteLog": {
+     "grille": 0.59219,
+     "produit": 0.60694,
+     "rhoZero": 0.59266
+    },
+    "eteint": false,
+    "ancien": {
+     "annonce": 26.83,
+     "produit": 36.12,
+     "realise": 28.14,
+     "brut": -1.32,
+     "net": -0.61
+    }
+   },
+   {
+    "nom": "double chance 1N & moins de 3,5",
+    "jambes": [
+     "doubleChance|[[\"outcome\",\"homeDraw\"]]",
+     "totalGoals|[[\"line\",3.5],[\"side\",\"under\"]]"
+    ],
+    "annonce": 49.67,
+    "produit": 49.57,
+    "rhoZero": 49.1,
+    "realise": 50.25,
+    "brut": -0.58,
+    "heriteDesJambes": -0.56,
+    "net": -0.02,
+    "netAdditif": 0.22,
+    "perteLog": {
+     "grille": 0.6708,
+     "produit": 0.67092,
+     "rhoZero": 0.67101
+    },
+    "eteint": false,
+    "ancien": {
+     "annonce": 50.15,
+     "produit": 50.06,
+     "realise": 50.25,
+     "brut": -0.1,
+     "net": 0.01
+    }
+   }
+  ],
+  "eteints": []
+ },
+ "f2c": {
+  "bloc": {
+   "verdict": "pas-prouve",
+   "gainMillieme": 0.007,
+   "fourchetteMillieme": [
+    -0.127292,
+    0.140614
+   ],
+   "matchs": 30149,
+   "lignes": 452235,
+   "variantes": 27,
+   "z": 3.113,
+   "raison": "La fourchette contient zéro : l’écart peut venir du hasard (30 149 matchs, 27 variantes essayées)."
+  },
+  "moinsBon": false,
+  "marchesDuBloc": [
+   "htD",
+   "htH",
+   "htA",
+   "htO05",
+   "htO15",
+   "htFt0",
+   "htFt1",
+   "htFt2",
+   "htFt3",
+   "htFt4",
+   "htFt5",
+   "htFt6",
+   "htFt7",
+   "htFt8",
+   "deuxMiTemps05"
+  ],
+  "parMarche": {
+   "regle": "|net exact| ≤ 1 pt (arrondi au centième), 17 marchés",
+   "marches": [
+    "htD",
+    "htH",
+    "htA",
+    "htO05",
+    "htO15",
+    "htFt0",
+    "htFt1",
+    "htFt2",
+    "htFt3",
+    "htFt4",
+    "htFt5",
+    "htFt6",
+    "htFt7",
+    "htFt8",
+    "deuxMiTemps05",
+    "h2plusQueH1",
+    "rougeAuMoinsUn"
+   ],
+   "seuilNet": 1,
+   "ecartees": 41,
+   "partEcartee": 0.136,
+   "partMax": 1,
+   "nonVerifie": false
+  },
+  "marches": [
+   {
+    "cle": "htD",
+    "libelle": "mi-temps nul",
+    "dansLaPorte": true,
+    "n": 30149,
+    "annonce": 41.41,
+    "annonceSansEffets": 41.58,
+    "realise": 41.55,
+    "brut": -0.14,
+    "herite": "nul",
+    "ecartHerite": -0.72,
+    "netAdditif": 0.58,
+    "perteLog": {
+     "avecEffets": 0.67411,
+     "sansEffets": 0.67414
+    },
+    "nExact": 30108,
+    "netExact": 0.16,
+    "eteint": false
+   },
+   {
+    "cle": "htH",
+    "libelle": "mi-temps domicile mène",
+    "dansLaPorte": true,
+    "n": 30149,
+    "annonce": 33.38,
+    "annonceSansEffets": 33.12,
+    "realise": 33.08,
+    "brut": 0.3,
+    "herite": "un",
+    "ecartHerite": 0.53,
+    "netAdditif": -0.23,
+    "perteLog": {
+     "avecEffets": 0.60772,
+     "sansEffets": 0.60763
+    },
+    "nExact": 30108,
+    "netExact": -0.05,
+    "eteint": false
+   },
+   {
+    "cle": "htA",
+    "libelle": "mi-temps extérieur mène",
+    "dansLaPorte": true,
+    "n": 30149,
+    "annonce": 25.21,
+    "annonceSansEffets": 25.3,
+    "realise": 25.37,
+    "brut": -0.15,
+    "herite": "deux",
+    "ecartHerite": 0.19,
+    "netAdditif": -0.35,
+    "perteLog": {
+     "avecEffets": 0.54147,
+     "sansEffets": 0.5413
+    },
+    "nExact": 30108,
+    "netExact": -0.11,
+    "eteint": false
+   },
+   {
+    "cle": "htO05",
+    "libelle": "mi-temps plus de 0,5",
+    "dansLaPorte": true,
+    "n": 30149,
+    "annonce": 69.28,
+    "annonceSansEffets": 69.31,
+    "realise": 69.47,
+    "brut": -0.18,
+    "herite": "plus15",
+    "ecartHerite": 0.32,
+    "netAdditif": -0.5,
+    "perteLog": {
+     "avecEffets": 0.60932,
+     "sansEffets": 0.6091
+    },
+    "nExact": 30108,
+    "netExact": -0.19,
+    "eteint": false
+   },
+   {
+    "cle": "htO15",
+    "libelle": "mi-temps plus de 1,5",
+    "dansLaPorte": true,
+    "n": 30149,
+    "annonce": 33.25,
+    "annonceSansEffets": 33.67,
+    "realise": 32.79,
+    "brut": 0.46,
+    "herite": "plus15",
+    "ecartHerite": 0.32,
+    "netAdditif": 0.14,
+    "perteLog": {
+     "avecEffets": 0.62482,
+     "sansEffets": 0.62488
+    },
+    "nExact": 30108,
+    "netExact": 0.17,
+    "eteint": false
+   },
+   {
+    "cle": "htFt0",
+    "libelle": "1/1",
+    "dansLaPorte": true,
+    "n": 30149,
+    "annonce": 26.63,
+    "annonceSansEffets": 26.64,
+    "realise": 25.54,
+    "brut": 1.09,
+    "herite": "un",
+    "ecartHerite": 0.53,
+    "netAdditif": 0.56,
+    "perteLog": {
+     "avecEffets": 0.53216,
+     "sansEffets": 0.53213
+    },
+    "nExact": 30108,
+    "netExact": 0.41,
+    "eteint": false
+   },
+   {
+    "cle": "htFt1",
+    "libelle": "1/N",
+    "dansLaPorte": true,
+    "n": 30149,
+    "annonce": 4.87,
+    "annonceSansEffets": 4.74,
+    "realise": 5.25,
+    "brut": -0.38,
+    "herite": "nul",
+    "ecartHerite": -0.72,
+    "netAdditif": 0.35,
+    "perteLog": {
+     "avecEffets": 0.20538,
+     "sansEffets": 0.20558
+    },
+    "nExact": 30108,
+    "netExact": -0.07,
+    "eteint": false
+   },
+   {
+    "cle": "htFt2",
+    "libelle": "1/2",
+    "dansLaPorte": true,
+    "n": 30149,
+    "annonce": 1.87,
+    "annonceSansEffets": 1.74,
+    "realise": 2.29,
+    "brut": -0.42,
+    "herite": "deux",
+    "ecartHerite": 0.19,
+    "netAdditif": -0.61,
+    "perteLog": {
+     "avecEffets": 0.10796,
+     "sansEffets": 0.10816
+    },
+    "nExact": 30108,
+    "netExact": -0.38,
+    "eteint": false
+   },
+   {
+    "cle": "htFt3",
+    "libelle": "N/1",
+    "dansLaPorte": true,
+    "n": 30149,
+    "annonce": 14.3,
+    "annonceSansEffets": 14.44,
+    "realise": 14.66,
+    "brut": -0.35,
+    "herite": "un",
+    "ecartHerite": 0.53,
+    "netAdditif": -0.88,
+    "perteLog": {
+     "avecEffets": 0.40897,
+     "sansEffets": 0.40886
+    },
+    "nExact": 30108,
+    "netExact": -0.19,
+    "eteint": false
+   },
+   {
+    "cle": "htFt4",
+    "libelle": "N/N",
+    "dansLaPorte": true,
+    "n": 30149,
+    "annonce": 15.99,
+    "annonceSansEffets": 16.09,
+    "realise": 15.9,
+    "brut": 0.09,
+    "herite": "nul",
+    "ecartHerite": -0.72,
+    "netAdditif": 0.81,
+    "perteLog": {
+     "avecEffets": 0.43217,
+     "sansEffets": 0.43223
+    },
+    "nExact": 30108,
+    "netExact": 0.18,
+    "eteint": false
+   },
+   {
+    "cle": "htFt5",
+    "libelle": "N/2",
+    "dansLaPorte": true,
+    "n": 30149,
+    "annonce": 11.11,
+    "annonceSansEffets": 11.04,
+    "realise": 10.99,
+    "brut": 0.12,
+    "herite": "deux",
+    "ecartHerite": 0.19,
+    "netAdditif": -0.07,
+    "perteLog": {
+     "avecEffets": 0.33702,
+     "sansEffets": 0.33707
+    },
+    "nExact": 30108,
+    "netExact": 0.17,
+    "eteint": false
+   },
+   {
+    "cle": "htFt6",
+    "libelle": "2/1",
+    "dansLaPorte": true,
+    "n": 30149,
+    "annonce": 2.33,
+    "annonceSansEffets": 2.19,
+    "realise": 2.55,
+    "brut": -0.22,
+    "herite": "un",
+    "ecartHerite": 0.53,
+    "netAdditif": -0.75,
+    "perteLog": {
+     "avecEffets": 0.1182,
+     "sansEffets": 0.1183
+    },
+    "nExact": 30108,
+    "netExact": -0.21,
+    "eteint": false
+   },
+   {
+    "cle": "htFt7",
+    "libelle": "2/N",
+    "dansLaPorte": true,
+    "n": 30149,
+    "annonce": 4.71,
+    "annonceSansEffets": 4.74,
+    "realise": 5.11,
+    "brut": -0.4,
+    "herite": "nul",
+    "ecartHerite": -0.72,
+    "netAdditif": 0.32,
+    "perteLog": {
+     "avecEffets": 0.20125,
+     "sansEffets": 0.20113
+    },
+    "nExact": 30108,
+    "netExact": -0.11,
+    "eteint": false
+   },
+   {
+    "cle": "htFt8",
+    "libelle": "2/2",
+    "dansLaPorte": true,
+    "n": 30149,
+    "annonce": 18.17,
+    "annonceSansEffets": 18.38,
+    "realise": 17.71,
+    "brut": 0.47,
+    "herite": "deux",
+    "ecartHerite": 0.19,
+    "netAdditif": 0.27,
+    "perteLog": {
+     "avecEffets": 0.43364,
+     "sansEffets": 0.43369
+    },
+    "nExact": 30108,
+    "netExact": 0.21,
+    "eteint": false
+   },
+   {
+    "cle": "deuxMiTemps05",
+    "libelle": "un but dans chaque mi-temps",
+    "dansLaPorte": true,
+    "n": 30149,
+    "annonce": 53.68,
+    "annonceSansEffets": 53.52,
+    "realise": 54.66,
+    "brut": -0.98,
+    "herite": "btts",
+    "ecartHerite": -0.83,
+    "netAdditif": -0.15,
+    "perteLog": {
+     "avecEffets": 0.6794,
+     "sansEffets": 0.6795
+    },
+    "nExact": 30108,
+    "netExact": -1.28,
+    "eteint": true
+   },
+   {
+    "cle": "h2plusQueH1",
+    "libelle": "2e mi-temps plus de buts",
+    "dansLaPorte": true,
+    "n": 30149,
+    "annonce": 43.03,
+    "annonceSansEffets": 42.62,
+    "realise": 43.7,
+    "brut": -0.67,
+    "herite": null,
+    "ecartHerite": null,
+    "netAdditif": null,
+    "perteLog": {
+     "avecEffets": 0.68525,
+     "sansEffets": 0.68515
+    },
+    "nExact": 30108,
+    "netExact": -0.39,
+    "eteint": false
+   },
+   {
+    "cle": "retourDom",
+    "libelle": "domicile gagne mené à la MT",
+    "dansLaPorte": false,
+    "n": 30149,
+    "annonce": 2.33,
+    "annonceSansEffets": 2.19,
+    "realise": 2.55,
+    "brut": -0.22,
+    "herite": null,
+    "ecartHerite": null,
+    "netAdditif": null,
+    "perteLog": {
+     "avecEffets": 0.1182,
+     "sansEffets": 0.1183
+    },
+    "nExact": 30108,
+    "netExact": -0.21,
+    "eteint": null
+   },
+   {
+    "cle": "retourExt",
+    "libelle": "extérieur gagne mené à la MT",
+    "dansLaPorte": false,
+    "n": 30149,
+    "annonce": 1.87,
+    "annonceSansEffets": 1.74,
+    "realise": 2.29,
+    "brut": -0.42,
+    "herite": null,
+    "ecartHerite": null,
+    "netAdditif": null,
+    "perteLog": {
+     "avecEffets": 0.10796,
+     "sansEffets": 0.10816
+    },
+    "nExact": 30108,
+    "netExact": -0.38,
+    "eteint": null
+   },
+   {
+    "cle": "rougeAuMoinsUn",
+    "libelle": "au moins un rouge",
+    "dansLaPorte": true,
+    "n": 30149,
+    "annonce": 21.69,
+    "annonceSansEffets": 0,
+    "realise": 18.04,
+    "brut": 3.65,
+    "herite": null,
+    "ecartHerite": null,
+    "netAdditif": 3.65,
+    "perteLog": {
+     "avecEffets": 0.47647,
+     "sansEffets": 2.49237
+    },
+    "nExact": 30108,
+    "netExact": 3.6,
+    "eteint": true
+   }
+  ],
+  "eteints": [
+   "deuxMiTemps05",
+   "rougeAuMoinsUn"
+  ]
+ },
+ "rapportes": {
+  "rho": {
+   "verdict": "retenu",
+   "gainMillieme": 0.148,
+   "fourchetteMillieme": [
+    0.067256,
+    0.228236
+   ],
+   "matchs": 30149,
+   "lignes": 422086,
+   "variantes": 27,
+   "z": 3.113,
+   "raison": "L’amélioration dépasse ce que le hasard explique : la fourchette est entièrement au-dessus de zéro (30 149 matchs, 27 variantes essayées)."
+  },
+  "ancienModele": {
+   "bloc": {
+    "verdict": "retenu",
+    "gainMillieme": 16.991,
+    "fourchetteMillieme": [
+     16.024035,
+     17.956969
+    ],
+    "matchs": 30149,
+    "lignes": 422086,
+    "variantes": 27,
+    "z": 3.113,
+    "raison": "L’amélioration dépasse ce que le hasard explique : la fourchette est entièrement au-dessus de zéro (30 149 matchs, 27 variantes essayées)."
+   },
+   "rencontres": 30149,
+   "sansGrille": 0
+  },
+  "scoreHerite": {
+   "un": {
+    "libelle": "1 (domicile gagne)",
+    "annonce": 43.28,
+    "realise": 42.75,
+    "ecart": 0.53
+   },
+   "nul": {
+    "libelle": "N (nul)",
+    "annonce": 25.54,
+    "realise": 26.26,
+    "ecart": -0.72
+   },
+   "deux": {
+    "libelle": "2 (extérieur gagne)",
+    "annonce": 31.18,
+    "realise": 30.99,
+    "ecart": 0.19
+   },
+   "btts": {
+    "libelle": "les deux marquent",
+    "annonce": 50.72,
+    "realise": 51.55,
+    "ecart": -0.83
+   },
+   "plus15": {
+    "libelle": "plus de 1,5 buts",
+    "annonce": 74.29,
+    "realise": 73.98,
+    "ecart": 0.32
+   }
+  },
+  "jambes": {
+   "result|[[\"outcome\",\"home\"]]": {
+    "annonce": 43.28,
+    "realise": 42.75,
+    "ecart": 0.53,
+    "annonceAncien": 42.75
+   },
+   "totalGoals|[[\"line\",2.5],[\"side\",\"over\"]]": {
+    "annonce": 49.33,
+    "realise": 49.07,
+    "ecart": 0.25,
+    "annonceAncien": 48.15
+   },
+   "totalGoals|[[\"line\",2.5],[\"side\",\"under\"]]": {
+    "annonce": 50.67,
+    "realise": 50.93,
+    "ecart": -0.25,
+    "annonceAncien": 51.85
+   },
+   "result|[[\"outcome\",\"draw\"]]": {
+    "annonce": 25.54,
+    "realise": 26.26,
+    "ecart": -0.72,
+    "annonceAncien": 25.79
+   },
+   "result|[[\"outcome\",\"away\"]]": {
+    "annonce": 31.18,
+    "realise": 30.99,
+    "ecart": 0.19,
+    "annonceAncien": 31.45
+   },
+   "bothTeamsScore|[[\"outcome\",\"yes\"]]": {
+    "annonce": 50.72,
+    "realise": 51.55,
+    "ecart": -0.83,
+    "annonceAncien": 50.01
+   },
+   "teamGoals|[[\"line\",1.5],[\"side\",\"over\"],[\"team\",\"home\"]]": {
+    "annonce": 42.28,
+    "realise": 41.84,
+    "ecart": 0.44,
+    "annonceAncien": 41.18
+   },
+   "teamGoals|[[\"line\",0.5],[\"side\",\"under\"],[\"team\",\"away\"]]": {
+    "annonce": 32.38,
+    "realise": 31.8,
+    "ecart": 0.58,
+    "annonceAncien": 32.66
+   },
+   "totalGoals|[[\"line\",1.5],[\"side\",\"over\"]]": {
+    "annonce": 74.29,
+    "realise": 73.98,
+    "ecart": 0.32,
+    "annonceAncien": 73.2
+   },
+   "totalGoals|[[\"line\",3.5],[\"side\",\"under\"]]": {
+    "annonce": 72.06,
+    "realise": 72.67,
+    "ecart": -0.61,
+    "annonceAncien": 73
+   },
+   "doubleChance|[[\"outcome\",\"homeDraw\"]]": {
+    "annonce": 68.82,
+    "realise": 69.01,
+    "ecart": -0.19,
+    "annonceAncien": 68.55
+   }
+  },
+  "deciles": {
+   "htD": [
+    {
+     "de": 0.2,
+     "n": 705,
+     "annonce": 27,
+     "realise": 26.2
+    },
+    {
+     "de": 0.3,
+     "n": 8584,
+     "annonce": 37,
+     "realise": 36.9
+    },
+    {
+     "de": 0.4,
+     "n": 20626,
+     "annonce": 43.6,
+     "realise": 44
+    }
+   ],
+   "htH": [
+    {
+     "de": 0.1,
+     "n": 2472,
+     "annonce": 16.1,
+     "realise": 16.3
+    },
+    {
+     "de": 0.2,
+     "n": 9501,
+     "annonce": 25.8,
+     "realise": 25.1
+    },
+    {
+     "de": 0.3,
+     "n": 10991,
+     "annonce": 34.5,
+     "realise": 34.5
+    },
+    {
+     "de": 0.4,
+     "n": 4588,
+     "annonce": 44.1,
+     "realise": 44.2
+    },
+    {
+     "de": 0.5,
+     "n": 1633,
+     "annonce": 54.2,
+     "realise": 53.5
+    },
+    {
+     "de": 0.6,
+     "n": 651,
+     "annonce": 64,
+     "realise": 61.8
+    }
+   ],
+   "htA": [
+    {
+     "de": 0,
+     "n": 1096,
+     "annonce": 7.6,
+     "realise": 9.4
+    },
+    {
+     "de": 0.1,
+     "n": 7979,
+     "annonce": 16.1,
+     "realise": 16.7
+    },
+    {
+     "de": 0.2,
+     "n": 13374,
+     "annonce": 24.7,
+     "realise": 24.3
+    },
+    {
+     "de": 0.3,
+     "n": 5361,
+     "annonce": 33.9,
+     "realise": 34.4
+    },
+    {
+     "de": 0.4,
+     "n": 1628,
+     "annonce": 44.1,
+     "realise": 44.8
+    },
+    {
+     "de": 0.5,
+     "n": 603,
+     "annonce": 53.9,
+     "realise": 53.6
+    }
+   ],
+   "htO05": [
+    {
+     "de": 0.5,
+     "n": 686,
+     "annonce": 58.6,
+     "realise": 60.6
+    },
+    {
+     "de": 0.6,
+     "n": 16598,
+     "annonce": 66.2,
+     "realise": 66.4
+    },
+    {
+     "de": 0.7,
+     "n": 12153,
+     "annonce": 73.3,
+     "realise": 73.3
+    },
+    {
+     "de": 0.8,
+     "n": 708,
+     "annonce": 82.3,
+     "realise": 83.5
+    }
+   ],
+   "htO15": [
+    {
+     "de": 0.2,
+     "n": 9491,
+     "annonce": 27.1,
+     "realise": 26.6
+    },
+    {
+     "de": 0.3,
+     "n": 16877,
+     "annonce": 34.3,
+     "realise": 33.8
+    },
+    {
+     "de": 0.4,
+     "n": 3375,
+     "annonce": 43.2,
+     "realise": 42.8
+    },
+    {
+     "de": 0.5,
+     "n": 346,
+     "annonce": 53.1,
+     "realise": 54.6
+    }
+   ],
+   "htFt0": [
+    {
+     "de": 0,
+     "n": 1658,
+     "annonce": 6.9,
+     "realise": 6.1
+    },
+    {
+     "de": 0.1,
+     "n": 7220,
+     "annonce": 16,
+     "realise": 14.9
+    },
+    {
+     "de": 0.2,
+     "n": 11605,
+     "annonce": 24.8,
+     "realise": 23.6
+    },
+    {
+     "de": 0.3,
+     "n": 5929,
+     "annonce": 34.3,
+     "realise": 33.5
+    },
+    {
+     "de": 0.4,
+     "n": 2314,
+     "annonce": 44.2,
+     "realise": 43.6
+    },
+    {
+     "de": 0.5,
+     "n": 965,
+     "annonce": 54.4,
+     "realise": 50.8
+    },
+    {
+     "de": 0.6,
+     "n": 402,
+     "annonce": 63.8,
+     "realise": 64.4
+    }
+   ],
+   "htFt1": [
+    {
+     "de": 0,
+     "n": 30149,
+     "annonce": 4.9,
+     "realise": 5.2
+    }
+   ],
+   "htFt2": [
+    {
+     "de": 0,
+     "n": 30149,
+     "annonce": 1.9,
+     "realise": 2.3
+    }
+   ],
+   "htFt3": [
+    {
+     "de": 0,
+     "n": 4014,
+     "annonce": 7.4,
+     "realise": 7.1
+    },
+    {
+     "de": 0.1,
+     "n": 25288,
+     "annonce": 15.2,
+     "realise": 15.5
+    },
+    {
+     "de": 0.2,
+     "n": 847,
+     "annonce": 20.6,
+     "realise": 25.6
+    }
+   ],
+   "htFt4": [
+    {
+     "de": 0,
+     "n": 1523,
+     "annonce": 8,
+     "realise": 6.7
+    },
+    {
+     "de": 0.1,
+     "n": 25942,
+     "annonce": 15.9,
+     "realise": 15.9
+    },
+    {
+     "de": 0.2,
+     "n": 2684,
+     "annonce": 21.3,
+     "realise": 21.5
+    }
+   ],
+   "htFt5": [
+    {
+     "de": 0,
+     "n": 11649,
+     "annonce": 7,
+     "realise": 6.8
+    },
+    {
+     "de": 0.1,
+     "n": 18190,
+     "annonce": 13.6,
+     "realise": 13.5
+    },
+    {
+     "de": 0.2,
+     "n": 310,
+     "annonce": 20.6,
+     "realise": 21
+    }
+   ],
+   "htFt6": [
+    {
+     "de": 0,
+     "n": 30149,
+     "annonce": 2.3,
+     "realise": 2.6
+    }
+   ],
+   "htFt7": [
+    {
+     "de": 0,
+     "n": 30149,
+     "annonce": 4.7,
+     "realise": 5.1
+    }
+   ],
+   "htFt8": [
+    {
+     "de": 0,
+     "n": 5690,
+     "annonce": 6.7,
+     "realise": 6.6
+    },
+    {
+     "de": 0.1,
+     "n": 14088,
+     "annonce": 15.1,
+     "realise": 14.1
+    },
+    {
+     "de": 0.2,
+     "n": 7119,
+     "annonce": 24,
+     "realise": 23.9
+    },
+    {
+     "de": 0.3,
+     "n": 2088,
+     "annonce": 34.2,
+     "realise": 34
+    },
+    {
+     "de": 0.4,
+     "n": 834,
+     "annonce": 44.4,
+     "realise": 44.5
+    }
+   ],
+   "deuxMiTemps05": [
+    {
+     "de": 0.3,
+     "n": 373,
+     "annonce": 38.5,
+     "realise": 42.1
+    },
+    {
+     "de": 0.4,
+     "n": 9041,
+     "annonce": 46.5,
+     "realise": 47.6
+    },
+    {
+     "de": 0.5,
+     "n": 15507,
+     "annonce": 54.6,
+     "realise": 55.2
+    },
+    {
+     "de": 0.6,
+     "n": 4713,
+     "annonce": 63.3,
+     "realise": 65.5
+    },
+    {
+     "de": 0.7,
+     "n": 494,
+     "annonce": 73.1,
+     "realise": 73.1
+    }
+   ],
+   "h2plusQueH1": [
+    {
+     "de": 0.3,
+     "n": 1090,
+     "annonce": 39.4,
+     "realise": 43.3
+    },
+    {
+     "de": 0.4,
+     "n": 29057,
+     "annonce": 43.2,
+     "realise": 43.7
+    }
+   ],
+   "retourDom": [
+    {
+     "de": 0,
+     "n": 30149,
+     "annonce": 2.3,
+     "realise": 2.6
+    }
+   ],
+   "retourExt": [
+    {
+     "de": 0,
+     "n": 30149,
+     "annonce": 1.9,
+     "realise": 2.3
+    }
+   ],
+   "rougeAuMoinsUn": [
+    {
+     "de": 0.2,
+     "n": 29917,
+     "annonce": 21.7,
+     "realise": 18.1
+    }
+   ]
+  },
+  "decompositionExacte": {
+   "sautees": 41,
+   "quoi": "netExact = moyenne de P_avecEffets(marché | score final réel) − réalisé, sur les rencontres dont la case du score réel a au moins un chemin"
+  },
+  "masseNonCouverte": {
+   "avecEffets": 0.1758,
+   "sansEffets": 0.1586,
+   "maxAvecEffets": 0.5874
+  },
+  "tailleEffectiveMoyenne": 3921,
+  "controleDesDefinitions": {
+   "rencontres": 603,
+   "ecartMax": 2.3092638912203256e-14
+  }
+ },
+ "dureeS": {
+  "simulation": 3916.9,
+  "total": 3918.9
+ },
+ "rssMaxMo": 729,
+ "zK": 3.113
+}

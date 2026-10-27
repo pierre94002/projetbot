@@ -2,23 +2,27 @@
  * controlesAntiFuite.js — les écarts des CONTRÔLES ANTI-FUITE de la nuit, en mots simples (étape 27 du plan,
  * vérification du branchement, constat 4 : ces alertes durables n'étaient lues par aucun écran).
  * -----------------------------------------------------------------------
- * Quatre alertes durables du serveur (refresh-status.json, GET /api/refresh → `alerts`), posées par l'actualisation
+ * Cinq alertes durables du serveur (refresh-status.json, GET /api/refresh → `alerts`), posées par l'actualisation
  * (server/src/jobs/matchStatsAutoRefresh.js) et gardées jusqu'à la nuit qui ne trouve plus d'écart :
  *   tableJourJ — la table du jour J (ce que l'appli savait la veille), des lignes recalculées depuis les tables sources ;
  *   forcesButs — les forces de buts du modèle de buts unique, des lignes recalculées par un second chemin ;
  *   fichesJoueurs — les fiches des joueurs (étape 30, 22/10/2026), des joueurs recalculés par un second chemin ;
- *   stylesDeJeu — les styles de jeu (étape 37, 22/10/2026), des clubs recalculés à un jour donné par un second chemin.
+ *   stylesDeJeu — les styles de jeu (étape 37, 22/10/2026), des clubs recalculés à un jour donné par un second chemin ;
+ *   simulationMatchs — les déroulés simulés de la nuit (étape 28, 27/10/2026), les lignes rangées relues : des entrées
+ *     modifiées après le tirage, une ligne calculée après le coup d'envoi (vérification du 27/10, constat 14) ; chaque
+ *     écart y porte sa phrase (`texte`), dite telle quelle.
  * Valeur : { ecarts (20 au plus), total, lignes, updatedAt }, ou null quand la dernière nuit n'a trouvé aucun écart.
  * Un écart veut dire qu'un chiffre « d'avant le match » a pu voir le match lui-même. Pur : ne lit rien.
  * -----------------------------------------------------------------------
  */
 
-/** Les quatre contrôles, dans l'ordre de la nuit, et leur nom pour Pierre. */
+/** Les cinq contrôles, dans l'ordre de la nuit, et leur nom pour Pierre. */
 export const CONTROLES_ANTI_FUITE = Object.freeze([
   Object.freeze({ cle: 'tableJourJ', nom: 'Table du jour J (ce que l’appli savait la veille)' }),
   Object.freeze({ cle: 'forcesButs', nom: 'Forces de buts du modèle de buts' }),
   Object.freeze({ cle: 'fichesJoueurs', nom: 'Fiches des joueurs (force du onze)' }),
-  Object.freeze({ cle: 'stylesDeJeu', nom: 'Styles de jeu des équipes' })
+  Object.freeze({ cle: 'stylesDeJeu', nom: 'Styles de jeu des équipes' }),
+  Object.freeze({ cle: 'simulationMatchs', nom: 'Déroulés simulés (lignes de la nuit relues)' })
 ]);
 
 const entier = (x) => (Number.isFinite(Number(x)) ? Number(x).toLocaleString('fr-FR') : null);
@@ -34,9 +38,11 @@ function quandDit(iso) {
   return `${jour} à ${heure}`;
 }
 
-/** Un écart en quelques mots : le club et le jour (forces), le match, le joueur ou le championnat (table du jour J). */
+/** Un écart en quelques mots : sa phrase s'il en porte une, sinon le club et le jour (forces), le match, le joueur ou le championnat (table du jour J). */
 export function ecartDit(e) {
   if (!e || typeof e !== 'object') return null;
+  // Un écart qui porte sa phrase (le contrôle des déroulés simulés de l'étape 28) : dite telle quelle.
+  if (typeof e.texte === 'string' && e.texte) return e.texte;
   if (e.club !== undefined && e.J) return `club n° ${e.club} avant le ${jourDit(e.J)}`;
   if (e.joueur !== undefined && e.J) return `joueur n° ${e.joueur} avant le ${jourDit(e.J)}`;
   if (e.matchKey) return `match ${e.matchKey}`;

@@ -36,6 +36,9 @@ import ValueBadge from '@/components/common/ValueBadge.vue';
 // Étape 10 du plan : le ticket « J'ai parié » (cote prise, bookmaker, probabilité du moteur, heure de la cote).
 import TicketDuPari from '@/components/betting/TicketDuPari.vue';
 import { prendre, selectionDuCandidat, controleDuTicket, pariAEnregistrer, bookmakerPropose, gainAttenduDit, natureDuTicket, NATURES, SOURCES_DE_COTE } from '@/utils/ticket.js';
+// Étape 28 du plan : le prix juste d'un combiné du bordereau (POST /api/simulation/prix-combine), quand Réglages le montre.
+import { usePrixJuste } from '@/composables/usePrixJuste.js';
+import { prixJusteDit } from '@/utils/simulation.js';
 import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
 import { formatOdds, formatCurrency, formatPercent, formatDateTime, formatKickoff } from '@/utils/format.js';
 // Étape 11 du plan : vos garde-fous et les fiches de vos comptes — le ticket signale une mise au-delà, jamais un refus.
@@ -567,6 +570,8 @@ watch(combinerMemeMatch, (actif) => {
 
 /** Les sélections du ticket, dans la forme du ticket (utils/ticket.js) : cote relevée, bookmaker, probabilité du moteur. */
 const selectionsDuTicket = computed(() => selectedLegs.value.map(selectionDuCandidat));
+/** Étape 28 : le prix juste d'un combiné du bordereau (le serveur), demandé seulement pour un combiné ; éteint, le ticket dit qu'il attend. */
+const prixJusteDuBordereau = usePrixJuste(() => selectionsDuTicket.value, () => editionDuTicket.value.coteCombinee);
 /** Une sélection retirée depuis le ticket : comme la décocher dans sa liste. */
 function retirerDuTicketMesParis(cle) {
   const candidat = selectedLegs.value.find((c) => legKey(c) === cle);
@@ -617,6 +622,10 @@ async function submitSlip() {
     return;
   }
   const corpsDuTicket = pariAEnregistrer({ selections: selectionsDuTicket.value, edition: editionDuTicket.value, mise: Number(slipStake.value), origine: 'mes-paris', bookmakers: vosBookmakersDuScan.value });
+  // Étape 28 : le prix juste d'un combiné, quand Réglages le montre, part avec le pari (son gain attendu, son suivi) —
+  // jamais pendant un recalcul : la probabilité serait celle du ticket d'AVANT (vérification du 27/10, constat 11).
+  const prixDuCombine = prixJusteDit(prixJusteDuBordereau.reponse, { cote: editionDuTicket.value.coteCombinee });
+  if (!prixJusteDuBordereau.enCours && prixDuCombine.etat === 'prix' && prixDuCombine.pariable && corpsDuTicket.legs.length > 1) corpsDuTicket.prixJuste = { probabilite: prixDuCombine.probabilite, source: prixDuCombine.source, lueA: prixDuCombine.lueA };
   submittingSlip.value = true;
   try {
     await betsStore.createBet({
@@ -636,6 +645,7 @@ async function submitSlip() {
         // Étape 10 : la cote PRISE (à la place de la cote indiquée), le bookmaker, la probabilité du moteur au moment du pari, l'heure de la cote.
         .map((jambe, i) => ({ ...jambe, ...corpsDuTicket.legs[i] })),
       ...(corpsDuTicket.cotePrise ? { cotePrise: corpsDuTicket.cotePrise } : {}),
+      ...(corpsDuTicket.prixJuste ? { prixJuste: corpsDuTicket.prixJuste } : {}),
       origine: 'mes-paris'
     });
     toastStore.success(selectedLegs.value.length > 1 ? 'Pari combiné ajouté au carnet.' : 'Pari ajouté au carnet.');
@@ -749,6 +759,7 @@ onMounted(() => {
         :comptes="risque.fiches"
         :avec-validation="false"
         origine="mes-paris"
+        :prix-juste="prixJusteDuBordereau"
         @retirer="retirerDuTicketMesParis"
       />
 

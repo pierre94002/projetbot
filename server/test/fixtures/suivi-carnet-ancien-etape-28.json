@@ -1,0 +1,1281 @@
+{
+ "quoi": "Étape 28 (B7) : un carnet de paris d’AVANT l’étape 28 et le rapport de suivi que l’ANCIEN code (betsRepository.js et suiviParis.js d’avant le 27/10/2026) en tire ; le nouveau code doit redonner le même rapport à l’octet.",
+ "carnet": [
+  {
+   "id": "p1",
+   "createdAt": "2026-10-01T10:00:00.000Z",
+   "settledAt": "2026-10-01T20:00:00.000Z",
+   "status": "won",
+   "stake": 10,
+   "odds": 2.1,
+   "nature": "simple",
+   "bookmaker": "williamhill",
+   "legs": [
+    {
+     "matchId": "Arsenal-Chelsea",
+     "homeName": "Arsenal",
+     "awayName": "Chelsea",
+     "league": "EPL",
+     "commenceTime": "2026-10-01T18:00:00.000Z",
+     "market": "Résultat",
+     "marketId": null,
+     "params": null,
+     "pick": "Arsenal",
+     "odds": 2.1,
+     "status": "won",
+     "probabiliteMoteur": 0.52,
+     "bookmaker": "williamhill"
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "createdAt": "2026-10-02T10:00:00.000Z",
+   "settledAt": "2026-10-02T20:00:00.000Z",
+   "status": "lost",
+   "stake": 20,
+   "odds": 1.9,
+   "nature": "simple",
+   "bookmaker": "williamhill",
+   "legs": [
+    {
+     "matchId": "Fulham-Brentford",
+     "homeName": "Fulham",
+     "awayName": "Brentford",
+     "league": "EPL",
+     "commenceTime": "2026-10-01T18:00:00.000Z",
+     "market": "Total buts",
+     "marketId": null,
+     "params": null,
+     "pick": "Plus de 2,5 buts",
+     "odds": 1.9,
+     "status": "lost",
+     "probabiliteMoteur": 0.55,
+     "bookmaker": "williamhill"
+    }
+   ]
+  },
+  {
+   "id": "p3",
+   "createdAt": "2026-10-03T10:00:00.000Z",
+   "settledAt": "2026-10-03T21:00:00.000Z",
+   "status": "won",
+   "stake": 5,
+   "odds": 4.62,
+   "nature": "combine",
+   "legs": [
+    {
+     "matchId": "Leeds-Everton",
+     "homeName": "Leeds",
+     "awayName": "Everton",
+     "league": "EPL",
+     "commenceTime": "2026-10-01T18:00:00.000Z",
+     "market": "Résultat",
+     "marketId": null,
+     "params": null,
+     "pick": "Leeds",
+     "odds": 2.2,
+     "status": "won"
+    },
+    {
+     "matchId": "Wolves-Burnley",
+     "homeName": "Wolves",
+     "awayName": "Burnley",
+     "league": "EPL",
+     "commenceTime": "2026-10-01T18:00:00.000Z",
+     "market": "Résultat",
+     "marketId": null,
+     "params": null,
+     "pick": "Burnley",
+     "odds": 2.1,
+     "status": "won"
+    }
+   ]
+  },
+  {
+   "id": "p4",
+   "createdAt": "2026-10-04T10:00:00.000Z",
+   "settledAt": "2026-10-04T21:00:00.000Z",
+   "status": "lost",
+   "stake": 8,
+   "odds": 3.4,
+   "produitDesCotes": 3.9,
+   "cotePrise": 3.4,
+   "nature": "combine-meme-match",
+   "legs": [
+    {
+     "matchId": "Spurs-Villa",
+     "homeName": "Spurs",
+     "awayName": "Villa",
+     "league": "EPL",
+     "commenceTime": "2026-10-01T18:00:00.000Z",
+     "market": "Résultat",
+     "marketId": null,
+     "params": null,
+     "pick": "Spurs",
+     "odds": 2,
+     "status": "won"
+    },
+    {
+     "matchId": "Spurs-Villa",
+     "homeName": "Spurs",
+     "awayName": "Villa",
+     "league": "EPL",
+     "commenceTime": "2026-10-01T18:00:00.000Z",
+     "market": "Les 2 équipes marquent",
+     "marketId": null,
+     "params": null,
+     "pick": "Oui",
+     "odds": 1.95,
+     "status": "lost"
+    }
+   ]
+  },
+  {
+   "id": "p5",
+   "createdAt": "2026-10-05T10:00:00.000Z",
+   "settledAt": null,
+   "status": "pending",
+   "stake": 12,
+   "odds": 2.5,
+   "nature": "simple",
+   "legs": [
+    {
+     "matchId": "Man City-Liverpool",
+     "homeName": "Man City",
+     "awayName": "Liverpool",
+     "league": "EPL",
+     "commenceTime": "2026-10-01T18:00:00.000Z",
+     "market": "Résultat",
+     "marketId": null,
+     "params": null,
+     "pick": "Liverpool",
+     "odds": 2.5,
+     "status": "pending",
+     "probabiliteMoteur": 0.38
+    }
+   ]
+  },
+  {
+   "id": "p6",
+   "createdAt": "2026-09-20T10:00:00.000Z",
+   "settledAt": "2026-09-20T20:00:00.000Z",
+   "status": "void",
+   "stake": 7,
+   "odds": 1.8,
+   "legs": [
+    {
+     "matchId": "Brighton-Newcastle",
+     "homeName": "Brighton",
+     "awayName": "Newcastle",
+     "league": "EPL",
+     "commenceTime": "2026-10-01T18:00:00.000Z",
+     "market": "Résultat",
+     "marketId": null,
+     "params": null,
+     "pick": "Brighton",
+     "odds": 1.8,
+     "status": "void"
+    }
+   ]
+  },
+  {
+   "id": "p7",
+   "createdAt": "2026-09-21T10:00:00.000Z",
+   "settledAt": "2026-09-21T20:00:00.000Z",
+   "status": "won",
+   "stake": 15,
+   "odds": 1.6,
+   "legs": [
+    {
+     "matchId": "Bournemouth-Palace",
+     "homeName": "Bournemouth",
+     "awayName": "Palace",
+     "league": "EPL",
+     "commenceTime": "2026-10-01T18:00:00.000Z",
+     "market": "Résultat",
+     "marketId": null,
+     "params": null,
+     "pick": "Bournemouth",
+     "odds": 1.6,
+     "status": "won"
+    }
+   ]
+  }
+ ],
+ "options": {
+  "reglage": {
+   "miseMaxParPari": 50,
+   "perteMaxParSemaine": 200
+  },
+  "comptes": {},
+  "vosBookmakers": [
+   "williamhill",
+   "betclic_fr"
+  ],
+  "cloture": null,
+  "maintenant": 1791288000000
+ },
+ "rapport": {
+  "version": 1,
+  "calculeLe": "2026-10-06T12:00:00.000Z",
+  "carnet": {
+   "cle": "carnet",
+   "libelle": "Carnet",
+   "paris": 7,
+   "gagnes": 3,
+   "perdus": 2,
+   "enAttente": 1,
+   "annules": 1,
+   "regles": 5,
+   "mise": 58,
+   "retours": 68.1,
+   "gainReel": 10.100000000000001,
+   "avecProbabilite": 2,
+   "gainAttendu": 1.82,
+   "gainReelAvecProbabilite": -9,
+   "roi": 17.413793103448278,
+   "tauxReussite": 60,
+   "coteMoyenne": 2.724,
+   "cloture": {
+    "n": 0,
+    "moyenne": null
+   }
+  },
+  "attendu": {
+   "parisAvecProbabilite": 3,
+   "regles": 2,
+   "reglesDuCarnet": 5,
+   "gainAttendu": 1.82,
+   "gainReel": -9,
+   "ecart": -10.82,
+   "ecartType": 21.62090654898633,
+   "ecartEnEcartsTypes": -0.5004415506577028,
+   "zone95": [
+    -40.556976836013206,
+    44.19697683601321
+   ],
+   "enAttente": {
+    "paris": 1,
+    "gainAttendu": -0.6
+   },
+   "sansProbabilite": {
+    "nonNote": 2,
+    "combines": 2
+   }
+  },
+  "courbe": {
+   "points": [
+    {
+     "rang": 1,
+     "id": "p7",
+     "t": "2026-09-21T20:00:00.000Z",
+     "carnet": 9,
+     "avecProbabilite": false,
+     "gagne": 0,
+     "attendu": 0
+    },
+    {
+     "rang": 2,
+     "id": "p1",
+     "t": "2026-10-01T20:00:00.000Z",
+     "carnet": 20,
+     "avecProbabilite": true,
+     "gagne": 11,
+     "attendu": 0.92
+    },
+    {
+     "rang": 3,
+     "id": "p2",
+     "t": "2026-10-02T20:00:00.000Z",
+     "carnet": 0,
+     "avecProbabilite": true,
+     "gagne": -9,
+     "attendu": 1.82
+    },
+    {
+     "rang": 4,
+     "id": "p3",
+     "t": "2026-10-03T21:00:00.000Z",
+     "carnet": 18.1,
+     "avecProbabilite": false,
+     "gagne": -9,
+     "attendu": 1.82
+    },
+    {
+     "rang": 5,
+     "id": "p4",
+     "t": "2026-10-04T21:00:00.000Z",
+     "carnet": 10.100000000000001,
+     "avecProbabilite": false,
+     "gagne": -9,
+     "attendu": 1.82
+    }
+   ],
+   "debut": "2026-09-21T20:00:00.000Z",
+   "fin": "2026-10-04T21:00:00.000Z",
+   "avecProbabilite": 2
+  },
+  "cloture": {
+   "disponible": false,
+   "raison": null,
+   "calculeLe": null,
+   "selections": null,
+   "selectionsMesurees": null,
+   "parisSimplesMesures": 0,
+   "moyenne": null,
+   "positifs": 0,
+   "manques": []
+  },
+  "tableaux": [
+   {
+    "cle": "marche",
+    "titre": "Par marché",
+    "colonne": "Marché",
+    "note": "Un pari simple compte pour son marché (et sa ligne) ; un combiné pour la ligne « combinés ».",
+    "lignes": [
+     {
+      "cle": "texte:Résultat|",
+      "libelle": "Résultat",
+      "paris": 4,
+      "gagnes": 2,
+      "perdus": 0,
+      "enAttente": 1,
+      "annules": 1,
+      "regles": 2,
+      "mise": 25,
+      "retours": 45,
+      "gainReel": 20,
+      "avecProbabilite": 1,
+      "gainAttendu": 0.92,
+      "gainReelAvecProbabilite": 11,
+      "roi": 80,
+      "tauxReussite": 100,
+      "coteMoyenne": 1.85,
+      "cloture": {
+       "n": 0,
+       "moyenne": null
+      }
+     },
+     {
+      "cle": "combine",
+      "libelle": "Combinés de plusieurs matchs",
+      "paris": 1,
+      "gagnes": 1,
+      "perdus": 0,
+      "enAttente": 0,
+      "annules": 0,
+      "regles": 1,
+      "mise": 5,
+      "retours": 23.1,
+      "gainReel": 18.1,
+      "avecProbabilite": 0,
+      "gainAttendu": null,
+      "gainReelAvecProbabilite": null,
+      "roi": 362,
+      "tauxReussite": 100,
+      "coteMoyenne": 4.62,
+      "cloture": {
+       "n": 0,
+       "moyenne": null
+      }
+     },
+     {
+      "cle": "combine-meme-match",
+      "libelle": "Combinés du même match",
+      "paris": 1,
+      "gagnes": 0,
+      "perdus": 1,
+      "enAttente": 0,
+      "annules": 0,
+      "regles": 1,
+      "mise": 8,
+      "retours": 0,
+      "gainReel": -8,
+      "avecProbabilite": 0,
+      "gainAttendu": null,
+      "gainReelAvecProbabilite": null,
+      "roi": -100,
+      "tauxReussite": 0,
+      "coteMoyenne": 3.4,
+      "cloture": {
+       "n": 0,
+       "moyenne": null
+      }
+     },
+     {
+      "cle": "texte:Total buts|",
+      "libelle": "Total buts",
+      "paris": 1,
+      "gagnes": 0,
+      "perdus": 1,
+      "enAttente": 0,
+      "annules": 0,
+      "regles": 1,
+      "mise": 20,
+      "retours": 0,
+      "gainReel": -20,
+      "avecProbabilite": 1,
+      "gainAttendu": 0.9,
+      "gainReelAvecProbabilite": -20,
+      "roi": -100,
+      "tauxReussite": 0,
+      "coteMoyenne": 1.9,
+      "cloture": {
+       "n": 0,
+       "moyenne": null
+      }
+     }
+    ],
+    "total": {
+     "paris": 7,
+     "gagnes": 3,
+     "perdus": 2,
+     "enAttente": 1,
+     "annules": 1,
+     "regles": 5,
+     "mise": 58,
+     "retours": 68.1,
+     "gainReel": 10.100000000000001,
+     "avecProbabilite": 2,
+     "gainAttendu": 1.82,
+     "gainReelAvecProbabilite": -9,
+     "clotureN": 0,
+     "roi": null,
+     "tauxReussite": null,
+     "coteMoyenne": null,
+     "cloture": null
+    },
+    "moyenne": {
+     "parPari": true,
+     "mise": 11.6,
+     "gainReel": 2.0200000000000005,
+     "gainAttendu": 0.91,
+     "gainReelAvecProbabilite": -4.5,
+     "roi": 17.413793103448278,
+     "tauxReussite": 60,
+     "coteMoyenne": 2.7239999999999998,
+     "cloture": null
+    }
+   },
+   {
+    "cle": "championnat",
+    "titre": "Par championnat",
+    "colonne": "Championnat",
+    "note": "Un combiné de plusieurs championnats compte pour sa propre ligne.",
+    "lignes": [
+     {
+      "cle": "ligue:EPL",
+      "libelle": "EPL",
+      "paris": 7,
+      "gagnes": 3,
+      "perdus": 2,
+      "enAttente": 1,
+      "annules": 1,
+      "regles": 5,
+      "mise": 58,
+      "retours": 68.1,
+      "gainReel": 10.100000000000001,
+      "avecProbabilite": 2,
+      "gainAttendu": 1.82,
+      "gainReelAvecProbabilite": -9,
+      "roi": 17.413793103448278,
+      "tauxReussite": 60,
+      "coteMoyenne": 2.724,
+      "cloture": {
+       "n": 0,
+       "moyenne": null
+      }
+     }
+    ],
+    "total": {
+     "paris": 7,
+     "gagnes": 3,
+     "perdus": 2,
+     "enAttente": 1,
+     "annules": 1,
+     "regles": 5,
+     "mise": 58,
+     "retours": 68.1,
+     "gainReel": 10.100000000000001,
+     "avecProbabilite": 2,
+     "gainAttendu": 1.82,
+     "gainReelAvecProbabilite": -9,
+     "clotureN": 0,
+     "roi": null,
+     "tauxReussite": null,
+     "coteMoyenne": null,
+     "cloture": null
+    },
+    "moyenne": {
+     "parPari": true,
+     "mise": 11.6,
+     "gainReel": 2.0200000000000005,
+     "gainAttendu": 0.91,
+     "gainReelAvecProbabilite": -4.5,
+     "roi": 17.413793103448278,
+     "tauxReussite": 60,
+     "coteMoyenne": 2.724,
+     "cloture": null
+    }
+   },
+   {
+    "cle": "bookmaker",
+    "titre": "Par bookmaker",
+    "colonne": "Bookmaker",
+    "note": "Le bookmaker est noté depuis « J’ai parié » (étape 10) : les paris d’avant sont dans « non noté ».",
+    "lignes": [
+     {
+      "cle": "williamhill",
+      "libelle": "William Hill",
+      "paris": 2,
+      "gagnes": 1,
+      "perdus": 1,
+      "enAttente": 0,
+      "annules": 0,
+      "regles": 2,
+      "mise": 30,
+      "retours": 21,
+      "gainReel": -9,
+      "avecProbabilite": 2,
+      "gainAttendu": 1.82,
+      "gainReelAvecProbabilite": -9,
+      "roi": -30,
+      "tauxReussite": 50,
+      "coteMoyenne": 2,
+      "cloture": {
+       "n": 0,
+       "moyenne": null
+      }
+     },
+     {
+      "cle": "betclic_fr",
+      "libelle": "betclic_fr",
+      "paris": 0,
+      "gagnes": 0,
+      "perdus": 0,
+      "enAttente": 0,
+      "annules": 0,
+      "regles": 0,
+      "mise": 0,
+      "retours": 0,
+      "gainReel": 0,
+      "avecProbabilite": 0,
+      "gainAttendu": null,
+      "gainReelAvecProbabilite": null,
+      "roi": null,
+      "tauxReussite": null,
+      "coteMoyenne": null,
+      "cloture": {
+       "n": 0,
+       "moyenne": null
+      }
+     },
+     {
+      "cle": "non-note",
+      "libelle": "Bookmaker non noté (pari d’avant « J’ai parié »)",
+      "paris": 5,
+      "gagnes": 2,
+      "perdus": 1,
+      "enAttente": 1,
+      "annules": 1,
+      "regles": 3,
+      "mise": 28,
+      "retours": 47.1,
+      "gainReel": 19.1,
+      "avecProbabilite": 0,
+      "gainAttendu": null,
+      "gainReelAvecProbabilite": null,
+      "roi": 68.21428571428572,
+      "tauxReussite": 66.66666666666666,
+      "coteMoyenne": 3.2066666666666666,
+      "cloture": {
+       "n": 0,
+       "moyenne": null
+      }
+     }
+    ],
+    "total": {
+     "paris": 7,
+     "gagnes": 3,
+     "perdus": 2,
+     "enAttente": 1,
+     "annules": 1,
+     "regles": 5,
+     "mise": 58,
+     "retours": 68.1,
+     "gainReel": 10.100000000000001,
+     "avecProbabilite": 2,
+     "gainAttendu": 1.82,
+     "gainReelAvecProbabilite": -9,
+     "clotureN": 0,
+     "roi": null,
+     "tauxReussite": null,
+     "coteMoyenne": null,
+     "cloture": null
+    },
+    "moyenne": {
+     "parPari": true,
+     "mise": 11.6,
+     "gainReel": 2.0200000000000005,
+     "gainAttendu": 0.91,
+     "gainReelAvecProbabilite": -4.5,
+     "roi": 17.413793103448278,
+     "tauxReussite": 60,
+     "coteMoyenne": 2.7239999999999998,
+     "cloture": null
+    }
+   },
+   {
+    "cle": "tranche",
+    "titre": "Par tranche de cote",
+    "colonne": "Cote du pari",
+    "note": "La cote prise (celle du ticket pour un combiné).",
+    "lignes": [
+     {
+      "cle": "moins-1-50",
+      "libelle": "Moins de 1,50",
+      "paris": 0,
+      "gagnes": 0,
+      "perdus": 0,
+      "enAttente": 0,
+      "annules": 0,
+      "regles": 0,
+      "mise": 0,
+      "retours": 0,
+      "gainReel": 0,
+      "avecProbabilite": 0,
+      "gainAttendu": null,
+      "gainReelAvecProbabilite": null,
+      "roi": null,
+      "tauxReussite": null,
+      "coteMoyenne": null,
+      "cloture": {
+       "n": 0,
+       "moyenne": null
+      }
+     },
+     {
+      "cle": "1-50-1-99",
+      "libelle": "1,50 à 1,99",
+      "paris": 3,
+      "gagnes": 1,
+      "perdus": 1,
+      "enAttente": 0,
+      "annules": 1,
+      "regles": 2,
+      "mise": 35,
+      "retours": 24,
+      "gainReel": -11,
+      "avecProbabilite": 1,
+      "gainAttendu": 0.9,
+      "gainReelAvecProbabilite": -20,
+      "roi": -31.428571428571427,
+      "tauxReussite": 50,
+      "coteMoyenne": 1.75,
+      "cloture": {
+       "n": 0,
+       "moyenne": null
+      }
+     },
+     {
+      "cle": "2-00-2-99",
+      "libelle": "2,00 à 2,99",
+      "paris": 2,
+      "gagnes": 1,
+      "perdus": 0,
+      "enAttente": 1,
+      "annules": 0,
+      "regles": 1,
+      "mise": 10,
+      "retours": 21,
+      "gainReel": 11,
+      "avecProbabilite": 1,
+      "gainAttendu": 0.92,
+      "gainReelAvecProbabilite": 11,
+      "roi": 110.00000000000001,
+      "tauxReussite": 100,
+      "coteMoyenne": 2.1,
+      "cloture": {
+       "n": 0,
+       "moyenne": null
+      }
+     },
+     {
+      "cle": "3-00-4-99",
+      "libelle": "3,00 à 4,99",
+      "paris": 2,
+      "gagnes": 1,
+      "perdus": 1,
+      "enAttente": 0,
+      "annules": 0,
+      "regles": 2,
+      "mise": 13,
+      "retours": 23.1,
+      "gainReel": 10.100000000000001,
+      "avecProbabilite": 0,
+      "gainAttendu": null,
+      "gainReelAvecProbabilite": null,
+      "roi": 77.69230769230771,
+      "tauxReussite": 50,
+      "coteMoyenne": 4.01,
+      "cloture": {
+       "n": 0,
+       "moyenne": null
+      }
+     },
+     {
+      "cle": "5-00-et-plus",
+      "libelle": "5,00 et plus",
+      "paris": 0,
+      "gagnes": 0,
+      "perdus": 0,
+      "enAttente": 0,
+      "annules": 0,
+      "regles": 0,
+      "mise": 0,
+      "retours": 0,
+      "gainReel": 0,
+      "avecProbabilite": 0,
+      "gainAttendu": null,
+      "gainReelAvecProbabilite": null,
+      "roi": null,
+      "tauxReussite": null,
+      "coteMoyenne": null,
+      "cloture": {
+       "n": 0,
+       "moyenne": null
+      }
+     }
+    ],
+    "total": {
+     "paris": 7,
+     "gagnes": 3,
+     "perdus": 2,
+     "enAttente": 1,
+     "annules": 1,
+     "regles": 5,
+     "mise": 58,
+     "retours": 68.1,
+     "gainReel": 10.100000000000001,
+     "avecProbabilite": 2,
+     "gainAttendu": 1.82,
+     "gainReelAvecProbabilite": -9,
+     "clotureN": 0,
+     "roi": null,
+     "tauxReussite": null,
+     "coteMoyenne": null,
+     "cloture": null
+    },
+    "moyenne": {
+     "parPari": true,
+     "mise": 11.6,
+     "gainReel": 2.0200000000000005,
+     "gainAttendu": 0.91,
+     "gainReelAvecProbabilite": -4.5,
+     "roi": 17.413793103448278,
+     "tauxReussite": 60,
+     "coteMoyenne": 2.7239999999999998,
+     "cloture": null
+    }
+   },
+   {
+    "cle": "confiance",
+    "titre": "Par confiance",
+    "colonne": "Confiance",
+    "note": "La confiance « sûr / fragile » n’est pas encore mesurée (étape 38) : tous les paris sont dans la dernière ligne.",
+    "lignes": [
+     {
+      "cle": "sur",
+      "libelle": "Sûr",
+      "paris": 0,
+      "gagnes": 0,
+      "perdus": 0,
+      "enAttente": 0,
+      "annules": 0,
+      "regles": 0,
+      "mise": 0,
+      "retours": 0,
+      "gainReel": 0,
+      "avecProbabilite": 0,
+      "gainAttendu": null,
+      "gainReelAvecProbabilite": null,
+      "roi": null,
+      "tauxReussite": null,
+      "coteMoyenne": null,
+      "cloture": {
+       "n": 0,
+       "moyenne": null
+      }
+     },
+     {
+      "cle": "fragile",
+      "libelle": "Fragile",
+      "paris": 0,
+      "gagnes": 0,
+      "perdus": 0,
+      "enAttente": 0,
+      "annules": 0,
+      "regles": 0,
+      "mise": 0,
+      "retours": 0,
+      "gainReel": 0,
+      "avecProbabilite": 0,
+      "gainAttendu": null,
+      "gainReelAvecProbabilite": null,
+      "roi": null,
+      "tauxReussite": null,
+      "coteMoyenne": null,
+      "cloture": {
+       "n": 0,
+       "moyenne": null
+      }
+     },
+     {
+      "cle": "non-mesuree",
+      "libelle": "Pas encore mesurée (étape 38)",
+      "paris": 7,
+      "gagnes": 3,
+      "perdus": 2,
+      "enAttente": 1,
+      "annules": 1,
+      "regles": 5,
+      "mise": 58,
+      "retours": 68.1,
+      "gainReel": 10.100000000000001,
+      "avecProbabilite": 2,
+      "gainAttendu": 1.82,
+      "gainReelAvecProbabilite": -9,
+      "roi": 17.413793103448278,
+      "tauxReussite": 60,
+      "coteMoyenne": 2.724,
+      "cloture": {
+       "n": 0,
+       "moyenne": null
+      }
+     }
+    ],
+    "total": {
+     "paris": 7,
+     "gagnes": 3,
+     "perdus": 2,
+     "enAttente": 1,
+     "annules": 1,
+     "regles": 5,
+     "mise": 58,
+     "retours": 68.1,
+     "gainReel": 10.100000000000001,
+     "avecProbabilite": 2,
+     "gainAttendu": 1.82,
+     "gainReelAvecProbabilite": -9,
+     "clotureN": 0,
+     "roi": null,
+     "tauxReussite": null,
+     "coteMoyenne": null,
+     "cloture": null
+    },
+    "moyenne": {
+     "parPari": true,
+     "mise": 11.6,
+     "gainReel": 2.0200000000000005,
+     "gainAttendu": 0.91,
+     "gainReelAvecProbabilite": -4.5,
+     "roi": 17.413793103448278,
+     "tauxReussite": 60,
+     "coteMoyenne": 2.724,
+     "cloture": null
+    }
+   }
+  ],
+  "series": {
+   "n": 5,
+   "seuil": 0.95,
+   "enCours": 1,
+   "enCoursDepuis": "2026-10-04T21:00:00.000Z",
+   "plusLongue": 1,
+   "plusLongueDu": "2026-10-04T21:00:00.000Z",
+   "plusLongueAu": "2026-10-04T21:00:00.000Z",
+   "zone": {
+    "jusqua": 4,
+    "mediane": 2,
+    "repartition": [
+     {
+      "serie": 0,
+      "probaAuPlus": 0.011379551820728293
+     },
+     {
+      "serie": 1,
+      "probaAuPlus": 0.2522039724980901
+     },
+     {
+      "serie": 2,
+      "probaAuPlus": 0.6837967914438503
+     },
+     {
+      "serie": 3,
+      "probaAuPlus": 0.8618647822765471
+     },
+     {
+      "serie": 4,
+      "probaAuPlus": 0.9551993888464476
+     },
+     {
+      "serie": 5,
+      "probaAuPlus": 1
+     }
+    ]
+   },
+   "probaEnCours": 0.9886204481792717,
+   "probaPlusLongue": 0.9886204481792717,
+   "horsZone": false,
+   "plusLongueHorsZone": false,
+   "sources": {
+    "moteur": 2,
+    "cote": 3
+   }
+  },
+  "gardeFous": {
+   "reglage": {
+    "miseMaxParPari": 50,
+    "perteMaxParSemaine": 200
+   },
+   "semaine": {
+    "du": "2026-10-05",
+    "au": "2026-10-11",
+    "debut": "2026-10-04T22:00:00.000Z",
+    "fin": "2026-10-11T22:00:00.000Z"
+   },
+   "gainSemaine": 0,
+   "perteSemaine": 0,
+   "parisReglesSemaine": 0,
+   "misesEnAttente": 12,
+   "parisEnAttente": 1,
+   "resteSemaine": 188,
+   "plafondDeMise": {
+    "montant": 50,
+    "par": "mise-max"
+   },
+   "bloque": false,
+   "motif": null,
+   "parisAuDelaDeLaMiseMax": [],
+   "alertes": []
+  },
+  "comptes": {},
+  "paris": [
+   {
+    "id": "p5",
+    "createdAt": "2026-10-05T10:00:00.000Z",
+    "settledAt": null,
+    "status": "pending",
+    "nature": "simple",
+    "stake": 12,
+    "odds": 2.5,
+    "bookmaker": null,
+    "bookmakerTitle": null,
+    "marche": "Résultat",
+    "selections": [
+     {
+      "homeName": "Man City",
+      "awayName": "Liverpool",
+      "league": "EPL",
+      "market": "Résultat",
+      "pick": "Liverpool",
+      "odds": 2.5,
+      "status": "pending",
+      "probabiliteMoteur": 0.38
+     }
+    ],
+    "gainReel": null,
+    "gainAttendu": {
+     "montant": -0.6,
+     "pourcent": -5,
+     "raison": null
+    },
+    "probabiliteDeGain": {
+     "p": 0.38,
+     "source": "moteur"
+    },
+    "cloture": {
+     "valeur": null,
+     "mesurees": 0,
+     "selections": 1,
+     "mesures": [],
+     "raison": "indisponible"
+    },
+    "signaux": []
+   },
+   {
+    "id": "p4",
+    "createdAt": "2026-10-04T10:00:00.000Z",
+    "settledAt": "2026-10-04T21:00:00.000Z",
+    "status": "lost",
+    "nature": "combine-meme-match",
+    "stake": 8,
+    "odds": 3.4,
+    "bookmaker": null,
+    "bookmakerTitle": null,
+    "marche": "Combinés du même match",
+    "selections": [
+     {
+      "homeName": "Spurs",
+      "awayName": "Villa",
+      "league": "EPL",
+      "market": "Résultat",
+      "pick": "Spurs",
+      "odds": 2,
+      "status": "won",
+      "probabiliteMoteur": null
+     },
+     {
+      "homeName": "Spurs",
+      "awayName": "Villa",
+      "league": "EPL",
+      "market": "Les 2 équipes marquent",
+      "pick": "Oui",
+      "odds": 1.95,
+      "status": "lost",
+      "probabiliteMoteur": null
+     }
+    ],
+    "gainReel": -8,
+    "gainAttendu": {
+     "montant": null,
+     "pourcent": null,
+     "raison": "combine"
+    },
+    "probabiliteDeGain": {
+     "p": 0.29411764705882354,
+     "source": "cote"
+    },
+    "cloture": {
+     "valeur": null,
+     "mesurees": 0,
+     "selections": 2,
+     "mesures": [],
+     "raison": "indisponible"
+    },
+    "signaux": []
+   },
+   {
+    "id": "p3",
+    "createdAt": "2026-10-03T10:00:00.000Z",
+    "settledAt": "2026-10-03T21:00:00.000Z",
+    "status": "won",
+    "nature": "combine",
+    "stake": 5,
+    "odds": 4.62,
+    "bookmaker": null,
+    "bookmakerTitle": null,
+    "marche": "Combinés de plusieurs matchs",
+    "selections": [
+     {
+      "homeName": "Leeds",
+      "awayName": "Everton",
+      "league": "EPL",
+      "market": "Résultat",
+      "pick": "Leeds",
+      "odds": 2.2,
+      "status": "won",
+      "probabiliteMoteur": null
+     },
+     {
+      "homeName": "Wolves",
+      "awayName": "Burnley",
+      "league": "EPL",
+      "market": "Résultat",
+      "pick": "Burnley",
+      "odds": 2.1,
+      "status": "won",
+      "probabiliteMoteur": null
+     }
+    ],
+    "gainReel": 18.1,
+    "gainAttendu": {
+     "montant": null,
+     "pourcent": null,
+     "raison": "combine"
+    },
+    "probabiliteDeGain": {
+     "p": 0.21645021645021645,
+     "source": "cote"
+    },
+    "cloture": {
+     "valeur": null,
+     "mesurees": 0,
+     "selections": 2,
+     "mesures": [],
+     "raison": "indisponible"
+    },
+    "signaux": []
+   },
+   {
+    "id": "p2",
+    "createdAt": "2026-10-02T10:00:00.000Z",
+    "settledAt": "2026-10-02T20:00:00.000Z",
+    "status": "lost",
+    "nature": "simple",
+    "stake": 20,
+    "odds": 1.9,
+    "bookmaker": "williamhill",
+    "bookmakerTitle": "William Hill",
+    "marche": "Total buts",
+    "selections": [
+     {
+      "homeName": "Fulham",
+      "awayName": "Brentford",
+      "league": "EPL",
+      "market": "Total buts",
+      "pick": "Plus de 2,5 buts",
+      "odds": 1.9,
+      "status": "lost",
+      "probabiliteMoteur": 0.55
+     }
+    ],
+    "gainReel": -20,
+    "gainAttendu": {
+     "montant": 0.9,
+     "pourcent": 4.5,
+     "raison": null
+    },
+    "probabiliteDeGain": {
+     "p": 0.55,
+     "source": "moteur"
+    },
+    "cloture": {
+     "valeur": null,
+     "mesurees": 0,
+     "selections": 1,
+     "mesures": [],
+     "raison": "indisponible"
+    },
+    "signaux": []
+   },
+   {
+    "id": "p1",
+    "createdAt": "2026-10-01T10:00:00.000Z",
+    "settledAt": "2026-10-01T20:00:00.000Z",
+    "status": "won",
+    "nature": "simple",
+    "stake": 10,
+    "odds": 2.1,
+    "bookmaker": "williamhill",
+    "bookmakerTitle": "William Hill",
+    "marche": "Résultat",
+    "selections": [
+     {
+      "homeName": "Arsenal",
+      "awayName": "Chelsea",
+      "league": "EPL",
+      "market": "Résultat",
+      "pick": "Arsenal",
+      "odds": 2.1,
+      "status": "won",
+      "probabiliteMoteur": 0.52
+     }
+    ],
+    "gainReel": 11,
+    "gainAttendu": {
+     "montant": 0.92,
+     "pourcent": 9.2,
+     "raison": null
+    },
+    "probabiliteDeGain": {
+     "p": 0.52,
+     "source": "moteur"
+    },
+    "cloture": {
+     "valeur": null,
+     "mesurees": 0,
+     "selections": 1,
+     "mesures": [],
+     "raison": "indisponible"
+    },
+    "signaux": []
+   },
+   {
+    "id": "p7",
+    "createdAt": "2026-09-21T10:00:00.000Z",
+    "settledAt": "2026-09-21T20:00:00.000Z",
+    "status": "won",
+    "nature": "simple",
+    "stake": 15,
+    "odds": 1.6,
+    "bookmaker": null,
+    "bookmakerTitle": null,
+    "marche": "Résultat",
+    "selections": [
+     {
+      "homeName": "Bournemouth",
+      "awayName": "Palace",
+      "league": "EPL",
+      "market": "Résultat",
+      "pick": "Bournemouth",
+      "odds": 1.6,
+      "status": "won",
+      "probabiliteMoteur": null
+     }
+    ],
+    "gainReel": 9,
+    "gainAttendu": {
+     "montant": null,
+     "pourcent": null,
+     "raison": "non-note"
+    },
+    "probabiliteDeGain": {
+     "p": 0.625,
+     "source": "cote"
+    },
+    "cloture": {
+     "valeur": null,
+     "mesurees": 0,
+     "selections": 1,
+     "mesures": [],
+     "raison": "indisponible"
+    },
+    "signaux": []
+   },
+   {
+    "id": "p6",
+    "createdAt": "2026-09-20T10:00:00.000Z",
+    "settledAt": "2026-09-20T20:00:00.000Z",
+    "status": "void",
+    "nature": "simple",
+    "stake": 7,
+    "odds": 1.8,
+    "bookmaker": null,
+    "bookmakerTitle": null,
+    "marche": "Résultat",
+    "selections": [
+     {
+      "homeName": "Brighton",
+      "awayName": "Newcastle",
+      "league": "EPL",
+      "market": "Résultat",
+      "pick": "Brighton",
+      "odds": 1.8,
+      "status": "void",
+      "probabiliteMoteur": null
+     }
+    ],
+    "gainReel": null,
+    "gainAttendu": {
+     "montant": null,
+     "pourcent": null,
+     "raison": "non-note"
+    },
+    "probabiliteDeGain": {
+     "p": 0.5555555555555556,
+     "source": "cote"
+    },
+    "cloture": {
+     "valeur": null,
+     "mesurees": 0,
+     "selections": 1,
+     "mesures": [],
+     "raison": "indisponible"
+    },
+    "signaux": []
+   }
+  ]
+ }
+}

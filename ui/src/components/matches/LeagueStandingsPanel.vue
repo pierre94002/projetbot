@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import AppCard from '@/components/common/AppCard.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
 import AppSelect from '@/components/common/AppSelect.vue';
@@ -7,7 +7,9 @@ import TabbedView from '@/components/common/TabbedView.vue';
 import TeamCrest from './TeamCrest.vue';
 import StandingsTable from './StandingsTable.vue';
 import ExpectedPointsTable from './ExpectedPointsTable.vue';
+import FinDeSaisonTable from './FinDeSaisonTable.vue';
 import { standingsApi } from '@/services/standingsApi.js';
+import { simulationApi } from '@/services/simulationApi.js';
 import { matchStatsApi } from '@/services/matchStatsApi.js';
 import { nomNormalise } from '@/utils/favoris.js';
 import { teamIdFor } from '@/utils/teamIds.js';
@@ -28,6 +30,10 @@ import { parseLeagueLabel } from '@/utils/leagueDisplay.js';
  * Tout vient du magasin (FotMob) : la table par /standings, la forme et
  * l'avancement par les rencontres du calendrier déjà chargées — aucun appel
  * de plus pour elles.
+ *
+ * Étape 28 (27/10/2026) : un troisième onglet, « Fin de saison »
+ * (FinDeSaisonTable), seulement quand Réglages a allumé les fins de saison et
+ * jamais pour une coupe ; éteint, le classement est celui d'avant.
  */
 const props = defineProps({
   league: { type: String, required: true },
@@ -264,6 +270,24 @@ const VUES = [
   { value: 'xg', label: 'Corrigé par les xG' }
 ];
 const vue = ref('classement');
+
+// ------------------------------------------------- la fin de saison simulée (étape 28)
+// Un troisième onglet, « Fin de saison » (FinDeSaisonTable), SEULEMENT quand Réglages a allumé les fins de saison et
+// pour un championnat qui en a une (jamais une coupe : la liste vient du serveur). L'état est lu une fois, après
+// l'affichage : éteint (la livraison), le classement reste exactement celui d'avant.
+const simulation = ref(null);
+onMounted(async () => {
+  try {
+    simulation.value = await simulationApi.etat();
+  } catch {
+    simulation.value = null;
+  }
+});
+const finDeSaisonPossible = computed(() => simulation.value?.effectif?.saisons === 'allume' && (simulation.value?.championnats ?? []).includes(props.league));
+const vues = computed(() => (finDeSaisonPossible.value ? [...VUES, { value: 'fin-de-saison', label: 'Fin de saison' }] : VUES));
+watch(finDeSaisonPossible, (possible) => {
+  if (!possible && vue.value === 'fin-de-saison') vue.value = 'classement';
+});
 </script>
 
 <template>
@@ -357,8 +381,8 @@ const vue = ref('classement');
       </div>
     </div>
 
-    <!-- Deux lectures de la même table : le classement réel, ou corrigé par les xG. -->
-    <TabbedView v-model="vue" :tabs="VUES" class="lst__views" />
+    <!-- Deux lectures de la même table : le classement réel, ou corrigé par les xG ; et, allumée dans Réglages, la fin de saison simulée. -->
+    <TabbedView v-model="vue" :tabs="vues" class="lst__views" />
 
     <StandingsTable
       v-if="vue === 'classement'"
@@ -374,7 +398,7 @@ const vue = ref('classement');
     />
     <!-- La saison du classement affiché, et ses lignes pour le VRAI rang de chaque équipe. -->
     <ExpectedPointsTable
-      v-else
+      v-else-if="vue === 'xg'"
       :league="league"
       :season="etat.data?.season ?? null"
       :standings-rows="rows"
@@ -382,6 +406,8 @@ const vue = ref('classement');
       :table-name="etat.data?.table ?? null"
       :pending="etat.loading"
     />
+    <!-- Étape 28 : la fin de saison simulée la nuit (10 000 fois), lue telle que la nuit l'a rangée. -->
+    <FinDeSaisonTable v-else-if="vue === 'fin-de-saison'" :league="league" />
   </AppCard>
 </template>
 

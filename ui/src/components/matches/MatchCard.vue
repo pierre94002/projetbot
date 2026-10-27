@@ -1,12 +1,15 @@
 <script setup>
-import { computed, useSlots } from 'vue';
+import { computed, onMounted, useSlots } from 'vue';
 import { RouterLink } from 'vue-router';
 import LeagueBadge from '@/components/matches/LeagueBadge.vue';
 import TeamCrest from '@/components/matches/TeamCrest.vue';
 import MatchResultBadge from '@/components/matches/MatchResultBadge.vue';
 import FavoriteStar from '@/components/common/FavoriteStar.vue';
+import EnjeuBadge from '@/components/common/EnjeuBadge.vue';
 import { useFavoritesStore } from '@/stores/favoritesStore.js';
 import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
+import { useEnjeuxStore } from '@/stores/enjeuxStore.js';
+import { teamIdFor } from '@/utils/teamIds.js';
 import { tour } from '@/utils/fotmobLabels.js';
 
 /**
@@ -117,6 +120,20 @@ const estFavori = (equipe) => favoris.isFavoriteTeam(equipe.nom, m.value.league 
 function basculerFavori(equipe) {
   favoris.toggleTeam({ name: equipe.nom, league: m.value.league ?? null, id: equipe.id ?? undefined });
 }
+
+// Étape 28 : la pastille d'ENJEU d'une rencontre à venir (EnjeuBadge), quand Réglages a allumé les fins de saison et que
+// la nuit a rangé un enjeu pour SES deux clubs — retrouvés par leur numéro FotMob (celui de la carte, sinon celui du
+// logo), jamais par un nom. Une lecture par jour affiché (enjeuxStore), après l'affichage : éteinte, la carte d'avant.
+const enjeux = useEnjeuxStore();
+const jourDeLaRencontre = computed(() => m.value.date ?? (m.value.commenceTime ? String(m.value.commenceTime).slice(0, 10) : null));
+const aVenir = computed(() => !avecScore.value && statut.value !== 'postponed' && statut.value !== 'finished');
+onMounted(() => (aVenir.value && jourDeLaRencontre.value ? enjeux.demander(jourDeLaRencontre.value) : undefined));
+const enjeu = computed(() => {
+  const jour = jourDeLaRencontre.value;
+  if (!aVenir.value || !jour || !enjeux.allume(jour)) return null;
+  const id = (equipe) => equipe.id ?? teamIdFor(equipe.nom, m.value.league ?? null) ?? null;
+  return enjeux.enjeuDe({ league: m.value.league ?? null, date: jour, homeId: id(equipes.value[0]), awayId: id(equipes.value[1]) });
+});
 </script>
 
 <template>
@@ -223,6 +240,9 @@ function basculerFavori(equipe) {
       </slot>
       <span v-if="estCliquable" class="mcard__chevron">›</span>
     </div>
+    </div>
+    <div v-if="enjeu" class="mcard__enjeu">
+      <EnjeuBadge :enjeu="enjeu" compacte />
     </div>
   </component>
 </template>
@@ -562,6 +582,13 @@ function basculerFavori(equipe) {
 .mcard__tag.is-reprogramme {
   background: var(--cm-warning-soft);
   color: var(--cm-warning);
+}
+
+/* Étape 28 : la pastille d'enjeu, sous les deux clubs (seulement quand les fins de saison sont allumées). */
+.mcard__enjeu {
+  display: flex;
+  justify-content: center;
+  margin-top: 6px;
 }
 
 /* Carte moyenne : la compétition passe sous les équipes. */

@@ -679,7 +679,8 @@ test('l’étape « controleQuotidien » : la DERNIÈRE de la passe, sous le ver
   // de la veille) s'intercale entre la sauvegarde et le contrôle quotidien, qui reste le dernier.
   // Étape 42 (22/10/2026) : le bulletin du jour et le bilan de la semaine s'intercalent à leur tour entre le carnet et le contrôle.
   // Étape 44 (23/10/2026) : la mémoire de l'IA (dossiers des équipes) suit le carnet, avant le bulletin.
-  assert.deepEqual(e.etapes.slice(-6), ['sauvegarde', 'carnetIA', 'dossiersIA', 'bulletin', 'bilanSemaine', 'controleQuotidien']);
+  // Étape 28 (27/10/2026) : la simulation complète (deux étapes) s'intercale entre la sauvegarde et le carnet de l'IA.
+  assert.deepEqual(e.etapes.slice(-8), ['sauvegarde', 'simulationSaisons', 'simulationMatchs', 'carnetIA', 'dossiersIA', 'bulletin', 'bilanSemaine', 'controleQuotidien']);
   assert.equal(e.etapes.filter((k) => k === 'controleQuotidien').length, 1);
   assert.equal(e.passe.status, 'warn');
   assert.match(e.passe.summary, /^Feu rouge : 35 contrôles en [\d,]+ s sur \d+ rencontres des 30 derniers jours \(le serveur jamais tenu plus de \d+ ms d'affilée\) — rouge : score différent de football-data, classement officiel, match joué absent du magasin — orange : .*\. Rien n'est corrigé automatiquement ; le détail est dans Réglages › Contrôle quotidien\.$/);
@@ -782,7 +783,9 @@ test('le code : l’étape une seule fois, en dernier ; le verdict reste celui d
   assert.doesNotMatch(verdict, /aVerifier|controleQuotidien|dailyChecks/);
   // L'analyse d'un match : « à vérifier » joint APRÈS le moteur, par les noms exacts puis les identifiants ; le moteur n'en sait rien.
   const analyse = lireSrc('api', 'controllers', 'analysis.controller.js');
-  assert.match(analyse, /const analyse = await analyzeMatch\(avecFraicheur, getEngineConfig\(sportId\), getTiltState\(\), getSport\(sportId\)\);\n  const aVerifier = aVerifierDuMatchAnalyse\(avecFraicheur\);\n  res\.json\(aVerifier \? \{ \.\.\.analyse, aVerifier \} : analyse\);/);
+  // Étape 28 (27/10) : le bloc `simulation` est joint APRÈS « à vérifier », de la même façon (conception de 28 : « bloc
+  // simulation ajouté APRÈS l'analyse, comme aVerifier ») ; l'analyse du moteur reste étalée telle quelle, en premier.
+  assert.match(analyse, /const analyse = await analyzeMatch\(avecFraicheur, getEngineConfig\(sportId\), getTiltState\(\), getSport\(sportId\)\);\n  const aVerifier = aVerifierDuMatchAnalyse\(avecFraicheur\);\n(?: {2}\/\/.*\n)* {2}const simulation = sportId === 'football' \? simulationDuMatchAnalyse\(avecFraicheur, analyse, getEngineConfig\(sportId\)\) : null;\n {2}res\.json\(\{ \.\.\.analyse, \.\.\.\(aVerifier \? \{ aVerifier \} : \{\}\), \.\.\.\(simulation \? \{ simulation \} : \{\}\) \}\);/);
   assert.match(analyse, /preparerAVerifierParNoms\(\)/);
   // Retouche du 07/10 : le bandeau d'un match est le RÉSUMÉ du match, demandé sans famille — jamais celle des joueurs, jamais celle d'un marché.
   assert.match(analyse, /homeName: match\.home, awayName: match\.away, famille: null \}\)/);

@@ -60,6 +60,11 @@ import { useBetsStore } from '@/stores/betsStore.js';
 import { prendre as prendreDansLeTicket, bookmakerPropose, cleDeSelection } from '@/utils/ticket.js';
 // Étape 11 du plan : vos garde-fous et les fiches de vos comptes, pour que le ticket signale une mise au-delà (jamais un refus).
 import { useRisqueStore } from '@/stores/risqueStore.js';
+// Étape 28 du plan : la simulation complète — l'encadré « Enjeu », le « Déroulé simulé » et le prix juste du ticket,
+// chacun SEULEMENT quand Réglages l'a allumé (le bloc `simulation` de l'analyse dit l'affichage effectif).
+import EnjeuDuMatch from '@/components/matches/EnjeuDuMatch.vue';
+import DerouleSimuleCard from '@/components/analysis/DerouleSimuleCard.vue';
+import { usePrixJuste } from '@/composables/usePrixJuste.js';
 
 /**
  * Page d'un match À VENIR, construite comme celle d'un match joué
@@ -476,6 +481,21 @@ async function enregistrerLePari(corps) {
   }
 }
 const cote2 = (x) => (Number.isFinite(x) ? x.toFixed(2).replace('.', ',') : '—');
+
+// ------------------------------------------------ étape 28 : la simulation complète
+// Le bloc `simulation` que le serveur joint à l'analyse (APRÈS elle) : l'affichage EFFECTIF (relu avec ses conditions),
+// l'enjeu de la rencontre (fins de saison allumées) et le déroulé simulé (affichage « tout »). Éteint (la livraison) :
+// rien ne paraît, la page est celle d'avant.
+const simulationDuMatch = computed(() => analyse.value.result?.simulation ?? null);
+const enjeuMontre = computed(() => (simulationDuMatch.value?.affichage?.saisons === 'allume' ? simulationDuMatch.value.enjeu ?? null : null));
+const derouleMontre = computed(() => (simulationDuMatch.value?.affichage?.matchs === 'tout' ? simulationDuMatch.value.deroule ?? null : null));
+// Le prix juste d'un combiné du ticket : demandé au serveur seulement quand le ticket est un combiné et que l'affichage
+// des matchs n'est pas éteint (l'analyse le dit) ; jamais au chargement de la page.
+const prixJuste = usePrixJuste(
+  () => ticket.selections,
+  () => ticket.edition.coteCombinee,
+  () => simulationDuMatch.value?.affichage?.matchs ?? 'eteint'
+);
 </script>
 
 <template>
@@ -681,6 +701,7 @@ const cote2 = (x) => (Number.isFinite(x) ? x.toFixed(2).replace('.', ',') : '—
                 :bookmakers="vosBookmakersDuMatch"
                 :garde-fous="risque.pourLeTicket"
                 :comptes="risque.fiches"
+                :prix-juste="prixJuste"
                 :en-cours="ticket.enCours"
                 origine="page-du-match"
                 @jai-parie="enregistrerLePari"
@@ -704,6 +725,9 @@ const cote2 = (x) => (Number.isFinite(x) ? x.toFixed(2).replace('.', ',') : '—
             </div>
           </template>
         </AppCard>
+
+        <!-- Étape 28 : l'enjeu de la rencontre au classement (fins de saison allumées dans Réglages) — une information. -->
+        <EnjeuDuMatch v-if="enjeuMontre" id="upcoming-enjeu" class="upcoming__block" :enjeu="enjeuMontre" />
 
         <!-- (b) La place du « pourquoi ce pourcentage » : réservée, remplie à l'étape 40. -->
         <PercentageWhyCard id="upcoming-pourquoi" class="upcoming__block" />
@@ -769,6 +793,9 @@ const cote2 = (x) => (Number.isFinite(x) ? x.toFixed(2).replace('.', ',') : '—
           <ResultPredictionCard :result="analyse.result" />
           <ScorePredictionCard :result="analyse.result" />
         </div>
+
+        <!-- Étape 28 : le déroulé simulé (affichage « tout » dans Réglages) — information, pas un pronostic. -->
+        <DerouleSimuleCard v-if="derouleMontre" id="upcoming-deroule" :deroule="derouleMontre" :match="match" :pris="ticket.selections" @prendre="prendreUneCote" />
 
         <!-- Étape 37 : le duel de styles (explication seulement, sauf effet mesuré au banc). -->
         <StyleDuelCard :home-name="match.home" :away-name="match.away" :league="match.league" :home-id="idsDesClubs.home" :away-id="idsDesClubs.away" />

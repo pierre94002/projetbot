@@ -1446,6 +1446,49 @@ const TEAM_STYLE_DDL = [
   'CREATE INDEX IF NOT EXISTS idx_team_style_matches_club ON team_style_matches(club, date);'
 ];
 
+/**
+ * LA SIMULATION COMPLÈTE (étape 28 du plan, 27/10/2026 ; data/simulation/) : le déroulé simulé des rencontres des 48
+ * prochaines heures, les fins de saison des championnats et l'enjeu de chaque rencontre des 14 prochains jours. Tables
+ * DÉRIVÉES, écrites par le serveur seul (étapes « simulationSaisons » et « simulationMatchs » de l'actualisation),
+ * sous le verrou de la passe, par tranches de 250 ; calculées dans des processus à part (les saisons en lecture seule,
+ * les matchs sans aucune base). JAMAIS lues par le moteur : hors de son empreinte, rien dans engine-config.json.
+ *   simulation_matchs  une ligne par rencontre, rôle (service | candidate) et nuit : entrées (grille, λ, μ, ρ, 1N2
+ *                      affiché), graine, table jointe et marchés de déroulé (NULL = entrées seules : la grille de
+ *                      l'ancien modèle n'est jamais tirée) ; apres_coup_d_envoi = 1 : gardée, comptée, ÉCARTÉE du
+ *                      jugement ;
+ *   saisons_etat       une ligne par championnat et par nuit : calculé ou non, et pourquoi ;
+ *   saisons_simulees   la probabilité de chaque famille de zones, par club, table, loi (forces | table) et nuit ;
+ *   enjeux_rencontres  l'enjeu d'une rencontre par loi, FIGÉ avant son coup d'envoi (jamais réécrit ensuite) ;
+ *   simulation_state   les interrupteurs de l'affichage, les nuits en cours et finies, le jugement, le contrôle.
+ * Identifiants : le numéro FotMob en texte (« 8456 »), jamais un nom.
+ */
+const SIMULATION_DDL = [
+  `CREATE TABLE IF NOT EXISTS simulation_matchs (
+  fixture_key TEXT NOT NULL, role TEXT NOT NULL, calcule_le TEXT NOT NULL, version INTEGER NOT NULL,
+  grille TEXT NOT NULL, engine_version INTEGER, candidate_hash TEXT,
+  match_id TEXT, league TEXT, date TEXT NOT NULL, kickoff TEXT, kickoff_connu INTEGER NOT NULL DEFAULT 1,
+  home_id TEXT, away_id TEXT, home_name TEXT, away_name TEXT,
+  lambda REAL NOT NULL, mu REAL NOT NULL, rho REAL NOT NULL, fair TEXT, odds_source TEXT, odds_at TEXT,
+  graine INTEGER, n INTEGER, table_jointe BLOB, marches TEXT, masse_non_couverte REAL,
+  apres_coup_d_envoi INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (fixture_key, role, calcule_le)) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS saisons_etat (
+  league TEXT NOT NULL, calcule_le TEXT NOT NULL, season TEXT, tables TEXT, complet INTEGER NOT NULL, raison TEXT,
+  restants INTEGER, a_dater INTEGER, table_relevee_le TEXT, forces_empreinte TEXT, forces_a_jour REAL, version INTEGER NOT NULL,
+  graine INTEGER, n INTEGER, duree_ms INTEGER, PRIMARY KEY (league, calcule_le)) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS saisons_simulees (
+  league TEXT NOT NULL, season TEXT NOT NULL, table_name TEXT NOT NULL, team_id TEXT NOT NULL, calcule_le TEXT NOT NULL,
+  loi TEXT NOT NULL, famille TEXT NOT NULL, probabilite REAL NOT NULL, unanime INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (league, season, table_name, team_id, calcule_le, loi, famille)) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS enjeux_rencontres (
+  league TEXT NOT NULL, date TEXT NOT NULL, home_id TEXT NOT NULL, away_id TEXT NOT NULL, loi TEXT NOT NULL,
+  match_id TEXT, kickoff TEXT, calcule_le TEXT NOT NULL, enjeu_dom REAL, enjeu_ext REAL, categorie TEXT NOT NULL,
+  detail TEXT, version INTEGER NOT NULL, PRIMARY KEY (league, date, home_id, away_id, loi)) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS simulation_state (cle TEXT PRIMARY KEY, valeur TEXT NOT NULL) WITHOUT ROWID;`,
+  'CREATE INDEX IF NOT EXISTS idx_simulation_matchs_date ON simulation_matchs(date);',
+  'CREATE INDEX IF NOT EXISTS idx_enjeux_rencontres_date ON enjeux_rencontres(date);'
+];
+
 const FD_HISTORY_INDEXES = [
   'CREATE INDEX IF NOT EXISTS idx_fd_history_code_date ON fd_history(code, date);',
   'CREATE INDEX IF NOT EXISTS idx_fd_history_dom ON fd_history(dom);',
@@ -1495,6 +1538,7 @@ const DDL = [
   ...FORCES_BUTS_DDL,
   ...PLAYER_RATINGS_DDL,
   ...TEAM_STYLE_DDL,
+  ...SIMULATION_DDL,
   'CREATE INDEX IF NOT EXISTS idx_matches_date ON matches(date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_league_date ON matches(league, date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_home ON matches(home_name);',

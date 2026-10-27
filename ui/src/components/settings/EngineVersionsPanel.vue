@@ -18,7 +18,9 @@
  *   - (étape 27, 21/10/2026) la phrase en mots de la candidate (`enMots`), son « quoi »
  *     technique replié dans « Détail technique » ; pour la candidate du modèle de buts unique, son détail famille
  *     par famille (EngineGoalModelTrial : porte 1 du banc et sa réserve acceptée, verdicts,
- *     calibration, régimes, porte de l'adoption, horizon) ; ses marchés et témoins en mots.
+ *     calibration, régimes, porte de l'adoption, horizon) ; ses marchés et témoins en mots ;
+ *   - (étape 28, 27/10/2026) la simulation complète à blanc (EngineSimulationTrial : la porte 1, la dernière nuit,
+ *     l'avancement de la preuve, les deux interrupteurs de l'affichage) — hors du moteur, elle ne fait aucune version.
  * Tout est LU (GET /api/config/versions, un état du serveur qui n'écrit rien) ;
  * les écritures sont le retour arrière (POST /api/config/versions/retour) et
  * l'adoption (POST /api/config/versions/adopter), chacune avec ce qui est vu à
@@ -35,6 +37,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import ProvenanceChip from '@/components/common/ProvenanceChip.vue';
 import EngineCandidateTrial from '@/components/settings/EngineCandidateTrial.vue';
 import EngineGoalModelTrial from '@/components/settings/EngineGoalModelTrial.vue';
+import EngineSimulationTrial from '@/components/settings/EngineSimulationTrial.vue';
 import { configApi } from '@/services/configApi.js';
 import {
   PHRASES,
@@ -422,6 +425,10 @@ async function revenir() {
         <p class="ev__petit">{{ derive.quoi }}</p>
       </div>
     </div>
+
+    <!-- 7. Étape 28 : la simulation complète, calculée à blanc chaque nuit, HORS du moteur (aucune version) — la porte 1,
+         la dernière nuit, l'avancement de la preuve et les deux interrupteurs ; le bloc lit lui-même son état. -->
+    <EngineSimulationTrial />
 
     <p class="ev__pied">
       <AppIcon name="info" :size="12" />

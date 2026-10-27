@@ -33,6 +33,7 @@ import benchRoutes from './bench.routes.js';
 import engineHealthRoutes from './engineHealth.routes.js';
 import bettingMapRoutes from './bettingMap.routes.js';
 import marketKnowledgeRoutes from './marketKnowledge.routes.js';
+import simulationRoutes from './simulation.routes.js';
 
 const router = Router();
 
@@ -81,5 +82,7 @@ router.use('/engine-health', engineHealthRoutes);
 router.use('/betting-map', bettingMapRoutes);
 // Étape 31 du plan : la page « Bookmakers » — ce que l'étape 22 a mesuré du marché (lecture seule ; calculé chaque nuit par l'actualisation).
 router.use('/market-knowledge', marketKnowledgeRoutes);
+// Étape 28 du plan : la simulation complète — fins de saison, enjeu, déroulé simulé, prix juste d'un ticket (lectures des lignes de nuit ; un interrupteur dans la base).
+router.use('/simulation', simulationRoutes);
 
 export default router;

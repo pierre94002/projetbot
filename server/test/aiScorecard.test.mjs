@@ -407,7 +407,9 @@ test('coupure DÉSACTIVÉE tant que Pierre n’a pas décidé (COUPURE_ACTIVE = 
 test('l’étape « carnetIA » : après la sauvegarde, avant le contrôle quotidien (toujours dernier) ; le carnet refait et écrit d’un bloc ; la base seulement lue ; coupure désactivée : « aucun marché retiré » et ce que la règle retirerait ; activée : « nouveau cette nuit » la première fois seulement', () => {
   const s = phase('tout');
   const i = s.etapes.indexOf('carnetIA');
-  assert.equal(s.etapes[i - 1], 'sauvegarde');
+  // Étape 28 (27/10/2026) : la simulation complète (fins de saison, puis déroulé des matchs) s'intercale entre la sauvegarde
+  // et le carnet ; le carnet reste après la sauvegarde.
+  assert.deepEqual(s.etapes.slice(i - 3, i), ['sauvegarde', 'simulationSaisons', 'simulationMatchs']);
   // Étape 42 (22/10/2026) : le bulletin du jour et le bilan de la semaine (deux textes de l'IA, dont le bilan lit CE carnet refait
   // cette nuit) s'intercalent entre le carnet et le contrôle quotidien, qui reste le dernier. Étape 44 (23/10/2026) : la mémoire de
   // l'IA (ses leçons ne se confirment que par CE carnet, dont elle reprend les cas) le suit immédiatement.

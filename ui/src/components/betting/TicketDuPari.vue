@@ -23,6 +23,7 @@ import {
   phraseFaceAuxBornes
 } from '@/utils/ticket.js';
 import { alertesDuTicket } from '@/utils/gardeFous.js';
+import { prixJusteDit } from '@/utils/simulation.js';
 
 /**
  * LE TICKET (étape 10 du plan, 06/10/2026) — un seul, posé dans le bordereau de
@@ -33,7 +34,12 @@ import { alertesDuTicket } from '@/utils/gardeFous.js';
  * serveur. Pour le ticket : le bookmaker (un ticket se joue chez un seul), sa
  * nature (simple, combiné de plusieurs matchs, combiné du même match — dont la
  * cote est celle du bookmaker, à taper), le gain potentiel et le gain attendu
- * (pari simple seulement : le prix juste d'un combiné viendra à l'étape 28).
+ * (pari simple ; un combiné seulement avec son prix juste). Étape 28 : le prix
+ * juste d'un combiné, calculé par le serveur et donné par la page (`prixJuste`),
+ * quand Réglages le montre — son heure, la cote tapée en écart NEUTRE (jamais
+ * ValueBadge ni vert), « si les sélections étaient indépendantes » en gris, sa
+ * précision, sa provenance ; « impossible » ; une sélection de mi-temps « se lit,
+ * ne se parie pas ». Éteint : une ligne dit qu'il attend.
  *
  * Aucune règle ici : utils/ticket.js décide (et les tests du serveur la
  * rejouent). Le composant n'appelle rien : « J'ai parié » rend le corps de
@@ -53,6 +59,9 @@ const props = defineProps({
   // pour SIGNALER une mise au-delà d'un plafond, de la mise acceptée ou du solde ; jamais pour bloquer « J'ai parié ».
   gardeFous: { type: Object, default: null },
   comptes: { type: Object, default: null },
+  // Étape 28 : le prix juste d'un combiné, tel que la page l'a demandé au serveur (composables/usePrixJuste.js :
+  // { enCours, reponse, erreur }). Absent ou éteint : le ticket dit qu'il attend.
+  prixJuste: { type: Object, default: null },
   maintenant: { type: Number, default: null }
 });
 
@@ -61,9 +70,18 @@ const emit = defineEmits(['update:edition', 'update:mise', 'update:memeMatch', '
 const heure = computed(() => props.maintenant ?? liveNow.value);
 const nature = computed(() => natureDuTicket(props.selections));
 const manques = computed(() => controleDuTicket({ selections: props.selections, edition: props.edition, mise: props.mise, bookmakers: props.bookmakers }));
-const gains = computed(() => gainsDuTicket({ selections: props.selections, edition: props.edition, mise: props.mise }));
 const optionsBookmakers = computed(() => props.bookmakers.map((b) => ({ value: b.cle, label: b.titre })));
 const titreDuBookmaker = computed(() => props.bookmakers.find((b) => b.cle === props.edition.bookmaker)?.titre ?? props.edition.bookmaker ?? null);
+// Étape 28 : le prix juste d'un combiné (le serveur) — un écart NEUTRE à la cote tapée, jamais une value (pas de vert).
+// Pendant un recalcul (le ticket vient de changer), JAMAIS le prix d'un autre ticket : ni montré, ni dans le gain attendu,
+// ni joint à « J'ai parié » (vérification du 27/10, constat 11) ; « calcul en cours » seulement quand l'affichage est
+// connu comme allumé (constat 23), sinon la phrase « il attend ».
+const prix = computed(() => {
+  if (nature.value === 'simple' || nature.value === 'vide') return { etat: 'attente' };
+  if (props.prixJuste?.enCours) return { etat: props.prixJuste?.allume === true ? 'calcul' : 'attente' };
+  return prixJusteDit(props.prixJuste?.reponse ?? null, { cote: props.edition.coteCombinee, bookmaker: titreDuBookmaker.value });
+});
+const gains = computed(() => gainsDuTicket({ selections: props.selections, edition: props.edition, mise: props.mise, probabiliteCombine: prix.value.etat === 'prix' ? prix.value.probabilite : null }));
 /** Étape 11 : ce que les garde-fous et la fiche du compte signalent — affiché, jamais compté dans « ce qui manque ». */
 const alertesGardeFous = computed(() => alertesDuTicket({ mise: props.mise, bookmaker: props.edition.bookmaker, bookmakers: props.bookmakers, gardeFous: props.gardeFous, comptes: props.comptes }));
 
@@ -101,7 +119,8 @@ function bornesDe(s) {
 
 function jaiParie() {
   if (manques.value.length || props.enCours) return;
-  emit('jai-parie', pariAEnregistrer({ selections: props.selections, edition: props.edition, mise: props.mise, origine: props.origine, maintenant: heure.value, bookmakers: props.bookmakers }));
+  const prixJuste = prix.value.etat === 'prix' && prix.value.pariable ? { probabilite: prix.value.probabilite, source: prix.value.source, lueA: prix.value.lueA } : null;
+  emit('jai-parie', pariAEnregistrer({ selections: props.selections, edition: props.edition, mise: props.mise, origine: props.origine, maintenant: heure.value, bookmakers: props.bookmakers, prixJuste }));
 }
 </script>
 
@@ -187,8 +206,28 @@ function jaiParie() {
         <p class="tkt__note">
           <template v-if="nature === 'combine-meme-match'">Les sélections d'un même match sont liées : la cote est celle que donne le bookmaker, jamais le produit des cotes. </template>
           <template v-else-if="Number.isFinite(gains.produit)">Produit des cotes prises : <span class="cm-numeric">{{ cote2(gains.produit) }}</span>. </template>
-          {{ PRIX_JUSTE_COMBINE }}
+          <template v-if="prix.etat === 'attente' || prix.etat === 'eteint'">{{ PRIX_JUSTE_COMBINE }}</template>
         </p>
+        <!-- Étape 28 : le prix juste du combiné (le serveur), seulement quand Réglages le montre. La cote tapée y est un écart
+             NEUTRE : aucun prix de combiné n'est relevé, aucune value de combiné n'est prouvée — jamais de vert ici. -->
+        <p v-if="prix.etat === 'eteint' && prix.pourquoi" class="tkt__prix-gris" data-prix-juste="eteint">{{ prix.pourquoi }}</p>
+        <div v-else-if="prix.etat === 'prix'" class="tkt__prix" data-prix-juste="prix">
+          <p class="tkt__prix-ligne">
+            <strong class="cm-numeric">{{ prix.prix }}</strong>
+            <HelpTip terme="prix-juste-combine" />
+          </p>
+          <p v-if="prix.ecart" class="tkt__prix-ecart cm-numeric">{{ prix.ecart }}</p>
+          <p v-if="prix.siIndependants" class="tkt__prix-gris cm-numeric">{{ prix.siIndependants }}</p>
+          <p class="tkt__prix-precision">{{ prix.precision }}</p>
+          <p v-for="m in prix.mentions" :key="m" class="tkt__prix-mention">{{ m }}</p>
+          <p v-if="prix.provenance" class="tkt__prix-gris">{{ prix.provenance }}</p>
+        </div>
+        <p v-else-if="prix.etat === 'impossible'" class="tkt__prix-impossible" data-prix-juste="impossible">Prix juste : <strong>impossible</strong> — {{ prix.phrase }}.</p>
+        <ul v-else-if="prix.etat === 'refuse'" class="tkt__prix-refus" data-prix-juste="refuse">
+          <li v-for="r in prix.raisons" :key="r">{{ r }}</li>
+        </ul>
+        <p v-if="prix.etat === 'calcul'" class="tkt__prix-gris" data-prix-juste="calcul">Prix juste : calcul en cours au serveur…</p>
+        <p v-else-if="prixJuste?.erreur" class="tkt__prix-gris">Prix juste illisible pour l’instant : {{ prixJuste.erreur }}</p>
       </div>
 
       <dl class="tkt__figures">
@@ -401,6 +440,64 @@ function jaiParie() {
 
 .tkt__combo .tkt__note {
   flex: 1 1 260px;
+}
+
+/* Étape 28 : le prix juste d'un combiné — du texte neutre, jamais le vert d'une value (DESIGN.md § 6). */
+.tkt__prix {
+  display: flex;
+  flex: 1 1 100%;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.tkt__prix p,
+.tkt__prix-impossible,
+.tkt__prix-gris {
+  margin: 0;
+}
+
+.tkt__prix-ligne {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  color: var(--cm-text-primary);
+}
+
+.tkt__prix-ecart {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--cm-text-secondary);
+}
+
+.tkt__prix-gris,
+.tkt__prix-precision {
+  flex: 1 1 100%;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--cm-text-muted);
+}
+
+.tkt__prix-mention {
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--cm-text-secondary);
+}
+
+.tkt__prix-impossible {
+  flex: 1 1 100%;
+  font-size: 12.5px;
+  color: var(--cm-text-secondary);
+}
+
+.tkt__prix-refus {
+  flex: 1 1 100%;
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--cm-text-secondary);
 }
 
 .tkt__figures {

@@ -162,7 +162,10 @@ test('le code : la table à part n’est écrite et lue que par le dépôt des e
   assert.deepEqual(avecMotif(/engine_candidate_picks/), ['data/db/matchStatsDb.js', 'data/enregistreurs/depot.js'], 'la table : son DDL et son dépôt');
   assert.deepEqual(avecMotif(/\becrirePronosticsABlanc\s*\(|\bpronosticsABlanc\s*\(/), ['data/enregistreurs/depot.js', 'data/enregistreurs/moteurABlanc.js']);
   assert.deepEqual(avecMotif(/from '[^']*moteurABlanc\.js'/), ['jobs/matchStatsAutoRefresh.js'], 'seule la passe lance la nuit à blanc');
-  assert.deepEqual(avecMotif(/\b(candidateEnEssai|configDeLaCandidate|mettreLaCandidateEnEssai)\s*\(/), ['core/engine/engineVersions.js', 'data/enregistreurs/moteurABlanc.js']);
+  // Étape 28 (27/10) : la nuit des matchs simulés calcule aussi le rôle « candidate » comme la nuit à blanc (conception
+  // de 28, §4.4 : candidateEnEssai puis configDeLaCandidate, SANS retoucher moteurABlanc.js), sans jamais l'écrire dans la
+  // table à part ; aucune route ni aucun lecteur de 28 ne l'importe (liste des interdits ci-dessous).
+  assert.deepEqual(avecMotif(/\b(candidateEnEssai|configDeLaCandidate|mettreLaCandidateEnEssai)\s*\(/), ['core/engine/engineVersions.js', 'data/enregistreurs/moteurABlanc.js', 'data/simulation/simulationNuit.js']);
   // Ce qui se montre, se parie ou part à l'IA n'importe ni la nuit à blanc, ni les fonctions de la candidate.
   const interdits = [
     'core/engine/verdictPari.js',
@@ -178,7 +181,12 @@ test('le code : la table à part n’est écrite et lue que par le dépôt des e
     'api/controllers/predictions.controller.js',
     'data/repositories/betsRepository.js',
     'data/repositories/predictionsRepository.js',
-    'data/enregistreurs/gelPronostics.js'
+    'data/enregistreurs/gelPronostics.js',
+    // Étape 28 : la route, ses lecteurs et l'état de la simulation ne connaissent pas la candidate.
+    'api/controllers/simulation.controller.js',
+    'api/routes/simulation.routes.js',
+    'data/simulation/simulationRead.js',
+    'data/simulation/etatSimulation.js'
   ];
   for (const f of interdits) {
     const source = sansCommentaires(f);

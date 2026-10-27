@@ -19,10 +19,13 @@
  *     source de la cote — ce qu'il faut pour la valeur de clôture
  *     (server/src/data/closingValue.js) et le gain attendu ;
  *   - le gain potentiel et le gain attendu (pari simple seulement).
- * Aucun prix n'est inventé : le prix juste d'un combiné (sélections liées) viendra
- * avec la simulation complète (étape 28 du plan) ; d'ici là, ni value ni gain
- * attendu pour un combiné. Aucune règle de value n'est refaite ici : la cote
- * minimale et la cote maximale viennent du serveur (core/engine/coteMinimale.js).
+ * Aucun prix n'est inventé : le prix juste d'un combiné (sélections liées) vient
+ * de la simulation complète (étape 28 du plan), calculé par le serveur (POST
+ * /api/simulation/prix-combine) quand Réglages l'a allumé — un écart NEUTRE à la
+ * cote tapée, jamais une value ; éteint (la livraison), le ticket dit qu'il
+ * attend, et ni value ni gain attendu pour un combiné. Aucune règle de value
+ * n'est refaite ici : la cote minimale et la cote maximale viennent du serveur
+ * (core/engine/coteMinimale.js).
  * Toute fonction qui dépend de l'heure reçoit `maintenant` (ms).
  * -----------------------------------------------------------------------
  */
@@ -42,9 +45,15 @@ export const SOURCES_DE_COTE = Object.freeze({
   'au-pari': 'vue chez le bookmaker au moment du pari'
 });
 
-/** Ce qu'on dit d'un combiné : pas de prix juste avant l'étape 28 — jamais un prix inventé. */
+/**
+ * Ce qu'on dit d'un combiné tant que son prix juste n'est pas montré (étape 28 livrée à blanc : calculé chaque nuit,
+ * éteint dans Réglages) — la phrase de la conception, mot pour mot, puis ce qu'elle veut dire : jamais un prix inventé.
+ * Vérification du 27/10 (constat 25) : plus « les sélections d'un même match sont liées, ce n'est jamais le produit des
+ * cotes » ici — le ticket le dit déjà juste avant pour un combiné du même match, et un combiné de matchs différents
+ * affiche, lui, le produit des cotes prises.
+ */
 export const PRIX_JUSTE_COMBINE =
-  "Prix juste : pas encore calculé. Les sélections d'un combiné ne se multiplient pas simplement (deux sélections d'un même match sont liées) : son prix juste viendra avec la simulation complète, étape 28 du plan. D'ici là, ni value ni gain attendu sur un combiné.";
+  "Prix juste : calculé à blanc chaque nuit, pas encore montré : il attend le modèle de buts (étape 27) et la preuve de l’étape 28. D'ici là, ni value ni gain attendu sur un combiné (étape 28 du plan).";
 
 const nombre = (x) => (typeof x === 'number' && Number.isFinite(x) ? x : null);
 const cote2 = (x) => (Number.isFinite(x) ? x.toFixed(2).replace('.', ',') : '—');
@@ -206,7 +215,9 @@ export function controleDuTicket({ selections = [], edition = {}, mise = null, b
   if (!edition.bookmaker) manques.push('Choisissez le bookmaker chez qui vous avez parié.');
   else if (bookmakers.length && !bookmakers.some((b) => b.cle === edition.bookmaker)) manques.push(`« ${edition.bookmaker} » n'est pas un de vos bookmakers (Réglages › Paramètres du moteur).`);
   for (const s of selections) {
-    if (cotePriseDe(s, edition.cotes) === null) manques.push(`Cote prise de « ${s.pick} » : la cote que vous avez eue chez le bookmaker (un nombre supérieur à 1).`);
+    // Étape 28 : une sélection du déroulé simulé (mi-temps, premier but…) se lit et se chiffre, le règlement ne sait pas la régler.
+    if (s.pariable === false) manques.push(`« ${s.pick} » se lit, ne se parie pas : ce pari ne se règle pas automatiquement.`);
+    else if (cotePriseDe(s, edition.cotes) === null) manques.push(`Cote prise de « ${s.pick} » : la cote que vous avez eue chez le bookmaker (un nombre supérieur à 1).`);
   }
   if (natureDuTicket(selections) === 'combine-meme-match' && !(nombre(edition.coteCombinee) > 1)) {
     manques.push("Combiné du même match : tapez la cote que donne le bookmaker pour le combiné — ce n'est pas le produit des cotes, ses sélections sont liées.");
@@ -218,8 +229,10 @@ export function controleDuTicket({ selections = [], edition = {}, mise = null, b
  * Le corps de POST /api/bets pour « J'ai parié ». Chaque sélection garde le
  * format d'avant (match, marché, issue, cote) et y ajoute le bookmaker, la
  * probabilité du moteur au moment du pari, l'heure et la source de la cote.
+ * Étape 28 : un combiné dont le prix juste est montré (prixJuste : { probabilite,
+ * source, lueA }) le garde avec lui — pour son gain attendu et son suivi.
  */
-export function pariAEnregistrer({ selections = [], edition = {}, mise, origine, maintenant = Date.now(), bookmakers = [] } = {}) {
+export function pariAEnregistrer({ selections = [], edition = {}, mise, origine, maintenant = Date.now(), bookmakers = [], prixJuste = null } = {}) {
   const titre = bookmakers.find((b) => b.cle === edition.bookmaker)?.titre ?? selections.find((s) => s.bookmaker === edition.bookmaker)?.bookmakerTitle ?? null;
   const nature = natureDuTicket(selections);
   const corps = {
@@ -250,6 +263,8 @@ export function pariAEnregistrer({ selections = [], edition = {}, mise, origine,
     origine
   };
   if (nature !== 'simple' && nombre(edition.coteCombinee) > 1) corps.cotePrise = edition.coteCombinee;
+  const p = nombre(prixJuste?.probabilite);
+  if (nature !== 'simple' && p !== null && p > 0 && p < 1) corps.prixJuste = { probabilite: p, source: prixJuste.source ?? null, lueA: prixJuste.lueA ?? null };
   return corps;
 }
 
@@ -258,9 +273,10 @@ export function pariAEnregistrer({ selections = [], edition = {}, mise, origine,
  * du combiné tapée, sinon le produit pour des matchs différents), le gain
  * potentiel, et le gain attendu d'un pari SIMPLE dont la probabilité du moteur
  * est connue — mise × (probabilité × cote − 1), la formule du serveur
- * (gainAttenduDuPari). Jamais pour un combiné (étape 28).
+ * (gainAttenduDuPari). Un combiné : seulement avec son prix juste (étape 28,
+ * probabiliteCombine), sinon jamais.
  */
-export function gainsDuTicket({ selections = [], edition = {}, mise = null } = {}) {
+export function gainsDuTicket({ selections = [], edition = {}, mise = null, probabiliteCombine = null } = {}) {
   const nature = natureDuTicket(selections);
   const cotes = selections.map((s) => cotePriseDe(s, edition.cotes));
   const produit = cotes.every((c) => c !== null) && cotes.length ? cotes.reduce((p, c) => p * c, 1) : null;
@@ -277,7 +293,12 @@ export function gainsDuTicket({ selections = [], edition = {}, mise = null } = {
     if (p === null || !(p > 0 && p < 1)) raisonAttendu = "Gain attendu inconnu : le moteur n'a pas de probabilité pour cette sélection.";
     else if (cote === null || !(m > 0)) raisonAttendu = 'Gain attendu : la cote prise et la mise d’abord.';
     else attendu = { montant: Math.round(m * (p * cote - 1) * 100) / 100, pourcent: Math.round((p * cote - 1) * 100 * 100) / 100 };
-  } else if (nature !== 'vide') raisonAttendu = PRIX_JUSTE_COMBINE;
+  } else if (nature !== 'vide') {
+    const p = nombre(probabiliteCombine);
+    if (p === null || !(p > 0 && p < 1)) raisonAttendu = PRIX_JUSTE_COMBINE;
+    else if (cote === null || !(m > 0)) raisonAttendu = 'Gain attendu : la cote du combiné et la mise d’abord.';
+    else attendu = { montant: Math.round(m * (p * cote - 1) * 100) / 100, pourcent: Math.round((p * cote - 1) * 100 * 100) / 100 };
+  }
   return { nature, cote, produit, potentiel, attendu, raisonAttendu };
 }
 

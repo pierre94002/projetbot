@@ -15,6 +15,7 @@ import AppButton from '@/components/common/AppButton.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
 import { formatDateTime } from '@/utils/format.js';
 import { controlesAntiFuiteDits } from '@/utils/controlesAntiFuite.js';
+import { nomsInconnusDits } from '@/utils/simulation.js';
 
 const props = defineProps({
   overview: { type: Object, default: null },
@@ -90,6 +91,9 @@ const autreProcessus = computed(() => props.overview?.lockedByOther ?? null);
 // forces de buts — gardent leurs écarts en alertes durables ; dits ici en mots simples (utils/controlesAntiFuite.js),
 // jusqu'à la nuit qui n'en trouve plus.
 const fuites = computed(() => controlesAntiFuiteDits(props.overview?.alerts ?? null));
+// Étape 28 (vérification du 27/10, constat 14) : un nom du calendrier inconnu qui bloque des fins de saison — une ligne,
+// le détail dans Réglages › Versions du moteur ; rien quand la nuit les a tous reconnus.
+const nomsInconnus = computed(() => nomsInconnusDits(props.overview?.alerts ?? null));
 /** Les lignes affichées, seules corrigées si l'utilisateur confirme. */
 const clesAffichees = computed(() => (contradictions.value?.samples ?? []).map((c) => c.key).filter(Boolean));
 
@@ -227,6 +231,12 @@ const ageCotes = computed(() => {
             Un écart veut dire qu'un chiffre « d'avant le match » a pu voir le match lui-même. Rien n'est corrigé d'office ;
             l'alerte reste jusqu'à la nuit qui n'en trouve plus.
           </p>
+        </div>
+      </div>
+      <div v-if="nomsInconnus && !running" class="cm-note is-warning" data-simulation-noms-inconnus>
+        <span class="cm-icon-box is-warning"><AppIcon name="flag" :size="17" /></span>
+        <div class="refresh-panel__alert">
+          <p class="cm-note__text refresh-panel__note-text">{{ nomsInconnus }}</p>
         </div>
       </div>
       <div v-if="cotesEnPanne.length && !running" class="cm-note is-warning">

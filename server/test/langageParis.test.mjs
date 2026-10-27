@@ -397,7 +397,7 @@ test('« quand » et « il y a » : hier, un autre jour, une autre année, les m
 // ------------------------------------------------ 4. le guide de lecture
 
 test('guide de lecture : les sept phrases demandées (la sixième, « à rafraîchir », depuis l’étape 7 ; la septième, « juge et partie », depuis l’étape 8), simples, sans balise — et la huitième, « cote minimale », depuis l’étape 10', options, () => {
-  assert.deepEqual(Object.keys(L.GUIDE_DE_LECTURE).sort(), ['a-rafraichir', 'banc-d-essai', 'calibration', 'carte-ou-parier', 'cote-juste', 'cote-minimale', 'donnees-deja-vues', 'fourchette-du-hasard', 'juge-et-partie', 'modele-de-buts', 'note-de-depart', 'preuve-apres-lancement', 'series-de-pertes', 'sur-fragile', 'table-du-jour-j', 'valeur-de-cloture', 'value', 'variantes-essayees']);
+  assert.deepEqual(Object.keys(L.GUIDE_DE_LECTURE).sort(), ['a-rafraichir', 'banc-d-essai', 'calibration', 'carte-ou-parier', 'cote-juste', 'cote-minimale', 'deroule-simule', 'donnees-deja-vues', 'enjeu', 'fin-de-saison', 'fourchette-du-hasard', 'juge-et-partie', 'modele-de-buts', 'note-de-depart', 'preuve-apres-lancement', 'prix-juste-combine', 'series-de-pertes', 'sur-fragile', 'table-du-jour-j', 'valeur-de-cloture', 'value', 'variantes-essayees']);
   assert.ok(Object.isFrozen(L.GUIDE_DE_LECTURE));
   for (const [terme, { titre, phrase }] of Object.entries(L.GUIDE_DE_LECTURE)) {
     assert.ok(titre.length >= 4, terme);
@@ -439,6 +439,17 @@ test('guide de lecture : les sept phrases demandées (la sixième, « à rafraî
   assert.match(g['modele-de-buts'].phrase, /partent des cotes/);
   assert.match(g['modele-de-buts'].phrase, /de 10 % quand une cote plus\/moins existe, de moitié pour le total sinon ; sans cote, les xG \(ou, à défaut, les buts\) seuls/);
   assert.doesNotMatch(g['modele-de-buts'].phrase, /ancr|Poisson|Dixon|rho/i);
+  // Étape 28 : la fin de saison, l'enjeu, le déroulé simulé et le prix juste d'un combiné (conception §5), sans jargon.
+  assert.match(g['fin-de-saison'].phrase, /classement officiel/);
+  assert.match(g['fin-de-saison'].phrase, /part des saisons/);
+  assert.match(g.enjeu.phrase, /entre une victoire et une défaite/);
+  assert.match(g.enjeu.phrase, /n’entre dans aucun pourcentage du moteur/);
+  assert.match(g['deroule-simule'].phrase, /Une information, pas un pronostic\./);
+  assert.match(g['prix-juste-combine'].phrase, /ce n’est pas le produit des cotes/);
+  assert.match(g['prix-juste-combine'].phrase, /jamais en vert/);
+  for (const terme of ['fin-de-saison', 'enjeu', 'deroule-simule', 'prix-juste-combine']) {
+    assert.doesNotMatch(g[terme].phrase, /Monte|Carlo|Poisson|Dixon|copule|bivari/i, terme);
+  }
 });
 
 /** Tous les fichiers .vue de l'interface. */
@@ -461,7 +472,7 @@ test('chaque « ? » posé dans l\'interface désigne une phrase du guide ; et l
     }
   }
   // Les sept notions sont expliquées quelque part dans l'appli, dans les pages où elles s'affichent.
-  assert.deepEqual([...utilises.keys()].sort(), ['a-rafraichir', 'banc-d-essai', 'calibration', 'carte-ou-parier', 'cote-juste', 'cote-minimale', 'donnees-deja-vues', 'fourchette-du-hasard', 'juge-et-partie', 'modele-de-buts', 'note-de-depart', 'preuve-apres-lancement', 'series-de-pertes', 'sur-fragile', 'table-du-jour-j', 'valeur-de-cloture', 'value', 'variantes-essayees']);
+  assert.deepEqual([...utilises.keys()].sort(), ['a-rafraichir', 'banc-d-essai', 'calibration', 'carte-ou-parier', 'cote-juste', 'cote-minimale', 'deroule-simule', 'donnees-deja-vues', 'enjeu', 'fin-de-saison', 'fourchette-du-hasard', 'juge-et-partie', 'modele-de-buts', 'note-de-depart', 'preuve-apres-lancement', 'prix-juste-combine', 'series-de-pertes', 'sur-fragile', 'table-du-jour-j', 'valeur-de-cloture', 'value', 'variantes-essayees']);
   // Étape 10 : « cote minimale » dans le comparateur de vos bookmakers, sur la page du match et dans le ticket.
   assert.ok(utilises.get('cote-minimale').includes('components/betting/BookmakerComparator.vue'));
   assert.ok(utilises.get('cote-minimale').includes('components/betting/TicketDuPari.vue'));
@@ -492,6 +503,13 @@ test('chaque « ? » posé dans l\'interface désigne une phrase du guide ; et l
   // Étape 27 : le modèle de buts unique, sur sa pastille de provenance (page du match) et sur la carte de sa candidate (Réglages).
   assert.ok(utilises.get('modele-de-buts').includes('components/analysis/GoalModelProvenance.vue'));
   assert.ok(utilises.get('modele-de-buts').includes('components/settings/EngineGoalModelTrial.vue'));
+  // Étape 28 : la fin de saison sur son onglet du classement, l'enjeu sur son encadré de la page du match, le déroulé sur
+  // sa carte et sur la carte de Réglages, le prix juste d'un combiné dans le ticket.
+  assert.ok(utilises.get('fin-de-saison').includes('components/matches/FinDeSaisonTable.vue'));
+  assert.ok(utilises.get('enjeu').includes('components/matches/EnjeuDuMatch.vue'));
+  assert.ok(utilises.get('deroule-simule').includes('components/analysis/DerouleSimuleCard.vue'));
+  assert.ok(utilises.get('deroule-simule').includes('components/settings/EngineSimulationTrial.vue'));
+  assert.ok(utilises.get('prix-juste-combine').includes('components/betting/TicketDuPari.vue'));
 });
 
 // ------------------------------------------------ 5. la bulle d'aide

@@ -7,6 +7,9 @@ import { fraicheurDuMatch } from '../../data/cotesDeVosBookmakers.js';
 import { getSport } from '../../sports/index.js';
 import { ApiError } from '../middlewares/errorHandler.js';
 import { preparerAVerifierParNoms } from '../../data/controleQuotidien.js';
+import { openDb } from '../../data/db/matchStatsDb.js';
+import { simulationDuMatch } from '../../data/simulation/simulationRead.js';
+import { lancementDe } from '../../bench/trialsRegistry.js';
 
 /**
  * Analyse un match existant d'une source de données, par son identifiant.
@@ -38,7 +41,9 @@ export async function analyzeMatchById(req, res) {
 
   const analyse = await analyzeMatch(avecFraicheur, getEngineConfig(sportId), getTiltState(), getSport(sportId));
   const aVerifier = aVerifierDuMatchAnalyse(avecFraicheur);
-  res.json(aVerifier ? { ...analyse, aVerifier } : analyse);
+  // Étape 28 : le bloc de la simulation, APRÈS l'analyse (le verdict n'en sait rien, l'IA ne le reçoit jamais).
+  const simulation = sportId === 'football' ? simulationDuMatchAnalyse(avecFraicheur, analyse, getEngineConfig(sportId)) : null;
+  res.json({ ...analyse, ...(aVerifier ? { aVerifier } : {}), ...(simulation ? { simulation } : {}) });
 }
 
 /**
@@ -55,6 +60,22 @@ function aVerifierDuMatchAnalyse(match) {
   try {
     const verifier = preparerAVerifierParNoms();
     return verifier({ league: match.league ?? null, date: String(match.commenceTime ?? '').slice(0, 10), homeName: match.home, awayName: match.away, famille: null });
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Étape 28 du plan : la simulation de ce match — { affichage, enjeu, deroule } (data/simulation/simulationRead.js) : des
+ * lignes rangées la nuit, jamais une simulation dans la requête. Ajouté APRÈS l'analyse, comme « à vérifier » : le
+ * verdict du moteur n'en sait rien, l'analyse IA ne le reçoit jamais (elle prend des champs nommés du moteur). Une
+ * lecture qui échoue n'empêche jamais l'analyse.
+ */
+function simulationDuMatchAnalyse(match, analyse, config) {
+  try {
+    // Le lancement de l'étape 28 au registre de la mesure : lu seulement si l'interrupteur des matchs est ouvert (ses
+    // conditions sont relues à chaque lecture : un « tout » resté ouvert sans elles se comporte comme éteint).
+    return simulationDuMatch({ match, analyse, config, database: openDb(), maintenant: Date.now(), reglagesEnService: config, lancement: () => lancementDe('28') ?? null });
   } catch {
     return null;
   }

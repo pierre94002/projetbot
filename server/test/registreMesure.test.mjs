@@ -214,7 +214,8 @@ test('registre : enregistrerLancements crée le fichier, daté du jour de PARIS 
   // Rien à noter (une liste vide ; celle du code a l'étape 29 depuis le 19/10, l'étape 30 depuis le 22/10, l'étape 37 depuis la nuit
   // du 22 au 23/10) : aucun fichier créé.
   const vide = nouveauFichier();
-  assert.deepEqual(LANCEMENTS.map((l) => [l.etape, l.version, l.le]), [['29', 'indice-v1', '2026-10-14'], ['30', 'fiches-v1', null], ['37', 'style-v1', null]]);
+  // Étape 28 (27/10/2026) : la simulation complète, datée du premier démarrage avec ce code.
+  assert.deepEqual(LANCEMENTS.map((l) => [l.etape, l.version, l.le]), [['29', 'indice-v1', '2026-10-14'], ['30', 'fiches-v1', null], ['37', 'style-v1', null], ['28', 'simulation-v1', null]]);
   assert.deepEqual(enregistrerLancements({ fichier: vide, lancements: [] }), { nouveaux: [], source: 'absent', probleme: null });
   assert.equal(fs.existsSync(vide), false);
 
@@ -403,10 +404,12 @@ test('juge de preuve, « déjà vu » par PORTÉE (correction du 19/10) : DONNEE
   // Le vrai code : l'étape 29 est lancée le 14/10 (date fixe), sa preuve écarte ses six vues, « indice » comprises ;
   // les étapes 30 (22/10/2026) et 37 (nuit du 22 au 23/10, les styles de jeu), « le: null », sont datées du démarrage.
   const vrai = nouveauFichier();
+  // Étape 28 (27/10) : sa déclaration (simulation-v1, « le: null ») est datée du démarrage comme 30 et 37 (§3.4 de 28).
   assert.deepEqual(enregistrerLancements({ fichier: vrai, maintenant: Date.parse('2026-10-19T08:00:00Z') }).nouveaux, [
     { etape: '29', version: 'indice-v1', le: '2026-10-14' },
     { etape: '30', version: 'fiches-v1', le: '2026-10-19' },
-    { etape: '37', version: 'style-v1', le: '2026-10-19' }
+    { etape: '37', version: 'style-v1', le: '2026-10-19' },
+    { etape: '28', version: 'simulation-v1', le: '2026-10-19' }
   ]);
   assert.equal(lancementDe('29', { fichier: vrai }).le, '2026-10-14');
   assert.deepEqual(fenetresVues('29', { fichier: vrai }).map((f) => [f.de, f.a]).sort(), [['2000-07-01', '2019-06-30'], ['2019-07-01', '2023-06-30'], ['2023-01-01', '2024-06-30'], ['2023-07-01', '2024-06-30'], ['2024-07-01', '2025-06-30'], ['2025-07-01', '2026-09-23'], ['2025-07-01', '2026-10-07']]);

@@ -347,6 +347,18 @@ chaque élément porte `data-modele-de-buts`, et aucun ne paraît sans la clé (
 le bloc « Banc d'essai sur des matchs jamais vus (2019-2023) : avant / après » de l'étape 27 (`RoadmapStep`, `.cm-table` toujours complet, en-têtes « Avant (ancien modèle) » / « Après (modèle de buts unique) » qui
 restent justes après l'adoption, avant la preuve après lancement ; `utils/bancAvantApres.js`) ; une étape que l'historique ne raconte qu'en partie (lignes `partielle`) est « En cours » et
 dit ce qui lui reste sous « pas encore terminée » (`etape.reste`, en couleur de section : « en essai à blanc, adoption à venir »).
+Depuis l'étape 28 du plan (27/10/2026, la simulation complète, livrée à blanc) : dans la même carte, après le bloc du modèle de buts,
+`EngineSimulationTrial` (`.cm-block`, `data-simulation-reglages`, `HelpTip terme="deroule-simule"`) — LIT lui-même `GET /api/simulation/etat`, un
+état rangé par la nuit, sans rien calculer — : la PORTE 1 en mots simples (réussie, les combinés meilleurs que le produit des simples, avec
+leur chiffre et sa fourchette ; les effets du score ; les deux marchés écartés et pourquoi — annoncé, arrivé — ; la date ; « ils restent éteints
+en v1 »), la dernière nuit des fins de saison (combien, durée, mémoire, les championnats non calculés NOMMÉS derrière « Voir les N championnats
+non calculés ») et celle des déroulés (rencontres, analyses, chemins à part, contrôle), l'avancement de la preuve sur vos matchs (« 312 matchs sur
+800, 9 jours sur 21 », `HelpTip terme="preuve-apres-lancement"`), puis « Ce que l'appli montre » : les DEUX interrupteurs en `AppSelect`
+(« Fins de saison et enjeu » : éteint / allumé ; « Combinés et déroulé » : éteint / combinés / tout), la valeur rangée ET ce qui est vraiment
+montré, relu avec ses conditions à chaque lecture (« tout » rangé sans le modèle de buts en service ni la preuve « retenu » : montré éteint, la
+raison en ambre, il se rallume de lui-même) et la liste de ce qui manque aux combinés. Un choix écrit `simulation_state` SEULEMENT (jamais les
+réglages du moteur, aucune version) ; « combinés » et « tout » sont refusés avec leur phrase tant que les conditions manquent. Provenance réelle
+et « Relire ». Aucun vert. Mots : `utils/simulation.js` ; rejoué par `server/test/simulationEcrans.test.mjs`.
 Depuis l'étape 17 du plan (12/10/2026) : `DayTablePanel` (Réglages, carte « Table du jour J », icône `calendar`, sur-titre « Statistiques », juste après
 « Historique football-data ») — LIT `GET /api/match-stats/day-table`, l'état noté à la fin de la dernière construction ou nuit par l'étape « Table du
 jour J (ce qu’on savait la veille) » de l'actualisation (`server/src/data/db/dayTable.js`), sans rien calculer ni recompter ; relue à la fin de chaque
@@ -669,6 +681,7 @@ ni vert ni rouge de case (l'avertissement d'une case rouge sous le pari, dans Op
 | Provenance | `ProvenanceChip` | le fournisseur RÉEL et l'heure du relevé ; ancien (24 h) : ambre ET « il y a 15 jours » | ambre = ancien, heure ou source inconnue | mots |
 | Aide | `HelpTip` | la petite bulle « ? » : une phrase par notion | neutre | Tab, Échap, `aria-describedby` |
 | Données à vérifier (étape 14) | `AVerifierBadge` | « À vérifier », et avec `avec-raison` la raison courte : « Score à vérifier : Millwall – Bolton du 05/09/2026 (FotMob 4-0, football-data 3-0) », « Cartons jaunes non relevés par FotMob en EPL… » (et N autres raisons) | ambre (`--cm-warning`) en pointillés ; jamais vert ni rouge : il ne touche ni au verdict ni à la pastille de value | icône alerte + mot, `role="note"`, toutes les raisons au survol et dans `aria-label` |
+| Enjeu d'une rencontre (étape 28) | `EnjeuBadge` | « Gros enjeu », « Sans enjeu », « Enjeu non calculé » ; entre les deux seuils, pas de pastille (l'encadré de la page dit la phrase) | bleu d'information = gros enjeu ; gris = sans enjeu ; gris en pointillés = non calculé ; jamais vert ni rouge | icône + mot, `role="note"`, la phrase du serveur (arrondie à 5 points) et quand elle a été calculée au survol et dans `aria-label` |
 | Case de la carte « où parier » (étape 23) | `BettingMapChip` | « Prouvé · 412 matchs », « Moins bien · 2 208 matchs », « Pas prouvé · 1 520 matchs », « Trop peu · 46 / 200 », « Pas mesurée », « Pas de cote », « Suspendue » ; avec `avec-ecart` l'écart (« −9,5 % ») ; `compacte` : le mot seul | vert = « Prouvé » seulement (l'exception ci-dessus) ; rouge = moins bien que le marché, prouvé ; gris en pointillés ; gris hachuré = pas de cote archivée | icône (coche, alerte, tiret, croix, horloge) + mot, `role="note"`, la phrase du serveur au survol et dans `aria-label` |
 
 - **`ValueBadge`** : `pourcent` (l'avantage en %, tel que le serveur le donne), `jouable` (la cote vient de vos bookmakers),
@@ -720,7 +733,9 @@ Cote jouable ; Opportunités, colonne Value), `cote-juste` (Repérage colonne Mo
 Performance paris), `series-de-pertes` (coupe-circuit de Réglages), `a-rafraichir` (étape 7 : saisie express et carte « Value à
 rafraîchir » de la page du match, carte « Cotes de vos bookmakers » de Réglages), `juge-et-partie` (étape 8 : la note de lecture de la
 page Opportunités), `cote-minimale` (étape 10 : le comparateur de vos bookmakers, son titre sur la page du match, le ticket),
-`modele-de-buts` (étape 27 : la provenance des pourcentages de buts, `GoalModelProvenance`, et la carte de la candidate du modèle de buts). Un terme de
+`modele-de-buts` (étape 27 : la provenance des pourcentages de buts, `GoalModelProvenance`, et la carte de la candidate du modèle de buts),
+`fin-de-saison`, `enjeu`, `deroule-simule` et `prix-juste-combine` (étape 28 : l'onglet « Fin de saison », l'encadré « Enjeu » de la page du match, la
+carte « Déroulé simulé » et celle de Réglages, le prix juste du ticket). Un terme de
 plus : une entrée au guide (le test refuse un `<HelpTip terme>` qui n'y est pas).
 
 **Où c'est posé** : Repérage (`ScreenerView` : pastille de value dans la colonne Cote jouable, bandeau avec le prochain coup d'envoi,
@@ -897,6 +912,46 @@ protéger sans jamais bloquer un pari :
 - **La note du pronostic** (`ResultPredictionCard`) dit une mise conseillée ramenée à un plafond et le garde-fou qui a enclenché le coupe-circuit ;
   l'onglet Value bets de Mes paris marque « · plafond » à côté de la mise Kelly (la raison au survol).
 
+**La simulation complète (étape 28 du plan, 27/10/2026)** — fins de saison, enjeu des rencontres, déroulé simulé, prix juste d'un combiné. Calculée
+à blanc chaque nuit, et **tout est ÉTEINT à la livraison** : deux interrupteurs de Réglages › Versions du moteur (`EngineSimulationTrial`, ci-dessus),
+relus avec leurs conditions à chaque lecture (`effectif` de `GET /api/simulation/etat`) ; éteints, les classements, les cartes de rencontre et la page
+du match sont rendus EXACTEMENT comme avant (test), seul le ticket d'un combiné dit en une ligne que le prix juste attend. Aucun calcul à l'ouverture
+d'une page : tout est lu dans ce que la nuit a rangé, chaque chiffre avec son heure. Appels : `services/simulationApi.js` ; mots et règles :
+`utils/simulation.js` (pur, sans Vue).
+- **`EnjeuBadge`** (`components/common`, props `enjeu` — une ligne du serveur, `GET /api/simulation/enjeux` — et `compacte`) : le seul dessin d'un
+  enjeu. « Gros enjeu » en bleu d'information (un club au moins voit une zone bouger d'au moins 20 points entre victoire et défaite, arrondis à 5
+  comme à l'écran), « Sans enjeu » en gris (les deux à « 0 pt » une fois arrondis), « Enjeu non calculé » en gris pointillé (fin de saison non
+  calculée, coupe, rencontre trop lointaine) ; entre les deux, pas de pastille. Jamais vert ni rouge : un enjeu n'est ni une value ni une perte, et il
+  n'entre dans aucun pourcentage du moteur. Au survol et dans `aria-label` : « Arsenal joue la Ligue des champions : 60 % en cas de victoire, 40 % en
+  cas de défaite ; Burnley joue sa survie : 45 % de descente en cas de victoire, 70 % en cas de défaite » — chaque chiffre dit s'il va avec la
+  victoire ou avec la défaite ; arrondi à 5, jamais « 100 % » ni « 0 % » : aux extrêmes les seuils du tableau « Fin de saison », « ≥ 90 % » dès 90 %
+  et « ≤ 10 % » dès 10 % ; deux chiffres arrondis égaux : « autour de 60 % quelle que soit l'issue » ; un club dont les chances ne changent presque
+  pas entre une victoire et une défaite, dans toutes ses zones, « n'a presque rien à jouer », les deux : une seule phrase (jamais « points d'écart » :
+  à côté d'un classement, on y lirait des points de classement) — et « Calculé la nuit du 26/10, refait chaque nuit jusqu'à la veille du match, puis
+  gardé tel quel. » (la forme « gardé tel quel jusqu'au coup d'envoi » pour une rencontre du jour même de la nuit). Posée sur `MatchCard` (une rangée sous la carte,
+  `compacte`), lue par `stores/enjeuxStore.js` — UNE requête par jour affiché, gardée 10 min, jamais une par carte —, et dans l'encadré
+  **`EnjeuDuMatch`** de la page du match (`AppCard` « Enjeu », entre le verdict et « Pourquoi ce pourcentage » : la pastille ou « Un enjeu ni gros ni
+  nul », la phrase, quand, la loi, `ProvenanceChip` « Simulation CôteMaster, classement FotMob »). Seulement avec « Fins de saison et enjeu » allumé.
+- **`DerouleSimuleCard`** (`components/analysis`, page du match après les cartes du résultat et du score ; SEULEMENT en « tout ») : en tête
+  « **Information, pas un pronostic.** » et la phrase de l'écart mesuré sur juillet 2025 – septembre 2026 (17 818 matchs jamais appris) avec les cotes de clôture, sur les marchés MONTRÉS ; une ligne
+  par issue, par groupes (À la mi-temps, Mi-temps / fin, Le premier but, D'une mi-temps à l'autre), libellés avec les noms des clubs
+  (`libelleDuDeroule` de `langageParis.js`), l'écart au réel mesuré au survol (`title` = `ecartMesureDit`, « Le hasard du tirage seul vaut ± 0,5
+  point ») ; « Prendre » met la ligne au ticket comme une sélection qui « se lit, ne se parie pas » (`pariable: false` : « J'ai parié » reste refusé,
+  ce pari ne se règle pas automatiquement). Les marchés écartés par la porte 1 (« un but dans chaque mi-temps », « au moins un rouge ») n'y
+  paraissent JAMAIS : une phrase dit que deux marchés manquent et renvoie à Réglages. Un marché ou un combiné que la garde de sûreté du jugement
+  principal a éteint (plus de 4 points d'écart sur vos matchs) s'éteint SEUL de la même façon — la phrase dit les deux sources, Réglages le nomme
+  par son libellé — ; le reste du déroulé et des prix reste montré. « Ni pronostic ni règlement automatique. »
+- **Le prix juste d'un combiné** (`TicketDuPari`, prop `prixJuste` fournie par `composables/usePrixJuste.js` : `POST /api/simulation/prix-combine`
+  350 ms après le dernier changement d'un combiné, réponse tardive ignorée, la réponse d'un ticket d'avant retirée dès que le ticket change — jamais
+  montrée ni enregistrée pendant le recalcul —, rien demandé par la page du match quand l'affichage est éteint (Mes paris demande, le serveur répond
+  « éteint » sans rien calculer ; « calcul en cours » n'est dit que quand l'affichage est connu comme allumé) : « Prix juste : 4,10 (24,4 %)
+  à 14 h 32 » (`HelpTip terme="prix-juste-combine"`) ; la cote tapée en écart NEUTRE (« Chez Winamax (cote tapée) : 3,60, soit 12 % sous le prix
+  juste ») — jamais `ValueBadge`, jamais vert ; en gris « si les sélections étaient indépendantes : 5,30 » ; la précision (± 1 point ; ± 2 avec « les
+  deux marquent » ; moins sûr au-delà de 65 %) ; la provenance (grille du moteur et son heure, déroulé de la nuit, « corners supposés indépendants des
+  buts : non mesuré »). Éteint : « Prix juste : calculé à blanc chaque nuit, pas encore montré… » ; sélections contradictoires : « impossible » ; un
+  marché écarté par la porte 1 : refusé, « ce marché a été écarté par la preuve sur 2019-2023 ». Le gain attendu d'un combiné n'existe qu'avec un prix
+  juste montré ; « J'ai parié » enregistre alors ce prix avec son heure.
+
 **Vérifier** : `server/test/langageParis.test.mjs` (les règles, dont le vert comparé à `findValueBet`) et
 `server/test/langageParisEcran.test.mjs` (rendu des sept composants et des pages, sans navigateur : aucune couleur en dur, le vert
 seulement dans la pastille de value, aucun appel hors liste), `server/test/cotesVosBookmakers.test.mjs` (étape 7 : la règle de
@@ -969,6 +1024,26 @@ Composer avec ces classes AVANT d'écrire du CSS propre :
   `--cm-gold`, jamais `--cm-section`.
 - **Pronostic / avis** → `AiMarketCard` ou le dessin de `MarketPicksBoard` (anneau, pronostic
   en gras, logo, pastilles).
+- **Fin de saison** (étape 28, 27/10/2026) → un onglet « Fin de saison » APRÈS « Classement » et
+  « Corrigé par les xG » (`LeagueStandingsPanel`), seulement quand « Fins de saison et enjeu » est
+  allumé et que le championnat est simulé — JAMAIS pour une coupe. `FinDeSaisonTable` : en tête la
+  provenance réelle (`ProvenanceChip` « Simulation CôteMaster, classement FotMob », l'heure de la nuit ;
+  dessous le détail : 10 000 fins de saison, l'heure du classement relevé, les rencontres restantes) et
+  `HelpTip terme="fin-de-saison"` ; la LOI nommée dans ses trois cas — forces de buts du modèle en
+  service, forces du modèle en essai, ou « classement officiel seul » en `.cm-note.is-warning` avec sa
+  phrase « trop sûre d'elle… lisez les pourcentages comme des ordres de grandeur » et sa cause (le modèle de
+  buts pas en service, ou ses forces qui manquent ou ne sont pas à jour), « Pourquoi : » la raison lue,
+  et des cases arrondies à 10 — ; « Mesuré sur les saisons 2023-2026 … pas encore sur la saison en
+  cours » ; les mentions en `.cm-chip` (« jusqu'à la scission : titre, Europe et descente se jouent
+  ensuite », « départage simplifié (différence de buts) »). Puis un `.cm-table` par table (une par
+  groupe d'un championnat scindé) dans l'ordre OFFICIEL, jamais réordonné : rang, `TeamCrest` sur
+  chaque ligne, le favori en or à sa place (`FavoriteStar` non interactive), la pénalité (« −8 pts »),
+  les points, puis UNE colonne par famille présente (titre, Europe, barrages, descente…) : au point
+  près entre 10 et 90, « ≥ 90 % » / « ≤ 10 % » au-delà (jamais « 97 % », « 100 % » ni « 0 % »), en
+  gris « acquis sauf surprise » quand 10 000 saisons sur 10 000 vont dans le même sens ; la légende
+  des extrêmes et du gris au pied. Non calculée : `EmptyState` « Fin de saison non calculée » avec sa
+  raison (« 2 clubs non reconnus : … », « rencontres en trop au calendrier… », « poules de fin de
+  saison : … ne sont pas simulées »). Lue dans ce que la nuit a rangé, jamais calculée à l'ouverture.
 - **Erreur** → `.cm-note.is-danger` ; **avertissement** → `.cm-note.is-warning` ; **vide** →
   `EmptyState` avec une description qui dit quoi faire.
 
@@ -1004,6 +1079,12 @@ Composer avec ces classes AVANT d'écrire du CSS propre :
   s'affiche « pas encore mesuré » avec sa raison, il n'est jamais calculé à la volée (le bilan de calibration du mois en cours prenait 6 s au premier appel).
 - Pas de chiffre sans son heure quand il vient d'un relevé : `ProvenanceChip` dit le fournisseur réel et l'heure, ou dit qu'il
   ne les a pas.
+- Pas de vert pour un combiné : aucune value de combiné n'est prouvée (aucun prix de combiné relevé ; la grille est jugée contre le
+  produit des simples, pas contre les bookmakers). Le prix juste d'un combiné et l'écart à la cote tapée restent neutres, jamais
+  `ValueBadge` (27/10/2026, étape 28). Un enjeu non plus n'est ni vert ni rouge (`EnjeuBadge`).
+- Pas de marché écarté par une preuve montré « pour information » : un marché que la porte 1 de l'étape 28 a écarté (« un but dans
+  chaque mi-temps », « au moins un rouge ») n'apparaît ni dans le déroulé ni comme jambe d'un combiné ; la liste se lit dans
+  `noteDeLaSimulation.js`, jamais recopiée à la main ; le rallumer demande une variante déclarée.
 
 ## 7. Vérifier
 
@@ -1025,3 +1106,9 @@ dans un dossier temporaire, rien de perdu face à l'ancien `src` : chaque ligne 
 navigateur : `server/test/bulletinPageEcran.test.mjs` (la page « Bulletin »), `momentsClesEcran.test.mjs` (les moments clés), `bilanApresMatchEcran.test.mjs` (le bilan d'après-match et
 la carte de marché commune) et `bulletinPage.test.mjs` (les deux routes de lecture). Une règle d'écran qui se teste dans le texte du composant (un « Relire » qui relit SA route, une adresse
 remplacée et non empilée) se garde par une expression sur le source : un rendu côté serveur ne clique pas.
+
+Depuis l'étape 28 (27/10/2026) : `server/test/simulationEcrans.test.mjs` rend côté serveur, sur les réponses du vrai serveur, l'onglet « Fin de
+saison » (aux extrêmes, loi nommée dans ses trois cas, scission, non calculée, coupe), `EnjeuBadge`, le déroulé, le ticket dans chacun de ses
+états et la carte de Réglages ; et il vérifie que TOUT ÉTEINT, la carte de rencontre, le classement et la page du match ne changent pas d'un
+octet (serveur d'avant sans la route, réponse « éteint », « éteint » avec des données présentes : même HTML ; allumé, seuls les ajouts diffèrent).
+À la livraison, ces trois écrans ont aussi été comparés une fois au code d'AVANT l'étape (ancien `src`, mêmes réponses) : identiques.

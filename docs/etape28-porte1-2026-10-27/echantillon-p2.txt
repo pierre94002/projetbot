@@ -1,0 +1,82 @@
+{
+ "ecritLe": "2026-10-27T07:07:20.567Z",
+ "quoi": "Porte 1 de l’étape 28 sur football-data P2 : l’échantillon, défini sur les entrées seules (aucune issue lue).",
+ "rejeu": {
+  "fichier": "../rejeux/b-p2-28.jsonl",
+  "octets": 1384699531,
+  "modifie": "2026-10-27T03:03:23.597Z",
+  "sha1": "d31555c7b3da3d64711730f357a2a934f3b45d25"
+ },
+ "rho": -0.05,
+ "reconstitution": {
+  "methode": "moindres-carres",
+  "garde": 0.000002
+ },
+ "requetes": {
+  "lignesP2": "SELECT COUNT(*) AS n FROM fd_history WHERE date BETWEEN '2019-07-01' AND '2023-06-30'",
+  "lignesP2Lien0": "SELECT COUNT(*) AS n FROM fd_history WHERE date BETWEEN '2019-07-01' AND '2023-06-30' AND lien = 0",
+  "completesP2": "SELECT COUNT(*) AS n FROM fd_history WHERE date BETWEEN '2019-07-01' AND '2023-06-30' AND bd IS NOT NULL AND be IS NOT NULL AND mtd IS NOT NULL AND mte IS NOT NULL AND rouges_d IS NOT NULL AND rouges_e IS NOT NULL",
+  "completesP2Lien0": "SELECT COUNT(*) AS n FROM fd_history WHERE date BETWEEN '2019-07-01' AND '2023-06-30' AND lien = 0 AND bd IS NOT NULL AND be IS NOT NULL AND mtd IS NOT NULL AND mte IS NOT NULL AND rouges_d IS NOT NULL AND rouges_e IS NOT NULL",
+  "clesCompletes": "SELECT code, date_fichier, date, dom, ext FROM fd_history WHERE date BETWEEN '2019-07-01' AND '2023-06-30' AND bd IS NOT NULL AND be IS NOT NULL AND mtd IS NOT NULL AND mte IS NOT NULL AND rouges_d IS NOT NULL AND rouges_e IS NOT NULL",
+  "clesEtCotes": "SELECT code, date_fichier, date, dom, ext, moy_p25, moy_m25 FROM fd_history WHERE date BETWEEN '2019-07-01' AND '2023-06-30'"
+ },
+ "comptesSql": {
+  "lignesP2": 47681,
+  "lignesP2Lien0": 46507,
+  "completesP2": 30167,
+  "completesP2Lien0": 30167
+ },
+ "comptes": {
+  "lignesDuRejeu": 1256245,
+  "scoreExact": 46507,
+  "doublons": 0,
+  "distributionPasA81": 0,
+  "rejouablesMoindresCarres": 46507,
+  "rejouablesRapport": 29838,
+  "ecartMax": 8.28441470368535e-7
+ },
+ "clesFdEnDouble": 0,
+ "regimes": {
+  "sans cote (sans-cote, statistiques)": 16349,
+  "cotes-plusmoins-buts": 30156,
+  "cotes-1n2-buts": 2
+ },
+ "regimesDuBilan": {
+  "buts-seuls": 16347,
+  "cotes-plusmoins-buts": 30156,
+  "cotes-1n2-buts": 2,
+  "moyennes-seules": 2
+ },
+ "controleRegime": {
+  "bilan": {
+   "cotes-plusmoins-buts": 30156,
+   "cotes-1n2-buts": 2
+  },
+  "relu": {
+   "cotes-plusmoins-buts": 30156,
+   "cotes-1n2-buts": 2
+  },
+  "egal": true
+ },
+ "etapes": {
+  "rejouables": 46507,
+  "regime": 30156,
+  "rejouablesEtRegime": 30156,
+  "cleFdTrouvee": 46507,
+  "cleFdAmbigue": 0,
+  "completes": 30167,
+  "echantillon": 30149
+ },
+ "colonnes": [
+  "fixtureKey",
+  "date",
+  "lambda",
+  "mu",
+  "ecart"
+ ],
+ "rencontres": "30149 rencontres",
+ "sortie": "echantillon-p2.json",
+ "sha1Sortie": "659271bac17f1298384fcf78e80fed896a9fa099",
+ "dureeS": 20.958,
+ "rssMo": 292
+}

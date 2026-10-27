@@ -51,7 +51,9 @@ export function natureDuPari(legs = []) {
 // produit des cotes reste alors noté à côté (`produitDesCotes`). Chaque
 // sélection garde, en plus, ce que le contrôleur a validé (bookmaker,
 // probabilité du moteur au moment du pari, heure de la cote).
-export function createBet({ stake, legs, cotePrise = null, nature = null, origine = null }) {
+// Étape 28 : le PRIX JUSTE d'un combiné au moment du pari (validé par le contrôleur) : probabiliteCombine, sa source,
+// l'heure où il a été lu. Absent : rien n'est écrit, un pari d'avant se lit à l'identique.
+export function createBet({ stake, legs, cotePrise = null, nature = null, origine = null, prixJuste = null }) {
   const bets = readBets();
   const odds = Number(legs.reduce((product, leg) => product * leg.odds, 1).toFixed(4));
   const entry = {
@@ -75,6 +77,11 @@ export function createBet({ stake, legs, cotePrise = null, nature = null, origin
     if (livre.bookmakerTitle) entry.bookmakerTitle = livre.bookmakerTitle;
   }
   if (origine) entry.origine = origine;
+  if (legs.length > 1 && prixJuste && typeof prixJuste.probabilite === 'number' && prixJuste.probabilite > 0 && prixJuste.probabilite < 1) {
+    entry.probabiliteCombine = prixJuste.probabilite;
+    if (prixJuste.source) entry.probabiliteCombineSource = prixJuste.source;
+    if (prixJuste.lueA) entry.probabiliteCombineLueA = prixJuste.lueA;
+  }
   bets.push(entry);
   writeBets(bets);
   return entry;
@@ -85,17 +92,18 @@ const deuxDecimales = (x) => Math.round(x * 100) / 100;
 /**
  * Le gain attendu d'un pari AU MOMENT où il a été pris (étape 10) : mise ×
  * (probabilité du moteur × cote prise − 1). Seulement pour un pari SIMPLE dont
- * la probabilité du moteur est notée. Un combiné n'en a pas encore : le prix
- * juste d'un combiné (sélections liées) viendra avec la simulation complète
- * (étape 28 du plan) ; un pari d'avant l'étape 10 n'a pas de probabilité notée.
+ * la probabilité du moteur est notée. Étape 28 : un COMBINÉ dont le prix juste a
+ * été noté au moment du pari (probabiliteCombine) : mise × (probabilité du
+ * combiné × cote prise − 1) ; sans lui, toujours « combine » (pas de gain
+ * attendu) ; un pari d'avant l'étape 10 n'a pas de probabilité notée.
  * Calculé à la lecture, jamais écrit dans le carnet.
  * @returns {{ montant: number|null, pourcent: number|null, raison: 'combine'|'non-note'|'vide'|null }}
  */
 export function gainAttenduDuPari(bet) {
   const legs = bet?.legs ?? [];
   if (!legs.length) return { montant: null, pourcent: null, raison: 'vide' };
-  if (legs.length > 1) return { montant: null, pourcent: null, raison: 'combine' };
-  const p = legs[0].probabiliteMoteur;
+  if (legs.length > 1 && !(typeof bet.probabiliteCombine === 'number' && bet.probabiliteCombine > 0 && bet.probabiliteCombine < 1)) return { montant: null, pourcent: null, raison: 'combine' };
+  const p = legs.length > 1 ? bet.probabiliteCombine : legs[0].probabiliteMoteur;
   const cote = Number(bet.odds);
   const mise = Number(bet.stake);
   if (!(typeof p === 'number' && p > 0 && p < 1) || !(cote > 1) || !(mise > 0)) return { montant: null, pourcent: null, raison: 'non-note' };

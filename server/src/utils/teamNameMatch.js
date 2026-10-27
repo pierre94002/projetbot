@@ -68,6 +68,12 @@ const TEAM_ALIASES = {
   // seul « frankfurt » est commun, soit 1 token sur 2, sous le seuil du
   // rapprochement flou. Trente-huit rencontres restaient non identifiées.
   'eintracht frankfurt': ['ein frankfurt', 'eintracht frankfurt fc'],
+  // Le calendrier de la saison (season-calendar.json) écrit le préfixe du club, la table officielle FotMob et le
+  // magasin non (« SV Elversberg » / « Elversberg », « SC Paderborn » / « Paderborn ») : sans ces deux lignes, la fin
+  // de saison de la Bundesliga n'est pas calculée (étape 28, 27/10/2026). Ici et jamais dans la table team_aliases,
+  // effacée et reconstruite chaque nuit (identityRegistry.js) : l'alias y disparaîtrait au matin.
+  elversberg: ['sv elversberg'],
+  paderborn: ['sc paderborn', 'paderborn 07'],
   // Deux clubs d'une même ville dont un seul mot distingue les noms, et ce
   // mot — « Club » — est un sigle écarté comme non distinctif. Il ne restait
   // que « brugge » de part et d'autre, donc un recouvrement parfait entre

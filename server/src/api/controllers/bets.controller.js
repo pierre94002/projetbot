@@ -4,6 +4,8 @@ import { suiviDesParis } from '../../data/suiviParis.js';
 import { alertesDuPari, etatDesGardeFous, REGLAGE_GARDE_FOUS_DEFAUT } from '../../core/risk/gardeFous.js';
 import { lireReglageGardeFous } from '../../data/repositories/gardeFousRepository.js';
 import { lireComptes } from '../../data/repositories/comptesBookmakersRepository.js';
+import { selectionReglable } from '../../data/simulation/simulationRead.js';
+import { MARCHES_DE_DEROULE } from '../../data/simulation/jambes.js';
 
 const VALID_STATUSES = new Set(['pending', 'won', 'lost', 'void']);
 
@@ -105,14 +107,51 @@ function validateLeg(leg, index) {
   };
 }
 
+/**
+ * Étape 28 du plan : le PRIX JUSTE d'un combiné au moment du pari (POST /api/simulation/prix-combine, rendu par le
+ * ticket) — { probabilite (strictement entre 0 et 1), source (un texte, 300 caractères au plus), lueA (l'instant) }.
+ * Seulement pour un combiné ; chaque sélection doit être réglable par le règlement (deriveBetLegOutcome, lu jamais
+ * modifié) : une sélection de mi-temps ou de score exact se lit et se chiffre, « J'ai parié » la refuse en v1 (elle
+ * resterait « en attente » pour toujours). Absent : rien ne change (le format d'avant).
+ */
+function prixJusteDuPari(prixJuste, jambes) {
+  if (prixJuste === undefined || prixJuste === null) return null;
+  if (typeof prixJuste !== 'object' || Array.isArray(prixJuste)) throw new ApiError(400, '« prixJuste » : un objet { probabilite, source, lueA }.');
+  if (jambes.length < 2) throw new ApiError(400, '« prixJuste » est le prix juste d’un combiné ; un pari simple garde la probabilité du moteur de sa sélection.');
+  const p = prixJuste.probabilite;
+  if (typeof p !== 'number' || !Number.isFinite(p) || p <= 0 || p >= 1) throw new ApiError(400, '« prixJuste.probabilite » est une probabilité strictement entre 0 et 1 (0,244 pour 24,4 %).');
+  let source = null;
+  if (prixJuste.source !== undefined && prixJuste.source !== null) {
+    if (typeof prixJuste.source !== 'string') throw new ApiError(400, '« prixJuste.source » doit être un texte.');
+    source = prixJuste.source.replace(/\s+/g, ' ').trim() || null;
+    if (source && source.length > 300) throw new ApiError(400, '« prixJuste.source » dépasse 300 caractères.');
+  }
+  let lueA = null;
+  if (prixJuste.lueA !== undefined && prixJuste.lueA !== null && prixJuste.lueA !== '') {
+    const t = typeof prixJuste.lueA === 'string' ? Date.parse(prixJuste.lueA) : Number.NaN;
+    if (!Number.isFinite(t)) throw new ApiError(400, '« prixJuste.lueA » doit être une date (ISO 8601).');
+    lueA = new Date(t).toISOString();
+  }
+  const nonReglable = jambes.find((l) => !selectionReglable(l));
+  if (nonReglable) {
+    throw new ApiError(400, `« J’ai parié » refusé : « ${nonReglable.pick} » se lit et se chiffre, mais ne se règle pas automatiquement — ce pari resterait en attente pour toujours (étape 28, v1).`);
+  }
+  return { probabilite: p, source, lueA };
+}
+
 export function postBet(req, res) {
-  const { stake, legs, cotePrise, origine } = req.body ?? {};
+  const { stake, legs, cotePrise, origine, prixJuste } = req.body ?? {};
 
   const numericStake = Number(stake);
   if (!Number.isFinite(numericStake) || numericStake <= 0) throw new ApiError(400, 'La mise doit être un nombre positif.');
   if (!Array.isArray(legs) || legs.length === 0) throw new ApiError(400, 'Au moins une sélection ("legs") est requise.');
 
   const jambes = legs.map(validateLeg);
+  // Étape 28 (vérification du 27/10, constat 17) : une sélection d'un marché de DÉROULÉ (mi-temps, premier but, rouge…)
+  // se lit et se chiffre, mais aucun règlement ne la sait régler en v1 — refusée par le serveur aussi, prix juste joint ou
+  // non (elle resterait « en attente » pour toujours). Ces marchés sont nouveaux : aucun pari ancien ne les porte.
+  const deDeroule = jambes.find((l) => MARCHES_DE_DEROULE.includes(l.marketId));
+  if (deDeroule) throw new ApiError(400, `« J’ai parié » refusé : « ${deDeroule.pick} » se lit et se chiffre, mais ne se règle pas automatiquement — ce pari resterait en attente pour toujours (étape 28, v1).`);
   const nature = natureDuPari(jambes);
   // Un ticket se joue chez UN bookmaker : ses sélections ne peuvent pas en nommer deux.
   const livres = new Set(jambes.map((l) => l.bookmaker).filter(Boolean));
@@ -134,7 +173,8 @@ export function postBet(req, res) {
     throw new ApiError(400, `« origine » vaut ${[...ORIGINES].map((o) => `« ${o} »`).join(' ou ')}.`);
   }
 
-  const bet = createBet({ stake: numericStake, legs: jambes, cotePrise: nature === 'simple' ? null : cote, nature, origine: origine ?? null });
+  const prix = prixJusteDuPari(prixJuste, jambes);
+  const bet = createBet({ stake: numericStake, legs: jambes, cotePrise: nature === 'simple' ? null : cote, nature, origine: origine ?? null, prixJuste: prix });
   // Étape 11 : les garde-fous SIGNALENT (mise maximale, mise acceptée, solde, compte fermé, perte de la semaine) — le pari est déjà écrit.
   res.status(201).json({ ...avecGainAttendu(bet), alertes: alertesApresLePari(bet) });
 }

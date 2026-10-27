@@ -82,6 +82,13 @@
  *       4 hebdomadaires / 12 mensuelles, restauration d'essai chaque semaine
  *       (contrôle complet chaque mois), copie hors du disque chaque semaine
  *       si une destination est réglée — tout dans des processus à part ;
+ *       puis LA SIMULATION COMPLÈTE (étape 28 du plan, 27/10/2026 : une fois
+ *       par jour civil de Paris, jamais au clic, ni réseau ni Claude — les fins
+ *       de saison et l’enjeu des rencontres dans un processus à part en lecture
+ *       seule, puis le déroulé simulé des rencontres des 48 prochaines heures,
+ *       chemins tirés dans un processus à part sans base ; rangés par le
+ *       serveur, calculés à blanc, jamais lus par le moteur — cf.
+ *       data/simulation/simulationNuit.js) ;
  *       puis le CARNET DE L'IA (étape 21 du plan, 14/10/2026 : une fois par
  *       jour ou au clic, chaque avis d'avant-match de l'IA réglé au magasin,
  *       sa clôture, sa fiabilité par marché et par championnat, et les
@@ -153,6 +160,8 @@ import { indiceDeForce, etatIndiceDeForce } from '../data/db/teamStrength.js';
 import { forcesDeButs, etatForcesButs, empreintesDemandees } from '../data/db/forcesButs.js';
 import { fichesDesJoueurs, etatDesFiches } from '../data/db/playerRatings.js';
 import { stylesDeJeu, etatDesStyles } from '../data/db/teamStyle.js';
+import { simulerLesSaisonsDeLaNuit, simulerLesMatchsDeLaNuit } from '../data/simulation/simulationNuit.js';
+import { N as N_SIMULATION } from '../data/simulation/reglages.js';
 import { lancementDe } from '../bench/trialsRegistry.js';
 import { candidatePourLeBanc } from '../core/engine/engineVersions.js';
 import { getEngineConfig } from '../core/engine/engineConfig.js';
@@ -1324,8 +1333,137 @@ const dueStylesDeJeu = (ctx, { database = null } = {}) => {
   }
 };
 
+/** Une raison de « non calculé » en peu de mots (le résumé de l'étape ; la phrase entière est dans les détails et dans Réglages). */
+const raisonCourte = (raison) => String(raison ?? 'raison non dite').split(' — ')[0].replace(/ : non calculé$/, '').slice(0, 90);
+
+/**
+ * L'étape « simulationSaisons » (étape 28 du plan, 27/10/2026) : LES FINS DE SAISON des championnats (jamais une coupe)
+ * et L'ENJEU de chaque rencontre des 14 prochains jours — 10 000 fins de phase par championnat, deux lois chaque nuit
+ * (les forces de buts du modèle de buts, et la table officielle), calculées dans un PROCESSUS À PART en lecture seule ;
+ * rangées par le serveur sous le verrou de la passe, par tranches courtes en rendant la main ; ce qui n'est PAS calculé
+ * est dit, avec sa raison. Un autre calcul lourd en cours : REPORTÉE. APRÈS la sauvegarde (une panne ici ne coûte rien
+ * à l'essai de l'étape 27 ; la copie de la nuit n'a ces lignes que la nuit suivante). Calculées à blanc : rien n'est
+ * montré tant que l'interrupteur de Réglages est éteint ; jamais lues par le moteur. Un nom du calendrier inconnu qui
+ * bloque un championnat : alerte durable, jusqu'à la nuit qui le reconnaît.
+ */
+async function passeSimulationSaisons(ctx, options = {}) {
+  // L'heure est lue ici (la passe), jamais dans data/simulation.
+  const r = await simulerLesSaisonsDeLaNuit({ ...options, maintenant: options.maintenant ?? Date.now() });
+  const tenu = `le serveur jamais tenu plus de ${nombre(Math.round(r.blocMaxMs ?? 0))} ms d'affilée`;
+  if (r.mode === 'reporte') {
+    return { status: 'warn', summary: `Reporté : ${String(r.raison).replace(/\.$/, '')} — les fins de saison seront calculées à la passe suivante.`, details: { mode: r.mode, reporte: true, raison: r.raison }, changed: false };
+  }
+  if (r.mode === 'echec') {
+    return { status: 'error', summary: `En échec : ${String(r.erreur).slice(0, 240)} — rien d’avancé, la nuit d’avant reste lue ; la passe suivante recommence (${duree(r.dureeMs)}).`, details: { mode: r.mode, erreur: r.erreur, dureeMs: r.dureeMs }, changed: false };
+  }
+  const b = r.bilan ?? {};
+  const non = b.nonCalcules ?? [];
+  const inconnus = b.inconnus ?? [];
+  const loi = r.forces?.empreinte
+    ? `loi « forces » : forces de buts ${r.forces.origine === 'service' ? 'du modèle de buts en service' : 'du modèle en essai (étape 27)'}`
+    : `loi « forces » non calculée (${r.forces?.raison ?? 'raison non dite'})`;
+  return {
+    status: inconnus.length || r.elague?.erreur ? 'warn' : 'ok',
+    summary:
+      `Fins de saison : ${pluriel(b.simules ?? 0, 'championnat simulé', 'championnats simulés')} ${nombre(N_SIMULATION)} fois, ${pluriel(non.length, 'non calculé', 'non calculés')}` +
+      (non.length ? ` (${non.slice(0, 4).map((x) => `${x.league} : ${raisonCourte(x.raison)}`).join(' ; ')}${non.length > 4 ? ' ; …' : ''})` : '') +
+      `, ${pluriel(r.ecrites?.enjeux ?? 0, 'enjeu rangé', 'enjeux rangés')}${r.ecrites?.enjeuxFiges ? ` (${nombre(r.ecrites.enjeuxFiges)} figé(s) : coup d’envoi passé)` : ''} ; ${loi} ; ` +
+      `${duree(b.dureeMs ?? 0)} à part (${Math.round((b.aPart?.rssMaxOctets ?? 0) / 1048576)} Mo chez lui), rangement ${duree(r.rangementMs ?? 0)}, ${tenu}.` +
+      (inconnus.length ? ` Noms du calendrier inconnus : ${inconnus.slice(0, 3).map((x) => `${x.league} (${x.noms.slice(0, 3).join(', ')})`).join(' ; ')} — à regarder.` : '') +
+      ' Calculé à blanc : rien n’est montré tant que l’affichage est éteint (Réglages) ; jamais lu par le moteur.',
+    details: {
+      mode: r.mode,
+      calculeLe: r.calculeLe,
+      simules: b.simules ?? 0,
+      nonCalcules: non,
+      inconnus,
+      enjeux: r.ecrites?.enjeux ?? 0,
+      enjeuxFiges: r.ecrites?.enjeuxFiges ?? 0,
+      lignes: { etat: r.ecrites?.etat ?? 0, simulees: r.ecrites?.simulees ?? 0 },
+      forces: r.forces ?? null,
+      elague: r.elague ?? null,
+      dureeMs: r.dureeMs,
+      rangementMs: r.rangementMs,
+      blocMaxMs: r.blocMaxMs,
+      plusLongueTrancheMs: r.ecrites?.plusLongueTrancheMs ?? null,
+      calculAPart: { dureeMs: b.dureeMs ?? null, rssMax: b.aPart?.rssMaxOctets ?? null }
+    },
+    alert: { key: 'simulationSaisons', value: inconnus.length ? { inconnus, updatedAt: new Date().toISOString() } : null },
+    // L'écran ne lit les fins de saison qu'allumé, à l'ouverture d'un classement : rien à recharger.
+    changed: false
+  };
+}
+
+/** Due : une fois par jour civil de Paris, ou quand la passe d'avant l'a REPORTÉE ; jamais forcée par un clic. */
+const dueSimulationSaisons = (ctx) => !faitAujourdhui(ctx.derniere('simulationSaisons')) || Boolean(ctx.derniersDetails?.('simulationSaisons')?.reporte);
+
+/**
+ * L'étape « simulationMatchs » (étape 28 du plan, 27/10/2026) : LE DÉROULÉ SIMULÉ des rencontres des 48 prochaines
+ * heures — pour chacune, l'analyse du moteur en service et celle de la candidate au modèle de buts dont les forces sont à
+ * jour (dans le serveur, en rendant la main), les entrées rangées pour les deux rôles, les chemins de la grille du
+ * modèle de buts seule tirés 10 000 fois dans un PROCESSUS À PART sans base (40 rencontres refaites avec la graine du
+ * jour : la même table à l'octet, sinon rien n'est rangé) ; puis le contrôle des lignes et le juge de la nuit
+ * (provisoire chaque nuit, principal une fois à 800 matchs et 21 jours). Une fois par jour civil de Paris, avec
+ * l'interrupteur des enregistreurs (un relevé pour la preuve, comme le gel) ; jamais aux autres passes ni au clic.
+ * Calculé à blanc : jamais montré tant que l'affichage est éteint ; jamais lu par le moteur ni envoyé à l'IA.
+ */
+async function passeSimulationMatchs(ctx, options = {}) {
+  // L'heure est lue ici (la passe), jamais dans data/simulation.
+  const r = await simulerLesMatchsDeLaNuit({ ...options, maintenant: options.maintenant ?? Date.now() });
+  const tenu = `le serveur jamais tenu plus de ${nombre(Math.round(r.blocMaxMs ?? 0))} ms d'affilée`;
+  if (r.mode === 'reporte') {
+    return { status: 'warn', summary: `Reporté : ${String(r.raison).replace(/\.$/, '')} — le déroulé simulé sera calculé à la passe suivante.`, details: { mode: r.mode, reporte: true, raison: r.raison }, changed: false };
+  }
+  if (r.mode === 'echec') {
+    return { status: 'error', summary: `En échec : ${String(r.erreur).slice(0, 240)} — rien n’est rangé, la nuit d’avant reste lue ; la passe suivante recommence (${duree(r.dureeMs)}).`, details: { mode: r.mode, erreur: r.erreur, dureeMs: r.dureeMs, controleDesTables: r.controleDesTables ?? null }, changed: false };
+  }
+  const b = r.bilan ?? {};
+  const c = r.controle ?? { lignes: 0, ecarts: [] };
+  const j = r.jugement;
+  const juge = j?.calcule
+    ? `jugement provisoire : ${pluriel(j.matchs ?? 0, 'match joué comparé', 'matchs joués comparés')} sur ${nombre(j.horizon?.matchs ?? 800)}, ${pluriel(j.joursEcoules ?? 0, 'jour', 'jours')} sur ${nombre(j.horizon?.jours ?? 21)}${j.principal ? ` ; jugé à l’horizon : « ${j.verdict} »` : ''}`
+    : `pas de jugement cette nuit (${j?.raison ?? 'juge non lancé'})`;
+  const points = [];
+  if (b.echecs) points.push(`${pluriel(b.echecs, 'échec', 'échecs')} (${b.echantillons.slice(0, 2).join(' ; ')})`);
+  if (c.ecarts?.length) points.push(`${pluriel(c.ecarts.length, 'écart au contrôle des lignes', 'écarts au contrôle des lignes')} (${c.ecarts.slice(0, 2).map((e) => e.texte).join(' ; ')}) — à regarder`);
+  if (r.elague?.erreur) points.push(`élagage en échec : ${r.elague.erreur}`);
+  const aPartMo = r.calculAPart?.aPart?.rssMaxOctets ? `, ${Math.round(r.calculAPart.aPart.rssMaxOctets / 1048576)} Mo chez lui` : '';
+  return {
+    status: points.length ? 'warn' : 'ok',
+    summary:
+      `Déroulés simulés : ${pluriel(b.dansLaFenetre ?? 0, 'rencontre des 48 prochaines heures', 'rencontres des 48 prochaines heures')}, ${pluriel(b.lignes ?? 0, 'ligne rangée', 'lignes rangées')} ` +
+      `(${nombre(b.tirees ?? 0)} tirée(s) ${nombre(N_SIMULATION)} fois sur la grille du modèle de buts, ${nombre(b.entreesSeules ?? 0)} en entrées seules)` +
+      (b.sansIdentifiant ? `, ${pluriel(b.sansIdentifiant, 'rencontre sans identifiant FotMob', 'rencontres sans identifiant FotMob')} (pas de ligne)` : '') +
+      (b.candidateEnAttente ? ` ; ${b.candidateEnAttente}` : '') +
+      ` ; contrôle : ${nombre(r.controleDesTables?.lignes ?? 0)} rencontre(s) refaite(s) avec la graine du jour, ${pluriel(r.controleDesTables?.ecarts?.length ?? 0, 'écart', 'écarts')} ; ${juge} ; ` +
+      `${duree(r.dureeMs)} (analyses ${duree(b.analysesMs ?? 0)}, à part ${duree(r.aPartMs ?? 0)}${aPartMo}), ${tenu}` +
+      (points.length ? ` ; ${points.join(' ; ')}.` : '.') +
+      ' Jamais montré tant que l’affichage est éteint ; jamais lu par le moteur ni envoyé à l’IA.',
+    details: {
+      mode: r.mode,
+      calculeLe: r.calculeLe,
+      bilan: b,
+      controleDesTables: r.controleDesTables ?? null,
+      controle: { lignes: c.lignes ?? 0, ecarts: (c.ecarts ?? []).length, marquees: c.marquees ?? 0 },
+      jugement: j ? { calcule: Boolean(j.calcule), raison: j.raison ?? null, matchs: j.matchs ?? 0, joursEcoules: j.joursEcoules ?? 0, principal: Boolean(j.principal), verdict: j.verdict ?? null } : null,
+      ecrites: r.ecrites ?? null,
+      elague: r.elague ?? null,
+      dureeMs: r.dureeMs,
+      aPartMs: r.aPartMs,
+      rangementMs: r.rangementMs,
+      blocMaxMs: r.blocMaxMs,
+      calculAPart: { dureeMs: r.calculAPart?.dureeMs ?? null, rssMax: r.calculAPart?.aPart?.rssMaxOctets ?? null }
+    },
+    alert: { key: 'simulationMatchs', value: c.ecarts?.length ? { ecarts: c.ecarts.slice(0, 20), total: c.ecarts.length, updatedAt: new Date().toISOString() } : null },
+    changed: false
+  };
+}
+
+/** Due : une fois par jour civil de Paris, avec l'interrupteur des enregistreurs, ou quand la passe d'avant l'a REPORTÉE ; jamais forcée par un clic. */
+const dueSimulationMatchs = (ctx) => Boolean(env.enregistreurs?.enabled) && (!faitAujourdhui(ctx.derniere('simulationMatchs')) || Boolean(ctx.derniersDetails?.('simulationMatchs')?.reporte));
+
 /** Pour les tests : l'étape d'analyse IA automatique telle que la passe la lance (plafond, réserve, bilan) ; l'étape du carnet de santé ; celle de l'historique football-data ; celle des repères ; celle de la table du jour J ; celle du contrôle quotidien ; celle de la candidate à blanc ; celle de la calibration du mois écoulé ; celle de connaître le marché ; celle de l'indice de force ; celle des forces de buts ; celle des fiches des joueurs ; celle du carnet de l'IA ; celles du bulletin du jour et du bilan de la semaine. */
-export const __testing = { ETAPES: () => ETAPES, passeBulletin, passeBilanSemaine, dueBulletin, dueBilanSemaine, passeCarteOuParier, dueCarteOuParier, dueMoteurABlanc, passeIaAuto, passeCarnetSante, passeHistoriqueFd, dueHistoriqueFd, passeReperes, dueReperes, passeTableJourJ, dueTableJourJ, passeControleQuotidien, passeMoteurABlanc, passeCalibrationMensuelle, dueCalibrationMensuelle, passeConnaitreMarche, dueConnaitreMarche, passeIndiceForce, dueIndiceForce, passeForcesButs, dueForcesButs, passeFichesJoueurs, dueFichesJoueurs, passeStylesDeJeu, dueStylesDeJeu, passeCarnetIA, passeDossiersIA };
+export const __testing = { ETAPES: () => ETAPES, passeBulletin, passeBilanSemaine, dueBulletin, dueBilanSemaine, passeCarteOuParier, dueCarteOuParier, dueMoteurABlanc, passeIaAuto, passeCarnetSante, passeHistoriqueFd, dueHistoriqueFd, passeReperes, dueReperes, passeTableJourJ, dueTableJourJ, passeControleQuotidien, passeMoteurABlanc, passeCalibrationMensuelle, dueCalibrationMensuelle, passeConnaitreMarche, dueConnaitreMarche, passeIndiceForce, dueIndiceForce, passeForcesButs, dueForcesButs, passeFichesJoueurs, dueFichesJoueurs, passeStylesDeJeu, dueStylesDeJeu, passeCarnetIA, passeDossiersIA, passeSimulationSaisons, dueSimulationSaisons, passeSimulationMatchs, dueSimulationMatchs };
 
 /**
  * Les étapes. `due(ctx)` dit si l'étape tourne à cette passe (les autres
@@ -1875,6 +2013,25 @@ const ETAPES = [
     // d'essai hebdomadaire, bilan et alerte durable : cf.
     // data/sauvegardes/etapeSauvegarde.js.
     run: () => passeSauvegarde()
+  },
+  {
+    key: 'simulationSaisons',
+    label: 'Fins de saison et enjeu des rencontres (simulation, à blanc)',
+    // Étape 28 du plan (27/10/2026) : juste APRÈS la sauvegarde (l'ordre de l'essai de l'étape 27, du gel à la
+    // sauvegarde, ne bouge pas ; une panne ici ne lui coûte rien), AVANT le carnet de l’IA et le contrôle quotidien
+    // (toujours dernier). Une fois par jour civil de Paris, ou si la passe d’avant l’a reportée ; jamais au clic ; ni
+    // réseau ni Claude. Cf. passeSimulationSaisons.
+    due: (ctx) => dueSimulationSaisons(ctx),
+    run: (ctx) => passeSimulationSaisons(ctx)
+  },
+  {
+    key: 'simulationMatchs',
+    label: 'Déroulé simulé des matchs des 48 prochaines heures (simulation, à blanc)',
+    // Étape 28 du plan : juste après les fins de saison, AVANT le carnet de l’IA. Une fois par jour civil de Paris,
+    // avec l’interrupteur des enregistreurs (un relevé pour la preuve, comme le gel), ou si la passe d’avant l’a
+    // reportée ; jamais aux autres passes ni au clic. Cf. passeSimulationMatchs.
+    due: (ctx) => dueSimulationMatchs(ctx),
+    run: (ctx) => passeSimulationMatchs(ctx)
   },
   {
     key: 'carnetIA',

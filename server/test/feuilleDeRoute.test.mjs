@@ -391,17 +391,18 @@ test('étape 27 — une ligne PARTIELLE ne finit pas l’étape : la 27 est « e
   assert.equal(e27.historique[0].partielle, 'en essai à blanc, adoption à venir');
   assert.match(e27.historique[0].change, /l’étape n’est pas finie/);
   assert.ok(e27.historique[0].mesure.length > 100, 'ce qui a été mesuré reste dit');
-  // La page compte la 27 « en cours », pas « terminée » (le 21/10/2026 : 29 terminées, 1 en cours).
-  assert.deepEqual([...PARTIELLES], ['27']);
+  // La page compte la 27 « en cours », pas « terminée » (le 21/10/2026 : 29 terminées, 1 en cours ; depuis le 27/10/2026,
+  // la 28 aussi, livrée à blanc : 2 en cours).
+  assert.deepEqual([...PARTIELLES], ['27', '28']);
   assert.equal(e.avancement.terminees, NB_TERMINEES);
-  assert.equal(e.avancement.enCours, 1);
+  assert.equal(e.avancement.enCours, 2);
   assert.ok(!TERMINEES.has('27'));
   assert.equal(toutesLesEtapes(e).filter((x) => x.etat === 'terminee').length, NB_TERMINEES);
   const lot5 = e.lots.find((l) => l.numero === 5);
-  assert.equal(lot5.enCours, 1);
+  assert.equal(lot5.enCours, 2);
   assert.equal(lot5.termine, false);
   // Les autres étapes n'ont rien qui reste dit.
-  assert.deepEqual(toutesLesEtapes(e).filter((x) => x.reste).map((x) => x.id), ['27']);
+  assert.deepEqual(toutesLesEtapes(e).filter((x) => x.reste).map((x) => x.id), ['27', '28']);
   // Chaque ligne partielle dit ce qui reste (une chaîne, au moins quelques mots) ; les autres valent null.
   for (const h of HISTORIQUE) {
     assert.ok(h.partielle === null || (typeof h.partielle === 'string' && h.partielle.trim().length >= 10), `étape ${h.etape} du ${h.fin} : « partielle » dit ce qui reste, ou vaut null`);
@@ -415,11 +416,42 @@ test('étape 27 — une ligne PARTIELLE ne finit pas l’étape : la 27 est « e
   const fini = etatFeuilleDeRoute({ maintenant: MIDI, pierre: PIERRE_VIDE, historique: [...HISTORIQUE, adoption], mesure: MESURE_ABSENTE });
   const f27 = toutesLesEtapes(fini).find((x) => x.id === '27');
   assert.deepEqual([f27.etat, f27.fin, f27.heureFin, f27.reste, f27.historique.length], ['terminee', '2026-11-15', '~9 h', null, 2]);
-  assert.deepEqual([fini.avancement.terminees, fini.avancement.enCours], [NB_TERMINEES + 1, 0]);
+  assert.deepEqual([fini.avancement.terminees, fini.avancement.enCours], [NB_TERMINEES + 1, 1], 'la 28 reste en cours');
   // Une étape dans ETAPES_EN_COURS sans ligne reste « en cours », sans rien qui reste dit.
   const libre = LIBRES[0];
   const enCours = toutesLesEtapes(etatFeuilleDeRoute({ maintenant: MIDI, pierre: PIERRE_VIDE, enCours: [libre], mesure: MESURE_ABSENTE })).find((x) => x.id === libre);
   assert.deepEqual([enCours.etat, enCours.reste, enCours.historique], ['en-cours', null, []]);
+});
+
+test('étape 28 — livrée à blanc : « en cours » (« livrée à blanc, preuve sur vos matchs en cours »), sans date de fin ; son histoire dit en mots simples que tout est éteint, la porte 1 passée, les deux marchés écartés et le refus des deux fichiers du moteur demandés par le cahier ; le verdict de la preuve la finira', () => {
+  const e = etatFeuilleDeRoute({ maintenant: MIDI, pierre: PIERRE_VIDE, mesure: MESURE_ABSENTE });
+  const e28 = toutesLesEtapes(e).find((x) => x.id === '28');
+  assert.deepEqual([e28.etat, e28.reste, e28.fin, e28.heureFin], ['en-cours', 'livrée à blanc, preuve sur vos matchs en cours', null, null], 'pas de date de fin : l’étape n’est pas finie');
+  assert.equal(e28.historique.length, 1);
+  const [h] = e28.historique;
+  assert.equal(h.fin, '2026-10-27');
+  assert.match(h.change, /l’étape n’est pas finie/);
+  // Tout éteint à la livraison, et ce qui se montrera quand Pierre l'allumera.
+  assert.match(h.change, /TOUT EST ÉTEINT : les classements, les cartes de rencontre et la page du match sont exactement ceux d’avant/);
+  assert.match(h.change, /« Fins de saison et enjeu » ; « Combinés et déroulé »/);
+  // La porte 1 passée ; les deux marchés écartés, nommés, jamais montrés en v1.
+  assert.match(h.change, /La porte 1 \(2019-2023, jamais vue\) est passée : les combinés sont mieux prévus par la grille que par le produit des simples\./);
+  assert.match(h.change, /Deux marchés sont écartés et ne seront jamais montrés en v1 : « un but dans chaque mi-temps » et « au moins un rouge »/);
+  // Le refus des deux fichiers demandés par le cahier, et pourquoi, en mots simples.
+  assert.match(h.change, /core\/engine\/matchSimulation\.js et core\/engine\/seasonSimulation\.js\) : refusé, parce qu’un fichier de plus dans le moteur crée une nouvelle version du moteur et recommence l’essai de l’étape 27/);
+  assert.doesNotMatch(h.change, /Monte|Carlo|Poisson|Dixon|copule|K = 27|F3a|F2c|P2\b/, 'pas de jargon dans ce qui a changé');
+  // Les chiffres de la porte 1 : ceux de la note, recopiés par script (noteDeLaSimulation.js), arrondis comme à l'écran.
+  assert.match(h.mesure, /30 149 matchs jamais vus \(football-data, juillet 2019 à juin 2023\)/);
+  assert.match(h.mesure, /15,5 millièmes d’erreur de prévision en moins que le produit des simples \[14,5 ; 16,4\], 27 variantes comptées/);
+  assert.match(h.mesure, /« un but dans chaque mi-temps » \(annoncé 53,7 %, arrivé 54,7 %/);
+  assert.match(h.mesure, /« au moins un rouge » \(annoncé 21,7 %, arrivé 18,0 %\)/);
+  assert.match(h.mesure, /Empreinte du moteur inchangée \(16f2459…\)/);
+  // Le verdict de la preuve, plus tard : une ligne qui FINIT l'étape la rend « terminée ».
+  const verdict = { etape: '28', fin: '2026-11-17', heure: '~6 h', titre: 'Verdict de la preuve', change: 'La preuve sur les matchs de Pierre a dit « retenu » : les combinés se montrent.', mesure: 'ok', partielle: null, tests: null };
+  const fini = etatFeuilleDeRoute({ maintenant: MIDI, pierre: PIERRE_VIDE, historique: [...HISTORIQUE, verdict], mesure: MESURE_ABSENTE });
+  const f28 = toutesLesEtapes(fini).find((x) => x.id === '28');
+  assert.deepEqual([f28.etat, f28.fin, f28.reste, f28.historique.length], ['terminee', '2026-11-17', null, 2]);
+  assert.deepEqual([fini.avancement.terminees, fini.avancement.enCours], [NB_TERMINEES + 1, 1], 'la 27 reste en cours');
 });
 
 test('état : terminée prime sur mise de côté, qui prime sur en cours, qui prime sur à faire ; une note n’y change rien', () => {

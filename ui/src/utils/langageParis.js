@@ -181,6 +181,27 @@ export const GUIDE_DE_LECTURE = Object.freeze({
     titre: 'Modèle de buts unique',
     phrase:
       'Les pourcentages de buts partent des cotes ; les xG des deux équipes les ajustent de 10 % quand une cote plus/moins existe, de moitié pour le total sinon ; sans cote, les xG (ou, à défaut, les buts) seuls.'
+  }),
+  // Étape 28 du plan (27/10/2026) : la simulation complète — fins de saison, enjeu, déroulé simulé, prix juste d'un combiné.
+  'fin-de-saison': Object.freeze({
+    titre: 'Fin de saison',
+    phrase:
+      'Chaque nuit, le reste de la saison est joué 10 000 fois à partir du classement officiel et des rencontres restantes : un pourcentage est la part des saisons où le club finit dans cette zone.'
+  }),
+  enjeu: Object.freeze({
+    titre: 'Enjeu',
+    phrase:
+      'De combien la chance d’un club d’atteindre une zone (titre, Europe, maintien…) change entre une victoire et une défaite dans cette rencontre. Une information : elle n’entre dans aucun pourcentage du moteur.'
+  }),
+  'deroule-simule': Object.freeze({
+    titre: 'Déroulé simulé',
+    phrase:
+      '10 000 matchs simulés minute par minute à partir des buts attendus du moteur, recalés sur sa grille des scores : la mi-temps, le premier but, un retournement. Une information, pas un pronostic.'
+  }),
+  'prix-juste-combine': Object.freeze({
+    titre: 'Prix juste d’un combiné',
+    phrase:
+      'La cote qui paierait exactement la chance que toutes les sélections passent ensemble : dans un même match elles sont liées, ce n’est pas le produit des cotes. Aucune value de combiné n’est prouvée : jamais en vert.'
   })
 });
 
@@ -735,3 +756,53 @@ export function transitionInfobulle(etat, evenement) {
 }
 
 export const infobulleOuverte = (etat) => !etat.ferme && (etat.focus || etat.survol || etat.epingle);
+
+// ------------------------------------------- les marchés de déroulé (étape 28)
+
+const MI_TEMPS_FIN = Object.freeze(['1/1', '1/N', '1/2', 'N/1', 'N/N', 'N/2', '2/1', '2/N', '2/2']);
+
+/**
+ * Le nom d'un marché de déroulé (la carte « Déroulé simulé » de la page du match, le ticket), avec le nom des clubs :
+ * la mi-temps (qui mène, au moins un ou deux buts avant la pause), les neuf cases mi-temps / fin, le premier but (avant
+ * la 30e minute : marqué avant 30:00, minutes 1 à 30 comprises), plus de buts en 2e mi-temps, le club mené à la pause
+ * puis vainqueur. `cle` : la clé du serveur (data/simulation, le banc et la nuit) ; une clé inconnue est rendue telle
+ * quelle. Les marchés que la preuve a écartés ne sont jamais montrés : ils n'ont pas de nom ici.
+ */
+export function libelleDuDeroule(cle, { home = 'Domicile', away = 'Extérieur' } = {}) {
+  const qui = (x) => (x === '1' ? home : x === '2' ? away : null);
+  const ft = /^htFt([0-8])$/.exec(String(cle ?? ''));
+  if (ft) {
+    const code = MI_TEMPS_FIN[Number(ft[1])];
+    const [mt, fin] = code.split('/');
+    const pause = mt === 'N' ? 'Égalité à la pause' : `${qui(mt)} mène à la pause`;
+    const finDit = fin === 'N' ? 'match nul' : `${qui(fin)} gagne`;
+    if (mt === fin) return `${code} — ${mt === 'N' ? 'Égalité à la pause et à la fin' : `${qui(mt)} mène à la pause et gagne`}`;
+    return `${code} — ${pause}, ${finDit}`;
+  }
+  switch (cle) {
+    case 'htH':
+      return `Mi-temps : ${home} mène`;
+    case 'htD':
+      return 'Mi-temps : égalité';
+    case 'htA':
+      return `Mi-temps : ${away} mène`;
+    case 'htO05':
+      return 'Au moins un but avant la pause';
+    case 'htO15':
+      return 'Au moins deux buts avant la pause';
+    case 'premierDom':
+      return `Premier but : ${home}`;
+    case 'premierExt':
+      return `Premier but : ${away}`;
+    case 'premierAvant30':
+      return 'Premier but avant la 30e minute';
+    case 'h2plusQueH1':
+      return 'Plus de buts en 2e mi-temps qu’en 1re';
+    case 'retourDom':
+      return `${home} mené à la pause, puis vainqueur`;
+    case 'retourExt':
+      return `${away} mené à la pause, puis vainqueur`;
+    default:
+      return String(cle ?? '');
+  }
+}

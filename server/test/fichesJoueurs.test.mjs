@@ -404,7 +404,8 @@ test('T15 lancement : l’étape 30 déclarée (fiches-v1, datée du premier dé
 
 test('T17 l’alerte durable « fichesJoueurs » dite à l’écran (Réglages › Actualisation, puce du haut) : son nom, ses écarts, le joueur et le jour en mots simples ; rien quand la nuit n’a trouvé aucun écart', async () => {
   const A = await import(pathToFileURL(path.join(SERVEUR, '..', 'ui', 'src', 'utils', 'controlesAntiFuite.js')).href);
-  assert.deepEqual(A.CONTROLES_ANTI_FUITE.map((c) => c.cle), ['tableJourJ', 'forcesButs', 'fichesJoueurs', 'stylesDeJeu'], 'dans l’ordre de la nuit (étape 37 : les styles de jeu après les fiches)');
+  // Étape 28 (vérification du 27/10, constat 14) : le contrôle des déroulés simulés de la nuit, en cinquième.
+  assert.deepEqual(A.CONTROLES_ANTI_FUITE.map((c) => c.cle), ['tableJourJ', 'forcesButs', 'fichesJoueurs', 'stylesDeJeu', 'simulationMatchs'], 'dans l’ordre de la nuit (étape 37 : les styles de jeu après les fiches ; étape 28 : les déroulés simulés)');
   assert.deepEqual(A.controlesAntiFuiteDits({ fichesJoueurs: null }), []);
   const alerte = { ecarts: [{ joueur: 123, J: '2026-10-12', colonne: 'S.xgnp', attendu: 1, lu: 2 }, { joueur: 123, J: '2026-10-12', colonne: 'W.xgnp', attendu: 1, lu: 2 }], total: 2, lignes: 40, updatedAt: '2026-10-22T03:20:00.000Z' };
   assert.deepEqual(A.controlesAntiFuiteDits({ fichesJoueurs: alerte }).map((d) => d.texte), ['Fiches des joueurs (force du onze) : 2 écarts sur 40 lignes recalculées (contrôle du 22/10/2026 à 05:20) — par exemple joueur n° 123 avant le 12/10/2026.']);

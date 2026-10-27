@@ -78,13 +78,16 @@ export const DONNEES_VUES = Object.freeze([
  *   indice        l'indice de force des équipes (étape 29, jamais lu par le moteur) ;
  *   joueurs       les fiches des joueurs et la force du onze (étape 30, 22/10/2026 ; jamais lues par le moteur) ;
  *   style         les styles de jeu des équipes et des entraîneurs, et les duels de styles (étape 37, 22/10/2026 ;
- *                 jamais lus par le moteur : explication seulement).
+ *                 jamais lus par le moteur : explication seulement) ;
+ *   simulation    la simulation complète : déroulé d'un match, combinés, fins de saison et enjeu (étape 28, 27/10/2026 ;
+ *                 jamais lue par le moteur — une candidate du moteur qui lirait un jour l'enjeu recopierait ces vues
+ *                 avec `pour: ['moteur']`).
  * Une étape qui fait LIRE au moteur une grandeur apprise ailleurs (27 lisant l'indice ou une demi-vie de 18)
  * recopie ces fenêtres dans SON lancement avec `pour: ['moteur']` : c'est son lancement qui dit ce que le
  * moteur a vu. Sans cette règle, une fenêtre regardée pour l'indice étiquetait « déjà vu » les lignes du
  * MOTEUR sur 2019-2023 (la note de départ), alors qu'aucun chiffre du moteur ne les avait vues.
  */
-export const PORTEES = Object.freeze(['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style']);
+export const PORTEES = Object.freeze(['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation']);
 
 /** Une fenêtre vaut-elle pour cette mesure ? `tout` vaut pour toutes. */
 export const pourLaPortee = (pour, portee) => Array.isArray(pour) && (pour.includes(portee) || pour.includes('tout'));
@@ -209,6 +212,60 @@ export const VARIANTES_DE_L_ETAPE_37 = Object.freeze([
   )
 ]);
 export const ETIQUETTES_DE_L_ETAPE_37_POUR_LES_TESTS = ETIQUETTES_DE_L_ETAPE_37;
+
+/**
+ * Les fenêtres REGARDÉES par l'étape 28 (la simulation complète, 27/10/2026 ; data/simulation/), portée « simulation » :
+ * le magasin 2023-07-01 → 2026-09-23 où le profil des minutes, les effets du score et les hasards des rouges ont été
+ * appris (2023-07 → 2025-06, puis sur tout, figés), les marchés de déroulé et les combinés jugés (2025-07 → 2026-09-23),
+ * les fins de saison et l'enjeu jugés sur 149 phases avec les forces de la candidate de l'étape 27 (texte de la preuve,
+ * §5). P2 (football-data 2019-07-01 → 2023-06-30) est déclarée ici comme FENÊTRE DE PORTE (critique de l'étape 28,
+ * point 2 ; ajoutée le 27/10/2026 AVANT le regard) : la porte 1, un seul passage, verdict écrit avant (porte1-regles.md
+ * de la partie C) ; c'est le second regard sur P2 après la porte 1 de l'étape 27, déclaré (conception §3.1) ; aucune
+ * mesure de l'étape 28 n'y sera refaite après le verdict. Une candidate du MOTEUR qui lirait un jour l'enjeu
+ * recopierait ces vues avec `pour: ['moteur']`.
+ */
+export const VUES_DE_L_ETAPE_28 = Object.freeze([
+  Object.freeze({ de: '2023-07-01', a: '2026-09-23', quoi: 'Étape 28 : profil des minutes, effets du score et hasards de rouges appris sur 2023-07 → 2025-06 puis sur tout (figés) ; marchés de déroulé et combinés jugés sur 2025-07 → 2026-09-23 ; fins de saison et enjeu jugés sur 149 phases avec les forces de la candidate 27.' }),
+  Object.freeze({ de: '2019-07-01', a: '2023-06-30', quoi: 'Étape 28 : porte 1 sur football-data P2, un seul passage le 27/10/2026, verdict écrit avant (SCR porte1-regles.md) ; aucune mesure de 28 n’y sera refaite après le verdict.' })
+]);
+
+/**
+ * Les 27 VARIANTES de l'étape 28, toutes regardées face à des matchs joués pendant sa conception (la déclaration de
+ * la preuve, §5) : la version retenue (simulation-v1, en tête), les 13 regards de l’angle simulation, les 12 de l’angle
+ * saisons et celui de l’angle preuve (effets appris sur la moitié A seulement). K = 27. Les corrections de la critique
+ * (Poisson exact, « ≥ 90 % » lu sur des déciles déjà imprimés) ne sont pas des variantes. Toute mesure nouvelle (effets
+ * par championnat, confrontations directes, seconde phase, seuil des 10 %, une autre empreinte des forces : la nuit la
+ * déclare elle-même, « saisons-forces-<empreinte> ») = un identifiant de plus, déclaré AVANT de regarder.
+ */
+export const VARIANTES_DE_L_ETAPE_28 = Object.freeze([
+  Object.freeze({ id: 'simulation-v1', quoi: 'Retenue : 92 créneaux, effets par écart × rouges × tranche appris sur tout, hasard moyen des rouges, Poisson exact, stratifiée sur la grille du moteur ; combinés lus dans la grille ρ −0,05 alignée sur le 1N2 affiché ; fins de saison par les forces de 27, départage simple ; enjeu = écart de probabilité entre victoire et défaite.' }),
+  Object.freeze({ id: 'sim-effets-sans-tranche', quoi: 'Angle simulation (1) : multiplicateurs de buts selon l’écart et les rouges, sans tranche de minutes (s1).' }),
+  Object.freeze({ id: 'sim-effets-par-tranche', quoi: 'Angle simulation (2) : les mêmes multiplicateurs par trois tranches de minutes (s2, retenus).' }),
+  Object.freeze({ id: 'sim-brute', quoi: 'Angle simulation (3) : simulation brute, non recalée sur la grille du moteur.' }),
+  Object.freeze({ id: 'sim-stratifiee-effets', quoi: 'Angle simulation (4) : stratifiée sur la grille, avec les effets du score (retenue).' }),
+  Object.freeze({ id: 'sim-stratifiee-sans-effets', quoi: 'Angle simulation (5) : stratifiée sur la grille, sans les effets du score (s5a).' }),
+  Object.freeze({ id: 'sim-rouges-moyen', quoi: 'Angle simulation (6) : hasard des rouges moyen par bande de minutes et par écart (s1, s2 ; retenu).' }),
+  Object.freeze({ id: 'sim-premier-rouge', quoi: 'Angle simulation (7) : premier rouge puis facteurs après (s6a) — déclarée, non retenue (pas prouvé dans les deux sens, v1).' }),
+  Object.freeze({ id: 'sim-poisson-exact', quoi: 'Angle simulation (8) : boucle de Poisson exacte par créneau (retenue).' }),
+  Object.freeze({ id: 'sim-un-but-par-creneau', quoi: 'Angle simulation (9) : boucle « un but par créneau au plus » (s6b), écartée.' }),
+  Object.freeze({ id: 'combines-grille', quoi: 'Angle simulation (10) : combinés lus dans la grille ρ −0,05 (retenu).' }),
+  Object.freeze({ id: 'combines-produit', quoi: 'Angle simulation (11) : combinés au produit des simples (ce que l’appli enregistrait avant).' }),
+  Object.freeze({ id: 'combines-rho-0', quoi: 'Angle simulation (12) : combinés lus dans la grille ρ = 0 (s3).' }),
+  Object.freeze({ id: 'combines-alignement-camp', quoi: 'Angle simulation (13) : grille alignée camp par camp sur le 1N2 affiché (s4, retenu pour l’écran et le ticket).' }),
+  Object.freeze({ id: 'saisons-moyennes', quoi: 'Angle saisons (1) : fins de saison par les moyennes du championnat seules (V0).' }),
+  Object.freeze({ id: 'saisons-table', quoi: 'Angle saisons (2) : fins de saison par la table officielle (V1, le repli).' }),
+  Object.freeze({ id: 'saisons-forces', quoi: 'Angle saisons (3) : fins de saison par les forces de buts de l’étape 27, empreinte v1|35|25|remise-a-zero (V2, retenue).' }),
+  Object.freeze({ id: 'saisons-table-poisson', quoi: 'Angle saisons (4) : fins de saison par la table, Poisson indépendant (V1P).' }),
+  Object.freeze({ id: 'enjeu-seuils-2-10-20', quoi: 'Angle saisons (5) : seuils de l’enjeu 2 / 10 / 20 points.' }),
+  Object.freeze({ id: 'enjeu-effet-forces', quoi: 'Angle saisons (6) : effet de l’enjeu sur le résultat par V2, dé-confondu par le marché.' }),
+  Object.freeze({ id: 'enjeu-effet-table', quoi: 'Angle saisons (7) : effet de l’enjeu sur le résultat par V1.' }),
+  Object.freeze({ id: 'enjeu-effet-moyennes', quoi: 'Angle saisons (8) : effet de l’enjeu sur le résultat par V0.' }),
+  Object.freeze({ id: 'enjeu-nul-arrange', quoi: 'Angle saisons (9) : seuil « le nul arrange les deux » (10 / 2 points).' }),
+  Object.freeze({ id: 'restants-construction', quoi: 'Angle saisons (10) : rencontres restantes construites pour un aller-retour simple (k = 2) contre le calendrier seul (p5, comptes).' }),
+  Object.freeze({ id: 'departage-simple', quoi: 'Angle saisons (11) : départage simplifié (différence de buts) contre les tables officielles (p1b, comptes).' }),
+  Object.freeze({ id: 'saisons-bruit-8-graines', quoi: 'Angle saisons (12) : bruit des fins de saison et de l’enjeu sur 8 graines (p6, comptes).' }),
+  Object.freeze({ id: 'sim-effets-appris-2023-2025', quoi: 'Angle preuve : les mêmes effets appris sur 2023-07 → 2025-06 seulement, jugés sur 2025-07 → 2026-09-23 (v1).' })
+]);
 
 /** Les variantes de l'indice de l'étape 29, toutes regardées (la retenue d'abord, choisie avant de regarder). teamStrengthBanc.js les ré-exporte. */
 export const VARIANTES_INDICE = Object.freeze([
@@ -603,6 +660,18 @@ export const LANCEMENTS = Object.freeze([
     le: null,
     variantes: VARIANTES_DE_L_ETAPE_37,
     vues: Object.freeze(VUES_DE_L_ETAPE_37.map((f) => Object.freeze({ ...f, pour: Object.freeze(['style']) })))
+  }),
+  // Étape 28 (27/10/2026) : la simulation complète — déroulé d'un match, combinés, fins de saison et enjeu ; elle ne
+  // règle aucun chiffre du moteur (portée 'simulation'). Datée du premier démarrage de l'appli avec ce code ; ses 27
+  // variantes et ses vues (le magasin 2023-07 → 2026-09-23 ; P2, la fenêtre de la porte 1, déclarée le 27/10 avant le
+  // regard). Écrite AVANT la porte 1 sur P2 (aucun résultat de P2 lu).
+  Object.freeze({
+    etape: '28',
+    version: 'simulation-v1',
+    quoi: 'Simulation complète : le déroulé de chaque match des 48 prochaines heures (10 000 matchs par créneaux d’une minute, effets du score et cartons rouges, recalés sur la grille du modèle de buts), le prix juste des combinés d’un même match, les fins de saison des championnats et l’enjeu de chaque rencontre ; calculée chaque nuit à blanc, montrée d’un clic, jamais lue par le moteur.',
+    le: null,
+    variantes: VARIANTES_DE_L_ETAPE_28,
+    vues: Object.freeze(VUES_DE_L_ETAPE_28.map((f) => Object.freeze({ ...f, pour: Object.freeze(['simulation']) })))
   })
 ]);
 

@@ -305,7 +305,8 @@ export function rapportDeSuivi({ paris = [], reglage = REGLAGE_GARDE_FOUS_DEFAUT
   // ---------------------------------------------------------- gain attendu
   const avecP = regles.filter((p) => p.attendu !== null);
   const variance = avecP.reduce((s, p) => {
-    const pr = p.bet.legs[0].probabiliteMoteur;
+    // Étape 28 : la probabilité du PARI — celle du combiné quand son prix juste est noté, sinon celle de sa sélection.
+    const pr = typeof p.bet.probabiliteCombine === 'number' ? p.bet.probabiliteCombine : p.bet.legs[0].probabiliteMoteur;
     return s + p.stake * p.stake * p.odds * p.odds * pr * (1 - pr);
   }, 0);
   const sigma = avecP.length ? Math.sqrt(variance) : null;
