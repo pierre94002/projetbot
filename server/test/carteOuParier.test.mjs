@@ -408,7 +408,9 @@ test('l’étape « carteOuParier » : après la calibration, avant la sauvegard
   const job = fs.readFileSync(path.join(SERVEUR, 'src', 'jobs', 'matchStatsAutoRefresh.js'), 'utf8');
   const cles = [...job.matchAll(/^ {4}key: '(\w+)',$/gm)].map((m) => m[1]);
   assert.equal(cles.indexOf('carteOuParier'), cles.indexOf('calibrationMensuelle') + 1);
-  assert.equal(cles.indexOf('sauvegarde'), cles.indexOf('carteOuParier') + 1);
+  // Étape 26 (28/10/2026) : la boucle de correction s'intercale entre la carte et la sauvegarde.
+  assert.equal(cles.indexOf('boucleCorrection'), cles.indexOf('carteOuParier') + 1);
+  assert.equal(cles.indexOf('sauvegarde'), cles.indexOf('boucleCorrection') + 1);
   const db = base();
   const ctx = { manuel: false };
   const r0 = await J.passeCarteOuParier(ctx, { database: db, calculer: () => assert.fail('aucun calcul sans rejeu') });

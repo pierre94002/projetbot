@@ -295,6 +295,7 @@ const provenance = computed(() => data.value?.provenance ?? null);
             </tfoot>
           </table>
         </div>
+        <p class="calib__renvoi">Ces verdicts sont ceux du mois, sur l’issue choisie par le moteur. Le tri « malchance ou vrai défaut » (issue de référence et issue favorite de chaque marché, en comptant toute l’année) est plus bas dans cet onglet (« Écarts du mois », étape 26).</p>
       </section>
 
       <!-- 4. Par championnat : Σ et ⌀, jamais une somme de pourcentages. -->
@@ -605,5 +606,13 @@ const provenance = computed(() => data.value?.provenance ?? null);
   .calib__courbe {
     grid-template-columns: minmax(240px, 340px) 1fr;
   }
+}
+
+/* Étape 26 : la phrase qui renvoie au tri « malchance ou vrai défaut », juste sous ce bloc. */
+.calib__renvoi {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--cm-text-muted);
 }
 </style>

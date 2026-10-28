@@ -141,7 +141,9 @@ test('l’étape « moteurABlanc » de la passe : après le gel et avant la sauv
   assert.equal(cles.indexOf('calibrationMensuelle'), cles.indexOf('moteurABlanc') + 1, 'puis la calibration du mois écoulé');
   // Étape 23 : la carte « où parier » vient juste après la calibration, et la sauvegarde juste après elle (la copie de la nuit la contient).
   assert.equal(cles.indexOf('carteOuParier'), cles.indexOf('calibrationMensuelle') + 1, 'puis la carte « où parier »');
-  assert.equal(cles.indexOf('sauvegarde'), cles.indexOf('carteOuParier') + 1, 'juste avant la sauvegarde');
+  // Étape 26 (28/10/2026) : la boucle de correction s'intercale entre la carte et la sauvegarde (la copie de la nuit contient le tri).
+  assert.equal(cles.indexOf('boucleCorrection'), cles.indexOf('carteOuParier') + 1, 'puis la boucle de correction');
+  assert.equal(cles.indexOf('sauvegarde'), cles.indexOf('boucleCorrection') + 1, 'juste avant la sauvegarde');
   assert.match(job, /key: 'moteurABlanc',\n {4}label: 'Version candidate du moteur, calculée à blanc',\n(?: {4}\/\/.*\n)*? {4}due: \(ctx\) => dueMoteurABlanc\(ctx\),\n {4}run: \(ctx\) => passeMoteurABlanc\(ctx\)\n/);
   // Une fois par jour avec l'interrupteur des enregistreurs ; refaite à la passe suivante après une passe « en attente » (étape 27).
   assert.match(job, /const dueMoteurABlanc = \(ctx\) => Boolean\(env\.enregistreurs\?\.enabled\) && \(!faitAujourdhui\(ctx\.derniere\('moteurABlanc'\)\) \|\| Boolean\(ctx\.derniersDetails\?\.\('moteurABlanc'\)\?\.attente\)\);/);
@@ -165,7 +167,10 @@ test('le code : la table à part n’est écrite et lue que par le dépôt des e
   // Étape 28 (27/10) : la nuit des matchs simulés calcule aussi le rôle « candidate » comme la nuit à blanc (conception
   // de 28, §4.4 : candidateEnEssai puis configDeLaCandidate, SANS retoucher moteurABlanc.js), sans jamais l'écrire dans la
   // table à part ; aucune route ni aucun lecteur de 28 ne l'importe (liste des interdits ci-dessous).
-  assert.deepEqual(avecMotif(/\b(candidateEnEssai|configDeLaCandidate|mettreLaCandidateEnEssai)\s*\(/), ['core/engine/engineVersions.js', 'data/enregistreurs/moteurABlanc.js', 'data/simulation/simulationNuit.js']);
+  // Étape 26 (partie B, 28/10/2026) : la boucle de correction pose la correction sur les réglages en service pour son banc
+  // (bancDesCorrections.js, configDeLaCandidate) et libère la place d'une correction refusée ou rejetée (miseALEssai.js,
+  // la mise en essai d'une candidate vide, avec ses trois gardes) — jamais rien de ce qui se montre ou se parie.
+  assert.deepEqual(avecMotif(/\b(candidateEnEssai|configDeLaCandidate|mettreLaCandidateEnEssai)\s*\(/), ['core/engine/engineVersions.js', 'data/correction/bancDesCorrections.js', 'data/correction/miseALEssai.js', 'data/enregistreurs/moteurABlanc.js', 'data/simulation/simulationNuit.js']);
   // Ce qui se montre, se parie ou part à l'IA n'importe ni la nuit à blanc, ni les fonctions de la candidate.
   const interdits = [
     'core/engine/verdictPari.js',

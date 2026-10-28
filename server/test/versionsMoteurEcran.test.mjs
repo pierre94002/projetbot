@@ -312,7 +312,8 @@ test('câblage : la carte dans Réglages juste sous « Paramètres du moteur »,
   const lireUi = (...c) => fs.readFileSync(path.join(UI, 'src', ...c), 'utf8');
   const reglages = lireUi('views', 'SettingsView.vue');
   assert.match(reglages, /import EngineVersionsPanel from '@\/components\/settings\/EngineVersionsPanel\.vue';/);
-  assert.match(reglages, /title="Versions du moteur"[\s\S]*?<EngineVersionsPanel\n\s+:changement-le="configStore\.derniereVersion\?\.le \?\? null"\n\s+:passe-terminee-le="refreshOverview\?\.lastCompletedAt \?\? null"\n\s+@retour="handleRetourVersion"\n\s+\/>/);
+  // Étape 26 (partie E, 28/10/2026) : la carte émet l’état lu (`@lu`), Réglages en tire l’avertissement de « Paramètres du moteur ».
+  assert.match(reglages, /title="Versions du moteur"[\s\S]*?<EngineVersionsPanel\n\s+:changement-le="configStore\.derniereVersion\?\.le \?\? null"\n\s+:passe-terminee-le="refreshOverview\?\.lastCompletedAt \?\? null"\n\s+@retour="handleRetourVersion"(?:\n\s+@lu="\(d\) => \(etatDesVersions = d\)")?\n\s+\/>/);
   assert.ok(reglages.indexOf('<EngineConfigForm') < reglages.indexOf('<EngineVersionsPanel') && reglages.indexOf('<EngineVersionsPanel') < reglages.indexOf('title="Gestion du risque"'), 'juste sous les paramètres du moteur');
   // La carte suit DIRECTEMENT celle des paramètres du moteur, toujours affichée (ni v-if ni v-show sur elle).
   assert.match(reglages, /<EngineConfigForm [^\n]*\/>\n\s+<\/AppCard>\n\n\s+<!-- Les versions du moteur [^\n]*-->\n\s+<AppCard\n\s+title="Versions du moteur"\n\s+subtitle="[^"\n]+"\n\s+eyebrow="Moteur"\n\s+icon="history"\n\s+>\n\s+<EngineVersionsPanel\n/);

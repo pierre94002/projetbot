@@ -41,7 +41,7 @@ import DailyChecksPanel from '@/components/settings/DailyChecksPanel.vue';
 import SourceHealthPanel from '@/components/settings/SourceHealthPanel.vue';
 // Étape 25 du plan : les versions du moteur (numéro de chaque état, candidate à blanc, retour arrière).
 import EngineVersionsPanel from '@/components/settings/EngineVersionsPanel.vue';
-import { phraseDeLEnregistrement } from '@/utils/versionsMoteur.js';
+import { phraseDeLEnregistrement, avertissementDeLEnregistrement, confirmationSansEtat } from '@/utils/versionsMoteur.js';
 import { avertissementDeLaRemiseAZero } from '@/utils/modeleDeButs.js';
 
 /**
@@ -59,6 +59,9 @@ const aiAnalysisStore = useAiAnalysisStore();
 const flashscoreStore = useFlashscoreStore();
 
 const saving = ref(false);
+// Étape 26 : l'état des versions du moteur que la carte « Versions du moteur » vient de lire — la candidate en essai ou
+// jugée y est ; « Paramètres du moteur » en tire son avertissement (et la remise à zéro sa confirmation).
+const etatDesVersions = ref(null);
 const generating = ref(false);
 const statsCoverage = ref(null);
 const refreshOverview = ref(null);
@@ -182,6 +185,12 @@ async function handleSaveConfig(partialConfig) {
 }
 
 async function handleResetConfig() {
+  // Étape 26 : remettre les valeurs par défaut fait aussi une version : si une candidate est en essai ou jugée, on le redemande.
+  const essaiEnCours = avertissementDeLEnregistrement(etatDesVersions.value);
+  if (essaiEnCours && !window.confirm(essaiEnCours.confirmationRemise)) return;
+  // Vérification finale (constat 5) : l'état des versions pas encore lu (lecture lente ou en échec) — une confirmation générique.
+  const sansEtat = confirmationSansEtat(etatDesVersions.value, { remise: true });
+  if (sansEtat && !window.confirm(sansEtat)) return;
   // Étape 27 : les valeurs par défaut n'ont pas le modèle de buts unique — quand il est en service, la remise à zéro le
   // retirerait : une confirmation le dit d'abord (utils/modeleDeButs.js) ; sans lui, rien ne change.
   const avertissement = avertissementDeLaRemiseAZero(configStore.config);
@@ -352,7 +361,7 @@ async function handleRunAiAnalysis(limit) {
         eyebrow="Moteur"
         icon="sliders"
       >
-        <EngineConfigForm :config="configStore.config" :saving="saving" @save="handleSaveConfig" @reset="handleResetConfig" />
+        <EngineConfigForm :config="configStore.config" :saving="saving" :essai="etatDesVersions" @save="handleSaveConfig" @reset="handleResetConfig" />
       </AppCard>
 
       <!-- Les versions du moteur (étape 25 du plan, le socle, 07/10/2026) : un numéro pour chaque état du moteur, la candidate à blanc, le retour arrière. -->
@@ -366,6 +375,7 @@ async function handleRunAiAnalysis(limit) {
           :changement-le="configStore.derniereVersion?.le ?? null"
           :passe-terminee-le="refreshOverview?.lastCompletedAt ?? null"
           @retour="handleRetourVersion"
+          @lu="(d) => (etatDesVersions = d)"
         />
       </AppCard>
 

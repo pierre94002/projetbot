@@ -9,7 +9,8 @@
  *   - ce que le moteur annonçait face à ce qui est arrivé, et la valeur de clôture (calibration, étape 20) ;
  *   - la liste « à vérifier » (contrôle quotidien) ;
  *   - la version du moteur en service, l'essai d'une candidate et l'alerte de dérive (étape 25) ;
- *   - la place des corrections à accepter ou refuser (étape 26 : vide aujourd'hui).
+ *   - les corrections à accepter ou refuser (étape 26 : le tri du mois, les propositions, leur journal — lus dans
+ *     les tables de la boucle de correction, jamais recalculés).
  *
  * UNE SEULE PLACE PAR INFORMATION : chaque bloc ne donne qu'un RÉSUMÉ court (un chiffre, un feu, une phrase) et
  * un lien vers sa vraie place (Historique moteur, Banc d'essai, Réglages) — les grands tableaux et les courbes
@@ -37,6 +38,7 @@ import { deriveDuMoteur } from './deriveMoteur.js';
 import { resumeDeLaCalibration } from './calibration.js';
 import { NOTE_DE_DEPART } from '../bench/noteDeDepart.js';
 import { dernierRejeuReussi, rejeuxDe } from '../bench/depotBanc.js';
+import { etatDesCorrections } from './correction/etatDesCorrections.js';
 
 // ============================================================ les vraies places
 
@@ -50,7 +52,8 @@ export const LIENS = Object.freeze({
   cloture: Object.freeze({ chemin: '/historique-moteur', query: null, libelle: 'Historique moteur › Calibration du mois (valeur de clôture)' }),
   aVerifier: Object.freeze({ chemin: '/reglages', query: Object.freeze({ carte: 'controle-quotidien' }), libelle: 'Réglages › Contrôle quotidien des données' }),
   versions: Object.freeze({ chemin: '/reglages', query: null, libelle: 'Réglages › Versions du moteur' }),
-  corrections: Object.freeze({ chemin: '/feuille-de-route', query: null, libelle: 'Feuille de route › étape 26 (boucle de correction)' })
+  // Étape 26 : le détail des 22 cases du tri et tout le journal vivent dans Historique moteur (leur vraie place).
+  corrections: Object.freeze({ chemin: '/historique-moteur', query: Object.freeze({ onglet: 'moteur' }), libelle: 'Historique moteur › Écarts du mois (malchance ou vrai défaut)' })
 });
 
 const lien = (cle) => {
@@ -117,9 +120,9 @@ export const LECTEURS = Object.freeze({
   },
   calibration: ({ maintenant }) => resumeDeLaCalibration({ database: openDb(), maintenant }),
   versions: () => ({ versions: etatDesVersions(), derive: deriveDuMoteur({ database: openDb() }) }),
-  // L'EMPLACEMENT des corrections (étape 26, boucle de correction) : vide tant qu'elle n'est pas construite. L'étape 26
-  // remplace cette lecture par celle de ses propositions ({ disponible: true, aAccepter: [...] }).
-  corrections: () => ({ disponible: false, aAccepter: [] })
+  // Étape 26 (boucle de correction) : le dernier tri figé, les propositions et le journal — des lectures de petites
+  // tables et du registre des versions, quelques millisecondes ; jamais un tri.
+  corrections: ({ maintenant }) => etatDesCorrections({ database: openDb(), maintenant })
 });
 
 // ============================================================ les trois feux
@@ -432,27 +435,71 @@ function blocVersions({ versions: v, derive: d }) {
   };
 }
 
+/** Les mots courts des statuts du tri pour la légende (« 1 vrai défaut, 15 dans la marge, 6 en essai »). */
+const STATUTS_DE_LA_LEGENDE = Object.freeze([
+  ['vrai-defaut', 'vrai défaut', 'vrais défauts'],
+  ['a-surveiller', 'à surveiller', 'à surveiller'],
+  ['petit-ecart', 'petit écart', 'petits écarts'],
+  ['dans-la-marge', 'dans la marge', 'dans la marge'],
+  ['trop-tot', 'trop tôt', 'trop tôt'],
+  ['trop-peu', 'trop peu de matchs', 'trop peu de matchs'],
+  ['mois-de-changement', 'mois de changement', 'mois de changement'],
+  ['en-essai', 'en essai', 'en essai']
+]);
+
 function blocCorrections(r) {
   const base = {
     cle: 'corrections',
     titre: 'Corrections à accepter ou refuser',
-    source: { libelle: 'Boucle de correction (étape 26 du plan)', fichier: null },
+    source: { libelle: 'Boucle de correction (étape 26) : tri du mois figé, propositions et journal, dans le magasin (tables correction_*)', fichier: 'tables correction_tri, correction_propositions et correction_journal du magasin SQLite' },
     mesureLe: null,
-    action: 'proposé',
+    action: 'trié',
     lien: lien('corrections'),
     etape: '26',
     aAccepter: []
   };
-  if (!r?.disponible) return pasMesure(base, 'la boucle de correction (étape 26) n’est pas encore construite. Ses propositions de correction arriveront ici, à accepter ou à refuser une par une ; rien n’est à décider aujourd’hui.');
-  const liste = Array.isArray(r.aAccepter) ? r.aAccepter : [];
+  const pasEncore = 'la boucle de correction (étape 26) n’a pas encore trié de mois — le premier tri se fait le 1er du mois à partir de 6 h, après le gel de la calibration. Rien n’est à décider aujourd’hui.';
+  if (r?.illisible) return indisponible(base, r.raison);
+  if (!r?.disponible) return pasMesure(base, pasEncore);
+  const t = r.dernierTri ?? null;
+  const propositions = Array.isArray(r.propositions) ? r.propositions : [];
+  const journal = Array.isArray(r.journal) ? r.journal : [];
+  // Partie D (28/10/2026) : le résumé du mois en mots et les règles dites accompagnent le bloc, même « pas encore mesuré ».
+  if (!t && !propositions.length && !journal.length) return { ...pasMesure(base, pasEncore), place: r.place ?? null, formulaire: r.formulaire ?? null, resume: r.resume ?? null, regles: r.regles ?? null };
+  const aDecider = Array.isArray(r.aAccepter) ? r.aAccepter : [];
+  const s = t?.statuts ?? {};
+  const legende = t
+    ? `tri ${/^[aeiouyéèêàâîïôû]/i.test(moisDit(t.mois)) ? 'd’' : 'de '}${moisDit(t.mois)} : ${STATUTS_DE_LA_LEGENDE.filter(([k]) => s[k]).map(([k, un, plusieurs]) => `${nombre(s[k])} ${s[k] >= 2 ? plusieurs : un}`).join(', ') || 'aucune case'}`
+    : 'aucun mois trié pour l’instant';
+  const enCours = propositions.filter((p) => ['acceptee', 'a-blanc', 'jugee'].includes(p.etat)).length;
+  const phrases = [];
+  if (aDecider.length) phrases.push(`${pluriel(aDecider.length, 'correction attend', 'corrections attendent')} votre décision (mesurer au banc, mettre à l’essai, refuser, ou adopter dans Réglages).`);
+  else phrases.push(t?.vraisDefauts?.length ? 'Les vrais défauts du dernier tri sont suivis ; rien n’attend votre décision.' : 'Rien n’attend votre décision.');
+  if (enCours) phrases.push(`${pluriel(enCours, 'correction en file ou à l’essai', 'corrections en file ou à l’essai')}.`);
+  if (r.place?.phrase) phrases.push(r.place.phrase);
+  if (r.formulaire && !r.formulaire.ouvert && r.formulaire.raison) phrases.push(r.formulaire.raison);
+  if (r.alerte?.erreur) phrases.push(`La dernière passe a vu une erreur : ${String(r.alerte.erreur).replace(/.$/, '')}.`);
   return {
     ...base,
-    etat: liste.length ? 'attention' : 'ok',
+    etat: aDecider.length || r.alerte ? 'attention' : 'ok',
     feu: null,
-    valeur: liste.length ? pluriel(liste.length, 'correction à décider', 'corrections à décider') : 'aucune à décider',
-    legende: null,
-    phrase: liste.length ? 'La boucle de correction propose des changements : chacun s’accepte ou se refuse ici.' : 'La boucle de correction n’a rien proposé.',
-    aAccepter: liste
+    valeur: aDecider.length ? `${nombre(aDecider.length)} à décider` : 'rien à décider',
+    legende,
+    phrase: phrases.join(' '),
+    mesureLe: t?.calculeLe ?? null,
+    aAccepter: aDecider,
+    dernierTri: t,
+    propositions,
+    place: r.place ?? null,
+    formulaire: r.formulaire ?? null,
+    essais: r.essais ?? null,
+    // Une seule place par information (ui/DESIGN.md) : ici, les 3 dernières entrées du journal ; tout le journal est dans Historique moteur.
+    journal: journal.slice(0, 3),
+    alerte: r.alerte ?? null,
+    // Partie D : le résumé du mois en mots (Claude, ou rangé sans appel) et ce qui l'attend ; les règles dites (sans jargon).
+    resume: r.resume ?? null,
+    regles: r.regles ?? null,
+    retraitPlusTard: r.retraitPlusTard ?? null
   };
 }
 
@@ -487,7 +534,7 @@ const BASES_POUR_ERREUR = Object.freeze({
   cloture: { cle: 'cloture', titre: 'Valeur de clôture', source: { libelle: 'Calibration du mois (étape 20)', fichier: null }, mesureLe: null, action: 'préparé', lien: lien('cloture') },
   aVerifier: { cle: 'aVerifier', titre: 'À vérifier', source: { libelle: 'Contrôle quotidien des données (étape 14)', fichier: null }, mesureLe: null, action: 'contrôlé', lien: lien('aVerifier') },
   versions: { cle: 'versions', titre: 'Versions du moteur', source: { libelle: 'Registre des versions du moteur (étape 25)', fichier: null }, mesureLe: null, action: 'noté', lien: lien('versions') },
-  corrections: { cle: 'corrections', titre: 'Corrections à accepter ou refuser', source: { libelle: 'Boucle de correction (étape 26)', fichier: null }, mesureLe: null, action: 'proposé', lien: lien('corrections'), etape: '26', aAccepter: [] }
+  corrections: { cle: 'corrections', titre: 'Corrections à accepter ou refuser', source: { libelle: 'Boucle de correction (étape 26)', fichier: null }, mesureLe: null, action: 'trié', lien: lien('corrections'), etape: '26', aAccepter: [] }
 });
 
 /**

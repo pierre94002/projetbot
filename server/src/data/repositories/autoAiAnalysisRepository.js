@@ -15,6 +15,9 @@
  * : chaque appel réussi prend une place sur les 150, refusé par la garde des
  * chiffres ou non — il a consommé du quota). Le plafond lui-même ne change pas.
  * Un fichier d'avant l'étape n'a pas ces deux champs : ils valent 0.
+ *
+ * Étape 26 (partie D, 28/10/2026) : le résumé du mois de la boucle de correction, un appel par mois, compté de même
+ * (`resumeMois`, décision 12 de l'orchestrateur) ; un fichier d'avant n'a pas ce champ : il vaut 0.
  * -----------------------------------------------------------------------
  */
 
@@ -25,7 +28,7 @@ import { readJsonFile, writeJsonAtomic } from '../../utils/atomicJson.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FILE_PATH = path.resolve(__dirname, '../../../data/runtime/auto-ai-analysis-status.json');
 
-const vide = (jour) => ({ day: jour, count: 0, preMatch: 0, postMatch: 0, bulletin: 0, bilanSemaine: 0, skippedPreMatch: 0, skippedPostMatch: 0 });
+const vide = (jour) => ({ day: jour, count: 0, preMatch: 0, postMatch: 0, bulletin: 0, bilanSemaine: 0, resumeMois: 0, skippedPreMatch: 0, skippedPostMatch: 0 });
 
 /** Jour civil à Paris (« AAAA-MM-JJ ») : celui du compteur. */
 export const jourParis = (d = new Date()) => new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Paris' }).format(d);
@@ -56,17 +59,19 @@ export function statutDuJour(jour) {
 
 /**
  * Enregistre ce qui a tourné (et ce qui a été laissé de côté) à cette passe. `bulletin` et `bilanSemaine` (étape 42) :
- * les appels du bulletin du jour et du bilan de la semaine, qui prennent leur place sur le même plafond.
+ * les appels du bulletin du jour et du bilan de la semaine, qui prennent leur place sur le même plafond ; `resumeMois`
+ * (étape 26) : celui du résumé du mois.
  */
-export function enregistrerUsage(jour, { preMatch = 0, postMatch = 0, bulletin = 0, bilanSemaine = 0, skippedPreMatch = 0, skippedPostMatch = 0 } = {}) {
+export function enregistrerUsage(jour, { preMatch = 0, postMatch = 0, bulletin = 0, bilanSemaine = 0, resumeMois = 0, skippedPreMatch = 0, skippedPostMatch = 0 } = {}) {
   const etat = lire(jour);
   const maj = {
     day: jour,
-    count: etat.count + preMatch + postMatch + bulletin + bilanSemaine,
+    count: etat.count + preMatch + postMatch + bulletin + bilanSemaine + resumeMois,
     preMatch: etat.preMatch + preMatch,
     postMatch: etat.postMatch + postMatch,
     bulletin: etat.bulletin + bulletin,
     bilanSemaine: etat.bilanSemaine + bilanSemaine,
+    resumeMois: etat.resumeMois + resumeMois,
     skippedPreMatch: etat.skippedPreMatch + skippedPreMatch,
     skippedPostMatch: etat.skippedPostMatch + skippedPostMatch
   };

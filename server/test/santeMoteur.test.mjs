@@ -489,8 +489,10 @@ test('les liens vers les vraies places : chaque lien mène à une page qui exist
   assert.match(reglages, /<ClaudeBudgetPanel /);
   assert.match(reglages, /<EngineVersionsPanel/);
   for (const cle of ['donnees', 'sauvegardes', 'budget', 'aVerifier', 'versions']) assert.equal(S.LIENS[cle].chemin, '/reglages', cle);
-  // Les corrections : la feuille de route, où figure l’étape 26.
-  assert.equal(S.LIENS.corrections.chemin, '/feuille-de-route');
+  // Les corrections (étape 26, 28/10/2026) : l’onglet « Historique moteur », où vivent les 22 cases du tri et tout le journal.
+  assert.equal(S.LIENS.corrections.chemin, '/historique-moteur');
+  assert.deepEqual(S.LIENS.corrections.query, { onglet: 'moteur' });
+  assert.match(histoire, /\{ value: 'moteur', label: 'Historique moteur' \}/);
   assert.match(lire('src', 'data', 'roadmap', 'plan.js'), /etape\('26', 'Boucle de correction'/);
   // Le menu et le routeur : la page elle-même.
   assert.match(routeur, /path: '\/sante-moteur',\s*name: 'engine-health',\s*component: \(\) => import\('@\/views\/EngineHealthView\.vue'\),\s*meta: \{ title: 'Santé du moteur', section: 'history', nav: 'sante-moteur' \}/);
@@ -538,7 +540,8 @@ test('la route : GET /api/engine-health, lecture seule, branchée une fois ; le 
   assert.deepEqual(
     importees.sort(),
     // Le dernier rejeu RÉUSSI du banc (correction du 19/10 de l'étape 19 : un rejeu arrêté en erreur n'efface plus le dernier réussi).
-    ['NOTE_DE_DEPART', 'deriveDuMoteur', 'dernierRejeuReussi', 'etatBudgetClaude', 'etatDesVersions', 'etatSauvegardes', 'lireLeControle', 'openDb', 'rejeuxDe', 'resumeDeLaCalibration'].sort()
+    // Étape 26 (28/10/2026) : l'état de la boucle de correction, une lecture de ses tables (etatDesCorrections, jamais un tri).
+    ['NOTE_DE_DEPART', 'deriveDuMoteur', 'dernierRejeuReussi', 'etatBudgetClaude', 'etatDesCorrections', 'etatDesVersions', 'etatSauvegardes', 'lireLeControle', 'openDb', 'rejeuxDe', 'resumeDeLaCalibration'].sort()
   );
   for (const lourd of [/travailDuBilan/, /calculerBilan/, /preparerLeMoisEnCours/, /figerLesMoisEcoules/, /rejouer\(/, /construireTableJourJ/, /connaitreLeMarche/, /executerControleQuotidien/, /lancerControleQuotidien/, /writeJsonAtomic/, /INSERT|UPDATE|DELETE/]) {
     assert.doesNotMatch(page, lourd, String(lourd));

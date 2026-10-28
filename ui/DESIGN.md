@@ -487,18 +487,63 @@ ordre » : le contexte des données, jamais une value de pari) ; (2) en deux col
 banc) ; **annoncé face à réalisé** (UNE courbe, `CalibrationChart` RÉUTILISÉ, tous marchés, première valeur, et trois `.cm-kpi` annoncé / réalisé / écart
 avec le juge) ; la **valeur de clôture** (deux `.cm-kpi`, pronostics et vos paris, juge de clôture — jamais vert) ; la liste **à vérifier** (les contrôles
 en échec, du plus grave au moins grave, statut en `.cm-chip` rouge ou ambre, six au plus puis « … et N autres contrôles dans Réglages ») ; les
-**versions du moteur** (la version en service, la candidate en essai, la dérive) ; les **corrections à accepter ou refuser** (la place est réservée à
-l'étape 26 : « pas encore mesuré », lien vers la feuille de route).
+**versions du moteur** (la version en service, la candidate en essai, la dérive) ; les **corrections à accepter ou refuser** (étape 26 : sur toute la largeur de la
+grille, voir le paragraphe « Depuis l’étape 26 » plus bas ; « pas encore mesuré » tant qu’aucun mois n’est trié).
 **UNE SEULE PLACE PAR INFORMATION** : chaque cadre n'est qu'un RÉSUMÉ — un chiffre (`.sante-bloc__valeur`), une pastille d'état, une phrase — avec, en pied,
 la source réelle et l'heure de la mesure (`ProvenanceChip variante="ligne"` ; un jour seul comme la date de la note de départ ne reçoit pas d'heure
 inventée) et le LIEN vers sa vraie place (Historique moteur › Banc d'essai / Calibration du mois, Réglages › Contrôle quotidien / Sauvegardes / Budget
-Claude / Versions du moteur, Feuille de route › étape 26) : les grands tableaux, les courbes par marché et le carnet de l'IA restent là-bas. Un cadre dont
+Claude / Versions du moteur, Historique moteur › Écarts du mois) : les grands tableaux, les courbes par marché et le carnet de l'IA restent là-bas. Un cadre dont
 la donnée manque RESTE affiché, avec « pas encore mesuré » (`.cm-chip` sans couleur) et pourquoi ; une lecture qui échoue donne « illisible »
 (`is-warning`) sans toucher aux autres ; si le serveur ne répond pas, les neuf cadres restent (`structureParDefaut`, mêmes titres et mêmes liens que la
 réponse, comparés par un test) avec l'erreur en `.cm-note.is-danger`. Le cadre commun est `components/analysis/HealthBlockCard.vue` (`AppCard` + pastille +
 `ProvenanceChip` + lien) ; les mots viennent de `utils/santeMoteur.js` (pur, rejoué par `server/test/santeMoteurEcran.test.mjs` sur les vraies réponses de
 la route) qui reprend ceux des vraies places (`utils/calibration.js`, `utils/preuve.js`, `utils/controleQuotidien.js`, `utils/banc.js`). Aucun appel hors la
 route de la page, aucune écriture.
+Depuis l'étape 26 du plan (28/10/2026, la **boucle de correction**) : le neuvième cadre de la Santé du moteur, « Corrections à accepter ou refuser », prend
+TOUTE la largeur de la grille (`grid-column: 1 / -1`) et reçoit dans son emplacement `components/analysis/CorrectionsBlock.vue` (affichage pur : il émet `banc`,
+`accepter`, `refuser`, `retirer`, `proposer` ; `EngineHealthView` confirme, appelle la route et relit la page — toujours une seule lecture). Quatre `.cm-block`,
+dans cet ordre, requête de conteneur `corr` (deux colonnes dès 760 px du bloc, les propositions sur toute la largeur) : (1) **« Le mois en mots »** — le résumé
+écrit par Claude (titre et phrases) et sa `ProvenanceChip variante="ligne"` « Écrit par Claude (Sonnet) — chiffres vérifiés par la garde », sinon sa raison
+en une phrase (pas encore écrit, rangé sans appel, abandonné, analyses automatiques coupées) ; (2) **« Les écarts du mois »**, EN COURT — l'en-tête du dernier
+tri, une `.cm-chip` par statut présent (« vrai défaut » `is-warning`, « à surveiller » `is-warning` en tirets, « en essai » `is-info`, les autres sans ton), les
+vrais défauts en une ligne chacun, les familles en essai, la règle ; `HelpTip terme="fourchette-du-hasard"` ; (3) **« Les corrections proposées »** — une carte
+par correction ouverte ou adoptée : sa phrase en mots, sa pastille d'état (« à décider » `is-warning` ; « en file », « à l'essai », « jugée » `is-info` ; « adoptée »
+`is-section`), d'où elle vient, ce qui changerait et les marchés touchés, le gain mesuré au banc d'essai (indicatif) et sa pastille (« retenu » `is-info`,
+« pas prouvé » `is-warning`, « moins bon » `is-danger`), son essai à blanc ; les boutons « Mesurer au banc — environ 10 min » (`secondary` : le banc part AU
+CLIC, un calcul lourd à la fois, son verdict une dizaine de minutes plus tard), « Mettre à l'essai » (`primary`, la couleur de section, jamais `section`),
+« Refuser » et « Retirer » (`secondary` ; « Retirer » dit où cliquer : le retour arrière de Réglages), le lien « Adopter dans Réglages › Versions du moteur »
+pour une correction jugée « retenu » ; puis « Proposer une correction » (`secondary`, il ouvre `CorrectionProposalForm.vue` : `AppSelect` du réglage — jamais
+de `<select>` natif —, `AppNumberField` borné, la valeur en service, les marchés touchés, la phrase facultative et son compteur, « Proposer » en `primary`,
+« Annuler » en `ghost`) — FERMÉ pendant l'essai du modèle de buts de l'étape 27, désactivé avec sa raison écrite —, la phrase des réglages de pari, la place
+de l'essai à blanc, « N corrections déjà essayées : chacune élargit la marge du juge » (bulle `HelpTip` à ses propres mots) ; un refus du serveur en
+`.cm-note.is-danger`, en mots ; (4) **« Le journal »** — les 3 dernières entrées (heure de Paris, pastille de l'événement, phrase) et le lien « Tout le
+journal : Historique moteur › Écarts du mois ». TOUTE action passe par `window.confirm` (le texte dit ce qui change, et que rien ne change dans les chiffres)
+et envoie l'état vu (`vue` : un double clic n'agit pas deux fois). AUCUN vert : un écart, une correction, un verdict du banc ne sont pas des gains.
+**Exception écrite (constat 14 de la critique de l'étape 26)** à « chaque cadre n'est qu'un résumé » et à « aucune écriture » : le cahier veut les boutons des
+corrections dans la Santé du moteur ; le cadre garde un résumé — le mois en mots, les écarts en court, le journal réduit à 3 entrées et un lien —, le détail des
+22 cases et tout le journal vivent dans Historique moteur. **Les mots de la boucle** : jamais « K », « lignée », « z », « variante », « levier » ni « regards »
+à l'écran — « N corrections déjà essayées : chacune élargit la marge du juge », « 22 cases × 12 mois : la marge du hasard en tient compte », « la version du
+moteur », « le réglage ».
+Dans l'onglet « Historique moteur », juste après `CalibrationPanel` : `CorrectionTriPanel.vue` (`AppCard` « Écarts du mois : malchance ou vrai défaut (étape 26) »,
+icône `swap`, sur-titre « Boucle de correction », `container: ctri`) — il LIT GET /api/corrections, /api/corrections/tri?mois= et /api/corrections/journal (rien
+n'est calculé à l'ouverture) et montre TOUJOURS : le choix du mois (pastilles des mois triés, le plus récent d'abord, le choisi en
+`rgba(var(--cm-section-rgb) / 0.12)`), quatre `.cm-kpi` (la version jugée, les mois comptés, « 22 cases × 12 mois », le seuil de 2 points), le tableau des 22
+cases (`.cm-table` TOUJOURS là, 22 lignes même vide ou illisible : famille, mesure, écart du mois, mois comptés, écart sur les mois comptés, fourchette signée,
+matchs, statut, ce qui est proposé ; au pied Σ des issues et des matchs du mois — les comptes du tri — et ⌀ de l'écart absolu, jamais une somme de
+pourcentages), « Par régime (pour comprendre, jamais jugé) », les pronostics écartés par raison, tout le journal par pages de 50 (« Plus ancien »), la provenance
+réelle (`ProvenanceChip` : la table engine_picks et les résultats FotMob du magasin, la table correction_tri, l'heure du tri). Le tri ne regarde pas « toutes
+les issues » : pour chaque marché, l'issue de référence (niveau) et l'issue favorite (confiance) — pour le 1N2, la victoire à domicile et le favori (décision 17,
+dite dans le sous-titre du panneau). La pastille « adoptée » (le statut d'une correction, le journal) prend la même teinte légère
+`rgba(var(--cm-section-rgb) / 0.12)` que le mois choisi, jamais `--cm-section-soft` (émeraude dans Historique moteur et Santé du moteur). `CalibrationPanel`
+dit sous ses verdicts qu'ils sont ceux du mois sur l'issue choisie et que le tri « malchance ou vrai défaut » est plus bas dans cet onglet. Réglages : `EngineVersionsPanel` émet
+l'état lu (`lu`) ; `SettingsView` le passe à `EngineConfigForm` (`essai`) qui, quand une candidate occupe la place de l'essai à blanc, pose au-dessus des
+boutons une `.cm-note.is-warning` — deux textes exacts (utils/versionsMoteur.js, `avertissementDeLEnregistrement`) : candidate en essai (« si cette version est
+encore en service la nuit prochaine, l'essai repart de zéro ») ou jugée (« Enregistrer efface le verdict « retenu » de la candidate… ») — et redemande à
+l'enregistrement comme à la remise à zéro (`window.confirm`) ; tant que l'état des versions n'est pas lu, les deux boutons demandent une confirmation générique
+(`confirmationSansEtat`) ; la carte liste les candidates passées, la fin d'une correction de la boucle dite « fermée par
+la boucle de correction (voir Santé du moteur) ». La carte du budget Claude a le type « Résumé du mois (boucle de correction) » (automatique, compté sur le
+plafond, une fois par mois) ; la puce du haut (`AppTopbar`) dit l'alerte durable « Boucle de correction — … » (ses erreurs seulement). Les mots viennent de
+`utils/corrections.js` et `utils/versionsMoteur.js` (purs), rejoués par `server/test/boucleCorrectionEcran.test.mjs` sur les réponses du vrai serveur.
 Depuis l'étape 9 du plan (06/10/2026) : la **page d'un match à venir** (`UpcomingMatchView`, onglet Résumé) se lit dans l'ordre d'une DÉCISION, sans
 changer d'onglet : `MarketVerdictBoard` (le verdict par marché, LA carte importante de la page : `AppCard tone="section"`), `PercentageWhyCard`
 (la place réservée du « pourquoi ce pourcentage »), les compositions et les absents, `OddsTimelineChart` (les cotes de l'ouverture à maintenant),

@@ -163,7 +163,7 @@ export const PLACES = Object.freeze({
   cloture: Object.freeze({ chemin: '/historique-moteur', query: null, libelle: 'Historique moteur › Calibration du mois (valeur de clôture)' }),
   aVerifier: Object.freeze({ chemin: '/reglages', query: Object.freeze({ carte: 'controle-quotidien' }), libelle: 'Réglages › Contrôle quotidien des données' }),
   versions: Object.freeze({ chemin: '/reglages', query: null, libelle: 'Réglages › Versions du moteur' }),
-  corrections: Object.freeze({ chemin: '/feuille-de-route', query: null, libelle: 'Feuille de route › étape 26 (boucle de correction)' })
+  corrections: Object.freeze({ chemin: '/historique-moteur', query: Object.freeze({ onglet: 'moteur' }), libelle: 'Historique moteur › Écarts du mois (malchance ou vrai défaut)' })
 });
 
 const TITRES = Object.freeze({

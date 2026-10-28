@@ -34,6 +34,7 @@ import engineHealthRoutes from './engineHealth.routes.js';
 import bettingMapRoutes from './bettingMap.routes.js';
 import marketKnowledgeRoutes from './marketKnowledge.routes.js';
 import simulationRoutes from './simulation.routes.js';
+import correctionsRoutes from './corrections.routes.js';
 
 const router = Router();
 
@@ -84,5 +85,7 @@ router.use('/betting-map', bettingMapRoutes);
 router.use('/market-knowledge', marketKnowledgeRoutes);
 // Étape 28 du plan : la simulation complète — fins de saison, enjeu, déroulé simulé, prix juste d'un ticket (lectures des lignes de nuit ; un interrupteur dans la base).
 router.use('/simulation', simulationRoutes);
+// Étape 26 du plan : la boucle de correction — le tri du mois (malchance ou vrai défaut), les corrections proposées et leur journal ; les clics de Pierre (jamais pendant une passe).
+router.use('/corrections', correctionsRoutes);
 
 export default router;

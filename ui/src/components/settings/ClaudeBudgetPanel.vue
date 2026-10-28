@@ -76,6 +76,8 @@ const TYPES = [
   // Étape 42 : le bulletin du matin et le bilan de la semaine, deux appels de l'actualisation.
   { type: 'bulletin', libelle: 'Bulletin du jour' },
   { type: 'bilan-semaine', libelle: 'Bilan de la semaine' },
+  // Étape 26 : le résumé du mois de la boucle de correction, un appel de l'actualisation par mois, compté sur le plafond.
+  { type: 'resume-mois', libelle: 'Résumé du mois (boucle de correction)' },
   { type: 'manuel', libelle: 'Clic manuel' },
   { type: 'autre', libelle: 'Autre' }
 ];
@@ -346,6 +348,7 @@ const provenanceReglage = computed(() => {
             <span class="cbud__gros cm-numeric">{{ kpiPlafond.valeur }}</span>
           </div>
           <span class="cbud__petit">{{ kpiPlafond.detail }}</span>
+          <span v-if="plafond?.resumeMois" class="cbud__petit">dont {{ nombre(plafond.resumeMois) }} pour le résumé du mois (boucle de correction).</span>
           <span class="cbud__petit">Inchangé par le budget : la seule limite dure, que le mode économe ne touche pas.</span>
         </div>
       </div>
@@ -408,6 +411,7 @@ const provenanceReglage = computed(() => {
                 <td class="is-left is-strong cbud__nom">
                   {{ l.libelle }}
                   <small class="cbud__petit">{{ l.nonLu ? 'non lu' : l.automatique ? 'automatique · compté sur le plafond' : l.type === 'manuel' ? 'votre clic · hors plafond, jamais bloqué' : 'sans type précis' }}</small>
+                  <small v-if="!l.nonLu && l.type === 'resume-mois'" class="cbud__petit">une fois par mois, juste après le tri du mois</small>
                 </td>
                 <td class="cm-numeric">
                   {{ l.nonLu ? 'non lu' : nombre(l.aujourdhui.appels) }}

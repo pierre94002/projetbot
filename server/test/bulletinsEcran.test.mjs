@@ -363,12 +363,14 @@ test('Réglages › Budget Claude : les deux types d’appel ont leur ligne (« 
   assert.deepEqual(r.avertissements, []);
   const t = espaces(r.texte);
   assert.ok(t.includes('Bulletin du jour') && t.includes('Bilan de la semaine'), 'les deux types dans le tableau par type');
-  assert.equal((t.match(/automatique · compté sur le plafond/g) ?? []).length, 6, 'six types automatiques : avance, coup d’envoi, reprise, revue, bulletin, bilan');
+  // Étape 26 (partie E, 28/10/2026) : le résumé du mois de la boucle de correction, automatique lui aussi (décision 12).
+  assert.equal((t.match(/automatique · compté sur le plafond/g) ?? []).length, 7, 'sept types automatiques : avance, coup d’envoi, reprise, revue, bulletin, bilan, résumé du mois');
   assert.ok(t.includes('2 bulletin ou bilan'), 'le plafond dit combien de places les deux textes ont prises');
   assert.ok(t.includes('2 / 150'), '2 places sur 150');
   assert.equal(s.budget.coherence.egal, true);
   assert.deepEqual([s.budget.plafond.bulletin, s.budget.plafond.bilanSemaine, s.budget.plafond.limite], [1, 1, 150]);
-  assert.deepEqual(s.budget.parType.filter((x) => x.automatique).map((x) => x.type), ['avance', 'coup-d-envoi', 'reprise', 'revue', 'bulletin', 'bilan-semaine']);
+  // Étape 26 (partie D, décision 12) : le résumé du mois de la boucle de correction est un appel automatique de plus.
+  assert.deepEqual(s.budget.parType.filter((x) => x.automatique).map((x) => x.type), ['avance', 'coup-d-envoi', 'reprise', 'revue', 'bulletin', 'bilan-semaine', 'resume-mois']);
   const ligneDe = (type) => s.budget.parType.find((x) => x.type === type);
   assert.deepEqual([ligneDe('bulletin').aujourdhui.appels, ligneDe('bilan-semaine').aujourdhui.appels], [1, 1]);
   // La source du panneau : ses deux types, dans l'ordre du serveur.

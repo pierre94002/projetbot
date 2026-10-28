@@ -412,8 +412,9 @@ test('l’étape « carnetIA » : après la sauvegarde, avant le contrôle quoti
   assert.deepEqual(s.etapes.slice(i - 3, i), ['sauvegarde', 'simulationSaisons', 'simulationMatchs']);
   // Étape 42 (22/10/2026) : le bulletin du jour et le bilan de la semaine (deux textes de l'IA, dont le bilan lit CE carnet refait
   // cette nuit) s'intercalent entre le carnet et le contrôle quotidien, qui reste le dernier. Étape 44 (23/10/2026) : la mémoire de
-  // l'IA (ses leçons ne se confirment que par CE carnet, dont elle reprend les cas) le suit immédiatement.
-  assert.deepEqual(s.etapes.slice(i + 1), ['dossiersIA', 'bulletin', 'bilanSemaine', 'controleQuotidien']);
+  // l'IA (ses leçons ne se confirment que par CE carnet, dont elle reprend les cas) le suit immédiatement. Étape 26 (partie D, 28/10/2026) :
+  // le résumé du mois de la boucle de correction (un texte de l'IA, une fois par mois) suit le bilan de la semaine.
+  assert.deepEqual(s.etapes.slice(i + 1), ['dossiersIA', 'bulletin', 'bilanSemaine', 'resumeCorrection', 'controleQuotidien']);
   assert.equal(s.etapes.at(-1), 'controleQuotidien');
   assert.equal(s.etapes.filter((k) => k === 'carnetIA').length, 1);
   assert.equal(s.ecrituresDuCalcul, 0, 'le calcul n’écrit rien dans la base');

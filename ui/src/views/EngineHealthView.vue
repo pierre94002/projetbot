@@ -6,7 +6,10 @@ import HelpTip from '@/components/common/HelpTip.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import CalibrationChart from '@/components/analysis/CalibrationChart.vue';
 import HealthBlockCard from '@/components/analysis/HealthBlockCard.vue';
+import CorrectionsBlock from '@/components/analysis/CorrectionsBlock.vue';
 import { engineHealthApi } from '@/services/engineHealthApi.js';
+import { correctionsApi } from '@/services/correctionsApi.js';
+import { confirmationDuBanc, confirmationDeLEssai, confirmationDuRefus, confirmationDuRetrait, confirmationDeLaProposition, messageApresLAction } from '@/utils/corrections.js';
 import { pointsDeLaCourbe, moisDit, clotureDesPronosticsDite, clotureDesParisDite } from '@/utils/calibration.js';
 import {
   PAGE,
@@ -27,8 +30,9 @@ import {
  * SANTÉ DU MOTEUR (étape 24 du plan, 14/10/2026) : le tableau de bord du moteur, une page qui RASSEMBLE ce que
  * les autres étapes ont préparé, sans rien recalculer. En tête, trois feux (les données, les sauvegardes, le
  * budget Claude) ; puis la note du moteur face au marché et son évolution, ce qu'il annonçait face à ce qui est
- * arrivé, la valeur de clôture, la liste « à vérifier », les versions du moteur, et la place — vide aujourd'hui —
- * des corrections de l'étape 26.
+ * arrivé, la valeur de clôture, la liste « à vérifier », les versions du moteur, et les corrections à accepter ou
+ * refuser de l'étape 26 (la boucle de correction : le résumé du mois, les écarts en court, les propositions et leurs
+ * boutons, le journal — CorrectionsBlock, sur toute la largeur).
  *
  * UNE SEULE PLACE PAR INFORMATION : chaque bloc n'est qu'un résumé (un chiffre, un feu, une phrase) avec la
  * source réelle, l'heure de la mesure et le lien vers sa vraie place (Historique moteur, Banc d'essai, Réglages).
@@ -37,6 +41,10 @@ import {
  * Une seule lecture : GET /api/engine-health (le serveur lit des résumés déjà écrits). Un bloc dont la donnée
  * manque reste affiché avec « pas encore mesuré » ; si le serveur ne répond pas, les neuf cadres restent, dits
  * « illisibles ». Les mots viennent de utils/santeMoteur.js (et des règles des vraies places).
+ *
+ * Les CLICS de l'étape 26 (mesurer au banc, mettre à l'essai, refuser, retirer, proposer) passent TOUS par une
+ * confirmation (window.confirm) qui dit ce qui change, envoient l'état vu à l'écran (`vue` : un double clic n'agit pas
+ * deux fois), puis la page se relit ; un refus du serveur est dit en mots.
  */
 
 const etat = ref({ loading: true, error: null, data: null });
@@ -83,6 +91,26 @@ const aVerifier = computed(() => lignesAVerifier(blocs.value.aVerifier));
 const resteAVerifier = computed(() => resteAVerifierDit(blocs.value.aVerifier));
 
 const ICONES_DES_FEUX = Object.freeze({ donnees: 'database', sauvegardes: 'shield', budget: 'cpu' });
+
+// Étape 26 (partie E, 28/10/2026) : les clics du bloc des corrections. Chacun : la confirmation d'abord (rien ne part sans elle),
+// la route avec l'état VU à l'écran, le message ou le refus en mots, puis la page se relit (la même lecture, une seule).
+const actionCorrection = ref({ occupe: null, message: null, erreur: null, retrait: null });
+async function agir(type, p, appel, texte) {
+  if (!texte || !window.confirm(texte)) return;
+  actionCorrection.value = { occupe: type === 'proposer' ? 'proposer' : p.id, message: null, erreur: null, retrait: null };
+  try {
+    const r = await appel();
+    actionCorrection.value = { occupe: null, message: messageApresLAction(type, r), erreur: null, retrait: type === 'retirer' ? r : null };
+  } catch (error) {
+    actionCorrection.value = { occupe: null, message: null, erreur: error.message, retrait: null };
+  }
+  await charger();
+}
+const mesurerAuBanc = (p) => agir('banc', p, () => correctionsApi.mesurerAuBanc(p.id, p.etat), confirmationDuBanc(p));
+const mettreALEssai = (p) => agir('accepter', p, () => correctionsApi.accepter(p.id, p.etat), confirmationDeLEssai(p, blocs.value.corrections?.place ?? null));
+const refuserLaCorrection = (p) => agir('refuser', p, () => correctionsApi.refuser(p.id, p.etat), confirmationDuRefus(p));
+const retirerLaCorrection = (p) => agir('retirer', p, () => correctionsApi.retirer(p.id, p.etat), confirmationDuRetrait(p));
+const proposerUneCorrection = (corps) => agir('proposer', null, () => correctionsApi.proposer(corps), confirmationDeLaProposition(corps));
 </script>
 
 <template>
@@ -104,7 +132,7 @@ const ICONES_DES_FEUX = Object.freeze({ donnees: 'database', sauvegardes: 'shiel
         </div>
       </div>
       <p class="cm-hero__subtitle">
-        Ce que les autres étapes ont préparé, en un coup d’œil : les données, les sauvegardes et le budget Claude en tête, puis la note du moteur face au marché, ce qu’il annonçait face à ce qui est arrivé, la valeur de clôture et ce qu’il faut vérifier. Rien n’est calculé ici : chaque bloc dit d’où vient son chiffre, quand il a été mesuré, et où se trouve le détail.
+        Ce que les autres étapes ont préparé, en un coup d’œil : les données, les sauvegardes et le budget Claude en tête, puis la note du moteur face au marché, ce qu’il annonçait face à ce qui est arrivé, la valeur de clôture, ce qu’il faut vérifier et les corrections à décider. Rien n’est calculé ici : chaque bloc dit d’où vient son chiffre, quand il a été mesuré, et où se trouve le détail.
       </p>
     </section>
 
@@ -221,8 +249,21 @@ const ICONES_DES_FEUX = Object.freeze({ donnees: 'database', sauvegardes: 'shiel
       <!-- 6. LES VERSIONS DU MOTEUR : version en service, essai d'une candidate, dérive -->
       <HealthBlockCard :bloc="blocs.versions" icone="layers" />
 
-      <!-- 7. LES CORRECTIONS À ACCEPTER OU REFUSER : la place est réservée (étape 26) -->
-      <HealthBlockCard :bloc="blocs.corrections" icone="swap" />
+      <!-- 7. LES CORRECTIONS À ACCEPTER OU REFUSER (étape 26) : toute la largeur ; le bloc émet les clics, la page confirme, appelle la route et relit -->
+      <HealthBlockCard :bloc="blocs.corrections" icone="swap" class="sante__corrections">
+        <CorrectionsBlock
+          :bloc="blocs.corrections"
+          :occupe="actionCorrection.occupe"
+          :message="actionCorrection.message"
+          :erreur="actionCorrection.erreur"
+          :retrait="actionCorrection.retrait"
+          @banc="mesurerAuBanc"
+          @accepter="mettreALEssai"
+          @refuser="refuserLaCorrection"
+          @retirer="retirerLaCorrection"
+          @proposer="proposerUneCorrection"
+        />
+      </HealthBlockCard>
     </div>
   </div>
 </template>
@@ -276,5 +317,9 @@ const ICONES_DES_FEUX = Object.freeze({ donnees: 'database', sauvegardes: 'shiel
 }
 .sante__kpis {
   margin: 0;
+}
+/* Étape 26 : le bloc des corrections prend toute la largeur de la grille (ses quatre parties, ses cartes et leurs boutons). */
+.sante__corrections {
+  grid-column: 1 / -1;
 }
 </style>

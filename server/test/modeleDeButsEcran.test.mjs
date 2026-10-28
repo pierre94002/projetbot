@@ -648,10 +648,11 @@ test('la feuille de route : le bloc « Banc d’essai sur des matchs jamais vus 
   assert.deepEqual(etapes.filter((e) => e.bancAvantApres).map((e) => e.id), ['27'], 'seulement l’étape 27');
   const e27 = etapes.find((e) => e.id === '27');
   // L'étape n'est finie qu'à l'adoption : « en cours », ce qui reste dit, aucune date de fin ; la page compte 1 en cours
-  // — 2 depuis le 27/10/2026 : la 28, livrée à blanc, est elle aussi « en cours » (une ligne partielle de l'historique).
+  // — 2 depuis le 27/10/2026 : la 28, livrée à blanc, est elle aussi « en cours » (une ligne partielle de l'historique) ;
+  // 3 depuis le 28/10/2026 : la 26, son lot 1 livré, l'est aussi.
   assert.deepEqual([e27.etat, e27.reste, e27.fin], ['en-cours', 'en essai à blanc, adoption à venir', null]);
-  assert.equal(etat.avancement.enCours, 2);
-  assert.deepEqual(etapes.filter((e) => e.etat === 'en-cours').map((e) => e.id), ['27', '28']);
+  assert.equal(etat.avancement.enCours, 3);
+  assert.deepEqual(etapes.filter((e) => e.etat === 'en-cours').map((e) => e.id), ['26', '27', '28']);
   const bloc = e27.bancAvantApres;
   assert.deepEqual(bloc, JSON.parse(JSON.stringify(blocDuBancEtape27())), 'lu dans le code');
   assert.deepEqual(bloc.lignes.map((l) => l.cle), LIGNES_DU_BANC_27);

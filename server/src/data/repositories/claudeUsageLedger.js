@@ -64,7 +64,8 @@ const VERSION = 1;
 /**
  * Les types d'appel, dans l'ordre d'affichage. Étape 42 (22/10/2026) : le bulletin du matin et le bilan de la
  * semaine sont deux types de plus — des appels de l'actualisation (un par jour, un par semaine), comptés comme
- * les analyses automatiques.
+ * les analyses automatiques. Étape 26 (partie D, 28/10/2026) : le résumé du mois de la boucle de correction, un appel
+ * de l'actualisation une fois par mois, compté lui aussi sur le plafond (décision 12 de l'orchestrateur).
  */
 export const TYPES_APPEL = Object.freeze({
   avance: "Avant-match d'avance",
@@ -73,14 +74,17 @@ export const TYPES_APPEL = Object.freeze({
   revue: "Revue d'après-match",
   bulletin: 'Bulletin du jour',
   'bilan-semaine': 'Bilan de la semaine',
+  'resume-mois': 'Résumé du mois (boucle de correction)',
   manuel: 'Clic manuel',
   autre: 'Autre'
 });
 /**
  * Ceux que fait l'actualisation automatique — ceux que compte le plafond quotidien (les analyses de match, et depuis
- * l'étape 42 le bulletin du jour et le bilan de la semaine : un appel de l'un ou de l'autre prend une place sur les 150).
+ * l'étape 42 le bulletin du jour et le bilan de la semaine : un appel de l'un ou de l'autre prend une place sur les 150 ;
+ * depuis l'étape 26 le résumé du mois, de même : le contrôle « compteur du plafond = appels automatiques du journal » de
+ * claudeBudget.js reste juste).
  */
-export const TYPES_AUTOMATIQUES = Object.freeze(['avance', 'coup-d-envoi', 'reprise', 'revue', 'bulletin', 'bilan-semaine']);
+export const TYPES_AUTOMATIQUES = Object.freeze(['avance', 'coup-d-envoi', 'reprise', 'revue', 'bulletin', 'bilan-semaine', 'resume-mois']);
 
 /** Les deux points de passage. Seul le premier entre dans le budget (quota de l'abonnement). */
 export const CANAUX = Object.freeze({

@@ -169,6 +169,8 @@ import { executerControleQuotidien } from '../data/controleQuotidien.js';
 import { rejeuxUtilesALaCarte, rejeuDeLaCarte, lireLaCarte, ecrireLaCarte } from '../data/bettingMap.js';
 import { carteAFaire, calculerAPart as calculerLaCarteAPart } from '../data/bettingMapCalcul.js';
 import { relancerLeBancDuMoisSiBesoin } from '../data/rejeuDuServeur.js';
+import { faireLaBoucle, dueBoucle, pourquoiPasDue as pourquoiPasDueLaBoucle, resumeDeLaBoucle } from '../data/correction/boucle.js';
+import { produireLeResumeDuMois, decisionDuResumeDuMois } from '../core/ai/resumeDuMois.js';
 import { moteurDuRejeu } from '../bench/runner.js';
 import { lireReglagesDuMoteur } from '../core/engine/engineConfig.js';
 import { FICHIER_VERSIONS } from '../core/engine/engineVersions.js';
@@ -830,6 +832,23 @@ const dueBulletin = (ctx, options = {}) => decisionDuBulletin({ maintenant: opti
 const dueBilanSemaine = (ctx, options = {}) => decisionDuBilan({ maintenant: options.maintenant ?? Date.now() }).du;
 
 /**
+ * L'étape « resumeCorrection » (étape 26 du plan, partie D, 28/10/2026) : LE RÉSUMÉ DU MOIS EN MOTS de la boucle de correction —
+ * un appel à Claude Code par mois, sur une fiche chiffrée que le code prépare sans token (data/correction/ficheDuMois.js), tout
+ * nombre du texte contrôlé par la garde des chiffres ; rangé dans le magasin (table correction_resumes). Le tri du mois est fait plus
+ * haut dans la MÊME passe (« boucleCorrection ») : le 1er du mois à partir de 6 h, le résumé suit. Le DERNIER mois trié seulement
+ * (jamais les mois manqués), une fois par mois, trois essais ratés au plus ; aucun appel quand rien n'est jugé (rangé « sans
+ * appel »). Compté sur le plafond des 150 comme le bulletin ; JAMAIS forcé par un clic ni contre AUTO_AI_ANALYSIS. Tout le travail
+ * est dans core/ai/resumeDuMois.js.
+ */
+async function passeResumeCorrection(ctx, options = {}) {
+  const r = await produireLeResumeDuMois({ maintenant: options.maintenant ?? Date.now(), ctx, options });
+  return { status: r.statut, summary: r.resume, details: { code: r.code, ...r.details }, changed: false };
+}
+
+/** Due : le dernier mois trié n'a pas encore son résumé (lu dans le magasin, jamais dans l'historique des passes), moins de trois essais ratés. */
+const dueResumeCorrection = (ctx, options = {}) => decisionDuResumeDuMois({ database: options.database ?? null }).du;
+
+/**
  * L'étape « connaitreMarche » (étape 22 du plan, 13/10/2026) : CONNAÎTRE LE MARCHÉ — la justesse, la
  * vitesse, les biais et la marge de chaque bookmaker, et le meilleur moment pour parier de chaque
  * championnat, sur toutes les cotes archivées (data/marketKnowledge.js). Tout se lit dans un PROCESSUS À
@@ -1462,8 +1481,8 @@ async function passeSimulationMatchs(ctx, options = {}) {
 /** Due : une fois par jour civil de Paris, avec l'interrupteur des enregistreurs, ou quand la passe d'avant l'a REPORTÉE ; jamais forcée par un clic. */
 const dueSimulationMatchs = (ctx) => Boolean(env.enregistreurs?.enabled) && (!faitAujourdhui(ctx.derniere('simulationMatchs')) || Boolean(ctx.derniersDetails?.('simulationMatchs')?.reporte));
 
-/** Pour les tests : l'étape d'analyse IA automatique telle que la passe la lance (plafond, réserve, bilan) ; l'étape du carnet de santé ; celle de l'historique football-data ; celle des repères ; celle de la table du jour J ; celle du contrôle quotidien ; celle de la candidate à blanc ; celle de la calibration du mois écoulé ; celle de connaître le marché ; celle de l'indice de force ; celle des forces de buts ; celle des fiches des joueurs ; celle du carnet de l'IA ; celles du bulletin du jour et du bilan de la semaine. */
-export const __testing = { ETAPES: () => ETAPES, passeBulletin, passeBilanSemaine, dueBulletin, dueBilanSemaine, passeCarteOuParier, dueCarteOuParier, dueMoteurABlanc, passeIaAuto, passeCarnetSante, passeHistoriqueFd, dueHistoriqueFd, passeReperes, dueReperes, passeTableJourJ, dueTableJourJ, passeControleQuotidien, passeMoteurABlanc, passeCalibrationMensuelle, dueCalibrationMensuelle, passeConnaitreMarche, dueConnaitreMarche, passeIndiceForce, dueIndiceForce, passeForcesButs, dueForcesButs, passeFichesJoueurs, dueFichesJoueurs, passeStylesDeJeu, dueStylesDeJeu, passeCarnetIA, passeDossiersIA, passeSimulationSaisons, dueSimulationSaisons, passeSimulationMatchs, dueSimulationMatchs };
+/** Pour les tests : l'étape d'analyse IA automatique telle que la passe la lance (plafond, réserve, bilan) ; l'étape du carnet de santé ; celle de l'historique football-data ; celle des repères ; celle de la table du jour J ; celle du contrôle quotidien ; celle de la candidate à blanc ; celle de la calibration du mois écoulé ; celle de connaître le marché ; celle de l'indice de force ; celle des forces de buts ; celle des fiches des joueurs ; celle du carnet de l'IA ; celles du bulletin du jour et du bilan de la semaine ; celle du résumé du mois de la boucle de correction. */
+export const __testing = { ETAPES: () => ETAPES, passeBulletin, passeBilanSemaine, dueBulletin, dueBilanSemaine, passeCarteOuParier, dueCarteOuParier, dueMoteurABlanc, passeIaAuto, passeCarnetSante, passeHistoriqueFd, dueHistoriqueFd, passeReperes, dueReperes, passeTableJourJ, dueTableJourJ, passeControleQuotidien, passeMoteurABlanc, passeCalibrationMensuelle, dueCalibrationMensuelle, passeConnaitreMarche, dueConnaitreMarche, passeIndiceForce, dueIndiceForce, passeForcesButs, dueForcesButs, passeFichesJoueurs, dueFichesJoueurs, passeStylesDeJeu, dueStylesDeJeu, passeCarnetIA, passeDossiersIA, passeSimulationSaisons, dueSimulationSaisons, passeSimulationMatchs, dueSimulationMatchs, passeBoucleCorrection, dueBoucleCorrection, passeResumeCorrection, dueResumeCorrection };
 
 /**
  * Les étapes. `due(ctx)` dit si l'étape tourne à cette passe (les autres
@@ -1525,6 +1544,43 @@ function dueCarteOuParier(ctx, options = {}) {
   } catch {
     return true;
   }
+}
+
+/** La clé de l'alerte durable de la boucle de correction (refresh-status.json, alerts) : ses erreurs seulement. */
+const CLE_ALERTE_BOUCLE = 'boucleCorrection';
+
+/**
+ * L'étape « boucleCorrection » (étape 26 du plan, 28/10/2026) : LA BOUCLE DE CORRECTION — le tri du mois écoulé
+ * (malchance ou vrai défaut, une fois par mois), les propositions des règles sur le dernier tri, la synchronisation avec
+ * le registre des versions (jugée, adoptée, retirée…) et la mise à blanc de la correction acceptée en tête de file si
+ * la place de l'essai est libre (data/correction/boucle.js, faireLaBoucle). Aucun banc ici (au clic de Pierre), rien
+ * n'écrit les réglages du moteur, rien n'adopte. L'alerte durable dit une erreur (lecture, synchronisation, tri) et
+ * depuis combien de passes ; elle se lève dès que tout passe. Rien à recharger à l'écran. Vérification finale, constat
+ * 3 : une passe précédente en échec à l'étape « propositions » les fait refaire sur le dernier tri rangé.
+ */
+async function passeBoucleCorrection(ctx, options = {}) {
+  const avant = ctx?.derniersDetails?.(CLE_ALERTE_BOUCLE) ?? null;
+  const refaireLesPropositions = Array.isArray(avant?.erreurs) && avant.erreurs.some((e) => e?.etape === 'propositions');
+  const r = await faireLaBoucle({ ...options, refaireLesPropositions });
+  const precedente = avant?.alerte ?? null;
+  const erreur = r.erreurs.length ? r.erreurs.map((e) => e.message).join(' ; ').slice(0, 300) : null;
+  const alerte = erreur ? { erreur, depuis: precedente?.depuis ?? r.le, passes: (precedente?.passes ?? 0) + 1 } : null;
+  return {
+    status: erreur ? 'error' : r.avertissements.length ? 'warn' : 'ok',
+    summary: resumeDeLaBoucle(r),
+    details: { ...r, alerte },
+    changed: false,
+    alert: { key: CLE_ALERTE_BOUCLE, value: alerte }
+  };
+}
+
+/**
+ * Due : un mois à trier, une correction à suivre, ou un clic (boucle.js, dueBoucle) ; LIT seulement. Vérification
+ * finale, constat 3 : due aussi tant que son alerte durable est levée — sinon une erreur de l'étape « propositions »
+ * (après le tri du dernier mois) laissait l'alerte figée jusqu'au tri du mois suivant, l'étape n'étant plus due.
+ */
+function dueBoucleCorrection(ctx, options = {}) {
+  return dueBoucle({ ...options, manuel: Boolean(ctx?.manuel) }).du || Boolean(ctx?.derniersDetails?.(CLE_ALERTE_BOUCLE)?.alerte);
 }
 
 const ETAPES = [
@@ -1999,6 +2055,19 @@ const ETAPES = [
     run: (ctx) => passeCarteOuParier(ctx)
   },
   {
+    key: 'boucleCorrection',
+    label: 'Boucle de correction : tri du mois (malchance ou vrai défaut), propositions, essai à blanc des corrections acceptées',
+    // Étape 26 du plan (28/10/2026) : APRÈS la calibration (le mois écoulé est figé) et la carte « où parier », AVANT la
+    // sauvegarde (la copie de la nuit contient le tri et le journal). L'ordre du gel, de la candidate à blanc et de la
+    // calibration ne bouge pas. Due quand un mois est à trier (une fois par mois, rattrapage jusqu'à 6 par passe), quand
+    // une correction avance ou occupe la place de l'essai, ou au clic (qui ne refait jamais un tri figé). Pas
+    // d'interrupteur : ni réseau, ni Claude ; le banc d'une correction part au clic de Pierre, jamais ici. Cf.
+    // passeBoucleCorrection.
+    due: (ctx) => dueBoucleCorrection(ctx),
+    pourquoiPasDue: () => pourquoiPasDueLaBoucle(),
+    run: (ctx) => passeBoucleCorrection(ctx)
+  },
+  {
     key: 'sauvegarde',
     label: 'Sauvegarde de la base',
     // Chaque nuit (étape 1 du plan ; avant, une fois par semaine avec
@@ -2075,6 +2144,17 @@ const ETAPES = [
     due: (ctx) => env.autoAiAnalysis.enabled && dueBilanSemaine(ctx),
     pourquoiPasDue: () => decisionDuBilan().pourquoi,
     run: (ctx) => passeBilanSemaine(ctx)
+  },
+  {
+    key: 'resumeCorrection',
+    label: "Résumé du mois de la boucle de correction (texte de l'IA, un seul appel par mois)",
+    // Étape 26 du plan (partie D, 28/10/2026) : APRÈS le bilan de la semaine, AVANT le contrôle quotidien (toujours dernier) ; le tri du mois
+    // est fait plus haut dans la même passe (« boucleCorrection »). Interrupteur pur comme le bulletin : AUTO_AI_ANALYSIS=false le coupe, un clic
+    // ne le force JAMAIS. Une fois par mois, le dernier mois trié seulement ; rattrapé par la première passe qui suit un arrêt. Cf.
+    // passeResumeCorrection.
+    due: (ctx) => env.autoAiAnalysis.enabled && dueResumeCorrection(ctx),
+    pourquoiPasDue: () => decisionDuResumeDuMois().pourquoi,
+    run: (ctx) => passeResumeCorrection(ctx)
   },
   {
     key: 'controleQuotidien',

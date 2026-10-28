@@ -378,6 +378,8 @@ export function etatBudgetClaude({ maintenant = Date.now() } = {}) {
       // Étape 42 : le bulletin du jour et le bilan de la semaine prennent leur place sur le même plafond.
       bulletin: compteur?.bulletin ?? null,
       bilanSemaine: compteur?.bilanSemaine ?? null,
+      // Étape 26 : le résumé du mois de la boucle de correction, sur le même plafond.
+      resumeMois: compteur?.resumeMois ?? null,
       laissesAvantMatch: compteur?.skippedPreMatch ?? null,
       laissesApresMatch: compteur?.skippedPostMatch ?? null,
       restant: compteur ? Math.max(0, env.autoAiAnalysis.dailyLimit - compteur.count) : null,

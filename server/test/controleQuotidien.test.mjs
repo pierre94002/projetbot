@@ -680,7 +680,8 @@ test('l’étape « controleQuotidien » : la DERNIÈRE de la passe, sous le ver
   // Étape 42 (22/10/2026) : le bulletin du jour et le bilan de la semaine s'intercalent à leur tour entre le carnet et le contrôle.
   // Étape 44 (23/10/2026) : la mémoire de l'IA (dossiers des équipes) suit le carnet, avant le bulletin.
   // Étape 28 (27/10/2026) : la simulation complète (deux étapes) s'intercale entre la sauvegarde et le carnet de l'IA.
-  assert.deepEqual(e.etapes.slice(-8), ['sauvegarde', 'simulationSaisons', 'simulationMatchs', 'carnetIA', 'dossiersIA', 'bulletin', 'bilanSemaine', 'controleQuotidien']);
+  // Étape 26 (partie D, 28/10/2026) : le résumé du mois de la boucle de correction suit le bilan de la semaine.
+  assert.deepEqual(e.etapes.slice(-9), ['sauvegarde', 'simulationSaisons', 'simulationMatchs', 'carnetIA', 'dossiersIA', 'bulletin', 'bilanSemaine', 'resumeCorrection', 'controleQuotidien']);
   assert.equal(e.etapes.filter((k) => k === 'controleQuotidien').length, 1);
   assert.equal(e.passe.status, 'warn');
   assert.match(e.passe.summary, /^Feu rouge : 35 contrôles en [\d,]+ s sur \d+ rencontres des 30 derniers jours \(le serveur jamais tenu plus de \d+ ms d'affilée\) — rouge : score différent de football-data, classement officiel, match joué absent du magasin — orange : .*\. Rien n'est corrigé automatiquement ; le détail est dans Réglages › Contrôle quotidien\.$/);

@@ -6,6 +6,7 @@ import { refreshApi } from '@/services/refreshApi.js';
 import AppIcon from '@/components/common/AppIcon.vue';
 import { etatDuFeu, titreDuFeu } from '@/utils/controleQuotidien.js';
 import { controlesAntiFuiteDits } from '@/utils/controlesAntiFuite.js';
+import { alerteDeLaBoucleDite } from '@/utils/corrections.js';
 
 const route = useRoute();
 const router = useRouter();
@@ -45,12 +46,15 @@ const sauvegardeGrave = computed(() => alertesSauvegarde.value.some((a) => a.niv
 const alertesEnregistreurs = computed(() => refresh.value?.alerts?.enregistreurs?.releves ?? []);
 /** Contrôles anti-fuite de la nuit (étape 27) : des écarts dans la table du jour J ou dans les forces de buts. */
 const alertesFuite = computed(() => controlesAntiFuiteDits(refresh.value?.alerts ?? null));
+/** Étape 26 : l'alerte durable de la boucle de correction (ses erreurs seulement), posée par l'étape « boucleCorrection ». */
+const alerteBoucle = computed(() => alerteDeLaBoucleDite(refresh.value?.alerts?.boucleCorrection ?? null));
 /** Des alertes durables (contradictions, anomalies du contrôle, cotes, sauvegardes, enregistreurs, contrôles anti-fuite) sont en cours. */
 const alertes = computed(() =>
   Boolean(
     refresh.value?.alerts?.contradictions?.count ||
       refresh.value?.alerts?.audit?.anomalies ||
       refresh.value?.alerts?.cotes?.sources?.length ||
+      alerteBoucle.value ||
       alertesSauvegarde.value.length ||
       alertesFuite.value.length ||
       alertesEnregistreurs.value.length
@@ -59,6 +63,7 @@ const alertes = computed(() =>
 const titreRepere = computed(() =>
   [
     'Actualisation automatique — détails dans Réglages',
+    ...(alerteBoucle.value ? [alerteBoucle.value] : []),
     ...alertesSauvegarde.value.map((a) => `Sauvegardes : ${a.texte}`),
     ...alertesFuite.value.map((f) => `Contrôle anti-fuite de la nuit — ${f.texte}`),
     ...alertesEnregistreurs.value.map((a) => `Enregistreurs — ${a.nom} : ${a.probleme}`)

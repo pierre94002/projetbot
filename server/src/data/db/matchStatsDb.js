@@ -1489,6 +1489,134 @@ const SIMULATION_DDL = [
   'CREATE INDEX IF NOT EXISTS idx_enjeux_rencontres_date ON enjeux_rencontres(date);'
 ];
 
+/**
+ * LA BOUCLE DE CORRECTION (étape 26 du plan, 27/10/2026 ; data/correction/) : le tri mensuel « malchance ou vrai
+ * défaut », les propositions de correction, leur journal et le résumé du mois en mots. Écrites par le SERVEUR seul,
+ * par un seul module (data/correction/depotCorrections.js), sous le verrou de la passe ou dans une route ; JAMAIS
+ * lues par le moteur (hors de son empreinte, rien dans engine-config.json).
+ *   correction_tri             le tri figé d'un mois, par FORME du tri (clé mois + version : une forme corrigée
+ *                              s'ajoute, la lecture prend la plus haute) : la lignée jugée, le résumé, les 22 cases,
+ *                              le détail par régime et les SOMMES PAR MATCH de chaque case (rangées en dernier : la
+ *                              fenêtre des mois suivants les relit) — jamais réécrit ni effacé ;
+ *   correction_propositions    une proposition et son état (le contenu — réglage, valeurs, déclaration, version
+ *                              d'où elle part — ne change jamais ; aucune ne s'efface) ;
+ *   correction_journal         le journal, ajout seulement (jamais réécrit, jamais effacé) ;
+ *   correction_resumes         le résumé du mois en mots, par mois et forme du tri — jamais réécrit ni effacé ;
+ *   correction_resumes_essais  les essais ratés d'un résumé — ajout seulement.
+ */
+const CORRECTION_DDL = [
+  `CREATE TABLE IF NOT EXISTS correction_tri (
+  mois TEXT NOT NULL,
+  version INTEGER NOT NULL,
+  calcule_le TEXT NOT NULL,
+  lignee TEXT NOT NULL,
+  regards INTEGER NOT NULL,
+  resume TEXT NOT NULL,
+  cases TEXT NOT NULL,
+  regimes TEXT NOT NULL,
+  sommes TEXT NOT NULL,
+  PRIMARY KEY (mois, version)
+);`,
+  `CREATE TRIGGER IF NOT EXISTS correction_tri_jamais_reecrit BEFORE UPDATE ON correction_tri
+BEGIN
+  SELECT RAISE(ABORT, 'correction_tri : un tri figé ne se réécrit jamais');
+END;`,
+  `CREATE TRIGGER IF NOT EXISTS correction_tri_jamais_efface BEFORE DELETE ON correction_tri
+BEGIN
+  SELECT RAISE(ABORT, 'correction_tri : un tri figé ne s’efface jamais');
+END;`,
+  `CREATE TABLE IF NOT EXISTS correction_propositions (
+  id TEXT PRIMARY KEY,
+  cree_le TEXT NOT NULL,
+  source TEXT NOT NULL,
+  etat TEXT NOT NULL,
+  etat_le TEXT NOT NULL,
+  levier TEXT NOT NULL,
+  avant TEXT NOT NULL,
+  apres TEXT NOT NULL,
+  marches TEXT NOT NULL,
+  declaration TEXT NOT NULL,
+  base TEXT NOT NULL,
+  tri_mois TEXT,
+  tri_version INTEGER,
+  cas TEXT,
+  cible TEXT,
+  banc TEXT,
+  essai TEXT,
+  version_adoptee INTEGER,
+  rang_file INTEGER,
+  maj_le TEXT NOT NULL
+) WITHOUT ROWID;`,
+  `CREATE TRIGGER IF NOT EXISTS correction_propositions_contenu_fige BEFORE UPDATE OF id, cree_le, source, levier, avant, apres, marches, declaration, base, tri_mois, tri_version, cas, cible ON correction_propositions
+BEGIN
+  SELECT RAISE(ABORT, 'correction_propositions : le contenu d’une proposition ne change jamais (seuls son état et son suivi avancent)');
+END;`,
+  `CREATE TRIGGER IF NOT EXISTS correction_propositions_jamais_effacee BEFORE DELETE ON correction_propositions
+BEGIN
+  SELECT RAISE(ABORT, 'correction_propositions : une proposition ne s’efface jamais');
+END;`,
+  `CREATE TABLE IF NOT EXISTS correction_journal (
+  n INTEGER PRIMARY KEY AUTOINCREMENT,
+  le TEXT NOT NULL,
+  proposition TEXT,
+  evenement TEXT NOT NULL,
+  source TEXT NOT NULL,
+  phrase TEXT NOT NULL,
+  details TEXT NOT NULL
+);`,
+  `CREATE TRIGGER IF NOT EXISTS correction_journal_jamais_reecrit BEFORE UPDATE ON correction_journal
+BEGIN
+  SELECT RAISE(ABORT, 'correction_journal : le journal ne se réécrit jamais');
+END;`,
+  `CREATE TRIGGER IF NOT EXISTS correction_journal_jamais_efface BEFORE DELETE ON correction_journal
+BEGIN
+  SELECT RAISE(ABORT, 'correction_journal : le journal ne s’efface jamais');
+END;`,
+  `CREATE TABLE IF NOT EXISTS correction_resumes (
+  mois TEXT NOT NULL,
+  version INTEGER NOT NULL,
+  ecrit_le TEXT NOT NULL,
+  modele TEXT,
+  mode TEXT,
+  texte TEXT,
+  fiche TEXT NOT NULL,
+  garde TEXT,
+  usage TEXT,
+  cout_usd REAL,
+  essai INTEGER NOT NULL,
+  sans_appel INTEGER NOT NULL DEFAULT 0,
+  raison TEXT,
+  PRIMARY KEY (mois, version)
+) WITHOUT ROWID;`,
+  `CREATE TRIGGER IF NOT EXISTS correction_resumes_jamais_reecrit BEFORE UPDATE ON correction_resumes
+BEGIN
+  SELECT RAISE(ABORT, 'correction_resumes : un résumé écrit ne se réécrit jamais');
+END;`,
+  `CREATE TRIGGER IF NOT EXISTS correction_resumes_jamais_efface BEFORE DELETE ON correction_resumes
+BEGIN
+  SELECT RAISE(ABORT, 'correction_resumes : un résumé écrit ne s’efface jamais');
+END;`,
+  `CREATE TABLE IF NOT EXISTS correction_resumes_essais (
+  mois TEXT NOT NULL,
+  version INTEGER NOT NULL,
+  le TEXT NOT NULL,
+  type TEXT NOT NULL,
+  raison TEXT,
+  tokens INTEGER,
+  PRIMARY KEY (mois, version, le)
+) WITHOUT ROWID;`,
+  `CREATE TRIGGER IF NOT EXISTS correction_resumes_essais_jamais_reecrit BEFORE UPDATE ON correction_resumes_essais
+BEGIN
+  SELECT RAISE(ABORT, 'correction_resumes_essais : un essai noté ne se réécrit jamais');
+END;`,
+  `CREATE TRIGGER IF NOT EXISTS correction_resumes_essais_jamais_efface BEFORE DELETE ON correction_resumes_essais
+BEGIN
+  SELECT RAISE(ABORT, 'correction_resumes_essais : un essai noté ne s’efface jamais');
+END;`,
+  'CREATE INDEX IF NOT EXISTS idx_correction_propositions_etat ON correction_propositions(etat);',
+  'CREATE INDEX IF NOT EXISTS idx_correction_journal_proposition ON correction_journal(proposition);'
+];
+
 const FD_HISTORY_INDEXES = [
   'CREATE INDEX IF NOT EXISTS idx_fd_history_code_date ON fd_history(code, date);',
   'CREATE INDEX IF NOT EXISTS idx_fd_history_dom ON fd_history(dom);',
@@ -1539,6 +1667,7 @@ const DDL = [
   ...PLAYER_RATINGS_DDL,
   ...TEAM_STYLE_DDL,
   ...SIMULATION_DDL,
+  ...CORRECTION_DDL,
   'CREATE INDEX IF NOT EXISTS idx_matches_date ON matches(date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_league_date ON matches(league, date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_home ON matches(home_name);',

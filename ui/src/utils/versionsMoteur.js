@@ -553,3 +553,99 @@ export const PHRASES_DU_MODELE_DE_BUTS = Object.freeze({
   pasProuveNormal: 'Une famille « pas prouvé » à 800 matchs est l’issue normale ; seul « moins bon » est un échec.',
   temoin: 'Le score exact est calculé à blanc pour être regardé (témoin), jamais jugé : sa précision ne se prouve pas à 800 matchs.'
 });
+
+// ============================================================ étape 26 : la boucle de correction (partie E, 28/10/2026)
+
+/** Le nom court des candidates connues (celui que dit la place de l'essai, data/correction/miseALEssai.js). */
+const NOMS_COURTS_DES_CANDIDATES = Object.freeze({ 'modele-buts-v1': 'Modèle de buts unique' });
+
+/** Le nom court d'une candidate, pour une phrase : le nom connu, « une correction du mois », sa phrase si elle est courte, ou son identifiant. */
+export function nomCourtDeLaCandidate(c) {
+  if (!c) return 'la candidate';
+  if (NOMS_COURTS_DES_CANDIDATES[c.id]) return NOMS_COURTS_DES_CANDIDATES[c.id];
+  if (c.origine === 'correction-mensuelle') return `une correction du mois (${c.id})`;
+  return typeof c.enMots === 'string' && c.enMots.length <= 60 ? c.enMots : c.id;
+}
+
+/** « 14/11 » (jour et mois de Paris), ou le repli. */
+function jourCourtParis(iso, repli = 'date inconnue') {
+  const t = Date.parse(iso ?? '');
+  if (!Number.isFinite(t)) return repli;
+  return new Intl.DateTimeFormat('fr-FR', { timeZone: FUSEAU, day: '2-digit', month: '2-digit' }).format(new Date(t));
+}
+
+/**
+ * L'AVERTISSEMENT de « Paramètres du moteur » quand une candidate occupe la place de l'essai à blanc (constat 8 de la
+ * critique, bug B46) — enregistrer (ou remettre les valeurs par défaut) crée une nouvelle version du moteur, même pour un
+ * réglage de pari. Deux textes, exacts :
+ *   - candidate EN ESSAI : l'essai ne repart de zéro que si cette version est encore en service la nuit prochaine ; le
+ *     verdict serait repoussé d'au moins autant de jours que l'essai en a déjà ;
+ *   - candidate JUGÉE : enregistrer efface son verdict et recommence son essai (au moins son horizon en jours).
+ * `etat` : la réponse de GET /api/config/versions (EngineVersionsPanel l'émet à Réglages). Rend null sans candidate en
+ * essai ou jugée ; sinon { genre, titre, texte, confirmation, confirmationRemise }.
+ */
+export function avertissementDeLEnregistrement(etat) {
+  const c = etat?.candidate ?? null;
+  if (!c || !['en-essai', 'jugee', 'autre-version'].includes(c.statut)) return null;
+  const nom = nomCourtDeLaCandidate(c);
+  if (c.statut === 'jugee') {
+    const verdict = c.jugement?.verdict ?? null;
+    const jours = Number.isFinite(c.horizon?.jours) ? c.horizon.jours : 21;
+    const texte =
+      verdict === 'retenu'
+        ? `Enregistrer efface le verdict « retenu » de la candidate et recommence son essai (au moins ${jours} jours) : adoptez-la d’abord, ou attendez.`
+        : `Enregistrer efface le verdict « ${verdictDit(verdict).court} » de la candidate et recommence son essai (au moins ${jours} jours).`;
+    return {
+      genre: 'jugee',
+      titre: `Une candidate est jugée : « ${nom} »`,
+      texte,
+      confirmation: `${texte}\n\nEnregistrer quand même ?`,
+      confirmationRemise: `${texte.replace(/^Enregistrer/, 'Remettre les valeurs par défaut')}\n\nRemettre les valeurs par défaut quand même ?`
+    };
+  }
+  const numero = c.essai?.numero ?? 1;
+  const depuis = c.essai?.depuis ?? c.enEssaiDepuis ?? null;
+  const jours = Math.max(1, Number.isFinite(c.premiersChiffres?.joursEcoules) ? c.premiersChiffres.joursEcoules : 0);
+  const auPlusTot = c.premiersChiffres?.auPlusTotLe ?? null;
+  const repousse = `verdict repoussé d’au moins ${jours} jour${jours > 1 ? 's' : ''}`;
+  const texte =
+    `Une candidate est en essai à blanc (« ${nom} », essai n° ${numero}${depuis ? ` depuis le ${jourCourtParis(depuis)}` : ''}). ` +
+    'Enregistrer ces réglages crée une nouvelle version du moteur, même pour un réglage de pari (vos bookmakers, le seuil de value, la mise) : ' +
+    `si cette version est encore en service la nuit prochaine, l’essai repart de zéro (${repousse}). ` +
+    `Si ce n’est pas urgent, attendez le verdict${auPlusTot ? ` (au plus tôt le ${jourCourtParis(auPlusTot)})` : ''}.`;
+  return {
+    genre: 'en-essai',
+    titre: 'Une candidate est en essai à blanc',
+    texte,
+    confirmation: `Enregistrer ces réglages ?\n\nSi cette version est encore en service la nuit prochaine, l’essai de la candidate « ${nom} » repart de zéro (${repousse}).\n\nEnregistrer quand même ?`,
+    confirmationRemise: `Remettre les valeurs par défaut ?\n\nC’est aussi une nouvelle version du moteur : si elle est encore en service la nuit prochaine, l’essai de la candidate « ${nom} » repart de zéro (${repousse}).\n\nRemettre les valeurs par défaut quand même ?`
+  };
+}
+
+/**
+ * Vérification finale de l'étape 26 (constat 5) : la confirmation GÉNÉRIQUE de « Enregistrer » et de « Réinitialiser les
+ * valeurs par défaut » tant que l'état des versions n'est pas lu (`etat` null : GET /api/config/versions lent ou en échec)
+ * — avant, les deux partaient alors sans note ni confirmation. Une fois l'état lu, seul l'avertissement d'une candidate en
+ * essai ou jugée (avertissementDeLEnregistrement) demande confirmation. `remise` : le texte de la remise à zéro. Rend le
+ * texte à confirmer, ou null quand l'état est lu.
+ */
+export const CONFIRMATIONS_SANS_ETAT = Object.freeze({
+  enregistrer: 'L’état de l’essai à blanc n’est pas lu : si une candidate est en essai, enregistrer peut faire repartir son essai.\n\nEnregistrer quand même ?',
+  remise: 'L’état de l’essai à blanc n’est pas lu : si une candidate est en essai, remettre les valeurs par défaut peut faire repartir son essai.\n\nRemettre les valeurs par défaut quand même ?'
+});
+export const confirmationSansEtat = (etat, { remise = false } = {}) => (etat ? null : remise ? CONFIRMATIONS_SANS_ETAT.remise : CONFIRMATIONS_SANS_ETAT.enregistrer);
+
+/** La fin d'une candidate passée, en mots — celle d'une correction de la boucle (étape 26) se dit à part (conception §5.8). */
+export function finDUneCandidateDite(c) {
+  const fin = c?.fin ?? null;
+  if (fin === 'retiree-du-code' && c?.origine === 'correction-mensuelle') return 'fermée par la boucle de correction (voir Santé du moteur)';
+  const FINS = { adoptee: 'adoptée', remplacee: 'remplacée par une autre candidate', modifiee: 'modifiée (une nouvelle forme a pris sa place)', 'retiree-du-code': 'retirée du code', refusee: 'refusée' };
+  return FINS[fin] ?? (fin ? String(fin) : 'fin non dite');
+}
+
+/** Les candidates passées (les plus récentes d'abord) : leur nom, leur étape, leur fin en mots, quand. */
+export function candidatesPasseesDites(etat) {
+  return [...(etat?.candidatesPassees ?? [])]
+    .reverse()
+    .map((c) => ({ id: c.id, nom: nomCourtDeLaCandidate(c), etape: c.etape ?? '?', fin: finDUneCandidateDite(c), le: quandParis(c.finLe), version: c.version ?? null }));
+}

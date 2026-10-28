@@ -21,6 +21,9 @@
  *     calibration, régimes, porte de l'adoption, horizon) ; ses marchés et témoins en mots ;
  *   - (étape 28, 27/10/2026) la simulation complète à blanc (EngineSimulationTrial : la porte 1, la dernière nuit,
  *     l'avancement de la preuve, les deux interrupteurs de l'affichage) — hors du moteur, elle ne fait aucune version.
+ *   - (étape 26, 28/10/2026) les candidates passées et leur fin en mots — celle d'une correction de la boucle se dit
+ *     « fermée par la boucle de correction (voir Santé du moteur) » — ; et l'état lu est ÉMIS (`lu`) : Réglages en tire
+ *     l'avertissement de « Paramètres du moteur » quand une candidate est en essai ou jugée.
  * Tout est LU (GET /api/config/versions, un état du serveur qui n'écrit rien) ;
  * les écritures sont le retour arrière (POST /api/config/versions/retour) et
  * l'adoption (POST /api/config/versions/adopter), chacune avec ce qui est vu à
@@ -59,6 +62,7 @@ import {
   messageApresRetour
 } from '@/utils/versionsMoteur.js';
 import { useConfigStore } from '@/stores/configStore.js';
+import { candidatesPasseesDites } from '@/utils/versionsMoteur.js';
 
 const props = defineProps({
   /** Heure du dernier enregistrement des réglages (ou remise aux valeurs par défaut) : la carte se relit. */
@@ -67,7 +71,7 @@ const props = defineProps({
   passeTermineeLe: { type: String, default: null }
 });
 
-const emit = defineEmits(['retour']);
+const emit = defineEmits(['retour', 'lu']);
 
 const etat = ref({ loading: false, error: null, data: null });
 const action = ref({ enCours: false, message: null, erreur: null });
@@ -116,6 +120,12 @@ const kpiDeLaDerive = computed(() => kpiDerive(d.value));
 const laDerive = computed(() => etatDeLaDerive(d.value));
 const correctionMensuelle = computed(() => d.value?.aVenir?.correctionMensuelle ?? null);
 const ancienServeur = computed(() => Boolean(d.value?.aVenir?.adoption));
+// Étape 26 : les candidates passées (la plus récente d’abord), leur fin en mots.
+const candidatesPassees = computed(() => candidatesPasseesDites(d.value));
+// Étape 26 : l'état lu est émis à chaque lecture (Réglages en tire l'avertissement de « Paramètres du moteur »).
+watch(() => etat.value.data, (donnees) => {
+  if (donnees) emit('lu', donnees);
+});
 
 async function adopter() {
   const texte = texteDeConfirmationAdoption(d.value);
@@ -324,6 +334,12 @@ async function revenir() {
       <p v-if="d?.candidateAdoptee" class="ev__petit">
         Dernière candidate adoptée : « {{ d.candidateAdoptee.id }} » (étape {{ d.candidateAdoptee.etape }}), devenue la version n° {{ d.candidateAdoptee.version }} le {{ quandParis(d.candidateAdoptee.le) }}.
       </p>
+      <div v-if="candidatesPassees.length" class="ev__passees" data-candidates-passees>
+        <p class="ev__petit"><strong>Candidates passées</strong> (la plus récente d’abord) :</p>
+        <ul class="ev__liste-passees">
+          <li v-for="c in candidatesPassees" :key="`${c.id}-${c.le}`" class="ev__petit">« {{ c.nom }} » (étape {{ c.etape }}) — {{ c.fin }}, le {{ c.le }}<template v-if="c.version"> (version n° {{ c.version }})</template></li>
+        </ul>
+      </div>
     </div>
 
     <!-- 4 bis. Étape 27 : la candidate du modèle de buts unique, famille par famille (seulement pour elle). -->
@@ -684,5 +700,14 @@ async function revenir() {
   .ev__fiche {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+
+/* Étape 26 : les candidates passées, en petite liste sous la fiche de la candidate. */
+.ev__liste-passees {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding-left: 18px;
 }
 </style>

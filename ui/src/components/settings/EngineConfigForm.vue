@@ -5,6 +5,7 @@ import AppButton from '@/components/common/AppButton.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
 import { etatDuModeleDansLesReglages } from '@/utils/modeleDeButs.js';
 import { BOOKMAKERS } from '@/utils/vosBookmakers.js';
+import { avertissementDeLEnregistrement, confirmationSansEtat } from '@/utils/versionsMoteur.js';
 
 /**
  * Les réglages du moteur (seuils, Kelly, mise, corrélation, cote plafond) et
@@ -17,9 +18,17 @@ import { BOOKMAKERS } from '@/utils/vosBookmakers.js';
  * absent : l'ancien modèle) ; « Réinitialiser les valeurs par défaut » le retire
  * (les valeurs par défaut ne l'ont pas) : quand il est en service, Réglages
  * (SettingsView) le dit dans une confirmation avant toute remise à zéro.
+ *
+ * Étape 26 du plan (28/10/2026, constat 8 de la critique) : quand une candidate occupe la place de l'essai à blanc
+ * (`essai` : l'état de GET /api/config/versions, que Réglages reçoit de la carte « Versions du moteur »), une note
+ * AU-DESSUS des boutons dit ce qu'enregistrer fait à son essai — deux textes exacts, candidate en essai ou jugée
+ * (utils/versionsMoteur.js) — et « Enregistrer » le redemande (window.confirm ; « Annuler » n’envoie rien). Tant que cet
+ * état n'est pas lu (`essai` null), « Enregistrer » demande une confirmation générique (vérification finale, constat 5).
  */
 const props = defineProps({
   config: { type: Object, required: true },
+  /** Étape 26 : l'état des versions du moteur (la candidate en essai ou jugée), pour l'avertissement ; null sans lui. */
+  essai: { type: Object, default: null },
   saving: { type: Boolean, default: false }
 });
 
@@ -55,6 +64,12 @@ function basculer(key) {
 }
 
 function handleSave() {
+  // Étape 26 : une candidate occupe la place de l'essai — la confirmation d'abord ; « Annuler » n'envoie rien.
+  if (avertissement.value && !window.confirm(avertissement.value.confirmation)) return;
+  // Vérification finale (constat 5) : l'état des versions pas encore lu (lecture lente ou en échec) — une confirmation
+  // générique, pour ne jamais enregistrer sans rien dire pendant un essai.
+  const sansEtat = confirmationSansEtat(props.essai);
+  if (sansEtat && !window.confirm(sansEtat)) return;
   emit('save', {
     edgeThresholdMin: form.edgeThresholdMin,
     edgeThresholdMax: form.edgeThresholdMax,
@@ -71,6 +86,9 @@ const asPercent = (value) => `${(value * 100).toFixed(1)}%`;
 
 // Étape 27 : le modèle de buts unique dans les réglages en service, en mots.
 const modeleDeButs = computed(() => etatDuModeleDansLesReglages(props.config));
+
+// Étape 26 : l'avertissement quand une candidate est en essai à blanc ou jugée (null sinon).
+const avertissement = computed(() => avertissementDeLEnregistrement(props.essai));
 </script>
 
 <template>
@@ -131,6 +149,15 @@ const modeleDeButs = computed(() => etatDuModeleDansLesReglages(props.config));
       <AppIcon name="layers" :size="13" />
       <span>{{ modeleDeButs.texte }}</span>
     </p>
+
+    <!-- Étape 26 : une candidate occupe la place de l'essai à blanc — ce qu'enregistrer fait à son essai, au-dessus des boutons. -->
+    <div v-if="avertissement" class="cm-note is-warning config-form__avertissement" data-avertissement-essai :data-genre="avertissement.genre">
+      <span class="cm-icon-box is-warning is-sm"><AppIcon name="alert" :size="14" /></span>
+      <div>
+        <p class="cm-note__title">{{ avertissement.titre }}</p>
+        <p class="cm-note__text config-form__hint">{{ avertissement.texte }}</p>
+      </div>
+    </div>
 
     <!-- 3. Enregistrer (vert de la marque) ou revenir aux valeurs par défaut. -->
     <div class="config-form__actions">

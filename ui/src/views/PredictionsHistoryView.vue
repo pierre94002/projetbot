@@ -19,6 +19,7 @@ import BetsTicketsView from '@/views/BetsTicketsView.vue';
 import BenchView from '@/views/BenchView.vue';
 import ClosingValuePanel from '@/components/analysis/ClosingValuePanel.vue';
 import CalibrationPanel from '@/components/analysis/CalibrationPanel.vue';
+import CorrectionTriPanel from '@/components/analysis/CorrectionTriPanel.vue';
 import AiScorecardPanel from '@/components/analysis/AiScorecardPanel.vue';
 import { formatDay, formatPercent } from '@/utils/format.js';
 import { marketBreakdownLabel } from '@/utils/betTrends.js';
@@ -409,6 +410,9 @@ onMounted(() => {
 
         <!-- 1 ter. LA CALIBRATION DU MOIS : annoncé face au réalisé, sur les pronostics GELÉS (étape 20 du plan, 13/10/2026) -->
         <CalibrationPanel />
+
+        <!-- 1 ter bis. LES ÉCARTS DU MOIS : malchance ou vrai défaut, sur l'issue de référence et l'issue favorite de chaque marché (1N2 : domicile et favori), en comptant l'année (étape 26 du plan, 28/10/2026) — le détail des 22 cases et tout le journal de la boucle de correction -->
+        <CorrectionTriPanel />
 
         <!-- 1 quater. LE CARNET DE L'IA : ses avis d'avant-match face au résultat, à la clôture et au moteur seul (étape 21 du plan, 14/10/2026) -->
         <AiScorecardPanel />

@@ -507,7 +507,9 @@ test('le code : routes et branchements ; l’essai jugé dans l’étape de nuit
   const avec = (motif) => fichiers.filter((f) => motif.test(sansCommentaires(lire(f)))).sort();
   assert.deepEqual(avec(/\badopterLaCandidate\s*\(/), ['api/controllers/config.controller.js', 'core/engine/engineVersions.js']);
   assert.deepEqual(avec(/\bnoterLEssai\s*\(/), ['core/engine/engineVersions.js', 'data/enregistreurs/moteurABlanc.js']);
-  assert.deepEqual(avec(/\bproposerUneCandidate\s*\(/), ['core/engine/engineVersions.js'], 'le point d’entrée existe ; rien ne propose encore (étape 26)');
+  // Étape 26 (partie B, 28/10/2026) : la boucle de correction propose — par un seul module, miseALEssai.js, qui importe
+  // le point d'entrée de engineVersions.js (pas de recopie) et ne l'appelle que quand la place est libre.
+  assert.deepEqual(avec(/\bproposerUneCandidate\s*\(/), ['core/engine/engineVersions.js', 'data/correction/miseALEssai.js'], 'le point d’entrée existe ; seule la boucle de correction (étape 26) propose');
   // Ce qui se montre, se parie ou part à l'IA ne connaît ni l'essai, ni l'adoption, ni le banc de la candidate.
   for (const f of ['core/engine/verdictPari.js', 'core/engine/oddsEngine.js', 'data/opportunities.js', 'data/screener.js', 'core/ai/matchAiAnalysisService.js', 'core/ai/compactContext.js', 'core/ai/matchAiAnalysisPrompt.js', 'core/ai/autoMatchAiTrigger.js', 'api/controllers/analysis.controller.js', 'api/controllers/bets.controller.js', 'api/controllers/predictions.controller.js', 'data/enregistreurs/gelPronostics.js']) {
     assert.doesNotMatch(sansCommentaires(lire(f)), /essaiCandidate|bancCandidate|horizonEssai|adopterLaCandidate|noterLEssai|jugerLEssai|deriveMoteur|proposerUneCandidate/, f);

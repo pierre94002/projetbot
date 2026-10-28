@@ -110,7 +110,9 @@ test('B2 l’ordre de la nuit : … → sauvegarde → simulationSaisons → sim
   assert.ok(!cles.slice(0, i).some((k) => /simulation/i.test(k)));
   assert.deepEqual(cles.filter((k) => ['gelPronostics', 'moteurABlanc', 'calibrationMensuelle', 'carteOuParier', 'sauvegarde'].includes(k)), ['gelPronostics', 'moteurABlanc', 'calibrationMensuelle', 'carteOuParier', 'sauvegarde']);
   assert.equal(cles.indexOf('moteurABlanc'), cles.indexOf('gelPronostics') + 1);
-  assert.equal(cles.indexOf('sauvegarde'), cles.indexOf('carteOuParier') + 1);
+  // Étape 26 (28/10/2026) : la boucle de correction s'intercale entre la carte et la sauvegarde (avant elle : rien de la 28).
+  assert.equal(cles.indexOf('boucleCorrection'), cles.indexOf('carteOuParier') + 1);
+  assert.equal(cles.indexOf('sauvegarde'), cles.indexOf('boucleCorrection') + 1);
 });
 
 test('B2 « due » : une fois par jour civil de Paris, ou quand la passe d’avant l’a reportée ; jamais forcée par un clic (manuel) ; les matchs avec l’interrupteur des enregistreurs', () => {

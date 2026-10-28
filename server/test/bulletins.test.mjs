@@ -758,9 +758,11 @@ test('BUDGET (étape 4) : le bulletin et le bilan sont notés au journal à leur
   // Le modèle et l’effort : ceux des analyses de match ; aucun outil (le modèle ne lit que la fiche).
   assert.deepEqual(s.appels.map((a) => [a.type, a.model, a.effort, a.tools]), [['bulletin', 'sonnet', 'low', ''], ['bilan-semaine', 'sonnet', 'low', '']]);
   // Le compteur du plafond : une place par appel, rangée dans son champ.
-  assert.deepEqual(s.compteur, { day: '2026-10-05', count: 2, preMatch: 0, postMatch: 0, bulletin: 1, bilanSemaine: 1, skippedPreMatch: 0, skippedPostMatch: 0 });
+  // Étape 26 (partie D) : le compteur a aussi le champ du résumé du mois (0 ici).
+  assert.deepEqual(s.compteur, { day: '2026-10-05', count: 2, preMatch: 0, postMatch: 0, bulletin: 1, bilanSemaine: 1, resumeMois: 0, skippedPreMatch: 0, skippedPostMatch: 0 });
   // L’état du budget : les deux types sont des appels AUTOMATIQUES ; le compteur et le journal s’accordent.
-  assert.deepEqual(s.etat.types, ['avance', 'coup-d-envoi', 'reprise', 'revue', 'bulletin', 'bilan-semaine', 'manuel', 'autre']);
+  // Étape 26 (partie D) : le résumé du mois de la boucle de correction, un type de plus, juste après le bilan.
+  assert.deepEqual(s.etat.types, ['avance', 'coup-d-envoi', 'reprise', 'revue', 'bulletin', 'bilan-semaine', 'resume-mois', 'manuel', 'autre']);
   assert.deepEqual(s.etat.parType, [{ type: 'bulletin', libelle: 'Bulletin du jour', automatique: true, appels: 1, tokens: 4000 }, { type: 'bilan-semaine', libelle: 'Bilan de la semaine', automatique: true, appels: 1, tokens: 4000 }]);
   assert.equal(s.etat.coherence.egal, true);
   assert.deepEqual([s.etat.coherence.compteur, s.etat.coherence.journalAutomatiques], [2, 2]);
@@ -896,7 +898,9 @@ test('les DEUX ÉTAPES de l’actualisation : après le carnet de l’IA, avant 
   assert.equal(s.etapes[i - 2], 'carnetIA');
   assert.equal(s.etapes[i - 1], 'dossiersIA');
   assert.equal(s.etapes[i + 1], 'bilanSemaine');
-  assert.equal(s.etapes[i + 2], 'controleQuotidien');
+  // Étape 26 (partie D, 28/10/2026) : le résumé du mois de la boucle de correction s’intercale entre le bilan et le contrôle quotidien.
+  assert.equal(s.etapes[i + 2], 'resumeCorrection');
+  assert.equal(s.etapes[i + 3], 'controleQuotidien');
   assert.equal(s.etapes.at(-1), 'controleQuotidien');
   assert.equal(s.etapes.filter((k) => k === 'bulletin' || k === 'bilanSemaine').length, 2);
   assert.deepEqual(s.labels, { bulletin: "Bulletin du jour (texte de l'IA, un seul appel par jour)", bilanSemaine: "Bilan de la semaine (texte de l'IA, un seul appel par semaine)" });
@@ -969,7 +973,8 @@ test('hygiène : jamais l’API Anthropic à la clé ni l’ancien audit par lot
   // Le journal : les deux types sont des types d’appel connus du budget.
   const ledger = lireSrc('data', 'repositories', 'claudeUsageLedger.js');
   assert.match(ledger, /bulletin: 'Bulletin du jour',\s*'bilan-semaine': 'Bilan de la semaine'/);
-  assert.match(ledger, /TYPES_AUTOMATIQUES = Object\.freeze\(\['avance', 'coup-d-envoi', 'reprise', 'revue', 'bulletin', 'bilan-semaine'\]\)/);
+  // Étape 26 (partie D, décision 12) : le résumé du mois compte lui aussi sur le plafond.
+  assert.match(ledger, /TYPES_AUTOMATIQUES = Object\.freeze\(\['avance', 'coup-d-envoi', 'reprise', 'revue', 'bulletin', 'bilan-semaine', 'resume-mois'\]\)/);
 });
 
 test('aucun fichier du moteur n’est touché par l’étape : les nouveaux fichiers et ceux qu’elle retouche n’en font pas partie, aucun fichier du moteur ne les importe', async () => {

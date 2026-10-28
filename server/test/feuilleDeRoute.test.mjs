@@ -392,17 +392,17 @@ test('étape 27 — une ligne PARTIELLE ne finit pas l’étape : la 27 est « e
   assert.match(e27.historique[0].change, /l’étape n’est pas finie/);
   assert.ok(e27.historique[0].mesure.length > 100, 'ce qui a été mesuré reste dit');
   // La page compte la 27 « en cours », pas « terminée » (le 21/10/2026 : 29 terminées, 1 en cours ; depuis le 27/10/2026,
-  // la 28 aussi, livrée à blanc : 2 en cours).
-  assert.deepEqual([...PARTIELLES], ['27', '28']);
+  // la 28 aussi, livrée à blanc : 2 en cours ; depuis le 28/10/2026, la 26 aussi, son lot 1 livré : 3 en cours).
+  assert.deepEqual([...PARTIELLES], ['27', '28', '26']);
   assert.equal(e.avancement.terminees, NB_TERMINEES);
-  assert.equal(e.avancement.enCours, 2);
+  assert.equal(e.avancement.enCours, 3);
   assert.ok(!TERMINEES.has('27'));
   assert.equal(toutesLesEtapes(e).filter((x) => x.etat === 'terminee').length, NB_TERMINEES);
   const lot5 = e.lots.find((l) => l.numero === 5);
-  assert.equal(lot5.enCours, 2);
+  assert.equal(lot5.enCours, 3);
   assert.equal(lot5.termine, false);
   // Les autres étapes n'ont rien qui reste dit.
-  assert.deepEqual(toutesLesEtapes(e).filter((x) => x.reste).map((x) => x.id), ['27', '28']);
+  assert.deepEqual(toutesLesEtapes(e).filter((x) => x.reste).map((x) => x.id), ['26', '27', '28']);
   // Chaque ligne partielle dit ce qui reste (une chaîne, au moins quelques mots) ; les autres valent null.
   for (const h of HISTORIQUE) {
     assert.ok(h.partielle === null || (typeof h.partielle === 'string' && h.partielle.trim().length >= 10), `étape ${h.etape} du ${h.fin} : « partielle » dit ce qui reste, ou vaut null`);
@@ -416,7 +416,7 @@ test('étape 27 — une ligne PARTIELLE ne finit pas l’étape : la 27 est « e
   const fini = etatFeuilleDeRoute({ maintenant: MIDI, pierre: PIERRE_VIDE, historique: [...HISTORIQUE, adoption], mesure: MESURE_ABSENTE });
   const f27 = toutesLesEtapes(fini).find((x) => x.id === '27');
   assert.deepEqual([f27.etat, f27.fin, f27.heureFin, f27.reste, f27.historique.length], ['terminee', '2026-11-15', '~9 h', null, 2]);
-  assert.deepEqual([fini.avancement.terminees, fini.avancement.enCours], [NB_TERMINEES + 1, 1], 'la 28 reste en cours');
+  assert.deepEqual([fini.avancement.terminees, fini.avancement.enCours], [NB_TERMINEES + 1, 2], 'la 26 et la 28 restent en cours');
   // Une étape dans ETAPES_EN_COURS sans ligne reste « en cours », sans rien qui reste dit.
   const libre = LIBRES[0];
   const enCours = toutesLesEtapes(etatFeuilleDeRoute({ maintenant: MIDI, pierre: PIERRE_VIDE, enCours: [libre], mesure: MESURE_ABSENTE })).find((x) => x.id === libre);
@@ -451,7 +451,61 @@ test('étape 28 — livrée à blanc : « en cours » (« livrée à blanc, preu
   const fini = etatFeuilleDeRoute({ maintenant: MIDI, pierre: PIERRE_VIDE, historique: [...HISTORIQUE, verdict], mesure: MESURE_ABSENTE });
   const f28 = toutesLesEtapes(fini).find((x) => x.id === '28');
   assert.deepEqual([f28.etat, f28.fin, f28.reste, f28.historique.length], ['terminee', '2026-11-17', null, 2]);
-  assert.deepEqual([fini.avancement.terminees, fini.avancement.enCours], [NB_TERMINEES + 1, 1], 'la 27 reste en cours');
+  assert.deepEqual([fini.avancement.terminees, fini.avancement.enCours], [NB_TERMINEES + 1, 2], 'la 26 et la 27 restent en cours');
+});
+
+test('étape 26 — lot 1 livré : « en cours » (« lot 1 livré : … ; lot 2 au verdict de l’étape 27 : … »), sans date de fin ; son histoire dit en mots simples le tri du mois, rien qui parte seul, rien pendant l’essai de la 27, le résumé du mois dans le plafond, les écrans et le moteur inchangé ; le lot 2 la finira', () => {
+  const RESTE_26 = 'lot 1 livré : tri du mois, propositions, banc au clic, journal, résumé du mois, écrans ; lot 2 au verdict de l’étape 27 : la fiche complète du pronostic et le relais de la place d’essai';
+  const e = etatFeuilleDeRoute({ maintenant: MIDI, pierre: PIERRE_VIDE, mesure: MESURE_ABSENTE });
+  const e26 = toutesLesEtapes(e).find((x) => x.id === '26');
+  assert.deepEqual([e26.etat, e26.reste, e26.fin, e26.heureFin], ['en-cours', RESTE_26, null, null], 'pas de date de fin : le lot 2 reste à faire');
+  assert.equal(e26.historique.length, 1);
+  const [h] = e26.historique;
+  assert.equal(h.fin, '2026-10-28');
+  // Ce qui a changé, en mots simples : le tri et sa règle, rien qui parte seul, rien pendant l'essai de la 27, le résumé
+  // du mois dans le plafond, les écrans, le lot 2, le moteur inchangé.
+  for (const morceau of [
+    'l’étape n’est pas finie',
+    'en « malchance » ou « vrai défaut »',
+    'au moins deux mois de suite d’au moins 200 matchs, un écart d’au moins 2 points, dans le même sens les deux derniers mois',
+    'Rien ne part seul : « Mesurer au banc — environ 10 min » se lance au clic de Pierre',
+    'n’est adoptée que d’un clic de Pierre',
+    '« Revenir à la version précédente » tant qu’elle est la dernière version',
+    'Pendant l’essai de l’étape 27, la boucle trie et montre, mais ne propose rien, et le formulaire est fermé avec sa raison écrite',
+    'compté dans le plafond des 150 ; aucun appel quand il n’y a rien à dire',
+    '« Corrections à accepter ou refuser »',
+    '« Écarts du mois : malchance ou vrai défaut »',
+    'Le lot 2 viendra après le verdict de l’étape 27 : la fiche complète de chaque pronostic et le relais de la place d’essai',
+    'Aucun chiffre ni aucun fichier du moteur ne change.'
+  ]) assert.ok(h.change.includes(morceau), `ce qui a changé dit : « ${morceau} »`);
+  // Pas de jargon (les mots que le constat 14 retire de l'écran), ni dans ce qui a changé, ni dans ce qui a été mesuré,
+  // ni dans ce qui reste : les mots sont coupés sur tout ce qui n'est pas une lettre ou un chiffre.
+  for (const texte of [h.change, h.mesure, e26.reste]) {
+    const mots = new Set(texte.split(/[^A-Za-zÀ-ÖØ-öø-ÿŒœ0-9]+/));
+    assert.deepEqual(['K', 'z', 'lignée', 'lignées', 'variante', 'variantes', 'levier', 'leviers', 'regards'].filter((m) => mots.has(m)), [], 'pas de jargon');
+  }
+  // Ce qui a été mesuré : le tri dans le bac, les années simulées, octobre au 01/11, les empreintes.
+  for (const morceau of [
+    'le tri d’octobre lit 51 714 relevés de pronostics gelés un match à la fois (806 matchs réglés) en 1,35 s',
+    'environ 3 % des années ont un faux « vrai défaut »',
+    'Octobre, premier mois trié le 01/11, ne compte qu’à partir du 22/10',
+    'Empreinte du moteur inchangée (16f2459…), celle de la candidate de l’étape 27 aussi (f01dd849…)'
+  ]) assert.ok(h.mesure.includes(morceau), `ce qui a été mesuré dit : « ${morceau} »`);
+  // Le lot 2, plus tard : une ligne qui FINIT l'étape la rend « terminée », avec sa date ; la 27 et la 28 restent en cours.
+  const lot2 = { etape: '26', fin: '2026-11-17', heure: '~9 h', titre: 'Lot 2', change: 'La fiche complète du pronostic et le relais de la place d’essai.', mesure: 'ok', partielle: null, tests: null };
+  const fini = etatFeuilleDeRoute({ maintenant: MIDI, pierre: PIERRE_VIDE, historique: [...HISTORIQUE, lot2], mesure: MESURE_ABSENTE });
+  const f26 = toutesLesEtapes(fini).find((x) => x.id === '26');
+  assert.deepEqual([f26.etat, f26.fin, f26.reste, f26.historique.length], ['terminee', '2026-11-17', null, 2]);
+  assert.deepEqual([fini.avancement.terminees, fini.avancement.enCours], [NB_TERMINEES + 1, 2], 'la 27 et la 28 restent en cours');
+});
+
+test('étape 26 — vérification finale, constat 9 : le résumé du mois dit ses trois essais au plus (un seul appel réussi par mois) ; le temps du tri chez Pierre est une attente (« quelques secondes »), plus une extrapolation chiffrée', () => {
+  const e = etatFeuilleDeRoute({ maintenant: MIDI, pierre: PIERRE_VIDE, mesure: MESURE_ABSENTE });
+  const [h] = toutesLesEtapes(e).find((x) => x.id === '26').historique;
+  assert.ok(h.change.includes('un résumé écrit par l’IA (un seul appel réussi par mois, trois essais au plus, compté dans le plafond des 150 ; aucun appel quand il n’y a rien à dire)'), 'ce qui a changé : les trois essais');
+  assert.doesNotMatch(h.change, /un seul appel, compté/, 'jamais « un seul appel » sans ses essais');
+  assert.ok(h.mesure.includes('chez Pierre, quelques secondes attendues (le temps réel sera rangé dans le bilan de l’étape)'), 'ce qui a été mesuré : une attente');
+  assert.doesNotMatch(h.mesure, /2,5 s et 40 Mo/, 'plus l’extrapolation');
 });
 
 test('état : terminée prime sur mise de côté, qui prime sur en cours, qui prime sur à faire ; une note n’y change rien', () => {

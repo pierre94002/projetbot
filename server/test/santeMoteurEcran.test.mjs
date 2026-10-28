@@ -210,7 +210,10 @@ const LECTEURS_RICHES = Object.freeze({
       adoption: { possible: false, texte: 'pas encore jugée' }
     },
     derive: { dernierMois: { mois: '2026-09', derive: true, signaux: [{ type: 'calibration', libelle: 'Résultat (1N2)' }] }, moisFiges: 1, alerte: { key: 'deriveMoteur' }, probleme: null }
-  })
+  }),
+  // Étape 26 (partie B, 28/10/2026) : la vraie lecture des corrections ouvre la base (openDb) ; jamais dans le
+  // processus des tests — ici la réponse « rien de trié », celle de l'emplacement d'avant la boucle.
+  corrections: () => ({ disponible: false, aAccepter: [] })
 });
 
 // ============================================== 1. les règles de l'écran
@@ -291,6 +294,8 @@ test('règles : l’évolution mois par mois (une pastille par mois figé, jamai
 });
 
 test('règles : la liste « à vérifier » (statut en mots, rouge pour un rouge, ambre pour le reste), le reste à voir dans Réglages ; la structure par défaut a les mêmes neuf cadres, titres et liens que la réponse du serveur', () => {
+  // Chaque lecture remplacée : aucune vraie lecture (qui ouvrirait la base ou un fichier) dans le processus des tests.
+  assert.deepEqual(Object.keys(LECTEURS_RICHES).sort(), Object.keys(S.LECTEURS).sort());
   const r = S.assemblerLaSante({ maintenant, lecteurs: LECTEURS_RICHES });
   const l = R.lignesAVerifier(r.blocs.aVerifier);
   assert.deepEqual(l.map((x) => [x.libelle, x.statut, x.ton]), [['Score face à football-data.co.uk', 'Rouge', 'is-danger'], ['Zéros « non relevé »', 'Orange', 'is-warning']]);
