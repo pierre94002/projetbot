@@ -2,34 +2,34 @@
   "version": 1,
   "jour": "2026-10-29",
   "canal": "claude-code",
-  "majLe": "2026-10-29T06:28:54.577Z",
+  "majLe": "2026-10-29T14:13:08.123Z",
   "totaux": {
-    "appels": 115,
-    "ok": 114,
+    "appels": 118,
+    "ok": 117,
     "echecs": 1,
     "sansTokens": 1,
     "tokens": {
-      "entree": 352,
-      "ecritureCache": 751043,
+      "entree": 358,
+      "ecritureCache": 773408,
       "lectureCache": 791177,
-      "sortie": 479283,
-      "total": 2021855
+      "sortie": 485918,
+      "total": 2050861
     },
-    "equivalentApiUsd": 7.955955,
+    "equivalentApiUsd": 8.111777,
     "parType": {
       "coup-d-envoi": {
-        "appels": 23,
-        "ok": 22,
+        "appels": 25,
+        "ok": 24,
         "echecs": 1,
         "sansTokens": 1,
         "tokens": {
-          "entree": 48,
-          "ecritureCache": 147816,
+          "entree": 52,
+          "ecritureCache": 166948,
           "lectureCache": 115951,
-          "sortie": 89288,
-          "total": 353103
+          "sortie": 94967,
+          "total": 377918
         },
-        "equivalentApiUsd": 1.507431
+        "equivalentApiUsd": 1.640757
       },
       "avance": {
         "appels": 5,
@@ -72,6 +72,20 @@
           "total": 117313
         },
         "equivalentApiUsd": 0.483292
+      },
+      "bulletin": {
+        "appels": 1,
+        "ok": 1,
+        "echecs": 0,
+        "sansTokens": 0,
+        "tokens": {
+          "entree": 2,
+          "ecritureCache": 3233,
+          "lectureCache": 0,
+          "sortie": 956,
+          "total": 4191
+        },
+        "equivalentApiUsd": 0.022496
       }
     }
   },
@@ -3864,6 +3878,100 @@
       "erreur": "Claude Code (headless) n'a pas répondu : Command failed: C:\\Users\\PC\\AppData\\Roaming\\npm\\node_modules\\@anthropic-ai\\claude-code\\bin\\claude.exe -p --output-format json --json-schema {\"type\":\"object\",\"properties\":{\"summary\":{\"type\":\"string\",\"description\":\"Synthèse qualitative en 2-4 phrases : la forme",
       "tokens": null,
       "equivalentApiUsd": null
+    },
+    {
+      "id": "2026-10-29T06:50:32.755Z-18064-1-ebe1e8",
+      "at": "2026-10-29T06:50:32.755Z",
+      "jour": "2026-10-29",
+      "debut": "2026-10-29T06:50:24.059Z",
+      "dureeMs": 8696,
+      "canal": "claude-code",
+      "type": "bulletin",
+      "detail": "bulletin du 2026-10-29",
+      "match": null,
+      "mode": "econome",
+      "fiche": null,
+      "taille": {
+        "consignes": 2595,
+        "message": 1833
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 3233,
+        "lectureCache": 0,
+        "sortie": 956,
+        "total": 4191
+      },
+      "equivalentApiUsd": 0.022496
+    },
+    {
+      "id": "2026-10-29T11:48:17.118Z-18064-2-ea7c14",
+      "at": "2026-10-29T11:48:17.118Z",
+      "jour": "2026-10-29",
+      "debut": "2026-10-29T11:47:49.874Z",
+      "dureeMs": 27244,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-10-29-genclerbirligi-karakopru-belediyespor",
+        "home": "Gençlerbirliği",
+        "away": "Karaköprü Belediyespor",
+        "league": "Türkiye Kupası"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 8221
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 9496,
+        "lectureCache": 0,
+        "sortie": 2590,
+        "total": 12088
+      },
+      "equivalentApiUsd": 0.063888
+    },
+    {
+      "id": "2026-10-29T14:13:08.119Z-18064-3-aabbef",
+      "at": "2026-10-29T14:13:08.119Z",
+      "jour": "2026-10-29",
+      "debut": "2026-10-29T14:12:43.946Z",
+      "dureeMs": 24173,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-10-29-kas-mpasa-corluspor-1947",
+        "home": "Kasımpaşa",
+        "away": "Çorluspor 1947",
+        "league": "Türkiye Kupası"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 8357
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 9636,
+        "lectureCache": 0,
+        "sortie": 3089,
+        "total": 12727
+      },
+      "equivalentApiUsd": 0.069438
     }
   ]
 }
