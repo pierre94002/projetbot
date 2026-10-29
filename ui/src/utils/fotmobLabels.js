@@ -58,6 +58,18 @@ export function meteo(texte) {
 }
 
 /**
+ * La vitesse du vent en km/h (correctif du 28/10/2026). FotMob la donne en MÈTRES PAR SECONDE (rangée telle quelle au
+ * magasin, meta.windSpeed) : les descriptions « …/Wind » de sa météo commencent exactement à 9 m/s = 20 mph = 32 km/h,
+ * le seuil « venteux » de la source. × 3,6, arrondi ; null pour une valeur absente ou illisible. Le serveur a la même
+ * règle (server/src/utils/libellesFotmob.js) pour ce que lit l'IA.
+ */
+export function ventEnKmH(metresParSeconde) {
+  if (metresParSeconde === null || metresParSeconde === undefined || metresParSeconde === '') return null;
+  const v = Number(metresParSeconde);
+  return Number.isFinite(v) ? Math.round(v * 3.6) : null;
+}
+
+/**
  * Tour d'une rencontre : FotMob écrit « Round 4 » aussi bien pour une
  * journée de championnat que pour un tour de coupe.
  */

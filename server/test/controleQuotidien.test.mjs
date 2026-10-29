@@ -569,7 +569,7 @@ test('un écart de BUTEURS façon Celtic – Ferencváros ou de GARDIENS façon 
   assert.deepEqual([e.buteurs.statut, e.buteurs.total, e.gardiens.statut, e.gardiens.total], ['rouge', 1, 'rouge', 1]);
   const [but] = e.buteurs.constats;
   const [gar] = e.gardiens.constats;
-  assert.equal(but.texte, 'Bournemouth – Brentford du 12/09/2026 (2-2) — 0 buts crédités aux joueurs (+ 0 csc adverses) pour un score de 2 : 2 buteurs manquants');
+  assert.equal(but.texte, 'Bournemouth – Brentford du 12/09/2026 (2-2) — 3 buts crédités aux joueurs (+ 0 csc adverses) pour un score de 2 : buteur en trop');
   assert.equal(gar.texte, 'Coventry – Brighton du 13/09/2026 (0-5) — les gardiens de Coventry encaissent 0 alors que l\'adversaire marque 5');
   assert.equal(but.raison, 'Score à vérifier : Bournemouth – Brentford du 12/09/2026 (buteurs et score ne collent pas)');
   assert.equal(gar.raison, 'Score à vérifier : Coventry – Brighton du 13/09/2026 (gardiens et score ne collent pas)');

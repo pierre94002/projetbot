@@ -28,6 +28,7 @@ import { ageAt, infosOf, ensureSquadsBirthdates } from '../db/playerBirthdates.j
 import { currentSeason, seasonBounds } from './seasonWindows.js';
 import { derniereFeuille } from '../db/derniereComposition.js';
 import { forceDuOnzeDeLaComposition } from '../db/playerRatings.js';
+import { ventEnKmH } from '../../utils/libellesFotmob.js';
 
 const JOUR_MS = 86_400_000;
 /** En début de saison, trop peu de matchs pour savoir qui est titulaire : on remonte plus loin. */
@@ -188,11 +189,22 @@ function decrireEquipe(team, league, jour, database) {
  * Le cadre du match utile à une lecture d'avant-match : stade, pelouse,
  * météo, arbitre et ses moyennes face à celles du championnat (cf. mapMeta,
  * fotMobProvider.js). Sans l'affluence ni les champs techniques.
+ *
+ * Correctif du 28/10/2026 (B) : le vent, que FotMob donne en mètres par
+ * seconde (rangé tel quel au magasin), est converti en km/h ici — c'est ce
+ * que l'IA lit (la fiche compacte, l'ancienne forme, et l'instantané gardé
+ * avec l'analyse), et ses consignes disent « windSpeed en km/h ». La meta
+ * reçue n'est jamais modifiée.
  */
-function cadreDuMatch(meta) {
+export function cadreDuMatch(meta) {
   if (!meta) return null;
   const garder = ['round', 'stadium', 'city', 'capacity', 'surface', 'weather', 'temperature', 'windSpeed', 'precipitation', 'referee'];
   const cadre = Object.fromEntries(garder.filter((k) => meta[k] != null).map((k) => [k, meta[k]]));
+  if ('windSpeed' in cadre) {
+    const kmh = ventEnKmH(cadre.windSpeed);
+    if (kmh === null) delete cadre.windSpeed;
+    else cadre.windSpeed = kmh;
+  }
   return Object.keys(cadre).length ? cadre : null;
 }
 

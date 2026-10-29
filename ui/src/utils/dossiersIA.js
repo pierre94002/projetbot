@@ -7,6 +7,8 @@
  * la provenance, et les lignes des tableaux, avec leur pied Σ / ⌀ — toujours affichés, même vides.
  */
 
+import { retourPrevu } from './fotmobLabels.js';
+
 /** « 18/10/2026 », au jour de PARIS pour un instant (un calcul de 1 h du matin le 23 n'est pas « du 22 »). */
 const JOUR_DE_PARIS = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Paris' });
 export function jourDit(iso, { annee = true } = {}) {
@@ -145,11 +147,11 @@ export function lignesDesRetirees(lecons, preuves = {}) {
   };
 }
 
-/** Le tableau des absents connus, et son pied. */
+/** Le tableau des absents connus, et son pied. Le retour en français (correctif du 28/10/2026 : « Early January 2027 » → « début janvier 2027 »). */
 const MOTIFS = { injury: 'blessure', suspension: 'suspension' };
 export function lignesDesAbsents(dossier) {
   const a = dossier?.absents ?? null;
-  const lignes = (a?.liste ?? []).map((x) => ({ cle: x.id ?? x.nom, nom: x.nom, id: x.id ?? null, motif: MOTIFS[x.motif] ?? x.motif ?? 'indisponible', retour: x.retour ?? 'retour non annoncé' }));
+  const lignes = (a?.liste ?? []).map((x) => ({ cle: x.id ?? x.nom, nom: x.nom, id: x.id ?? null, motif: MOTIFS[x.motif] ?? x.motif ?? 'indisponible', retour: x.retour ? retourPrevu(x.retour) : 'retour non annoncé' }));
   const blesses = lignes.filter((l) => l.motif === 'blessure').length;
   return {
     lus: a ? `Lus le ${jourDit(a.lusLe)}${a.match ? ` pour le match du ${jourDit(a.match.date)} contre ${a.match.adversaire ?? 'un adversaire inconnu'}` : ''}` : 'Aucune lecture des absents dans les 30 derniers jours',

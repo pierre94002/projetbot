@@ -81,7 +81,8 @@ const blocs = computed(() => {
       titre,
       sousTitre,
       icone,
-      etat: etatDuTexte({ entree, situation, essais }),
+      // Correctif du 28/10/2026 (D1) : la lecture en cours n'est jamais « serveur à relancer ».
+      etat: etatDuTexte({ entree, situation, essais, lecture: etat.value }),
       // Le texte d'aujourd'hui n'est pas encore là : le dernier écrit reste lisible, dit pour ce qu'il est.
       entree: affiche,
       ancien: !entree && Boolean(dernier),

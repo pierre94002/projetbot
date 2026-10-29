@@ -619,9 +619,12 @@ if (phase === 'scores') {
   };
   // 1. La base d'essai telle quelle : aucun constat pour ces clubs.
   sortie.propre = await passe(0);
-  // 2. Un écart de BUTEURS façon Celtic – Ferencváros (le score est bon, mais les buts crédités aux joueurs de l'équipe qui reçoit ne le font pas)
+  // 2. Un écart de BUTEURS façon Celtic – Ferencváros (le score est bon, mais les joueurs de l'équipe qui reçoit ont un but de PLUS que lui —
+  //    une vraie contradiction ; correctif du 28/10/2026 : des buteurs qui MANQUENT ne sont plus qu'orange, cf. la phase « buteurs-source »)
   //    et un écart de GARDIENS façon Antofagasta – Deportes Iquique (le gardien de l'équipe qui reçoit n'encaisse rien pour 5 buts adverses).
-  db.prepare("UPDATE players SET goals = 0 WHERE match_key = ? AND side = 'home'").run(cles.buteurs);
+  db.prepare(
+    "UPDATE players SET goals = COALESCE(goals, 0) + 1 WHERE match_key = ? AND side = 'home' AND player_key = (SELECT player_key FROM players WHERE match_key = ? AND side = 'home' ORDER BY ord LIMIT 1)"
+  ).run(cles.buteurs, cles.buteurs);
   db.prepare("UPDATE players SET goals_conceded = 0 WHERE match_key = ? AND side = 'home' AND goals_conceded IS NOT NULL").run(cles.gardiens);
   sortie.ecartsDeJoueurs = await passe(1, { corps: true });
   // 3. Un FAUX SCORE (Leeds – Newcastle 4-1 → 4-3, football-data dit 4-1) : tous les marchés de ses deux clubs sont à vérifier.
@@ -741,6 +744,81 @@ if (phase === 'scores') {
     ecrireRuntime('sante-fotmob.json', { version: 1, enregistreLe: '2026-10-05T09:00:00.000Z', depuis: '2026-10-05T06:00:00.000Z', requetes: 40, reussites: 34, echecs: 6, erreursDeSuite: 6, derniereReussite: '2026-10-05T07:00:00.000Z', derniereErreur: { le: '2026-10-05T09:00:00.000Z', type: 'liste-du-jour', nature: 'acces-refuse', statut: 403, message: 'HTTP 403' }, parType: {} });
     sortie.sourcesReelles = etatDesSources({ maintenant: MAINTENANT, config: CONFIG_REELLE });
   }
+} else if (phase === 'buteurs-source') {
+  // Correctif du 28/10/2026 (A) — « buteurs et score » au rouge depuis le 27/10 : les constats RÉELS du contrôle de Pierre du 28/10
+  // (copie figée test/fixtures/buteurs-27-10.json, mise par le test dans data/runtime de la copie) PLANTÉS tels quels — noms,
+  // identifiants FotMob, compétition, date, score, buts crédités et csc lus dans leur texte : Arosa SC – Pontevedra (2-0, aucun but
+  // crédité à Arosa, aucun gardien relevé, comme les feuilles des petits clubs), Boluspor – Karşıyaka (1-3, un but crédité à
+  // Karşıyaka, le gardien de Boluspor encaisse bien 3), Lille – Galatasaray (2-4, 3 buts crédités à Galatasaray + 2 csc de Lille :
+  // buteur en trop). Le contrôle tourne à l'heure de celui de Pierre (la fenêtre ne contient que ces trois rencontres : la base
+  // d'essai s'arrête au 21/09). Puis le carnet de santé : l'audit de ces rencontres, un contrôle complet, et une passe de nuit
+  // partie d'un carnet écrit par le code d'AVANT (les deux écarts remis en « erreur, N buteurs manquants ») : ré-audités une
+  // fois, la nuit suivante ne les relit plus.
+  const F = lireRuntime('buteurs-27-10.json');
+  if (!F) throw new Error('buteurs-27-10.json manque dans data/runtime de la copie');
+  const db = openDb();
+  const MOTIF = /\((\d+)-(\d+)\) — (\d+) buts crédités aux joueurs \(\+ (\d+) csc adverses\) pour un score de (\d+) : /;
+  const plantes = [];
+  const insMatch = db.prepare(
+    "INSERT INTO matches (match_key, match_id, date, league, home_name, away_name, home_id, away_id, fotmob_id, home_goals, away_goals, updated_at, meta) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '{}')"
+  );
+  const insJoueur = db.prepare(
+    'INSERT INTO players (match_key, side, player_key, ord, player_id, name, position, starter, minutes, goals, own_goals, goals_conceded) VALUES (?, ?, ?, ?, ?, ?, ?, 1, 90, ?, ?, ?)'
+  );
+  F.constats.forEach((c, i) => {
+    const m = MOTIF.exec(c.texte);
+    if (!m) throw new Error(`texte du constat illisible : ${c.texte}`);
+    const camp = c.id.endsWith(':home') ? 'home' : 'away';
+    const autre = camp === 'home' ? 'away' : 'home';
+    const score = { home: Number(m[1]), away: Number(m[2]) };
+    const [dom, ext] = c.label.split(' – ');
+    // Les buts de chaque camp : ceux du constat pour le camp visé (ses « csc adverses » sont des buts contre leur camp des joueurs
+    // de l'autre camp) ; l'autre camp a tous ses buteurs (aucun constat sur lui chez Pierre).
+    const credites = { [camp]: Number(m[3]), [autre]: score[autre] };
+    const csc = { [autre]: Number(m[4]), [camp]: 0 };
+    // Le gardien : rien de relevé pour les petits clubs d'Arosa – Pontevedra ; ailleurs, il encaisse le score de l'adversaire.
+    const sansGardien = c.matchKey.includes('arosa');
+    const encaisse = { home: sansGardien ? null : score.away, away: sansGardien ? null : score.home };
+    insMatch.run(c.matchKey, `essai-buteurs-${i}`, c.date, c.league, dom, ext, c.clubs[0], c.clubs[1], `99000${i}`, score.home, score.away, F.controleLe);
+    for (const side of ['home', 'away']) {
+      for (let k = 0; k < 11; k++) {
+        const poste = k === 0 ? 'Goalkeeper' : k < 5 ? 'Defender' : k < 8 ? 'Midfielder' : 'Forward';
+        // Les buts sur l'avant-centre (dernier joueur), les csc sur le premier défenseur.
+        insJoueur.run(c.matchKey, side, `j${k}`, k, `fotmob-99${i}${side === 'home' ? 1 : 2}${String(k).padStart(2, '0')}`, `Joueur ${side} ${k}`, poste, k === 10 ? credites[side] : 0, k === 1 ? csc[side] : 0, k === 0 ? encaisse[side] : null);
+      }
+    }
+    plantes.push({ cle: c.matchKey, camp, score, credites, csc, sansGardien });
+  });
+  sortie.plantes = plantes;
+  const sources = await sourcesDe();
+  const maintenant = Date.parse(F.controleLe);
+  // Comme chez Pierre : les dates de découverte de ses constats (Lille – Galatasaray, rouge trouvé le 21/10, est « connu » le 28/10) ;
+  // puis la même passe sans passé (tout est « nouveau » : le buteur en trop est rouge).
+  const precedent = { version: D.VERSION_CONTROLE, vus: Object.fromEntries(F.constats.map((c) => [c.id, c.trouveLe])), historique: [] };
+  const etat = await D.lancerControleQuotidien({ database: db, maintenant, precedent, sources });
+  sortie.etat = resumer(etat);
+  sortie.etatNeuf = resumer(await D.lancerControleQuotidien({ database: db, maintenant, sources }));
+  sortie.relu = D.etatAuMoment(etat, { maintenant: maintenant + HEURE, sources }).controles.find((c) => c.cle === 'buteurs-score').statutLe;
+  sortie.badgeJoueur = Object.fromEntries(
+    F.constats.map((c) => [c.matchKey, D.aVerifierDuMatch(etat, { league: c.league, date: '2026-10-29', homeId: c.clubs[0], awayId: c.clubs[1], famille: D.familleDuMarche('anytimeScorer') })])
+  );
+  // Le carnet de santé reprend le même audit (dataHealth.controlesAudit) : gravité de chaque anomalie de ces rencontres.
+  const H = await imp('data/db/dataHealth.js');
+  const { lireRencontres } = H;
+  const cles = F.constats.map((c) => c.matchKey);
+  sortie.audit = H.controlesAudit(db, { cles, rencontres: lireRencontres(db, { cles }) }).anomalies.map((a) => ({ id: a.id, sorte: a.sorte, gravite: a.gravite, detail: a.detail }));
+  // Un contrôle complet du carnet, puis le même carnet tel que le code d'AVANT l'aurait écrit, puis deux passes de nuit.
+  const complet = await H.controleComplet({ database: db, maintenant: maintenant + HEURE, rendreLaMain: () => Promise.resolve() });
+  const ANCIEN = new Map(F.constats.map((c) => [`impossible:buteurs:${c.matchKey}:${c.id.endsWith(':home') ? 'home' : 'away'}`, c.texte.split(' — ').slice(1).join(' — ')]));
+  const ancien = structuredClone(complet);
+  for (const a of ancien.anomalies) if (ANCIEN.has(a.id) && a.gravite !== 'erreur') Object.assign(a, { gravite: 'erreur', detail: ANCIEN.get(a.id) });
+  const parId = (etatCarnet) => Object.fromEntries(etatCarnet.anomalies.filter((a) => a.sorte === 'buteurs' || a.sorte === 'gardiens').map((a) => [a.id, { gravite: a.gravite, detail: a.detail, trouveeLe: a.trouveeLe, controleLe: a.controleLe }]));
+  sortie.carnet = { complet: parId(complet), ancien: parId(ancien), idsComplet: complet.anomalies.map((a) => a.id).sort() };
+  const nuit1 = await H.controleDeNuit({ database: db, precedent: ancien, maintenant: maintenant + 2 * HEURE, rendreLaMain: () => Promise.resolve() });
+  const nuit2 = nuit1 ? await H.controleDeNuit({ database: db, precedent: nuit1, maintenant: maintenant + 3 * HEURE, rendreLaMain: () => Promise.resolve() }) : null;
+  sortie.carnet.nuit1 = nuit1 ? { buteurs: parId(nuit1), ids: nuit1.anomalies.map((a) => a.id).sort(), audit: nuit1.controle.audit, nouvelles: nuit1.controle.nouvellesAnomalies, levees: nuit1.controle.anomaliesLevees } : null;
+  sortie.carnet.nuit2 = nuit2 ? { buteurs: parId(nuit2), ids: nuit2.anomalies.map((a) => a.id).sort(), audit: nuit2.controle.audit } : null;
+  closeDb();
 } else {
   throw new Error(`phase inconnue : ${phase}`);
 }

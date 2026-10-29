@@ -12,6 +12,17 @@
  *      comme le 0-0 de Cadiz - Girona du 19/09/2026 (en réalité 1-2).
  *   2. BUTEURS — la somme des buts des joueurs (plus les csc adverses) ne
  *      dépasse pas le score ; un écart de 1 en dessous est un csc non relevé.
+ *      Correctif du 28/10/2026 (`jugerLesButeurs`) : des buteurs qui
+ *      MANQUENT (deux ou plus, y compris aucun) ne sont plus une
+ *      contradiction en soi — FotMob donne le score des petits matchs de
+ *      coupe sans tous les buteurs (Arosa SC – Pontevedra 2-0 : aucun
+ *      buteur ; Boluspor – Karşıyaka 1-3 : un sur trois). C'est
+ *      `incomplets` : « buteurs absents ou incomplets chez la source »,
+ *      à vérifier (orange au contrôle quotidien), jamais une erreur. Restent
+ *      des erreurs : un buteur EN TROP, et des buteurs manquants que les
+ *      gardiens adverses contredisent aussi (`contredits` : ils encaissent
+ *      autre chose que le score — le score lui-même est en doute, comme le
+ *      faux 4-3 de Leeds – Newcastle des essais).
  *   3. TROIS FICHIERS — la base, season-calendar.json et match-results.json
  *      annoncent le même score.
  *   4. CALENDRIER contre RÉSULTATS, y compris sans statistiques.
@@ -170,6 +181,50 @@ function* buildFinder(entries, getDate) {
 
 const oriented = (score, swapped) => (swapped ? [score[1], score[0]] : score);
 
+const pluriel = (n, un, plusieurs) => `${n} ${Math.abs(n) > 1 ? plusieurs : un}`;
+
+/**
+ * Les gardiens d'une équipe contredisent-ils le score de l'adversaire ? Exactement le contrôle 1 (gardiens) : ils
+ * encaissent autre chose que `marques`, sauf un gardien exclu ou sorti sans relayeur (personne n'encaisse après lui).
+ * Sans gardien relevé (`keepers` à 0 : feuille sans buts encaissés), ils ne disent rien.
+ */
+function gardiensContredisent(gardiens, marques) {
+  if (!gardiens?.keepers) return false;
+  if (gardiens.conceded < marques && gardiens.gkSorti > 0 && gardiens.gkJoue <= 1) return false;
+  return gardiens.conceded !== marques;
+}
+
+/**
+ * Le contrôle 2 (buteurs) pour UNE équipe — correctif du 28/10/2026. `marques` : ses buts au score ; `credites` : les
+ * buts de ses joueurs ; `cscAdverses` : les buts contre son camp de l'adversaire ; `gardiensAdverses` : la feuille des
+ * gardiens adverses ({ keepers, conceded, gkJoue, gkSorti }, ou null) ; `equipe` : son nom. Rend { ecart, manque,
+ * detail } — `ecart` :
+ *   null             les buts crédités font le score ;
+ *   'csc-non-releve' un seul but sans buteur : un csc non relevé (compté, jamais signalé) ;
+ *   'en-trop'        plus de buts crédités que le score : une vraie contradiction (erreur) ;
+ *   'contredits'     deux buteurs ou plus manquent ET les gardiens adverses encaissent autre chose que le score : le
+ *                    score lui-même ne colle pas (erreur) ;
+ *   'incomplets'     deux buteurs ou plus manquent (aucun, parfois), les gardiens adverses ne contredisent pas le score :
+ *                    buteurs absents ou incomplets chez la source (à vérifier, jamais une erreur).
+ */
+export function jugerLesButeurs({ marques, credites, cscAdverses = 0, gardiensAdverses = null, equipe = null }) {
+  const manque = marques - credites - cscAdverses;
+  if (manque === 0) return { ecart: null, manque, detail: null };
+  if (manque < 0) return { ecart: 'en-trop', manque, detail: `${credites} buts crédités aux joueurs (+ ${cscAdverses} csc adverses) pour un score de ${marques} : buteur en trop` };
+  if (manque === 1) return { ecart: 'csc-non-releve', manque, detail: null };
+  if (gardiensContredisent(gardiensAdverses, marques)) {
+    return {
+      ecart: 'contredits',
+      manque,
+      detail: `${pluriel(credites, 'but crédité', 'buts crédités')} aux joueurs (+ ${pluriel(cscAdverses, 'csc adverse', 'csc adverses')}) pour un score de ${marques} (${manque} sans buteur), et les gardiens adverses en encaissent ${gardiensAdverses.conceded} : le score lui-même ne colle pas`
+    };
+  }
+  const attribues = credites + cscAdverses;
+  const avecButeur = attribues === 0 ? 'aucun n’a de buteur' : attribues === 1 ? 'un seul a un buteur' : `${attribues} seulement ont un buteur`;
+  const csc = cscAdverses > 0 ? ` (dont ${cscAdverses} contre son camp)` : '';
+  return { ecart: 'incomplets', manque, detail: `buteurs absents ou incomplets chez la source : ${equipe ?? 'l’équipe'} marque ${pluriel(marques, 'but', 'buts')}, ${avecButeur}${csc}` };
+}
+
 /**
  * @param {object} p
  * @param {import('node:sqlite').DatabaseSync} p.database  connexion (lecture suffit)
@@ -203,10 +258,11 @@ export function* auditScoresParMorceaux({ database, since = null, calendarPath, 
 
   const anomalies = [];
   let total = 0;
-  // `m` : la rencontre du magasin concernée (null pour le contrôle 4) ; `camp` : l'équipe visée.
-  const report = (kind, label, detail, m = null, camp = null) => {
+  // `m` : la rencontre du magasin concernée (null pour le contrôle 4) ; `camp` : l'équipe visée ; `ecart` : la sorte
+  // d'écart de buteurs (jugerLesButeurs), null pour les autres contrôles.
+  const report = (kind, label, detail, m = null, camp = null, ecart = null) => {
     total++;
-    const a = { kind, label, detail, matchKey: m?.matchKey ?? null, date: m?.date ?? null, league: m?.league ?? null, camp };
+    const a = { kind, label, detail, matchKey: m?.matchKey ?? null, date: m?.date ?? null, league: m?.league ?? null, camp, ecart };
     if (anomalies.length < maxSamples) anomalies.push(a);
     onAnomaly?.(a);
   };
@@ -215,6 +271,7 @@ export function* auditScoresParMorceaux({ database, since = null, calendarPath, 
   let checkedScorers = 0;
   let checkedCrossFile = 0;
   let ownGoals = 0;
+  let buteursIncomplets = 0;
   let attribues = 0;
   let sansGardien = 0;
   const byKind = {};
@@ -247,18 +304,16 @@ export function* auditScoresParMorceaux({ database, since = null, calendarPath, 
         }
       }
 
-      // 2. Buteurs : buts des joueurs + csc de l'adversaire = score.
+      // 2. Buteurs : buts des joueurs + csc de l'adversaire = score (jugerLesButeurs, correctif du 28/10/2026).
       checkedScorers++;
-      const csc = m.sides[side === 'home' ? 'away' : 'home']?.ownGoals ?? 0;
-      const manque = own - agg.scored - csc;
-      if (manque < 0) {
-        report('buteurs', label, `${agg.scored} buts crédités aux joueurs (+ ${csc} csc adverses) pour un score de ${own} : buteur en trop`, m, side);
-        byKind.buteurs = (byKind.buteurs ?? 0) + 1;
-      } else if (manque === 1) {
+      const adverse = m.sides[side === 'home' ? 'away' : 'home'] ?? null;
+      const buteurs = jugerLesButeurs({ marques: own, credites: agg.scored, cscAdverses: adverse?.ownGoals ?? 0, gardiensAdverses: adverse, equipe: side === 'home' ? m.homeName : m.awayName });
+      if (buteurs.ecart === 'csc-non-releve') {
         ownGoals++;
-      } else if (manque >= 2) {
-        report('buteurs', label, `${agg.scored} buts crédités aux joueurs (+ ${csc} csc adverses) pour un score de ${own} : ${manque} buteurs manquants`, m, side);
+      } else if (buteurs.ecart) {
+        report('buteurs', label, buteurs.detail, m, side, buteurs.ecart);
         byKind.buteurs = (byKind.buteurs ?? 0) + 1;
+        if (buteurs.ecart === 'incomplets') buteursIncomplets++;
       }
     }
 
@@ -304,6 +359,8 @@ export function* auditScoresParMorceaux({ database, since = null, calendarPath, 
     controlesButeurs: checkedScorers,
     controlesEntreFichiers: checkedCrossFile + checkedCalendarResults,
     butsContreSonCamp: ownGoals,
+    // Correctif du 28/10/2026 : parmi les écarts de buteurs, ceux qui ne sont que des buteurs absents ou incomplets chez la source.
+    buteursIncomplets,
     resultatsAttribues: attribues,
     gardienSortiSansRelayeur: sansGardien,
     anomalies: total,

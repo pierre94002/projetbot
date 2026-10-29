@@ -333,7 +333,7 @@ test('un écart de buteurs et de gardiens (réponse du VRAI serveur, retouche du
   const gardiens = echecs.find((x) => x.startsWith('Rouge Gardiens et score'));
   assert.ok(buteurs, echecs.map((x) => x.slice(0, 40)).join(' | '));
   assert.ok(gardiens);
-  assert.ok(buteurs.includes('Bournemouth – Brentford du 12/09/2026 (2-2) — 0 buts crédités aux joueurs (+ 0 csc adverses) pour un score de 2 : 2 buteurs manquants'), buteurs);
+  assert.ok(buteurs.includes('Bournemouth – Brentford du 12/09/2026 (2-2) — 3 buts crédités aux joueurs (+ 0 csc adverses) pour un score de 2 : buteur en trop'), buteurs);
   assert.ok(gardiens.includes('Coventry – Brighton du 13/09/2026 (0-5) — les gardiens de Coventry encaissent 0 alors que l\'adversaire marque 5'), gardiens);
   assert.ok(buteurs.endsWith('nouveau') && gardiens.endsWith('nouveau'), 'rouges et nouveaux, comme avant');
   // Le compte des clubs : celui des clubs dont le prochain pari peut porter le badge (121), pas celui de l'index (125, avec les quatre clubs de joueurs).

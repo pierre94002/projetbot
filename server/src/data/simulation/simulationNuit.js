@@ -59,12 +59,16 @@ import { calculerLesDeroules, calculerSansEffets } from './simulationMatchsEnfan
 
 const ENFANT_SAISONS = fileURLToPath(new URL('./simulationSaisonsEnfant.js', import.meta.url));
 const ENFANT_MATCHS = fileURLToPath(new URL('./simulationMatchsEnfant.js', import.meta.url));
+const ENFANT_LISTE = fileURLToPath(new URL('./simulationListeEnfant.js', import.meta.url));
 
 /** Au-delà de 10 minutes sans réponse, l'enfant est arrêté et rien n'est rangé. */
 export const DELAI_ENFANT_MS = 10 * 60_000;
 /** La mémoire des enfants : tas plafonné (les saisons ≤ 400 Mo mesurés 225 ; les matchs ≤ 121 Mo mesurés). */
 export const OPTIONS_ENFANT_SAISONS = Object.freeze(['--max-old-space-size=512', '--max-semi-space-size=8']);
 export const OPTIONS_ENFANT_MATCHS = Object.freeze(['--max-old-space-size=256', '--max-semi-space-size=8']);
+/** La liste des matchs à venir, calculée à part (correctif C du 28/10/2026) : le tas des saisons (le calendrier de 18 Mo y est lu) ; 3 minutes au plus. */
+export const OPTIONS_ENFANT_LISTE = Object.freeze(['--max-old-space-size=512', '--max-semi-space-size=8']);
+export const DELAI_LISTE_MS = 3 * 60_000;
 /** Ordres par transaction au rangement et à l'élagage. */
 export const TRANCHE = RETENTION.tranche;
 /** L'horizon de la preuve neuve (F6, la règle de l'étape 27) : 800 matchs ET 21 jours après le lancement (reglages.js : l'écran de Réglages le lit aussi). */
@@ -199,6 +203,34 @@ export function calculerAPart({ fichier, nom, options, message, surMorceau = () 
     });
     enfant.send(message);
   }).finally(rendre);
+}
+
+/**
+ * LA LISTE DES MATCHS À VENIR de la nuit des déroulés (correctif C du 28/10/2026) : celle de la page Matchs
+ * (gelPronostics.matchsAVenir, inchangé), calculée dans un PROCESSUS À PART (simulationListeEnfant.js, la base en
+ * lecture seule) — dans le serveur, elle le tenait d'une traite : 797 ms la nuit du 28/10, 2 570 ms à la passe de
+ * démarrage du 27/10. Le serveur la reçoit par morceaux en gardant la main (`pauses.attendre`). L'enfant échoue (arrêt,
+ * délai, réponse incomplète) : la liste est refaite ici, comme avant, et le repli est dit (`repli`). Un autre calcul
+ * lourd qui a pris le jeton entre-temps : CalculLourdEnCours remonte (la nuit est reportée). `aPart` faux (essais) : ici.
+ * Rend { liste, lieu: 'a-part' | 'serveur', ms?, repli? }.
+ */
+export async function listeDesMatchsAVenir({ instant, aPart = true, pauses = creerPauses(), delaiMs = DELAI_LISTE_MS } = {}) {
+  if (!aPart) return { liste: matchsAVenir(instant), lieu: 'serveur' };
+  let repli;
+  try {
+    const recus = [];
+    const fin = await pauses.attendre(
+      calculerAPart({ fichier: ENFANT_LISTE, nom: 'liste des matchs à venir', options: OPTIONS_ENFANT_LISTE, delaiMs, message: { instant }, surMorceau: (morceau) => recus.push(...morceau) }),
+      'liste des matchs à part'
+    );
+    if (Number.isInteger(fin?.matchs) && fin.matchs === recus.length) return { liste: recus, lieu: 'a-part', ms: fin.ms ?? null };
+    repli = `réponse incomplète : ${recus.length} match(s) reçu(s)${Number.isInteger(fin?.matchs) ? ` sur ${fin.matchs}` : ''}`;
+  } catch (error) {
+    if (error instanceof CalculLourdEnCours || error?.reporte) throw error;
+    repli = String(error?.message ?? error).slice(0, 200);
+  }
+  await pauses.pause('liste des matchs : repli dans le serveur');
+  return { liste: matchsAVenir(instant), lieu: 'serveur', repli };
 }
 
 // ------------------------------------------------------------ le rangement par tranches (le serveur, seul écrivain)
@@ -1053,7 +1085,16 @@ export async function simulerLesMatchsDeLaNuit({
   // Pierre), refaites à la passe suivante (vérification du 27/10, constat 15). Le jeton reste pris par calculerAPart.
   const autre = aPart ? calculLourdEnCours() : null;
   if (autre) return { mode: 'reporte', raison: phraseDuReport(autre, instant), calculeLe, jourD, bilan, dureeMs: duree(), ...pauses.bilan() };
-  const liste = matchs ?? matchsAVenir(instant);
+  // Correctif C du 28/10/2026 : la liste de la page Matchs se calcule à part (listeDesMatchsAVenir), le serveur garde la main.
+  let lue;
+  try {
+    lue = matchs ? { liste: matchs, lieu: 'donnee' } : await listeDesMatchsAVenir({ instant, aPart, pauses, delaiMs: Math.min(delaiMs, DELAI_LISTE_MS) });
+  } catch (error) {
+    if (error instanceof CalculLourdEnCours || error?.reporte) return { mode: 'reporte', raison: error.message, calculeLe, jourD, bilan, dureeMs: duree(), ...pauses.bilan() };
+    throw error;
+  }
+  const liste = lue.liste;
+  const listeDite = { lieu: lue.lieu, ...(Number.isFinite(lue.ms) ? { msAPart: lue.ms } : {}), ...(lue.repli ? { repli: lue.repli } : {}) };
   bilan.matchs = liste.length;
   const fenetre = [];
   for (const m of liste) {
@@ -1185,6 +1226,8 @@ export async function simulerLesMatchsDeLaNuit({
     calculeLe,
     jourD,
     bilan,
+    // Où la liste des matchs a été calculée (correctif C du 28/10/2026) : « a-part », « serveur » (essai, ou repli dit), « donnee ».
+    liste: listeDite,
     controleDesTables: calcul?.controle ?? { lignes: 0, ecarts: [] },
     calculAPart: calcul?.bilan ?? null,
     controle,

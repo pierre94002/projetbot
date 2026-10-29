@@ -279,7 +279,7 @@ test('T5b les faits d’un club, recomptés à la main : la forme sans les match
   ] }];
   const c = M.classementDuClub(tables, 'fotmob-3');
   assert.deepEqual([c.rang, c.points, c.premier.id, c.zone, c.table], [4, 12, 'fotmob-7', 'Relegation', null]);
-  assert.equal(M.classementDit(c), '4e de L1 (sur 2) : 12 pts en 8 matchs, à 8 pts du 1er, Nacional ; zone : Relegation');
+  assert.equal(M.classementDit(c), '4e en L1 (sur 2) : 12 pts en 8 matchs, à 8 pts du 1er, Nacional ; zone : Relegation');
   assert.equal(M.classementDuClub(tables, 'fotmob-99'), null, 'un club absent de la table : rien, jamais un homonyme');
   const coach = (date, nom) => ({ date, coach: nom, coach_id: null });
   const recent = M.entraineurDuClub([coach('2026-09-20', 'B'), coach('2026-09-13', 'B'), coach('2026-08-01', 'A')], matchs, { maintenant: MAINTENANT });
@@ -399,7 +399,8 @@ test('T10 LE RATTACHEMENT PAR IDENTIFIANT FotMob : les deux « Nacional » (Para
   assert.deepEqual([paraguay.league, portugal.league], ['División Profesional - Paraguay', 'Primeira Liga - Portugal']);
   assert.equal(paraguay.adversaires.filter((a) => portugal.adversaires.includes(a)).length, 0, 'aucun match de l’un dans le dossier de l’autre');
   assert.equal(s.memoireParaguay.home.id, 'fotmob-49689');
-  assert.ok(s.memoireParaguay.texte.includes('de División Profesional - Paraguay'));
+  // Correctif du 28/10/2026 (D3) : « 4e en … » (et plus « 4e de … ») dans le classement du dossier.
+  assert.ok(s.memoireParaguay.texte.includes('en División Profesional - Paraguay'));
   assert.ok(!s.memoireParaguay.texte.includes('Primeira Liga'));
 });
 

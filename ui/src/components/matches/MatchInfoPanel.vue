@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 import AppIcon from '@/components/common/AppIcon.vue';
-import { pelouse, meteo } from '@/utils/fotmobLabels.js';
+import { pelouse, meteo, ventEnKmH } from '@/utils/fotmobLabels.js';
 
 /**
  * Cadre de la rencontre : stade, remplissage, terrain, météo, et l'arbitre
@@ -81,7 +81,8 @@ function fr(value, decimals = 1) {
           <span class="cm-kpi__value">{{ meta.temperature }} °C</span>
           <span class="match-info__weather">
             <span v-if="meta.weather" class="match-info__weather-item"><AppIcon name="droplet" :size="11" />{{ meteo(meta.weather) }}</span>
-            <span v-if="meta.windSpeed" class="match-info__weather-item"><AppIcon name="wind" :size="11" />vent {{ meta.windSpeed }} km/h</span>
+            <!-- FotMob donne le vent en m/s (correctif du 28/10/2026) : affiché en km/h. -->
+            <span v-if="ventEnKmH(meta.windSpeed)" class="match-info__weather-item"><AppIcon name="wind" :size="11" />vent {{ ventEnKmH(meta.windSpeed) }} km/h</span>
           </span>
         </div>
       </div>

@@ -48,6 +48,17 @@
  * paris sur les joueurs (buteur, passeur… : étape 34 du plan), donc sur aucun
  * marché aujourd'hui, et jamais dans le bandeau d'un match.
  *
+ * Correctif du 28/10/2026 : « buteurs et score » était rouge depuis le 27/10
+ * à cause de matchs de coupe entre petits clubs dont FotMob donne le score
+ * sans tous les buteurs (Arosa SC – Pontevedra 2-0, aucun buteur ; Boluspor –
+ * Karşıyaka 1-3, un sur trois). Des buteurs MANQUANTS sans autre
+ * contradiction sont désormais un ORANGE dit en mots — « buteurs absents ou
+ * incomplets chez la source » (gravité « à vérifier » de l'audit, jamais de
+ * badge « à vérifier » sur un pronostic, comme les autres constats orange de
+ * l'étape 12) ; le rouge reste aux vraies contradictions : un buteur en trop,
+ * ou des buteurs manquants que les gardiens adverses contredisent aussi
+ * (scoreAudit.jugerLesButeurs).
+ *
  * RAPIDE : quelques secondes sur la base complète, dans le serveur, en
  * rendant la main entre deux contrôles (`setImmediate`) et dans les boucles
  * longues ; jamais pendant un import (la passe tient le verrou).
@@ -120,7 +131,7 @@ const C = (cle, famille, libelle, classe, quoi) => Object.freeze({ cle, famille,
 export const CONTROLES = Object.freeze([
   C('score-football-data', 'scores', 'Score différent de football-data', 'rouge', 'le score du magasin face à celui de football-data.co.uk, sans prolongation, tirs au but ni résultat attribué pour l’expliquer'),
   C('score-football-data-explique', 'scores', 'Écarts expliqués avec football-data', 'info', 'les écarts de score qu’explique une prolongation, une séance de tirs au but ou un résultat attribué sur tapis vert'),
-  C('buteurs-score', 'scores', 'Buteurs et score', 'rouge', 'les buts des joueurs (et les csc adverses) font-ils le score ? (audit des scores)'),
+  C('buteurs-score', 'scores', 'Buteurs et score', 'rouge', 'les buts des joueurs (et les csc adverses) font-ils le score ? Rouge pour un buteur en trop, ou des buteurs manquants que les gardiens contredisent aussi ; orange pour des buteurs absents ou incomplets chez la source (audit des scores)'),
   C('gardiens-score', 'scores', 'Gardiens et score', 'rouge', 'les buts encaissés des gardiens font-ils le score de l’adversaire ? (audit des scores)'),
   C('score-calendrier', 'scores', 'Score du calendrier et des résultats', 'rouge', 'le magasin, le calendrier et les résultats disent-ils le même score ? (contrôle quotidien des scores)'),
   C('score-futur', 'scores', 'Score d’un match à venir', 'rouge', 'un match daté après demain qui a déjà un score'),
@@ -339,7 +350,8 @@ const DEPUIS_L_ETAPE_12 = {
   joueurs: { controle: 'chiffres-joueurs', aVerifier: false },
   // Données de JOUEURS seulement : rouges et listés dans la carte comme avant, mais le badge n'y vient que sur un marché de joueurs (aucun aujourd'hui).
   gardiens: { controle: 'gardiens-score', familles: ['joueurs'], raison: 'Score à vérifier', precision: 'gardiens et score ne collent pas' },
-  buteurs: { controle: 'buteurs-score', familles: ['joueurs'], raison: 'Score à vérifier', precision: 'buteurs et score ne collent pas' },
+  // Correctif du 28/10/2026 : un écart de buteurs ORANGE (buteurs absents ou incomplets chez la source) ne met pas le score en doute.
+  buteurs: { controle: 'buteurs-score', familles: ['joueurs'], raison: 'Score à vérifier', precision: 'buteurs et score ne collent pas', siOrange: { raison: 'Buteurs absents ou incomplets chez la source', precision: null } },
   'score-fichiers': { controle: 'score-calendrier', raison: 'Score à vérifier' },
   'classement-bilan': { controle: 'classement-officiel', raison: 'Bilan différent du classement officiel' },
   'classement-club': { controle: 'classement-officiel', raison: 'Club du classement officiel sans rencontre au magasin' },
@@ -378,8 +390,10 @@ function depuisAnomalie(a, ctx, clubsEnPlus = null) {
   const quand = a.date ? ` du ${jourFr(a.date)}` : '';
   const sorte = SORTES[a.sorte]?.libelle ?? a.sorte;
   // La raison courte du badge « à vérifier » : « Score à vérifier : Blackpool – Bromley du 12/09/2026 (buteurs et score ne collent pas) ».
+  // Un constat qui n'est pas rouge prend la raison de `siOrange` quand la règle en a une (correctif du 28/10/2026).
   const qui = String(libelle).replace(/ · classement officiel$/, '');
-  const raison = `${regle.raison ?? sorte} : ${qui}${quand}${regle.precision ? ` (${regle.precision})` : ''}`;
+  const mots = classe !== 'rouge' && regle.siOrange ? { ...regle, ...regle.siOrange } : regle;
+  const raison = `${mots.raison ?? sorte} : ${qui}${quand}${mots.precision ? ` (${mots.precision})` : ''}`;
   return {
     id: `${regle.controle}:${a.id}`,
     controle: regle.controle,

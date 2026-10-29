@@ -134,6 +134,32 @@ export const pourcentDit = (x) => (fini(x) ? `${Math.round(100 * x)} %` : null);
 const pluriel = (n, un, plusieurs) => `${n} ${Math.abs(n) > 1 ? plusieurs : un}`;
 const rangDit = (r) => (r === 1 ? '1er' : `${r}e`);
 
+/**
+ * Le nom d'un championnat dans une phrase (correctif D3 du 28/10/2026) : la clé du magasin, sauf un sigle qui ne se dit
+ * pas — « EPL » (le sigle de The Odds API) est la Premier League. « 5e de EPL » devient « 5e en Premier League ».
+ */
+const NOMS_DITS = Object.freeze({ EPL: 'Premier League' });
+export const championnatDit = (league) => NOMS_DITS[league] ?? league;
+
+/**
+ * Le retour annoncé d'un absent, en français (correctif D2 du 28/10/2026) : FotMob l'écrit en anglais (« Early January
+ * 2027 », « Doubtful »), et les dossiers le recopiaient tel quel — dans le texte remis à l'IA comme à l'écran. Les mêmes
+ * règles que retourPrevu de l'écran (ui/src/utils/fotmobLabels.js ; le test des correctifs les compare) : ce module
+ * reste sans import. Un libellé inconnu est rendu tel quel plutôt que deviné.
+ */
+const MOIS_EN = Object.freeze({
+  January: 'janvier', February: 'février', March: 'mars', April: 'avril', May: 'mai', June: 'juin',
+  July: 'juillet', August: 'août', September: 'septembre', October: 'octobre', November: 'novembre', December: 'décembre'
+});
+const RETOURS_EN = Object.freeze({ 'Out for season': 'saison terminée', Doubtful: 'incertain', 'Back in training': "reprise de l'entraînement", Unknown: 'inconnu' });
+export function retourDit(texte) {
+  if (!texte) return null;
+  if (RETOURS_EN[texte]) return RETOURS_EN[texte];
+  const m = /^(Early|Mid|Late)\s+([A-Z][a-z]+)\s+(\d{4})$/.exec(texte);
+  if (!m || !MOIS_EN[m[2]]) return texte;
+  return `${{ Early: 'début ', Mid: 'mi-', Late: 'fin ' }[m[1]]}${MOIS_EN[m[2]]} ${m[3]}`;
+}
+
 // ============================================================ les leçons
 
 /** Le sens d'une leçon, lu dans le RÈGLEMENT du carnet : −1 si le pronostic du moteur a échoué, +1 s'il a tenu. */
@@ -462,10 +488,11 @@ export function classementDuClub(tables, club) {
   return null;
 }
 
-/** Le classement en une phrase : « 2e de EPL (sur 20) : 18 pts en 7 matchs, à 3 pts du 1er, Manchester City ; zone : Champions League ». */
+/** Le classement en une phrase : « 2e en Premier League (sur 20) : 18 pts en 7 matchs, à 3 pts du 1er, Manchester City ; zone : Champions League ». */
 export function classementDit(c) {
   if (!c) return null;
-  let t = `${rangDit(c.rang)} de ${c.table && c.table !== c.league ? `${c.league}, ${c.table}` : c.league} (sur ${c.equipes}) : ${pluriel(c.points ?? 0, 'pt', 'pts')} en ${pluriel(c.joues ?? 0, 'match', 'matchs')}`;
+  const nom = championnatDit(c.league);
+  let t = `${rangDit(c.rang)} en ${c.table && c.table !== c.league ? `${nom}, ${c.table}` : nom} (sur ${c.equipes}) : ${pluriel(c.points ?? 0, 'pt', 'pts')} en ${pluriel(c.joues ?? 0, 'match', 'matchs')}`;
   if (c.premier && fini(c.premier.points) && fini(c.points)) t += `, à ${pluriel(c.premier.points - c.points, 'pt', 'pts')} du 1er, ${c.premier.nom}`;
   if (c.second && fini(c.second.points) && fini(c.points)) t += `, ${pluriel(c.points - c.second.points, 'pt', 'pts')} d’avance sur ${c.second.nom}`;
   if (c.zone) t += ` ; zone : ${c.zone}`;
@@ -527,7 +554,7 @@ export function absentsDits(a, { max = 6 } = {}) {
   const pour = a.match ? ` pour le match du ${jourDit(a.match.date)} contre ${a.match.adversaire ?? 'un adversaire inconnu'}` : '';
   if (!a.liste?.length) return `Absents : aucun annoncé par FotMob (lu le ${jourDit(a.lusLe)}${pour}).`;
   const MOTIFS = { injury: 'blessure', suspension: 'suspension' };
-  const noms = a.liste.slice(0, max).map((x) => `${x.nom} (${MOTIFS[x.motif] ?? x.motif ?? 'indisponible'}${x.retour ? `, retour : ${x.retour}` : ''})`);
+  const noms = a.liste.slice(0, max).map((x) => `${x.nom} (${MOTIFS[x.motif] ?? x.motif ?? 'indisponible'}${x.retour ? `, retour : ${retourDit(x.retour)}` : ''})`);
   const reste = a.liste.length - noms.length;
   return `Absents connus (lus le ${jourDit(a.lusLe)}${pour}) : ${noms.join(' · ')}${reste > 0 ? ` · et ${reste} autre${reste > 1 ? 's' : ''}` : ''}.`;
 }

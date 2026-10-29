@@ -1,0 +1,82 @@
+{
+ "description": "Copie figée (lecture seule) de trois constats « Buteurs et score » du contrôle quotidien de Pierre (server/data/runtime/controle-quotidien.json du dépôt, contrôle du 2026-10-28T04:46:28.059Z, feu rouge) : les deux cas réels du correctif A du 28/10/2026 (Arosa SC – Pontevedra, Boluspor – Karşıyaka : buteurs absents ou incomplets chez la source, rouges avant le correctif) et Lille – Galatasaray (buteur en trop : une vraie contradiction, qui reste rouge). Ne pas regénérer avec le code d’après.",
+ "controleLe": "2026-10-28T04:46:28.059Z",
+ "feu": "rouge",
+ "statutDuControle": "rouge",
+ "parClasse": {
+  "rouge": 12,
+  "orange": 0,
+  "info": 0
+ },
+ "constats": [
+  {
+   "id": "buteurs-score:impossible:buteurs:2026-10-27-arosa-sc-pontevedra:home",
+   "controle": "buteurs-score",
+   "classe": "rouge",
+   "texte": "Arosa SC – Pontevedra du 27/10/2026 (2-0) — 0 buts crédités aux joueurs (+ 0 csc adverses) pour un score de 2 : 2 buteurs manquants",
+   "detail": "Les buts des joueurs (et les csc adverses) dépassent le score, ou il en manque deux ou plus (audit des scores, scoreAudit.js).",
+   "matchKey": "2026-10-27-arosa-sc-pontevedra",
+   "date": "2026-10-27",
+   "league": "Copa del Rey - Spain",
+   "saison": "2026-27",
+   "label": "Arosa SC – Pontevedra",
+   "score": "2-0",
+   "clubs": [
+    "fotmob-474525",
+    "fotmob-7862"
+   ],
+   "familles": [
+    "joueurs"
+   ],
+   "aVerifier": true,
+   "raison": "Score à vérifier : Arosa SC – Pontevedra du 27/10/2026 (buteurs et score ne collent pas)",
+   "trouveLe": "2026-10-27T22:07:26.844Z"
+  },
+  {
+   "id": "buteurs-score:impossible:buteurs:2026-10-27-boluspor-kars-yaka:away",
+   "controle": "buteurs-score",
+   "classe": "rouge",
+   "texte": "Boluspor – Karşıyaka du 27/10/2026 (1-3) — 1 buts crédités aux joueurs (+ 0 csc adverses) pour un score de 3 : 2 buteurs manquants",
+   "detail": "Les buts des joueurs (et les csc adverses) dépassent le score, ou il en manque deux ou plus (audit des scores, scoreAudit.js).",
+   "matchKey": "2026-10-27-boluspor-kars-yaka",
+   "date": "2026-10-27",
+   "league": "Türkiye Kupası",
+   "saison": "2026-27",
+   "label": "Boluspor – Karşıyaka",
+   "score": "1-3",
+   "clubs": [
+    "fotmob-4675",
+    "fotmob-4066"
+   ],
+   "familles": [
+    "joueurs"
+   ],
+   "aVerifier": true,
+   "raison": "Score à vérifier : Boluspor – Karşıyaka du 27/10/2026 (buteurs et score ne collent pas)",
+   "trouveLe": "2026-10-27T16:20:41.706Z"
+  },
+  {
+   "id": "buteurs-score:impossible:buteurs:2026-10-21-lille-galatasaray:away",
+   "controle": "buteurs-score",
+   "classe": "rouge",
+   "texte": "Lille – Galatasaray du 21/10/2026 (2-4) — 3 buts crédités aux joueurs (+ 2 csc adverses) pour un score de 4 : buteur en trop",
+   "detail": "Les buts des joueurs (et les csc adverses) dépassent le score, ou il en manque deux ou plus (audit des scores, scoreAudit.js).",
+   "matchKey": "2026-10-21-lille-galatasaray",
+   "date": "2026-10-21",
+   "league": "UEFA Champions League",
+   "saison": "2026-27",
+   "label": "Lille – Galatasaray",
+   "score": "2-4",
+   "clubs": [
+    "fotmob-8639",
+    "fotmob-8637"
+   ],
+   "familles": [
+    "joueurs"
+   ],
+   "aVerifier": true,
+   "raison": "Score à vérifier : Lille – Galatasaray du 21/10/2026 (buteurs et score ne collent pas)",
+   "trouveLe": "2026-10-21T20:11:41.583Z"
+  }
+ ]
+}

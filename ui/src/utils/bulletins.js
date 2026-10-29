@@ -62,11 +62,23 @@ export function essaiDit(essai) {
  * L'état d'un texte (le bulletin du jour ou le bilan de la semaine), en un mot, une couleur et une phrase.
  * `entree` : le texte écrit pour le jour (ou la semaine) ; `situation` : ce que dit le serveur de l'écrire maintenant
  * ({ code, pourquoi, essais }) ; `essais` : les essais ratés de la clé.
- * Codes : ecrit, sans-appel, interrupteur, illisible, essais-epuises, trop-tot, a-faire, serveur-a-relancer.
+ * `lecture` (correctif D1 du 28/10/2026) : la lecture de la route ({ loading, error, data }) quand l'appelant l'a. Tant
+ * qu'aucune réponse n'est arrivée, le texte est « en lecture » (ou « illisible » avec l'erreur — pour une route que le
+ * serveur ne connaît pas, cette erreur dit déjà de le relancer) : « relancez-le » ne vient QUE d'une vraie réponse du
+ * serveur sans la situation (un serveur d'avant cette fonction), jamais pendant le chargement.
+ * Codes : ecrit, sans-appel, interrupteur, illisible, essais-epuises, trop-tot, a-faire, serveur-a-relancer, lecture,
+ * lecture-impossible, non-lu.
  */
-export function etatDuTexte({ entree = null, situation = null, essais = [] } = {}) {
+export function etatDuTexte({ entree = null, situation = null, essais = [], lecture = null } = {}) {
   if (entree && !entree.sansAppel) return { code: 'ecrit', titre: 'Écrit', ton: 'is-accent', icone: 'check', phrase: `Écrit le ${jourEtHeureDits(entree.ecritLe)}, en un seul appel à Claude Code.` };
   if (entree) return { code: 'sans-appel', titre: 'Rien à commenter', ton: '', icone: 'info', phrase: entree.raison ?? 'Rien à commenter : aucun appel à Claude.' };
+  if (!situation && lecture && !lecture.data) {
+    // La route manque vraiment (le serveur d'avant cette fonction : « Route introuvable », dit par httpClient) : relancer.
+    if (lecture.error && /^Le serveur n.est pas à jour/.test(String(lecture.error))) return { code: 'serveur-a-relancer', titre: 'Pas lu', ton: 'is-warning', icone: 'alert', phrase: String(lecture.error) };
+    if (lecture.error) return { code: 'lecture-impossible', titre: 'Illisible', ton: 'is-danger', icone: 'x', phrase: `Lecture impossible : ${lecture.error}` };
+    if (lecture.loading) return { code: 'lecture', titre: 'Lecture…', ton: '', icone: 'clock', phrase: 'Lecture en cours.' };
+    return { code: 'non-lu', titre: 'Non lu', ton: '', icone: 'clock', phrase: 'Rien n’a encore été lu.' };
+  }
   if (!situation) return { code: 'serveur-a-relancer', titre: 'Pas lu', ton: 'is-warning', icone: 'alert', phrase: 'Le serveur ne répond pas à cette question : relancez-le pour activer cette fonction.' };
   const dernier = essais.at(-1);
   switch (situation.code) {

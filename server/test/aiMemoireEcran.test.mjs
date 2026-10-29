@@ -55,7 +55,8 @@ after(async () => {
 // ================================================ 1. les règles (pures), recomptées à la main
 
 test('règles : pures ; les états du bloc ; la provenance réelle ; la forme (Σ points, buts, ⌀ par match), les leçons et les absents avec leur pied ; le jour de Paris', () => {
-  assert.deepEqual([...reglesPures('dossiersIA.js')], ['dossiersIA.js']);
+  // Correctif du 28/10/2026 (D2) : le retour d'un absent en français, par la règle de l'écran (fotmobLabels.js, pure elle aussi).
+  assert.deepEqual([...reglesPures('dossiersIA.js')], ['dossiersIA.js', 'fotmobLabels.js']);
   assert.equal(U.etatDuDossier({ clubId: null }).cle, 'sans-club');
   assert.equal(U.etatDuDossier({ clubId: 'fotmob-1', erreur: "Le serveur n'est pas à jour : relancez" }).cle, 'pas-a-jour-serveur');
   assert.equal(U.etatDuDossier({ clubId: 'fotmob-1', erreur: 'boum' }).cle, 'erreur');

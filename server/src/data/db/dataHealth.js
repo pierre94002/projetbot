@@ -133,7 +133,8 @@ export const SORTES = Object.freeze({
   zeros: { type: 'zero', libelle: 'Zéros non relevés', explication: 'Un 0 publié à la place d’un champ que la source n’a pas relevé : passes, tacles ou possession à 0 (impossible dans un match joué), plusieurs champs défensifs à 0 ensemble (dégagements, interceptions, centres, longs ballons), tirs dans et hors de la surface à 0 pour des tirs relevés. FotMob le fait en couverture réduite (« lower »). À ne pas lire comme de vrais zéros ; le magasin ne contredit pas la source : rien n’est effacé.' },
   joueurs: { type: 'impossible', libelle: 'Chiffres de joueurs', explication: 'Plus de deux cartons jaunes ou d’un rouge, plus de tirs cadrés que de tirs, plus de passes réussies que de passes, minutes ou note impossibles.' },
   gardiens: { type: 'impossible', libelle: 'Gardiens et score', explication: 'Les buts encaissés des gardiens d’une équipe ne font pas le score de l’adversaire (audit des scores, scoreAudit.js).' },
-  buteurs: { type: 'impossible', libelle: 'Buteurs et score', explication: 'Les buts des joueurs (et les csc adverses) dépassent le score, ou il en manque deux ou plus (audit des scores, scoreAudit.js).' },
+  // Correctif du 28/10/2026 : des buteurs qui manquent ne sont une erreur que si les gardiens adverses contredisent aussi le score.
+  buteurs: { type: 'impossible', libelle: 'Buteurs et score', explication: 'Erreur : les buts des joueurs (et les csc adverses) dépassent le score, ou il en manque deux ou plus et les gardiens adverses contredisent aussi le score. À vérifier : il en manque deux ou plus (parfois tous) sans autre contradiction — buteurs absents ou incomplets chez la source, fréquent dans les petits matchs de coupe (audit des scores, scoreAudit.js).' },
   'score-fichiers': { type: 'impossible', libelle: 'Deux scores', explication: 'Le magasin et le calendrier (ou les résultats) ne disent pas le même score.' },
   'classement-bilan': { type: 'impossible', libelle: 'Bilan différent du classement', explication: 'À matchs égaux, victoires, nuls, défaites ou buts diffèrent du classement officiel : un score faux ?' },
   'sans-identifiant': { type: 'identite', libelle: 'Joueurs sans identifiant', explication: 'FotMob donne l’identifiant 0 à tous les inconnus d’une feuille (clubs amateurs, divisions inférieures) : ces joueurs sont rangés par leur nom, leurs matchs ne se rattachent à aucune fiche ni ne s’additionnent d’une feuille à l’autre.' },
@@ -748,6 +749,16 @@ export function* controlesDoublonsParMorceaux(database, rencontres, cles = null)
   return out;
 }
 
+/** Les sortes d'anomalies que rend l'audit des scores (controlesAuditParMorceaux). */
+export const SORTES_DE_L_AUDIT = new Set(['gardiens', 'buteurs', 'score-fichiers']);
+
+/**
+ * Correctif du 28/10/2026 : une anomalie « buteurs » écrite par le code d'AVANT la règle des buteurs absents ou
+ * incomplets chez la source — gravité « erreur » et détail « … pour un score de N : M buteurs manquants », que le code
+ * d'aujourd'hui n'écrit plus. La passe de nuit refait l'audit de sa rencontre une fois (controleDeNuit).
+ */
+export const anomalieDeButeursDAvant = (a) => a?.sorte === 'buteurs' && a.gravite === 'erreur' && / : \d+ buteurs manquants$/.test(String(a.detail ?? ''));
+
 /** L'audit des scores (scoreAudit.js) : gardiens, buteurs, deux scores pour un même match. */
 export function controlesAudit(database, options = {}) {
   return executerSansPause(controlesAuditParMorceaux(database, options));
@@ -773,7 +784,9 @@ export function* controlesAuditParMorceaux(database, { cles = null, calendarPath
           sorte,
           // Un constat par camp (les gardiens des deux équipes peuvent être faux).
           cleEnPlus: a.camp ?? (a.kind === 'fichiers' ? (/calendrier/.test(a.detail) ? 'calendrier' : 'resultats') : null),
-          gravite: 'erreur',
+          // Correctif du 28/10/2026 : des buteurs absents ou incomplets chez la source (scoreAudit.jugerLesButeurs) sont
+          // « à vérifier » — orange au contrôle quotidien, jamais une erreur ; tout le reste de l'audit reste une erreur.
+          gravite: a.kind === 'buteurs' && a.ecart === 'incomplets' ? 'a-verifier' : 'erreur',
           portee: { cles: [a.matchKey] },
           r,
           league: a.league,
@@ -1641,7 +1654,13 @@ export async function controleDeNuit({ database, precedent, omissions = null, ca
   anomalies.push(...(await cooperer(controlesDeToutesLesRencontres(nouvelles, stats, joueurs, impossibles))));
   const tous = new Map(nouvelles);
   anomalies.push(...(await mesurer('doublons', () => cooperer(controlesDoublonsParMorceaux(database, tous, cles)))));
-  const audit = await mesurer('audit des scores', () => cooperer(controlesAuditParMorceaux(database, { cles, calendarPath, resultsPath, rencontres: tous })));
+  // Correctif du 28/10/2026 : les écarts de buteurs écrits avant la règle des buteurs absents ou incomplets chez la
+  // source sont refaits UNE fois par l'audit (lui seul : pas les autres contrôles de ces rencontres) ; ensuite ils ont
+  // la forme d'aujourd'hui et la nuit ne les relit plus.
+  const dejaRefaites = new Set(cles);
+  const aReauditer = [...new Set(precedent.anomalies.filter(anomalieDeButeursDAvant).map((a) => a.matchKey).filter((k) => k && !dejaRefaites.has(k)))];
+  const pourLAudit = aReauditer.length ? new Map([...tous, ...(await cooperer(lireRencontresParMorceaux(database, { cles: aReauditer, lot: 64 })))]) : tous;
+  const audit = await mesurer('audit des scores', () => cooperer(controlesAuditParMorceaux(database, { cles: [...cles, ...aReauditer], calendarPath, resultsPath, rencontres: pourLAudit })));
   anomalies.push(...audit.anomalies);
   const homonymes = await mesurer('homonymes (joueurs)', () => cooperer(homonymesJoueursParMorceaux(database, tous, cles, { anciens: precedent.anomalies.map(porteeDe).filter((p) => p.joueur) })));
   anomalies.push(...homonymes.anomalies);
@@ -1669,6 +1688,8 @@ export async function controleDeNuit({ database, precedent, omissions = null, ca
   // le reste est repris ; une anomalie dont une rencontre a disparu est levée.
   const existe = database.prepare('SELECT 1 AS ok FROM matches WHERE match_key = ?');
   const refaites = new Set(cles);
+  // Les rencontres ré-auditées (correctif du 28/10/2026) : seules leurs anomalies de l'audit sont remplacées.
+  const reauditees = new Set(aReauditer);
   // L'étape « omissions » relit la saison EN COURS de chaque compétition qui a
   // un identifiant FotMob, sauf celles en échec : pour elles, la liste de ce
   // soir remplace l'ancienne. Les saisons passées (contrôle complet) restent.
@@ -1678,7 +1699,7 @@ export async function controleDeNuit({ database, precedent, omissions = null, ca
   for (const a of precedent.anomalies) {
     const p = porteeDe(a);
     let reprise = true;
-    if (p.cles) reprise = !p.cles.some((c) => refaites.has(c)) && p.cles.every((c) => existe.get(c));
+    if (p.cles) reprise = !p.cles.some((c) => refaites.has(c) || (reauditees.has(c) && SORTES_DE_L_AUDIT.has(a.sorte))) && p.cles.every((c) => existe.get(c));
     else if (p.joueur) reprise = !idsDuGroupe(p.joueur).some((id) => homonymes.touches.has(id));
     else if (p.fotmob) reprise = absentes.has(a.id);
     else if (p.ligueSaison) reprise = !aRecompter.has(p.ligueSaison);
