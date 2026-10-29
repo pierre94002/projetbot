@@ -162,6 +162,7 @@ import { fichesDesJoueurs, etatDesFiches } from '../data/db/playerRatings.js';
 import { stylesDeJeu, etatDesStyles } from '../data/db/teamStyle.js';
 import { simulerLesSaisonsDeLaNuit, simulerLesMatchsDeLaNuit } from '../data/simulation/simulationNuit.js';
 import { N as N_SIMULATION } from '../data/simulation/reglages.js';
+import { faireLeContexteDeLaNuit } from '../data/contexte/contexteNuit.js';
 import { lancementDe } from '../bench/trialsRegistry.js';
 import { candidatePourLeBanc } from '../core/engine/engineVersions.js';
 import { getEngineConfig } from '../core/engine/engineConfig.js';
@@ -1481,8 +1482,82 @@ async function passeSimulationMatchs(ctx, options = {}) {
 /** Due : une fois par jour civil de Paris, avec l'interrupteur des enregistreurs, ou quand la passe d'avant l'a REPORTÉE ; jamais forcée par un clic. */
 const dueSimulationMatchs = (ctx) => Boolean(env.enregistreurs?.enabled) && (!faitAujourdhui(ctx.derniere('simulationMatchs')) || Boolean(ctx.derniersDetails?.('simulationMatchs')?.reporte));
 
+/**
+ * L'étape « contexteDuMatch » (étape 32 du plan, lot 1a, 29/10/2026) : LA FICHE DE CONTEXTE de chaque match des 14
+ * prochains jours (repos et enchaînement des deux clubs, déplacement, altitude, pelouse, entraîneur, arbitre), calculée
+ * dans un PROCESSUS À PART en lecture seule (le cache incrémental des rencontres, la passe chronologique, les arbitres,
+ * le contrôle anti-fuite) et rangée par le serveur par tranches ; une fiche n'est jamais réécrite après son coup d'envoi ;
+ * l'archive d'avant-match FotMob (météo prévue, arbitre désigné) rattrapée et comptée. Un autre calcul lourd en cours :
+ * REPORTÉE. APRÈS la sauvegarde, hors du chemin de nuit de l'essai de l'étape 27 ; jamais lue par le moteur ni envoyée à
+ * l'IA. Cf. data/contexte/contexteNuit.js.
+ */
+async function passeContexteDuMatch(ctx, options = {}) {
+  // L'heure est lue ici (la passe), jamais dans data/contexte.
+  const r = await faireLeContexteDeLaNuit({ ...options, maintenant: options.maintenant ?? Date.now() });
+  const tenu = `le serveur jamais tenu plus de ${nombre(Math.round(r.blocMaxMs ?? 0))} ms d'affilée`;
+  if (r.mode === 'reporte') {
+    return { status: 'warn', summary: `Reporté : ${String(r.raison).replace(/\.$/, '')} — le contexte du match sera calculé à la passe suivante.`, details: { mode: r.mode, reporte: true, raison: r.raison }, changed: false };
+  }
+  if (r.mode === 'echec') {
+    return { status: 'error', summary: `En échec : ${String(r.erreur).slice(0, 240)} — rien d’avancé, les fiches d’avant restent ; la passe suivante recommence (${duree(r.dureeMs)}).`, details: { mode: r.mode, erreur: r.erreur, dureeMs: r.dureeMs }, changed: false };
+  }
+  const b = r.bilan ?? {};
+  const f = r.ecrites?.fiches ?? {};
+  const sans = r.liste?.sansIdentifiant ?? [];
+  const inconnus = [...new Set(sans.flatMap((x) => x.inconnus ?? []))];
+  const am = r.avantMatch?.comptes ?? null;
+  const c = r.controle ?? { lignes: 0, ecarts: [] };
+  const ecarts = c.ecarts ?? [];
+  const points = [];
+  if (ecarts.length) points.push(`${pluriel(ecarts.length, 'écart au contrôle anti-fuite', 'écarts au contrôle anti-fuite')} (${ecarts.slice(0, 2).map((e) => e.texte).join(' ; ')}) — à regarder`);
+  if (r.avantMatch?.erreur) points.push(`archive d’avant-match en échec : ${r.avantMatch.erreur}`);
+  if (r.elague?.erreur) points.push(`élagage en échec : ${r.elague.erreur}`);
+  const aPartMo = b.aPart?.rssMaxOctets ? `, ${Math.round(b.aPart.rssMaxOctets / 1048576)} Mo chez lui` : '';
+  return {
+    status: points.length ? 'warn' : 'ok',
+    summary:
+      `Contexte du match : ${pluriel(f.ecrites ?? 0, 'fiche écrite', 'fiches écrites')} pour les matchs des 14 prochains jours` +
+      (f.figees ? ` (${pluriel(f.figees, 'fiche figée', 'fiches figées')} : coup d’envoi passé ou jour du match)` : '') +
+      (sans.length ? ` ; ${pluriel(sans.length, 'match sans fiche', 'matchs sans fiche')} : club non reconnu par son identifiant FotMob (${inconnus.slice(0, 3).join(', ')}${inconnus.length > 3 ? ', …' : ''})` : '') +
+      (am ? ` ; avant-match FotMob des ${pluriel(am.matchs, 'match joué', 'matchs joués')} des deux derniers jours : ${nombre(am.gardes)} gardé(s), ${nombre(am.perdus)} perdu(s) (lu seulement après le coup d’envoi), ${nombre(am.jamaisReleves)} jamais relevé(s)` : '') +
+      ` ; ${pluriel(r.ecrites?.arbitres?.ecrits ?? 0, 'arbitre', 'arbitres')} ; ${pluriel(b.cache?.relues ?? 0, 'rencontre relue', 'rencontres relues')} (nouvelles ou changées)` +
+      ` ; contrôle anti-fuite : ${pluriel(c.lignes ?? 0, 'couple recalculé', 'couples recalculés')} par un second chemin, ${pluriel(ecarts.length, 'écart', 'écarts')}` +
+      ` ; ${duree(r.dureeMs)} (à part ${duree(b.calculMs ?? 0)}${aPartMo} ; rangement ${duree(r.rangementMs ?? 0)}), ${tenu}` +
+      (points.length ? ` ; ${points.join(' ; ')}.` : '.') +
+      ' Preuve sur vos matchs : le banc d’essai n’a encore mesuré aucun facteur, rien à juger. Explication seulement : jamais lu par le moteur ni envoyé à l’IA.',
+    details: {
+      mode: r.mode,
+      calculeLe: r.calculeLe,
+      jourD: r.jourD,
+      liste: { items: r.liste?.items ?? 0, sansIdentifiant: sans.length, inconnus: inconnus.slice(0, 10), noms: r.liste?.noms ?? 0 },
+      fiches: f,
+      rencontres: r.ecrites?.rencontres ?? null,
+      arbitres: r.ecrites?.arbitres ?? null,
+      avantMatch: r.avantMatch ?? null,
+      elague: r.elague ?? null,
+      controle: { lignes: c.lignes ?? 0, couples: c.couples ?? 0, ecarts: ecarts.length },
+      cache: b.cache ?? null,
+      passe: b.passe ?? null,
+      durees: b.durees ?? null,
+      dureeMs: r.dureeMs,
+      calculMs: b.calculMs ?? null,
+      rangementMs: r.rangementMs ?? null,
+      plusLongueTrancheMs: r.plusLongueTrancheMs ?? null,
+      blocMaxMs: r.blocMaxMs,
+      blocMaxOu: r.blocMaxOu ?? null,
+      calculAPart: { dureeMs: b.dureeMs ?? null, rssMax: b.aPart?.rssMaxOctets ?? null }
+    },
+    // Les écarts du contrôle restent visibles jusqu'à la nuit qui n'en trouve plus (comme les autres contrôles de nuit).
+    alert: { key: 'contexteDuMatch', value: ecarts.length ? { ecarts: ecarts.slice(0, 20), total: ecarts.length, lignes: c.lignes ?? 0, updatedAt: new Date().toISOString() } : null },
+    changed: false
+  };
+}
+
+/** Due : une fois par jour civil de Paris, ou quand la passe d'avant l'a REPORTÉE ; jamais forcée par un clic. */
+const dueContexteDuMatch = (ctx) => !faitAujourdhui(ctx.derniere('contexteDuMatch')) || Boolean(ctx.derniersDetails?.('contexteDuMatch')?.reporte);
+
 /** Pour les tests : l'étape d'analyse IA automatique telle que la passe la lance (plafond, réserve, bilan) ; l'étape du carnet de santé ; celle de l'historique football-data ; celle des repères ; celle de la table du jour J ; celle du contrôle quotidien ; celle de la candidate à blanc ; celle de la calibration du mois écoulé ; celle de connaître le marché ; celle de l'indice de force ; celle des forces de buts ; celle des fiches des joueurs ; celle du carnet de l'IA ; celles du bulletin du jour et du bilan de la semaine ; celle du résumé du mois de la boucle de correction. */
-export const __testing = { ETAPES: () => ETAPES, passeBulletin, passeBilanSemaine, dueBulletin, dueBilanSemaine, passeCarteOuParier, dueCarteOuParier, dueMoteurABlanc, passeIaAuto, passeCarnetSante, passeHistoriqueFd, dueHistoriqueFd, passeReperes, dueReperes, passeTableJourJ, dueTableJourJ, passeControleQuotidien, passeMoteurABlanc, passeCalibrationMensuelle, dueCalibrationMensuelle, passeConnaitreMarche, dueConnaitreMarche, passeIndiceForce, dueIndiceForce, passeForcesButs, dueForcesButs, passeFichesJoueurs, dueFichesJoueurs, passeStylesDeJeu, dueStylesDeJeu, passeCarnetIA, passeDossiersIA, passeSimulationSaisons, dueSimulationSaisons, passeSimulationMatchs, dueSimulationMatchs, passeBoucleCorrection, dueBoucleCorrection, passeResumeCorrection, dueResumeCorrection };
+export const __testing = { ETAPES: () => ETAPES, passeBulletin, passeBilanSemaine, dueBulletin, dueBilanSemaine, passeCarteOuParier, dueCarteOuParier, dueMoteurABlanc, passeIaAuto, passeCarnetSante, passeHistoriqueFd, dueHistoriqueFd, passeReperes, dueReperes, passeTableJourJ, dueTableJourJ, passeControleQuotidien, passeMoteurABlanc, passeCalibrationMensuelle, dueCalibrationMensuelle, passeConnaitreMarche, dueConnaitreMarche, passeIndiceForce, dueIndiceForce, passeForcesButs, dueForcesButs, passeFichesJoueurs, dueFichesJoueurs, passeStylesDeJeu, dueStylesDeJeu, passeCarnetIA, passeDossiersIA, passeSimulationSaisons, dueSimulationSaisons, passeSimulationMatchs, dueSimulationMatchs, passeBoucleCorrection, dueBoucleCorrection, passeResumeCorrection, dueResumeCorrection, passeContexteDuMatch, dueContexteDuMatch };
 
 /**
  * Les étapes. `due(ctx)` dit si l'étape tourne à cette passe (les autres
@@ -2155,6 +2230,16 @@ const ETAPES = [
     due: (ctx) => env.autoAiAnalysis.enabled && dueResumeCorrection(ctx),
     pourquoiPasDue: () => decisionDuResumeDuMois().pourquoi,
     run: (ctx) => passeResumeCorrection(ctx)
+  },
+  {
+    key: 'contexteDuMatch',
+    label: 'Contexte du match (fiches des 14 prochains jours, avant-match FotMob, arbitres)',
+    // Étape 32 du plan (lot 1a, 29/10/2026) : APRÈS la sauvegarde et tout ce qu'elle lit (table du jour J, styles de jeu,
+    // calendrier), hors du chemin de nuit de l'essai de l'étape 27 (une panne ici ne lui coûte rien), juste AVANT le
+    // contrôle quotidien (toujours dernier). Une fois par jour civil de Paris, ou si la passe d'avant l'a reportée ; jamais
+    // au clic ; ni réseau ni Claude. Cf. passeContexteDuMatch.
+    due: (ctx) => dueContexteDuMatch(ctx),
+    run: (ctx) => passeContexteDuMatch(ctx)
   },
   {
     key: 'controleQuotidien',

@@ -73,9 +73,9 @@ let refreshPollTimer = null;
 let pageOuverte = true;
 
 const MODEL_WEIGHTS = [
-  { key: 'market', label: 'Consensus marché', description: 'Moyenne des cotes bookmakers — le signal le plus fiable.' },
-  { key: 'structural', label: 'Facteurs structurels', description: 'Pressing, fatigue et rotation — impact borné à ±6%.' },
-  { key: 'exogenous', label: 'Facteurs exogènes', description: 'Météo et état du terrain — impact borné à ±2%.' }
+  { key: 'market', label: 'Consensus marché', description: "Cotes des bookmakers de référence (les plus fiables d'abord), marge retirée." },
+  { key: 'structural', label: 'Facteurs structurels', description: "Le modèle statistique seul (attaque et défense des deux équipes). Poids 0 % : le 1N2 vient du marché. Ses réglages « pressing, fatigue » n'ont jamais reçu de données." },
+  { key: 'exogenous', label: 'Facteurs exogènes', description: "Le même modèle ajusté par la météo et le terrain. Poids 0 %, et l'ajustement n'a jamais reçu de données. Le contexte du match (étape 32) est montré à part." }
 ];
 
 // ------------------------------------------------ puces du bandeau
@@ -551,7 +551,7 @@ async function handleRunAiAnalysis(limit) {
           <AiConnectionForm :status="aiAnalysisStore.status" :connecting="aiAnalysisStore.connecting" @connect="handleConnectAi" @disconnect="handleDisconnectAi" />
         </AppCard>
 
-        <AppCard title="Structure du modèle" subtitle="Importance relative des signaux — à titre indicatif, non modifiable" eyebrow="Modèle" icon="pieChart">
+        <AppCard title="Structure du modèle" subtitle="Poids de chaque signal dans le pronostic du résultat (1N2). Les marchés de buts ont leur propre modèle." eyebrow="Modèle" icon="pieChart">
           <div class="model-weights cm-stagger">
             <div v-for="weight in MODEL_WEIGHTS" :key="weight.key" class="model-weights__item cm-block">
               <div class="model-weights__top">

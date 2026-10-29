@@ -351,7 +351,9 @@ test('l’étape « resumeCorrection » : après le bilan de la semaine, avant l
   const i = s.etapes.indexOf('resumeCorrection');
   assert.equal(s.etapes.filter((k) => k === 'resumeCorrection').length, 1);
   assert.equal(s.etapes[i - 1], 'bilanSemaine');
-  assert.equal(s.etapes[i + 1], 'controleQuotidien');
+  // Étape 32 (lot 1a, 29/10/2026) : le contexte du match s'intercale entre le résumé du mois et le contrôle quotidien.
+  assert.equal(s.etapes[i + 1], 'contexteDuMatch');
+  assert.equal(s.etapes[i + 2], 'controleQuotidien');
   assert.equal(s.etapes.at(-1), 'controleQuotidien');
   assert.ok(s.etapes.indexOf('boucleCorrection') < i, 'le tri du mois est fait plus haut dans la même passe');
   assert.equal(s.label, "Résumé du mois de la boucle de correction (texte de l'IA, un seul appel par mois)");

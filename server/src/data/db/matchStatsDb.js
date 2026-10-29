@@ -1617,6 +1617,97 @@ END;`,
   'CREATE INDEX IF NOT EXISTS idx_correction_journal_proposition ON correction_journal(proposition);'
 ];
 
+/**
+ * LE CONTEXTE DU MATCH (étape 32 du plan, lot 1a, 29/10/2026 ; data/contexte/ et data/db/refereeRead.js) : la fiche de
+ * contexte de chaque match des 14 prochains jours, l'archive d'avant-match FotMob, les arbitres au jour de la nuit.
+ * Écrites par le SERVEUR seul — l'étape « contexteDuMatch » de la passe, sous son verrou, par tranches ; l'archive
+ * d'avant-match par upsertUpcomingLineup, au moment où la page est lue —, calculées dans un processus à part en lecture
+ * seule ; JAMAIS lues par le moteur (hors de son empreinte). Clubs : le NUMÉRO FotMob (8456), jamais un nom.
+ *   contexte_rencontres   le CACHE incrémental de la nuit : pour chaque rencontre du registre du jour J, ce que la page
+ *                         d'avant-match publie (coup d'envoi, stade, pelouse, arbitre) et les penalties marqués ; seules
+ *                         les rencontres dont la signature change sont relues (constat 11 de la critique) ;
+ *   contexte_fiches       la fiche d'un match (date, clubs), réécrite chaque nuit tant que son coup d'envoi n'est pas
+ *                         passé (heure inconnue : tant que sa date est après le jour de la nuit), JAMAIS ensuite : c'est
+ *                         l'archive de la fiche ; jamais élaguée quand le match a été joué (constat 8 ; match_key : la
+ *                         rencontre jouée qui lui correspond, rattachée par la nuit) ; table à rowid ;
+ *   contexte_avant_match  l'avant-match FotMob (météo PRÉVUE, stade, pelouse, arbitre désigné : une liste blanche), écrit
+ *                         quand la page est lue AVANT le coup d'envoi ; la dernière lecture d'avant gagne ; une lecture
+ *                         d'après ou une relecture ne le touche jamais (constat 5) ; jamais élagué ;
+ *   contexte_arbitres     les arbitres au jour de la nuit (moyennes recalculées depuis le magasin, indices) ;
+ *   contexte_etat         la nuit, ses comptes, les moyennes des championnats, le contrôle anti-fuite.
+ * Chaque entrée commence par son ordre (aucun commentaire devant : openDb crée d'abord les « CREATE TABLE »).
+ */
+const CONTEXTE_DDL = [
+  `CREATE TABLE IF NOT EXISTS contexte_rencontres (
+  match_key TEXT PRIMARY KEY,
+  sig TEXT NOT NULL,
+  kickoff TEXT,
+  stade TEXT,
+  surface TEXT,
+  arbitre_nom TEXT,
+  arbitre_pays TEXT,
+  penalties INTEGER,
+  version INTEGER NOT NULL
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS contexte_fiches (
+  id INTEGER PRIMARY KEY,
+  date TEXT NOT NULL,
+  home_id INTEGER NOT NULL,
+  away_id INTEGER NOT NULL,
+  league TEXT,
+  match_id TEXT,
+  home_name TEXT,
+  away_name TEXT,
+  kickoff TEXT,
+  kickoff_connu INTEGER NOT NULL DEFAULT 0,
+  calcule_le TEXT NOT NULL,
+  version INTEGER NOT NULL,
+  apres_coup_d_envoi INTEGER NOT NULL DEFAULT 0,
+  facteurs TEXT NOT NULL,
+  match_key TEXT,
+  UNIQUE (date, home_id, away_id)
+);`,
+  `CREATE TABLE IF NOT EXISTS contexte_avant_match (
+  id INTEGER PRIMARY KEY,
+  fotmob_id TEXT NOT NULL UNIQUE,
+  date TEXT NOT NULL,
+  kickoff TEXT NOT NULL,
+  league TEXT,
+  home_id INTEGER,
+  away_id INTEGER,
+  releve_le TEXT NOT NULL,
+  avant_match TEXT NOT NULL,
+  version INTEGER NOT NULL
+);`,
+  `CREATE TABLE IF NOT EXISTS contexte_arbitres (
+  cle TEXT PRIMARY KEY,
+  nom TEXT NOT NULL,
+  pays TEXT,
+  matchs INTEGER NOT NULL,
+  matchs_cartons INTEGER NOT NULL,
+  jaunes INTEGER,
+  rouges INTEGER,
+  matchs_fautes INTEGER NOT NULL,
+  fautes INTEGER,
+  matchs_deroule INTEGER NOT NULL,
+  penalties INTEGER,
+  matchs_buts INTEGER NOT NULL,
+  buts90 INTEGER,
+  buts_attendus REAL,
+  pen_attendus REAL,
+  indice_buts REAL,
+  indice_penalties REAL,
+  premier TEXT,
+  dernier TEXT,
+  ligues TEXT,
+  calcule_le TEXT NOT NULL,
+  version INTEGER NOT NULL
+);`,
+  `CREATE TABLE IF NOT EXISTS contexte_etat (cle TEXT PRIMARY KEY, valeur TEXT NOT NULL) WITHOUT ROWID;`,
+  'CREATE INDEX IF NOT EXISTS idx_contexte_fiches_kickoff ON contexte_fiches(kickoff);',
+  'CREATE INDEX IF NOT EXISTS idx_contexte_avant_match_date ON contexte_avant_match(date);'
+];
+
 const FD_HISTORY_INDEXES = [
   'CREATE INDEX IF NOT EXISTS idx_fd_history_code_date ON fd_history(code, date);',
   'CREATE INDEX IF NOT EXISTS idx_fd_history_dom ON fd_history(dom);',
@@ -1668,6 +1759,7 @@ const DDL = [
   ...TEAM_STYLE_DDL,
   ...SIMULATION_DDL,
   ...CORRECTION_DDL,
+  ...CONTEXTE_DDL,
   'CREATE INDEX IF NOT EXISTS idx_matches_date ON matches(date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_league_date ON matches(league, date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_home ON matches(home_name);',
@@ -2255,6 +2347,110 @@ export function upsertUpcomingLineup(entry, { database = openDb() } = {}) {
       payload: JSON.stringify(entry.payload),
       fetchedAt: entry.fetchedAt ?? new Date().toISOString()
     });
+  // Étape 32 (lot 1a) : l'ARCHIVE d'avant-match, au moment de l'écriture (cf. archiverLAvantMatch) ; une panne de
+  // l'archive n'empêche jamais la composition, déjà écrite.
+  try {
+    archiverLAvantMatch({ ...entry, fetchedAt: entry.fetchedAt ?? new Date().toISOString() }, { database });
+  } catch (error) {
+    console.warn(`[contexte] avant-match non archivé : ${String(error?.message ?? error).slice(0, 160)}`);
+  }
+}
+
+/**
+ * Étape 32 (lot 1a, 29/10/2026) : CE QUE L'ON GARDE DE LA PAGE FOTMOB D'AVANT-MATCH — la LISTE BLANCHE de l'archive
+ * (le vent tel quel, en m/s : la conversion en km/h est celle de l'écran ; de l'arbitre, le nom et le pays SEULEMENT,
+ * jamais les moyennes que FotMob affiche ; jamais l'affluence). La règle vit ICI, dans le module de la base, et nulle
+ * part dans data/contexte/ : matchStatsDb.js est atteint par les fichiers du moteur, et rien de l'étape 32 ne doit
+ * l'être (test contexteFrontiere, T-X2).
+ */
+export const CHAMPS_AVANT_MATCH = Object.freeze(['temperature', 'windSpeed', 'precipitation', 'weather', 'surface', 'stadium', 'lat', 'long']);
+/** La forme des lignes de l'archive d'avant-match. */
+export const VERSION_AVANT_MATCH = 1;
+
+const instantAvantMatch = (x) => (typeof x === 'string' && Number.isFinite(Date.parse(x)) ? Date.parse(x) : null);
+const texteAvantMatch = (t) => {
+  if (typeof t !== 'string') return null;
+  const s = t.normalize('NFC').trim().replace(/\s+/g, ' ');
+  return s ? s : null;
+};
+/** « fotmob-8456 », « 8456 » ou 8456 → 8456 ; sinon null (la règle de data/contexte/formulesDuContexte.numeroDuClub : un test les compare). */
+const numeroAvantMatch = (id) => {
+  const m = /^(?:fotmob-)?([1-9]\d*)$/.exec(String(id ?? '').trim());
+  return m && Number.isSafeInteger(Number(m[1])) ? Number(m[1]) : null;
+};
+
+/**
+ * La ligne de `contexte_avant_match` d'une écriture de `upcoming_lineups` (`entry` : { fotmobId, date, kickoff, league,
+ * homeId, awayId, payload, fetchedAt }), ou la raison de ne rien archiver : sans identifiant, sans cadre (aucun champ
+ * de la liste blanche), coup d'envoi inconnu, ou lecture faite AU coup d'envoi ou après. Le coup d'envoi de FotMob
+ * (payload.meta.kickoff) passe avant celui de l'appelant. Pur. Rend { ligne, raison }.
+ */
+export function ligneDAvantMatch(entry) {
+  const fotmobId = texteAvantMatch(entry?.fotmobId === null || entry?.fotmobId === undefined ? '' : String(entry.fotmobId));
+  if (!fotmobId) return { ligne: null, raison: 'sans-identifiant' };
+  const meta = entry?.payload?.meta ?? null;
+  const champs = {};
+  if (meta && typeof meta === 'object') {
+    for (const k of CHAMPS_AVANT_MATCH) if (meta[k] !== null && meta[k] !== undefined && meta[k] !== '') champs[k] = meta[k];
+    const nom = texteAvantMatch(meta.referee?.name);
+    if (nom) champs.referee = { name: nom, country: texteAvantMatch(meta.referee?.country) };
+  }
+  if (!Object.keys(champs).length) return { ligne: null, raison: 'sans-cadre' };
+  const ko = instantAvantMatch(meta?.kickoff) ?? instantAvantMatch(entry?.kickoff);
+  if (ko === null) return { ligne: null, raison: 'coup-d-envoi-inconnu' };
+  const releve = instantAvantMatch(entry?.fetchedAt);
+  if (releve === null || !(releve < ko)) return { ligne: null, raison: 'apres-le-coup-d-envoi' };
+  const kickoff = new Date(ko).toISOString();
+  const jour = String(entry?.date ?? '').slice(0, 10);
+  return {
+    ligne: {
+      fotmob_id: fotmobId,
+      date: /^\d{4}-\d{2}-\d{2}$/.test(jour) ? jour : kickoff.slice(0, 10),
+      kickoff,
+      league: texteAvantMatch(entry?.league ?? null),
+      home_id: numeroAvantMatch(entry?.homeId ?? entry?.payload?.home?.teamId),
+      away_id: numeroAvantMatch(entry?.awayId ?? entry?.payload?.away?.teamId),
+      releve_le: new Date(releve).toISOString(),
+      avant_match: JSON.stringify(champs),
+      version: VERSION_AVANT_MATCH
+    },
+    raison: null
+  };
+}
+
+/**
+ * Étape 32 (lot 1a, 29/10/2026 ; constat 5 de la critique) : L'ARCHIVE D'AVANT-MATCH, écrite au moment où la page
+ * FotMob d'un match à venir est lue (upsertUpcomingLineup) — la météo PRÉVUE, le stade, la pelouse, l'arbitre désigné
+ * (ligneDAvantMatch, la liste blanche). Seulement si la lecture précède le coup d'envoi ; champ par champ, la
+ * DERNIÈRE lecture d'avant gagne (un champ absent d'une lecture plus récente garde sa valeur : une page relue qui ne
+ * redit pas l'arbitre ne l'efface pas) ; une lecture faite après le coup d'envoi ne la touche jamais (la condition est
+ * aussi dans l'ordre SQL) ; jamais élaguée. Rend { archive, raison }.
+ */
+export function archiverLAvantMatch(entry, { database = openDb() } = {}) {
+  const { ligne: lue, raison } = ligneDAvantMatch(entry);
+  if (!lue) return { archive: false, raison };
+  const deja = database.prepare('SELECT releve_le, avant_match FROM contexte_avant_match WHERE fotmob_id = ?').get(lue.fotmob_id);
+  if (deja && !(lue.releve_le > deja.releve_le)) return { archive: false, raison: 'plus-ancienne-que-l-archive' };
+  let ligne = lue;
+  if (deja) {
+    let avant = {};
+    try {
+      avant = JSON.parse(deja.avant_match) ?? {};
+    } catch {
+      avant = {};
+    }
+    ligne = { ...lue, avant_match: JSON.stringify({ ...avant, ...JSON.parse(lue.avant_match) }) };
+  }
+  const r = database
+    .prepare(`INSERT INTO contexte_avant_match (fotmob_id, date, kickoff, league, home_id, away_id, releve_le, avant_match, version)
+              VALUES (@fotmob_id, @date, @kickoff, @league, @home_id, @away_id, @releve_le, @avant_match, @version)
+              ON CONFLICT(fotmob_id) DO UPDATE SET
+                date = excluded.date, kickoff = excluded.kickoff, league = COALESCE(excluded.league, contexte_avant_match.league),
+                home_id = COALESCE(excluded.home_id, contexte_avant_match.home_id), away_id = COALESCE(excluded.away_id, contexte_avant_match.away_id),
+                releve_le = excluded.releve_le, avant_match = excluded.avant_match, version = excluded.version
+              WHERE excluded.releve_le > contexte_avant_match.releve_le AND excluded.releve_le < excluded.kickoff`)
+    .run(ligne);
+  return { archive: Number(r.changes) > 0, raison: Number(r.changes) > 0 ? null : 'plus-ancienne-que-l-archive' };
 }
 
 /** La composition déjà enregistrée pour ce match, `null` si aucune. */

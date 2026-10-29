@@ -900,7 +900,9 @@ test('les DEUX ÉTAPES de l’actualisation : après le carnet de l’IA, avant 
   assert.equal(s.etapes[i + 1], 'bilanSemaine');
   // Étape 26 (partie D, 28/10/2026) : le résumé du mois de la boucle de correction s’intercale entre le bilan et le contrôle quotidien.
   assert.equal(s.etapes[i + 2], 'resumeCorrection');
-  assert.equal(s.etapes[i + 3], 'controleQuotidien');
+  // Étape 32 (lot 1a, 29/10/2026) : le contexte du match s’intercale entre le résumé du mois et le contrôle quotidien.
+  assert.equal(s.etapes[i + 3], 'contexteDuMatch');
+  assert.equal(s.etapes[i + 4], 'controleQuotidien');
   assert.equal(s.etapes.at(-1), 'controleQuotidien');
   assert.equal(s.etapes.filter((k) => k === 'bulletin' || k === 'bilanSemaine').length, 2);
   assert.deepEqual(s.labels, { bulletin: "Bulletin du jour (texte de l'IA, un seul appel par jour)", bilanSemaine: "Bilan de la semaine (texte de l'IA, un seul appel par semaine)" });

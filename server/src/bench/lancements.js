@@ -82,12 +82,15 @@ export const DONNEES_VUES = Object.freeze([
  *   simulation    la simulation complète : déroulé d'un match, combinés, fins de saison et enjeu (étape 28, 27/10/2026 ;
  *                 jamais lue par le moteur — une candidate du moteur qui lirait un jour l'enjeu recopierait ces vues
  *                 avec `pour: ['moteur']`).
+ *   contexte      le contexte du match (étape 32, 29/10/2026 ; data/contexte/) : la fiche de contexte, l'archive
+ *                 d'avant-match et le banc des facteurs — jamais lus par le moteur au lot 1 (une candidate du moteur qui
+ *                 lirait un jour le contexte recopierait ces vues avec `pour: ['moteur']`).
  * Une étape qui fait LIRE au moteur une grandeur apprise ailleurs (27 lisant l'indice ou une demi-vie de 18)
  * recopie ces fenêtres dans SON lancement avec `pour: ['moteur']` : c'est son lancement qui dit ce que le
  * moteur a vu. Sans cette règle, une fenêtre regardée pour l'indice étiquetait « déjà vu » les lignes du
  * MOTEUR sur 2019-2023 (la note de départ), alors qu'aucun chiffre du moteur ne les avait vues.
  */
-export const PORTEES = Object.freeze(['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation']);
+export const PORTEES = Object.freeze(['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte']);
 
 /** Une fenêtre vaut-elle pour cette mesure ? `tout` vaut pour toutes. */
 export const pourLaPortee = (pour, portee) => Array.isArray(pour) && (pour.includes(portee) || pour.includes('tout'));
@@ -608,6 +611,49 @@ export const VARIANTES_DE_L_ETAPE_27 = Object.freeze([
 ]);
 
 /**
+ * Les fenêtres REGARDÉES par l'étape 32 (le contexte du match, lot 1a du 29/10/2026 ; data/contexte/), portée « contexte »
+ * (déclarée DANS chaque fenêtre : verifierLancements l'exige, et le juge de l'essai de l'étape 27 n'en voit rien) : le
+ * magasin 2023-07-01 → 2026-09-23 où le banc (partie B, UN seul regard) apprendra sur un pli et jugera l'autre, puis
+ * l'inverse — et où la conception et la critique ont compté les parts et simulé la puissance sans lire un seul résultat
+ * (scores simulés), déclaré quand même ; la mise en route 2023-01-01 → 2023-06-30 (états accumulés, rien d'appris ni de
+ * jugé). Jamais P5 (depuis le 24/09/2026) : c'est la preuve après lancement. Une candidate du MOTEUR qui lirait un jour le
+ * contexte (lot 2) recopierait ces fenêtres avec `pour: ['moteur']`.
+ */
+export const VUES_DE_L_ETAPE_32 = Object.freeze([
+  Object.freeze({
+    de: '2023-07-01',
+    a: '2026-09-23',
+    quoi: 'Étape 32 : banc du contexte, un seul regard — coefficients appris sur 2023-07 → 2025-06 et jugés sur 2025-07 → 2026-09-23, puis l’inverse (deux plis), perte du score exact ; avant lui, parts et puissances comptées sans aucun résultat (scores simulés).',
+    pour: Object.freeze(['contexte'])
+  }),
+  Object.freeze({
+    de: '2023-01-01',
+    a: '2023-06-30',
+    quoi: 'Étape 32 : mise en route du banc du contexte (repos, entraîneurs et arbitres accumulés ; rien d’appris ni de jugé).',
+    pour: Object.freeze(['contexte'])
+  })
+]);
+
+/**
+ * Les VARIANTES de l'étape 32, déclarées AVANT le regard unique du banc (décision de l'orchestrateur du 29/10/2026,
+ * recommandation 3 de la critique : `repos-ecart` et `arbitre-penalties` retirés, la classe « long » du repos n'est plus
+ * mesurée) : la fiche retenue (contexte-v1, en tête : elle ne lit aucun résultat, comptée par prudence comme style-v1),
+ * les sept facteurs mesurés et le faux facteur de contrôle. Le banc compte K = VARIANTES_DE_L_ETAPE_32.length et refuse
+ * toute variante absente d'ici. Une variante corrigée après le regard = un identifiant de plus, déclaré avant son passage.
+ */
+export const VARIANTES_DE_L_ETAPE_32 = Object.freeze([
+  Object.freeze({ id: 'contexte-v1', quoi: 'Fiche de contexte retenue (version 1) : repos en heures entre deux coups d’envoi, enchaînement à moins de 96 h (le tour suivant d’une même coupe ignoré), distance entre les stades habituels, altitude, pelouse, nouvel entraîneur, arbitre recalculé au jour J ; ne lit aucun résultat.' }),
+  Object.freeze({ id: 'repos-court', quoi: 'Repos court (moins de 96 h entre les deux coups d’envoi) : les buts du club × e^a, ceux de son adversaire × e^b (2 coefficients ; « normal » et « long » en référence, « inconnu » sans effet).' }),
+  Object.freeze({ id: 'enchainement-serre', quoi: 'Enchaînement serré (le club rejoue moins de 96 h après le coup d’envoi) : ses buts × e^a, ceux de son adversaire × e^b (2 coefficients).' }),
+  Object.freeze({ id: 'deplacement-distance', quoi: 'Distance entre les stades habituels, x = ln(1 + km/100) centré sur l’apprentissage : buts du visiteur × e^(a·x), du club qui reçoit × e^(b·x) (2 coefficients) ; un match joué ailleurs est écarté.' }),
+  Object.freeze({ id: 'deplacement-altitude', quoi: 'Altitude : stade à 2 000 m ou plus, visiteur sans altitude listée ou 1 500 m plus bas — buts du club qui reçoit × e^a, du visiteur × e^b (2 coefficients).' }),
+  Object.freeze({ id: 'pelouse-synthetique', quoi: 'Pelouse synthétique : buts du club qui reçoit × e^a, du visiteur × e^b (2 coefficients) ; les clubs dont la pelouse a pu changer (la base, l’export du 22/09 et venues.json en désaccord) écartés.' }),
+  Object.freeze({ id: 'arbitre-buts', quoi: 'Arbitre « à buts » : indice au jour J face à la base statistique (somme des λS + μS recalés de ses matchs d’avant J, 10 matchs moyens ajoutés) — les buts des deux équipes × e^(β·indice) (1 coefficient).' }),
+  Object.freeze({ id: 'entraineur-nouveau', quoi: 'Nouvel entraîneur (5 matchs au plus, un autre avant lui, pas de retour sous 365 jours) : ses buts × e^a, ceux de son adversaire × e^b (2 coefficients).' }),
+  Object.freeze({ id: 'placebo', quoi: 'Faux facteur de contrôle : la forme de repos-court sur une classe tirée pour chaque club (FNV-1a de « clé du match:camp », mod 100, de 0 à 14 : 15 % des clubs) ; doit sortir « pas prouvé ».' })
+]);
+
+/**
  * Les lancements déclarés par les étapes, dans l'ordre où elles sont faites. À la FIN d'une étape qui
  * touche aux chiffres : ajouter son entrée ici (version en service, ce qu'elle change, TOUTES les
  * variantes dont on a regardé le résultat pendant la construction, les fenêtres de données regardées).
@@ -672,6 +718,18 @@ export const LANCEMENTS = Object.freeze([
     le: null,
     variantes: VARIANTES_DE_L_ETAPE_28,
     vues: Object.freeze(VUES_DE_L_ETAPE_28.map((f) => Object.freeze({ ...f, pour: Object.freeze(['simulation']) })))
+  }),
+  // Étape 32 (lot 1a, 29/10/2026) : le contexte du match — la fiche de contexte de chaque match à venir, calculée chaque
+  // nuit, et l'archive d'avant-match ; elle ne règle aucun chiffre du moteur (portée 'contexte'). Datée du premier
+  // démarrage de l'appli avec ce code (la preuve après lancement jugera les matchs d'après, fiche gelée avant leur coup
+  // d'envoi) ; ses variantes et ses vues déclarées AVANT le regard unique du banc (partie B).
+  Object.freeze({
+    etape: '32',
+    version: 'contexte-v1',
+    quoi: 'Contexte du match : pour chaque match des 14 prochains jours, une fiche calculée chaque nuit depuis le magasin FotMob (repos et enchaînement des deux clubs, déplacement, altitude, pelouse, entraîneur, arbitre), gardée telle qu’elle était avant le coup d’envoi avec la météo prévue par FotMob ; explication seulement, jamais lue par le moteur.',
+    le: null,
+    variantes: VARIANTES_DE_L_ETAPE_32,
+    vues: VUES_DE_L_ETAPE_32
   })
 ]);
 

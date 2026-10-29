@@ -405,7 +405,12 @@ test('T15 lancement : l’étape 30 déclarée (fiches-v1, datée du premier dé
 test('T17 l’alerte durable « fichesJoueurs » dite à l’écran (Réglages › Actualisation, puce du haut) : son nom, ses écarts, le joueur et le jour en mots simples ; rien quand la nuit n’a trouvé aucun écart', async () => {
   const A = await import(pathToFileURL(path.join(SERVEUR, '..', 'ui', 'src', 'utils', 'controlesAntiFuite.js')).href);
   // Étape 28 (vérification du 27/10, constat 14) : le contrôle des déroulés simulés de la nuit, en cinquième.
-  assert.deepEqual(A.CONTROLES_ANTI_FUITE.map((c) => c.cle), ['tableJourJ', 'forcesButs', 'fichesJoueurs', 'stylesDeJeu', 'simulationMatchs'], 'dans l’ordre de la nuit (étape 37 : les styles de jeu après les fiches ; étape 28 : les déroulés simulés)');
+  // Étape 32 (lot 1a, 29/10/2026 ; critique, constat 19) : le contrôle du contexte du match, en sixième — chaque écart porte sa phrase.
+  assert.deepEqual(A.CONTROLES_ANTI_FUITE.map((c) => c.cle), ['tableJourJ', 'forcesButs', 'fichesJoueurs', 'stylesDeJeu', 'simulationMatchs', 'contexteDuMatch'], 'dans l’ordre de la nuit (étape 37 : les styles de jeu après les fiches ; étape 28 : les déroulés simulés ; étape 32 : le contexte du match)');
+  assert.deepEqual(
+    A.controlesAntiFuiteDits({ contexteDuMatch: { ecarts: [{ matchKey: 'm', J: '2026-10-12', club: 8456, colonne: 'precedent', texte: 'Lens avant le 12/10/2026 : dernier match lu le 11/10/2026 par la passe, le 08/10/2026 par le second chemin' }], total: 1, lignes: 20, updatedAt: '2026-10-29T02:10:00.000Z' } }).map((d) => d.texte),
+    ['Contexte du match (repos, entraîneur et arbitre au jour du match) : 1 écart sur 20 lignes recalculées (contrôle du 29/10/2026 à 03:10) — par exemple Lens avant le 12/10/2026 : dernier match lu le 11/10/2026 par la passe, le 08/10/2026 par le second chemin.']
+  );
   assert.deepEqual(A.controlesAntiFuiteDits({ fichesJoueurs: null }), []);
   const alerte = { ecarts: [{ joueur: 123, J: '2026-10-12', colonne: 'S.xgnp', attendu: 1, lu: 2 }, { joueur: 123, J: '2026-10-12', colonne: 'W.xgnp', attendu: 1, lu: 2 }], total: 2, lignes: 40, updatedAt: '2026-10-22T03:20:00.000Z' };
   assert.deepEqual(A.controlesAntiFuiteDits({ fichesJoueurs: alerte }).map((d) => d.texte), ['Fiches des joueurs (force du onze) : 2 écarts sur 40 lignes recalculées (contrôle du 22/10/2026 à 05:20) — par exemple joueur n° 123 avant le 12/10/2026.']);
