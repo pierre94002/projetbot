@@ -10,6 +10,7 @@ import { preparerAVerifierParNoms } from '../../data/controleQuotidien.js';
 import { openDb } from '../../data/db/matchStatsDb.js';
 import { simulationDuMatch } from '../../data/simulation/simulationRead.js';
 import { lancementDe } from '../../bench/trialsRegistry.js';
+import { contexteDuMatch } from '../../data/contexte/contexteRead.js';
 
 /**
  * Analyse un match existant d'une source de données, par son identifiant.
@@ -43,7 +44,9 @@ export async function analyzeMatchById(req, res) {
   const aVerifier = aVerifierDuMatchAnalyse(avecFraicheur);
   // Étape 28 : le bloc de la simulation, APRÈS l'analyse (le verdict n'en sait rien, l'IA ne le reçoit jamais).
   const simulation = sportId === 'football' ? simulationDuMatchAnalyse(avecFraicheur, analyse, getEngineConfig(sportId)) : null;
-  res.json({ ...analyse, ...(aVerifier ? { aVerifier } : {}), ...(simulation ? { simulation } : {}) });
+  // Étape 32 : le contexte du match, APRÈS l'analyse lui aussi (le verdict n'en sait rien, l'IA ne le reçoit jamais).
+  const contexte = sportId === 'football' ? contexteDuMatchAnalyse(avecFraicheur) : null;
+  res.json({ ...analyse, ...(aVerifier ? { aVerifier } : {}), ...(simulation ? { simulation } : {}), ...(contexte ? { contexte } : {}) });
 }
 
 /**
@@ -78,5 +81,20 @@ function simulationDuMatchAnalyse(match, analyse, config) {
     return simulationDuMatch({ match, analyse, config, database: openDb(), maintenant: Date.now(), reglagesEnService: config, lancement: () => lancementDe('28') ?? null });
   } catch {
     return null;
+  }
+}
+
+/**
+ * Étape 32 du plan : le contexte de ce match (data/contexte/contexteRead.js) — la fiche calculée la nuit, lue par
+ * identifiants FotMob et par clé (jamais une passe dans la requête), les statuts du banc d'essai (la note recopiée par
+ * script), les moyennes du championnat pour la phrase de l'arbitre. Ajouté APRÈS l'analyse, comme la simulation : le
+ * verdict du moteur n'en sait rien, l'analyse IA ne le reçoit jamais (elle prend des champs nommés du moteur). Une
+ * lecture qui échoue n'empêche jamais l'analyse : l'encadré dit alors « illisible ».
+ */
+function contexteDuMatchAnalyse(match) {
+  try {
+    return contexteDuMatch({ match, database: openDb(), maintenant: Date.now(), lancement: () => lancementDe('32') ?? null });
+  } catch {
+    return { version: 1, etat: 'illisible', raison: 'lecture-ratee' };
   }
 }

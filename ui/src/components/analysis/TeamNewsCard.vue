@@ -1,17 +1,21 @@
 <script setup>
 /**
- * Ce que le calcul ne voit pas : blessures et suspensions longues,
- * changement d'entraîneur (FotMob, gratuit, cf. server/src/data/providers/
- * teamNewsResolver.js), et une note libre que Pierre écrit lui-même —
+ * Ce que le calcul ne voit pas : blessures et suspensions longues (FotMob,
+ * gratuit, cf. server/src/data/providers/teamNewsResolver.js), et une note
+ * libre que Pierre écrit lui-même —
  * vestiaire, rumeur, finances du club, tout ce qu'aucune donnée mesurée ne
  * capture. Relu par l'analyse IA avant-match ; n'entre jamais dans le
  * pronostic chiffré ni dans la mise (cf. README, section moteur).
  *
  * Dessin (refonte du 01/10/2026) : une carte à icône ; chaque club dans un
  * bloc avec son logo, ses absents en lignes (drapeau, étiquette blessé ou
- * suspendu colorée), le changement d'entraîneur en note ; la note manuscrite
+ * suspendu colorée) ; la note manuscrite
  * dans un champ au dessin des champs communs (anneau de focus couleur de
  * section), le bouton d'enregistrement en vert de la marque.
+ *
+ * Étape 32 du plan (une seule place par information) : le changement d'entraîneur n'est plus montré ici — l'encadré
+ * « Contexte du match » le dit, par identifiant FotMob et depuis combien de matchs. L'analyse IA garde `coachChange`
+ * (teamNewsResolver.js inchangé) : deux règles différentes pour l'instant, à rapprocher à l'étape 41.
  */
 import { ref, computed, watch } from 'vue';
 import { teamStatsApi } from '@/services/teamStatsApi.js';
@@ -114,11 +118,11 @@ const nombreAbsents = (e) => e.actu.longTermAbsences?.length ?? 0;
 </script>
 
 <template>
-  <AppCard title="Actualités d'équipe" subtitle="Blessures, suspensions et changement d'entraîneur d'après FotMob, gratuit." icon="userX" class="tnc">
+  <AppCard title="Actualités d'équipe" subtitle="Blessures et suspensions d'après FotMob, gratuit." icon="userX" class="tnc">
     <div class="tnc__body">
       <LoadingSpinner v-if="newsLoading" label="Recherche des blessures et suspensions…" />
 
-      <!-- Chaque club dans son bloc : logo, nombre d'absents, entraîneur, absents. -->
+      <!-- Chaque club dans son bloc : logo, nombre d'absents, absents. -->
       <div v-else-if="equipes.length" class="tnc__teams">
         <div v-for="e in equipes" :key="e.cle" class="cm-block tnc__team">
           <p class="tnc__team-head">
@@ -129,17 +133,6 @@ const nombreAbsents = (e) => e.actu.longTermAbsences?.length ?? 0;
               {{ nombreAbsents(e) }} absent{{ nombreAbsents(e) > 1 ? 's' : '' }}
             </span>
           </p>
-
-          <div v-if="e.actu.coachChange" class="cm-note is-info tnc__coach">
-            <span class="cm-icon-box is-info is-sm"><AppIcon name="swap" :size="14" /></span>
-            <div>
-              <p class="cm-note__title">Changement d'entraîneur</p>
-              <p class="cm-note__text tnc__coach-text">
-                {{ e.actu.coachChange.previousCoach }} <span class="tnc__arrow">→</span> {{ e.actu.coachChange.currentCoach }}
-                <span v-if="e.actu.coachChange.since" class="cm-text-muted tnc__coach-since">(dernier match connu avec l'ancien, le {{ formatDateTime(e.actu.coachChange.since) }})</span>
-              </p>
-            </div>
-          </div>
 
           <ul v-if="e.actu.longTermAbsences?.length" class="tnc__absences">
             <li v-for="a in e.actu.longTermAbsences" :key="a.name" class="tnc__absence">
@@ -244,22 +237,6 @@ const nombreAbsents = (e) => e.actu.longTermAbsences?.length ?? 0;
 .tnc__count.is-danger {
   background: var(--cm-danger-soft);
   color: var(--cm-danger);
-}
-
-.tnc__coach {
-  padding: 10px 12px;
-}
-
-.tnc__coach-text {
-  font-size: 12.5px;
-}
-
-.tnc__arrow {
-  color: var(--cm-text-muted);
-}
-
-.tnc__coach-since {
-  font-size: 11.5px;
 }
 
 /* Les absents : drapeau, nom, retour prévu, étiquette colorée à droite. */

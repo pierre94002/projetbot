@@ -9,8 +9,16 @@ import { pelouse, meteo, ventEnKmH } from '@/utils/fotmobLabels.js';
  * que la moyenne du championnat, ce qui intéresse directement les marchés
  * cartons et fautes. Chaque information est une tuile à icône (refonte du
  * 01/10/2026), l'arbitre a sa carte avec ses deux chiffres en tuiles.
+ *
+ * Étape 32 du plan (une seule place par information) : avec `sansContexte`, la page d'un match À VENIR ne montre ici que
+ * le stade, la capacité et l'affluence — la pelouse, la météo et l'arbitre (ses moyennes recalculées au magasin, jamais
+ * celles que FotMob affiche) sont dans l'encadré « Contexte du match ». La page d'un match joué (MatchDetailView) ne
+ * change pas : sans la propriété, tout reste là.
  */
-const props = defineProps({ meta: { type: Object, default: null } });
+const props = defineProps({
+  meta: { type: Object, default: null },
+  sansContexte: { type: Boolean, default: false }
+});
 
 const fill = computed(() => {
   const { attendance, capacity } = props.meta ?? {};
@@ -65,7 +73,7 @@ function fr(value, decimals = 1) {
           <div v-if="fill" class="cm-bar match-info__bar" title="Remplissage du stade"><span class="cm-bar__fill" :style="{ width: `${Math.min(fill, 100)}%` }" /></div>
         </div>
 
-        <div v-if="meta.surface" class="cm-kpi match-info__tile">
+        <div v-if="meta.surface && !sansContexte" class="cm-kpi match-info__tile">
           <span class="match-info__tile-head">
             <span class="cm-icon-box is-sm is-accent"><AppIcon name="layers" :size="14" /></span>
             <span class="cm-kpi__label">Type de terrain</span>
@@ -73,7 +81,7 @@ function fr(value, decimals = 1) {
           <span class="match-info__tile-text">{{ pelouse(meta.surface) }}</span>
         </div>
 
-        <div v-if="meta.temperature != null" class="cm-kpi match-info__tile">
+        <div v-if="meta.temperature != null && !sansContexte" class="cm-kpi match-info__tile">
           <span class="match-info__tile-head">
             <span class="cm-icon-box is-sm is-info"><AppIcon name="thermometer" :size="14" /></span>
             <span class="cm-kpi__label">Météo</span>
@@ -89,7 +97,7 @@ function fr(value, decimals = 1) {
     </section>
 
     <!-- L'arbitre : son nom, puis ses moyennes de la saison face à celles du championnat. -->
-    <section v-if="referee" class="match-info__group">
+    <section v-if="referee && !sansContexte" class="match-info__group">
       <p class="cm-group-title">Arbitre</p>
       <div class="match-info__referee">
         <div class="match-info__ref-head">

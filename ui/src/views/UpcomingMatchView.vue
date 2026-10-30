@@ -65,6 +65,9 @@ import { useRisqueStore } from '@/stores/risqueStore.js';
 import EnjeuDuMatch from '@/components/matches/EnjeuDuMatch.vue';
 import DerouleSimuleCard from '@/components/analysis/DerouleSimuleCard.vue';
 import { usePrixJuste } from '@/composables/usePrixJuste.js';
+// Étape 32 du plan : l'encadré « Contexte du match » (repos, enchaînement, déplacement, altitude, pelouse, météo, arbitre,
+// entraîneur, enjeu) — il lit le bloc `contexte` de l'analyse et la page FotMob déjà chargés, aucune requête de plus.
+import MatchContextCard from '@/components/analysis/MatchContextCard.vue';
 
 /**
  * Page d'un match À VENIR, construite comme celle d'un match joué
@@ -729,6 +732,18 @@ const prixJuste = usePrixJuste(
         <!-- Étape 28 : l'enjeu de la rencontre au classement (fins de saison allumées dans Réglages) — une information. -->
         <EnjeuDuMatch v-if="enjeuMontre" id="upcoming-enjeu" class="upcoming__block" :enjeu="enjeuMontre" />
 
+        <!-- Étape 32 : le contexte du match — une explication ; « Effet mesuré » seulement pour ce que le banc d'essai a prouvé
+             utile, et pas encore dans les pourcentages. Une seule place : la pelouse, la météo, l'arbitre et l'entraîneur sont ici. -->
+        <MatchContextCard
+          id="upcoming-contexte"
+          class="upcoming__block"
+          :contexte="analyse.result?.contexte"
+          :analyse="analyse"
+          :page="page"
+          :simulation="simulationDuMatch"
+          :match="match"
+        />
+
         <!-- (b) La place du « pourquoi ce pourcentage » : réservée, remplie à l'étape 40. -->
         <PercentageWhyCard id="upcoming-pourquoi" class="upcoming__block" />
 
@@ -767,7 +782,7 @@ const prixJuste = usePrixJuste(
           />
         </AppCard>
 
-        <!-- Les absents : blessures, suspensions et changement d'entraîneur, avec la note libre de Pierre. -->
+        <!-- Les absents : blessures et suspensions, avec la note libre de Pierre (l'entraîneur est dans « Contexte du match », étape 32). -->
         <TeamNewsCard v-if="analyse.result" :result="analyse.result" />
 
         <!-- (d) La courbe des cotes, de l'ouverture à maintenant : les mouvements relevés gratuitement (les mêmes que l'onglet Cotes). -->
@@ -807,8 +822,9 @@ const prixJuste = usePrixJuste(
           <EmptyState v-else icon="trendUp" title="Aucune statistique" description="Aucune statistique importée pour ces équipes." />
         </AppCard>
 
-        <AppCard v-if="meta && (meta.stadium || meta.referee || meta.weather)" title="Rencontre" subtitle="Stade, arbitre et météo publiés par FotMob." icon="mapPin">
-          <MatchInfoPanel :meta="meta" />
+        <!-- Étape 32 : une seule place — la pelouse, la météo et l'arbitre sont dans « Contexte du match » ; ici, le stade. -->
+        <AppCard v-if="meta && (meta.stadium || meta.capacity)" title="Rencontre" subtitle="Stade et capacité publiés par FotMob." icon="mapPin">
+          <MatchInfoPanel :meta="meta" sans-contexte />
         </AppCard>
 
         <AppCard v-if="matchStatus === 'live'" title="En direct" subtitle="Score et statistiques en cours de match (API-Football, sur demande)." icon="bolt">

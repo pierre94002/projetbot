@@ -589,12 +589,14 @@ test('B10 TOUT ÉTEINT, la page du match : l’analyse sans le bloc de l’étap
   const blocDeroule = texteDe(allumee.html.slice(debutDe('upcoming-deroule')));
   assert.ok(blocDeroule.startsWith('Déroulé simulé'));
   assert.ok(blocDeroule.includes('Information, pas un pronostic.'));
-  // Le reste de la page : identique à celle d'avant, aux deux blocs près.
-  const sansEtape28 = (html) => sansCommentaires(html.replace(/<section[^>]*id="upcoming-enjeu"[\s\S]*?<\/section>/, '').replace(/<section[^>]*id="upcoming-deroule"[\s\S]*?<\/section>/, ''));
+  // Le reste de la page : identique à celle d'avant, aux deux blocs près — et à la ligne « Enjeu » de l'encadré « Contexte
+  // du match » (étape 32), qui RENVOIE à l'encadré « Enjeu » quand il est allumé (sans en recopier le chiffre).
+  const sansLigneEnjeu = (html) => html.replace(/<li class="mcc__ligne" data-facteur="enjeu"[\s\S]*?<\/li>/, '');
+  const sansEtape28 = (html) => sansLigneEnjeu(sansCommentaires(html.replace(/<section[^>]*id="upcoming-enjeu"[\s\S]*?<\/section>/, '').replace(/<section[^>]*id="upcoming-deroule"[\s\S]*?<\/section>/, '')));
   // (Les identifiants générés par Vue — useId, « v-0-7 » — se décalent des blocs ajoutés : ramenés à un seul nom.)
   const memesIds = (html) => html.replace(/\bv-\d+(?:-\d+)+/g, 'v-id');
   const a1 = memesIds(sansEtape28(allumee.html));
-  const a0 = memesIds(sansCommentaires(avant.html));
+  const a0 = memesIds(sansLigneEnjeu(sansCommentaires(avant.html)));
   let k = 0;
   while (k < Math.min(a1.length, a0.length) && a1[k] === a0[k]) k++;
   assert.equal(a1, a0, `aucun autre changement de la page — premier écart au caractère ${k} :\n${a0.slice(Math.max(0, k - 300), k + 300)}\n---\n${a1.slice(Math.max(0, k - 300), k + 300)}`);

@@ -386,7 +386,8 @@ test('les compositions et les absents, la courbe des cotes et l’avis de l’IA
   assert.match(textCompos, /Dernière alignée/);
   assert.match(textCompos, /Relire chez FotMob/);
   assert.ok(compos.includes('class="lp-wrap"'), 'le terrain');
-  assert.match(textCompos, /Actualités d'équipe Blessures, suspensions et changement d'entraîneur d'après FotMob, gratuit\./);
+  // Étape 32 : le changement d'entraîneur est dans « Contexte du match » (une seule place par information).
+  assert.match(textCompos, /Actualités d'équipe Blessures et suspensions d'après FotMob, gratuit\./);
   // (d) La courbe : trois issues du résultat, de l'ouverture au dernier relevé, les mêmes cotes justes que l'onglet Cotes.
   const courbe = entre('upcoming-courbe', 'upcoming-ia');
   const mouvements = scenario.fixture.movement.filter((m) => m.market === '1x2');
@@ -587,7 +588,8 @@ test('rien de ce que montrait le Résumé d’avant ne disparaît : le détail l
   const t = texteDe(detail);
   // Les cartes d'avant, à leur place relative : résultat et score, statistiques, cadre du match.
   const dans = (motif) => t.search(motif);
-  const rangs = [/Pronostic du résultat/, /Pronostic du score/, /Meilleures statistiques Moyennes par match sur les 10 dernières rencontres\./, /Rencontre Stade, arbitre et météo publiés par FotMob\./].map(dans);
+  // Étape 32 : « Rencontre » garde le stade et la capacité ; la pelouse, la météo et l'arbitre sont dans « Contexte du match ».
+  const rangs = [/Pronostic du résultat/, /Pronostic du score/, /Meilleures statistiques Moyennes par match sur les 10 dernières rencontres\./, /Rencontre Stade et capacité publiés par FotMob\./].map(dans);
   assert.ok(rangs.every((x) => x >= 0), `les quatre cartes du détail : ${rangs}`);
   assert.deepEqual([...rangs].sort((x, y) => x - y), rangs, 'dans l’ordre d’avant');
   assert.match(t, /Etihad Stadium/);

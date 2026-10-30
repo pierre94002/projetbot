@@ -29,6 +29,7 @@ import { currentSeason, seasonBounds } from './seasonWindows.js';
 import { derniereFeuille } from '../db/derniereComposition.js';
 import { forceDuOnzeDeLaComposition } from '../db/playerRatings.js';
 import { ventEnKmH } from '../../utils/libellesFotmob.js';
+import { lireLArbitre, homonymesDe } from '../db/refereeRead.js';
 
 const JOUR_MS = 86_400_000;
 /** En début de saison, trop peu de matchs pour savoir qui est titulaire : on remonte plus loin. */
@@ -325,6 +326,23 @@ export function avecForceDuOnze(compo, database) {
 }
 
 /**
+ * L'ARBITRE DÉSIGNÉ, AU MAGASIN (étape 32 du plan, partie D) : pour l'encadré « Contexte du match » de la page du match,
+ * la ligne de cet arbitre dans la table de la nuit (`contexte_arbitres`, une clé primaire « nom|pays » : ses moyennes
+ * recalculées sur ses matchs relevés au magasin) et les autres arbitres du même nom (un autre pays : pas comptés). Jamais
+ * les moyennes que FotMob affiche à côté de son nom. Pas de nom : null ; une lecture ratée ne casse jamais la page.
+ */
+export function arbitreAuMagasin(referee, database) {
+  const nom = typeof referee?.name === 'string' && referee.name.trim() ? referee.name : null;
+  if (!nom) return null;
+  const pays = typeof referee?.country === 'string' ? referee.country : '';
+  try {
+    return { nom, pays, ligne: lireLArbitre({ nom, pays, database }), homonymes: homonymesDe({ nom, pays, database }) };
+  } catch {
+    return { nom, pays, ligne: null, homonymes: [], illisible: true };
+  }
+}
+
+/**
  * Tout ce que FotMob publie d'un match à venir, pour sa page : coup d'envoi
  * exact (le calendrier ne connaît que le jour), cadre (stade, météo,
  * arbitre) et composition décrite si elle est sortie — sinon, la dernière
@@ -359,7 +377,10 @@ export async function buildMatchPreview({ homeName, awayName, commenceTimeIso, l
     kickoff,
     meta: lu.page.meta ?? null,
     lineups,
-    lastLineups
+    lastLineups,
+    // Étape 32 : l'heure de cette lecture FotMob, et l'arbitre désigné au magasin (l'encadré « Contexte du match »).
+    releveLe: lu.fetchedAt ?? null,
+    arbitreAuMagasin: arbitreAuMagasin(lu.page.meta?.referee, database)
   };
 }
 

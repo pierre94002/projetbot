@@ -1,0 +1,967 @@
+{
+ "format": 1,
+ "quoi": "Banc du contexte du match (étape 32, partie B) : le passage unique.",
+ "ou": "bac à sable",
+ "premierRegard": "2026-10-29T12:34:54.471Z",
+ "fin": "2026-10-29T12:35:40.371Z",
+ "dureeS": 45.9,
+ "base": {
+  "fichier": "C:\\Users\\PC\\CoteMaster\\bac-a-sable\\base\\match-stats.db",
+  "lectureSeule": true
+ },
+ "passeDePierre": {
+  "verifiee": true,
+  "attenduS": 0
+ },
+ "regles": {
+  "fichier": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\C--Users-PC-OneDrive-Bureau-developement-ProjetBot\\c4b41134-df35-4d3f-be49-63a4f15181fd\\scratchpad\\etape32\\banc-regles.md",
+  "sha1": "6d610d1a9ed97dca24df13aed72371fde44584ff",
+  "copie": "test/fixtures/banc-regles-etape32.md"
+ },
+ "pelouses": {
+  "fichier": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\C--Users-PC-OneDrive-Bureau-developement-ProjetBot\\c4b41134-df35-4d3f-be49-63a4f15181fd\\scratchpad\\etape32\\pelouses-ecartees.json",
+  "sha1": "c7922a0f6a2754ddb70dd21d6bdaba5f1f7ef685",
+  "clubsEcartes": 140
+ },
+ "verrou": {
+  "fichier": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\C--Users-PC-OneDrive-Bureau-developement-ProjetBot\\c4b41134-df35-4d3f-be49-63a4f15181fd\\scratchpad\\etape32\\banc-passage-reel.lock",
+  "pose": "2026-10-29T12:34:54.471Z"
+ },
+ "empreinteDuMoteur": {
+  "sha1": "16f2459db183a99576365047da98b7777687ef05",
+  "fichiers": 37,
+  "candidate": "f01dd8496f56a415"
+ },
+ "rejeu": null,
+ "comptes": {
+  "rencontresLues": 60059,
+  "dernierJourLu": "2026-09-23",
+  "avantLesPlis": 2972,
+  "dansLesPlis": 57087,
+  "attribuees": 48,
+  "sansScore90": 309,
+  "jugeables": 56730,
+  "parFenetre": {
+   "miseEnRoute": 2972,
+   "pli0": 35310,
+   "pli1": 21777
+  }
+ },
+ "durees": {
+  "lecture": 13752,
+  "passe": 24779,
+  "arbitres": 1146,
+  "juge": 5992,
+  "total": 45712
+ },
+ "aPart": {
+  "pid": 17444,
+  "rssMaxOctets": 403406848
+ },
+ "banc": {
+  "version": 1,
+  "K": 9,
+  "z": 2.772928076232682,
+  "mesure": "perte-log-score-exact",
+  "periodes": {
+   "miseEnRoute": {
+    "de": "2023-01-01",
+    "a": "2023-06-30"
+   },
+   "plis": [
+    {
+     "apprendre": {
+      "de": "2023-07-01",
+      "a": "2025-06-30"
+     },
+     "juger": {
+      "de": "2025-07-01",
+      "a": "2026-09-23"
+     }
+    },
+    {
+     "apprendre": {
+      "de": "2025-07-01",
+      "a": "2026-09-23"
+     },
+     "juger": {
+      "de": "2023-07-01",
+      "a": "2025-06-30"
+     }
+    }
+   ],
+   "dernierJourLu": "2026-09-23"
+  },
+  "prior": 0.1,
+  "recalages": [
+   {
+    "cDom": -0.009137958387742484,
+    "cExt": 0.002099201368725167,
+    "matchs": 35068
+   },
+   {
+    "cDom": -0.007696011409382078,
+    "cExt": -0.0074864598976318265,
+    "matchs": 21662
+   }
+  ],
+  "centres": [
+   1.380783520248228,
+   1.4076988947724933
+  ],
+  "matchs": {
+   "utilisables": 56730,
+   "plis": [
+    {
+     "apprendre": 35068,
+     "juger": 21662
+    },
+    {
+     "apprendre": 21662,
+     "juger": 35068
+    }
+   ]
+  },
+  "variantes": [
+   {
+    "id": "repos-court",
+    "sorte": "camp",
+    "facteur": "repos",
+    "coefficients": [
+     {
+      "pli": 0,
+      "apprisSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "jugeSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "coefficients": {
+       "sesButs": 0.06877163538909761,
+       "butsAdverses": -0.07120906024553496
+      },
+      "vecteur": [
+       0.06877163538909761,
+       -0.07120906024553496
+      ],
+      "matchs": 10466,
+      "iterations": 4,
+      "converge": true
+     },
+     {
+      "pli": 1,
+      "apprisSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "jugeSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "coefficients": {
+       "sesButs": 0.047256208348770486,
+       "butsAdverses": -0.04329731100157889
+      },
+      "vecteur": [
+       0.047256208348770486,
+       -0.04329731100157889
+      ],
+      "matchs": 6404,
+      "iterations": 4,
+      "converge": true
+     }
+    ],
+    "matchsJuges": 56730,
+    "matchsConcernes": 16870,
+    "partConcernee": 0.29737352370879605,
+    "verdict": "retenu",
+    "raison": "L’amélioration dépasse ce que le hasard explique : la fourchette est entièrement au-dessus de zéro (16 870 matchs, 9 variantes essayées).",
+    "lignes": 16870,
+    "blocs": 16870,
+    "perteBase": 2.9498136501924748,
+    "perteVariante": 2.9469883804150863,
+    "gain": 0.0028252697774021627,
+    "ecartType": 0.0006044128624327868,
+    "fourchette": [
+     0.0011492763815261267,
+     0.004501263173278198
+    ],
+    "gainRelatif": 0.0009577790709653182,
+    "fourchetteRelative": [
+     0.00038960982550580327,
+     0.001525948316424833
+    ],
+    "p": 0.0000029514106703043552,
+    "z": 2.772928076232682,
+    "variantes": 9,
+    "ampleur": {
+     "max": 0.01658170675815993,
+     "marche": "dom15",
+     "parMarche": {
+      "plus05": 0.001574111542874662,
+      "plus15": 0.003857405976912659,
+      "plus25": 0.005528058076940561,
+      "plus35": 0.005314811716742528,
+      "lesDeuxMarquent": 0.003616128227263333,
+      "dom05": 0.011162381328590917,
+      "dom15": 0.01658170675815993,
+      "dom25": 0.013331952489015673,
+      "dom35": 0.00772275073548412,
+      "ext05": 0.012015233185461709,
+      "ext15": 0.014548302516193287,
+      "ext25": 0.009639207758581073,
+      "ext35": 0.004672693437019211
+     },
+     "seuil": 0.005
+    },
+    "temoins": {
+     "marches": 13,
+     "perteBase": 6.4007482588444145,
+     "perteVariante": 6.394005232425268,
+     "gainRelatif": 0.001053474710527544,
+     "juge": false
+    },
+    "utile": true,
+    "raisons": []
+   },
+   {
+    "id": "enchainement-serre",
+    "sorte": "camp",
+    "facteur": "enchainement",
+    "coefficients": [
+     {
+      "pli": 0,
+      "apprisSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "jugeSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "coefficients": {
+       "sesButs": 0.052392800994325944,
+       "butsAdverses": -0.06378973388416653
+      },
+      "vecteur": [
+       0.052392800994325944,
+       -0.06378973388416653
+      ],
+      "matchs": 9893,
+      "iterations": 4,
+      "converge": true
+     },
+     {
+      "pli": 1,
+      "apprisSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "jugeSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "coefficients": {
+       "sesButs": 0.041636925978166726,
+       "butsAdverses": -0.06299825659299908
+      },
+      "vecteur": [
+       0.041636925978166726,
+       -0.06299825659299908
+      ],
+      "matchs": 5975,
+      "iterations": 4,
+      "converge": true
+     }
+    ],
+    "matchsJuges": 56730,
+    "matchsConcernes": 15868,
+    "partConcernee": 0.27971091133439097,
+    "verdict": "retenu",
+    "raison": "L’amélioration dépasse ce que le hasard explique : la fourchette est entièrement au-dessus de zéro (15 868 matchs, 9 variantes essayées).",
+    "lignes": 15868,
+    "blocs": 15868,
+    "perteBase": 2.9534696515191077,
+    "perteVariante": 2.9510408701483803,
+    "gain": 0.002428781370703032,
+    "ecartType": 0.0005725194977261479,
+    "fourchette": [
+     0.0008412259812675636,
+     0.0040163367601385004
+    ],
+    "gainRelatif": 0.0008223485111667886,
+    "fourchetteRelative": [
+     0.000284826350199631,
+     0.0013598706721339462
+    ],
+    "p": 0.000022141853191826044,
+    "z": 2.772928076232682,
+    "variantes": 9,
+    "ampleur": {
+     "max": 0.017847414271658524,
+     "marche": "dom15",
+     "parMarche": {
+      "plus05": 0.002680099624724307,
+      "plus15": 0.00664170468863268,
+      "plus25": 0.009106757422082572,
+      "plus35": 0.008454894239441981,
+      "lesDeuxMarquent": 0.007704918709093421,
+      "dom05": 0.0121904907204837,
+      "dom15": 0.017847414271658524,
+      "dom25": 0.01405392232562181,
+      "dom35": 0.007924829204711888,
+      "ext05": 0.013153910142721466,
+      "ext15": 0.015360451117387862,
+      "ext25": 0.00975999765328576,
+      "ext35": 0.004524815011145973
+     },
+     "seuil": 0.005
+    },
+    "temoins": {
+     "marches": 13,
+     "perteBase": 6.437326754110967,
+     "perteVariante": 6.431754089290931,
+     "gainRelatif": 0.000865679968238025,
+     "juge": false
+    },
+    "utile": true,
+    "raisons": []
+   },
+   {
+    "id": "deplacement-distance",
+    "sorte": "distance",
+    "facteur": "deplacement",
+    "coefficients": [
+     {
+      "pli": 0,
+      "apprisSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "jugeSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "coefficients": {
+       "visiteur": -0.010973538628031953,
+       "domicile": 0.010880386336027427
+      },
+      "vecteur": [
+       -0.010973538628031953,
+       0.010880386336027427
+      ],
+      "matchs": 22076,
+      "iterations": 4,
+      "converge": true
+     },
+     {
+      "pli": 1,
+      "apprisSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "jugeSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "coefficients": {
+       "visiteur": -0.021663338731855258,
+       "domicile": 0.009670458975943305
+      },
+      "vecteur": [
+       -0.021663338731855258,
+       0.009670458975943305
+      ],
+      "matchs": 19187,
+      "iterations": 4,
+      "converge": true
+     }
+    ],
+    "matchsJuges": 56730,
+    "matchsConcernes": 41263,
+    "partConcernee": 0.7273576590869029,
+    "verdict": "pas-prouve",
+    "raison": "La fourchette contient zéro : l’écart peut venir du hasard (41 263 matchs, 9 variantes essayées).",
+    "lignes": 41263,
+    "blocs": 41263,
+    "perteBase": 2.9280500589024783,
+    "perteVariante": 2.927909920155174,
+    "gain": 0.00014013874736347093,
+    "ecartType": 0.00009619516022191376,
+    "fourchette": [
+     -0.000126603513213575,
+     0.00040688100794051684
+    ],
+    "gainRelatif": 0.00004786077578741915,
+    "fourchetteRelative": [
+     -0.00004323816555958399,
+     0.00013895971713442226
+    ],
+    "p": 0.14516697733761497,
+    "z": 2.772928076232682,
+    "variantes": 9,
+    "ampleur": {
+     "max": 0.004628050019852096,
+     "marche": "ext15",
+     "parMarche": {
+      "plus05": 0.0003968896171108211,
+      "plus15": 0.0009980502041912877,
+      "plus25": 0.0013639857329446425,
+      "plus35": 0.0012681974683385923,
+      "lesDeuxMarquent": 0.0016185502678740978,
+      "dom05": 0.002208749658986233,
+      "dom15": 0.0033202760918413896,
+      "dom25": 0.0026585457374940264,
+      "dom35": 0.0015122052268098445,
+      "ext05": 0.00392323179556996,
+      "ext15": 0.004628050019852096,
+      "ext25": 0.002928629278546119,
+      "ext35": 0.001326059564192156
+     },
+     "seuil": 0.005
+    },
+    "temoins": {
+     "marches": 13,
+     "perteBase": 6.418052224538141,
+     "perteVariante": 6.417940947737488,
+     "gainRelatif": 0.000017338095228936992,
+     "juge": false
+    },
+    "utile": false,
+    "raisons": [
+     "verdict « pas-prouve »",
+     "ampleur sous 0,5 point"
+    ]
+   },
+   {
+    "id": "deplacement-altitude",
+    "sorte": "lieu",
+    "facteur": "altitude",
+    "coefficients": [
+     {
+      "pli": 0,
+      "apprisSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "jugeSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "coefficients": {
+       "domicile": 0.10539556630359886,
+       "visiteur": -0.11886634199950044
+      },
+      "vecteur": [
+       0.10539556630359886,
+       -0.11886634199950044
+      ],
+      "matchs": 623,
+      "iterations": 4,
+      "converge": true
+     },
+     {
+      "pli": 1,
+      "apprisSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "jugeSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "coefficients": {
+       "domicile": 0.12008128251005308,
+       "visiteur": -0.04401765757888223
+      },
+      "vecteur": [
+       0.12008128251005308,
+       -0.04401765757888223
+      ],
+      "matchs": 462,
+      "iterations": 5,
+      "converge": true
+     }
+    ],
+    "matchsJuges": 56730,
+    "matchsConcernes": 1085,
+    "partConcernee": 0.01912568306010929,
+    "verdict": "retenu",
+    "raison": "L’amélioration dépasse ce que le hasard explique : la fourchette est entièrement au-dessus de zéro (1 085 matchs, 9 variantes essayées).",
+    "lignes": 1085,
+    "blocs": 1085,
+    "perteBase": 2.8553797209542857,
+    "perteVariante": 2.839618543038921,
+    "gain": 0.01576117791536954,
+    "ecartType": 0.005217421269494748,
+    "fourchette": [
+     0.0012936439916539887,
+     0.030228711839085088
+    ],
+    "gainRelatif": 0.0055198185375155825,
+    "fourchetteRelative": [
+     0.0004530549762473079,
+     0.010586582098783858
+    ],
+    "p": 0.0025205917166366554,
+    "z": 2.772928076232682,
+    "variantes": 9,
+    "ampleur": {
+     "max": 0.05616633574413657,
+     "marche": "dom15",
+     "parMarche": {
+      "plus05": 0.009187405551365622,
+      "plus15": 0.02187406635795322,
+      "plus25": 0.029375135519556863,
+      "plus35": 0.026798747455603424,
+      "lesDeuxMarquent": 0.011108256756134563,
+      "dom05": 0.03432285478728869,
+      "dom15": 0.05616633574413657,
+      "dom25": 0.04927748089928607,
+      "dom35": 0.030961858757185164,
+      "ext05": 0.02699361260019953,
+      "ext15": 0.025483570003631037,
+      "ext25": 0.012776414110670502,
+      "ext35": 0.0045234923932904805
+     },
+     "seuil": 0.005
+    },
+    "temoins": {
+     "marches": 13,
+     "perteBase": 6.243866568946414,
+     "perteVariante": 6.211661220631898,
+     "gainRelatif": 0.005157917447289526,
+     "juge": false
+    },
+    "utile": true,
+    "raisons": []
+   },
+   {
+    "id": "pelouse-synthetique",
+    "sorte": "lieu",
+    "facteur": "pelouse",
+    "coefficients": [
+     {
+      "pli": 0,
+      "apprisSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "jugeSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "coefficients": {
+       "domicile": -0.015643181585911794,
+       "visiteur": -0.001064854027419338
+      },
+      "vecteur": [
+       -0.015643181585911794,
+       -0.001064854027419338
+      ],
+      "matchs": 1400,
+      "iterations": 4,
+      "converge": true
+     },
+     {
+      "pli": 1,
+      "apprisSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "jugeSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "coefficients": {
+       "domicile": 0.00005212892807020186,
+       "visiteur": 0.038544119245717545
+      },
+      "vecteur": [
+       0.00005212892807020186,
+       0.038544119245717545
+      ],
+      "matchs": 1274,
+      "iterations": 4,
+      "converge": true
+     }
+    ],
+    "matchsJuges": 56730,
+    "matchsConcernes": 2674,
+    "partConcernee": 0.047135554380398376,
+    "verdict": "pas-prouve",
+    "raison": "La fourchette contient zéro : l’écart peut venir du hasard (2 674 matchs, 9 variantes essayées).",
+    "lignes": 2674,
+    "blocs": 2674,
+    "perteBase": 3.089851868953333,
+    "perteVariante": 3.0903094229311767,
+    "gain": -0.0004575539778405386,
+    "ecartType": 0.0006956134536181026,
+    "fourchette": [
+     -0.0023864400535833557,
+     0.0014713320979022784
+    ],
+    "gainRelatif": -0.00014808281990409203,
+    "fourchetteRelative": [
+     -0.0007723477224141967,
+     0.00047618208260601254
+    ],
+    "p": 0.5106855142867619,
+    "z": 2.772928076232682,
+    "variantes": 9,
+    "ampleur": {
+     "max": 0.009389078362163478,
+     "marche": "ext15",
+     "parMarche": {
+      "plus05": 0.0021541362243151538,
+      "plus15": 0.005924939732153212,
+      "plus25": 0.008771404686030031,
+      "plus35": 0.008774128274544414,
+      "lesDeuxMarquent": 0.007201057731511619,
+      "dom05": 0.0023336947326079637,
+      "dom15": 0.003687508386054747,
+      "dom25": 0.003086702414686044,
+      "dom35": 0.0018193447064467814,
+      "ext05": 0.007021499223218797,
+      "ext15": 0.009389078362163478,
+      "ext25": 0.006650643136680519,
+      "ext35": 0.00333407072409634
+     },
+     "seuil": 0.005
+    },
+    "temoins": {
+     "marches": 13,
+     "perteBase": 6.562467764087827,
+     "perteVariante": 6.564768240074113,
+     "gainRelatif": -0.0003505504436722963,
+     "juge": false
+    },
+    "utile": false,
+    "raisons": [
+     "verdict « pas-prouve »"
+    ]
+   },
+   {
+    "id": "arbitre-buts",
+    "sorte": "arbitre",
+    "facteur": "arbitre",
+    "coefficients": [
+     {
+      "pli": 0,
+      "apprisSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "jugeSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "coefficients": {
+       "lesDeux": 0.03925700811327776
+      },
+      "vecteur": [
+       0.03925700811327776
+      ],
+      "matchs": 26908,
+      "iterations": 3,
+      "converge": true
+     },
+     {
+      "pli": 1,
+      "apprisSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "jugeSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "coefficients": {
+       "lesDeux": 0.12727656361891557
+      },
+      "vecteur": [
+       0.12727656361891557
+      ],
+      "matchs": 16529,
+      "iterations": 4,
+      "converge": true
+     }
+    ],
+    "matchsJuges": 56730,
+    "matchsConcernes": 43437,
+    "partConcernee": 0.7656795346377578,
+    "verdict": "pas-prouve",
+    "raison": "La fourchette contient zéro : l’écart peut venir du hasard (43 437 matchs, 9 variantes essayées).",
+    "lignes": 43437,
+    "blocs": 43437,
+    "perteBase": 2.9411986682059004,
+    "perteVariante": 2.9411798097155173,
+    "gain": 0.000018858490415003764,
+    "ecartType": 0.00006976459395475392,
+    "fourchette": [
+     -0.0001745937108891062,
+     0.00021231069171911372
+    ],
+    "gainRelatif": 0.000006411838349738965,
+    "fourchetteRelative": [
+     -0.00005936141369042795,
+     0.00007218509038990587
+    ],
+    "p": 0.7869172332612748,
+    "z": 2.772928076232682,
+    "variantes": 9,
+    "ampleur": {
+     "max": 0.0040730146021954045,
+     "marche": "plus25",
+     "parMarche": {
+      "plus05": 0.00120062034345212,
+      "plus15": 0.0030248433850471766,
+      "plus25": 0.0040730146021954045,
+      "plus35": 0.003735432947148911,
+      "lesDeuxMarquent": 0.003117030223652252,
+      "dom05": 0.00207995484158208,
+      "dom15": 0.0030617527194922137,
+      "dom25": 0.002398386993547078,
+      "dom35": 0.0013321733565702701,
+      "ext05": 0.002237695725522318,
+      "ext15": 0.002645791813823233,
+      "ext25": 0.001678719046210988,
+      "ext35": 0.0007630358734052437
+     },
+     "seuil": 0.005
+    },
+    "temoins": {
+     "marches": 13,
+     "perteBase": 6.437705295855483,
+     "perteVariante": 6.43770271963919,
+     "gainRelatif": 4.0017617673027626e-7,
+     "juge": false
+    },
+    "utile": false,
+    "raisons": [
+     "verdict « pas-prouve »",
+     "ampleur sous 0,5 point"
+    ]
+   },
+   {
+    "id": "entraineur-nouveau",
+    "sorte": "camp",
+    "facteur": "entraineur",
+    "coefficients": [
+     {
+      "pli": 0,
+      "apprisSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "jugeSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "coefficients": {
+       "sesButs": -0.006604271567302969,
+       "butsAdverses": -0.022053139406793716
+      },
+      "vecteur": [
+       -0.006604271567302969,
+       -0.022053139406793716
+      ],
+      "matchs": 7526,
+      "iterations": 4,
+      "converge": true
+     },
+     {
+      "pli": 1,
+      "apprisSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "jugeSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "coefficients": {
+       "sesButs": -0.0036268437780123336,
+       "butsAdverses": -0.0006315852855109467
+      },
+      "vecteur": [
+       -0.0036268437780123336,
+       -0.0006315852855109467
+      ],
+      "matchs": 5990,
+      "iterations": 3,
+      "converge": true
+     }
+    ],
+    "matchsJuges": 56730,
+    "matchsConcernes": 13516,
+    "partConcernee": 0.23825136612021858,
+    "verdict": "pas-prouve",
+    "raison": "La fourchette contient zéro : l’écart peut venir du hasard (13 516 matchs, 9 variantes essayées).",
+    "lignes": 13516,
+    "blocs": 13516,
+    "perteBase": 2.923082066805801,
+    "perteVariante": 2.9231653265081965,
+    "gain": -0.00008325970241252845,
+    "ecartType": 0.0001815421353054411,
+    "fourchette": [
+     -0.0005866629864202185,
+     0.00042014358159516156
+    ],
+    "gainRelatif": -0.00002848353228190768,
+    "fourchetteRelative": [
+     -0.0002007001421829031,
+     0.00014373307761908773
+    ],
+    "p": 0.6465037573679502,
+    "z": 2.772928076232682,
+    "variantes": 9,
+    "ampleur": {
+     "max": 0.005440684954006381,
+     "marche": "plus25",
+     "parMarche": {
+      "plus05": 0.0016202462981481426,
+      "plus15": 0.0040614276046363005,
+      "plus25": 0.005440684954006381,
+      "plus35": 0.004968558583064305,
+      "lesDeuxMarquent": 0.004095355292655521,
+      "dom05": 0.0027410646284063453,
+      "dom15": 0.004072355931963976,
+      "dom25": 0.0032232651670803694,
+      "dom35": 0.0018148451378501356,
+      "ext05": 0.002974536962397315,
+      "ext15": 0.003510442827236984,
+      "ext25": 0.0022252953925231073,
+      "ext35": 0.0010106075843618288
+     },
+     "seuil": 0.005
+    },
+    "temoins": {
+     "marches": 13,
+     "perteBase": 6.4590618696767885,
+     "perteVariante": 6.459554174807177,
+     "gainRelatif": -0.00007621929319185148,
+     "juge": false
+    },
+    "utile": false,
+    "raisons": [
+     "verdict « pas-prouve »"
+    ]
+   },
+   {
+    "id": "placebo",
+    "sorte": "camp",
+    "facteur": "controle",
+    "coefficients": [
+     {
+      "pli": 0,
+      "apprisSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "jugeSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "coefficients": {
+       "sesButs": -0.009530891411846881,
+       "butsAdverses": -0.0033417494677092
+      },
+      "vecteur": [
+       -0.009530891411846881,
+       -0.0033417494677092
+      ],
+      "matchs": 10569,
+      "iterations": 4,
+      "converge": true
+     },
+     {
+      "pli": 1,
+      "apprisSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "jugeSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "coefficients": {
+       "sesButs": 0.0032799199713677315,
+       "butsAdverses": 0.0004578429719552628
+      },
+      "vecteur": [
+       0.0032799199713677315,
+       0.0004578429719552628
+      ],
+      "matchs": 6611,
+      "iterations": 3,
+      "converge": true
+     }
+    ],
+    "matchsJuges": 56730,
+    "matchsConcernes": 17180,
+    "partConcernee": 0.302838004583113,
+    "verdict": "pas-prouve",
+    "raison": "La fourchette contient zéro : l’écart peut venir du hasard (17 180 matchs, 9 variantes essayées).",
+    "lignes": 17180,
+    "blocs": 17180,
+    "perteBase": 2.9501704339098,
+    "perteVariante": 2.9502065833399373,
+    "gain": -0.00003614943013316104,
+    "ecartType": 0.000059056716149808175,
+    "fourchette": [
+     -0.00019990945643506817,
+     0.00012761059616874608
+    ],
+    "gainRelatif": -0.000012253336186158216,
+    "fourchetteRelative": [
+     -0.0000677620025396744,
+     0.00004325533016735795
+    ],
+    "p": 0.5404623725368773,
+    "z": 2.772928076232682,
+    "variantes": 9,
+    "ampleur": {
+     "max": 0.0023094904837887673,
+     "marche": "plus25",
+     "parMarche": {
+      "plus05": 0.0006654087502816839,
+      "plus15": 0.0016958893127095877,
+      "plus25": 0.0023094904837887673,
+      "plus35": 0.002138595538208563,
+      "lesDeuxMarquent": 0.0017670123264511147,
+      "dom05": 0.0011671166610484854,
+      "dom15": 0.0017227462477222948,
+      "dom25": 0.0013541826060516156,
+      "dom35": 0.0007558339738133918,
+      "ext05": 0.001265304415684313,
+      "ext15": 0.001525311238302885,
+      "ext25": 0.0009863587672309516,
+      "ext35": 0.00045733786437638095
+     },
+     "seuil": 0.005
+    },
+    "temoins": {
+     "marches": 13,
+     "perteBase": 6.453510483462785,
+     "perteVariante": 6.453719065341381,
+     "gainRelatif": -0.00003232068486298112,
+     "juge": false
+    },
+    "utile": false,
+    "raisons": []
+   }
+  ],
+  "placebo": {
+   "verdict": "pas-prouve"
+  },
+  "bancFaux": false,
+  "utiles": [
+   "repos-court",
+   "enchainement-serre",
+   "deplacement-altitude"
+  ]
+ }
+}

@@ -787,7 +787,9 @@ test('le code : l’étape une seule fois, en dernier ; le verdict reste celui d
   const analyse = lireSrc('api', 'controllers', 'analysis.controller.js');
   // Étape 28 (27/10) : le bloc `simulation` est joint APRÈS « à vérifier », de la même façon (conception de 28 : « bloc
   // simulation ajouté APRÈS l'analyse, comme aVerifier ») ; l'analyse du moteur reste étalée telle quelle, en premier.
-  assert.match(analyse, /const analyse = await analyzeMatch\(avecFraicheur, getEngineConfig\(sportId\), getTiltState\(\), getSport\(sportId\)\);\n  const aVerifier = aVerifierDuMatchAnalyse\(avecFraicheur\);\n(?: {2}\/\/.*\n)* {2}const simulation = sportId === 'football' \? simulationDuMatchAnalyse\(avecFraicheur, analyse, getEngineConfig\(sportId\)\) : null;\n {2}res\.json\(\{ \.\.\.analyse, \.\.\.\(aVerifier \? \{ aVerifier \} : \{\}\), \.\.\.\(simulation \? \{ simulation \} : \{\}\) \}\);/);
+  // Étape 32 (29/10) : le bloc `contexte` est joint APRÈS la simulation, de la même façon (conception de 32, §5.6 : le verdict
+  // n’en sait rien, l’IA ne le reçoit jamais).
+  assert.match(analyse, /const analyse = await analyzeMatch\(avecFraicheur, getEngineConfig\(sportId\), getTiltState\(\), getSport\(sportId\)\);\n  const aVerifier = aVerifierDuMatchAnalyse\(avecFraicheur\);\n(?: {2}\/\/.*\n)* {2}const simulation = sportId === 'football' \? simulationDuMatchAnalyse\(avecFraicheur, analyse, getEngineConfig\(sportId\)\) : null;\n(?: {2}\/\/.*\n)* {2}const contexte = sportId === 'football' \? contexteDuMatchAnalyse\(avecFraicheur\) : null;\n {2}res\.json\(\{ \.\.\.analyse, \.\.\.\(aVerifier \? \{ aVerifier \} : \{\}\), \.\.\.\(simulation \? \{ simulation \} : \{\}\), \.\.\.\(contexte \? \{ contexte \} : \{\}\) \}\);/);
   assert.match(analyse, /preparerAVerifierParNoms\(\)/);
   // Retouche du 07/10 : le bandeau d'un match est le RÉSUMÉ du match, demandé sans famille — jamais celle des joueurs, jamais celle d'un marché.
   assert.match(analyse, /homeName: match\.home, awayName: match\.away, famille: null \}\)/);

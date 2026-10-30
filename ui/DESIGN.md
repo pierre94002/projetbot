@@ -640,6 +640,30 @@ au-dessus en bleu `--cm-info`, en dessous en ambre. Le duel : les deux clubs fac
 en points ; sous le scénario, ce que le banc a mesuré en mots (matchs jugés, essais comptés, « pas prouvé »). Mots : `utils/stylesDeJeu.js` (pur, sans Vue : les tests le
 rejouent sur les vraies réponses du serveur).
 
+Depuis l'étape 32 du plan (29/10/2026, lot 1 en partie) : **le contexte du match** — UN bloc, sur la page d'un match à venir, entre le verdict (et l'encadré « Enjeu » de
+l'étape 28 quand il est allumé) et « Pourquoi ce pourcentage » : `components/analysis/MatchContextCard.vue` (« Contexte du match », `data-bloc="contexte-du-match"`,
+icône `globe`, `id="upcoming-contexte"`). Il ne LIT rien lui-même : le bloc `contexte` que le serveur joint à l'analyse (APRÈS elle : la fiche calculée la nuit, les moyennes
+du championnat, les statuts du banc d'essai recopiés par script) et la page FotMob du match déjà chargée (météo prévue, pelouse du match, arbitre désigné et sa ligne au
+magasin `arbitreAuMagasin`, heure de la lecture `releveLe`) — aucune requête de plus. Règles de dessin : TOUJOURS les neuf lignes (repos, enchaînement, déplacement,
+altitude, pelouse, météo, arbitre, entraîneur, enjeu), chacune avec sa raison quand elle manque (« pas encore calculé », « paraîtra la nuit du … », « club non reconnu »,
+« illisible » — jamais « 0 » ni le silence) ; la pastille de chaque ligne (`role="note"`, icône + mot, la phrase complète dans `aria-label`) : « Explication seulement » (gris)
+par défaut, avec « non mesurable au banc d'essai » pour la météo et l'enjeu, « pas encore mesuré au banc d'essai » sans note du banc ; « Effet mesuré » en vert `--cm-accent`
+(la seule exception, comme le duel de styles de l'étape 37) pour un facteur que le banc a mesuré utile, TOUJOURS suivi de « pas encore dans le pourcentage » au lot 1
+(« compte dans le pourcentage (version N) » seulement après l'adoption du lot 2) ; un démenti sur vos matchs repasse en gris avec sa note ambre ; jamais de vert ni de rouge
+pour une VALEUR (un repos court n'est pas « mauvais »), jamais `ValueBadge`. Sous chaque ligne, ce que dit le banc en mots (« les statistiques seules sous-estimaient… » :
+une erreur des statistiques dans cette situation, jamais une cause), et « ce match n'est pas concerné » quand un facteur mesuré ne touche pas CE match. La provenance de chaque
+ligne (`ProvenanceChip variante="ligne"`) : « magasin FotMob (feuilles des matchs déjà joués) » calculé la nuit (repos, entraîneur, moyennes de l'arbitre), « calendrier de
+saison (FotMob) » lu la nuit (le prochain match), « table des stades (venues.json, faite depuis FotMob) » et « liste des altitudes faite à la main » (un jour, sans heure
+inventée, jamais ambre), « FotMob, page du match » relevé (météo, pelouse du match, arbitre désigné), « Simulation CôteMaster, classement FotMob » pour l'enjeu allumé ;
+l'ambre au-delà de 24 h (la nuit n'est pas repassée). Heures de Paris, virgule décimale, espace fine des milliers, vrai signe moins ; le vent TOUJOURS en km/h (`ventEnKmH`,
+« vent fort » à 9 m/s, soit 32 km/h). Le tableau replié « Ce que dit le banc d'essai » (`<details>`, `data-tableau="banc-du-contexte"`) : les neuf facteurs et le contrôle
+(faux facteur) TOUJOURS là, « non mesurable au banc » pour la météo et l'enjeu, **Σ** des matchs jugés (un compte) et **⌀** de la part concernée sur les facteurs mesurés —
+jamais une somme de pourcentages. **Une seule place par information** : sur cette page, la carte « Rencontre » (« Stade et capacité publiés par FotMob »,
+`MatchInfoPanel sans-contexte`) ne montre plus pelouse, météo ni arbitre — les moyennes que FotMob affiche pour l'arbitre ne sont plus montrées ici, celles du magasin
+les remplacent ; « Actualités d'équipe » (`TeamNewsCard`) ne montre plus le changement d'entraîneur ; le chiffre de l'enjeu reste dans `EnjeuDuMatch`, la ligne « Enjeu »
+y renvoie ; la page d'un match joué (`MatchDetailView`) ne change pas. Mots : `utils/contexteDuMatch.js` (pur, sans Vue : `server/test/contexteEcran.test.mjs` le rejoue
+sur les vraies réponses du serveur).
+
 Depuis l'étape 44 du plan (23/10/2026) : **la mémoire de l'IA** — un bloc, sur la page d'une équipe, juste sous « Style de jeu »,
 `components/analysis/AiDossierCard.vue` (« Mémoire de l'IA », `data-bloc="memoire-ia"`, icône `sparkles`) ; la page « Bulletin » de l'étape 45 le réutilise tel
 quel pour une équipe, et en mode `portee="championnat"` (`GET …/dossiers?league=`) pour un championnat seul. Il LIT `GET /api/match-ai-analysis/dossiers?club=fotmob-…` (le club par son IDENTIFIANT FotMob, jamais
