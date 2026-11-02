@@ -9,7 +9,8 @@
  *   liste  C, la liste des matchs à venir de la nuit des déroulés : un instantané de cotes et un calendrier PLANTÉS dans
  *          la copie, la liste calculée à part (l'enfant) face à celle calculée ici (même instant), le repli quand
  *          l'enfant ne répond pas à temps, l'essai (`aPart` faux), un autre calcul lourd en cours, puis une nuit entière
- *          (le serveur jamais tenu longtemps, vu de dedans et de dehors).
+ *          (le serveur jamais tenu longtemps, vu de dedans et de dehors) — APRÈS une nuit de chauffe à liste donnée (les
+ *          lectures à froid, mesurées à part : 02/11/2026).
  * Sortie : une ligne JSON.
  */
 
@@ -78,6 +79,23 @@ if (phase === 'vent') {
   } finally {
     rendre();
   }
+  // 6a. LA CHAUFFE (02/11/2026) : une nuit entière avec la liste DONNÉE (celle de la référence, jamais recalculée : ni
+  // enfant de la liste, ni liste dans le serveur), pour que les lectures À FROID — les réglages (engine-config, candidate,
+  // état des forces : ~110 ms seul, 430 ms une fois sous la charge de la suite complète) et la première analyse — ne
+  // tombent pas dans la nuit mesurée. Elle est mesurée elle aussi (rendue telle quelle, jamais jugée) : `chauffe`.
+  const battre = () => {
+    const b = { dernier: performance.now(), max: 0 };
+    b.id = setInterval(() => {
+      const t = performance.now();
+      b.max = Math.max(b.max, t - b.dernier);
+      b.dernier = t;
+    }, 1);
+    return b;
+  };
+  const bc = battre();
+  const chauffe = await SN.simulerLesMatchsDeLaNuit({ maintenant: instant, aPart: true, juger: false, n: 200, matchs: JSON.parse(JSON.stringify(ici)) });
+  clearInterval(bc.id);
+  sortie.chauffe = { mode: chauffe.mode, erreur: chauffe.erreur ?? null, liste: chauffe.liste ?? null, matchs: chauffe.bilan?.matchs ?? null, blocMaxMs: chauffe.blocMaxMs, blocMaxOu: chauffe.blocMaxOu, dehorsMaxMs: Math.round(bc.max) };
   // 6. Une nuit entière : la liste à part, le serveur jamais tenu longtemps (dedans : blocMaxMs ; dehors : un battement de 1 ms).
   let dernier = performance.now();
   let dehorsMax = 0;

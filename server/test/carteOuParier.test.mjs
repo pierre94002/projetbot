@@ -439,7 +439,7 @@ test('l’étape « carteOuParier » : après la calibration, avant la sauvegard
   assert.equal(recu.moteur.empreinte, m.empreinte);
   assert.match(r1.summary, /^Carte n° 1 \(première carte\) : .* 1 rouge, .* banc d’essai n° 1 ; .*Rien ne change dans les chiffres du moteur\.$/);
   assert.equal(M.lireLaCarte({ database: db }).banc.id, 1);
-  assert.equal(J.dueCarteOuParier({ manuel: true }, { database: db }), false, 'au clic : déjà à jour');
+  assert.equal(J.dueCarteOuParier({ manuel: true }, { database: db, maintenant: Date.parse('2026-10-22T09:30:00Z') }), false, 'au clic : déjà à jour');
   // Un calcul lourd en cours : reportée, rien d'écrit.
   db.prepare('INSERT INTO bench_runs (lance_le, fini_le, ou, version_banc, format_lignes, empreinte_moteur, empreinte_code, version_moteur, options, bilan, resume) SELECT lance_le, fini_le, ou, version_banc, format_lignes, empreinte_moteur, empreinte_code, version_moteur, options, bilan, resume FROM bench_runs WHERE id = 1').run();
   const r2 = await J.passeCarteOuParier(ctx, { database: db, calculer: async () => Promise.reject(Object.assign(new Error('Un autre calcul lourd tourne'), { reporte: true })) });

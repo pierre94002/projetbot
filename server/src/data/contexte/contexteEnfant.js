@@ -14,8 +14,12 @@
  *   3. les FICHES des matchs des 14 prochains jours (la liste du calendrier) : le précédent plus récent que la passe
  *      (match joué depuis, ou prévu au calendrier), le prochain match ;
  *   4. la table des arbitres et les moyennes des championnats au jour de la nuit ;
- *   5. le contrôle anti-fuite (le second chemin, controleDuContexte.js).
- * Renvoie par morceaux ({ morceau: { type, lignes } }), puis la fin ({ fin: true, ligues, controle, bilan }) ou
+ *   5. le contrôle anti-fuite (le second chemin, controleDuContexte.js) ;
+ *   6. (partie C2, 02/11/2026) LA PREUVE APRÈS LANCEMENT, seulement si le serveur la demande (`preuve` : un facteur retenu
+ *      au banc, l'étape lancée au registre) : les lignes figées avant le coup d'envoi, les premiers chiffres (des
+ *      comptes), le principal à l'horizon et la garde du mois — calculés ici SANS rien écrire (preuveDuContexte.js) ;
+ *      le serveur range.
+ * Renvoie par morceaux ({ morceau: { type, lignes } }), puis la fin ({ fin: true, ligues, controle, bilan, preuve? }) ou
  * { erreur }, et s'arrête. `calculerLaNuitDuContexte` est aussi appelable dans le processus courant (les essais).
  * -----------------------------------------------------------------------
  */
@@ -30,6 +34,7 @@ import { mettreAJourLeCache, rencontresChronologiques } from './lectureDuMagasin
 import { ligneDeLaTable } from '../db/refereeRead.js';
 import { tirerLesCouples, instantaneDeLaPasse, controlerLesInstantanes } from './controleDuContexte.js';
 import { listeDuCalendrier, AnnuairesIndisponibles } from './listeDuCalendrier.js';
+import { preuveDansLaBase } from './preuveDuContexte.js';
 
 const JOUR_MS = 86_400_000;
 /** Lignes par morceau renvoyé au serveur. */
@@ -43,10 +48,11 @@ const ordre = (a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
  * calendrier de saison (par défaut celui de l'appli), dont la liste est faite ici — ou `calendrier`, une liste déjà
  * rattachée ([{ date, league, home, away, statut, matchId, homeName, awayName }], de jourD − 2 à jourD + 18) ; `clubDe` :
  * l'annuaire (les essais) ; `graine` : celle du contrôle ; `venues` : venues.json (par défaut, celui du code) ;
- * `envoyer(type, lignes)` reçoit chaque morceau. Lève AnnuairesIndisponibles si l'annuaire n'est pas prêt. Rend
- * { liste, ligues, controle, bilan }.
+ * `envoyer(type, lignes)` reçoit chaque morceau ; `preuve` : la demande du serveur pour la preuve après lancement
+ * (demandeDeLaPreuve, partie C2), ou null. Lève AnnuairesIndisponibles si l'annuaire n'est pas prêt. Rend
+ * { liste, ligues, controle, bilan } (+ `preuve` quand elle est demandée).
  */
-export function calculerLaNuitDuContexte({ database, instant, jourD, calendrier = null, fichierCalendrier = undefined, clubDe = null, graine = null, couples: nombreDeCouples = NUIT.couples, venues = undefined, envoyer = () => {} }) {
+export function calculerLaNuitDuContexte({ database, instant, jourD, calendrier = null, fichierCalendrier = undefined, clubDe = null, graine = null, couples: nombreDeCouples = NUIT.couples, venues = undefined, preuve = null, envoyer = () => {} }) {
   const t0 = performance.now();
   const durees = {};
   let rssMax = process.memoryUsage.rss();
@@ -185,6 +191,18 @@ export function calculerLaNuitDuContexte({ database, instant, jourD, calendrier 
   const controle = controlerLesInstantanes({ database, couples, instantanes, nomDuClub });
   mesurer('controle', t);
 
+  // 6. La preuve après lancement (partie C2), si le serveur la demande : rien n'est écrit ici, le serveur range.
+  let laPreuve = null;
+  if (preuve) {
+    t = performance.now();
+    try {
+      laPreuve = preuveDansLaBase({ database, instant, jourD, ...preuve });
+    } catch (error) {
+      laPreuve = { erreur: String(error?.message ?? error).slice(0, 300) };
+    }
+    mesurer('preuve', t);
+  }
+
   return {
     liste: liste ? { items: liste.items.length, sansIdentifiant: liste.sansIdentifiant, noms: liste.noms } : { items: calendrier.length, sansIdentifiant: [], noms: null },
     ligues,
@@ -200,7 +218,8 @@ export function calculerLaNuitDuContexte({ database, instant, jourD, calendrier 
       dureeMs: Math.round(performance.now() - t0),
       durees,
       aPart: { pid: process.pid, rssMaxOctets: Math.max(rssMax, process.memoryUsage.rss()) }
-    }
+    },
+    ...(laPreuve ? { preuve: laPreuve } : {})
   };
 }
 

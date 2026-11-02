@@ -163,6 +163,7 @@ import { stylesDeJeu, etatDesStyles } from '../data/db/teamStyle.js';
 import { simulerLesSaisonsDeLaNuit, simulerLesMatchsDeLaNuit } from '../data/simulation/simulationNuit.js';
 import { N as N_SIMULATION } from '../data/simulation/reglages.js';
 import { faireLeContexteDeLaNuit } from '../data/contexte/contexteNuit.js';
+import { phraseDeLaPreuve, alerteDuContexte } from '../data/contexte/preuveDuContexte.js';
 import { lancementDe } from '../bench/trialsRegistry.js';
 import { candidatePourLeBanc } from '../core/engine/engineVersions.js';
 import { getEngineConfig } from '../core/engine/engineConfig.js';
@@ -1489,7 +1490,9 @@ const dueSimulationMatchs = (ctx) => Boolean(env.enregistreurs?.enabled) && (!fa
  * le contrôle anti-fuite) et rangée par le serveur par tranches ; une fiche n'est jamais réécrite après son coup d'envoi ;
  * l'archive d'avant-match FotMob (météo prévue, arbitre désigné) rattrapée et comptée. Un autre calcul lourd en cours :
  * REPORTÉE. APRÈS la sauvegarde, hors du chemin de nuit de l'essai de l'étape 27 ; jamais lue par le moteur ni envoyée à
- * l'IA. Cf. data/contexte/contexteNuit.js.
+ * l'IA. Cf. data/contexte/contexteNuit.js. Partie C2 (02/11/2026) : la preuve après lancement des facteurs retenus au banc
+ * (premiers chiffres = des comptes ; principal une seule fois à l'horizon ; garde du mois) dite au résumé ; un démenti
+ * rend l'étape « à regarder » la nuit où il tombe et reste dans l'alerte durable (data/contexte/preuveDuContexte.js).
  */
 async function passeContexteDuMatch(ctx, options = {}) {
   // L'heure est lue ici (la passe), jamais dans data/contexte.
@@ -1512,6 +1515,8 @@ async function passeContexteDuMatch(ctx, options = {}) {
   if (ecarts.length) points.push(`${pluriel(ecarts.length, 'écart au contrôle anti-fuite', 'écarts au contrôle anti-fuite')} (${ecarts.slice(0, 2).map((e) => e.texte).join(' ; ')}) — à regarder`);
   if (r.avantMatch?.erreur) points.push(`archive d’avant-match en échec : ${r.avantMatch.erreur}`);
   if (r.elague?.erreur) points.push(`élagage en échec : ${r.elague.erreur}`);
+  if (r.preuve?.erreur) points.push(`preuve sur vos matchs en échec : ${r.preuve.erreur}`);
+  if (r.preuve?.nouveauxDementis?.length) points.push(`${pluriel(r.preuve.nouveauxDementis.length, 'facteur démenti', 'facteurs démentis')} sur vos matchs cette nuit (${r.preuve.nouveauxDementis.join(', ')}) — repassé en « Explication seulement »`);
   const aPartMo = b.aPart?.rssMaxOctets ? `, ${Math.round(b.aPart.rssMaxOctets / 1048576)} Mo chez lui` : '';
   return {
     status: points.length ? 'warn' : 'ok',
@@ -1524,7 +1529,7 @@ async function passeContexteDuMatch(ctx, options = {}) {
       ` ; contrôle anti-fuite : ${pluriel(c.lignes ?? 0, 'couple recalculé', 'couples recalculés')} par un second chemin, ${pluriel(ecarts.length, 'écart', 'écarts')}` +
       ` ; ${duree(r.dureeMs)} (à part ${duree(b.calculMs ?? 0)}${aPartMo} ; rangement ${duree(r.rangementMs ?? 0)}), ${tenu}` +
       (points.length ? ` ; ${points.join(' ; ')}.` : '.') +
-      ' Preuve sur vos matchs : le banc d’essai n’a encore mesuré aucun facteur, rien à juger. Explication seulement : jamais lu par le moteur ni envoyé à l’IA.',
+      ` ${phraseDeLaPreuve(r.preuve)} Explication seulement : jamais lu par le moteur ni envoyé à l’IA.`,
     details: {
       mode: r.mode,
       calculeLe: r.calculeLe,
@@ -1545,10 +1550,12 @@ async function passeContexteDuMatch(ctx, options = {}) {
       plusLongueTrancheMs: r.plusLongueTrancheMs ?? null,
       blocMaxMs: r.blocMaxMs,
       blocMaxOu: r.blocMaxOu ?? null,
-      calculAPart: { dureeMs: b.dureeMs ?? null, rssMax: b.aPart?.rssMaxOctets ?? null }
+      calculAPart: { dureeMs: b.dureeMs ?? null, rssMax: b.aPart?.rssMaxOctets ?? null },
+      preuve: r.preuve ? { rien: r.preuve.rien ?? null, erreur: r.preuve.erreur ?? null, etat: r.preuve.etat ?? null, principauxRanges: r.preuve.principauxRanges ?? [], refuses: r.preuve.refuses ?? [], nouveauxDementis: r.preuve.nouveauxDementis ?? [] } : null
     },
-    // Les écarts du contrôle restent visibles jusqu'à la nuit qui n'en trouve plus (comme les autres contrôles de nuit).
-    alert: { key: 'contexteDuMatch', value: ecarts.length ? { ecarts: ecarts.slice(0, 20), total: ecarts.length, lignes: c.lignes ?? 0, updatedAt: new Date().toISOString() } : null },
+    // Les écarts du contrôle restent visibles jusqu'à la nuit qui n'en trouve plus (comme les autres contrôles de nuit) ;
+    // les démentis de la preuve (partie C2) y restent toujours (l'état les garde).
+    alert: { key: 'contexteDuMatch', value: alerteDuContexte({ ecarts, lignes: c.lignes ?? 0, dementis: r.preuve?.dementis ?? null, updatedAt: new Date().toISOString() }) },
     changed: false
   };
 }

@@ -22,7 +22,12 @@
  *      perdus (seulement lus après le coup d'envoi), jamais relevés (PC éteint, page jamais lue) ;
  *   6. LE RATTACHEMENT des fiches passées à la rencontre jouée (par identifiants, la date à un jour près), puis
  *      L'ÉLAGAGE : seules les fiches ORPHELINES (aucune rencontre jouée, plus de 30 jours) partent ; les fiches des matchs
- *      joués et l'archive d'avant-match ne sont JAMAIS élaguées (la preuve après lancement en a besoin, constat 8).
+ *      joués et l'archive d'avant-match ne sont JAMAIS élaguées (la preuve après lancement en a besoin, constat 8) ;
+ *   7. (partie C2, 02/11/2026) LA PREUVE APRÈS LANCEMENT (preuveDuContexte.js) : la demande faite AVANT le processus à
+ *      part (les facteurs retenus au banc, le lancement au registre, l'état d'avant), le calcul DANS le processus à part
+ *      (lignes figées avant le coup d'envoi, premiers chiffres — des comptes —, principal à l'horizon, garde du mois),
+ *      puis ici : le principal RANGÉ au registre de la mesure (une seule fois), et l'état (`preuve`, `principal`,
+ *      `surete`, `dementis`) écrit avec celui de la nuit. Une panne de la preuve n'empêche jamais le reste de la nuit.
  * L'heure est lue par la passe (jamais ici) ; aucune exception pour une panne du calcul : « reporté » ou « en échec ».
  * -----------------------------------------------------------------------
  */
@@ -38,6 +43,7 @@ import { coupDEnvoiConnu } from './formulesDuContexte.js';
 import { COLONNES_RENCONTRES } from './lectureDuMagasin.js';
 import { COLONNES_ARBITRES } from '../db/refereeRead.js';
 import { calculerLaNuitDuContexte } from './contexteEnfant.js';
+import { demandeDeLaPreuve, rangerLesPrincipaux, etatApresLaPreuve } from './preuveDuContexte.js';
 
 const JOUR_MS = 86_400_000;
 const ENFANT = fileURLToPath(new URL('./contexteEnfant.js', import.meta.url));
@@ -371,8 +377,9 @@ export function* rattacherEtElaguer({ database, jourD, tranche = GARDE.tranche, 
 
 /**
  * L'ÉTAPE « contexteDuMatch ». `maintenant` : OBLIGATOIRE (l'heure de la passe) ; `aPart` : le processus à part (false :
- * dans ce processus, pour un essai) ; `fichierCalendrier`, `clubDe`, `venues`, `graine` : pour les essais. Jamais
- * d'exception pour une panne du calcul. Rend { mode: 'complet' | 'reporte' | 'echec', ... }.
+ * dans ce processus, pour un essai) ; `fichierCalendrier`, `clubDe`, `venues`, `graine` : pour les essais ;
+ * `registre` (options du registre de la mesure) et `horizonDeLaPreuve` : pour les essais de la preuve (partie C2). Jamais
+ * d'exception pour une panne du calcul. Rend { mode: 'complet' | 'reporte' | 'echec', ..., preuve }.
  */
 export async function faireLeContexteDeLaNuit({
   maintenant,
@@ -385,7 +392,9 @@ export async function faireLeContexteDeLaNuit({
   venues = undefined,
   graine = undefined,
   rendreLaMain = rendreLaMainParDefaut,
-  tranche = GARDE.tranche
+  tranche = GARDE.tranche,
+  registre = {},
+  horizonDeLaPreuve = undefined
 } = {}) {
   const instant = instantDe(maintenant);
   const debut = performance.now();
@@ -400,7 +409,12 @@ export async function faireLeContexteDeLaNuit({
     if (!recus[m?.type]) throw new Error(`morceau inconnu « ${m?.type ?? ''} »`);
     recus[m.type].push(...m.lignes);
   };
-  const message = { mode: 'nuit', chemin, instant, jourD, fichierCalendrier, graine: graine === undefined ? graineDuJour(instant) : graine, couples: NUIT.couples, ...(venues === undefined ? {} : { venues }) };
+  // 7 (C2). La preuve après lancement : ce que le processus à part doit calculer (rien sans facteur retenu au banc ni
+  // lancement au registre) ; l'état d'avant (principal, garde, démentis), lu ici, une clé chacun.
+  const etatDeLaPreuve = { principal: lireLaValeur(database, 'principal'), surete: lireLaValeur(database, 'surete'), dementis: lireLaValeur(database, 'dementis') };
+  const demande = demandeDeLaPreuve({ instant, registre, etat: etatDeLaPreuve, horizon: horizonDeLaPreuve ?? null });
+  const aPreuver = demande.rien ? null : { lancement: demande.lancement, etat: demande.etat, dejaAuRegistre: demande.dejaAuRegistre, registre, horizon: demande.horizon };
+  const message = { mode: 'nuit', chemin, instant, jourD, fichierCalendrier, graine: graine === undefined ? graineDuJour(instant) : graine, couples: NUIT.couples, ...(venues === undefined ? {} : { venues }), ...(aPreuver ? { preuve: aPreuver } : {}) };
   let fin;
   const tCalcul = performance.now();
   try {
@@ -451,6 +465,31 @@ export async function faireLeContexteDeLaNuit({
   } catch (error) {
     elague = { erreur: String(error?.message ?? error).slice(0, 200) };
   }
+  // 7 (C2). Le principal rangé au registre (une seule fois), puis l'état de la preuve (écrit avec celui de la nuit).
+  let preuve = { rien: demande.rien ?? null, dementis: etatDeLaPreuve.dementis ?? null };
+  let etatApres = null;
+  if (aPreuver) {
+    try {
+      if (!fin?.preuve || fin.preuve.erreur) throw new Error(fin?.preuve?.erreur ?? 'le processus à part n’a rien rendu pour la preuve');
+      const r = rangerLesPrincipaux({ principaux: fin.preuve.principaux ?? {}, lancement: demande.lancement, registre, instant });
+      etatApres = etatApresLaPreuve({ etatAvant: etatDeLaPreuve, calcul: fin.preuve, enregistres: r.enregistres, dejaAuRegistre: demande.jugementsDejaAuRegistre, lancement: demande.lancement, instant, jourD });
+      preuve = {
+        rien: null,
+        etat: etatApres.preuve,
+        principal: etatApres.principal,
+        principauxCalcules: Object.keys(fin.preuve.principaux ?? {}),
+        principauxRanges: Object.keys(r.enregistres),
+        refuses: r.refuses,
+        garde: fin.preuve.garde ?? null,
+        nouveauxDementis: etatApres.nouveauxDementis,
+        dementis: etatApres.dementis
+      };
+    } catch (error) {
+      preuve = { erreur: String(error?.message ?? error).slice(0, 300), dementis: etatDeLaPreuve.dementis ?? null };
+      etatApres = null;
+    }
+    await pauses.pause('preuve');
+  }
   const bilan = { ...(fin?.bilan ?? {}), calculMs };
   const nuit = {
     calculeLe,
@@ -467,6 +506,12 @@ export async function faireLeContexteDeLaNuit({
       ecrireLaValeur(database, 'nuit', nuit);
       ecrireLaValeur(database, 'ligues', { calculeLe, jourD, ligues: fin?.ligues ?? {} });
       ecrireLaValeur(database, 'controle', { calculeLe, lignes: fin?.controle?.lignes ?? 0, couples: fin?.controle?.couples ?? 0, ecarts: fin?.controle?.ecarts ?? [] });
+      if (etatApres) {
+        ecrireLaValeur(database, 'preuve', etatApres.preuve);
+        ecrireLaValeur(database, 'principal', etatApres.principal);
+        ecrireLaValeur(database, 'surete', etatApres.surete);
+        ecrireLaValeur(database, 'dementis', etatApres.dementis);
+      }
       effacerLaValeur(database, 'en_cours');
       database.exec('COMMIT');
     } catch (error) {
@@ -489,6 +534,7 @@ export async function faireLeContexteDeLaNuit({
     plusLongueTrancheMs: Math.round(mesure.plusLongueTrancheMs ?? 0),
     transactions: mesure.transactions ?? 0,
     ordresParTransactionMax: mesure.ordresParTransactionMax ?? 0,
+    preuve,
     dureeMs: duree(),
     ...pauses.bilan()
   };
