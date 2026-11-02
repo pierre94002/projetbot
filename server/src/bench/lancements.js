@@ -85,12 +85,15 @@ export const DONNEES_VUES = Object.freeze([
  *   contexte      le contexte du match (étape 32, 29/10/2026 ; data/contexte/) : la fiche de contexte, l'archive
  *                 d'avant-match et le banc des facteurs — jamais lus par le moteur au lot 1 (une candidate du moteur qui
  *                 lirait un jour le contexte recopierait ces vues avec `pour: ['moteur']`).
+ *   cartons-corners  les cartons attendus et les réglages des corners et des tirs par championnat (étape 33, 02/11/2026 ;
+ *                 data/cartons/) — à blanc, jamais lus par le moteur au lot 1 (la candidate du lot 2 recopierait ces vues
+ *                 avec `pour: ['moteur']`).
  * Une étape qui fait LIRE au moteur une grandeur apprise ailleurs (27 lisant l'indice ou une demi-vie de 18)
  * recopie ces fenêtres dans SON lancement avec `pour: ['moteur']` : c'est son lancement qui dit ce que le
  * moteur a vu. Sans cette règle, une fenêtre regardée pour l'indice étiquetait « déjà vu » les lignes du
  * MOTEUR sur 2019-2023 (la note de départ), alors qu'aucun chiffre du moteur ne les avait vues.
  */
-export const PORTEES = Object.freeze(['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte']);
+export const PORTEES = Object.freeze(['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners']);
 
 /** Une fenêtre vaut-elle pour cette mesure ? `tout` vaut pour toutes. */
 export const pourLaPortee = (pour, portee) => Array.isArray(pour) && (pour.includes(portee) || pour.includes('tout'));
@@ -654,6 +657,49 @@ export const VARIANTES_DE_L_ETAPE_32 = Object.freeze([
 ]);
 
 /**
+ * Les fenêtres REGARDÉES par l'étape 33 (cartons et corners, lot 1a du 02/11/2026 ; data/cartons/), portée
+ * « cartons-corners » (déclarée DANS chaque fenêtre : le juge de l'essai de l'étape 27 n'en voit rien) : le magasin
+ * 2023-07-01 → 2026-09-23 où le banc (UN seul regard) apprend sur un pli et juge l'autre, puis l'inverse, et où les comptes
+ * d'avant le regard (statuts, couvertures, sans attendu ni perte) sont pris ; la mise en route 2023-01-01 → 2023-06-30,
+ * où la conception et la critique ont lu, dans l'export gelé du 22/09, la forme des cartons et l'ordre de grandeur des
+ * effets. Jamais P5 (depuis le 24/09/2026) : c'est la preuve après lancement. La candidate du lot 2 recopierait ces
+ * fenêtres avec `pour: ['moteur']`.
+ */
+export const VUES_DE_L_ETAPE_33 = Object.freeze([
+  Object.freeze({
+    de: '2023-07-01',
+    a: '2026-09-23',
+    quoi: 'Étape 33 : banc des cartons et des réglages par championnat, un seul regard — appris sur 2023-07 → 2025-06 et jugés sur 2025-07 → 2026-09-23, puis l’inverse (deux plis), perte log des comptes ; avant lui, les comptes (statuts des cartons relevés, couvertures), sans attendu ni perte.',
+    pour: Object.freeze(['cartons-corners'])
+  }),
+  Object.freeze({
+    de: '2023-01-01',
+    a: '2023-06-30',
+    quoi: 'Étape 33 : mise en route du banc (rien d’appris ni de jugé) ; la conception et la critique y ont lu, dans l’export gelé du 22/09, la convention de comptage des cartons et l’ordre de grandeur des effets (arbitre, équipes, facteur de terrain), sans attendu ni perte.',
+    pour: Object.freeze(['cartons-corners'])
+  })
+]);
+
+/**
+ * Les VARIANTES de l'étape 33, déclarées AVANT le regard unique du banc (conception §4.3 ; décisions de l'orchestrateur
+ * du 02/11/2026 et critique, constats 1, 2, 3, 4 et 10) : la définition retenue (cartons-corners-v1, en tête : elle ne lit
+ * aucun résultat, comptée par prudence comme contexte-v1), les cartons des équipes et de l'arbitre et leur faux arbitre,
+ * les réglages par championnat des corners, des tirs et des tirs cadrés et leur faux championnat. Le banc compte
+ * K = VARIANTES_DE_L_ETAPE_33.length et refuse toute variante absente d'ici. Une variante corrigée après le regard = un
+ * identifiant de plus, déclaré avant son passage.
+ */
+export const VARIANTES_DE_L_ETAPE_33 = Object.freeze([
+  Object.freeze({ id: 'cartons-corners-v1', quoi: 'Définition retenue (version 1) : cartons comptés sur le déroulé complet, joueur par joueur (convention C de Pierre : un exclu après deux jaunes compte pour 2), ceux du banc et du staff compris ; statuts des cartons relevés et garde des vrais zéros au jour J ; fenêtres de 20 matchs, tendance des 60 derniers matchs de la compétition, indice d’arbitre face aux attendus des équipes ; réglages par championnat ramenés vers le commun du pli ; ne lit aucun résultat.' }),
+  Object.freeze({ id: 'cartons-equipes', quoi: 'Cartons : repère (moyennes de la compétition par côté sur 365 jours × tendance des 60 derniers matchs relevés^λ, niveaux libres) face au repère + ce que les deux équipes prennent et font prendre (ρ̃^α, π̃^γ, 20 matchs, 5 moyens) ; perte log des comptes (deux équipes et total).' }),
+  Object.freeze({ id: 'cartons-arbitre', quoi: 'Cartons : bras « équipes » face au bras « équipes » + β·z de l’arbitre (indice au jour J face aux attendus des équipes, 10 matchs moyens) ; les deux bras appris sur les MÊMES matchs (arbitre avec au moins un match relevé d’avant J) ; l’indice mêle la sévérité et les matchs qu’on lui confie.' }),
+  Object.freeze({ id: 'cartons-placebo', quoi: 'Faux arbitre de contrôle : la forme de cartons-arbitre avec un arbitre tiré pour chaque match (« faux:<compétition>:<n> », n = FNV-1a de la clé du match mod 20), accumulé comme un vrai ; doit sortir « pas prouvé ».' }),
+  Object.freeze({ id: 'corners-championnat', quoi: 'Corners : le commun du pli (facteur domicile / extérieur et 1/k équipe / total appris sur le pli d’apprentissage, sans championnat) face aux réglages par championnat (facteur et dispersions ramenés vers le commun par le bayésien empirique) ; fenêtres f10 du moteur ; championnats seulement.' }),
+  Object.freeze({ id: 'tirs-championnat', quoi: 'Tirs : la même méthode que corners-championnat.' }),
+  Object.freeze({ id: 'cadres-championnat', quoi: 'Tirs cadrés : la même méthode que corners-championnat.' }),
+  Object.freeze({ id: 'championnat-placebo', quoi: 'Faux championnat de contrôle : la méthode de corners-championnat sur 40 pseudo-championnats (FNV-1a de la clé du match mod 40), face au commun du pli ; doit sortir « pas prouvé ».' })
+]);
+
+/**
  * Les lancements déclarés par les étapes, dans l'ordre où elles sont faites. À la FIN d'une étape qui
  * touche aux chiffres : ajouter son entrée ici (version en service, ce qu'elle change, TOUTES les
  * variantes dont on a regardé le résultat pendant la construction, les fenêtres de données regardées).
@@ -730,6 +776,17 @@ export const LANCEMENTS = Object.freeze([
     le: null,
     variantes: VARIANTES_DE_L_ETAPE_32,
     vues: VUES_DE_L_ETAPE_32
+  }),
+  // Étape 33 (lot 1a, 02/11/2026) : les cartons attendus et les réglages des corners et des tirs par championnat, à blanc ;
+  // ils ne règlent aucun chiffre du moteur (portée 'cartons-corners'). Datée du premier démarrage de l'appli avec ce code ;
+  // ses variantes et ses vues déclarées AVANT le regard unique du banc.
+  Object.freeze({
+    etape: '33',
+    version: 'cartons-corners-v1',
+    quoi: 'Cartons et corners : les cartons attendus de chaque match (ce que les deux équipes prennent et font prendre, l’arbitre, la compétition), comptés sur le déroulé FotMob, et les réglages des corners, tirs et tirs cadrés propres à chaque championnat ; calculés à blanc, mesurés au banc d’essai, jamais lus par le moteur.',
+    le: null,
+    variantes: VARIANTES_DE_L_ETAPE_33,
+    vues: VUES_DE_L_ETAPE_33
   })
 ]);
 

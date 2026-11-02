@@ -1708,6 +1708,65 @@ const CONTEXTE_DDL = [
   'CREATE INDEX IF NOT EXISTS idx_contexte_avant_match_date ON contexte_avant_match(date);'
 ];
 
+/**
+ * Étape 33 du plan (cartons et corners, lot 1a, 02/11/2026) — data/cartons/ ; le serveur seul écrit (la nuit, lot 1b),
+ * jamais un JSON sous OneDrive :
+ *   cartons_rencontres  le cache incrémental : par rencontre du registre, les cartons de son déroulé (par camp : jaunes,
+ *                       deuxièmes jaunes, rouges, inconnus, hors terrain, après la 90e, remplacements, et les comptes
+ *                       joueur par joueur — convention C de Pierre, conventions 1 et 3 mesurées), sa ligne d'équipe
+ *                       (team_stats ; NULL = absente), son statut (sans la garde du jour J), l'arbitre (nom et pays,
+ *                       jamais ses moyennes FotMob), la raison FotMob ; ~140 octets par ligne : sans rowid ;
+ *   cartons_equipes     ce que chaque équipe prend et fait prendre au jour de la nuit (rapports ramenés vers 1) ;
+ *   cartons_arbitres    les sommes de chaque arbitre au jour de la nuit (cartons réels, attendus par les équipes, indice z ;
+ *                       jamais un multiplicateur : critique de l'étape 33, constat 13) ;
+ *   cartons_etat        la nuit, les moyennes des compétitions, les couvertures, le contrôle anti-fuite.
+ * Aucun index (un DDL bon marché sur la vraie base). Chaque entrée commence par son ordre (aucun commentaire devant).
+ */
+const CARTONS_DDL = [
+  `CREATE TABLE IF NOT EXISTS cartons_rencontres (
+  match_key TEXT PRIMARY KEY,
+  sig TEXT NOT NULL,
+  present INTEGER NOT NULL,
+  complet INTEGER NOT NULL,
+  j_dom INTEGER, jr_dom INTEGER, r_dom INTEGER, inc_dom INTEGER, hors_dom INTEGER, a90_dom INTEGER, rempl_dom INTEGER, c_dom INTEGER, un_dom INTEGER, trois_dom INTEGER,
+  j_ext INTEGER, jr_ext INTEGER, r_ext INTEGER, inc_ext INTEGER, hors_ext INTEGER, a90_ext INTEGER, rempl_ext INTEGER, c_ext INTEGER, un_ext INTEGER, trois_ext INTEGER,
+  ligne_j_dom INTEGER, ligne_j_ext INTEGER, ligne_r_dom INTEGER, ligne_r_ext INTEGER,
+  statut TEXT NOT NULL,
+  arbitre_nom TEXT,
+  arbitre_pays TEXT,
+  raison TEXT,
+  attribue INTEGER NOT NULL,
+  version INTEGER NOT NULL
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS cartons_equipes (
+  club INTEGER PRIMARY KEY,
+  n INTEGER NOT NULL,
+  pris REAL,
+  provoques REAL,
+  rho REAL,
+  pi REAL,
+  dernier TEXT,
+  league TEXT,
+  calcule_le TEXT NOT NULL,
+  version INTEGER NOT NULL
+);`,
+  `CREATE TABLE IF NOT EXISTS cartons_arbitres (
+  cle TEXT PRIMARY KEY,
+  nom TEXT NOT NULL,
+  pays TEXT,
+  matchs INTEGER NOT NULL,
+  observes INTEGER,
+  attendus REAL,
+  indice REAL,
+  premier TEXT,
+  dernier TEXT,
+  ligues TEXT,
+  calcule_le TEXT NOT NULL,
+  version INTEGER NOT NULL
+);`,
+  `CREATE TABLE IF NOT EXISTS cartons_etat (cle TEXT PRIMARY KEY, valeur TEXT NOT NULL) WITHOUT ROWID;`
+];
+
 const FD_HISTORY_INDEXES = [
   'CREATE INDEX IF NOT EXISTS idx_fd_history_code_date ON fd_history(code, date);',
   'CREATE INDEX IF NOT EXISTS idx_fd_history_dom ON fd_history(dom);',
@@ -1760,6 +1819,7 @@ const DDL = [
   ...SIMULATION_DDL,
   ...CORRECTION_DDL,
   ...CONTEXTE_DDL,
+  ...CARTONS_DDL,
   'CREATE INDEX IF NOT EXISTS idx_matches_date ON matches(date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_league_date ON matches(league, date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_home ON matches(home_name);',

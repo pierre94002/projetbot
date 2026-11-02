@@ -216,7 +216,8 @@ test('registre : enregistrerLancements crée le fichier, daté du jour de PARIS 
   const vide = nouveauFichier();
   // Étape 28 (27/10/2026) : la simulation complète, datée du premier démarrage avec ce code.
   // Étape 32 (lot 1a, 29/10/2026) : le contexte du match, daté du premier démarrage avec ce code (variantes déclarées avant le regard).
-  assert.deepEqual(LANCEMENTS.map((l) => [l.etape, l.version, l.le]), [['29', 'indice-v1', '2026-10-14'], ['30', 'fiches-v1', null], ['37', 'style-v1', null], ['28', 'simulation-v1', null], ['32', 'contexte-v1', null]]);
+  // Étape 33 (lot 1a, 02/11/2026) : les cartons et les réglages par championnat, datés du premier démarrage eux aussi.
+  assert.deepEqual(LANCEMENTS.map((l) => [l.etape, l.version, l.le]), [['29', 'indice-v1', '2026-10-14'], ['30', 'fiches-v1', null], ['37', 'style-v1', null], ['28', 'simulation-v1', null], ['32', 'contexte-v1', null], ['33', 'cartons-corners-v1', null]]);
   assert.deepEqual(enregistrerLancements({ fichier: vide, lancements: [] }), { nouveaux: [], source: 'absent', probleme: null });
   assert.equal(fs.existsSync(vide), false);
 
@@ -413,7 +414,8 @@ test('juge de preuve, « déjà vu » par PORTÉE (correction du 19/10) : DONNEE
     { etape: '30', version: 'fiches-v1', le: '2026-10-19' },
     { etape: '37', version: 'style-v1', le: '2026-10-19' },
     { etape: '28', version: 'simulation-v1', le: '2026-10-19' },
-    { etape: '32', version: 'contexte-v1', le: '2026-10-19' }
+    { etape: '32', version: 'contexte-v1', le: '2026-10-19' },
+    { etape: '33', version: 'cartons-corners-v1', le: '2026-10-19' }
   ]);
   assert.equal(lancementDe('29', { fichier: vrai }).le, '2026-10-14');
   assert.deepEqual(fenetresVues('29', { fichier: vrai }).map((f) => [f.de, f.a]).sort(), [['2000-07-01', '2019-06-30'], ['2019-07-01', '2023-06-30'], ['2023-01-01', '2024-06-30'], ['2023-07-01', '2024-06-30'], ['2024-07-01', '2025-06-30'], ['2025-07-01', '2026-09-23'], ['2025-07-01', '2026-10-07']]);

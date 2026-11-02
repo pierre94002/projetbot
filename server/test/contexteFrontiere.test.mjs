@@ -111,7 +111,9 @@ after(() => fs.rmSync(DOSSIER, { recursive: true, force: true, maxRetries: 10, r
 
 test('T-X5 la déclaration de l’étape 32 AVANT le regard : portée « contexte » à la fin de PORTEES ; vues `pour: [\'contexte\']` seulement ; les variantes (la retenue en tête, le faux facteur, sans repos-ecart ni arbitre-penalties) ; le lancement daté au premier démarrage ; fenetresVues(\'27\') et compterVariantes(\'27\') inchangés', () => {
   assert.equal(LANC.verifierLancements(), true);
-  assert.deepEqual([...LANC.PORTEES], ['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte']);
+  // Étape 33 (02/11/2026) : sa portée « cartons-corners » vient APRÈS « contexte » (ajoutée à la fin, cartonsFrontiere T-X5).
+  assert.deepEqual([...LANC.PORTEES].slice(0, 9), ['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte']);
+  assert.deepEqual([...LANC.PORTEES].slice(9), ['cartons-corners']);
   assert.ok(LANC.VUES_DE_L_ETAPE_32.length >= 1);
   for (const v of LANC.VUES_DE_L_ETAPE_32) assert.deepEqual([...v.pour], ['contexte'], `${v.de} → ${v.a}`);
   for (const v of LANC.VUES_DE_L_ETAPE_32) assert.ok(v.a <= '2026-09-23', 'jamais P5 : la preuve après lancement');
@@ -124,7 +126,7 @@ test('T-X5 la déclaration de l’étape 32 AVANT le regard : portée « context
   assert.deepEqual([l32.version, l32.le], ['contexte-v1', null]);
   assert.equal(l32.variantes, LANC.VARIANTES_DE_L_ETAPE_32);
   assert.equal(l32.vues, LANC.VUES_DE_L_ETAPE_32);
-  for (const portee of ['moteur', 'indice', 'joueurs', 'style', 'statistiques', 'marche', 'simulation']) assert.ok(!LANC.fenetresDeclarees({ portee }).some((f) => f.etape === '32'), portee);
+  for (const portee of ['moteur', 'indice', 'joueurs', 'style', 'statistiques', 'marche', 'simulation', 'cartons-corners']) assert.ok(!LANC.fenetresDeclarees({ portee }).some((f) => f.etape === '32'), portee);
   assert.ok(LANC.fenetresDeclarees({ portee: 'contexte' }).some((f) => f.etape === '32'));
   // Le premier démarrage date le lancement ; les fenêtres et le compte de l'étape 27 n'en voient rien.
   const fichier = path.join(DOSSIER, 'registre-t-x5.json');
@@ -181,15 +183,19 @@ test('T-X7 le jugement PROVISOIRE de l’essai de l’étape 27 (moteurABlanc, e
   // Le registre de la mesure d'essai : à l'octet, au lancement 32 près (noté au premier démarrage, avec sa date).
   const registre = JSON.parse(s.registreMesureTexte);
   assert.deepEqual(registre.etapes['32'].lancements.map((l) => [l.version, l.le, l.source]), [['contexte-v1', '2026-09-23', 'code']]);
+  // Étape 33 (lot 1a, 02/11/2026) : son lancement est noté au premier démarrage comme celui de 32 — rien d'autre ne bouge.
+  assert.deepEqual(registre.etapes['33'].lancements.map((l) => [l.version, l.le, l.source]), [['cartons-corners-v1', '2026-09-23', 'code']]);
   delete registre.etapes['32'];
+  delete registre.etapes['33'];
   assert.equal(JSON.stringify(registre), JSON.stringify(JSON.parse(figee.registreMesureTexte)), 'le registre de la mesure d’essai, à l’octet hors du lancement 32');
   assert.ok(!figee.lancementsNotes.some((x) => x.startsWith('32:')), 'avant : le premier démarrage ne note pas 32');
-  assert.deepEqual(s.lancementsNotes, [...figee.lancementsNotes, '32:contexte-v1:2026-09-23'], 'après : 32 noté au premier démarrage, rien d’autre de neuf');
+  assert.deepEqual(s.lancementsNotes, [...figee.lancementsNotes, '32:contexte-v1:2026-09-23', '33:cartons-corners-v1:2026-09-23'], 'après : 32 et 33 notés au premier démarrage, rien d’autre de neuf');
   assert.equal(s.variantes27, figee.variantes27);
   assert.equal(s.variantes27, 320);
   assert.ok(!figee.lancementsVus.includes('32:contexte-v1'), 'avant : pas de lancement 32');
   assert.ok(s.lancementsVus.includes('32:contexte-v1'), 'après : le lancement 32 est dans le registre du juge, et rien ne change');
-  assert.deepEqual(s.lancementsVus.filter((x) => x !== '32:contexte-v1'), figee.lancementsVus);
+  assert.ok(s.lancementsVus.includes('33:cartons-corners-v1'), 'après : le lancement 33 est dans le registre du juge, et rien ne change');
+  assert.deepEqual(s.lancementsVus.filter((x) => x !== '32:contexte-v1' && x !== '33:cartons-corners-v1'), figee.lancementsVus);
 });
 
 test('T-X8 openDb sur une copie de forme réelle (la base d’essai) crée les cinq tables et les deux index du contexte ; indexAttendus() complet ; une seconde ouverture ne change rien ; chaque entrée du DDL du contexte commence par son ordre', () => {
