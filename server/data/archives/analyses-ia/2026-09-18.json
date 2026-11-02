@@ -1,0 +1,732 @@
+[
+  {
+    "matchId": "82d8b6a005d78bac0b1508abc17a7d39",
+    "homeName": "Brentford",
+    "awayName": "Chelsea",
+    "league": "EPL",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Brentford vs Chelsea",
+      "expectedGoals": {
+        "home": 2.432,
+        "away": 1.646,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 2.53,
+        "draw": 4.24,
+        "away": 2.71
+      },
+      "market": {
+        "odds1": 2.87,
+        "oddsDraw": 3.79,
+        "odds2": 2.26
+      },
+      "edgePercent": 19.58,
+      "staking": {
+        "action": "RECOMMENDED",
+        "stake": 200
+      }
+    },
+    "usage": {
+      "input_tokens": 2698,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1651,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Brentford (7e, 6 pts en 4 matchs) reçoit Chelsea (6e, 7 pts en 4 matchs) dans un contexte de forme récente favorable aux deux équipes, mais avec des échantillons de données très hétérogènes. Brentford affiche une forme solide (4V-N-D sur 5) et des standings actuels invaincus, tandis que Chelsea reste également performant (4V-1D-1N sur 5) malgré une défense qui concède plus de buts. Les stats FlashScore actuelles montrent une dominance offensive marquée de Brentford à domicile, mais sur un échantillon minuscule (1 match), ce qui limite leur fiabilité.\n[{\"factor\":\"classement et points\",\"observation\":\"Chelsea légèrement devant au classement actuel malgré une défaite\",\"evidence\":\"Brentford: 7e, 6 pts (1V-3N-0D, 7 buts marqués, 4 encaissés) ; Chelsea: 6e, 7 pts (2V-1N-1D, 10 buts marqués, 9 encaissés)\"},{\"factor\":\"forme récente (5 derniers matchs)\",\"observation\":\"Les deux équipes sont en bonne dynamique actuelle, Chelsea légèrement plus régulier\",\"evidence\":\"Brentford: N-D-V-V-V ; Chelsea: V-V-D-V-V\"},{\"factor\":\"statistiques FlashScore (échantillon limité)\",\"observation\":\"Brentford affiche une possession et un volume de tirs élevés à domicile, mais sur un seul match observé, donc peu représentatif\",\"evidence\":\"Brentford: 71% possession, 11 tirs dont 8 cadrés, xG 3.21 (sample=1) ; Chelsea: 54.1% possession, 14.1 tirs dont 5.1 cadrés, xG 1.25 (sample=10)\"},{\"factor\":\"statistiques historiques (5 dernières saisons, football-data.co.uk)\",\"observation\":\"Sur le long terme, Chelsea a un volume de tirs et de corners supérieur mais une défense plus perméable que Brentford, tandis que Brentford marque et encaisse peu en moyenne\",\"evidence\":\"Brentford (10 matchs): 1.1 but marqué/match, 1.2 encaissé, 10.6 tirs ; Chelsea (10 matchs): 0.9 but marqué/match, 1.9 encaissé, 13.4 tirs, 2.4 cartons jaunes/match\"},{\"factor\":\"forme historique (5 dernières saisons)\",\"observation\":\"Les tendances historiques de forme sont nettement plus mitigées que la forme actuelle pour les deux clubs, ce qui contraste avec la dynamique récente\",\"evidence\":\"Forme historique Brentford: N-N-D-V-D ; Forme historique Chelsea: D-V-N-D-D\"}]\nLe contexte qualitatif va globalement dans le sens de l'edge identifié par le moteur en faveur de Brentford : la forme actuelle solide du club (V-V-V-N-D) et un classement légèrement inférieur mais compétitif face à Chelsea appuient l'idée d'une équipe à domicile en confiance. Toutefois, les statistiques historiques nuancent ce tableau, montrant une défense Chelsea plus friable sur le long terme mais aussi une attaque Brentford historiquement modeste (1.1 but/match), ce qui contraste avec l'expected_goals élevé (2.432) attribué par le moteur pour ce match précis. La disparité entre les stats FlashScore (échantillon d'1 match seulement pour Brentford) et les moyennes historiques invite à une lecture prudente du contexte qualitatif, sans remettre en cause le chiffrage du moteur.\nLes statistiques FlashScore de Brentford (homeStats) reposent sur un échantillon d'un seul match, ce qui limite fortement leur représentativité et contraste nettement avec les moyennes historiques sur 10 matchs (xG 3.21 vs des moyennes historiques bien plus modestes de 1.1 but/match). Les champs homeFlashscoreStats et awayFlashscoreStats sont absents. Le classement fourni (standings) semble être un classement de saison en cours basé sur seulement 4 matchs joués, et non un historique football-data.co.uk, mais aucune répartition domicile/extérieur n'est disponible (played=0 pour home/away). Aucun profil d'équipe (homeTeamProfile/awayTeamProfile) n'est disponible pour un contexte européen ou de forme plus récente issu du web."
+    },
+    "updatedAt": "2026-09-30T21:03:31.205Z",
+    "createdAt": "2026-09-18T16:50:40.206Z",
+    "postMatchReview": {
+      "summary": "Brentford a battu Chelsea 3-0, ce qui va dans le sens de l'edge du moteur sur le côté domicile. Mon analyse pré-match était prudente et sans avis tranché. Le scénario (xG 2.65 contre 0.83) confirme la supériorité de Brentford en occasions malgré 40% de possession. Les trois buts sont tombés tard (61e, 83e, 90e), donc le score final est plus large que le jeu ne le laissait voir jusqu'à l'heure de jeu.",
+      "whatWasRight": "J'avais noté que les stats FlashScore de Brentford (1 match) étaient peu fiables, et la possession de 71% annoncée s'est inversée (40% réel). J'avais aussi relevé que l'attaque de Brentford était modeste sur le long terme et la défense de Chelsea friable. Le résultat valide ce dernier point : Chelsea a peu cadré (2 tirs) et a encaissé 3 fois. Le xG du moteur pour Brentford (2.432) était proche du xG réel (2.65).",
+      "whatWasMissed": "Je n'ai pas anticipé le profil du match : Chelsea dominant la possession (60%) et les corners (12 contre 4) sans créer de danger, contre un Brentford efficace en contre (4 grosses occasions, 6 tirs cadrés sur 13). Le xG de Chelsea du moteur (1.646) était trop élevé par rapport au 0.83 réel. Mon avis sur la forme récente, qui mettait Chelsea légèrement devant, n'a pas pesé dans le bon sens.",
+      "outcomeVsEngine": "Le résultat confirme le moteur sur le marché principal : victoire de Brentford, cote marché 2.87 face à une vraie cote estimée de 2.53. Le seul pronostic raté, les deux équipes marquent, vient d'une surestimation de l'attaque de Chelsea (xG du moteur 1.646 contre 0.83 réel).",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Brentford gagne",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Brentford a gagné 3-0 avec un xG de 2.65 contre 0.83 et 6 tirs cadrés contre 2. Les buts à la 61e, 83e et 90e ont transformé une domination d'occasions en victoire nette.",
+          "lesson": "L'edge du moteur en faveur de Brentford à domicile est confirmé. À garder : quand le moteur voit de la valeur sur l'équipe à domicile contre un adversaire défensivement fragile, ne pas se laisser freiner par des stats de possession ou de forme ambiguës. Un seul match ne valide pas la méthode."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Trois buts au total, donc le plus de 0.5 est largement passé. Le premier but est arrivé tard (61e), ce qui montre que ce seuil ne tenait pas à un début de match rapide.",
+          "lesson": "Un seuil aussi bas est quasi acquis et porte peu d'information. Il ne dit rien sur la qualité de l'analyse."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Chelsea n'a pas marqué : 2 tirs cadrés seulement, 1 grosse occasion et xG de 0.83, malgré 60% de possession et 12 corners. Le moteur attendait 1.646 de xG.",
+          "lesson": "Corriger : la possession et les corners de Chelsea gonflent son volume sans produire de danger. Pour un 'Oui' sur les deux équipes, vérifier la qualité des tirs (cadrés, grosses occasions) plutôt que le volume. Une défaite à l'extérieur peut facilement être un zéro de but."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Brentford & Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Brentford a gagné et il y a eu plus de 0.5 but, donc la combinaison est passée mécaniquement avec le résultat.",
+          "lesson": "Ce marché dépend entièrement du 1X2, le volet buts étant quasi acquis. Il n'apporte pas d'information supplémentaire."
+        },
+        {
+          "market": "Buts — Brentford",
+          "marketId": "teamGoals",
+          "pick": "Brentford — Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Brentford a marqué 3 fois (Anthony 61e, Thiago 83e, Carvalho 90e) avec 6 tirs cadrés et 4 grosses occasions.",
+          "lesson": "L'attaque de Brentford à domicile a dépassé sa moyenne historique de 1.1 but par match. À garder : le xG du moteur (2.432) était plus fiable que les moyennes historiques de 10 matchs."
+        },
+        {
+          "market": "Buts — Chelsea",
+          "marketId": "teamGoals",
+          "pick": "Chelsea — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Chelsea n'a marqué aucun but, donc moins de 3.5 est passé sans difficulté.",
+          "lesson": "Seuil très large, peu informatif. Il est en accord avec un xG réel de Chelsea à 0.83, inférieur aux 1.646 du moteur."
+        }
+      ],
+      "caveats": "Un seul match : impossible de dire si l'analyse était bonne ou si c'est de la variance. Deux buts sont tombés dans les sept dernières minutes et le score ne reflète pas forcément l'équilibre du jeu avant la 61e. Je n'ai pas les données sur les compositions, les blessures ni le contexte tactique. Je n'avais pas d'avis chiffré par marché, donc aucune vérification d'avis n'est possible.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3839,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 1964,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3839,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1964,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 3839,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3839
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0352072,
+      "createdAt": "2026-09-30T21:03:31.204Z"
+    }
+  },
+  {
+    "matchId": "b2d41e20e9485a8ad28e7534d389a37d",
+    "homeName": "Bayern Munich",
+    "awayName": "Union Berlin",
+    "league": "Bundesliga - Germany",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Bayern Munich vs Union Berlin",
+      "expectedGoals": {
+        "home": 2.187,
+        "away": 0.825,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 1.22,
+        "draw": 8.81,
+        "away": 15.32
+      },
+      "market": {
+        "odds1": 1.08,
+        "oddsDraw": 12.46,
+        "odds2": 23.11
+      },
+      "edgePercent": -6.95,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 2781,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1421,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Bayern Munich, 4e avec 7 points en 3 matches (7 buts pour, 2 contre), aborde cette réception d'Union Berlin (16e, 1 point, -6 de différence de buts) en net favori sur le papier. Les données FlashScore et historiques convergent pour souligner la domination offensive et la possession écrasante du Bayern, tandis qu'Union Berlin affiche des stats de production offensive et défensive bien plus modestes. Le moteur reflète cette hiérarchie avec un edge négatif qui pousse à un PASS malgré la cote très basse sur le Bayern.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Écart de classement très marqué en faveur du Bayern dès le début de saison.",
+          "evidence": "Bayern 4e avec 7 pts (2V,1N,0D, 7 buts pour/2 contre) vs Union Berlin 16e avec 1 pt (0V,1N,2D, 4 buts pour/10 contre) après 3 journées."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Le Bayern affiche une forme quasi parfaite, Union Berlin est plus irrégulier avec des nuls et défaites récentes.",
+          "evidence": "FlashScore recentForm Bayern: N,V,V,V,V ; profil équipe Bayern: V,V,N,V,V,V,V. Historique local: V,V,N,V,V. Profil Union Berlin: V,V,V,V,N,D,V,N."
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Le Bayern surclasse Union Berlin sur la production offensive et la possession selon plusieurs sources secondaires convergentes.",
+          "evidence": "FlashScore Bayern: xG 2.72, possession 66%, 18.71 tirs, 7.54 tirs cadrés. Historique Bayern: 3.4 buts pour/1.3 contre, 19.8 tirs. Historique Union Berlin: 1.5 buts pour/2 contre, 12.5 tirs, 4.7 tirs cadrés."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur chiffre un edge négatif malgré la domination attendue du Bayern, en raison d'une cote marché déjà très basse.",
+          "evidence": "Expected goals 2.187 (Bayern) vs 0.825 (Union), true odds 1.22/8.81/15.32 contre cotes marché 1.08/12.46/23.11, edge -6.95%, action PASS."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif confirme sans ambiguïté la supériorité attendue du Bayern (classement, forme, statistiques offensives et de possession toutes favorables), ce qui va dans le même sens que l'expected goals élevé du moteur pour le Bayern. Toutefois, cette domination qualitative ne contredit pas le PASS du moteur : l'écart favorable au Bayern est déjà largement intégré dans une cote marché très basse, ce qui explique l'edge négatif malgré un contexte sportif clairement en sa faveur.",
+      "caveats": "Les statistiques directes homeStats/awayStats et la forme homeForm/awayForm structurées ne sont pas disponibles (null ou vides) ; l'analyse repose donc sur des sources secondaires (FlashScore, historique football-data.co.uk 5 dernières saisons, profils équipes web). awayFlashscoreStats est totalement absent, limitant la comparaison directe sur les statistiques récentes d'Union Berlin. Les données de classement (played=3) sont très récentes en début de saison, ce qui limite la portée de l'échantillon. Les profils d'équipes (homeTeamProfile/awayTeamProfile) présentent des formes légèrement différentes des autres sources selon la fenêtre temporelle considérée, sans contradiction majeure mais à interpréter avec prudence vu leur origine web périodique."
+    },
+    "updatedAt": "2026-09-30T21:03:56.583Z",
+    "createdAt": "2026-09-18T16:55:55.127Z",
+    "postMatchReview": {
+      "summary": "Le Bayern a écrasé Union Berlin 7-0. La lecture pré-match (supériorité nette du Bayern, PASS dû à une cote déjà très basse) était juste sur le sens, mais l'ampleur a été largement sous-estimée. Le match a été à sens unique (xG 3.71 contre 0.34, 23 tirs contre 3).",
+      "whatWasRight": "La hiérarchie a été bien lue : classement, forme, possession (68 % réalisée contre 66 % de moyenne) et production offensive. Le Bayern a gagné avec un xG de 3.71, supérieur aux 2.187 du moteur. Union n'a pas marqué (3 tirs, xG 0.34), cohérent avec son profil offensif modeste (xG moteur 0.825). Le PASS lié à l'edge négatif n'a pas été contredit : aucune valeur sur un favori à 1.08.",
+      "whatWasMissed": "L'ampleur du score n'a pas été anticipée. L'historique du Bayern (3.4 buts par match) et son xG FlashScore de 2.72 suggéraient un plafond plus haut que 2.19. Le déséquilibre défensif d'Union (10 buts encaissés en 3 matchs) a été sous-pesé. Trois buts sont tombés entre la 70e et la 76e minute, ce qui montre la variance haussière d'un favori qui domine.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le vainqueur et la faiblesse d'Union, mais le contredit sur le volume de buts. Les picks nul, moins de 2.5 buts, BTTS oui et moins de 3.5 buts pour le Bayern ont tous été démentis par le 7-0.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Bayern Munich gagne",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le Bayern a mené dès la 18e (Musiala) et n'a jamais été inquiété : 7-0, xG 3.71 contre 0.34.",
+          "lesson": "Garder la lecture du favori net à domicile contre une équipe faible. Un bon pick de résultat ne crée pas de valeur quand la cote est de 1.08."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Sept buts, donc plus de 0.5 atteint dès la 18e minute.",
+          "lesson": "Ce seuil est quasi certain dans un match de ce profil. Il apporte peu d'information, la valeur éventuelle est ailleurs."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Union n'a cadré que 2 tirs sur 3, sans grosse occasion (xG 0.34) : le BTTS oui est faux.",
+          "lesson": "Face à un Bayern dominant à domicile, l'adversaire faible marque rarement. Pondérer davantage la faiblesse offensive d'Union (1.5 but, 4.7 tirs cadrés) que la défense du Bayern."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Nul & Moins de 2.5 buts",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le pick Nul et moins de 2.5 buts était incohérent avec la domination attendue. Le Bayern a gagné 7-0.",
+          "lesson": "Un pick de nul contre un favori à 1.08 est à rejeter. Vérifier la cohérence des picks combinés avec le scénario dominant du modèle."
+        },
+        {
+          "market": "Buts — Bayern Munich",
+          "marketId": "teamGoals",
+          "pick": "Bayern Munich — Moins de 3.5 buts",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le Bayern a marqué 7 buts (Kane 2, Olise 3, Musiala, Saibari) avec 23 tirs dont 15 cadrés et 6 grosses occasions. Moins de 3.5 est donc faux.",
+          "lesson": "Pour un grand favori à domicile en forme offensive, les lignes basses de buts par équipe sont risquées : la variance à la hausse est forte."
+        },
+        {
+          "market": "Buts — Union Berlin",
+          "marketId": "teamGoals",
+          "pick": "Union Berlin — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Union est resté à 0 but avec 3 tirs et un xG de 0.34, donc moins de 3.5 est juste.",
+          "lesson": "Pick juste mais peu informatif : la ligne est très haute pour une équipe limitée offensivement."
+        }
+      ],
+      "caveats": "Un seul match : un 7-0 est un résultat extrême, en partie dû à la variance. Les avis d'avant-match par marché (aiVerdict) étaient absents, donc l'évaluation marché par marché repose surtout sur les picks du moteur. Aucune donnée de composition ou de contexte du match n'était fournie.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 5856,
+        "cache_read_input_tokens": 5769,
+        "output_tokens": 3458,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5856,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1637,
+            "cache_read_input_tokens": 4733,
+            "cache_creation_input_tokens": 2159,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2159
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0591658,
+      "createdAt": "2026-09-30T21:03:56.583Z"
+    }
+  },
+  {
+    "matchId": "da3d3fec3e0b6b939910427a76ecfb76",
+    "homeName": "Espanyol",
+    "awayName": "Elche CF",
+    "league": "La Liga - Spain",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Espanyol vs Elche CF",
+      "expectedGoals": {
+        "home": 1.753,
+        "away": 0.798,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 1.86,
+        "draw": 3.76,
+        "away": 5.05
+      },
+      "market": {
+        "odds1": 1.85,
+        "oddsDraw": 3.46,
+        "odds2": 4.4
+      },
+      "edgePercent": 4.74,
+      "staking": {
+        "action": "RECOMMENDED",
+        "stake": 59.23
+      }
+    },
+    "usage": {
+      "input_tokens": 2417,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1528,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Espanyol occupe la 8e place avec 7 points en 6 matchs (2V, 1N, 3D), mais affiche une forme récente inquiétante avec 4 défaites sur les 5 derniers matchs. Elche CF ne dispose pas de classement en direct ni de forme récente confirmée dans les données actuelles, seules des données historiques (5 saisons football-data.co.uk) sont disponibles et suggèrent une équipe moyenne offensivement et défensivement. Les échantillons statistiques sont très limités (1 match chacun côté stats principales), ce qui réduit la robustesse du contexte qualitatif.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Espanyol est 8e avec un bilan équilibré mais une différence de buts faible.",
+          "evidence": "8e place, 6 joués, 2V-1N-3D, 9 buts pour, 7 contre, diff +2, 7 points."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "La forme actuelle d'Espanyol est très négative malgré son classement, avec quatre défaites sur les cinq derniers matchs.",
+          "evidence": "Forme homeForm: V, D, D, D, D (5 derniers matchs)."
+        },
+        {
+          "factor": "statistiques offensives/défensives (échantillon réduit)",
+          "observation": "Sur le seul match recensé, Espanyol a généré plus de tirs et un xG légèrement supérieur au chiffrage du moteur, tandis qu'Elche a eu plus de possession mais moins d'occasions dangereuses.",
+          "evidence": "Espanyol: 19 tirs dont 5 cadrés, xG 1.65, possession 45%. Elche: 11 tirs dont 3 cadrés, xG 0.78, possession 56%."
+        },
+        {
+          "factor": "données historiques Elche (secondaires)",
+          "observation": "Sur 5 saisons, Elche affiche une moyenne offensive et défensive assez équilibrée, cohérente avec un profil d'équipe modeste, mais ces données sont anciennes et à traiter avec prudence.",
+          "evidence": "Historique Elche (10 matchs agrégés sur 5 saisons): 1.3 but marqué, 1.2 encaissé, 10 tirs, 3.5 cadrés, 4 corners en moyenne."
+        },
+        {
+          "factor": "forme historique Elche (secondaire)",
+          "observation": "La forme historique récente d'Elche sur les données football-data.co.uk montre un équilibre entre nuls et défaites, sans dominante claire.",
+          "evidence": "Forme historique Elche: N, V, D, N, D (5 derniers matchs recensés)."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif nuance partiellement l'edge du moteur en faveur d'Espanyol : le classement et les statistiques du seul match observé (tirs, xG) soutiennent une supériorité offensive à domicile cohérente avec les xG du moteur (1.753 vs 0.798), mais la forme très négative d'Espanyol (4 défaites sur 5) introduit une incertitude que le modèle ne capture pas nécessairement dans le détail. Côté Elche, l'absence de classement et de forme récente en direct empêche de confirmer ou contredire fermement l'écart attendu par le moteur, les seules données disponibles (historiques sur 5 saisons) esquissant un profil modeste sans signal fort dans un sens ou l'autre.",
+      "caveats": "Classement d'Elche CF totalement indisponible (standings.away = null). Forme récente directe d'Elche (awayForm) absente ; seule une forme historique ancienne (football-data.co.uk, 5 saisons) est fournie, à traiter comme secondaire et non représentative de la forme actuelle. Statistiques principales homeStats/awayStats basées sur un échantillon d'un seul match chacun (sampleSize:1), donc peu fiables statistiquement. Aucune donnée FlashScore ni profil d'équipe (homeTeamProfile/awayTeamProfile) disponible pour compléter ou vérifier ces informations. Les statistiques 'home' et 'away' détaillées dans standings.home (played/goalsFor/goalsAgainst à domicile) sont à 0, donc non renseignées."
+    },
+    "updatedAt": "2026-09-30T21:04:17.319Z",
+    "createdAt": "2026-09-18T17:01:22.722Z",
+    "postMatchReview": {
+      "summary": "Le moteur et ma lecture privilégiaient Espanyol à domicile ; Elche a gagné 3-1 malgré un carton rouge dès la 6e minute. Le résultat contredit l'edge sur le 1X2, mais les marchés de buts (BTTS, plus de 0.5, moins de 3.5 par équipe) étaient justes. Ma lecture avait surtout signalé l'incertitude liée à la forme d'Espanyol et à la faiblesse de l'échantillon.",
+      "whatWasRight": "J'avais noté la forme très négative d'Espanyol (4 défaites sur 5) comme un risque que le modèle capte mal : cela s'est confirmé par la défaite. Espanyol a dominé le volume (23 tirs contre 9, 66 % de possession), dans le sens de la supériorité offensive que j'attendais. Les marchés de buts sont passés : les deux équipes ont marqué et aucune n'a atteint 3.5 buts.",
+      "whatWasMissed": "Je n'ai pas pesé la variance d'un match à faible échantillon ni l'efficacité d'Elche en contre. Malgré un carton rouge à la 6e minute, Elche a marqué 3 fois sur 9 tirs, avec un xG de 1.61 contre 1.05 pour Espanyol. Le xG de 1.65 d'Espanyol, tiré d'un seul match, était surévalué pour ce match. Fer Niño a marqué deux buts en trois minutes (26e et 29e). Le but d'Espanyol est un csc (72e). Aucun signal pré-match ne permettait d'anticiper le rouge.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1X2 : Espanyol favori (1.86 vrai, edge de 4.74 %) a perdu. Le xG d'Elche (1.61) dépasse celui attendu par le moteur (0.80), et celui d'Espanyol (1.05) est inférieur à l'attendu (1.75). Une seule issue ne dit pas si l'edge était mauvais ; la faible couverture des données d'Elche limitait déjà la confiance.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Espanyol gagne",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Espanyol a perdu 1-3. Elche a marqué à la 26e et à la 29e (Fer Niño), puis à la 78e (Valera). Le seul but d'Espanyol est un csc de Chust à la 72e. Espanyol a dominé sans efficacité (23 tirs, 4 cadrés, xG 1.05), alors qu'Elche a cadré 6 tirs sur 9 en étant à 10 dès la 6e minute.",
+          "lesson": "Ne pas traiter un favori à domicile comme solide quand sa forme récente est mauvaise et que les données adverses manquent. Le volume de tirs d'Espanyol n'a pas produit de buts. Il faut peser la qualité des tirs (cadrés, grosses occasions) plus que leur nombre."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "4 buts au total (1-3), donc plus de 0.5 est largement passé. Les buts sont tombés aux 26e, 29e, 72e et 78e minutes.",
+          "lesson": "Ce seuil très bas est quasi acquis dans un match de ce profil. Il apporte peu d'information et ne valide pas la lecture sur le vainqueur."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Les deux équipes ont marqué : Elche trois fois, Espanyol une fois, sur csc à la 72e. Sans ce csc, Espanyol aurait sans doute fini sans but malgré 23 tirs, donc le « Oui » a été juste de peu.",
+          "lesson": "Le BTTS était cohérent avec des xG autour de 1.75 et 0.80. Mais il a tenu sur un csc, pas sur une finition d'Espanyol : le garder avec prudence quand l'attaque domine sans cadrer."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Espanyol & Plus de 0.5 buts",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le pari combiné dépendait d'une victoire d'Espanyol, qui n'a pas eu lieu. Le volet buts était juste, mais la défaite du pick l'a fait échouer.",
+          "lesson": "Un combiné hérite de l'erreur du marché 1X2. Quand le vainqueur est incertain, éviter de le coupler à un marché de buts qui ne le renforce pas."
+        },
+        {
+          "market": "Buts — Espanyol",
+          "marketId": "teamGoals",
+          "pick": "Espanyol — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Espanyol n'a marqué qu'un but (csc), largement sous 3.5, malgré 23 tirs.",
+          "lesson": "Un seuil de 3.5 est très sûr pour une équipe moyenne. Il a été juste, mais ne prouve pas la qualité de l'analyse."
+        },
+        {
+          "market": "Buts — Elche CF",
+          "marketId": "teamGoals",
+          "pick": "Elche CF — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Elche a marqué 3 buts, donc moins de 3.5 est passé de justesse. Deux buts en trois minutes de Fer Niño ont rendu le match ouvert malgré le rouge à la 6e minute.",
+          "lesson": "Elche a été plus efficace que prévu (xG 1.61 contre 0.80 attendu) : un seuil de 3.5 est resté juste, mais la marge était faible. Ne pas sous-estimer un adversaire dont on ne connaît pas la forme actuelle."
+        }
+      ],
+      "caveats": "Un seul match : le résultat peut tenir à la variance (efficacité d'Elche, csc, rouge à la 6e). Je n'ai pas le détail des blessures ni la forme actuelle d'Elche. Les statistiques pré-match reposaient sur un échantillon d'un match. Il n'y a pas d'avis d'avant-match par marché (aiVerdict nul), donc je ne peux juger que la lecture globale.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3704,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 2119,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3704,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2119,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 3704,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3704
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0362172,
+      "createdAt": "2026-09-30T21:04:17.319Z"
+    }
+  },
+  {
+    "matchId": "f6d8ec3ecfba4947770ddd7d391c8c73",
+    "homeName": "AS Monaco",
+    "awayName": "RC Lens",
+    "league": "Ligue 1 - France",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "AS Monaco vs RC Lens",
+      "expectedGoals": {
+        "home": 2.187,
+        "away": 0.825,
+        "source": "league-baseline"
+      },
+      "trueOdds": {
+        "home": 1.96,
+        "draw": 4.16,
+        "away": 4.02
+      },
+      "market": {
+        "odds1": 2.14,
+        "oddsDraw": 3.65,
+        "odds2": 3.1
+      },
+      "edgePercent": 16.26,
+      "staking": {
+        "action": "RECOMMENDED",
+        "stake": 200
+      }
+    },
+    "usage": {
+      "input_tokens": 2403,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1583,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Les données directes (classement, forme et stats en direct de Monaco, forme en direct de Lens) sont indisponibles, ce qui limite la lecture qualitative. Les sources secondaires disponibles pour Lens dressent un profil offensif solide (xG ~2.18, possession ~52.6%, ~18 tirs/match) mais une forme récente FlashScore mitigée (D,D,V,V,D), alors qu'un autre profil (awayTeamProfile) donne une série plus équilibrée (N,V,D,D,V,V,D). Les historiques locaux (5 dernières saisons) montrent des moyennes assez proches entre les deux équipes en buts marqués (Monaco 2, Lens 2.1) mais Lens y encaisse moins (1.4 vs 1.8) et produit davantage de tirs (21 vs 13.4), ce qui suggère un profil offensif légèrement supérieur pour Lens sur le temps long, malgré l'expected goals du moteur nettement favorable à Monaco pour ce match précis.",
+      "keyFactors": [
+        {
+          "factor": "forme récente (Lens)",
+          "observation": "Deux sources de forme pour Lens divergent légèrement, sans données équivalentes pour Monaco.",
+          "evidence": "FlashScore recentForm: D,D,V,V,D (25 matchs échantillon) vs awayTeamProfile recentForm: N,V,D,D,V,V,D"
+        },
+        {
+          "factor": "statistiques moyennes en match (Lens, FlashScore)",
+          "observation": "Lens affiche un profil offensif actif avec possession majoritaire.",
+          "evidence": "xG 2.18, possession 52.65%, 18.12 tirs/match, 6.35 tirs cadrés, 6.94 corners sur 25 matchs (donnée du 07/09/2026)"
+        },
+        {
+          "factor": "historique 5 saisons (football-data.co.uk)",
+          "observation": "Sur le long terme, Lens produit plus de tirs et encaisse moins que Monaco, mais les buts marqués sont comparables.",
+          "evidence": "Monaco: 2 buts marqués/1.8 encaissés/13.4 tirs; Lens: 2.1 buts marqués/1.4 encaissés/21 tirs (10 matchs chacun)"
+        },
+        {
+          "factor": "forme historique 5 saisons",
+          "observation": "Les deux équipes affichent des séries mêlant victoires et nuls, sans nette domination historique pour l'une ou l'autre.",
+          "evidence": "Monaco: D,D,V,N,N; Lens: V,D,V,N,N (5 matchs chacun)"
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur identifie un edge important en faveur de Monaco à domicile, appuyé par un différentiel d'expected goals marqué.",
+          "evidence": "xG 2.187 (Monaco) vs 0.825 (Lens), edge 16.26%, cote vraie 1.96 vs cote marché 2.14"
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif nuance partiellement l'edge du moteur plutôt que de le confirmer pleinement : les données FlashScore et historiques disponibles positionnent Lens comme une équipe à profil offensif solide (bonne possession, volume de tirs élevé, défense historique plus économe), ce qui contraste avec l'écart très marqué en expected goals du moteur en faveur de Monaco. L'absence totale de données directes sur Monaco (classement, forme, stats) empêche cependant de confirmer ou d'infirmer solidement la supériorité domiciliaire suggérée par le modèle ; le contexte disponible invite donc à une lecture prudente plutôt qu'à un renforcement du signal.",
+      "caveats": "Aucune donnée directe disponible pour Monaco (classement, stats, forme) ni pour la forme FlashScore en direct — seules des sources secondaires existent pour Lens. Le classement (standings) est totalement absent pour les deux équipes, aucune indication football-data.co.uk n'étant fournie ici. Deux sources de forme pour Lens (FlashScore et profil équipe) présentent des séquences différentes sur des périodes non alignées, ce qui empêche de trancher sur la forme réelle actuelle. Les données FlashScore datent du 07/09/2026 et le profil d'équipe du 16/09/2026, avec un décalage temporel entre les deux sources à noter."
+    },
+    "updatedAt": "2026-09-30T21:04:36.143Z",
+    "createdAt": "2026-09-18T17:07:44.435Z",
+    "postMatchReview": {
+      "summary": "Monaco a gagné 2-1, dans le sens du moteur (favori à domicile, edge 16,26 %). Ma lecture prudente, qui nuançait l'écart d'xG en faveur de Monaco, était trop sceptique sur le résultat. Elle avait cependant vu juste sur un Lens offensivement actif : Lens a marqué, a tiré plus (12 tirs contre 9) et a obtenu 8 corners contre 2. Le score final doit beaucoup à un csc tardif (84e), donc la marge reste mince.",
+      "whatWasRight": "J'avais pointé le profil offensif de Lens (volume de tirs, possession). Il s'est confirmé : 12 tirs contre 9, 8 corners contre 2, un xG de 1,19 et un but de Udol à la 57e. Cela invalidait l'idée d'un xG Lens de 0,825 jugé très faible. Le refus de surévaluer l'écart entre les équipes était donc justifié sur le déroulé : possession égale (50 %), match ouvert et serré.",
+      "whatWasMissed": "J'ai laissé trop de poids à l'absence de données sur Monaco et à la forme de Lens, sans tirer de conclusion sur l'issue. Monaco a produit la meilleure qualité de tirs (6 cadrés sur 9, 3 grosses occasions, xG 1,75 contre 1,19), proche des 2,19 attendus par le moteur. Je n'ai pas non plus anticipé que le match serait à la fois ouvert et gagné par Monaco. Le csc de Gradit à la 84e a fait basculer le score : c'est un facteur de chance non modélisable.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur la victoire de Monaco et sur le xG de Monaco (1,75 réel contre 2,19 attendu). Il le contredit partiellement sur Lens, dont le xG réel (1,19) dépasse nettement les 0,83 prévus. Le pronostic est juste, mais le 2-1 avec un csc tardif ne prouve pas un écart aussi net que celui du chiffrage.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "AS Monaco gagne",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Monaco a ouvert le score à la 32e (Brunner), Lens a égalisé à la 57e (Udol), puis le csc de Gradit à la 84e a donné la victoire. Monaco a eu plus de tirs cadrés (6 contre 4) et un meilleur xG (1,75 contre 1,19).",
+          "lesson": "Le favori à domicile s'est imposé, ce qui confirme la direction du moteur. Mais la victoire s'est jouée sur un csc tardif : ne pas lire un pari juste comme une preuve d'écart net. Garder un doute sur l'ampleur de l'avantage quand les stats du match sont proches."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Trois buts ont été marqués (32e, 57e, 84e), donc le plus de 0,5 but était acquis dès la 32e minute.",
+          "lesson": "Un seuil aussi bas est presque toujours validé dans un match entre deux équipes offensives. Il apporte peu d'information : ne pas le compter comme une preuve de la qualité de l'analyse."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Lens a marqué à la 57e par Udol, avec 12 tirs, 4 cadrés et 2 grosses occasions. Monaco avait marqué dès la 32e.",
+          "lesson": "Mon analyse avait vu juste sur le profil offensif de Lens : xG moyen de 2,18 et 18 tirs par match. Le xG moteur de 0,825 pour Lens semblait trop bas face à ce profil. À garder : croiser l'xG du moteur avec le volume de tirs pour juger si l'adversaire peut marquer."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "AS Monaco & Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Les deux conditions sont réunies : victoire de Monaco et trois buts au total.",
+          "lesson": "Ce marché combiné dépend surtout de la victoire du favori, car le plus de 0,5 but était quasi acquis. Sa fiabilité est celle du marché Résultat, avec le même risque lié à un but chanceux."
+        },
+        {
+          "market": "Buts — AS Monaco",
+          "marketId": "teamGoals",
+          "pick": "AS Monaco — Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Monaco a marqué dès la 32e par Brunner, avec 6 tirs cadrés, 3 grosses occasions et un xG de 1,75. Le csc de la 84e s'ajoute au total.",
+          "lesson": "Le xG moteur de 2,19 pour Monaco était cohérent avec sa production réelle. Ce seuil bas est logique pour une équipe jugée nettement supérieure à domicile."
+        },
+        {
+          "market": "Buts — RC Lens",
+          "marketId": "teamGoals",
+          "pick": "RC Lens — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Lens n'a marqué qu'un but (Udol, 57e), donc moins de 3,5 buts, malgré 12 tirs et 8 corners.",
+          "lesson": "Un plafond aussi haut était très sûr, car un total de 4 buts ou plus est rare. Il n'indique pas de valeur : les probabilités y sont déjà fortes. La pression de Lens (8 corners) n'a produit qu'un seul but."
+        }
+      ],
+      "caveats": "Un seul match : le résultat ne valide ni n'invalide le modèle. Le csc tardif (84e) a pesé sur le score final. Je n'avais aucune donnée directe sur Monaco avant le match, donc l'évaluation de ma lecture reste partielle. Les stats réelles ne donnent ni la compo, ni le contexte tactique, ni les absences.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3708,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 2051,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3708,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2051,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 3708,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3708
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0355532,
+      "createdAt": "2026-09-30T21:04:36.143Z"
+    }
+  }
+]

@@ -1,0 +1,121 @@
+[
+  {
+    "matchId": "b9a6e597fd597637efa24b92d51dda62",
+    "homeName": "Rayo Vallecano",
+    "awayName": "Espanyol",
+    "league": "La Liga - Spain",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Rayo Vallecano vs Espanyol",
+      "expectedGoals": {
+        "home": 1.853,
+        "away": 0.768,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 2.05,
+        "draw": 3.76,
+        "away": 4.07
+      },
+      "market": {
+        "odds1": 2.21,
+        "oddsDraw": 3.4,
+        "odds2": 3.27
+      },
+      "edgePercent": 13.47,
+      "staking": {
+        "action": "RECOMMENDED",
+        "stake": 168.37
+      }
+    },
+    "usage": {
+      "input_tokens": 2555,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1309,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Rayo Vallecano reçoit un Espanyol qui occupe une meilleure position au classement (8e, 7 pts) que Rayo (16e, 4 pts), mais les dynamiques récentes racontent une histoire différente : Rayo est sur une série encourageante (N-V-N-V-V) tandis qu'Espanyol traverse une mauvaise passe (V-D-D-D-D, quatre défaites de suite). Les statistiques moyennes de tirs et de possession favorisent nettement Rayo à domicile.",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Tendance inverse au classement : Rayo invaincu sur ses 5 derniers matchs contre Espanyol en pleine série négative.",
+          "evidence": "Rayo: N-V-N-V-V (3V, 2N, 0D) ; Espanyol: V-D-D-D-D (1V, 0N, 4D)"
+        },
+        {
+          "factor": "classement",
+          "observation": "Espanyol est mieux classé et a une meilleure différence de buts globale, mais cela contraste avec sa forme récente.",
+          "evidence": "Rayo 16e (4 pts, 8-14, diff -6) ; Espanyol 8e (7 pts, 8-5, diff +3) sur 5 matchs joués"
+        },
+        {
+          "factor": "statistiques offensives/défensives moyennes",
+          "observation": "Rayo domine en volume de jeu et tirs cadrés sur ses 10 derniers matchs, avec une possession largement supérieure.",
+          "evidence": "Rayo: 5.1 tirs cadrés, 14.4 tirs, 54.1% possession, xG 1.11 ; Espanyol: 3.8 tirs cadrés, 10.5 tirs, 42.5% possession, xG 1.27 (sur 10 matchs)"
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur identifie un edge de 13.47% sur la victoire de Rayo, avec une valeur nettement supérieure à la cote du marché.",
+          "evidence": "trueOdds home 2.05 vs cote marché 2.21, edge 13.47%, xG attendus 1.853 (Rayo) vs 0.768 (Espanyol)"
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif renforce globalement l'edge identifié par le moteur sur la victoire de Rayo : la forme récente très favorable à domicile et les statistiques de tirs/possession supérieures vont dans le même sens que l'écart de expected goals calculé (1.853 contre 0.768). Le seul élément qui nuance ce alignement est le classement général, plus favorable à Espanyol, mais celui-ci semble davantage refléter un début de saison ancien que la dynamique actuelle des deux équipes.",
+      "caveats": "Les données FlashScore (homeFlashscoreStats/awayFlashscoreStats) sont absentes pour ce match. Les statistiques historiques locales (football-data.co.uk) ne sont disponibles que pour Rayo (homeHistoricalStats et homeHistoricalForm), aucune donnée équivalente pour Espanyol (awayHistoricalStats et awayHistoricalForm manquantes), ce qui empêche une comparaison symétrique sur cette source secondaire. Les statistiques 'home'/'away' détaillées (played, goalsFor, goalsAgainst) au sein des standings sont à zéro, donc aucune performance spécifique à domicile pour Rayo ou à l'extérieur pour Espanyol n'a pu être isolée. L'échantillon de forme récente reste limité à 5 matchs."
+    },
+    "updatedAt": "2026-09-30T21:02:26.329Z",
+    "createdAt": "2026-09-14T21:50:08.702Z",
+    "postMatchReview": {
+      "summary": "Rayo a gagné 2-1, ce qui va dans le sens de la lecture pré-match (victoire de Rayo, edge du moteur). Le match a pourtant été plus disputé que prévu : Espanyol a fini avec plus de tirs (19 contre 16), plus de tirs cadrés (5 contre 2) et un xG quasi égal (1,65 contre 1,71). Rayo a marqué tôt (3e, 26e) puis a dû tenir.",
+      "whatWasRight": "Le vainqueur : Rayo a gagné à domicile, comme le laissaient attendre la forme récente (N-V-N-V-V contre V-D-D-D-D pour Espanyol) et l'avantage du moteur. La possession supérieure (55% contre 45%) est cohérente avec les moyennes citées (54% contre 42,5%). L'idée que le classement d'Espanyol, établi sur 5 matchs, pesait peu face à la dynamique était la bonne : Rayo a marqué dès la 3e minute et a doublé la mise à la 26e.",
+      "whatWasMissed": "L'écart de xG attendu (1,85 contre 0,77) était trop large. Le xG réel est quasi équilibré (1,71 contre 1,65), et Espanyol a dominé les tirs (19 contre 16) et les tirs cadrés (5 contre 2). J'ai sous-estimé la capacité offensive d'Espanyol malgré sa série de défaites. Je n'avais pas non plus anticipé que l'avantage de Rayo viendrait d'une efficacité élevée (2 buts pour 2 tirs cadrés) plutôt que d'une domination du volume. Le score de 2-1, avec un but d'Espanyol à la 54e et un match serré jusqu'au bout, montre que la marge était mince.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le vainqueur, puisque Rayo a gagné. Il contredit en partie le chiffrage des xG, car le contenu du match était beaucoup plus équilibré que l'écart attendu. Un seul match ne valide pas un edge de 13,47%. Le pari a pu être gagnant en partie grâce à l'efficacité de Rayo devant le but.",
+      "marketReviews": [],
+      "caveats": "Il s'agit d'un seul match, et la victoire 2-1 n'est pas une preuve de la justesse de l'edge. Aucun marché joué n'était fourni (marketOutcomes vide), d'où l'absence de bilan par marché. Les données FlashScore et l'historique d'Espanyol manquaient avant le match. Les stats fournies ne donnent pas le contexte des tirs, comme l'état du score ou le rythme après l'ouverture du score.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2990,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 1073,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 2990,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1073,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 2990,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2990
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0229012,
+      "createdAt": "2026-09-30T21:02:26.329Z"
+    }
+  }
+]

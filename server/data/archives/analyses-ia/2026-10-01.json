@@ -1,0 +1,227 @@
+[
+  {
+    "matchId": "cal-2026-10-01-atletico-nacional-junior-fc",
+    "homeName": "Atlético Nacional",
+    "awayName": "Junior FC",
+    "league": "Primera A - Colombia",
+    "commenceTime": "2026-10-01T12:00:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Atlético Nacional vs Junior FC",
+      "expectedGoals": {
+        "home": 2.092,
+        "away": 0.64,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 1.7,
+        "draw": 4.38,
+        "away": 5.42
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds",
+        "candidates": []
+      }
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 4374,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 1412,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 4374,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1412,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 4374,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 4374
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.03162,
+    "analysis": {
+      "summary": "Atlético Nacional (6e, 19 pts en 9 matchs, différence de buts +9) reçoit un Junior FC en difficulté (16e, 9 pts, différence de buts 0). Nacional affiche une meilleure forme récente et un meilleur bilan à domicile (2V 1N 0D). Les deux équipes ont toutefois plusieurs absences, surtout Nacional dans l'attaque et le milieu.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Nacional nettement devant Junior, dans la zone de qualification.",
+          "evidence": "Nacional 6e, 19 pts (6V 1N 2D, buts 18-9). Junior 16e, 9 pts (2V 3N 4D, buts 14-14)."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Nacional sur une série plutôt positive, Junior en dents de scie avec deux victoires récentes.",
+          "evidence": "Nacional (API-Football) : N, D, V, V, V. Junior : V, V, D, N, N (du plus récent au plus ancien)."
+        },
+        {
+          "factor": "rendement domicile/extérieur",
+          "observation": "Nacional est invaincu à domicile. Junior est fragile à l'extérieur.",
+          "evidence": "Nacional à domicile : 3 matchs, 2V 1N, buts 5-2. Junior à l'extérieur : 4 matchs, 1V 3D, buts 7-8."
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Nacional produit un peu plus de tirs et de corners. Les xG moyens sont proches.",
+          "evidence": "Nacional : 16,7 tirs, 5,9 cadrés, xG 1,58, 7,2 corners. Junior : 13,2 tirs, 4,7 cadrés, xG 1,49, 4,9 corners."
+        },
+        {
+          "factor": "absences et entraîneurs",
+          "observation": "Nacional compte 7 absents, dont des offensifs. Junior en compte 4, dont Muriel. Les deux équipes ont changé d'entraîneur cette saison.",
+          "evidence": "Nacional : Morelos, Cardona, Arango, Uribe, etc. ; Lucas González depuis le 2026-06-08. Junior : Muriel, Canchimbo, Correa, Pérez ; Sebastián Viera depuis le 2026-08-29."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur voit Nacional nettement favori, en cohérence avec le classement. Aucune cote de marché n'est disponible, donc pas d'edge calculable.",
+          "evidence": "xG moteur 2,09 contre 0,64 ; staking PASS (no_market_odds)."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif va dans le sens du moteur : Nacional est mieux classé, plus solide à domicile et en meilleure forme. Les nombreuses absences côté Nacional, notamment offensives, et les xG moyens proches des deux équipes nuancent toutefois l'écart important d'xG retenu par le moteur. Sans cote de marché, aucun edge ne peut être commenté.",
+      "caveats": "La forme API-Football est étiquetée saison 2024 alors que les dates sont en septembre 2026, donc l'étiquette de saison est incohérente. Je l'ai utilisée telle quelle, faute de forme historique ou web plus récente. Les stats FlashScore de Nacional portent le nom « Atletico GO » (collectées le 2026-09-07) : elles pourraient concerner une autre équipe, donc je les ignore. Aucune donnée FlashScore pour Junior. Les stats de Junior reposent sur 10 matchs, contre 9 pour Nacional. Les dates de changement d'entraîneur sont approximatives. Aucune note utilisateur n'est fournie. Les cotes de marché sont absentes."
+    },
+    "updatedAt": "2026-10-01T16:04:58.251Z",
+    "createdAt": "2026-09-30T17:46:02.071Z",
+    "postMatchReview": {
+      "summary": "Atlético Nacional a gagné 3-1 à domicile, dans le sens de ma lecture pré-match (meilleur classement, meilleure forme, solidité à domicile). Le moteur sous-estimait pourtant Junior, qui a marqué (xG réel 1,12 contre 0,64 attendu). Il sous-estimait aussi Nacional, qui a marqué 3 buts (xG réel 1,83, 19 tirs), malgré les absences offensives que j'avais soulignées.",
+      "whatWasRight": "J'avais vu Nacional favori : il a gagné 3-1, avec 58 % de possession, 19 tirs contre 9 et 5 grosses occasions contre 2. J'avais aussi noté que Nacional produisait plus de tirs et de corners (7 contre 5 ici), et que Junior était fragile à l'extérieur. Le score le confirme : Junior a encaissé 2 buts en 17 minutes.",
+      "whatWasMissed": "J'ai trop pesé les 7 absences de Nacional. Elles n'ont pas freiné l'attaque : 3 buts, dont un doublé d'Andrés Román. J'ai aussi laissé passer un xG de Junior très bas (0,64) alors que ses xG moyens étaient proches de ceux de Nacional (1,49 contre 1,58). Junior a marqué à la 24e minute par Paiva et a créé 2 grosses occasions. Je n'avais pas contesté ce point.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le vainqueur et sur le fait qu'il y aurait des buts. Il le contredit sur la répartition : Nacional a dépassé son xG de 2,09 en buts (3), alors que son xG réel était plus bas (1,83), et Junior a marqué malgré un xG moteur très faible. Les picks « Les 2 équipes marquent : Non », « Nacional moins de 2,5 » et « Junior moins de 0,5 » sont donc faux.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Atlético Nacional gagne",
+          "minOdds": null,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Nacional a mené 2-0 dès la 17e minute (Sarmiento 8e, Román 17e) et a contrôlé le match (19 tirs, xG 1,83). Junior a réduit l'écart à la 24e, mais Román a scellé le 3-1 à la 71e.",
+          "lesson": "Confirmé : le classement, la forme et le bilan à domicile ont bien indiqué le vainqueur. À garder pour les favoris à domicile contre une équipe mal classée, même avec des absences offensives."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": null,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Avec 4 buts, dont 3 avant la 25e minute pour les deux équipes confondues, le seuil de 1,5 a été dépassé largement. Les xG cumulés atteignaient 2,95.",
+          "lesson": "Ce marché est sûr quand le favori domine les tirs et que l'adversaire garde une capacité à marquer. Les xG moyens d'environ 1,5 des deux équipes laissaient prévoir plus de buts que ne le suggérait l'xG moteur de 0,64 pour Junior."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": null,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Paiva a marqué pour Junior à la 24e minute. Junior a tiré 9 fois, dont 2 cadrés, avec 2 grosses occasions et un xG de 1,12 : il n'était pas étouffé.",
+          "lesson": "Avoir pris un xG de 0,64 pour Junior comme base sans le contester était une erreur. Quand les xG moyens d'un outsider (1,49) contredisent un xG moteur très bas, il faut se méfier du « Non »."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Atlético Nacional & Plus de 1.5 buts",
+          "minOdds": null,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Les deux conditions sont réunies : victoire de Nacional 3-1 avec 4 buts au total.",
+          "lesson": "La combinaison est juste parce que ses deux composantes étaient robustes. Elle garde de la valeur lorsque le favori domine clairement les tirs."
+        },
+        {
+          "market": "Buts — Atlético Nacional",
+          "marketId": "teamGoals",
+          "pick": "Atlético Nacional — Moins de 2.5 buts",
+          "minOdds": null,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Nacional a marqué 3 buts, donc plus de 2,5. Il a eu 19 tirs, 6 cadrés et 5 grosses occasions, avec un xG de 1,83. Il a donc réalisé un peu plus que son xG, et le doublé de Román y a contribué.",
+          "lesson": "Un pick « moins de 2,5 » avec un xG moteur de 2,09 laisse peu de marge. À une moyenne de 2,09, 3 buts sont un résultat courant. Les absences offensives n'ont pas réduit le volume offensif de Nacional."
+        },
+        {
+          "market": "Buts — Junior FC",
+          "marketId": "teamGoals",
+          "pick": "Junior FC — Moins de 0.5 buts",
+          "minOdds": null,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Paiva a marqué à la 24e minute après deux buts encaissés, ce qui rend faux le « moins de 0,5 ». Junior a eu 2 tirs cadrés et 2 grosses occasions.",
+          "lesson": "Un « zéro but » exige un xG adverse très bas. Avec 0,64, la probabilité de marquer restait élevée. À éviter pour une équipe qui marque en moyenne près de 1,5 xG, même à l'extérieur."
+        }
+      ],
+      "caveats": "Un seul match : l'échantillon est trop petit pour juger le moteur. Le doublé de Román et le but de Paiva peuvent relever de la variance. Je ne dispose pas de cotes de marché, d'avis pré-match chiffrés par marché ni des compositions réelles. Je ne peux donc pas juger l'impact des absences, ni mesurer la valeur des picks.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3621,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 2048,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3621,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2048,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 3621,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3621
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.035175200000000004,
+      "createdAt": "2026-10-01T16:04:58.250Z"
+    }
+  }
+]

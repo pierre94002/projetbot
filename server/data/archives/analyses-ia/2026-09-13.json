@@ -1,0 +1,931 @@
+[
+  {
+    "matchId": "0eba3c2d3bcf1d1fe4ab3180a3d03152",
+    "homeName": "Celta Vigo",
+    "awayName": "Málaga",
+    "league": "La Liga - Spain",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Celta Vigo vs Málaga",
+      "expectedGoals": {
+        "home": 0.5,
+        "away": 0.5,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 2.22,
+        "draw": 3.03,
+        "away": 4.53
+      },
+      "market": {
+        "odds1": 1.71,
+        "oddsDraw": 3.41,
+        "odds2": 4.45
+      },
+      "edgePercent": -15.29,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 1857,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1004,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Celta Vigo présente un profil solide sur la saison écoulée (7e, 55 pts, 16V-7N-15D) avec un net avantage à domicile (32 buts marqués / 21 encaissés sur 19 matchs). La forme récente est correcte (3V-2D sur les 5 derniers). Aucune donnée n'est disponible pour Málaga, ce qui limite fortement la comparaison entre les deux équipes.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Celta termine dans le milieu de tableau haut, avec qualification européenne, signe d'une saison globalement positive",
+          "evidence": "7e place, 55 points, 16V-7N-15D, diff de buts +2"
+        },
+        {
+          "factor": "forme à domicile",
+          "observation": "Celta est nettement plus performant à domicile qu'à l'extérieur sur la saison",
+          "evidence": "Domicile: 32 buts pour / 21 contre sur 19 matchs vs extérieur: 27 pour / 36 contre"
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Tendance récente favorable pour Celta sur les 5 derniers matchs",
+          "evidence": "Résultats récents: V, D, V, V, D (3V-2D)"
+        },
+        {
+          "factor": "statistiques offensives récentes",
+          "observation": "Celta génère un volume de tirs conséquent sur ses 10 derniers matchs",
+          "evidence": "14.5 tirs totaux dont 6.2 cadrés en moyenne, xG moyen de 1.55, possession 53.3%"
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur signale un edge négatif significatif, incitant à passer sur ce match malgré des cotes du marché plus basses que la cote réelle calculée sur le favori",
+          "evidence": "edgePercent -15.29%, action PASS, cote vraie domicile 2.22 vs cote marché 1.71"
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif disponible sur Celta (forme correcte, solidité à domicile, volume offensif notable) pourrait sembler favorable à l'équipe locale, mais l'absence totale de données sur Málaga empêche toute mise en perspective comparative fiable. Ce déséquilibre informationnel renforce plutôt la prudence du moteur, qui recommande de passer sur ce match plutôt que de le nuancer.",
+      "caveats": "Aucune donnée disponible pour Málaga : classement, forme récente et statistiques moyennes sont absents. Le xG affiché par le moteur (0.5/0.5) contraste avec le xG moyen de Celta sur 10 matchs (1.55), sans qu'il soit possible d'expliquer cet écart faute de données comparatives sur l'adversaire."
+    },
+    "updatedAt": "2026-09-30T21:01:09.110Z",
+    "createdAt": "2026-09-12T23:15:09.480Z",
+    "postMatchReview": {
+      "summary": "Le match nul 1-1 contredit le pick « Celta gagne » du moteur, mais valide la prudence du PASS pré-match (edge -15,29 %). Le nul était proche du xG 0,5/0,5 du moteur et de sa cote vraie du nul (3,03). Mon analyse, centrée sur Celta sans aucune donnée sur Málaga, penchait trop vers le local.",
+      "whatWasRight": "Le PASS était justifié : le favori Celta (cote marché 1,71 contre 2,22 de cote vraie) était surévalué, et il n'a pas gagné. J'avais aussi signalé l'écart entre le xG moteur (0,5/0,5) et le xG moyen de Celta (1,55), ce qui indiquait un modèle prudent et non un avantage net du local. Les marchés de buts (plus de 0,5, les deux équipes marquent, moins de 3,5) se sont réalisés avec 1-1.",
+      "whatWasMissed": "J'ai laissé le contexte favorable à Celta (forme à domicile, volume de tirs) suggérer un avantage local, alors que Málaga n'était pas évalué. J'ai aussi sous-estimé le scénario du nul, que la cote vraie de 3,03 rendait plausible, et le fait que les deux équipes marquent. Un xG moteur de 0,5 par équipe est faible face à un 1-1 : soit le xG est peu fiable, soit le résultat est à l'inverse de la tendance.",
+      "outcomeVsEngine": "Résultat mixte. Le pick 1X2 du moteur (Celta gagne) est faux, mais son edge négatif et son PASS sont confirmés. Les marchés de buts allaient dans le sens du moteur. Le nul était cohérent avec ses probabilités, qui donnaient une cote vraie du nul plus basse que celle du marché.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Celta Vigo gagne",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "1-1 : Celta n'a pas gagné. Le moteur voyait le local favori, mais sa cote vraie (2,22) laissait une vraie place au nul (3,03) et au nul ou à l'extérieur.",
+          "lesson": "Quand l'edge est négatif et que l'adversaire est inconnu, ne pas transformer une bonne forme à domicile en avantage net ; le nul reste un scénario à garder en tête. Un pick favori sans edge est fragile."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Deux buts au total, donc plus de 0,5 est validé. Seul un 0-0 l'aurait fait échouer.",
+          "lesson": "Plus de 0,5 est un pick presque toujours juste. Il confirme peu de choses sur la qualité du modèle, il ne faut pas lui accorder de valeur informative."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Chaque équipe a marqué une fois. Málaga a marqué malgré l'absence de données sur lui, et Celta a marqué à domicile.",
+          "lesson": "Malgré un xG moteur bas (0,5 chacun), le oui a été validé. Attention toutefois à ne pas en tirer une règle avec un seul match ; ce marché dépend des deux défenses, dont une était inconnue."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Celta Vigo & Plus de 0.5 buts",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Échec car la composante résultat (victoire Celta) est fausse, alors que plus de 0,5 but était acquis.",
+          "lesson": "Un marché combiné n'est jamais plus fiable que sa jambe la plus fragile : ici le 1X2. Ne pas le considérer tant que le résultat seul est sans edge."
+        },
+        {
+          "market": "Buts — Celta Vigo",
+          "marketId": "teamGoals",
+          "pick": "Celta Vigo — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Celta a marqué un but, loin de 3,5. Le xG de 0,5 du moteur pointait vers un faible total.",
+          "lesson": "Les seuils hauts (moins de 3,5) sont très probables dans la plupart des matchs. Ils confirment le calibrage du xG moteur, mais apportent peu de valeur."
+        },
+        {
+          "market": "Buts — Málaga",
+          "marketId": "teamGoals",
+          "pick": "Málaga — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Málaga a marqué un but, donc moins de 3,5 est validé. Le match est resté fermé.",
+          "lesson": "Même en l'absence de données sur l'équipe, un seuil de 3,5 buts est peu risqué. Il ne dit rien sur sa force."
+        }
+      ],
+      "caveats": "Un seul match, avec aucune donnée sur Málaga et aucune statistique de match (xG réel, tirs, possession, minutes des buts) fournie. Le 1-1 peut venir de la variance, donc on ne peut pas juger la qualité du modèle sur ce résultat.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2787,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 1714,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 2787,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1714,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 2787,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2787
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.028499200000000002,
+      "createdAt": "2026-09-30T21:01:09.109Z"
+    }
+  },
+  {
+    "matchId": "14e37b5aaf6fec05a01f7e1309025a66",
+    "homeName": "Real Sociedad",
+    "awayName": "Atlético Madrid",
+    "league": "La Liga - Spain",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Real Sociedad vs Atlético Madrid",
+      "expectedGoals": {
+        "home": 0.8,
+        "away": 1.06,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 3.47,
+        "draw": 3.48,
+        "away": 2.35
+      },
+      "market": {
+        "odds1": 3.07,
+        "oddsDraw": 3.47,
+        "odds2": 2.11
+      },
+      "edgePercent": -3.88,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 2108,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1096,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Match entre une Real Sociedad qui termine la saison passée à la 11e place (46 pts, différence de buts négative -11) et un Atlético Madrid dont le classement n'est pas fourni mais dont les statistiques moyennes récentes sont nettement supérieures. Les xG moyens sur les 10 derniers matchs (1.26 pour la Sociedad contre 1.97 pour l'Atlético) et la forme récente confirment une dynamique plutôt favorable aux visiteurs, cohérente avec l'edge légèrement négatif calculé par le moteur sur le succès à domicile.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Real Sociedad a un bilan domicile équilibré en buts mais un bilan extérieur très déficitaire, illustrant une équipe globalement moyenne cette saison.",
+          "evidence": "11e place, 46 pts, 13V-7N-18D, à domicile 20 buts pour/20 contre sur 19 matchs, à l'extérieur seulement 15 pour/26 contre."
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Atlético Madrid affiche des indicateurs offensifs et de possession supérieurs à ceux de la Real Sociedad sur les 10 derniers matchs.",
+          "evidence": "xG moyen 1.97 (Atlético) vs 1.26 (Sociedad), tirs cadrés 5.9 vs 3.7, possession 56.4% vs 52.4%."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "L'Atlético présente une forme plus solide avec davantage de victoires que la Real Sociedad sur les 5 derniers matchs.",
+          "evidence": "Forme Atlético: V,V,D,V,N (3 victoires) contre Real Sociedad: D,V,D,D,N (1 victoire)."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur ne détecte pas de valeur suffisante sur ce match et recommande de passer.",
+          "evidence": "edgePercent à -3.88%, staking action PASS."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif va globalement dans le même sens que le chiffrage du moteur : les statistiques offensives moyennes (xG, tirs cadrés, possession) et la forme récente penchent plutôt en faveur de l'Atlético Madrid, ce qui est cohérent avec des cotes vraies plus favorables à la victoire visiteuse (2.35) qu'au succès de la Real Sociedad (3.47). Cela renforce l'idée que le marché ne surestime pas franchement les chances domicile, expliquant l'absence d'edge significatif et la recommandation de passer.",
+      "caveats": "Le classement complet de l'Atlético Madrid n'est pas fourni (standings.away est null), ce qui empêche une comparaison directe des positions au classement. Les statistiques FlashScore (home et away) sont également absentes, limitant la validation croisée des données statistiques utilisées."
+    },
+    "updatedAt": "2026-09-30T21:01:57.368Z",
+    "createdAt": "2026-09-13T21:23:54.898Z",
+    "postMatchReview": {
+      "summary": "L'Atlético a gagné 3-0 à Saint-Sébastien. Ma lecture pré-match penchait côté visiteurs (xG, forme, tirs cadrés) et conseillait de passer faute d'edge ; le résultat va dans le sens de la lecture qualitative, mais l'ampleur de la victoire dépasse ce que les xG du moteur (0.8 contre 1.06) laissaient attendre.",
+      "whatWasRight": "J'avais bien identifié l'Atlético comme favori : meilleurs xG moyens (1.97 contre 1.26), meilleurs tirs cadrés, meilleure forme récente. La Sociedad est restée muette à domicile, ce qui correspond à sa faiblesse offensive relative. Le 'PASS' était aussi cohérent : la cote marché de l'Atlético (2.11) était plus basse que la cote vraie (2.35), donc pas de valeur à la prendre malgré la victoire.",
+      "whatWasMissed": "Je n'avais pas anticipé un écart aussi net : 3-0 contre un xG modèle de 0.8 pour la Sociedad et 1.06 pour l'Atlético. Les xG du moteur, très bas et serrés, sous-estimaient l'Atlético, alors que mes propres indicateurs récents (1.97) le plaçaient bien plus haut. Je n'ai pas relevé cette contradiction. Je ne dispose pas du détail du match (minutes des buts, tirs, xG réel), donc je ne peux pas dire si le score reflète la domination ou l'efficacité.",
+      "outcomeVsEngine": "Le résultat confirme la direction du moteur, qui donnait l'Atlético favori (cote vraie 2.35). Il contredit toutefois l'idée d'un match serré et peu prolifique suggérée par les xG (0.8 / 1.06). L'absence d'edge ne dit rien ici : le moteur a bien classé le favori, mais le marché le payait moins cher.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Atlético Madrid gagne",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Victoire 3-0 de l'Atlético, conforme au pick. La supériorité offensive récente des visiteurs et la pauvreté de la Sociedad se sont confirmées. Sur ce marché, je n'avais pas d'avis tranché.",
+          "lesson": "Quand xG récents, tirs cadrés et forme convergent vers le même côté, le favori du moteur mérite d'être suivi comme lecture directionnelle. Ce n'est pas une raison de jouer si la cote marché est plus basse que la cote vraie."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Trois buts au total, donc Plus de 0.5 largement atteint. Ce seuil était quasi certain et n'apporte aucune information sur le rythme du match.",
+          "lesson": "Un seuil de 0.5 but se valide presque toujours. Il ne prouve pas la qualité du modèle ; il faut juger les totaux sur des seuils plus discriminants (1.5, 2.5)."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le pick Oui était faux : la Sociedad n'a pas marqué (0-3). Son attaque faible (xG moyen 1.26, 3.7 tirs cadrés) et un adversaire plus solide rendaient cette issue plausible. Mon analyse ne prenait pas position sur ce marché.",
+          "lesson": "Quand une équipe est nettement plus faible offensivement, le pick Oui est fragile : le risque de blanchissage de l'outsider doit être pesé, surtout face à un favori solide. À garder en tête pour les prochains marchés BTTS."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Atlético Madrid & Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Victoire de l'Atlético et plus de 0.5 but : combiné validé dès que l'Atlético gagne, puisque le seuil est trivial.",
+          "lesson": "Ce combiné se réduit au marché Résultat quand le seuil est de 0.5 but. Il n'ajoute aucune validation indépendante."
+        },
+        {
+          "market": "Buts — Real Sociedad",
+          "marketId": "teamGoals",
+          "pick": "Real Sociedad — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "La Sociedad a marqué 0 but, donc Moins de 3.5 est très largement atteint. Son attaque était déjà la plus faible des deux.",
+          "lesson": "Un plafond de 3.5 buts pour l'équipe la plus faible offensivement est très sûr. Il n'a donc que peu de valeur informative."
+        },
+        {
+          "market": "Buts — Atlético Madrid",
+          "marketId": "teamGoals",
+          "pick": "Atlético Madrid — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "L'Atlético a marqué 3 buts, soit juste sous le seuil de 3.5. Le pick a tenu de peu, alors que le modèle n'attendait qu'environ 1.06 but.",
+          "lesson": "Le 3-0 montre que les xG du moteur peuvent sous-estimer un attaquant fort. Les plafonds proches du nombre de buts possible restent fragiles quand un favori déroule."
+        }
+      ],
+      "caveats": "Un seul match ne valide ni ne réfute un modèle. Je n'ai pas les statistiques du match (minutes des buts, tirs, xG, possession), donc je ne peux pas expliquer le déroulé. Un 3-0 peut venir d'un facteur que le modèle ne capte pas (carton rouge, efficacité inhabituelle). Je n'avais pas d'avis d'avant-match sur les marchés détaillés. Le classement de l'Atlético manquait avant le match.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2894,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 1983,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 2894,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1983,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 2894,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2894
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0316172,
+      "createdAt": "2026-09-30T21:01:57.368Z"
+    }
+  },
+  {
+    "matchId": "15e3bf25540c88237a06c03df1cb334b",
+    "homeName": "Getafe",
+    "awayName": "Deportivo La Coruña",
+    "league": "La Liga - Spain",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Getafe vs Deportivo La Coruña",
+      "expectedGoals": {
+        "home": 0.5,
+        "away": 0.5,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 2.62,
+        "draw": 2.69,
+        "away": 4.06
+      },
+      "market": {
+        "odds1": 2.08,
+        "oddsDraw": 2.77,
+        "odds2": 3.75
+      },
+      "edgePercent": -12.01,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 1854,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 968,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Getafe termine la saison à une 13e place avec un bilan équilibré mais modeste (11V-9N-18D, différence de buts négative), et sa forme récente est franchement mauvaise avec 4 défaites sur les 5 derniers matchs. Aucune donnée de classement, de forme ou de statistiques n'est disponible pour le Deportivo La Coruña, ce qui limite fortement la comparaison. Les statistiques offensives de Getafe (11.6 tirs, 3.9 cadrés en moyenne sur 10 matchs) montrent une équipe qui génère du jeu mais avec une possession faible (39.8%), cohérent avec un profil de contre-attaque.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Getafe est milieu de tableau avec une différence de buts légèrement négative, sans dominer son propre championnat.",
+          "evidence": "13e place, 42 points en 38 matchs, 34 buts pour / 39 contre, diff -5"
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Getafe traverse une période très difficile juste avant ce match.",
+          "evidence": "Forme sur 5 matchs : D, V, D, D, D (1 victoire, 4 défaites)"
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Getafe produit un volume de tirs correct mais avec une possession faible, suggérant un jeu direct plutôt qu'une domination du ballon.",
+          "evidence": "11.6 tirs totaux, 3.9 tirs cadrés, 3.9 corners, possession 39.8% sur 10 matchs, xG 1.14"
+        }
+      ],
+      "alignmentWithModel": "Le moteur affiche un edge négatif (-12.01%) et recommande de passer sur ce match, ce qui est cohérent avec le contexte qualitatif disponible : la forme récente très négative de Getafe (4 défaites sur 5) ne plaide pas en faveur d'une confiance accrue sur le favori supposé du marché, et l'absence totale de données sur Deportivo empêche de contrebalancer ou de nuancer ce signal. Le contexte qualitatif ne contredit donc pas la prudence du modèle, sans pour autant permettre de la renforcer davantage faute d'informations sur l'adversaire.",
+      "caveats": "Aucune donnée de classement, de forme récente ni de statistiques moyennes n'est disponible pour le Deportivo La Coruña, ce qui limite fortement l'analyse comparative. L'échantillon de forme de Getafe (5 matchs) et de statistiques (10 matchs) reste par ailleurs limité."
+    },
+    "updatedAt": "2026-09-30T21:01:39.546Z",
+    "createdAt": "2026-09-13T11:27:47.136Z",
+    "postMatchReview": {
+      "summary": "Le match nul 1-1 a validé la prudence pré-match : le moteur passait (edge -12 %) et l'analyse jugeait la forme de Getafe fragile. Le pick « Getafe gagne » du moteur est faux. Les marchés de buts (plus de 0,5, BTTS oui, moins de 3,5 par équipe) sont justes, mais ce sont des issues peu contraignantes.",
+      "whatWasRight": "Le PASS était cohérent : Getafe n'a pas gagné, malgré un statut de favori du marché (cote 2,08). La forme récente très négative (4 défaites sur 5) n'incitait pas à faire confiance au favori, et le nul, que le moteur valorisait (vraie cote 2,69 contre 2,77 au marché), s'est produit. Le profil de contre-attaque de Getafe (possession 39,8 %) allait aussi dans le sens d'un match serré.",
+      "whatWasMissed": "Je n'avais aucune donnée sur le Deportivo et je n'ai pas pu évaluer sa capacité à marquer. Son but a pourtant rendu le BTTS juste. Je n'ai pas non plus mentionné explicitement le nul comme issue probable. Mon analyse restait centrée sur Getafe, sans lecture du marché des buts.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur : le PASS était justifié, car le favori du marché n'a pas gagné et le prix du nul était le plus proche de la valeur estimée. Les xG du moteur de 0,5 contre 0,5 étaient toutefois très bas pour un match qui a compté deux buts, donc la partie sur les buts reste mal calibrée.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Getafe gagne",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le 1-1 invalide « Getafe gagne ». Getafe, en mauvaise forme et avec peu de possession, n'a pas su faire la différence face à un adversaire dont on ignorait tout.",
+          "lesson": "Ne pas suivre le favori du marché quand sa forme récente est mauvaise et qu'on n'a rien sur l'adversaire. Le nul doit être considéré comme une issue sérieuse dans les matchs équilibrés, avec des xG moteur proches."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Deux buts ont été marqués (1-1), donc plus de 0,5 est largement atteint.",
+          "lesson": "Ce seuil est presque toujours atteint et n'apporte quasiment aucune information. Il ne faut pas le compter comme une réussite de l'analyse."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Chaque équipe a marqué une fois. Getafe génère du volume (11,6 tirs, xG 1,14 en moyenne), et le Deportivo a trouvé la faille.",
+          "lesson": "Un volume de tirs correct de la part de Getafe suggère qu'il marque. Il faudrait des données sur la défense adverse pour évaluer le BTTS. Les xG du moteur de 0,5 étaient sans doute trop bas."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Getafe & Plus de 0.5 buts",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le pari combiné échoue à cause de la composante résultat : il n'y a pas eu de victoire de Getafe, même si le volet buts est validé.",
+          "lesson": "Un combiné hérite de l'incertitude de sa composante la plus fragile. Le volet résultat ne se sauve pas grâce au volet buts, quasi acquis."
+        },
+        {
+          "market": "Buts — Getafe",
+          "marketId": "teamGoals",
+          "pick": "Getafe — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Getafe n'a marqué qu'un but, très en dessous du seuil de 3,5.",
+          "lesson": "Une ligne de 3,5 buts pour une équipe est très rarement dépassée, surtout avec une moyenne de xG de 1,14. Ce marché est peu informatif."
+        },
+        {
+          "market": "Buts — Deportivo La Coruña",
+          "marketId": "teamGoals",
+          "pick": "Deportivo La Coruña — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le Deportivo n'a marqué qu'un but, largement sous 3,5.",
+          "lesson": "Cette ligne est très rarement dépassée, même sans donnée sur l'équipe. Elle n'apporte quasiment rien comme signal."
+        }
+      ],
+      "caveats": "Il s'agit d'un seul match, et un nul 1-1 peut tenir à la variance. Aucune statistique de match (xG réel, tirs, minutes des buts) n'était fournie, donc les explications restent limitées. Il n'y avait aucune donnée sur le Deportivo et aucun avis d'avant-match sur les marchés individuels, donc aucun aiWasRight n'est évaluable.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2754,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 1693,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 2754,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1693,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 2754,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2754
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0281572,
+      "createdAt": "2026-09-30T21:01:39.546Z"
+    }
+  },
+  {
+    "matchId": "6406438af00a2a42a81d6b2f1656d474",
+    "homeName": "Levante",
+    "awayName": "Barcelona",
+    "league": "La Liga - Spain",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Levante vs Barcelona",
+      "expectedGoals": {
+        "home": 0.5,
+        "away": 0.5,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 6.73,
+        "draw": 4,
+        "away": 1.66
+      },
+      "market": {
+        "odds1": 9.33,
+        "oddsDraw": 6.22,
+        "odds2": 1.26
+      },
+      "edgePercent": 47.4,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 1841,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1030,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Barcelone aborde ce déplacement en position de force écrasante : leader du championnat avec 88 points sur 38 matches (28V-4N-6D), une différence de buts de +63 et un rendement à l'extérieur particulièrement solide (50 buts marqués, seulement 19 encaissés sur 19 matches). La forme récente confirme cette dynamique (4V-1D sur les 5 derniers matches), avec des statistiques offensives moyennes impressionnantes sur l'échantillon récent (xG 2.3, 20 tirs et 72.2% de possession en moyenne). Aucune donnée de classement ou de forme n'est disponible pour Levante, ce qui limite la lecture du contexte côté domicile.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Barcelone termine la saison en tête du championnat avec un bilan quasi parfait à l'extérieur.",
+          "evidence": "1er, 88 pts, 28V-4N-6D, à l'extérieur : 19 matches, 50 buts pour, 19 contre"
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Barcelone affiche une dynamique très positive sur ses cinq derniers matches.",
+          "evidence": "Forme: V-D-V-V-V (4V, 1D sur 5)"
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Les données offensives récentes de Barcelone montrent une domination nette en tirs et possession.",
+          "evidence": "Moyennes sur 10 matches: 20 tirs totaux, 6.8 tirs cadrés, xG 2.3, possession 72.2%, 8.2 corners"
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur identifie un edge important sur la victoire de Barcelone mais recommande de ne pas miser.",
+          "evidence": "Edge 47.4%, cote vraie équipe extérieure 1.66 vs cote marché 1.26, staking action: PASS"
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif renforce clairement le sens de l'edge chiffré par le moteur en faveur de Barcelone : classement, forme et statistiques offensives convergent vers une nette supériorité de l'équipe visiteuse. Cela dit, ces éléments ne permettent pas d'évaluer si l'ampleur de l'edge (47.4%) est justifiée, la décision de staking (PASS) relevant uniquement du calibrage du moteur.",
+      "caveats": "Aucune donnée de classement disponible pour Levante (standings.home = null). Aucune statistique moyenne disponible pour Levante (homeStats = null). Aucune forme récente disponible pour Levante (homeForm.results vide, sampleSize=0), ce qui empêche toute comparaison directe entre les deux équipes sur ces critères."
+    },
+    "updatedAt": "2026-09-30T21:01:24.029Z",
+    "createdAt": "2026-09-13T00:13:20.861Z",
+    "postMatchReview": {
+      "summary": "Barcelone s'est imposé 4-2 à Levante, ce qui confirme le sens de ma lecture pré-match (supériorité nette du visiteur). Le match a été bien plus ouvert que le xG de 0.5 par équipe fourni au moteur ne le laissait penser : six buts au total. Le moteur a la bonne direction sur le 1X2 mais était mal calibré sur le volume de buts.",
+      "whatWasRight": "La domination de Barcelone (leader, 88 pts, bilan extérieur très offensif avec 50 buts en 19 matches, xG récent 2.3) a été confirmée par la victoire et par les 4 buts inscrits. Le profil offensif que j'avais relevé se retrouve dans le score. Le fait de ne pas pouvoir juger l'ampleur de l'edge (47.4 %) était aussi une réserve prudente.",
+      "whatWasMissed": "Je n'ai pas relevé l'incohérence entre les xG du moteur (0.5 / 0.5) et le profil réel de Barcelone (xG moyen 2.3, 50 buts à l'extérieur) : ces xG étaient très bas et ont produit des picks de type Nul & Moins de 2.5 buts, démentis par 6 buts. J'ai aussi sous-estimé la capacité de Levante à marquer (2 buts), faute de données sur lui, sans signaler explicitement le risque d'un match ouvert.",
+      "outcomeVsEngine": "Sur le 1X2, le résultat va dans le sens du moteur (victoire de Barcelone, cote vraie 1.66 contre 1.26 du marché). En revanche, les marchés dérivés du xG très faible (nul, moins de 2.5 buts, Barcelone moins de 3.5) sont contredits par le score 2-4. Le staking PASS s'est montré prudent, sans conséquence à juger ici.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Barcelona gagne",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Barcelone a gagné 4-2 à l'extérieur, conforme à sa supériorité de classement et de forme.",
+          "lesson": "Le favori écrasant en déplacement reste fiable sur le 1X2 quand classement, forme et stats convergent ; à garder."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Six buts ont été marqués, donc plus de 0.5 est largement passé.",
+          "lesson": "Ce seuil très bas est quasi certain ; il n'apporte que peu d'information, à ne pas surinterpréter comme validation du modèle."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Levante a marqué 2 fois malgré un xG moteur de 0.5, et Barcelone 4 : le Oui est passé.",
+          "lesson": "Face à un Barcelone qui encaisse ponctuellement (19 buts en 19 matchs à l'extérieur), le Oui reste plausible ; ne pas fermer l'équipe à domicile avec un xG de 0.5."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Nul & Moins de 2.5 buts",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le pick Nul & Moins de 2.5 est incohérent avec le contexte : Barcelone a gagné et il y a eu 6 buts. Faux sur les deux composantes.",
+          "lesson": "Un pick combiné contredisant le favori net et le profil offensif doit être signalé comme incohérent ; les xG trop bas du moteur produisent des combinés erronés."
+        },
+        {
+          "market": "Buts — Levante",
+          "marketId": "teamGoals",
+          "pick": "Levante — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Levante a marqué 2 buts, soit moins de 3.5 : pick juste.",
+          "lesson": "Plafond de buts d'un outsider à domicile face à un gros : le seuil de 3.5 est sûr, mais la valeur informationnelle est faible."
+        },
+        {
+          "market": "Buts — Barcelona",
+          "marketId": "teamGoals",
+          "pick": "Barcelona — Moins de 3.5 buts",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Barcelone a marqué 4 buts, donc dépassé 3.5 : pick faux. Cela colle à son xG récent de 2.3 et ses 20 tirs par match, que le xG moteur de 0.5 ignorait.",
+          "lesson": "Pour Barcelone, ne pas plafonner les buts avec un xG moteur de 0.5 ; croiser avec ses moyennes récentes (xG 2.3, 50 buts à l'extérieur) avant de valider un Moins de 3.5."
+        }
+      ],
+      "caveats": "Un seul match, donc échantillon minimal. Aucune donnée sur Levante ni détail des minutes de buts, tirs ou xG réels du match, donc l'analyse du déroulé reste limitée. Un score de 4-2 peut aussi tenir à la variance.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 3825,
+        "output_tokens": 1687,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1687,
+            "cache_read_input_tokens": 3825,
+            "cache_creation_input_tokens": 0,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 0
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.017639000000000002,
+      "createdAt": "2026-09-30T21:01:24.029Z"
+    }
+  },
+  {
+    "matchId": "aa0e2541144928205ab6d870953d42c2",
+    "homeName": "Villarreal",
+    "awayName": "Real Betis",
+    "league": "La Liga - Spain",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Villarreal vs Real Betis",
+      "expectedGoals": {
+        "home": 1.981,
+        "away": 1.043,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 1.9,
+        "draw": 4.1,
+        "away": 4.35
+      },
+      "market": {
+        "odds1": 1.81,
+        "oddsDraw": 3.64,
+        "odds2": 3.66
+      },
+      "edgePercent": 4.93,
+      "staking": {
+        "action": "RECOMMENDED",
+        "stake": 61.68
+      }
+    },
+    "usage": {
+      "input_tokens": 2386,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1435,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Villarreal, 5e avec 70 points et une saison solide à domicile (43 buts marqués/27 encaissés en 19 matchs), aborde ce match dans une forme étincelante (5 victoires de suite). Le Real Betis, 6e avec 60 points, affiche une forme plus irrégulière (1V-3N-1D sur les 5 derniers matchs) et une défense à l'extérieur plus friable (25 marqués/29 encaissés en 19 matchs). Les statistiques récentes sur 10 matchs confirment une meilleure efficacité offensive de Villarreal (xG 1.64) que Betis (xG 1.07), malgré une possession et un volume de tirs légèrement supérieurs côté andalou.",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Villarreal est sur une dynamique excellente à l'inverse de Betis qui peine à enchaîner les victoires.",
+          "evidence": "Villarreal 5V/5V sur les 5 derniers matchs ; Betis 1V-3N-1D sur les 5 derniers matchs."
+        },
+        {
+          "factor": "classement et bilan domicile/extérieur",
+          "observation": "Villarreal se classe juste devant Betis et possède un net avantage à domicile, alors que Betis est moins performant à l'extérieur.",
+          "evidence": "Villarreal 5e (70 pts, 20V-10N-8D) avec bilan domicile 43 BP/27 BC en 19 matchs ; Betis 6e (60 pts, 16V-12N-10D) avec bilan extérieur 25 BP/29 BC en 19 matchs."
+        },
+        {
+          "factor": "statistiques moyennes (10 derniers matchs)",
+          "observation": "Villarreal génère plus d'expected goals malgré moins de possession et de tirs, signe d'une efficacité offensive supérieure ; Betis domine les indicateurs de volume mais convertit moins.",
+          "evidence": "Villarreal: xG 1.64, 4.4 tirs cadrés, 12.3 tirs totaux, 44.0% possession, 4.6 corners. Betis: xG 1.07, 5.4 tirs cadrés, 14 tirs totaux, 52.9% possession, 5 corners."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur identifie un edge de 4.93% sur la victoire à domicile avec une cote vraie de 1.90 contre une cote marché de 1.81, et recommande une mise.",
+          "evidence": "expectedGoals home 1.981 vs away 1.043 ; trueOdds home 1.90 vs market odds1 1.81 ; edgePercent 4.93% ; staking action RECOMMENDED, stake 61.68."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif renforce clairement l'edge chiffré par le moteur en faveur de Villarreal. La forme excellente, le solide bilan domicile et l'efficacité offensive supérieure (xG) de Villarreal, combinés à l'irrégularité et à la fragilité défensive extérieure de Betis, convergent avec l'expected goals du modèle (1.981 vs 1.043) et son edge positif sur la victoire à domicile. Aucun signal qualitatif ne vient contredire ou nuancer significativement cette tendance.\nLa source secondaire FlashScore pour Villarreal (homeFlashscoreStats) semble concerner une autre équipe ('Villa Mitre') et non Villarreal FC, ses statistiques (possession, tirs, forme) diffèrent nettement de homeStats et de homeForm fournis par ailleurs — donnée à traiter avec grande prudence, possible erreur d'association. Aucune donnée FlashScore n'est disponible pour Real Betis (awayFlashscoreStats null). Les statistiques moyennes homeStats/awayStats portent sur un échantillon de seulement 10 matchs, ce qui limite leur robustesse."
+    },
+    "updatedAt": "2026-09-30T21:02:14.779Z",
+    "createdAt": "2026-09-13T21:49:42.389Z",
+    "postMatchReview": {
+      "summary": "Villarreal a perdu 1-2 à domicile contre le Betis. Ma lecture pré-match allait dans le sens du moteur (victoire locale, edge de 4,93 %) et elle a été contredite sur le résultat 1X2. Les marchés de buts (les deux équipes marquent, buts par équipe) se sont bien déroulés, mais ce sont des marchés peu risqués.",
+      "whatWasRight": "Le scénario d'un match ouvert où les deux équipes marquent était cohérent avec le xG du moteur (1,98 contre 1,04) et avec l'efficacité offensive de Villarreal. Villarreal a marqué, le Betis aussi, et le total de 3 buts dépasse largement 0,5. Le Betis, qui a marqué 2 buts, a montré la fragilité défensive attendue de Villarreal mais pas celle de l'extérieur du Betis.",
+      "whatWasMissed": "J'ai jugé que rien ne nuançait le pari sur Villarreal. Je me suis appuyé sur la série de 5 victoires et sur des moyennes calculées sur seulement 10 matchs. J'ai sous-estimé la capacité du Betis, avec plus de possession et de tirs dans ces moyennes, à battre une équipe en forme. Le résultat montre aussi que la variance d'un seul match pèse lourd : une cote vraie de 1,90 laisse environ 47 % de chances à la victoire locale, donc une défaite est loin d'être anormale.",
+      "outcomeVsEngine": "Le résultat contredit le pronostic du moteur sur le 1X2 et sur la combinaison résultat + total, mais il confirme les marchés de buts. Un seul match ne suffit pas à invalider un edge de 4,93 %. Le moteur voyait bien un match où les deux équipes marquent, mais il a surestimé l'avantage de Villarreal sur le vainqueur. Villarreal a marqué moins que son xG de 1,98 attendu.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Villarreal gagne",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Villarreal n'a pas gagné : défaite 1-2 à domicile. Je n'avais pas de minutes de buts ni de statistiques de match, donc je ne peux pas dire comment le match a basculé. Le Betis a marqué deux fois, plus que sa moyenne habituelle.",
+          "lesson": "Mon avis pré-match, favorable à Villarreal, s'est trompé. Il faut tempérer une série de victoires et des bilans domicile/extérieur quand l'adversaire est proche au classement (5e contre 6e) et que l'edge est faible (moins de 5 %). Dans ce cas, le nul ou l'outsider restent des issues fréquentes."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "3 buts (1-2), donc plus de 0,5 est largement atteint. Le pari n'était à risque que dans le cas d'un 0-0.",
+          "lesson": "Cette sélection est presque sans risque (un seul score, 0-0, la fait perdre) et ne valide pas le modèle : ce marché ne mérite pas d'être cité comme preuve de justesse de la lecture."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Villarreal a marqué une fois et le Betis deux fois, donc les deux équipes ont marqué. Cela va dans le sens d'un Betis qui trouve le chemin du but malgré sa défense extérieure friable.",
+          "lesson": "Ce marché correspondait bien au profil des deux équipes (attaque de Villarreal, Betis qui tire plus). Il est à garder comme lecture pour ce type de match, avec prudence sur un échantillon d'un match."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Villarreal & Plus de 0.5 buts",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "La partie Plus de 0,5 but est gagnée (3 buts), mais la partie Villarreal gagne est perdue : le pari combiné échoue.",
+          "lesson": "Un pari combiné hérite du risque du marché le plus fragile. Ici, le total était quasi certain, donc cette combinaison revenait simplement à parier sur le 1X2 et a subi la même erreur."
+        },
+        {
+          "market": "Buts — Villarreal",
+          "marketId": "teamGoals",
+          "pick": "Villarreal — Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Villarreal a marqué 1 but, donc plus de 0,5 est atteint. Son attaque a fonctionné au moins une fois, même sans suffire à gagner.",
+          "lesson": "Le raisonnement sur l'efficacité offensive de Villarreal à domicile tient pour la marque d'au moins un but. Il ne permet pas d'en déduire la victoire."
+        },
+        {
+          "market": "Buts — Real Betis",
+          "marketId": "teamGoals",
+          "pick": "Real Betis — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le Betis a marqué 2 buts, donc moins de 3,5 est atteint. Il a néanmoins dépassé son xG attendu de 1,04.",
+          "lesson": "La ligne de 3,5 buts laissait une grande marge. Le Betis a marqué 2 fois, près du seuil, ce qui rappelle de ne pas sous-estimer son attaque sur un seul match."
+        }
+      ],
+      "caveats": "Il s'agit d'un seul match, sans minutes de buts, xG réel, tirs ni possession fournis dans ce bilan. Je ne peux donc pas expliquer précisément le déroulé. Le résultat peut tenir à la variance. Les données FlashScore de Villarreal étaient suspectes avant le match, et les statistiques ne portaient que sur 10 matchs.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3202,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 1980,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3202,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1980,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 3202,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3202
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0328192,
+      "createdAt": "2026-09-30T21:02:14.779Z"
+    }
+  }
+]

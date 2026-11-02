@@ -1,0 +1,3911 @@
+[
+  {
+    "matchId": "cal-2026-10-02-club-atletico-platense-estudiantes",
+    "homeName": "Club Atlético Platense",
+    "awayName": "Estudiantes",
+    "league": "Copa Argentina",
+    "commenceTime": "2026-10-02T12:00:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Club Atlético Platense vs Estudiantes",
+      "expectedGoals": {
+        "home": 0.5,
+        "away": 0.594,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 3.02,
+        "draw": 2.7,
+        "away": 3.35
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds",
+        "candidates": []
+      }
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 3229,
+      "cache_read_input_tokens": 774,
+      "output_tokens": 1407,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3229,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1407,
+          "cache_read_input_tokens": 774,
+          "cache_creation_input_tokens": 3229,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 3229
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.027144800000000004,
+    "analysis": {
+      "summary": "Match de Copa Argentina entre Platense et Estudiantes, sans classement disponible. Les moyennes montrent un Estudiantes un peu plus productif en tirs et en possession, alors que Platense est en phase de transition avec un nouvel entraîneur (Martín Palermo) et cinq blessés de longue durée. Les deux formes récentes FlashScore sont mitigées.",
+      "keyFactors": [
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Estudiantes présente un volume offensif supérieur à Platense, avec un xG moyen un peu plus faible.",
+          "evidence": "Platense : 12,4 tirs, 4 cadrés, 51,6 % de possession, xG 1,27 (9 matchs). Estudiantes : 16,7 tirs, 5,8 cadrés, 55,3 % de possession, xG 1,02 (10 matchs)."
+        },
+        {
+          "factor": "forme récente (FlashScore)",
+          "observation": "Platense a une forme légèrement meilleure qu'Estudiantes, qui reste sur plusieurs défaites sur ses 5 derniers matchs.",
+          "evidence": "Platense : N, V, V, N, D. Estudiantes : D, N, D, V, D."
+        },
+        {
+          "factor": "forme API-Football",
+          "observation": "Forme ancienne (saison 2024, dates listées de 2025 à août 2026), donc peu représentative de l'état actuel. Elle est plus favorable à Estudiantes.",
+          "evidence": "Platense : N, N, V, N, V. Estudiantes : V, V, V, N, V."
+        },
+        {
+          "factor": "effectif et banc",
+          "observation": "Platense compte cinq blessés de longue durée et a changé d'entraîneur. Estudiantes a six absents, dont deux de retour attendu sous 1-2 semaines.",
+          "evidence": "Platense : Quirós, Giménez, Bobadilla, Nasif, Goñi ; coach Zunino remplacé par Palermo depuis 2026-08-03. Estudiantes : Carrillo, Elías, Neves, Correa, Palacios, Arzamendia (de retour à l'entraînement)."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur voit un match très fermé et équilibré, avec peu de buts attendus. Aucune cote de marché n'est fournie, donc pas d'edge calculé.",
+          "evidence": "xG 0,5 vs 0,594 ; action PASS (no_market_odds)."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : une rencontre serrée et peu prolifique, avec un léger avantage à Estudiantes sur le volume de jeu (tirs, possession). La meilleure forme récente de Platense et son changement d'entraîneur nuancent cette lecture. Sans cote de marché, le moteur n'identifie aucun edge et le contexte ne justifie pas de le remettre en cause.",
+      "caveats": "Classement indisponible (coupe). Les statistiques homeStats/awayStats reposent sur des échantillons de 9 et 10 matchs. Les données FlashScore (25 matchs) mentionnent \"Atletico GO\" pour l'équipe à domicile, un nom qui ne correspond pas clairement à Platense. Cette source est donc à prendre avec prudence. Elle se contredit aussi sur les chiffres d'Estudiantes (8,04 tirs en moyenne contre 16,7 pour l'autre source), sans qu'on puisse trancher. La forme API-Football est étiquetée saison 2024 avec des dates incohérentes, donc peu fiable, et aucun historique local ni profil web n'est disponible. Le changement d'entraîneur de Platense est déduit des compositions, et l'absence de coachChange côté Estudiantes ne prouve rien. Aucune note utilisateur fournie."
+    },
+    "updatedAt": "2026-10-02T11:20:44.404Z",
+    "createdAt": "2026-09-30T17:46:30.096Z",
+    "postMatchReview": {
+      "summary": "Platense a gagné 1-0 sur un but tardif (83e, Lencina). La lecture d'avant-match (match fermé, peu de buts, pas d'edge) était juste sur le profil, mais le moteur a manqué l'issue : il penchait vers le nul alors qu'un seul but a départagé les équipes. Les marchés « peu de buts » sont validés, ceux du nul et de Platense muet sont faux.",
+      "whatWasRight": "Le scénario fermé et peu prolifique : un seul but en tout, BTTS Non et moins de 1,5 but validés. Estudiantes n'a cadré qu'un tir et n'a eu aucune grosse occasion, ce qui confirme que son volume de jeu moyen (tirs, possession 53 %) ne s'est pas traduit en danger. La prudence (PASS, pas d'edge) était justifiée : le résultat a tenu à un but à la 83e.",
+      "whatWasMissed": "Je n'ai pas assez pesé la forme récente meilleure de Platense, ni sa capacité à créer des occasions : 13 tirs contre 8 et 3 grosses occasions contre 0, malgré 47 % de possession. L'avantage de volume attribué à Estudiantes dans les moyennes ne s'est pas vérifié sur ce match. Le xG du moteur (0,5 contre 0,594) sous-estimait l'écart de dangerosité en faveur de Platense. Le nul, retenu comme issue centrale, n'a tenu que jusqu'à la 83e.",
+      "outcomeVsEngine": "Résultat mixte. Le moteur avait vu juste sur le faible nombre de buts (moins de 1,5, BTTS Non, Estudiantes sous 0,5), mais il se trompe sur le vainqueur (nul prédit, victoire de Platense) et sur Platense sous 0,5 but. Le résultat contredit donc sa lecture d'équilibre, tout en confirmant son profil de match fermé.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Match nul",
+          "minOdds": null,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le moteur choisissait le nul, mais Platense a marqué à la 83e (1-0). Les tirs (13 contre 8) et les 3 grosses occasions contre 0 montrent que l'avantage de Platense était réel, même si la possession favorisait Estudiantes (53 %).",
+          "lesson": "Dans un match fermé, le nul est fragile : un seul but suffit à le casser. Pour les prochains matchs, ne pas privilégier le nul sur la seule base de xG faibles et proches. Regarder qui crée les grosses occasions et qui est le plus dangereux pour le dernier tiers du match."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 1.5 buts",
+          "minOdds": null,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Un seul but (83e) : moins de 1,5 but validé. Les deux équipes ont cadré peu de tirs (2 et 1) et le score est resté vierge jusqu'à la fin.",
+          "lesson": "Le profil à très faible xG en coupe, avec peu de tirs cadrés, soutient bien les marchés « peu de buts ». À garder. Attention toutefois : la ligne 1,5 est très sensible à un seul but de plus."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": null,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Estudiantes n'a pas marqué : 1 tir cadré seulement et aucune grosse occasion. BTTS Non validé.",
+          "lesson": "Le Non est cohérent quand une équipe a un xG attendu faible et une attaque peu dangereuse. À garder, en notant que le Non a été validé par la faiblesse d'Estudiantes plutôt que par un match bloqué."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Nul & Moins de 2.5 buts",
+          "minOdds": null,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Nul & moins de 2,5 buts est faux : la partie « moins de 2,5 » était bonne, mais le nul a été cassé par le but de Lencina à la 83e.",
+          "lesson": "Un marché combiné hérite du risque de sa composante la plus fragile, ici le nul. Quand le nul est faux, le combiné l'est aussi, même si le total est juste. Ne pas lui accorder plus de confiance qu'au résultat seul."
+        },
+        {
+          "market": "Buts — Club Atlético Platense",
+          "marketId": "teamGoals",
+          "pick": "Club Atlético Platense — Moins de 0.5 buts",
+          "minOdds": null,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Platense a marqué une fois (83e) après 13 tirs et 3 grosses occasions. Sous 0,5 but est faux : sa domination en occasions rendait le but probable, malgré le xG moyen de 0,5.",
+          "lesson": "Un xG de 0,5 sous-estimait ici Platense, sa production moyenne étant plus forte (xG 1,27 en moyenne). Pondérer davantage le volume de tirs et le contexte (nouveau coach, forme) avant de laisser une équipe sous 0,5 but."
+        },
+        {
+          "market": "Buts — Estudiantes",
+          "marketId": "teamGoals",
+          "pick": "Estudiantes — Moins de 0.5 buts",
+          "minOdds": null,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Estudiantes n'a pas marqué : 8 tirs, 1 cadré, 0 grosse occasion. Sous 0,5 but validé, en dépit de 53 % de possession.",
+          "lesson": "La possession et le volume moyen d'Estudiantes ne se sont pas convertis en danger. Cette équipe, dont la forme récente est mauvaise (D, N, D, V, D), reste à surveiller pour de faibles productions offensives. À garder."
+        }
+      ],
+      "caveats": "Échantillon d'un seul match, décidé par un but à la 83e : une issue aussi serrée tient beaucoup à la variance. Aucune cote de marché n'était fournie, donc aucun edge ne peut être évalué. Les xG réels du match ne sont pas fournis, seulement tirs et grosses occasions. Les avis d'avant-match par marché étaient absents, donc aucun jugement d'exactitude n'est possible sur eux.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4509,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 2080,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 4509,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2080,
+            "cache_read_input_tokens": 0,
+            "cache_creation_input_tokens": 4509,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 4509
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.03884,
+      "createdAt": "2026-10-02T11:20:44.404Z"
+    }
+  },
+  {
+    "matchId": "cal-2026-10-02-independiente-instituto",
+    "homeName": "Independiente",
+    "awayName": "Instituto",
+    "league": "Primera División - Argentina",
+    "commenceTime": "2026-10-02T12:00:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Independiente vs Instituto",
+      "expectedGoals": {
+        "home": 1.099,
+        "away": 0.898,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 2.42,
+        "draw": 3.35,
+        "away": 3.47
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds",
+        "candidates": []
+      }
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 3250,
+      "cache_read_input_tokens": 774,
+      "output_tokens": 1537,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3250,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1537,
+          "cache_read_input_tokens": 774,
+          "cache_creation_input_tokens": 3250,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 3250
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.0285288,
+    "analysis": {
+      "summary": "Instituto est 1er (22 pts en 10 matchs) contre un Independiente 6e (17 pts). Instituto est intraitable à domicile (5 victoires sur 5), mais ce match se joue chez Independiente, qui a pris seulement 5 pts sur 15 à domicile pour 8 pts/12 à l'extérieur... en réalité 12 pts sur 15 à l'extérieur. Independiente a un nouvel entraîneur depuis mi-août. Les moyennes de tirs sont proches, avec un léger avantage en xG pour Instituto.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Instituto devance Independiente de 5 points et a la meilleure différence de buts.",
+          "evidence": "Instituto 1er : 7V 1N 2D, 22 pts, diff +6. Independiente 6e : 5V 2N 3D, 17 pts, diff +2."
+        },
+        {
+          "factor": "rendement domicile/extérieur",
+          "observation": "Independiente est faible à domicile mais performant dehors ; Instituto est moins solide à l'extérieur, sa force étant chez lui. Le match a lieu chez Independiente.",
+          "evidence": "Independiente à domicile : 1V 2N 2D, 2 buts marqués, 5 encaissés. Instituto à l'extérieur : 2V 1N 2D, 4 buts marqués, 4 encaissés."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Formes API-Football comparables, légèrement meilleure pour Instituto. La forme FlashScore d'Independiente (collectée le 07/09) est plus ancienne et moins favorable.",
+          "evidence": "Independiente : V N V D N ; Instituto : V V D V N (dates jusqu'au 19-20/09/2026). FlashScore Independiente : V D N V D."
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Volume de jeu proche ; Instituto a un xG moyen un peu plus haut, Independiente a plus de possession et de tirs cadrés.",
+          "evidence": "Independiente : xG 1.22, 14.3 tirs, 5 cadrés, 50.9 % de possession. Instituto : xG 1.43, 13.8 tirs, 4.7 cadrés, 47.5 %."
+        },
+        {
+          "factor": "effectif et banc",
+          "observation": "Independiente est dirigé par un nouvel entraîneur et compte deux blessés de longue durée. Instituto n'a qu'une absence longue.",
+          "evidence": "Jádson Viera succède à Carlos Matheu (depuis env. 17/08/2026). Absents : Ávila (incertain), De Irastorza (out for season). Instituto : Rafaelli (retour mi-octobre)."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur voit un match serré, avec un léger avantage à Independiente à domicile et peu de buts attendus. Aucune cote de marché n'est disponible, donc aucun edge n'est calculé.",
+          "evidence": "xG 1.099 contre 0.898 ; le staking est PASS (no_market_odds)."
+        }
+      ],
+      "alignmentWithModel": "Le contexte nuance le modèle. Celui-ci donne un léger avantage à Independiente grâce à l'effet domicile. Or le classement, le xG moyen et la forme favorisent plutôt Instituto, même si ses résultats à l'extérieur sont moyens et que les faibles résultats d'Independiente à domicile sont peu encourageants. Le tableau est équilibré et reste cohérent avec un match serré et peu prolifique.",
+      "caveats": "La forme API-Football est étiquetée saison 2024 mais datée de fin août à septembre 2026. Aucune forme plus récente n'est disponible pour la comparer. Il n'y a pas de FlashScore pour Instituto, pas d'historique local ni de profil web, et pas de note utilisateur. La forme FlashScore d'Independiente date du 07/09 et diffère de la forme API-Football. Aucune cote de marché n'est fournie. L'absence de coachChange pour Instituto ne prouve rien. Échantillon de 10 matchs seulement par équipe, donc les splits domicile/extérieur reposent sur 5 matchs."
+    },
+    "updatedAt": "2026-10-03T15:56:06.231Z",
+    "createdAt": "2026-09-30T17:47:04.143Z",
+    "postMatchReview": {
+      "summary": "Ma lecture annonçait un match serré et peu prolifique, avec un léger avantage au moteur pour Independiente à domicile. Le résultat réel est un 1-4 net pour Instituto. Le contexte (classement, xG moyen, forme) penchait déjà vers Instituto, mais l'ampleur du score n'était pas anticipée.",
+      "whatWasRight": "J'avais nuancé le modèle en soulignant que classement, xG moyen (1.43 contre 1.22) et forme favorisaient Instituto, et que les résultats d'Independiente à domicile (2 buts marqués en 5 matchs) étaient peu rassurants. Instituto a gagné avec un xG de 1.56 contre 0.44 et 6 tirs cadrés contre 2. Le doute sur l'avantage domicile du moteur était justifié.",
+      "whatWasMissed": "Je n'ai pas vu le risque d'un scénario ouvert et déséquilibré. Instituto a marqué 4 fois, dont 3 après la pause (51e, 65e, 80e), et Independiente a joué avec un joueur de moins (1 carton rouge, minute inconnue). J'ai aussi trop validé l'idée d'un match peu prolifique, alors que la défense d'Independiente à domicile (5 buts encaissés en 5 matchs) et la force offensive d'Instituto pouvaient pousser le total plus haut. Le nouvel entraîneur et l'instabilité n'ont pas été assez pesés.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur presque tous les marchés : victoire d'Independiente, moins de 2.5 buts, BTTS non et Instituto sous 1.5 sont tous faux. Seul le marché Independiente moins de 1.5 but est juste, et avec un seul but marqué c'est presque un hasard. Mon scepticisme sur l'avantage domicile allait dans le bon sens, mais je n'avais pas d'avis tranché.",
+      "marketReviews": [
+        {
+          "market": "Buts — Independiente",
+          "marketId": "teamGoals",
+          "pick": "Independiente — Moins de 1.5 buts",
+          "minOdds": null,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Independiente a marqué un seul but (Meza, 22e), avec 0.44 xG, 8 tirs dont 2 cadrés et aucune grosse occasion. Le pari sous 1.5 est donc juste.",
+          "lesson": "Le faible rendement offensif d'Independiente à domicile (2 buts en 5 matchs avant ce match) s'est confirmé. Ce signal est à garder pour ce marché, surtout face à un adversaire plus dangereux."
+        },
+        {
+          "market": "Buts — Instituto",
+          "marketId": "teamGoals",
+          "pick": "Instituto — Moins de 1.5 buts",
+          "minOdds": null,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Instituto a marqué 4 fois (16e, 51e, 65e, 80e) avec 1.56 xG, 13 tirs, 6 cadrés et 3 grosses occasions. Le pari sous 1.5 est faux. Le carton rouge d'Independiente a probablement favorisé la fin de match, mais sa minute n'est pas fournie.",
+          "lesson": "Ne pas plafonner à moins de 1.5 but une équipe à fort xG moyen (1.43) et en tête du classement, même à l'extérieur. Le xG supérieur d'Instituto aurait dû faire douter de ce pari."
+        },
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Independiente gagne",
+          "minOdds": null,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le moteur donnait Independiente gagnant, mais Instituto a mené presque tout le match et l'a emporté 4-1, avec un net avantage en xG et en tirs cadrés.",
+          "lesson": "Dans un match équilibré, le simple effet domicile du moteur ne suffit pas quand le classement, le xG et la forme favorisent le visiteur. Mon avis nuancé pointait la bonne direction, mais j'aurais dû l'exprimer plus clairement."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 2.5 buts",
+          "minOdds": null,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Cinq buts au total, donc moins de 2.5 est faux. Les trois derniers buts sont tombés après la 50e minute, dans un match devenu ouvert, avec un rouge côté Independiente.",
+          "lesson": "Un xG moteur total d'environ 2.0 ne protège pas d'un match à score élevé. Il faut tenir compte du risque de débordement quand une équipe défend mal à domicile et que l'autre est efficace."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": null,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Les deux équipes ont marqué : Lázaro puis Meza avant la demi-heure. Le pari Non est faux.",
+          "lesson": "Dès le 22e minute le Non était battu. Independiente avait un xG faible, mais un seul but suffisait. Éviter de tirer le Non d'un faible xG moyen d'une équipe."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Independiente & Moins de 3.5 buts",
+          "minOdds": null,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Ce pari combinait la victoire d'Independiente et moins de 3.5 buts. Il échoue sur les deux jambes : Independiente a perdu et il y a eu 5 buts.",
+          "lesson": "Un pari combiné cumule les erreurs. Il dépendait ici d'un résultat que mon analyse jugeait fragile, et il n'aurait pas dû être soutenu sans conviction sur le vainqueur."
+        }
+      ],
+      "caveats": "Un seul match, donc beaucoup de variance. Le carton rouge d'Independiente a pu fausser la seconde période, mais sa minute n'est pas fournie. Les compositions et le déroulé détaillé ne sont pas connus. Aucune cote de marché n'était disponible.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4798,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 1978,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 4798,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1978,
+            "cache_read_input_tokens": 0,
+            "cache_creation_input_tokens": 4798,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 4798
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.038976000000000004,
+      "createdAt": "2026-10-03T15:56:06.231Z"
+    }
+  },
+  {
+    "matchId": "cal-2026-10-02-internacional-de-bogota-once-caldas",
+    "homeName": "Internacional de Bogotá",
+    "awayName": "Once Caldas",
+    "league": "Primera A - Colombia",
+    "commenceTime": "2026-10-02T12:00:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Internacional de Bogotá vs Once Caldas",
+      "expectedGoals": {
+        "home": 1.283,
+        "away": 1.475,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 2.67,
+        "draw": 3.73,
+        "away": 2.8
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds",
+        "candidates": []
+      }
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 3003,
+      "cache_read_input_tokens": 774,
+      "output_tokens": 1498,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3003,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1498,
+          "cache_read_input_tokens": 774,
+          "cache_creation_input_tokens": 3003,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 3003
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.027150800000000003,
+    "analysis": {
+      "summary": "Match entre deux équipes de milieu de tableau à égalité de points (12 chacune) : Internacional de Bogotá 11e, Once Caldas 10e. Les deux sont peu prolifiques (13 et 14 buts marqués) et en forme mitigée. Internacional tient beaucoup de nuls (6 sur 12), Once Caldas aligne plusieurs défaites récentes.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Deux équipes voisines, à égalité de points ; Once Caldas devant grâce à une meilleure différence de buts et un match de moins.",
+          "evidence": "Internacional 11e : 12 pts en 12 matchs (2V 6N 4D, diff -4). Once Caldas 10e : 12 pts en 11 matchs (3V 3N 5D, diff -1)."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Internacional est plus régulier, avec des nuls et une victoire ; Once Caldas est en difficulté avec 4 défaites sur ses 5 derniers matchs.",
+          "evidence": "Internacional (API-Football) : N, D, D, V, N. Once Caldas : D, D, V, D, D."
+        },
+        {
+          "factor": "domicile/extérieur",
+          "observation": "Internacional est plus solide à domicile qu'à l'extérieur. Once Caldas n'a gagné qu'une fois en 6 déplacements et reste peu fiable dehors.",
+          "evidence": "Internacional à domicile : 2V 2N 2D, 9 buts marqués, 10 encaissés. Once Caldas à l'extérieur : 1V 3N 2D, 6 marqués, 8 encaissés."
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Once Caldas produit plus de tirs et a davantage le ballon, mais ses xG moyens restent proches de ceux d'Internacional.",
+          "evidence": "Tirs : 18,7 (Once Caldas) contre 13,2 ; possession 55,2 % contre 45,4 % ; xG 1,17 contre 1,06 ; tirs cadrés 6,5 contre 4,2 (10 matchs chacun)."
+        },
+        {
+          "factor": "absences",
+          "observation": "Internacional compte une absence de longue durée, Yulián Gómez (blessé). Rien n'est renseigné pour Once Caldas.",
+          "evidence": "Retour de Yulián Gómez attendu fin octobre 2026."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur voit un match très équilibré, avec un léger avantage en buts attendus pour Once Caldas. Aucune cote de marché n'est disponible, donc pas d'edge calculable.",
+          "evidence": "xG 1,283 contre 1,475 (FotMob) ; staking PASS, raison no_market_odds."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : deux équipes proches au classement et en stats, avec un léger ascendant offensif pour Once Caldas (tirs, possession, xG). Ce léger avantage est nuancé par la mauvaise forme récente de Once Caldas et sa fragilité à l'extérieur, alors qu'Internacional est plus solide à domicile. Le caractère indécis du match, avec beaucoup de nuls côté Internacional, reste cohérent avec le PASS du moteur, qui n'a de toute façon pas de cote de marché.",
+      "caveats": "Les cotes de marché sont absentes, donc pas d'edge. La forme API-Football est étiquetée saison 2024 alors que ses dates vont de début à fin septembre 2026 ; aucune forme plus récente n'est disponible (historique et recherche web absents), donc la cohérence de cette forme n'est pas garantie. FlashScore, historique, profils d'équipe et note de Pierre sont absents. Aucune info sur les absences ni sur un éventuel changement d'entraîneur pour Once Caldas, et pas de coachChange pour Internacional (l'historique peut simplement manquer). Les moyennes reposent sur 10 matchs par équipe et la forme sur 5 seulement."
+    },
+    "updatedAt": "2026-09-30T17:47:20.203Z",
+    "createdAt": "2026-09-30T17:47:20.203Z"
+  },
+  {
+    "matchId": "cal-2026-10-02-seattle-sounders-fc-sporting-kansas-city",
+    "homeName": "Seattle Sounders FC",
+    "awayName": "Sporting Kansas City",
+    "league": "MLS",
+    "commenceTime": "2026-10-02T12:00:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Seattle Sounders FC vs Sporting Kansas City",
+      "expectedGoals": {
+        "home": 2.515,
+        "away": 1.052,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 1.74,
+        "draw": 4.58,
+        "away": 4.86
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds",
+        "candidates": []
+      }
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 2877,
+      "cache_read_input_tokens": 774,
+      "output_tokens": 1371,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 2877,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1371,
+          "cache_read_input_tokens": 774,
+          "cache_creation_input_tokens": 2877,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 2877
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.025376799999999998,
+    "analysis": {
+      "summary": "Seattle reçoit un Sporting KC dont les statistiques moyennes sont légèrement supérieures sur les 10 derniers matchs (xG, tirs, possession), alors que le moteur attend nettement plus de buts côté Seattle. Seattle reste invaincu sur ses 5 derniers matchs (2 V, 3 N), tandis que Kansas City alterne avec 2 V et 3 D. Seattle compte plusieurs absents de longue durée. Aucun classement n'est disponible.",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Seattle est invaincu sur ses 5 derniers matchs, mais avec beaucoup de nuls. Kansas City est irrégulier sur la même période.",
+          "evidence": "Seattle : V, V, N, N, N (du 06/09 au 27/09). Kansas City : V, D, V, D, D (du 30/08 au 27/09)."
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Sur 10 matchs, Kansas City affiche de meilleures moyennes offensives que Seattle, ce qui nuance la domination attendue par le moteur pour les locaux.",
+          "evidence": "xG 1,81 contre 1,41 ; tirs cadrés 5,6 contre 4,7 ; tirs totaux 14 contre 13,3 ; possession 52,6 % contre 45,3 % ; corners 4,3 contre 5,1."
+        },
+        {
+          "factor": "absences",
+          "observation": "Seattle perd quatre joueurs sur blessure de longue durée, dont une absence pour la saison. Kansas City en compte trois.",
+          "evidence": "Seattle : Rothrock et Ferreira (fin octobre), De la Vega (out for season), Petković (inconnu). Kansas City : Capita et Davis (fin octobre), Blorian (mi-octobre)."
+        },
+        {
+          "factor": "profil de forme web (Kansas City)",
+          "observation": "La recherche web décrit un Kansas City en bonne dynamique, ce qui contredit la série API-Football. Cette recherche date du 16/09 et n'inclut donc pas les derniers matchs.",
+          "evidence": "Forme : N, V, V, V, V, V, N. Moyennes historiques : 2,67 buts marqués et 1,67 encaissés."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur attend un net avantage offensif pour Seattle (xG issus de FotMob). Sans cote de marché, aucun edge n'est calculé et le staking est PASS.",
+          "evidence": "xG attendus : 2,515 contre 1,052."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif ne confirme que partiellement le moteur. La série invaincue de Seattle va dans son sens. En revanche, les moyennes de xG, de tirs et de possession de Kansas City, ainsi que les quatre absents longue durée côté Seattle, nuancent l'écart très marqué attendu en faveur des locaux. Les sources se contredisent sur la forme de Kansas City.",
+      "caveats": "Classement indisponible. La forme API-Football est étiquetée saison 2024 alors que ses dates vont de fin août à fin septembre 2026, donc la saison est à prendre avec prudence. Aucun historique plus récent n'existe pour Seattle (pas de profil web, FlashScore ni historique). La forme web de Kansas City date du 16/09 et contredit la série API-Football (2 V, 3 D). Les statistiques moyennes reposent sur 10 matchs. Aucun changement d'entraîneur n'est signalé, mais l'historique peut être incomplet. Aucune note utilisateur. Les cotes de marché sont absentes, donc aucun edge n'est mesurable."
+    },
+    "updatedAt": "2026-10-02T11:21:02.227Z",
+    "createdAt": "2026-09-30T17:46:45.883Z",
+    "postMatchReview": {
+      "summary": "Seattle a gagné 2-1 dans un match très ouvert. Le résultat suit le moteur (victoire locale, plus de 2,5 buts, les deux équipes marquent). Mais le déroulé donne raison à ma prudence d'avant-match : Kansas City a fait aussi bien, voire mieux, en xG (2,05 contre 1,70) et en tirs cadrés (11 contre 7). Seattle a pris les trois points tard, avec un but à la 90e.",
+      "whatWasRight": "J'avais relativisé l'écart très marqué attendu par le moteur (xG 2,5 contre 1,05) en m'appuyant sur les moyennes offensives de Kansas City, meilleures sur 10 matchs. Le match l'a confirmé : Kansas City a tiré 22 fois, dont 11 cadrés, pour 2,05 xG, et a marqué à la 44e. J'avais aussi noté que la série invaincue de Seattle allait dans le sens du moteur, et les locaux ont bien gagné. Le moteur voyait Seattle favori, et c'est ce qui s'est produit.",
+      "whatWasMissed": "Je n'ai pas anticipé que Seattle l'emporterait malgré un xG inférieur. Le résultat tient à la finition et à un but tardif (Roldan, 90e), pas à une domination réelle. J'avais aussi sous-estimé le caractère ouvert de la rencontre : 43 tirs au total et 17 corners. Mes réserves sur les absents de Seattle n'ont pas eu d'effet visible sur le score.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur tous les marchés. Le score final (2-1) est proche du xG attendu côté Seattle, mais les xG réels (1,70 contre 2,05) racontent un match plus équilibré que ce que le moteur projetait. Le xG de 1,05 prévu pour Kansas City était nettement trop bas. Comme aucune cote de marché n'était disponible, aucun edge n'a pu être mesuré.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Seattle Sounders FC gagne",
+          "minOdds": null,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Seattle a gagné 2-1 après avoir été mené à la mi-temps (André Luiz, 44e). Gomez a égalisé à la 51e et Roldan a marqué le but victorieux à la 90e. Seattle a eu plus de possession (59 %) et de corners (11), mais moins de xG (1,70 contre 2,05) et moins de tirs cadrés (7 contre 11).",
+          "lesson": "Le pronostic du moteur était juste, mais la victoire a tenu à un but tardif alors que Kansas City a fait mieux en xG. Pour un favori à domicile, ne pas confondre le résultat et la supériorité réelle : une victoire serrée reste fragile quand les xG sont proches."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": null,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Trois buts, donc plus de 2,5. Le match était ouvert : 43 tirs au total et 3,75 xG cumulés. Les buts sont tombés aux 44e, 51e et 90e minutes.",
+          "lesson": "Quand les moyennes de xG et de tirs des deux équipes sont élevées, le plus de 2,5 buts est cohérent. Ce marché était bien soutenu par les stats offensives de Kansas City que j'avais relevées."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": null,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Kansas City a marqué avant la pause (André Luiz, 44e) et Seattle a marqué deux fois. Kansas City a cadré 11 tirs, ce qui rendait son but très probable.",
+          "lesson": "Le xG de 1,05 prévu pour Kansas City sous-estimait son potentiel offensif. Les moyennes récentes de l'équipe (xG 1,81, tirs cadrés 5,6) étaient un meilleur indicateur, et je dois m'y fier davantage pour ce marché."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Seattle Sounders FC & Plus de 1.5 buts",
+          "minOdds": null,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Seattle a gagné avec 3 buts au total, donc le plus de 1,5 buts est validé. Ce combiné est peu exigeant dès que le favori gagne dans un match ouvert.",
+          "lesson": "Ce combiné dépend presque entièrement de la victoire de Seattle. Comme le plus de 1,5 buts était quasi acquis, le vrai risque était sur le résultat, qui s'est joué à la 90e."
+        },
+        {
+          "market": "Buts — Seattle Sounders FC",
+          "marketId": "teamGoals",
+          "pick": "Seattle Sounders FC — Moins de 3.5 buts",
+          "minOdds": null,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Seattle a marqué 2 buts (Gomez, 51e, et Roldan, 90e), soit moins de 3,5 pour un xG de 1,70. Le xG attendu par le moteur (2,5) était supérieur à la production réelle.",
+          "lesson": "Le moins de 3,5 buts pour Seattle était un seuil sûr. Le xG de 2,5 du moteur paraissait élevé pour une équipe aux moyennes de 1,41 sur 10 matchs."
+        },
+        {
+          "market": "Buts — Sporting Kansas City",
+          "marketId": "teamGoals",
+          "pick": "Sporting Kansas City — Moins de 1.5 buts",
+          "minOdds": null,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Kansas City n'a marqué qu'un seul but, donc moins de 1,5. Il a pourtant produit 2,05 xG et 11 tirs cadrés, ce qui laisse penser que la défense de Seattle a eu de la chance, ou que le gardien a bien joué.",
+          "lesson": "Le pick était juste, mais de justesse : un deuxième but de Kansas City était plausible vu les xG. Ce marché reste fragile quand Kansas City a autant d'occasions."
+        }
+      ],
+      "caveats": "Il s'agit d'un seul match, et le score final dépend beaucoup d'un but à la 90e. Aucune cote de marché n'était disponible, donc je ne peux pas juger la valeur des picks. Je n'ai pas de données sur les compositions ni sur le rôle réel des absents pendant le match. L'écart entre xG et score peut relever de la variance.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3562,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 2156,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3562,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2156,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 3562,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3562
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0360192,
+      "createdAt": "2026-10-02T11:21:02.227Z"
+    }
+  },
+  {
+    "matchId": "cal-2026-10-02-eldense-oviedo",
+    "homeName": "Eldense",
+    "awayName": "Oviedo",
+    "league": "La Liga 2 - Spain",
+    "commenceTime": "2026-10-02T18:30:00.000Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Eldense vs Oviedo",
+      "expectedGoals": {
+        "home": 0.726,
+        "away": 1.966,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 3.76,
+        "draw": 4.17,
+        "away": 2.02
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds",
+        "candidates": []
+      },
+      "statExpectations": {
+        "corners": {
+          "home": 5.39,
+          "away": 3.74,
+          "total": 9.13
+        },
+        "shots": {
+          "home": 13.7,
+          "away": 10.04,
+          "total": 23.73
+        },
+        "shotsOnTarget": {
+          "home": 3.96,
+          "away": 3.42,
+          "total": 7.38
+        }
+      },
+      "marketPredictions": [
+        {
+          "marketId": "result",
+          "params": {
+            "outcome": "away"
+          },
+          "market": "Résultat",
+          "predictedOutcome": "away",
+          "predictedLabel": "Oviedo gagne",
+          "predictedOdds": 2.02,
+          "probability": 50,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 1.5,
+            "side": "over"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 1.5 buts",
+          "predictedOdds": 1.32,
+          "probability": 76,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "no"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "no",
+          "predictedLabel": "Non",
+          "predictedOdds": 1.82,
+          "probability": 55,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 1.5,
+            "key": "awayOver"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "awayOver",
+          "predictedLabel": "Oviedo & Plus de 1.5 buts",
+          "predictedOdds": 2.5,
+          "probability": 40,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 1.5,
+            "side": "under"
+          },
+          "market": "Buts — Eldense",
+          "predictedOutcome": "under",
+          "predictedLabel": "Eldense — Moins de 1.5 buts",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 2.5,
+            "side": "under"
+          },
+          "market": "Buts — Oviedo",
+          "predictedOutcome": "under",
+          "predictedLabel": "Oviedo — Moins de 2.5 buts",
+          "predictedOdds": 1.46,
+          "probability": 68,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalCorners",
+          "params": {
+            "line": 6.5,
+            "side": "over"
+          },
+          "market": "Total corners",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 6.5 corners",
+          "predictedOdds": 1.28,
+          "probability": 78,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "home",
+            "line": 7.5,
+            "side": "under"
+          },
+          "market": "Corners — Eldense",
+          "predictedOutcome": "under",
+          "predictedLabel": "Eldense — Moins de 7.5 corners",
+          "predictedOdds": 1.27,
+          "probability": 79,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "away",
+            "line": 5.5,
+            "side": "under"
+          },
+          "market": "Corners — Oviedo",
+          "predictedOutcome": "under",
+          "predictedLabel": "Oviedo — Moins de 5.5 corners",
+          "predictedOdds": 1.25,
+          "probability": 80,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShots",
+          "params": {
+            "line": 18.5,
+            "side": "over"
+          },
+          "market": "Total tirs",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 18.5 tirs",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "home",
+            "line": 18.5,
+            "side": "under"
+          },
+          "market": "Tirs — Eldense",
+          "predictedOutcome": "under",
+          "predictedLabel": "Eldense — Moins de 18.5 tirs",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "away",
+            "line": 13.5,
+            "side": "under"
+          },
+          "market": "Tirs — Oviedo",
+          "predictedOutcome": "under",
+          "predictedLabel": "Oviedo — Moins de 13.5 tirs",
+          "predictedOdds": 1.23,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShotsOnTarget",
+          "params": {
+            "line": 9.5,
+            "side": "under"
+          },
+          "market": "Total tirs cadrés",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 9.5 tirs cadrés",
+          "predictedOdds": 1.28,
+          "probability": 78,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "home",
+            "line": 5.5,
+            "side": "under"
+          },
+          "market": "Tirs cadrés — Eldense",
+          "predictedOutcome": "under",
+          "predictedLabel": "Eldense — Moins de 5.5 tirs cadrés",
+          "predictedOdds": 1.29,
+          "probability": 78,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "away",
+            "line": 1.5,
+            "side": "over"
+          },
+          "market": "Tirs cadrés — Oviedo",
+          "predictedOutcome": "over",
+          "predictedLabel": "Oviedo — Plus de 1.5 tirs cadrés",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        }
+      ]
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 11752,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 3805,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 11752,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 3805,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 11752,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 11752
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.085062,
+    "analysis": {
+      "summary": "Eldense (19e, 5 pts en 7 matchs, 4 buts marqués pour 9 encaissés) enchaîne deux défaites avant ce match. Oviedo (8e, 11 pts) vient de battre Gijón 2-0 mais n'a marqué que 0,7 but par match sur ses 10 derniers. Les compositions, relevées 51 minutes avant le coup d'envoi, sont probablement officielles. Eldense est privé de plusieurs titulaires habituels et Oviedo aligne un onze remanié, avec un gardien sans match cette saison.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Oviedo nettement devant, Eldense en zone de relégation.",
+          "evidence": "Eldense 19e, 5 pts, différence de buts -5 ; Oviedo 8e, 11 pts, +3."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Eldense en difficulté, Oviedo irrégulier mais plus solide.",
+          "evidence": "Eldense : D, D, V, N, D sur 5 matchs. Oviedo : V, D, V, N, V."
+        },
+        {
+          "factor": "statistiques et moyennes",
+          "observation": "Oviedo concède beaucoup à l'extérieur et produit peu. Eldense est modeste à domicile.",
+          "evidence": "Oviedo à l'extérieur : 1 but marqué, 1,6 encaissé, 9,2 tirs, 16,2 tirs concédés. Eldense à domicile : 1,2 but marqué, 1,4 encaissé, 12,4 tirs."
+        },
+        {
+          "factor": "compositions",
+          "observation": "Eldense sans plusieurs cadres, Oviedo avec un gardien sans match cette saison.",
+          "evidence": "Absents côté Eldense : Justin Smith (7 titularisations), Ruiz Montero (6), Clemente (5), Carmona blessé. Côté Oviedo : Narváez (0 match) remplace Escandell (7 titularisations)."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : Oviedo est favori, Eldense peu prolifique. Il nuance toutefois l'ampleur de l'avantage, car Oviedo marque peu à l'extérieur et concède beaucoup, et son gardien est inédit.",
+      "marketViews": [
+        {
+          "market": "Résultat",
+          "pick": "Oviedo gagne",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "50 % : Oviedo (11 pts, 8e) devance Eldense (5 pts, 19e), mais n'inscrit qu'un but par match à l'extérieur.",
+          "reasoning": "Le classement et la forme favorisent Oviedo, mais sa faible production offensive à l'extérieur et un gardien remplaçant limitent la certitude.",
+          "probability": 50
+        },
+        {
+          "market": "Total buts",
+          "pick": "Plus de 1.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "76 % : le moteur attend 0,73 but pour Eldense et 1,97 pour Oviedo, soit environ 2,7 buts.",
+          "reasoning": "Les deux équipes marquent peu, mais Eldense encaisse 9 buts en 7 matchs et Oviedo concède 1,6 but par match à l'extérieur.",
+          "probability": 76
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "pick": "Non",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "55 % : Eldense n'a marqué que 4 buts en 7 matchs et en attend 0,73 ici.",
+          "reasoning": "L'attaque d'Eldense est pauvre et amputée de Carmona, mais Oviedo encaisse 1,6 but par match à l'extérieur, d'où une marge limitée.",
+          "probability": 55
+        },
+        {
+          "market": "Résultat + Total buts",
+          "pick": "Oviedo & Plus de 1.5 buts",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "40 % : il faut cumuler la victoire d'Oviedo (50 %) et au moins 2 buts, ce qui réduit nettement le chiffre.",
+          "reasoning": "Plusieurs des scores favorables à Oviedo sont 1-0, comme à Albacete, ce qui ne passerait pas le total.",
+          "probability": 40
+        },
+        {
+          "market": "Buts — Eldense",
+          "pick": "Eldense — Moins de 1.5 buts",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : Eldense a marqué 4 buts en 7 matchs et le moteur n'en attend que 0,73.",
+          "reasoning": "Eldense ne marque que 1 but par match sur ses 10 derniers et a perdu ses deux derniers matchs.",
+          "probability": 83
+        },
+        {
+          "market": "Buts — Oviedo",
+          "pick": "Oviedo — Moins de 2.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "68 % : Oviedo n'a marqué que 0,7 but par match sur ses 10 derniers, pour 1,97 attendu ici.",
+          "reasoning": "Oviedo n'a marqué 3 buts qu'une seule fois, à Valladolid, et ne marque qu'un but par match à l'extérieur.",
+          "probability": 68
+        },
+        {
+          "market": "Total corners",
+          "pick": "Plus de 6.5 corners",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "78 % : 9,13 corners attendus au total (5,39 pour Eldense, 3,74 pour Oviedo).",
+          "reasoning": "Eldense en obtient 6 par match à domicile, ce qui soutient le total malgré les 3,8 corners d'Oviedo à l'extérieur.",
+          "probability": 78
+        },
+        {
+          "market": "Corners — Eldense",
+          "pick": "Eldense — Moins de 7.5 corners",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "79 % : 5,39 corners attendus pour Eldense, qui en obtient 6 par match à domicile.",
+          "reasoning": "La moyenne est nettement sous la ligne et Oviedo n'en concède que 4,6 à l'extérieur.",
+          "probability": 79
+        },
+        {
+          "market": "Corners — Oviedo",
+          "pick": "Oviedo — Moins de 5.5 corners",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "80 % : Oviedo obtient 3,8 corners par match à l'extérieur, pour 3,74 attendus.",
+          "reasoning": "Oviedo possède 43 % du ballon à l'extérieur, ce qui limite ses corners.",
+          "probability": 80
+        },
+        {
+          "market": "Total tirs",
+          "pick": "Plus de 18.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : 23,7 tirs attendus au total (13,7 pour Eldense, 10,0 pour Oviedo).",
+          "reasoning": "Oviedo concède 16,2 tirs à l'extérieur et Eldense en tente 12,4 à domicile, ce qui place le total bien au-dessus de la ligne.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs — Eldense",
+          "pick": "Eldense — Moins de 18.5 tirs",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : Eldense tente 12 à 12,4 tirs par match et le moteur en attend 13,7.",
+          "reasoning": "La ligne est très au-dessus de ses moyennes récentes.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs — Oviedo",
+          "pick": "Oviedo — Moins de 13.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "81 % : Oviedo tente 9,2 tirs à l'extérieur, pour 10,04 attendus.",
+          "reasoning": "La moyenne reste sous la ligne, même si Eldense concède autour de 8,6 à 9,7 tirs par match.",
+          "probability": 81
+        },
+        {
+          "market": "Total tirs cadrés",
+          "pick": "Moins de 9.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "78 % : 7,38 tirs cadrés attendus au total (3,96 pour Eldense, 3,42 pour Oviedo).",
+          "reasoning": "Les deux équipes cadrent peu : 3,8 pour Eldense et 3,0 pour Oviedo sur 10 matchs.",
+          "probability": 78
+        },
+        {
+          "market": "Tirs cadrés — Eldense",
+          "pick": "Eldense — Moins de 5.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "78 % : Eldense cadre 3,8 tirs par match sur 10 matchs et 4,2 à domicile.",
+          "reasoning": "La ligne est supérieure à ses moyennes, même si Oviedo concède 4,8 tirs cadrés à l'extérieur.",
+          "probability": 78
+        },
+        {
+          "market": "Tirs cadrés — Oviedo",
+          "pick": "Oviedo — Plus de 1.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : 3,42 tirs cadrés attendus pour Oviedo, qui en cadre 2,8 par match à l'extérieur.",
+          "reasoning": "Même la moyenne extérieure la plus basse dépasse la ligne, et Eldense en concède 5 à domicile.",
+          "probability": 83
+        }
+      ],
+      "lineupImpact": "Les compositions, relevées 51 minutes avant le coup d'envoi, sont probablement officielles. Eldense (4-2-3-1, Calleja) se présente sans Justin Smith (7 titularisations), David Ruiz Montero (6) et Jesús Clemente (5), tous absents de la feuille de match, ni Carmona (4 titularisations, 1 but, blessé). Le onze s'appuie sur Manu Nieto (0,96 xG) et Javi Martínez (1 but, 1,11 xG). Oviedo (4-3-3, Calero) aligne Narváez (0 match cette saison) à la place d'Escandell, titulaire sept fois. Il aligne aussi Pablo Sáenz (2 buts, note 7,27) et Jacobo González (1,43 xG, aucun but), et manque de Cruz, Ahmed et Isfan. Le banc n'est pas renseigné et six joueurs sont blessés côté Oviedo.",
+      "caveats": "Peu de matchs joués (7 par équipe), donc des moyennes fragiles. Les remplaçants ne sont pas fournis. Aucune cote de marché n'est disponible (edge non calculé). Aucune actualité d'équipe, note de Pierre ni historique d'entraîneur n'est disponible. Pas de bilan d'expérience fourni, donc la confiance n'est pas calibrée sur mes avis passés. Pluie possible (orages épars, 0,6 mm), vent faible ; l'arbitre est un peu moins sévère que la moyenne de la ligue."
+    },
+    "updatedAt": "2026-10-02T20:53:07.145Z",
+    "createdAt": "2026-09-30T19:59:09.999Z",
+    "analysedAt": "2026-10-02T17:39:50.462Z",
+    "timing": "coup-d-envoi",
+    "lineupSnapshot": {
+      "source": "FotMob",
+      "fotmobMatchId": "5868475",
+      "fetchedAt": "2026-10-02T17:39:20.577Z",
+      "minutesBeforeKickoff": 51,
+      "home": {
+        "team": "Eldense",
+        "teamId": "fotmob-8288",
+        "formation": "4-2-3-1",
+        "coach": "Javier Calleja",
+        "statsSince": "2026-07-01",
+        "teamMatches": 7,
+        "startXI": [
+          {
+            "id": "fotmob-1658531",
+            "name": "Ramón Vilà",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 7,
+              "starts": 7,
+              "minutes": 630,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.95
+            }
+          },
+          {
+            "id": "fotmob-1327414",
+            "name": "Alejandro Ibarrondo",
+            "number": 19,
+            "position": "Defender",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.292,
+            "y": 0.875,
+            "stats": {
+              "apps": 4,
+              "starts": 2,
+              "minutes": 197,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.6
+            }
+          },
+          {
+            "id": "fotmob-1669653",
+            "name": "Álex Serra",
+            "number": 5,
+            "position": "Defender",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 6,
+              "starts": 6,
+              "minutes": 535,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.17,
+              "rating": 7.17
+            }
+          },
+          {
+            "id": "fotmob-1393472",
+            "name": "Floris Smand",
+            "number": 4,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "NED",
+            "countryName": "Netherlands",
+            "x": 0.292,
+            "y": 0.375,
+            "stats": {
+              "apps": 7,
+              "starts": 7,
+              "minutes": 630,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.76
+            }
+          },
+          {
+            "id": "fotmob-1210310",
+            "name": "Iker Recio",
+            "number": 2,
+            "position": "Defender",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.292,
+            "y": 0.125,
+            "stats": {
+              "apps": 2,
+              "starts": 0,
+              "minutes": 30,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.24
+            }
+          },
+          {
+            "id": "fotmob-1669636",
+            "name": "Carlos Guirao",
+            "number": 15,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.485,
+            "y": 0.7,
+            "stats": {
+              "apps": 6,
+              "starts": 3,
+              "minutes": 239,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.07,
+              "rating": 6.58
+            }
+          },
+          {
+            "id": "fotmob-1578417",
+            "name": "Guille Macho",
+            "number": 18,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.485,
+            "y": 0.3,
+            "stats": {
+              "apps": 7,
+              "starts": 4,
+              "minutes": 407,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.55,
+              "rating": 6.8
+            }
+          },
+          {
+            "id": "fotmob-202610",
+            "name": "Fidel Chaves",
+            "number": 10,
+            "position": "Midfielder",
+            "age": 36,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.678,
+            "y": 0.837,
+            "stats": {
+              "apps": 7,
+              "starts": 7,
+              "minutes": 557,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.59,
+              "rating": 6.56
+            }
+          },
+          {
+            "id": "fotmob-920741",
+            "name": "Javi Martínez",
+            "number": 24,
+            "position": "Midfielder",
+            "age": 26,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.678,
+            "y": 0.5,
+            "stats": {
+              "apps": 6,
+              "starts": 1,
+              "minutes": 174,
+              "goals": 1,
+              "assists": 0,
+              "xg": 1.11,
+              "rating": 6.48
+            }
+          },
+          {
+            "id": "fotmob-730472",
+            "name": "Waldo Rubio",
+            "number": 20,
+            "position": "Midfielder",
+            "age": 31,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.678,
+            "y": 0.163,
+            "stats": {
+              "apps": 3,
+              "starts": 0,
+              "minutes": 96,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.03,
+              "rating": 6.54
+            }
+          },
+          {
+            "id": "fotmob-1093784",
+            "name": "Manu Nieto",
+            "number": 11,
+            "position": "Forward",
+            "age": 28,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 5,
+              "starts": 2,
+              "minutes": 198,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.96,
+              "rating": 6.37
+            }
+          }
+        ],
+        "bench": [],
+        "unavailable": [
+          {
+            "id": "fotmob-1685541",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Mariano Carmona",
+            "reason": "blessé",
+            "expectedReturn": "A few days"
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-1283073",
+            "age": 23,
+            "countryCode": "CAN",
+            "countryName": "Canada",
+            "name": "Justin Smith",
+            "position": "Midfielder",
+            "starts": 7,
+            "goals": 1,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1256502",
+            "age": 23,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "David Ruiz Montero",
+            "position": "Midfielder",
+            "starts": 6,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1204395",
+            "age": 26,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Jesús Clemente",
+            "position": "Defender",
+            "starts": 5,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1685541",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Mariano Carmona",
+            "position": "Forward",
+            "starts": 4,
+            "goals": 1,
+            "assists": 0,
+            "status": "blessé"
+          }
+        ]
+      },
+      "away": {
+        "team": "Real Oviedo",
+        "teamId": "fotmob-8670",
+        "formation": "4-3-3",
+        "coach": "Julián Calero",
+        "statsSince": "2026-07-01",
+        "teamMatches": 7,
+        "startXI": [
+          {
+            "id": "fotmob-1688651",
+            "name": "Miguel Narváez",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1413780",
+            "name": "David Jiménez",
+            "number": 21,
+            "position": "Defender",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.875,
+            "stats": {
+              "apps": 3,
+              "starts": 1,
+              "minutes": 105,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.04,
+              "rating": 6.73
+            }
+          },
+          {
+            "id": "fotmob-545905",
+            "name": "Dani Calvo",
+            "number": 12,
+            "position": "Defender",
+            "age": 32,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.625,
+            "stats": {
+              "apps": 6,
+              "starts": 6,
+              "minutes": 540,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.43,
+              "rating": 7.24
+            }
+          },
+          {
+            "id": "fotmob-1254217",
+            "name": "Carlos Domínguez",
+            "number": 23,
+            "position": "Defender",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.375,
+            "stats": {
+              "apps": 5,
+              "starts": 5,
+              "minutes": 450,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.52,
+              "rating": 7.39
+            }
+          },
+          {
+            "id": "fotmob-1720593",
+            "name": "Samu Rodríguez",
+            "number": 15,
+            "position": "Defender",
+            "age": 21,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.125,
+            "stats": {
+              "apps": 6,
+              "starts": 4,
+              "minutes": 372,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.02,
+              "rating": 6.92
+            }
+          },
+          {
+            "id": "fotmob-1162677",
+            "name": "Dani Villahermosa",
+            "number": 6,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.79,
+            "stats": {
+              "apps": 7,
+              "starts": 7,
+              "minutes": 575,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.26,
+              "rating": 6.92
+            }
+          },
+          {
+            "id": "fotmob-1167189",
+            "name": "Youness Lachhab",
+            "number": 5,
+            "position": "Midfielder",
+            "age": 27,
+            "countryCode": "MAR",
+            "countryName": "Morocco",
+            "x": 0.613,
+            "y": 0.5,
+            "stats": {
+              "apps": 7,
+              "starts": 6,
+              "minutes": 471,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.22,
+              "rating": 6.79
+            }
+          },
+          {
+            "id": "fotmob-1340594",
+            "name": "Mikel Goti",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.21,
+            "stats": {
+              "apps": 3,
+              "starts": 2,
+              "minutes": 197,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.05,
+              "rating": 7.47
+            }
+          },
+          {
+            "id": "fotmob-1370087",
+            "name": "Pablo Sáenz",
+            "number": 20,
+            "position": "Forward",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.87,
+            "y": 0.79,
+            "stats": {
+              "apps": 7,
+              "starts": 7,
+              "minutes": 558,
+              "goals": 2,
+              "assists": 0,
+              "xg": 0.87,
+              "rating": 7.27
+            }
+          },
+          {
+            "id": "fotmob-785508",
+            "name": "Jacobo González",
+            "number": 11,
+            "position": "Forward",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 6,
+              "starts": 5,
+              "minutes": 393,
+              "goals": 0,
+              "assists": 0,
+              "xg": 1.43,
+              "rating": 6.19
+            }
+          },
+          {
+            "id": "fotmob-1323510",
+            "name": "Alberto Reina",
+            "number": 10,
+            "position": "Forward",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.87,
+            "y": 0.21,
+            "stats": {
+              "apps": 6,
+              "starts": 5,
+              "minutes": 483,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.18,
+              "rating": 7.06
+            }
+          }
+        ],
+        "bench": [],
+        "unavailable": [
+          {
+            "id": "fotmob-891059",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Christopher Ramos",
+            "reason": "blessé",
+            "expectedReturn": "Out for season"
+          },
+          {
+            "id": "fotmob-1321603",
+            "age": 23,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Estanis Pedrola",
+            "reason": "blessé",
+            "expectedReturn": "Mid October 2026"
+          },
+          {
+            "id": "fotmob-1026223",
+            "age": 26,
+            "countryCode": "ROU",
+            "countryName": "Romania",
+            "name": "Alexandru Ișfan",
+            "reason": "blessé",
+            "expectedReturn": "Mid October 2026"
+          },
+          {
+            "id": "fotmob-640238",
+            "age": 31,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Nacho Vidal",
+            "reason": "blessé",
+            "expectedReturn": "Doubtful"
+          },
+          {
+            "id": "fotmob-516854",
+            "age": 30,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Carlos Fernández",
+            "reason": "blessé",
+            "expectedReturn": "Late November 2026"
+          },
+          {
+            "id": "fotmob-1169595",
+            "age": 25,
+            "countryCode": "MAR",
+            "countryName": "Morocco",
+            "name": "Ilyas Chaira",
+            "reason": "blessé",
+            "expectedReturn": "Doubtful"
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-534955",
+            "age": 31,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Aarón Escandell",
+            "position": "Goalkeeper",
+            "starts": 7,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-243419",
+            "age": 34,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Juan Cruz",
+            "position": "Defender",
+            "starts": 4,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1323859",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Aisar Ahmed",
+            "position": "Midfielder",
+            "starts": 4,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1026223",
+            "age": 26,
+            "countryCode": "ROU",
+            "countryName": "Romania",
+            "name": "Alexandru Mihai Isfan",
+            "position": "Forward",
+            "starts": 4,
+            "goals": 0,
+            "assists": 1,
+            "status": "blessé"
+          }
+        ]
+      },
+      "matchInfo": {
+        "round": "8",
+        "stadium": "Estadio Municipal Nuevo Pepico Amat",
+        "city": "Elda",
+        "capacity": 5776,
+        "surface": "grass",
+        "weather": "Scattered Thunderstorms",
+        "temperature": 23,
+        "windSpeed": 3,
+        "precipitation": 0.6,
+        "referee": {
+          "name": "Rafael Sánchez López",
+          "country": "Spain",
+          "league": "LaLiga2",
+          "matches": 43,
+          "yellowCardsPerMatch": 4.44,
+          "yellowCardsLeagueAverage": 5.02,
+          "redCards": 8,
+          "penalties": 9,
+          "foulsPerMatch": 23.78,
+          "foulsLeagueAverage": 26.54
+        }
+      }
+    },
+    "kickoffRuns": 1,
+    "earlierAnalysis": {
+      "analysis": {
+        "summary": "Eldense est 19e (zone de relégation) avec 5 points en 7 matchs et une différence de buts de -5, tandis qu'Oviedo est 8e avec 11 points (+3). La forme récente penche nettement pour Oviedo. Les moyennes statistiques sont proches en volume de tirs, mais Oviedo est plus solide défensivement.",
+        "keyFactors": [
+          {
+            "factor": "classement",
+            "observation": "Oviedo nettement mieux classé ; Eldense en zone de relégation.",
+            "evidence": "Eldense 19e, 5 pts (1V 2N 4D, 4 buts pour, 9 contre). Oviedo 8e, 11 pts (3V 2N 2D, 7 buts pour, 4 contre)."
+          },
+          {
+            "factor": "forme récente",
+            "observation": "Eldense peine à gagner, Oviedo alterne mais reste devant. L'historique local confirme la tendance.",
+            "evidence": "Eldense (API) D-D-V-N-D ; historique D-N-N-V-D. Oviedo (API) V-D-V-N-V ; historique V-V-V-N-V."
+          },
+          {
+            "factor": "statistiques moyennes",
+            "observation": "Volume de tirs comparable, xG légèrement en faveur d'Oviedo ; Oviedo concède très peu dans l'historique.",
+            "evidence": "xG moyen 0.89 (Eldense) vs 1.02 (Oviedo) ; tirs 12 vs 12.4. Historique buts encaissés 1.6 (Eldense) vs 0.5 (Oviedo) ; buts marqués 1.0 vs 1.4."
+          },
+          {
+            "factor": "domicile/extérieur",
+            "observation": "Eldense n'a pas gagné à domicile ; Oviedo a bien marqué à l'extérieur.",
+            "evidence": "Eldense dom. : 0V 2N 1D (3-4). Oviedo ext. : 2V 0N 1D (5-3)."
+          },
+          {
+            "factor": "edge du modèle",
+            "observation": "Le moteur voit Oviedo favori avec un xG nettement supérieur.",
+            "evidence": "xG 0.726 vs 1.966 ; cotes justes 3.76 / 4.17 / 2.02. Aucune cote de marché fournie, donc pas d'edge, action PASS."
+          }
+        ],
+        "alignmentWithModel": "Le contexte qualitatif va dans le même sens que le moteur : Oviedo est mieux classé, en meilleure forme et plus solide défensivement. L'écart des xG du modèle paraît toutefois plus marqué que celui des xG moyens, très proches (0.89 contre 1.02). Sans cotes de marché, aucun edge n'est mesurable.",
+        "caveats": "La forme API-Football est étiquetée saison 2024 mais ses dates (août-septembre 2026) sont récentes et cohérentes avec l'historique local, sans contradiction notable. Les classements reposent sur seulement 7 matchs, ce qui donne un petit échantillon. Les stats FlashScore, les profils d'équipe, les actualités (blessures, entraîneur) et la note utilisateur sont absents. Aucune cote de marché n'est disponible."
+      },
+      "engineSnapshot": {
+        "label": "Eldense vs Oviedo",
+        "expectedGoals": {
+          "home": 0.726,
+          "away": 1.966,
+          "source": "fotmob"
+        },
+        "trueOdds": {
+          "home": 3.76,
+          "draw": 4.17,
+          "away": 2.02
+        },
+        "market": {
+          "odds1": null,
+          "oddsDraw": null,
+          "odds2": null
+        },
+        "edgePercent": null,
+        "staking": {
+          "action": "PASS",
+          "stake": null,
+          "reason": "no_market_odds",
+          "candidates": []
+        }
+      },
+      "analysedAt": "2026-09-30T19:59:09.999Z"
+    },
+    "postMatchReview": {
+      "summary": "Le moteur et ma lecture donnaient Oviedo favori et Eldense stérile. Le match a donné l'inverse : Eldense a gagné 4-1 après avoir encaissé à la 1re minute, avec 3,29 xG contre 0,96. Quatre des cinq buts sont tombés après la 55e minute, dont deux à la 90e. Les marchés de volume (tirs, corners totaux) ont tenu, mais tous les marchés liés à la production d'Eldense ont échoué.",
+      "whatWasRight": "Le total de buts élevé (5 buts), le total de corners (14) et le total de tirs (32 contre 18,5 de ligne) ont été anticipés : le match était ouvert, avec un Oviedo qui concède. Oviedo à moins de 2,5 buts (1 but) et à plus de 1,5 tir cadré (4) sont passés. Le doute sur l'ampleur de l'avantage d'Oviedo (confiance faible, gardien inédit) était fondé. Les tirs d'Eldense sous 18,5 (17) sont passés de justesse.",
+      "whatWasMissed": "J'ai sous-estimé l'effet de la fragilité défensive d'Oviedo (gardien remplaçant, onze remanié) face à une équipe pourtant amoindrie. Eldense a cadré 9 tirs et créé 6 grosses occasions pour 3,29 xG, très au-dessus de sa moyenne de 3,8 tirs cadrés. J'ai trop pris les moyennes de 7 matchs comme un plafond. J'ai aussi ignoré le scénario d'un match ouvert après un but précoce et la fin de match débridée : deux buts à la 90e ont fait gonfler le score. Oviedo a pris plus de tirs (15 contre 10 attendus) et de corners (8 contre 3,7) en étant mené.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le vainqueur (Oviedo à 50 %, Eldense à environ 27 %) et sur la production d'Eldense (0,73 but attendu pour 4 réels). Il va dans son sens pour les totaux de tirs, de corners et de buts. Le xG réel d'Eldense (3,29) montre que ce n'est pas qu'un score gonflé tard : le moteur a nettement sous-évalué l'attaque locale.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Oviedo gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Oviedo a ouvert le score dès la 1re minute (Reina), puis Eldense a dominé en xG (3,29 contre 0,96) et a marqué quatre fois (56e, 68e, 90e, 90e). Mon avis nuancé et prudent était pertinent, mais le pick est faux.",
+          "lesson": "Un favori à l'extérieur avec un onze remanié et un gardien inédit mérite une prudence encore plus forte. Les rapports de force en classement après 7 matchs sont peu fiables."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Cinq buts au total, donc largement plus de 1,5. Le match était ouvert, avec 32 tirs au total.",
+          "lesson": "Le plus de 1,5 but est robuste quand les deux défenses sont fragiles. Cela mérite d'être gardé, mais la ligne est peu informative."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Oviedo a marqué à la 1re minute et Eldense quatre fois ensuite. Le « Non » reposait sur la pauvreté offensive d'Eldense, démentie par 3,29 xG.",
+          "lesson": "Ne pas valider un « Non » avec marge limitée uniquement sur l'attaque pauvre d'une équipe. Un but précoce ouvre le match et pousse les deux équipes à marquer."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Oviedo & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Le total est passé, mais Oviedo a perdu. Le marché combiné dépend de la victoire, qui a échoué.",
+          "lesson": "Un combiné hérite de l'incertitude du résultat. Avec une confiance faible sur le vainqueur, il n'y avait pas de raison de le soutenir."
+        },
+        {
+          "market": "Buts — Eldense",
+          "marketId": "teamGoals",
+          "pick": "Eldense — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Eldense a marqué 4 buts, dont trois dans les 35 dernières minutes. Il a généré 17 tirs, 9 cadrés et 6 grosses occasions. Ma confiance forte à 83 % était excessive.",
+          "lesson": "Éviter la confiance forte sur un « moins de » basé sur 7 matchs de moyennes. Une défense adverse remaniée peut faire exploser la production. Pondérer par la qualité des occasions concédées."
+        },
+        {
+          "market": "Buts — Oviedo",
+          "marketId": "teamGoals",
+          "pick": "Oviedo — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Oviedo n'a marqué qu'une fois, dès la 1re minute, malgré 15 tirs. Son xG était de 0,96.",
+          "lesson": "Le « moins de 2,5 » sur Oviedo à l'extérieur est fiable : son attaque est pauvre, et cela mérite d'être gardé."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "14 corners (6 pour Eldense, 8 pour Oviedo), bien au-dessus de 6,5.",
+          "lesson": "Le plus de 6,5 corners tient bien dans les matchs ouverts. Ligne basse, à conserver."
+        },
+        {
+          "market": "Corners — Eldense",
+          "marketId": "teamCorners",
+          "pick": "Eldense — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Eldense a obtenu 6 corners, sous 7,5, conformément à sa moyenne à domicile.",
+          "lesson": "La moyenne de corners d'Eldense reste un bon repère, même dans un match où il domine."
+        },
+        {
+          "market": "Corners — Oviedo",
+          "marketId": "teamCorners",
+          "pick": "Oviedo — Moins de 5.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Oviedo a obtenu 8 corners contre 3,8 de moyenne extérieure. Mené après le 56e, il a poussé en fin de match.",
+          "lesson": "Les corners d'une équipe qui court derrière au score grimpent. Les moyennes extérieures de l'équipe dite « peu possessive » sont sensibles au scénario."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 18.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "32 tirs (17 plus 15), nettement au-dessus de 18,5.",
+          "lesson": "Le total de tirs au-dessus d'une ligne basse est solide quand une défense concède autant. Garder."
+        },
+        {
+          "market": "Tirs — Eldense",
+          "marketId": "teamShots",
+          "pick": "Eldense — Moins de 18.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Eldense a tiré 17 fois, juste sous 18,5, tout en dominant largement.",
+          "lesson": "Même dans un match dominé, la ligne n'est passée que de peu. Marge fine : ne pas parler de confiance forte."
+        },
+        {
+          "market": "Tirs — Oviedo",
+          "marketId": "teamShots",
+          "pick": "Oviedo — Moins de 13.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Oviedo a tiré 15 fois, au-dessus de 13,5, alors que sa moyenne extérieure était de 9,2. Un but à la 1re minute puis un retard au score ont augmenté son volume.",
+          "lesson": "Le volume de tirs d'une équipe menée dépasse sa moyenne. Prudence sur les « moins de » côté outsider dans des matchs ouverts."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 9.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "13 tirs cadrés (9 plus 4), contre 7,38 attendus et une ligne à 9,5. Eldense a nettement dépassé son profil.",
+          "lesson": "Les tirs cadrés sont volatils. Un « moins de » sur le total quand les défenses sont fragiles est risqué."
+        },
+        {
+          "market": "Tirs cadrés — Eldense",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Eldense — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Eldense a cadré 9 tirs sur 17, contre 3,8 en moyenne, avec 6 grosses occasions.",
+          "lesson": "La moyenne de 3,8 cadrés sous-estime un match où l'adversaire est remanié. Surveiller les xG et les grosses occasions concédées, pas seulement les tirs cadrés moyens."
+        },
+        {
+          "market": "Tirs cadrés — Oviedo",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Oviedo — Plus de 1.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Oviedo a cadré 4 tirs, au-dessus de 1,5, et a marqué dès la 1re minute.",
+          "lesson": "Une ligne basse sur les tirs cadrés d'une équipe qui tire 10 à 15 fois est sûre. À garder."
+        }
+      ],
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 8751,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 3085,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 8751,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 3085,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 8751,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 8751
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0660652,
+      "createdAt": "2026-10-02T20:53:07.145Z"
+    }
+  },
+  {
+    "matchId": "cal-2026-10-02-dundalk-bohemian-fc",
+    "homeName": "Dundalk",
+    "awayName": "Bohemian FC",
+    "league": "League of Ireland",
+    "commenceTime": "2026-10-02T18:45:00.000Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Dundalk vs Bohemian FC",
+      "expectedGoals": {
+        "home": 1.261,
+        "away": 2.274,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 3.26,
+        "draw": 4.28,
+        "away": 2.18
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds",
+        "candidates": []
+      },
+      "statExpectations": {
+        "corners": {
+          "home": 4.9,
+          "away": 4.68,
+          "total": 9.58
+        },
+        "shots": {
+          "home": 14.14,
+          "away": 13.5,
+          "total": 27.64
+        },
+        "shotsOnTarget": {
+          "home": 4.18,
+          "away": 5.09,
+          "total": 9.27
+        }
+      },
+      "marketPredictions": [
+        {
+          "marketId": "result",
+          "params": {
+            "outcome": "away"
+          },
+          "market": "Résultat",
+          "predictedOutcome": "away",
+          "predictedLabel": "Bohemian FC gagne",
+          "predictedOdds": 2.18,
+          "probability": 46,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 2.5 buts",
+          "predictedOdds": 1.46,
+          "probability": 68,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "yes"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "yes",
+          "predictedLabel": "Oui",
+          "predictedOdds": 1.54,
+          "probability": 65,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 1.5,
+            "key": "awayOver"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "awayOver",
+          "predictedLabel": "Bohemian FC & Plus de 1.5 buts",
+          "predictedOdds": 2.42,
+          "probability": 41,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 0.5,
+            "side": "over"
+          },
+          "market": "Buts — Dundalk",
+          "predictedOutcome": "over",
+          "predictedLabel": "Dundalk — Plus de 0.5 buts",
+          "predictedOdds": 1.4,
+          "probability": 71,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 3.5,
+            "side": "under"
+          },
+          "market": "Buts — Bohemian FC",
+          "predictedOutcome": "under",
+          "predictedLabel": "Bohemian FC — Moins de 3.5 buts",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalCorners",
+          "params": {
+            "line": 6.5,
+            "side": "over"
+          },
+          "market": "Total corners",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 6.5 corners",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "home",
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Corners — Dundalk",
+          "predictedOutcome": "over",
+          "predictedLabel": "Dundalk — Plus de 2.5 corners",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "away",
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Corners — Bohemian FC",
+          "predictedOutcome": "over",
+          "predictedLabel": "Bohemian FC — Plus de 2.5 corners",
+          "predictedOdds": 1.27,
+          "probability": 79,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShots",
+          "params": {
+            "line": 33.5,
+            "side": "under"
+          },
+          "market": "Total tirs",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 33.5 tirs",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "home",
+            "line": 9.5,
+            "side": "over"
+          },
+          "market": "Tirs — Dundalk",
+          "predictedOutcome": "over",
+          "predictedLabel": "Dundalk — Plus de 9.5 tirs",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "away",
+            "line": 17.5,
+            "side": "under"
+          },
+          "market": "Tirs — Bohemian FC",
+          "predictedOutcome": "under",
+          "predictedLabel": "Bohemian FC — Moins de 17.5 tirs",
+          "predictedOdds": 1.25,
+          "probability": 80,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShotsOnTarget",
+          "params": {
+            "line": 6.5,
+            "side": "over"
+          },
+          "market": "Total tirs cadrés",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 6.5 tirs cadrés",
+          "predictedOdds": 1.26,
+          "probability": 79,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "home",
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Tirs cadrés — Dundalk",
+          "predictedOutcome": "over",
+          "predictedLabel": "Dundalk — Plus de 2.5 tirs cadrés",
+          "predictedOdds": 1.32,
+          "probability": 76,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "away",
+            "line": 7.5,
+            "side": "under"
+          },
+          "market": "Tirs cadrés — Bohemian FC",
+          "predictedOutcome": "under",
+          "predictedLabel": "Bohemian FC — Moins de 7.5 tirs cadrés",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        }
+      ]
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 11386,
+      "cache_read_input_tokens": 1701,
+      "output_tokens": 3825,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 11386,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 3825,
+          "cache_read_input_tokens": 1701,
+          "cache_creation_input_tokens": 11386,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 11386
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.0841382,
+    "analysis": {
+      "summary": "Bohemian (3e, 56 pts) est en bien meilleure forme que Dundalk (5e, 41 pts) : 4 victoires sur ses 5 derniers matchs contre 1 pour Dundalk, qui reste sur deux défaites à domicile (0-4 et 2-3). Dundalk est très diminué (8 indisponibles, Arubi et Kenny hors feuille). Bohemian est quasi complet, avec Whelan, Tierney et Devoy titulaires. Les deux défenses concèdent environ 2 buts par match, ce qui soutient un match ouvert.",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Bohemian en série positive, Dundalk en difficulté à domicile.",
+          "evidence": "Bohemian V-V-V-V-D sur 5 matchs ; Dundalk D-D-N-V-D. Last10 : Bohemian VVVVDDDNDV, Dundalk DDNVDDNNDD."
+        },
+        {
+          "factor": "statistiques et moyennes",
+          "observation": "Bohemian produit plus et concède moins ; Dundalk encaisse beaucoup.",
+          "evidence": "Bohemian 2,1 buts marqués, xG 1,69, 6 tirs cadrés ; Dundalk 1,3 marqué, 2,1 encaissés, xG concédé 1,9."
+        },
+        {
+          "factor": "absences",
+          "observation": "Dundalk privé de plusieurs cadres, dont Arubi (7 buts), Kenny et Tyreke Wilson.",
+          "evidence": "8 indisponibles ; Bohemian n'a que Rooney et Sam Todd (29 titularisations) absents."
+        },
+        {
+          "factor": "classement",
+          "observation": "Écart net en faveur de Bohemian.",
+          "evidence": "3e avec +18 de différence de buts contre 5e avec -4."
+        }
+      ],
+      "lineupImpact": "Composition FotMob relevée 50 minutes avant le coup d'envoi, donc quasi officielle. Dundalk aligne Horgan (10 buts, 10 passes, note 7,6), mais sans Arubi (7 buts), Kenny, Tyreke Wilson ni Cornwall. John Ross Wilson figure dans le onze alors que FotMob le donne blessé pour 1-2 semaines : à surveiller. Bohemian aligne Walters au lieu de Chorążka, sans Sam Todd en défense. Whelan (12 buts), Tierney (10) et Devoy (note 7,79) sont là. Pelouse synthétique, météo calme, arbitre un peu moins sévère que la moyenne (4,18 jaunes contre 4,76).",
+      "alignmentWithModel": "Le contexte va dans le sens du moteur : Bohemian favori grâce à sa forme et aux absences de Dundalk. La fragilité défensive des deux équipes soutient le scénario de buts. Le déplacement de Bohemian (VDDD, 2,75 buts encaissés) nuance un peu la domination.",
+      "caveats": "Aucune cote de marché fournie, donc pas d'edge calculable. Pas de bilan d'expérience disponible. Échantillons récents réduits : 4 matchs à l'extérieur pour Bohemian, 5 à domicile pour Dundalk. La présence de John Ross Wilson dans le onze est contradictoire avec sa blessure.",
+      "marketViews": [
+        {
+          "market": "Résultat",
+          "pick": "Bohemian FC gagne",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "46 % : Bohemian marque 2,1 buts par match et affiche xG 1,69, face à un Dundalk qui en encaisse 2,1, mais l'issue reste incertaine avec 3 nuls en 4 déplacements.",
+          "reasoning": "Forme, classement et absences penchent pour Bohemian. Son bilan en déplacement (VDDD) empêche une grande confiance.",
+          "probability": 46
+        },
+        {
+          "market": "Total buts",
+          "pick": "Plus de 2.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "68 % : buts attendus de 1,26 et 2,27, et Dundalk (2,1 encaissés) comme Bohemian (1,9) concèdent près de 2 buts par match.",
+          "reasoning": "Dundalk vient de perdre 2-3 et 0-4, Bohemian a marqué 5, 3 et 3 buts récemment. Le contexte favorise les buts.",
+          "probability": 68
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "pick": "Oui",
+          "verdict": "nuance",
+          "confidence": "moyenne",
+          "explanation": "65 % : Bohemian concède 1,9 but par match, mais Dundalk n'en marque que 1,3 et 1,0 à domicile.",
+          "reasoning": "Dundalk est affaibli offensivement sans Arubi ni Kenny, mais Horgan reste dangereux et la défense de Bohemian est souvent battue.",
+          "probability": 65
+        },
+        {
+          "market": "Résultat + Total buts",
+          "pick": "Bohemian FC & Plus de 1.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "41 % : cela suppose la victoire de Bohemian (46 %), qui marque 2,1 buts par match, avec au moins 2 buts au total.",
+          "reasoning": "Si Bohemian gagne, il y a très probablement 2 buts ou plus. Le risque principal est son résultat.",
+          "probability": 41
+        },
+        {
+          "market": "Buts — Dundalk",
+          "pick": "Dundalk — Plus de 0.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "71 % : Dundalk marque 1,3 but par match avec xG 1,46, et Bohemian a encaissé 2,75 buts par match à l'extérieur.",
+          "reasoning": "Dundalk a marqué lors de 4 de ses 5 derniers matchs (sauf 0-4). Les absences offensives limitent la confiance.",
+          "probability": 71
+        },
+        {
+          "market": "Buts — Bohemian FC",
+          "pick": "Bohemian FC — Moins de 3.5 buts",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "81 % : Bohemian marque 2,1 buts par match et le moteur en attend 2,27, donc 4 buts ou plus restent peu probables.",
+          "reasoning": "Ses 5 buts contre Derry sont une exception ; il marque 2 à 3 buts habituellement.",
+          "probability": 81
+        },
+        {
+          "market": "Total corners",
+          "pick": "Plus de 6.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "82 % : 9,58 corners attendus, avec 5,3 par match pour Dundalk et 6,7 pour Bohemian.",
+          "reasoning": "Les deux équipes ont beaucoup la possession (56 % et 59 %) et génèrent des corners, bien au-dessus du seuil.",
+          "probability": 82
+        },
+        {
+          "market": "Corners — Dundalk",
+          "pick": "Dundalk — Plus de 2.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "81 % : Dundalk obtient 5,3 corners par match (6,8 à domicile), pour 4,9 attendus.",
+          "reasoning": "Il tire beaucoup à domicile (18,2 tirs par match) ; le seuil est très bas.",
+          "probability": 81
+        },
+        {
+          "market": "Corners — Bohemian FC",
+          "pick": "Bohemian FC — Plus de 2.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "79 % : Bohemian obtient 6,7 corners par match (6,3 à l'extérieur), pour 4,68 attendus.",
+          "reasoning": "Son volume offensif est régulier et ses 4 déplacements restent au-dessus du seuil en moyenne.",
+          "probability": 79
+        },
+        {
+          "market": "Total tirs",
+          "pick": "Moins de 33.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : 27,64 tirs attendus, soit 6 de moins que le seuil, et Dundalk (15,5) plus Bohemian (17,1) font environ 32,6 en additionnant leurs moyennes.",
+          "reasoning": "Le seuil est haut. Le total est un peu moins sûr car Dundalk a monté à 18,2 tirs à domicile.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs — Dundalk",
+          "pick": "Dundalk — Plus de 9.5 tirs",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "82 % : Dundalk tire 15,5 fois par match (18,2 à domicile), pour 14,14 attendus.",
+          "reasoning": "Le volume de tirs de Dundalk est stable. Les absences offensives pèsent surtout sur la qualité, pas sur la quantité.",
+          "probability": 82
+        },
+        {
+          "market": "Tirs — Bohemian FC",
+          "pick": "Bohemian FC — Moins de 17.5 tirs",
+          "verdict": "nuance",
+          "confidence": "moyenne",
+          "explanation": "80 % : Bohemian tire 17,1 fois par match et 17,8 à l'extérieur, mais le moteur en attend 13,5.",
+          "reasoning": "Ses moyennes récentes sont proches du seuil, et pourtant Dundalk n'en concède que 12,9 par match. La marge est moins nette que le chiffre ne le suggère.",
+          "probability": 80
+        },
+        {
+          "market": "Total tirs cadrés",
+          "pick": "Plus de 6.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "79 % : 9,27 tirs cadrés attendus, Bohemian en produit 6 et Dundalk en concède 5,3.",
+          "reasoning": "Bohemian cadre beaucoup et Dundalk concède 5,3 tirs cadrés par match, ce qui rend le seuil atteignable malgré le faible cadrage de Dundalk (3,4).",
+          "probability": 79
+        },
+        {
+          "market": "Tirs cadrés — Dundalk",
+          "pick": "Dundalk — Plus de 2.5 tirs cadrés",
+          "verdict": "nuance",
+          "confidence": "moyenne",
+          "explanation": "76 % : Dundalk cadre 3,4 tirs par match, tout juste au-dessus du seuil, et Bohemian en concède 4,2 ; le moteur en attend 4,18.",
+          "reasoning": "La moyenne passe le seuil de peu et les absences offensives (Arubi, Kenny) peuvent la faire baisser.",
+          "probability": 76
+        },
+        {
+          "market": "Tirs cadrés — Bohemian FC",
+          "pick": "Bohemian FC — Moins de 7.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : Bohemian cadre 6 tirs par match (5,8 à l'extérieur), pour 5,09 attendus, donc 8 ou plus est peu probable.",
+          "reasoning": "Atteindre 8 tirs cadrés demande un match exceptionnel, bien au-dessus de ses moyennes.",
+          "probability": 83
+        }
+      ]
+    },
+    "updatedAt": "2026-10-02T20:52:42.467Z",
+    "createdAt": "2026-09-30T19:36:35.937Z",
+    "analysedAt": "2026-10-02T17:55:10.091Z",
+    "timing": "coup-d-envoi",
+    "lineupSnapshot": {
+      "source": "FotMob",
+      "fotmobMatchId": "5100973",
+      "fetchedAt": "2026-10-02T17:54:41.925Z",
+      "minutesBeforeKickoff": 50,
+      "home": {
+        "team": "Dundalk",
+        "teamId": "fotmob-1853",
+        "formation": "4-2-3-1",
+        "coach": "Ciarán Kilduff",
+        "statsSince": "2026-01-01",
+        "teamMatches": 32,
+        "startXI": [
+          {
+            "id": "fotmob-952037",
+            "name": "Enda Minogue",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 24,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 26,
+              "starts": 26,
+              "minutes": 2340,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.92
+            }
+          },
+          {
+            "id": "fotmob-882350",
+            "name": "John Ross Wilson",
+            "number": 31,
+            "position": "Defender",
+            "age": 27,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "x": 0.292,
+            "y": 0.875,
+            "stats": {
+              "apps": 23,
+              "starts": 21,
+              "minutes": 1861,
+              "goals": 1,
+              "assists": 1,
+              "xg": 0.54,
+              "rating": 6.92
+            }
+          },
+          {
+            "id": "fotmob-1250503",
+            "name": "Mayowa Animasahun",
+            "number": 4,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 21,
+              "starts": 18,
+              "minutes": 1520,
+              "goals": 0,
+              "assists": 0,
+              "xg": 1.71,
+              "rating": 6.97
+            }
+          },
+          {
+            "id": "fotmob-972031",
+            "name": "Tom Grivosti",
+            "number": 44,
+            "position": "Defender",
+            "age": 27,
+            "countryCode": "ENG",
+            "countryName": "England",
+            "x": 0.292,
+            "y": 0.375,
+            "stats": {
+              "apps": 17,
+              "starts": 12,
+              "minutes": 1200,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.37,
+              "rating": 6.79
+            }
+          },
+          {
+            "id": "fotmob-873002",
+            "name": "Bobby Burns",
+            "number": 3,
+            "position": "Defender",
+            "age": 26,
+            "countryCode": "NIR",
+            "countryName": "Northern Ireland",
+            "x": 0.292,
+            "y": 0.125,
+            "stats": {
+              "apps": 32,
+              "starts": 29,
+              "minutes": 2586,
+              "goals": 2,
+              "assists": 0,
+              "xg": 1.48,
+              "rating": 7.15
+            }
+          },
+          {
+            "id": "fotmob-253259",
+            "name": "Keith Buckley",
+            "number": 18,
+            "position": "Midfielder",
+            "age": 34,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "x": 0.485,
+            "y": 0.7,
+            "stats": {
+              "apps": 30,
+              "starts": 23,
+              "minutes": 1899,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.28,
+              "rating": 6.77
+            }
+          },
+          {
+            "id": "fotmob-843941",
+            "name": "Aodh Dervin",
+            "number": 6,
+            "position": "Midfielder",
+            "age": 27,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "x": 0.485,
+            "y": 0.3,
+            "stats": {
+              "apps": 29,
+              "starts": 23,
+              "minutes": 2011,
+              "goals": 1,
+              "assists": 2,
+              "xg": 0.52,
+              "rating": 6.84
+            }
+          },
+          {
+            "id": "fotmob-730242",
+            "name": "Trevor Clarke",
+            "number": 15,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "x": 0.678,
+            "y": 0.837,
+            "stats": {
+              "apps": 10,
+              "starts": 8,
+              "minutes": 582,
+              "goals": 1,
+              "assists": 1,
+              "xg": 1.55,
+              "rating": 6.6
+            }
+          },
+          {
+            "id": "fotmob-1664590",
+            "name": "Ronan Teahan",
+            "number": 11,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "x": 0.678,
+            "y": 0.5,
+            "stats": {
+              "apps": 26,
+              "starts": 19,
+              "minutes": 1781,
+              "goals": 3,
+              "assists": 1,
+              "xg": 2.45,
+              "rating": 6.78
+            }
+          },
+          {
+            "id": "fotmob-253356",
+            "name": "Daryl Horgan",
+            "number": 7,
+            "position": "Midfielder",
+            "age": 34,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "x": 0.678,
+            "y": 0.163,
+            "stats": {
+              "apps": 31,
+              "starts": 31,
+              "minutes": 2666,
+              "goals": 10,
+              "assists": 10,
+              "xg": 9.68,
+              "rating": 7.6
+            }
+          },
+          {
+            "id": "fotmob-1612455",
+            "name": "Cian Dillon",
+            "number": 9,
+            "position": "Forward",
+            "age": 20,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 8,
+              "starts": 8,
+              "minutes": 590,
+              "goals": 1,
+              "assists": 0,
+              "xg": 1.73,
+              "rating": 6.41
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-32901",
+            "name": "Peter Cherrie",
+            "number": 13,
+            "position": "Goalkeeper",
+            "age": 43,
+            "countryCode": "SCO",
+            "countryName": "Scotland",
+            "stats": {
+              "apps": 1,
+              "starts": 0,
+              "minutes": 5,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1781901",
+            "name": "Egor Vassenin",
+            "number": 16,
+            "position": "Defender",
+            "age": 18,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "stats": {
+              "apps": 6,
+              "starts": 3,
+              "minutes": 319,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.68,
+              "rating": 6.41
+            }
+          },
+          {
+            "id": "fotmob-1609368",
+            "name": "Harvey Warren",
+            "number": 5,
+            "position": "Defender",
+            "age": 22,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "stats": {
+              "apps": 17,
+              "starts": 10,
+              "minutes": 1003,
+              "goals": 0,
+              "assists": 1,
+              "xg": 1.29,
+              "rating": 6.88
+            }
+          },
+          {
+            "id": "fotmob-1609320",
+            "name": "Luke Mulligan",
+            "number": 12,
+            "position": "Defender",
+            "age": 18,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 45,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 5.78
+            }
+          },
+          {
+            "id": "fotmob-1342525",
+            "name": "Harry Groome",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 24,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "stats": {
+              "apps": 29,
+              "starts": 11,
+              "minutes": 1108,
+              "goals": 1,
+              "assists": 1,
+              "xg": 2.31,
+              "rating": 6.46
+            }
+          },
+          {
+            "id": "fotmob-1445823",
+            "name": "Leonardo Gaxha",
+            "number": 10,
+            "position": "Midfielder",
+            "age": 24,
+            "countryCode": "ALB",
+            "countryName": "Albania",
+            "stats": {
+              "apps": 11,
+              "starts": 2,
+              "minutes": 328,
+              "goals": 0,
+              "assists": 0,
+              "xg": 1.56,
+              "rating": 6.15
+            }
+          },
+          {
+            "id": "fotmob-1899449",
+            "name": "Shane Tracey",
+            "number": 17,
+            "position": "Midfielder",
+            "age": 20,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "stats": {
+              "apps": 21,
+              "starts": 6,
+              "minutes": 682,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.57,
+              "rating": 6.5
+            }
+          },
+          {
+            "id": "fotmob-263676",
+            "name": "Declan McDaid",
+            "number": 27,
+            "position": "Forward",
+            "age": 30,
+            "countryCode": "SCO",
+            "countryName": "Scotland",
+            "stats": {
+              "apps": 31,
+              "starts": 12,
+              "minutes": 1369,
+              "goals": 4,
+              "assists": 1,
+              "xg": 3.94,
+              "rating": 6.46
+            }
+          },
+          {
+            "id": "fotmob-1477445",
+            "name": "Norman Garbett",
+            "number": 14,
+            "position": "Forward",
+            "age": 22,
+            "countryCode": "NZL",
+            "countryName": "New Zealand",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "id": "fotmob-1899449",
+            "age": 20,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "name": "Shane Tracey",
+            "reason": "suspendu",
+            "expectedReturn": "Early October 2026"
+          },
+          {
+            "id": "fotmob-882350",
+            "age": 27,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "name": "John Ross Wilson",
+            "reason": "blessé",
+            "expectedReturn": "About 1-2 weeks"
+          },
+          {
+            "id": "fotmob-433825",
+            "age": 31,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "name": "Robert Cornwall",
+            "reason": "blessé",
+            "expectedReturn": "Doubtful"
+          },
+          {
+            "id": "fotmob-863820",
+            "age": 26,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "name": "Tyreke Wilson",
+            "reason": "blessé",
+            "expectedReturn": "Unknown"
+          },
+          {
+            "id": "fotmob-428952",
+            "age": 31,
+            "countryCode": "SCO",
+            "countryName": "Scotland",
+            "name": "Daniel Mullen",
+            "reason": "blessé",
+            "expectedReturn": "Back in training"
+          },
+          {
+            "id": "fotmob-292683",
+            "age": 33,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "name": "Conor O'Keeffe",
+            "reason": "blessé",
+            "expectedReturn": "Unknown"
+          },
+          {
+            "id": "fotmob-944311",
+            "age": 28,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "name": "Conor Kearns",
+            "reason": "blessé",
+            "expectedReturn": "Unknown"
+          },
+          {
+            "id": "fotmob-1477445",
+            "age": 22,
+            "countryCode": "NZL",
+            "countryName": "New Zealand",
+            "name": "Norman Garbett",
+            "reason": "blessé",
+            "expectedReturn": "Unknown"
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-863820",
+            "age": 26,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "name": "Tyreke Wilson",
+            "position": "Midfielder",
+            "starts": 21,
+            "goals": 4,
+            "assists": 2,
+            "status": "blessé"
+          },
+          {
+            "id": "fotmob-1459970",
+            "age": 20,
+            "countryCode": "NIR",
+            "countryName": "Northern Ireland",
+            "name": "Eoin Kenny",
+            "position": "Midfielder",
+            "starts": 19,
+            "goals": 5,
+            "assists": 3,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1344257",
+            "age": 22,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "name": "Gbemi Arubi",
+            "position": "Forward",
+            "starts": 19,
+            "goals": 7,
+            "assists": 3,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-433825",
+            "age": 31,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "name": "Robert Cornwall",
+            "position": "Defender",
+            "starts": 16,
+            "goals": 1,
+            "assists": 0,
+            "status": "blessé"
+          }
+        ]
+      },
+      "away": {
+        "team": "Bohemian FC",
+        "teamId": "fotmob-4594",
+        "formation": "4-2-3-1",
+        "coach": "Alan Reynolds",
+        "statsSince": "2026-01-01",
+        "teamMatches": 37,
+        "startXI": [
+          {
+            "id": "fotmob-1440046",
+            "name": "Paul Walters",
+            "number": 25,
+            "position": "Goalkeeper",
+            "age": 22,
+            "countryCode": "USA",
+            "countryName": "USA",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 17,
+              "starts": 17,
+              "minutes": 1560,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.77
+            }
+          },
+          {
+            "id": "fotmob-1064852",
+            "name": "Darragh Power",
+            "number": 16,
+            "position": "Defender",
+            "age": 25,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "x": 0.292,
+            "y": 0.875,
+            "stats": {
+              "apps": 38,
+              "starts": 32,
+              "minutes": 2877,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.73,
+              "rating": 6.76
+            }
+          },
+          {
+            "id": "fotmob-1404378",
+            "name": "Patrick Hickey",
+            "number": 12,
+            "position": "Defender",
+            "age": 28,
+            "countryCode": "USA",
+            "countryName": "USA",
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 36,
+              "starts": 36,
+              "minutes": 3211,
+              "goals": 6,
+              "assists": 0,
+              "xg": 3.39,
+              "rating": 7.17
+            }
+          },
+          {
+            "id": "fotmob-1362460",
+            "name": "Cian Byrne",
+            "number": 24,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "x": 0.292,
+            "y": 0.375,
+            "stats": {
+              "apps": 26,
+              "starts": 16,
+              "minutes": 1563,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.97,
+              "rating": 6.92
+            }
+          },
+          {
+            "id": "fotmob-1345315",
+            "name": "Senan Mullen",
+            "number": 15,
+            "position": "Defender",
+            "age": 21,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "x": 0.292,
+            "y": 0.125,
+            "stats": {
+              "apps": 26,
+              "starts": 24,
+              "minutes": 1879,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.99,
+              "rating": 7.18
+            }
+          },
+          {
+            "id": "fotmob-1055841",
+            "name": "Dawson Devoy",
+            "number": 10,
+            "position": "Midfielder",
+            "age": 24,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "x": 0.485,
+            "y": 0.7,
+            "stats": {
+              "apps": 35,
+              "starts": 35,
+              "minutes": 3172,
+              "goals": 4,
+              "assists": 6,
+              "xg": 4.15,
+              "rating": 7.79
+            }
+          },
+          {
+            "id": "fotmob-568551",
+            "name": "Jordan Flores",
+            "number": 6,
+            "position": "Midfielder",
+            "age": 30,
+            "countryCode": "ENG",
+            "countryName": "England",
+            "x": 0.485,
+            "y": 0.3,
+            "stats": {
+              "apps": 33,
+              "starts": 27,
+              "minutes": 2473,
+              "goals": 1,
+              "assists": 3,
+              "xg": 2.91,
+              "rating": 7.14
+            }
+          },
+          {
+            "id": "fotmob-1055839",
+            "name": "Ross Tierney",
+            "number": 26,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "x": 0.678,
+            "y": 0.837,
+            "stats": {
+              "apps": 37,
+              "starts": 33,
+              "minutes": 3019,
+              "goals": 10,
+              "assists": 3,
+              "xg": 8.59,
+              "rating": 7.32
+            }
+          },
+          {
+            "id": "fotmob-1231219",
+            "name": "Harry Vaughan",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "ENG",
+            "countryName": "England",
+            "x": 0.678,
+            "y": 0.5,
+            "stats": {
+              "apps": 31,
+              "starts": 20,
+              "minutes": 1519,
+              "goals": 3,
+              "assists": 4,
+              "xg": 1.94,
+              "rating": 6.83
+            }
+          },
+          {
+            "id": "fotmob-1093048",
+            "name": "Connor Parsons",
+            "number": 7,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "ENG",
+            "countryName": "England",
+            "x": 0.678,
+            "y": 0.163,
+            "stats": {
+              "apps": 32,
+              "starts": 15,
+              "minutes": 1461,
+              "goals": 5,
+              "assists": 2,
+              "xg": 3.61,
+              "rating": 6.67
+            }
+          },
+          {
+            "id": "fotmob-939029",
+            "name": "Colm Whelan",
+            "number": 9,
+            "position": "Forward",
+            "age": 26,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 36,
+              "starts": 22,
+              "minutes": 2166,
+              "goals": 12,
+              "assists": 6,
+              "xg": 10.62,
+              "rating": 6.85
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-656334",
+            "name": "Kacper Chorążka",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 27,
+            "countryCode": "POL",
+            "countryName": "Poland",
+            "stats": {
+              "apps": 20,
+              "starts": 20,
+              "minutes": 1800,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.98
+            }
+          },
+          {
+            "id": "fotmob-939908",
+            "name": "Niall Morahan",
+            "number": 4,
+            "position": "Defender",
+            "age": 26,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "stats": {
+              "apps": 22,
+              "starts": 8,
+              "minutes": 699,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.07,
+              "rating": 6.51
+            }
+          },
+          {
+            "id": "fotmob-1077896",
+            "name": "Ryan Burke",
+            "number": 3,
+            "position": "Defender",
+            "age": 25,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "stats": {
+              "apps": 3,
+              "starts": 0,
+              "minutes": 64,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.16,
+              "rating": 6.21
+            }
+          },
+          {
+            "id": "fotmob-556349",
+            "name": "Adam McDonnell",
+            "number": 17,
+            "position": "Midfielder",
+            "age": 29,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "stats": {
+              "apps": 28,
+              "starts": 11,
+              "minutes": 982,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.97,
+              "rating": 6.42
+            }
+          },
+          {
+            "id": "fotmob-760742",
+            "name": "Sadou Diallo",
+            "number": 5,
+            "position": "Midfielder",
+            "age": 27,
+            "countryCode": "ENG",
+            "countryName": "England",
+            "stats": {
+              "apps": 19,
+              "starts": 9,
+              "minutes": 870,
+              "goals": 0,
+              "assists": 2,
+              "xg": 0.12,
+              "rating": 6.58
+            }
+          },
+          {
+            "id": "fotmob-1022021",
+            "name": "Douglas James-Taylor",
+            "number": 18,
+            "position": "Forward",
+            "age": 24,
+            "countryCode": "ENG",
+            "countryName": "England",
+            "stats": {
+              "apps": 25,
+              "starts": 18,
+              "minutes": 1374,
+              "goals": 9,
+              "assists": 4,
+              "xg": 6.18,
+              "rating": 6.7
+            }
+          },
+          {
+            "id": "fotmob-1690586",
+            "name": "Markuss Strods",
+            "number": 32,
+            "position": "Forward",
+            "age": 19,
+            "countryCode": "LVA",
+            "countryName": "Latvia",
+            "stats": {
+              "apps": 24,
+              "starts": 10,
+              "minutes": 1000,
+              "goals": 2,
+              "assists": 4,
+              "xg": 0.69,
+              "rating": 6.74
+            }
+          },
+          {
+            "id": "fotmob-159397",
+            "name": "Paddy Madden",
+            "number": 41,
+            "position": "Forward",
+            "age": 36,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "stats": {
+              "apps": 20,
+              "starts": 11,
+              "minutes": 1121,
+              "goals": 2,
+              "assists": 0,
+              "xg": 2.01,
+              "rating": 6.3
+            }
+          },
+          {
+            "id": "fotmob-1705306",
+            "name": "Zane Myers",
+            "number": 23,
+            "position": "Forward",
+            "age": 21,
+            "countryCode": "ENG",
+            "countryName": "England",
+            "stats": {
+              "apps": 19,
+              "starts": 6,
+              "minutes": 627,
+              "goals": 3,
+              "assists": 1,
+              "xg": 1.74,
+              "rating": 6.66
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "id": "fotmob-829108",
+            "age": 28,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "name": "Dayle Rooney",
+            "reason": "blessé",
+            "expectedReturn": "Back in training"
+          },
+          {
+            "id": "fotmob-775981",
+            "age": 28,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "name": "Sam Todd",
+            "reason": "blessé",
+            "expectedReturn": "A few days"
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-775981",
+            "age": 28,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "name": "Sam Todd",
+            "position": "Defender",
+            "starts": 29,
+            "goals": 1,
+            "assists": 0,
+            "status": "blessé"
+          },
+          {
+            "id": "fotmob-656334",
+            "age": 27,
+            "countryCode": "POL",
+            "countryName": "Poland",
+            "name": "Kacper Chorążka",
+            "position": "Goalkeeper",
+            "starts": 20,
+            "goals": 0,
+            "assists": 0,
+            "status": "remplaçant"
+          }
+        ]
+      },
+      "matchInfo": {
+        "round": "33",
+        "stadium": "Oriel Park",
+        "city": "Dundalk",
+        "capacity": 4500,
+        "surface": "artificial turf",
+        "weather": "Clear",
+        "temperature": 12,
+        "windSpeed": 3,
+        "precipitation": 0,
+        "referee": {
+          "name": "Damien MacGraith",
+          "country": "Ireland",
+          "league": "Premier Division",
+          "matches": 17,
+          "yellowCardsPerMatch": 4.18,
+          "yellowCardsLeagueAverage": 4.76,
+          "redCards": 1,
+          "penalties": 2,
+          "foulsPerMatch": 20.2,
+          "foulsLeagueAverage": 22.39
+        }
+      }
+    },
+    "kickoffRuns": 1,
+    "earlierAnalysis": {
+      "analysis": {
+        "summary": "Bohemian FC (3e, 56 pts en 31 matchs, différence de buts +18) aborde le match avec un net avantage au classement et en forme sur Dundalk (5e, 41 pts en 32 matchs, -4). Bohemian a gagné 4 de ses 5 derniers matchs connus, Dundalk n'en a gagné qu'un. Dundalk a en outre plusieurs absents, dont un suspendu jusqu'à début octobre.",
+        "keyFactors": [
+          {
+            "factor": "classement",
+            "observation": "Bohemian est nettement mieux classé, en position de qualification pour la Conference League ; Dundalk est à 15 points derrière.",
+            "evidence": "Bohemian 3e, 56 pts, 16V-8N-7D, buts 55-37 ; Dundalk 5e, 41 pts, 10V-11N-11D, buts 49-53."
+          },
+          {
+            "factor": "forme récente",
+            "observation": "Série très favorable à Bohemian, forme hésitante pour Dundalk (beaucoup de nuls/défaites).",
+            "evidence": "Bohemian V-V-V-V-D ; Dundalk D-D-N-V-D (données API-Football, saison 2024 indiquée, dates au 18/09 au plus tard)."
+          },
+          {
+            "factor": "statistiques moyennes",
+            "observation": "Bohemian crée des occasions plus dangereuses (tirs cadrés, xG supérieurs) ; possession comparable.",
+            "evidence": "Tirs cadrés 5,7 vs 3,4 ; xG 1,88 vs 1,46 ; possession 54,8% vs 56,0% ; tirs 16,6 vs 15,5 (10 matchs)."
+          },
+          {
+            "factor": "rendement extérieur/domicile",
+            "observation": "Bohemian est très solide à l'extérieur ; Dundalk est irrégulier à domicile.",
+            "evidence": "Bohemian à l'extérieur : 9V-2N-4D, 28-18 ; Dundalk à domicile : 6V-3N-7D, 25-25."
+          },
+          {
+            "factor": "absences",
+            "observation": "Dundalk est plus touché, avec 7 indisponibles contre 2 pour Bohemian, dont certains avec retour incertain.",
+            "evidence": "Dundalk : Tracey (suspendu, retour début octobre 2026), Cornwall et Wilson (incertains), 4 autres blessés ; Bohemian : Rooney (de retour à l'entraînement), Todd (quelques jours)."
+          },
+          {
+            "factor": "edge du modèle",
+            "observation": "Le moteur voit Bohemian favori sur la base des xG attendus, cohérent avec le contexte. Aucune cote de marché n'est fournie, donc pas d'edge calculable.",
+            "evidence": "xG moteur 1,261 vs 2,274 ; action PASS (no_market_odds)."
+          }
+        ],
+        "alignmentWithModel": "Le contexte qualitatif va dans le même sens que le moteur : Bohemian est supérieur au classement, en forme, dans les statistiques offensives, et Dundalk est plus diminué par les absences. Sans cote de marché, aucune lecture d'edge n'est possible.",
+        "caveats": "La forme API-Football est étiquetée saison 2024 alors que les dates sont en 2026 ; aucune forme historique ou web plus récente n'est disponible pour la comparer. Pas de données FlashScore, d'historique ni de profil d'équipe. Aucun changement d'entraîneur n'est signalé, mais l'historique peut manquer. Pas de note utilisateur. Dundalk a joué un match de plus que Bohemian au classement. Échantillon de statistiques limité à 10 matchs et 5 pour la forme."
+      },
+      "engineSnapshot": {
+        "label": "Dundalk vs Bohemian FC",
+        "expectedGoals": {
+          "home": 1.261,
+          "away": 2.274,
+          "source": "fotmob"
+        },
+        "trueOdds": {
+          "home": 3.26,
+          "draw": 4.28,
+          "away": 2.18
+        },
+        "market": {
+          "odds1": null,
+          "oddsDraw": null,
+          "odds2": null
+        },
+        "edgePercent": null,
+        "staking": {
+          "action": "PASS",
+          "stake": null,
+          "reason": "no_market_odds",
+          "candidates": []
+        }
+      },
+      "analysedAt": "2026-09-30T19:36:35.937Z"
+    },
+    "postMatchReview": {
+      "summary": "Bohemian s'impose 2-1 à Dundalk, comme la lecture pré-match et le moteur le prévoyaient : victoire visiteuse, plus de 2,5 buts, BTTS. Les marchés de buts et de tirs sont tous justes. Seuls deux marchés de corners (total et Dundalk) ont échoué, avec seulement 6 corners au total contre 9,58 attendus.",
+      "whatWasRight": "Le favori Bohemian a gagné (buts de Devoy 26' et Tierney 67'), avec un xG de 1,93 contre 1,2, ce qui confirme l'avantage de forme et de classement. Les buts ont suivi le scénario : 3 buts au total, Dundalk a marqué (Horgan 88') et Bohemian est resté sous 3,5 buts. Les volumes de tirs sont conformes : 23 au total (sous 33,5), Dundalk 11 tirs (au-dessus de 9,5), Bohemian 12 (sous 17,5). Tirs cadrés : 8 au total (au-dessus de 6,5), Dundalk 5 (au-dessus de 2,5), Bohemian 3 (sous 7,5). Les doutes sur les tirs de Bohemian et sur le cadrage de Dundalk n'ont pas empêché ces marchés de passer.",
+      "whatWasMissed": "Les corners étaient surestimés : 6 au total (2 pour Dundalk, 4 pour Bohemian), alors que j'avais confirmé avec une confiance forte. Les moyennes de corners (5,3 et 6,7 par match) et la possession élevée présumée ne se sont pas retrouvées : la possession était de 48 % contre 52 %. Le match a aussi été plus fermé que prévu en volume de tirs (23 contre 27,6 attendus). Le moteur attendait environ 14 tirs pour Dundalk, qui n'en a eu que 11.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur 13 des 15 marchés : issue, buts, tirs et tirs cadrés. Il le contredit sur les corners, où le moteur attendait 9,58 corners et en a vu 6. Les xG réels (1,2 et 1,93) sont proches des attendus (1,26 et 2,27).",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Bohemian FC gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Bohemian a gagné 2-1 grâce à Devoy (26') et Tierney (67'), avec le xG le plus élevé (1,93 contre 1,2). Dundalk n'a réduit l'écart qu'à la 88e.",
+          "lesson": "Garder la lecture forme + absences adverses pour un favori à l'extérieur, en conservant une confiance moyenne : l'écart est resté d'un seul but."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "3 buts (26', 67', 88'), donc le seuil de 2,5 est franchi. Le dernier but est tardif : sans lui, le total aurait été de 2.",
+          "lesson": "Le plus de 2,5 reste soutenu par les défenses poreuses, mais un but tardif a fait la différence ; il faut rester prudent sur ce seuil."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Dundalk n'a marqué qu'à la 88e par Horgan, malgré 5 tirs cadrés, et Bohemian a marqué deux fois. Le oui est passé de justesse.",
+          "lesson": "Ma nuance était justifiée : Dundalk affaibli a un volume correct mais un BTTS tardif. Garder la prudence sur le oui avec une attaque amputée."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Bohemian FC & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Victoire de Bohemian avec 3 buts : les deux conditions sont remplies.",
+          "lesson": "Ce combiné se réduit au résultat quand le favori marque deux fois ; la logique est confirmée."
+        },
+        {
+          "market": "Buts — Dundalk",
+          "marketId": "teamGoals",
+          "pick": "Dundalk — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Horgan a marqué à la 88e, ce qui valide le plus de 0,5, mais très tard. Dundalk avait 5 tirs cadrés et un xG de 1,2.",
+          "lesson": "Le seuil de 0,5 but pour Dundalk à domicile est fiable avec Horgan, même sans Arubi ni Kenny."
+        },
+        {
+          "market": "Buts — Bohemian FC",
+          "marketId": "teamGoals",
+          "pick": "Bohemian FC — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Bohemian n'a marqué que 2 fois, nettement sous 3,5, avec seulement 3 tirs cadrés.",
+          "lesson": "Confiance forte justifiée : Bohemian marque 2 à 3 buts habituellement, et les 5 buts contre Derry restent une exception."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Seulement 6 corners (2 pour Dundalk, 4 pour Bohemian) contre 9,58 attendus. La possession était proche de 50/50 et le jeu a été peu offensif sur les côtés.",
+          "lesson": "Ne pas confirmer avec forte confiance un seuil de corners sur la seule base des moyennes saisonnières : la variance est grande et le seuil de 6,5 n'est pas si éloigné du total réel d'un match équilibré."
+        },
+        {
+          "market": "Corners — Dundalk",
+          "marketId": "teamCorners",
+          "pick": "Dundalk — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Dundalk n'a obtenu que 2 corners, malgré 11 tirs et 48 % de possession. Ses 6,8 corners à domicile ne se sont pas répétés.",
+          "lesson": "Une moyenne à domicile ne suffit pas, surtout contre un adversaire qui mène : Dundalk a mené le score trop tard pour forcer des corners. Le seuil de 2,5 n'est pas aussi sûr que 81 % le laissait croire."
+        },
+        {
+          "market": "Corners — Bohemian FC",
+          "marketId": "teamCorners",
+          "pick": "Bohemian FC — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Bohemian a obtenu 4 corners, soit au-dessus de 2,5, mais nettement sous ses 6,7 de moyenne.",
+          "lesson": "Le seuil bas passe même quand l'équipe est en dessous de sa moyenne : la marge de sécurité compte plus que la moyenne."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 33.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "23 tirs au total (11 + 12), très loin du seuil de 33,5.",
+          "lesson": "Garder ce type de seuil haut : le total réel est resté proche des 27,6 attendus par le moteur plutôt que de la somme des moyennes."
+        },
+        {
+          "market": "Tirs — Dundalk",
+          "marketId": "teamShots",
+          "pick": "Dundalk — Plus de 9.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Dundalk a tiré 11 fois, au-dessus de 9,5 mais de peu, à cause du faible volume du match.",
+          "lesson": "Le volume de Dundalk est stable, mais la marge était mince (11 contre 9,5) : la confiance forte était un peu trop haute."
+        },
+        {
+          "market": "Tirs — Bohemian FC",
+          "marketId": "teamShots",
+          "pick": "Bohemian FC — Moins de 17.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Bohemian n'a tiré que 12 fois, loin de 17,5. Il a mené dès la 26e et a géré.",
+          "lesson": "Ma nuance sur la moyenne proche du seuil était trop prudente : le moteur (13,5) était plus proche du réel, et un favori qui mène réduit son volume."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "8 tirs cadrés (5 Dundalk, 3 Bohemian), juste au-dessus de 6,5.",
+          "lesson": "Passé avec une marge faible : le total dépend beaucoup des 5 tirs cadrés de Dundalk, plus qu'attendu."
+        },
+        {
+          "market": "Tirs cadrés — Dundalk",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Dundalk — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Dundalk a cadré 5 fois, au-dessus de 2,5 et de sa moyenne de 3,4, en poussant dans les dernières minutes.",
+          "lesson": "La nuance sur les absences offensives était trop pessimiste : le moteur (4,18) était plus proche. Un outsider mené pousse davantage."
+        },
+        {
+          "market": "Tirs cadrés — Bohemian FC",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Bohemian FC — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Bohemian n'a cadré que 3 fois, très loin de 7,5.",
+          "lesson": "Confiance forte justifiée : 8 tirs cadrés demandent un match exceptionnel, surtout quand l'équipe mène."
+        }
+      ],
+      "caveats": "Un seul match : les corners ratés peuvent tenir à la variance. Les données ne donnent pas la répartition des tirs dans le temps ni le contexte tactique après le 2-0. Le carton rouge à la 90e n'a pas d'effet sur les marchés. Aucune cote de marché n'étant fournie, aucun edge ne peut être jugé.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 9805,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 3050,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 9805,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 3050,
+            "cache_read_input_tokens": 0,
+            "cache_creation_input_tokens": 9805,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 9805
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.06972400000000001,
+      "createdAt": "2026-10-02T20:52:42.466Z"
+    }
+  }
+]

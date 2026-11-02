@@ -1,0 +1,347 @@
+[
+  {
+    "matchId": "9fc08b390a49c4434f7cf631a0bb88fb",
+    "homeName": "Brighton and Hove Albion",
+    "awayName": "Crystal Palace",
+    "league": "EPL",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Brighton and Hove Albion vs Crystal Palace",
+      "expectedGoals": {
+        "home": 1.48,
+        "away": 1.2,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 1.57,
+        "draw": 5.03,
+        "away": 6.07
+      },
+      "market": {
+        "odds1": 1.54,
+        "oddsDraw": 4.33,
+        "odds2": 5.19
+      },
+      "edgePercent": 3.73,
+      "staking": {
+        "action": "RECOMMENDED",
+        "stake": 74.01,
+        "outcome": "home",
+        "label": "Brighton and Hove Albion gagne",
+        "odds": 1.63,
+        "displayedOdds": 1.63,
+        "bookmaker": "unibet_se",
+        "bookmakerTitle": "Unibet (SE)",
+        "fairOdds": 1.57,
+        "ev": 0.0373,
+        "exclusion": null,
+        "candidates": [
+          {
+            "outcome": "home",
+            "label": "Brighton and Hove Albion gagne",
+            "odds": 1.63,
+            "displayedOdds": 1.63,
+            "bookmaker": "unibet_se",
+            "bookmakerTitle": "Unibet (SE)",
+            "fairOdds": 1.57,
+            "ev": 0.0373,
+            "exclusion": null
+          },
+          {
+            "outcome": "draw",
+            "label": "Match nul",
+            "odds": 4.6,
+            "displayedOdds": 4.6,
+            "bookmaker": "tipico_de",
+            "bookmakerTitle": "Tipico",
+            "fairOdds": 5.03,
+            "ev": -0.0849,
+            "exclusion": "sous_le_seuil"
+          },
+          {
+            "outcome": "away",
+            "label": "Crystal Palace gagne",
+            "odds": 5,
+            "displayedOdds": 5,
+            "bookmaker": "leovegas_se",
+            "bookmakerTitle": "LeoVegas (SE)",
+            "fairOdds": 6.07,
+            "ev": -0.1767,
+            "exclusion": "sous_le_seuil"
+          }
+        ],
+        "limits": {
+          "edgeThresholdMin": 0.02,
+          "edgeThresholdMax": 0.25,
+          "maxValueOdds": 5
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 3859,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1786,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Brighton, 3e de Premier League avec un excellent bilan à domicile (2V 1N 0D, 8 buts marqués pour 1 encaissé), reçoit un Crystal Palace en difficulté (15e, 1V 1N 3D, -5 de différence de buts) et particulièrement friable à l'extérieur cette saison. Les statistiques moyennes confirment une nette supériorité de Brighton en volume offensif et en possession, tandis que Palace affiche des standards défensifs plus fragiles. Le contexte qualitatif va globalement dans le sens d'une domination des Seagulls, cohérent avec l'edge identifié par le modèle sur la victoire à domicile.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Brighton nettement mieux classé et surtout intraitable à domicile, Palace en méforme générale et très faible à l'extérieur.",
+          "evidence": "Brighton 3e (10 pts, 3V-1N-1D) avec bilan domicile 2V-1N-0D (8 buts pour, 1 contre) ; Palace 15e (4 pts, 1V-1N-3D) avec bilan extérieur 1V-1N-1D (3 buts pour, 4 contre) et bilan domicile catastrophique 0V sur 2 matchs (mais ce n'est pas pertinent ici puisque Palace joue à l'extérieur)."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Les sources de forme récente divergent quelque peu mais convergent globalement vers un Brighton solide et un Palace irrégulier voire en délicatesse selon la donnée API-Football, bien que des sources plus fraîches (web) suggèrent un Palace en regain de forme sur ses tout derniers matchs.",
+          "evidence": "API-Football (5 derniers, dates fin août-sept 2026) donne Palace N-D-V-D-D ; FlashScore (25 matchs) donne Brighton N-D-V-V-N ; historique local donne Brighton D-D-V-D-V et Palace D-N-D-N-D ; recherche web plus récente indique Brighton V-V-N-D-V-V-N (7 derniers) et Palace D-V-V (3 derniers, plus favorable)."
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Sur l'échantillon fourni, Brighton domine largement en création offensive et en possession, avec un xG moyen supérieur à celui de Palace, ce qui appuie la logique d'une équipe génératrice de plus d'occasions à domicile.",
+          "evidence": "Brighton : 19.1 tirs/match, 5.8 tirs cadrés, 63.8% possession, xG 2.19 (10 matchs) ; Palace : 11.2 tirs/match, 4 tirs cadrés, 43.5% possession, xG 1.49 (10 matchs). Historique complémentaire : Brighton 1.4 buts pour / 1.1 contre en moyenne, Palace 1.1 buts pour / 1.7 contre."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur identifie une valeur positive sur la victoire de Brighton, ce que le contexte qualitatif (classement, forme à domicile, volume de jeu) tend globalement à corroborer sans le contredire.",
+          "evidence": "Cote vraie modèle 1.57 vs cote marché 1.63 (Unibet SE), edge +3.73%, mise recommandée sur 'Brighton gagne'."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif renforce globalement l'edge identifié par le modèle sur la victoire de Brighton : la position au classement, le très bon bilan domestique des Seagulls et leur supériorité statistique en volume de jeu vont dans le même sens que le chiffrage. Une nuance existe toutefois : certaines données de forme plus récentes (recherche web) suggèrent un Palace en regain sur ses trois derniers matchs, ce qui invite à ne pas surestimer l'écart au-delà de ce que le modèle indique déjà.",
+      "caveats": "Les indicateurs de forme récente sont contradictoires selon la source : l'API-Football (period allant jusqu'au 20/09/2026) montre un Palace en méforme, alors que le profil web plus récent (updatedAt 16/09/2026 pour Palace, 19/09/2026 pour Brighton) suggère un Palace en léger regain (D-V-V sur ses 3 derniers) et un Brighton globalement performant mais avec une forme mitigée sur son tout dernier match. Le champ homeForm est absent (null). Le classement fourni est en direct (fotmob), mais les données historiques (football-data.co.uk) portent sur un classement non actualisé et ne doivent pas être confondues avec la position actuelle. Les FlashScore stats de Brighton datent du 07/09/2026 et n'incluent pas les tout derniers matchs ; aucune donnée FlashScore n'est disponible pour Palace."
+    },
+    "updatedAt": "2026-10-18T19:09:15.846Z",
+    "createdAt": "2026-09-24T20:48:24.906Z",
+    "postMatchReview": {
+      "summary": "Brighton a écrasé Crystal Palace 5-0 (3-0 à la mi-temps). La lecture d'avant-match, favorable à Brighton et alignée sur l'edge du moteur (victoire à domicile), est confirmée, avec une ampleur très supérieure à celle prévue.",
+      "whatWasRight": "Le sens du match : Brighton dominant à domicile, supérieur en volume. Le match l'a confirmé : 17 tirs contre 5, 9 tirs cadrés contre 1, xG 1,98 contre 0,75, et trois buts avant la 10e minute (but contre son camp à la 4e, Gómez à la 7e, Ayari à la 10e). La fragilité défensive de Palace à l'extérieur est aussi apparue clairement.",
+      "whatWasMissed": "L'ampleur du score. Le moteur donnait 1,48 contre 1,20 en buts attendus, un match plus serré. Le but contre son camp et l'effondrement précoce de Palace n'étaient pas modélisables. Le regain de forme de Palace (D-V-V) que j'avais signalé n'a eu aucun effet. La possession (57 %) était nettement inférieure à la moyenne de 63,8 % de Brighton, sans que cela ait d'importance.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur : Brighton gagne, ce qui valide le pari recommandé à 1,63. L'écart de score dépasse largement les xG pré-match. Une partie de cet écart tient à des événements précoces, notamment le but contre son camp. Un seul match ne suffit pas pour juger la calibration.",
+      "marketReviews": [],
+      "caveats": "Un seul match. Aucun marché n'était listé dans marketOutcomes, donc aucun bilan par marché n'est possible. Le score a été fortement influencé par un but contre son camp à la 4e minute et par trois buts en 10 minutes, ce qui est peu reproductible. Le xG de 1,98 pour Brighton ne reflète pas à lui seul le score de 5-0.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 18,
+        "commentaire": 5
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4000,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 840,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 4000,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 840,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 4000,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 4000
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.024821600000000003,
+      "createdAt": "2026-10-18T19:09:15.846Z"
+    }
+  },
+  {
+    "matchId": "dfd5d6648be46426e418801584d46a68",
+    "homeName": "Bournemouth",
+    "awayName": "Sunderland",
+    "league": "EPL",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Bournemouth vs Sunderland",
+      "expectedGoals": {
+        "home": 1.478,
+        "away": 0.869,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 2.05,
+        "draw": 3.84,
+        "away": 3.97
+      },
+      "market": {
+        "odds1": 1.95,
+        "oddsDraw": 3.58,
+        "odds2": 3.63
+      },
+      "edgePercent": -2.34,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "pas_de_value",
+        "candidates": [
+          {
+            "outcome": "home",
+            "label": "Bournemouth gagne",
+            "odds": 2,
+            "displayedOdds": 2,
+            "bookmaker": "unibet_nl",
+            "bookmakerTitle": "Unibet (NL)",
+            "fairOdds": 2.05,
+            "ev": -0.0241,
+            "exclusion": "sous_le_seuil"
+          },
+          {
+            "outcome": "draw",
+            "label": "Match nul",
+            "odds": 3.75,
+            "displayedOdds": 3.75,
+            "bookmaker": "unibet_nl",
+            "bookmakerTitle": "Unibet (NL)",
+            "fairOdds": 3.84,
+            "ev": -0.0234,
+            "exclusion": "sous_le_seuil"
+          },
+          {
+            "outcome": "away",
+            "label": "Sunderland gagne",
+            "odds": 3.8,
+            "displayedOdds": 3.8,
+            "bookmaker": "tipico_de",
+            "bookmakerTitle": "Tipico",
+            "fairOdds": 3.97,
+            "ev": -0.0439,
+            "exclusion": "sous_le_seuil"
+          }
+        ],
+        "limits": {
+          "edgeThresholdMin": 0.02,
+          "edgeThresholdMax": 0.25,
+          "maxValueOdds": 5
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 3741,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1622,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Match entre deux équipes du bas de tableau à la dynamique fragile. Bournemouth (17e, 3 pts en 5 matchs) reste invaincu sur ses 3 derniers résultats mais n'a toujours pas gagné cette saison, avec un profil très nul-heavy (3 nuls sur 5). Sunderland (14e, 4 pts) affiche un bilan légèrement supérieur avec une victoire et une défense plus perméable à l'extérieur (5 buts encaissés en 3 matchs away). Les statistiques moyennes sous-jacentes sont assez proches entre les deux équipes, ce qui colle avec un match serré sans favori marqué.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Les deux équipes évoluent dans le bas du tableau avec un écart de points limité, Sunderland devançant légèrement Bournemouth.",
+          "evidence": "Bournemouth 17e (3 pts, 0V-3N-2D, diff -2) vs Sunderland 14e (4 pts, 1V-1N-3D, diff -4) sur 5 matchs."
+        },
+        {
+          "factor": "forme récente (API-Football, saison en cours)",
+          "observation": "Bournemouth enchaîne les nuls sans perdre récemment, Sunderland alterne victoires et défaites de façon plus irrégulière.",
+          "evidence": "Forme Bournemouth (5 derniers, du 23/08 au 20/09) : D-N-N-N-D. Forme Sunderland (même période) : D-D-N-V-D."
+        },
+        {
+          "factor": "statistiques offensives/défensives moyennes",
+          "observation": "Les deux équipes ont un volume de jeu très similaire (tirs, possession), Sunderland légèrement plus prolifique en expected_goals sur l'échantillon mais aussi plus fébrile défensivement.",
+          "evidence": "Bournemouth : 15.2 tirs/match, 4.8 tirs cadrés, xG 1.4, possession 48.5%. Sunderland : 14.2 tirs/match, 4.6 tirs cadrés, xG 1.74, possession 48.5%."
+        },
+        {
+          "factor": "performances à domicile/extérieur",
+          "observation": "Bournemouth reste solide à domicile sans gagner, Sunderland a un bilan mitigé à l'extérieur avec une défense friable.",
+          "evidence": "Bournemouth à domicile : 0V-2N-1D, 3 buts marqués/4 encaissés. Sunderland à l'extérieur : 0V-1N-2D, 5 buts marqués/8 encaissés."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur ne détecte de value sur aucune issue, les cotes de marché étant globalement alignées avec les probabilités calculées.",
+          "evidence": "Edge global -2.34%, EV négatif sur les trois issues (home -2.41%, nul -2.34%, away -4.39%), staking en PASS."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif renforce l'absence de value identifiée par le moteur : les deux équipes présentent des profils statistiques et de forme très proches, sans avantage tranché en faveur de l'un ou l'autre camp. La légère supériorité de Bournemouth à domicile est contrebalancée par l'instabilité défensive à l'extérieur de Sunderland, ce qui colle avec un marché jugé globalement bien pricé par le modèle (pas d'écart suffisant pour justifier une mise).",
+      "caveats": "Le classement fourni (standings) semble basé sur seulement 5 matchs joués, échantillon réduit pour juger de la forme de fond des deux équipes. Les données homeHistoricalForm/awayHistoricalForm et homeTeamProfile/awayTeamProfile (recherche web) présentent des résultats différents de la forme API-Football sur des périodes qui se chevauchent partiellement ; en l'absence de dates précises pour homeHistoricalForm/awayHistoricalForm et homeTeamProfile.recentForm, il n'est pas possible de déterminer laquelle est la plus récente par rapport aux dates du 20/09/2026 fournies par homeForm/awayForm — ces divergences doivent être considérées avec prudence. Aucune donnée FlashScore disponible (homeFlashscoreStats/awayFlashscoreStats null). Les historicalAverages de homeTeamProfile (buts pour/contre) diffèrent nettement des homeHistoricalStats, sans indication claire de la période couverte."
+    },
+    "updatedAt": "2026-10-18T19:09:05.432Z",
+    "createdAt": "2026-09-24T20:01:57.832Z",
+    "postMatchReview": {
+      "summary": "Bournemouth a gagné 2-0 sur un match très déséquilibré (xG 4,23 contre 0,07). Ma lecture d'un match serré entre deux équipes proches était démentie par un fait imprévisible : le rouge direct de Danso à la 17e. Le côté domicile, légèrement favori pour le moteur, a eu raison, mais l'ampleur de la domination n'avait rien à voir avec les profils d'avant-match.",
+      "whatWasRight": "Je ne voyais aucune value et le moteur a mis PASS. Aucune mise n'a donc été exposée à un scénario atypique. Bournemouth, favori léger du moteur (xG attendus 1,48 contre 0,87), a gagné à domicile. Mon doute sur la fragilité défensive de Sunderland à l'extérieur s'est confirmé : 29 tirs concédés et deux buts encaissés.",
+      "whatWasMissed": "Je n'ai pas pesé le risque de scénario extrême, par exemple une expulsion qui casse le match. Danso a été expulsé à la 17e pour faute professionnelle, et Sunderland a même été brièvement à neuf vers la 30e à cause de la blessure de Mukiele. Je jugeais aussi les deux équipes proches en volume de jeu. Le résultat montre un écart énorme : 29 tirs contre 3, 6 grosses occasions contre 0, possession 65 % contre 35 %. Le 2-0 reste modeste au regard du xG de 4,23, ce qui indique que Bournemouth a aussi gâché beaucoup d'occasions.",
+      "outcomeVsEngine": "Le résultat va dans le sens du léger penchant du moteur pour Bournemouth, mais pas pour la raison attendue. Les probabilités d'avant-match décrivaient un match serré, et l'issue a été dictée par l'expulsion. Le PASS reste cohérent : aucune value détectée, et le résultat ne prouve rien contre le modèle.",
+      "marketReviews": [],
+      "caveats": "Un seul match, fortement influencé par un événement non modélisable (rouge à la 17e, blessure de Mukiele). Aucun marché n'a été joué, donc aucun bilan par marché n'est possible. Le coup d'envoi et les compositions n'étaient pas connus.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 16,
+        "commentaire": 5
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3604,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 923,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3604,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 923,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 3604,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3604
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0240676,
+      "createdAt": "2026-10-18T19:09:05.432Z"
+    }
+  }
+]

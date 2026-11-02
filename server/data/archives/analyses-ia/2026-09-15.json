@@ -1,0 +1,188 @@
+[
+  {
+    "matchId": "8bc1f4d74cf888c97c0216fd26c4ece7",
+    "homeName": "Monza",
+    "awayName": "Sassuolo",
+    "league": "Serie A - Italy",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Monza vs Sassuolo",
+      "expectedGoals": {
+        "home": 0.5,
+        "away": 0.5,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 3.28,
+        "draw": 2.94,
+        "away": 2.81
+      },
+      "market": {
+        "odds1": 2.93,
+        "oddsDraw": 3.38,
+        "odds2": 2.39
+      },
+      "edgePercent": -5.87,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 2703,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1380,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Monza occupe la 18e place avec seulement 1 point en 4 matches (0V-1N-3D, -5 de différence de buts), tandis que Sassuolo pointe 9e avec 7 points (2V-1N-1D, +1 de différence). Les statistiques FlashScore récentes montrent des attaques comparables en xG (1.41 pour les deux) mais Sassuolo produit un peu plus de tirs et de tirs cadrés. L'écart de classement et de dynamique récente favorise nettement Sassuolo sur le papier, ce qui contraste avec un marché qui ne surcote pas franchement l'extérieur.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Écart important entre les deux équipes, Sassuolo largement devant",
+          "evidence": "Monza 18e (1 pt, 4 matchs) vs Sassuolo 9e (7 pts, 4 matchs), diff de buts -5 contre +1"
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Monza n'enchaîne que des nuls et défaites, Sassuolo alterne victoires et nuls",
+          "evidence": "Forme officielle Monza: D-D-V-D-D (1 victoire sur 5) ; forme FlashScore Sassuolo: N-N-V-D-V (2 victoires, 0 défaite sur les 4 derniers avant la dernière D)"
+        },
+        {
+          "factor": "statistiques offensives/défensives",
+          "observation": "Sassuolo légèrement plus productif en tirs et tirs cadrés selon FlashScore, et l'historique sur 5 saisons confirme une meilleure efficacité offensive et défensive de Sassuolo",
+          "evidence": "FlashScore: xG identique 1.41 des deux côtés, mais Sassuolo 11.68 tirs/4.37 cadrés vs Monza 13.95 tirs/5.05 cadrés (plus de volume mais moins efficace) ; historique: Sassuolo 1.1 buts marqués/1.2 encaissés vs Monza 0.5 marqués/2.1 encaissés"
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur affiche un edge négatif et recommande de passer, le marché semblant déjà bien aligné voire légèrement en faveur du marché sur ce match",
+          "evidence": "edgePercent: -5.87%, staking action: PASS"
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif (classement, forme, historique) dessine un avantage assez net pour Sassuolo, ce qui pourrait suggérer une sous-évaluation du visiteur par le modèle. Cependant, l'edge négatif calculé par le moteur et sa recommandation de passer indiquent que le marché intègre déjà correctement, voire surestime légèrement, cet avantage perçu de Sassuolo. Le contexte ne contredit donc pas la prudence du moteur mais souligne que si un pari devait être envisagé malgré le PASS, la dynamique favoriserait plutôt l'extérieur que Monza.",
+      "caveats": "Aucune statistique moyenne directe homeStats/awayStats disponible (valeurs nulles), l'analyse s'appuie donc sur FlashScore et l'historique football-data.co.uk, deux sources secondaires. La forme officielle awayForm est vide (sampleSize 0), obligeant à se référer uniquement à la forme FlashScore et historique pour Sassuolo. Le classement fourni n'est pas issu de football-data.co.uk donc il s'agit bien d'un classement en direct de la saison en cours, mais à seulement 4 matchs joués, l'échantillon reste réduit. Les données historiques (5 dernières saisons) et FlashScore concordent globalement sur un léger avantage à Sassuolo, sans contradiction majeure notée."
+    },
+    "updatedAt": "2026-09-30T21:02:43.802Z",
+    "createdAt": "2026-09-15T21:00:48.231Z",
+    "postMatchReview": {
+      "summary": "Monza a gagné 2-1 (Varela 51e et 63e, Adžić 88e pour Sassuolo). Ma lecture penchait pour Sassuolo et elle était contredite sur le résultat. Sassuolo a pourtant dominé (20 tirs contre 15, 65 % de possession, xG 1,47 contre 1,51, 6 grosses occasions contre 3). Le moteur avait recommandé de passer (PASS) et cette prudence était justifiée.",
+      "whatWasRight": "Le sens du jeu était bon : Sassuolo a eu plus de tirs (20 contre 15), plus de tirs cadrés (8 contre 6) et plus de grosses occasions (6 contre 3). Le constat d'un marché déjà bien calé, sans valeur sur l'extérieur, s'est vérifié : le PASS a évité une perte. Les deux équipes ont marqué et aucune n'a atteint 3,5 buts.",
+      "whatWasMissed": "J'ai trop pesé le classement (18e contre 9e) et la forme sur 4 matchs, un échantillon trop court. J'ai sous-estimé le fait que Monza à domicile pouvait être aussi dangereux (xG 1,51, plus que Sassuolo). Je n'ai pas anticipé l'efficacité de Varela, auteur d'un doublé en 12 minutes, ni la finition : 2 buts pour Monza sur 6 tirs cadrés. Le xG de 0,5 par équipe du moteur était très bas face à un match à 2,98 xG cumulés.",
+      "outcomeVsEngine": "Le résultat contredit le pick du moteur (victoire de Sassuolo), mais pas sa décision de ne pas parier. Le match a été très ouvert, à l'opposé du scénario « nul et moins de 2,5 buts » et de ses xG de 0,5 par équipe. Monza a gagné malgré une possession de 35 %.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Sassuolo gagne",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Sassuolo a dominé les statistiques, mais Monza a marqué deux fois entre la 51e et la 63e minute par Varela. Le but de Sassuolo est arrivé trop tard, à la 88e, et le pick « Sassuolo gagne » était faux.",
+          "lesson": "Une domination en tirs et en possession ne garantit pas la victoire. À 4 journées, classement et forme pèsent peu. Ne pas faire d'un écart de classement précoce un avantage net du visiteur."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "3 buts (51e, 63e, 88e). Plus de 0,5 but était une évidence avec deux équipes à environ 1,5 xG chacune.",
+          "lesson": "Ce marché est très peu risqué. Il confirme que les deux équipes produisent des occasions. Ce n'est pas un signal fort pour choisir un camp."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Monza a marqué deux fois et Sassuolo une fois à la 88e. Avec 1,51 et 1,47 de xG, le « Oui » était cohérent avec le volume d'occasions (6 et 8 tirs cadrés).",
+          "lesson": "Quand les xG FlashScore des deux équipes sont proches de 1,4 et que les tirs cadrés dépassent 4 de chaque côté, « Oui » est à garder. Le xG de 0,5 du moteur sous-estimait ce profil."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Nul & Moins de 2.5 buts",
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Le pick « Nul & Moins de 2,5 buts » était faux : Monza a gagné 2-1 avec 3 buts. Les deux conditions ont échoué. Le match s'est ouvert après la pause, avec deux buts en 12 minutes.",
+          "lesson": "Méfiance envers les combinés fondés sur un xG de 0,5 par équipe, peu crédible face à des xG de 1,4 par ailleurs. Une source xG aberrante doit invalider le combiné nul + under."
+        },
+        {
+          "market": "Buts — Monza",
+          "marketId": "teamGoals",
+          "pick": "Monza — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Monza a marqué 2 buts, donc moins de 3,5 buts. C'était un seuil très large.",
+          "lesson": "Une ligne de 3,5 buts par équipe est presque toujours gagnante. Elle ne mesure pas la qualité de l'analyse."
+        },
+        {
+          "market": "Buts — Sassuolo",
+          "marketId": "teamGoals",
+          "pick": "Sassuolo — Moins de 3.5 buts",
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": "Sassuolo n'a marqué qu'un but, à la 88e, malgré 20 tirs et 6 grosses occasions. Moins de 3,5 buts est passé sans difficulté.",
+          "lesson": "Même logique : seuil trop large pour être informatif. La sous-finition de Sassuolo (1 but pour 1,47 xG) rappelle qu'un volume de tirs ne fait pas un score."
+        }
+      ],
+      "caveats": "Un seul match, avec un résultat très marqué par la variance : le doublé de Varela et un but tardif. Je n'ai ni les compositions, ni les blessures, ni le contexte tactique. Les xG du moteur (0,5 pour les deux) et ceux de FlashScore ne coïncident pas, donc la qualité de la source est incertaine. On ne peut pas tirer de conclusion générale sur Monza ou Sassuolo.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3488,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 1931,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3488,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1931,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 3488,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3488
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0334732,
+      "createdAt": "2026-09-30T21:02:43.802Z"
+    }
+  }
+]

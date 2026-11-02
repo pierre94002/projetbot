@@ -1,0 +1,358 @@
+[
+  {
+    "matchId": "4283f064a57c57a3515d04eceead72d6",
+    "homeName": "Sunderland",
+    "awayName": "AZ Alkmaar",
+    "league": "UEFA Europa League",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Sunderland vs AZ Alkmaar",
+      "expectedGoals": {
+        "home": 0.5,
+        "away": 0.5,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 2.09,
+        "draw": 3.24,
+        "away": 4.71
+      },
+      "market": {
+        "odds1": 1.65,
+        "oddsDraw": 4.02,
+        "odds2": 4.92
+      },
+      "edgePercent": -16.37,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 2166,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1291,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Les données qualitatives disponibles sont très déséquilibrées : aucune information n'existe côté Sunderland (classement, forme, stats), tandis qu'AZ Alkmaar dispose d'un classement (19e, Europa League) et d'une forme récente sur 5 matches. AZ affiche un profil moyen, avec un net déséquilibre entre performances à domicile et à l'extérieur.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "AZ Alkmaar occupe une position modeste en phase de championnat/Europa League, avec un bilan équilibré en buts marqués/encaissés sur l'ensemble de la saison.",
+          "evidence": "AZ: 8 matches joués, 3V/2N/3D, 13 buts pour, 13 contre, 11 points, 19e place."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "La forme d'AZ sur les 5 derniers matches est mitigée, sans dynamique nette dans un sens ou l'autre.",
+          "evidence": "Forme AZ (5 derniers): D, V, N, V, D."
+        },
+        {
+          "factor": "écart domicile/extérieur",
+          "observation": "AZ montre une nette différence de rendement selon le lieu : solide à domicile, plus fragile à l'extérieur, ce qui est pertinent puisque ce match se joue chez Sunderland.",
+          "evidence": "AZ à domicile: 4 matches, 8 buts pour, 4 contre. AZ à l'extérieur: 4 matches, 5 buts pour, 9 contre."
+        },
+        {
+          "factor": "données manquantes côté Sunderland",
+          "observation": "Impossible d'évaluer la forme ou le classement de Sunderland faute de données, ce qui limite la portée de toute comparaison qualitative.",
+          "evidence": "homeStats: null, homeForm: sampleSize 0, standings.home: null."
+        }
+      ],
+      "alignmentWithModel": "Le modèle attend un match très serré (0.5 xG de chaque côté, cotes vraies proches entre victoire à domicile et match nul) et recommande de passer en raison d'un edge négatif marqué sur les cotes du marché. Le contexte qualitatif ne permet pas de trancher clairement dans un sens ou dans l'autre : l'absence totale de données sur Sunderland empêche de confirmer ou nuancer l'avantage à domicile implicite dans le chiffrage, tandis que le profil extérieur plus fragile d'AZ (5 buts pour, 9 contre en 4 matches à l'extérieur) pourrait plutôt aller dans le sens d'une prudence supplémentaire côté visiteur, cohérente avec la faible cote attribuée à leur victoire. Globalement, rien dans les éléments qualitatifs disponibles ne contredit fortement la décision de passer recommandée par le moteur.",
+      "caveats": "Aucune donnée disponible pour Sunderland : classement (standings.home), statistiques (homeStats), forme récente (homeForm avec sampleSize 0) et stats FlashScore/historiques sont toutes absentes ou nulles. Les stats FlashScore et historiques pour AZ sont également absentes (homeFlashscoreStats, awayFlashscoreStats, homeHistoricalStats, awayHistoricalStats, homeHistoricalForm, awayHistoricalForm tous null), donc aucune source secondaire n'est disponible pour croiser ou nuancer les données de classement/forme d'AZ. L'analyse repose uniquement sur un classement partiel et une forme limitée à 5 matches côté AZ."
+    },
+    "updatedAt": "2026-09-30T21:02:54.317Z",
+    "createdAt": "2026-09-16T20:43:49.047Z",
+    "postMatchReview": {
+      "summary": "Sunderland a gagné 1-0 (Le Fée, 66e) en dominant nettement les occasions (xG 2,96 contre 1,32, 20 tirs contre 11). Le moteur voyait un match serré à 0,5 xG partout et passait (PASS) ; la lecture qualitative prudente était cohérente avec cette décision. Le résultat valide la fragilité d'AZ à l'extérieur, mais le niveau de xG réel dépasse largement l'attendu.",
+      "whatWasRight": "La fragilité d'AZ à l'extérieur (5 buts pour, 9 contre en 4 matches) s'est confirmée : défaite sans marquer, seulement 2 tirs cadrés. Le moteur donnait aussi l'avantage au domicile (cote vraie 2,09 contre 4,71), et Sunderland a gagné. Le choix de passer était défendable vu l'incertitude.",
+      "whatWasMissed": "J'ai sous-estimé la supériorité de Sunderland : xG 2,96 contre 1,32, 12 corners contre 5, alors que le moteur annonçait 0,5 xG partout. Ce xG de 0,5 pour chaque équipe semble être une donnée très faible ou peu fiable, que je n'ai pas remise en cause. L'absence de données sur Sunderland m'a fait rester neutre au lieu de relever que le profil extérieur d'AZ penchait vers le domicile. Le score serré (1-0, but tardif à la 66e) montre aussi que la domination pouvait ne pas se traduire.",
+      "outcomeVsEngine": "Le résultat va dans le sens de la tendance domicile du moteur (favori Sunderland), mais contredit son profil de match fermé à 0,5 xG par équipe. L'edge négatif de -16,37 % portait sur la cote du marché, à 1,65 pour Sunderland. La victoire de ce favori ne rend pas la décision de passer fausse, car aucun pari n'a été pris.",
+      "marketReviews": [],
+      "caveats": "Un seul match : un 1-0 avec un but à la 66e tient en partie à la variance. Aucun marché n'a été joué (marketOutcomes vide), donc aucune évaluation marché par marché n'est possible. Aucune donnée sur Sunderland avant le match, et on ignore ce qui explique le xG de 0,5 (source api-football) côté moteur.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2858,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 953,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 2858,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 953,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 2858,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2858
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0211732,
+      "createdAt": "2026-09-30T21:02:54.316Z"
+    }
+  },
+  {
+    "matchId": "4a3400b0763bcc367171537f40b27a4f",
+    "homeName": "Barcelona",
+    "awayName": "Real Racing Club de Santander",
+    "league": "La Liga - Spain",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "Barcelona vs Real Racing Club de Santander",
+      "expectedGoals": {
+        "home": 2.8,
+        "away": 0.798,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 1.15,
+        "draw": 11.74,
+        "away": 21.53
+      },
+      "market": {
+        "odds1": 1.06,
+        "oddsDraw": 15.71,
+        "odds2": 27.92
+      },
+      "edgePercent": -4.04,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 2551,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 1478,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Toutes les données disponibles convergent vers un très large favori à domicile : Barcelona est leader avec un bilan parfait (5V/5), une différence de buts impressionnante (+17) et une forme récente excellente sur plusieurs échantillons. Aucune donnée n'est disponible côté Real Racing Club de Santander, ce qui empêche toute analyse comparative sur l'adversaire. Le moteur affiche d'ailleurs un edge négatif, suggérant que le marché a déjà pleinement intégré cette domination.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Barcelona est leader incontesté avec un bilan parfait sur les 5 premières journées.",
+          "evidence": "Rang 1, 5 matchs joués, 5V/0N/0D, 21 buts marqués contre 4 encaissés (diff +17), 15 points."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Toutes les sources s'accordent sur une série de victoires quasi ininterrompue pour Barcelona.",
+          "evidence": "homeForm: V-D-V-V-V (4V/1D sur 5) ; homeFlashscoreStats.recentForm: 5V/5 ; homeTeamProfile.recentForm: 6V/6 ; seule homeHistoricalForm indique D-V-D-V-V (3V/2D sur 5), plus mitigée."
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Barcelona affiche une nette domination offensive et de possession sur l'ensemble des échantillons récents.",
+          "evidence": "homeStats (10 matchs): xG 2.3, 20 tirs, 72.2% possession, 6.8 tirs cadrés ; homeFlashscoreStats (25 matchs, collecté le 07/09/2026): xG 2.41, possession 66.68%, 16 tirs, 6.64 tirs cadrés ; homeHistoricalStats (5 saisons, échantillon 10): 1.8 but marqué / 0.8 encaissé en moyenne, plus modeste que les autres sources."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur signale un edge négatif malgré la domination écrasante de Barcelona, ce qui traduit une cote marché déjà très resserrée sur le favori.",
+          "evidence": "edgePercent: -4.04, trueOdds home 1.15 vs odds1 marché 1.06, action de staking: PASS."
+        }
+      ],
+      "alignmentWithModel": "Le contexte qualitatif confirme sans ambiguïté la domination attendue de Barcelona (classement parfait, forme excellente sur plusieurs sources, statistiques offensives élevées), ce qui va dans le même sens que l'expected goals élevé du moteur (2.8 vs 0.798). Cependant, l'absence totale de données sur l'adversaire ne permet pas de nuancer ou d'enrichir la lecture de ce côté. L'edge négatif du moteur n'est pas contredit par le contexte : il illustre simplement que le marché a déjà pleinement anticipé cette suprématie, sans qu'aucune information qualitative ne suggère une valeur cachée sur l'issue domicile.",
+      "caveats": "Aucune donnée disponible pour Real Racing Club de Santander (awayStats, awayForm, awayFlashscoreStats, awayHistoricalStats, awayHistoricalForm, awayTeamProfile tous null), ce qui limite fortement l'analyse à un seul côté du match. Le classement fourni ne concerne que Barcelona (aucun classement pour l'adversaire). Par ailleurs, les sources sur la forme de Barcelona divergent légèrement entre elles : homeHistoricalForm (D-V-D-V-V) est nettement moins flatteuse que homeForm, homeFlashscoreStats et homeTeamProfile (qui affichent 4 à 6 victoires consécutives), tout comme homeHistoricalStats montre des moyennes de buts plus modestes que homeStats et homeFlashscoreStats — à interpréter avec prudence, sans trancher entre ces sources."
+    },
+    "updatedAt": "2026-09-30T21:03:14.453Z",
+    "createdAt": "2026-09-16T21:18:28.734Z",
+    "postMatchReview": {
+      "summary": "Barcelona a battu Racing Santander 7-2, ce qui confirme la lecture d'avant-match d'une domination écrasante à domicile. L'ampleur du score (xG 6,74 contre 1,98, 30 tirs contre 5) dépasse même les attentes du moteur (2,8 contre 0,80). L'adversaire, sur lequel nous n'avions aucune donnée, a marqué deux fois, ce que le moteur sous-estimait.",
+      "whatWasRight": "Le favori était le bon : Barcelona a gagné largement, avec 69 % de possession, 30 tirs dont 9 cadrés, 13 grosses occasions et 18 corners contre 0. Le constat que le marché avait déjà intégré cette supériorité (edge négatif, PASS) reste cohérent, car le résultat 1X2 domicile était très probable et la cote de 1,06 n'offrait aucune marge.",
+      "whatWasMissed": "L'analyse n'a pas envisagé l'ampleur de la victoire, ni le fait que l'adversaire marquerait deux fois. Les xG du moteur (2,8 et 0,80) étaient bien inférieurs à la réalité (6,74 et 1,98). Un but contre son camp (36e) et un triplé de Raphinha (25e, 42e, 67e) ont amplifié le score. L'absence de données sur Racing est restée une zone aveugle : elle n'a pas été traitée comme un facteur d'incertitude sur le nombre de buts encaissés.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le vainqueur (la victoire à domicile, probabilité la plus élevée) et l'excède largement sur les buts. Avec 9 buts au total, 7 pour Barcelona et 2 pour Racing, les xG du moteur étaient trop prudents. L'edge négatif portait sur le prix, pas sur la direction, et le match ne le contredit pas : le PASS n'a rien fait perdre, mais rien non plus n'est démontré sur la valeur.",
+      "marketReviews": [],
+      "caveats": "Un seul match, donc peu de valeur statistique. Aucun marché joué n'était listé, donc pas de revue marché par marché. Le but contre son camp et la série de grosses occasions ont pu gonfler le score. Aucune donnée sur Racing, ni sur la compo ou le contexte du match, n'était disponible.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3359,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 959,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3359,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 959,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 3359,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3359
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0232372,
+      "createdAt": "2026-09-30T21:03:14.453Z"
+    }
+  },
+  {
+    "matchId": "923b87c9f2ccf67f9db1897dd6d71415",
+    "homeName": "AC Milan",
+    "awayName": "Benfica",
+    "league": "UEFA Europa League",
+    "model": "claude-sonnet-5",
+    "engineSnapshot": {
+      "label": "AC Milan vs Benfica",
+      "expectedGoals": {
+        "home": 0.5,
+        "away": 0.5,
+        "source": "api-football"
+      },
+      "trueOdds": {
+        "home": 2.55,
+        "draw": 3.03,
+        "away": 3.6
+      },
+      "market": {
+        "odds1": 2.11,
+        "oddsDraw": 3.57,
+        "odds2": 3.33
+      },
+      "edgePercent": -12.63,
+      "staking": {
+        "action": "PASS",
+        "stake": null
+      }
+    },
+    "usage": {
+      "input_tokens": 1947,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 852,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "analysis": {
+      "summary": "Aucune donnée qualitative n'est disponible pour ce match AC Milan vs Benfica : ni classement, ni statistiques moyennes, ni forme récente pour l'une ou l'autre équipe. Le moteur CôteMaster projette un match très fermé (0.5 xG de chaque côté) et recommande de passer (PASS) au vu d'un edge négatif de -12.63% sur le marché. En l'absence totale de contexte, il n'est pas possible d'apporter un éclairage qualitatif supplémentaire sur ce match.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Aucune information de classement disponible pour Milan ou Benfica.",
+          "evidence": "standings.home = null, standings.away = null"
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Aucun résultat récent recensé pour les deux équipes.",
+          "evidence": "homeForm.sampleSize = 0, awayForm.sampleSize = 0"
+        },
+        {
+          "factor": "statistiques moyennes",
+          "observation": "Aucune statistique (FlashScore ou historique) disponible pour appuyer ou nuancer l'attente de buts.",
+          "evidence": "homeStats, awayStats, homeFlashscoreStats, awayFlashscoreStats, homeHistoricalStats, awayHistoricalStats tous null"
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur affiche un edge négatif significatif et recommande de ne pas miser.",
+          "evidence": "edgePercent: -12.63%, staking.action: PASS"
+        }
+      ],
+      "alignmentWithModel": "Sans aucune donnée qualitative pour confronter ou nuancer le chiffrage, il est impossible de dire si le contexte va dans le sens de l'edge négatif du modèle ou le contredit. La recommandation PASS du moteur ne peut être ni renforcée ni remise en question faute d'éléments contextuels.\nToutes les sources de contexte sont vides ou nulles pour ce match : classement (home/away), statistiques moyennes (source principale et FlashScore), forme récente (home/away), et données historiques football-data.co.uk. Aucune analyse qualitative fiable ne peut donc être formulée ; seule la sortie chiffrée du moteur est disponible pour ce match."
+    },
+    "updatedAt": "2026-09-30T21:03:04.215Z",
+    "createdAt": "2026-09-16T20:44:11.617Z",
+    "postMatchReview": {
+      "summary": "Ma lecture d'avant-match était vide de contexte et s'en remettait au PASS du moteur. Benfica a gagné 2-0 à Milan (buts de Lukébakio à la 16e et de Kamiński à la 53e) alors que Milan dominait les statistiques. Le PASS n'a donc pas été contredit, mais l'absence d'analyse qualitative ne nous a rien appris sur ce scénario.",
+      "whatWasRight": "Le PASS était prudent : Milan, favori du marché à 2.11, a perdu. Le moteur jugeait la cote de Milan peu attractive (edge négatif), et le résultat va dans ce sens. Un match plutôt fermé en buts (2 buts au total, xG cumulés d'environ 1.66) n'est pas non plus incompatible avec la projection basse du moteur.",
+      "whatWasMissed": "Je n'avais aucun contexte (forme, classement, statistiques) et je n'ai donc rien anticipé. Les xG de 0.5 par équipe étaient trop bas : Milan a produit 1.03 xG et 17 tirs, 10 corners et 60% de possession. Benfica, avec 0.63 xG et une seule grosse occasion, a été plus efficace que ses chiffres (2 buts pour 0.63 xG). Le scénario d'un but précoce suivi d'un match où l'adversaire domine sans concrétiser n'était pas envisagé.",
+      "outcomeVsEngine": "Le résultat va plutôt dans le sens du moteur sur le fond : l'edge négatif sur Milan est confirmé par sa défaite. En revanche, les xG du moteur (0.5-0.5) sous-estimaient le volume de jeu de Milan, et Benfica a nettement surperformé ses xG. Le résultat reste en partie dû à l'efficacité, non modélisable.",
+      "marketReviews": [],
+      "caveats": "Un seul match, sans aucun marché joué (marketOutcomes vide), donc aucune évaluation marché par marché n'est possible. Aucune donnée de contexte d'avant-match n'était disponible. Le score tient en partie à l'efficacité de Benfica (2 buts pour 0.63 xG), ce qu'on ne peut pas généraliser.",
+      "model": "claude-code:sonnet",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2447,
+        "cache_read_input_tokens": 1036,
+        "output_tokens": 902,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 2447,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "not_available",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 902,
+            "cache_read_input_tokens": 1036,
+            "cache_creation_input_tokens": 2447,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2447
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0190192,
+      "createdAt": "2026-09-30T21:03:04.214Z"
+    }
+  }
+]
