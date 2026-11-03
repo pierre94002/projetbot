@@ -6,6 +6,7 @@ import { lireReglageGardeFous } from '../../data/repositories/gardeFousRepositor
 import { lireComptes } from '../../data/repositories/comptesBookmakersRepository.js';
 import { selectionReglable } from '../../data/simulation/simulationRead.js';
 import { MARCHES_DE_DEROULE } from '../../data/simulation/jambes.js';
+import { reglementPourLaLecture } from '../../data/providers/settlementService.js';
 
 const VALID_STATUSES = new Set(['pending', 'won', 'lost', 'void']);
 
@@ -24,8 +25,26 @@ const ORIGINES = new Set(['page-du-match', 'mes-paris']);
  */
 const avecGainAttendu = (bet) => (bet ? { ...bet, gainAttendu: gainAttenduDuPari(bet) } : bet);
 
+/**
+ * Correctif du règlement (02/11/2026) : ce que Mes paris dit sous une sélection (réglée à la 90e, ou pourquoi elle
+ * attend), calculé à la lecture et jamais écrit (comme le gain attendu). Ajouté à un pari SEULEMENT s'il a quelque chose à
+ * dire : les autres paris sont rendus comme avant. Une erreur ne fait jamais échouer la liste.
+ */
 export function getAllBets(req, res) {
-  res.json({ bets: listBets().map(avecGainAttendu) });
+  const bets = listBets();
+  let reglements = {};
+  try {
+    reglements = reglementPourLaLecture({ bets }) ?? {};
+  } catch {
+    reglements = {};
+  }
+  res.json({
+    bets: bets.map((bet) => {
+      const lu = avecGainAttendu(bet);
+      const reglement = reglements[bet.id];
+      return reglement && Object.keys(reglement).length ? { ...lu, reglement } : lu;
+    })
+  });
 }
 
 function texteFacultatif(valeur, champ, index, max) {

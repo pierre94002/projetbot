@@ -67,7 +67,8 @@ const INTERDITS = Object.freeze([
   ['data/db/refereeRead.js', '0eb2c468dd9ea492a1e9b3a0de9ce14460f2d22f'],
   ['data/db/leagueBenchmarks.js', '1c5c192ce3ba261f884c37541dd46b14736746c7'],
   ['data/db/dayTable.js', 'afc8d42ccc9028531da8d9efc2700ece449d6a97'],
-  ['data/providers/settlementService.js', '1836c3af9e5bee9fe0f4816ce3121e8924c6e0ae'],
+  // Retouché le 02/11/2026 par le correctif du règlement des vrais paris (pas par l'étape 33) : son sha1 après ce correctif.
+  ['data/providers/settlementService.js', 'ee5ed0786f48fb36558184356f26c0a8e95c5436'],
   ['core/settlement/settlementRules.js', '67eac67e465e395b87e71aaa6d7228f0e57b6011'],
   ['data/saisiesCotes.js', '1449bbbdc1fd5f08d94af42dc17a82fc728512b4'],
   ['data/db/forcesButs.js', '4ecda40200d8da352bc8c51adefb1152de4af916'],

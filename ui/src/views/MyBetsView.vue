@@ -35,6 +35,7 @@ import TabbedView from '@/components/common/TabbedView.vue';
 import ValueBadge from '@/components/common/ValueBadge.vue';
 // Étape 10 du plan : le ticket « J'ai parié » (cote prise, bookmaker, probabilité du moteur, heure de la cote).
 import TicketDuPari from '@/components/betting/TicketDuPari.vue';
+import ReglementDeLaSelection from '@/components/betting/ReglementDeLaSelection.vue';
 import { prendre, selectionDuCandidat, controleDuTicket, pariAEnregistrer, bookmakerPropose, gainAttenduDit, natureDuTicket, NATURES, SOURCES_DE_COTE } from '@/utils/ticket.js';
 // Étape 28 du plan : le prix juste d'un combiné du bordereau (POST /api/simulation/prix-combine), quand Réglages le montre.
 import { usePrixJuste } from '@/composables/usePrixJuste.js';
@@ -926,6 +927,8 @@ onMounted(() => {
                                 <AppIcon name="calendar" :size="11" />Match le {{ formatKickoff(matchKickoff(bet.legs[0])) }}
                                 <MatchStatusBadge v-if="bet.status === 'pending'" :commence-time="matchKickoff(bet.legs[0])" class="status-badge" />
                               </p>
+                              <!-- Correctif du règlement : réglé à la 90e, ou pourquoi ce pari attend (phrase du serveur). -->
+                              <ReglementDeLaSelection :reglement="bet.reglement?.[0]" />
                             </template>
                             <template v-else>
                               <p class="bet-card__market">Combiné</p>
@@ -1000,6 +1003,8 @@ onMounted(() => {
                               <p v-if="leg.probabiliteMoteur || leg.coteReleveeA" class="bet-leg__market cm-truncate">
                                 {{ probabiliteAuPari(leg) }}<template v-if="heureDeLaCotePrise(leg)"> · {{ heureDeLaCotePrise(leg) }}</template>
                               </p>
+                              <!-- Correctif du règlement : la raison de CETTE sélection (même numéro que dans le carnet). -->
+                              <ReglementDeLaSelection :reglement="bet.reglement?.[i]" />
                             </div>
                             <span class="bet-status is-sm" :class="`is-${legStatus(bet, i)}`">{{ STATUS_LABELS[legStatus(bet, i)] }}</span>
                             <div class="bet-leg__actions">

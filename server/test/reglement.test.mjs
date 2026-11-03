@@ -10,9 +10,13 @@
  *     pronostics, de paris et de résultats, contre la base d'essai —
  *     jamais les vrais fichiers de Pierre. Un match de coupe décidé après
  *     prolongation ou aux tirs au but n'est PAS réglé sur son score final
- *     (les marchés se jouent sur les 90 minutes) : il reste en attente, à
- *     régler à la main ; un score saisi à la main sous l'identifiant du match
- *     (celui des 90 minutes), lui, le règle.
+ *     (les marchés se jouent sur les 90 minutes) : un PRONOSTIC reste en
+ *     attente, à régler à la main ; une SÉLECTION DE PARI de buts se règle
+ *     sur le score à la 90e recompté dans le déroulé FotMob, quand le match
+ *     est retrouvé par les identifiants des deux clubs et que le déroulé est
+ *     complet (correctif du 02/11/2026 : le seul attendu changé ici, celui de
+ *     « b-prolongation ») ; un score saisi à la main sous l'identifiant du
+ *     match (celui des 90 minutes), lui, le règle.
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -210,14 +214,19 @@ test('passe automatique (copie isolée) : bon match, bonnes statistiques, prolon
   const b = Object.fromEntries(bets.map((x) => [x.id, x]));
   assert.deepEqual(b['b-leeds'].legs.map((l) => l.status), ['won', 'lost'], 'Leeds gagne ; 10 corners, pas plus de 10,5');
   assert.equal(b['b-leeds'].status, 'lost');
-  assert.equal(b['b-prolongation'].legs[0].status, 'pending');
-  assert.equal(b['b-prolongation'].status, 'pending');
-  assert.equal(rapport.bets.extraTime, 1);
+  // Correctif du 02/11/2026 (le seul attendu changé) : DFB Pokal 0-1, le seul but à la 120e (déroulé complet de la base
+  // d'essai) → 0-0 à la 90e, « Kaiserslautern » perdu ; avant, en attente.
+  assert.equal(b['b-prolongation'].legs[0].status, 'lost');
+  assert.equal(b['b-prolongation'].legs[0].settledScore, '0-0 à la 90e (prolongation)');
+  assert.equal(b['b-prolongation'].legs[0].settledBy, 'auto');
+  assert.equal(b['b-prolongation'].status, 'lost');
+  assert.equal(rapport.bets.extraTime, 0);
+  assert.equal(rapport.bets.regleA90, 1);
 
   // Bilan, puis une seconde passe qui ne règle plus rien.
   assert.equal(rapport.predictions.pending, PRONOSTICS.filter((x) => x.status === 'pending').length);
   assert.equal(rapport.predictions.settled, 10);
-  assert.equal(rapport.bets.settled, 2);
+  assert.equal(rapport.bets.settled, 3);
   assert.equal(second.predictions.settled, 0);
   assert.equal(second.bets.settled, 0);
   assert.equal(second.predictions.extraTime, 2, 'toujours en attente, toujours signalé');
