@@ -1,0 +1,839 @@
+{
+  "version": 1,
+  "jour": "2026-11-03",
+  "canal": "claude-code",
+  "majLe": "2026-11-03T06:24:21.506Z",
+  "totaux": {
+    "appels": 23,
+    "ok": 7,
+    "echecs": 16,
+    "sansTokens": 0,
+    "tokens": {
+      "entree": 18,
+      "ecritureCache": 53011,
+      "lectureCache": 44909,
+      "sortie": 24097,
+      "total": 122035
+    },
+    "equivalentApiUsd": 0.462032,
+    "parType": {
+      "coup-d-envoi": {
+        "appels": 13,
+        "ok": 3,
+        "echecs": 10,
+        "sansTokens": 0,
+        "tokens": {
+          "entree": 8,
+          "ecritureCache": 24896,
+          "lectureCache": 20233,
+          "sortie": 12179,
+          "total": 57316
+        },
+        "equivalentApiUsd": 0.225437
+      },
+      "reprise": {
+        "appels": 2,
+        "ok": 2,
+        "echecs": 0,
+        "sansTokens": 0,
+        "tokens": {
+          "entree": 6,
+          "ecritureCache": 14554,
+          "lectureCache": 20206,
+          "sortie": 7427,
+          "total": 42193
+        },
+        "equivalentApiUsd": 0.136539
+      },
+      "avance": {
+        "appels": 5,
+        "ok": 2,
+        "echecs": 3,
+        "sansTokens": 0,
+        "tokens": {
+          "entree": 4,
+          "ecritureCache": 13561,
+          "lectureCache": 4470,
+          "sortie": 4491,
+          "total": 22526
+        },
+        "equivalentApiUsd": 0.100056
+      },
+      "revue": {
+        "appels": 3,
+        "ok": 0,
+        "echecs": 3,
+        "sansTokens": 0,
+        "tokens": {
+          "entree": 0,
+          "ecritureCache": 0,
+          "lectureCache": 0,
+          "sortie": 0,
+          "total": 0
+        },
+        "equivalentApiUsd": 0
+      }
+    }
+  },
+  "appels": [
+    {
+      "id": "2026-11-02T23:04:00.513Z-17660-1-75dcf7",
+      "at": "2026-11-02T23:04:00.513Z",
+      "jour": "2026-11-03",
+      "debut": "2026-11-02T23:03:33.776Z",
+      "dureeMs": 26737,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-02-deportes-concepcion-palestino",
+        "home": "Deportes Concepción",
+        "away": "Palestino",
+        "league": "Primera División - Chile"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10038
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 10577,
+        "lectureCache": 0,
+        "sortie": 4048,
+        "total": 14627
+      },
+      "equivalentApiUsd": 0.082792
+    },
+    {
+      "id": "2026-11-02T23:24:10.457Z-17660-2-3dab24",
+      "at": "2026-11-02T23:24:10.457Z",
+      "jour": "2026-11-03",
+      "debut": "2026-11-02T23:23:36.151Z",
+      "dureeMs": 34306,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-03-atletico-tucuman-argentinos-juniors",
+        "home": "Atlético Tucumán",
+        "away": "Argentinos Juniors",
+        "league": "Primera División - Argentina"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 11421
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7483,
+        "lectureCache": 15763,
+        "sortie": 3962,
+        "total": 27212
+      },
+      "equivalentApiUsd": 0.072713
+    },
+    {
+      "id": "2026-11-02T23:24:42.024Z-17660-3-6d8f7e",
+      "at": "2026-11-02T23:24:42.024Z",
+      "jour": "2026-11-03",
+      "debut": "2026-11-02T23:24:12.882Z",
+      "dureeMs": 29142,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-03-independiente-rivadavia-banfield",
+        "home": "Independiente Rivadavia",
+        "away": "Banfield",
+        "league": "Primera División - Argentina"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 11419
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 6836,
+        "lectureCache": 4470,
+        "sortie": 4169,
+        "total": 15477
+      },
+      "equivalentApiUsd": 0.069932
+    },
+    {
+      "id": "2026-11-02T23:59:00.852Z-17660-4-8301d2",
+      "at": "2026-11-02T23:59:00.852Z",
+      "jour": "2026-11-03",
+      "debut": "2026-11-02T23:58:33.543Z",
+      "dureeMs": 27309,
+      "canal": "claude-code",
+      "type": "reprise",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-03-atletico-tucuman-argentinos-juniors",
+        "home": "Atlético Tucumán",
+        "away": "Argentinos Juniors",
+        "league": "Primera División - Argentina"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 11401
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7721,
+        "lectureCache": 15736,
+        "sortie": 3992,
+        "total": 27453
+      },
+      "equivalentApiUsd": 0.073959
+    },
+    {
+      "id": "2026-11-02T23:59:25.563Z-17660-5-db5bd8",
+      "at": "2026-11-02T23:59:25.563Z",
+      "jour": "2026-11-03",
+      "debut": "2026-11-02T23:59:02.901Z",
+      "dureeMs": 22662,
+      "canal": "claude-code",
+      "type": "reprise",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-03-independiente-rivadavia-banfield",
+        "home": "Independiente Rivadavia",
+        "away": "Banfield",
+        "league": "Primera División - Argentina"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 11362
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 6833,
+        "lectureCache": 4470,
+        "sortie": 3435,
+        "total": 14740
+      },
+      "equivalentApiUsd": 0.06258
+    },
+    {
+      "id": "2026-11-03T00:23:36.358Z-17660-6-e59453",
+      "at": "2026-11-03T00:23:36.358Z",
+      "jour": "2026-11-03",
+      "debut": "2026-11-03T00:23:33.737Z",
+      "dureeMs": 2621,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-03-bucaramanga-atletico-nacional",
+        "home": "Bucaramanga",
+        "away": "Atlético Nacional",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 11100
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "echec",
+      "erreur": "You've hit your session limit · resets 3:50am (Europe/Paris)",
+      "tokens": {
+        "entree": 0,
+        "ecritureCache": 0,
+        "lectureCache": 0,
+        "sortie": 0,
+        "total": 0
+      },
+      "equivalentApiUsd": 0
+    },
+    {
+      "id": "2026-11-03T00:28:35.267Z-17660-7-168f0b",
+      "at": "2026-11-03T00:28:35.267Z",
+      "jour": "2026-11-03",
+      "debut": "2026-11-03T00:28:32.848Z",
+      "dureeMs": 2419,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-03-bucaramanga-atletico-nacional",
+        "home": "Bucaramanga",
+        "away": "Atlético Nacional",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 11100
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "echec",
+      "erreur": "You've hit your session limit · resets 3:50am (Europe/Paris)",
+      "tokens": {
+        "entree": 0,
+        "ecritureCache": 0,
+        "lectureCache": 0,
+        "sortie": 0,
+        "total": 0
+      },
+      "equivalentApiUsd": 0
+    },
+    {
+      "id": "2026-11-03T00:33:35.163Z-17660-8-35eb93",
+      "at": "2026-11-03T00:33:35.163Z",
+      "jour": "2026-11-03",
+      "debut": "2026-11-03T00:33:32.859Z",
+      "dureeMs": 2304,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-03-bucaramanga-atletico-nacional",
+        "home": "Bucaramanga",
+        "away": "Atlético Nacional",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 11100
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "echec",
+      "erreur": "You've hit your session limit · resets 3:50am (Europe/Paris)",
+      "tokens": {
+        "entree": 0,
+        "ecritureCache": 0,
+        "lectureCache": 0,
+        "sortie": 0,
+        "total": 0
+      },
+      "equivalentApiUsd": 0
+    },
+    {
+      "id": "2026-11-03T00:38:35.097Z-17660-9-c8efac",
+      "at": "2026-11-03T00:38:35.097Z",
+      "jour": "2026-11-03",
+      "debut": "2026-11-03T00:38:32.883Z",
+      "dureeMs": 2214,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-03-bucaramanga-atletico-nacional",
+        "home": "Bucaramanga",
+        "away": "Atlético Nacional",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 11100
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "echec",
+      "erreur": "You've hit your session limit · resets 3:50am (Europe/Paris)",
+      "tokens": {
+        "entree": 0,
+        "ecritureCache": 0,
+        "lectureCache": 0,
+        "sortie": 0,
+        "total": 0
+      },
+      "equivalentApiUsd": 0
+    },
+    {
+      "id": "2026-11-03T00:43:35.185Z-17660-10-d77359",
+      "at": "2026-11-03T00:43:35.185Z",
+      "jour": "2026-11-03",
+      "debut": "2026-11-03T00:43:32.841Z",
+      "dureeMs": 2344,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-03-bucaramanga-atletico-nacional",
+        "home": "Bucaramanga",
+        "away": "Atlético Nacional",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 11100
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "echec",
+      "erreur": "You've hit your session limit · resets 3:50am (Europe/Paris)",
+      "tokens": {
+        "entree": 0,
+        "ecritureCache": 0,
+        "lectureCache": 0,
+        "sortie": 0,
+        "total": 0
+      },
+      "equivalentApiUsd": 0
+    },
+    {
+      "id": "2026-11-03T00:48:37.264Z-17660-11-b323b8",
+      "at": "2026-11-03T00:48:37.264Z",
+      "jour": "2026-11-03",
+      "debut": "2026-11-03T00:48:32.875Z",
+      "dureeMs": 4389,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-03-bucaramanga-atletico-nacional",
+        "home": "Bucaramanga",
+        "away": "Atlético Nacional",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 11167
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "echec",
+      "erreur": "You've hit your session limit · resets 3:50am (Europe/Paris)",
+      "tokens": {
+        "entree": 0,
+        "ecritureCache": 0,
+        "lectureCache": 0,
+        "sortie": 0,
+        "total": 0
+      },
+      "equivalentApiUsd": 0
+    },
+    {
+      "id": "2026-11-03T00:53:35.160Z-17660-12-14eeba",
+      "at": "2026-11-03T00:53:35.160Z",
+      "jour": "2026-11-03",
+      "debut": "2026-11-03T00:53:32.892Z",
+      "dureeMs": 2268,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-03-bucaramanga-atletico-nacional",
+        "home": "Bucaramanga",
+        "away": "Atlético Nacional",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 11166
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "echec",
+      "erreur": "You've hit your session limit · resets 3:50am (Europe/Paris)",
+      "tokens": {
+        "entree": 0,
+        "ecritureCache": 0,
+        "lectureCache": 0,
+        "sortie": 0,
+        "total": 0
+      },
+      "equivalentApiUsd": 0
+    },
+    {
+      "id": "2026-11-03T00:58:35.103Z-17660-13-a134af",
+      "at": "2026-11-03T00:58:35.103Z",
+      "jour": "2026-11-03",
+      "debut": "2026-11-03T00:58:32.852Z",
+      "dureeMs": 2251,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-03-bucaramanga-atletico-nacional",
+        "home": "Bucaramanga",
+        "away": "Atlético Nacional",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 11166
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "echec",
+      "erreur": "You've hit your session limit · resets 3:50am (Europe/Paris)",
+      "tokens": {
+        "entree": 0,
+        "ecritureCache": 0,
+        "lectureCache": 0,
+        "sortie": 0,
+        "total": 0
+      },
+      "equivalentApiUsd": 0
+    },
+    {
+      "id": "2026-11-03T01:03:35.179Z-17660-14-fce57b",
+      "at": "2026-11-03T01:03:35.179Z",
+      "jour": "2026-11-03",
+      "debut": "2026-11-03T01:03:32.822Z",
+      "dureeMs": 2357,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-03-bucaramanga-atletico-nacional",
+        "home": "Bucaramanga",
+        "away": "Atlético Nacional",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 11168
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "echec",
+      "erreur": "You've hit your session limit · resets 3:50am (Europe/Paris)",
+      "tokens": {
+        "entree": 0,
+        "ecritureCache": 0,
+        "lectureCache": 0,
+        "sortie": 0,
+        "total": 0
+      },
+      "equivalentApiUsd": 0
+    },
+    {
+      "id": "2026-11-03T01:08:35.288Z-17660-15-ce26f8",
+      "at": "2026-11-03T01:08:35.288Z",
+      "jour": "2026-11-03",
+      "debut": "2026-11-03T01:08:32.973Z",
+      "dureeMs": 2315,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-03-bucaramanga-atletico-nacional",
+        "home": "Bucaramanga",
+        "away": "Atlético Nacional",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 11167
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "echec",
+      "erreur": "You've hit your session limit · resets 3:50am (Europe/Paris)",
+      "tokens": {
+        "entree": 0,
+        "ecritureCache": 0,
+        "lectureCache": 0,
+        "sortie": 0,
+        "total": 0
+      },
+      "equivalentApiUsd": 0
+    },
+    {
+      "id": "2026-11-03T01:27:21.082Z-17660-16-f2d939",
+      "at": "2026-11-03T01:27:21.082Z",
+      "jour": "2026-11-03",
+      "debut": "2026-11-03T01:27:18.647Z",
+      "dureeMs": 2435,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-11-03-deportes-concepcion-palestino",
+        "home": "Deportes Concepción",
+        "away": "Palestino",
+        "league": "Primera División - Chile"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10036
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "echec",
+      "erreur": "You've hit your session limit · resets 3:50am (Europe/Paris)",
+      "tokens": {
+        "entree": 0,
+        "ecritureCache": 0,
+        "lectureCache": 0,
+        "sortie": 0,
+        "total": 0
+      },
+      "equivalentApiUsd": 0
+    },
+    {
+      "id": "2026-11-03T01:27:24.469Z-17660-17-ed0c04",
+      "at": "2026-11-03T01:27:24.469Z",
+      "jour": "2026-11-03",
+      "debut": "2026-11-03T01:27:22.223Z",
+      "dureeMs": 2246,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-11-03-anaitasuna-ft-deportivo-alaves",
+        "home": "Anaitasuna FT",
+        "away": "Deportivo Alavés",
+        "league": "Copa del Rey - Spain"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 7616
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "echec",
+      "erreur": "You've hit your session limit · resets 3:50am (Europe/Paris)",
+      "tokens": {
+        "entree": 0,
+        "ecritureCache": 0,
+        "lectureCache": 0,
+        "sortie": 0,
+        "total": 0
+      },
+      "equivalentApiUsd": 0
+    },
+    {
+      "id": "2026-11-03T01:27:27.524Z-17660-18-bfa5cd",
+      "at": "2026-11-03T01:27:27.524Z",
+      "jour": "2026-11-03",
+      "debut": "2026-11-03T01:27:25.297Z",
+      "dureeMs": 2227,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-11-03-pamplona-eibar",
+        "home": "Pamplona",
+        "away": "Eibar",
+        "league": "Copa del Rey - Spain"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 7516
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "echec",
+      "erreur": "You've hit your session limit · resets 3:50am (Europe/Paris)",
+      "tokens": {
+        "entree": 0,
+        "ecritureCache": 0,
+        "lectureCache": 0,
+        "sortie": 0,
+        "total": 0
+      },
+      "equivalentApiUsd": 0
+    },
+    {
+      "id": "2026-11-03T01:27:32.670Z-17660-19-6f928c",
+      "at": "2026-11-03T01:27:32.670Z",
+      "jour": "2026-11-03",
+      "debut": "2026-11-03T01:27:30.380Z",
+      "dureeMs": 2290,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-28-pec-zwolle-top-oss",
+        "home": "PEC Zwolle",
+        "away": "TOP Oss",
+        "league": "KNVB Cup - Netherlands"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 6259
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "echec",
+      "erreur": "You've hit your session limit · resets 3:50am (Europe/Paris)",
+      "tokens": {
+        "entree": 0,
+        "ecritureCache": 0,
+        "lectureCache": 0,
+        "sortie": 0,
+        "total": 0
+      },
+      "equivalentApiUsd": 0
+    },
+    {
+      "id": "2026-11-03T01:27:36.136Z-17660-20-d82079",
+      "at": "2026-11-03T01:27:36.136Z",
+      "jour": "2026-11-03",
+      "debut": "2026-11-03T01:27:33.763Z",
+      "dureeMs": 2373,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-28-pisa-palermo",
+        "home": "Pisa",
+        "away": "Palermo",
+        "league": "Serie B - Italy"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9074
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "echec",
+      "erreur": "You've hit your session limit · resets 3:50am (Europe/Paris)",
+      "tokens": {
+        "entree": 0,
+        "ecritureCache": 0,
+        "lectureCache": 0,
+        "sortie": 0,
+        "total": 0
+      },
+      "equivalentApiUsd": 0
+    },
+    {
+      "id": "2026-11-03T01:27:39.044Z-17660-21-bc8bdb",
+      "at": "2026-11-03T01:27:39.044Z",
+      "jour": "2026-11-03",
+      "debut": "2026-11-03T01:27:36.710Z",
+      "dureeMs": 2334,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-10-28-quick-boys-eemdijk",
+        "home": "Quick Boys",
+        "away": "Eemdijk",
+        "league": "KNVB Cup - Netherlands"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 5476
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "echec",
+      "erreur": "You've hit your session limit · resets 3:50am (Europe/Paris)",
+      "tokens": {
+        "entree": 0,
+        "ecritureCache": 0,
+        "lectureCache": 0,
+        "sortie": 0,
+        "total": 0
+      },
+      "equivalentApiUsd": 0
+    },
+    {
+      "id": "2026-11-03T06:24:01.285Z-17660-22-1c6b5e",
+      "at": "2026-11-03T06:24:01.285Z",
+      "jour": "2026-11-03",
+      "debut": "2026-11-03T06:23:44.377Z",
+      "dureeMs": 16908,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-11-03-anaitasuna-ft-deportivo-alaves",
+        "home": "Anaitasuna FT",
+        "away": "Deportivo Alavés",
+        "league": "Copa del Rey - Spain"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 7623
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 9064,
+        "lectureCache": 0,
+        "sortie": 2154,
+        "total": 11220
+      },
+      "equivalentApiUsd": 0.0578
+    },
+    {
+      "id": "2026-11-03T06:24:21.506Z-17660-23-67d1c4",
+      "at": "2026-11-03T06:24:21.506Z",
+      "jour": "2026-11-03",
+      "debut": "2026-11-03T06:24:04.532Z",
+      "dureeMs": 16974,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-11-03-pamplona-eibar",
+        "home": "Pamplona",
+        "away": "Eibar",
+        "league": "Copa del Rey - Spain"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 7517
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 4497,
+        "lectureCache": 4470,
+        "sortie": 2337,
+        "total": 11306
+      },
+      "equivalentApiUsd": 0.042256
+    }
+  ]
+}

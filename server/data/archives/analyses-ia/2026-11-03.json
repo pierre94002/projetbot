@@ -1,5 +1,6272 @@
 [
   {
+    "matchId": "cal-2026-11-02-deportes-concepcion-palestino",
+    "homeName": "Deportes Concepción",
+    "awayName": "Palestino",
+    "league": "Primera División - Chile",
+    "commenceTime": "2026-11-02T23:30:00.000Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Deportes Concepción vs Palestino",
+      "expectedGoals": {
+        "home": 1.436,
+        "away": 0.905,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 2.75,
+        "draw": 3.58,
+        "away": 2.8
+      },
+      "market": {
+        "odds1": 2.58,
+        "oddsDraw": 3.33,
+        "odds2": 2.63
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "trop_peu_de_bookmakers",
+        "candidates": []
+      },
+      "statExpectations": {
+        "corners": {
+          "home": 4.79,
+          "away": 4.5,
+          "total": 9.29
+        },
+        "shots": {
+          "home": 14.58,
+          "away": 12.28,
+          "total": 26.86
+        },
+        "shotsOnTarget": {
+          "home": 5.39,
+          "away": 3.42,
+          "total": 8.81
+        }
+      },
+      "marketPredictions": [
+        {
+          "marketId": "result",
+          "params": {
+            "outcome": "home"
+          },
+          "market": "Résultat",
+          "predictedOutcome": "home",
+          "predictedLabel": "Deportes Concepción gagne",
+          "predictedOdds": 2.75,
+          "probability": 36,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 3.5,
+            "side": "under"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 3.5 buts",
+          "predictedOdds": 1.26,
+          "probability": 79,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "no"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "no",
+          "predictedLabel": "Non",
+          "predictedOdds": 1.86,
+          "probability": 54,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 3.5,
+            "key": "homeUnder"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "homeUnder",
+          "predictedLabel": "Deportes Concepción & Moins de 3.5 buts",
+          "predictedOdds": 3.64,
+          "probability": 27,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 2.5,
+            "side": "under"
+          },
+          "market": "Buts — Deportes Concepción",
+          "predictedOutcome": "under",
+          "predictedLabel": "Deportes Concepción — Moins de 2.5 buts",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 1.5,
+            "side": "under"
+          },
+          "market": "Buts — Palestino",
+          "predictedOutcome": "under",
+          "predictedLabel": "Palestino — Moins de 1.5 buts",
+          "predictedOdds": 1.3,
+          "probability": 77,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalCorners",
+          "params": {
+            "line": 12.5,
+            "side": "under"
+          },
+          "market": "Total corners",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 12.5 corners",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "home",
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Corners — Deportes Concepción",
+          "predictedOutcome": "over",
+          "predictedLabel": "Deportes Concepción — Plus de 2.5 corners",
+          "predictedOdds": 1.25,
+          "probability": 80,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "away",
+            "line": 6.5,
+            "side": "under"
+          },
+          "market": "Corners — Palestino",
+          "predictedOutcome": "under",
+          "predictedLabel": "Palestino — Moins de 6.5 corners",
+          "predictedOdds": 1.25,
+          "probability": 80,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShots",
+          "params": {
+            "line": 32.5,
+            "side": "under"
+          },
+          "market": "Total tirs",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 32.5 tirs",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "home",
+            "line": 9.5,
+            "side": "over"
+          },
+          "market": "Tirs — Deportes Concepción",
+          "predictedOutcome": "over",
+          "predictedLabel": "Deportes Concepción — Plus de 9.5 tirs",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "away",
+            "line": 16.5,
+            "side": "under"
+          },
+          "market": "Tirs — Palestino",
+          "predictedOutcome": "under",
+          "predictedLabel": "Palestino — Moins de 16.5 tirs",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShotsOnTarget",
+          "params": {
+            "line": 11.5,
+            "side": "under"
+          },
+          "market": "Total tirs cadrés",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 11.5 tirs cadrés",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "home",
+            "line": 7.5,
+            "side": "under"
+          },
+          "market": "Tirs cadrés — Deportes Concepción",
+          "predictedOutcome": "under",
+          "predictedLabel": "Deportes Concepción — Moins de 7.5 tirs cadrés",
+          "predictedOdds": 1.25,
+          "probability": 80,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "away",
+            "line": 1.5,
+            "side": "over"
+          },
+          "market": "Tirs cadrés — Palestino",
+          "predictedOutcome": "over",
+          "predictedLabel": "Palestino — Plus de 1.5 tirs cadrés",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        }
+      ],
+      "engineVersion": 5
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 10577,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 4048,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 10577,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 4048,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 10577,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 10577
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.082792,
+    "analysedAt": "2026-11-02T23:04:00.520Z",
+    "timing": "coup-d-envoi",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 371,
+      "tokens": 1143,
+      "lecons": [],
+      "dossiersDu": "2026-11-01T23:17:56.128Z",
+      "equipes": {
+        "home": {
+          "id": "fotmob-4134",
+          "dossier": true
+        },
+        "away": {
+          "id": "fotmob-6455",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "Primera División - Chile",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "FotMob",
+      "fotmobMatchId": "1000013259",
+      "fetchedAt": "2026-11-02T23:03:31.556Z",
+      "minutesBeforeKickoff": 26,
+      "home": {
+        "team": "Deportes Concepción",
+        "teamId": "fotmob-4134",
+        "formation": "4-2-3-1",
+        "coach": "Fernando Díaz",
+        "statsSince": "2026-01-01",
+        "teamMatches": 35,
+        "startXI": [
+          {
+            "id": "fotmob-589365",
+            "name": "Nicolás Araya",
+            "number": 25,
+            "position": "Goalkeeper",
+            "age": 27,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 27,
+              "starts": 27,
+              "minutes": 2430,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.02
+            }
+          },
+          {
+            "id": "fotmob-1944532",
+            "name": "Mateo González",
+            "number": 28,
+            "position": "Defender",
+            "age": 21,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "x": 0.292,
+            "y": 0.875,
+            "stats": {
+              "apps": 3,
+              "starts": 2,
+              "minutes": 191,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.29
+            }
+          },
+          {
+            "id": "fotmob-1353300",
+            "name": "Norman Rodríguez",
+            "number": 21,
+            "position": "Defender",
+            "age": 28,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 31,
+              "starts": 31,
+              "minutes": 2757,
+              "goals": 6,
+              "assists": 1,
+              "xg": null,
+              "rating": 7.32
+            }
+          },
+          {
+            "id": "fotmob-538346",
+            "name": "Fausto Grillo",
+            "number": 37,
+            "position": "Defender",
+            "age": 33,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.292,
+            "y": 0.375,
+            "stats": {
+              "apps": 26,
+              "starts": 25,
+              "minutes": 2177,
+              "goals": 2,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.88
+            }
+          },
+          {
+            "id": "fotmob-1307773",
+            "name": "Cristián Riquelme",
+            "number": 23,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "x": 0.292,
+            "y": 0.125,
+            "stats": {
+              "apps": 14,
+              "starts": 5,
+              "minutes": 613,
+              "goals": 0,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.57
+            }
+          },
+          {
+            "id": "fotmob-1077389",
+            "name": "Mario Sandoval",
+            "number": 16,
+            "position": "Midfielder",
+            "age": 35,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "x": 0.485,
+            "y": 0.7,
+            "stats": {
+              "apps": 27,
+              "starts": 22,
+              "minutes": 1954,
+              "goals": 3,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.96
+            }
+          },
+          {
+            "id": "fotmob-164301",
+            "name": "Misael Dávila",
+            "number": 22,
+            "position": "Midfielder",
+            "age": 35,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "x": 0.485,
+            "y": 0.3,
+            "stats": {
+              "apps": 28,
+              "starts": 21,
+              "minutes": 1964,
+              "goals": 1,
+              "assists": 2,
+              "xg": null,
+              "rating": 6.73
+            }
+          },
+          {
+            "id": "fotmob-1206710",
+            "name": "Joaquín Montecinos",
+            "number": 15,
+            "position": "Midfielder",
+            "age": 30,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "x": 0.678,
+            "y": 0.837,
+            "stats": {
+              "apps": 28,
+              "starts": 15,
+              "minutes": 1373,
+              "goals": 3,
+              "assists": 5,
+              "xg": null,
+              "rating": 6.99
+            }
+          },
+          {
+            "id": "fotmob-921624",
+            "name": "Matías Cavalleri",
+            "number": 24,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "x": 0.678,
+            "y": 0.5,
+            "stats": {
+              "apps": 20,
+              "starts": 10,
+              "minutes": 861,
+              "goals": 1,
+              "assists": 2,
+              "xg": null,
+              "rating": 6.68
+            }
+          },
+          {
+            "id": "fotmob-1184853",
+            "name": "Ethan Espinoza",
+            "number": 30,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "x": 0.678,
+            "y": 0.163,
+            "stats": {
+              "apps": 28,
+              "starts": 21,
+              "minutes": 1873,
+              "goals": 5,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.04
+            }
+          },
+          {
+            "id": "fotmob-96509",
+            "name": "Joaquín Larrivey",
+            "number": 32,
+            "position": "Forward",
+            "age": 42,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 29,
+              "starts": 27,
+              "minutes": 2364,
+              "goals": 11,
+              "assists": 2,
+              "xg": null,
+              "rating": 6.85
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-112658",
+            "name": "Nery Veloso",
+            "number": 12,
+            "position": "Goalkeeper",
+            "age": 39,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 90,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1025379",
+            "name": "Diego Carrasco",
+            "number": 3,
+            "position": "Defender",
+            "age": 31,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "stats": {
+              "apps": 13,
+              "starts": 13,
+              "minutes": 1140,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.65
+            }
+          },
+          {
+            "id": "fotmob-1686407",
+            "name": "Dilan Varas",
+            "number": 29,
+            "position": "Defender",
+            "age": 21,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "stats": {
+              "apps": 21,
+              "starts": 21,
+              "minutes": 1727,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.02
+            }
+          },
+          {
+            "id": "fotmob-595768",
+            "name": "Jorge Henríquez",
+            "number": 20,
+            "position": "Midfielder",
+            "age": 32,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "stats": {
+              "apps": 29,
+              "starts": 25,
+              "minutes": 2067,
+              "goals": 4,
+              "assists": 3,
+              "xg": null,
+              "rating": 7.42
+            }
+          },
+          {
+            "id": "fotmob-293628",
+            "name": "Sebastián Martínez",
+            "number": 14,
+            "position": "Midfielder",
+            "age": 33,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "stats": null
+          },
+          {
+            "id": "fotmob-446855",
+            "name": "Brayan Véjar",
+            "number": 11,
+            "position": "Midfielder",
+            "age": 31,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "stats": {
+              "apps": 12,
+              "starts": 6,
+              "minutes": 577,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.63
+            }
+          },
+          {
+            "id": "fotmob-304872",
+            "name": "Carlos Escobar",
+            "number": 9,
+            "position": "Forward",
+            "age": 36,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "stats": {
+              "apps": 16,
+              "starts": 5,
+              "minutes": 534,
+              "goals": 1,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.43
+            }
+          },
+          {
+            "id": "fotmob-787218",
+            "name": "Fernando Romero",
+            "number": 7,
+            "position": "Forward",
+            "age": 26,
+            "countryCode": "PAR",
+            "countryName": "Paraguay",
+            "stats": {
+              "apps": 27,
+              "starts": 16,
+              "minutes": 1510,
+              "goals": 7,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.83
+            }
+          },
+          {
+            "id": "fotmob-1196399",
+            "name": "Aldrix Jara",
+            "number": 19,
+            "position": "Forward",
+            "age": 26,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "stats": {
+              "apps": 25,
+              "starts": 15,
+              "minutes": 1340,
+              "goals": 2,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.69
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "id": "fotmob-1306107",
+            "age": 33,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "name": "Yonatan Rodríguez",
+            "reason": "suspendu",
+            "expectedReturn": "Early November 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 17,
+              "starts": 13,
+              "minutes": 1148,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.9
+            }
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-953784",
+            "age": 26,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "name": "Ariel Cáceres",
+            "position": "Defender",
+            "starts": 27,
+            "goals": 3,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-595768",
+            "age": 32,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "name": "Jorge Henríquez",
+            "position": "Midfielder",
+            "starts": 25,
+            "goals": 4,
+            "assists": 3,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-1686407",
+            "age": 21,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "name": "Dilan Varas",
+            "position": "Forward",
+            "starts": 21,
+            "goals": 0,
+            "assists": 0,
+            "status": "remplaçant"
+          }
+        ]
+      },
+      "away": {
+        "team": "Palestino",
+        "teamId": "fotmob-6455",
+        "formation": "4-2-3-1",
+        "coach": "Guillermo Farré",
+        "statsSince": "2026-01-01",
+        "teamMatches": 38,
+        "startXI": [
+          {
+            "id": "fotmob-172971",
+            "name": "Sebastián Pérez",
+            "number": 25,
+            "position": "Goalkeeper",
+            "age": 35,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 38,
+              "starts": 38,
+              "minutes": 3420,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.88
+            }
+          },
+          {
+            "id": "fotmob-185092",
+            "name": "Bryan Carrasco",
+            "number": 7,
+            "position": "Defender",
+            "age": 35,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "x": 0.292,
+            "y": 0.875,
+            "stats": {
+              "apps": 33,
+              "starts": 22,
+              "minutes": 1869,
+              "goals": 3,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.49
+            }
+          },
+          {
+            "id": "fotmob-1464264",
+            "name": "Vicente Espinoza",
+            "number": 2,
+            "position": "Defender",
+            "age": 22,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 31,
+              "starts": 30,
+              "minutes": 2645,
+              "goals": 1,
+              "assists": 1,
+              "xg": null,
+              "rating": 7.04
+            }
+          },
+          {
+            "id": "fotmob-193930",
+            "name": "Enzo Roco",
+            "number": 3,
+            "position": "Defender",
+            "age": 34,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "x": 0.292,
+            "y": 0.375,
+            "stats": {
+              "apps": 26,
+              "starts": 25,
+              "minutes": 2282,
+              "goals": 3,
+              "assists": 1,
+              "xg": null,
+              "rating": 7.21
+            }
+          },
+          {
+            "id": "fotmob-1129021",
+            "name": "Jason León",
+            "number": 23,
+            "position": "Defender",
+            "age": 26,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "x": 0.292,
+            "y": 0.125,
+            "stats": {
+              "apps": 21,
+              "starts": 11,
+              "minutes": 1139,
+              "goals": 1,
+              "assists": 1,
+              "xg": null,
+              "rating": 7
+            }
+          },
+          {
+            "id": "fotmob-1228819",
+            "name": "Dylan Glaby",
+            "number": 5,
+            "position": "Midfielder",
+            "age": 30,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.485,
+            "y": 0.7,
+            "stats": {
+              "apps": 24,
+              "starts": 12,
+              "minutes": 1198,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.67
+            }
+          },
+          {
+            "id": "fotmob-202093",
+            "name": "Sebastián Gallegos",
+            "number": 18,
+            "position": "Midfielder",
+            "age": 34,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "x": 0.485,
+            "y": 0.3,
+            "stats": {
+              "apps": 37,
+              "starts": 36,
+              "minutes": 3140,
+              "goals": 3,
+              "assists": 2,
+              "xg": null,
+              "rating": 7.28
+            }
+          },
+          {
+            "id": "fotmob-1249572",
+            "name": "Marcelo Eggel",
+            "number": 17,
+            "position": "Midfielder",
+            "age": 27,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.678,
+            "y": 0.837,
+            "stats": {
+              "apps": 8,
+              "starts": 7,
+              "minutes": 533,
+              "goals": 1,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.95
+            }
+          },
+          {
+            "id": "fotmob-1344566",
+            "name": "Gonzalo Tapia",
+            "number": 20,
+            "position": "Midfielder",
+            "age": 30,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "x": 0.678,
+            "y": 0.5,
+            "stats": {
+              "apps": 30,
+              "starts": 12,
+              "minutes": 1414,
+              "goals": 9,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.67
+            }
+          },
+          {
+            "id": "fotmob-934062",
+            "name": "César Munder",
+            "number": 27,
+            "position": "Midfielder",
+            "age": 26,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "x": 0.678,
+            "y": 0.163,
+            "stats": {
+              "apps": 32,
+              "starts": 28,
+              "minutes": 2442,
+              "goals": 3,
+              "assists": 6,
+              "xg": null,
+              "rating": 7.02
+            }
+          },
+          {
+            "id": "fotmob-194420",
+            "name": "Ronnie Fernández",
+            "number": 9,
+            "position": "Forward",
+            "age": 35,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 27,
+              "starts": 15,
+              "minutes": 1435,
+              "goals": 3,
+              "assists": 2,
+              "xg": null,
+              "rating": 6.66
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-1714750",
+            "name": "Sebastián Salas",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 25,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1251508",
+            "name": "Antonio Ceza",
+            "number": 4,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "stats": {
+              "apps": 10,
+              "starts": 6,
+              "minutes": 570,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.81
+            }
+          },
+          {
+            "id": "fotmob-659740",
+            "name": "José Bizama",
+            "number": 16,
+            "position": "Defender",
+            "age": 32,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "stats": {
+              "apps": 19,
+              "starts": 12,
+              "minutes": 1059,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.8
+            }
+          },
+          {
+            "id": "fotmob-1184047",
+            "name": "Nicolás Meza",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 24,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "stats": {
+              "apps": 28,
+              "starts": 17,
+              "minutes": 1623,
+              "goals": 0,
+              "assists": 2,
+              "xg": null,
+              "rating": 6.82
+            }
+          },
+          {
+            "id": "fotmob-1640496",
+            "name": "Francisco Montes",
+            "number": 15,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "stats": {
+              "apps": 28,
+              "starts": 19,
+              "minutes": 1552,
+              "goals": 3,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.77
+            }
+          },
+          {
+            "id": "fotmob-821999",
+            "name": "Joe Abrigo",
+            "number": 14,
+            "position": "Midfielder",
+            "age": 31,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "stats": {
+              "apps": 10,
+              "starts": 6,
+              "minutes": 496,
+              "goals": 1,
+              "assists": 2,
+              "xg": null,
+              "rating": 6.92
+            }
+          },
+          {
+            "id": "fotmob-660777",
+            "name": "Jonathan Benítez",
+            "number": 11,
+            "position": "Forward",
+            "age": 35,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 17,
+              "starts": 6,
+              "minutes": 609,
+              "goals": 1,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.56
+            }
+          },
+          {
+            "id": "fotmob-1434501",
+            "name": "Martín Araya",
+            "number": 21,
+            "position": "Forward",
+            "age": 21,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "stats": {
+              "apps": 19,
+              "starts": 11,
+              "minutes": 879,
+              "goals": 1,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.51
+            }
+          },
+          {
+            "id": "fotmob-1776698",
+            "name": "Ian Alegría",
+            "number": 30,
+            "position": "Forward",
+            "age": 18,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "stats": {
+              "apps": 11,
+              "starts": 4,
+              "minutes": 365,
+              "goals": 1,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.55
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "id": "fotmob-517871",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Dilan Zúñiga",
+            "reason": "suspendu",
+            "expectedReturn": "Early November 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 30,
+              "starts": 29,
+              "minutes": 2611,
+              "goals": 1,
+              "assists": 3,
+              "xg": null,
+              "rating": 7.13
+            }
+          },
+          {
+            "id": "fotmob-1636881",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Ian Garguez",
+            "reason": "blessé",
+            "expectedReturn": "Out for season",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 27,
+              "starts": 26,
+              "minutes": 2148,
+              "goals": 2,
+              "assists": 2,
+              "xg": null,
+              "rating": 7.12
+            }
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-517871",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Dilan Zúñiga",
+            "position": "Midfielder",
+            "starts": 29,
+            "goals": 1,
+            "assists": 3,
+            "status": "suspendu"
+          },
+          {
+            "id": "fotmob-1636881",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Ian Garguez",
+            "position": "Midfielder",
+            "starts": 26,
+            "goals": 2,
+            "assists": 2,
+            "status": "blessé"
+          },
+          {
+            "id": "fotmob-1254709",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Nelson da Silva",
+            "position": "Forward",
+            "starts": 21,
+            "goals": 12,
+            "assists": 2,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1640496",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Francisco Montes",
+            "position": "Midfielder",
+            "starts": 19,
+            "goals": 3,
+            "assists": 1,
+            "status": "remplaçant"
+          }
+        ]
+      },
+      "matchInfo": {
+        "round": "26",
+        "stadium": "Estadio Municipal Alcaldesa Ester Roa Rebolledo",
+        "city": "Concepción",
+        "capacity": 30448,
+        "surface": "grass",
+        "weather": "Partly Cloudy",
+        "temperature": 16,
+        "windSpeed": 14,
+        "precipitation": 0,
+        "referee": {
+          "name": "Héctor Jona",
+          "country": "Chile",
+          "league": "Primera División",
+          "matches": 29,
+          "yellowCardsPerMatch": 5.66,
+          "yellowCardsLeagueAverage": 5.27,
+          "redCards": 5,
+          "penalties": 8,
+          "foulsPerMatch": 20.76,
+          "foulsLeagueAverage": 21.98
+        }
+      }
+    },
+    "analysis": {
+      "summary": "Concepción (11e, 32 pts) est en baisse : sans victoire depuis 4 matchs (1 N, 1 D, 1 N, 1 D sur les cinq derniers), 1,1 but marqué et 1 encaissé en moyenne sur 10 matchs. Palestino (6e, 38 pts) joue la possession (57,9 %) avec 1,6 / 1,5 mais ne marque que 0,8 à l'extérieur sur 5 matchs. Palestino est privé de Zúñiga (suspendu), Garguez (blessé) et da Silva (12 buts, absent de la feuille). Concepción n'a pas Cáceres ni Y. Rodríguez (suspendu), mais Larrivey (11 buts) est titulaire.",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Les deux équipes sont en baisse, Concepción plus nettement.",
+          "evidence": "Concepción 0,8 pt/match sur les 5 derniers contre 1,6 avant ; Palestino 1 contre 1,8."
+        },
+        {
+          "factor": "statistiques et moyennes",
+          "observation": "Concepción produit peu à domicile mais concède peu. Palestino produit peu à l'extérieur et concède beaucoup.",
+          "evidence": "Concepción à domicile 0,8 / 0,8 but, 17,8 tirs ; Palestino à l'extérieur 0,8 / 1,6 but, 16 / 13,2 tirs."
+        },
+        {
+          "factor": "absences",
+          "observation": "Palestino est affaibli en attaque et au milieu, sans da Silva ni Zúñiga.",
+          "evidence": "da Silva 12+2 en 21 titularisations ; Zúñiga 29 titularisations, suspendu jusqu'à début novembre."
+        },
+        {
+          "factor": "classement",
+          "observation": "Palestino est mieux classé, mais Concepción est solide à domicile.",
+          "evidence": "6e, 38 pts contre 11e, 32 pts ; Concepción à domicile 5-4-4, buts 17-14."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Aucun edge n'est relevé et la mise est PASS.",
+          "evidence": "Staking PASS (trop_peu_de_bookmakers) ; xG 1,436 contre 0,905."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : match plutôt fermé, léger avantage pour Concepción à domicile, et un Palestino diminué en attaque. Il n'y a pas d'edge chiffré, donc la lecture reste prudente.",
+      "lineupImpact": "Les compositions sont officielles (26 min avant le coup d'envoi). Concepción aligne un 4-2-3-1 avec Larrivey (11+2) en pointe, Montecinos (3+5) en meneur et Norman Rodríguez (6+1) en défense. Cáceres (27 titularisations) est absent de la feuille, Henríquez (4+3) est sur le banc et Y. Rodríguez est suspendu. Palestino, en 4-2-3-1, n'a ni da Silva (12+2), son meilleur buteur, ni Zúñiga ni Garguez. Tapia (9+1) et Fernández (3+2) portent l'attaque. Cela pèse sur les marchés de buts de Palestino et sur le total. Le terrain est en herbe, sans pluie, avec peu de vent, et l'arbitre est un peu plus sévère que la moyenne en cartons.",
+      "caveats": "Les échantillons de forme sont de 5 matchs seulement. Aucune cote n'est disponible pour parler d'un edge. Le carnet est mince sur ces deux équipes (2 matchs analysés pour Concepción, 1 pour Palestino).",
+      "marketViews": [
+        {
+          "market": "Résultat",
+          "pick": "Deportes Concepción gagne",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "36 % : Concepción reçoit avec 1,436 but attendu contre 0,905, mais il est sans victoire depuis 4 matchs et le nul pèse lourd.",
+          "reasoning": "L'avantage du terrain et les absences de Palestino (da Silva, Zúñiga) vont dans ce sens. La baisse de forme de Concepción et le faible 0,8 but par match à domicile limitent la conviction.",
+          "probability": 36
+        },
+        {
+          "market": "Total buts",
+          "pick": "Moins de 3.5 buts",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "79 % : Concepción marque 1,1 et encaisse 1 par match, et ses matchs à domicile tournent autour de 0,8 / 0,8.",
+          "reasoning": "Les xG de 1,44 et 0,91 totalisent environ 2,3 buts, et Palestino est privé de son buteur. Un scénario à 4 buts ou plus est peu probable.",
+          "probability": 79
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "pick": "Non",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "54 % : Concepción n'a marqué que 0,8 but par match à domicile et Palestino 0,8 à l'extérieur, mais Palestino inscrit 1,6 sur 10 matchs.",
+          "reasoning": "Palestino sans da Silva et Concepción peu prolifique plaident pour le Non. Les défenses concèdent pourtant assez (1,6 pour Palestino à l'extérieur), et le championnat est à 54 % de matchs où les deux marquent.",
+          "probability": 54
+        },
+        {
+          "market": "Résultat + Total buts",
+          "pick": "Deportes Concepción & Moins de 3.5 buts",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "27 % : il combine la victoire de Concepción (36 %) et le moins de 3,5 buts (79 %), donc la probabilité reste basse.",
+          "reasoning": "La partie « moins de 3,5 buts » est solide, mais la victoire de Concepción est incertaine vu sa forme. Le résultat reste le point fragile.",
+          "probability": 27
+        },
+        {
+          "market": "Buts — Deportes Concepción",
+          "pick": "Deportes Concepción — Moins de 2.5 buts",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : Concepción marque 1,1 but par match sur 10 matchs, 0,8 à domicile, pour 1,436 attendu.",
+          "reasoning": "Il faudrait un match très ouvert pour qu'il en marque trois. Le onze avec Larrivey reste sous cette barre dans la grande majorité des cas.",
+          "probability": 83
+        },
+        {
+          "market": "Buts — Palestino",
+          "pick": "Palestino — Moins de 1.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "77 % : Palestino n'attend que 0,905 but et ne marque que 0,8 par match à l'extérieur sur 5 matchs.",
+          "reasoning": "L'absence de da Silva (12 buts) réduit sa menace. Sa moyenne de 1,6 sur 10 matchs laisse tout de même la place à un but ou deux.",
+          "probability": 77
+        },
+        {
+          "market": "Total corners",
+          "pick": "Moins de 12.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : le moteur attend 9,29 corners (4,79 + 4,5), et le championnat tourne à 9,9 par match.",
+          "reasoning": "Les moyennes de corners des deux équipes (5,1 et 5,2 produits) restent loin de 12,5. Seul un match très déséquilibré le ferait dépasser.",
+          "probability": 83
+        },
+        {
+          "market": "Corners — Deportes Concepción",
+          "pick": "Deportes Concepción — Plus de 2.5 corners",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "80 % : Concepción produit 5,1 corners par match (5,4 à domicile) et le moteur en attend 4,79.",
+          "reasoning": "Le seuil est très bas par rapport à ses moyennes. Ses corners sont stables à domicile, où il a davantage le ballon (53,4 %).",
+          "probability": 80
+        },
+        {
+          "market": "Corners — Palestino",
+          "pick": "Palestino — Moins de 6.5 corners",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "80 % : Palestino produit 5,2 corners par match (5 à l'extérieur) et le moteur en attend 4,5.",
+          "reasoning": "Même avec sa possession, il dépasse rarement 6 corners à l'extérieur. Le seuil laisse de la marge.",
+          "probability": 80
+        },
+        {
+          "market": "Total tirs",
+          "pick": "Moins de 32.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : le moteur attend 26,86 tirs (14,58 + 12,28), alors que les moyennes combinées avoisinent 26 à 31.",
+          "reasoning": "Le seuil est nettement au-dessus du total attendu. Concepción à domicile (17,8 tirs) est la seule voie vers un volume élevé.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs — Deportes Concepción",
+          "pick": "Deportes Concepción — Plus de 9.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : Concepción tire 14,9 fois par match (17,8 à domicile) et le moteur en attend 14,58.",
+          "reasoning": "Le seuil est bas pour une équipe qui tire autant, surtout à domicile. Seul un match très défensif le ferait passer sous 10.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs — Palestino",
+          "pick": "Palestino — Moins de 16.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : Palestino tire 16,4 fois par match (16 à l'extérieur), le moteur en attend 12,28 et Concepción en concède 10,9.",
+          "reasoning": "Concepción concède peu de tirs, 9,4 à domicile. Dépasser 16 serait inhabituel.",
+          "probability": 83
+        },
+        {
+          "market": "Total tirs cadrés",
+          "pick": "Moins de 11.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "81 % : le moteur attend 8,81 tirs cadrés (5,39 + 3,42), loin de 11,5.",
+          "reasoning": "Palestino cadre peu à l'extérieur (2,8) et Concepción 4,9 par match. Le total reste sous le seuil dans la grande majorité des cas.",
+          "probability": 81
+        },
+        {
+          "market": "Tirs cadrés — Deportes Concepción",
+          "pick": "Deportes Concepción — Moins de 7.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "80 % : Concepción cadre 4,9 tirs par match (5,6 à domicile) et le moteur en attend 5,39.",
+          "reasoning": "Même sa meilleure moyenne à domicile reste bien en dessous de 7,5. Seule une soirée exceptionnelle le dépasserait.",
+          "probability": 80
+        },
+        {
+          "market": "Tirs cadrés — Palestino",
+          "pick": "Palestino — Plus de 1.5 tirs cadrés",
+          "verdict": "nuance",
+          "confidence": "moyenne",
+          "explanation": "83 % : le moteur attend 3,42 tirs cadrés pour Palestino, qui en produit 4,6 par match mais seulement 2,8 à l'extérieur.",
+          "reasoning": "La moyenne reste au-dessus de 1,5, mais la baisse à 2,8 à l'extérieur et l'absence de da Silva rendent la marge moins large qu'elle n'y paraît.",
+          "probability": 83
+        }
+      ]
+    },
+    "kickoffRuns": 1,
+    "updatedAt": "2026-11-02T23:04:00.521Z",
+    "createdAt": "2026-11-02T23:04:00.521Z"
+  },
+  {
+    "matchId": "cal-2026-11-03-atletico-tucuman-argentinos-juniors",
+    "homeName": "Atlético Tucumán",
+    "awayName": "Argentinos Juniors",
+    "league": "Primera División - Argentina",
+    "commenceTime": "2026-11-03T00:15:00.000Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Atlético Tucumán vs Argentinos Juniors",
+      "expectedGoals": {
+        "home": 0.829,
+        "away": 1.026,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 3.07,
+        "draw": 3.14,
+        "away": 2.81
+      },
+      "market": {
+        "odds1": 2.88,
+        "oddsDraw": 2.92,
+        "odds2": 2.63
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "trop_peu_de_bookmakers",
+        "candidates": []
+      },
+      "statExpectations": {
+        "corners": {
+          "home": 4.46,
+          "away": 5.17,
+          "total": 9.63
+        },
+        "shots": {
+          "home": 12.54,
+          "away": 12.33,
+          "total": 24.87
+        },
+        "shotsOnTarget": {
+          "home": 3.74,
+          "away": 3.69,
+          "total": 7.43
+        }
+      },
+      "marketPredictions": [
+        {
+          "marketId": "result",
+          "params": {
+            "outcome": "away"
+          },
+          "market": "Résultat",
+          "predictedOutcome": "away",
+          "predictedLabel": "Argentinos Juniors gagne",
+          "predictedOdds": 2.81,
+          "probability": 36,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 0.5,
+            "side": "over"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 0.5 buts",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "no"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "no",
+          "predictedLabel": "Non",
+          "predictedOdds": 1.59,
+          "probability": 63,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 3.5,
+            "key": "awayUnder"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "awayUnder",
+          "predictedLabel": "Argentinos Juniors & Moins de 3.5 buts",
+          "predictedOdds": 3.27,
+          "probability": 31,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 1.5,
+            "side": "under"
+          },
+          "market": "Buts — Atlético Tucumán",
+          "predictedOutcome": "under",
+          "predictedLabel": "Atlético Tucumán — Moins de 1.5 buts",
+          "predictedOdds": 1.25,
+          "probability": 80,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 1.5,
+            "side": "under"
+          },
+          "market": "Buts — Argentinos Juniors",
+          "predictedOutcome": "under",
+          "predictedLabel": "Argentinos Juniors — Moins de 1.5 buts",
+          "predictedOdds": 1.38,
+          "probability": 72,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalCorners",
+          "params": {
+            "line": 6.5,
+            "side": "over"
+          },
+          "market": "Total corners",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 6.5 corners",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "home",
+            "line": 6.5,
+            "side": "under"
+          },
+          "market": "Corners — Atlético Tucumán",
+          "predictedOutcome": "under",
+          "predictedLabel": "Atlético Tucumán — Moins de 6.5 corners",
+          "predictedOdds": 1.25,
+          "probability": 80,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "away",
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Corners — Argentinos Juniors",
+          "predictedOutcome": "over",
+          "predictedLabel": "Argentinos Juniors — Plus de 2.5 corners",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShots",
+          "params": {
+            "line": 30.5,
+            "side": "under"
+          },
+          "market": "Total tirs",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 30.5 tirs",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "home",
+            "line": 16.5,
+            "side": "under"
+          },
+          "market": "Tirs — Atlético Tucumán",
+          "predictedOutcome": "under",
+          "predictedLabel": "Atlético Tucumán — Moins de 16.5 tirs",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "away",
+            "line": 16.5,
+            "side": "under"
+          },
+          "market": "Tirs — Argentinos Juniors",
+          "predictedOutcome": "under",
+          "predictedLabel": "Argentinos Juniors — Moins de 16.5 tirs",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShotsOnTarget",
+          "params": {
+            "line": 9.5,
+            "side": "under"
+          },
+          "market": "Total tirs cadrés",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 9.5 tirs cadrés",
+          "predictedOdds": 1.29,
+          "probability": 78,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "home",
+            "line": 5.5,
+            "side": "under"
+          },
+          "market": "Tirs cadrés — Atlético Tucumán",
+          "predictedOutcome": "under",
+          "predictedLabel": "Atlético Tucumán — Moins de 5.5 tirs cadrés",
+          "predictedOdds": 1.23,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "away",
+            "line": 5.5,
+            "side": "under"
+          },
+          "market": "Tirs cadrés — Argentinos Juniors",
+          "predictedOutcome": "under",
+          "predictedLabel": "Argentinos Juniors — Moins de 5.5 tirs cadrés",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        }
+      ],
+      "engineVersion": 5
+    },
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 7721,
+      "cache_read_input_tokens": 15736,
+      "output_tokens": 3992,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 7721,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 3491,
+          "cache_read_input_tokens": 11266,
+          "cache_creation_input_tokens": 925,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 925
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.0739592,
+    "analysedAt": "2026-11-02T23:59:00.860Z",
+    "timing": "coup-d-envoi",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 499,
+      "tokens": 1567,
+      "lecons": [
+        "cal-2026-10-18-estudiantes-de-rio-cuarto-aldosivi|teamCorners:away"
+      ],
+      "dossiersDu": "2026-11-01T23:17:56.128Z",
+      "equipes": {
+        "home": {
+          "id": "fotmob-161727",
+          "dossier": true
+        },
+        "away": {
+          "id": "fotmob-10086",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "Primera División - Argentina",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "FotMob",
+      "fotmobMatchId": "1000019617",
+      "fetchedAt": "2026-11-02T23:58:31.675Z",
+      "minutesBeforeKickoff": 16,
+      "home": {
+        "team": "Atlético Tucumán",
+        "teamId": "fotmob-161727",
+        "formation": "4-1-4-1",
+        "coach": "Julio Falcioni",
+        "statsSince": "2026-01-01",
+        "teamMatches": 35,
+        "startXI": [
+          {
+            "id": "fotmob-844389",
+            "name": "Luis Ingolotti",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 26,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 34,
+              "starts": 34,
+              "minutes": 3060,
+              "goals": 0,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.89
+            }
+          },
+          {
+            "id": "fotmob-426353",
+            "name": "Leonel Di Plácido",
+            "number": 24,
+            "position": "Defender",
+            "age": 32,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.292,
+            "y": 0.875,
+            "stats": {
+              "apps": 23,
+              "starts": 20,
+              "minutes": 1783,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.17,
+              "rating": 7.01
+            }
+          },
+          {
+            "id": "fotmob-1640274",
+            "name": "Clever Ferreira",
+            "number": 26,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "PAR",
+            "countryName": "Paraguay",
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 27,
+              "starts": 25,
+              "minutes": 2273,
+              "goals": 4,
+              "assists": 1,
+              "xg": 1.79,
+              "rating": 7.39
+            }
+          },
+          {
+            "id": "fotmob-1710298",
+            "name": "Luciano Vallejo",
+            "number": 36,
+            "position": "Defender",
+            "age": 22,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.292,
+            "y": 0.375,
+            "stats": {
+              "apps": 24,
+              "starts": 22,
+              "minutes": 1959,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.64,
+              "rating": 6.88
+            }
+          },
+          {
+            "id": "fotmob-941538",
+            "name": "Juan Infante",
+            "number": 32,
+            "position": "Defender",
+            "age": 30,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.292,
+            "y": 0.125,
+            "stats": {
+              "apps": 10,
+              "starts": 6,
+              "minutes": 593,
+              "goals": 0,
+              "assists": 2,
+              "xg": 0.07,
+              "rating": 6.78
+            }
+          },
+          {
+            "id": "fotmob-453412",
+            "name": "Julián Fernández",
+            "number": 5,
+            "position": "Midfielder",
+            "age": 31,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.485,
+            "y": 0.5,
+            "stats": {
+              "apps": 31,
+              "starts": 19,
+              "minutes": 1776,
+              "goals": 1,
+              "assists": 3,
+              "xg": 0.04,
+              "rating": 6.88
+            }
+          },
+          {
+            "id": "fotmob-793800",
+            "name": "Renzo Tesuri",
+            "number": 11,
+            "position": "Midfielder",
+            "age": 30,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.678,
+            "y": 0.875,
+            "stats": {
+              "apps": 35,
+              "starts": 34,
+              "minutes": 2581,
+              "goals": 4,
+              "assists": 1,
+              "xg": 2.44,
+              "rating": 6.66
+            }
+          },
+          {
+            "id": "fotmob-1661711",
+            "name": "Lautaro Godoy",
+            "number": 31,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.678,
+            "y": 0.625,
+            "stats": {
+              "apps": 32,
+              "starts": 21,
+              "minutes": 2025,
+              "goals": 3,
+              "assists": 3,
+              "xg": 1.29,
+              "rating": 7.25
+            }
+          },
+          {
+            "id": "fotmob-1374130",
+            "name": "Franco Nicola",
+            "number": 10,
+            "position": "Midfielder",
+            "age": 24,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "x": 0.678,
+            "y": 0.375,
+            "stats": {
+              "apps": 32,
+              "starts": 28,
+              "minutes": 2324,
+              "goals": 3,
+              "assists": 1,
+              "xg": 2.25,
+              "rating": 6.75
+            }
+          },
+          {
+            "id": "fotmob-1135464",
+            "name": "Nicolás Laméndola",
+            "number": 23,
+            "position": "Midfielder",
+            "age": 27,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.678,
+            "y": 0.125,
+            "stats": {
+              "apps": 33,
+              "starts": 29,
+              "minutes": 2477,
+              "goals": 5,
+              "assists": 5,
+              "xg": 2.18,
+              "rating": 7.01
+            }
+          },
+          {
+            "id": "fotmob-198056",
+            "name": "Leandro Díaz",
+            "number": 9,
+            "position": "Forward",
+            "age": 34,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.89,
+            "y": 0.5,
+            "stats": {
+              "apps": 26,
+              "starts": 24,
+              "minutes": 2034,
+              "goals": 8,
+              "assists": 3,
+              "xg": 8.38,
+              "rating": 6.81
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-874631",
+            "name": "Tomás Durso",
+            "number": 25,
+            "position": "Goalkeeper",
+            "age": 27,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 90,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-754685",
+            "name": "Gabriel Compagnucci",
+            "number": 28,
+            "position": "Defender",
+            "age": 35,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 22,
+              "starts": 4,
+              "minutes": 476,
+              "goals": 0,
+              "assists": 2,
+              "xg": 0.51,
+              "rating": 6.43
+            }
+          },
+          {
+            "id": "fotmob-892697",
+            "name": "Maximiliano Villa",
+            "number": 3,
+            "position": "Defender",
+            "age": 29,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "stats": {
+              "apps": 21,
+              "starts": 17,
+              "minutes": 1527,
+              "goals": 2,
+              "assists": 1,
+              "xg": 1.44,
+              "rating": 6.92
+            }
+          },
+          {
+            "id": "fotmob-1744054",
+            "name": "Ramiro Paunero",
+            "number": 2,
+            "position": "Defender",
+            "age": 21,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 3,
+              "starts": 1,
+              "minutes": 71,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.68
+            }
+          },
+          {
+            "id": "fotmob-940819",
+            "name": "Juan Rodríguez",
+            "number": 17,
+            "position": "Defender",
+            "age": 32,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-955274",
+            "name": "Gianluca Ferrari",
+            "number": 6,
+            "position": "Defender",
+            "age": 29,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 11,
+              "starts": 10,
+              "minutes": 901,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.84,
+              "rating": 6.71
+            }
+          },
+          {
+            "id": "fotmob-529351",
+            "name": "Ezequiel Ham",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 32,
+            "countryCode": "SYR",
+            "countryName": "Syria",
+            "stats": {
+              "apps": 19,
+              "starts": 10,
+              "minutes": 914,
+              "goals": 0,
+              "assists": 2,
+              "xg": 1.19,
+              "rating": 6.5
+            }
+          },
+          {
+            "id": "fotmob-1520069",
+            "name": "Mauro Carrizo",
+            "number": 34,
+            "position": "Midfielder",
+            "age": 20,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-2102112",
+            "name": "Rodrigo Granillo",
+            "number": 27,
+            "position": "Forward",
+            "age": 20,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 7,
+              "starts": 0,
+              "minutes": 60,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.09,
+              "rating": 5.94
+            }
+          },
+          {
+            "id": "fotmob-1531790",
+            "name": "Facundo Pimienta",
+            "number": 22,
+            "position": "Forward",
+            "age": 23,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 2,
+              "starts": 0,
+              "minutes": 13,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-616400",
+            "name": "Pedro Canelo",
+            "number": 14,
+            "position": "Forward",
+            "age": 34,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 16,
+              "starts": 5,
+              "minutes": 465,
+              "goals": 2,
+              "assists": 0,
+              "xg": 0.79,
+              "rating": 6.3
+            }
+          },
+          {
+            "id": "fotmob-1436204",
+            "name": "Manuel Brondo",
+            "number": 30,
+            "position": "Forward",
+            "age": 24,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 15,
+              "starts": 3,
+              "minutes": 381,
+              "goals": 1,
+              "assists": 1,
+              "xg": 0.62,
+              "rating": 6.38
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "id": "fotmob-939335",
+            "age": 26,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Ramiro Ruíz",
+            "reason": "suspendu",
+            "expectedReturn": "Early November 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 21,
+              "starts": 8,
+              "minutes": 922,
+              "goals": 3,
+              "assists": 3,
+              "xg": 3.73,
+              "rating": 6.49
+            }
+          },
+          {
+            "id": "fotmob-1336567",
+            "age": 26,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Kevin Ortíz",
+            "reason": "blessé",
+            "expectedReturn": "About 1-2 weeks",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 17,
+              "starts": 9,
+              "minutes": 860,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.18,
+              "rating": 6.97
+            }
+          },
+          {
+            "id": "fotmob-529109",
+            "age": 35,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Gastón Suso",
+            "reason": "blessé",
+            "expectedReturn": "Mid January 2027",
+            "position": "Defender",
+            "stats": {
+              "apps": 17,
+              "starts": 17,
+              "minutes": 1508,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.36,
+              "rating": 6.74
+            }
+          },
+          {
+            "id": "fotmob-298229",
+            "age": 32,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Martín Benítez",
+            "reason": "blessé",
+            "expectedReturn": "Mid November 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 3,
+              "starts": 1,
+              "minutes": 94,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.83,
+              "rating": 6.75
+            }
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-1230316",
+            "age": 24,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Ignacio Galván",
+            "position": "Midfielder",
+            "starts": 22,
+            "goals": 0,
+            "assists": 1,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1844361",
+            "age": 22,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Leonel Vega",
+            "position": "Midfielder",
+            "starts": 19,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          }
+        ]
+      },
+      "away": {
+        "team": "Argentinos Juniors",
+        "teamId": "fotmob-10086",
+        "formation": "4-3-3",
+        "coach": "Nicolás Diez",
+        "statsSince": "2026-01-01",
+        "teamMatches": 36,
+        "startXI": [
+          {
+            "id": "fotmob-424153",
+            "name": "Brayan Cortés",
+            "number": 25,
+            "position": "Goalkeeper",
+            "age": 31,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 35,
+              "starts": 35,
+              "minutes": 3210,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.08
+            }
+          },
+          {
+            "id": "fotmob-1137661",
+            "name": "Franco Paredes",
+            "number": 17,
+            "position": "Defender",
+            "age": 27,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.357,
+            "y": 0.875,
+            "stats": {
+              "apps": 8,
+              "starts": 7,
+              "minutes": 545,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.09,
+              "rating": 7.17
+            }
+          },
+          {
+            "id": "fotmob-920404",
+            "name": "Francisco Álvarez",
+            "number": 16,
+            "position": "Defender",
+            "age": 26,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.357,
+            "y": 0.625,
+            "stats": {
+              "apps": 34,
+              "starts": 34,
+              "minutes": 3089,
+              "goals": 3,
+              "assists": 0,
+              "xg": 1.65,
+              "rating": 7.5
+            }
+          },
+          {
+            "id": "fotmob-316878",
+            "name": "Érik Godoy",
+            "number": 4,
+            "position": "Defender",
+            "age": 33,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.357,
+            "y": 0.375,
+            "stats": {
+              "apps": 18,
+              "starts": 9,
+              "minutes": 884,
+              "goals": 1,
+              "assists": 0,
+              "xg": 1.05,
+              "rating": 6.73
+            }
+          },
+          {
+            "id": "fotmob-841913",
+            "name": "Sebastián Prieto",
+            "number": 20,
+            "position": "Defender",
+            "age": 33,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.357,
+            "y": 0.125,
+            "stats": {
+              "apps": 33,
+              "starts": 32,
+              "minutes": 2711,
+              "goals": 3,
+              "assists": 3,
+              "xg": 1.16,
+              "rating": 7.4
+            }
+          },
+          {
+            "id": "fotmob-1842716",
+            "name": "Facundo Carrizo",
+            "number": 5,
+            "position": "Midfielder",
+            "age": 19,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.613,
+            "y": 0.79,
+            "stats": {
+              "apps": 7,
+              "starts": 3,
+              "minutes": 309,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.28,
+              "rating": 6.52
+            }
+          },
+          {
+            "id": "fotmob-905265",
+            "name": "Kevin Gutiérrez",
+            "number": 15,
+            "position": "Midfielder",
+            "age": 29,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.613,
+            "y": 0.5,
+            "stats": {
+              "apps": 29,
+              "starts": 22,
+              "minutes": 2026,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.54,
+              "rating": 7.02
+            }
+          },
+          {
+            "id": "fotmob-543304",
+            "name": "Nicolás Oroz",
+            "number": 11,
+            "position": "Midfielder",
+            "age": 32,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.613,
+            "y": 0.21,
+            "stats": {
+              "apps": 35,
+              "starts": 33,
+              "minutes": 2686,
+              "goals": 2,
+              "assists": 4,
+              "xg": 2.05,
+              "rating": 7.17
+            }
+          },
+          {
+            "id": "fotmob-1648046",
+            "name": "Diego Porcel",
+            "number": 7,
+            "position": "Forward",
+            "age": 21,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.87,
+            "y": 0.79,
+            "stats": {
+              "apps": 30,
+              "starts": 10,
+              "minutes": 1088,
+              "goals": 3,
+              "assists": 0,
+              "xg": 2.21,
+              "rating": 6.47
+            }
+          },
+          {
+            "id": "fotmob-918846",
+            "name": "Gastón Verón",
+            "number": 9,
+            "position": "Forward",
+            "age": 25,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 14,
+              "starts": 12,
+              "minutes": 933,
+              "goals": 5,
+              "assists": 2,
+              "xg": 3.82,
+              "rating": 7.24
+            }
+          },
+          {
+            "id": "fotmob-1025559",
+            "name": "Matías Giménez",
+            "number": 19,
+            "position": "Forward",
+            "age": 27,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.87,
+            "y": 0.21,
+            "stats": {
+              "apps": 13,
+              "starts": 2,
+              "minutes": 350,
+              "goals": 2,
+              "assists": 1,
+              "xg": 1.43,
+              "rating": 6.73
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-1608394",
+            "name": "Gonzalo Siri Payer",
+            "number": 12,
+            "position": "Goalkeeper",
+            "age": 23,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 90,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.91
+            }
+          },
+          {
+            "id": "fotmob-1436206",
+            "name": "Mateo Mendoza",
+            "number": 23,
+            "position": "Defender",
+            "age": 21,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 2,
+              "starts": 1,
+              "minutes": 98,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.02,
+              "rating": 7.3
+            }
+          },
+          {
+            "id": "fotmob-723489",
+            "name": "Claudio Bravo",
+            "number": 26,
+            "position": "Defender",
+            "age": 29,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 12,
+              "starts": 3,
+              "minutes": 412,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.12,
+              "rating": 6.94
+            }
+          },
+          {
+            "id": "fotmob-1924773",
+            "name": "Santino Gianini",
+            "number": 13,
+            "position": "Defender",
+            "age": 18,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 1,
+              "starts": 0,
+              "minutes": 71,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.69
+            }
+          },
+          {
+            "id": "fotmob-1575797",
+            "name": "Kevin Coronel",
+            "number": 22,
+            "position": "Defender",
+            "age": 22,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 20,
+              "starts": 14,
+              "minutes": 1230,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.49,
+              "rating": 7.02
+            }
+          },
+          {
+            "id": "fotmob-1232259",
+            "name": "Joaquín Gho",
+            "number": 28,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1037535",
+            "name": "Hernán López",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 26,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 29,
+              "starts": 24,
+              "minutes": 1803,
+              "goals": 4,
+              "assists": 3,
+              "xg": 4.93,
+              "rating": 6.85
+            }
+          },
+          {
+            "id": "fotmob-1054269",
+            "name": "Gabriel Florentín",
+            "number": 10,
+            "position": "Midfielder",
+            "age": 27,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 14,
+              "starts": 2,
+              "minutes": 307,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.04,
+              "rating": 6.63
+            }
+          },
+          {
+            "id": "fotmob-2097589",
+            "name": "Alan Alcaraz",
+            "number": 35,
+            "position": "Midfielder",
+            "age": 17,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 3,
+              "starts": 0,
+              "minutes": 75,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.24,
+              "rating": 6.15
+            }
+          },
+          {
+            "id": "fotmob-1200022",
+            "name": "Gino Infantino",
+            "number": 32,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 3,
+              "starts": 0,
+              "minutes": 51,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.17,
+              "rating": 6.44
+            }
+          },
+          {
+            "id": "fotmob-1843096",
+            "name": "Facundo Jainikoski",
+            "number": 48,
+            "position": "Forward",
+            "age": 18,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 25,
+              "starts": 8,
+              "minutes": 918,
+              "goals": 1,
+              "assists": 2,
+              "xg": 1.99,
+              "rating": 6.47
+            }
+          },
+          {
+            "id": "fotmob-728323",
+            "name": "Tomás Molina",
+            "number": 27,
+            "position": "Forward",
+            "age": 31,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 30,
+              "starts": 26,
+              "minutes": 2319,
+              "goals": 5,
+              "assists": 3,
+              "xg": 8.28,
+              "rating": 6.86
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "id": "fotmob-1648045",
+            "age": 21,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Franco Vázquez",
+            "reason": "blessé",
+            "expectedReturn": "About 1-2 weeks",
+            "position": "Defender",
+            "stats": {
+              "apps": 13,
+              "starts": 12,
+              "minutes": 1032,
+              "goals": 0,
+              "assists": 0,
+              "xg": 1.07,
+              "rating": 7.19
+            }
+          },
+          {
+            "id": "fotmob-1304246",
+            "age": 24,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Emiliano Viveros",
+            "reason": "blessé",
+            "expectedReturn": "Out for season",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 20,
+              "starts": 14,
+              "minutes": 1079,
+              "goals": 1,
+              "assists": 2,
+              "xg": 0.6,
+              "rating": 6.76
+            }
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-1342579",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Alan Lescano",
+            "position": "Midfielder",
+            "starts": 28,
+            "goals": 6,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-728323",
+            "age": 31,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Tomás Molina",
+            "position": "Midfielder",
+            "starts": 26,
+            "goals": 5,
+            "assists": 3,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-1037535",
+            "age": 26,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Hernán López",
+            "position": "Midfielder",
+            "starts": 24,
+            "goals": 4,
+            "assists": 3,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-616508",
+            "age": 34,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Federico Fattori",
+            "position": "Midfielder",
+            "starts": 21,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          }
+        ]
+      },
+      "matchInfo": {
+        "round": "Clausura - Round 15",
+        "stadium": "Estadio Monumental Presidente José Fierro",
+        "city": "San Miguel de Tucumán, Provincia",
+        "capacity": 35200,
+        "surface": "grass",
+        "weather": "Cloudy",
+        "temperature": 21,
+        "windSpeed": 11,
+        "precipitation": 0,
+        "referee": {
+          "name": "Yael Falcón Pérez",
+          "country": "Argentina",
+          "league": "Liga Profesional",
+          "matches": 64,
+          "yellowCardsPerMatch": 6.02,
+          "yellowCardsLeagueAverage": 5.21,
+          "redCards": 11,
+          "penalties": 11,
+          "foulsPerMatch": 26.25,
+          "foulsLeagueAverage": 24.73
+        }
+      }
+    },
+    "analysis": {
+      "summary": "Atlético Tucumán (25e du classement historique, 31 pts) est fragile : aucune victoire à domicile en championnat depuis 9 matchs, 1,1 but marqué et 1,3 encaissé sur 10 matchs, 36 % de possession. Argentinos Juniors (1er de l'historique, 62 pts) est invaincu depuis 4 matchs, avec 0,9 but marqué et 0,8 encaissé : un profil de match fermé. Argentinos aligne son 4-3-3 sans Lescano, avec Molina et López au banc. Tucumán est privé de Ruíz (suspendu), Ortíz et Suso (blessés).",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Argentinos est en meilleure dynamique que Tucumán.",
+          "evidence": "Argentinos : V V N V D sur 5 matchs. Tucumán : V D N D D."
+        },
+        {
+          "factor": "statistiques et moyennes",
+          "observation": "Deux équipes peu prolifiques, avec peu de tirs cadrés.",
+          "evidence": "Tucumán 1,1 / 1,3 but et 3,5 tirs cadrés produits ; Argentinos 0,9 / 0,8 but et 3,7 tirs cadrés. Argentinos à l'extérieur : 0,5 but marqué par match."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Aucun edge chiffré, mise PASS faute de bookmakers.",
+          "evidence": "Cote juste 1 : 3,07 · N : 3,14 · 2 : 2,81."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va dans le sens du moteur : un match fermé, avec un léger avantage à Argentinos. Le résultat reste très ouvert, et l'absence d'edge invite à la prudence.",
+      "lineupImpact": "Source FotMob, relue 16 min avant le coup d'envoi : composition presque officielle. Argentinos laisse Molina (5+3) et López (4+3) sur le banc et se passe de Lescano (6 buts) : le trio offensif Porcel, Verón, Giménez est moins prolifique. Tucumán a Leandro Díaz (8 buts) en pointe mais manque de Ruíz (3+3, suspendu) et Suso (blessé). Arbitre plus sévère que la moyenne (6,02 jaunes contre 5,21), sans effet net sur les marchés présents.",
+      "marketViews": [
+        {
+          "market": "Résultat",
+          "pick": "Argentinos Juniors gagne",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "36 % : Argentinos invaincu depuis 4 matchs et 1er de l'historique, mais seulement 0,5 but marqué par match à l'extérieur face à un Tucumán qui garde le nul possible.",
+          "reasoning": "La forme et le classement favorisent Argentinos, mais son faible rendement offensif à l'extérieur et un match fermé laissent le nul très présent.",
+          "probability": 36
+        },
+        {
+          "market": "Total buts",
+          "pick": "Plus de 0.5 buts",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : Tucumán a marqué lors de ses 5 derniers matchs, et le moteur attend 0,83 + 1,03 but, soit environ 1,9 au total.",
+          "reasoning": "Il manque un 0-0 pour que la ligne tombe, et Tucumán marque régulièrement. La ligne est très basse.",
+          "probability": 83
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "pick": "Non",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "63 % : Argentinos n'encaisse que 0,8 but par match et a gardé sa cage inviolée sur ses 2 derniers matchs, tandis qu'il ne marque que 0,5 à l'extérieur.",
+          "reasoning": "Le profil défensif d'Argentinos va dans le sens du Non, même si Tucumán a marqué 5 matchs de suite.",
+          "probability": 63
+        },
+        {
+          "market": "Résultat + Total buts",
+          "pick": "Argentinos Juniors & Moins de 3.5 buts",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "31 % : cumule la victoire d'Argentinos (36 %) et un match à moins de 4 buts, très probable vu les faibles moyennes des deux équipes.",
+          "reasoning": "Le volet buts est solide, mais le résultat reste incertain. Marché historiquement peu fiable.",
+          "probability": 31
+        },
+        {
+          "market": "Buts — Atlético Tucumán",
+          "pick": "Atlético Tucumán — Moins de 1.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "80 % : Tucumán marque 1,1 but par match, le moteur en attend 0,83 face à une défense d'Argentinos qui en concède 0,8.",
+          "reasoning": "Face à la meilleure défense, Tucumán dépasse rarement un but, malgré Díaz en pointe.",
+          "probability": 80
+        },
+        {
+          "market": "Buts — Argentinos Juniors",
+          "pick": "Argentinos Juniors — Moins de 1.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "72 % : Argentinos marque 0,9 but par match (0,5 à l'extérieur), le moteur en attend 1,03 contre 1,3 concédé par Tucumán.",
+          "reasoning": "Sans Lescano et avec un trio offensif peu prolifique, un seul but ou moins est le scénario le plus probable.",
+          "probability": 72
+        },
+        {
+          "market": "Total corners",
+          "pick": "Plus de 6.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "82 % : le moteur attend 9,63 corners (4,46 + 5,17), Argentinos en tire 6,2 par match.",
+          "reasoning": "La domination d'Argentinos à la possession (59 %) alimente les corners, avec une marge confortable sur la ligne.",
+          "probability": 82
+        },
+        {
+          "market": "Corners — Atlético Tucumán",
+          "pick": "Atlético Tucumán — Moins de 6.5 corners",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "80 % : Tucumán tire 4,3 corners par match (4,2 à domicile), le moteur en attend 4,46.",
+          "reasoning": "Avec 36 % de possession, Tucumán est loin de 7 corners.",
+          "probability": 80
+        },
+        {
+          "market": "Corners — Argentinos Juniors",
+          "pick": "Argentinos Juniors — Plus de 2.5 corners",
+          "verdict": "nuance",
+          "confidence": "moyenne",
+          "explanation": "83 % : Argentinos obtient 6,2 corners par match (4,8 à l'extérieur), le moteur en attend 5,17.",
+          "reasoning": "La marge est large. Le carnet signale pourtant des erreurs sur ce type de plancher quand l'équipe est dominée, ce qui est peu probable ici.",
+          "probability": 83
+        },
+        {
+          "market": "Total tirs",
+          "pick": "Moins de 30.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : le moteur attend 24,87 tirs (12,54 + 12,33) pour un match fermé.",
+          "reasoning": "Les moyennes des deux équipes sont loin de 30 tirs cumulés.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs — Atlético Tucumán",
+          "pick": "Atlético Tucumán — Moins de 16.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "81 % : Tucumán tire 11,6 fois par match (11,4 à domicile) et Argentinos en concède 11,2.",
+          "reasoning": "Avec peu de possession, dépasser 16 tirs serait inhabituel.",
+          "probability": 81
+        },
+        {
+          "market": "Tirs — Argentinos Juniors",
+          "pick": "Argentinos Juniors — Moins de 16.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "82 % : Argentinos tire 12,9 fois par match (10 à l'extérieur), le moteur en attend 12,33.",
+          "reasoning": "Son volume à l'extérieur est encore plus bas que sa moyenne globale, ce qui éloigne la ligne.",
+          "probability": 82
+        },
+        {
+          "market": "Total tirs cadrés",
+          "pick": "Moins de 9.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "78 % : le moteur attend 7,43 tirs cadrés (3,74 + 3,69), avec 3,5 et 3,7 par match en moyenne.",
+          "reasoning": "Les deux équipes cadrent peu, la ligne laisse de la marge.",
+          "probability": 78
+        },
+        {
+          "market": "Tirs cadrés — Atlético Tucumán",
+          "pick": "Atlético Tucumán — Moins de 5.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "81 % : Tucumán cadre 3,5 tirs par match (3,4 à domicile), le moteur en attend 3,74.",
+          "reasoning": "Atteindre 6 tirs cadrés serait très au-dessus de ses habitudes.",
+          "probability": 81
+        },
+        {
+          "market": "Tirs cadrés — Argentinos Juniors",
+          "pick": "Argentinos Juniors — Moins de 5.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "82 % : Argentinos cadre 3,7 tirs par match (2,8 à l'extérieur), le moteur en attend 3,69.",
+          "reasoning": "Son volume à l'extérieur est faible, la ligne est donc bien placée.",
+          "probability": 82
+        }
+      ],
+      "caveats": "Classement issu de football-data.co.uk (historique), non en direct. Les dossiers donnent une position différente dans le Clausura (Tucumán 10e, Argentinos 2e). Peu de relevés à l'extérieur pour Argentinos (6 matchs). Pas d'edge chiffré, mise PASS faute de bookmakers."
+    },
+    "kickoffRuns": 2,
+    "updatedAt": "2026-11-02T23:59:00.860Z",
+    "createdAt": "2026-11-02T23:24:10.464Z"
+  },
+  {
+    "matchId": "cal-2026-11-03-independiente-rivadavia-banfield",
+    "homeName": "Independiente Rivadavia",
+    "awayName": "Banfield",
+    "league": "Primera División - Argentina",
+    "commenceTime": "2026-11-03T00:15:00.000Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Independiente Rivadavia vs Banfield",
+      "expectedGoals": {
+        "home": 2.609,
+        "away": 1.256,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 1.64,
+        "draw": 4.26,
+        "away": 6.43
+      },
+      "market": {
+        "odds1": 1.58,
+        "oddsDraw": 3.88,
+        "odds2": 5.88
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "trop_peu_de_bookmakers",
+        "candidates": []
+      },
+      "statExpectations": {
+        "corners": {
+          "home": 4.79,
+          "away": 4.5,
+          "total": 9.29
+        },
+        "shots": {
+          "home": 16.39,
+          "away": 12.96,
+          "total": 29.35
+        },
+        "shotsOnTarget": {
+          "home": 6.16,
+          "away": 4.46,
+          "total": 10.62
+        }
+      },
+      "marketPredictions": [
+        {
+          "marketId": "result",
+          "params": {
+            "outcome": "home"
+          },
+          "market": "Résultat",
+          "predictedOutcome": "home",
+          "predictedLabel": "Independiente Rivadavia gagne",
+          "predictedOdds": 1.64,
+          "probability": 61,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 2.5 buts",
+          "predictedOdds": 1.35,
+          "probability": 74,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "yes"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "yes",
+          "predictedLabel": "Oui",
+          "predictedOdds": 1.5,
+          "probability": 67,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 1.5,
+            "key": "homeOver"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "homeOver",
+          "predictedLabel": "Independiente Rivadavia & Plus de 1.5 buts",
+          "predictedOdds": 1.77,
+          "probability": 56,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 1.5,
+            "side": "over"
+          },
+          "market": "Buts — Independiente Rivadavia",
+          "predictedOutcome": "over",
+          "predictedLabel": "Independiente Rivadavia — Plus de 1.5 buts",
+          "predictedOdds": 1.36,
+          "probability": 74,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 0.5,
+            "side": "over"
+          },
+          "market": "Buts — Banfield",
+          "predictedOutcome": "over",
+          "predictedLabel": "Banfield — Plus de 0.5 buts",
+          "predictedOdds": 1.4,
+          "probability": 71,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalCorners",
+          "params": {
+            "line": 12.5,
+            "side": "under"
+          },
+          "market": "Total corners",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 12.5 corners",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "home",
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Corners — Independiente Rivadavia",
+          "predictedOutcome": "over",
+          "predictedLabel": "Independiente Rivadavia — Plus de 2.5 corners",
+          "predictedOdds": 1.25,
+          "probability": 80,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "away",
+            "line": 6.5,
+            "side": "under"
+          },
+          "market": "Corners — Banfield",
+          "predictedOutcome": "under",
+          "predictedLabel": "Banfield — Moins de 6.5 corners",
+          "predictedOdds": 1.25,
+          "probability": 80,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShots",
+          "params": {
+            "line": 35.5,
+            "side": "under"
+          },
+          "market": "Total tirs",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 35.5 tirs",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "home",
+            "line": 21.5,
+            "side": "under"
+          },
+          "market": "Tirs — Independiente Rivadavia",
+          "predictedOutcome": "under",
+          "predictedLabel": "Independiente Rivadavia — Moins de 21.5 tirs",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "away",
+            "line": 17.5,
+            "side": "under"
+          },
+          "market": "Tirs — Banfield",
+          "predictedOutcome": "under",
+          "predictedLabel": "Banfield — Moins de 17.5 tirs",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShotsOnTarget",
+          "params": {
+            "line": 7.5,
+            "side": "over"
+          },
+          "market": "Total tirs cadrés",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 7.5 tirs cadrés",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "home",
+            "line": 3.5,
+            "side": "over"
+          },
+          "market": "Tirs cadrés — Independiente Rivadavia",
+          "predictedOutcome": "over",
+          "predictedLabel": "Independiente Rivadavia — Plus de 3.5 tirs cadrés",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "away",
+            "line": 6.5,
+            "side": "under"
+          },
+          "market": "Tirs cadrés — Banfield",
+          "predictedOutcome": "under",
+          "predictedLabel": "Banfield — Moins de 6.5 tirs cadrés",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        }
+      ],
+      "engineVersion": 5
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 6833,
+      "cache_read_input_tokens": 4470,
+      "output_tokens": 3435,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 6833,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 3435,
+          "cache_read_input_tokens": 4470,
+          "cache_creation_input_tokens": 6833,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 6833
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.06258,
+    "analysedAt": "2026-11-02T23:59:25.567Z",
+    "timing": "coup-d-envoi",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 480,
+      "tokens": 1508,
+      "lecons": [
+        "cal-2026-10-18-estudiantes-de-rio-cuarto-aldosivi|teamCorners:away"
+      ],
+      "dossiersDu": "2026-11-01T23:17:56.128Z",
+      "equipes": {
+        "home": {
+          "id": "fotmob-161729",
+          "dossier": true
+        },
+        "away": {
+          "id": "fotmob-10087",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "Primera División - Argentina",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "FotMob",
+      "fotmobMatchId": "1000019618",
+      "fetchedAt": "2026-11-02T23:59:01.762Z",
+      "minutesBeforeKickoff": 16,
+      "home": {
+        "team": "Independiente Rivadavia",
+        "teamId": "fotmob-161729",
+        "formation": "4-2-3-1",
+        "coach": "Alfredo Berti",
+        "statsSince": "2026-01-01",
+        "teamMatches": 43,
+        "startXI": [
+          {
+            "id": "fotmob-1844779",
+            "name": "Nicolás Bolcato",
+            "number": 30,
+            "position": "Goalkeeper",
+            "age": 22,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 41,
+              "starts": 40,
+              "minutes": 3676,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.03
+            }
+          },
+          {
+            "id": "fotmob-805771",
+            "name": "Iván Villalba",
+            "number": 40,
+            "position": "Defender",
+            "age": 31,
+            "countryCode": "PAR",
+            "countryName": "Paraguay",
+            "x": 0.292,
+            "y": 0.875,
+            "stats": {
+              "apps": 37,
+              "starts": 27,
+              "minutes": 2498,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.58,
+              "rating": 6.98
+            }
+          },
+          {
+            "id": "fotmob-1344767",
+            "name": "Leonard Costa",
+            "number": 2,
+            "position": "Defender",
+            "age": 28,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 39,
+              "starts": 36,
+              "minutes": 3010,
+              "goals": 1,
+              "assists": 2,
+              "xg": 1.23,
+              "rating": 6.85
+            }
+          },
+          {
+            "id": "fotmob-1624107",
+            "name": "Alejo Osella",
+            "number": 13,
+            "position": "Defender",
+            "age": 26,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.292,
+            "y": 0.375,
+            "stats": {
+              "apps": 24,
+              "starts": 18,
+              "minutes": 1479,
+              "goals": 4,
+              "assists": 1,
+              "xg": 1.89,
+              "rating": 7.01
+            }
+          },
+          {
+            "id": "fotmob-978210",
+            "name": "Juan Elordi",
+            "number": 3,
+            "position": "Defender",
+            "age": 32,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.292,
+            "y": 0.125,
+            "stats": {
+              "apps": 39,
+              "starts": 29,
+              "minutes": 2748,
+              "goals": 2,
+              "assists": 5,
+              "xg": 2.94,
+              "rating": 7.11
+            }
+          },
+          {
+            "id": "fotmob-1435009",
+            "name": "Tomás Bottari",
+            "number": 5,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.485,
+            "y": 0.7,
+            "stats": {
+              "apps": 36,
+              "starts": 31,
+              "minutes": 2658,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.17,
+              "rating": 6.87
+            }
+          },
+          {
+            "id": "fotmob-1129078",
+            "name": "José Florentín",
+            "number": 25,
+            "position": "Midfielder",
+            "age": 30,
+            "countryCode": "PAR",
+            "countryName": "Paraguay",
+            "x": 0.485,
+            "y": 0.3,
+            "stats": {
+              "apps": 41,
+              "starts": 39,
+              "minutes": 3500,
+              "goals": 8,
+              "assists": 2,
+              "xg": 5.5,
+              "rating": 7.39
+            }
+          },
+          {
+            "id": "fotmob-1462417",
+            "name": "Fabrizio Sartori",
+            "number": 43,
+            "position": "Midfielder",
+            "age": 24,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.678,
+            "y": 0.837,
+            "stats": {
+              "apps": 38,
+              "starts": 30,
+              "minutes": 2462,
+              "goals": 9,
+              "assists": 0,
+              "xg": 6.33,
+              "rating": 6.7
+            }
+          },
+          {
+            "id": "fotmob-1314171",
+            "name": "Gonzalo Ríos",
+            "number": 11,
+            "position": "Midfielder",
+            "age": 27,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.678,
+            "y": 0.5,
+            "stats": {
+              "apps": 40,
+              "starts": 24,
+              "minutes": 1943,
+              "goals": 5,
+              "assists": 3,
+              "xg": 1.2,
+              "rating": 6.7
+            }
+          },
+          {
+            "id": "fotmob-1201808",
+            "name": "Leonel Bucca",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 27,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.678,
+            "y": 0.163,
+            "stats": {
+              "apps": 31,
+              "starts": 12,
+              "minutes": 1085,
+              "goals": 5,
+              "assists": 0,
+              "xg": 1.72,
+              "rating": 6.82
+            }
+          },
+          {
+            "id": "fotmob-1320444",
+            "name": "Álex Arce",
+            "number": 9,
+            "position": "Forward",
+            "age": 31,
+            "countryCode": "PAR",
+            "countryName": "Paraguay",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 32,
+              "starts": 23,
+              "minutes": 2185,
+              "goals": 20,
+              "assists": 1,
+              "xg": 13.29,
+              "rating": 7.15
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-1340884",
+            "name": "Emmanuel Gómez",
+            "number": 21,
+            "position": "Goalkeeper",
+            "age": 25,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 2,
+              "starts": 2,
+              "minutes": 180,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.37
+            }
+          },
+          {
+            "id": "fotmob-1017707",
+            "name": "Alex Vigo",
+            "number": 28,
+            "position": "Defender",
+            "age": 27,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 22,
+              "starts": 9,
+              "minutes": 959,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.56,
+              "rating": 6.76
+            }
+          },
+          {
+            "id": "fotmob-566259",
+            "name": "Ezequiel Bonifacio",
+            "number": 36,
+            "position": "Defender",
+            "age": 32,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 24,
+              "starts": 15,
+              "minutes": 1310,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.72,
+              "rating": 6.61
+            }
+          },
+          {
+            "id": "fotmob-1110613",
+            "name": "Luis Sequeira",
+            "number": 77,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 13,
+              "starts": 4,
+              "minutes": 457,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.52,
+              "rating": 6.72
+            }
+          },
+          {
+            "id": "fotmob-1273505",
+            "name": "Matías Fernández",
+            "number": 10,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 40,
+              "starts": 38,
+              "minutes": 3025,
+              "goals": 4,
+              "assists": 11,
+              "xg": 6.8,
+              "rating": 7.14
+            }
+          },
+          {
+            "id": "fotmob-1201767",
+            "name": "Stéfano Moreyra",
+            "number": 34,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 10,
+              "starts": 1,
+              "minutes": 163,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.14,
+              "rating": 6.31
+            }
+          },
+          {
+            "id": "fotmob-1096613",
+            "name": "Diego Crego",
+            "number": 27,
+            "position": "Midfielder",
+            "age": 29,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 15,
+              "starts": 4,
+              "minutes": 451,
+              "goals": 1,
+              "assists": 0,
+              "xg": 1.22,
+              "rating": 6.57
+            }
+          },
+          {
+            "id": "fotmob-1435121",
+            "name": "Kevin Vázquez",
+            "number": 32,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 10,
+              "starts": 3,
+              "minutes": 320,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.68,
+              "rating": 6.54
+            }
+          },
+          {
+            "id": "fotmob-1362517",
+            "name": "Rodrigo Atencio",
+            "number": 19,
+            "position": "Forward",
+            "age": 24,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 28,
+              "starts": 7,
+              "minutes": 977,
+              "goals": 0,
+              "assists": 4,
+              "xg": 1.72,
+              "rating": 6.59
+            }
+          },
+          {
+            "id": "fotmob-1271801",
+            "name": "Matías Reali",
+            "number": 80,
+            "position": "Forward",
+            "age": 28,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 25,
+              "starts": 13,
+              "minutes": 1263,
+              "goals": 2,
+              "assists": 3,
+              "xg": 1.25,
+              "rating": 6.81
+            }
+          },
+          {
+            "id": "fotmob-1433139",
+            "name": "Luis Díaz",
+            "number": 23,
+            "position": "Forward",
+            "age": 22,
+            "countryCode": "COL",
+            "countryName": "Colombia",
+            "stats": {
+              "apps": 5,
+              "starts": 0,
+              "minutes": 55,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.05,
+              "rating": 6.07
+            }
+          },
+          {
+            "id": "fotmob-571578",
+            "name": "Victorio Gabriel Ramis",
+            "number": 7,
+            "position": "Forward",
+            "age": 32,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 7,
+              "starts": 1,
+              "minutes": 85,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.34,
+              "rating": 6.36
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "id": "fotmob-1559675",
+            "age": 23,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Sheyko Studer",
+            "reason": "blessé",
+            "expectedReturn": "About 1-2 weeks",
+            "position": "Defender",
+            "stats": {
+              "apps": 35,
+              "starts": 35,
+              "minutes": 3064,
+              "goals": 2,
+              "assists": 0,
+              "xg": 0.89,
+              "rating": 7.17
+            }
+          },
+          {
+            "id": "fotmob-725483",
+            "age": 30,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Luciano Gómez",
+            "reason": "blessé",
+            "expectedReturn": "Out for season",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 26,
+              "starts": 18,
+              "minutes": 1610,
+              "goals": 2,
+              "assists": 4,
+              "xg": 0.27,
+              "rating": 7.11
+            }
+          },
+          {
+            "id": "fotmob-730647",
+            "age": 28,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Maximiliano Salas",
+            "reason": "blessé",
+            "expectedReturn": "Out for season",
+            "position": "Forward",
+            "stats": {
+              "apps": 30,
+              "starts": 15,
+              "minutes": 1598,
+              "goals": 3,
+              "assists": 1,
+              "xg": 3.31,
+              "rating": 6.81
+            }
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-1273505",
+            "age": 25,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Matías Fernández",
+            "position": "Midfielder",
+            "starts": 38,
+            "goals": 4,
+            "assists": 11,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-1559675",
+            "age": 23,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Sheyko Studer",
+            "position": "Defender",
+            "starts": 35,
+            "goals": 2,
+            "assists": 0,
+            "status": "blessé"
+          }
+        ]
+      },
+      "away": {
+        "team": "Banfield",
+        "teamId": "fotmob-10087",
+        "formation": "4-3-3",
+        "coach": "Pedro Troglio",
+        "statsSince": "2026-01-01",
+        "teamMatches": 34,
+        "startXI": [
+          {
+            "id": "fotmob-186986",
+            "name": "Diego Rodríguez",
+            "number": 50,
+            "position": "Goalkeeper",
+            "age": 37,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 9,
+              "starts": 9,
+              "minutes": 810,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.1
+            }
+          },
+          {
+            "id": "fotmob-1634589",
+            "name": "Juan Luis Alfaro",
+            "number": 4,
+            "position": "Defender",
+            "age": 27,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.357,
+            "y": 0.875,
+            "stats": {
+              "apps": 9,
+              "starts": 8,
+              "minutes": 619,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.04,
+              "rating": 7.33
+            }
+          },
+          {
+            "id": "fotmob-1660382",
+            "name": "Santiago Daniele",
+            "number": 2,
+            "position": "Defender",
+            "age": 20,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.357,
+            "y": 0.625,
+            "stats": {
+              "apps": 17,
+              "starts": 13,
+              "minutes": 1315,
+              "goals": 0,
+              "assists": 1,
+              "xg": 1.08,
+              "rating": 7.1
+            }
+          },
+          {
+            "id": "fotmob-1299928",
+            "name": "Nicolás Meriano",
+            "number": 6,
+            "position": "Defender",
+            "age": 25,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.357,
+            "y": 0.375,
+            "stats": {
+              "apps": 30,
+              "starts": 26,
+              "minutes": 2328,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.97,
+              "rating": 6.84
+            }
+          },
+          {
+            "id": "fotmob-1254641",
+            "name": "Ignacio Abraham",
+            "number": 27,
+            "position": "Defender",
+            "age": 28,
+            "countryCode": "SYR",
+            "countryName": "Syria",
+            "x": 0.357,
+            "y": 0.125,
+            "stats": {
+              "apps": 33,
+              "starts": 32,
+              "minutes": 2903,
+              "goals": 0,
+              "assists": 4,
+              "xg": 0.67,
+              "rating": 6.94
+            }
+          },
+          {
+            "id": "fotmob-1645972",
+            "name": "Lautaro Gómez",
+            "number": 10,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.613,
+            "y": 0.79,
+            "stats": {
+              "apps": 31,
+              "starts": 17,
+              "minutes": 1482,
+              "goals": 5,
+              "assists": 2,
+              "xg": 1.21,
+              "rating": 6.65
+            }
+          },
+          {
+            "id": "fotmob-1685811",
+            "name": "Santiago Esquivel",
+            "number": 5,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.613,
+            "y": 0.5,
+            "stats": {
+              "apps": 22,
+              "starts": 16,
+              "minutes": 1314,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.12,
+              "rating": 6.71
+            }
+          },
+          {
+            "id": "fotmob-1447884",
+            "name": "Tomás Adoryán",
+            "number": 20,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "ARM",
+            "countryName": "Armenia",
+            "x": 0.613,
+            "y": 0.21,
+            "stats": {
+              "apps": 27,
+              "starts": 19,
+              "minutes": 1689,
+              "goals": 4,
+              "assists": 2,
+              "xg": 2.32,
+              "rating": 7.04
+            }
+          },
+          {
+            "id": "fotmob-1608141",
+            "name": "Federico Medina",
+            "number": 18,
+            "position": "Forward",
+            "age": 22,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.87,
+            "y": 0.79,
+            "stats": {
+              "apps": 11,
+              "starts": 8,
+              "minutes": 666,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.29,
+              "rating": 6.62
+            }
+          },
+          {
+            "id": "fotmob-514296",
+            "name": "Adrián Balboa",
+            "number": 9,
+            "position": "Forward",
+            "age": 32,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 19,
+              "starts": 17,
+              "minutes": 1410,
+              "goals": 5,
+              "assists": 1,
+              "xg": 5.49,
+              "rating": 6.81
+            }
+          },
+          {
+            "id": "fotmob-1336106",
+            "name": "David Zalazar",
+            "number": 40,
+            "position": "Forward",
+            "age": 24,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.87,
+            "y": 0.21,
+            "stats": {
+              "apps": 27,
+              "starts": 18,
+              "minutes": 1521,
+              "goals": 2,
+              "assists": 4,
+              "xg": 2.13,
+              "rating": 6.9
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-1244346",
+            "name": "Gino Santilli",
+            "number": 25,
+            "position": "Goalkeeper",
+            "age": 25,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 2,
+              "starts": 2,
+              "minutes": 180,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.98
+            }
+          },
+          {
+            "id": "fotmob-1695058",
+            "name": "Brandon Oviedo",
+            "number": 13,
+            "position": "Defender",
+            "age": 21,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 12,
+              "starts": 11,
+              "minutes": 893,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.06,
+              "rating": 6.72
+            }
+          },
+          {
+            "id": "fotmob-1110049",
+            "name": "Lautaro Cano",
+            "number": 19,
+            "position": "Defender",
+            "age": 24,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 3,
+              "starts": 3,
+              "minutes": 216,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.04,
+              "rating": 6.07
+            }
+          },
+          {
+            "id": "fotmob-490660",
+            "name": "Nehuén Paz",
+            "number": 3,
+            "position": "Defender",
+            "age": 33,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 6,
+              "starts": 4,
+              "minutes": 353,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.45,
+              "rating": 6.98
+            }
+          },
+          {
+            "id": "fotmob-1336833",
+            "name": "Renzo Malanca",
+            "number": 37,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 19,
+              "starts": 16,
+              "minutes": 1530,
+              "goals": 1,
+              "assists": 1,
+              "xg": 0.63,
+              "rating": 6.68
+            }
+          },
+          {
+            "id": "fotmob-529104",
+            "name": "Favio Álvarez",
+            "number": 11,
+            "position": "Midfielder",
+            "age": 33,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 9,
+              "starts": 3,
+              "minutes": 298,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.29,
+              "rating": 6.6
+            }
+          },
+          {
+            "id": "fotmob-1246078",
+            "name": "Lautaro Villegas",
+            "number": 21,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 22,
+              "starts": 11,
+              "minutes": 1085,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.4,
+              "rating": 6.55
+            }
+          },
+          {
+            "id": "fotmob-1242942",
+            "name": "Nacho Pais",
+            "number": 35,
+            "position": "Midfielder",
+            "age": 26,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 23,
+              "starts": 18,
+              "minutes": 1460,
+              "goals": 0,
+              "assists": 1,
+              "xg": 1,
+              "rating": 6.63
+            }
+          },
+          {
+            "id": "fotmob-1038763",
+            "name": "Santiago López",
+            "number": 24,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 32,
+              "starts": 28,
+              "minutes": 2574,
+              "goals": 2,
+              "assists": 5,
+              "xg": 0.83,
+              "rating": 6.99
+            }
+          },
+          {
+            "id": "fotmob-589348",
+            "name": "Federico Anselmo",
+            "number": 30,
+            "position": "Forward",
+            "age": 32,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 13,
+              "starts": 0,
+              "minutes": 190,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.88,
+              "rating": 6.06
+            }
+          },
+          {
+            "id": "fotmob-1675394",
+            "name": "Lisandro Piñero",
+            "number": 7,
+            "position": "Forward",
+            "age": 19,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 26,
+              "starts": 9,
+              "minutes": 969,
+              "goals": 0,
+              "assists": 1,
+              "xg": 1.3,
+              "rating": 6.52
+            }
+          },
+          {
+            "id": "fotmob-1054256",
+            "name": "Alexander Machado",
+            "number": 22,
+            "position": "Forward",
+            "age": 24,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "stats": {
+              "apps": 9,
+              "starts": 8,
+              "minutes": 663,
+              "goals": 2,
+              "assists": 0,
+              "xg": 1.1,
+              "rating": 6.6
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "id": "fotmob-1675024",
+            "age": 27,
+            "countryCode": "COL",
+            "countryName": "Colombia",
+            "name": "Manuel Arteaga",
+            "reason": "blessé",
+            "expectedReturn": "Mid November 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-1038763",
+            "age": 28,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Santiago López",
+            "position": "Midfielder",
+            "starts": 28,
+            "goals": 2,
+            "assists": 5,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-1200037",
+            "age": 25,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Facundo Sanguinetti",
+            "position": "Goalkeeper",
+            "starts": 23,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-857776",
+            "age": 31,
+            "countryCode": "COL",
+            "countryName": "Colombia",
+            "name": "Danilo Arboleda",
+            "position": "Defender",
+            "starts": 18,
+            "goals": 0,
+            "assists": 1,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1242942",
+            "age": 26,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Nacho Pais",
+            "position": "Midfielder",
+            "starts": 18,
+            "goals": 0,
+            "assists": 1,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-1054259",
+            "age": 27,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "name": "Mauro Méndez",
+            "position": "Forward",
+            "starts": 18,
+            "goals": 7,
+            "assists": 3,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1778729",
+            "age": 19,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Tiziano Perrotta",
+            "position": "Forward",
+            "starts": 17,
+            "goals": 8,
+            "assists": 1,
+            "status": "absent de la feuille de match"
+          }
+        ]
+      },
+      "matchInfo": {
+        "round": "Clausura - Round 15",
+        "stadium": "Estadio Bautista Gargantini",
+        "city": "Mendoza, Provincia de Mendoza",
+        "capacity": 16000,
+        "surface": "grass",
+        "weather": "Partly Cloudy",
+        "temperature": 21,
+        "windSpeed": 0,
+        "precipitation": 0,
+        "referee": {
+          "name": "Álvaro Carranza",
+          "country": "Argentina",
+          "league": "Primera B Nacional",
+          "matches": 48,
+          "yellowCardsPerMatch": 5.27,
+          "yellowCardsLeagueAverage": 4.89,
+          "redCards": 6,
+          "penalties": 6
+        }
+      }
+    },
+    "analysis": {
+      "summary": "Independiente Rivadavia (8e du classement, 19 pts) reste solide à domicile (2,2 buts marqués / 1,6 concédés sur 5 matchs) mais est sans victoire sur ses 4 derniers (D, N, D, N). Banfield (24e du classement historique) alterne nuls et défaites à l'extérieur (VNNDD, 1,4 / 1,8) avec une défense fragile (3,4 grosses occasions concédées). Compo : Arce (20 buts) est titulaire côté Rivadavia, Matías Fernández sur le banc, Studer blessé. Banfield aligne un onze remanié sans Méndez, Perrotta ni son gardien habituel Sanguinetti.",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Rivadavia en baisse, Banfield sans victoire récente en championnat mais en hausse sur 5 matchs.",
+          "evidence": "Rivadavia : D N D N V sur 5 derniers ; Banfield : N D V N N."
+        },
+        {
+          "factor": "statistiques et moyennes",
+          "observation": "Rivadavia domine à domicile en xG, Banfield concède beaucoup à l'extérieur.",
+          "evidence": "Rivadavia dom. xG 2,04 / 1,32 ; Banfield ext. xG 1,11 / 2,22, tirs concédés 19,6, cadrés concédés 6,8."
+        },
+        {
+          "factor": "compositions",
+          "observation": "Banfield privé de plusieurs titulaires offensifs et de son gardien habituel.",
+          "evidence": "Méndez (7+3), Perrotta (8+1) et Sanguinetti (23 tit.) absents de la feuille ; Diego Rodríguez 9 matchs."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Pas d'edge ni de mise.",
+          "evidence": "Staking PASS (trop peu de bookmakers) ; moteur 1 à 1,64 contre marché 1,58."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : avantage net de Rivadavia à domicile, défense visiteuse poreuse. La baisse de forme récente de Rivadavia et l'absence d'edge chiffré invitent toutefois à la prudence sur le résultat sec.",
+      "caveats": "Classement de Banfield issu de football-data.co.uk (historique), non en direct (30 matchs, pas le Clausura). Bilan de Rivadavia sur très peu de matchs analysés. Historique de changements d'entraîneur non établi au-delà des dossiers.",
+      "marketViews": [
+        {
+          "market": "Résultat",
+          "pick": "Independiente Rivadavia gagne",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "61 % : Rivadavia attend 2,61 buts contre 1,26 pour Banfield, et marque 2,2 par match à domicile face à un visiteur concédant 1,8 dehors.",
+          "reasoning": "L'écart de xG à domicile et la défense visiteuse fragile soutiennent le favori, malgré 4 matchs sans victoire. Le onze de Banfield est amoindri.",
+          "probability": 61
+        },
+        {
+          "market": "Total buts",
+          "pick": "Plus de 2.5 buts",
+          "verdict": "nuance",
+          "confidence": "moyenne",
+          "explanation": "74 % : 2,61 + 1,26 buts attendus, mais Rivadavia fait 1,5 / 1,7 sur 10 matchs et le championnat est à 39 % de plus de 2,5.",
+          "reasoning": "Le xG attendu soutient le choix, mais la moyenne du championnat (39 %) et le faible score de Banfield (1,2 par match) tempèrent.",
+          "probability": 74
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "pick": "Oui",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "67 % : Banfield marque 1,4 dehors et Rivadavia encaisse 1,6 à domicile et 1,7 sur 10 matchs.",
+          "reasoning": "Les deux défenses concèdent régulièrement, mais l'absence de Méndez et Perrotta limite l'attaque visiteuse.",
+          "probability": 67
+        },
+        {
+          "market": "Résultat + Total buts",
+          "pick": "Independiente Rivadavia & Plus de 1.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "56 % : combine la victoire de Rivadavia (61 %) avec un score d'au moins 2 buts, probable vu 2,61 buts attendus.",
+          "reasoning": "Le scénario d'une victoire avec deux buts ou plus est cohérent avec la forme à domicile ; la victoire reste le point incertain.",
+          "probability": 56
+        },
+        {
+          "market": "Buts — Independiente Rivadavia",
+          "pick": "Independiente Rivadavia — Plus de 1.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "74 % : 2,61 buts attendus, 2,2 marqués à domicile et Banfield concède 1,8 dehors.",
+          "reasoning": "Arce (20 buts) titulaire et une défense visiteuse poreuse favorisent la ligne ; seul le manque de réalisme récent (0-1, 0-5) nuance.",
+          "probability": 74
+        },
+        {
+          "market": "Buts — Banfield",
+          "pick": "Banfield — Plus de 0.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "71 % : Banfield attend 1,26 but et marque 1,4 par match dehors, face à un Rivadavia qui encaisse 1,6 à domicile.",
+          "reasoning": "Banfield a marqué dans la plupart de ses derniers matchs, mais son attaque est amputée de Méndez et Perrotta.",
+          "probability": 71
+        },
+        {
+          "market": "Total corners",
+          "pick": "Moins de 12.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : 9,29 corners attendus et 8,9 par match en championnat, loin de 12,5.",
+          "reasoning": "Les deux équipes sont modestes en corners (3,5 et 4,1 produits), la ligne laisse une grande marge.",
+          "probability": 83
+        },
+        {
+          "market": "Corners — Independiente Rivadavia",
+          "pick": "Independiente Rivadavia — Plus de 2.5 corners",
+          "verdict": "nuance",
+          "confidence": "moyenne",
+          "explanation": "80 % : 4,79 corners attendus, mais Rivadavia n'en produit que 3,2 à domicile.",
+          "reasoning": "Le plancher est bas, mais la leçon du 18/10 sur les corners d'équipe invite à la prudence ; Rivadavia pourrait aussi marquer tôt et défendre.",
+          "probability": 80
+        },
+        {
+          "market": "Corners — Banfield",
+          "pick": "Banfield — Moins de 6.5 corners",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "80 % : 4,5 corners attendus et 4 par match dehors, bien sous 6,5.",
+          "reasoning": "Banfield n'est pas une équipe à corners et sera souvent dominé ; un match ouvert resterait le risque.",
+          "probability": 80
+        },
+        {
+          "market": "Total tirs",
+          "pick": "Moins de 35.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : 29,35 tirs attendus ; les deux équipes tournent autour de 13 à 14 tirs produits.",
+          "reasoning": "La marge est large par rapport aux moyennes, y compris les tirs concédés par Banfield dehors (19,6).",
+          "probability": 83
+        },
+        {
+          "market": "Tirs — Independiente Rivadavia",
+          "pick": "Independiente Rivadavia — Moins de 21.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "82 % : 16,39 tirs attendus et 14,4 produits à domicile, loin de 21,5.",
+          "reasoning": "Même face à une défense qui concède 19,6 tirs, atteindre 22 tirs serait inhabituel pour Rivadavia.",
+          "probability": 82
+        },
+        {
+          "market": "Tirs — Banfield",
+          "pick": "Banfield — Moins de 17.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : 12,96 tirs attendus, 12,6 produits dehors et 13,4 sur 10 matchs.",
+          "reasoning": "Banfield tire peu et sera en retrait, avec un onze remanié ; la ligne est confortable.",
+          "probability": 83
+        },
+        {
+          "market": "Total tirs cadrés",
+          "pick": "Plus de 7.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "81 % : 10,62 cadrés attendus (6,16 + 4,46), au-dessus de 7,5.",
+          "reasoning": "Banfield concède 6,8 cadrés dehors et Rivadavia en produit 5,6 à domicile, ce qui soutient le dépassement.",
+          "probability": 81
+        },
+        {
+          "market": "Tirs cadrés — Independiente Rivadavia",
+          "pick": "Independiente Rivadavia — Plus de 3.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : 6,16 cadrés attendus et 5,6 par match à domicile, face à 6,8 concédés par Banfield dehors.",
+          "reasoning": "Une ligne basse bien en dessous des moyennes, avec Arce en pointe.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs cadrés — Banfield",
+          "pick": "Banfield — Moins de 6.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "82 % : 4,46 cadrés attendus et 4,6 produits dehors, sous 6,5.",
+          "reasoning": "Banfield dépasse rarement cette barre et son attaque est affaiblie par les absences de Méndez et Perrotta.",
+          "probability": 82
+        }
+      ]
+    },
+    "kickoffRuns": 2,
+    "updatedAt": "2026-11-02T23:59:25.567Z",
+    "createdAt": "2026-11-02T23:24:42.029Z"
+  },
+  {
+    "matchId": "cal-2026-11-03-anaitasuna-ft-deportivo-alaves",
+    "homeName": "Anaitasuna FT",
+    "awayName": "Deportivo Alavés",
+    "league": "Copa del Rey - Spain",
+    "commenceTime": "2026-11-03T12:00:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Anaitasuna FT vs Deportivo Alavés",
+      "expectedGoals": {
+        "home": 0.57,
+        "away": 2.8,
+        "source": "league-baseline"
+      },
+      "trueOdds": {
+        "home": 4.45,
+        "draw": 5.35,
+        "away": 1.7
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds",
+        "candidates": []
+      },
+      "statExpectations": null,
+      "marketPredictions": [
+        {
+          "marketId": "result",
+          "params": {
+            "outcome": "away"
+          },
+          "market": "Résultat",
+          "predictedOutcome": "away",
+          "predictedLabel": "Deportivo Alavés gagne",
+          "predictedOdds": 1.7,
+          "probability": 59,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 2.5 buts",
+          "predictedOdds": 1.53,
+          "probability": 65,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "no"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "no",
+          "predictedLabel": "Non",
+          "predictedOdds": 1.7,
+          "probability": 59,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 1.5,
+            "key": "awayOver"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "awayOver",
+          "predictedLabel": "Deportivo Alavés & Plus de 1.5 buts",
+          "predictedOdds": 1.91,
+          "probability": 52,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 0.5,
+            "side": "under"
+          },
+          "market": "Buts — Anaitasuna FT",
+          "predictedOutcome": "under",
+          "predictedLabel": "Anaitasuna FT — Moins de 0.5 buts",
+          "predictedOdds": 1.77,
+          "probability": 56,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 1.5,
+            "side": "over"
+          },
+          "market": "Buts — Deportivo Alavés",
+          "predictedOutcome": "over",
+          "predictedLabel": "Deportivo Alavés — Plus de 1.5 buts",
+          "predictedOdds": 1.3,
+          "probability": 77,
+          "minOdds": 1.2
+        }
+      ],
+      "engineVersion": 5
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 9064,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 2154,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 9064,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 2154,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 9064,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 9064
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.0578,
+    "analysedAt": "2026-11-03T06:24:01.292Z",
+    "timing": "avance",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 379,
+      "tokens": 1202,
+      "lecons": [
+        "cal-2026-10-27-arosa-sc-pontevedra|result",
+        "cal-2026-10-27-arosa-sc-pontevedra|resultAndTotal"
+      ],
+      "dossiersDu": "2026-11-03T01:45:08.432Z",
+      "equipes": {
+        "home": {
+          "id": null,
+          "dossier": false
+        },
+        "away": {
+          "id": "fotmob-9866",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "Copa del Rey - Spain",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "magasin",
+      "home": null,
+      "away": {
+        "team": "Deportivo Alavés",
+        "teamId": "fotmob-9866",
+        "formation": "4-5-1",
+        "coach": "Quique Sánchez Flores",
+        "statsSince": "2026-07-01",
+        "teamMatches": 11,
+        "startXI": [
+          {
+            "id": "fotmob-282281",
+            "name": "Denis Suárez",
+            "number": 4,
+            "position": "Midfielder",
+            "age": 32,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.305,
+            "stats": {
+              "apps": 10,
+              "starts": 5,
+              "minutes": 477,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.53,
+              "rating": 6.64
+            }
+          },
+          {
+            "id": "fotmob-360918",
+            "name": "Jonny Otto",
+            "number": 17,
+            "position": "Defender",
+            "age": 32,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.875,
+            "stats": {
+              "apps": 9,
+              "starts": 9,
+              "minutes": 752,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.11,
+              "rating": 6.48
+            }
+          },
+          {
+            "id": "fotmob-530468",
+            "name": "Antonio Sivera",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 30,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 11,
+              "starts": 11,
+              "minutes": 990,
+              "goals": 0,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.87
+            }
+          },
+          {
+            "id": "fotmob-561164",
+            "name": "Lucas Boyé",
+            "number": 15,
+            "position": "Forward",
+            "age": 30,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 10,
+              "starts": 10,
+              "minutes": 802,
+              "goals": 5,
+              "assists": 0,
+              "xg": 2.68,
+              "rating": 7.05
+            }
+          },
+          {
+            "id": "fotmob-799914",
+            "name": "Carlos Protesoni",
+            "number": 23,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "x": 0.613,
+            "y": 0.5,
+            "stats": {
+              "apps": 5,
+              "starts": 2,
+              "minutes": 210,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.15,
+              "rating": 6.32
+            }
+          },
+          {
+            "id": "fotmob-860314",
+            "name": "Nahuel Tenaglia",
+            "number": 14,
+            "position": "Defender",
+            "age": 30,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.357,
+            "y": 0.625,
+            "stats": {
+              "apps": 11,
+              "starts": 11,
+              "minutes": 945,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.61,
+              "rating": 6.72
+            }
+          },
+          {
+            "id": "fotmob-873827",
+            "name": "Ander Guevara",
+            "number": 6,
+            "position": "Midfielder",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.695,
+            "stats": {
+              "apps": 6,
+              "starts": 2,
+              "minutes": 214,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.04,
+              "rating": 6.48
+            }
+          },
+          {
+            "id": "fotmob-1056461",
+            "name": "Ville Koski",
+            "number": 16,
+            "position": "Defender",
+            "age": 24,
+            "countryCode": "FIN",
+            "countryName": "Finland",
+            "x": 0.357,
+            "y": 0.375,
+            "stats": {
+              "apps": 11,
+              "starts": 10,
+              "minutes": 909,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.96,
+              "rating": 6.66
+            }
+          },
+          {
+            "id": "fotmob-1200941",
+            "name": "Abderrahman Rebbach",
+            "number": 21,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "ALG",
+            "countryName": "Algeria",
+            "x": 0.613,
+            "y": 0.11,
+            "stats": {
+              "apps": 11,
+              "starts": 11,
+              "minutes": 849,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.49,
+              "rating": 6.7
+            }
+          },
+          {
+            "id": "fotmob-1403692",
+            "name": "Youssef Enríquez",
+            "number": 3,
+            "position": "Defender",
+            "age": 21,
+            "countryCode": "MAR",
+            "countryName": "Morocco",
+            "x": 0.357,
+            "y": 0.125,
+            "stats": {
+              "apps": 8,
+              "starts": 1,
+              "minutes": 273,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.04,
+              "rating": 6.21
+            }
+          },
+          {
+            "id": "fotmob-1563022",
+            "name": "Ángel Pérez",
+            "number": 7,
+            "position": "Midfielder",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.89,
+            "stats": {
+              "apps": 10,
+              "starts": 9,
+              "minutes": 717,
+              "goals": 0,
+              "assists": 3,
+              "xg": 1.19,
+              "rating": 7
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-518525",
+            "name": "Mariano Díaz",
+            "number": 9,
+            "position": "Forward",
+            "age": 33,
+            "countryCode": "DOM",
+            "countryName": "Dominican Republic",
+            "stats": {
+              "apps": 11,
+              "starts": 4,
+              "minutes": 459,
+              "goals": 4,
+              "assists": 4,
+              "xg": 1.82,
+              "rating": 6.85
+            }
+          },
+          {
+            "id": "fotmob-637756",
+            "name": "Carles Aleñá",
+            "number": 10,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 8,
+              "starts": 3,
+              "minutes": 222,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.16,
+              "rating": 6.55
+            }
+          },
+          {
+            "id": "fotmob-640123",
+            "name": "Toni Martínez",
+            "number": 11,
+            "position": "Forward",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 10,
+              "starts": 6,
+              "minutes": 544,
+              "goals": 0,
+              "assists": 0,
+              "xg": 2.46,
+              "rating": 6.45
+            }
+          },
+          {
+            "id": "fotmob-845998",
+            "name": "Antonio Blanco",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 26,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 10,
+              "starts": 9,
+              "minutes": 753,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.22,
+              "rating": 6.89
+            }
+          },
+          {
+            "id": "fotmob-1136937",
+            "name": "Adrián Rodriguez",
+            "number": 13,
+            "position": "Goalkeeper",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1175969",
+            "name": "Hugo Novoa",
+            "number": 12,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 3,
+              "starts": 0,
+              "minutes": 89,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.08,
+              "rating": 6.78
+            }
+          },
+          {
+            "id": "fotmob-1184663",
+            "name": "Miguel Rodríguez",
+            "number": 22,
+            "position": "Forward",
+            "age": 23,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 3,
+              "starts": 0,
+              "minutes": 11,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1238154",
+            "name": "Pablo Ibánez",
+            "number": 19,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 11,
+              "starts": 10,
+              "minutes": 885,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.88,
+              "rating": 7.05
+            }
+          },
+          {
+            "id": "fotmob-1249665",
+            "name": "Nicolás Valentini",
+            "number": 2,
+            "position": "Defender",
+            "age": 25,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 7,
+              "starts": 5,
+              "minutes": 451,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.15,
+              "rating": 6.57
+            }
+          },
+          {
+            "id": "fotmob-1431307",
+            "name": "Selu Diallo",
+            "number": 24,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1553663",
+            "name": "Aitor Mañas",
+            "number": 20,
+            "position": "Forward",
+            "age": 23,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 8,
+              "starts": 1,
+              "minutes": 150,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.91,
+              "rating": 6.45
+            }
+          },
+          {
+            "id": "fotmob-1721181",
+            "name": "Xanet Oláiz",
+            "number": 27,
+            "position": "Defender",
+            "age": 21,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 1,
+              "starts": 0,
+              "minutes": 10,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.15
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "id": "fotmob-845067",
+            "age": 27,
+            "countryCode": "MAS",
+            "countryName": "Malaysia",
+            "name": "Facundo Garcés",
+            "reason": "blessé",
+            "expectedReturn": "Out for season",
+            "position": null,
+            "stats": null
+          },
+          {
+            "id": "fotmob-1426189",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Mikel Rodríguez",
+            "reason": "blessé",
+            "expectedReturn": "Out for season",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 3,
+              "starts": 2,
+              "minutes": 149,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.57,
+              "rating": 7.33
+            }
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-1238154",
+            "age": 28,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Pablo Ibáñez",
+            "position": "Midfielder",
+            "starts": 10,
+            "goals": 1,
+            "assists": 0,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-845998",
+            "age": 26,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Antonio Blanco",
+            "position": "Midfielder",
+            "starts": 9,
+            "goals": 0,
+            "assists": 0,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-640123",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Toni Martínez",
+            "position": "Forward",
+            "starts": 6,
+            "goals": 0,
+            "assists": 0,
+            "status": "remplaçant"
+          }
+        ],
+        "lastMatch": {
+          "date": "2026-10-31",
+          "league": "La Liga - Spain",
+          "home": "Barcelona",
+          "away": "Deportivo Alavés",
+          "homeGoals": 6,
+          "awayGoals": 1
+        }
+      },
+      "matchInfo": {
+        "round": "1",
+        "stadium": "Campo Txerloia",
+        "city": "Azkoitia",
+        "capacity": 1500,
+        "surface": "grass",
+        "weather": "Mostly Cloudy",
+        "temperature": 9,
+        "windSpeed": 7,
+        "precipitation": 0,
+        "referee": {
+          "name": "Ricardo de Burgos Bengoetxea",
+          "country": "Spain",
+          "league": "LaLiga",
+          "matches": 39,
+          "yellowCardsPerMatch": 3.82,
+          "yellowCardsLeagueAverage": 4.43,
+          "redCards": 6,
+          "penalties": 13,
+          "foulsPerMatch": 22.49,
+          "foulsLeagueAverage": 24.98
+        }
+      }
+    },
+    "analysis": {
+      "summary": "Alavés (10e de Liga, sans victoire depuis 7 matchs, 2V 3N 5D sur 10) est en baisse mais affronte un petit club local, Anaitasuna, sans aucune donnée de forme, de stats ni de composition. Alavés produit 1,2 but et en concède 1,7 sur 10 matchs, 0,8 / 2,2 à l'extérieur ; sa défense est fragile. La composition est celle du dernier match (6-1 à Barcelone), pas celle du match de coupe : une rotation est probable face à un adversaire de niveau inférieur.",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Alavés en baisse en championnat ; Anaitasuna inconnu.",
+          "evidence": "10 derniers : DNDDNDDVVN, 0,4 pt/match sur les 5 derniers contre 1,4 sur les 5 d'avant ; sans victoire depuis 7 matchs."
+        },
+        {
+          "factor": "statistiques et moyennes",
+          "observation": "Alavés marque peu et encaisse beaucoup, ce qui tire le total vers le haut.",
+          "evidence": "1,2 / 1,7 buts sur 10 matchs ; 0,8 / 2,2 à l'extérieur ; xG 1,18 / 1,5."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur voit un écart net de niveau : 2,8 buts attendus pour Alavés contre 0,57.",
+          "evidence": "expectedGoals 0,57 vs 2,8 ; pas de cote de marché, mise PASS."
+        },
+        {
+          "factor": "compositions",
+          "observation": "Onze du dernier match, probable rotation en coupe ; Boyé (5 buts) et Mariano Díaz (4+4) sont les atouts offensifs.",
+          "evidence": "Boyé 10/10 5+0 ; Mariano Díaz 11/4 4+4 ; Mikel Rodríguez blessé jusqu'à la fin de saison."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur sur la victoire d'Alavés, mais l'écart de niveau supposé repose sur l'absence de données sur Anaitasuna ; la forme faible d'Alavés et la rotation probable en coupe nuancent l'ampleur du score attendu.",
+      "caveats": "Aucune donnée pour Anaitasuna (forme, moyennes, composition, dossier). Classement indisponible (coupe). La composition d'Alavés est celle du dernier match, pas celle de ce match. Pas de statExpectations. Pas de cote de marché. Le coup d'envoi indiqué est le 03/11 à 12h UTC.",
+      "marketViews": [
+        {
+          "market": "Résultat",
+          "pick": "Deportivo Alavés gagne",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "59 % : Alavés a 2,8 buts attendus contre 0,57, mais sa forme est en baisse (0,4 pt/match sur 5 matchs) et l'adversaire est inconnu.",
+          "reasoning": "Écart de division net en faveur d'Alavés. La série sans victoire et la rotation probable en coupe expliquent que le pourcentage reste modéré.",
+          "probability": 59
+        },
+        {
+          "market": "Total buts",
+          "pick": "Plus de 2.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "65 % : Alavés attend 2,8 buts selon le moteur et sa défense concède 1,7 par match (2,2 à l'extérieur).",
+          "reasoning": "Le total attendu dépasse 3 buts au total, mais une équipe de rotation pourrait lever le pied. Les données manquent pour Anaitasuna.",
+          "probability": 65
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "pick": "Non",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "59 % : Anaitasuna n'a que 0,57 but attendu, mais Alavés concède 1,7 par match et 2,2 à l'extérieur.",
+          "reasoning": "Le petit club peut marquer sur un coup de pied arrêté face à une défense qui encaisse beaucoup. Mes avis sur ce marché tiennent peu (218/414).",
+          "probability": 59
+        },
+        {
+          "market": "Résultat + Total buts",
+          "pick": "Deportivo Alavés & Plus de 1.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "52 % : combiné de la victoire d'Alavés (59 %) et d'un seuil bas de 1,5 but, avec 2,8 buts attendus.",
+          "reasoning": "Le seuil bas fait dépendre le combiné presque entièrement de la victoire d'Alavés, comme pour la leçon d'Arosa du 27/10. L'incertitude vient de la forme et de la rotation.",
+          "probability": 52
+        },
+        {
+          "market": "Buts — Anaitasuna FT",
+          "pick": "Anaitasuna FT — Moins de 0.5 buts",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "56 % : 0,57 but attendu pour Anaitasuna, face à une défense d'Alavés qui encaisse 1,7 par match.",
+          "reasoning": "Le chiffre est à peine au-dessus de la moitié ; Alavés encaisse beaucoup, et sans donnée sur Anaitasuna la prudence s'impose.",
+          "probability": 56
+        },
+        {
+          "market": "Buts — Deportivo Alavés",
+          "pick": "Deportivo Alavés — Plus de 1.5 buts",
+          "verdict": "nuance",
+          "confidence": "moyenne",
+          "explanation": "77 % : 2,8 buts attendus, mais Alavés ne marque que 1,2 par match (0,8 à l'extérieur) sur ses 10 derniers.",
+          "reasoning": "Le moteur s'appuie sur l'écart de niveau, alors que l'attaque d'Alavés tourne à 1,2 but par match. Une rotation pourrait réduire la production, même si Boyé et Mariano Díaz restent des menaces.",
+          "probability": 77
+        }
+      ]
+    },
+    "updatedAt": "2026-11-03T06:24:01.292Z",
+    "createdAt": "2026-11-03T06:24:01.292Z"
+  },
+  {
+    "matchId": "cal-2026-11-03-pamplona-eibar",
+    "homeName": "Pamplona",
+    "awayName": "Eibar",
+    "league": "Copa del Rey - Spain",
+    "commenceTime": "2026-11-03T12:00:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Pamplona vs Eibar",
+      "expectedGoals": {
+        "home": 0.8,
+        "away": 2.4,
+        "source": "league-baseline"
+      },
+      "trueOdds": {
+        "home": 3.94,
+        "draw": 4.62,
+        "away": 1.89
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds",
+        "candidates": []
+      },
+      "statExpectations": null,
+      "marketPredictions": [
+        {
+          "marketId": "result",
+          "params": {
+            "outcome": "away"
+          },
+          "market": "Résultat",
+          "predictedOutcome": "away",
+          "predictedLabel": "Eibar gagne",
+          "predictedOdds": 1.89,
+          "probability": 53,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 1.5,
+            "side": "over"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 1.5 buts",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "yes"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "yes",
+          "predictedLabel": "Oui",
+          "predictedOdds": 1.97,
+          "probability": 51,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 1.5,
+            "key": "awayOver"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "awayOver",
+          "predictedLabel": "Eibar & Plus de 1.5 buts",
+          "predictedOdds": 2.16,
+          "probability": 46,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 1.5,
+            "side": "under"
+          },
+          "market": "Buts — Pamplona",
+          "predictedOutcome": "under",
+          "predictedLabel": "Pamplona — Moins de 1.5 buts",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 3.5,
+            "side": "under"
+          },
+          "market": "Buts — Eibar",
+          "predictedOutcome": "under",
+          "predictedLabel": "Eibar — Moins de 3.5 buts",
+          "predictedOdds": 1.28,
+          "probability": 78,
+          "minOdds": 1.2
+        }
+      ],
+      "engineVersion": 5
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 4497,
+      "cache_read_input_tokens": 4470,
+      "output_tokens": 2337,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 4497,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 2337,
+          "cache_read_input_tokens": 4470,
+          "cache_creation_input_tokens": 4497,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 4497
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.042256,
+    "analysedAt": "2026-11-03T06:24:21.511Z",
+    "timing": "avance",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 382,
+      "tokens": 1218,
+      "lecons": [
+        "cal-2026-10-27-arosa-sc-pontevedra|result",
+        "cal-2026-10-27-arosa-sc-pontevedra|resultAndTotal"
+      ],
+      "dossiersDu": "2026-11-03T01:45:08.432Z",
+      "equipes": {
+        "home": {
+          "id": null,
+          "dossier": false
+        },
+        "away": {
+          "id": "fotmob-8372",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "Copa del Rey - Spain",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "magasin",
+      "home": null,
+      "away": {
+        "team": "Eibar",
+        "teamId": "fotmob-8372",
+        "formation": "4-2-3-1",
+        "coach": "Jokin Aranbarri",
+        "statsSince": "2026-07-01",
+        "teamMatches": 12,
+        "startXI": [
+          {
+            "id": "fotmob-213814",
+            "name": "Anaitz Arbilla",
+            "number": 23,
+            "position": "Defender",
+            "age": 39,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.292,
+            "y": 0.375,
+            "stats": {
+              "apps": 11,
+              "starts": 11,
+              "minutes": 976,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.88,
+              "rating": 6.94
+            }
+          },
+          {
+            "id": "fotmob-282691",
+            "name": "Juan Bernat",
+            "number": 24,
+            "position": "Defender",
+            "age": 33,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.292,
+            "y": 0.125,
+            "stats": {
+              "apps": 10,
+              "starts": 10,
+              "minutes": 800,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.79
+            }
+          },
+          {
+            "id": "fotmob-636565",
+            "name": "Jon Bautista",
+            "number": 9,
+            "position": "Forward",
+            "age": 31,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 12,
+              "starts": 9,
+              "minutes": 678,
+              "goals": 1,
+              "assists": 1,
+              "xg": 2.11,
+              "rating": 6.58
+            }
+          },
+          {
+            "id": "fotmob-792071",
+            "name": "Peru Nolaskoain",
+            "number": 5,
+            "position": "Defender",
+            "age": 28,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 4,
+              "starts": 2,
+              "minutes": 270,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.03,
+              "rating": 6.8
+            }
+          },
+          {
+            "id": "fotmob-820259",
+            "name": "Álvaro Rodríguez",
+            "number": 22,
+            "position": "Defender",
+            "age": 32,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.292,
+            "y": 0.875,
+            "stats": {
+              "apps": 10,
+              "starts": 9,
+              "minutes": 783,
+              "goals": 2,
+              "assists": 1,
+              "xg": 0.7,
+              "rating": 6.91
+            }
+          },
+          {
+            "id": "fotmob-1110836",
+            "name": "Iván Gil",
+            "number": 21,
+            "position": "Midfielder",
+            "age": 26,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.678,
+            "y": 0.5,
+            "stats": {
+              "apps": 11,
+              "starts": 6,
+              "minutes": 602,
+              "goals": 4,
+              "assists": 1,
+              "xg": 2.08,
+              "rating": 7.18
+            }
+          },
+          {
+            "id": "fotmob-1198494",
+            "name": "Jon Guruzeta",
+            "number": 10,
+            "position": "Midfielder",
+            "age": 26,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.678,
+            "y": 0.163,
+            "stats": {
+              "apps": 12,
+              "starts": 9,
+              "minutes": 766,
+              "goals": 3,
+              "assists": 2,
+              "xg": 2.27,
+              "rating": 7.28
+            }
+          },
+          {
+            "id": "fotmob-1233601",
+            "name": "Jonmi Magunagoitia",
+            "number": 13,
+            "position": "Goalkeeper",
+            "age": 26,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 12,
+              "starts": 12,
+              "minutes": 1080,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.24
+            }
+          },
+          {
+            "id": "fotmob-1327733",
+            "name": "Aleix Garrido",
+            "number": 30,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.485,
+            "y": 0.3,
+            "stats": {
+              "apps": 12,
+              "starts": 11,
+              "minutes": 981,
+              "goals": 1,
+              "assists": 1,
+              "xg": 0.85,
+              "rating": 7.29
+            }
+          },
+          {
+            "id": "fotmob-1331037",
+            "name": "Adu Ares",
+            "number": 7,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.678,
+            "y": 0.837,
+            "stats": {
+              "apps": 10,
+              "starts": 9,
+              "minutes": 692,
+              "goals": 2,
+              "assists": 4,
+              "xg": 0.96,
+              "rating": 7.63
+            }
+          },
+          {
+            "id": "fotmob-1526604",
+            "name": "Ander Madariaga",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.485,
+            "y": 0.7,
+            "stats": {
+              "apps": 12,
+              "starts": 11,
+              "minutes": 966,
+              "goals": 2,
+              "assists": 2,
+              "xg": 1.12,
+              "rating": 7.27
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-202639",
+            "name": "Sergio Álvarez",
+            "number": 6,
+            "position": "Midfielder",
+            "age": 34,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 2,
+              "starts": 2,
+              "minutes": 106,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.04,
+              "rating": 6.21
+            }
+          },
+          {
+            "id": "fotmob-640217",
+            "name": "Jair Amador",
+            "number": 15,
+            "position": "Defender",
+            "age": 37,
+            "countryCode": "POR",
+            "countryName": "Portugal",
+            "stats": {
+              "apps": 5,
+              "starts": 1,
+              "minutes": 128,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 5.93
+            }
+          },
+          {
+            "id": "fotmob-670029",
+            "name": "Lander Olaetxea",
+            "number": 14,
+            "position": "Midfielder",
+            "age": 33,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-920095",
+            "name": "Pejiño",
+            "number": 17,
+            "position": "Midfielder",
+            "age": 30,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 9,
+              "starts": 3,
+              "minutes": 284,
+              "goals": 2,
+              "assists": 0,
+              "xg": 0.52,
+              "rating": 6.49
+            }
+          },
+          {
+            "id": "fotmob-1111061",
+            "name": "Imanol García de Albéniz",
+            "number": 3,
+            "position": "Defender",
+            "age": 26,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 2,
+              "starts": 1,
+              "minutes": 95,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.11
+            }
+          },
+          {
+            "id": "fotmob-1119684",
+            "name": "Sergio Cubero",
+            "number": 2,
+            "position": "Defender",
+            "age": 27,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 6,
+              "starts": 3,
+              "minutes": 326,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.27,
+              "rating": 6.69
+            }
+          },
+          {
+            "id": "fotmob-1169373",
+            "name": "Luis López",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1205433",
+            "name": "Javi Martón",
+            "number": 20,
+            "position": "Forward",
+            "age": 27,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 12,
+              "starts": 3,
+              "minutes": 429,
+              "goals": 1,
+              "assists": 2,
+              "xg": 3.5,
+              "rating": 6.46
+            }
+          },
+          {
+            "id": "fotmob-1287788",
+            "name": "Jon Magunazelaia",
+            "number": 11,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 9,
+              "starts": 8,
+              "minutes": 623,
+              "goals": 2,
+              "assists": 1,
+              "xg": 1.19,
+              "rating": 6.95
+            }
+          },
+          {
+            "id": "fotmob-1432713",
+            "name": "Markel Arana",
+            "number": 18,
+            "position": "Defender",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 7,
+              "starts": 2,
+              "minutes": 321,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.05,
+              "rating": 6.66
+            }
+          },
+          {
+            "id": "fotmob-1649311",
+            "name": "Eric Pérez",
+            "number": 19,
+            "position": "Forward",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 1,
+              "starts": 0,
+              "minutes": 29,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.91
+            }
+          },
+          {
+            "id": "fotmob-1757894",
+            "name": "Lucas Núñez",
+            "number": 28,
+            "position": "Midfielder",
+            "age": 20,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 9,
+              "starts": 0,
+              "minutes": 180,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.11,
+              "rating": 6.38
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "id": "fotmob-282691",
+            "age": 33,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Juan Bernat",
+            "reason": "blessé",
+            "expectedReturn": "Doubtful",
+            "position": "Defender",
+            "stats": {
+              "apps": 10,
+              "starts": 10,
+              "minutes": 800,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.79
+            }
+          },
+          {
+            "id": "fotmob-1432929",
+            "age": 20,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Elijah Gift",
+            "reason": "blessé",
+            "expectedReturn": "Doubtful",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 3,
+              "starts": 1,
+              "minutes": 42,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.34,
+              "rating": 6.2
+            }
+          },
+          {
+            "id": "fotmob-693736",
+            "age": 33,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Unai Elgezabal",
+            "reason": "blessé",
+            "expectedReturn": "Mid November 2026",
+            "position": "Defender",
+            "stats": {
+              "apps": 9,
+              "starts": 9,
+              "minutes": 675,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.02,
+              "rating": 6.92
+            }
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-693736",
+            "age": 33,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Unai Elgezabel",
+            "position": "Defender",
+            "starts": 9,
+            "goals": 0,
+            "assists": 0,
+            "status": "blessé"
+          },
+          {
+            "id": "fotmob-1287788",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Jon Magunazelaia",
+            "position": "Midfielder",
+            "starts": 8,
+            "goals": 2,
+            "assists": 1,
+            "status": "remplaçant"
+          }
+        ],
+        "lastMatch": {
+          "date": "2026-10-31",
+          "league": "La Liga 2 - Spain",
+          "home": "Eibar",
+          "away": "Almería",
+          "homeGoals": 1,
+          "awayGoals": 1
+        }
+      },
+      "matchInfo": {
+        "round": "1",
+        "stadium": "Polideportivo Municipal Valle de Aranguren",
+        "city": "Mutilva Baja",
+        "capacity": 2007,
+        "surface": "artificial turf",
+        "weather": "Partly Cloudy",
+        "temperature": 7,
+        "windSpeed": 14,
+        "precipitation": 0,
+        "referee": {
+          "name": "Eder Mallo Fernández",
+          "country": "Spain",
+          "league": "LaLiga2",
+          "matches": 43,
+          "yellowCardsPerMatch": 5.49,
+          "yellowCardsLeagueAverage": 5.08,
+          "redCards": 2,
+          "penalties": 8,
+          "foulsPerMatch": 26.07,
+          "foulsLeagueAverage": 26.61
+        }
+      }
+    },
+    "analysis": {
+      "summary": "Pamplona est une inconnue : ni forme, ni moyennes, ni composition, ni classement. Eibar (3e de Liga 2) est sur 6 V, 2 N, 2 D sur ses 10 derniers matchs (1,9 marqué / 1,1 encaissé), mais n'a pas gagné lors de ses 4 derniers. Les moyennes à l'extérieur sont de 1,83 / 1,17 avec 40 % de possession. Le onze probable d'Eibar est celui du 31/10 (1-1 contre Almería) : Elgezabal est blessé et Bernat est annoncé absent (incertain). Le match se joue sur synthétique, dans un petit stade.",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Eibar est solide mais en baisse. Pamplona n'a aucune donnée.",
+          "evidence": "Eibar : NDNDVVVVVV sur 10 matchs, 1 point par match sur les 5 derniers contre 3 sur les 5 d'avant."
+        },
+        {
+          "factor": "statistiques et moyennes",
+          "observation": "Eibar marque régulièrement à l'extérieur et concède peu en buts, malgré beaucoup de tirs subis.",
+          "evidence": "À l'extérieur : 1,83 / 1,17 buts, xG 1,18 / 1,6, tirs 10,7 / 22,8."
+        },
+        {
+          "factor": "absences",
+          "observation": "Deux défenseurs d'Eibar manquent, ce qui fragilise l'arrière-garde.",
+          "evidence": "Elgezabal (9 titularisations) blessé, retour mi-novembre. Bernat (10 titularisations) blessé, retour incertain."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur donne un net avantage d'Eibar, sans cote de marché pour le comparer.",
+          "evidence": "Buts attendus 0,8 contre 2,4 ; mise PASS, aucune cote de marché."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur, car Eibar est nettement plus armé. Il nuance toutefois le tableau : Pamplona est totalement inconnu, la défense d'Eibar est amputée et le synthétique ajoute de l'incertitude.",
+      "caveats": "Aucune donnée pour Pamplona : forme, moyennes, composition et dossier manquent. Le classement est indisponible (coupe). La composition d'Eibar est celle de son dernier match, pas celle de ce match. Le onze du 31/10 contient Bernat, annoncé absent. La forme FotMob d'Eibar est ancienne et lacunaire, le dossier est plus fiable. Les attendus de corners et de tirs sont absents. Le changement d'entraîneur d'Eibar (Aranbarri) est connu, mais l'historique de Pamplona manque.",
+      "lineupImpact": "Le onze d'Eibar est le dernier aligné (31/10), pas celui du match. Les piliers offensifs sont Guruzeta (3+2, xG 2,27), Ares (2+4, note 7,63) et Gil (4+1). Elgezabal est blessé et Bernat est annoncé absent : l'arrière-garde sera remaniée, avec Arbilla et Rodríguez comme repères. La composition de Pamplona est inconnue. Une rotation d'Eibar est possible en Coupe, ce que rien ne confirme. Le synthétique et un petit stade peuvent aussi jouer.",
+      "marketViews": [
+        {
+          "market": "Résultat",
+          "pick": "Eibar gagne",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "53 % : Eibar affiche 1,9 but marqué par match sur 10 matchs et le moteur attend 2,4 buts contre 0,8, mais la Coupe et la défense amoindrie limitent la certitude.",
+          "reasoning": "Eibar est 3e de Liga 2 et sa forme reste bonne. L'absence totale de données sur Pamplona et sa série de 4 matchs sans victoire invitent à rester modéré.",
+          "probability": 53
+        },
+        {
+          "market": "Total buts",
+          "pick": "Plus de 1.5 buts",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : Eibar marque 1,9 et encaisse 1,1 par match, et le moteur attend 3,2 buts au total.",
+          "reasoning": "Eibar a un rythme offensif solide et sa défense est affaiblie. Il suffit de deux buts, ce qui reste très accessible.",
+          "probability": 83
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "pick": "Oui",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "51 % : Eibar encaisse 1,1 but par match, mais le moteur n'attend que 0,8 but pour Pamplona.",
+          "reasoning": "Deux défenseurs d'Eibar manquent, ce qui aide Pamplona. Mais l'équipe locale est inconnue et mon bilan sur ce marché est médiocre.",
+          "probability": 51
+        },
+        {
+          "market": "Résultat + Total buts",
+          "pick": "Eibar & Plus de 1.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "46 % : il combine la victoire d'Eibar (53 %) et au moins 2 buts (83 %).",
+          "reasoning": "Le combiné dépend surtout de la victoire d'Eibar. Ce marché a été difficile pour moi (146/292), d'où la prudence.",
+          "probability": 46
+        },
+        {
+          "market": "Buts — Pamplona",
+          "pick": "Pamplona — Moins de 1.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "81 % : le moteur n'attend que 0,8 but pour Pamplona, face à une défense d'Eibar qui encaisse 1,1 par match.",
+          "reasoning": "Eibar concède peu en buts malgré les tirs subis. Pamplona n'a aucune donnée, et la défense d'Eibar est remaniée.",
+          "probability": 81
+        },
+        {
+          "market": "Buts — Eibar",
+          "pick": "Eibar — Moins de 3.5 buts",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "78 % : Eibar marque 1,9 par match et 1,83 à l'extérieur, et le moteur lui prête 2,4 buts attendus.",
+          "reasoning": "Atteindre 4 buts demande un match très ouvert. Eibar joue plutôt en contre-attaque, avec 40 % de possession à l'extérieur.",
+          "probability": 78
+        }
+      ]
+    },
+    "updatedAt": "2026-11-03T06:24:21.511Z",
+    "createdAt": "2026-11-03T06:24:21.511Z"
+  },
+  {
     "matchId": "cal-2026-11-03-galatasaray-vfb-stuttgart",
     "homeName": "Galatasaray",
     "awayName": "VfB Stuttgart",
