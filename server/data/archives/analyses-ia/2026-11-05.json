@@ -1,0 +1,707 @@
+[
+  {
+    "matchId": "cal-2026-11-05-sint-truiden-brann",
+    "homeName": "Sint-Truiden",
+    "awayName": "Brann",
+    "league": "UEFA Europa Conference League",
+    "commenceTime": "2026-11-05T12:00:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Sint-Truiden vs Brann",
+      "expectedGoals": {
+        "home": 1.5,
+        "away": 2.75,
+        "source": "league-baseline"
+      },
+      "trueOdds": {
+        "home": 3.31,
+        "draw": 4.6,
+        "away": 2.08
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds",
+        "candidates": []
+      },
+      "statExpectations": null,
+      "marketPredictions": [
+        {
+          "marketId": "result",
+          "params": {
+            "outcome": "away"
+          },
+          "market": "Résultat",
+          "predictedOutcome": "away",
+          "predictedLabel": "Brann gagne",
+          "predictedOdds": 2.08,
+          "probability": 48,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 2.5 buts",
+          "predictedOdds": 1.26,
+          "probability": 79,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "yes"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "yes",
+          "predictedLabel": "Oui",
+          "predictedOdds": 1.37,
+          "probability": 73,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 1.5,
+            "key": "awayOver"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "awayOver",
+          "predictedLabel": "Brann & Plus de 1.5 buts",
+          "predictedOdds": 2.2,
+          "probability": 45,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 2.5,
+            "side": "under"
+          },
+          "market": "Buts — Sint-Truiden",
+          "predictedOutcome": "under",
+          "predictedLabel": "Sint-Truiden — Moins de 2.5 buts",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 1.5,
+            "side": "over"
+          },
+          "market": "Buts — Brann",
+          "predictedOutcome": "over",
+          "predictedLabel": "Brann — Plus de 1.5 buts",
+          "predictedOdds": 1.32,
+          "probability": 76,
+          "minOdds": 1.2
+        }
+      ],
+      "engineVersion": 5
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 4744,
+      "cache_read_input_tokens": 4470,
+      "output_tokens": 2419,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 4744,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 2419,
+          "cache_read_input_tokens": 4470,
+          "cache_creation_input_tokens": 4744,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 4744
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.044064000000000006,
+    "analysedAt": "2026-11-03T17:43:12.821Z",
+    "timing": "avance",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 320,
+      "tokens": 1060,
+      "lecons": [],
+      "dossiersDu": "2026-11-03T01:45:08.432Z",
+      "equipes": {
+        "home": {
+          "id": null,
+          "dossier": false
+        },
+        "away": {
+          "id": "fotmob-8468",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "UEFA Europa Conference League",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "magasin",
+      "home": null,
+      "away": {
+        "team": "Brann",
+        "teamId": "fotmob-8468",
+        "formation": "4-3-3",
+        "coach": "Eirik Horneland",
+        "statsSince": "2026-07-01",
+        "teamMatches": 21,
+        "startXI": [
+          {
+            "id": "fotmob-533370",
+            "name": "Kristian Eriksen",
+            "number": 16,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.613,
+            "y": 0.79,
+            "stats": {
+              "apps": 20,
+              "starts": 13,
+              "minutes": 1246,
+              "goals": 7,
+              "assists": 6,
+              "xg": 5.94,
+              "rating": 7.01
+            }
+          },
+          {
+            "id": "fotmob-538644",
+            "name": "Joachim Soltvedt",
+            "number": 17,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.357,
+            "y": 0.125,
+            "stats": {
+              "apps": 21,
+              "starts": 19,
+              "minutes": 1689,
+              "goals": 1,
+              "assists": 5,
+              "xg": 1.37,
+              "rating": 7.55
+            }
+          },
+          {
+            "id": "fotmob-601990",
+            "name": "Fredrik Pallesen Knudsen",
+            "number": 3,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.357,
+            "y": 0.625,
+            "stats": {
+              "apps": 20,
+              "starts": 20,
+              "minutes": 1771,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.52,
+              "rating": 7.19
+            }
+          },
+          {
+            "id": "fotmob-630366",
+            "name": "Niklas Castro",
+            "number": 9,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.87,
+            "y": 0.21,
+            "stats": {
+              "apps": 19,
+              "starts": 17,
+              "minutes": 1519,
+              "goals": 9,
+              "assists": 4,
+              "xg": 3.3,
+              "rating": 7.48
+            }
+          },
+          {
+            "id": "fotmob-856936",
+            "name": "Kristall Ingason",
+            "number": 10,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.87,
+            "y": 0.79,
+            "stats": {
+              "apps": 16,
+              "starts": 13,
+              "minutes": 1128,
+              "goals": 5,
+              "assists": 2,
+              "xg": 2.28,
+              "rating": 7.18
+            }
+          },
+          {
+            "id": "fotmob-1083890",
+            "name": "Neraysho Kasanwirjo",
+            "number": 21,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.357,
+            "y": 0.375,
+            "stats": {
+              "apps": 8,
+              "starts": 7,
+              "minutes": 555,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.17,
+              "rating": 6.58
+            }
+          },
+          {
+            "id": "fotmob-1088860",
+            "name": "Eggert Guðmundsson",
+            "number": 19,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.613,
+            "y": 0.21,
+            "stats": {
+              "apps": 17,
+              "starts": 14,
+              "minutes": 1119,
+              "goals": 1,
+              "assists": 2,
+              "xg": 0.85,
+              "rating": 6.98
+            }
+          },
+          {
+            "id": "fotmob-1126420",
+            "name": "Simen Vidtun Nilsen",
+            "number": 12,
+            "position": "Goalkeeper",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 7,
+              "starts": 7,
+              "minutes": 630,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.86
+            }
+          },
+          {
+            "id": "fotmob-1186576",
+            "name": "Noah Holm",
+            "number": 29,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 19,
+              "starts": 15,
+              "minutes": 1381,
+              "goals": 10,
+              "assists": 1,
+              "xg": 6.33,
+              "rating": 7.17
+            }
+          },
+          {
+            "id": "fotmob-1233201",
+            "name": "Niklas Jensen Wassberg",
+            "number": 25,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.613,
+            "y": 0.5,
+            "stats": {
+              "apps": 19,
+              "starts": 15,
+              "minutes": 1269,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.43,
+              "rating": 7.02
+            }
+          },
+          {
+            "id": "fotmob-1377429",
+            "name": "Jonas Torsvik",
+            "number": 15,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.357,
+            "y": 0.875,
+            "stats": {
+              "apps": 8,
+              "starts": 4,
+              "minutes": 347,
+              "goals": 1,
+              "assists": 1,
+              "xg": 1.11,
+              "rating": 7.05
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-313825",
+            "name": "Bård Finne",
+            "number": 11,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 14,
+              "starts": 3,
+              "minutes": 348,
+              "goals": 2,
+              "assists": 0,
+              "xg": 1.59,
+              "rating": 6.58
+            }
+          },
+          {
+            "id": "fotmob-444485",
+            "name": "Thore Pedersen",
+            "number": 23,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 21,
+              "starts": 18,
+              "minutes": 1532,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.73
+            }
+          },
+          {
+            "id": "fotmob-532947",
+            "name": "Vetle Dragsnes",
+            "number": 20,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 16,
+              "starts": 7,
+              "minutes": 783,
+              "goals": 0,
+              "assists": 2,
+              "xg": 0.24,
+              "rating": 6.66
+            }
+          },
+          {
+            "id": "fotmob-683355",
+            "name": "Sævar Atli Magnusson",
+            "number": 22,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 15,
+              "starts": 6,
+              "minutes": 665,
+              "goals": 0,
+              "assists": 0,
+              "xg": 1.83,
+              "rating": 6.5
+            }
+          },
+          {
+            "id": "fotmob-940963",
+            "name": "Ulrik Mathisen",
+            "number": 14,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 10,
+              "starts": 6,
+              "minutes": 519,
+              "goals": 1,
+              "assists": 3,
+              "xg": 0.63,
+              "rating": 6.81
+            }
+          },
+          {
+            "id": "fotmob-942362",
+            "name": "Leo Cornic",
+            "number": 2,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 7,
+              "starts": 4,
+              "minutes": 429,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.14,
+              "rating": 6.75
+            }
+          },
+          {
+            "id": "fotmob-1606401",
+            "name": "Julian Lægreid",
+            "number": 39,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 4,
+              "starts": 0,
+              "minutes": 44,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.12,
+              "rating": 5.92
+            }
+          },
+          {
+            "id": "fotmob-1804707",
+            "name": "Håkon Melås Hellesøy",
+            "number": 36,
+            "position": "Goalkeeper",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1991108",
+            "name": "Brage Haugen",
+            "number": 43,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          }
+        ],
+        "unavailable": [],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-444485",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Thore Pedersen",
+            "position": "Midfielder",
+            "starts": 18,
+            "goals": 0,
+            "assists": 0,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-738046",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Jacob Lungi Sørensen",
+            "position": "Midfielder",
+            "starts": 15,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-354136",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Mathias Dyngeland",
+            "position": "Goalkeeper",
+            "starts": 14,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          }
+        ],
+        "lastMatch": {
+          "date": "2026-11-01",
+          "league": "Eliteserien - Norway",
+          "home": "Brann",
+          "away": "Molde",
+          "homeGoals": 3,
+          "awayGoals": 2
+        }
+      },
+      "matchInfo": null
+    },
+    "analysis": {
+      "summary": "Brann arrive en forme correcte : 3 victoires sur ses 5 derniers matchs de coupe référencés, 6 buts marqués en 2 matchs de Conference League, et un onze offensif (Holm 10 buts, Castro 9, Eriksen 7+6). Sint-Truiden a aussi 6 points sur 6, mais ses 10 derniers matchs sont mitigés (4 V, 6 D), avec 1,7 but marqué et 1,7 concédé. Composition de Sint-Truiden inconnue ; celle de Brann est le dernier onze aligné (Molde, 01/11), pas celui du match.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Les deux équipes ont un début de phase de ligue parfait.",
+          "evidence": "St.Truiden 7e, 6 pts, buts 3-0 ; Brann 3e, 6 pts, buts 6-2."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Brann marque beaucoup mais encaisse aussi ; Sint-Truiden est irrégulier.",
+          "evidence": "Brann 4-1, 2-1, 3-2, 1-1, 4-2 sur ses 5 derniers matchs de coupe ; Sint-Truiden DDVVVDDDVD sur 10 matchs."
+        },
+        {
+          "factor": "statistiques et moyennes",
+          "observation": "Sint-Truiden concède autant qu'il marque, Brann domine la possession mais est fragile en défense à l'extérieur.",
+          "evidence": "Sint-Truiden 1,7 / 1,7 (domicile 1,83 / 1,33) ; Brann 1,5 / 1,7 (extérieur 1,4 / 1,8)."
+        },
+        {
+          "factor": "absents",
+          "observation": "Plusieurs blessés côté Brann, dont Mathisen, qui était sur le banc au dernier match.",
+          "evidence": "Kjartansson, Boakye, Tronstad, Opsahl, Mathisen (dossier du 01/11, donc à vérifier)."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur, avec un Brann offensif et des matchs ouverts. Il nuance toutefois l'écart du 1N2, car Sint-Truiden est invaincu dans cette phase et plus solide à domicile que son bilan global.",
+      "caveats": "Forme FotMob de Sint-Truiden non trouvée (seul un profil web du 19/09 est disponible) ; composition et dossier de Sint-Truiden absents. La composition de Brann est le dernier onze aligné, pas celle du match. Les absents de Brann datent du 01/11. Coup d'envoi indiqué à 12h00 UTC. Le moteur n'a pas de cotes de marché ni de statExpectations.",
+      "lineupImpact": "Source magasin : c'est le dernier onze de Brann (4-3-3, Horneland, 3-2 contre Molde), pas celui du match. Holm (10 buts), Castro (9+4) et Eriksen (7+6) y figurent, ce qui soutient le potentiel offensif. Parmi les titulaires habituels, Pedersen est remplaçant, Sørensen et le gardien Dyngeland sont absents de la feuille, et Nilsen (7 titularisations) est dans les buts. Aucun absent annoncé par FotMob pour ce match. Composition de Sint-Truiden inconnue.",
+      "marketViews": [
+        {
+          "market": "Résultat",
+          "pick": "Brann gagne",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "48 % : Brann a gagné ses 2 matchs de coupe (6 buts) et domine la possession (61,5 %), mais il concède 1,8 but par match à l'extérieur.",
+          "reasoning": "Le potentiel offensif de Brann soutient le pronostic. Sint-Truiden, 6 points sur 6 et 1,83 but par match à domicile, reste dangereux, et l'incertitude est grande.",
+          "probability": 48
+        },
+        {
+          "market": "Total buts",
+          "pick": "Plus de 2.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "79 % : le moteur attend 4,25 buts (1,5 + 2,75) et les deux défenses concèdent 1,7 but par match.",
+          "reasoning": "Brann a vu des matchs à 5, 3, 5 et 6 buts en coupe, et Sint-Truiden concède autant qu'il marque. Le contexte confirme un match ouvert.",
+          "probability": 79
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "pick": "Oui",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "73 % : Brann a marqué lors de ses 5 derniers matchs et en a encaissé dans 4 des 5 derniers de coupe, Sint-Truiden marque 1,7 par match.",
+          "reasoning": "Les deux équipes concèdent en moyenne 1,7 but. Sint-Truiden a toutefois gardé sa cage inviolée lors de ses 2 matchs de coupe, d'où une réserve.",
+          "probability": 73
+        },
+        {
+          "market": "Résultat + Total buts",
+          "pick": "Brann & Plus de 1.5 buts",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "45 % : il combine la victoire de Brann (48 %) avec un total presque acquis, car Brann a marqué 2 buts ou plus dans 4 de ses 5 derniers matchs de coupe.",
+          "reasoning": "Le pari repose surtout sur la victoire de Brann, qui est le point incertain. Ce marché est historiquement peu fiable (158/316 pour mes avis).",
+          "probability": 45
+        },
+        {
+          "market": "Buts — Sint-Truiden",
+          "pick": "Sint-Truiden — Moins de 2.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "81 % : Sint-Truiden marque 1,7 par match (1,83 à domicile), pour 1,5 but attendu par le moteur.",
+          "reasoning": "Atteindre 3 buts demande un match très ouvert. Brann concède 1,7 but par match, mais le seuil reste élevé pour Sint-Truiden.",
+          "probability": 81
+        },
+        {
+          "market": "Buts — Brann",
+          "pick": "Brann — Plus de 1.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "76 % : le moteur attend 2,75 buts pour Brann, qui a marqué 4, 2, 3, 1 et 4 buts lors de ses 5 derniers matchs de coupe.",
+          "reasoning": "Holm, Castro et Eriksen forment une attaque productive. La moyenne de 1,5 but sur 10 matchs et le déplacement incitent toutefois à rester prudent.",
+          "probability": 76
+        }
+      ]
+    },
+    "updatedAt": "2026-11-03T17:43:12.821Z",
+    "createdAt": "2026-11-03T17:43:12.821Z"
+  }
+]

@@ -41464,7 +41464,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-02T17:14:45.651Z",
+    "updatedAt": "2026-11-03T07:10:57.181Z",
     "createdAt": "2026-11-01T00:52:17.400Z",
     "kickoffRuns": 2,
     "earlierAnalysis": {
@@ -41859,6 +41859,225 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-01T00:52:17.400Z"
+    },
+    "postMatchReview": {
+      "summary": "La Fiorentina a gagné 4-2 à Sassuolo, avec trois buts en deuxième période (50e, 79e, 90+3e). La lecture « match ouvert, beaucoup de buts » était juste, et le moteur avait raison sur la Fiorentina. Le point manqué est le plafond de buts de la Fiorentina, qui en a marqué 4.",
+      "whatWasRight": "Le scénario ouvert s'est vérifié : 6 buts, donc Plus de 3.5 validé. Sassuolo a marqué deux fois (Laurienté 25e et 65e). Les marchés de volume ont tenu : 22 tirs au total, 8 tirs cadrés au total, 8 corners au total, 15 tirs de la Fiorentina, 5 corners de Sassuolo et 3 de la Fiorentina. Le xG de 2,54 contre 0,87 confirme la supériorité de la Fiorentina, que le moteur avait chiffrée à 40 %.",
+      "whatWasMissed": "J'ai jugé que 4 buts seraient très inhabituels pour la Fiorentina (1,4 but par match) : elle les a marqués, dont deux tardifs (79e, 90+3e) quand Sassuolo poussait pour gagner. J'ai surestimé les tirs cadrés de Sassuolo, qui n'en a eu que 2 sur 7 tirs malgré 58 % de possession. Son xG (0,87) était très inférieur aux 2,8 attendus.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur l'essentiel : victoire de la Fiorentina, beaucoup de buts, corners et tirs dans les fourchettes. Il le contredit sur deux lignes : Fiorentina Moins de 3.5 buts et Sassuolo Plus de 3.5 tirs cadrés. Il n'y avait pas d'edge chiffré, mise PASS.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Fiorentina gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "La Fiorentina a gagné 4-2 : égalisation à la 45+2e, avantage à la 50e, puis buts à la 79e et 90+3e. Son xG (2,54 contre 0,87) et ses 15 tirs contre 7 justifient la victoire.",
+          "lesson": "Mon avis nuancé était prudent et le moteur avait raison. Quand les tirs et le xG attendus favorisent un camp, ils pèsent plus que la mauvaise série de résultats."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "6 buts (1-1 à la mi-temps, puis 3 buts de la Fiorentina contre 1 de Sassuolo), dont deux dans les dix dernières minutes ou presque (79e, 90+3e).",
+          "lesson": "Avec deux défenses poreuses, confirmer le Plus de 3.5 a été payant. À garder pour ce type d'affiche."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Fiorentina & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Victoire de la Fiorentina avec 6 buts : les deux conditions sont remplies largement.",
+          "lesson": "Ce marché dépend entièrement du résultat. Il est correct ici parce que la jambe des buts était quasi acquise, mais mon doute sur le résultat restait légitime."
+        },
+        {
+          "market": "Buts — Sassuolo",
+          "marketId": "teamGoals",
+          "pick": "Sassuolo — Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Laurienté a marqué à la 25e et à la 65e, ce qui suffit pour Plus de 1.5, même avec un xG de 0,87 seulement.",
+          "lesson": "Le seuil de 1,5 a passé grâce à l'efficacité plus qu'au volume. La défense fragile de la Fiorentina reste une raison de le garder."
+        },
+        {
+          "market": "Buts — Fiorentina",
+          "marketId": "teamGoals",
+          "pick": "Fiorentina — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "La Fiorentina a marqué 4 buts (Pellegrino 45+2e, Njie 50e, Mastantuono 79e, Valde 90+3e) avec un xG de 2,54 et 6 tirs cadrés sur 15.",
+          "lesson": "Ma confiance forte était excessive : une attaque à 1,4 but par match n'écarte pas 4 buts face à une défense qui en concède 2,3. Quand le moteur attend 2,5 buts, un seuil à 3,5 mérite plus de prudence, d'autant que la fin de match ouverte ajoute des buts."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 11.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "8 corners au total (5 Sassuolo, 3 Fiorentina), nettement sous 11,5.",
+          "lesson": "Les corners restent stables même dans un match à 6 buts. L'attendu du moteur (8,91) était proche."
+        },
+        {
+          "market": "Corners — Sassuolo",
+          "marketId": "teamCorners",
+          "pick": "Sassuolo — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sassuolo a eu 5 corners malgré 58 % de possession, sous 6,5.",
+          "lesson": "Même avec plus de possession que prévu, le seuil a tenu. L'attendu du moteur était bon."
+        },
+        {
+          "market": "Corners — Fiorentina",
+          "marketId": "teamCorners",
+          "pick": "Fiorentina — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "La Fiorentina a eu 3 corners, juste au-dessus de 2,5.",
+          "lesson": "C'est passé de justesse (3). Pour un seuil proche de sa moyenne à l'extérieur, la marge est mince."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 34.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "22 tirs au total (7 + 15), très sous 34,5.",
+          "lesson": "Le match ouvert n'a pas gonflé les tirs. L'attendu de 29 était plutôt haut, ce qui donnait de la marge."
+        },
+        {
+          "market": "Tirs — Sassuolo",
+          "marketId": "teamShots",
+          "pick": "Sassuolo — Moins de 19.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Sassuolo n'a tiré que 7 fois, très sous 19,5.",
+          "lesson": "Confirmation forte justifiée : ses tirs sont bien inférieurs aux moyennes, sa seule marge de risque étant un autre scénario."
+        },
+        {
+          "market": "Tirs — Fiorentina",
+          "marketId": "teamShots",
+          "pick": "Fiorentina — Plus de 9.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "La Fiorentina a tiré 15 fois, au-dessus de 9,5, en menant plus de la moitié du match.",
+          "lesson": "Son volume de tirs est fiable à l'extérieur, d'autant plus qu'elle devait remonter au score."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "8 tirs cadrés au total (2 + 6), juste au-dessus de 7,5.",
+          "lesson": "C'est passé de peu malgré 6 buts, car Sassuolo n'a cadré que 2 fois. Le seuil à 7,5 n'avait pas la marge que 83 % suggérait."
+        },
+        {
+          "market": "Tirs cadrés — Sassuolo",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Sassuolo — Plus de 3.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Sassuolo n'a cadré que 2 tirs sur 7, sous 3,5, avec un xG de 0,87.",
+          "lesson": "Ma confirmation était à corriger : l'attendu de 5,67 était trop haut pour une équipe qui tire 11 fois à domicile. Prendre plus en compte la moyenne domicile (4,2) et la fragilité de l'attaque."
+        },
+        {
+          "market": "Tirs cadrés — Fiorentina",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Fiorentina — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "La Fiorentina a cadré 6 tirs, sous 7,5, malgré 4 buts.",
+          "lesson": "Même avec un tel score, 8 tirs cadrés restait difficile à atteindre. Le seuil est à garder."
+        }
+      ],
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 21,
+        "commentaire": 2
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 6841,
+        "cache_read_input_tokens": 9398,
+        "output_tokens": 6288,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 6841,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2586,
+            "cache_read_input_tokens": 7310,
+            "cache_creation_input_tokens": 1619,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1619
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.09213160000000001,
+      "createdAt": "2026-11-03T07:10:57.180Z"
     }
   },
   {
@@ -60231,7 +60450,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-02T18:54:53.774Z",
+    "updatedAt": "2026-11-03T07:08:56.301Z",
     "createdAt": "2026-11-01T00:52:42.270Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -60646,6 +60865,238 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-01T00:52:42.270Z"
+    },
+    "postMatchReview": {
+      "summary": "Atalanta a dominé (xG 2,8 contre 0,36, 20 tirs contre 6, 70 % de possession) mais a perdu 0-3 face à un Parma ultra-efficace : 3 buts sur 3 tirs cadrés, dont un but contre son camp. Les marchés de volume (tirs, corners) ont tenu. Les marchés de résultat et de buts d'Atalanta et de Parma ont été battus par l'efficacité de Parma.",
+      "whatWasRight": "Le scénario de domination d'Atalanta : xG 2,8 pour un attendu moteur de 2,8, 20 tirs, 8 corners contre 4. Les marchés de volume ont tenu : corners sous les lignes, tirs totaux et d'Atalanta au-dessus, tirs cadrés (6 et 3) sous les plafonds. Parma n'a effectivement pas marqué d'un jeu de volume (6 tirs). « Les 2 équipes marquent : Non » a aussi été juste, mais pour la mauvaise raison : Atalanta n'a pas marqué.",
+      "whatWasMissed": "La variance de finition : Fabbian de la tête (41'), but contre son camp de Zappacosta (47') et Lontani (58') ont donné 3 buts pour 0,36 xG. Une domination xG ne protège pas d'un petit nombre de tirs adverses très efficaces. Atalanta a aussi manqué de réalisme malgré 4 grosses occasions, dont une barre de Pasalic à la 79'. J'ai sous-estimé la fragilité défensive d'Atalanta, déjà visible avec 2-2 et 4-4, ainsi que le risque de rester à 0 but.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1N2 et les marchés de buts d'Atalanta et de Parma, mais confirme ses attendus de volume (xG 2,8, tirs, corners). Le moteur lisait bien le jeu ; c'est la conversion, hors modèle, qui l'a contredit.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Atalanta gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Défaite 0-3 malgré 70 % de possession et 2,8 xG. Parma a marqué à la 41', 47' (contre son camp) et 58' et a tué le match en début de seconde période.",
+          "lesson": "Une cote à 1,5 laisse une vraie place à la variance, surtout avec des absences et deux nuls récents. La domination ne garantit pas la victoire ; ne pas confirmer avec assurance un favori à défense perméable."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "3 buts au total, donc plus de 2,5 : tous sont venus de Parma, dont un but contre son camp.",
+          "lesson": "Le pari a tenu, mais par un chemin inattendu. Un total élevé n'implique pas un favori qui marque ; garder le raisonnement sur la perméabilité d'Atalanta."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "faible",
+          "aiWasRight": true,
+          "explanation": "Atalanta n'a pas marqué malgré 6 tirs cadrés et 4 grosses occasions ; Parma a marqué 3 fois, d'où Non.",
+          "lesson": "Le Non est sorti à cause de la stérilité d'Atalanta et non de celle de Parma, ce qui montre la fragilité de la lecture. Ne pas valider un résultat juste pour la mauvaise raison."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Atalanta & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Atalanta n'a pas gagné ; le pari échoue dès le résultat.",
+          "lesson": "Les combinés héritent du risque du résultat. Le pari dépendait entièrement d'un favori qui a perdu."
+        },
+        {
+          "market": "Buts — Atalanta",
+          "marketId": "teamGoals",
+          "pick": "Atalanta — Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Atalanta a marqué 0 but réel (le but contre son camp compte pour Parma) malgré 2,8 xG, 20 tirs et une barre à la 79'.",
+          "lesson": "Même avec un xG de 2,8, marquer 2 fois n'est pas acquis. Un seuil à 77 % surestime la certitude face à la variance de finition."
+        },
+        {
+          "market": "Buts — Parma",
+          "marketId": "teamGoals",
+          "pick": "Parma — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "faible",
+          "aiWasRight": false,
+          "explanation": "Parma a marqué 3 fois : Fabbian de la tête (41'), but contre son camp (47') et Lontani (58') pour un xG de 0,36.",
+          "lesson": "Un seul but fait perdre ce pari, et les buts contre son camp comptent. Le xG de 0,36 ne garantit rien ; mon doute (confiance faible) était justifié."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 13.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "12 corners (8 + 4), sous 13,5, proche de l'attendu de 10,19.",
+          "lesson": "Marge large et marché stable : à garder."
+        },
+        {
+          "market": "Corners — Atalanta",
+          "marketId": "teamCorners",
+          "pick": "Atalanta — Moins de 8.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "8 corners, sous 8,5 de peu malgré la domination.",
+          "lesson": "Le résultat est passé de justesse : une domination forte approche la ligne. Garder la prudence sur ces lignes proches de 8."
+        },
+        {
+          "market": "Corners — Parma",
+          "marketId": "teamCorners",
+          "pick": "Parma — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "4 corners, bien sous 6,5, avec 30 % de possession.",
+          "lesson": "Le lien entre faible possession et peu de corners se confirme."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 24.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "26 tirs (20 + 6), juste au-dessus de 24,5 alors que 30,5 étaient attendus.",
+          "lesson": "Le pari est passé, mais Parma a produit moins que prévu. Le volume est mené par un seul camp ; la marge réelle était plus faible que 82 %."
+        },
+        {
+          "market": "Tirs — Atalanta",
+          "marketId": "teamShots",
+          "pick": "Atalanta — Plus de 12.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "20 tirs, bien au-dessus de 12,5 face à un adversaire passif.",
+          "lesson": "Le volume d'Atalanta à domicile est fiable, à garder."
+        },
+        {
+          "market": "Tirs — Parma",
+          "marketId": "teamShots",
+          "pick": "Parma — Plus de 8.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Seulement 6 tirs, sous 8,5, alors que le moteur attendait 12,83. Mon doute était donc justifié.",
+          "lesson": "Quand l'attendu vient surtout de la défense adverse et que l'équipe est proche de la ligne dans ses propres moyennes, la nuance s'impose. Avoir nuancé était la bonne approche. Un Parma mené, avec 30 % de possession, produit peu."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "9 tirs cadrés (6 + 3), au-dessus de 6,5.",
+          "lesson": "Marché confirmé, la marge sur l'attendu de 9,6 a suffi."
+        },
+        {
+          "market": "Tirs cadrés — Atalanta",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Atalanta — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "6 tirs cadrés, sous 7,5 mais près de la moyenne de 6,6.",
+          "lesson": "La moyenne à domicile est un bon repère de plafond ; marché à garder."
+        },
+        {
+          "market": "Tirs cadrés — Parma",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Parma — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "3 tirs cadrés, sous 5,5, et 3 buts sur ces 3 tirs.",
+          "lesson": "Le volume de tirs cadrés reste bas même quand Parma marque beaucoup ; ces marchés sont indépendants de l'efficacité."
+        }
+      ],
+      "caveats": "Un seul match. Les 3 buts de Parma tiennent largement à la finition et à un but contre son camp, difficiles à modéliser. Aucune donnée sur les raisons tactiques de l'écart n'est fournie, ni sur l'effet d'un score défavorable sur le volume après la 47'.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 12,
+        "commentaire": 1
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 7152,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 2674,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 7152,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2674,
+            "cache_read_input_tokens": 0,
+            "cache_creation_input_tokens": 7152,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 7152
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.055352,
+      "createdAt": "2026-11-03T07:08:56.301Z"
     }
   },
   {
@@ -61764,7 +62215,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-02T18:55:17.760Z",
+    "updatedAt": "2026-11-03T07:09:48.257Z",
     "createdAt": "2026-11-01T22:04:07.577Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -62180,6 +62631,238 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-01T22:04:07.577Z"
+    },
+    "postMatchReview": {
+      "summary": "Brest s'impose 0-2 à Lorient grâce à deux buts tardifs (Ajorque 69', Edjouma 90+2'), alors que Lorient dominait en xG (1,63 contre 1,22) et en tirs (15 contre 12). Mon avis prudent sur le 1N2 était sage. Les marchés de faible volume ont tenu. Deux marchés ont échoué : les corners de Lorient (8) et le total de tirs cadrés (4).",
+      "whatWasRight": "Le match est resté peu prolifique : moins de 3,5 buts, Lorient moins de 1,5 but et BTTS Non sont passés. Brest a tiré moins que sa moyenne (12 tirs, sous 17,5) et obtenu 2 corners. Lorient a dépassé 7,5 tirs avec 15. Les tirs cadrés de Lorient (0) et de Brest (4) sont restés sous les seuils. Ma prudence sur le 1N2 était justifiée.",
+      "whatWasMissed": "J'ai sous-estimé les corners de Lorient : 8 contre un seuil de moins de 6,5, que j'avais jugé large avec une confiance forte. J'ai aussi mal vu la domination de Lorient à domicile (15 tirs, 3 grosses occasions, 1,63 xG) et l'efficacité de Brest (2 buts sur 4 tirs cadrés). Le total de tirs cadrés (4) était très inférieur aux 8,34 attendus parce que Lorient n'a rien cadré. Un penalty manqué à 90+1' puis un but à 90+2' sont des événements tardifs que je ne pouvais pas prévoir.",
+      "outcomeVsEngine": "Le résultat contredit le léger avantage de Lorient (38 %) et le moteur sur le 1N2 : Brest gagne avec un xG inférieur. Il confirme le moteur sur les totaux bas (buts, corners totaux, tirs de Brest). Il le contredit sur les corners de Lorient et sur le total de tirs cadrés.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Lorient gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Lorient n'a pas gagné : Brest l'a emporté 0-2 (69' et 90+2'), malgré un xG inférieur (1,22 contre 1,63).",
+          "lesson": "Garder la nuance quand les xG sont proches et sans edge. Le score ne suit pas toujours les occasions."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Seulement 2 buts, tous deux en fin de match (69' et 90+2'). Le 0-0 a tenu jusqu'à la 69e minute.",
+          "lesson": "Les totaux bas de Lorient se confirment. Garder ce type de lecture."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Lorient n'a pas marqué : 0 tir cadré sur 15 tirs, et un penalty manqué à 90+1' (Tosin, sur le poteau).",
+          "lesson": "Lorient est capable de produire sans cadrer. Le Non reste une piste raisonnable, mais ce résultat tient en partie à un penalty raté."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Lorient & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Lorient a perdu, donc la combinaison est fausse malgré le total bas.",
+          "lesson": "Ce marché hérite de l'incertitude du 1N2 : ne pas le traiter comme plus sûr que lui."
+        },
+        {
+          "market": "Buts — Lorient",
+          "marketId": "teamGoals",
+          "pick": "Lorient — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Lorient a marqué 0 but, avec 0 tir cadré malgré 15 tirs.",
+          "lesson": "Le seuil bas pour Lorient est cohérent avec sa faible efficacité. À conserver."
+        },
+        {
+          "market": "Buts — Brest",
+          "marketId": "teamGoals",
+          "pick": "Brest — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Brest a marqué 2 fois (Ajorque 69', Edjouma 90+2') sur 4 tirs cadrés, avec 1,22 xG.",
+          "lesson": "Brest est efficace même avec peu de tirs. La nuance était justifiée : ne pas sous-estimer Brest en déplacement, surtout face à une équipe qui s'expose en fin de match."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 11.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Total de 10 corners (8 + 2), sous 11,5, mais la répartition a été très déséquilibrée.",
+          "lesson": "Le total est passé, mais de peu. Vérifier la répartition, car elle peut être très déséquilibrée."
+        },
+        {
+          "market": "Corners — Lorient",
+          "marketId": "teamCorners",
+          "pick": "Lorient — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Lorient a obtenu 8 corners, au-dessus de 6,5, en dominant à domicile (15 tirs, 3 grosses occasions).",
+          "lesson": "Ne pas appliquer une confiance forte sur un seuil de corners d'une équipe qui peut dominer. Une domination à domicile peut doubler sa moyenne de 3,4."
+        },
+        {
+          "market": "Corners — Brest",
+          "marketId": "teamCorners",
+          "pick": "Brest — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Brest n'a obtenu que 2 corners, bien sous 6,5.",
+          "lesson": "Le seuil large a bien tenu, car Brest a joué en contre-attaque. À garder."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 19.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "27 tirs au total (15 + 12), au-dessus de 19,5.",
+          "lesson": "Un total de tirs élevé reste fiable quand une équipe est offensive."
+        },
+        {
+          "market": "Tirs — Lorient",
+          "marketId": "teamShots",
+          "pick": "Lorient — Plus de 7.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Lorient a tiré 15 fois, au-dessus de 7,5.",
+          "lesson": "Le seuil sous sa moyenne s'est confirmé. À garder."
+        },
+        {
+          "market": "Tirs — Brest",
+          "marketId": "teamShots",
+          "pick": "Brest — Moins de 17.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Brest n'a tiré que 12 fois, sous 17,5.",
+          "lesson": "Brest produit moins en déplacement : la distinction domicile/extérieur est utile."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Seulement 4 tirs cadrés au total (0 pour Lorient, 4 pour Brest), sous 5,5.",
+          "lesson": "Un total attendu élevé peut s'effondrer si l'une des équipes ne cadre rien. Se méfier des plus de sur les tirs cadrés quand une équipe est peu précise."
+        },
+        {
+          "market": "Tirs cadrés — Lorient",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Lorient — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Lorient n'a cadré aucun tir, bien sous 5,5.",
+          "lesson": "Lorient cadre peu : le seuil bas est fiable."
+        },
+        {
+          "market": "Tirs cadrés — Brest",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Brest — Moins de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Brest a cadré 4 tirs, sous 6,5.",
+          "lesson": "Brest dépasse rarement 6 tirs cadrés en déplacement. À garder."
+        }
+      ],
+      "caveats": "Échantillon d'un seul match. Les deux buts sont tardifs (69' et 90+2'). Un penalty manqué à 90+1' a pesé sur le BTTS et le score. Les raisons précises de la différence entre xG et résultat ne figurent pas dans la fiche.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 13,
+        "commentaire": 2
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 6353,
+        "cache_read_input_tokens": 8992,
+        "output_tokens": 3547,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 6353,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2485,
+            "cache_read_input_tokens": 6904,
+            "cache_creation_input_tokens": 1537,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1537
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0626884,
+      "createdAt": "2026-11-03T07:09:48.256Z"
     }
   },
   {
@@ -66966,8 +67649,240 @@
         }
       ]
     },
-    "updatedAt": "2026-11-01T22:05:03.912Z",
-    "createdAt": "2026-11-01T22:05:03.912Z"
+    "updatedAt": "2026-11-03T07:09:18.783Z",
+    "createdAt": "2026-11-01T22:05:03.912Z",
+    "postMatchReview": {
+      "summary": "Deportivo a gagné 2-1 en renversant Osasuna (but de Budimir à la 32e, puis Soriano à la 64e et Nsongo à la 87e). Le sens général du moteur (xG 2,39 contre 0,92, domination à domicile) est confirmé, avec 62 % de possession, 18 tirs et un xG de 2,35 contre 1,1. Les lignes de volume prudentes ont presque toutes tenu, sauf les corners de Deportivo et ses tirs cadrés, qui ont frôlé ou dépassé les plafonds.",
+      "whatWasRight": "La domination de Deportivo à domicile : xG 2,35 contre 1,1, 7 tirs cadrés contre 2. Les deux équipes ont marqué, et Budimir a bien été le buteur d'Osasuna. Les lignes basses sur Osasuna (tirs 11, tirs cadrés 2, corners 2) ont tenu. Le plafond de buts de Deportivo (2) aussi. Le choix de la prudence sur un résultat incertain était justifié, car le match s'est décidé tard, à la 87e.",
+      "whatWasMissed": "J'ai sous-estimé le volume offensif de Deportivo : 18 tirs contre 14,74 attendus, 7 tirs cadrés et 8 corners. Cela a fragilisé les lignes de plafond sur ses corners et ses tirs. Les entrées d'Aubameyang (69e) et de Traoré (56e) ont relancé l'équipe, et l'effet des remplaçants n'avait pas été anticipé. Le faible nombre de corners d'Osasuna (2) a failli faire échouer la ligne de plus de 1,5.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur : victoire de Deportivo, plus de 2,5 buts et BTTS. Le marché du résultat n'avait pas d'edge, donc la confirmation reste sans conséquence chiffrée.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Deportivo A Coruña gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Osasuna a ouvert le score à la 32e, puis Deportivo a renversé le match avec Soriano (64e) et Nsongo (87e). La domination (62 % de possession, 18 tirs contre 11) a fini par payer.",
+          "lesson": "Le pronostic modéré sur Deportivo était correct. À domicile, une équipe qui domine les tirs finit souvent par convertir malgré une mauvaise forme récente."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Trois buts (Budimir 32e, Soriano 64e, Nsongo 87e), donc plus de 2,5 validé. Les xG de 2,35 et 1,1 le laissaient prévoir.",
+          "lesson": "Mon avis nuancé par prudence a été trop timide : l'xG total de 3,3 était un meilleur guide que la faible moyenne de buts de Deportivo."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Budimir a marqué à la 32e sur la seule vraie occasion nette d'Osasuna. Deportivo a répondu deux fois, aux 64e et 87e.",
+          "lesson": "La défense extérieure fragile d'Osasuna combinée à sa capacité à marquer régulièrement valide ce type de lecture. À garder."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Deportivo A Coruña & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Deportivo a gagné avec 3 buts au total, donc le marché est validé.",
+          "lesson": "Ce marché suit le résultat. Il a réussi ici, mais le faible bilan historique du moteur sur ce marché justifie de rester prudent."
+        },
+        {
+          "market": "Buts — Deportivo A Coruña",
+          "marketId": "teamGoals",
+          "pick": "Deportivo A Coruña — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Deportivo a marqué 2 buts, très loin de 4. Le plafond n'a jamais été menacé.",
+          "lesson": "Une ligne de plafond de buts éloignée de la moyenne offensive est sûre. Le raisonnement est à garder."
+        },
+        {
+          "market": "Buts — Osasuna",
+          "marketId": "teamGoals",
+          "pick": "Osasuna — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Osasuna a marqué un seul but (Budimir, 32e) avec 2 tirs cadrés. Le moins de 1,5 est validé de justesse.",
+          "lesson": "La nuance était justifiée : Budimir a marqué, mais la production d'Osasuna est restée faible. Le xG de 1,1 était supérieur au 0,92 du moteur."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "10 corners au total (8 + 2), donc plus de 6,5 validé largement grâce à la pression de Deportivo.",
+          "lesson": "Une ligne bien en dessous de la moyenne attendue est fiable, surtout quand une équipe domine."
+        },
+        {
+          "market": "Corners — Deportivo A Coruña",
+          "marketId": "teamCorners",
+          "pick": "Deportivo A Coruña — Moins de 8.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Deportivo a fait 8 corners, soit moins de 8,5 de justesse. La pression tardive a failli faire échouer la ligne.",
+          "lesson": "Attention à la marge : une équipe dominante peut atteindre le plafond. Confiance moyenne à conserver, pas forte."
+        },
+        {
+          "market": "Corners — Osasuna",
+          "marketId": "teamCorners",
+          "pick": "Osasuna — Plus de 1.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Osasuna n'a eu que 2 corners, donc plus de 1,5 validé de justesse.",
+          "lesson": "Face à un adversaire qui domine la possession, les corners du visiteur peuvent tomber bas. Marge fragile sur ce type de ligne."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 31.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "29 tirs au total (18 + 11), donc moins de 31,5 validé avec une marge de 2,5.",
+          "lesson": "La marge s'est réduite par rapport aux 25,8 attendus. Un domicile dominant gonfle le total."
+        },
+        {
+          "market": "Tirs — Deportivo A Coruña",
+          "marketId": "teamShots",
+          "pick": "Deportivo A Coruña — Moins de 19.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "18 tirs, soit moins de 19,5 de justesse, contre 14,74 attendus.",
+          "lesson": "L'avis « marge de plus de 5 tirs » était trop optimiste : une équipe qui renverse un score tire plus. Réduire la confiance sur les plafonds de tirs d'un favori à domicile."
+        },
+        {
+          "market": "Tirs — Osasuna",
+          "marketId": "teamShots",
+          "pick": "Osasuna — Moins de 14.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Osasuna n'a tiré que 11 fois, très en dessous de 14,5, face à une équipe qui avait 62 % de possession.",
+          "lesson": "Les plafonds sur l'outsider visiteur sont sûrs quand l'adversaire domine. À garder."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 11.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "9 tirs cadrés au total (7 + 2), moins de 11,5 validé.",
+          "lesson": "Le total reste sous la ligne même si Deportivo a dépassé sa moyenne, car Osasuna a très peu cadré."
+        },
+        {
+          "market": "Tirs cadrés — Deportivo A Coruña",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Deportivo A Coruña — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "7 tirs cadrés contre un seuil de 2,5, largement validé.",
+          "lesson": "Ligne basse sur une équipe qui domine : confirmation solide, à garder."
+        },
+        {
+          "market": "Tirs cadrés — Osasuna",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Osasuna — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Seulement 2 tirs cadrés pour Osasuna, très sous 5,5.",
+          "lesson": "Le plafond sur le visiteur est sûr quand il est dominé. À garder."
+        }
+      ],
+      "caveats": "Un seul match, donc rien de généralisable. Le renversement tardif à la 87e tient en partie à la variance. Je n'ai pas de statistiques sur la mi-temps ni sur l'effet réel des remplaçants au-delà des minutes des changements.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 16,
+        "commentaire": 3
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5264,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2685,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5264,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2685,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5264,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5264
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0483276,
+      "createdAt": "2026-11-03T07:09:18.783Z"
+    }
   },
   {
     "matchId": "cal-2026-11-02-mallorca-cadiz",
@@ -69715,8 +70630,240 @@
         }
       ]
     },
-    "updatedAt": "2026-11-01T22:04:34.216Z",
-    "createdAt": "2026-11-01T22:04:34.216Z"
+    "updatedAt": "2026-11-03T07:10:12.977Z",
+    "createdAt": "2026-11-01T22:04:34.216Z",
+    "postMatchReview": {
+      "summary": "Everton a gagné 1-0 à Newcastle grâce à Barry (49'). La lecture d'un match fermé, avec peu de buts et un Everton dangereux, s'est vérifiée. Le moteur penchait légèrement pour Newcastle, et cela a été contredit : Everton a dominé la qualité des occasions (xG 2,15 contre 1,47) et Newcastle n'a cadré que 2 tirs.",
+      "whatWasRight": "Le scénario d'un match fermé s'est confirmé : un seul but, 33 tirs au total, 9 corners. Everton s'est créé de bonnes occasions à l'extérieur (xG 2,15, 3 grosses occasions, Barry manquant une énorme occasion à la 24'), comme je l'avais souligné. Les marchés de volume (corners, tirs, tirs d'Everton) sont tous passés. Le doute sur Newcastle, à la défense remaniée et à la forme irrégulière, était fondé.",
+      "whatWasMissed": "J'ai sous-estimé la capacité d'Everton à gagner, alors que son xG extérieur et ses tirs cadrés le laissaient prévoir. J'ai surestimé l'attaque de Newcastle : le seuil de 2,5 tirs cadrés et le but marqué à 71 % ont échoué (2 tirs cadrés, 0 but) malgré 17 tirs. Je n'ai pas assez pesé la faible précision de Newcastle à domicile (3,8 tirs cadrés par match), ni le fait que ses tirs étaient souvent bloqués ou peu dangereux.",
+      "outcomeVsEngine": "Le résultat contredit la légère préférence du moteur pour Newcastle (41 % contre un xG de 1,24 à 0,94) et le but de Newcastle à 71 %. Il va dans le sens des marchés de plafond (moins de buts, de corners, de tirs) et de la défiance côté Everton. Le moteur avait raison de ne pas dégager d'edge.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Newcastle gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Newcastle n'a pas gagné : Barry a marqué à la 49' et Everton a tenu jusqu'au bout. Everton a eu le meilleur xG (2,15 contre 1,47) et a cadré 5 tirs contre 2.",
+          "lesson": "Ne pas faire du domicile un avantage quand l'équipe est irrégulière et remaniée en défense. Mon avis nuancé était prudent et approprié."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Un seul but dans le match (Barry, 49'), donc bien sous 3,5 malgré 33 tirs.",
+          "lesson": "Le seuil de 3,5 buts reste très sûr dans les matchs entre équipes de milieu de tableau. Garder cette confiance."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Newcastle n'a pas marqué (2 tirs cadrés seulement), donc Non est passé. Everton a marqué à la 49'.",
+          "lesson": "Le Non était fragile, mais le faible niveau offensif de Newcastle en tirs cadrés à domicile est un signal à mieux peser. Mon avis nuancé a bien tenu."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Newcastle & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "La victoire de Newcastle n'a pas eu lieu (0-1), donc la combinaison a échoué malgré le sous 3,5.",
+          "lesson": "Une combinaison dépend du résultat le plus incertain. Rester prudent quand le 1N2 est ouvert."
+        },
+        {
+          "market": "Buts — Newcastle",
+          "marketId": "teamGoals",
+          "pick": "Newcastle — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Newcastle n'a pas marqué : 17 tirs mais seulement 2 cadrés, xG 1,47. Il a été en panne devant le but.",
+          "lesson": "Plus de 0,5 but n'est pas acquis à 71 % pour une équipe qui cadre peu et aligne une attaque remaniée. Moins de confiance dans ce marché quand la qualité des tirs est faible."
+        },
+        {
+          "market": "Buts — Everton",
+          "marketId": "teamGoals",
+          "pick": "Everton — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Everton a marqué un seul but (Barry, 49'), donc moins de 1,5 est passé, bien que son xG ait atteint 2,15.",
+          "lesson": "Le résultat est juste, mais Everton a été chanceux de n'en marquer qu'un. Il a laissé passer des occasions franches, dont celle de Barry à la 24'. Cela dépend aussi de la finition."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 14.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "9 corners au total (4 et 5), très loin de 14,5.",
+          "lesson": "Le seuil haut sur les corners est fiable. À garder."
+        },
+        {
+          "market": "Corners — Newcastle",
+          "marketId": "teamCorners",
+          "pick": "Newcastle — Moins de 9.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Newcastle n'a obtenu que 4 corners, bien sous 9,5.",
+          "lesson": "Les moyennes à domicile (4,5) étaient le bon repère. À conserver."
+        },
+        {
+          "market": "Corners — Everton",
+          "marketId": "teamCorners",
+          "pick": "Everton — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Everton a obtenu 5 corners, sous 6,5, en ligne avec sa moyenne de 5.",
+          "lesson": "Le seuil était confortable. À conserver."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 35.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "33 tirs (17 et 16), sous 35,5 mais plus haut que les 29,5 attendus.",
+          "lesson": "Le résultat est juste, mais la marge s'est réduite. Un match ouvert aurait dépassé le seuil, donc rester attentif aux totaux proches de 33."
+        },
+        {
+          "market": "Tirs — Newcastle",
+          "marketId": "teamShots",
+          "pick": "Newcastle — Moins de 21.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Newcastle a tiré 17 fois, sous 21,5, mais au-dessus de sa moyenne de 13 à domicile.",
+          "lesson": "Le seuil large reste sûr. La hausse du volume n'a pas produit de tirs cadrés."
+        },
+        {
+          "market": "Tirs — Everton",
+          "marketId": "teamShots",
+          "pick": "Everton — Plus de 8.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Everton a tiré 16 fois, bien au-dessus de 8,5.",
+          "lesson": "Le seuil très bas par rapport à ses volumes habituels était sûr. À garder."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "7 tirs cadrés au total (2 et 5), juste au-dessus de 6,5. C'est passé de justesse, grâce à Everton.",
+          "lesson": "Le résultat est juste, mais la marge était mince, car Newcastle n'a presque rien cadré. Ne pas compter sur les deux équipes pour la même contribution."
+        },
+        {
+          "market": "Tirs cadrés — Newcastle",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Newcastle — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Newcastle n'a cadré que 2 tirs, sous le seuil de 2,5. Beaucoup de tirs ont été bloqués ou ont manqué le cadre (Barnes à la 7', Joelinton bloqué à la 16').",
+          "lesson": "Une moyenne de 3,8 à domicile est trop proche du seuil de 2,5 pour 83 %. Pour ce marché, baisser la confiance quand la défense adverse bloque et que l'attaque est remaniée."
+        },
+        {
+          "market": "Tirs cadrés — Everton",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Everton — Moins de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Everton a cadré 5 tirs, sous 6,5, conformément à l'attendu de 4,41.",
+          "lesson": "Se fier à l'attendu du moteur plutôt qu'à la moyenne extérieure de 6 était le bon choix."
+        }
+      ],
+      "caveats": "Un seul match : le 1-0 tient en partie à la finition et à l'un ou l'autre fait de jeu. Les extraits du texte FotMob sont partiels, et le déroulé ne couvre pas tout le match. Rien ne dit que la composition annoncée très en avance a été modifiée.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 16,
+        "commentaire": 5
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5273,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2735,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5273,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2735,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5273,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5273
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0488636,
+      "createdAt": "2026-11-03T07:10:12.977Z"
+    }
   },
   {
     "matchId": "cal-2026-11-02-benfica-alverca",
