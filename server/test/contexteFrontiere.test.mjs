@@ -113,7 +113,8 @@ test('T-X5 la déclaration de l’étape 32 AVANT le regard : portée « context
   assert.equal(LANC.verifierLancements(), true);
   // Étape 33 (02/11/2026) : sa portée « cartons-corners » vient APRÈS « contexte » (ajoutée à la fin, cartonsFrontiere T-X5).
   assert.deepEqual([...LANC.PORTEES].slice(0, 9), ['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte']);
-  assert.deepEqual([...LANC.PORTEES].slice(9), ['cartons-corners']);
+  // Étape 34 (03/11/2026) : sa portée « paris-joueurs » vient APRÈS « cartons-corners » (joueursFrontiere T-X5).
+  assert.deepEqual([...LANC.PORTEES].slice(9), ['cartons-corners', 'paris-joueurs']);
   assert.ok(LANC.VUES_DE_L_ETAPE_32.length >= 1);
   for (const v of LANC.VUES_DE_L_ETAPE_32) assert.deepEqual([...v.pour], ['contexte'], `${v.de} → ${v.a}`);
   for (const v of LANC.VUES_DE_L_ETAPE_32) assert.ok(v.a <= '2026-09-23', 'jamais P5 : la preuve après lancement');
@@ -185,17 +186,21 @@ test('T-X7 le jugement PROVISOIRE de l’essai de l’étape 27 (moteurABlanc, e
   assert.deepEqual(registre.etapes['32'].lancements.map((l) => [l.version, l.le, l.source]), [['contexte-v1', '2026-09-23', 'code']]);
   // Étape 33 (lot 1a, 02/11/2026) : son lancement est noté au premier démarrage comme celui de 32 — rien d'autre ne bouge.
   assert.deepEqual(registre.etapes['33'].lancements.map((l) => [l.version, l.le, l.source]), [['cartons-corners-v1', '2026-09-23', 'code']]);
+  // Étape 34 (lot 1a, 03/11/2026) : de même.
+  assert.deepEqual(registre.etapes['34'].lancements.map((l) => [l.version, l.le, l.source]), [['joueurs-v1', '2026-09-23', 'code']]);
   delete registre.etapes['32'];
   delete registre.etapes['33'];
+  delete registre.etapes['34'];
   assert.equal(JSON.stringify(registre), JSON.stringify(JSON.parse(figee.registreMesureTexte)), 'le registre de la mesure d’essai, à l’octet hors du lancement 32');
   assert.ok(!figee.lancementsNotes.some((x) => x.startsWith('32:')), 'avant : le premier démarrage ne note pas 32');
-  assert.deepEqual(s.lancementsNotes, [...figee.lancementsNotes, '32:contexte-v1:2026-09-23', '33:cartons-corners-v1:2026-09-23'], 'après : 32 et 33 notés au premier démarrage, rien d’autre de neuf');
+  assert.deepEqual(s.lancementsNotes, [...figee.lancementsNotes, '32:contexte-v1:2026-09-23', '33:cartons-corners-v1:2026-09-23', '34:joueurs-v1:2026-09-23'], 'après : 32, 33 et 34 notés au premier démarrage, rien d’autre de neuf');
   assert.equal(s.variantes27, figee.variantes27);
   assert.equal(s.variantes27, 320);
   assert.ok(!figee.lancementsVus.includes('32:contexte-v1'), 'avant : pas de lancement 32');
   assert.ok(s.lancementsVus.includes('32:contexte-v1'), 'après : le lancement 32 est dans le registre du juge, et rien ne change');
   assert.ok(s.lancementsVus.includes('33:cartons-corners-v1'), 'après : le lancement 33 est dans le registre du juge, et rien ne change');
-  assert.deepEqual(s.lancementsVus.filter((x) => x !== '32:contexte-v1' && x !== '33:cartons-corners-v1'), figee.lancementsVus);
+  assert.ok(s.lancementsVus.includes('34:joueurs-v1'), 'après : le lancement 34 est dans le registre du juge, et rien ne change');
+  assert.deepEqual(s.lancementsVus.filter((x) => x !== '32:contexte-v1' && x !== '33:cartons-corners-v1' && x !== '34:joueurs-v1'), figee.lancementsVus);
 });
 
 test('T-X8 openDb sur une copie de forme réelle (la base d’essai) crée les cinq tables et les deux index du contexte ; indexAttendus() complet ; une seconde ouverture ne change rien ; chaque entrée du DDL du contexte commence par son ordre', () => {

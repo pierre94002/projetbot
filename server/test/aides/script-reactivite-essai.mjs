@@ -164,6 +164,18 @@ if (phase === 'fabriquer') {
     .all(...o.jours, o.limite ?? 100000)
     .map((m) => ({ ...m, commenceTime: `${m.date}T18:00:00.000Z`, hasOdds: false }));
   s.matchs = matchs.length;
+  // La CHAUFFE (03/11/2026, étape 34 ; patron : C1 de correctifs28Octobre) : la même nuit une première fois, sur des copies à
+  // part des registres, dans le MÊME processus — elle prend les lectures et les compilations à froid (315 à 427 ms vus sous
+  // la charge de la suite complète) ; elle est mesurée et rendue telle quelle, jamais jugée. Puis la nuit mesurée.
+  if (o.chauffe) {
+    const vC = `${o.versions}.chauffe.json`;
+    const mC = `${o.mesure}.chauffe.json`;
+    fs.copyFileSync(o.versionsSource, vC);
+    fs.copyFileSync(o.mesureSource, mC);
+    const finC = battement();
+    const c = await calculerABlanc({ maintenant: Date.parse(o.maintenant), database, matchs: JSON.parse(JSON.stringify(matchs)), dansLaPasse: true, versions: { fichier: vC }, mesure: { fichier: mC } });
+    s.chauffe = { blocMaxMs: c.blocMaxMs, blocMaxOu: c.blocMaxOu ?? null, calcules: c.calcules, erreur: c.erreur ?? null, dehorsMaxMs: finC().battementMaxMs ?? null };
+  }
   const fin = battement();
   const debut = performance.now();
   const bilan = await calculerABlanc({ maintenant: Date.parse(o.maintenant), database, matchs, dansLaPasse: true, versions: { fichier: o.versions }, mesure: { fichier: o.mesure } });

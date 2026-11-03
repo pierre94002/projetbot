@@ -65,8 +65,10 @@ const campagne = uneFois(() => {
       const run = { ...fichiers, maintenant, versions: path.join(dossier, `versions-${nom}.json`), mesure: path.join(dossier, `mesure-${nom}.json`) };
       s[nom] = { mesure: lancer('mesurer', run), reference: lancer('reference', run) };
     }
-    // Quelques matchs à calculer (ceux du 20/09 de la base d'essai, vus « à venir » la veille au soir).
-    s.nuit = lancer('nuit', { ...fichiers, maintenant: '2026-09-19T22:00:00.000Z', jours: ['2026-09-20'], limite: 12, versions: path.join(dossier, 'versions-nuit.json'), mesure: path.join(dossier, 'mesure-nuit.json') });
+    // Quelques matchs à calculer (ceux du 20/09 de la base d'essai, vus « à venir » la veille au soir). Étape 34 (03/11/2026) :
+    // APRÈS une nuit de chauffe dans le même processus (les lectures à froid : 315 à 427 ms sous la charge de la suite), comme
+    // C1 de correctifs28Octobre ; la chauffe est mesurée et dite, jamais jugée ; le seuil de 300 ms est gardé.
+    s.nuit = lancer('nuit', { ...fichiers, chauffe: true, maintenant: '2026-09-19T22:00:00.000Z', jours: ['2026-09-20'], limite: 12, versions: path.join(dossier, 'versions-nuit.json'), mesure: path.join(dossier, 'mesure-nuit.json') });
     return s;
   } finally {
     copie.nettoyer();
@@ -135,7 +137,10 @@ test('les matchs à calculer : la main rendue entre l’enrichissement et chacun
   assert.ok(nuit.bilan.calcules >= 5, `des matchs calculés (${nuit.bilan.calcules})`);
   assert.equal(nuit.bilan.echecs, 0, JSON.stringify(nuit.bilan.echantillons));
   assert.ok(nuit.bilan.pauses >= 4 * nuit.bilan.calcules, `au moins quatre pauses par match (${nuit.bilan.pauses} pour ${nuit.bilan.calcules})`);
-  assert.ok(nuit.bilan.blocMaxMs > 0 && nuit.bilan.blocMaxMs < SEUIL_MS, `tenu ${nuit.bilan.blocMaxMs} ms (« ${nuit.bilan.blocMaxOu} »)`);
+  // La chauffe (même nuit, même processus, avant la nuit mesurée) : faite, sans erreur ; son temps est dit, jamais jugé.
+  assert.ok(nuit.chauffe && nuit.chauffe.erreur === null && nuit.chauffe.calcules === nuit.bilan.calcules, `la nuit de chauffe : ${JSON.stringify(nuit.chauffe)}`);
+  const froid = `à froid (chauffe) : ${nuit.chauffe.blocMaxMs} ms (« ${nuit.chauffe.blocMaxOu} »)`;
+  assert.ok(nuit.bilan.blocMaxMs > 0 && nuit.bilan.blocMaxMs < SEUIL_MS, `tenu ${nuit.bilan.blocMaxMs} ms (« ${nuit.bilan.blocMaxOu} ») ; ${froid}`);
   assert.equal(typeof nuit.bilan.blocMaxOu, 'string');
 });
 

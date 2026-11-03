@@ -88,12 +88,15 @@ export const DONNEES_VUES = Object.freeze([
  *   cartons-corners  les cartons attendus et les réglages des corners et des tirs par championnat (étape 33, 02/11/2026 ;
  *                 data/cartons/) — à blanc, jamais lus par le moteur au lot 1 (la candidate du lot 2 recopierait ces vues
  *                 avec `pour: ['moteur']`).
+ *   paris-joueurs les chiffres à blanc des paris sur les joueurs (étape 34, 03/11/2026 ; data/joueurs/) — buteur, tirs
+ *                 cadrés, averti, passeur ; jamais lus par le moteur au lot 1 (la candidate du lot 2 recopierait ces vues
+ *                 avec `pour: ['moteur']`). Ce n'est pas `joueurs` (les fiches de l'étape 30).
  * Une étape qui fait LIRE au moteur une grandeur apprise ailleurs (27 lisant l'indice ou une demi-vie de 18)
  * recopie ces fenêtres dans SON lancement avec `pour: ['moteur']` : c'est son lancement qui dit ce que le
  * moteur a vu. Sans cette règle, une fenêtre regardée pour l'indice étiquetait « déjà vu » les lignes du
  * MOTEUR sur 2019-2023 (la note de départ), alors qu'aucun chiffre du moteur ne les avait vues.
  */
-export const PORTEES = Object.freeze(['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners']);
+export const PORTEES = Object.freeze(['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs']);
 
 /** Une fenêtre vaut-elle pour cette mesure ? `tout` vaut pour toutes. */
 export const pourLaPortee = (pour, portee) => Array.isArray(pour) && (pour.includes(portee) || pour.includes('tout'));
@@ -700,6 +703,54 @@ export const VARIANTES_DE_L_ETAPE_33 = Object.freeze([
 ]);
 
 /**
+ * Les fenêtres REGARDÉES par l'étape 34 (buteurs et paris sur les joueurs, lot 1a du 03/11/2026 ; data/joueurs/), portée
+ * « paris-joueurs » (déclarée DANS chaque fenêtre : le juge de l'essai de l'étape 27 n'en voit rien) : le magasin
+ * 2023-07-01 → 2026-09-23 où le banc (UN seul regard) apprend sur un pli et juge l'autre, puis l'inverse, et où les comptes
+ * d'avant le regard (couvertures, relevés, règle des penalties, compositions — sans attendu ni perte) sont pris ; la mise
+ * en route 2023-01-01 → 2023-06-30, où la conception et la critique ont lu, dans l'export gelé du 22/09, la définition des
+ * tirs d'un joueur, la règle des penalties et les ordres de grandeur. Les demi-vies et la base statistique (les réglages de
+ * la candidate 27) ont été réglées sur une partie de la fenêtre jugée (critique, constat 11) : la calibration peut y être
+ * un peu optimiste ; les deux bras le partagent. L'étape 30 (portée « joueurs ») a déjà regardé cette fenêtre pour une
+ * autre question. Jamais P5 (depuis le 24/09/2026) : c'est la preuve après lancement.
+ */
+export const VUES_DE_L_ETAPE_34 = Object.freeze([
+  Object.freeze({
+    de: '2023-07-01',
+    a: '2026-09-23',
+    quoi: 'Étape 34 : banc des chiffres des joueurs, un seul regard — parts (buts, tirs cadrés, avertissements, passes), tireur de penalties et faux joueurs appris sur 2023-07 → 2025-06 et jugés sur 2025-07 → 2026-09-23, puis l’inverse ; avant lui, les comptes (couvertures, relevés, règle des penalties, compositions), sans attendu ni perte. Les demi-vies (fourchette de l’étape 30) et la base statistique (réglages de la candidate 27) ont été réglées en partie sur cette fenêtre.',
+    pour: Object.freeze(['paris-joueurs'])
+  }),
+  Object.freeze({
+    de: '2023-01-01',
+    a: '2023-06-30',
+    quoi: 'Étape 34 : mise en route du banc (rien d’appris ni de jugé) ; la conception et la critique y ont lu, dans l’export gelé du 22/09, la définition des tirs d’un joueur, la règle des penalties et les ordres de grandeur des parts, des minutes et des compositions, sans attendu ni perte.',
+    pour: Object.freeze(['paris-joueurs'])
+  })
+]);
+
+/**
+ * Les VARIANTES de l'étape 34, déclarées AVANT le regard unique du banc (conception §6.3 ; critique, constat 8 :
+ * placebo-passeur, K = 11) : la fiche retenue (joueurs-v1, en tête : elle ne lit aucun résultat, comptée par prudence
+ * comme contexte-v1 et cartons-corners-v1), les parts propres au joueur des quatre familles, le tireur de penalties, et
+ * les cinq faux joueurs de contrôle. Le bras A de chaque famille est le repère du poste × le rapport de la compétition,
+ * rétréci (critique, constat 8). Le banc compte K = VARIANTES_DE_L_ETAPE_34.length et refuse toute variante absente
+ * d'ici. Une variante corrigée après le regard = un identifiant de plus, déclaré avant son passage.
+ */
+export const VARIANTES_DE_L_ETAPE_34 = Object.freeze([
+  Object.freeze({ id: 'joueurs-v1', quoi: 'Fiche retenue (version 1) : la part du joueur dans ce que produit son équipe (xG hors penalty, penalties tirés, tirs cadrés, avertissements, xA ; sommes amorties par apparition, ramenées vers le repère de son poste dans ce championnat), ses minutes attendues, les parts d’une composition qui se rajoutent à l’équipe (titulaires et bloc des remplaçants) ; buts et passes en Poisson, tirs cadrés en binomiale négative, averti plafonné ; recalage par dixièmes appris sur l’autre pli ; ne lit aucun résultat.' }),
+  Object.freeze({ id: 'buteur-parts', quoi: 'Marque : parts d’xG hors penalty du poste (repère × rapport de la compétition) face aux parts du joueur (rappel κ appris sur la grille finie) ; penalties au poste dans les deux bras ; perte log de la loi du nombre de buts.' }),
+  Object.freeze({ id: 'buteur-tireur', quoi: 'Marque : le bras B de buteur-parts face au même avec le tireur de penalties (sa part des penalties tirés de son club, rappelée vers le poste) ; perte log de la loi du nombre de buts.' }),
+  Object.freeze({ id: 'cadres-parts', quoi: 'Tirs cadrés : parts du poste face aux parts du joueur ; binomiale négative (binomiale sous une sous-dispersion), 1/k de chaque bras par les moments ; perte log de la loi du nombre de tirs cadrés.' }),
+  Object.freeze({ id: 'averti-parts', quoi: 'Averti : parts d’avertissements du poste face aux parts du joueur ; cartons attendus de l’équipe = la moyenne de la compétition pour ce côté (étape 33) ; perte log binaire.' }),
+  Object.freeze({ id: 'passeur-parts', quoi: 'Passeur : parts d’xA du poste face aux parts du joueur (passes décisives là où l’xA manque) ; perte log de la loi du nombre de passes décisives.' }),
+  Object.freeze({ id: 'placebo-parts', quoi: 'Faux joueurs de contrôle (buts) : les parts d’xG hors penalty d’un emplacement tiré pour chaque apparition (FNV-1a de « clé du match:numéro » mod le nombre d’emplacements du poste), accumulé comme un vrai joueur, face au repère ; doit sortir « pas prouvé ».' }),
+  Object.freeze({ id: 'placebo-tireur', quoi: 'Faux tireurs de contrôle : le bras A de buteur-tireur face aux penalties des faux joueurs ; doit sortir « pas prouvé ».' }),
+  Object.freeze({ id: 'placebo-cadres', quoi: 'Faux joueurs de contrôle (tirs cadrés) : parts des faux joueurs face au repère ; doit sortir « pas prouvé ».' }),
+  Object.freeze({ id: 'placebo-averti', quoi: 'Faux joueurs de contrôle (averti) : parts des faux joueurs face au repère ; doit sortir « pas prouvé ».' }),
+  Object.freeze({ id: 'placebo-passeur', quoi: 'Faux joueurs de contrôle (passes) : parts d’xA des faux joueurs face au repère ; doit sortir « pas prouvé ».' })
+]);
+
+/**
  * Les lancements déclarés par les étapes, dans l'ordre où elles sont faites. À la FIN d'une étape qui
  * touche aux chiffres : ajouter son entrée ici (version en service, ce qu'elle change, TOUTES les
  * variantes dont on a regardé le résultat pendant la construction, les fenêtres de données regardées).
@@ -787,6 +838,17 @@ export const LANCEMENTS = Object.freeze([
     le: null,
     variantes: VARIANTES_DE_L_ETAPE_33,
     vues: VUES_DE_L_ETAPE_33
+  }),
+  // Étape 34 (lot 1a, 03/11/2026) : les chiffres des joueurs (buteur, tirs cadrés, averti, passeur), à blanc ; ils ne
+  // règlent aucun chiffre du moteur (portée 'paris-joueurs'). Datée du premier démarrage de l'appli avec ce code ; ses
+  // variantes et ses vues déclarées AVANT le regard unique du banc.
+  Object.freeze({
+    etape: '34',
+    version: 'joueurs-v1',
+    quoi: 'Buteurs et paris sur les joueurs : pour chaque joueur d’un match à venir, ses chances de marquer, de cadrer un tir, d’être averti et de faire une passe décisive, avec leur cote juste, calculées depuis le magasin FotMob (sa part dans ce que produit son équipe, ses minutes, ce qu’attend l’équipe) ; calculées à blanc, mesurées au banc d’essai, jamais lues par le moteur.',
+    le: null,
+    variantes: VARIANTES_DE_L_ETAPE_34,
+    vues: VUES_DE_L_ETAPE_34
   })
 ]);
 

@@ -1767,6 +1767,58 @@ const CARTONS_DDL = [
   `CREATE TABLE IF NOT EXISTS cartons_etat (cle TEXT PRIMARY KEY, valeur TEXT NOT NULL) WITHOUT ROWID;`
 ];
 
+/**
+ * Étape 34 du plan (lot 1a, 03/11/2026) : LES CHIFFRES DES JOUEURS, À BLANC (server/src/data/joueurs/). Ajout pur : des
+ * tables neuves, écrites par le serveur seul (la nuit et l'enregistreur d'avant-match, lot 1b), jamais un JSON sous
+ * OneDrive ; aucun fichier du moteur ne les lit.
+ *   joueurs_fiches       l'état de chaque joueur au lendemain du dernier jour joué (numéro FotMob après people_merges) :
+ *                        sommes amorties des cinq signaux, penalties par club, minutes, banc ; réécrites chaque nuit ;
+ *   joueurs_matchs       la base de chaque match à venir (buts, tirs cadrés et cartons attendus — « cartes_* » — des deux équipes) et ses
+ *                        sources ; sans rowid ;
+ *   joueurs_avant_match  l'ARCHIVE d'avant-match : une ligne par match et par état de la compo (« publiee » ou
+ *                        « derniere-alignee »), écrite avant le coup d'envoi et jamais après ; ~1,8 Ko par ligne : sans rowid ;
+ *   joueurs_etat         la nuit, les repères des postes, le contrôle anti-fuite, les comptes, l'enregistreur.
+ * Aucun index. Chaque entrée commence par son ordre (aucun commentaire devant).
+ */
+const JOUEURS_DDL = [
+  `CREATE TABLE IF NOT EXISTS joueurs_fiches (
+  joueur INTEGER PRIMARY KEY,
+  club INTEGER,
+  poste INTEGER,
+  derniere TEXT NOT NULL,
+  apparitions INTEGER NOT NULL,
+  np_x REAL, np_e REAL, pen_x REAL, pen_e REAL, sot_x REAL, sot_e REAL, av_x REAL, av_e REAL, xa_x REAL, xa_e REAL,
+  pen_club INTEGER,
+  tit_min REAL, tit_n REAL, entre_min REAL, entre_n REAL, banc_n REAL, banc_entrees REAL,
+  calcule_le TEXT NOT NULL,
+  version INTEGER NOT NULL
+);`,
+  `CREATE TABLE IF NOT EXISTS joueurs_matchs (
+  rencontre TEXT PRIMARY KEY,
+  jour TEXT NOT NULL,
+  kickoff TEXT,
+  league TEXT,
+  home INTEGER NOT NULL,
+  away INTEGER NOT NULL,
+  lambda_dom REAL, lambda_ext REAL, cadres_dom REAL, cadres_ext REAL, cartes_dom REAL, cartes_ext REAL,
+  sources TEXT NOT NULL,
+  calcule_le TEXT NOT NULL,
+  version INTEGER NOT NULL
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS joueurs_avant_match (
+  rencontre TEXT NOT NULL,
+  etat TEXT NOT NULL,
+  kickoff TEXT NOT NULL,
+  compo_lue_le TEXT,
+  ecrit_le TEXT NOT NULL,
+  base TEXT NOT NULL,
+  joueurs TEXT NOT NULL,
+  version INTEGER NOT NULL,
+  PRIMARY KEY (rencontre, etat)
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS joueurs_etat (cle TEXT PRIMARY KEY, valeur TEXT NOT NULL) WITHOUT ROWID;`
+];
+
 const FD_HISTORY_INDEXES = [
   'CREATE INDEX IF NOT EXISTS idx_fd_history_code_date ON fd_history(code, date);',
   'CREATE INDEX IF NOT EXISTS idx_fd_history_dom ON fd_history(dom);',
@@ -1820,6 +1872,7 @@ const DDL = [
   ...CORRECTION_DDL,
   ...CONTEXTE_DDL,
   ...CARTONS_DDL,
+  ...JOUEURS_DDL,
   'CREATE INDEX IF NOT EXISTS idx_matches_date ON matches(date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_league_date ON matches(league, date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_home ON matches(home_name);',
