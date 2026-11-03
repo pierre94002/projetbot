@@ -902,7 +902,9 @@ test('les DEUX ÉTAPES de l’actualisation : après le carnet de l’IA, avant 
   assert.equal(s.etapes[i + 2], 'resumeCorrection');
   // Étape 32 (lot 1a, 29/10/2026) : le contexte du match s’intercale entre le résumé du mois et le contrôle quotidien.
   assert.equal(s.etapes[i + 3], 'contexteDuMatch');
-  assert.equal(s.etapes[i + 4], 'controleQuotidien');
+  // Étape 33 (lot 1b, 03/11/2026) : les cartons et corners suivent le contexte du match.
+  assert.equal(s.etapes[i + 4], 'cartonsEtCorners');
+  assert.equal(s.etapes[i + 5], 'controleQuotidien');
   assert.equal(s.etapes.at(-1), 'controleQuotidien');
   assert.equal(s.etapes.filter((k) => k === 'bulletin' || k === 'bilanSemaine').length, 2);
   assert.deepEqual(s.labels, { bulletin: "Bulletin du jour (texte de l'IA, un seul appel par jour)", bilanSemaine: "Bilan de la semaine (texte de l'IA, un seul appel par semaine)" });

@@ -190,7 +190,8 @@ test('T-L1 le bloc `contexte` est joint APRÈS l’analyse par la vraie route (G
   assert.ok(R.ETATS_DU_CONTEXTE.includes(a.contexte.etat), a.contexte.etat);
   assert.equal(a.contexte.version, 1);
   const controleur = lireSrc('api', 'controllers', 'analysis.controller.js');
-  assert.match(controleur, /const contexte = sportId === 'football' \? contexteDuMatchAnalyse\(avecFraicheur\) : null;\n {2}res\.json\(\{ \.\.\.analyse, \.\.\.\(aVerifier \? \{ aVerifier \} : \{\}\), \.\.\.\(simulation \? \{ simulation \} : \{\}\), \.\.\.\(contexte \? \{ contexte \} : \{\}\) \}\);/);
+  // Étape 33 (lot 1b, 03/11/2026) : le bloc `cartons` est joint après le contexte, de la même façon.
+  assert.match(controleur, /const contexte = sportId === 'football' \? contexteDuMatchAnalyse\(avecFraicheur\) : null;\n(?: {2}\/\/.*\n)* {2}const cartons = sportId === 'football' \? await cartonsDuMatchAnalyse\(avecFraicheur, analyse\) : null;\n {2}res\.json\(\{ \.\.\.analyse, \.\.\.\(aVerifier \? \{ aVerifier \} : \{\}\), \.\.\.\(simulation \? \{ simulation \} : \{\}\), \.\.\.\(contexte \? \{ contexte \} : \{\}\), \.\.\.\(cartons \? \{ cartons \} : \{\}\) \}\);/);
   assert.match(controleur, /function contexteDuMatchAnalyse\(match\) \{\n {2}try \{\n {4}return contexteDuMatch\(\{ match, database: openDb\(\), maintenant: Date\.now\(\), lancement: \(\) => lancementDe\('32'\) \?\? null \}\);\n {2}\} catch \{\n {4}return \{ version: 1, etat: 'illisible', raison: 'lecture-ratee' \};/);
   const service = lireSrc('core', 'ai', 'matchAiAnalysisService.js');
   const resume = service.slice(service.indexOf('function resumeDuMoteur('), service.indexOf('\n}\n', service.indexOf('function resumeDuMoteur(')));
@@ -211,7 +212,8 @@ test('T-L2 l’APERÇU de la page du match : l’arbitre désigné au MAGASIN (s
   assert.equal(a.sansNom, null);
   assert.deepEqual([a.illisible.ligne, a.illisible.homonymes], [null, []]);
   const lc = lireSrc('data', 'providers', 'lineupContext.js');
-  assert.match(lc, /releveLe: lu\.fetchedAt \?\? null,\n {4}arbitreAuMagasin: arbitreAuMagasin\(lu\.page\.meta\?\.referee, database\)/);
+  // Étape 33 (lot 1b, 03/11/2026) : l'arbitre des cartons s'ajoute entre les deux (un bloc marqué « ajout pur »).
+  assert.match(lc, /releveLe: lu\.fetchedAt \?\? null,\n(?: {4}\/\/.*\n| {4}arbitreDesCartons: await arbitreDesCartonsAuMagasin\(lu\.page\.meta\?\.referee, database\),\n)* {4}arbitreAuMagasin: arbitreAuMagasin\(lu\.page\.meta\?\.referee, database\)/);
   assert.equal(compter(lc, /avecForceDuOnze\(/g), 3, 'la force du onze inchangée');
   assert.match(lc, /^import \{ lireLArbitre, homonymesDe \} from '\.\.\/db\/refereeRead\.js';$/m);
 });

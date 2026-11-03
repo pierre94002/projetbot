@@ -664,6 +664,33 @@ les remplacent ; « Actualités d'équipe » (`TeamNewsCard`) ne montre plus le 
 y renvoie ; la page d'un match joué (`MatchDetailView`) ne change pas. Mots : `utils/contexteDuMatch.js` (pur, sans Vue : `server/test/contexteEcran.test.mjs` le rejoue
 sur les vraies réponses du serveur).
 
+Depuis l'étape 33 du plan (lot 1, 03/11/2026) : **les cartons attendus, à blanc** — UNE carte, sur la page d'un match à venir, onglet **Statistiques**, juste après
+« Corners et tirs attendus » (le moteur, inchangé : AUCUNE ligne « à blanc » n'y est ajoutée) : `components/analysis/CartonsABlancCard.vue` (« Cartons attendus »,
+sur-titre « À blanc · pas encore un marché », `data-bloc="cartons-a-blanc"`, icône `cards`, `id="upcoming-cartons"`). Elle ne LIT rien elle-même : le bloc `cartons` que
+le serveur joint à l'analyse (APRÈS elle : les tables de la nuit, les cartons attendus sans arbitre, les paramètres et les statuts du banc d'essai recopiés par script,
+corners et tirs avec les réglages par championnat) et la page FotMob du match déjà chargée (l'arbitre désigné et sa ligne dans la table des cartons `arbitreDesCartons`,
+l'heure de la lecture `releveLe`) — aucune requête de plus. Règles de dessin : les barres face à face (« Cartons attendus · {t} au total », une décimale) et la pastille
+du modèle ; puis TOUJOURS les cinq lignes — équipes (les deux logos), championnat (son drapeau, `LeagueBadge`), arbitre, enjeu, corners et tirs par championnat (le
+drapeau du championnat) —, chacune avec sa raison quand elle manque (« pas encore calculé », « club non reconnu », « moins de 30 matchs aux cartons relevés »,
+« illisible » — jamais « 0 » ni le silence) ; la pastille de chaque ligne (`role="note"`, icône + mot, la phrase complète dans `aria-label`) : « Explication seulement »
+(gris) par défaut, « pas encore mesuré au banc d'essai » sans note du banc, « non mesurable au banc d'essai » pour l'enjeu ; « Effet mesuré » en vert `--cm-accent` (la seule
+exception) pour une famille que le banc a mesurée utile, TOUJOURS suivi de « pas encore un marché » pour les cartons et de « pas encore dans le pourcentage » pour corners
+et tirs (une pastille par statistique) ; un démenti sur vos matchs repasse en gris avec sa note ambre ; jamais de vert ni de rouge pour une VALEUR (un arbitre sévère n'est
+pas « mauvais »), jamais `ValueBadge`. Sous une ligne mesurée, ce que dit le banc en mots, avec l'ampleur en points (« les probabilités des lignes bougent jusqu'à … points »)
+— face à la moyenne du championnat pour les équipes, face au même calcul sans l'arbitre pour l'arbitre. L'arbitre se dit avec ses limites : « la sévérité de l'arbitre et
+le genre de matchs qu'on lui confie, que le banc ne sépare pas » ; ses moyennes brutes restent dans « Contexte du match ». Les lignes du total (`data-tableau="total-des-cartons"`,
+« Plus de … » → « … % ») seulement si les cartons des équipes sont utiles au banc, avec « À blanc : ni un pronostic, ni une cote juste ». Les quatre mentions fixes (la
+convention dite par Pierre le 02/11/2026 — un joueur exclu après deux jaunes compte pour deux —, les cartons du banc et des entraîneurs qui comptent comme les autres, le
+déroulé contre les jaunes publiés à 0, les matchs prolongés exclus). La provenance de chaque ligne (`ProvenanceChip variante="ligne"`) : « magasin FotMob (déroulés des
+matchs déjà joués) » calculé la nuit (équipes, championnat, effet de l'arbitre), « FotMob, page du match » relevé (arbitre désigné), « banc d'essai de l'étape 33 (magasin
+2023-2026) » (un jour sans heure inventée, jamais ambre), « Simulation CôteMaster, classement FotMob » pour l'enjeu allumé ; l'ambre au-delà de 24 h. Heures de Paris,
+virgule décimale, espace fine des milliers, vrai signe moins. Deux tableaux repliés : « Ce que dit le banc d'essai » (`data-tableau="banc-des-cartons"`, TOUJOURS huit
+lignes — équipes, arbitre, faux arbitre, corners, tirs, tirs cadrés, faux championnat, enjeu « non mesurable » —, **Σ** des matchs distincts jugés — au moins le plus grand
+compte, jamais leur somme — et **⌀** de l'écart annoncé − réalisé des variantes mesurées) et « Réglages par championnat (à blanc) » (`data-tableau="reglages-par-championnat"`,
+une ligne par championnat avec son drapeau, Σ des matchs, ⌀ des réglages). **Une seule place par information** : aucune famille « Cartons » dans `MarketPicksBoard` au
+lot 1, aucun pourcentage à blanc des corners ni des tirs (des nombres seulement), le chiffre de l'enjeu reste dans `EnjeuDuMatch`. Mots : `utils/cartonsABlanc.js` (pur,
+sans Vue : `server/test/cartonsEcran.test.mjs` le rejoue sur les vraies réponses du serveur, et sa loi des lignes est celle du serveur à 1e-12 près).
+
 Depuis l'étape 44 du plan (23/10/2026) : **la mémoire de l'IA** — un bloc, sur la page d'une équipe, juste sous « Style de jeu »,
 `components/analysis/AiDossierCard.vue` (« Mémoire de l'IA », `data-bloc="memoire-ia"`, icône `sparkles`) ; la page « Bulletin » de l'étape 45 le réutilise tel
 quel pour une équipe, et en mode `portee="championnat"` (`GET …/dossiers?league=`) pour un championnat seul. Il LIT `GET /api/match-ai-analysis/dossiers?club=fotmob-…` (le club par son IDENTIFIANT FotMob, jamais

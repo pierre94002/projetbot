@@ -1563,6 +1563,43 @@ async function passeContexteDuMatch(ctx, options = {}) {
 /** Due : une fois par jour civil de Paris, ou quand la passe d'avant l'a REPORTÉE ; jamais forcée par un clic. */
 const dueContexteDuMatch = (ctx) => !faitAujourdhui(ctx.derniere('contexteDuMatch')) || Boolean(ctx.derniersDetails?.('contexteDuMatch')?.reporte);
 
+// [étape 33, lot 1b : ajout pur, début]
+/**
+ * L'étape « cartonsEtCorners » (étape 33 du plan, lot 1b, 02/11/2026) : LES CARTONS ATTENDUS À BLANC (ce que chaque équipe
+ * prend et fait prendre, l'arbitre, le championnat) et les tables du jour qui les portent, calculés dans un PROCESSUS À
+ * PART en lecture seule (le cache incrémental des déroulés, la passe chronologique, le contrôle anti-fuite par un second
+ * chemin) et rangés par le serveur par tranches de 250. Un autre calcul lourd en cours : REPORTÉE. APRÈS le contexte du
+ * match, hors du chemin de nuit de l'essai de l'étape 27 ; jamais lue par le moteur ni envoyée à l'IA. Le module est
+ * chargé par un import() DYNAMIQUE : une erreur dans data/cartons/ n'empêche jamais ce fichier de se charger ni la nuit
+ * de démarrer (critique de l'étape 33, constat 16) — elle met seulement cette étape en échec. Ajout PUR (règle du gel
+ * pendant l'essai 27) : rien d'autre de ce fichier ne change (cartonsNuit.test.mjs le vérifie à l'octet).
+ */
+async function passeCartonsEtCorners(ctx, options = {}) {
+  const { chargerLeModule = () => import('../data/cartons/cartonsNuit.js'), ...reste } = options;
+  let cartons;
+  try {
+    cartons = await chargerLeModule();
+  } catch (error) {
+    const erreur = String(error?.message ?? error).slice(0, 300);
+    return { status: 'error', summary: `En échec : le module des cartons ne se charge pas (${erreur}) — rien d’avancé ; le reste de la nuit n’en dépend pas.`, details: { mode: 'echec', module: false, erreur }, changed: false };
+  }
+  try {
+    // L'heure est lue ici (la passe), jamais dans data/cartons.
+    const r = await cartons.faireLesCartonsDeLaNuit({ ...reste, maintenant: reste.maintenant ?? Date.now() });
+    return cartons.resultatDeLEtape(r, { updatedAt: new Date().toISOString() });
+  } catch (error) {
+    const erreur = String(error?.message ?? error).slice(0, 300);
+    return { status: 'error', summary: `En échec : ${erreur} — rien d’avancé, les tables d’avant restent ; la passe suivante recommence.`, details: { mode: 'echec', erreur }, changed: false };
+  }
+}
+
+/** Due : une fois par jour civil de Paris, ou quand la passe d'avant l'a REPORTÉE ; jamais forcée par un clic. */
+const dueCartonsEtCorners = (ctx) => !faitAujourdhui(ctx.derniere('cartonsEtCorners')) || Boolean(ctx.derniersDetails?.('cartonsEtCorners')?.reporte);
+
+/** Pour les tests : l'étape des cartons et corners (étape 33, lot 1b). */
+export const __cartonsPourLesTests = { passeCartonsEtCorners, dueCartonsEtCorners };
+
+// [étape 33, lot 1b : ajout pur, fin]
 /** Pour les tests : l'étape d'analyse IA automatique telle que la passe la lance (plafond, réserve, bilan) ; l'étape du carnet de santé ; celle de l'historique football-data ; celle des repères ; celle de la table du jour J ; celle du contrôle quotidien ; celle de la candidate à blanc ; celle de la calibration du mois écoulé ; celle de connaître le marché ; celle de l'indice de force ; celle des forces de buts ; celle des fiches des joueurs ; celle du carnet de l'IA ; celles du bulletin du jour et du bilan de la semaine ; celle du résumé du mois de la boucle de correction. */
 export const __testing = { ETAPES: () => ETAPES, passeBulletin, passeBilanSemaine, dueBulletin, dueBilanSemaine, passeCarteOuParier, dueCarteOuParier, dueMoteurABlanc, passeIaAuto, passeCarnetSante, passeHistoriqueFd, dueHistoriqueFd, passeReperes, dueReperes, passeTableJourJ, dueTableJourJ, passeControleQuotidien, passeMoteurABlanc, passeCalibrationMensuelle, dueCalibrationMensuelle, passeConnaitreMarche, dueConnaitreMarche, passeIndiceForce, dueIndiceForce, passeForcesButs, dueForcesButs, passeFichesJoueurs, dueFichesJoueurs, passeStylesDeJeu, dueStylesDeJeu, passeCarnetIA, passeDossiersIA, passeSimulationSaisons, dueSimulationSaisons, passeSimulationMatchs, dueSimulationMatchs, passeBoucleCorrection, dueBoucleCorrection, passeResumeCorrection, dueResumeCorrection, passeContexteDuMatch, dueContexteDuMatch };
 
@@ -2248,6 +2285,17 @@ const ETAPES = [
     due: (ctx) => dueContexteDuMatch(ctx),
     run: (ctx) => passeContexteDuMatch(ctx)
   },
+  // [étape 33, lot 1b : ajout pur, début]
+  {
+    key: 'cartonsEtCorners',
+    label: 'Cartons et corners à blanc (cartons attendus des équipes et de l’arbitre, contrôle anti-fuite)',
+    // Étape 33 du plan (lot 1b, 02/11/2026) : APRÈS le contexte du match, juste AVANT le contrôle quotidien (toujours
+    // dernier), hors du chemin de nuit de l'essai de l'étape 27. Une fois par jour civil de Paris, ou si la passe d'avant
+    // l'a reportée ; jamais au clic ; ni réseau ni Claude. Cf. passeCartonsEtCorners.
+    due: (ctx) => dueCartonsEtCorners(ctx),
+    run: (ctx) => passeCartonsEtCorners(ctx)
+  },
+  // [étape 33, lot 1b : ajout pur, fin]
   {
     key: 'controleQuotidien',
     label: 'Contrôle quotidien des données et santé des sources',

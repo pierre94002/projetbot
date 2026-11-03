@@ -182,7 +182,8 @@ test('T-N9 la GARDE : la fiche gelée d’un match JOUÉ est rattachée à sa re
 
 test('l’étape « contexteDuMatch » : une fois par jour civil de Paris, reprise si la passe d’avant l’a reportée, jamais forcée par un clic ; juste avant le contrôle quotidien', () => {
   const etapes = JOB.ETAPES().map((e) => e.key);
-  assert.deepEqual(etapes.slice(-2), ['contexteDuMatch', 'controleQuotidien']);
+  // Étape 33 (lot 1b, 03/11/2026) : les cartons et corners entre le contexte du match et le contrôle quotidien.
+  assert.deepEqual(etapes.slice(-3), ['contexteDuMatch', 'cartonsEtCorners', 'controleQuotidien']);
   assert.ok(etapes.indexOf('contexteDuMatch') > etapes.indexOf('sauvegarde'));
   assert.ok(etapes.indexOf('contexteDuMatch') > etapes.indexOf('stylesDeJeu') && etapes.indexOf('contexteDuMatch') > etapes.indexOf('tableJourJ'));
   const ctx = (derniere, details = null, manuel = false) => ({ manuel, derniere: () => derniere, derniersDetails: () => details });

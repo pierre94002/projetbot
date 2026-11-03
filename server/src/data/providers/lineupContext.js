@@ -342,6 +342,25 @@ export function arbitreAuMagasin(referee, database) {
   }
 }
 
+// [étape 33, lot 1b : ajout pur, début]
+/**
+ * L'ARBITRE DÉSIGNÉ DANS LA TABLE DES CARTONS (étape 33 du plan, lot 1b, partie D) : pour la carte « Cartons attendus — à
+ * blanc » de la page du match, la ligne de cet arbitre dans `cartons_arbitres` (data/cartons/cartonsRead.js : une clé
+ * primaire « nom|pays » ; ses matchs relevés, ses cartons observés et attendus par les équipes, son indice) et ses
+ * homonymes. Le module est chargé par un import() DYNAMIQUE : une erreur dans data/cartons/ ne casse jamais l'aperçu.
+ * Lecture seule ; n'écrit rien (upcoming_lineups reste écrit par la seule lecture de la page, plus haut, inchangée).
+ * Pas de nom : null ; une lecture ratée : { illisible: true }.
+ */
+async function arbitreDesCartonsAuMagasin(referee, database) {
+  try {
+    const { arbitreDesCartons } = await import('../cartons/cartonsRead.js');
+    return arbitreDesCartons(referee, database);
+  } catch {
+    return typeof referee?.name === 'string' && referee.name.trim() ? { nom: referee.name, pays: typeof referee?.country === 'string' ? referee.country : '', ligne: null, homonymes: [], illisible: true } : null;
+  }
+}
+
+// [étape 33, lot 1b : ajout pur, fin]
 /**
  * Tout ce que FotMob publie d'un match à venir, pour sa page : coup d'envoi
  * exact (le calendrier ne connaît que le jour), cadre (stade, météo,
@@ -380,6 +399,10 @@ export async function buildMatchPreview({ homeName, awayName, commenceTimeIso, l
     lastLineups,
     // Étape 32 : l'heure de cette lecture FotMob, et l'arbitre désigné au magasin (l'encadré « Contexte du match »).
     releveLe: lu.fetchedAt ?? null,
+    // [étape 33, lot 1b : ajout pur, début]
+    // Étape 33 : le même arbitre dans la table des cartons de la nuit (la carte « Cartons attendus — à blanc »).
+    arbitreDesCartons: await arbitreDesCartonsAuMagasin(lu.page.meta?.referee, database),
+    // [étape 33, lot 1b : ajout pur, fin]
     arbitreAuMagasin: arbitreAuMagasin(lu.page.meta?.referee, database)
   };
 }

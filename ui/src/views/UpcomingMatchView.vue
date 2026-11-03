@@ -68,6 +68,9 @@ import { usePrixJuste } from '@/composables/usePrixJuste.js';
 // Étape 32 du plan : l'encadré « Contexte du match » (repos, enchaînement, déplacement, altitude, pelouse, météo, arbitre,
 // entraîneur, enjeu) — il lit le bloc `contexte` de l'analyse et la page FotMob déjà chargés, aucune requête de plus.
 import MatchContextCard from '@/components/analysis/MatchContextCard.vue';
+// Étape 33 du plan : la carte « Cartons attendus — à blanc » (onglet Statistiques) — elle lit le bloc `cartons` de
+// l'analyse et la page FotMob déjà chargés, aucune requête de plus.
+import CartonsABlancCard from '@/components/analysis/CartonsABlancCard.vue';
 
 /**
  * Page d'un match À VENIR, construite comme celle d'un match joué
@@ -917,6 +920,17 @@ const prixJuste = usePrixJuste(
           <MatchupHeader :home="match.home" :away="match.away" :league="match.league" label="par match" />
           <MatchStatBars :group="attendusBarres.group" :home="attendusBarres.home" :away="attendusBarres.away" />
         </AppCard>
+        <!-- Étape 33 : les cartons attendus, À BLANC (pas encore un marché) ; corners et tirs avec les réglages par
+             championnat, en nombres. La carte du moteur au-dessus reste inchangée (aucune ligne « à blanc »). -->
+        <CartonsABlancCard
+          id="upcoming-cartons"
+          class="upcoming__block"
+          :cartons="analyse.result?.cartons"
+          :analyse="analyse"
+          :page="page"
+          :simulation="simulationDuMatch"
+          :match="match"
+        />
         <LoadingSpinner v-if="moyennes.loading" label="Moyennes des deux équipes…" />
         <EmptyState v-else-if="!moyennesDispo" icon="trendUp" title="Aucune statistique" description="Aucune statistique importée pour ces équipes." />
         <template v-else>
