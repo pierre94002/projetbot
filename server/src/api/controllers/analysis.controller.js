@@ -48,7 +48,25 @@ export async function analyzeMatchById(req, res) {
   const contexte = sportId === 'football' ? contexteDuMatchAnalyse(avecFraicheur) : null;
   // Étape 33 : les cartons attendus à blanc, APRÈS l'analyse eux aussi (le verdict n'en sait rien, l'IA ne les reçoit jamais).
   const cartons = sportId === 'football' ? await cartonsDuMatchAnalyse(avecFraicheur, analyse) : null;
-  res.json({ ...analyse, ...(aVerifier ? { aVerifier } : {}), ...(simulation ? { simulation } : {}), ...(contexte ? { contexte } : {}), ...(cartons ? { cartons } : {}) });
+  // Étape 34 : les chiffres des joueurs à blanc, APRÈS l'analyse eux aussi (le verdict n'en sait rien, l'IA ne les reçoit jamais).
+  const joueurs = sportId === 'football' ? await joueursDuMatchAnalyse(avecFraicheur) : null;
+  res.json({ ...analyse, ...(aVerifier ? { aVerifier } : {}), ...(simulation ? { simulation } : {}), ...(contexte ? { contexte } : {}), ...(cartons ? { cartons } : {}), ...(joueurs ? { joueurs } : {}) });
+}
+
+/**
+ * Étape 34 du plan (lot 1b) : les chiffres à blanc des joueurs de ce match (data/joueurs/joueursRead.js) — les tables de la
+ * nuit et la compo lues par identifiants FotMob et par clé (jamais une passe dans la requête), la formule pure et les
+ * paramètres de la note du banc. Le module est chargé par un import() DYNAMIQUE : une erreur dans data/joueurs/ n'empêche
+ * jamais l'analyse de répondre (l'onglet dit alors « illisible »). Ajouté APRÈS l'analyse, comme les cartons : le verdict
+ * du moteur n'en sait rien, l'analyse IA ne le reçoit jamais.
+ */
+async function joueursDuMatchAnalyse(match) {
+  try {
+    const { joueursDuMatch } = await import('../../data/joueurs/joueursRead.js');
+    return joueursDuMatch({ match, database: openDb(), maintenant: Date.now() });
+  } catch {
+    return { version: 1, etat: 'illisible', raison: 'lecture-ratee' };
+  }
 }
 
 /**

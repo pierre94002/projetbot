@@ -71,6 +71,9 @@ import MatchContextCard from '@/components/analysis/MatchContextCard.vue';
 // Étape 33 du plan : la carte « Cartons attendus — à blanc » (onglet Statistiques) — elle lit le bloc `cartons` de
 // l'analyse et la page FotMob déjà chargés, aucune requête de plus.
 import CartonsABlancCard from '@/components/analysis/CartonsABlancCard.vue';
+// Étape 34 du plan : l'onglet « Joueurs » (chiffres à blanc de chaque joueur) — il lit le bloc `joueurs` de l'analyse
+// déjà chargée, aucune requête de plus.
+import PlayerPropsBoard from '@/components/analysis/PlayerPropsBoard.vue';
 
 /**
  * Page d'un match À VENIR, construite comme celle d'un match joué
@@ -130,6 +133,8 @@ const risque = useRisqueStore();
 const TABS = [
   { id: 'resume', label: 'Résumé' },
   { id: 'lineups', label: 'Compositions' },
+  // Étape 34 : les chiffres à blanc des joueurs, juste après les compositions (décision de Pierre du 02/11, n° 6).
+  { id: 'joueurs', label: 'Joueurs' },
   { id: 'stats', label: 'Statistiques' },
   { id: 'form', label: 'Forme' },
   { id: 'markets', label: 'Marchés' },
@@ -906,6 +911,16 @@ const prixJuste = usePrixJuste(
           description="FotMob publie les compositions officielles en général une heure avant le coup d'envoi (parfois une prévision la veille pour les grosses affiches)."
         />
       </AppCard>
+
+      <!-- JOUEURS (étape 34) : les chiffres à blanc de chaque joueur — pas encore un marché ; le bloc `joueurs` de
+           l'analyse, aucune requête de plus. Rien sur le terrain des compositions, aucune famille dans les pronostics. -->
+      <PlayerPropsBoard
+        v-else-if="tab === 'joueurs'"
+        id="upcoming-joueurs"
+        class="upcoming__block"
+        :joueurs="analyse.loading ? null : analyse.result ? analyse.result.joueurs : analyse.error ? { etat: 'illisible', raison: 'analyse-en-erreur' } : null"
+        :match="match"
+      />
 
       <!-- STATISTIQUES -->
       <template v-else-if="tab === 'stats'">

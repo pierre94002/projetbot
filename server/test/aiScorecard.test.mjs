@@ -416,7 +416,8 @@ test('l’étape « carnetIA » : après la sauvegarde, avant le contrôle quoti
   // le résumé du mois de la boucle de correction (un texte de l'IA, une fois par mois) suit le bilan de la semaine. Étape 32 (lot 1a,
   // 29/10/2026) : le contexte du match s'intercale entre le résumé du mois et le contrôle quotidien. Étape 33 (lot 1b,
   // 03/11/2026) : les cartons et corners suivent le contexte du match, avant le contrôle quotidien.
-  assert.deepEqual(s.etapes.slice(i + 1), ['dossiersIA', 'bulletin', 'bilanSemaine', 'resumeCorrection', 'contexteDuMatch', 'cartonsEtCorners', 'controleQuotidien']);
+  // Étape 34 (lot 1b, 03/11/2026) : les chiffres des joueurs suivent les cartons et corners.
+  assert.deepEqual(s.etapes.slice(i + 1), ['dossiersIA', 'bulletin', 'bilanSemaine', 'resumeCorrection', 'contexteDuMatch', 'cartonsEtCorners', 'joueursABlanc', 'controleQuotidien']);
   assert.equal(s.etapes.at(-1), 'controleQuotidien');
   assert.equal(s.etapes.filter((k) => k === 'carnetIA').length, 1);
   assert.equal(s.ecrituresDuCalcul, 0, 'le calcul n’écrit rien dans la base');

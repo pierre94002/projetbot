@@ -36,6 +36,31 @@ const ALERTE_TOUS_LES_MS = 5 * MINUTE_MS;
 let timer = null;
 let enCours = false;
 const rythme = { absentsMs: 30 * MINUTE_MS, maxLectures: 25, derniersAbsents: 0, derniereAlerte: 0 };
+// [étape 34, lot 1b : ajout pur, début]
+/**
+ * L'ENREGISTREUR D'AVANT-MATCH DES CHIFFRES DES JOUEURS (étape 34 du plan, lot 1b, 03/11/2026) : toutes les 10 minutes, en
+ * DERNIER dans le tour, les compos publiées des matchs des 150 prochaines minutes, chiffrées et gardées avant le coup
+ * d'envoi (data/joueurs/avantMatchJoueurs.js). Synchrone, un budget de 2 s, rien quand le verrou d'actualisation est tenu
+ * (critique de l'étape 34, constat 15). Les modules sont chargés par un import() DYNAMIQUE : une erreur dans data/joueurs/
+ * n'empêche jamais ce fichier de se charger ni le tour de finir — le bilan dit l'erreur. Ajout PUR : rien d'autre de ce
+ * fichier ne change (joueursNuit.test.mjs le vérifie à l'octet).
+ */
+const avantMatchDesJoueurs = { rythmeMs: 10 * MINUTE_MS, dernier: 0, charger: () => import('../data/joueurs/avantMatchJoueurs.js') };
+async function tourAvantMatchDesJoueurs({ maintenant }) {
+  try {
+    const [{ tourAvantMatch }, { openDb }, { isRefreshRunning }] = await Promise.all([avantMatchDesJoueurs.charger(), import('../data/db/matchStatsDb.js'), import('../data/providers/refreshLock.js')]);
+    return tourAvantMatch({ maintenant, database: openDb(), verrouTenu: () => isRefreshRunning() });
+  } catch (error) {
+    return { erreur: String(error?.message ?? error).slice(0, 300) };
+  }
+}
+/** Pour les tests : le rythme et le chargeur de l'enregistreur d'avant-match des joueurs. */
+export function __reglerAvantMatchDesJoueurs({ rythmeMs = 10 * MINUTE_MS, charger = null } = {}) {
+  avantMatchDesJoueurs.rythmeMs = rythmeMs;
+  avantMatchDesJoueurs.dernier = 0;
+  avantMatchDesJoueurs.charger = charger ?? (() => import('../data/joueurs/avantMatchJoueurs.js'));
+}
+// [étape 34, lot 1b : ajout pur, fin]
 
 /** Un tour du planificateur. `maintenant` et les options : pour les tests. */
 export async function tourEnregistreurs({ maintenant = Date.now(), absents = true } = {}) {
@@ -65,6 +90,13 @@ export async function tourEnregistreurs({ maintenant = Date.now(), absents = tru
       rythme.derniereAlerte = maintenant;
       bilan.problemes = actualiserAlerte({ maintenant });
     }
+    // [étape 34, lot 1b : ajout pur, début]
+    // Étape 34 : les chiffres des joueurs gardés avant le coup d'envoi, EN DERNIER dans le tour, toutes les 10 minutes.
+    if (maintenant - avantMatchDesJoueurs.dernier >= avantMatchDesJoueurs.rythmeMs) {
+      avantMatchDesJoueurs.dernier = maintenant;
+      bilan.avantMatchJoueurs = await tourAvantMatchDesJoueurs({ maintenant });
+    }
+    // [étape 34, lot 1b : ajout pur, fin]
     return bilan;
   } finally {
     noterPlanificateur({ dernierTour: bilan });

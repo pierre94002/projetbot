@@ -2,7 +2,7 @@
  * controlesAntiFuite.js — les écarts des CONTRÔLES ANTI-FUITE de la nuit, en mots simples (étape 27 du plan,
  * vérification du branchement, constat 4 : ces alertes durables n'étaient lues par aucun écran).
  * -----------------------------------------------------------------------
- * Sept alertes durables du serveur (refresh-status.json, GET /api/refresh → `alerts`), posées par l'actualisation
+ * Huit alertes durables du serveur (refresh-status.json, GET /api/refresh → `alerts`), posées par l'actualisation
  * (server/src/jobs/matchStatsAutoRefresh.js) et gardées jusqu'à la nuit qui ne trouve plus d'écart :
  *   tableJourJ — la table du jour J (ce que l'appli savait la veille), des lignes recalculées depuis les tables sources ;
  *   forcesButs — les forces de buts du modèle de buts unique, des lignes recalculées par un second chemin ;
@@ -15,13 +15,15 @@
  *     un second chemin (dernier match d'avant, entraîneur, sommes de l'arbitre) ; chaque écart porte sa phrase (`texte`) ;
  *   cartonsEtCorners — les cartons attendus (étape 33, lot 1b, 02/11/2026), des équipes recalculées au jour d'un de leurs
  *     matchs par un second chemin (les clés et les cartons de leur fenêtre, les sommes de l'arbitre) ; chaque écart porte
- *     sa phrase (`texte`).
+ *     sa phrase (`texte`) ;
+ *   joueursABlanc — les chiffres des joueurs (étape 34, lot 1b, 03/11/2026), des joueurs recalculés au jour d'un de leurs
+ *     matchs par un second chemin (leurs apparitions d'avant, leurs minutes et leurs sommes) ; chaque écart porte sa phrase.
  * Valeur : { ecarts (20 au plus), total, lignes, updatedAt }, ou null quand la dernière nuit n'a trouvé aucun écart.
  * Un écart veut dire qu'un chiffre « d'avant le match » a pu voir le match lui-même. Pur : ne lit rien.
  * -----------------------------------------------------------------------
  */
 
-/** Les sept contrôles, dans l'ordre de la nuit, et leur nom pour Pierre. */
+/** Les huit contrôles, dans l'ordre de la nuit, et leur nom pour Pierre. */
 export const CONTROLES_ANTI_FUITE = Object.freeze([
   Object.freeze({ cle: 'tableJourJ', nom: 'Table du jour J (ce que l’appli savait la veille)' }),
   Object.freeze({ cle: 'forcesButs', nom: 'Forces de buts du modèle de buts' }),
@@ -29,7 +31,8 @@ export const CONTROLES_ANTI_FUITE = Object.freeze([
   Object.freeze({ cle: 'stylesDeJeu', nom: 'Styles de jeu des équipes' }),
   Object.freeze({ cle: 'simulationMatchs', nom: 'Déroulés simulés (lignes de la nuit relues)' }),
   Object.freeze({ cle: 'contexteDuMatch', nom: 'Contexte du match (repos, entraîneur et arbitre au jour du match)' }),
-  Object.freeze({ cle: 'cartonsEtCorners', nom: 'Cartons attendus (équipes et arbitre au jour du match)' })
+  Object.freeze({ cle: 'cartonsEtCorners', nom: 'Cartons attendus (équipes et arbitre au jour du match)' }),
+  Object.freeze({ cle: 'joueursABlanc', nom: 'Chiffres des joueurs (parts au jour du match)' })
 ]);
 
 const entier = (x) => (Number.isFinite(Number(x)) ? Number(x).toLocaleString('fr-FR') : null);

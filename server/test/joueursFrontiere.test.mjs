@@ -45,6 +45,18 @@ import { MARCHES_CONNUS } from '../src/sports/football/markets.js';
 import { BORNES_LAMBDA, PERIODES_DU_BANC, DECISION_DE_PIERRE } from '../src/data/joueurs/reglagesJoueurs.js';
 import { BASE_STATISTIQUE } from '../src/data/contexte/bancDuContexte.js';
 
+/**
+ * Lot 1b (03/11/2026) : les deux fichiers gelés retouchés par AJOUT PUR (matchStatsAutoRefresh.js, enregistreurs.js) sont
+ * comparés SANS leurs blocs marqués « [étape 34, lot 1b : ajout pur] » — à l'octet ceux de la partie 0 (joueursNuit.test.mjs,
+ * T-X10, vérifie aussi ce que les blocs contiennent). Un autre fichier : ses octets bruts.
+ */
+const AJOUTS_34 = new RegExp('^[^\\n]*\\[étape 34, lot 1b : ajout pur, début\\][\\s\\S]*?\\[étape 34, lot 1b : ajout pur, fin\\][^\\n]*\\n', 'gm');
+const octetsHorsAjouts = (chemin) => {
+  const brut = fs.readFileSync(chemin);
+  const texte = brut.toString('utf8');
+  return texte.includes('[étape 34, lot 1b : ajout pur, début]') ? Buffer.from(texte.replace(AJOUTS_34, ''), 'utf8') : brut;
+};
+
 const SRC = path.join(SERVEUR, 'src');
 const RACINE = path.join(SERVEUR, '..');
 const JOUEURS = path.join(SRC, 'data', 'joueurs');
@@ -264,7 +276,7 @@ test('T-X1 les empreintes ne bougent pas ; aucun fichier de l’étape 34 sous c
   assert.ok(!MODULES_DU_MOTEUR.fichiers.some((f) => /joueurs\/|playerProps/i.test(f)));
   assert.equal(fs.existsSync(path.join(SRC, 'data', 'db', 'playerPropsInputs.js')), false, 'data/db/playerPropsInputs.js n’est pas créé au lot 1');
   assert.ok(INTERDITS.length >= 160, `${INTERDITS.length} fichiers gelés`);
-  for (const [f, attendu] of INTERDITS) assert.equal(sha1(fs.readFileSync(path.join(SRC, f))), attendu, `${f} : retouché (gelé pendant l’essai 27, ou interdit au lot 1 de l’étape 34)`);
+  for (const [f, attendu] of INTERDITS) assert.equal(sha1(octetsHorsAjouts(path.join(SRC, f))), attendu, `${f} : retouché (gelé pendant l’essai 27, ou interdit au lot 1 de l’étape 34)`);
   for (const [f, attendu] of INTERDITS_UI) assert.equal(sha1(fs.readFileSync(path.join(RACINE, f))), attendu, `${f} : retouché`);
   for (const dossier of ['contexte', 'cartons']) {
     const presents = fs.readdirSync(path.join(SRC, 'data', dossier)).map((f) => `data/${dossier}/${f}`).sort();
@@ -279,10 +291,14 @@ test('T-X2 depuis TOUTES les racines de la règle du gel, rien n’atteint data/
     'core/engine/engineVersions.js', 'core/engine/engineConfig.js', 'data/db/dayTable.js', 'data/db/forcesButs.js', 'data/db/forcesButsEnfant.js',
     'api/controllers/statValue.controller.js', 'data/contexte/contexteNuit.js', 'data/db/dayTableControle.js', 'data/marketKnowledge.js',
     'data/providers/espnOdds.js', 'data/providers/footballDataHistory.js', 'data/providers/fotMobRefresh.js', 'data/providers/freeOdds.js',
-    'data/providers/kalshiOdds.js', 'data/providers/lineupContext.js', 'data/providers/smarketsOdds.js', 'jobs/matchStatsAutoRefresh.js'
+    'data/providers/kalshiOdds.js', 'data/providers/lineupContext.js', 'data/providers/smarketsOdds.js'
   ].map((f) => path.join(SRC, f));
   for (const f of racines) assert.ok(fs.existsSync(f), `racine absente : ${rel(f)}`);
-  const graphe = [...atteints(racines)].map(rel);
+  // Lot 1b (03/11/2026) : matchStatsAutoRefresh.js charge l'étape de nuit par un import() DYNAMIQUE, dans un bloc « ajout
+  // pur » (l'exception nommée de la règle du gel ; joueursNuit.test.mjs, T-X10) — ses imports STATIQUES n'y mènent pas.
+  const actualisation = path.join(SRC, 'jobs', 'matchStatsAutoRefresh.js');
+  assert.ok(fs.existsSync(actualisation));
+  const graphe = [...atteints(racines), ...atteints([actualisation], { statiquesSeulement: true })].map(rel);
   assert.ok(graphe.length > 150, `${graphe.length} fichiers atteints`);
   for (const f of FICHIERS_34) assert.ok(!graphe.includes(f), `${f} atteint depuis une racine du gel`);
   for (const f of ['data/db/matchStatsDb.js', 'bench/lancements.js']) assert.doesNotMatch(fs.readFileSync(path.join(SRC, f), 'utf8'), /['"][./]*(data\/)?joueurs\//, f);
@@ -308,6 +324,9 @@ test('T-X3 les modules purs : ni horloge, ni hasard, ni base, ni réseau, ni fic
 test('T-X4 les lecteurs, la passe, les comptes et le banc n’écrivent rien ; l’enfant ouvre la base EN LECTURE SEULE, une fois, sans horloge', () => {
   for (const f of FICHIERS_34) {
     if (f.endsWith('noteDesJoueurs.js')) continue;
+    // Lot 1b : la nuit et l'enregistreur d'avant-match sont les seuls écrivains (le serveur), sur joueurs_* seulement
+    // (joueursNuit.test.mjs, T-X11).
+    if (f.endsWith('joueursNuit.js') || f.endsWith('avantMatchJoueurs.js')) continue;
     const code = sansCommentaires(path.join(SRC, f));
     assert.doesNotMatch(code, /\.run\(|INSERT\s|UPDATE\s|DELETE\s|writeJsonAtomic|writeFileSync|\.exec\(/, `${f} : aucune écriture`);
   }
@@ -396,9 +415,12 @@ test('T-X9 (lot 1a) aucun fichier hors de data/joueurs/ n’importe data/joueurs
   const statiques = [...atteints([serveur], { statiquesSeulement: true })].map(rel);
   assert.ok(statiques.length > 100, `${statiques.length} fichiers chargés au démarrage`);
   for (const f of FICHIERS_34) assert.ok(!statiques.includes(f), `${f} chargé statiquement depuis server.js`);
+  // Lot 1b : lineupContext.js n'est toujours pas touché ; matchStatsAutoRefresh.js et enregistreurs.js le sont par ajout pur
+  // seulement (hors de leurs blocs marqués : à l'octet).
   for (const f of ['data/providers/lineupContext.js', 'jobs/matchStatsAutoRefresh.js', 'jobs/enregistreurs.js']) {
     const x = INTERDITS.find(([g]) => g === f);
     assert.ok(x, `${f} gardé à l’octet`);
-    assert.equal(sha1(fs.readFileSync(path.join(SRC, f))), x[1], `${f} : non touché au lot 1a`);
+    assert.equal(sha1(octetsHorsAjouts(path.join(SRC, f))), x[1], `${f} : hors des blocs « ajout pur » du lot 1b, non touché`);
   }
+  assert.equal(sha1(fs.readFileSync(path.join(SRC, 'data', 'providers', 'lineupContext.js'))), INTERDITS.find(([g]) => g === 'data/providers/lineupContext.js')[1], 'lineupContext.js : pas un octet (critique, constat 1)');
 });

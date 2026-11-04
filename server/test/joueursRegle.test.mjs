@@ -197,6 +197,13 @@ test('T-R9 passes : la colonne, relevée par l’égalité de comptes ; le NOM d
   assert.equal(reglerUnJoueur({ marche: 'passeur', joueur: 11, rencontre: faux }).statut, 'en-attente');
   for (const f of fs.readdirSync(JOUEURS)) {
     const t = code(fs.readFileSync(path.join(JOUEURS, f), 'utf8'));
+    // Lot 1b (03/11/2026) : la compo d'un match à venir lit le NOM de chaque joueur pour l'écran seulement (le libellé `nom`),
+    // jamais pour reconnaître un joueur (toujours par identifiant FotMob) — chaque lecture d'un nom y va dans `nom`.
+    if (f === 'lectureDesCompos.js') {
+      assert.ok(!/teamNamesLikelyMatch|nomNormalise|sharesNameToken|\.player\b(?!Id)/.test(t), `${f} : aucun rapprochement de noms`);
+      for (const l of t.split('\n').filter((x) => /\.name\b|player_name/.test(x))) assert.match(l, /\bnom: |'SELECT /, `${f} : un nom lu ailleurs que pour l’écran : ${l.trim()}`);
+      continue;
+    }
     assert.ok(!/teamNamesLikelyMatch|nomNormalise|sharesNameToken|\.name\b|\.player\b(?!Id)/.test(t), `${f} : aucun nom lu ni rapproché`);
     const assists = t.match(/e\.assist\b/g) ?? [];
     assert.ok(f === 'lectureDesJoueurs.js' ? assists.length === 2 : assists.length === 0, `${f} : le passeur du déroulé n’est lu que pour sa présence (avecPasseur), dans le lecteur`);

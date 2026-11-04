@@ -691,6 +691,32 @@ une ligne par championnat avec son drapeau, Σ des matchs, ⌀ des réglages). *
 lot 1, aucun pourcentage à blanc des corners ni des tirs (des nombres seulement), le chiffre de l'enjeu reste dans `EnjeuDuMatch`. Mots : `utils/cartonsABlanc.js` (pur,
 sans Vue : `server/test/cartonsEcran.test.mjs` le rejoue sur les vraies réponses du serveur, et sa loi des lignes est celle du serveur à 1e-12 près).
 
+Depuis l'étape 34 du plan (lot 1, 03/11/2026) : **les chiffres des joueurs, à blanc** — UN onglet, sur la page d'un match à venir, **« Joueurs », juste après
+« Compositions »** (décision de Pierre du 02/11) : `components/analysis/PlayerPropsBoard.vue` (« Joueurs », sur-titre « À blanc · pas encore un marché »,
+`data-bloc="joueurs-a-blanc"`, icône `users`, `id="upcoming-joueurs"`). Il ne LIT rien lui-même : le bloc `joueurs` que le serveur joint à l'analyse (APRÈS elle,
+comme les cartons : les fiches et la base de la nuit, la compo du cache des compositions ou la dernière alignée, la formule et les paramètres du banc d'essai
+recopiés par script) — aucune requête de plus (le drapeau vient du bloc, jamais d'un appel `players-info`). Règles de dessin : l'en-tête, puis l'**état de la compo**
+(`data-ligne="compo"` : « Compo publiée par FotMob, lue à {heure} » — et « ce peut être une prévision » au-delà de 90 minutes avant —, ou « Compo pas encore
+publiée : chiffres « s'il joue », sur la dernière compo alignée… ; les joueurs annoncés absents par FotMob sont retirés ») et la **base** (`data-ligne="base"` :
+buts, tirs cadrés et cartons attendus de chaque équipe, avec leur source) ; les **pastilles des quatre familles** (`role="note"`, icône + mot, phrase complète dans
+`aria-label`) : « Effet mesuré » en vert `--cm-accent` (la seule exception) TOUJOURS suivi de « pas encore un marché », « Chiffre du poste » (gris) pour une famille
+non prouvée, « pas encore mesuré au banc d'essai » sans note — et alors AUCUN pourcentage ; la calibration au banc à côté (« Calibré au banc : écart moyen … point »,
+gris ; « Pas calibré… », ambre). Puis **deux tableaux, un par équipe** (le logo et le nom du club en titre), qui gardent TOUJOURS leurs colonnes et leurs en-têtes, même
+vides ou en erreur : Joueur | Poste | Minutes attendues | Marque | Au moins un tir cadré | Averti | Passe décisive ; chaque case « {23} % » et, dessous, en petit,
+« cote juste {4,35} » (« — » hors de 0,5 % à 99,5 %) ; « au moins deux tirs cadrés » au survol de la case. Le **logo du club ET le drapeau** sur chaque ligne qui nomme
+un joueur. Les titulaires d'abord (par chance de marquer décroissante), puis « Remplaçants (s'il entre en jeu) » avec « entre en jeu dans {48} % de ses matchs sur le
+banc » ; un absent annoncé de la compo publiée « ⚠ annoncé {blessé} par FotMob — chiffre calculé quand même » ; un joueur sans fiche « chiffre du poste » ; sans
+identifiant FotMob, une ligne grise sans chiffre. Le pied de chaque tableau (`data-ligne="somme"`) : des NOMBRES ATTENDUS (« Σ attendus des titulaires : … but (l'équipe
+…, dont … sur des buts contre son camp de l'adversaire ; … pour les remplaçants qui entreront), … tirs cadrés, … joueurs avertis, … passes décisives »), jamais une
+somme de pourcentages. Les quatre mentions fixes (non-partant remboursé, csc exclu, 90 minutes ; l'averti et le carton reçu sur le banc ; « Tirs (plus de X) : pas
+calculé » et sa raison ; les penalties au tireur, ou au poste si le tireur n'est pas prouvé). La provenance (`ProvenanceChip variante="ligne"`) : « magasin FotMob
+(feuilles des matchs déjà joués) » calculé la nuit, « FotMob, page du match » lue (ou « magasin (dernière compo alignée du …) »), le modèle de buts de l'étape 27 recalé
+au banc, l'étape 33 pour les cartons, « banc d'essai de l'étape 34 (magasin 2023-2026) » (un jour sans heure inventée) ; l'ambre au-delà de 24 h. Le tableau replié
+« Ce que dit le banc d'essai » (`data-tableau="banc-des-joueurs"`, TOUJOURS ses dix lignes — buteurs, tireur, tirs cadrés, averti, passe décisive et les cinq contrôles
+des faux joueurs —, **Σ** des matchs jugés — au moins le plus grand compte, jamais leur somme — et **⌀** de l'écart de calibration des familles mesurées). **Une seule
+place par information** : rien sur le terrain des compositions (`LineupPitch`, « juste les notes »), aucune famille « Joueurs » dans `MarketPicksBoard`, aucun
+pourcentage de joueur ailleurs. Mots : `utils/joueursABlanc.js` (pur, sans Vue : `server/test/joueursEcran.test.mjs` le rejoue sur les vraies réponses du serveur).
+
 Depuis l'étape 44 du plan (23/10/2026) : **la mémoire de l'IA** — un bloc, sur la page d'une équipe, juste sous « Style de jeu »,
 `components/analysis/AiDossierCard.vue` (« Mémoire de l'IA », `data-bloc="memoire-ia"`, icône `sparkles`) ; la page « Bulletin » de l'étape 45 le réutilise tel
 quel pour une équipe, et en mode `portee="championnat"` (`GET …/dossiers?league=`) pour un championnat seul. Il LIT `GET /api/match-ai-analysis/dossiers?club=fotmob-…` (le club par son IDENTIFIANT FotMob, jamais

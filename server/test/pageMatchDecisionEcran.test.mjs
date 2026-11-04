@@ -255,7 +255,8 @@ test('l’ordre d’une décision : le sommaire, le verdict, la place du pourquo
   for (const titre of ['Pronostic du résultat', 'Meilleures statistiques', 'Rencontre']) assert.ok(r.html.indexOf(titre) > position(r.html, 'upcoming-detail'), `${titre} dans le détail`);
   // Les onglets sont tous là, comme avant.
   const onglets = [...r.html.matchAll(/role="tab"[^>]*>\s*([^<]*?)\s*</g)].map((m) => m[1]);
-  assert.deepEqual(onglets, ['Résumé', 'Compositions', 'Statistiques', 'Forme', 'Marchés', 'Analyse IA', 'Cotes', 'Profilage de cotes']);
+  // Étape 34 (lot 1b, 03/11/2026) : l'onglet « Joueurs » juste après « Compositions » (décision de Pierre du 02/11, n° 6).
+  assert.deepEqual(onglets, ['Résumé', 'Compositions', 'Joueurs', 'Statistiques', 'Forme', 'Marchés', 'Analyse IA', 'Cotes', 'Profilage de cotes']);
 });
 
 // ------------------------------------------------------------------ 2. le verdict

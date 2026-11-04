@@ -130,7 +130,7 @@ test('T-L1 la LECTURE (cartonsRead) : cinq lectures par clé, AUCUNE écriture, 
 
 test('T-L1 le bloc `cartons` est joint APRÈS l’analyse (import() dynamique, try/catch) : une lecture ratée n’empêche jamais l’analyse ; le verdict n’en sait rien ; l’IA ne le reçoit jamais', () => {
   const controleur = lireSrc('api', 'controllers', 'analysis.controller.js');
-  assert.match(controleur, /const cartons = sportId === 'football' \? await cartonsDuMatchAnalyse\(avecFraicheur, analyse\) : null;\n {2}res\.json\(\{ \.\.\.analyse, [^\n]*\.\.\.\(cartons \? \{ cartons \} : \{\}\) \}\);/);
+  assert.match(controleur, /const cartons = sportId === 'football' \? await cartonsDuMatchAnalyse\(avecFraicheur, analyse\) : null;\n(?: {2}\/\/.*\n| {2}const joueurs = sportId === 'football' \? await joueursDuMatchAnalyse\(avecFraicheur\) : null;\n)* {2}res\.json\(\{ \.\.\.analyse, [^\n]*\.\.\.\(cartons \? \{ cartons \} : \{\}\)(?:, \.\.\.\(joueurs \? \{ joueurs \} : \{\}\))? \}\);/);
   assert.match(controleur, /async function cartonsDuMatchAnalyse\(match, analyse\) \{\n {2}try \{\n {4}const \{ cartonsDuMatch \} = await import\('\.\.\/\.\.\/data\/cartons\/cartonsRead\.js'\);\n {4}return cartonsDuMatch\(\{ match, analyse, database: openDb\(\) \}\);\n {2}\} catch \{\n {4}return \{ version: 1, etat: 'illisible', raison: 'lecture-ratee' \};/);
   assert.doesNotMatch(controleur, /^import .*cartons/m, 'aucun import statique de data/cartons/');
   const service = lireSrc('core', 'ai', 'matchAiAnalysisService.js');
@@ -370,7 +370,8 @@ test('T-E8 aucune requête de plus à l’ouverture de la page : la carte rendue
   const vue = lireUi('views', 'UpcomingMatchView.vue');
   assert.match(vue, /<CartonsABlancCard\n {10}id="upcoming-cartons"\n {10}class="upcoming__block"\n {10}:cartons="analyse\.result\?\.cartons"\n {10}:analyse="analyse"\n {10}:page="page"\n {10}:simulation="simulationDuMatch"\n {10}:match="match"\n {8}\/>/);
   const A = await imp(path.join(UI, 'src', 'utils', 'controlesAntiFuite.js'));
-  assert.deepEqual(A.CONTROLES_ANTI_FUITE.at(-1), { cle: 'cartonsEtCorners', nom: 'Cartons attendus (équipes et arbitre au jour du match)' });
+  // Étape 34 (lot 1b, 03/11/2026) : le contrôle des chiffres des joueurs vient après celui des cartons.
+  assert.deepEqual(A.CONTROLES_ANTI_FUITE.find((c) => c.cle === 'cartonsEtCorners'), { cle: 'cartonsEtCorners', nom: 'Cartons attendus (équipes et arbitre au jour du match)' });
   assert.deepEqual(
     A.controlesAntiFuiteDits({ cartonsEtCorners: { ecarts: [{ matchKey: 'm', J: '2026-10-12', club: 8456, colonne: 'fenetre', texte: 'Lens avant le 12/10/2026 : fenêtre des cartons de 20 match(s) pour la passe, 19 pour le second chemin' }], total: 1, lignes: 20, updatedAt: '2026-11-03T02:10:00.000Z' } }).map((x) => x.texte),
     ['Cartons attendus (équipes et arbitre au jour du match) : 1 écart sur 20 lignes recalculées (contrôle du 03/11/2026 à 03:10) — par exemple Lens avant le 12/10/2026 : fenêtre des cartons de 20 match(s) pour la passe, 19 pour le second chemin.']
