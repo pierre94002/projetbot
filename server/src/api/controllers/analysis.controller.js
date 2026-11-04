@@ -11,6 +11,7 @@ import { openDb } from '../../data/db/matchStatsDb.js';
 import { simulationDuMatch } from '../../data/simulation/simulationRead.js';
 import { lancementDe } from '../../bench/trialsRegistry.js';
 import { contexteDuMatch } from '../../data/contexte/contexteRead.js';
+import { contexteDeLaMise, analyseAvecLaMise } from '../../data/mise/miseRead.js';
 
 /**
  * Analyse un match existant d'une source de données, par son identifiant.
@@ -22,11 +23,16 @@ import { contexteDuMatch } from '../../data/contexte/contexteRead.js';
  * Étape 7 du plan : l'heure de chaque cote de vos bookmakers, lue dans les
  * archives (data/cotesDeVosBookmakers.js), accompagne le match — une value
  * sur une cote à rafraîchir n'est plus recommandée (core/engine/fraicheurCotes.js).
+ *
+ * Étape 39 (lot 1a) : la base de la mise vient du capital de Pierre (data/mise/capitalDePierre.js), JAMAIS de la requête
+ * (`bankroll` n'y est plus lu) ; la réponse porte `mise` (la part du capital, les euros seulement sur son capital réglé)
+ * et, sans capital, aucun euro calculé sur la base interne (data/mise/miseRead.js, analyseAvecLaMise).
  */
 export async function analyzeMatchById(req, res) {
   const source = req.query.source || 'odds-api';
   const sportId = req.query.sport || 'football';
-  const bankroll = Number(req.query.bankroll) || 10000;
+  const contexteMise = contexteDeLaMise({ sportId });
+  const bankroll = contexteMise.base;
   const shouldEnrich = req.query.enrich !== 'false';
   const includeCorners = req.query.includeCorners === 'true';
   const cornersSampleSize = req.query.cornersSampleSize ? Number(req.query.cornersSampleSize) : undefined;
@@ -50,7 +56,8 @@ export async function analyzeMatchById(req, res) {
   const cartons = sportId === 'football' ? await cartonsDuMatchAnalyse(avecFraicheur, analyse) : null;
   // Étape 34 : les chiffres des joueurs à blanc, APRÈS l'analyse eux aussi (le verdict n'en sait rien, l'IA ne les reçoit jamais).
   const joueurs = sportId === 'football' ? await joueursDuMatchAnalyse(avecFraicheur) : null;
-  res.json({ ...analyse, ...(aVerifier ? { aVerifier } : {}), ...(simulation ? { simulation } : {}), ...(contexte ? { contexte } : {}), ...(cartons ? { cartons } : {}), ...(joueurs ? { joueurs } : {}) });
+  const reponse = { ...analyse, ...(aVerifier ? { aVerifier } : {}), ...(simulation ? { simulation } : {}), ...(contexte ? { contexte } : {}), ...(cartons ? { cartons } : {}), ...(joueurs ? { joueurs } : {}) };
+  res.json(analyseAvecLaMise(reponse, { contexte: contexteMise, match: avecFraicheur }));
 }
 
 /**

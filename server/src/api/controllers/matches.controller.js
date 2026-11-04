@@ -1,6 +1,8 @@
 import { listAdaptedMatches, findAdaptedMatch, DATA_SOURCE_KEYS } from '../../data/matchSources.js';
 import { createResultLookup } from '../../data/repositories/matchResultsRepository.js';
 import { ApiError } from '../middlewares/errorHandler.js';
+import { capitalDuMomentLu, baseDeCalcul, vueDuCapital } from '../../data/mise/capitalDePierre.js';
+import { sansBase } from '../../data/mise/miseRead.js';
 
 /**
  * Marque les matchs dont le score est déjà connu. L'appariement ne peut pas se
@@ -39,20 +41,23 @@ function resolveSource(req) {
   return source;
 }
 
+// Étape 39 (lot 1a) : la base de la mise vient du capital de Pierre (Réglages › Gestion du risque), JAMAIS de la requête
+// (`bankroll` n'y est plus lu) ; sans capital réglé, la base de calcul interne, jamais rendue (sansBase).
 export function listMatches(req, res) {
   const source = resolveSource(req);
-  const bankroll = Number(req.query.bankroll) || 10000;
-  const matches = withSettledFlag(listAdaptedMatches(source, bankroll));
-  res.json({ source, count: matches.length, matches });
+  const capital = capitalDuMomentLu();
+  const bankroll = baseDeCalcul(capital);
+  const matches = withSettledFlag(listAdaptedMatches(source, bankroll)).map(sansBase);
+  res.json({ source, count: matches.length, matches, capital: vueDuCapital(capital) });
 }
 
 export function getMatch(req, res) {
   const source = resolveSource(req);
-  const bankroll = Number(req.query.bankroll) || 10000;
+  const bankroll = baseDeCalcul(capitalDuMomentLu());
   const match = findAdaptedMatch(source, req.params.matchId, bankroll);
 
   if (!match) throw new ApiError(404, `Match introuvable : ${req.params.matchId}`);
   // Annoté mais jamais filtré ici : ouvrir le détail d'un match terminé reste
   // légitime (relecture d'un pronostic passé).
-  res.json(withSettledFlag([match])[0]);
+  res.json(sansBase(withSettledFlag([match])[0]));
 }

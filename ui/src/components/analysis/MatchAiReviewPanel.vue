@@ -10,6 +10,9 @@ import AiMarketCard from './AiMarketCard.vue';
 import TeamCrest from '@/components/matches/TeamCrest.vue';
 import PickCrest from '@/components/matches/PickCrest.vue';
 import { LIEN_VERS_LA_FIABILITE, PROVENANCE_DE_L_EXPERIENCE, groupesDeMarches, tableauDeLExperience } from '@/utils/bilanApresMatch.js';
+// Étape 39 (lot 1a) : la mise d'une analyse gardée se dit en PART du capital, recalculée par la règle depuis l'avantage et
+// la cote du résumé — jamais les euros gardés (calculés sur une base interne).
+import { miseDeLaRevue } from '@/utils/miseAffichee.js';
 
 /**
  * Onglet « Analyse IA » de la page de match : ce qui était prédit AVANT
@@ -111,11 +114,7 @@ const nombre = (x, d = 2) => (Number.isFinite(Number(x)) ? Number(x).toLocaleStr
 const cote = (x) => (Number.isFinite(Number(x)) && Number(x) > 1 ? nombre(x, 2) : 'pas de cote');
 const jour = (iso) => (iso ? new Date(iso).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }) : '');
 
-const decision = computed(() => {
-  const s = engine.value?.staking;
-  if (!s) return null;
-  return s.action === 'RECOMMENDED' ? `mise recommandée${s.stake ? ` : ${s.stake}` : ''}` : 'pas de mise';
-});
+const decision = computed(() => miseDeLaRevue(engine.value?.staking ?? null));
 
 // ---- présentation ---------------------------------------------------------
 // La probabilité du moteur montrée en anneau sur chaque marché : celle que

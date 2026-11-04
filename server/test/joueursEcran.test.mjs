@@ -103,7 +103,7 @@ test('T-L1 la LECTURE : sept lectures par clé, AUCUNE écriture, moins de 25 ms
 
 test('T-L1 le bloc `joueurs` est joint APRÈS l’analyse (import() dynamique, try/catch) ; le verdict n’en sait rien ; l’IA ne le reçoit jamais', () => {
   const controleur = lireSrc('api', 'controllers', 'analysis.controller.js');
-  assert.match(controleur, /const cartons = sportId === 'football' \? await cartonsDuMatchAnalyse\(avecFraicheur, analyse\) : null;\n {2}\/\/ Étape 34[^\n]*\n {2}const joueurs = sportId === 'football' \? await joueursDuMatchAnalyse\(avecFraicheur\) : null;\n {2}res\.json\(\{ \.\.\.analyse, [^\n]*\.\.\.\(cartons \? \{ cartons \} : \{\}\), \.\.\.\(joueurs \? \{ joueurs \} : \{\}\) \}\);/);
+  assert.match(controleur, /const cartons = sportId === 'football' \? await cartonsDuMatchAnalyse\(avecFraicheur, analyse\) : null;\n {2}\/\/ Étape 34[^\n]*\n {2}const joueurs = sportId === 'football' \? await joueursDuMatchAnalyse\(avecFraicheur\) : null;\n {2}(?:res\.json\(|const reponse = )\{ \.\.\.analyse, [^\n]*\.\.\.\(cartons \? \{ cartons \} : \{\}\), \.\.\.\(joueurs \? \{ joueurs \} : \{\}\) \}(?:\);|;\n {2}res\.json\(analyseAvecLaMise\(reponse, \{ contexte: contexteMise, match: avecFraicheur \}\)\);)/);
   assert.match(controleur, /async function joueursDuMatchAnalyse\(match\) \{\n {2}try \{\n {4}const \{ joueursDuMatch \} = await import\('\.\.\/\.\.\/data\/joueurs\/joueursRead\.js'\);\n {4}return joueursDuMatch\(\{ match, database: openDb\(\), maintenant: Date\.now\(\) \}\);\n {2}\} catch \{\n {4}return \{ version: 1, etat: 'illisible', raison: 'lecture-ratee' \};/);
   assert.doesNotMatch(controleur, /^import .*joueurs/m, 'aucun import statique de data/joueurs/');
   const service = lireSrc('core', 'ai', 'matchAiAnalysisService.js');

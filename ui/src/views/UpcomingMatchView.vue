@@ -60,6 +60,8 @@ import { useBetsStore } from '@/stores/betsStore.js';
 import { prendre as prendreDansLeTicket, bookmakerPropose, cleDeSelection } from '@/utils/ticket.js';
 // Étape 11 du plan : vos garde-fous et les fiches de vos comptes, pour que le ticket signale une mise au-delà (jamais un refus).
 import { useRisqueStore } from '@/stores/risqueStore.js';
+// Étape 39 (lot 1a) : la mise conseillée en part de votre capital (les euros seulement sur le capital réglé) et le ticket.
+import { lignesDeLaMise, misePourLaSelection } from '@/utils/miseAffichee.js';
 // Étape 28 du plan : la simulation complète — l'encadré « Enjeu », le « Déroulé simulé » et le prix juste du ticket,
 // chacun SEULEMENT quand Réglages l'a allumé (le bloc `simulation` de l'analyse dit l'affichage effectif).
 import EnjeuDuMatch from '@/components/matches/EnjeuDuMatch.vue';
@@ -125,7 +127,9 @@ const saisies = ref({ loading: false, error: null, data: null }); // GET /api/od
 // Étape 10 : le ticket de la page — les sélections prises dans le comparateur, la cote prise, le bookmaker, la mise ;
 // « J'ai parié » l'enregistre dans Mes paris (POST /api/bets), seulement au clic. Rien n'est lu ni écrit au chargement.
 const betsStore = useBetsStore();
-const ticketVide = () => ({ selections: [], edition: { bookmaker: null, cotes: {}, coteCombinee: null }, mise: 10, memeMatch: false, enCours: false, dernier: null });
+// Étape 39 (lot 1a) : le ticket part VIDE (il recevait 10 €) ; la mise conseillée du moteur ne le pré-remplit que sur
+// votre capital réglé, pour SON pari (même issue, même bookmaker), marquée « conseil du moteur, modifiable ».
+const ticketVide = () => ({ selections: [], edition: { bookmaker: null, cotes: {}, coteCombinee: null }, mise: null, prerempli: null, memeMatch: false, enCours: false, dernier: null });
 const ticket = reactive(ticketVide());
 // Étape 11 : lus seulement quand une cote est prise (jamais au chargement de la page).
 const risque = useRisqueStore();
@@ -207,14 +211,14 @@ async function chargerMatch() {
   match.value = matchesStore.matches.find((m) => m.matchId === props.matchId) ?? null;
   // Un match du calendrier au-delà de la prochaine journée (ouvert depuis la
   // page d'une équipe) n'est pas dans la liste : le serveur le retrouve.
-  if (!match.value) match.value = await matchesApi.getById(props.matchId, matchesStore.source, matchesStore.bankroll).catch(() => null);
+  if (!match.value) match.value = await matchesApi.getById(props.matchId, matchesStore.source).catch(() => null);
   introuvable.value = !match.value;
 }
 
 async function chargerAnalyse() {
   analyse.value = { loading: true, error: null, result: null };
   try {
-    const result = await analysisApi.analyzeMatchById(props.matchId, matchesStore.source, matchesStore.bankroll);
+    const result = await analysisApi.analyzeMatchById(props.matchId, matchesStore.source);
     analyse.value = { loading: false, error: null, result };
   } catch (error) {
     analyse.value = { loading: false, error: error.message, result: null };
@@ -394,6 +398,8 @@ const pariConseille = computed(() => {
 });
 /** La value qui n'existe que sur une cote à rafraîchir : dite, jamais conseillée. */
 const pariARafraichir = computed(() => pariDuMatch.value.aRafraichir);
+/** Étape 39 (lot 1a) : les lignes de la mise conseillée (l'objet `mise` du serveur, utils/miseAffichee.js). */
+const miseDuConseil = computed(() => lignesDeLaMise(analyse.value.result?.mise ?? null));
 /** Les seuils du moteur, tels que findValueBet les a appliqués (en %), pour la pastille. */
 const regleDuPari = computed(() => {
   const l = analyse.value.result?.staking?.limits;
@@ -469,10 +475,28 @@ function prendreUneCote(selection) {
   // Une cote tapée pour une sélection retirée ou remplacée ne sert plus.
   const gardees = Object.fromEntries(Object.entries(ticket.edition.cotes ?? {}).filter(([cle]) => ticket.selections.some((s) => cleDeSelection(s) === cle)));
   ticket.edition = { ...ticket.edition, bookmaker, cotes: gardees };
+  proposerLaMise();
 }
 function retirerDuTicket(cle) {
   ticket.selections = ticket.selections.filter((s) => cleDeSelection(s) !== cle);
+  proposerLaMise();
 }
+/**
+ * Étape 39 (lot 1a) : la mise conseillée (sur votre capital réglé) pré-remplit le ticket pour LE pari du moteur ; sinon
+ * rien, et une proposition d'avant est retirée — jamais un montant inventé.
+ */
+function proposerLaMise() {
+  const proposee = misePourLaSelection({ selections: ticket.selections, staking: analyse.value.result?.staking ?? null, mise: analyse.value.result?.mise ?? null });
+  if (proposee) {
+    ticket.mise = proposee.montant;
+    ticket.prerempli = proposee;
+  } else if (ticket.prerempli) {
+    ticket.mise = null;
+    ticket.prerempli = null;
+  }
+}
+/** « conseil du moteur, modifiable » : seulement tant que la mise du ticket est celle que le moteur a proposée. */
+const marqueDuTicket = computed(() => (ticket.prerempli && Number(ticket.mise) === ticket.prerempli.montant ? ticket.prerempli.marque : null));
 function viderLeTicket() {
   Object.assign(ticket, ticketVide());
 }
@@ -633,9 +657,14 @@ const prixJuste = usePrixJuste(
               <span class="upcoming__advice-text">
                 <span class="upcoming__advice-label">Pari conseillé par le moteur</span>
                 <strong class="upcoming__advice-pick">{{ issues[pariConseille.outcome] ?? pariConseille.outcome }}</strong>
-                <span v-if="pariConseille.bookmakerTitle || pariConseille.stake" class="upcoming__advice-where">
-                  <template v-if="pariConseille.bookmakerTitle">chez {{ pariConseille.bookmakerTitle }}</template>
-                  <template v-if="pariConseille.stake"> · mise {{ pariConseille.stake }}</template>
+                <span v-if="pariConseille.bookmakerTitle" class="upcoming__advice-where">chez {{ pariConseille.bookmakerTitle }}</span>
+                <!-- Étape 39 : la mise conseillée en part de votre capital ; ses euros seulement sur le capital réglé ; les réductions ; la règle candidate en gris. -->
+                <span v-if="miseDuConseil.conseil" class="upcoming__advice-mise" data-mise="conseil">
+                  <span class="upcoming__advice-mise-titre">{{ miseDuConseil.titre }}</span>
+                  <span v-if="miseDuConseil.euros" class="upcoming__advice-mise-euros">{{ miseDuConseil.euros }}</span>
+                  <span v-else class="upcoming__advice-mise-sans">{{ miseDuConseil.sansCapital }}</span>
+                  <span v-for="(r, i) in miseDuConseil.raisons" :key="i" class="upcoming__advice-mise-raison">{{ r }}</span>
+                  <span v-if="miseDuConseil.aBlanc" class="upcoming__advice-mise-blanc">{{ miseDuConseil.aBlanc }}</span>
                 </span>
               </span>
               <span class="upcoming__advice-odds cm-numeric" title="Cote affichée par le bookmaker">{{ cote(pariConseille.displayedOdds ?? pariConseille.odds) }}</span>
@@ -719,6 +748,8 @@ const prixJuste = usePrixJuste(
                 @retirer="retirerDuTicket"
                 @vider="viderLeTicket"
               />
+              <!-- Étape 39 : la mise proposée par le moteur (seulement sur votre capital réglé) est marquée, et modifiable. -->
+              <p v-if="marqueDuTicket" class="cm-note__text upcoming__ticket-marque" data-mise="ticket-marque">Mise : {{ marqueDuTicket }}</p>
               <div v-if="ticket.dernier" class="cm-note is-info upcoming__bet-done">
                 <span class="cm-icon-box is-info is-sm"><AppIcon name="check" :size="14" /></span>
                 <div>
@@ -1337,6 +1368,38 @@ const prixJuste = usePrixJuste(
 .upcoming__advice-where {
   font-size: 11.5px;
   color: var(--cm-text-secondary);
+}
+
+/* Étape 39 : la mise conseillée — la part du capital, les euros (capital réglé), une ligne par réduction, la règle à blanc en gris. */
+.upcoming__advice-mise {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-top: 3px;
+  font-size: 11.5px;
+  color: var(--cm-text-secondary);
+}
+
+.upcoming__advice-mise-titre {
+  font-weight: 600;
+  color: var(--cm-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.upcoming__advice-mise-euros {
+  font-variant-numeric: tabular-nums;
+}
+
+.upcoming__advice-mise-sans,
+.upcoming__advice-mise-raison,
+.upcoming__advice-mise-blanc {
+  color: var(--cm-text-muted);
+}
+
+.upcoming__ticket-marque {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--cm-text-muted);
 }
 
 .upcoming__advice-odds {

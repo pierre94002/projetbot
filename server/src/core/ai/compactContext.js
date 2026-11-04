@@ -43,11 +43,22 @@
  *
  * Fonctions pures : aucune base, aucun réseau, aucun Claude, aucune lecture
  * de l'environnement (le réglage est passé par l'appelant).
+ *
+ * Étape 39 (lot 1a, décision 7 c de l'orchestrateur) : la mise du moteur est
+ * écrite à l'IA en PART DU CAPITAL (« RECOMMENDED : 0,39 % du capital sur … à
+ * … »), jamais en euros — ni la mise calculée sur la base interne du
+ * déclencheur automatique, ni celle d'une analyse manuelle ; le capital n'est
+ * pas lu ici. Seule exception à « aucune lecture » : k et s_max du réglage du
+ * moteur, lus par getEngineConfig (import seulement, lecture seule). Ce fichier
+ * est atteint par les racines du gel de l'essai 27 (matchAiAnalysisService.js) :
+ * il n'importe rien de data/mise/ et garde une COPIE TEMPORAIRE de la règle
+ * (partDuCapitalPourIA), remplacée par l'import au lot 2.
  * -----------------------------------------------------------------------
  */
 
 import { COTE_MINIMALE } from '../../sports/football/markets.js';
 import { lignesDuDeroule } from './derouleDuMatch.js';
+import { getEngineConfig } from '../engine/engineConfig.js';
 
 export const FICHES = Object.freeze({ compacte: 'compacte', ancienne: 'ancienne' });
 
@@ -226,6 +237,7 @@ export const NON_RECOPIES = Object.freeze({
   'moteur.staking.candidates.*.displayedOdds': 'égale à la cote (odds) ; écrite seulement quand elle diffère',
   'moteur.staking.candidates.*.outcome': 'code interne de l’issue : son libellé (label) est écrit',
   'moteur.staking.outcome': 'code interne de l’issue : son libellé (label) est écrit',
+  'moteur.staking.stake': 'la mise en euros sur une base de calcul interne (étape 39) : la fiche écrit la part du capital, jamais un euro',
   'contexte.standings.*.teamId': 'identifiant interne du club',
   'contexte.standings.*.teamLogo': 'image du club, pour l’écran',
   'contexte.standings.*.shortName': 'nom court du club, pour l’écran : le nom complet est écrit',
@@ -262,6 +274,7 @@ export const NON_RECOPIES_REVUE = Object.freeze({
   'moteur.staking.candidates.*.displayedOdds': 'égale à la cote ; écrite seulement quand elle diffère',
   'moteur.staking.candidates.*.outcome': 'code interne de l’issue : son libellé est écrit',
   'moteur.staking.outcome': 'code interne de l’issue : son libellé est écrit',
+  'moteur.staking.stake': 'la mise en euros sur une base de calcul interne (étape 39) : la fiche écrit la part du capital, jamais un euro',
   'issues.*.marketId': 'identifiant interne du marché : le libellé le dit',
   'issues.*.minOdds': 'le plancher de cote : dans la consigne, inutile pour juger l’issue',
   'faits.goals.*.side': 'écrit avec le nom de l’équipe',
@@ -271,16 +284,65 @@ export const NON_RECOPIES_REVUE = Object.freeze({
 });
 
 // ---------------------------------------------------------------- le moteur
-function mise(s) {
-  if (!s || typeof s !== 'object') return 'aucune information';
+
+/**
+ * Étape 39 (lot 1a) : le jour où la ligne de la mise a changé dans le message de l'IA (la part du capital au lieu
+ * d'euros) — la date du code ; le carnet de l'IA (Réglages › analyse IA, ui/src/utils/miseAffichee.js) la dit.
+ */
+export const MISE_EN_PART_DANS_LE_MESSAGE = Object.freeze({
+  etape: 39,
+  le: '2026-11-04',
+  texte: 'la mise du moteur est écrite à l’IA en part du capital (« 0,39 % du capital »), plus jamais en euros calculés sur une base interne'
+});
+
+/** k et s_max du réglage du moteur en vigueur (lecture seule) ; null s'il est illisible. */
+function reglageDeMiseDuMoteur() {
+  try {
+    const c = getEngineConfig('football');
+    return { kellyFraction: c.kellyFraction, maxStakePercent: c.maxStakePercent };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * COPIE TEMPORAIRE de la règle de mise (data/mise/regleDeMise.js, partDeMise : min(k · ev / (cote − 1), s_max), jamais
+ * négative), REMPLACÉE PAR L'IMPORT AU LOT 2 : ce fichier est atteint par les racines du gel de l'essai 27, il ne peut rien
+ * importer de data/mise/ (T-X2). Un test garde l'identité à l'octet avec partDeMise (10 000 cas). Entrées illisibles : null.
+ */
+export function partDuCapitalPourIA({ ev, cote, reglage = reglageDeMiseDuMoteur() } = {}) {
+  const k = reglage?.kellyFraction;
+  const sMax = reglage?.maxStakePercent;
+  const fini = (x) => typeof x === 'number' && Number.isFinite(x);
+  if (!fini(ev) || !fini(cote) || !(cote > 1) || !fini(k) || !fini(sMax)) return null;
+  const kelly = (k * ev) / (cote - 1);
+  return Math.max(0, Math.min(kelly, sMax));
+}
+
+/** « 0,39 % du capital » ; sans part calculable, « part du capital non calculée » — jamais un euro. */
+function partDite(f) {
+  if (typeof f !== 'number' || !Number.isFinite(f)) return 'part du capital non calculée';
+  return `${(100 * f).toFixed(2).replace('.', ',')} % du capital`;
+}
+
+/** La décision du moteur sans aucun montant en euros (la mise, son plafond), à toute profondeur : l'IA ne lit que la part. */
+function sansEuros(v) {
+  if (Array.isArray(v)) return v.map(sansEuros);
+  if (!v || typeof v !== 'object') return v;
+  return Object.fromEntries(Object.entries(v).filter(([k]) => k !== 'stake' && k !== 'misePlafonnee').map(([k, x]) => [k, sansEuros(x)]));
+}
+
+function mise(staking) {
+  if (!staking || typeof staking !== 'object') return 'aucune information';
+  const s = sansEuros(staking);
   const morceaux = [];
   if (s.action === 'RECOMMENDED') {
     const affichee = !estVide(s.displayedOdds) && s.displayedOdds !== s.odds ? ` (affichée ${texte(s.displayedOdds)})` : '';
     morceaux.push(
-      `RECOMMENDED : ${texte(s.stake)} sur ${texte(s.label)} à ${texte(s.odds)}${affichee} chez ${texte(s.bookmakerTitle ?? s.bookmaker)} (cote juste ${texte(s.fairOdds)}, EV ${texte(s.ev)}${s.exclusion ? `, ${s.exclusion}` : ''})`
+      `RECOMMENDED : ${partDite(partDuCapitalPourIA({ ev: s.ev, cote: s.odds }))} sur ${texte(s.label)} à ${texte(s.odds)}${affichee} chez ${texte(s.bookmakerTitle ?? s.bookmaker)} (cote juste ${texte(s.fairOdds)}, EV ${texte(s.ev)}${s.exclusion ? `, ${s.exclusion}` : ''})`
     );
   } else if (s.action) {
-    morceaux.push(`${s.action}${s.reason ? ` (${s.reason})` : ''}${estVide(s.stake) ? '' : `, mise ${texte(s.stake)}`}`);
+    morceaux.push(`${s.action}${s.reason ? ` (${s.reason})` : ''}`);
   }
   if ('recommended' in s) morceaux.push(`recommended ${texte(s.recommended)}`);
   if (Array.isArray(s.candidates) && s.candidates.length) {

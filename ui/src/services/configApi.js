@@ -10,6 +10,10 @@ export const configApi = {
   // Étape 11 du plan : les garde-fous de Pierre (null = aucun plafond).
   gardeFous: () => httpClient.get('/config/garde-fous'),
   setGardeFous: (reglage) => httpClient.put('/config/garde-fous', reglage),
+  // Étape 39 du plan : le capital de Pierre (montant, date, « suit mes paris », plancher) — la seule base des euros.
+  capital: () => httpClient.get('/config/capital'),
+  setCapital: (reglage) => httpClient.put('/config/capital', reglage),
+  retirerCapital: () => httpClient.delete('/config/capital'),
   // Étape 25 du plan : les versions du moteur (lecture seule) et le retour à la version précédente
   // (`depuis` = la version en service vue à l'écran : un double clic ne recule jamais de deux versions).
   versions: () => httpClient.get('/config/versions'),

@@ -26,6 +26,8 @@ import { formatOdds } from '@/utils/format.js';
 import { formatLeagueOptionLabel, parseLeagueLabel } from '@/utils/leagueDisplay.js';
 import { liveNow } from '@/utils/liveClock.js';
 import { provenanceDuRegime, bulleDuDeuxCinq } from '@/utils/modeleDeButs.js';
+// Étape 39 (lot 1a) : la mise conseillée (part de votre capital ; euros seulement sur le capital réglé).
+import { miseEnUneLigne, titreDeLaMise } from '@/utils/miseAffichee.js';
 
 /**
  * L'onglet « Repérage » de la page Matchs (04/10/2026, Pierre : « lance les
@@ -552,6 +554,9 @@ function vueDeLigne(m, k, rang, libelle, prior) {
     fraicheur: k.bestOdds != null ? (k.freshness ?? null) : null,
     // Étape 8 : le verdict du moteur sur cette issue (findValueBet, « juge et partie » compris) — il décide seul du vert.
     verdict: k.verdict ?? null,
+    // Étape 39 : la mise conseillée sur l'issue du conseil (part de votre capital ; euros seulement sur le capital réglé).
+    mise: k.verdict?.conseil && m.mise ? miseEnUneLigne(m.mise) : null,
+    miseTitre: k.verdict?.conseil && m.mise ? titreDeLaMise(m.mise) : null,
     // Étape 27 : d'où viennent les pourcentages de buts de ce match (le modèle de buts unique seulement), et la bulle de
     // la colonne 2,5 (« petit écart attendu » quand le moteur part de la cote plus/moins). null sans lui : rien ne change.
     buts: m.butsProvenance ? provenanceDuRegime({ ...m.butsProvenance, calculeLe: m.butsProvenance.calculeLe ?? donnees.value?.generatedAt ?? null }) : null,
@@ -985,6 +990,8 @@ const descriptionVide = computed(() => {
                         </span>
                         <!-- Étape 8 : un bookmaker « juge et partie » qui paie davantage, écarté par le moteur — dit. -->
                         <small v-if="r.cote.juge" class="screener__sub screener__judge">{{ r.cote.juge }}</small>
+                        <!-- Étape 39 : la mise conseillée (part de votre capital ; euros seulement sur le capital réglé). -->
+                        <small v-if="r.mise" class="screener__sub" data-mise="reperage" :title="r.miseTitre">Mise conseillée : {{ r.mise }}</small>
                       </template>
                     </td>
 

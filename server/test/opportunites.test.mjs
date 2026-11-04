@@ -65,6 +65,10 @@ function phase(nom) {
   return phases.get(nom);
 }
 const ligneDe = (s, cle) => s.page.lignes.find((l) => l.cle === cle);
+// Étape 39 (lot 1a) : un verdict sans ce qui touche à la mise — les euros calculés sur une base interne (la route de
+// l'analyse ne les rend plus sans capital réglé) et le `conseil` du Repérage (ev, cote, bookmaker : jamais d'euros).
+const CLES_DE_LA_MISE = ['mise', 'stake', 'misePlafonnee', 'conseil'];
+const sansLaMise = (v) => (v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).filter(([k]) => !CLES_DE_LA_MISE.includes(k))) : v);
 
 // ------------------------------------------------- 1. une seule source de verdict
 
@@ -79,7 +83,12 @@ test('même verdict, issue par issue : la page Opportunités = l’analyse d’u
       const ligne = ligneDe(s, `${id}|${issue}`);
       assert.ok(ligne, `${id} ${issue} : une ligne (une cote de vos bookmakers)`);
       // Le même objet, champ par champ : état, avantage, cote, bookmaker, heure, fraîcheur, juges.
-      assert.deepEqual(ligne.verdict, route.verdicts[issue], `${id} ${issue}`);
+      // Étape 39 (lot 1a) : sans capital réglé, la route ne rend plus la mise en euros (base interne) ; la page porte en
+      // plus, sur l'issue conseillée, le `conseil` du moteur dont la route des Opportunités tire la part du capital.
+      assert.deepEqual(sansLaMise(ligne.verdict), sansLaMise(route.verdicts[issue]), `${id} ${issue}`);
+      assert.equal(['mise', 'stake', 'misePlafonnee'].some((k) => k in route.verdicts[issue]), false, `${id} ${issue} : aucun euro interne par la route`);
+      if (ligne.verdict.conseil) assert.deepEqual([ligne.verdict.conseil.issue, ligne.verdict.conseil.cote, ligne.verdict.conseil.bookmaker], [issue, route.staking.odds, route.staking.bookmaker], `${id} ${issue} : le conseil = la décision de la route`);
+      if (ligne.verdict.conseil) assert.equal(route.staking.outcome, issue, `${id} ${issue} : l'issue conseillée par la route`);
       compares++;
     }
     // Ce que l'onglet « Value bets » de Mes paris retient (scanMatches) : le pari RECOMMANDÉ, coté au moins 1,20.
@@ -97,7 +106,10 @@ test('même verdict, issue par issue : la page Opportunités = l’analyse d’u
   assert.deepEqual(s.vertesFonction.vertes.map((v) => v.cle), ['essai-a|home', 'essai-d|home']);
   assert.deepEqual(s.page.resume, { matchs: 5, matchsAvecVosCotes: 5, matchsSansVosCotes: 0, lignes: 16, vertes: 2, aRafraichir: 0, chutes: 2, chutesSansVosCotes: 1, coupeCircuit: false });
   // Le Repérage, par sa route, porte le même verdict.
-  assert.deepEqual(s.reperageRoute.verdictA, s.route['essai-a'].verdicts.home);
+  // Étape 39 (lot 1a) : le même verdict, sans ce qui touche à la mise ; aucun euro interne par la route du Repérage.
+  assert.deepEqual(sansLaMise(s.reperageRoute.verdictA), sansLaMise(s.route['essai-a'].verdicts.home));
+  assert.equal('mise' in s.reperageRoute.verdictA, false, 'le Repérage, par sa route : aucun euro interne');
+  assert.equal(s.reperageRoute.verdictA.conseil?.bookmaker, 'williamhill', 'le conseil du Repérage, sans euros');
   assert.deepEqual([s.pageRoute.code, s.pageRoute.status, s.pageRoute.lignes], [200, 'ready', 16]);
 });
 

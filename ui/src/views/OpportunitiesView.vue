@@ -34,6 +34,8 @@ import { liveNow } from '@/utils/liveClock.js';
 import { etatVerdict, ilYA } from '@/utils/langageParis.js';
 import { VALEURS_MINIMALES, PERIODES, dansLaPeriode, opportunitesAffichees, rangVivant } from '@/utils/opportunites.js';
 import { etatNotifications, activerNotifications, desactiverNotifications, relireEtatNotifications } from '@/composables/useNotificationsOpportunites.js';
+// Étape 39 (lot 1a) : la mise conseillée (part de votre capital ; euros seulement sur le capital réglé).
+import { miseEnUneLigne, titreDeLaMise } from '@/utils/miseAffichee.js';
 
 /**
  * La page « Opportunités du jour » (étape 8 du plan, 06/10/2026) — un onglet
@@ -620,6 +622,8 @@ const descriptionVide = computed(() => {
                     <AVerifierBadge v-if="r.l.aVerifier" :a-verifier="r.l.aVerifier" :marche="r.l.marche" class="opps__averif" />
                     <!-- Étape 23 : la case de la carte « où parier » (verte « Prouvé », rouge, grise) ; le verdict ne change pas. -->
                     <BettingMapChip v-if="r.l.carte" :case-carte="r.l.carte" compacte class="opps__carte" />
+                    <!-- Étape 39 : la mise conseillée de la ligne du moteur (part de votre capital ; euros seulement sur le capital réglé). -->
+                    <small v-if="r.l.mise?.conseil" class="opps__sub" data-mise="opportunites" :title="titreDeLaMise(r.l.mise)">Mise conseillée : {{ miseEnUneLigne(r.l.mise) }}</small>
                   </td>
 
                   <td class="cm-numeric" :title="r.mouvement.titre">

@@ -19,6 +19,9 @@ import { deriveDuMoteur } from '../../data/deriveMoteur.js';
 import { jugerLaCandidateAuBanc, bancDeLaCandidateEnCours, dernierRefusDuBanc, commencerLeBanc, avancerLeBanc, refuserLeBanc, terminerLeBanc } from '../../bench/bancCandidate.js';
 import { ApiError } from '../middlewares/errorHandler.js';
 import { reglagesDuModeleDeButs, ReglagesDuModeleDeButsInvalides } from '../../core/engine/goalModel.js';
+import { lireCapital, enregistrerCapital, retirerCapital, capitalDuMomentLu, vueDuCapital, ErreurCapital } from '../../data/mise/capitalDePierre.js';
+import { MOTS_DE_LA_MISE } from '../../data/mise/regleDeMise.js';
+import { lireComptes } from '../../data/repositories/comptesBookmakersRepository.js';
 
 function resolveSportId(req) {
   return req.query.sport || 'football';
@@ -229,5 +232,63 @@ export function putGardeFous(req, res) {
     res.json(vueDesGardeFous(lu, { ecrit }));
   } catch (error) {
     throw enApiError(error);
+  }
+}
+
+// ------------------------------------------------ étape 39 : le capital de Pierre
+
+/**
+ * Le réglage du capital (data/runtime/capital.json, null = « Capital non indiqué »), le capital du moment (des sommes
+ * seulement : jamais un pari précis), la somme des soldes déclarés de ses comptes (rapportée à côté, jamais mélangée) et
+ * les deux phrases de l'écran. `garde-fous.json` n'est jamais lu ni écrit ici.
+ */
+function vueDuReglageDuCapital(lu, extra = {}) {
+  let soldes = null;
+  try {
+    const comptes = Object.values(lireComptes().comptes ?? {});
+    const declares = comptes.map((f) => f.soldeDeclare).filter((x) => typeof x === 'number' && Number.isFinite(x));
+    soldes = declares.length ? { total: Math.round(declares.reduce((s, x) => s + x, 0) * 100) / 100, comptes: declares.length } : { total: null, comptes: 0 };
+  } catch {
+    soldes = null;
+  }
+  return {
+    reglage: lu.reglage,
+    source: lu.source,
+    bornes: lu.bornes,
+    ...extra,
+    moment: vueDuCapital(capitalDuMomentLu()),
+    soldesDeclares: soldes,
+    phrases: { nonEnregistres: MOTS_DE_LA_MISE.nonEnregistres, seriesLiees: MOTS_DE_LA_MISE.seriesLiees }
+  };
+}
+
+const enApiErreurDuCapital = (error) => (error instanceof ErreurCapital ? new ApiError(error.statut, error.message) : error);
+
+/** GET /api/config/capital — lecture seule. */
+export function getCapital(req, res) {
+  try {
+    res.json(vueDuReglageDuCapital(lireCapital()));
+  } catch (error) {
+    throw enApiErreurDuCapital(error);
+  }
+}
+
+/** PUT /api/config/capital — { montant, le?, suitLeCarnet?, plancher? } ; idempotent ; mot de passe, numéro de compte et champ inconnu refusés. */
+export function putCapital(req, res) {
+  try {
+    const { ecrit, ...lu } = enregistrerCapital(req.body);
+    res.json(vueDuReglageDuCapital(lu, { ecrit }));
+  } catch (error) {
+    throw enApiErreurDuCapital(error);
+  }
+}
+
+/** DELETE /api/config/capital — « Capital non indiqué » (la mise se dit alors en part du capital, sans aucun euro). */
+export function deleteCapital(req, res) {
+  try {
+    const { ecrit, ...lu } = retirerCapital();
+    res.json(vueDuReglageDuCapital(lu, { ecrit }));
+  } catch (error) {
+    throw enApiErreurDuCapital(error);
   }
 }

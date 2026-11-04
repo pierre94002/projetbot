@@ -10,12 +10,13 @@ export const useAnalysisStore = defineStore('analysis', {
     lastRequest: null
   }),
   actions: {
-    async analyzeMatchById(matchId, source, bankroll) {
+    // Étape 39 (lot 1a) : plus de `bankroll` — la mise est calculée par le serveur sur le capital de Pierre.
+    async analyzeMatchById(matchId, source) {
       this.loading = true;
       this.error = null;
       try {
-        this.result = await analysisApi.analyzeMatchById(matchId, source, bankroll);
-        this.lastRequest = { matchId, source, bankroll };
+        this.result = await analysisApi.analyzeMatchById(matchId, source);
+        this.lastRequest = { matchId, source };
         return this.result;
       } catch (error) {
         this.error = error.message;
@@ -30,8 +31,8 @@ export const useAnalysisStore = defineStore('analysis', {
       this.loadingCorners = true;
       this.error = null;
       try {
-        const { matchId, source, bankroll } = this.lastRequest;
-        this.result = await analysisApi.analyzeMatchById(matchId, source, bankroll, { includeCorners: true });
+        const { matchId, source } = this.lastRequest;
+        this.result = await analysisApi.analyzeMatchById(matchId, source, { includeCorners: true });
       } catch (error) {
         this.error = error.message;
         throw error;

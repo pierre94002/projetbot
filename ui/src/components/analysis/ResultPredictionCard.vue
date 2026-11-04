@@ -19,6 +19,8 @@ import PickCrest from '@/components/matches/PickCrest.vue';
 import ProbabilityRing from './ProbabilityRing.vue';
 import { pariDuMoteur, quandDit } from '@/utils/langageParis.js';
 import { liveNow } from '@/utils/liveClock.js';
+// Étape 39 (lot 1a) : la mise conseillée en part de votre capital ; ses euros seulement sur le capital réglé.
+import { lignesDeLaMise } from '@/utils/miseAffichee.js';
 
 const props = defineProps({
   result: { type: Object, required: true }
@@ -31,7 +33,6 @@ const away = computed(() => props.result.teamStats?.away?.name ?? props.result.l
 
 const pct = (p, d = 0) => `${(p * 100).toFixed(d).replace('.', ',')} %`;
 const cote = (o) => (o == null ? '–' : Number(o).toFixed(2));
-const euros = (v) => new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(v ?? 0);
 
 const barres = computed(() => {
   const p = prediction.value?.probabilities;
@@ -78,6 +79,14 @@ function aRafraichir(o) {
   };
 }
 
+/** Étape 39 : « Mise conseillée : 0,39 % de votre capital », puis « soit 7,80 € sur votre capital de 2 000 € (…) » ou « Capital non indiqué : … ». */
+const mise = computed(() => lignesDeLaMise(props.result.mise ?? null));
+const miseDite = () => {
+  const m = mise.value;
+  if (!m.conseil) return '';
+  return [`${m.titre}.`, m.euros ? `${m.euros.charAt(0).toUpperCase()}${m.euros.slice(1)}.` : m.sansCapital, ...m.raisons.map((r) => `${r.charAt(0).toUpperCase()}${r.slice(1)}.`)].filter(Boolean).join(' ');
+};
+
 const value = computed(() => {
   const s = staking.value;
   if (!s) return null;
@@ -87,7 +96,8 @@ const value = computed(() => {
       ton: 'positif',
       camp: s.outcome ?? null,
       releve: releve(s),
-      texte: `${s.label} à ${cote(affichee(s))} chez ${s.bookmakerTitle}. Cote juste ${cote(s.fairOdds)}, soit un avantage de ${pct(s.ev, 1)}. Mise conseillée : ${euros(s.stake)}.`
+      texte: `${s.label} à ${cote(affichee(s))} chez ${s.bookmakerTitle}. Cote juste ${cote(s.fairOdds)}, soit un avantage de ${pct(s.ev, 1)}. ${miseDite()}`.trim(),
+      aBlanc: mise.value.aBlanc
     };
   }
   if (s.reason === 'a_rafraichir' && s.aRafraichir) return aRafraichir(s.aRafraichir);
@@ -193,8 +203,9 @@ const titreNote = computed(() => value.value?.titre ?? note.value.titre);
           <p class="cm-note__text rpc__value-text">
             <PickCrest v-if="value.camp" :side="value.camp" :home="home" :away="away" :league="result.league ?? null" :size="16" />{{ value.texte }}<template v-if="value.releve">{{ value.releve }}</template>
           </p>
-          <!-- Étape 11 : la mise conseillée ramenée à un plafond de vos garde-fous, ou le garde-fou qui a enclenché le coupe-circuit. -->
-          <p v-if="staking?.action === 'RECOMMENDED' && staking.misePlafonnee" class="cm-note__text rpc__value-text">{{ staking.misePlafonnee.texte }}</p>
+          <!-- Étape 39 : la règle candidate (à blanc), en gris, jamais à la place du conseil. Étape 11 : le garde-fou qui a
+               enclenché le coupe-circuit (la mise ramenée à un plafond est dite dans le texte, ligne « ramenée par »). -->
+          <p v-if="value.aBlanc" class="cm-note__text rpc__value-blanc" data-mise="a-blanc">{{ value.aBlanc }}</p>
           <p v-if="staking?.action === 'CIRCUIT_BREAKER_ACTIVE' && staking.coupeCircuit?.texte && staking.coupeCircuit.motif !== 'manuel'" class="cm-note__text rpc__value-text">
             Enclenché par un garde-fou : {{ staking.coupeCircuit.texte }}.
           </p>
@@ -346,6 +357,13 @@ const titreNote = computed(() => value.value?.titre ?? note.value.titre);
 
 .rpc__value.is-info .cm-note__title {
   color: var(--cm-info);
+}
+
+/* Étape 39 : la règle candidate (à blanc), en gris, sous le conseil. */
+.rpc__value-blanc {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--cm-text-muted);
 }
 
 /* Panneau étroit : l'anneau au-dessus du nom, les libellés des barres plus courts. */

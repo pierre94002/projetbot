@@ -717,6 +717,26 @@ des faux joueurs —, **Σ** des matchs jugés — au moins le plus grand compte
 place par information** : rien sur le terrain des compositions (`LineupPitch`, « juste les notes »), aucune famille « Joueurs » dans `MarketPicksBoard`, aucun
 pourcentage de joueur ailleurs. Mots : `utils/joueursABlanc.js` (pur, sans Vue : `server/test/joueursEcran.test.mjs` le rejoue sur les vraies réponses du serveur).
 
+Depuis l'étape 39 du plan (lot 1a, 04/11/2026) : **la mise juste** — la mise conseillée se dit en **part de votre capital** (« Mise conseillée : 0,39 % de votre
+capital »), ses **euros seulement sur le capital que Pierre a réglé** (« soit 7,80 € sur votre capital de 2 000 € (réglé le 05/11 · suivi de vos paris : +12 € · en
+attente : 40 €) ») ; sans capital : « Capital non indiqué : réglez-le dans Réglages › Gestion du risque pour voir la mise en euros. » — JAMAIS un euro calculé sur une base
+interne, jamais « 10 000 ». Le serveur rend l'objet `mise` (part recalculée par la règle, euros = la mise du moteur sur le capital, raisons, règle candidate à blanc) ; les mots
+viennent de `utils/miseAffichee.js` (pur, sans Vue ni import ; recopie les mots du serveur, un test les compare). Où : la carte du pari conseillé de la page d'un match à venir
+(`data-mise="conseil"`, sous « chez {bookmaker} » : la part en gras, les euros ou « Capital non indiqué », une ligne grise par réduction dans l'ordre où elle a mordu —
+« ramenée par : votre mise maximale par pari (50 €) », « chez Winamax : jamais mesuré chez ce bookmaker (marge 11 à 15 %) » —, puis, en gris et seulement quand elle diffère,
+« Règle candidate (à blanc) : … » — jamais à la place du conseil) ; la note de value de `ResultPredictionCard` (même texte, la ligne à blanc dessous, `data-mise="a-blanc"`) ; la
+revue de l'IA (`MatchAiReviewPanel` : « mise recommandée : 0,39 % du capital », recalculée depuis l'avantage et la cote gardés, jamais les euros gardés) ; le Repérage et les
+Opportunités (une petite ligne « Mise conseillée : 0,39 % de votre capital · 7,80 € » sous la cote de la ligne du moteur, `data-mise="reperage"` / `"opportunites"`, le détail
+au survol) ; Mes paris (onglet « Capital et carnet » : « Votre capital : 2 000 € (réglé le 05/11) » à la place de l'ancien champ « Bankroll », lu, jamais saisi là ; la colonne
+« Mise conseillée » des value bets). **Le ticket « J'ai parié »** part VIDE ; il n'est pré-rempli que pour LE pari du moteur, sur le capital réglé, avec la petite ligne
+« conseil du moteur, modifiable » (`data-mise="ticket-marque"`), qui disparaît dès que Pierre change la mise. **Réglages › Gestion du risque** : `components/settings/
+CapitalPanel.vue` (`data-mise="capital-panel"`) sous le coupe-circuit — le capital du moment, « Réglé à … le … · suit mes paris enregistrés : oui/non », « Vos comptes
+déclarent … € » (rapporté à côté, jamais mélangé), le montant, la date, « suit mes paris enregistrés », « Jamais plus bas que … sous mon plus haut » (vide = rien), la phrase
+« Si vous n'enregistrez pas vos paris… » ; sous l'alerte des séries (`GardeFousPanel`), en ambre : « Cette alerte compte les paris d'un même match comme indépendants : chez
+vous, elle sonne trop souvent. » ; et dans le carnet de l'IA (`AiScorecardPanel`, « Par forme de fiche ») le jour où la mise est passée en part du capital dans le message de
+l'IA. Couleurs : aucune nouvelle (la part en `--cm-text-primary`, le reste en `--cm-text-secondary` / `--cm-text-muted`, l'ambre `--cm-warning` pour la phrase des séries) ;
+jamais de vert sur une mise, jamais « sûr ».
+
 Depuis l'étape 44 du plan (23/10/2026) : **la mémoire de l'IA** — un bloc, sur la page d'une équipe, juste sous « Style de jeu »,
 `components/analysis/AiDossierCard.vue` (« Mémoire de l'IA », `data-bloc="memoire-ia"`, icône `sparkles`) ; la page « Bulletin » de l'étape 45 le réutilise tel
 quel pour une équipe, et en mode `portee="championnat"` (`GET …/dossiers?league=`) pour un championnat seul. Il LIT `GET /api/match-ai-analysis/dossiers?club=fotmob-…` (le club par son IDENTIFIANT FotMob, jamais

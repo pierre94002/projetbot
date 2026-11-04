@@ -2,10 +2,12 @@ import { defineStore } from 'pinia';
 import { matchesApi } from '@/services/matchesApi.js';
 import { teamStatsApi } from '@/services/teamStatsApi.js';
 
+// Étape 39 (lot 1a) : plus de `bankroll` ici (ni `setBankroll`) — le capital de Pierre est lu par le serveur
+// (/api/config/capital) ; la liste des matchs dit le capital du moment (`capital` : réglé ou « non indiqué »).
 export const useMatchesStore = defineStore('matches', {
   state: () => ({
     source: 'odds-api',
-    bankroll: 10000,
+    capital: null,
     matches: [],
     loading: false,
     error: null,
@@ -17,7 +19,8 @@ export const useMatchesStore = defineStore('matches', {
       this.loading = true;
       this.error = null;
       try {
-        const { matches } = await matchesApi.list(this.source, this.bankroll);
+        const { matches, capital } = await matchesApi.list(this.source);
+        this.capital = capital ?? null;
         // Un match dont le score est connu est terminé — il n'a plus rien à
         // faire dans la liste des matchs à analyser/parier, sur AUCUNE page
         // (Matchs, Mes paris et les autres onglets partagent tous cette même
@@ -49,9 +52,6 @@ export const useMatchesStore = defineStore('matches', {
      */
     removeMatch(matchId) {
       this.matches = this.matches.filter((match) => match.matchId !== matchId);
-    },
-    setBankroll(bankroll) {
-      this.bankroll = bankroll;
     },
     /** Récupère la forme récente des deux équipes pour chaque match actuellement affiché (API-Football, action groupée explicite). */
     async loadForm() {

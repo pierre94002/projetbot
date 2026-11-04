@@ -3,6 +3,7 @@ import { teamUpcomingFixtures } from '../../data/db/teamUpcomingRead.js';
 import { listAdaptedMatches } from '../../data/matchSources.js';
 import { teamNamesLikelyMatch } from '../../utils/teamNameMatch.js';
 import { optionalStringParam, requireStringParam, optionalPositiveInt } from '../middlewares/errorHandler.js';
+import { capitalDuMomentLu, baseDeCalcul } from '../../data/mise/capitalDePierre.js';
 
 const JOUR_MS = 86_400_000;
 
@@ -33,8 +34,11 @@ export function getTeamCalendar(req, res) {
   const all = teamUpcomingFixtures(name, { league, from });
   const fixtures = all.slice(0, limit);
   let cotes = [];
+  // Étape 39 (lot 1a) : la base de calcul passée explicitement (le capital de Pierre, sinon la base interne) — la mise de
+  // ces matchs n'est pas lue ici (seuls l'identifiant et l'heure du match coté servent).
+  const bankroll = baseDeCalcul(capitalDuMomentLu());
   try {
-    cotes = listAdaptedMatches('odds-api', 10000).filter((m) => m.hasOdds);
+    cotes = listAdaptedMatches('odds-api', bankroll).filter((m) => m.hasOdds);
   } catch {
     // Relevé de cotes illisible à cet instant : les liens mènent aux pages sans cotes.
   }

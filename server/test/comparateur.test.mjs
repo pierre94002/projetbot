@@ -362,11 +362,14 @@ test('la route de l’analyse rend le comparateur (vrai serveur, copie isolée) 
   }
   assert.deepEqual(c.issues.map((i) => [i.issue, i.bornes.coteMinimale, i.bornes.coteMaximale]), [['home', 2.09, 2.55], ['draw', 3.84, 4.69], ['away', 4.17, 5]]);
   // La case du pari du moteur : verte, conseillée, la mise de Kelly ; les deux autres : sans value.
-  assert.deepEqual([wh.home.etat, wh.home.conseillee, wh.home.cote, wh.home.mise], ['value', true, 2.3, a.staking.stake]);
+  // Étape 39 (lot 1a) : sans capital réglé, aucune mise en euros (calculée sur une base interne) ne sort de la route : la case
+  // conseillée n'a plus de « mise », la mise se dit en part du capital dans `a.mise`.
+  assert.deepEqual([wh.home.etat, wh.home.conseillee, wh.home.cote, 'mise' in wh.home, 'stake' in a.staking], ['value', true, 2.3, false, false]);
+  assert.ok(a.mise?.conseil && a.mise.euros === null && a.mise.fraction > 0, 'la mise en part du capital, sans euros');
   assert.deepEqual([wh.draw.etat, wh.away.etat], ['sans-value', 'sans-value']);
   assert.equal(wh.home.pourcent, a.verdicts.home.pourcent, 'le même avantage que le verdict');
   assert.equal(c.issues[0].retenue, true);
-  assert.deepEqual(c.issues[0].conseil, { bookmaker: 'williamhill', bookmakerTitle: 'William Hill', cote: 2.3, mise: a.staking.stake });
+  assert.deepEqual(c.issues[0].conseil, { bookmaker: 'williamhill', bookmakerTitle: 'William Hill', cote: 2.3 });
   // Les autres pronostics du moteur : leur cote minimale (règle d'une cote saisie).
   const pronostics = a.marketPredictions.filter((p) => p.marketId !== 'result');
   assert.equal(c.marches.length, pronostics.length);

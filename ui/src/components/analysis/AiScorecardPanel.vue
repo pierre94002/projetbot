@@ -27,6 +27,8 @@ import {
   TYPES_PAR_DEFAUT,
   TYPE_ARGUMENT_PAR_DEFAUT
 } from '@/utils/carnetIA.js';
+// Étape 39 (lot 1a) : le changement du message de l'IA (la mise en part du capital), daté dans le carnet.
+import { MISE_EN_PART_DANS_LE_MESSAGE, jourCourt } from '@/utils/miseAffichee.js';
 
 /**
  * LE CARNET DE L'IA (étape 21 du plan, 14/10/2026), bloc d'Historique moteur : chaque avis d'avant-match de
@@ -73,6 +75,7 @@ const optionsMarches = computed(() => optionsDesTypes(types.value));
 const ligues = computed(() => tableauDesChampionnats(carnet.value, { marche: marche.value, types: types.value, ordonner: (l) => favoris.favoritesFirst(l, { league: (x) => x.league }) }));
 const confiance = computed(() => lignesDeConfiance(carnet.value));
 const fiches = computed(() => lignesDesFiches(carnet.value));
+const jourDuChangement = `${jourCourt(MISE_EN_PART_DANS_LE_MESSAGE.le)}/${MISE_EN_PART_DANS_LE_MESSAGE.le.slice(0, 4)}`;
 const nuancesDites = computed(() => lignesDesNuances(carnet.value, { types: types.value }));
 const ecartes = computed(() => ecartesDits(carnet.value));
 const total = computed(() => carnet.value?.total ?? null);
@@ -297,6 +300,11 @@ const provenance = computed(() => carnet.value?.provenance ?? data.value?.proven
               </tbody>
             </table>
           </div>
+          <!-- Étape 39 : le changement du message de l'IA, daté (les avis d'avant et d'après ne lisent pas la même ligne de mise). -->
+          <p class="carnet-ia__petit" data-mise="message-date">
+            Depuis le {{ jourDuChangement }} (étape {{ MISE_EN_PART_DANS_LE_MESSAGE.etape }}) : {{ MISE_EN_PART_DANS_LE_MESSAGE.texte }}. Les avis d’avant
+            cette date ont lu une mise en euros.
+          </p>
         </section>
       </div>
 

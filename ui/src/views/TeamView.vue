@@ -241,7 +241,7 @@ async function chargerMatchDuClic() {
   // liste : le serveur le retrouve. Un match déjà joué n'en a plus.
   matchDuClic.value =
     matchesStore.matches.find((m) => m.matchId === props.matchId) ??
-    (await matchesApi.getById(props.matchId, matchesStore.source, matchesStore.bankroll).catch(() => null));
+    (await matchesApi.getById(props.matchId, matchesStore.source).catch(() => null));
 }
 
 async function chargerCalendrier() {

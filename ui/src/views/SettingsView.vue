@@ -30,6 +30,8 @@ import PaidOddsAdvicePanel from '@/components/settings/PaidOddsAdvicePanel.vue';
 // Étape 11 du plan : les garde-fous de Pierre (sous le coupe-circuit qu'ils enclenchent) et les fiches de ses comptes bookmakers.
 import GardeFousPanel from '@/components/settings/GardeFousPanel.vue';
 import BookmakerAccountsPanel from '@/components/settings/BookmakerAccountsPanel.vue';
+// Étape 39 du plan : votre capital (sous le coupe-circuit) — la seule base des euros de la mise conseillée.
+import CapitalPanel from '@/components/settings/CapitalPanel.vue';
 // Étape 12 du plan : les contrôles des données et le carnet de santé (un état préparé chaque nuit).
 import DataHealthPanel from '@/components/settings/DataHealthPanel.vue';
 // Étape 13 du plan : l'historique football-data depuis 2000 (un résumé préparé à chaque passe).
@@ -380,7 +382,7 @@ async function handleRunAiAnalysis(limit) {
       </AppCard>
 
       <div class="settings-view__row">
-        <AppCard title="Gestion du risque" subtitle="Coupe-circuit manuel, indépendant de la configuration, et vos garde-fous (mise maximale, perte maximale par semaine)" eyebrow="Sécurité" icon="shield">
+        <AppCard title="Gestion du risque" subtitle="Coupe-circuit manuel, indépendant de la configuration, votre capital (la base des euros de la mise) et vos garde-fous (mise maximale, perte maximale par semaine)" eyebrow="Sécurité" icon="shield">
           <RiskControlPanel
             :circuit-breaker-active="configStore.tilt?.circuitBreakerActive ?? false"
             :manuel="configStore.tilt?.coupeCircuitManuel ?? null"
@@ -388,6 +390,7 @@ async function handleRunAiAnalysis(limit) {
             @toggle="handleToggleCircuitBreaker"
             @reset="handleResetTilt"
           />
+          <CapitalPanel />
           <GardeFousPanel @enregistre="handleGardeFousEnregistres" />
         </AppCard>
 

@@ -25,6 +25,7 @@ import { SERVEUR, RACINE_ESSAIS } from './aides/isolement.mjs';
 import { fraicheurCote } from '../src/core/engine/fraicheurCotes.js';
 import { conseilDeReleve } from '../src/data/conseilReleve.js';
 import { MARCHES_SAISIE, SENS, TITRES_BOOKMAKERS } from '../src/data/saisiesCotes.js';
+import { partDeMise } from '../src/data/mise/regleDeMise.js';
 
 const UI = path.resolve(SERVEUR, '..', 'ui');
 const pret = ['vite', '@vitejs/plugin-vue', 'vue', 'pinia', 'vue-router'].every((p) => fs.existsSync(path.join(UI, 'node_modules', p)));
@@ -363,22 +364,29 @@ test('PaidOddsAdvicePanel : « vers 16 h 00 » quand les compositions ne sont pa
 const PREDICTION = { outcome: 'home', label: 'Man City gagne', confidence: 0.48, probabilities: { home: 0.48, draw: 0.27, away: 0.25 }, source: 'cotes', referenceBooks: ['Pinnacle'], reliability: null, doubleChance: null, bookmakersCount: 3 };
 const LIMITES = { edgeThresholdMin: 0.02, edgeThresholdMax: 0.25, maxValueOdds: 5 };
 const PARI = { outcome: 'home', label: 'Man City gagne', odds: 2.3, displayedOdds: 2.3, bookmaker: 'williamhill', bookmakerTitle: 'William Hill', fairOdds: 2.07, ev: 0.1111 };
+// Étape 39 (lot 1a) : la mise que la route de l'analyse joint, sans capital réglé — la part du capital, aucun euro.
+const MISE_SANS_CAPITAL = { version: '39.1', conseil: true, fraction: partDeMise({ ev: PARI.ev, cote: PARI.odds, reglageMoteur: { kellyFraction: 0.125, maxStakePercent: 0.02 } }), euros: null, capital: { indique: false, montant: null }, raisons: [], aBlanc: null };
 
 test('ResultPredictionCard : une value fraîche dit l’heure de sa cote ; une value « à rafraîchir » (dite par le serveur, ou vieillie depuis) n’est jamais conseillée — note ambre, la raison', options, async () => {
   const { rendre, composants } = contexte;
-  const resultat = (staking) => ({ result: { prediction: PREDICTION, staking, label: 'Man City vs Liverpool', league: 'EPL' } });
+  const resultat = (staking, mise = null) => ({ result: { prediction: PREDICTION, staking, label: 'Man City vs Liverpool', league: 'EPL', ...(mise ? { mise } : {}) } });
   const fraicheStaking = { action: 'RECOMMENDED', ...PARI, stake: 119.13, releveAt: iso(-H), origineReleve: 'archive', fraicheur: fraicheur(iso(-H)), candidates: [], limits: LIMITES };
-  const fraiche = await rendre(composants.ResultPredictionCard, resultat(fraicheStaking));
+  const fraiche = await rendre(composants.ResultPredictionCard, resultat(fraicheStaking, MISE_SANS_CAPITAL));
   assert.deepEqual(fraiche.avertissements, []);
   // (« MC » : les initiales du logo du club, dessinées devant le pari quand l'image n'est pas chargée.)
-  assert.match(fraiche.texte, /Pari value chez vos bookmakers (?:MC )?Man City gagne à 2\.30 chez William Hill\. Cote juste 2\.07, soit un avantage de 11,1 %\. Mise conseillée : 119,13 €\. Cote relevée aujourd'hui à 13:00\./);
+  assert.match(fraiche.texte, /Pari value chez vos bookmakers (?:MC )?Man City gagne à 2\.30 chez William Hill\. Cote juste 2\.07, soit un avantage de 11,1 %\. Mise conseillée : \d+,\d\d % de votre capital\. Capital non indiqué : réglez-le dans Réglages › Gestion du risque pour voir la mise en euros\. ?Cote relevée aujourd'hui à 13:00\./);
+  assert.ok(!fraiche.texte.includes('119'), 'aucun euro calculé sur une base interne (staking.stake jamais lu)');
+  // Sans la mise de la route (forme d'avant) : la carte ne dit aucune mise, ni part ni euros.
+  const sansMise = await rendre(composants.ResultPredictionCard, resultat(fraicheStaking));
+  assert.ok(!/Mise conseillée/.test(sansMise.texte) && !sansMise.texte.includes('119'), sansMise.texte);
   const serveur = await rendre(composants.ResultPredictionCard, resultat({ action: 'PASS', reason: 'a_rafraichir', stake: null, candidates: [], limits: LIMITES, aRafraichir: { ...PARI, releveAt: iso(-5 * H), fraicheur: fraicheur(iso(-5 * H)) } }));
   assert.match(serveur.texte, /Value à rafraîchir (?:MC )?« Man City gagne » à 2\.30 chez William Hill paierait au-dessus de la cote juste de 2\.07 \(avantage de 11,1 % au dernier relevé\), mais la cote est à rafraîchir : Relevée il y a 5 h, au-delà du délai de 3 h : à relever de nouveau avant de parier\. Relevez les cotes \(Réglages › Données\) avant de parier : aucun pari recommandé d'ici là\./);
   assert.ok(!serveur.html.includes('is-positif'), 'pas la note verte');
   const classeNote = /class="([^"]*\brpc__value\b[^"]*)"/.exec(serveur.html)?.[1] ?? '';
   assert.match(classeNote, /\bis-warning\b/, `la note en ambre (classe « ${classeNote} »)`);
   // Recommandée à l'analyse, la page restée ouverte deux heures de plus : à rafraîchir.
-  const vieillie = await rendre(composants.ResultPredictionCard, resultat(fraicheStaking), { heure: MAINTENANT + 2 * H + MIN });
+  const vieillie = await rendre(composants.ResultPredictionCard, resultat(fraicheStaking, MISE_SANS_CAPITAL), { heure: MAINTENANT + 2 * H + MIN });
+  assert.ok(!/Mise conseillée/.test(vieillie.texte), 'à rafraîchir : aucune mise conseillée (étape 39)');
   assert.match(vieillie.texte, /Value à rafraîchir (?:MC )?« Man City gagne » à 2\.30 chez William Hill .*Relevée il y a 3 h 01, au-delà du délai de 3 h/);
   assert.ok(!vieillie.html.includes('is-positif'));
 });

@@ -411,6 +411,13 @@ const CARNET_COPIE = [
   pari('attente', { status: 'pending', stake: 5, odds: 1.7, cree: '2026-10-05T10:00:00Z', legs: [jambe({ homeName: 'Fulham', awayName: 'Brentford', commenceTime: '2026-10-06T14:00:00Z', odds: 1.7, status: 'pending' })] })
 ];
 
+/**
+ * Étape 39 (lot 1a) : la mise en euros n'existe plus que sur le capital que Pierre règle (sans lui, la route n'en rend
+ * aucune). Ces tests des garde-fous, en euros, gardent leurs nombres : la copie a un capital FIXE de 10 000 € (la base
+ * de calcul d'avant), réglé avant la première analyse ; il ne suit pas le carnet (suitLeCarnet: false).
+ */
+const CAPITAL_COPIE = { montant: 10000, le: '2026-10-05', suitLeCarnet: false, plancher: null, devise: 'EUR', regleA: '2026-10-05T07:00:00.000Z', majLe: '2026-10-05T07:00:00.000Z' };
+
 let P;
 before(() => {
   const lancer = (copie, phase, maintenant) => {
@@ -420,7 +427,7 @@ before(() => {
     assert.equal(r.reseau, false, `phase ${phase} : un appel réseau`);
     return r.json;
   };
-  const copie = preparerCopie({ runtime: { 'bets.json': CARNET_COPIE } });
+  const copie = preparerCopie({ runtime: { 'bets.json': CARNET_COPIE, 'capital.json': CAPITAL_COPIE } });
   P = {};
   try {
     fs.cpSync(path.join(SERVEUR, 'scripts'), path.join(copie.serveur, 'scripts'), { recursive: true });
@@ -657,5 +664,14 @@ test('lecture du code : les modules de l’étape n’appellent ni réseau, ni A
   assert.doesNotMatch(corps.slice(0, corps.indexOf('createBet(')), /gardeFous|GardeFous|lireComptes|alertesDuPari/);
   // Le conseil passe aux garde-fous à UN endroit : la décision de pari unique (verdictPari.stakingDuMatch).
   const appelants = fs.readdirSync(SRC, { recursive: true }).filter((f) => f.endsWith('.js') && /plafonnerLeConseil\(/.test(fs.readFileSync(path.join(SRC, f), 'utf8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, ''))).map((f) => f.split(path.sep).join('/')).sort();
-  assert.deepEqual(appelants, ['core/engine/verdictPari.js', 'core/risk/gardeFous.js']);
+  // Étape 39 (lot 1a) : un second appelant, data/mise/miseRead.js (stakingDuConseil), et lui seul — le Repérage et les
+  // Opportunités calculent sur la base interne de leur passe ; leurs euros sont refaits sur le capital de Pierre puis
+  // passent le MÊME plafond (le même centime que la page du match). La décision (issue, bookmaker, avantage) reste celle
+  // de verdictPari : miseRead ne décide rien.
+  assert.deepEqual(appelants, ['core/engine/verdictPari.js', 'core/risk/gardeFous.js', 'data/mise/miseRead.js']);
+  const miseRead = lire('data/mise/miseRead.js').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '');
+  assert.equal(miseRead.match(/plafonnerLeConseil\(/g).length, 1, 'un seul appel');
+  const corpsDuConseil = miseRead.slice(miseRead.indexOf('export function stakingDuConseil('), miseRead.indexOf('export function reperageAvecLaMise('));
+  assert.match(corpsDuConseil, /plafonnerLeConseil\(/, 'dans stakingDuConseil seulement');
+  assert.doesNotMatch(miseRead, /findValueBet|stakingDuMatch|analyzeMatch/, 'miseRead ne décide rien');
 });

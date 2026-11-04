@@ -8,6 +8,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import { useRisqueStore } from '@/stores/risqueStore.js';
 import { euros, jourDit, montantSaisi } from '@/utils/gardeFous.js';
 import { phrasesDesSeries } from '@/utils/suiviParis.js';
+import { MOTS_DE_LA_MISE } from '@/utils/miseAffichee.js';
 
 /**
  * LES GARDE-FOUS DE PIERRE (étape 11 du plan, 06/10/2026), dans la carte
@@ -181,6 +182,8 @@ onMounted(() => {
 
     <div v-if="series" class="gfous__series cm-block">
       <p class="gfous__petit"><strong>{{ phrasesSeries.zone }}</strong></p>
+      <!-- Étape 39 : l'alerte des séries tire chaque pari seul ; vos paris d'un même match perdent ensemble (critique 39, constat 2). -->
+      <p class="gfous__petit gfous__petit--warning" data-mise="series-liees">{{ MOTS_DE_LA_MISE.seriesLiees }}</p>
       <p v-if="phrasesSeries.enCours" class="gfous__petit">{{ phrasesSeries.enCours }}</p>
       <p v-if="phrasesSeries.plusLongue" class="gfous__petit">{{ phrasesSeries.plusLongue }}</p>
       <p class="gfous__petit">La bande et le détail : Historique moteur › Performance paris.</p>

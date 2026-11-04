@@ -458,12 +458,32 @@ export function avecVerdicts(data, internes, { maintenant = Date.now(), reglage 
         }
       };
       const { staking, verdicts } = decisionDePari(match, config, tiltState);
+      // Étape 39 (lot 1a) : le CONSEIL du moteur — son avantage et sa cote nette, jamais sa mise (calculée sur la base
+      // interne de la passe) : le contrôleur refait la part du capital et ses euros sur le capital de Pierre
+      // (data/mise/miseRead.js). Joint au pari du match et au verdict « value » de son issue (les Opportunités le lisent).
+      const conseil = conseilDuPari(staking);
       return {
         ...m,
-        pari: { action: staking.action, raison: staking.reason ?? null, issue: staking.outcome ?? staking.aRafraichir?.outcome ?? null },
-        markets: (m.markets ?? []).map((k) => (verdicts[k.key] ? { ...k, verdict: verdicts[k.key] } : k))
+        pari: { action: staking.action, raison: staking.reason ?? null, issue: staking.outcome ?? staking.aRafraichir?.outcome ?? null, ...(conseil ? { conseil } : {}) },
+        markets: (m.markets ?? []).map((k) => (verdicts[k.key] ? { ...k, verdict: conseil && k.key === conseil.issue ? { ...verdicts[k.key], conseil } : verdicts[k.key] } : k))
       };
     })
+  };
+}
+
+/**
+ * Étape 39 (lot 1a) : le conseil du moteur tel que le Repérage le rend — l'issue, l'avantage (4 décimales), la cote nette
+ * (3 décimales) et affichée, le bookmaker ; JAMAIS la mise (aucun euro de la base interne) ; null sans conseil.
+ */
+export function conseilDuPari(staking) {
+  if (staking?.action !== 'RECOMMENDED') return null;
+  return {
+    issue: staking.outcome ?? null,
+    ev: staking.ev ?? null,
+    cote: staking.odds ?? null,
+    coteAffichee: staking.displayedOdds ?? staking.odds ?? null,
+    bookmaker: staking.bookmaker ?? null,
+    bookmakerTitle: staking.bookmakerTitle ?? staking.bookmaker ?? null
   };
 }
 

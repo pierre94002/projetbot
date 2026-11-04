@@ -44,10 +44,13 @@ import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
 import { formatOdds, formatCurrency, formatPercent, formatDateTime, formatKickoff } from '@/utils/format.js';
 // Étape 11 du plan : vos garde-fous et les fiches de vos comptes — le ticket signale une mise au-delà, jamais un refus.
 import { useRisqueStore } from '@/stores/risqueStore.js';
+// Étape 39 (lot 1a) : la mise conseillée en part de votre capital, ses euros seulement sur le capital réglé, le ticket
+// pré-rempli seulement avec eux (marqué « conseil du moteur, modifiable »).
+import { misePourLeTicket, miseEnUneLigne, lignesDeLaMise, capitalDit, provenanceDuCapital, MOTS_DE_LA_MISE } from '@/utils/miseAffichee.js';
 
 /**
  * Mes paris — refonte visuelle du 01/10/2026 (cf. ui/DESIGN.md) : un bandeau
- * avec les chiffres de la bankroll, le bordereau de sélection en carte
+ * avec les chiffres de vos paris, le bordereau de sélection en carte
  * collante couleur de section, le scanner en rangée de commandes, puis les
  * listes (carnet, value bets, paris probables, tous les paris) en cartes par
  * championnat et par rencontre. La logique est strictement celle d'avant ;
@@ -253,9 +256,10 @@ const MIN_DISPLAYED_ODDS = 1.2;
 
 // Les trois listes issues du scan sont réparties en onglets (même principe
 // que Matchs/Statistiques ligue) plutôt qu'empilées — trop dense d'un coup
-// une fois qu'il y a des dizaines de paris par liste. L'onglet "Bankroll"
-// (scanner, carnet réel, réglages de mise) est prioritaire/par défaut ; un
-// seul scan y alimente les trois autres onglets.
+// une fois qu'il y a des dizaines de paris par liste. L'onglet « Capital et
+// carnet » (clé « bankroll » gardée pour les liens : scanner, carnet réel,
+// votre capital) est prioritaire/par défaut ; un seul scan y alimente les trois
+// autres onglets.
 const TAB_VALUES = ['bankroll', 'value', 'safest', 'all'];
 const activeTab = ref(TAB_VALUES.includes(route.query.onglet) ? route.query.onglet : 'bankroll');
 
@@ -325,7 +329,7 @@ async function scanMatches() {
   for (let i = 0; i < matches.length; i += BATCH_SIZE) {
     const batch = matches.slice(i, i + BATCH_SIZE);
     const results = await Promise.allSettled(
-      batch.map((match) => analysisApi.analyzeMatchById(match.matchId, matchesStore.source, matchesStore.bankroll))
+      batch.map((match) => analysisApi.analyzeMatchById(match.matchId, matchesStore.source))
     );
     results.forEach((result, index) => {
       if (result.status !== 'fulfilled') return;
@@ -359,7 +363,10 @@ async function scanMatches() {
           bookmaker: pari.bookmakerTitle,
           modelOdds: pari.fairOdds,
           edgePercent: data.edgePercent,
-          recommendedStake: pari.stake,
+          // Étape 39 (lot 1a) : la mise du serveur (part du capital ; euros seulement sur votre capital réglé) — le ticket
+          // n'est pré-rempli qu'avec ces euros-là (misePourLeTicket), jamais avec un chiffre calculé sur une base interne.
+          mise: data.mise ?? null,
+          recommendedStake: misePourLeTicket(data.mise)?.montant ?? null,
           oddsField: CHAMPS[pari.outcome],
           // Étape 8 du plan : le verdict du moteur sur cette issue (verdictPari.js), le même que la page
           // « Opportunités du jour » — la pastille le réévalue à l'horloge (une cote qui vieillit : « à rafraîchir »).
@@ -368,8 +375,9 @@ async function scanMatches() {
         });
         // Étape 10 : la cote minimale à prendre pour cette issue (comparateur du serveur).
         Object.assign(foundValue.at(-1), { bornes: bornesDuPronostic(data, { marketId: 'result', params: { outcome: pari.outcome } }) });
-        // Étape 11 : la mise conseillée ramenée à un plafond de vos garde-fous (le serveur dit lequel, et ce que le moteur conseillait).
-        Object.assign(foundValue.at(-1), { misePlafonnee: pari.misePlafonnee ?? null });
+        // Étape 11 : la mise conseillée ramenée à un plafond de vos garde-fous — étape 39 : le serveur le dit dans les raisons
+        // de la mise (data.mise.raisons), seulement sur votre capital réglé (sans lui, aucun plafond en euros ne s'applique).
+        Object.assign(foundValue.at(-1), { misePlafonnee: data.mise?.capital?.indique ? (pari.misePlafonnee ?? null) : null });
       }
 
       for (const safePick of computeSafestPicks(data)) {
@@ -453,7 +461,7 @@ const activeSafestPicksPool = computed(() =>
 const activeAllPicksPool = computed(() => allPicksPool.value.filter((c) => liveMatchIds.value.has(c.matchId) && !takenLegKeys.value.has(legKey(c))));
 
 const TABS = computed(() => [
-  { value: 'bankroll', label: 'Bankroll & carnet' },
+  { value: 'bankroll', label: 'Capital et carnet' },
   { value: 'value', label: 'Value bets détectées', count: activeValueBets.value.length },
   { value: 'safest', label: 'Paris les plus probables', count: activeSafestPicksPool.value.length },
   { value: 'all', label: 'Tous les paris', count: activeAllPicksPool.value.length }
@@ -599,20 +607,31 @@ function heureDeLaCotePrise(leg) {
   return `${SOURCES_DE_COTE[leg.coteSource] ?? 'cote'} · ${formatDateTime(leg.coteReleveeA)}`;
 }
 
-const slipStake = ref(10);
+// Étape 39 (lot 1a) : le bordereau part VIDE — jamais un montant inventé (il recevait 10 €, puis une mise calculée sur
+// 10 000 € fictifs). Une seule sélection conseillée par le moteur, sur votre capital RÉGLÉ : sa mise en euros, marquée
+// « conseil du moteur, modifiable » (misePourLeTicket) ; sans capital, ou pour un combiné, un pari sûr : le champ reste vide.
+const slipStake = ref(null);
+const slipPrerempli = ref(null); // { montant, marque } : ce que le moteur a proposé, tant que Pierre ne l'a pas changé
 const submittingSlip = ref(false);
 
 // Présentation seulement : ce que rapporterait le bordereau s'il passait
 // (mise × cote cumulée), affiché à côté du bouton de validation.
 const slipPotential = computed(() => (Number(slipStake.value) > 0 ? Number(slipStake.value) * combinedOdds.value : 0));
 
-// Kelly ne s'applique proprement qu'à UN pari indépendant à la fois — pour
-// une seule sélection avec une mise conseillée (value bet), on la propose en
-// mise par défaut ; pour un combiné ou un pari sûr sans mise Kelly, on laisse
-// la valeur manuelle telle quelle plutôt que de suggérer un chiffre inventé.
+// Kelly ne s'applique proprement qu'à UN pari indépendant à la fois : une seule sélection avec une mise conseillée sur
+// votre capital la propose ; sinon rien n'est proposé (et une proposition d'avant est retirée, jamais laissée en place).
 watch(selectedLegs, (legs) => {
-  if (legs.length === 1 && legs[0].recommendedStake > 0) slipStake.value = Number(legs[0].recommendedStake.toFixed(2));
+  const proposee = legs.length === 1 ? misePourLeTicket(legs[0].mise) : null;
+  if (proposee) {
+    slipStake.value = proposee.montant;
+    slipPrerempli.value = proposee;
+  } else if (slipPrerempli.value) {
+    slipStake.value = null;
+    slipPrerempli.value = null;
+  }
 });
+/** La marque « conseil du moteur, modifiable » : seulement tant que la mise est celle que le moteur a proposée. */
+const slipMarque = computed(() => (slipPrerempli.value && Number(slipStake.value) === slipPrerempli.value.montant ? slipPrerempli.value.marque : null));
 
 async function submitSlip() {
   if (!selectedLegs.value.length) return;
@@ -671,7 +690,7 @@ onMounted(() => {
 
 <template>
   <div class="my-bets-view cm-page">
-    <!-- 1. LE BANDEAU : la bankroll d'un coup d'œil, quel que soit l'onglet. -->
+    <!-- 1. LE BANDEAU : vos paris d'un coup d'œil, quel que soit l'onglet. -->
     <section class="cm-hero bets-hero">
       <div class="cm-hero__top">
         <h2 class="cm-hero__title">
@@ -770,16 +789,23 @@ onMounted(() => {
           J'ai parié : {{ selectedLegs.length > 1 ? `le combiné (${selectedLegs.length})` : 'le pari' }}
         </AppButton>
       </div>
+      <!-- Étape 39 : la mise proposée par le moteur (seulement sur votre capital réglé) est marquée, et modifiable. -->
+      <p v-if="slipMarque" class="cm-note__text bet-slip__marque" data-mise="ticket-marque">{{ slipMarque }}</p>
     </div>
 
     <Transition name="view" mode="out-in">
-      <!-- 3. BANKROLL & CARNET : le scanner, puis les paris en cours. -->
+      <!-- 3. CAPITAL ET CARNET : le scanner, puis les paris en cours. -->
       <div v-if="activeTab === 'bankroll'" key="bankroll" class="bets-tab">
         <AppCard icon="bolt" eyebrow="Scanner" title="Scanner les matchs" subtitle="Une seule analyse alimente les trois recherches : value bets, paris les plus probables, tous les paris">
           <div class="scanner">
             <div class="cm-toolbar scanner__toolbar">
               <AppSelect v-model="matchesStore.source" label="Source de données" :options="sourcesStore.options" class="scanner__source" />
-              <AppNumberField v-model="matchesStore.bankroll" label="Bankroll" :min="0" :step="500" suffix="€" class="scanner__bankroll" />
+              <!-- Étape 39 : plus de champ « Bankroll » (10 000 € fictifs) — votre capital, réglé dans Réglages › Gestion du risque. -->
+              <div class="scanner__capital" data-mise="capital">
+                <span class="scanner__capital-label">{{ capitalDit(risque.capitalDuMoment) }}</span>
+                <span v-if="risque.capitalDuMoment?.indique" class="scanner__capital-detail">{{ provenanceDuCapital(risque.capitalDuMoment) }}</span>
+                <RouterLink v-else to="/reglages" class="scanner__link">Réglez-le dans Réglages › Gestion du risque</RouterLink>
+              </div>
               <AppButton variant="primary" :loading="scanning" @click="scanMatches">
                 <template #icon><AppIcon name="bolt" :size="15" /></template>
                 Scanner les matchs
@@ -796,8 +822,9 @@ onMounted(() => {
               <div>
                 <p class="cm-note__title">Mise conseillée</p>
                 <p class="cm-note__text scanner__hint">
-                  Mise conseillée = critère de Kelly fractionné sur la bankroll ci-dessus. Fraction de Kelly, seuils d'edge et mise
-                  max réglables dans <RouterLink to="/reglages" class="scanner__link">Réglages du moteur</RouterLink>.
+                  Mise conseillée = critère de Kelly fractionné (1/8, 2 % au plus) en part de votre capital ; en euros seulement sur
+                  le capital que vous avez réglé dans <RouterLink to="/reglages" class="scanner__link">Réglages › Gestion du risque</RouterLink>.
+                  {{ MOTS_DE_LA_MISE.nonEnregistres }}
                 </p>
               </div>
             </div>
@@ -1140,9 +1167,12 @@ onMounted(() => {
                         <dt>Edge</dt>
                         <dd class="cm-numeric figure__edge">{{ c.edgePercent == null ? '—' : `+${c.edgePercent.toFixed(1)}%` }}</dd>
                       </div>
-                      <div class="figure">
-                        <dt>Kelly</dt>
-                        <dd class="cm-numeric" :title="c.misePlafonnee?.texte ?? 'Kelly fractionné sur la bankroll du scanner'">{{ formatCurrency(c.recommendedStake) }}<template v-if="c.misePlafonnee"> · plafond</template></dd>
+                      <!-- Étape 39 : la mise conseillée en part de votre capital ; ses euros seulement sur le capital réglé. -->
+                      <div class="figure" data-mise="value-bet">
+                        <dt>Mise conseillée</dt>
+                        <dd class="cm-numeric" :title="[lignesDeLaMise(c.mise).euros ?? lignesDeLaMise(c.mise).sansCapital, ...lignesDeLaMise(c.mise).raisons].filter(Boolean).join(' · ')">
+                          {{ miseEnUneLigne(c.mise) ?? '—' }}<template v-if="c.misePlafonnee"> · plafond</template>
+                        </dd>
                       </div>
                     </dl>
 
@@ -1367,8 +1397,29 @@ onMounted(() => {
   flex: 1 1 240px;
 }
 
-.scanner__bankroll {
-  flex: 0 1 160px;
+/* Étape 39 : votre capital (lu, jamais saisi ici) à la place de l'ancien champ « Bankroll ». */
+.scanner__capital {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 0 1 260px;
+  min-width: 0;
+}
+
+.scanner__capital-label {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.scanner__capital-detail {
+  font-size: 12px;
+  color: var(--cm-text-muted);
+}
+
+.bet-slip__marque {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--cm-text-muted);
 }
 
 .scanner__period {
