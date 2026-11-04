@@ -7641,6 +7641,1071 @@
     }
   },
   {
+    "matchId": "cal-2026-11-04-fethiyespor-eyupspor",
+    "homeName": "Fethiyespor",
+    "awayName": "Eyüpspor",
+    "league": "Türkiye Kupası",
+    "commenceTime": "2026-11-04T10:00:00.000Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Fethiyespor vs Eyüpspor",
+      "expectedGoals": {
+        "home": 2.262,
+        "away": 1.339,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 56.06,
+        "draw": 11.13,
+        "away": 1.12
+      },
+      "market": {
+        "odds1": 29,
+        "oddsDraw": 7.5,
+        "odds2": 1.1
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "trop_peu_de_bookmakers",
+        "candidates": []
+      },
+      "statExpectations": null,
+      "marketPredictions": [
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 2.5 buts",
+          "predictedOdds": 1.43,
+          "probability": 70,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "yes"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "yes",
+          "predictedLabel": "Oui",
+          "predictedOdds": 1.5,
+          "probability": 67,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 1.5,
+            "key": "awayOver"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "awayOver",
+          "predictedLabel": "Eyüpspor & Plus de 1.5 buts",
+          "predictedOdds": 1.31,
+          "probability": 76,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 3.5,
+            "side": "under"
+          },
+          "market": "Buts — Fethiyespor",
+          "predictedOutcome": "under",
+          "predictedLabel": "Fethiyespor — Moins de 3.5 buts",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 0.5,
+            "side": "over"
+          },
+          "market": "Buts — Eyüpspor",
+          "predictedOutcome": "over",
+          "predictedLabel": "Eyüpspor — Plus de 0.5 buts",
+          "predictedOdds": 1.36,
+          "probability": 74,
+          "minOdds": 1.2
+        }
+      ],
+      "engineVersion": 5
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 9519,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 2076,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 9519,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 2076,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 9519,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 9519
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.05884,
+    "analysedAt": "2026-11-04T09:06:44.399Z",
+    "timing": "coup-d-envoi",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 343,
+      "tokens": 1090,
+      "lecons": [],
+      "dossiersDu": "2026-11-04T01:34:09.445Z",
+      "equipes": {
+        "home": {
+          "id": "fotmob-8375",
+          "dossier": true
+        },
+        "away": {
+          "id": "fotmob-4681",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "Türkiye Kupası",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "FotMob",
+      "fotmobMatchId": "6554601",
+      "fetchedAt": "2026-11-04T09:06:25.921Z",
+      "minutesBeforeKickoff": 54,
+      "home": {
+        "team": "Fethiyespor",
+        "teamId": "fotmob-8375",
+        "formation": "4-4-1-1",
+        "coach": null,
+        "statsSince": "2026-01-08",
+        "teamMatches": 3,
+        "startXI": [
+          {
+            "id": null,
+            "name": "Miraç Özel",
+            "number": 79,
+            "position": "Goalkeeper",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.1,
+            "y": 0.5,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Ramazan Cevik",
+            "number": 77,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.292,
+            "y": 0.875,
+            "stats": null
+          },
+          {
+            "id": "fotmob-687106",
+            "name": "Fatih Kurucuk",
+            "number": 22,
+            "position": "Defender",
+            "age": 28,
+            "countryCode": "TUR",
+            "countryName": "Turkiye",
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 3,
+              "starts": 1,
+              "minutes": 137,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.91
+            }
+          },
+          {
+            "id": null,
+            "name": "Mert Apat",
+            "number": 6,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.292,
+            "y": 0.375,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Okan Dernek",
+            "number": 34,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.292,
+            "y": 0.125,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Irfan Akgün",
+            "number": 14,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.485,
+            "y": 0.875,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Kerem Pala",
+            "number": 48,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.485,
+            "y": 0.625,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Deniz Erdogan",
+            "number": 97,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.485,
+            "y": 0.375,
+            "stats": null
+          },
+          {
+            "id": "fotmob-908601",
+            "name": "Hüseyin Eray Karatas",
+            "number": 11,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "TUR",
+            "countryName": "Turkiye",
+            "x": 0.485,
+            "y": 0.125,
+            "stats": null
+          },
+          {
+            "id": "fotmob-964493",
+            "name": "Yusuf Türk",
+            "number": 9,
+            "position": "Forward",
+            "age": 28,
+            "countryCode": "TUR",
+            "countryName": "Turkiye",
+            "x": 0.678,
+            "y": 0.5,
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-955226",
+            "name": "Mehmet Kaan Türkmen",
+            "number": 17,
+            "position": "Forward",
+            "age": 26,
+            "countryCode": "TUR",
+            "countryName": "Turkiye",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": null
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-1096466",
+            "name": "Eren Erdoğan",
+            "number": 7,
+            "position": "Defender",
+            "age": 25,
+            "countryCode": "TUR",
+            "countryName": "Turkiye",
+            "stats": null
+          },
+          {
+            "id": "fotmob-1126550",
+            "name": "Cengiz Demir",
+            "number": 4,
+            "position": "Defender",
+            "age": 25,
+            "countryCode": "TUR",
+            "countryName": "Turkiye",
+            "stats": null
+          },
+          {
+            "id": "fotmob-1861421",
+            "name": "Cihan Kazan",
+            "number": 23,
+            "position": "Midfielder",
+            "age": 21,
+            "countryCode": "TUR",
+            "countryName": "Turkiye",
+            "stats": {
+              "apps": 3,
+              "starts": 3,
+              "minutes": 270,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-305056",
+            "name": "U&#287;ur Ayhan",
+            "number": 19,
+            "position": "Midfielder",
+            "age": 34,
+            "countryCode": "TUR",
+            "countryName": "Turkiye",
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 90,
+              "goals": 1,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1596347",
+            "name": "Jamal Camcı",
+            "number": 44,
+            "position": "Forward",
+            "age": 20,
+            "countryCode": "TUR",
+            "countryName": "Turkiye",
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Seyit Özcan",
+            "number": 26,
+            "position": null,
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Berkay Iscan",
+            "number": 21,
+            "position": null,
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Berkin Özgür",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Ismail Erdogan",
+            "number": 24,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Fatih Ok",
+            "number": 16,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": null
+          }
+        ],
+        "unavailable": [],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-866845",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Arda Akbulut",
+            "position": "Goalkeeper",
+            "starts": 3,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1861421",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Cihan Kazan",
+            "position": "Midfielder",
+            "starts": 3,
+            "goals": 0,
+            "assists": 0,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-612197",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Melih Okutan",
+            "position": "Midfielder",
+            "starts": 2,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-409543",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Oguz Yilmaz",
+            "position": "Defender",
+            "starts": 2,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1210865",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Sahan Akyüz",
+            "position": "Defender",
+            "starts": 2,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          }
+        ]
+      },
+      "away": {
+        "team": "Eyüpspor",
+        "teamId": "fotmob-4681",
+        "formation": "4-5-1",
+        "coach": null,
+        "statsSince": "2026-07-01",
+        "teamMatches": 10,
+        "startXI": [
+          {
+            "id": "fotmob-1017745",
+            "name": "Horațiu Moldovan",
+            "number": 31,
+            "position": "Goalkeeper",
+            "age": 28,
+            "countryCode": "ROU",
+            "countryName": "Romania",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 7,
+              "starts": 7,
+              "minutes": 585,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 5.88
+            }
+          },
+          {
+            "id": "fotmob-1393698",
+            "name": "Talha Ülvan",
+            "number": 7,
+            "position": "Defender",
+            "age": 25,
+            "countryCode": "TUR",
+            "countryName": "Turkiye",
+            "x": 0.357,
+            "y": 0.875,
+            "stats": {
+              "apps": 10,
+              "starts": 8,
+              "minutes": 712,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.22,
+              "rating": 6.22
+            }
+          },
+          {
+            "id": "fotmob-798736",
+            "name": "Jawad El Yamiq",
+            "number": 5,
+            "position": "Defender",
+            "age": 34,
+            "countryCode": "MAR",
+            "countryName": "Morocco",
+            "x": 0.357,
+            "y": 0.625,
+            "stats": {
+              "apps": 8,
+              "starts": 8,
+              "minutes": 675,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.43,
+              "rating": 6.37
+            }
+          },
+          {
+            "id": "fotmob-1210344",
+            "name": "Anıl Yaşar",
+            "number": 4,
+            "position": "Defender",
+            "age": 24,
+            "countryCode": "TUR",
+            "countryName": "Turkiye",
+            "x": 0.357,
+            "y": 0.375,
+            "stats": {
+              "apps": 6,
+              "starts": 4,
+              "minutes": 395,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.1,
+              "rating": 6.23
+            }
+          },
+          {
+            "id": "fotmob-1697516",
+            "name": "Arda Yavuz",
+            "number": 3,
+            "position": "Defender",
+            "age": 20,
+            "countryCode": "TUR",
+            "countryName": "Turkiye",
+            "x": 0.357,
+            "y": 0.125,
+            "stats": {
+              "apps": 3,
+              "starts": 0,
+              "minutes": 20,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 5.97
+            }
+          },
+          {
+            "id": "fotmob-889626",
+            "name": "Lenny Pintor",
+            "number": 11,
+            "position": "Midfielder",
+            "age": 26,
+            "countryCode": "FRA",
+            "countryName": "France",
+            "x": 0.613,
+            "y": 0.89,
+            "stats": {
+              "apps": 9,
+              "starts": 4,
+              "minutes": 414,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.81,
+              "rating": 6.18
+            }
+          },
+          {
+            "id": "fotmob-1668290",
+            "name": "Charles-André Raux Yao",
+            "number": 15,
+            "position": "Midfielder",
+            "age": 24,
+            "countryCode": "FRA",
+            "countryName": "France",
+            "x": 0.613,
+            "y": 0.695,
+            "stats": {
+              "apps": 10,
+              "starts": 7,
+              "minutes": 598,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.45,
+              "rating": 6.43
+            }
+          },
+          {
+            "id": "fotmob-1523340",
+            "name": "David Costa",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "CPV",
+            "countryName": "Cape Verde",
+            "x": 0.613,
+            "y": 0.5,
+            "stats": {
+              "apps": 9,
+              "starts": 8,
+              "minutes": 617,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.13,
+              "rating": 6.13
+            }
+          },
+          {
+            "id": "fotmob-1388936",
+            "name": "Hamza Akman",
+            "number": 18,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "TUR",
+            "countryName": "Turkiye",
+            "x": 0.613,
+            "y": 0.305,
+            "stats": {
+              "apps": 7,
+              "starts": 0,
+              "minutes": 156,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.07,
+              "rating": 6.43
+            }
+          },
+          {
+            "id": "fotmob-872726",
+            "name": "Mete Kaan Demir",
+            "number": 70,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "TUR",
+            "countryName": "Turkiye",
+            "x": 0.613,
+            "y": 0.11,
+            "stats": {
+              "apps": 6,
+              "starts": 2,
+              "minutes": 253,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.04,
+              "rating": 6.29
+            }
+          },
+          {
+            "id": "fotmob-1125999",
+            "name": "Yusuf Barası",
+            "number": 9,
+            "position": "Forward",
+            "age": 23,
+            "countryCode": "TUR",
+            "countryName": "Turkiye",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 10,
+              "starts": 4,
+              "minutes": 417,
+              "goals": 0,
+              "assists": 0,
+              "xg": 1.05,
+              "rating": 6.17
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-1178124",
+            "name": "Emre Bilgin",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 22,
+            "countryCode": "TUR",
+            "countryName": "Turkiye",
+            "stats": {
+              "apps": 4,
+              "starts": 3,
+              "minutes": 315,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 5.92
+            }
+          },
+          {
+            "id": "fotmob-1901438",
+            "name": "Umut Keseci",
+            "number": 23,
+            "position": "Goalkeeper",
+            "age": 22,
+            "countryCode": "TUR",
+            "countryName": "Turkiye",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-708872",
+            "name": "Zak Jules",
+            "number": 33,
+            "position": "Defender",
+            "age": 29,
+            "countryCode": "SCO",
+            "countryName": "Scotland",
+            "stats": {
+              "apps": 10,
+              "starts": 10,
+              "minutes": 900,
+              "goals": 1,
+              "assists": 1,
+              "xg": 1.67,
+              "rating": 6.4
+            }
+          },
+          {
+            "id": "fotmob-2168482",
+            "name": "Yiğit Demir",
+            "number": 27,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "TUR",
+            "countryName": "Turkiye",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-2137178",
+            "name": "Musa Karakaş",
+            "number": 53,
+            "position": "Defender",
+            "age": 22,
+            "countryCode": "TUR",
+            "countryName": "Turkiye",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1896098",
+            "name": "Berhan Şatlı",
+            "number": 42,
+            "position": "Defender",
+            "age": 20,
+            "countryCode": "TUR",
+            "countryName": "Turkiye",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1896101",
+            "name": "Ömer Ceyhan",
+            "number": 44,
+            "position": "Defender",
+            "age": 19,
+            "countryCode": "TUR",
+            "countryName": "Turkiye",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-769644",
+            "name": "Abdelhamid Sabiri",
+            "number": 10,
+            "position": "Midfielder",
+            "age": 29,
+            "countryCode": "MAR",
+            "countryName": "Morocco",
+            "stats": {
+              "apps": 5,
+              "starts": 2,
+              "minutes": 184,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.2,
+              "rating": 6.57
+            }
+          },
+          {
+            "id": "fotmob-1844328",
+            "name": "Christ Sadia",
+            "number": 84,
+            "position": "Midfielder",
+            "age": 19,
+            "countryCode": "CIV",
+            "countryName": "Ivory Coast",
+            "stats": {
+              "apps": 1,
+              "starts": 0,
+              "minutes": 5,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": null,
+            "name": "Halil Balta",
+            "number": 56,
+            "position": null,
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": null
+          }
+        ],
+        "unavailable": [],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-708872",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Zak Jules",
+            "position": "Defender",
+            "starts": 10,
+            "goals": 1,
+            "assists": 1,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-1120319",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Chandrel Massanga",
+            "position": "Midfielder",
+            "starts": 10,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-815981",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Konrad Michalak",
+            "position": "Midfielder",
+            "starts": 8,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-605858",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Bilal Boutobba",
+            "position": "Midfielder",
+            "starts": 7,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1439393",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Ahmed Abdullahi",
+            "position": "Forward",
+            "starts": 7,
+            "goals": 2,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1346625",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Simone Giordano",
+            "position": "Midfielder",
+            "starts": 7,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          }
+        ]
+      },
+      "matchInfo": {
+        "round": "3"
+      }
+    },
+    "analysis": {
+      "summary": "Fethiyespor (équipe de division inférieure) est en méforme en coupe : 3 défaites de suite, 1,22 marqué / 1,44 encaissé sur ses 9 derniers matchs (données arrêtées à mars 2026). Eyüpspor, plus haut niveau, traverse une crise : 18e de Super Lig, 7 défaites de suite, 0,3 but marqué / 2,8 encaissés sur 10 matchs, nouvel entraîneur Mustafa Dalcı (0 point en 4 matchs). Les compositions sont quasi officielles (54 min avant) : Eyüpspor aligne Moldovan, El Yamiq et Barası, Zak Jules (10 titularisations, 1+1) sur le banc ; plusieurs habituels manquent (Massanga, Michalak, Abdullahi 2 buts). Fethiyespor est peu connu du magasin.",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Fethiyespor en baisse, Eyüpspor en crise totale en championnat.",
+          "evidence": "Fethiyespor : D D D N V ; Eyüpspor : 1 V sur 10, 28 buts encaissés, 3 marqués."
+        },
+        {
+          "factor": "statistiques et moyennes",
+          "observation": "Eyüpspor ne marque presque pas mais encaisse énormément, surtout à l'extérieur.",
+          "evidence": "Eyüpspor ext. : 0,2 / 3,8 sur 5 matchs ; Fethiyespor dom. : 1,25 / 1,5."
+        },
+        {
+          "factor": "compositions",
+          "observation": "Eyüpspor privé de plusieurs titulaires réguliers, Zak Jules remplaçant ; Fethiyespor sans son gardien habituel Arda Akbulut.",
+          "evidence": "Absents Eyüpspor : Massanga (10 tit.), Michalak (8), Abdullahi (7 tit., 2 buts) ; Fethiyespor : Akbulut (3 tit.) absent."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur donne un très gros favori à Eyüpspor, cote marché bien plus basse ; pas d'edge ni de mise.",
+          "evidence": "Cote juste 1 : 56,06 ; 2 : 1,12 ; staking PASS."
+        }
+      ],
+      "alignmentWithModel": "Le contexte nuance le moteur : la supériorité de niveau d'Eyüpspor est réelle, mais sa crise (7 défaites, attaque quasi muette) et les absences fragilisent les pronostics qui dépendent de son efficacité offensive.",
+      "caveats": "Classement indisponible (coupe). Données de Fethiyespor anciennes (jusqu'à mars 2026) et la plupart de ses joueurs sont inconnus du magasin ; entraîneur non renseigné. Pas de statExpectations (peu de relevés). Changement d'entraîneur chez Eyüpspor déduit des compositions.",
+      "marketViews": [
+        {
+          "market": "Total buts",
+          "pick": "Plus de 2.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "70 % : Eyüpspor encaisse 2,8 buts par match sur 10 (3,8 à l'extérieur) et le moteur attend 2,26 + 1,34 buts.",
+          "reasoning": "La défense d'Eyüpspor est passoire et Fethiyespor concède 1,44 par match ; le total attendu dépasse nettement 3 buts, même si l'attaque d'Eyüpspor est famélique.",
+          "probability": 70
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "pick": "Oui",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "67 % : Fethiyespor concède 1,44 mais Eyüpspor ne marque que 0,3 par match, d'où un chiffre limité.",
+          "reasoning": "Eyüpspor a marqué 3 buts en 10 matchs, ce qui pèse contre le oui ; en face, Fethiyespor marque 1,22 et affronte une défense fragile.",
+          "probability": 67
+        },
+        {
+          "market": "Résultat + Total buts",
+          "pick": "Eyüpspor & Plus de 1.5 buts",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "76 % : le moteur voit Eyüpspor très favori, mais sa série de 7 défaites et ses 0,3 but marqué par match plafonnent la confiance.",
+          "reasoning": "Le niveau supérieur d'Eyüpspor pèse, mais sa forme catastrophique et les absences offensives (Abdullahi) rendent la victoire moins sûre que le chiffre ne l'indique.",
+          "probability": 76
+        },
+        {
+          "market": "Buts — Fethiyespor",
+          "pick": "Fethiyespor — Moins de 3.5 buts",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "81 % : Fethiyespor marque 1,22 par match et le moteur lui attend 2,26 buts, rarement plus de 3.",
+          "reasoning": "Quatre buts sont exceptionnels pour Fethiyespor (un seul 4-1 sur 5 matchs récents) ; seul l'effondrement d'Eyüpspor menace cette sélection.",
+          "probability": 81
+        },
+        {
+          "market": "Buts — Eyüpspor",
+          "pick": "Eyüpspor — Plus de 0.5 buts",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "74 % : le moteur attend 1,34 but pour Eyüpspor face à une défense de division inférieure, malgré seulement 0,3 but par match.",
+          "reasoning": "L'écart de niveau joue, mais l'attaque est muette (0,2 en déplacement) et Abdullahi, Michalak sont absents ; Barası seul devant.",
+          "probability": 74
+        }
+      ]
+    },
+    "kickoffRuns": 1,
+    "updatedAt": "2026-11-04T09:06:44.399Z",
+    "createdAt": "2026-11-04T09:06:44.399Z"
+  },
+  {
     "matchId": "cal-2026-11-04-cd-badajoz-tenerife",
     "homeName": "CD Badajoz",
     "awayName": "Tenerife",

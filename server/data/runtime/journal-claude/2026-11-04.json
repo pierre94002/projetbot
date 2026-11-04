@@ -2,34 +2,34 @@
   "version": 1,
   "jour": "2026-11-04",
   "canal": "claude-code",
-  "majLe": "2026-11-04T01:19:56.774Z",
+  "majLe": "2026-11-04T09:06:44.394Z",
   "totaux": {
-    "appels": 119,
-    "ok": 119,
+    "appels": 121,
+    "ok": 121,
     "echecs": 0,
     "sansTokens": 0,
     "tokens": {
-      "entree": 368,
-      "ecritureCache": 780482,
-      "lectureCache": 842523,
-      "sortie": 503585,
-      "total": 2126958
+      "entree": 374,
+      "ecritureCache": 794856,
+      "lectureCache": 846082,
+      "sortie": 507574,
+      "total": 2148886
     },
-    "equivalentApiUsd": 8.327029,
+    "equivalentApiUsd": 8.425139,
     "parType": {
       "coup-d-envoi": {
-        "appels": 4,
-        "ok": 4,
+        "appels": 5,
+        "ok": 5,
         "echecs": 0,
         "sansTokens": 0,
         "tokens": {
-          "entree": 10,
-          "ecritureCache": 34151,
+          "entree": 12,
+          "ecritureCache": 43670,
           "lectureCache": 24813,
-          "sortie": 17834,
-          "total": 76808
+          "sortie": 19910,
+          "total": 88405
         },
-        "equivalentApiUsd": 0.319927
+        "equivalentApiUsd": 0.378767
       },
       "reprise": {
         "appels": 2,
@@ -72,6 +72,20 @@
           "total": 1461216
         },
         "equivalentApiUsd": 5.621007
+      },
+      "bulletin": {
+        "appels": 1,
+        "ok": 1,
+        "echecs": 0,
+        "sansTokens": 0,
+        "tokens": {
+          "entree": 4,
+          "ecritureCache": 4855,
+          "lectureCache": 3559,
+          "sortie": 1913,
+          "total": 10331
+        },
+        "equivalentApiUsd": 0.03927
       }
     }
   },
@@ -4002,6 +4016,67 @@
         "total": 20968
       },
       "equivalentApiUsd": 0.065596
+    },
+    {
+      "id": "2026-11-04T06:54:18.752Z-15716-1-d5cf25",
+      "at": "2026-11-04T06:54:18.752Z",
+      "jour": "2026-11-04",
+      "debut": "2026-11-04T06:53:57.196Z",
+      "dureeMs": 21556,
+      "canal": "claude-code",
+      "type": "bulletin",
+      "detail": "bulletin du 2026-11-04",
+      "match": null,
+      "mode": "econome",
+      "fiche": null,
+      "taille": {
+        "consignes": 2595,
+        "message": 2490
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 4855,
+        "lectureCache": 3559,
+        "sortie": 1913,
+        "total": 10331
+      },
+      "equivalentApiUsd": 0.03927
+    },
+    {
+      "id": "2026-11-04T09:06:44.391Z-15716-2-1f9181",
+      "at": "2026-11-04T09:06:44.391Z",
+      "jour": "2026-11-04",
+      "debut": "2026-11-04T09:06:27.106Z",
+      "dureeMs": 17285,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-04-fethiyespor-eyupspor",
+        "home": "Fethiyespor",
+        "away": "Eyüpspor",
+        "league": "Türkiye Kupası"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 8061
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 9519,
+        "lectureCache": 0,
+        "sortie": 2076,
+        "total": 11597
+      },
+      "equivalentApiUsd": 0.05884
     }
   ]
 }
