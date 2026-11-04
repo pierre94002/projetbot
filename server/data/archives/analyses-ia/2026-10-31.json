@@ -3234,8 +3234,240 @@
       ]
     },
     "kickoffRuns": 1,
-    "updatedAt": "2026-10-30T23:42:50.794Z",
-    "createdAt": "2026-10-30T23:42:50.794Z"
+    "updatedAt": "2026-11-04T11:19:57.637Z",
+    "createdAt": "2026-10-30T23:42:50.794Z",
+    "postMatchReview": {
+      "summary": "Racing a gagné 2-1 après avoir été mené (Vombergar 20', Martínez 24', penalty de Rodríguez 60' après VAR). Le favori et la lecture d'un match fermé ont tenu. Les erreurs viennent des corners : Racing n'en a obtenu aucun et Aldosivi en a eu 6. Le marché des deux équipes qui marquent a aussi été perdu.",
+      "whatWasRight": "Le favori à domicile (Racing) a gagné. Le total de buts est resté sous 3,5 (3 buts). Racing a marqué et Aldosivi est resté sous 1,5 but. Les volumes de tirs (37 au total, 17 pour Racing, 20 pour Aldosivi) et de tirs cadrés (Racing 6, Aldosivi 2) ont suivi les attentes. Le nuancé sur le résultat était prudent, vu la forme de Racing.",
+      "whatWasMissed": "Les corners ont été mal lus : Racing 0 et Aldosivi 6, soit l'inverse du scénario de possession. Aldosivi a produit 20 tirs et 1,76 xG, plus que prévu. Le but encaissé à la 20e contredit le « Non » aux deux équipes marquent. La blessure de Martínez à la 29e a pu réduire la menace de Racing. Le penalty VAR (55'-60') a fait basculer le match.",
+      "outcomeVsEngine": "Le résultat va globalement dans le sens du moteur (victoire de Racing, peu de buts, tirs). Il contredit le moteur sur les corners et sur « les 2 équipes marquent : Non ». Aldosivi a aussi dépassé nettement son xG attendu de 0,90.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Racing Club gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Racing a renversé le match : 1-1 à la mi-temps, puis penalty de Rodríguez à la 60e après VAR. La possession de 57 % a aidé.",
+          "lesson": "Le favori à domicile a tenu malgré la méforme. Garder la nuance : l'issue a dépendu d'un penalty, pas d'une domination nette."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Trois buts seulement (20', 24', 60'), donc sous 3,5. Pas de but après la 60e.",
+          "lesson": "Le faible volume de buts de ces équipes se confirme. Ce type de ligne haute reste fiable."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Vombergar a marqué à la 20e. Aldosivi a produit 1,76 xG avec 20 tirs, bien au-dessus des 0,90 attendus.",
+          "lesson": "Ne pas sous-estimer une équipe qui concède beaucoup de tirs. Quand les deux défenses sont poreuses, rester prudent sur le « Non »."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Racing Club & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Racing a gagné et il y a eu 3 buts, donc plus de 1,5. Le combiné est passé.",
+          "lesson": "Le combiné suit la victoire du favori. Sa réussite a dépendu du penalty de la 60e."
+        },
+        {
+          "market": "Buts — Racing Club",
+          "marketId": "teamGoals",
+          "pick": "Racing Club — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Racing a marqué dès la 24e (Martínez), puis sur penalty à la 60e.",
+          "lesson": "La ligne de 0,5 but pour un favori à domicile face à une défense poreuse est solide."
+        },
+        {
+          "market": "Buts — Aldosivi",
+          "marketId": "teamGoals",
+          "pick": "Aldosivi — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Aldosivi n'a marqué qu'un but (Vombergar, 20e), malgré 20 tirs, mais seulement 2 cadrés.",
+          "lesson": "Confirmé, mais à surveiller : Aldosivi a produit beaucoup de volume. Les tirs cadrés limités ont protégé la ligne."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 12.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Les 6 corners du match (0 + 6) sont très loin de 12,5.",
+          "lesson": "La ligne basse sur le total de corners est confirmée, avec la moyenne de ligue de 8,9."
+        },
+        {
+          "market": "Corners — Racing Club",
+          "marketId": "teamCorners",
+          "pick": "Racing Club — Plus de 3.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Racing n'a obtenu aucun corner malgré 17 tirs et 57 % de possession. Le pronostic était pourtant fondé sur la possession.",
+          "lesson": "La possession et les tirs ne garantissent pas des corners. Une ligne basse n'est pas sûre : utiliser les moyennes avec prudence, d'autant que la blessure de Martínez à la 29e a changé le match."
+        },
+        {
+          "market": "Corners — Aldosivi",
+          "marketId": "teamCorners",
+          "pick": "Aldosivi — Moins de 5.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Aldosivi a obtenu 6 corners, au-dessus de 5,5, grâce à ses 20 tirs.",
+          "lesson": "Ne pas plafonner les corners d'une équipe sur sa seule possession. Un volume de tirs élevé, même mené au score, génère des corners."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 23.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "37 tirs au total (17 + 20), bien au-dessus de 23,5.",
+          "lesson": "Ligne confirmée. Le moteur sous-estimait même légèrement le volume."
+        },
+        {
+          "market": "Tirs — Racing Club",
+          "marketId": "teamShots",
+          "pick": "Racing Club — Moins de 21.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Racing a tiré 17 fois, sous 21,5.",
+          "lesson": "Ses moyennes à domicile restent un bon repère."
+        },
+        {
+          "market": "Tirs — Aldosivi",
+          "marketId": "teamShots",
+          "pick": "Aldosivi — Plus de 8.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Aldosivi a tiré 20 fois, au-dessus de 8,5.",
+          "lesson": "Aldosivi à l'extérieur produit du volume. Cette ligne reste solide."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Racing 6 et Aldosivi 2 : 8 au total, juste au-dessus de 7,5.",
+          "lesson": "Passé de peu, car la part d'Aldosivi a été faible. La marge était mince."
+        },
+        {
+          "market": "Tirs cadrés — Racing Club",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Racing Club — Plus de 3.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Racing a cadré 6 tirs, au-dessus de 3,5.",
+          "lesson": "Confirmé : la défense d'Aldosivi concède des tirs cadrés."
+        },
+        {
+          "market": "Tirs cadrés — Aldosivi",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Aldosivi — Moins de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Aldosivi n'a cadré que 2 tirs sur ses 20, très sous 6,5.",
+          "lesson": "Ligne confirmée. Beaucoup de tirs ne veut pas dire beaucoup de tirs cadrés pour Aldosivi."
+        }
+      ],
+      "caveats": "Un seul match : l'issue a tenu à un penalty VAR et à la blessure de Martínez (29'). Les corners de Racing (0) peuvent être atypiques. Les statistiques ne donnent pas le détail des occasions.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 17,
+        "commentaire": 3
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5837,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2402,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5837,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2402,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5837,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5837
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0477896,
+      "createdAt": "2026-11-04T11:19:57.636Z"
+    }
   },
   {
     "matchId": "cal-2026-10-31-sarmiento-rosario-central",
@@ -31087,8 +31319,240 @@
       ]
     },
     "kickoffRuns": 1,
-    "updatedAt": "2026-10-31T12:30:11.897Z",
-    "createdAt": "2026-10-31T12:30:11.897Z"
+    "updatedAt": "2026-11-04T11:20:48.821Z",
+    "createdAt": "2026-10-31T12:30:11.897Z",
+    "postMatchReview": {
+      "summary": "Girona, favori, a perdu 1-0 à Sociedad B. Le rouge direct de David López à la 16e (penalty concédé) a bouleversé le match. Dani Díaz a manqué le penalty à la 17e, puis Astiazarán, entré en jeu, a marqué à la 86e. Ma lecture de la supériorité de Girona était cohérente avant le match, mais l'expulsion précoce a invalidé les marchés qui dépendaient des buts et des tirs de Girona.",
+      "whatWasRight": "Les marchés de volume ont tenu. Moins de 11,5 corners (4 au total), Sociedad B plus de 2,5 corners (3), Girona moins de 5,5 corners (1), plus de 21,5 tirs (22), plus de 6,5 tirs cadrés (8), Sociedad B plus de 2,5 cadrés (5) et Girona moins de 6,5 cadrés (3) sont tous passés. Le « Non » aux deux équipes marquent est passé aussi, car Girona n'a pas marqué. Mon doute sur le « moins de 0,5 but » de Sociedad B était justifié : ils ont marqué, et c'est Astiazarán, que j'avais noté sur le banc, qui l'a fait.",
+      "whatWasMissed": "Je n'ai pas pris en compte le risque d'un événement extrême comme un rouge précoce. J'ai donc trop fait confiance à Girona pour la victoire, pour plus de 1,5 but (aucun but) et pour plus de 8,5 tirs (8 seulement). Le xG de 0,64 donné à Sociedad B était trop bas : ils ont fini à 1,37 xG, 14 tirs et 59 % de possession, aidés par la supériorité numérique.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1N2, sur Girona plus de 1,5 but, sur Résultat + Total buts, sur plus de 2,5 buts, sur Sociedad B moins de 0,5 but et sur Girona plus de 8,5 tirs. Il le confirme sur les corners, les tirs cadrés, le plus de 21,5 tirs, Sociedad B plus de 9,5 tirs et le « Non » aux deux équipes marquent. Le moteur n'avait aucun moyen d'anticiper l'expulsion.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Girona gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Girona a perdu 1-0. Le rouge direct à la 16e l'a fait jouer à dix pendant plus de 75 minutes. Sociedad B a manqué un penalty à la 17e, puis a marqué à la 86e par Astiazarán.",
+          "lesson": "Un favori à moins de 50 % reste fragile face aux aléas disciplinaires. Garder une confiance modérée sur le 1N2 en déplacement, même contre une équipe en crise."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Un seul but, à la 86e. Le rouge a coupé l'élan offensif de Girona et Sociedad B a raté son penalty à la 17e. Mon avis nuancé, qui insistait sur la dépendance à Girona, s'est confirmé.",
+          "lesson": "Quand le plus de 2,5 dépend d'une seule équipe, un incident précoce suffit à le faire tomber. Cette prudence mérite d'être gardée."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Girona n'a pas marqué : à dix dès la 16e, il n'a eu que 8 tirs, 3 cadrés et 0,52 xG. Seul Sociedad B a marqué, à la 86e.",
+          "lesson": "Le « Non » était cohérent avec la solidité de Girona, mais l'issue vient surtout du manque d'attaque d'une équipe réduite à dix. Garder la prudence notée avant le match."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Girona & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Girona n'a pas gagné et n'a marqué aucun but, donc le combiné est faux. Le rouge à la 16e et le but encaissé à la 86e l'ont fait perdre.",
+          "lesson": "Les combinés qui reposent sur la victoire d'un favori cumulent le risque du 1N2. Pondérer fortement l'incertitude du résultat."
+        },
+        {
+          "market": "Buts — Sociedad B",
+          "marketId": "teamGoals",
+          "pick": "Sociedad B — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Sociedad B a marqué une fois, à la 86e (Astiazarán), avec 1,37 xG et 3 grosses occasions. Le moteur à 0,64 xG était trop bas.",
+          "lesson": "Les remplaçants peuvent changer le match. Le moteur sous-estime l'attaque d'une équipe qui joue à onze contre dix."
+        },
+        {
+          "market": "Buts — Girona",
+          "marketId": "teamGoals",
+          "pick": "Girona — Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Girona n'a pas marqué. Le rouge à la 16e, une seule grosse occasion et 0,52 xG expliquent l'échec. Ma confiance forte était excessive.",
+          "lesson": "Ne pas donner une confiance forte à un seuil de buts d'une équipe en déplacement. Un rouge précoce détruit ce marché."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 11.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "4 corners au total (3 et 1), très loin du seuil de 11,5.",
+          "lesson": "Les moyennes basses de corners dans ce championnat sont fiables. Garder cet avis."
+        },
+        {
+          "market": "Corners — Sociedad B",
+          "marketId": "teamCorners",
+          "pick": "Sociedad B — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sociedad B a obtenu 3 corners, juste au-dessus du seuil de 2,5, avec 59 % de possession et la supériorité numérique.",
+          "lesson": "Le seuil était bas, mais la marge est faible (3 pour un seuil de 2,5). La possession et la supériorité numérique ont aidé."
+        },
+        {
+          "market": "Corners — Girona",
+          "marketId": "teamCorners",
+          "pick": "Girona — Moins de 5.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Girona n'a obtenu qu'1 corner, à dix et avec 41 % de possession.",
+          "lesson": "Les moyennes basses en déplacement et le scénario défensif confirment le moins de 5,5. À garder."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 21.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "22 tirs au total (14 + 8), au-dessus du seuil de 21,5 d'un seul tir. Sociedad B a fourni l'essentiel du volume.",
+          "lesson": "Le total est passé de justesse malgré le rouge. Un tir de moins suffisait à le faire tomber, donc prudence sur ce seuil."
+        },
+        {
+          "market": "Tirs — Sociedad B",
+          "marketId": "teamShots",
+          "pick": "Sociedad B — Plus de 9.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Sociedad B a tiré 14 fois, au-dessus du seuil de 9,5, avec 59 % de possession et la supériorité numérique.",
+          "lesson": "Ce marché était nuancé et il est passé. La moyenne à domicile est restée fiable, aidée par le scénario."
+        },
+        {
+          "market": "Tirs — Girona",
+          "marketId": "teamShots",
+          "pick": "Girona — Plus de 8.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Girona n'a tiré que 8 fois (seuil 8,5) à dix contre onze pendant plus de 75 minutes.",
+          "lesson": "Les seuils de tirs d'un favori en déplacement sont sensibles aux scénarios défavorables. Ne pas le traiter comme acquis avec une confiance moyenne."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "8 tirs cadrés au total (5 + 3), au-dessus du seuil de 6,5.",
+          "lesson": "Le seuil cumulé reste robuste même dans un match déséquilibré. À garder."
+        },
+        {
+          "market": "Tirs cadrés — Sociedad B",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Sociedad B — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sociedad B a cadré 5 tirs, au-dessus du seuil de 2,5.",
+          "lesson": "Le seuil bas par rapport à sa production moyenne a bien tenu."
+        },
+        {
+          "market": "Tirs cadrés — Girona",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Girona — Moins de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Girona n'a cadré que 3 tirs, sous le seuil de 6,5, à dix pendant la plus grande partie du match.",
+          "lesson": "Le moins de 6,5 est solide : même sans rouge, Girona dépasse rarement ce niveau. À garder."
+        }
+      ],
+      "caveats": "Un seul match. Le rouge à la 16e est un événement non modélisable qui a dominé le scénario. Les statistiques de ce match ne reflètent pas un match à onze contre onze.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 20,
+        "commentaire": 4
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 7106,
+        "cache_read_input_tokens": 9632,
+        "output_tokens": 6538,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 7106,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2934,
+            "cache_read_input_tokens": 7544,
+            "cache_creation_input_tokens": 1650,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1650
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0957384,
+      "createdAt": "2026-11-04T11:20:48.821Z"
+    }
   },
   {
     "matchId": "cal-2026-10-31-wieczysta-krakow-jagiellonia-bia-ystok",
@@ -103198,8 +103662,240 @@
       ]
     },
     "kickoffRuns": 1,
-    "updatedAt": "2026-10-31T14:21:33.286Z",
-    "createdAt": "2026-10-31T14:21:33.286Z"
+    "updatedAt": "2026-11-04T11:22:05.464Z",
+    "createdAt": "2026-10-31T14:21:33.286Z",
+    "postMatchReview": {
+      "summary": "Salford a gagné 2-1 en renversant Exeter (Cox 34e, puis Garbutt 66e et Aimson 88e). Le favori du moteur a gagné, mais le match a été plus ouvert que prévu: Exeter a marqué et les tirs se sont inversés (9 pour Salford, 16 pour Exeter) malgré 67 % de possession pour Salford.",
+      "whatWasRight": "Le vainqueur (Salford, 65 %) et la combinaison Salford & moins de 3,5 buts (3 buts au total). Les marchés de corners totaux et d'Exeter, tous les marchés de tirs cadrés (3 par équipe) et le total de tirs (25) sont passés. Mon avis contraire sur Salford moins de 0,5 but était bon: Salford a marqué deux fois.",
+      "whatWasMissed": "Je n'ai pas vu qu'Exeter pouvait marquer: but de Cox à la 34e, xG de 0,8 contre 0,5 attendu. J'ai surestimé le volume de tirs de Salford (9 seulement) et sous-estimé celui d'Exeter (16). Salford n'a eu que 3 corners malgré 67 % de possession. J'ai aussi trop fait confiance au Non des deux équipes marquent et au moins de 0,5 but d'Exeter.",
+      "outcomeVsEngine": "Le 1N2 va dans le sens du moteur. Plusieurs marchés de buts et de tirs le contredisent: les deux équipes ont marqué, le total a atteint 3 buts, et les tirs de chaque équipe sont loin des attendus.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Salford City gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Salford a renversé Exeter après le but de Cox (34e): Garbutt à 1-1 (66e), Aimson à 2-1 (88e).",
+          "lesson": "Forme et classement du leader à domicile ont tenu, à garder. La victoire est venue tard (88e), donc elle restait fragile."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "3 buts (34e, 66e, 88e): le seuil de 1,5 a été dépassé dès la 66e.",
+          "lesson": "Quand le moteur attend environ 1,1 but au total, un leader qui marque 2 buts par match fait échouer le moins de 1,5. Mon avis nuancé était justifié."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Cox a marqué pour Exeter à la 34e, avec 0,8 xG et 16 tirs, alors que sa moyenne à l'extérieur était très basse.",
+          "lesson": "Une moyenne de buts à l'extérieur sur 4 matchs est trop mince pour porter un Non à 81 %. Se méfier des Non appuyés sur de petits échantillons."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Salford City & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Salford a gagné et il n'y a eu que 3 buts, donc moins de 3,5.",
+          "lesson": "Ce combiné est cohérent quand le favori gagne d'un but. À garder."
+        },
+        {
+          "market": "Buts — Salford City",
+          "marketId": "teamGoals",
+          "pick": "Salford City — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "contredit",
+          "aiConfidence": "faible",
+          "aiWasRight": true,
+          "explanation": "Salford a marqué deux fois (Garbutt 66e, Aimson 88e), avec 1,12 xG.",
+          "lesson": "Mon avis contraire a eu raison: un attaquant qui marque dans chacun de ses 10 derniers matchs contredit un moins de 0,5. À garder."
+        },
+        {
+          "market": "Buts — Exeter City",
+          "marketId": "teamGoals",
+          "pick": "Exeter City — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Cox a ouvert le score à la 34e sur les 16 tirs d'Exeter (0,8 xG).",
+          "lesson": "Ne pas trop miser sur la stérilité offensive d'Exeter à l'extérieur: son but et ses 16 tirs montrent un volume sous-estimé."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 13.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "8 corners au total (3 pour Salford, 5 pour Exeter), très sous 13,5.",
+          "lesson": "La marge était confortable, avis à garder."
+        },
+        {
+          "market": "Corners — Salford City",
+          "marketId": "teamCorners",
+          "pick": "Salford City — Plus de 3.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Salford n'a eu que 3 corners malgré 67 % de possession, soit sous le seuil de 3,5.",
+          "lesson": "La possession ne se traduit pas en corners quand l'équipe ne tire pas (9 tirs). Ne pas déduire les corners de la possession ni de la moyenne à domicile."
+        },
+        {
+          "market": "Corners — Exeter City",
+          "marketId": "teamCorners",
+          "pick": "Exeter City — Moins de 5.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Exeter a eu 5 corners, sous le seuil de 5,5, mais de justesse.",
+          "lesson": "Juste, mais avec peu de marge: le moins de 5,5 reste fragile quand Exeter tire 16 fois."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 20.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "25 tirs au total (9 + 16), au-dessus de 20,5.",
+          "lesson": "Le total a tenu, mais par une répartition inattendue. Le total est plus fiable que le détail par équipe."
+        },
+        {
+          "market": "Tirs — Salford City",
+          "marketId": "teamShots",
+          "pick": "Salford City — Plus de 10.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Salford n'a tiré que 9 fois, loin de 10,5 et de 17,8 à domicile, avec Powell et Cesay absents.",
+          "lesson": "Ma prudence était fondée: les absences au milieu ont pesé sur le volume de tirs de Salford. Ne pas appliquer la moyenne à domicile telle quelle."
+        },
+        {
+          "market": "Tirs — Exeter City",
+          "marketId": "teamShots",
+          "pick": "Exeter City — Moins de 13.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Exeter a tiré 16 fois, au-dessus de 13,5, contre 7,8 de moyenne à l'extérieur.",
+          "lesson": "Mon avis confirmant le moins de 13,5 était faux. Mené puis revenu au score, Exeter a augmenté son volume. La moyenne à l'extérieur sous-estime ce scénario."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 9.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "3 tirs cadrés de chaque côté, soit 6 au total, sous 9,5.",
+          "lesson": "Avis juste: les tirs cadrés restent bas même quand le volume de tirs monte. À garder."
+        },
+        {
+          "market": "Tirs cadrés — Salford City",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Salford City — Moins de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Salford n'a cadré que 3 tirs, bien sous 6,5.",
+          "lesson": "Seuil large, avis confirmé: à garder."
+        },
+        {
+          "market": "Tirs cadrés — Exeter City",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Exeter City — Moins de 4.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Exeter a cadré 3 tirs sur 16, sous 4,5.",
+          "lesson": "Malgré 16 tirs, la précision d'Exeter est restée faible. Le marché des tirs cadrés est plus stable que celui des tirs."
+        }
+      ],
+      "caveats": "Un seul match: les 16 tirs d'Exeter viennent peut-être d'un scénario où il a poussé après avoir ouvert le score. La blessure de Molyneux (55e) a pu perturber le jeu de Salford. Les xG sont modestes (1,12 et 0,8).",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 15,
+        "commentaire": 2
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 6230,
+        "cache_read_input_tokens": 9107,
+        "output_tokens": 3338,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 6230,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2460,
+            "cache_read_input_tokens": 7019,
+            "cache_creation_input_tokens": 1299,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1299
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0601294,
+      "createdAt": "2026-11-04T11:22:05.463Z"
+    }
   },
   {
     "matchId": "cal-2026-10-31-shrewsbury-town-gillingham",
@@ -138849,8 +139545,240 @@
       ]
     },
     "kickoffRuns": 2,
-    "updatedAt": "2026-10-31T16:33:25.540Z",
-    "createdAt": "2026-10-31T15:53:21.044Z"
+    "updatedAt": "2026-11-04T11:21:12.617Z",
+    "createdAt": "2026-10-31T15:53:21.044Z",
+    "postMatchReview": {
+      "summary": "Rodina a gagné 2-1 contre Krasnodar, favori du moteur (51 %). Le but contre son camp de Douglas Augusto à la 86e a fait basculer un match fermé jusqu'à la 64e. Les marchés de buts, de corners et de tirs ont bien tenu. Seuls le résultat et les marchés qui en dépendent ont échoué, ainsi que Krasnodar +1,5 but.",
+      "whatWasRight": "Le scénario de volume était juste : les 2 équipes ont marqué, le match a dépassé 2,5 buts (3 buts) et Rodina a marqué (but de Onugkha à la 69e). Les corners étaient très bas (1 de chaque côté) et les tirs sont restés modérés (11 et 12, total 23). Les tirs cadrés étaient 4 et 5, sous les lignes. Les avis prudents sur les nuls répétés de Krasnodar étaient justifiés : il a encore été freiné, ici par une défaite.",
+      "whatWasMissed": "J'ai trop fait confiance à Krasnodar. Les 2,8 buts attendus du moteur étaient très éloignés du xG réel (1,09). Krasnodar n'a marqué qu'un but (Christian, 64e) et a ensuite perdu sur un but contre son camp à la 86e. Rodina a eu 2 grosses occasions contre 0 pour Krasnodar, et sa défense a été moins perméable que prévu. J'ai aussi sous-estimé la baisse de forme de Krasnodar, qui avait six matchs sans victoire. L'effet d'un nouvel entraîneur chez Rodina était difficile à mesurer.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le vainqueur et sur les buts de Krasnodar : 2,8 buts attendus pour un seul but marqué et un xG de 1,09. Il le confirme sur le volume (total de buts, corners, tirs, tirs cadrés) et sur Rodina qui marque.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "FC Krasnodar gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Krasnodar a ouvert le score à la 64e (0-1), puis Onugkha a égalisé à la 69e. Un but contre son camp de Douglas Augusto à la 86e a donné la victoire 2-1 à Rodina. Le xG était proche (0,87 contre 1,09), donc le match était très équilibré.",
+          "lesson": "Ne pas confirmer un favori à 51 % quand sa forme est mauvaise (nuls répétés, six matchs sans victoire). Dans ce cas, un match équilibré est plus probable que la victoire attendue."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 3 buts (64e, 69e, 86e), mais tous après l'heure de jeu : 0-0 à la mi-temps. Plus de 2,5 buts est passé de justesse, grâce à un but contre son camp.",
+          "lesson": "La confiance forte était juste sur le résultat, mais le match a été fermé 64 minutes. Garder le raisonnement sur la défense perméable de Rodina, tout en admettant que le dénouement peut être tardif."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Christian a marqué pour Krasnodar à la 64e et Onugkha pour Rodina à la 69e, ce qui valide le marché.",
+          "lesson": "Mon avis nuancé était trop prudent : Krasnodar encaisse régulièrement et Rodina à domicile marque. À garder en tête dans ce cas."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "FC Krasnodar & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "faible",
+          "aiWasRight": false,
+          "explanation": "Krasnodar a perdu, donc le cumul échoue, même si le total de 1,5 but a été largement dépassé.",
+          "lesson": "Un marché composé dépend du résultat. Une confiance faible n'aurait pas dû confirmer un cumul bâti sur un favori incertain."
+        },
+        {
+          "market": "Buts — Rodina Moscow",
+          "marketId": "teamGoals",
+          "pick": "Rodina Moscow — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Rodina a marqué à la 69e (Onugkha) puis a profité du but contre son camp à la 86e.",
+          "lesson": "À domicile, Rodina marque suffisamment souvent contre une défense de Krasnodar qui encaisse. Garder ce type de pari."
+        },
+        {
+          "market": "Buts — FC Krasnodar",
+          "marketId": "teamGoals",
+          "pick": "FC Krasnodar — Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Krasnodar n'a marqué qu'une fois (Christian, 64e), avec un xG de 1,09 et 0 grosse occasion. Il a touché la barre à la 1re minute et le poteau à la 89e sans marquer.",
+          "lesson": "Les 2,8 buts attendus étaient surévalués par rapport aux moyennes récentes (1,4). Mon avis nuancé était justifié : se méfier de ce type de chiffre quand un titulaire offensif manque (Krivtsov)."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 11.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Seulement 2 corners au total (1 chacun), très loin de la ligne de 11,5.",
+          "lesson": "Les lignes hautes de corners restent fiables dans cette ligue. Mon avis fort est confirmé."
+        },
+        {
+          "market": "Corners — Rodina Moscow",
+          "marketId": "teamCorners",
+          "pick": "Rodina Moscow — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Rodina a obtenu 1 corner, très en dessous de 6,5.",
+          "lesson": "Confirmé : Rodina prend peu de corners. À garder."
+        },
+        {
+          "market": "Corners — FC Krasnodar",
+          "marketId": "teamCorners",
+          "pick": "FC Krasnodar — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Krasnodar n'a obtenu qu'1 corner malgré 54 % de possession.",
+          "lesson": "La possession n'implique pas beaucoup de corners ici. À garder."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 21.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 23 tirs (11 + 12), au-dessus de 21,5 mais de peu, malgré un match fermé jusqu'à la 64e.",
+          "lesson": "La marge était faible (23 contre 27,3 attendus par le moteur). Une confiance moyenne était adaptée."
+        },
+        {
+          "market": "Tirs — Rodina Moscow",
+          "marketId": "teamShots",
+          "pick": "Rodina Moscow — Moins de 16.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Rodina a tiré 11 fois, loin de 16,5.",
+          "lesson": "Confirmé : Rodina produit peu de tirs, même en menant la fin de match."
+        },
+        {
+          "market": "Tirs — FC Krasnodar",
+          "marketId": "teamShots",
+          "pick": "FC Krasnodar — Moins de 19.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Krasnodar a tiré 12 fois, bien sous 19,5.",
+          "lesson": "La moyenne de production (14,9) restait la bonne référence, et non les tirs concédés par Rodina (18,1)."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 11.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 9 tirs cadrés (4 + 5), sous 11,5.",
+          "lesson": "Une marge de 2,5 par rapport à l'attendu a suffi. Bon réglage de la ligne."
+        },
+        {
+          "market": "Tirs cadrés — Rodina Moscow",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Rodina Moscow — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Rodina a cadré 4 tirs, sous 5,5. La marge était de 1,5 seulement.",
+          "lesson": "Passé, mais avec une marge fine, ce qui confirme la prudence sur ce marché."
+        },
+        {
+          "market": "Tirs cadrés — FC Krasnodar",
+          "marketId": "teamShotsOnTarget",
+          "pick": "FC Krasnodar — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Krasnodar a cadré 5 tirs, sous 7,5.",
+          "lesson": "Confirmé : l'attendu de 5,26 était bien proche de la réalité."
+        }
+      ],
+      "caveats": "C'est un seul match, avec un résultat décidé par un but contre son camp à la 86e, un facteur peu modélisable. Pas de cotes de marché disponibles, donc pas de mesure d'edge. Le dossier de Rodina est établi sur peu de matchs et l'effet de son nouvel entraîneur est difficile à évaluer.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 20,
+        "commentaire": 4
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5777,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2739,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5777,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2739,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5777,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5777
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0509196,
+      "createdAt": "2026-11-04T11:21:12.617Z"
+    }
   },
   {
     "matchId": "cal-2026-10-31-aalesund-sandefjord",
@@ -149105,8 +150033,240 @@
       ]
     },
     "kickoffRuns": 2,
-    "updatedAt": "2026-10-31T16:49:51.571Z",
-    "createdAt": "2026-10-31T16:10:21.487Z"
+    "updatedAt": "2026-11-04T11:21:35.382Z",
+    "createdAt": "2026-10-31T16:10:21.487Z",
+    "postMatchReview": {
+      "summary": "Rudeš a battu le Dinamo 1-0 (but de Fernándes à la 30e), contredisant la lecture et le moteur qui donnaient le Dinamo gagnant à 81 %. Le Dinamo a dominé (26 tirs à 13, 78 % de possession) mais n'a pas marqué, et a fini à dix après le rouge d'Almena à la 72e. Les marchés de volume (corners, tirs cadrés) ont tenu, ceux de buts ont presque tous échoué.",
+      "whatWasRight": "La domination du Dinamo en volume : 26 tirs, 78 % de possession, 9 corners. Les seuils bas de corners et de tirs cadrés ont tenu : Rudeš plus de 1,5 corners (7), Dinamo plus de 2,5 corners (9), Dinamo plus de 2,5 tirs cadrés (3), Rudeš moins de 5,5 tirs cadrés (4), total moins de 11,5 tirs cadrés (7). Rudeš moins de 2,5 buts et moins de 15,5 tirs (13) ont aussi passé.",
+      "whatWasMissed": "La conversion du Dinamo : 26 tirs mais seulement 3 cadrés, aucun but. Le moteur surestimait le total de buts (2,8 attendus pour le Dinamo). Rudeš a eu 4 grosses occasions contre 2 pour le Dinamo, ce qui montre un Rudeš plus dangereux que ses moyennes. Le volume de tirs du Dinamo (26) a dépassé largement les attentes (13,5). Mon avis « forte » sur le Dinamo plus de 1,5 buts était excessif. Le rouge à la 72e a pu freiner le Dinamo.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1N2, le BTTS et les buts du Dinamo. Il le confirme sur les marchés de corners et de tirs cadrés. Le moteur n'avait aucun edge (PASS), donc aucune mise n'était en jeu.",
+      "caveats": "Un seul match. Un but à la 30e et un rouge à la 72e pèsent beaucoup sur le scénario. La fiche n'a pas de xG du match. Un résultat à 19 % reste possible sans que l'analyse soit fausse.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Dinamo Zagreb gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Rudeš a ouvert le score à la 30e par Fernándes et a gardé son avance. Le Dinamo a tiré 26 fois mais n'a cadré que 3 tirs. Il a fini à dix après le rouge d'Almena à la 72e.",
+          "lesson": "Un favori à 81 % peut perdre malgré une domination écrasante. En déplacement, la domination en tirs ne garantit pas la victoire : regarder la qualité des tirs, pas leur nombre."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Un seul but dans le match (30e), loin de 4 buts. Le Dinamo n'a pas marqué malgré 26 tirs.",
+          "lesson": "Ma nuance était justifiée : le seuil de 3,5 est trop haut pour un 71 % isolé. Se méfier des totaux élevés quand le moteur gonfle les xG."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Le Dinamo n'a pas marqué (1-0), alors que Rudeš avait marqué. Le Dinamo n'a cadré que 3 tirs.",
+          "lesson": "Le BTTS à 82 % reposait sur l'attaque du Dinamo. Sa forme à l'extérieur et la faible précision de ses tirs auraient dû pousser à modérer ma confiance."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Dinamo Zagreb & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Le Dinamo n'a pas gagné, donc le pari est perdu d'emblée. Le seul but du match est celui de Rudeš (30e).",
+          "lesson": "Les combinés dépendent du résultat : si le 1N2 échoue, tout échoue. Ne pas empiler la confiance sur un même scénario."
+        },
+        {
+          "market": "Buts — Rudeš",
+          "marketId": "teamGoals",
+          "pick": "Rudeš — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Rudeš n'a marqué qu'un but (30e), sous 2,5 buts.",
+          "lesson": "Le seuil bas sur un attaquant modeste est sûr : Rudeš marque 1,3 par match. À garder."
+        },
+        {
+          "market": "Buts — Dinamo Zagreb",
+          "marketId": "teamGoals",
+          "pick": "Dinamo Zagreb — Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Le Dinamo est resté à 0 but malgré 26 tirs, 78 % de possession et 2 grosses occasions. Son infériorité numérique dès la 72e a pesé sur la fin de match.",
+          "lesson": "Ma confiance « forte » était excessive. Un 0 but reste possible même pour une équipe dominante quand la précision manque (3 tirs cadrés sur 26)."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 11.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Il y a eu 16 corners (7 + 9), donc au-dessus de 11,5. La domination du Dinamo et la pression de Rudeš ont dépassé les attentes (8,71).",
+          "lesson": "Le seuil de corners sous-estimait un match très déséquilibré : le total attendu de 8,7 était trop bas avec 78 % de possession. Un favori qui domine à ce point gonfle les corners."
+        },
+        {
+          "market": "Corners — Rudeš",
+          "marketId": "teamCorners",
+          "pick": "Rudeš — Plus de 1.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Rudeš a obtenu 7 corners, au-dessus de 1,5.",
+          "lesson": "Seuil bas fiable. Rudeš a même dépassé sa moyenne de 3,6."
+        },
+        {
+          "market": "Corners — Dinamo Zagreb",
+          "marketId": "teamCorners",
+          "pick": "Dinamo Zagreb — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Le Dinamo a obtenu 9 corners, largement au-dessus de 2,5.",
+          "lesson": "Le seuil bas sur l'équipe dominante tient bien. À garder."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 30.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Il y a eu 39 tirs (13 + 26), donc au-dessus de 30,5. Le Dinamo a presque doublé son volume attendu (13,5).",
+          "lesson": "Le total attendu de 24,9 était trop bas quand un côté domine à 78 %. Corriger à la hausse les totaux de tirs en cas de forte domination."
+        },
+        {
+          "market": "Tirs — Rudeš",
+          "marketId": "teamShots",
+          "pick": "Rudeš — Moins de 15.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Rudeš a tiré 13 fois, sous 15,5. C'est plus que sa moyenne de 9,7, mais le seuil a tenu.",
+          "lesson": "Le seuil large a tenu mais la marge était plus faible que prévu. Rudeš a eu 4 grosses occasions."
+        },
+        {
+          "market": "Tirs — Dinamo Zagreb",
+          "marketId": "teamShots",
+          "pick": "Dinamo Zagreb — Moins de 17.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Le Dinamo a tiré 26 fois, bien au-dessus de 17,5. Il a dominé le match avec 78 % de possession.",
+          "lesson": "Ma nuance était justifiée : un Dinamo dominant peut dépasser sa moyenne de 15,3. Pour une équipe très supérieure en déplacement, ne pas se fier à la moyenne seule."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 11.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 7 tirs cadrés (4 + 3), sous 11,5.",
+          "lesson": "Les tirs cadrés restent faibles même quand les tirs explosent. Le seuil de 11,5 était sûr."
+        },
+        {
+          "market": "Tirs cadrés — Rudeš",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Rudeš — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Rudeš a cadré 4 tirs, sous 5,5.",
+          "lesson": "Le seuil proche de la moyenne de 3,1 a bien tenu. À garder."
+        },
+        {
+          "market": "Tirs cadrés — Dinamo Zagreb",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Dinamo Zagreb — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Le Dinamo a cadré 3 tirs, juste au-dessus de 2,5, malgré 26 tirs.",
+          "lesson": "Le pari est passé de justesse. La précision du Dinamo (3 sur 26) montre que le seuil de 2,5 n'était pas aussi sûr que mon avis « forte » le laissait croire."
+        }
+      ],
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 15,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5104,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2866,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5104,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2866,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5104,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5104
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0494976,
+      "createdAt": "2026-11-04T11:21:35.382Z"
+    }
   },
   {
     "matchId": "cal-2026-10-31-sigma-olomouc-fc-zbrojovka-brno",
@@ -169353,8 +170513,227 @@
       "lineupImpact": "Composition FotMob relue 52 min avant le coup d'envoi : elle peut encore évoluer, mais est proche de l'officielle. PSV aligne son onze type en 4-2-3-1 (Til 7+1, Dest 3+2, Perišić 2+1) sans Pepi (A, 7 titularisations, 3 buts, blessé), dont l'absence est compensée par van Bommel. Willem II perd Slory (suspendu, 10 titularisations), son gardien habituel Delanghe, Vilhena et Gürbüz (hors feuille de match). Didillon-Hödl (2 titularisations) garde les buts, ce qui favorise PSV sur ses marchés de buts. Le cadre ne pèse pas : pelouse en herbe, 7 °C, pas de pluie, arbitre proche de la moyenne."
     },
     "kickoffRuns": 1,
-    "updatedAt": "2026-10-31T16:53:23.361Z",
-    "createdAt": "2026-10-31T16:53:23.361Z"
+    "updatedAt": "2026-11-04T11:19:35.791Z",
+    "createdAt": "2026-10-31T16:53:23.361Z",
+    "postMatchReview": {
+      "summary": "PSV a écrasé Willem II 7-0 : la lecture de domination et de match à buts était juste, mais l'ampleur a dépassé les attentes. Les marchés de buts, de tirs adverses et de tirs cadrés ont tenu. Les deux ratés viennent du volume de PSV : 11 corners pour PSV et 20 tirs au total contre 4 adverses.",
+      "whatWasRight": "Le favori net, le total de buts élevé et le blanchissage de Willem II (nuancé) ont été bien lus : 4 buts entre la 44e et la 53e, puis 3 autres entre la 73e et la 81e. Willem II est resté très faible offensivement : 4 tirs, 1 tir cadré, 1 corner, 30 % de possession. Les plafonds sur les tirs de PSV (20 < 26,5) et sur les tirs cadrés (9 < 9,5, de justesse) ont tenu.",
+      "whatWasMissed": "Le volume de corners de PSV a été sous-estimé : 11 contre 6,44 attendus. Le total de tirs a été surestimé en comptant sur 11,3 tirs de Willem II alors qu'il n'en a pris que 4. Avec une telle supériorité, l'adversaire s'effondre et ne produit presque plus. Le blanchissage (nuancé, confiance faible) s'est réalisé malgré une barre touchée à la 68e et un xG adverse de 1,22.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le vainqueur, les buts de PSV et les plafonds de Willem II. Il le contredit sur le total de tirs et sur les corners de PSV, deux marchés où le modèle était trop proche des moyennes.",
+      "marketReviews": [
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "7 buts, dont 4 en 10 minutes (44e–53e) puis 3 entre la 73e et la 81e. Le seuil était largement dépassé.",
+          "lesson": "Un favori fort face à une défense très poreuse justifie la confiance sur les plus de 2,5 buts, à garder."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Willem II n'a pas marqué : 1 tir cadré seulement, une barre à la 68e. Le Non est juste, mais la nuance prudente était fondée vu le xG adverse de 1,22.",
+          "lesson": "Contre un favori écrasant, l'outsider produit peu de tirs cadrés. Le Non peut être suivi plus facilement quand l'écart est aussi marqué, même si la série récente de buts adverses incite à la prudence."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "PSV Eindhoven & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "PSV a gagné avec 7 buts, bien au-dessus de 1,5. Le seul risque envisagé, un 1-0, ne s'est pas produit (2-0 dès la 44e).",
+          "lesson": "Combiner victoire du favori et plus de 1,5 but est cohérent avec un xG de 2,8 : à garder."
+        },
+        {
+          "market": "Buts — PSV Eindhoven",
+          "marketId": "teamGoals",
+          "pick": "PSV Eindhoven — Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "PSV a marqué 7 fois (20e, 44e, 50e, 53e, 73e, 77e, 81e). L'absence de Pepi n'a rien changé, il est même entré et a marqué à la 73e.",
+          "lesson": "Face à une défense qui encaisse 3 buts par match, les plus de 1,5 de PSV restent un bon marché à garder."
+        },
+        {
+          "market": "Buts — Willem II",
+          "marketId": "teamGoals",
+          "pick": "Willem II — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Willem II n'a pas marqué (1 tir cadré, xG 1,22 tout de même, barre à la 68e). Le moins de 0,5 est juste.",
+          "lesson": "Le xG adverse de 1,22 montre que le blanchissage a aussi tenu à la chance. Rester nuancé sur ce marché malgré le résultat."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 13.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "12 corners au total (11+1), sous 13,5 de justesse malgré la domination de PSV.",
+          "lesson": "Le résultat est passé de peu. Une domination écrasante peut pousser le total vers la ligne via les corners de PSV, donc la confiance « forte » était excessive."
+        },
+        {
+          "market": "Corners — PSV Eindhoven",
+          "marketId": "teamCorners",
+          "pick": "PSV Eindhoven — Moins de 9.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "PSV a obtenu 11 corners, dont une grande partie quand le score était déjà acquis, avec 70 % de possession et 20 tirs. La ligne de 9,5 a été dépassée.",
+          "lesson": "Pour un favori très dominant contre le dernier du classement, les moyennes de corners sous-estiment le volume. Il faut majorer ce marché et ne pas le juger avec une confiance forte sur la seule moyenne de 5,8."
+        },
+        {
+          "market": "Corners — Willem II",
+          "marketId": "teamCorners",
+          "pick": "Willem II — Moins de 5.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Willem II n'a obtenu qu'un corner, avec 30 % de possession et 4 tirs.",
+          "lesson": "Les plafonds de corners d'un outsider dominé tiennent bien : à garder."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 25.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Seulement 24 tirs au total (20+4), sous 25,5. PSV a tiré dans son registre, mais Willem II n'a presque rien tenté (4 contre 11,3 attendus).",
+          "lesson": "Dans un match à sens unique, le total de tirs est tiré vers le bas par l'effondrement de l'adversaire. Ne pas additionner la production moyenne de l'outsider quand il est très dominé."
+        },
+        {
+          "market": "Tirs — PSV Eindhoven",
+          "marketId": "teamShots",
+          "pick": "PSV Eindhoven — Moins de 26.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "PSV a tiré 20 fois, sous 26,5, malgré 7 buts et 70 % de possession.",
+          "lesson": "Même dans une large victoire, le volume de tirs de PSV reste proche de sa moyenne : le plafond a tenu, à garder."
+        },
+        {
+          "market": "Tirs — Willem II",
+          "marketId": "teamShots",
+          "pick": "Willem II — Moins de 15.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Willem II n'a tiré que 4 fois, très loin de 15,5.",
+          "lesson": "Le plafond de tirs d'un outsider à l'extérieur est sûr, il pouvait même être plus bas que l'attendu."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 13.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "10 tirs cadrés au total (9+1), sous 13,5. L'attendu du moteur était de 10,39.",
+          "lesson": "L'attendu du moteur était bien calibré ici : le marché mérite d'être gardé."
+        },
+        {
+          "market": "Tirs cadrés — PSV Eindhoven",
+          "marketId": "teamShotsOnTarget",
+          "pick": "PSV Eindhoven — Moins de 9.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "PSV a cadré 9 tirs, soit juste sous 9,5 malgré 7 buts. Le marché est passé de très peu.",
+          "lesson": "Marge très mince : en cas de large victoire, la ligne de 9,5 peut être touchée, donc la confiance moyenne était déjà généreuse."
+        },
+        {
+          "market": "Tirs cadrés — Willem II",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Willem II — Moins de 4.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Un seul tir cadré pour Willem II, très loin de 4,5. La prudence sur un match ouvert n'a pas été nécessaire.",
+          "lesson": "Quand l'outsider est dominé, ses tirs cadrés s'effondrent : le moins de 4,5 était plus sûr que le 72 % annoncé."
+        }
+      ],
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 19,
+        "commentaire": 1
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 7432,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 2725,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 7432,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2725,
+            "cache_read_input_tokens": 0,
+            "cache_creation_input_tokens": 7432,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 7432
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.056982000000000005,
+      "createdAt": "2026-11-04T11:19:35.791Z"
+    }
   },
   {
     "matchId": "cal-2026-10-31-sc-heerenveen-nec-nijmegen",
