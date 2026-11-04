@@ -1819,6 +1819,70 @@ const JOUEURS_DDL = [
   `CREATE TABLE IF NOT EXISTS joueurs_etat (cle TEXT PRIMARY KEY, valeur TEXT NOT NULL) WITHOUT ROWID;`
 ];
 
+/**
+ * Étape 38 (lot 1a, 03-04/11/2026 ; ajout PUR, règle du gel) : la combinaison, la confiance et le seuil de value À BLANC
+ * (data/combinaison/), hors de l'empreinte du moteur — rien ici n'est lu par l'empreinte ni par la fermeture des imports :
+ *   combinaison_avant_match  une ligne par révision gelée (engine_picks, et la candidate en essai) : ingrédients, degrés,
+ *                            étiquette (« sur » / « fragile »), ce qui manque, classe de seuil, régime de l'ancre, P_M et
+ *                            P_comb (= P_M tant que la note ne retient aucun β), recopiés et jamais recalculés ; écrite par
+ *                            la nuit (lot 1b) en INSERT OR IGNORE, jamais réécrite ; sans rowid ;
+ *   combinaison_etat         la nuit, le contrôle anti-fuite, les comptes.
+ * Aucun index au lot 1. Chaque entrée commence par son ordre (aucun commentaire devant).
+ */
+const COMBINAISON_DDL = [
+  `CREATE TABLE IF NOT EXISTS combinaison_avant_match (
+  source TEXT NOT NULL,
+  candidate_id TEXT NOT NULL DEFAULT '',
+  fixture_key TEXT NOT NULL,
+  market_key TEXT NOT NULL,
+  revision INTEGER NOT NULL,
+  origin TEXT NOT NULL,
+  recorded_at TEXT NOT NULL,
+  calcule_le TEXT NOT NULL,
+  calcule_apres INTEGER NOT NULL DEFAULT 0,
+  apres_coup_d_envoi INTEGER NOT NULL DEFAULT 0,
+  regle_version TEXT NOT NULL,
+  note_sha1 TEXT,
+  engine_version INTEGER,
+  engine_hash TEXT,
+  league TEXT,
+  date TEXT NOT NULL,
+  kickoff TEXT,
+  market_id TEXT NOT NULL,
+  famille TEXT NOT NULL,
+  choice TEXT,
+  probability REAL,
+  regime TEXT NOT NULL,
+  palier TEXT,
+  palier_reconstruit INTEGER NOT NULL DEFAULT 1,
+  p_marche REAL,
+  p_comb REAL,
+  odds_source TEXT,
+  odds_at TEXT,
+  age_min INTEGER,
+  avant_compo INTEGER,
+  lineup_state TEXT,
+  lineup_at TEXT,
+  n_min INTEGER,
+  part_demarrage REAL,
+  releves_dom INTEGER,
+  releves_ext INTEGER,
+  regime_xg TEXT,
+  a_verifier TEXT,
+  controle_du TEXT,
+  accord REAL,
+  tranche_case TEXT,
+  tranche_verdict TEXT,
+  tranche_matchs INTEGER,
+  degres TEXT NOT NULL,
+  etiquette TEXT NOT NULL,
+  manques TEXT NOT NULL,
+  classe_seuil TEXT NOT NULL,
+  PRIMARY KEY (source, candidate_id, fixture_key, market_key, revision)
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS combinaison_etat (cle TEXT PRIMARY KEY, valeur TEXT NOT NULL) WITHOUT ROWID;`
+];
+
 const FD_HISTORY_INDEXES = [
   'CREATE INDEX IF NOT EXISTS idx_fd_history_code_date ON fd_history(code, date);',
   'CREATE INDEX IF NOT EXISTS idx_fd_history_dom ON fd_history(dom);',
@@ -1873,6 +1937,7 @@ const DDL = [
   ...CONTEXTE_DDL,
   ...CARTONS_DDL,
   ...JOUEURS_DDL,
+  ...COMBINAISON_DDL,
   'CREATE INDEX IF NOT EXISTS idx_matches_date ON matches(date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_league_date ON matches(league, date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_home ON matches(home_name);',

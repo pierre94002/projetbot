@@ -96,7 +96,9 @@ export const DONNEES_VUES = Object.freeze([
  * moteur a vu. Sans cette règle, une fenêtre regardée pour l'indice étiquetait « déjà vu » les lignes du
  * MOTEUR sur 2019-2023 (la note de départ), alors qu'aucun chiffre du moteur ne les avait vues.
  */
-export const PORTEES = Object.freeze(['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs']);
+// Étape 38 (lot 1a, 03-04/11/2026) : « combinaison » — la combinaison, la confiance et le seuil de value mesurés à blanc
+// (data/combinaison/) ; jamais lus par le moteur au lot 1 (la candidate du lot 2 recopierait ces vues avec `pour: ['moteur']`).
+export const PORTEES = Object.freeze(['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs', 'combinaison']);
 
 /** Une fenêtre vaut-elle pour cette mesure ? `tout` vaut pour toutes. */
 export const pourLaPortee = (pour, portee) => Array.isArray(pour) && (pour.includes(portee) || pour.includes('tout'));
@@ -751,6 +753,94 @@ export const VARIANTES_DE_L_ETAPE_34 = Object.freeze([
 ]);
 
 /**
+ * Les fenêtres REGARDÉES par l'étape 38 (combinaison, confiance et seuil de value, lot 1a du 03-04/11/2026 ;
+ * data/combinaison/), portée « combinaison » (déclarée DANS chaque fenêtre : le juge de l'essai de l'étape 27 n'en voit
+ * rien) : P1 (football-data 2000-07-28 → 2019-06-30 : les forces s'y accumulent depuis 2000, les β, le recalage du marché et
+ * les dixièmes y sont appris ; le seuil y est jugé à partir du 27/07/2012), P2 (2019-07-01 → 2023-06-30 : jugée — une
+ * question neuve, regard déclaré ; la note de départ, l'étape 18 et les portes 1 des étapes 27 et 28 l'ont déjà regardée
+ * pour d'autres questions), P5-a (2026-10-06 → 2026-10-18, le dernier jour joué de la base du bac : les classes de la
+ * confiance par origine, contre la clôture gratuite ; la conception et la critique y ont compté les parts par origine, sans
+ * résultat), la mise en route du magasin (2023-01-01 → 2023-06-30 : comptes seulement). Le magasin 2023-07 → 2026-09-23 :
+ * rien (aucun banc magasin). Une candidate du moteur qui lirait un jour ces chiffres (lot 2) recopierait ces fenêtres avec
+ * `pour: ['moteur']`.
+ */
+export const VUES_DE_L_ETAPE_38 = Object.freeze([
+  Object.freeze({
+    de: '2000-07-28',
+    a: '2019-06-30',
+    quoi: 'Étape 38 : P1 football-data — les forces de la base statistique accumulées depuis 2000 ; les β des signaux face au marché (a priori σ0 = 0,25), le recalage du marché (2017-07 → 2019-06) et les dixièmes de la confiance (à partir du 27/07/2012) appris ; les règles du seuil jugées à partir du 27/07/2012 (rien n’y est appris par elles).',
+    pour: Object.freeze(['combinaison'])
+  }),
+  Object.freeze({
+    de: '2019-07-01',
+    a: '2023-06-30',
+    quoi: 'Étape 38 : P2 football-data — jugée en un seul regard (combinaison et confiance face au marché et à la clôture, seuil par la valeur de clôture) ; apprentissage interdit ; avant lui, les comptes (tailles, classes, décisions et paris des règles), sans issue, clôture ni perte.',
+    pour: Object.freeze(['combinaison'])
+  }),
+  Object.freeze({
+    de: '2026-10-06',
+    a: '2026-10-18',
+    quoi: 'Étape 38 : P5-a, pronostics gelés de la base du bac — les classes de la confiance par origine contre la clôture gratuite (jugées seulement si la classe minoritaire a 300 lignes avec clôture dans l’origine) ; la conception et la critique y ont compté les parts par origine, sans résultat.',
+    pour: Object.freeze(['combinaison'])
+  }),
+  Object.freeze({
+    de: '2023-01-01',
+    a: '2023-06-30',
+    quoi: 'Étape 38 : mise en route du magasin — comptes seulement (rien d’appris ni de jugé).',
+    pour: Object.freeze(['combinaison'])
+  })
+]);
+
+/**
+ * Les VARIANTES de l'étape 38, déclarées AVANT le regard unique du banc (conception §4.2 ; décisions de l'orchestrateur
+ * du 03/11/2026 ; critique, constats 1, 3 et 5 : `classe-fraicheur`, `vieux-4pc` et `huis-clos-5pc` hors K) : 13 de la
+ * combinaison, 8 de la confiance, 14 du seuil, 3 de la combinaison sur P5-b. Les définitions retenues (combinaison-v1,
+ * seuil-v1) ne lisent aucun résultat, comptées par prudence. Les variantes de P5-b ne sont jugées qu'après le lancement
+ * (lot 1c). Le banc compte K = VARIANTES_DE_L_ETAPE_38.length (38, z 3,2125) et refuse toute variante absente d'ici. Une
+ * variante corrigée après le regard = un identifiant de plus, déclaré avant son passage.
+ */
+export const VARIANTES_DE_L_ETAPE_38 = Object.freeze([
+  Object.freeze({ id: 'combinaison-v1', quoi: 'Définition retenue (version 1) : le marché est l’ancre, le mélange en log-cotes à β = 0 (le marché exactement), la confiance v1 (ce qui manque à ce pronostic : ancre, compo, couverture, contrôle « à vérifier », calibration de la tranche par version, accord des estimations ; « fragile » si un degré vaut 2 ou si la somme vaut 2), le seuil de 2 % ; ne lit aucun résultat.' }),
+  Object.freeze({ id: '1n2-recalage-marche', quoi: 'Le marché est-il calibré ? 1N2 : ln P(i) = α_i + β ln P_M(i) − ln Z (α du nul = 0), appris sur les deux saisons d’avant P2, jugé sur P2 (perte log ; la clôture qualifie) ; rapporté saison par saison, huis clos à part ; « retenu » seulement si le signe tient chaque saison.' }),
+  Object.freeze({ id: '1n2-stats-residuel', quoi: 'Le 1N2 de la partie statistique du modèle de buts (λS, μS sans cote, base de la 32) mêlé au marché en log-cotes par un β appris sur P1 (a priori σ0 = 0,25), jugé sur P2 face au marché (perte log ; la clôture qualifie).' }),
+  Object.freeze({ id: '1n2-placebo', quoi: 'Faux signal de contrôle : la partie statistique d’un AUTRE match du même jour (FNV-1a de la clé), même forme que 1n2-stats-residuel ; doit sortir « pas prouvé ».' }),
+  Object.freeze({ id: 'horloge-j2', quoi: 'La forme de 1n2-stats-residuel avec les statistiques coupées à J−2 (sans la veille) ; rôle scellé : si 1n2-stats-residuel est retenu et elle non, « avance d’horloge ».' }),
+  Object.freeze({ id: 'plusmoins25-recalage-marche', quoi: 'Le marché du plus/moins 2,5 est-il calibré ? ℓ(P) = α + β ℓ(P_M), appris sur les deux saisons d’avant P2, jugé sur P2, signe saison par saison.' }),
+  Object.freeze({ id: 'poids-par-regime', quoi: 'Un β par régime de l’ancre (Pinnacle, repli) quand le pli d’apprentissage en a 2 000 matchs, sinon le commun ; jugée sur P2 seulement si P2 a 2 000 lignes de repli, sinon sur P5.' }),
+  Object.freeze({ id: 'poids-par-championnat', quoi: 'β par championnat ramené vers le commun (δ rétréci par τ² des moments) ; bras A = le β commun appris sur P1 ; jugé sur P2.' }),
+  Object.freeze({ id: 'faux-championnat', quoi: 'Faux championnat de contrôle : la forme de poids-par-championnat sur 40 pseudo-championnats (FNV-1a de la clé du match mod 40) ; doit sortir « pas prouvé ».' }),
+  Object.freeze({ id: 'repos-court-residuel', quoi: 'Le β résiduel du repos court (fiche gelée de la 32) face au marché, sur P5-b ; rapporté à la 32 : un « retenu » n’ouvre pas un second canal (le canal est λS).' }),
+  Object.freeze({ id: 'enchainement-residuel', quoi: 'Le β résiduel de l’enchaînement serré (fiche gelée de la 32) face au marché, sur P5-b ; même rôle que repos-court-residuel.' }),
+  Object.freeze({ id: 'contexte-placebo', quoi: 'Faux facteur de contexte de contrôle sur P5-b ; doit sortir « pas prouvé ».' }),
+  Object.freeze({ id: 'recalage-dixiemes', quoi: 'E3 : recalage monotone par dixièmes des lignes sans prix, appris par version du moteur × marché sur les matchs joués avant J (200 matchs par case au moins), sur P5-b.' }),
+  Object.freeze({ id: 'confiance-v1', quoi: 'L’étiquette « sur / fragile » de la définition retenue, jugée PAR famille et PAR origine (révision 1 de la nuit / coup d’envoi) contre la clôture gratuite : recalage commun par dixièmes face au recalage par étiquette, l’origine dans les deux bras ; P5-a si la classe minoritaire a 300 lignes avec clôture dans l’origine, sinon P5-b.' }),
+  Object.freeze({ id: 'classe-regime', quoi: 'Classe A (ancre Pinnacle / palier 2 contre les autres) : recalage commun par dixièmes face au recalage par classe, contre la clôture ; P2 si 2 000 lignes de repli, P5-a par origine si 300 lignes minoritaires.' }),
+  Object.freeze({ id: 'classe-compo', quoi: 'Classe C (compo publiée ou dernière alignée / pas publiée) : même juge, par origine ; les buts des versions ≤ 5 écartés.' }),
+  Object.freeze({ id: 'classe-couverture', quoi: 'Classe D (nMin ≥ 8 / moins) sur le plus/moins 2,5 de P2 contre la clôture : recalage commun par dixièmes appris sur P1 ≥ 2012 face au recalage par classe.' }),
+  Object.freeze({ id: 'classe-a-verifier', quoi: 'Classe E (contrôle « à vérifier » en vigueur à l’heure du gel), lue dans la table de nuit seulement ; P5-b.' }),
+  Object.freeze({ id: 'classe-accord', quoi: 'Classe G (accord : |p Pinnacle − p moyenne| > 3 points sur P2 ; dispersion du palier sur P5-a) : même juge, P2 et P5-a par origine, jamais réunis.' }),
+  Object.freeze({ id: 'confiance-placebo', quoi: 'Fausse classe de contrôle (FNV-1a de « confiance-placebo|clé » mod 10 < 3), même juge que classe-accord sur P2 ; doit sortir « pas prouvé ».' }),
+  Object.freeze({ id: 'faux-ingredient', quoi: 'Faux ingrédient de contrôle au degré 2 (FNV-1a de la clé mod 10 < 3) ajouté à la règle de confiance-v1 ; l’étiquette jugée sur P2 (1N2) contre la clôture ; doit sortir « pas prouvé ».' }),
+  Object.freeze({ id: 'seuil-v1', quoi: 'Définition retenue du seuil (version 1) : 2 % partout où la cote juste vient de Pinnacle ou d’un palier (repli et sans cote : aucune value), comme aujourd’hui ; ne lit aucun résultat.' }),
+  Object.freeze({ id: 'pinnacle-1pc', quoi: 'Seuil de 1 % quand la cote juste vient de Pinnacle (2 % ailleurs) ; jugé par la valeur de clôture appariée sur toutes les décisions de P1 ≥ 2012 ∪ P2 ; utilité : la VC des paris ajoutés.' }),
+  Object.freeze({ id: 'pinnacle-1-5pc', quoi: 'Seuil de 1,5 % pour Pinnacle ; même juge.' }),
+  Object.freeze({ id: 'pinnacle-3pc', quoi: 'Seuil de 3 % pour Pinnacle ; même juge ; utilité : la VC des paris retirés ≤ 0.' }),
+  Object.freeze({ id: 'pinnacle-5pc', quoi: 'Seuil de 5 % pour Pinnacle ; même juge.' }),
+  Object.freeze({ id: 'accord-disperse-4pc', quoi: 'Seuil de 4 % quand Pinnacle et la moyenne s’écartent de plus de 3 points ; même juge.' }),
+  Object.freeze({ id: 'accord-disperse-aucune', quoi: 'Aucune value quand Pinnacle et la moyenne s’écartent de plus de 3 points ; même juge.' }),
+  Object.freeze({ id: 'cote-haute-3pc', quoi: 'Seuil de 3 % quand le pari que ferait la règle en service est à une cote au-dessus de 3 ; même juge.' }),
+  Object.freeze({ id: 'placebo-classe', quoi: 'Fausse classe de contrôle : les étiquettes « cote haute » permutées entre les matchs d’une même journée qui ont un pari sous la règle en service, deux fois (deux graines) ; la forme de cote-haute-3pc sur la première permutation face à la même sur la seconde ; doit sortir « pas prouvé ».' }),
+  Object.freeze({ id: 'palier2-3pc', quoi: 'Ombre P5-b : seuil de 3 % quand la cote juste vient du palier 2 (décisions rejouées depuis l’archive, fraîcheur réelle).' }),
+  Object.freeze({ id: 'palier3-5pc', quoi: 'Ombre P5-b : seuil de 5 % pour le palier 3.' }),
+  Object.freeze({ id: 'palier3-aucune', quoi: 'Ombre P5-b : aucune value pour le palier 3.' }),
+  Object.freeze({ id: 'a-verifier-aucune', quoi: 'Ombre P5-b : aucun conseil sur un match « à vérifier ».' }),
+  Object.freeze({ id: 'francais-aucune', quoi: 'Ombre P5-b : aucune value chez un bookmaker français (non mesuré).' }),
+  Object.freeze({ id: 'compo-avant-cote', quoi: 'P5-b : la compo dans le 1N2 quand la cote a été relevée AVANT sa publication (régime r5), jugée face à la clôture.' }),
+  Object.freeze({ id: 'ancre-gratuite', quoi: 'P5-b : le prix gratuit dé-margé comme ancre de plus pour le 1,5, le 3,5 et les deux équipes marquent (E1 avec la grille de la 27).' }),
+  Object.freeze({ id: 'saisies-ancre', quoi: 'P5-b : la cote saisie à la main comme ancre de son marché (dé-margée à deux issues), jugée par la clôture gratuite là où elle existe.' })
+]);
+
+/**
  * Les lancements déclarés par les étapes, dans l'ordre où elles sont faites. À la FIN d'une étape qui
  * touche aux chiffres : ajouter son entrée ici (version en service, ce qu'elle change, TOUTES les
  * variantes dont on a regardé le résultat pendant la construction, les fenêtres de données regardées).
@@ -849,6 +939,17 @@ export const LANCEMENTS = Object.freeze([
     le: null,
     variantes: VARIANTES_DE_L_ETAPE_34,
     vues: VUES_DE_L_ETAPE_34
+  }),
+  // Étape 38 (lot 1a, 03-04/11/2026) : la combinaison, la confiance et le seuil de value, mesurés à blanc ; ils ne règlent
+  // aucun chiffre du moteur (portée 'combinaison'). Datée du premier démarrage de l'appli avec ce code ; ses 38 variantes
+  // et ses vues déclarées AVANT le regard unique du banc.
+  Object.freeze({
+    etape: '38',
+    version: 'combinaison-v1',
+    quoi: 'Combinaison, confiance et seuil de value : la combinaison des signaux face au marché (le marché en cas nul exact), ce qui manque à chaque pronostic posé avant le match, le seuil de value par classe de cote juste ; mesurés au banc d’essai et calculés à blanc, jamais lus par le moteur.',
+    le: null,
+    variantes: VARIANTES_DE_L_ETAPE_38,
+    vues: VUES_DE_L_ETAPE_38
   })
 ]);
 

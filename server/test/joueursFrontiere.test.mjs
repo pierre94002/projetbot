@@ -341,8 +341,10 @@ const DOSSIER = fs.mkdtempSync(path.join(RACINE_ESSAIS, 'cm-joueurs-registre-'))
 after(() => fs.rmSync(DOSSIER, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 }));
 
 test('T-X5 la déclaration de l’étape 34 AVANT le regard : portée à la fin de PORTEES ; vues `pour: [\'paris-joueurs\']` seulement ; les 11 variantes ; le lancement daté au premier démarrage ; fenetresVues(\'27\') et compterVariantes(\'27\') inchangés', () => {
-  assert.equal(LANC.PORTEES.at(-1), 'paris-joueurs');
-  assert.equal(LANC.PORTEES.at(-2), 'cartons-corners');
+  // Étape 38 (04/11/2026) : « combinaison » vient après « paris-joueurs » (combinaisonFrontiere T-X5).
+  assert.equal(LANC.PORTEES.at(-1), 'combinaison');
+  assert.equal(LANC.PORTEES.at(-2), 'paris-joueurs');
+  assert.equal(LANC.PORTEES.at(-3), 'cartons-corners');
   assert.ok(LANC.verifierLancements());
   for (const v of LANC.VUES_DE_L_ETAPE_34) {
     assert.deepEqual([...v.pour], ['paris-joueurs'], `${v.de} → ${v.a}`);
@@ -355,7 +357,9 @@ test('T-X5 la déclaration de l’étape 34 AVANT le regard : portée à la fin 
   assert.deepEqual([l34.version, l34.le], ['joueurs-v1', null]);
   assert.equal(l34.variantes, LANC.VARIANTES_DE_L_ETAPE_34);
   assert.equal(l34.vues, LANC.VUES_DE_L_ETAPE_34);
-  assert.equal(LANC.LANCEMENTS.at(-1), l34, 'le lancement 34 ajouté à la fin');
+  // Étape 38 (04/11/2026) : le lancement 34, puis celui de la 38.
+  assert.equal(LANC.LANCEMENTS.at(-2), l34, 'le lancement 34 ajouté à la fin, puis celui de la 38');
+  assert.equal(LANC.LANCEMENTS.at(-1).etape, '38');
   for (const portee of LANC.PORTEES.filter((p) => !['tout', 'paris-joueurs'].includes(p))) assert.ok(!LANC.fenetresDeclarees({ portee }).some((f) => f.etape === '34'), portee);
   assert.ok(LANC.fenetresDeclarees({ portee: 'paris-joueurs' }).some((f) => f.etape === '34'));
   const fichier = path.join(DOSSIER, 'registre-t-x5.json');

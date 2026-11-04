@@ -1536,3 +1536,40 @@ Les tables sont rangées par le serveur par paquets de 250. Un **contrôle anti-
 **Les essais.** 26 tests neufs (11 pour la nuit, 15 pour la lecture et l'onglet) et quatorze tests d'avant ajustés. Suite complète : **1 690 tests, 1 687 réussis + 3 constats « # TODO » (les mêmes), 0 échec, ~423 s**, sous l'**espion des bases** : 43 ouvertures, **aucune de la base du bac ni de la vraie base**. **Bugs volontaires : 104 poses sur 104 détectées**, chacune par son test nommé (les 74 du lot 1a rejouées, 30 neuves). L'interface : 168 composants compilés, construction faite, rien de perdu face au dépôt.
 
 **Ce qu'il faut savoir.** Au premier démarrage avec ce code, rien ne change avant la première passe de nuit : l'onglet dira « Pas encore calculé ». La nuit des joueurs est la plus longue des étapes à blanc (environ 2 à 4 min à part, chaque nuit : elle relit tout le magasin) ; elle tourne après la sauvegarde et hors du chemin de l'essai de l'étape 27, une panne ne lui coûte rien. La recopie chez Pierre se fait CôteMaster fermé : les 34 fichiers de `deploiement\liste-1b.txt`, vérifiés par `deploiement\sha1-1b.txt`.
+
+## Mise en service du 04/11/2026 à 11 h 48 : étape 38, combinaison, confiance et seuil de value, lot 1a (27 fichiers ; versions précédentes dans bac-a-sable/recopies/2026-11-04_11h48m05/avant)
+
+### Étape 38 — combinaison, confiance et seuil de value (lot 1a : les fondations et le banc d'essai)
+
+(Écrit dans le bac du 03/11/2026 à 23 h 49 au 04/11/2026 vers 3 h, par-dessus le lot 1b de l'étape 34 qui attendait sa mise
+en service. Rien dans les fichiers du moteur — empreinte du code inchangée `16f2459d…`, celle de la candidate de l'étape 27 aussi
+`f01dd849…` — ni dans le chemin de nuit de l'essai de l'étape 27, identique à l'octet. **Aucun pourcentage, aucun conseil ne
+change.** L'étape reste « en cours » : restent le lot 1b — le calcul de chaque nuit et l'encadré « Avant de parier — à blanc »
+de la page du match —, le lot 1c — la preuve sur les matchs joués après le lancement — et le lot 2, après le verdict de l'étape
+27 et votre accord.)
+
+**Ce qu'on mesure, en mots simples.** Trois questions. (1) Les statistiques ajoutent-elles quelque chose aux cotes ? Le
+pourcentage du moteur reste la cote juste du marché tant que rien ne prouve le contraire ; on a mesuré si mêler la partie
+statistique du modèle de buts aux cotes aurait mieux prévu. (2) Peut-on dire d'avance qu'un pronostic est « fragile » (cote
+juste de repli, composition pas encore publiée, peu de matchs relevés, contrôle « à vérifier », estimations en désaccord) ? (3)
+Le seuil de value de 2 % est-il le bon, et pour quelle cote juste ?
+
+**Le passage unique du banc (04/11/2026, 2 h 35 → 2 h 37, 2 min 03 s, base du bac en lecture seule ; règles scellées avant).**
+L'étalonnage retrouve à l'unité la note de départ (30 158 matchs de 2019-2023, 555 paris, valeur de clôture +4,66 %).
+- **Les statistiques n'ajoutent rien aux cotes** (1N2 et plus/moins 2,5) : « pas prouvé » partout ; le poids appris est même
+  légèrement négatif, et la clôture dit « moins bon ». Le moteur reste le marché — c'est ce qui était attendu.
+- **La confiance** : la base du bac a trop peu de lignes dans la classe la plus rare pour la juger (300 exigées) ; elle le
+  sera sur les matchs joués après le lancement (lot 1c). Ses deux contrôles « faux » sortent « pas prouvé ».
+- **Le seuil** : sur 84 647 matchs (2012-2023), baisser le seuil à 1 % ou 1,5 % quand la cote juste vient de Pinnacle ajoute
+  des paris dont la valeur de clôture est positive (« retenu ») ; la règle de choix retient 1,5 % ; monter à 3 % ou 5 % fait
+  « moins bon ». Sur 2019-2023 seul, l'écart n'est pas prouvé. **Rien ne change** : un seuil ne s'adopte qu'après six mois
+  d'ombre sur vos propres prix, votre accord, et pas avant 2027.
+- Les six contrôles « faux » (placebos) : cinq jugés, tous « pas prouvé » ; le sixième vient au lot 1c.
+
+**Ce que le banc ne peut pas dire (écrit dans la note).** L'ombre du seuil sur vos bookmakers n'a aucun horizon tant que les
+cotes sont relevées à la main : avec votre règle (moins de 60 minutes, après l'annonce des compositions), aucun relevé n'est
+encore frais une heure avant le coup d'envoi (0 sur 197 rencontres) ; le plus/moins 2,5 n'a pas de clôture avant 2019 ; la
+couverture et l'accord des estimations des buts ne sont pas gardés dans les pronostics gelés (lot 1b).
+
+**Vos décisions appliquées.** Unibet et Betclic (03/11) : la mention « jamais mesuré chez ce bookmaker » s'appliquera ; vos
+réglages du moteur ne sont pas touchés avant le verdict de l'étape 27.

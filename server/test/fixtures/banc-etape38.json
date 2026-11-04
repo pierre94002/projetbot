@@ -1,0 +1,1246 @@
+{
+ "format": 1,
+ "quoi": "Banc de la combinaison, de la confiance et du seuil (étape 38, lot 1a, partie B) : le passage unique.",
+ "ou": "bac à sable",
+ "premierRegard": "2026-11-04T01:35:13.412Z",
+ "fin": "2026-11-04T01:37:16.152Z",
+ "dureeS": 122.7,
+ "base": {
+  "fichier": "C:\\Users\\PC\\CoteMaster\\bac-a-sable\\base\\match-stats.db",
+  "lectureSeule": true
+ },
+ "passeDePierre": {
+  "verifiee": true,
+  "attenduS": 240
+ },
+ "regles": {
+  "fichier": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\C--Users-PC-OneDrive-Bureau-developement-ProjetBot\\c4b41134-df35-4d3f-be49-63a4f15181fd\\scratchpad\\etape38\\banc-regles.md",
+  "sha1": "164cfd292d55ecdc6af9815bab98cc8bb5a786ac",
+  "copie": "test/fixtures/banc-regles-etape38.md"
+ },
+ "verrou": {
+  "fichier": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\C--Users-PC-OneDrive-Bureau-developement-ProjetBot\\c4b41134-df35-4d3f-be49-63a4f15181fd\\scratchpad\\etape38\\banc-passage-reel.lock",
+  "pose": "2026-11-04T01:35:13.412Z"
+ },
+ "decisionsDePierre": {
+  "qA": null,
+  "qB": null,
+  "qC": null,
+  "qG": null,
+  "qH": {
+   "reponse": "mention",
+   "le": "2026-11-03",
+   "source": "decisions-pierre-02-11.md, n° 7",
+   "livres": [
+    "unibet_fr",
+    "betclic_fr"
+   ],
+   "phrase": "Pour l’instant, les deux bookmakers que j’ai, c’est Unibet et Betclic."
+  },
+  "defauts": {
+   "qA": "Le moteur reste le marché sur le 1N2 et le plus/moins 2,5 cotés tant que rien n’a prouvé qu’il y ajoute quelque chose ; l’écran le dit.",
+   "qB": "Rien avant le lot 2 sur les cotes saisies (jamais deux verdicts sur un écran).",
+   "qC": "compo-avant-cote déclarée et rapportée ; aucun β compo sur le 1N2.",
+   "qG": "La mention « jamais mesuré » (palier 3) ; jamais « aucune value » sans l’ombre.",
+   "qH": "La mention « jamais mesuré chez ce bookmaker » et l’ombre les compte à part (affichage seulement)."
+  }
+ },
+ "modulesScelles": {
+  "src/core/engine/goalModel.js": "236a33d7f952b12d4596b02ecb7c6090afca137d",
+  "src/data/db/forcesButs.js": "4ecda40200d8da352bc8c51adefb1152de4af916",
+  "src/core/engine/verdictPari.js": "368d73a39b081948dd6d49bfa9add6789c0490f3",
+  "src/core/engine/valueFinder.js": "25e4757198fc09a1119de41cdef52eb553368e6a",
+  "src/bench/prix.js": "0f33a6b56d5238057be45f5720f2050dac22bf6a",
+  "src/bench/simulateBets.js": "523189cda6c82d77368f5b04e5877321d2d5f0d1",
+  "src/bench/metrics.js": "c40ebc02607830dec623d071c0d70778f26cf806",
+  "src/bench/guard.js": "60551323d356d5502684ca32276793fcb946ef84",
+  "src/data/db/leagueBenchmarks.js": "1c5c192ce3ba261f884c37541dd46b14736746c7",
+  "src/core/engine/fraicheurCotes.js": "d7f4bf125d8b7902d86767b2d8344f457f5c9094",
+  "src/bench/periodes.js": "d8b5264a88fd7ef241fb16bd209f3928c53ac628",
+  "src/core/market/marginRemoval.js": "b3deabcfcf1fe1d7f875d93a1b327b6efc0e883f",
+  "src/data/db/dayTable.js": "afc8d42ccc9028531da8d9efc2700ece449d6a97",
+  "src/data/contexte/bancDuContexte.js": "beaee6f2ae7064b46fb599e9a588e398e3fce229",
+  "src/bench/lancements.js": "c2db82b68168b877603e3f18d3d0203121906ac4",
+  "src/core/risk/gardeFous.js": "2edd957379facdb0915308f8404114d0786a70f5",
+  "src/data/combinaison/bancDeLaCombinaison.js": "cb96ae8cdaf98acf647636d3779946365dca5af2",
+  "src/data/combinaison/bancFd.js": "f0d6201a10681e8281715bdd37d54e497eb4a82f",
+  "src/data/combinaison/combinaisonEnfant.js": "257e0c75c17b70270953e6c1540d160ceb3f7315",
+  "src/data/combinaison/comptesDeLaCombinaison.js": "9b15d2252a3e6e0729f5d56decbb4dca23e4248c",
+  "src/data/combinaison/formulesDeLaCombinaison.js": "f3b51be33ddb62bfc352e5962c22f2f6a29361dd",
+  "src/data/combinaison/ingredientsDUneLigne.js": "8a21b2b138253f5c2444a9d79c95c75e06b77dc1",
+  "src/data/combinaison/lecteurP5.js": "9a9faa5863a1f699e1643c0b4b77089e3a57256e",
+  "src/data/combinaison/reglagesCombinaison.js": "c415fc616f243b5cc8a1faecc2d60ac7ef5be870",
+  "src/data/combinaison/reglesDeConfiance.js": "180c3df704ebf989d68c5495d365c4bdcb6c22c6",
+  "src/data/combinaison/reglesDeSeuil.js": "8e6764ffdc068da883a94756144f361ff7d338dc"
+ },
+ "empreinteDuMoteur": {
+  "sha1": "16f2459db183a99576365047da98b7777687ef05",
+  "fichiers": 37,
+  "candidate": "f01dd8496f56a415"
+ },
+ "rejeu": null,
+ "etalonnage": {
+  "ok": true,
+  "ecarts": [],
+  "mesure": {
+   "decisions": 30158,
+   "paris": 555,
+   "refus": {
+    "pas_de_value": 28380,
+    "trop_peu_de_bookmakers": 130,
+    "value_hors_limites": 145,
+    "aucun_bookmaker_autorise": 948
+   },
+   "vcN": 555,
+   "vcMoyenne": 0.046579626060587784,
+   "n25": 30157,
+   "perteLog25": 0.6770126327219833,
+   "n1n2": 30158,
+   "perteLog1n2": 1.0040256284335478
+  }
+ },
+ "arret": false,
+ "comptes": {
+  "fd": {
+   "lues": 223118,
+   "lien0": 186016,
+   "sansMarche": 47116,
+   "parFenetre": {
+    "P1": 108742,
+    "P2": 30158
+   },
+   "parRegime": {
+    "P1:r3": 55288,
+    "P1:r1": 53454,
+    "P2:r1": 30028,
+    "P2:r3": 130
+   },
+   "sans25": 64
+  },
+  "p5": {
+   "lues": 2890,
+   "parOrigine": {
+    "nuit": {
+     "lignes": 857,
+     "avecCloture": 801,
+     "parAncre": {
+      "sans-cote": 163,
+      "repli": 553,
+      "pinnacle": 136,
+      "palier2": 5
+     }
+    },
+    "coup-d-envoi": {
+     "lignes": 81,
+     "avecCloture": 81,
+     "parAncre": {
+      "repli": 75,
+      "sans-cote": 2,
+      "pinnacle": 4
+     }
+    }
+   },
+   "ecartees": {
+    "avance": 175,
+    "apresCoupDEnvoi": 0,
+    "sansIdentifiant": 12
+   }
+  }
+ },
+ "durees": {
+  "fd": 95656,
+  "p5": 11507,
+  "juge": 15248,
+  "total": 122411
+ },
+ "aPart": {
+  "rssMaxOctets": 1028161536,
+  "pid": 12776
+ },
+ "banc": {
+  "K": 38,
+  "z": 3.212541279709357,
+  "version": "38.1",
+  "variantes": [
+   {
+    "id": "combinaison-v1",
+    "angle": "combinaison",
+    "fenetre": "definition",
+    "verdict": "definition",
+    "raisons": [
+     "la définition retenue ne lit aucun résultat (comptée dans K par prudence)"
+    ]
+   },
+   {
+    "id": "1n2-recalage-marche",
+    "angle": "combinaison",
+    "fenetre": "P2",
+    "juge": "perte-log",
+    "e2": "1n2",
+    "verdict": "pas-prouve",
+    "raisons": [],
+    "gain": 0.000051387203941501004,
+    "fourchette": [
+     -0.0001888130015878802,
+     0.0002915874094708822
+    ],
+    "z": 3.212541279709357,
+    "zObserve": 0.6872746571847641,
+    "ampleur": 0.47849552197242196,
+    "lignes": 30158,
+    "blocs": 30158,
+    "matchs": 30158,
+    "j2": {
+     "verdict": "moins-bon",
+     "gain": -0.00005518112994243684,
+     "fourchette": [
+      -0.0000700595967747741,
+      -0.00004030266311009959
+     ],
+     "lignes": 30158
+    },
+    "moyenneA": 1.0040256284335478,
+    "recalage": {
+     "alphaDom": -0.028995860576057034,
+     "alphaExt": -0.02510345202672166,
+     "beta": 1.0322431987522107,
+     "iterations": 4,
+     "converge": true,
+     "n": 15478
+    },
+    "parSaison": {
+     "2019-20": {
+      "lignes": 6345,
+      "gain": -0.00014641698540414206
+     },
+     "2020-21": {
+      "lignes": 8192,
+      "gain": -0.00010833581725816613
+     },
+     "2021-22": {
+      "lignes": 7821,
+      "gain": 0.00024738403756270047
+     },
+     "2022-23": {
+      "lignes": 7800,
+      "gain": 0.0001835189135971908
+     }
+    },
+    "huisClos": {
+     "lignes": 8692,
+     "gain": -0.00009245999451535816
+    }
+   },
+   {
+    "id": "1n2-stats-residuel",
+    "angle": "combinaison",
+    "fenetre": "P2",
+    "juge": "perte-log",
+    "signal": "pS",
+    "verdict": "pas-prouve",
+    "raisons": [],
+    "gain": 0.00007495972122885729,
+    "fourchette": [
+     -0.00008009864066584127,
+     0.00023001808312355586
+    ],
+    "z": 3.212541279709357,
+    "zObserve": 1.5530358751419466,
+    "ampleur": 0.29734144815910873,
+    "lignes": 30158,
+    "blocs": 30158,
+    "matchs": 30158,
+    "j2": {
+     "verdict": "moins-bon",
+     "gain": -0.00007306343692976434,
+     "fourchette": [
+      -0.00008671197541736967,
+      -0.00005941489844215902
+     ],
+     "lignes": 30158
+    },
+    "moyenneA": 1.0040256284335478,
+    "betas": [
+     -0.0458317183728053
+    ],
+    "betasSansAPriori": [
+     -0.04605314799290379
+    ],
+    "apprisSur": 108742
+   },
+   {
+    "id": "1n2-placebo",
+    "angle": "combinaison",
+    "fenetre": "P2",
+    "juge": "perte-log",
+    "signal": "pSautre",
+    "placebo": true,
+    "verdict": "pas-prouve",
+    "raisons": [],
+    "gain": 0.000023152633490357503,
+    "fourchette": [
+     -0.00007390944244052524,
+     0.00012021470942124024
+    ],
+    "z": 3.212541279709357,
+    "zObserve": 0.7663012572976436,
+    "ampleur": 0.1843693034169202,
+    "lignes": 30078,
+    "blocs": 30078,
+    "matchs": 30078,
+    "j2": {
+     "verdict": "moins-bon",
+     "gain": -0.000015071645309223727,
+     "fourchette": [
+      -0.000023412660681996303,
+      -0.0000067306299364511515
+     ],
+     "lignes": 30078
+    },
+    "moyenneA": 1.003951404202649,
+    "betas": [
+     -0.01087376914538002
+    ],
+    "betasSansAPriori": [
+     -0.010881989639919104
+    ],
+    "apprisSur": 108444
+   },
+   {
+    "id": "horloge-j2",
+    "angle": "combinaison",
+    "fenetre": "P2",
+    "juge": "perte-log",
+    "signal": "pSj2",
+    "verdict": "pas-prouve",
+    "raisons": [],
+    "gain": 0.00007282572046786121,
+    "fourchette": [
+     -0.0000897142726563722,
+     0.00023536571359209461
+    ],
+    "z": 3.212541279709357,
+    "zObserve": 1.439372727478588,
+    "ampleur": 0.3117085656774036,
+    "lignes": 30158,
+    "blocs": 30158,
+    "matchs": 30158,
+    "j2": {
+     "verdict": "moins-bon",
+     "gain": -0.00007743303963098625,
+     "fourchette": [
+      -0.00009173155607759519,
+      -0.00006313452318437731
+     ],
+     "lignes": 30158
+    },
+    "moyenneA": 1.0040256284335478,
+    "betas": [
+     -0.048090868049675016
+    ],
+    "betasSansAPriori": [
+     -0.04832336590202051
+    ],
+    "apprisSur": 108742
+   },
+   {
+    "id": "plusmoins25-recalage-marche",
+    "angle": "combinaison",
+    "fenetre": "P2",
+    "juge": "perte-log",
+    "e2": "25",
+    "verdict": "pas-prouve",
+    "raisons": [],
+    "gain": -0.000040959371221143694,
+    "fourchette": [
+     -0.00011692521498206754,
+     0.000035006472539780156
+    ],
+    "z": 3.212541279709357,
+    "zObserve": -1.732142556765084,
+    "ampleur": 0.17726412447711637,
+    "lignes": 30157,
+    "blocs": 30157,
+    "matchs": 30157,
+    "j2": {
+     "verdict": "moins-bon",
+     "gain": -0.000038148428986118826,
+     "fourchette": [
+      -0.000042987506473691315,
+      -0.000033309351498546336
+     ],
+     "lignes": 30157
+    },
+    "moyenneA": 0.6770126327219833,
+    "recalage": {
+     "alpha": 0.004977248669736599,
+     "beta": 0.9802291166979409,
+     "iterations": 4,
+     "converge": true,
+     "n": 15478
+    },
+    "parSaison": {
+     "2019-20": {
+      "lignes": 6345,
+      "gain": 0.000007419390524649378
+     },
+     "2020-21": {
+      "lignes": 8191,
+      "gain": -0.00006094098205717296
+     },
+     "2021-22": {
+      "lignes": 7821,
+      "gain": -0.000005468010834592744
+     },
+     "2022-23": {
+      "lignes": 7800,
+      "gain": -0.00009491729410606096
+     }
+    },
+    "huisClos": {
+     "lignes": 8691,
+     "gain": -0.00006177418853309607
+    }
+   },
+   {
+    "id": "poids-par-regime",
+    "angle": "combinaison",
+    "fenetre": "P2",
+    "juge": "perte-log",
+    "signal": "pS",
+    "parRegime": true,
+    "verdict": "non-jugeable-ici",
+    "raisons": [
+     "P2 n’a que 130 lignes de repli (2000 exigées, conception §1.2) : jugée sur P5"
+    ],
+    "tailles": {
+     "repliP2": 130
+    }
+   },
+   {
+    "id": "poids-par-championnat",
+    "angle": "combinaison",
+    "fenetre": "P2",
+    "juge": "perte-log",
+    "signal": "pS",
+    "parLigue": "vraie",
+    "verdict": "pas-prouve",
+    "raisons": [],
+    "gain": -0.000047303984339081725,
+    "fourchette": [
+     -0.00020706762455739914,
+     0.00011245965587923568
+    ],
+    "z": 3.212541279709357,
+    "zObserve": -0.9511926629636321,
+    "ampleur": 0.25273972388859134,
+    "lignes": 30158,
+    "blocs": 30158,
+    "matchs": 30158,
+    "j2": {
+     "verdict": "moins-bon",
+     "gain": -0.00005056206180707715,
+     "fourchette": [
+      -0.00006651904589385666,
+      -0.00003460507772029764
+     ],
+     "lignes": 30158
+    },
+    "moyenneA": 1.0039506687123203,
+    "betaCommun": -0.0458317183728053,
+    "tau2": 0.005345141844682812,
+    "championnats": 22
+   },
+   {
+    "id": "faux-championnat",
+    "angle": "combinaison",
+    "fenetre": "P2",
+    "juge": "perte-log",
+    "signal": "pS",
+    "parLigue": "fausse",
+    "placebo": true,
+    "verdict": "pas-prouve",
+    "raisons": [],
+    "gain": 0,
+    "fourchette": [
+     0,
+     0
+    ],
+    "z": 3.212541279709357,
+    "zObserve": null,
+    "ampleur": 0,
+    "lignes": 30158,
+    "blocs": 30158,
+    "matchs": 30158,
+    "j2": {
+     "verdict": "pas-prouve",
+     "gain": 0,
+     "fourchette": [
+      0,
+      0
+     ],
+     "lignes": 30158
+    },
+    "moyenneA": 1.0039506687123203,
+    "betaCommun": -0.0458317183728053,
+    "tau2": 0,
+    "championnats": 40
+   },
+   {
+    "id": "repos-court-residuel",
+    "angle": "combinaison",
+    "fenetre": "P5b",
+    "verdict": "non-jugeable-ici",
+    "raisons": [
+     "jugée après le lancement (P5-b, preuve du lot 1c)"
+    ]
+   },
+   {
+    "id": "enchainement-residuel",
+    "angle": "combinaison",
+    "fenetre": "P5b",
+    "verdict": "non-jugeable-ici",
+    "raisons": [
+     "jugée après le lancement (P5-b, preuve du lot 1c)"
+    ]
+   },
+   {
+    "id": "contexte-placebo",
+    "angle": "combinaison",
+    "fenetre": "P5b",
+    "placebo": true,
+    "verdict": "non-jugeable-ici",
+    "raisons": [
+     "jugée après le lancement (P5-b, preuve du lot 1c)"
+    ]
+   },
+   {
+    "id": "recalage-dixiemes",
+    "angle": "combinaison",
+    "fenetre": "P5b",
+    "verdict": "non-jugeable-ici",
+    "raisons": [
+     "jugée après le lancement (P5-b, preuve du lot 1c)"
+    ]
+   },
+   {
+    "id": "confiance-v1",
+    "angle": "confiance",
+    "fenetre": "P5a",
+    "classe": "etiquette",
+    "fenetreJugee": "P5a",
+    "verdict": "non-jugeable-ici",
+    "strates": {
+     "nuit": {
+      "verdict": "non-jugeable-ici",
+      "raisons": [
+       "classe minoritaire : 0 lignes avec clôture dans l’origine « nuit » (300 exigées)"
+      ],
+      "tailles": {
+       "fragile": 318
+      }
+     },
+     "coup-d-envoi": {
+      "verdict": "non-jugeable-ici",
+      "raisons": [
+       "classe minoritaire : 4 lignes avec clôture dans l’origine « coup-d-envoi » (300 exigées)"
+      ],
+      "tailles": {
+       "fragile": 71,
+       "sur": 4
+      }
+     }
+    },
+    "raisons": [
+     "aucune origine jugeable"
+    ]
+   },
+   {
+    "id": "classe-regime",
+    "angle": "confiance",
+    "fenetre": "P2+P5a",
+    "classe": "regime",
+    "verdict": "non-jugeable-ici",
+    "fenetres": {
+     "P2": {
+      "verdict": "non-jugeable-ici",
+      "raisons": [
+       "P2 n’a que 130 lignes de repli (2000 exigées)"
+      ],
+      "gain": null,
+      "fourchette": null,
+      "lignes": null,
+      "tailles": null
+     },
+     "P5a": {
+      "verdict": "non-jugeable-ici",
+      "strates": {
+       "nuit": {
+        "verdict": "non-jugeable-ici",
+        "raisons": [
+         "classe minoritaire : 0 lignes avec clôture dans l’origine « nuit » (300 exigées)"
+        ],
+        "tailles": {
+         "ancre-fragile": 318
+        }
+       },
+       "coup-d-envoi": {
+        "verdict": "non-jugeable-ici",
+        "raisons": [
+         "classe minoritaire : 4 lignes avec clôture dans l’origine « coup-d-envoi » (300 exigées)"
+        ],
+        "tailles": {
+         "ancre-fragile": 71,
+         "ancre-sure": 4
+        }
+       }
+      }
+     }
+    },
+    "raisons": [
+     "aucune fenêtre jugeable"
+    ]
+   },
+   {
+    "id": "classe-compo",
+    "angle": "confiance",
+    "fenetre": "P5a",
+    "classe": "compo",
+    "verdict": "non-jugeable-ici",
+    "raisons": [
+     "P5-a : les buts des versions ≤ 5 sont écartés de la preuve (ancien modèle) et le 1N2 ne lit pas la compo ; jugée sur P5-b"
+    ]
+   },
+   {
+    "id": "classe-couverture",
+    "angle": "confiance",
+    "fenetre": "P2",
+    "classe": "couverture",
+    "fenetreJugee": "P2",
+    "verdict": "non-jugeable-ici",
+    "raisons": [
+     "classe minoritaire : 285 lignes avec clôture (300 exigées)"
+    ],
+    "tailles": {
+     "couvert": 29872,
+     "peu-couvert": 285
+    }
+   },
+   {
+    "id": "classe-a-verifier",
+    "angle": "confiance",
+    "fenetre": "P5b",
+    "verdict": "non-jugeable-ici",
+    "raisons": [
+     "jugée après le lancement (P5-b, preuve du lot 1c)"
+    ]
+   },
+   {
+    "id": "classe-accord",
+    "angle": "confiance",
+    "fenetre": "P2+P5a",
+    "classe": "accord",
+    "verdict": "non-jugeable-ici",
+    "fenetres": {
+     "P2": {
+      "verdict": "non-jugeable-ici",
+      "raisons": [
+       "classe minoritaire : 22 lignes avec clôture (300 exigées)"
+      ],
+      "gain": null,
+      "fourchette": null,
+      "lignes": null,
+      "tailles": {
+       "serre": 30006,
+       "disperse": 22
+      }
+     },
+     "P5a": {
+      "verdict": "non-jugeable-ici",
+      "strates": {
+       "nuit": {
+        "verdict": "non-jugeable-ici",
+        "raisons": [
+         "classe minoritaire : 0 lignes avec clôture dans l’origine « nuit » (300 exigées)"
+        ],
+        "tailles": {}
+       },
+       "coup-d-envoi": {
+        "verdict": "non-jugeable-ici",
+        "raisons": [
+         "classe minoritaire : 0 lignes avec clôture dans l’origine « coup-d-envoi » (300 exigées)"
+        ],
+        "tailles": {
+         "serre": 4
+        }
+       }
+      }
+     }
+    },
+    "raisons": [
+     "aucune fenêtre jugeable"
+    ]
+   },
+   {
+    "id": "confiance-placebo",
+    "angle": "confiance",
+    "fenetre": "P2",
+    "classe": "placebo",
+    "placebo": true,
+    "fenetreJugee": "P2",
+    "verdict": "pas-prouve",
+    "raisons": [],
+    "gain": -6.658190050475228e-8,
+    "fourchette": [
+     -3.956307086738592e-7,
+     2.624669076643546e-7
+    ],
+    "z": 3.212541279709357,
+    "zObserve": -0.6500467363586091,
+    "ampleur": 0.003161014869786114,
+    "lignes": 30158,
+    "blocs": 30158,
+    "tailles": {
+     "fragile": 9068,
+     "sur": 21090
+    }
+   },
+   {
+    "id": "faux-ingredient",
+    "angle": "confiance",
+    "fenetre": "P2",
+    "classe": "faux-ingredient",
+    "placebo": true,
+    "fenetreJugee": "P2",
+    "verdict": "pas-prouve",
+    "raisons": [],
+    "gain": -1.8487169943940838e-7,
+    "fourchette": [
+     -8.955150885525072e-7,
+     5.257716896736905e-7
+    ],
+    "z": 3.212541279709357,
+    "zObserve": -0.8357327669512734,
+    "ampleur": 0.008134396865877351,
+    "lignes": 30158,
+    "blocs": 30158,
+    "tailles": {
+     "fragile": 9118,
+     "sur": 21040
+    }
+   },
+   {
+    "id": "seuil-v1",
+    "angle": "seuil",
+    "fenetre": "definition",
+    "verdict": "definition",
+    "raisons": [
+     "la définition retenue ne lit aucun résultat (comptée dans K par prudence)"
+    ]
+   },
+   {
+    "id": "pinnacle-1pc",
+    "angle": "seuil",
+    "fenetre": "P1pinnacle+P2",
+    "emboitee": "pinnacle",
+    "verdict": "retenu",
+    "gain": 0.00031401983882722173,
+    "fourchette": [
+     0.00016717086489921552,
+     0.00046086881275522794
+    ],
+    "z": 3.212541279709357,
+    "zObserve": 6.869654365952202,
+    "lignes": 84340,
+    "blocs": 22785,
+    "matchs": 84340,
+    "sansCloture": 307,
+    "parisA": 2526,
+    "parisB": 5284,
+    "rendement": {
+     "A": 0.031615201900237526,
+     "B": 0.026877365632096806,
+     "rapporteSeulement": true
+    },
+    "utile": true,
+    "utilite": {
+     "sorte": "ajoutes",
+     "n": 2758,
+     "verdict": "retenu",
+     "gain": 0.009602767660147891,
+     "fourchette": [
+      0.005326945366255747,
+      0.013878589954040035
+     ]
+    },
+    "raisons": [],
+    "P2": {
+     "gain": 0.00006799126144730209,
+     "fourchette": [
+      -0.00009794596102634842,
+      0.0002339284839209526
+     ],
+     "lignes": 30158,
+     "rapporteSeulement": true
+    }
+   },
+   {
+    "id": "pinnacle-1-5pc",
+    "angle": "seuil",
+    "fenetre": "P1pinnacle+P2",
+    "emboitee": "pinnacle",
+    "verdict": "retenu",
+    "gain": 0.00017844722408801158,
+    "fourchette": [
+     0.00008008078844339078,
+     0.0002768136597326324
+    ],
+    "z": 3.212541279709357,
+    "zObserve": 5.827893121017367,
+    "lignes": 84399,
+    "blocs": 22791,
+    "matchs": 84399,
+    "sansCloture": 248,
+    "parisA": 2526,
+    "parisB": 3686,
+    "rendement": {
+     "A": 0.031615201900237526,
+     "B": 0.02994574064026037,
+     "rapporteSeulement": true
+    },
+    "utile": true,
+    "utilite": {
+     "sorte": "ajoutes",
+     "n": 1160,
+     "verdict": "retenu",
+     "gain": 0.012983420056727663,
+     "fourchette": [
+      0.0058274247448362555,
+      0.02013941536861907
+     ]
+    },
+    "raisons": [],
+    "P2": {
+     "gain": 0.00006508594031478055,
+     "fourchette": [
+      -0.0000373302904912653,
+      0.00016750217112082642
+     ],
+     "lignes": 30158,
+     "rapporteSeulement": true
+    }
+   },
+   {
+    "id": "pinnacle-3pc",
+    "angle": "seuil",
+    "fenetre": "P1pinnacle+P2",
+    "emboitee": "pinnacle",
+    "verdict": "moins-bon",
+    "gain": -0.0002309637187789771,
+    "fourchette": [
+     -0.0003371826251836708,
+     -0.00012474481237428344
+    ],
+    "z": 3.212541279709357,
+    "zObserve": -6.985389944288298,
+    "lignes": 84447,
+    "blocs": 22791,
+    "matchs": 84447,
+    "sansCloture": 200,
+    "parisA": 2526,
+    "parisB": 1188,
+    "rendement": {
+     "A": 0.031615201900237526,
+     "B": 0.07790404040404039,
+     "rapporteSeulement": true
+    },
+    "utile": false,
+    "utilite": {
+     "sorte": "retires",
+     "n": 1338,
+     "vcMoyenne": 0.014577124932532342,
+     "phrase": "choix de prudence : les paris retirés avaient une valeur de clôture positive"
+    },
+    "raisons": [],
+    "P2": {
+     "gain": -0.00008760488647239756,
+     "fourchette": [
+      -0.00022383584809289618,
+      0.000048626075148101044
+     ],
+     "lignes": 30158,
+     "rapporteSeulement": true
+    }
+   },
+   {
+    "id": "pinnacle-5pc",
+    "angle": "seuil",
+    "fenetre": "P1pinnacle+P2",
+    "emboitee": "pinnacle",
+    "verdict": "moins-bon",
+    "gain": -0.00044937212206570376,
+    "fourchette": [
+     -0.0005963662882625195,
+     -0.000302377955868888
+    ],
+    "z": 3.212541279709357,
+    "zObserve": -9.82097813428692,
+    "lignes": 84447,
+    "blocs": 22791,
+    "matchs": 84447,
+    "sansCloture": 200,
+    "parisA": 2526,
+    "parisB": 372,
+    "rendement": {
+     "A": 0.031615201900237526,
+     "B": 0.20817204301075273,
+     "rapporteSeulement": true
+    },
+    "utile": false,
+    "utilite": {
+     "sorte": "retires",
+     "n": 2154,
+     "vcMoyenne": 0.017617515130957533,
+     "phrase": "choix de prudence : les paris retirés avaient une valeur de clôture positive"
+    },
+    "raisons": [],
+    "P2": {
+     "gain": -0.00024454948357667945,
+     "fourchette": [
+      -0.000463591915445503,
+      -0.00002550705170785593
+     ],
+     "lignes": 30158,
+     "rapporteSeulement": true
+    }
+   },
+   {
+    "id": "accord-disperse-4pc",
+    "angle": "seuil",
+    "fenetre": "P1pinnacle+P2",
+    "emboitee": "disperse",
+    "verdict": "pas-prouve",
+    "gain": 0.0000022833271080491837,
+    "fourchette": [
+     -0.000021879099485738744,
+     0.00002644575370183711
+    ],
+    "z": 3.212541279709357,
+    "zObserve": 0.3035821986345223,
+    "lignes": 84447,
+    "blocs": 22791,
+    "matchs": 84447,
+    "sansCloture": 200,
+    "parisA": 2526,
+    "parisB": 2510,
+    "rendement": {
+     "A": 0.031615201900237526,
+     "B": 0.02996812749003984,
+     "rapporteSeulement": true
+    },
+    "utile": true,
+    "utilite": {
+     "sorte": "retires",
+     "n": 16,
+     "vcMoyenne": -0.01205125776833934,
+     "phrase": "les paris retirés n’avaient pas de valeur de clôture"
+    },
+    "raisons": [],
+    "P2": {
+     "gain": -0.000013181541354643565,
+     "fourchette": [
+      -0.000046317645385876235,
+      0.000019954562676589108
+     ],
+     "lignes": 30158,
+     "rapporteSeulement": true
+    }
+   },
+   {
+    "id": "accord-disperse-aucune",
+    "angle": "seuil",
+    "fenetre": "P1pinnacle+P2",
+    "emboitee": "disperse",
+    "verdict": "pas-prouve",
+    "gain": -0.000014251996354109844,
+    "fourchette": [
+     -0.00005291825164249867,
+     0.000024414258934278987
+    ],
+    "z": 3.212541279709357,
+    "zObserve": -1.1841106997396265,
+    "lignes": 84447,
+    "blocs": 22791,
+    "matchs": 84447,
+    "sansCloture": 200,
+    "parisA": 2526,
+    "parisB": 2482,
+    "rendement": {
+     "A": 0.031615201900237526,
+     "B": 0.03226833199033035,
+     "rapporteSeulement": true
+    },
+    "utile": false,
+    "utilite": {
+     "sorte": "retires",
+     "n": 44,
+     "vcMoyenne": 0.02735314400262532,
+     "phrase": "choix de prudence : les paris retirés avaient une valeur de clôture positive"
+    },
+    "raisons": [],
+    "P2": {
+     "gain": -0.00002271320982731249,
+     "fourchette": [
+      -0.00008671613332015121,
+      0.00004128971366552623
+     ],
+     "lignes": 30158,
+     "rapporteSeulement": true
+    }
+   },
+   {
+    "id": "cote-haute-3pc",
+    "angle": "seuil",
+    "fenetre": "P1pinnacle+P2",
+    "verdict": "pas-prouve",
+    "gain": -0.000014038571446497494,
+    "fourchette": [
+     -0.00007024319885310375,
+     0.00004216605596010877
+    ],
+    "z": 3.212541279709357,
+    "zObserve": -0.8024159639695668,
+    "lignes": 84447,
+    "blocs": 22791,
+    "matchs": 84447,
+    "sansCloture": 200,
+    "parisA": 2526,
+    "parisB": 2270,
+    "rendement": {
+     "A": 0.031615201900237526,
+     "B": 0.03928634361233479,
+     "rapporteSeulement": true
+    },
+    "utile": false,
+    "utilite": {
+     "sorte": "retires",
+     "n": 256,
+     "vcMoyenne": 0.004630918917743648,
+     "phrase": "choix de prudence : les paris retirés avaient une valeur de clôture positive"
+    },
+    "raisons": [],
+    "P2": {
+     "gain": -0.000003833519159801802,
+     "fourchette": [
+      -0.00007978628998809345,
+      0.00007211925166848983
+     ],
+     "lignes": 30158,
+     "rapporteSeulement": true
+    }
+   },
+   {
+    "id": "placebo-classe",
+    "angle": "seuil",
+    "fenetre": "P1pinnacle+P2",
+    "placebo": true,
+    "verdict": "pas-prouve",
+    "gain": 0.000009707132474895442,
+    "fourchette": [
+     -0.000038671518014096275,
+     0.000058085782963887156
+    ],
+    "z": 3.212541279709357,
+    "zObserve": 0.6445935028779839,
+    "lignes": 84453,
+    "blocs": 22793,
+    "matchs": 84453,
+    "sansCloture": 194,
+    "parisA": 2211,
+    "parisB": 2199,
+    "rendement": {
+     "A": 0.03207598371777474,
+     "B": 0.027598908594815855,
+     "rapporteSeulement": true
+    },
+    "utile": false,
+    "utilite": {
+     "sorte": "ajoutes",
+     "n": 114,
+     "verdict": "pas-assez-de-matchs",
+     "gain": 0.0146676503209977,
+     "fourchette": [
+      -0.014025816988886402,
+      0.0433611176308818
+     ]
+    },
+    "raisons": [],
+    "P2": {
+     "gain": 0.000009322308344303754,
+     "fourchette": [
+      -0.00004086294023421734,
+      0.00005950755692282485
+     ],
+     "lignes": 30158,
+     "rapporteSeulement": true
+    }
+   },
+   {
+    "id": "palier2-3pc",
+    "angle": "seuil",
+    "fenetre": "P5b",
+    "verdict": "non-jugeable-ici",
+    "raisons": [
+     "jugée après le lancement (P5-b, preuve du lot 1c)"
+    ]
+   },
+   {
+    "id": "palier3-5pc",
+    "angle": "seuil",
+    "fenetre": "P5b",
+    "verdict": "non-jugeable-ici",
+    "raisons": [
+     "jugée après le lancement (P5-b, preuve du lot 1c)"
+    ]
+   },
+   {
+    "id": "palier3-aucune",
+    "angle": "seuil",
+    "fenetre": "P5b",
+    "verdict": "non-jugeable-ici",
+    "raisons": [
+     "jugée après le lancement (P5-b, preuve du lot 1c)"
+    ]
+   },
+   {
+    "id": "a-verifier-aucune",
+    "angle": "seuil",
+    "fenetre": "P5b",
+    "verdict": "non-jugeable-ici",
+    "raisons": [
+     "jugée après le lancement (P5-b, preuve du lot 1c)"
+    ]
+   },
+   {
+    "id": "francais-aucune",
+    "angle": "seuil",
+    "fenetre": "P5b",
+    "verdict": "non-jugeable-ici",
+    "raisons": [
+     "jugée après le lancement (P5-b, preuve du lot 1c)"
+    ]
+   },
+   {
+    "id": "compo-avant-cote",
+    "angle": "combinaison",
+    "fenetre": "P5b",
+    "verdict": "non-jugeable-ici",
+    "raisons": [
+     "jugée après le lancement (P5-b, preuve du lot 1c)"
+    ]
+   },
+   {
+    "id": "ancre-gratuite",
+    "angle": "combinaison",
+    "fenetre": "P5b",
+    "verdict": "non-jugeable-ici",
+    "raisons": [
+     "jugée après le lancement (P5-b, preuve du lot 1c)"
+    ]
+   },
+   {
+    "id": "saisies-ancre",
+    "angle": "combinaison",
+    "fenetre": "P5b",
+    "verdict": "non-jugeable-ici",
+    "raisons": [
+     "jugée après le lancement (P5-b, preuve du lot 1c)"
+    ]
+   }
+  ],
+  "placebos": {
+   "1n2-placebo": "pas-prouve",
+   "faux-championnat": "pas-prouve",
+   "contexte-placebo": "non-jugeable-ici",
+   "confiance-placebo": "pas-prouve",
+   "faux-ingredient": "pas-prouve",
+   "placebo-classe": "pas-prouve"
+  },
+  "emboitees": {
+   "pinnacle": "pinnacle-1-5pc",
+   "disperse": null
+  },
+  "horloge": null,
+  "rapports": {
+   "bandesParSeuil": {
+    "0.01": {
+     "paris": 5284,
+     "vcMoyenne": 0.016970981051826182
+    },
+    "0.015": {
+     "paris": 3686,
+     "vcMoyenne": 0.021229245235205016
+    },
+    "0.02": {
+     "paris": 2526,
+     "vcMoyenne": 0.025015926631497057
+    },
+    "0.03": {
+     "paris": 1188,
+     "vcMoyenne": 0.036772758848007896
+    },
+    "0.04": {
+     "paris": 639,
+     "vcMoyenne": 0.05388595324416808
+    },
+    "0.05": {
+     "paris": 372,
+     "vcMoyenne": 0.06785511580397614
+    }
+   },
+   "rhoParClasse": {
+    "serre": {
+     "paris": 5233,
+     "rho": 0.8120670708115705
+    },
+    "disperse": {
+     "paris": 51,
+     "rho": 0.7485670591832343
+    },
+    "cote-haute": {
+     "paris": 650,
+     "rho": 0.8750583652097662
+    },
+    "cote-basse": {
+     "paris": 4634,
+     "rho": 0.8786921876545266
+    }
+   },
+   "huisClos5pc": {
+    "matchs": 8692,
+    "paris2pc": 150,
+    "paris5pc": 47,
+    "vc2pc": 0.007471539066616068,
+    "vc5pc": 0.029142360837055698,
+    "rapporteSeulement": true
+   },
+   "coxParClasseDAccord": {
+    "serre": {
+     "alpha": 0.010223449681094924,
+     "beta": 1.0157019964762886,
+     "n": 90018
+    },
+    "disperse": {
+     "alpha": 0.03812047276647521,
+     "beta": 1.0595679954234016,
+     "n": 66
+    }
+   },
+   "lignes": {
+    "P1": 108742,
+    "P2": 30158,
+    "seuil": 84647
+   }
+  }
+ }
+}
