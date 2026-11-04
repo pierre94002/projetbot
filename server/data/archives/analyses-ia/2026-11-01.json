@@ -1419,8 +1419,240 @@
       ]
     },
     "kickoffRuns": 1,
-    "updatedAt": "2026-10-31T23:03:22.296Z",
-    "createdAt": "2026-10-31T23:03:22.296Z"
+    "updatedAt": "2026-11-04T00:51:24.427Z",
+    "createdAt": "2026-10-31T23:03:22.296Z",
+    "postMatchReview": {
+      "summary": "Monagas a gagné 3-2 à Caracas après avoir été mené 2-1 à la mi-temps, alors que la lecture d'avant-match penchait pour Caracas. Les marchés de volume (corners, tirs, tirs cadrés) et de buts (BTTS, plus de 2,5) ont été bien anticipés. Seuls le 1N2 et le combiné Caracas & plus de 1,5 ont échoué, à cause de la remontée de Monagas (2 buts entre la 68e et la 71e).",
+      "whatWasRight": "Le match a été ouvert avec 5 buts : BTTS oui et plus de 2,5 validés. Les volumes étaient bien lus : 3 corners Caracas, 4 Monagas, 13 tirs Caracas contre 15 Monagas (28 au total), 4 et 5 tirs cadrés. Monagas a marqué malgré l'absence de Rodríguez, et Caracas est resté sous 2,5 buts avec 2.",
+      "whatWasMissed": "Le poids de Caracas a été surestimé. Monagas a eu 58 % de possession et plus de tirs, ce qui a contredit l'idée d'une attaque visiteuse amoindrie. La blessure de Luis González (40e) n'a pas empêché Monagas de gagner : son remplaçant Antonio Romero a marqué le 3-2 à la 71e. Caracas a pris 4 jaunes et a vu sa marge fondre. Un penalty marqué à la 45+6 l'avait mis devant, et Monagas en a raté un à la 63e avant de renverser le match.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1N2, où il donnait Caracas favori à 50 %, et sur le combiné associé. Il le confirme sur tous les autres marchés, buts, corners, tirs et tirs cadrés, qui étaient tous justes.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Caracas gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Caracas a mené 2-1 (22e, penalty 45+6) mais Monagas a égalisé à la 68e et pris l'avantage à la 71e, après un penalty raté à la 63e. Monagas a dominé en possession (58 %) et en tirs (15 contre 13).",
+          "lesson": "Le 1N2 entre équipes aux moyennes proches ne doit pas s'appuyer sur la seule absence d'un buteur. Le remplaçant d'attaque a marqué le but vainqueur. Se méfier d'une forme récente sur peu de matchs et d'un changement d'entraîneur."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Cinq buts (22e, 28e, 45+6, 68e, 71e), donc plus de 2,5 validé. Les xG de 3,35 avaient raison face aux moyennes basses.",
+          "lesson": "Les xG du moteur ont mieux lu le match que les moyennes réelles de buts de Caracas. Quand les deux équipes concèdent, garder le plus de 2,5 sans trop de réserve."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Covea a marqué à la 22e et Andrés Romero a égalisé à la 28e : le BTTS était acquis dès la mi-temps.",
+          "lesson": "Confirmé : l'absence du buteur ne coupe pas la production de Monagas. Garder BTTS quand les deux défenses encaissent régulièrement."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Caracas & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "faible",
+          "aiWasRight": false,
+          "explanation": "Le volet buts (plus de 1,5) est passé, mais Caracas a perdu 2-3, donc le combiné a échoué.",
+          "lesson": "Un combiné hérite du risque du 1N2. Il faut s'en méfier quand le côté résultat n'est qu'à environ 50 %."
+        },
+        {
+          "market": "Buts — Caracas",
+          "marketId": "teamGoals",
+          "pick": "Caracas — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Caracas a marqué 2 buts : Covea à la 22e et Villarreal sur penalty à la 45+6. Il n'a plus marqué ensuite, donc moins de 2,5 validé.",
+          "lesson": "Les faibles moyennes offensives de Caracas (1,1) ont tenu. Garder ce type de plafond pour cette équipe."
+        },
+        {
+          "market": "Buts — Monagas SC",
+          "marketId": "teamGoals",
+          "pick": "Monagas SC — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Monagas a marqué trois fois : Andrés Romero (28e), Henry (68e) et Antonio Romero (71e).",
+          "lesson": "La prudence sur l'absence de Rodríguez était excessive. Monagas a de la profondeur offensive et a marqué sans lui, malgré le 0-2 récent."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 12.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Seulement 7 corners (3 + 4), très loin de 12,5.",
+          "lesson": "Garder ce marché : les moyennes basses et le match sans domination territoriale marquée convergent."
+        },
+        {
+          "market": "Corners — Caracas",
+          "marketId": "teamCorners",
+          "pick": "Caracas — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Caracas n'a eu que 3 corners, avec 42 % de possession.",
+          "lesson": "Une équipe à faible volume de corners à domicile reste sous la ligne, surtout quand elle est dominée en possession."
+        },
+        {
+          "market": "Corners — Monagas SC",
+          "marketId": "teamCorners",
+          "pick": "Monagas SC — Moins de 5.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Monagas a eu 4 corners malgré 58 % de possession, sous 5,5.",
+          "lesson": "La possession ne se traduit pas forcément en corners. Les moyennes basses ont bien prédit."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 22.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "28 tirs au total (13 + 15), au-dessus de 22,5 et proche des 28,34 attendus.",
+          "lesson": "Les attendus de tirs du moteur sont fiables dans un match ouvert avec renversement de score. À garder."
+        },
+        {
+          "market": "Tirs — Caracas",
+          "marketId": "teamShots",
+          "pick": "Caracas — Moins de 20.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "13 tirs seulement, très en dessous de 20,5.",
+          "lesson": "La moyenne à domicile (11,5) était un bon repère. Conserver le plafond pour Caracas."
+        },
+        {
+          "market": "Tirs — Monagas SC",
+          "marketId": "teamShots",
+          "pick": "Monagas SC — Plus de 8.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Monagas a tiré 15 fois, plus que 8,5, avec 58 % de possession.",
+          "lesson": "Le volume de tirs de Monagas ne dépend pas d'un seul attaquant. Garder cette ligne basse."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "9 tirs cadrés (4 + 5), au-dessus de 5,5.",
+          "lesson": "La somme des moyennes avait bien fonctionné. À garder."
+        },
+        {
+          "market": "Tirs cadrés — Caracas",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Caracas — Moins de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Caracas a cadré 4 tirs, sous 6,5.",
+          "lesson": "Dépasser 6 cadrés est inhabituel pour cette équipe. Plafond à conserver."
+        },
+        {
+          "market": "Tirs cadrés — Monagas SC",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Monagas SC — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Monagas a cadré 5 tirs, sous 5,5 de justesse, malgré ses 3 buts.",
+          "lesson": "Ce résultat a été serré : 5 contre 5,5. La marge est mince pour une équipe qui cadre 4,5 à 4,8 par match."
+        }
+      ],
+      "caveats": "C'est un échantillon d'un seul match. Le renversement tient à des événements ponctuels : un penalty raté à la 63e, deux buts en trois minutes et la blessure de Luis González à la 40e. Aucun xG ni grosse occasion n'est relevé (0 / 0). Les deux équipes avaient récemment changé d'entraîneur, ce qui rend les moyennes peu fiables.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 24,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5008,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2687,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5008,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2687,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5008,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5008
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.04732360000000001,
+      "createdAt": "2026-11-04T00:51:24.427Z"
+    }
   },
   {
     "matchId": "cal-2026-11-01-estudiantes-instituto",

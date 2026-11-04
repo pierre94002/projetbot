@@ -1,13 +1,13 @@
 {
   "version": 1,
-  "enregistreLe": "2026-11-03T14:11:45.828Z",
-  "pid": 6900,
-  "depuis": "2026-11-03T06:41:24.824Z",
-  "requetes": 1331,
-  "reussites": 1331,
+  "enregistreLe": "2026-11-04T01:35:09.689Z",
+  "pid": 16280,
+  "depuis": "2026-11-03T18:12:17.630Z",
+  "requetes": 3002,
+  "reussites": 3002,
   "echecs": 0,
   "erreursDeSuite": 0,
-  "derniereReussite": "2026-11-03T14:10:47.902Z",
+  "derniereReussite": "2026-11-04T01:34:43.060Z",
   "derniereErreur": {
     "le": "2026-10-29T11:47:54.918Z",
     "type": "feuille-de-match",
@@ -17,53 +17,17 @@
   },
   "parType": {
     "liste-du-jour": {
-      "requetes": 484,
-      "reussites": 484,
+      "requetes": 753,
+      "reussites": 753,
       "echecs": 0,
       "absentes": 0,
       "erreursDeSuite": 0,
       "formeInattendue": 0,
-      "derniereReussite": "2026-11-03T14:10:47.902Z",
+      "derniereReussite": "2026-11-04T01:34:43.060Z",
       "derniereErreur": null,
       "derniereAbsence": null,
       "derniereForme": {
-        "le": "2026-11-03T14:10:47.902Z",
-        "attendue": true,
-        "manques": []
-      },
-      "derniereFormeInattendue": null,
-      "manques": {}
-    },
-    "equipe": {
-      "requetes": 2,
-      "reussites": 2,
-      "echecs": 0,
-      "absentes": 0,
-      "erreursDeSuite": 0,
-      "formeInattendue": 0,
-      "derniereReussite": "2026-11-03T06:42:15.392Z",
-      "derniereErreur": null,
-      "derniereAbsence": null,
-      "derniereForme": {
-        "le": "2026-11-03T06:42:15.392Z",
-        "attendue": true,
-        "manques": []
-      },
-      "derniereFormeInattendue": null,
-      "manques": {}
-    },
-    "joueur": {
-      "requetes": 1,
-      "reussites": 1,
-      "echecs": 0,
-      "absentes": 0,
-      "erreursDeSuite": 0,
-      "formeInattendue": 0,
-      "derniereReussite": "2026-11-03T06:42:17.508Z",
-      "derniereErreur": null,
-      "derniereAbsence": null,
-      "derniereForme": {
-        "le": "2026-11-03T06:42:17.508Z",
+        "le": "2026-11-04T01:34:43.060Z",
         "attendue": true,
         "manques": []
       },
@@ -71,22 +35,33 @@
       "manques": {}
     },
     "feuille-de-match": {
-      "requetes": 463,
-      "reussites": 463,
+      "requetes": 1840,
+      "reussites": 1840,
       "echecs": 0,
       "absentes": 0,
       "erreursDeSuite": 0,
-      "formeInattendue": 0,
-      "derniereReussite": "2026-11-03T14:10:19.536Z",
+      "formeInattendue": 1,
+      "derniereReussite": "2026-11-04T01:33:49.668Z",
       "derniereErreur": null,
       "derniereAbsence": null,
       "derniereForme": {
-        "le": "2026-11-03T14:10:19.536Z",
+        "le": "2026-11-04T01:33:49.668Z",
         "attendue": true,
         "manques": []
       },
-      "derniereFormeInattendue": null,
-      "manques": {}
+      "derniereFormeInattendue": {
+        "le": "2026-11-03T18:14:24.982Z",
+        "manques": [
+          "general",
+          "header.status",
+          "content"
+        ]
+      },
+      "manques": {
+        "general": 1,
+        "header.status": 1,
+        "content": 1
+      }
     },
     "competition": {
       "requetes": 381,
@@ -95,29 +70,56 @@
       "absentes": 0,
       "erreursDeSuite": 0,
       "formeInattendue": 0,
-      "derniereReussite": "2026-11-03T14:10:16.950Z",
+      "derniereReussite": "2026-11-04T00:19:57.666Z",
       "derniereErreur": null,
       "derniereAbsence": null,
       "derniereForme": {
-        "le": "2026-11-03T14:10:16.950Z",
+        "le": "2026-11-04T00:19:57.666Z",
         "attendue": true,
         "manques": []
       },
       "derniereFormeInattendue": null,
       "manques": {}
     },
+    "joueur": {
+      "requetes": 28,
+      "reussites": 28,
+      "echecs": 0,
+      "absentes": 0,
+      "erreursDeSuite": 0,
+      "formeInattendue": 27,
+      "derniereReussite": "2026-11-03T18:54:29.954Z",
+      "derniereErreur": null,
+      "derniereAbsence": null,
+      "derniereForme": {
+        "le": "2026-11-03T18:54:29.954Z",
+        "attendue": false,
+        "manques": [
+          "réponse qui n’est pas un objet JSON"
+        ]
+      },
+      "derniereFormeInattendue": {
+        "le": "2026-11-03T18:54:29.954Z",
+        "manques": [
+          "réponse qui n’est pas un objet JSON"
+        ]
+      },
+      "manques": {
+        "réponse qui n’est pas un objet JSON": 27
+      }
+    },
     "commentaire": {
-      "requetes": 62,
-      "reussites": 62,
+      "requetes": 77,
+      "reussites": 77,
       "echecs": 0,
       "absentes": 4,
       "erreursDeSuite": 0,
       "formeInattendue": 0,
-      "derniereReussite": "2026-11-03T14:10:54.005Z",
+      "derniereReussite": "2026-11-04T01:19:31.296Z",
       "derniereErreur": null,
-      "derniereAbsence": "2026-11-03T07:29:47.371Z",
+      "derniereAbsence": "2026-11-04T01:02:28.253Z",
       "derniereForme": {
-        "le": "2026-11-03T14:10:54.005Z",
+        "le": "2026-11-04T01:19:31.296Z",
         "attendue": true,
         "manques": []
       },

@@ -42812,8 +42812,132 @@
       "lineupImpact": "Le onze de Numancia est celui de décembre 2025 (source magasin, pas celui du match), sans aucune donnée chiffrée sur les joueurs : impossible d'en tirer un avis. Pour Oviedo, c'est le dernier onze aligné (24/10 à Almería) en 4-2-3-1 : Escandell dans les buts, Calvo, Reina et Goti (1+1) en soutien. Sáenz (2+0), Villahermosa et Jacobo González sont habituellement titulaires mais étaient remplaçants. Domínguez était absent de la feuille ; Ișfan, Ramos, Juan Cruz et Fernández sont blessés. L'arbitre siffle plus de fautes (28,9 contre 26,6) et de jaunes (5,44 contre 5,07) que la moyenne."
     },
     "kickoffRuns": 1,
-    "updatedAt": "2026-10-29T16:37:35.238Z",
-    "createdAt": "2026-10-29T16:37:35.238Z"
+    "updatedAt": "2026-11-04T00:43:36.391Z",
+    "createdAt": "2026-10-29T16:37:35.238Z",
+    "postMatchReview": {
+      "summary": "Match nul 3-3 après 90 minutes, très ouvert. Ma lecture prudente (Oviedo légèrement favori, mais confiance faible) a évité l'erreur sur le 1N2. Le plus de 1,5 but et l'avis que Oviedo marquerait ont tenu. Je n'ai pas vu que Numancia, inconnu, pouvait marquer autant.",
+      "whatWasRight": "Match ouvert avec au moins 2 buts : 6 buts, dont 3 pour Oviedo. J'ai contredit le « Oviedo moins de 0,5 but » du moteur : Oviedo a marqué à la 74e (Ișfan), à la 76e et à la 89e (Goti). Numancia sous 3,5 buts : il en a marqué 3, juste sous la barre. Ma prudence sur la victoire d'Oviedo était justifiée : le nul est sorti.",
+      "whatWasMissed": "Je n'ai pas vu que Numancia avait un vrai potentiel offensif. Son xG est de 2,51, très proche du 2,39 du moteur, alors que je prenais ce chiffre pour une incohérence. J'ai sous-estimé la possibilité que les deux équipes marquent. Je n'ai pas non plus anticipé l'ampleur de la domination d'Oviedo : 31 tirs contre 14, 13 corners contre 3, 69 % de possession. Le scénario tardif (2-0, puis 2-2, 3-2 et 3-3) était difficile à prévoir.",
+      "outcomeVsEngine": "Le résultat contredit en partie le moteur. Il voyait Oviedo gagner (51 %) et ne lui donnait que 0,68 xG, or le match a fini 3-3 avec 2,61 xG pour Oviedo. Le moteur avait raison sur la force de Numancia (xG 2,39 prévu, 2,51 réel), mais il se trompait sur Oviedo. Les marchés « plus de 1,5 » et « Numancia moins de 3,5 » vont dans son sens, pas « les 2 marquent : non » ni « Oviedo 0 but ».",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Real Oviedo gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Le pick Oviedo gagne est faux : 3-3. Oviedo a été mené 2-0 (buts de Numancia à la 43e et à la 57e), puis a égalisé à 2-2 à la 76e. Numancia est repassé devant à la 87e, et Goti a égalisé à la 89e. Oviedo a dominé les statistiques (31 tirs, 13 corners, xG 2,61 contre 2,51), mais Numancia a été efficace.",
+          "lesson": "Mon avis nuancé et peu confiant était adapté : en Coupe contre un adversaire mal connu, ne pas valider un favori sur la seule forme. Un nul reste une issue sérieuse quand l'adversaire est inconnu."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Plus de 1,5 but est juste : 6 buts au total, dont 4 entre la 74e et la 89e. Les xG des deux équipes dépassent 2,5.",
+          "lesson": "Garder cette lecture : les moyennes d'Oviedo à l'extérieur (environ 3,3 buts) et les matchs ouverts récents indiquent un total élevé, même en Coupe."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Le pick « Non » est faux : Numancia a marqué 3 fois (43e, 57e, 87e) et Oviedo 3 fois (74e, 76e, 89e). Le xG de 0,68 d'Oviedo était très inférieur au 2,61 réel.",
+          "lesson": "Quand le xG du moteur pour une équipe qui marque régulièrement (7 matchs de suite) est incohérent avec sa forme, se méfier du « Non ». Mon doute d'avant-match était fondé."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Real Oviedo & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Oviedo & moins de 3,5 buts est faux : Oviedo n'a pas gagné (3-3), et le total de 6 buts dépasse aussi 3,5. Les deux conditions ont échoué.",
+          "lesson": "Éviter ces combinés sur un match de Coupe peu documenté : le cumul d'incertitudes a été sanctionné, et l'ouverture du match a invalidé la partie « moins de 3,5 »."
+        },
+        {
+          "market": "Buts — Numancia",
+          "marketId": "teamGoals",
+          "pick": "Numancia — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Numancia moins de 3,5 buts est juste : 3 buts (Aranzabe à la 43e, Leon à la 57e, Gonzalez à la 87e). Il est resté à une unité de la barre malgré un xG de 2,51.",
+          "lesson": "La confiance forte était acceptable, mais la barre est passée près : un adversaire inconnu peut marquer 3 fois face à une défense qui encaisse 1,67 but à l'extérieur. Garder ce marché, sans le surestimer."
+        },
+        {
+          "market": "Buts — Real Oviedo",
+          "marketId": "teamGoals",
+          "pick": "Real Oviedo — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "contredit",
+          "aiConfidence": "faible",
+          "aiWasRight": true,
+          "explanation": "Le pick « Oviedo moins de 0,5 but » est faux, et mon avis contraire était bon : Oviedo a marqué 3 fois (Ișfan à la 74e, Goti à la 76e et à la 89e). Samu Rodríguez a touché le poteau à la 48e, et Oviedo a tiré 31 fois.",
+          "lesson": "Garder cette règle : face à une équipe qui marque depuis 7 matchs et tire beaucoup, un pick « 0 but » issu du xG du moteur est à contredire, même avec des attaquants blessés."
+        }
+      ],
+      "caveats": "Un seul match, avec très peu de données sur Numancia (anciennes, onze non officiel). Cartons et remplacements ne sont pas publiés dans le déroulé, seulement les totaux (5 jaunes et 1 rouge pour Numancia) sans minute. Le rouge a pu influencer la fin de match, mais je ne sais pas à quel moment il a été donné. Le score de 3-3 pourrait aussi tenir à la variance de finition en fin de match, difficile à modéliser.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 6,
+        "commentaire": 2
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 6641,
+        "cache_read_input_tokens": 7998,
+        "output_tokens": 4455,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 6641,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2225,
+            "cache_read_input_tokens": 5910,
+            "cache_creation_input_tokens": 2819,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2819
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0727216,
+      "createdAt": "2026-11-04T00:43:36.390Z"
+    }
   },
   {
     "matchId": "cal-2026-10-29-pena-sport-sd-huesca",
@@ -43772,8 +43896,132 @@
       "lineupImpact": "Source FotMob, relue 22 minutes avant le coup d'envoi : composition presque officielle. Peña Sport est en 5-3-2 avec des joueurs tous inconnus du magasin, donc aucun repère chiffré. Huesca est en 4-3-3 avec 8 titulaires habituels absents de la feuille (Portillo, Pulido, Jimenez, Carrillo, Sielva 5+2, Piña, Álvarez, Abad), dont le gardien habituel. Seul Collado (22 matchs, 1+1, xG 2,54) est un repère offensif. Cela affaiblit Huesca et nuance son statut de favori. Terrain en herbe, météo calme, sans effet notable."
     },
     "kickoffRuns": 1,
-    "updatedAt": "2026-10-29T16:38:01.553Z",
-    "createdAt": "2026-10-29T16:38:01.553Z"
+    "updatedAt": "2026-11-04T00:43:54.344Z",
+    "createdAt": "2026-10-29T16:38:01.553Z",
+    "postMatchReview": {
+      "summary": "Huesca a gagné 1-5 malgré un onze remanié. Ma lecture prudente (favori fragile, Peña Sport capable de marquer) était juste sur un point : Peña Sport a marqué. Mais j'ai sous-estimé la supériorité de division de Huesca et le volume de buts : 6 buts au total, 5 pour Huesca.",
+      "whatWasRight": "J'avais contredit le « Moins de 0.5 but » de Peña Sport : Recalde a marqué à la 66e. J'avais aussi nuancé le Non aux deux équipes (le Non était à 66 %) : il est faux. Le favori Huesca était bien le bon côté, et Huesca + plus de 1,5 but est passé.",
+      "whatWasMissed": "J'ai trop pris au sérieux la forme et l'ancienneté des statistiques de Huesca (série sans victoire, avril-mai) et la fragilité du onze remanié. Même avec des remplaçants, Huesca a marqué à la 22e, 31e, 55e, 68e et 89e. J'ai confirmé à tort les marchés « moins de 3,5 buts » et « Huesca moins de 2,5 buts ». Le fossé de division entre un club amateur et un club professionnel l'a emporté sur la forme récente.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le vainqueur (Huesca favori) et sur la combinaison Huesca + plus de 1,5 but. Il contredit le moteur sur les marchés de buts : total sous 3,5, Non aux deux équipes, Peña Sport sous 0,5 et Huesca sous 2,5 sont tous faux. Le moteur a sous-estimé l'ampleur de la victoire (1,83 but attendu pour Huesca, 5 marqués).",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "SD Huesca gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Huesca a mené 0-2 à la mi-temps (buts à la 22e et à la 31e), puis 0-3 à la 55e, et a fini par gagner 1-5. Le pick du moteur était juste. Mon avis nuancé, de faible confiance, n'a pas été tranché.",
+          "lesson": "En coupe, face à un club amateur, l'écart de division pèse davantage que la forme récente ou que les rotations. Un onze remanié de club professionnel reste en général supérieur."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Il y a eu 6 buts (22e, 31e, 55e, 66e, 68e, 89e), donc plus de 3,5. Le moteur et moi avons confirmé à tort le Moins de 3,5, car Huesca a marqué cinq fois.",
+          "lesson": "Dans un match de coupe très déséquilibré, les moyennes de buts de championnat sous-estiment les scores larges. Je dois me méfier du Moins de 3,5 quand l'écart de niveau est net."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Peña Sport a marqué par Recalde à la 66e, et Huesca a marqué cinq fois, donc les deux équipes ont marqué. Le Non était faux. Mon avis nuancé, de faible confiance, allait dans le bon sens sans trancher.",
+          "lesson": "Un petit xG moteur pour l'outsider ne suffit pas à écarter son but : une équipe qui marque 1,7 à domicile peut marquer quand l'adversaire fait tourner. Garder cette prudence sur le Non."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "SD Huesca & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Huesca a gagné avec 5 buts, donc la combinaison Huesca & plus de 1,5 but est validée. Le pick était juste et mon avis nuancé était prudent.",
+          "lesson": "Le moteur lisait bien le scénario de victoire large de Huesca. Cette combinaison est cohérente quand l'écart de division est net, malgré mes réserves sur le bilan passé."
+        },
+        {
+          "market": "Buts — Peña Sport",
+          "marketId": "teamGoals",
+          "pick": "Peña Sport — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "contredit",
+          "aiConfidence": "faible",
+          "aiWasRight": true,
+          "explanation": "Peña Sport a marqué à la 66e par Recalde, donc Moins de 0,5 est faux. Mon avis contradictoire était juste.",
+          "lesson": "Garder le raisonnement : un xG à domicile de 2,03 et une défense extérieure de Huesca qui concède 1,8 rendaient un 0 but moins probable que ne l'indiquait le moteur."
+        },
+        {
+          "market": "Buts — SD Huesca",
+          "marketId": "teamGoals",
+          "pick": "SD Huesca — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Huesca a marqué 5 buts (Aznar 22e, Collado 31e, Garcia 55e, Redondo 68e, Gorostidi 89e). Moins de 2,5 est faux. J'avais confirmé ce pick à tort.",
+          "lesson": "L'absence des titulaires offensifs habituels n'a pas freiné Huesca. Je ne dois pas faire baisser le total de buts d'un club professionnel sur la seule base des rotations, surtout face à un club amateur avec une défense inconnue."
+        }
+      ],
+      "caveats": "Un seul match. Aucune statistique (tirs, xG, possession) ni aucun carton relevés, donc le déroulé détaillé reste inconnu. Peña Sport est un club amateur sans données fiables, et les statistiques de Huesca dataient d'avril-mai 2026. L'écart peut aussi tenir à l'écart de niveau et à la variance d'un seul match de coupe.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 6,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3540,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 1965,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3540,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1965,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 3540,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3540
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0342316,
+      "createdAt": "2026-11-04T00:43:54.343Z"
+    }
   },
   {
     "matchId": "cal-2026-10-29-eskisehirspor-igd-r-fk",
@@ -52639,8 +52887,132 @@
       "caveats": "Classement indisponible (coupe). Forme et moyennes de Coruxo FC introuvables. Pour Zamora, la forme et les stats portent sur 4 matchs de 2023-2024, donc très anciens. La composition de Zamora est celle de décembre 2024 et celle de Coruxo est inconnue. Pas de dossier club, pas de cotes de marché, pas de statExpectations (corners, tirs). L'historique d'entraîneurs manque. Mon bilan en Copa del Rey (33/59) est modeste."
     },
     "kickoffRuns": 1,
-    "updatedAt": "2026-10-29T17:31:35.501Z",
-    "createdAt": "2026-10-29T17:31:35.501Z"
+    "updatedAt": "2026-11-04T00:43:04.295Z",
+    "createdAt": "2026-10-29T17:31:35.501Z",
+    "postMatchReview": {
+      "summary": "Zamora a gagné 0-2 (but à la 8e, second à la 90e). La lecture prudente d'avant-match, qui penchait pour Zamora sans conviction et sans données fiables, est cohérente avec le résultat. Le scénario ouvert à plusieurs buts ne s'est pas produit : seul « les 2 équipes marquent » a échoué.",
+      "whatWasRight": "Zamora favori et score faible côté Coruxo : Coruxo n'a pas marqué (Moins de 1.5 juste). Zamora est resté à 2 buts (Moins de 2.5 juste). Plus de 1.5 buts est passé avec exactement 2 buts, et la combinaison Zamora & Plus de 1.5 aussi. Ma prudence sur les données anciennes était justifiée.",
+      "whatWasMissed": "J'ai laissé entendre un match ouvert et jugé le BTTS plausible (56 %) à partir de trois matchs de Zamora de 2023-2024, anciens et peu représentatifs. Coruxo n'a pas marqué. Le but précoce de Pau Mascaró (8e) a orienté le match, et le second but est arrivé tardivement (90e), ce qui montre que Plus de 1.5 a tenu de justesse.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur : victoire de Zamora, qui avait deux buts attendus contre un. Seul le BTTS, favorisé par le moteur, est contredit.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Zamora gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Zamora a gagné 0-2 : but de Pau Mascaró à la 8e, mené 0-1 à la mi-temps, puis but d'Alexander Hidalgo à la 90e. Le moteur avait vu juste.",
+          "lesson": "Mon avis nuancé et de faible confiance était raisonnable vu des données anciennes. Quand le moteur favorise nettement l'équipe de division supérieure en coupe, ce favori mérite plus de crédit que la forme ancienne ne le suggère."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Deux buts au total (8e et 90e) : Plus de 1.5 est passé, mais de justesse, le second but étant arrivé dans le temps additionnel.",
+          "lesson": "Ce marché confirmé reste solide, mais la marge est mince. Un 1-0 aurait suffi à le faire échouer, donc la confiance moyenne était adaptée."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Coruxo n'a pas marqué : 0-2, avec seulement des buts de Zamora. Le marché Oui a échoué.",
+          "lesson": "Ne pas s'appuyer sur le BTTS d'un seul club à partir de 3 matchs anciens quand l'autre équipe est inconnue. Ce marché reste fragile en coupe face à un déséquilibre de niveau, et ma prudence était justifiée."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Zamora & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Zamora a gagné avec 2 buts, ce qui valide la combinaison. Le but à la 90e a fait passer le total à 2.",
+          "lesson": "La combinaison dépend surtout du vainqueur. Le résultat s'est joué grâce à un but tardif sur le total, ce qui doit rester un point de vigilance."
+        },
+        {
+          "market": "Buts — Coruxo FC",
+          "marketId": "teamGoals",
+          "pick": "Coruxo FC — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Coruxo a fini à 0 but, ce qui valide Moins de 1.5.",
+          "lesson": "Pour une équipe locale inconnue et moins favorite, la base du championnat qui limite son total est utile. À garder."
+        },
+        {
+          "market": "Buts — Zamora",
+          "marketId": "teamGoals",
+          "pick": "Zamora — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Zamora a marqué 2 buts (8e et 90e), donc Moins de 2.5 est juste. Le total de Zamora est resté plafonné à 2.",
+          "lesson": "Confirmé : la moyenne offensive modeste de Zamora a bien tenu. Il faut toutefois rester prudent, car le second but est arrivé à la toute fin."
+        }
+      ],
+      "caveats": "Un seul match. Aucune statistique (tirs, xG, possession), carton ou remplacement n'a été publiée, donc on ne peut pas dire si la victoire était dominante. Le but à la 90e peut relever du hasard. Les données d'avant-match étaient très pauvres.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 2,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3275,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 1611,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3275,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1611,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 3275,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3275
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0296316,
+      "createdAt": "2026-11-04T00:43:04.295Z"
+    }
   },
   {
     "matchId": "cal-2026-10-29-kalmar-ff-gais",
@@ -58941,8 +59313,132 @@
       ]
     },
     "kickoffRuns": 1,
-    "updatedAt": "2026-10-29T17:31:57.261Z",
-    "createdAt": "2026-10-29T17:31:57.261Z"
+    "updatedAt": "2026-11-04T00:44:12.829Z",
+    "createdAt": "2026-10-29T17:31:57.261Z",
+    "postMatchReview": {
+      "summary": "Ceuta (Liga 2) a gagné 2-1 à Poblense après avoir été mené dès la 17e. Le moteur favorisait Ceuta et j'avais nuancé à cause de sa crise. Le match a été serré : égalisation à la 79e, victoire à la 90e. Le scénario « victoire courte, moins de 3,5 buts » s'est réalisé, mais Poblense a marqué.",
+      "whatWasRight": "J'avais confirmé « moins de 3,5 buts » : 3 buts au total. J'avais confirmé « Ceuta marque au moins un but » : deux buts, par Lapeña (79e) et Escobar (90e). J'avais signalé la fragilité de la défense de Ceuta, et Poblense a marqué à la 17e (Santi Riveron). Ma prudence sur le résultat sec était justifiée : Ceuta a dû attendre la 79e pour égaliser et a gagné à la dernière minute. Escobar, que je citais parmi les attaquants à surveiller, a marqué le but décisif.",
+      "whatWasMissed": "J'ai confirmé « les 2 équipes ne marquent pas » alors que Poblense avait marqué dans ses deux matchs de Copa et que Ceuta concédait 2 buts par match. J'aurais dû moins me fier au 0,5 but attendu, calculé sur peu de données. Poblense a ouvert le score à la 17e et menait à la mi-temps (1-0). J'ai sous-estimé qu'une équipe amateur à domicile peut marquer sur un temps fort, et que le résultat reste ouvert tard dans un match de coupe.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le vainqueur : Ceuta gagne, avec le total sous 3,5 et Ceuta au moins un but. Il contredit le moteur sur Poblense, qui marque alors que le moteur lui attendait seulement 0,5 but, donc sur « Les 2 équipes marquent : Non ». Le score exact, avec un but encaissé, reste dans la zone du scénario central du moteur, mais la victoire est arrivée à la 90e.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "AD Ceuta FC gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Ceuta a gagné 2-1 après avoir été mené 1-0 dès la 17e. Il a égalisé à la 79e (Lapeña) et gagné à la 90e (Escobar). Le pronostic du moteur était juste, mais de justesse.",
+          "lesson": "Ma nuance prudente était raisonnable : le match a été accroché. Face à un club amateur en coupe, le niveau supérieur de Ceuta a fini par peser malgré sa crise en championnat. Garder ce constat, sans surpondérer la forme en championnat."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "3 buts au total (17e, 79e, 90e), donc sous 3,5. Le volume est resté limité et aucun but n'est tombé en première partie de match après la 17e.",
+          "lesson": "Quand une équipe a un faible volume offensif et que l'autre est amateur, le sous 3,5 est un marché solide. À conserver."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Poblense a marqué à la 17e (Santi Riveron) et Ceuta deux fois, donc les deux équipes ont marqué. Le « Non » était faux.",
+          "lesson": "Ne pas confirmer « Non » quand l'équipe faible a marqué lors de ses matchs récents et que l'adversaire concède 2 buts par match. Un xG de 0,5 sur peu de données ne suffit pas à fermer ce marché."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "AD Ceuta FC & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Ceuta a gagné 2-1 avec 3 buts, donc sous 3,5. Les deux conditions sont réunies, avec une victoire courte, comme je le disais.",
+          "lesson": "La combinaison dépendait surtout du résultat. L'avis nuancé était cohérent : le sous 3,5 était sûr, la victoire de Ceuta ne l'était pas."
+        },
+        {
+          "market": "Buts — Poblense",
+          "marketId": "teamGoals",
+          "pick": "Poblense — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Poblense a marqué une fois, à la 17e, donc « moins de 0,5 but » est faux. Le but a été marqué avant la mi-temps, sur un score de 1-0.",
+          "lesson": "J'avais bien signalé que le résultat n'était pas sûr à cause de la défense poreuse de Ceuta. Un seuil de 0,5 but est fragile contre une défense qui encaisse 2 buts par match, même face à une équipe amateur."
+        },
+        {
+          "market": "Buts — AD Ceuta FC",
+          "marketId": "teamGoals",
+          "pick": "AD Ceuta FC — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Ceuta a marqué deux fois (79e Lapeña, 90e Escobar), donc « plus de 0,5 but » est juste. Les buts sont tombés tard, mais ils sont tombés.",
+          "lesson": "La série de matchs avec but et la qualité offensive de Ceuta justifient cet avis. À garder pour ce type de marché contre un adversaire de niveau inférieur."
+        }
+      ],
+      "caveats": "Échantillon d'un seul match de coupe, dont l'issue s'est jouée à la 90e. Aucune statistique (tirs, xG, possession), carton ni remplacement n'a été relevée, donc le déroulé reste incomplet. Les données de Poblense sont anciennes (2 matchs), et les compositions venaient du magasin, pas du match.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 3,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3418,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 1991,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3418,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1991,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 3418,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3418
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0340036,
+      "createdAt": "2026-11-04T00:44:12.829Z"
+    }
   },
   {
     "matchId": "cal-2026-10-29-san-sebastian-de-los-reyes-cd-coria",
@@ -62153,8 +62649,120 @@
       "lineupImpact": "Source magasin : le onze de Granada est celui du 23/10 (2-1 contre Valladolid), et celui de Cieza date du 03/12/2025 ; aucun n'est officiel. Arnáiz (11/11, 2+1, douteux) et Marqués (2 buts en 7 matchs, blessé) sont absents, et Alemañ (7 titularisations, 2+1) est blessé. Jorge Pascual (4 buts) est l'arme offensive restante. Le gardien Lizoain (7 titularisations) est remplaçant au profit de Flores. Les joueurs de Cieza sont inconnus du magasin. Le synthétique et un arbitre sévère sur les fautes (29,9 contre 26,6 de moyenne) peuvent hacher le jeu."
     },
     "kickoffRuns": 1,
-    "updatedAt": "2026-10-29T18:00:55.656Z",
-    "createdAt": "2026-10-29T18:00:55.656Z"
+    "updatedAt": "2026-11-04T00:42:47.742Z",
+    "createdAt": "2026-10-29T18:00:55.656Z",
+    "postMatchReview": {
+      "summary": "Granada a gagné 3-0 à Cieza (buts 10e, 61e, 84e). Ma lecture favorable à Granada et méfiante envers les marchés « peu de buts » s'est confirmée. Le moteur, calé sur 0,5 / 0,5 but attendu, a sous-estimé l'attaque de Granada : deux de ses cinq pronostics sont faux.",
+      "whatWasRight": "J'avais confirmé la victoire de Granada (forme, écart de niveau) : 3-0. J'avais confirmé « Granada & moins de 3,5 buts » : 3 buts, juste. J'avais contredit « Granada moins de 0,5 but » en m'appuyant sur ses 1,8 but par match : Granada a marqué dès la 10e. J'avais jugé fragile le « moins de 1,5 but » : 3 buts. Jorge Pascual, cité comme arme offensive restante, a marqué à la 84e. Cieza n'a pas marqué, conformément à son faible niveau offensif.",
+      "whatWasMissed": "Je n'avais que « nuancé » le total de buts avec une confiance faible, alors que l'écart de niveau rendait plausible un score à plusieurs buts. Mon doute sur les absences d'Arnáiz et de Marqués et sur une rotation n'a pas pesé : Granada a ouvert le score tôt et marqué trois fois, dont Hormigo et Gimber, que je n'avais pas cités. Le synthétique et l'arbitre sévère n'ont pas eu d'effet visible dans les faits relevés.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le 1N2, le « Granada & moins de 3,5 » et « Cieza moins de 0,5 ». Il le contredit sur « moins de 1,5 but » et « Granada moins de 0,5 ». Les 0,5 / 0,5 but attendus étaient trop bas pour une équipe de Liga 2 face à une équipe amateur.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Granada gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Granada a gagné 3-0 : Hormigo (10e), Gimber (61e), Pascual (84e). Mi-temps 0-1. Aucune statistique relevée.",
+          "lesson": "Face à un adversaire amateur, le niveau et la forme de Liga 2 l'emportent sur les absences et la rotation. À garder pour les coupes entre divisions éloignées."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "3 buts au total (10e, 61e, 84e), donc moins de 1,5 est faux. Le but précoce a ouvert le match et Granada a ajouté deux buts en seconde période.",
+          "lesson": "Ne pas se fier à des xG de 0,5 / 0,5 fondés sur un échantillon minuscule d'un adversaire amateur. Mon doute, même faible, était fondé : à renforcer contre un « moins de buts » dans ce cas."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Granada & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Victoire de Granada avec 3 buts, sous la barre de 3,5 : le combiné est juste. Le troisième but, à la 84e, a laissé le total à 3.",
+          "lesson": "Ce combiné tient bien pour un favori net, mais la marge est mince : un quatrième but l'aurait fait basculer. À garder avec prudence."
+        },
+        {
+          "market": "Buts — Cieza",
+          "marketId": "teamGoals",
+          "pick": "Cieza — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Cieza n'a pas marqué (0-3). Aucun but sur tout le match ; les tirs ne sont pas relevés.",
+          "lesson": "Le faible niveau offensif d'une équipe amateur contre une défense de Liga 2 justifiait ce pronostic. À garder."
+        },
+        {
+          "market": "Buts — Granada",
+          "marketId": "teamGoals",
+          "pick": "Granada — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "contredit",
+          "aiConfidence": "faible",
+          "aiWasRight": true,
+          "explanation": "Granada a marqué trois fois, dès la 10e. Le « moins de 0,5 » est donc faux.",
+          "lesson": "Quand le moteur donne 0,5 but attendu à une équipe qui marque 1,8 par match, le contredire était juste. Les moyennes récentes de l'équipe forte priment sur les xG d'un adversaire peu documenté."
+        }
+      ],
+      "caveats": "Un seul match, sans statistiques détaillées (tirs, xG, possession, cartons non relevés). Le but précoce a pu orienter le déroulé. Les données de Cieza étaient très minces, donc la lecture reste peu fiable.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 3,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 4908,
+        "cache_read_input_tokens": 7443,
+        "output_tokens": 3521,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 4908,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1627,
+            "cache_read_input_tokens": 5355,
+            "cache_creation_input_tokens": 1641,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1641
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0563386,
+      "createdAt": "2026-11-04T00:42:47.742Z"
+    }
   },
   {
     "matchId": "cal-2026-10-29-braga-famalicao",
