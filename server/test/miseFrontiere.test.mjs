@@ -383,7 +383,9 @@ test('T-X12 les sha1 de la partie 0 : tous les fichiers gelés identiques à l�
   }
   for (const [f, attendu] of GELES) {
     const chemin = f.startsWith('ui/') ? path.join(RACINE, f) : path.join(SRC, f);
-    assert.equal(sha1(fs.readFileSync(chemin)), attendu, `${f} : retouché (gelé pendant l’essai 27)`);
+    // Étape 38 (lot 1b, 04/11/2026) : l'actualisation comparée sans ses blocs « ajout pur » de la 38 (combinaisonFuite.test.mjs, T-X10).
+    const octets = f === 'jobs/matchStatsAutoRefresh.js' ? Buffer.from(fs.readFileSync(chemin, 'utf8').replace(/^[^\n]*\[étape 38, lot 1b : ajout pur, début\][\s\S]*?\[étape 38, lot 1b : ajout pur, fin\][^\n]*\n/gm, ''), 'utf8') : fs.readFileSync(chemin);
+    assert.equal(sha1(octets), attendu, `${f} : retouché (gelé pendant l’essai 27)`);
   }
   // autoMatchAiTrigger.js garde sa base interne de 10 000 (aucune mise n'en sort vers Pierre : le prompt passe par compactContext.js).
   const declencheur = fs.readFileSync(path.join(SRC, 'core', 'ai', 'autoMatchAiTrigger.js'), 'utf8');

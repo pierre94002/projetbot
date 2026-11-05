@@ -51,10 +51,12 @@ import { BASE_STATISTIQUE } from '../src/data/contexte/bancDuContexte.js';
  * T-X10, vérifie aussi ce que les blocs contiennent). Un autre fichier : ses octets bruts.
  */
 const AJOUTS_34 = new RegExp('^[^\\n]*\\[étape 34, lot 1b : ajout pur, début\\][\\s\\S]*?\\[étape 34, lot 1b : ajout pur, fin\\][^\\n]*\\n', 'gm');
+// Étape 38 (lot 1b, 04/11/2026) : ses blocs « ajout pur » de l'actualisation retirés de même (combinaisonFuite.test.mjs, T-X10).
+const AJOUTS_38 = new RegExp('^[^\\n]*\\[étape 38, lot 1b : ajout pur, début\\][\\s\\S]*?\\[étape 38, lot 1b : ajout pur, fin\\][^\\n]*\\n', 'gm');
 const octetsHorsAjouts = (chemin) => {
   const brut = fs.readFileSync(chemin);
   const texte = brut.toString('utf8');
-  return texte.includes('[étape 34, lot 1b : ajout pur, début]') ? Buffer.from(texte.replace(AJOUTS_34, ''), 'utf8') : brut;
+  return texte.includes('[étape 34, lot 1b : ajout pur, début]') ? Buffer.from(texte.replace(AJOUTS_34, '').replace(AJOUTS_38, ''), 'utf8') : brut;
 };
 
 const SRC = path.join(SERVEUR, 'src');

@@ -1638,6 +1638,54 @@ const dueJoueursABlanc = (ctx) => !faitAujourdhui(ctx.derniere('joueursABlanc'))
 export const __joueursPourLesTests = { passeJoueursABlanc, dueJoueursABlanc };
 
 // [étape 34, lot 1b : ajout pur, fin]
+// [étape 38, lot 1b : ajout pur, début]
+/**
+ * L'étape « combinaisonABlanc » (étape 38 du plan, lot 1b, 04/11/2026) : LA COMBINAISON, LA CONFIANCE ET LE SEUIL À BLANC —
+ * pour chaque révision gelée pas encore rangée (le moteur en service ; la candidate en essai, lue par le dépôt), ce qui
+ * manque au pronostic, son étiquette (gardée pour la preuve, jamais montrée), sa classe de seuil, le régime de son ancre,
+ * P_M et P_comb = P_M, par ENTRÉES GELÉES seulement, calculés dans un PROCESSUS À PART en lecture seule (avec le contrôle
+ * anti-fuite par un second chemin) et rangés par le serveur par tranches de 250 (jamais réécrits). Un autre calcul lourd en
+ * cours : REPORTÉE. APRÈS les chiffres des joueurs, juste AVANT le contrôle quotidien (toujours dernier) : la classe « à
+ * vérifier » lit le contrôle de la VEILLE, lu ICI par la passe (aucun fichier d'exécution n'est lu dans data/combinaison/).
+ * Hors du chemin de nuit de l'essai de l'étape 27 ; jamais lue par le moteur ni envoyée à l'IA. Le module est chargé par un
+ * import() DYNAMIQUE : une erreur dans data/combinaison/ n'empêche jamais ce fichier de se charger ni la nuit de démarrer —
+ * elle met seulement cette étape en échec. Ajout PUR (règle du gel pendant l'essai 27) : rien d'autre de ce fichier ne
+ * change (combinaisonFuite.test.mjs, T-X10, le vérifie à l'octet).
+ */
+async function passeCombinaisonABlanc(ctx, options = {}) {
+  const { chargerLeModule = () => import('../data/combinaison/combinaisonNuit.js'), lireLeControle = async () => (await import('../data/repositories/controleQuotidienRepository.js')).lireControle(), ...reste } = options;
+  let combinaison;
+  try {
+    combinaison = await chargerLeModule();
+  } catch (error) {
+    const erreur = String(error?.message ?? error).slice(0, 300);
+    return { status: 'error', summary: `En échec : le module de la combinaison ne se charge pas (${erreur}) — rien d’avancé ; le reste de la nuit n’en dépend pas.`, details: { mode: 'echec', module: false, erreur }, changed: false };
+  }
+  // Le contrôle quotidien de la veille (le dernier écrit) : la classe « à vérifier » en vigueur à chaque révision.
+  let controle = null;
+  try {
+    const lu = await lireLeControle();
+    controle = lu?.etat === 'pret' && lu.controle?.le ? { le: lu.controle.le, aVerifier: lu.controle.aVerifier ?? null } : null;
+  } catch {
+    controle = null;
+  }
+  try {
+    // L'heure est lue ici (la passe), jamais dans data/combinaison.
+    const r = await combinaison.faireLaCombinaisonDeLaNuit({ controle, ...reste, maintenant: reste.maintenant ?? Date.now() });
+    return combinaison.resultatDeLEtape(r, { updatedAt: new Date().toISOString() });
+  } catch (error) {
+    const erreur = String(error?.message ?? error).slice(0, 300);
+    return { status: 'error', summary: `En échec : ${erreur} — rien d’avancé, les lignes d’avant restent ; la passe suivante recommence.`, details: { mode: 'echec', erreur }, changed: false };
+  }
+}
+
+/** Due : une fois par jour civil de Paris, ou quand la passe d'avant l'a REPORTÉE ; jamais forcée par un clic. */
+const dueCombinaisonABlanc = (ctx) => !faitAujourdhui(ctx.derniere('combinaisonABlanc')) || Boolean(ctx.derniersDetails?.('combinaisonABlanc')?.reporte);
+
+/** Pour les tests : l'étape de la combinaison à blanc (étape 38, lot 1b). */
+export const __combinaisonPourLesTests = { passeCombinaisonABlanc, dueCombinaisonABlanc };
+
+// [étape 38, lot 1b : ajout pur, fin]
 /** Pour les tests : l'étape d'analyse IA automatique telle que la passe la lance (plafond, réserve, bilan) ; l'étape du carnet de santé ; celle de l'historique football-data ; celle des repères ; celle de la table du jour J ; celle du contrôle quotidien ; celle de la candidate à blanc ; celle de la calibration du mois écoulé ; celle de connaître le marché ; celle de l'indice de force ; celle des forces de buts ; celle des fiches des joueurs ; celle du carnet de l'IA ; celles du bulletin du jour et du bilan de la semaine ; celle du résumé du mois de la boucle de correction. */
 export const __testing = { ETAPES: () => ETAPES, passeBulletin, passeBilanSemaine, dueBulletin, dueBilanSemaine, passeCarteOuParier, dueCarteOuParier, dueMoteurABlanc, passeIaAuto, passeCarnetSante, passeHistoriqueFd, dueHistoriqueFd, passeReperes, dueReperes, passeTableJourJ, dueTableJourJ, passeControleQuotidien, passeMoteurABlanc, passeCalibrationMensuelle, dueCalibrationMensuelle, passeConnaitreMarche, dueConnaitreMarche, passeIndiceForce, dueIndiceForce, passeForcesButs, dueForcesButs, passeFichesJoueurs, dueFichesJoueurs, passeStylesDeJeu, dueStylesDeJeu, passeCarnetIA, passeDossiersIA, passeSimulationSaisons, dueSimulationSaisons, passeSimulationMatchs, dueSimulationMatchs, passeBoucleCorrection, dueBoucleCorrection, passeResumeCorrection, dueResumeCorrection, passeContexteDuMatch, dueContexteDuMatch };
 
@@ -2345,6 +2393,18 @@ const ETAPES = [
     run: (ctx) => passeJoueursABlanc(ctx)
   },
   // [étape 34, lot 1b : ajout pur, fin]
+  // [étape 38, lot 1b : ajout pur, début]
+  {
+    key: 'combinaisonABlanc',
+    label: 'Combinaison à blanc (ce qui manque à chaque pronostic, gelé avant le match ; contrôle anti-fuite)',
+    // Étape 38 du plan (lot 1b, 04/11/2026) : APRÈS les chiffres des joueurs, juste AVANT le contrôle quotidien (toujours
+    // dernier : la classe « à vérifier » lit celui de la veille), hors du chemin de nuit de l'essai de l'étape 27. Une fois
+    // par jour civil de Paris, ou si la passe d'avant l'a reportée ; jamais au clic ; ni réseau ni Claude. Cf.
+    // passeCombinaisonABlanc.
+    due: (ctx) => dueCombinaisonABlanc(ctx),
+    run: (ctx) => passeCombinaisonABlanc(ctx)
+  },
+  // [étape 38, lot 1b : ajout pur, fin]
   {
     key: 'controleQuotidien',
     label: 'Contrôle quotidien des données et santé des sources',

@@ -40,6 +40,7 @@ import MatchAiAnalysisPanel from '@/components/analysis/MatchAiAnalysisPanel.vue
 import AiLineupSnapshot from '@/components/analysis/AiLineupSnapshot.vue';
 import ManualOddsEntry from '@/components/analysis/ManualOddsEntry.vue';
 import MarketVerdictBoard from '@/components/analysis/MarketVerdictBoard.vue';
+import AvantDeParierABlanc from '@/components/analysis/AvantDeParierABlanc.vue';
 import OddsTimelineChart from '@/components/analysis/OddsTimelineChart.vue';
 import PercentageWhyCard from '@/components/analysis/PercentageWhyCard.vue';
 import PaidOddsAdvicePanel from '@/components/settings/PaidOddsAdvicePanel.vue';
@@ -726,6 +727,8 @@ const prixJuste = usePrixJuste(
               </div>
             </div>
             <MarketVerdictBoard :result="analyse.result" :match="match" :saisies="saisies.data" @saisir="saisirUneCote" />
+            <!-- Étape 38 : « Avant de parier — à blanc », sous le tableau des verdicts — ce qui manque au pronostic, le seuil et vos bookmakers ; rien n'y change le pourcentage ni le conseil. -->
+            <AvantDeParierABlanc :combinaison="analyse.result.combinaison ?? null" :result="analyse.result" />
             <!-- Étape 10 : le comparateur de vos bookmakers (la cote de chacun, son heure, sa value, la cote minimale à prendre) et le ticket (« J'ai parié »). -->
             <div id="upcoming-comparateur" class="upcoming__compare">
               <h4 class="upcoming__compare-title">

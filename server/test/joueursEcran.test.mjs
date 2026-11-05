@@ -103,7 +103,7 @@ test('T-L1 la LECTURE : sept lectures par clé, AUCUNE écriture, moins de 25 ms
 
 test('T-L1 le bloc `joueurs` est joint APRÈS l’analyse (import() dynamique, try/catch) ; le verdict n’en sait rien ; l’IA ne le reçoit jamais', () => {
   const controleur = lireSrc('api', 'controllers', 'analysis.controller.js');
-  assert.match(controleur, /const cartons = sportId === 'football' \? await cartonsDuMatchAnalyse\(avecFraicheur, analyse\) : null;\n {2}\/\/ Étape 34[^\n]*\n {2}const joueurs = sportId === 'football' \? await joueursDuMatchAnalyse\(avecFraicheur\) : null;\n {2}(?:res\.json\(|const reponse = )\{ \.\.\.analyse, [^\n]*\.\.\.\(cartons \? \{ cartons \} : \{\}\), \.\.\.\(joueurs \? \{ joueurs \} : \{\}\) \}(?:\);|;\n {2}res\.json\(analyseAvecLaMise\(reponse, \{ contexte: contexteMise, match: avecFraicheur \}\)\);)/);
+  assert.match(controleur, /const cartons = sportId === 'football' \? await cartonsDuMatchAnalyse\(avecFraicheur, analyse\) : null;\n {2}\/\/ Étape 34[^\n]*\n {2}const joueurs = sportId === 'football' \? await joueursDuMatchAnalyse\(avecFraicheur\) : null;\n(?: {2}\/\/ Étape 38[^\n]*\n {2}const combinaison = sportId === 'football' \? await combinaisonDuMatchAnalyse\(avecFraicheur, getEngineConfig\(sportId\)\) : null;\n)? {2}(?:res\.json\(|const reponse = )\{ \.\.\.analyse, [^\n]*\.\.\.\(cartons \? \{ cartons \} : \{\}\), \.\.\.\(joueurs \? \{ joueurs \} : \{\}\)(?:, \.\.\.\(combinaison \? \{ combinaison \} : \{\}\))? \}(?:\);|;\n {2}res\.json\(analyseAvecLaMise\(reponse, \{ contexte: contexteMise, match: avecFraicheur \}\)\);)/);
   assert.match(controleur, /async function joueursDuMatchAnalyse\(match\) \{\n {2}try \{\n {4}const \{ joueursDuMatch \} = await import\('\.\.\/\.\.\/data\/joueurs\/joueursRead\.js'\);\n {4}return joueursDuMatch\(\{ match, database: openDb\(\), maintenant: Date\.now\(\) \}\);\n {2}\} catch \{\n {4}return \{ version: 1, etat: 'illisible', raison: 'lecture-ratee' \};/);
   assert.doesNotMatch(controleur, /^import .*joueurs/m, 'aucun import statique de data/joueurs/');
   const service = lireSrc('core', 'ai', 'matchAiAnalysisService.js');
@@ -259,7 +259,8 @@ test('T-E7 aucune requête de plus : l’onglet et ses règles n’importent auc
   assert.doesNotMatch(carte, /player-id|playerId/, 'aucun drapeau demandé par identifiant');
   assert.deepEqual([...reglesPures('joueursABlanc.js')].filter((f) => /services|stores/.test(f)), []);
   const A = await imp(path.join(UI, 'src', 'utils', 'controlesAntiFuite.js'));
-  assert.deepEqual(A.CONTROLES_ANTI_FUITE.at(-1), { cle: 'joueursABlanc', nom: 'Chiffres des joueurs (parts au jour du match)' });
+  // Étape 38 (lot 1b, 04/11/2026) : le neuvième contrôle (la combinaison à blanc) vient après lui ; il reste le huitième.
+  assert.deepEqual(A.CONTROLES_ANTI_FUITE[7], { cle: 'joueursABlanc', nom: 'Chiffres des joueurs (parts au jour du match)' });
   assert.deepEqual(
     A.controlesAntiFuiteDits({ joueursABlanc: { ecarts: [{ joueur: 700102, J: '2026-10-12', colonne: 'derniere', texte: 'joueur n° 700102 avant le 12/10/2026 : dernière apparition le 12/10/2026 dans la passe, le 05/10/2026 dans le magasin relu — un jour qui n’est pas d’avant le match' }], total: 1, lignes: 20, updatedAt: '2026-11-03T02:10:00.000Z' } }).map((x) => x.texte),
     ['Chiffres des joueurs (parts au jour du match) : 1 écart sur 20 lignes recalculées (contrôle du 03/11/2026 à 03:10) — par exemple joueur n° 700102 avant le 12/10/2026 : dernière apparition le 12/10/2026 dans la passe, le 05/10/2026 dans le magasin relu — un jour qui n’est pas d’avant le match.']

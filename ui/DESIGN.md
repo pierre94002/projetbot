@@ -737,6 +737,25 @@ vous, elle sonne trop souvent. » ; et dans le carnet de l'IA (`AiScorecardPanel
 l'IA. Couleurs : aucune nouvelle (la part en `--cm-text-primary`, le reste en `--cm-text-secondary` / `--cm-text-muted`, l'ambre `--cm-warning` pour la phrase des séries) ;
 jamais de vert sur une mise, jamais « sûr ».
 
+Depuis l'étape 38 du plan (lot 1b, 04/11/2026) : **« Avant de parier — à blanc »** — UN encadré gris, sur la page d'un match à venir, dans la carte
+« Verdict par marché », **juste sous le tableau des verdicts** (`MarketVerdictBoard`) : `components/analysis/AvantDeParierABlanc.vue`
+(`.cm-note` sans ton, icône `info` dans une `.cm-icon-box is-muted`, `data-bloc="avant-de-parier"`, `data-etat`). Il ne LIT rien lui-même : le bloc
+`combinaison` que le serveur joint à l'analyse (APRÈS elle : la ligne du pronostic du résultat rangée la nuit, lue par les identifiants FotMob ;
+l'ancre de la cote juste et les cotes de vos bookmakers de CETTE analyse ; la note du banc) — aucune requête de plus. Le titre (« Avant de parier —
+à blanc », en sur-titre `.cm-note__title`), « Pour le pronostic du résultat (1 / N / 2) » en gris, puis une ligne par chose (`data-ligne`) : `manque`
+(« Ce qui manque à ce pronostic : … · … » en `--cm-text-primary`, ou « Rien ne manque à ce pronostic. La confiance du moteur n'est pas encore
+mesurée. ») ; `quand` (« Calculé sur les données telles qu'elles étaient le 04/11 à 00 h 31 (pronostic de la nuit) ») ; `banc` (« Sur ce marché, rien
+ne s'ajoute aux cotes (mesuré sur 30 158 matchs, 2019-2023). », « pas encore mesuré » sans note) ; `seuil` (« Seuil de value de 2 % : mesuré pour une
+cote juste Pinnacle (555 paris, 2019-2023). Pour ce match (palier 3) : jamais mesuré. ») ; `livre-<clé>` (« Chez Unibet : jamais mesuré chez ce
+bookmaker (marge 11 à 15 %). » — sauf le bookmaker que la mise conseillée de l'étape 39 nomme déjà : jamais deux fois la même mention) ; `aucune-cote`
+(« Aucune cote de vos bookmakers relevée pour ce match. ») — en `--cm-text-secondary` ; au pied, en `--cm-text-muted` : « À blanc : rien de tout
+cela ne change le pourcentage ni le conseil. » Les états vides gardent le titre, le seuil, vos bookmakers et le pied (« pas encore calculé, la
+première passe de nuit le fera », « en cours de calcul cette nuit », « ce match n'a pas ses deux identifiants FotMob », « lecture impossible pour
+l'instant »). **Jamais** « sûr » ni « fragile » (l'étiquette reste au serveur pour la preuve), jamais une jauge ni une barre (`ConfidenceGauge` du
+tableau des verdicts reçoit toujours null), jamais une value chiffrée ni un seuil « conseillé », jamais la mise (dite au-dessus par l'étape 39, ni
+répétée ni contredite). Aucune couleur nouvelle, aucun vert. Mots : `utils/avantDeParier.js` (pur, sans Vue ; ses mots fixes = ceux du serveur,
+`reglagesCombinaison.MOTS`, scellés dans `banc-regles-etape38.md` : `server/test/combinaisonEcran.test.mjs` le vérifie).
+
 Depuis l'étape 44 du plan (23/10/2026) : **la mémoire de l'IA** — un bloc, sur la page d'une équipe, juste sous « Style de jeu »,
 `components/analysis/AiDossierCard.vue` (« Mémoire de l'IA », `data-bloc="memoire-ia"`, icône `sparkles`) ; la page « Bulletin » de l'étape 45 le réutilise tel
 quel pour une équipe, et en mode `portee="championnat"` (`GET …/dossiers?league=`) pour un championnat seul. Il LIT `GET /api/match-ai-analysis/dossiers?club=fotmob-…` (le club par son IDENTIFIANT FotMob, jamais

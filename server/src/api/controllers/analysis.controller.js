@@ -56,8 +56,27 @@ export async function analyzeMatchById(req, res) {
   const cartons = sportId === 'football' ? await cartonsDuMatchAnalyse(avecFraicheur, analyse) : null;
   // Étape 34 : les chiffres des joueurs à blanc, APRÈS l'analyse eux aussi (le verdict n'en sait rien, l'IA ne les reçoit jamais).
   const joueurs = sportId === 'football' ? await joueursDuMatchAnalyse(avecFraicheur) : null;
-  const reponse = { ...analyse, ...(aVerifier ? { aVerifier } : {}), ...(simulation ? { simulation } : {}), ...(contexte ? { contexte } : {}), ...(cartons ? { cartons } : {}), ...(joueurs ? { joueurs } : {}) };
+  // Étape 38 : « Avant de parier — à blanc », APRÈS l'analyse elle aussi (le verdict n'en sait rien, l'IA ne la reçoit jamais).
+  const combinaison = sportId === 'football' ? await combinaisonDuMatchAnalyse(avecFraicheur, getEngineConfig(sportId)) : null;
+  const reponse = { ...analyse, ...(aVerifier ? { aVerifier } : {}), ...(simulation ? { simulation } : {}), ...(contexte ? { contexte } : {}), ...(cartons ? { cartons } : {}), ...(joueurs ? { joueurs } : {}), ...(combinaison ? { combinaison } : {}) };
   res.json(analyseAvecLaMise(reponse, { contexte: contexteMise, match: avecFraicheur }));
+}
+
+/**
+ * Étape 38 du plan (lot 1b) : « Avant de parier — à blanc » (data/combinaison/combinaisonRead.js) — la ligne du pronostic du
+ * résultat rangée la nuit, lue par identifiants FotMob et par clé (ce qui manque à ce pronostic, jamais son étiquette), et,
+ * sur les cotes de CETTE analyse, l'ancre de la cote juste et les cotes de vos bookmakers. Le module est chargé par un
+ * import() DYNAMIQUE : une erreur dans data/combinaison/ n'empêche jamais l'analyse de répondre (l'encadré dit alors
+ * « illisible »). Ajouté APRÈS l'analyse, comme les joueurs : le verdict du moteur n'en sait rien, l'analyse IA ne le reçoit
+ * jamais ; la mise de l'étape 39 est jointe ensuite, sans le lire.
+ */
+async function combinaisonDuMatchAnalyse(match, config) {
+  try {
+    const { combinaisonDuMatch } = await import('../../data/combinaison/combinaisonRead.js');
+    return combinaisonDuMatch({ match, database: openDb(), config });
+  } catch {
+    return { version: 1, etat: 'illisible', raison: 'lecture-ratee' };
+  }
 }
 
 /**

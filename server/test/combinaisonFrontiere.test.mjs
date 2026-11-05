@@ -228,6 +228,28 @@ const INTERDITS_UI = Object.freeze([
   ['ui/src/components/matches/LineupPitch.vue', '0bc9124c6228b303a98342128a2f7acddc6b8661']
 ]);
 
+/**
+ * Lot 1b (04/11/2026) : un fichier privé de ses blocs « [étape 38, lot 1b : ajout pur] » — l'étape de nuit de la 38 dans
+ * l'actualisation (gelée, ajout pur : combinaisonFuite.test.mjs, T-X10, la compare à l'octet sans eux ; son import() de
+ * data/combinaison/ est voulu : T-X9 et T-X11 le gardent).
+ */
+function sansBlocs38(texte) {
+  const garde = [];
+  let dans = false;
+  for (const l of texte.split('\n')) {
+    if (/\[étape 38, lot 1b : ajout pur, début\]/.test(l)) {
+      dans = true;
+      continue;
+    }
+    if (/\[étape 38, lot 1b : ajout pur, fin\]/.test(l)) {
+      dans = false;
+      continue;
+    }
+    if (!dans) garde.push(l);
+  }
+  return garde.join('\n');
+}
+
 /** Les fichiers atteints par les imports relatifs (statiques et dynamiques, ou statiques seulement) d'un ensemble de départ. */
 function atteints(depart, { statiquesSeulement = false } = {}) {
   const vus = new Set();
@@ -237,7 +259,7 @@ function atteints(depart, { statiquesSeulement = false } = {}) {
     const f = pile.pop();
     if (vus.has(f) || !fs.existsSync(f)) continue;
     vus.add(f);
-    const texte = statiquesSeulement ? sansCommentaires(f) : fs.readFileSync(f, 'utf8');
+    const texte = sansBlocs38(statiquesSeulement ? sansCommentaires(f) : fs.readFileSync(f, 'utf8'));
     for (const m of texte.matchAll(re)) {
       let cible = path.resolve(path.dirname(f), m[1] ?? m[2]);
       if (!/\.(m?js|json)$/.test(cible) && fs.existsSync(`${cible}.js`)) cible += '.js';
@@ -263,7 +285,11 @@ test('T-X1 les empreintes ne bougent pas ; rien de l’étape 38 sous core/ ni s
   for (const f of FICHIERS_38) assert.ok(!empreinte.includes(f), `${f} dans l’empreinte`);
   assert.ok(!MODULES_DU_MOTEUR.fichiers.some((f) => /combinaison/i.test(f)));
   assert.ok(INTERDITS.length >= 170, `${INTERDITS.length} fichiers gelés`);
-  for (const [f, attendu] of INTERDITS) assert.equal(sha1(fs.readFileSync(path.join(SRC, f))), attendu, `${f} : retouché (gelé pendant l’essai 27, ou interdit au lot 1a de l’étape 38)`);
+  // Lot 1b : l'actualisation reçoit deux blocs « ajout pur » de la 38 — comparée SANS eux (T-X10 de combinaisonFuite).
+  for (const [f, attendu] of INTERDITS) {
+    const octets = f === 'jobs/matchStatsAutoRefresh.js' ? Buffer.from(sansBlocs38(fs.readFileSync(path.join(SRC, f), 'utf8')), 'utf8') : fs.readFileSync(path.join(SRC, f));
+    assert.equal(sha1(octets), attendu, `${f} : retouché (gelé pendant l’essai 27, ou interdit au lot 1a de l’étape 38)`);
+  }
   for (const [f, attendu] of INTERDITS_UI) assert.equal(sha1(fs.readFileSync(path.join(RACINE, f))), attendu, `${f} : retouché`);
   for (const dossier of ['contexte', 'cartons', 'joueurs']) {
     const presents = fs.readdirSync(path.join(SRC, 'data', dossier)).map((f) => `data/${dossier}/${f}`).sort();
@@ -278,7 +304,9 @@ test('T-X2 depuis TOUTES les racines de la règle du gel, rien n’atteint data/
     'core/engine/engineVersions.js', 'core/engine/engineConfig.js', 'data/db/dayTable.js', 'data/db/forcesButs.js', 'data/db/forcesButsEnfant.js',
     'api/controllers/statValue.controller.js', 'data/contexte/contexteNuit.js', 'data/db/dayTableControle.js', 'data/marketKnowledge.js',
     'data/providers/espnOdds.js', 'data/providers/footballDataHistory.js', 'data/providers/fotMobRefresh.js', 'data/providers/freeOdds.js',
-    'data/providers/kalshiOdds.js', 'data/providers/lineupContext.js', 'data/providers/smarketsOdds.js', 'jobs/matchStatsAutoRefresh.js'
+    'data/providers/kalshiOdds.js', 'data/providers/lineupContext.js', 'data/providers/smarketsOdds.js', 'jobs/matchStatsAutoRefresh.js',
+    // Lot 1b (décision 7 de l'étape 39) : le producteur autoMatchAiTrigger.js et matchAiAnalysisService.js, gelés eux aussi.
+    'core/ai/autoMatchAiTrigger.js', 'core/ai/matchAiAnalysisService.js'
   ].map((f) => path.join(SRC, f));
   for (const f of racines) assert.ok(fs.existsSync(f), `racine absente : ${rel(f)}`);
   const graphe = [...atteints(racines)].map(rel);
@@ -305,16 +333,20 @@ test('T-X3 les modules purs : ni horloge, ni hasard, ni base, ni réseau, ni fic
   assert.equal(CONFIG_DE_LA_REGLE.edgeThresholdMin, 0.02);
 });
 
-test('T-X4 rien n’écrit depuis data/combinaison/ ; l’enfant ouvre la base EN LECTURE SEULE, une fois, sans horloge du jour', () => {
-  for (const f of FICHIERS_38) {
+test('T-X4 rien n’écrit depuis data/combinaison/ (hors la nuit du lot 1b, ses deux tables) ; les enfants ouvrent la base EN LECTURE SEULE, une fois, sans horloge du jour', () => {
+  // Lot 1b : la nuit (combinaisonNuit.js) est le seul écrivain — le serveur, sous le verrou de la passe, ses deux tables
+  // seulement (combinaisonFuite.test.mjs, T-X10) ; tout le reste de data/combinaison/ n'écrit rien.
+  for (const f of FICHIERS_38.filter((x) => x !== 'data/combinaison/combinaisonNuit.js')) {
     const code = sansCommentaires(path.join(SRC, f));
     assert.doesNotMatch(code, /\.run\(|INSERT\s|UPDATE\s|DELETE\s|writeJsonAtomic|writeFileSync|\.exec\(|CREATE\s/, `${f} : aucune écriture`);
   }
-  const enfant = sansCommentaires(path.join(COMB, 'combinaisonEnfant.js'));
-  assert.equal((enfant.match(/openDb\(/g) ?? []).length, 1);
-  assert.match(enfant, /openDb\(\{ file: m\.chemin, readonly: true \}\)/);
-  assert.doesNotMatch(enfant, /Date\.now\(|new Date\(\)|Math\.random|fetch\(/);
-  for (const f of ['bancFd.js', 'lecteurP5.js']) assert.doesNotMatch(sansCommentaires(path.join(COMB, f)), /openDb|engine_candidate_picks/, `${f} : lit la base de l’appelant, jamais la table de la candidate`);
+  for (const nom of ['combinaisonEnfant.js', 'combinaisonNuitEnfant.js']) {
+    const enfant = sansCommentaires(path.join(COMB, nom));
+    assert.equal((enfant.match(/openDb\(/g) ?? []).length, 1, nom);
+    assert.match(enfant, /openDb\(\{ file: m\.chemin, readonly: true \}\)/, nom);
+    assert.doesNotMatch(enfant, /Date\.now\(|new Date\(\)|Math\.random|fetch\(/, nom);
+  }
+  for (const f of ['bancFd.js', 'lecteurP5.js', 'nuitDeLaCombinaison.js', 'casesDeLaTranche.js', 'controleDeLaCombinaison.js', 'combinaisonRead.js']) assert.doesNotMatch(sansCommentaires(path.join(COMB, f)), /openDb|engine_candidate_picks/, `${f} : lit la base de l’appelant, jamais la table de la candidate par une requête`);
 });
 
 fs.mkdirSync(RACINE_ESSAIS, { recursive: true });
@@ -381,16 +413,27 @@ test('T-X8 openDb sur une copie de forme réelle crée les 2 tables de la combin
   assert.match(s.premiere.find((x) => x.name === 'combinaison_avant_match').sql, /PRIMARY KEY \(source, candidate_id, fixture_key, market_key, revision\)/);
 });
 
-test('T-X9 aucune commande de réglage ; personne n’importe data/combinaison/ (hors le script du banc) ; le graphe statique depuis server.js n’y mène pas ; les fichiers du lot 1b non touchés', () => {
+test('T-X9 aucune commande de réglage ; personne n’importe data/combinaison/ (hors le script du banc, et au lot 1b la passe et la route de l’analyse, par import() seulement) ; le graphe statique depuis server.js n’y mène pas', () => {
+  // Lot 1b (04/11/2026) : l'actualisation (dans ses blocs « ajout pur ») et la route de l'analyse chargent la nuit et la
+  // lecture de la 38 par un import() DYNAMIQUE — jamais un import statique, jamais un autre fichier.
+  const PAR_IMPORT_DYNAMIQUE = { 'jobs/matchStatsAutoRefresh.js': ['../data/combinaison/combinaisonNuit.js'], 'api/controllers/analysis.controller.js': ['../../data/combinaison/combinaisonRead.js'] };
   for (const f of tousLesFichiers(SRC)) {
     const r = f.split(path.sep).join('/');
     if (r.startsWith('data/combinaison/') || !/\.(m?js)$/.test(r)) continue;
-    assert.doesNotMatch(fs.readFileSync(path.join(SRC, f), 'utf8'), /['"`][./]*(data\/)?combinaison\//, `${r} importe data/combinaison/`);
+    const texte = fs.readFileSync(path.join(SRC, f), 'utf8');
+    if (PAR_IMPORT_DYNAMIQUE[r]) {
+      assert.deepEqual([...texte.matchAll(/['"`]([./]*(?:data\/)?combinaison\/[^'"`]+)['"`]/g)].map((m) => m[1]), PAR_IMPORT_DYNAMIQUE[r], r);
+      assert.match(texte, new RegExp(`await import\\('${PAR_IMPORT_DYNAMIQUE[r][0].replace(/[./]/g, (c) => `\\${c}`)}'\\)|=> import\\('${PAR_IMPORT_DYNAMIQUE[r][0].replace(/[./]/g, (c) => `\\${c}`)}'\\)`), `${r} : par import() dynamique`);
+      assert.doesNotMatch(texte, /^import [^;]*combinaison/m, `${r} : jamais un import statique`);
+      continue;
+    }
+    assert.doesNotMatch(texte, /['"`][./]*(data\/)?combinaison\//, `${r} importe data/combinaison/`);
   }
   const serveur = path.join(SRC, 'server.js');
   const statiques = [...atteints([serveur], { statiquesSeulement: true })].map(rel);
   assert.ok(statiques.length > 100);
   for (const f of FICHIERS_38) assert.ok(!statiques.includes(f), `${f} chargé statiquement depuis server.js`);
   for (const f of FICHIERS_38) assert.doesNotMatch(sansCommentaires(path.join(SRC, f)), /api\/controllers|express|router\./, `${f} : aucune route ni commande`);
-  for (const f of ['jobs/matchStatsAutoRefresh.js', 'data/providers/lineupContext.js', 'jobs/enregistreurs.js']) assert.ok(INTERDITS.some(([g]) => g === f), `${f} gardé à l’octet (lot 1a)`);
+  // lineupContext.js et enregistreurs.js à l'octet ; l'actualisation à l'octet SANS ses blocs de la 38 (T-X1, T-X10).
+  for (const f of ['jobs/matchStatsAutoRefresh.js', 'data/providers/lineupContext.js', 'jobs/enregistreurs.js']) assert.ok(INTERDITS.some(([g]) => g === f), `${f} gardé à l’octet (ses blocs de la 38 mis à part)`);
 });

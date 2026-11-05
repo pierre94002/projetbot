@@ -141,7 +141,8 @@ test('T-N5 le contrôle anti-fuite : 20 couples recalculés par un second chemin
 test('T-N6 l’étape « cartonsEtCorners » : entre le contexte du match et le contrôle quotidien ; une fois par jour civil de Paris, reprise si reportée, jamais au clic ; son résumé ; le module chargé par import() dynamique (s’il ne se charge pas : l’étape en échec, la passe ne lève pas)', async () => {
   const etapes = JOB.ETAPES().map((e) => e.key);
   // Étape 34 (lot 1b, 03/11/2026) : les chiffres des joueurs entre les cartons et le contrôle quotidien.
-  assert.deepEqual(etapes.slice(-4), ['contexteDuMatch', 'cartonsEtCorners', 'joueursABlanc', 'controleQuotidien']);
+  // Étape 38 (lot 1b, 04/11/2026) : la combinaison à blanc entre les chiffres des joueurs et le contrôle quotidien.
+  assert.deepEqual(etapes.slice(-5), ['contexteDuMatch', 'cartonsEtCorners', 'joueursABlanc', 'combinaisonABlanc', 'controleQuotidien']);
   assert.ok(etapes.indexOf('cartonsEtCorners') > etapes.indexOf('sauvegarde') && etapes.indexOf('cartonsEtCorners') > etapes.indexOf('moteurABlanc'));
   const ctx = (derniere, details = null, manuel = false) => ({ manuel, derniere: () => derniere, derniersDetails: () => details });
   assert.equal(CARTONS.dueCartonsEtCorners(ctx(null)), true);
@@ -177,7 +178,8 @@ const DEBUT = /\[étape 33, lot 1b : ajout pur, début\]/;
 const FIN = /\[étape 33, lot 1b : ajout pur, fin\]/;
 function blocs(brut) {
   // Étape 34 (lot 1b, 03/11/2026) : ses propres blocs « ajout pur » (vérifiés par joueursNuit.test.mjs) sont retirés d'abord.
-  const texte = brut.replace(/^[^\n]*\[étape 34, lot 1b : ajout pur, début\][\s\S]*?\[étape 34, lot 1b : ajout pur, fin\][^\n]*\n/gm, '');
+  // Étape 38 (lot 1b, 04/11/2026) : de même pour ses blocs « ajout pur » (vérifiés par combinaisonFuite.test.mjs, T-X10).
+  const texte = brut.replace(/^[^\n]*\[étape 34, lot 1b : ajout pur, début\][\s\S]*?\[étape 34, lot 1b : ajout pur, fin\][^\n]*\n/gm, '').replace(/^[^\n]*\[étape 38, lot 1b : ajout pur, début\][\s\S]*?\[étape 38, lot 1b : ajout pur, fin\][^\n]*\n/gm, '');
   const garde = [];
   const ajoutes = [];
   let dans = null;

@@ -184,7 +184,8 @@ test('l’étape « contexteDuMatch » : une fois par jour civil de Paris, repri
   const etapes = JOB.ETAPES().map((e) => e.key);
   // Étape 33 (lot 1b, 03/11/2026) : les cartons et corners entre le contexte du match et le contrôle quotidien.
   // Étape 34 (lot 1b, 03/11/2026) : les chiffres des joueurs entre les cartons et le contrôle quotidien.
-  assert.deepEqual(etapes.slice(-4), ['contexteDuMatch', 'cartonsEtCorners', 'joueursABlanc', 'controleQuotidien']);
+  // Étape 38 (lot 1b, 04/11/2026) : la combinaison à blanc entre les chiffres des joueurs et le contrôle quotidien.
+  assert.deepEqual(etapes.slice(-5), ['contexteDuMatch', 'cartonsEtCorners', 'joueursABlanc', 'combinaisonABlanc', 'controleQuotidien']);
   assert.ok(etapes.indexOf('contexteDuMatch') > etapes.indexOf('sauvegarde'));
   assert.ok(etapes.indexOf('contexteDuMatch') > etapes.indexOf('stylesDeJeu') && etapes.indexOf('contexteDuMatch') > etapes.indexOf('tableJourJ'));
   const ctx = (derniere, details = null, manuel = false) => ({ manuel, derniere: () => derniere, derniersDetails: () => details });
