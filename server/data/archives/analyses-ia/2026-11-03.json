@@ -1439,8 +1439,240 @@
       ]
     },
     "kickoffRuns": 1,
-    "updatedAt": "2026-11-02T23:04:00.521Z",
-    "createdAt": "2026-11-02T23:04:00.521Z"
+    "updatedAt": "2026-11-05T18:19:39.706Z",
+    "createdAt": "2026-11-02T23:04:00.521Z",
+    "postMatchReview": {
+      "summary": "Concepción s'est imposé 1-0 (but de Grillo à la 35e) malgré une possession de 34 % et un net déficit de tirs (7 contre 16). Ma lecture d'un match fermé, avec peu de buts, a tenu. Elle s'est trompée sur le profil du match : Concepción a tiré moins que prévu et Palestino a dominé les corners.",
+      "whatWasRight": "Le match fermé : un seul but, donc moins de 3,5 buts, Non pour les deux équipes, Concepción sous 2,5 buts et Palestino sous 1,5. L'impact des absences de Palestino (da Silva, Zúñiga) sur ses buts s'est vu : 16 tirs, 5 cadrés, zéro grosse occasion et aucun but. Les marchés de tirs cadrés (Concepción moins de 7,5, total moins de 11,5, Palestino plus de 1,5) et le total de tirs sous 32,5 se sont vérifiés. L'avantage léger donné à Concepción à domicile s'est confirmé.",
+      "whatWasMissed": "Le déséquilibre territorial. Palestino a eu 66 % de possession, 16 tirs et 8 corners, alors que Concepción n'a tiré que 7 fois, très loin de ses 17,8 tirs à domicile. J'ai surestimé le volume offensif de Concepción et sous-estimé la domination de Palestino dans la possession et les corners. Concepción a gagné avec peu de tirs : 2 cadrés, 1 grosse occasion. La blessure de Larrivey à la 41e a peut-être pesé sur son volume offensif, mais la fiche ne permet pas de l'affirmer.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le vainqueur (Concepción, xG 1,44 contre 0,91) et sur le faible total de buts. Il le contredit sur la répartition des tirs et des corners. Le moteur attendait 14,6 tirs pour Concepción et 4,5 corners pour Palestino. Il y en a eu 7 et 8. Aucun edge n'était relevé (PASS), ce qui reste cohérent avec cette incertitude.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Deportes Concepción gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Grillo marque à la 35e et Concepción garde le 1-0 jusqu'au bout malgré 34 % de possession. Le pick du moteur est juste.",
+          "lesson": "L'avantage du terrain avec un adversaire diminué suffit à gagner un match fermé, même en étant dominé. Ma nuance prudente était justifiée, car la victoire est venue avec peu de tirs."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Un seul but dans le match, très loin de 4. Les absences et le profil fermé ont joué.",
+          "lesson": "Les seuils hauts de buts pour deux équipes peu prolifiques sont fiables. À garder."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Palestino a eu 16 tirs et 5 cadrés mais n'a pas marqué. Seul Concepción a marqué.",
+          "lesson": "Sans da Silva, Palestino a peu converti son volume. Pencher pour le Non était cohérent, mais ma prudence reste raisonnable à 54 %."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Deportes Concepción & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "La victoire de Concepción 1-0 valide les deux jambes du combiné.",
+          "lesson": "Le combiné s'est vérifié grâce à la partie « moins de 3,5 buts », la plus solide. Le résultat restait le point fragile."
+        },
+        {
+          "market": "Buts — Deportes Concepción",
+          "marketId": "teamGoals",
+          "pick": "Deportes Concepción — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Concepción n'a marqué qu'une fois, avec 7 tirs seulement.",
+          "lesson": "Les seuils bas de buts d'équipe sont sûrs quand l'attaque est peu prolifique. À garder."
+        },
+        {
+          "market": "Buts — Palestino",
+          "marketId": "teamGoals",
+          "pick": "Palestino — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Palestino n'a pas marqué malgré 16 tirs et 5 cadrés. Seuil largement respecté.",
+          "lesson": "L'absence du meilleur buteur a bien pesé sur la finition. À garder."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 12.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "11 corners au total (3 + 8), sous 12,5, mais plus que les 9,29 attendus.",
+          "lesson": "Le seuil est tenu, mais la marge était plus étroite que prévu quand un camp domine la possession."
+        },
+        {
+          "market": "Corners — Deportes Concepción",
+          "marketId": "teamCorners",
+          "pick": "Deportes Concepción — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Concepción a obtenu 3 corners, juste au-dessus de 2,5. Cela a tenu de justesse.",
+          "lesson": "Concepción a obtenu très peu de corners en étant dominé. Le seuil de 2,5 était de peu de marge malgré les 80 %, et son corner est sensible à la possession."
+        },
+        {
+          "market": "Corners — Palestino",
+          "marketId": "teamCorners",
+          "pick": "Palestino — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Palestino a obtenu 8 corners, au-dessus de 6,5. Il a dominé la possession (66 %) et mené 16 tirs à 7.",
+          "lesson": "J'ai trop fait confiance à la moyenne extérieure de corners de Palestino (5). Quand il domine un adversaire mené au score, ses corners montent. Avec le score et la possession, ne pas confirmer un plafond bas à 80 %."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 32.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "23 tirs au total (7 + 16), sous 32,5.",
+          "lesson": "Le seuil large a bien protégé, même avec une répartition inattendue. À garder."
+        },
+        {
+          "market": "Tirs — Deportes Concepción",
+          "marketId": "teamShots",
+          "pick": "Deportes Concepción — Plus de 9.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Concepción n'a tiré que 7 fois, sous 9,5, avec 34 % de possession et un but marqué tôt (35e) qui l'a fait reculer.",
+          "lesson": "Ne pas appliquer la moyenne à domicile (17,8) quand une équipe prend l'avantage et laisse le ballon. Le volume de tirs d'une équipe qui mène baisse. J'ai eu tort de confirmer à 83 %."
+        },
+        {
+          "market": "Tirs — Palestino",
+          "marketId": "teamShots",
+          "pick": "Palestino — Moins de 16.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Palestino a tiré 16 fois, donc moins de 16,5. C'est passé de justesse.",
+          "lesson": "Le résultat est juste, mais la marge d'un tir était mince. Un adversaire mené au score pousse le volume vers le plafond."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 11.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "7 tirs cadrés au total (2 + 5), sous 11,5.",
+          "lesson": "Les tirs cadrés restent faibles même avec un gros volume de tirs. À garder."
+        },
+        {
+          "market": "Tirs cadrés — Deportes Concepción",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Deportes Concepción — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Concepción n'a cadré que 2 tirs, sous 7,5.",
+          "lesson": "Seuil sûr. À garder."
+        },
+        {
+          "market": "Tirs cadrés — Palestino",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Palestino — Plus de 1.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Palestino a cadré 5 tirs, au-dessus de 1,5, grâce à 16 tirs.",
+          "lesson": "Ma nuance sur l'absence de da Silva était trop prudente pour ce seuil. Le volume de tirs d'une équipe qui domine soutient les tirs cadrés."
+        }
+      ],
+      "caveats": "Un seul match : l'écart entre tirs et possession tient peut-être au scénario (but à la 35e, blessure de Larrivey à la 41e), que je ne peux pas isoler avec les données de la fiche. Le carnet est mince sur ces équipes (2 matchs pour Concepción, 1 pour Palestino). Je n'ai ni xG réel ni cotes pour juger de la valeur.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 14,
+        "commentaire": 3
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5602,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2731,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5602,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2731,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5602,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5602
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.050139600000000006,
+      "createdAt": "2026-11-05T18:19:39.705Z"
+    }
   },
   {
     "matchId": "cal-2026-11-03-atletico-tucuman-argentinos-juniors",
@@ -3035,8 +3267,240 @@
       "caveats": "Classement issu de football-data.co.uk (historique), non en direct. Les dossiers donnent une position différente dans le Clausura (Tucumán 10e, Argentinos 2e). Peu de relevés à l'extérieur pour Argentinos (6 matchs). Pas d'edge chiffré, mise PASS faute de bookmakers."
     },
     "kickoffRuns": 2,
-    "updatedAt": "2026-11-02T23:59:00.860Z",
-    "createdAt": "2026-11-02T23:24:10.464Z"
+    "updatedAt": "2026-11-05T18:33:33.187Z",
+    "createdAt": "2026-11-02T23:24:10.464Z",
+    "postMatchReview": {
+      "summary": "Argentinos Juniors s'est imposé 2-1 à Tucumán, ce qui va dans le sens de la légère préférence que j'avais pour lui. Les marchés de volume (tirs, tirs cadrés, corners) ont tous tenu. Les deux marchés de buts ont été mis en défaut : un but contre son camp à la 43e, puis un penalty de Tucumán à la 86e, ont fait tomber le « Non » et le « Moins de 1.5 » d'Argentinos.",
+      "whatWasRight": "Le match est resté fermé en volume : 21 tirs au total, 5 tirs cadrés, 9 corners, sous les lignes prises. Les plafonds par équipe ont tous tenu (Tucumán 11 tirs et 3 cadrés, Argentinos 10 tirs et 2 cadrés). Le plancher de corners d'Argentinos (3) a aussi tenu, de peu. Argentinos a gagné comme le moteur le penchait, avec une prudence sur le résultat justifiée. Le plus de 0.5 but est passé.",
+      "whatWasMissed": "J'ai trop fait confiance au profil défensif d'Argentinos pour le « Non » et le « Moins de 1.5 ». Deux buts sont venus de situations non modélisables : un but contre son camp (43e) et un penalty (86e). Tucumán a eu un xG de 1,15 contre 0,33, plus haut que le 0,83 attendu : Argentinos a gagné en étant dominé dans la création. J'avais aussi sous-estimé les corners de Tucumán (6, loin de la ligne mais bien au-dessus des 4,3 de moyenne), et la possession a été de 52 % pour Argentinos contre 59 % annoncée.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le 1N2 (victoire d'Argentinos, légèrement favori) et sur tous les marchés de volume. Il le contredit sur les marchés de buts : le « Non » à 63 % et Argentinos « Moins de 1.5 » à 72 % ont échoué à cause d'un but contre son camp et d'un penalty tardif.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Argentinos Juniors gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Argentinos a mené 2-0 dès la 43e (Giménez 30e, but contre son camp de Ferreira 43e) et a tenu malgré le penalty de Canelo à la 86e. Le pick était juste.",
+          "lesson": "La prudence (nuance, faible) était adaptée à un favori très léger. Le classement et la forme d'Argentinos ont servi d'indice, mais sans écart assez net pour monter la confiance."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "3 buts dans le match (but à la 30e, but contre son camp à la 43e, penalty à la 86e), la ligne de 0,5 est passée très tôt.",
+          "lesson": "Une ligne à 0,5 très basse reste solide : la confiance forte était justifiée, à garder pour ce type de ligne."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Tucumán a marqué sur penalty à la 86e (faute de Mendoza). Argentinos avait déjà marqué deux fois, donc le « Non » est tombé sur un événement tardif.",
+          "lesson": "Le « Non » est fragile quand un camp a une série de matchs marqués (Tucumán 5 de suite) : ne pas laisser la défense adverse l'emporter sur cette série. Un penalty tardif défait vite ce marché."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Argentinos Juniors & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Victoire d'Argentinos 2-1 avec 3 buts, donc moins de 3,5 buts : les deux volets sont passés.",
+          "lesson": "Le volet buts était solide et le résultat a suivi. La nuance, faible, restait cohérente avec le caractère composite du marché."
+        },
+        {
+          "market": "Buts — Atlético Tucumán",
+          "marketId": "teamGoals",
+          "pick": "Atlético Tucumán — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Tucumán n'a marqué qu'un but (penalty à la 86e) malgré un xG de 1,15 et un poteau de Brondo à la 52e.",
+          "lesson": "Le plafond d'un but a tenu, mais de peu : Tucumán a été plus dangereux que ses moyennes. À garder avec une confiance moyenne."
+        },
+        {
+          "market": "Buts — Argentinos Juniors",
+          "marketId": "teamGoals",
+          "pick": "Argentinos Juniors — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Argentinos a marqué 2 buts, mais avec un xG de seulement 0,33 : un but de Giménez (30e) et un but contre son camp (43e). Le « Moins de 1.5 » est tombé sur un but non créé.",
+          "lesson": "Un xG très bas ne protège pas contre un but contre son camp ou un penalty. Pour les plafonds de buts d'un petit attaquant, garder une marge d'événements fortuits."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "9 corners (6 + 3), au-dessus de 6,5, malgré une possession quasi égale (48 % / 52 %).",
+          "lesson": "Le total tenait grâce à la répartition 6-3, non due à la domination d'Argentinos que j'avais supposée. Garder la ligne, mais ne pas dépendre de la possession."
+        },
+        {
+          "market": "Corners — Atlético Tucumán",
+          "marketId": "teamCorners",
+          "pick": "Atlético Tucumán — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Tucumán a obtenu 6 corners, soit tout juste sous la ligne de 6,5. Le marché passe de justesse.",
+          "lesson": "Marge mince : mener 0-2 a poussé Tucumán à attaquer. Un plafond de 6,5 est moins sûr quand l'équipe est menée."
+        },
+        {
+          "market": "Corners — Argentinos Juniors",
+          "marketId": "teamCorners",
+          "pick": "Argentinos Juniors — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Argentinos n'a obtenu que 3 corners, juste au-dessus de 2,5, alors que le moteur en attendait 5,17. Le marché passe de justesse.",
+          "lesson": "Mon doute (nuance) était justifié : une équipe qui mène et recule génère peu de corners. Prudence sur ce plancher."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 30.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "21 tirs au total (11 + 10), nettement sous la ligne de 30,5.",
+          "lesson": "Les lignes de tirs totaux avec une marge large sont fiables pour un match fermé."
+        },
+        {
+          "market": "Tirs — Atlético Tucumán",
+          "marketId": "teamShots",
+          "pick": "Atlético Tucumán — Moins de 16.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Tucumán a tiré 11 fois, loin de 16,5.",
+          "lesson": "Plafond bien placé, à garder pour une équipe à faible possession."
+        },
+        {
+          "market": "Tirs — Argentinos Juniors",
+          "marketId": "teamShots",
+          "pick": "Argentinos Juniors — Moins de 16.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Argentinos a tiré 10 fois, en cohérence avec son volume à l'extérieur (10).",
+          "lesson": "Utiliser la moyenne à l'extérieur plutôt que globale s'est avéré pertinent."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 9.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "5 tirs cadrés au total (3 + 2), sous la ligne de 9,5.",
+          "lesson": "Les deux équipes cadrent peu : marge large, bon marché pour ce profil."
+        },
+        {
+          "market": "Tirs cadrés — Atlético Tucumán",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Atlético Tucumán — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Tucumán a cadré 3 tirs, sous 5,5, en ligne avec sa moyenne de 3,5.",
+          "lesson": "Confirmé : plafond très au-dessus des habitudes, à garder."
+        },
+        {
+          "market": "Tirs cadrés — Argentinos Juniors",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Argentinos Juniors — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Argentinos n'a cadré que 2 tirs, avec 2 buts marqués grâce à un tir et un but contre son camp. Largement sous 5,5.",
+          "lesson": "La faible production à l'extérieur (2,8) s'est confirmée : le plafond reste solide pour Argentinos."
+        }
+      ],
+      "caveats": "Un seul match : les deux buts décisifs de la fin de première période et de la fin de match (but contre son camp, penalty) relèvent du hasard. Le classement utilisé était historique, et les statistiques de possession annoncées (59 %) différaient de la réalité (52 %).",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 22,
+        "commentaire": 2
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5429,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2875,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5429,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2875,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5429,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5429
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0508876,
+      "createdAt": "2026-11-05T18:33:33.187Z"
+    }
   },
   {
     "matchId": "cal-2026-11-03-independiente-rivadavia-banfield",
@@ -4619,8 +5083,240 @@
       ]
     },
     "kickoffRuns": 2,
-    "updatedAt": "2026-11-02T23:59:25.567Z",
-    "createdAt": "2026-11-02T23:24:42.029Z"
+    "updatedAt": "2026-11-05T18:38:10.074Z",
+    "createdAt": "2026-11-02T23:24:42.029Z",
+    "postMatchReview": {
+      "summary": "Rivadavia a gagné 3-1 comme le moteur et ma lecture le penchaient, avec tous les buts avant la mi-temps (dont un csc de Daniele à la 45e). Le match a été pauvre en volume : xG 0,6 / 0,48, seulement 2 tirs cadrés de chaque côté. Les marchés de tirs cadrés à la hausse ont donc échoué, alors que ceux de résultat, de buts, de corners et de tirs totaux ont tenu.",
+      "whatWasRight": "Victoire de Rivadavia, les deux équipes marquent, Rivadavia à plus de 1,5 but, Banfield à moins de 17,5 tirs (13) et à moins de 6,5 cadrés (2). Corners sous les plafonds (5 et 4). Tirs totaux (25) sous 35,5.",
+      "whatWasMissed": "J'ai surestimé le volume de tirs cadrés. Rivadavia a marqué 3 buts avec 2 cadrés seulement, dont un csc. Le but annulé par le VAR (40e) et le poteau d'Arce (31e) montrent que le score était partiellement chanceux. Rivadavia n'a eu que 46 % de possession.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le 1N2 et les buts. Il le contredit sur les volumes : xG de 2,6 attendu contre 0,6 réel, tirs cadrés 10,6 attendus contre 4.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Independiente Rivadavia gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Rivadavia a renversé le score après le but de Daniele (9e) : Florentín 11e et 15e, puis csc de Daniele à la 45e. 3-1 à la mi-temps.",
+          "lesson": "Favori à domicile contre une défense remaniée : lecture confirmée. Garder, sans oublier que l'xG réel était équilibré."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "4 buts (3-1), tous avant la mi-temps, dont un csc : le plus de 2,5 passe malgré un xG réel de 1,08.",
+          "lesson": "Ma nuance était trop prudente ici, mais le dépassement est venu de l'efficacité et d'un csc, pas du volume. Ne pas en conclure que la moyenne du championnat est caduque."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Daniele a ouvert le score à la 9e, puis Rivadavia a marqué trois fois. Banfield a marqué dès l'entame.",
+          "lesson": "Une défense fragile à domicile encaisse souvent même quand l'attaque adverse est amoindrie. À garder."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Independiente Rivadavia & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Victoire de Rivadavia avec 4 buts au total, largement au-dessus de 1,5.",
+          "lesson": "Le combiné suit le résultat ; le risque reste la victoire. Confirmé."
+        },
+        {
+          "market": "Buts — Independiente Rivadavia",
+          "marketId": "teamGoals",
+          "pick": "Independiente Rivadavia — Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Florentín 11e et 15e, plus le csc de Daniele à la 45e : 3 buts malgré 2 tirs cadrés et 0,6 xG.",
+          "lesson": "Le plus de 1,5 a été atteint avec de la réussite (csc). Le moteur surestimait le volume offensif, pas l'issue."
+        },
+        {
+          "market": "Buts — Banfield",
+          "marketId": "teamGoals",
+          "pick": "Banfield — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "But de Daniele dès la 9e.",
+          "lesson": "Une ligne à 0,5 but pour un visiteur qui marque régulièrement reste confortable. À garder."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 12.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "9 corners (5 + 4), loin de 12,5.",
+          "lesson": "Ligne haute pour des équipes peu productrices en corners : confirmé."
+        },
+        {
+          "market": "Corners — Independiente Rivadavia",
+          "marketId": "teamCorners",
+          "pick": "Independiente Rivadavia — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Rivadavia a obtenu 5 corners, au-dessus de 2,5. Ma nuance sur la prudence n'a pas eu lieu d'être.",
+          "lesson": "Le plancher bas était bien un marché sûr ; la prudence excessive a été inutile ici."
+        },
+        {
+          "market": "Corners — Banfield",
+          "marketId": "teamCorners",
+          "pick": "Banfield — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Banfield a obtenu 4 corners, sous 6,5.",
+          "lesson": "Banfield n'est pas une équipe à corners. Confirmé."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 35.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "25 tirs (12 + 13), sous 35,5.",
+          "lesson": "Les moyennes de tirs du championnat donnent de la marge ; confirmé."
+        },
+        {
+          "market": "Tirs — Independiente Rivadavia",
+          "marketId": "teamShots",
+          "pick": "Independiente Rivadavia — Moins de 21.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "12 tirs, loin de 21,5.",
+          "lesson": "Même face à une défense qui concède beaucoup, Rivadavia dépasse rarement 20 tirs. Garder."
+        },
+        {
+          "market": "Tirs — Banfield",
+          "marketId": "teamShots",
+          "pick": "Banfield — Moins de 17.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "13 tirs, sous 17,5.",
+          "lesson": "Banfield, onze remanié, reste sous sa moyenne ; confirmé."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Seulement 4 tirs cadrés au total (2 + 2) contre 10,6 attendus. Rivadavia a marqué avec un csc et des tirs peu cadrés ; poteaux d'Arce (31e) et de Gómez (90+7).",
+          "lesson": "Les cadrés sont très volatils et dépendent de la relève statistique : ne pas leur donner 80 %+ sur la seule base des moyennes. Les poteaux et les tirs non cadrés comptent hors cadrés."
+        },
+        {
+          "market": "Tirs cadrés — Independiente Rivadavia",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Independiente Rivadavia — Plus de 3.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Rivadavia n'a cadré que 2 tirs (3 buts dont un csc), très sous 3,5. Il menait 3-1 dès la 45e et a géré.",
+          "lesson": "Une équipe qui mène tôt réduit son volume : prendre en compte l'effet du score. Moyenne de 5,6 trop optimiste."
+        },
+        {
+          "market": "Tirs cadrés — Banfield",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Banfield — Moins de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Banfield n'a cadré que 2 tirs, sous 6,5.",
+          "lesson": "Ligne confortable pour une attaque amoindrie : confirmé."
+        }
+      ],
+      "caveats": "Un seul match. Les statistiques de tirs cadrés semblent peu cohérentes avec 3 buts et 25 tirs ; la relève FotMob peut sous-compter. Le csc et le but annulé par le VAR rendent le score peu représentatif.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 16,
+        "commentaire": 5
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5246,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 3326,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5246,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 3326,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5246,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5246
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.054665599999999995,
+      "createdAt": "2026-11-05T18:38:10.074Z"
+    }
   },
   {
     "matchId": "cal-2026-11-03-anaitasuna-ft-deportivo-alaves",
@@ -13491,7 +14187,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-03T18:54:57.637Z",
+    "updatedAt": "2026-11-05T18:34:36.184Z",
     "createdAt": "2026-11-03T06:43:53.972Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -13907,6 +14603,238 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-03T06:43:53.972Z"
+    },
+    "postMatchReview": {
+      "summary": "Stoke s'est imposé 2-1 à Blackburn alors que Blackburn dominait les statistiques (xG 1,81 contre 0,92, 4 grosses occasions contre 1). Les marchés de buts et de volumes, où l'analyse confirmait le moteur, ont tous été justes. Le 1N2, jugé nuancé et sans edge, a basculé côté Stoke malgré la domination adverse.",
+      "whatWasRight": "Les volumes ont été bien lus : 14 tirs Blackburn (plus de 9,5) et 11 Stoke (plus de 8,5), 3 tirs cadrés chacun (Blackburn plus de 2,5, Stoke sous 5,5), 6 et 5 corners. Le total de buts (3) et le but des deux équipes (McGlynn 43', Guðjohnsen 87') étaient bien anticipés. Rester nuancé sur le 1N2 était prudent. Blackburn est resté sous 2,5 buts.",
+      "whatWasMissed": "Le but contre son camp de Baradji (68') a permis à Stoke de creuser l'écart malgré une infériorité d'occasions. L'efficacité de Stoke (2 buts pour 0,92 xG) n'était pas prévue. Les blessures en cours de match (Pickering 7', Alebiosu 41') n'étaient pas anticipables. Le but contre son camp était imprévisible.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur presque tous les marchés. Sur le 1N2, la victoire de Stoke (36 %) était dans la zone d'incertitude, sans edge. Le xG de Blackburn (1,81) était proche de l'attendu du moteur (1,85), celui de Stoke (0,92) inférieur à 1,22.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Stoke gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Stoke gagne 2-1 : McGlynn 43', but contre son camp de Baradji 68', Guðjohnsen 87'. Blackburn dominait (xG 1,81 contre 0,92, possession 58 %).",
+          "lesson": "Un 1N2 sans edge reste à traiter avec nuance : l'efficacité et un but contre son camp peuvent renverser la domination."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "3 buts (43', 68', 87') : plus de 1,5 largement atteint.",
+          "lesson": "La confiance forte sur ce marché était justifiée par des xG cumulés proches de 3 ; à garder."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "McGlynn marque pour Stoke à la 43e et Guðjohnsen pour Blackburn à la 87e, ce qui valide le oui. Ce dernier but est arrivé tard.",
+          "lesson": "Malgré la série de Stoke sans encaisser, la défense a cédé ; un buteur du camp dominant (xG 1,81) finit par marquer."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Stoke & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Stoke gagne et 3 buts : combinaison réussie, portée par le but contre son camp (68').",
+          "lesson": "Marché dépendant du 1N2 incertain ; la partie buts était sûre."
+        },
+        {
+          "market": "Buts — Blackburn",
+          "marketId": "teamGoals",
+          "pick": "Blackburn — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Blackburn n'a marqué qu'une fois (87'), plus un but contre son camp attribué à Stoke ; moins de 2,5 est passé.",
+          "lesson": "Une défense de Stoke solide limite le plafond de Blackburn ; garder ce type de ligne haute."
+        },
+        {
+          "market": "Buts — Stoke",
+          "marketId": "teamGoals",
+          "pick": "Stoke — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Stoke a marqué 2 fois (43', 68' csc).",
+          "lesson": "Un but de Stoke sur 70 % reste cohérent avec sa régularité offensive."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 8.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "6 + 5 = 11 corners, au-dessus de 8,5.",
+          "lesson": "L'attendu du moteur (11,6) a été très proche du réel ; marge confortable à garder."
+        },
+        {
+          "market": "Corners — Blackburn",
+          "marketId": "teamCorners",
+          "pick": "Blackburn — Plus de 3.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Blackburn a obtenu 6 corners, au-dessus de 3,5.",
+          "lesson": "La production à domicile (7,8) sert de bon repère pour une ligne basse."
+        },
+        {
+          "market": "Corners — Stoke",
+          "marketId": "teamCorners",
+          "pick": "Stoke — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Stoke a obtenu 5 corners, sous 7,5, bien qu'il ait mené dès la 43e.",
+          "lesson": "Le risque d'un scénario où Stoke est mené ne s'est pas matérialisé ; la moyenne de 5,3 à l'extérieur est fiable."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 33.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "14 + 11 = 25 tirs, sous 33,5 et sous l'attendu de 27,66.",
+          "lesson": "Le total dépasse rarement 33 quand les deux équipes sont à 12-15 tirs ; à conserver."
+        },
+        {
+          "market": "Tirs — Blackburn",
+          "marketId": "teamShots",
+          "pick": "Blackburn — Plus de 9.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "14 tirs, au-dessus de 9,5, avec une domination de 58 % de possession.",
+          "lesson": "Blackburn à domicile garantit un volume ; l'écart avec 17,5 de moyenne reste notable."
+        },
+        {
+          "market": "Tirs — Stoke",
+          "marketId": "teamShots",
+          "pick": "Stoke — Plus de 8.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "11 tirs, au-dessus de 8,5.",
+          "lesson": "La ligne basse a tenu même avec 42 % de possession."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 10.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "3 + 3 = 6 tirs cadrés, loin de 10,5.",
+          "lesson": "Les totaux de tirs cadrés restent bas ; marge large à garder."
+        },
+        {
+          "market": "Tirs cadrés — Blackburn",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Blackburn — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "3 tirs cadrés, tout juste au-dessus de 2,5 (14 tirs).",
+          "lesson": "Passé de peu : la précision de Blackburn a été faible ; la marge était mince malgré 77 %."
+        },
+        {
+          "market": "Tirs cadrés — Stoke",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Stoke — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "3 tirs cadrés, sous 5,5, pour 2 buts dont un contre son camp.",
+          "lesson": "Stoke est efficace avec peu de tirs ; la ligne haute reste sûre."
+        }
+      ],
+      "caveats": "Un seul match : l'efficacité de Stoke et un but contre son camp (68') ont pesé sur le résultat, ce qui est peu modélisable. Aucune cote fiable n'était disponible, donc pas d'évaluation de valeur.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 20,
+        "commentaire": 2
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 6745,
+        "cache_read_input_tokens": 9295,
+        "output_tokens": 4972,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 6745,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2322,
+            "cache_read_input_tokens": 7207,
+            "cache_creation_input_tokens": 1626,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1626
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.078567,
+      "createdAt": "2026-11-05T18:34:36.184Z"
     }
   },
   {
@@ -15387,7 +16315,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-03T18:55:29.447Z",
+    "updatedAt": "2026-11-05T18:35:20.373Z",
     "createdAt": "2026-11-03T06:44:20.397Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -15803,6 +16731,238 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-03T06:44:20.397Z"
+    },
+    "postMatchReview": {
+      "summary": "Bolton s'est imposé 0-1 à Charlton sur un but précoce de Dalby (18e). Le match fermé et pauvre en buts a confirmé la lecture « peu de buts, Charlton stérile », mais pas la victoire de Charlton ni le marché des corners totaux ni les tirs cadrés de Charlton.",
+      "whatWasRight": "Le faible rendement offensif de Charlton : 0 but, seulement 2 tirs cadrés et 0 grosse occasion. Total de moins de 2,5 buts, BTTS Non, Charlton moins de 1,5 but et Bolton moins de 1,5 but sont passés. Volumes de tirs (14 et 11 : total supérieur à 21,5, Charlton sous 17,5, Bolton au-dessus de 9,5), tirs cadrés totaux (5) bien sous 12,5, Bolton au-dessus de 2,5 tirs cadrés (3) et corners par équipe sous 7,5 (4 et 3) ont été bien anticipés. La prudence sur le 1N2 était justifiée.",
+      "whatWasMissed": "Les corners totaux : 7 seulement contre 10,92 attendus, dans un match où Bolton a défendu son avantage après la 18e. Le seuil de 2,5 tirs cadrés de Charlton (2 réalisés) : l'avertissement sur sa moyenne de 2,5 était fondé mais n'a pas été assez poussé. Le moteur surestimait Charlton, et un but précoce a figé le scénario.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur les marchés de buts, de tirs et de corners par équipe. Il le contredit sur la victoire de Charlton (44 %), les corners totaux (83 %), les tirs cadrés de Charlton (82 %) et le combiné Charlton et moins de 3,5 buts.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Charlton gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Bolton a gagné 0-1 sur un but de Dalby à la 18e. Charlton, dominant en possession (57 %) et en xG (0,84 contre 0,67), n'a pas converti ses 14 tirs.",
+          "lesson": "Charlton à domicile marquait peu (0,5 but par match) : ne pas lui accorder un avantage de favori malgré le domicile."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Un seul but, à la 18e, puis un match fermé avec 1,51 xG cumulé.",
+          "lesson": "Avec deux attaques faibles ou diminuées, la ligne basse tient. L'avis nuancé était trop prudent."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Charlton n'a pas marqué : 2 tirs cadrés, 0 grosse occasion.",
+          "lesson": "Le faible rendement offensif de Charlton (0,6 but par match) était un signal fiable pour Non. À garder."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Charlton & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Moins de 3,5 buts est passé, mais Charlton a perdu, ce qui invalide le combiné.",
+          "lesson": "Un combiné dépend du volet le plus fragile, ici la victoire de Charlton. La nuance était justifiée."
+        },
+        {
+          "market": "Buts — Charlton",
+          "marketId": "teamGoals",
+          "pick": "Charlton — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Charlton est resté à 0 but, avec 0,84 xG.",
+          "lesson": "La confirmation reposait sur l'attaque pauvre de Charlton (0,6 but par match, 0 but à Middlesbrough et Watford). À garder."
+        },
+        {
+          "market": "Buts — Bolton",
+          "marketId": "teamGoals",
+          "pick": "Bolton — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Bolton n'a marqué qu'une fois, sur sa seule grosse occasion, avec 0,67 xG.",
+          "lesson": "Bolton sans Hardie ni McAtee a été moins prolifique. La nuance prudente sur Bolton était trop faible."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Seulement 7 corners (4 et 3), contre 10,92 attendus. Bolton, mené puis menant, n'a pas été poussé à en provoquer.",
+          "lesson": "Ne pas confirmer avec une forte confiance une ligne de corners basée sur des moyennes de concession. Les corners restent très variables selon le scénario."
+        },
+        {
+          "market": "Corners — Charlton",
+          "marketId": "teamCorners",
+          "pick": "Charlton — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Charlton a obtenu 4 corners, sous 7,5.",
+          "lesson": "Sa moyenne de 4,1 corners et sa possession plutôt basse en saison étaient de bons indices. À garder."
+        },
+        {
+          "market": "Corners — Bolton",
+          "marketId": "teamCorners",
+          "pick": "Bolton — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Bolton a obtenu 3 corners.",
+          "lesson": "Une moyenne de 5,1 corners loin du seuil de 7,5 a tenu. À garder."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 21.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "25 tirs (14 et 11), au-dessus de 21,5.",
+          "lesson": "La ligne de volume de tirs a tenu même dans un match fermé. À garder."
+        },
+        {
+          "market": "Tirs — Charlton",
+          "marketId": "teamShots",
+          "pick": "Charlton — Moins de 17.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "14 tirs, sous 17,5, malgré une possession de 57 %.",
+          "lesson": "Une moyenne de 9,2 tirs laissait de la marge. À garder."
+        },
+        {
+          "market": "Tirs — Bolton",
+          "marketId": "teamShots",
+          "pick": "Bolton — Plus de 9.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Bolton a tiré 11 fois, au-dessus de 9,5 de justesse.",
+          "lesson": "Marge mince malgré les 14,5 tirs de moyenne : Bolton avec une avance a baissé son volume."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 12.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Seulement 5 tirs cadrés au total (2 et 3).",
+          "lesson": "La ligne haute était sûre dans un match à faible qualité de tir. À garder."
+        },
+        {
+          "market": "Tirs cadrés — Charlton",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Charlton — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Charlton n'a cadré que 2 tirs sur 14, sous la ligne de 2,5.",
+          "lesson": "Quand la moyenne de l'équipe (2,5) est inférieure à l'attendu du moteur (4,73), croire la moyenne. L'avis nuancé était bon."
+        },
+        {
+          "market": "Tirs cadrés — Bolton",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Bolton — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Bolton a cadré 3 tirs, juste au-dessus de 2,5.",
+          "lesson": "Passé de peu : la marge était faible alors que la moyenne de 5 était nettement plus haute. Un scénario avec avance réduit le volume."
+        }
+      ],
+      "caveats": "Un seul match : les résultats tiennent en partie à un but précoce et à la gestion de l'avance par Bolton. Les blessures de Famewo, Kelman, Sheehan et Ito ont pu perturber le rythme du match. Les stats ne détaillent pas les corners ni les tirs par période.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 12,
+        "commentaire": 4
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5313,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2690,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5313,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2690,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5313,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5313
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0485736,
+      "createdAt": "2026-11-05T18:35:20.372Z"
     }
   },
   {
@@ -17461,7 +18621,7 @@
       ],
       "lineupImpact": "Source FotMob, 49 minutes avant le coup d'envoi : la composition peut encore être une prévision. Derby (4-2-3-1, Eustace) aligne Szmodics (4+1), Clark (3+2) et Morris en pointe, sans Langås, Taylor et Ozoh (blessés), Hedges et Ward absents de la feuille. L'attaque est limitée, ce qui soutient les marchés à faible total de Derby. Norwich (4-2-3-1, Clement) perd Touré (6+1) et aligne Kvistgaarden (4+4) et Brooks (3+3). Le gardien Grimshaw remplace Kovačević, et Córdoba, Chrisene et Schwartau sont sur le banc. Cette rotation peut fragiliser la défense. Le cadre ne pèse pas : 9 °C, vent faible, arbitre proche de la moyenne."
     },
-    "updatedAt": "2026-11-03T18:56:01.277Z",
+    "updatedAt": "2026-11-05T18:37:18.992Z",
     "createdAt": "2026-11-03T06:44:49.138Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -17877,6 +19037,238 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-03T06:44:49.138Z"
+    },
+    "postMatchReview": {
+      "summary": "Norwich a gagné 4-0 à Derby, dans le sens de la lecture pré-match (favori Norwich, Derby en crise, faible production offensive de Derby). Le sens était bon mais l'ampleur a été sous-estimée : Norwich a marqué 4 buts dont 3 avant la pause, avec 19 tirs et 8 cadrés, au-dessus des seuils « moins de » que j'avais confirmés.",
+      "whatWasRight": "Victoire de Norwich, plus de 1,5 but (4 buts), Derby sous 1,5 but (0 but, xG 0,69), les corners (4 et 5, total 9) et le total de tirs (25) sous les seuils. Le tirs cadrés total (10) est au-dessus de 6,5. Le diagnostic d'une attaque de Derby en panne s'est confirmé. J'avais aussi nuancé le BTTS, qui a échoué.",
+      "whatWasMissed": "L'ampleur de la domination de Norwich : but dès la 8e, 0-3 à la 44e, puis 4-0 à la 66e. J'ai trop fait confiance aux moyennes de Norwich (1,8 but, 12,5 tirs) alors que Derby concédait déjà 1,8 but et 15,1 tirs. Résultat : Norwich à 19 tirs, 8 cadrés et 4 buts, ce qui fait échouer les plafonds de 3,5 buts, 16,5 tirs et 6,5 tirs cadrés. Derby n'a cadré que 2 tirs, sous le plus de 2,5. La rotation de Norwich n'a pas fragilisé sa défense.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le 1N2 (Norwich, xG 2,19 contre 0,81) mais le dépasse nettement : le xG réel de Norwich est de 1,8 pour 4 buts. Les marchés « moins de » sur les produits offensifs de Norwich ont été contredits.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Norwich gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Norwich a gagné 4-0 : buts à la 8e, 27e, 44e et 66e, avec 19 tirs contre 6.",
+          "lesson": "Confirmer le favori face à un Derby en crise et diminué était justifié ; à garder."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "4 buts, dont 3 avant la 45e : le plus de 1,5 était acquis dès la 27e.",
+          "lesson": "Les deux défenses perméables et la moyenne élevée du championnat justifient ce type de seuil bas ; à garder."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Derby n'a pas marqué (xG 0,69, 2 tirs cadrés). Mon avis nuancé était prudent.",
+          "lesson": "Quand un côté a une attaque très faible et est diminué, rester prudent sur le BTTS ; le moteur à 50 % surestimait Derby."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Norwich & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "faible",
+          "aiWasRight": true,
+          "explanation": "Victoire de Norwich et 4 buts : les deux conditions étaient remplies dès la 27e.",
+          "lesson": "Ce combiné suit le résultat ; quand le favori est bien lu, il tient."
+        },
+        {
+          "market": "Buts — Derby",
+          "marketId": "teamGoals",
+          "pick": "Derby — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Derby a fini à 0 but, xG 0,69, avec seulement 6 tirs.",
+          "lesson": "Une attaque en panne et décimée justifie les seuils bas ; à garder."
+        },
+        {
+          "market": "Buts — Norwich",
+          "marketId": "teamGoals",
+          "pick": "Norwich — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Norwich a marqué 4 buts (8e, 27e, 44e, 66e), ce qui dépasse 3,5. Son xG de 1,8 n'en prévoyait que 2 environ.",
+          "lesson": "Contre une équipe qui s'effondre, le plafond de buts du favori est trop confiant à 3,5 ; la variance est plus forte qu'un 82 % ne le laisse croire. Une forte confiance sur ce « moins de » était exagérée."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 12.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "9 corners au total (4 + 5), très loin de 12,5.",
+          "lesson": "Les seuils de corners très larges sont fiables même en match à sens unique ; à garder."
+        },
+        {
+          "market": "Corners — Derby",
+          "marketId": "teamCorners",
+          "pick": "Derby — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Derby a obtenu 4 corners, sous 7,5.",
+          "lesson": "Même mené 0-3, Derby n'a pas multiplié les corners ; le seuil restait sûr."
+        },
+        {
+          "market": "Corners — Norwich",
+          "marketId": "teamCorners",
+          "pick": "Norwich — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Norwich a obtenu 5 corners malgré sa domination, sous 6,5.",
+          "lesson": "Une domination en tirs ne se traduit pas forcément en corners ; à garder."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 31.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "25 tirs (6 + 19), sous 31,5, proche des 25,79 attendus.",
+          "lesson": "Le total est resté stable car Derby a peu tiré, ce qui compense l'excès de Norwich."
+        },
+        {
+          "market": "Tirs — Derby",
+          "marketId": "teamShots",
+          "pick": "Derby — Moins de 17.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Derby n'a tiré que 6 fois, loin de 17,5.",
+          "lesson": "Un Derby diminué et mené produit peu ; à garder."
+        },
+        {
+          "market": "Tirs — Norwich",
+          "marketId": "teamShots",
+          "pick": "Norwich — Moins de 16.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Norwich a tiré 19 fois, au-dessus de 16,5, avec 3 grosses occasions et un poteau à la 29e. Derby concédait déjà 15,1 tirs.",
+          "lesson": "Quand le favori mène largement et que l'adversaire concède plus de 15 tirs par match, la moyenne du favori (12,5) sous-estime ; relever la marge de sécurité."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "10 tirs cadrés (2 + 8), au-dessus de 6,5, tiré par Norwich.",
+          "lesson": "Le plus de tirs cadrés total s'appuie sur des défenses perméables ; à garder."
+        },
+        {
+          "market": "Tirs cadrés — Derby",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Derby — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Derby n'a cadré que 2 tirs sur 6, sous 2,5. Mené 0-3 à la pause et Szmodics blessé à la 62e.",
+          "lesson": "Avec une attaque à 0,69 xG et des absences, un « plus de 2,5 » reste fragile ; j'avais signalé le risque mais pas assez pesé."
+        },
+        {
+          "market": "Tirs cadrés — Norwich",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Norwich — Moins de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Norwich a cadré 8 tirs, au-dessus de 6,5, avec 4 buts et un volume élevé.",
+          "lesson": "Un favori qui marque tôt peut dépasser largement sa moyenne (4,4) ; ne pas trop faire confiance à une forte confiance sur un plafond."
+        }
+      ],
+      "caveats": "Un seul match : le 4-0 avec un but à la 8e a peut-être eu un effet de scénario (Derby mené très tôt, blessure de Szmodics). Aucune cote de mise n'était disponible, et cette revue reste qualitative.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 15,
+        "commentaire": 2
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5444,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2516,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5444,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2516,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5444,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5444
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0473576,
+      "createdAt": "2026-11-05T18:37:18.991Z"
     }
   },
   {
@@ -19180,7 +20572,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-03T18:59:27.295Z",
+    "updatedAt": "2026-11-05T18:37:43.905Z",
     "createdAt": "2026-11-03T06:48:04.806Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -19596,6 +20988,238 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-03T06:48:04.805Z"
+    },
+    "postMatchReview": {
+      "summary": "Nul 1-1 : Luton a ouvert le score avant la pause (Clark, 40e) et Taylor a égalisé à la 49e. Le scénario « buts des deux côtés » était juste. Le favori Huddersfield n'a pas gagné et le volume offensif attendu a été surestimé (xG 0,96 / 0,61, très en dessous des 2,8 / 1,8 du moteur). Les marchés de tirs, de tirs cadrés et de corners de chaque équipe ont tenu, sauf le total de tirs.",
+      "whatWasRight": "Les deux équipes ont marqué (Clark 40e, Taylor 49e). Luton a été tenu sous 2,5 buts et sous 15,5 tirs (9 tirs, 4 cadrés). Huddersfield a dominé les corners (10 contre 1) avec 12 tirs dont 6 cadrés. Le total de corners, le total de tirs cadrés (10) et les seuils par équipe sont passés comme prévu.",
+      "whatWasMissed": "Le potentiel de buts de Huddersfield a été surestimé : un seul but, malgré une domination en corners. J'avais confirmé la victoire (49 %) et plus de 1,5 but pour Huddersfield avec une confiance forte, ce qui était excessif. Le total de tirs (21 au total) est passé sous 21,5 car Luton n'en a tiré que 9, sans doute à cause du match très contrôlé. La blessure d'Andersen (16e) et celle de Naismith (remplacé à la 17e) n'ont pas été prises en compte. Le rythme a été plus bas que les 4,6 buts attendus.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le vainqueur et sur les buts : favori à 49 %, Huddersfield ne gagne pas ; 3,5 buts au-dessus à 68 % échoue (2 buts). Le moteur est en revanche juste sur les deux équipes qui marquent et sur la plupart des marchés de volume (corners, tirs par équipe, tirs cadrés). Son xG de 4,6 était trop élevé.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Huddersfield Town gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Huddersfield menait en occasions (12 tirs, xG 0,96 contre 0,61) mais n'a fait que 1-1. Luton a marqué à la 40e, Taylor a égalisé à la 49e, et personne n'a ensuite fait la différence.",
+          "lesson": "Un leader à domicile à 49 % laisse plus de la moitié des issues à un nul ou une défaite. Confirmer le favori avec confiance moyenne est fragile quand l'adversaire est en série de 4 victoires."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Seulement 2 buts (40e et 49e), aucun ensuite. Le xG réel est de 1,57 contre 4,6 attendus par le moteur.",
+          "lesson": "Mon avis nuancé était bon : le seuil de 3,5 est trop optimiste quand les moyennes récentes sont autour de 3. Se méfier d'un xG de moteur très supérieur aux moyennes réelles."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Clark (40e) puis Taylor (49e) ont marqué. Luton marquait déjà depuis 6 matchs, Huddersfield depuis 7.",
+          "lesson": "Quand les deux équipes marquent régulièrement, ce marché reste fiable même si le total de buts est surestimé. À garder."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Huddersfield Town & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Il fallait une victoire de Huddersfield, ce qui n'est pas arrivé (1-1). Le marché dépend entièrement du résultat.",
+          "lesson": "Ce marché combiné hérite de l'erreur sur le résultat, sans valeur ajoutée. Ne pas le confirmer avec la même confiance que le 1N2."
+        },
+        {
+          "market": "Buts — Huddersfield Town",
+          "marketId": "teamGoals",
+          "pick": "Huddersfield Town — Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Un seul but, de Taylor (49e), malgré 12 tirs, 6 cadrés et 10 corners. Le xG de 0,96 était loin des 2,5 attendus à domicile.",
+          "lesson": "Une confiance forte sur un seuil de buts est excessive : la volume offensif ne se convertit pas toujours. Ne pas la donner sur des seuils de buts d'une équipe."
+        },
+        {
+          "market": "Buts — Luton Town",
+          "marketId": "teamGoals",
+          "pick": "Luton Town — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Luton n'a marqué qu'une fois (Clark, 40e) avec 4 tirs cadrés et un xG de 0,61, très loin de 2,5.",
+          "lesson": "Ce seuil était très sûr. Le moins de 2,5 buts pour une équipe à l'extérieur reste un marché solide."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "11 corners au total (10 + 1), au-dessus du seuil de 7,5, grâce à la domination de Huddersfield.",
+          "lesson": "Le moteur est fiable en corners : attendus 10,8, réels 11. La confiance forte a été justifiée."
+        },
+        {
+          "market": "Corners — Huddersfield Town",
+          "marketId": "teamCorners",
+          "pick": "Huddersfield Town — Plus de 3.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "10 corners pour Huddersfield, bien au-dessus du seuil de 3,5.",
+          "lesson": "Pour une équipe dominante à domicile, ce seuil bas a laissé une très large marge. À conserver."
+        },
+        {
+          "market": "Corners — Luton Town",
+          "marketId": "teamCorners",
+          "pick": "Luton Town — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Luton n'a obtenu qu'1 corner, largement sous 6,5. Mon avis était nuancé, plus prudent que le moteur.",
+          "lesson": "Luton a été réduit à peu d'attaques (9 tirs). Le moteur sous-estimait même ce déficit : l'under de Luton n'est pas risqué quand l'adversaire domine."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 21.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "21 tirs au total (12 + 9), un de moins que 21,5. Luton n'a tiré que 9 fois, loin de ses 15 en moyenne.",
+          "lesson": "J'avais confirmé un seuil proche de la moyenne cumulée. Quand un seuil total est proche de l'attendu moins la variance, la confiance moyenne était trop haute. Un seul tir d'écart a suffi."
+        },
+        {
+          "market": "Tirs — Huddersfield Town",
+          "marketId": "teamShots",
+          "pick": "Huddersfield Town — Plus de 10.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "12 tirs, au-dessus de 10,5, mais de peu (la moyenne était 17,4).",
+          "lesson": "Marché juste mais avec peu de marge : la confiance forte était un peu haute vu l'écart avec la moyenne."
+        },
+        {
+          "market": "Tirs — Luton Town",
+          "marketId": "teamShots",
+          "pick": "Luton Town — Moins de 15.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "9 tirs pour Luton, sous 15,5, avec une marge confortable.",
+          "lesson": "L'avis tenait : la défense de Huddersfield (9,3 tirs concédés) limite Luton. À garder."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 12.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "10 tirs cadrés au total (6 + 4), sous 12,5. Le moteur en attendait 9,36.",
+          "lesson": "Le moteur, plus bas que les moyennes brutes, a eu raison. Faire confiance à son estimation défensive."
+        },
+        {
+          "market": "Tirs cadrés — Huddersfield Town",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Huddersfield Town — Plus de 3.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "6 tirs cadrés, au-dessus de 3,5.",
+          "lesson": "Ce volume régulier de Huddersfield à domicile (6,6) s'est confirmé. À garder."
+        },
+        {
+          "market": "Tirs cadrés — Luton Town",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Luton Town — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "4 tirs cadrés, sous 5,5, conformément à l'attendu du moteur (3,69).",
+          "lesson": "Le moteur était plus fin que la moyenne brute de Luton : la défense de Huddersfield compte. À garder."
+        }
+      ],
+      "caveats": "Un seul match : le nul 1-1 peut tenir à la finition (xG 0,96 / 0,61) et aux blessures de Luton (Andersen, Naismith) sans qu'on puisse en tirer une tendance. Les échantillons à domicile et à l'extérieur étaient petits.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 10,
+        "commentaire": 1
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5563,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2890,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5563,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2890,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5563,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5563
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.051573600000000004,
+      "createdAt": "2026-11-05T18:37:43.904Z"
     }
   },
   {
@@ -20905,7 +22529,7 @@
       "caveats": "Classement et forme disponibles. Changement d'entraîneur à Northampton déduit des compositions seulement (Hogg depuis août), donc historique incomplet. Les xG des moyennes reposent sur des échantillons de 5 à 10 matchs. Composition source FotMob relue 46 minutes avant le coup d'envoi : probablement proche de l'officiel mais pas garantie.",
       "lineupImpact": "Northampton aligne son onze type en 4-5-1 : Jeacock dans les buts, Guthrie (1 but) et Warhurst (2 buts, xG 1,7) comme principaux atouts offensifs. Maxwell (9 titularisations) et Fornah (8) sont sur le banc, un choix de l'entraîneur. Oldham joue en 5-4-1 sans Appiah-Forson (13 tit.), Drummond (11 tit.) ni Delaney (8 tit.), absents de la feuille de match, et Fawunmi (2+2) est remplaçant. Kavanagh (5+4, xG 6,19) et Fondop-Talum (2+1) restent ses principales menaces, ce qui nuance le marché des buts d'Oldham. Pelouse naturelle, vent faible, arbitre un peu plus sévère sur les jaunes (4,26 contre 3,77), sans effet notable sur les marchés proposés."
     },
-    "updatedAt": "2026-11-03T18:59:58.101Z",
+    "updatedAt": "2026-11-05T18:40:32.251Z",
     "createdAt": "2026-11-03T06:48:32.908Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -21325,6 +22949,238 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-03T06:48:32.908Z"
+    },
+    "postMatchReview": {
+      "summary": "Oldham a gagné 1-0 à l'extérieur (but de Norburn, 70e) alors que le moteur et mon avis penchaient légèrement pour Northampton. Le match fermé, à peu de buts, avec beaucoup de tirs et peu de corners, a été bien lu. Les deux erreurs sont la victoire locale et le « zéro but » d'Oldham.",
+      "whatWasRight": "Le profil du match : un seul but, Northampton sous 1,5 but, BTTS Non, peu de corners (3 et 2), tirs en volume (13 et 10) et tirs cadrés modérés (4 et 3). Les marchés de volume (tirs, corners, tirs cadrés) ont tous été tenus. J'avais aussi nuancé le marché « Oldham ne marque pas » à cause du xG extérieur et des grosses occasions, ce qui s'est vérifié : Oldham a eu 2 grosses occasions et une barre de Kavanagh (58e).",
+      "whatWasMissed": "J'ai confirmé la victoire de Northampton, même avec une confiance faible. Les absences d'Oldham n'ont pas pesé. Northampton a dominé la possession (57 %) et le xG (1,03 contre 0,78), mais n'a eu aucune grosse occasion et a cogné la barre (Dale, 66e) sans marquer. Oldham a puni sur son premier tir décisif (70e). Je n'ai pas non plus assez pesé la faible efficacité offensive locale, ni le fait qu'Oldham pouvait marquer une fois sur une action.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1N2 : Northampton favori à 41 % a perdu, et le moteur laissait 29 % à Oldham. Il le confirme sur le profil de buts (peu de buts, BTTS Non, total d'équipe) et sur tous les marchés de statistiques. L'écart vient d'un seul but, donc surtout de la variance. Le xG supérieur de Northampton montre que la lecture du jeu n'était pas absurde.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Northampton Town gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "faible",
+          "aiWasRight": false,
+          "explanation": "Northampton a dominé la possession (57 %) et le xG (1,03 contre 0,78), mais n'a eu aucune grosse occasion et a touché la barre (Dale, 66e). Norburn a marqué pour Oldham à la 70e, quatre minutes après cette barre.",
+          "lesson": "Entre deux équipes de bas de tableau peu prolifiques, un avantage de classement léger ne justifie pas de confirmer un favori à domicile. Le nul et l'issue adverse pèsent davantage que le pronostic principal."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Un seul but, à la 70e, après 0-0 à la mi-temps : suffisant pour passer Plus de 0.5.",
+          "lesson": "Un seuil de 0,5 reste cohérent même avec des attaques faibles, car les occasions arrivent (barres, grosses occasions). À garder."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Northampton n'a pas marqué malgré 13 tirs, 4 cadrés et une barre. Oldham a marqué une fois.",
+          "lesson": "Le Non est confirmé par la faible efficacité locale (0 grosse occasion). Garder ce critère pour Northampton."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Northampton Town & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "faible",
+          "aiWasRight": false,
+          "explanation": "Le volet « Moins de 3,5 » est passé avec un seul but, mais Northampton a perdu, ce qui invalide la combinaison.",
+          "lesson": "Une combinaison dépend entièrement de son volet le plus incertain, ici la victoire locale. Ne pas la confirmer si le 1N2 est ouvert."
+        },
+        {
+          "market": "Buts — Northampton Town",
+          "marketId": "teamGoals",
+          "pick": "Northampton Town — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Northampton est resté à 0 but malgré le xG de 1,03.",
+          "lesson": "Le seuil de 1,5 pour une attaque à 0,9 but par match est solide. À garder."
+        },
+        {
+          "market": "Buts — Oldham Athletic",
+          "marketId": "teamGoals",
+          "pick": "Oldham Athletic — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Norburn a marqué à la 70e, après une barre de Kavanagh (58e) et 2 grosses occasions. Mon avis nuancé, faible, était prudent.",
+          "lesson": "La faible moyenne extérieure d'Oldham (0,4 but) sous-estimait à nouveau sa production : deuxième cas après Barnet. Pondérer davantage son xG et ses grosses occasions pour ce marché."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 12.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Seulement 5 corners au total (3 et 2), très sous 12,5.",
+          "lesson": "Match fermé : les seuils hauts de corners sont sûrs. Avis à garder."
+        },
+        {
+          "market": "Corners — Northampton Town",
+          "marketId": "teamCorners",
+          "pick": "Northampton Town — Moins de 8.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Northampton a obtenu 3 corners, très sous 8,5.",
+          "lesson": "La marge large était justifiée. À garder."
+        },
+        {
+          "market": "Corners — Oldham Athletic",
+          "marketId": "teamCorners",
+          "pick": "Oldham Athletic — Moins de 5.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Oldham a obtenu 2 corners, sous 5,5.",
+          "lesson": "Confirmation correcte, même avec une marge moindre estimée. À garder."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 19.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "13 + 10 = 23 tirs, au-dessus de 19,5, proche des 24,84 attendus.",
+          "lesson": "Les attentes de tirs du moteur sont fiables sur ces seuils. À garder."
+        },
+        {
+          "market": "Tirs — Northampton Town",
+          "marketId": "teamShots",
+          "pick": "Northampton Town — Plus de 8.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "13 tirs, au-dessus de 8,5, en accord avec les 13 par match à domicile.",
+          "lesson": "Utiliser la moyenne à domicile plutôt que la moyenne globale a été payant."
+        },
+        {
+          "market": "Tirs — Oldham Athletic",
+          "marketId": "teamShots",
+          "pick": "Oldham Athletic — Plus de 7.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "10 tirs, au-dessus de 7,5 mais plus bas que les 14,7 de moyenne : la marge a joué.",
+          "lesson": "Le seuil bas était le bon choix, car les moyennes sont parfois surévaluées en match contrôlé."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 4.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "4 + 3 = 7 tirs cadrés, au-dessus de 4,5, comme les 7,09 attendus.",
+          "lesson": "Le total attendu proche de 7 soutient bien ce seuil. À garder."
+        },
+        {
+          "market": "Tirs cadrés — Northampton Town",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Northampton Town — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "4 tirs cadrés, sous 5,5.",
+          "lesson": "Une moyenne à 3,5 laisse une marge suffisante, même en cas de domination."
+        },
+        {
+          "market": "Tirs cadrés — Oldham Athletic",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Oldham Athletic — Moins de 4.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "3 tirs cadrés, sous 4,5, malgré le but.",
+          "lesson": "Un seul but ne nécessite pas beaucoup de tirs cadrés. Marge correctement estimée."
+        }
+      ],
+      "caveats": "Un seul match : le 1-0 vient d'un but à la 70e et tient en partie à la variance. Le xG de Northampton était supérieur, donc l'erreur sur le 1N2 ne prouve pas à elle seule une faute de lecture. Pas de données sur le contexte tactique après la blessure de Kavanagh (44e).",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 7,
+        "commentaire": 3
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5611,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2578,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5611,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2578,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5611,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5611
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0486456,
+      "createdAt": "2026-11-05T18:40:32.250Z"
     }
   },
   {
@@ -32382,7 +34238,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-03T19:45:07.151Z",
+    "updatedAt": "2026-11-05T18:33:07.925Z",
     "createdAt": "2026-11-03T06:50:28.360Z",
     "kickoffRuns": 2,
     "earlierAnalysis": {
@@ -32803,6 +34659,238 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-03T06:50:28.359Z"
+    },
+    "postMatchReview": {
+      "summary": "0-0 fermé : peu de tirs cadrés (2 partout), aucune grosse occasion. Ma lecture pro-Trinidense et mon « Plus de 0.5 but » en confiance forte ont échoué. Les marchés de volume (corners, tirs) ont tenu, mais pas les tirs cadrés en hausse.",
+      "whatWasRight": "Le profil fermé de 2 de Mayo (attaque faible, BTTS Non). Les volumes de tirs (14/12, total 26) et de corners (5/7, total 12) ont été conformes aux seuils. Trinidense sous 16,5 tirs et sous 5,5 cadrés ont aussi tenu.",
+      "whatWasMissed": "J'ai surestimé l'efficacité offensive de Trinidense (série de 6 matchs avec but) et l'impact du remaniement défensif de 2 de Mayo (Rossi au but). Les tirs n'ont pas été convertis en tirs cadrés : 2 et 2 contre 8,56 attendus. Le 0-0 est le seul scénario que j'avais jugé marginal en confiance forte. La seule vraie frayeur : le poteau de Cornet à la 87e.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1N2 (Trinidense favori à 43 %), les buts et les tirs cadrés. Il le confirme sur le BTTS Non, les corners et les tirs totaux. Le moteur était bon sur le volume, trop optimiste sur la qualité des tirs.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Sportivo Trinidense gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "0-0 : Trinidense n'a pas gagné. Aucune grosse occasion, 2 tirs cadrés chacun, et un poteau de Cornet à la 87e.",
+          "lesson": "Le favori léger à l'extérieur (43 %) reste fragile ; sans edge ni cotes fiables, ne pas confirmer sur la seule forme."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Le 0-0 était le seul scénario perdant et il s'est produit, avec 2 tirs cadrés partout.",
+          "lesson": "Même à 83 %, « Plus de 0.5 but » n'est pas sûr quand les deux attaques cadrent peu ; la confiance « forte » était excessive."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Aucun but : Non est juste. 2 de Mayo n'a cadré que 2 fois.",
+          "lesson": "Mon doute était inutile : l'attaque faible de 2 de Mayo et l'absence de grosses occasions justifiaient de suivre Non."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Sportivo Trinidense & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Sans victoire de Trinidense (0-0), le combiné échoue.",
+          "lesson": "Garder la prudence sur ce combiné, qui dépend d'un résultat déjà incertain."
+        },
+        {
+          "market": "Buts — 2 de Mayo",
+          "marketId": "teamGoals",
+          "pick": "2 de Mayo — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "2 de Mayo n'a pas marqué : 2 tirs cadrés seulement, sans grosse occasion.",
+          "lesson": "Son faible rendement offensif (1 but/match) justifiait de pencher pour Moins ; le doute de 50 % était trop généreux."
+        },
+        {
+          "market": "Buts — Sportivo Trinidense",
+          "marketId": "teamGoals",
+          "pick": "Sportivo Trinidense — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Trinidense n'a pas marqué malgré 12 tirs, dont 2 cadrés et un poteau à la 87e.",
+          "lesson": "Une série de buts marqués ne garantit pas un but sur un match ; les stats extérieur sur 4 matchs sont trop minces pour une confiance moyenne."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "12 corners (5+7), au-dessus de 7,5.",
+          "lesson": "Le total de corners attendu bien au-dessus du seuil s'est confirmé ; à garder."
+        },
+        {
+          "market": "Corners — 2 de Mayo",
+          "marketId": "teamCorners",
+          "pick": "2 de Mayo — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "5 corners, sous 7,5.",
+          "lesson": "Une moyenne de 5 corners avec une marge confortable reste fiable."
+        },
+        {
+          "market": "Corners — Sportivo Trinidense",
+          "marketId": "teamCorners",
+          "pick": "Sportivo Trinidense — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "7 corners, nettement au-dessus de 2,5.",
+          "lesson": "Un seuil très bas par rapport à la moyenne (6,3) est solide."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 21.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "26 tirs (14+12), au-dessus de 21,5.",
+          "lesson": "Le volume de tirs cumulé est stable, même sans buts ; bon marché à garder."
+        },
+        {
+          "market": "Tirs — 2 de Mayo",
+          "marketId": "teamShots",
+          "pick": "2 de Mayo — Moins de 19.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "14 tirs, sous 19,5.",
+          "lesson": "Un seuil bien supérieur à la moyenne (12-13) s'est confirmé."
+        },
+        {
+          "market": "Tirs — Sportivo Trinidense",
+          "marketId": "teamShots",
+          "pick": "Sportivo Trinidense — Moins de 16.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "12 tirs, sous 16,5 ; la moyenne extérieure de 18,3 n'a pas pesé.",
+          "lesson": "Ma nuance sur sa moyenne extérieure était excessive ; le moteur (12,46) était plus juste."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "4 tirs cadrés seulement (2+2) contre un seuil de 5,5 ; les tirs ont été peu dangereux.",
+          "lesson": "Les tirs cadrés sont très variables : un total attendu de 8,56 n'offre pas de sécurité quand les moyennes réelles sont de 3,2 et 4,4. Se méfier des seuils au-dessus de la somme des moyennes."
+        },
+        {
+          "market": "Tirs cadrés — 2 de Mayo",
+          "marketId": "teamShotsOnTarget",
+          "pick": "2 de Mayo — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "2 tirs cadrés, sous le seuil de 2,5, malgré 14 tirs.",
+          "lesson": "Une moyenne de 3,2 sans grande marge ne justifie pas la confiance sur Plus de 2.5."
+        },
+        {
+          "market": "Tirs cadrés — Sportivo Trinidense",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Sportivo Trinidense — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "2 tirs cadrés, sous 5,5.",
+          "lesson": "Le moteur (3,83) avait raison de pencher pour Moins ; ma nuance sur les 6 par match à l'extérieur était trop prudente."
+        }
+      ],
+      "caveats": "Échantillon d'un seul match 0-0. Les 8 premières lignes du déroulé ne montrent aucun but, et les xG ne sont pas relevés. Une blessure d'Alexis Villalba (8e) peut avoir perturbé le rythme, mais rien ne le prouve.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 10,
+        "commentaire": 2
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5063,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2322,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5063,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2322,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5063,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5063
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0438936,
+      "createdAt": "2026-11-05T18:33:07.924Z"
     }
   },
   {
@@ -38842,7 +40930,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-03T19:15:26.205Z",
+    "updatedAt": "2026-11-05T18:33:58.418Z",
     "createdAt": "2026-11-03T06:48:59.558Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -39258,6 +41346,238 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-03T06:48:59.558Z"
+    },
+    "postMatchReview": {
+      "summary": "Birmingham a gagné 3-0 avec trois buts en 29 minutes (1', 16', 29'), dans le sens de la lecture d'avant-match sur le résultat, le total de buts et la plupart des marchés de volume. Deux points ont échoué : Millwall n'a pas marqué, et Birmingham a cadré 8 tirs, au-dessus de la ligne de 7,5.",
+      "whatWasRight": "Le favori à domicile et le total offensif étaient bien vus : 3 buts, victoire de Birmingham, plus de 2,5 buts et plus de 1,5 pour Birmingham. Les marchés de corners étaient aussi justes : 6 pour Birmingham, 2 pour Millwall, 8 au total. Les plafonds de tirs ont tenu : 19 pour Birmingham, 15 pour Millwall, 34 au total, alors que la ligne de 22,5 tirs était à dépasser. Millwall n'a cadré que 2 tirs, donc le marché sur ses tirs cadrés était juste. Ma nuance sur les 2 équipes marquent s'est révélée utile.",
+      "whatWasMissed": "Je n'ai pas assez pesé le scénario d'un but très précoce suivi d'un Millwall passif : il a pris 3 buts en 29 minutes, avec Metcalfe suspendu et un gardien de fortune. Millwall a marqué 0 but malgré 15 tirs et un xG de 0,91, et sa seule grosse occasion est une barre à la 75e. Le « Millwall marque » (70 %) était trop confiant. Birmingham a cadré 8 tirs (ligne 7,5) avec seulement 19 tirs au total, un volume de tirs cadrés supérieur à la moyenne de 5,2 à domicile. Un xG de 1,18 contre 2,8 attendus montre aussi que le score a dépassé la qualité des occasions.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le 1N2, les buts et les corners, et le contredit sur Millwall qui marque (70 %) et les tirs cadrés de Birmingham (83 % pour moins de 7,5). Les 2 équipes marquent à 67 % était faux, et ma nuance sur ce marché a bien tenu.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Birmingham gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Birmingham s'est imposé 3-0 grâce à un début de match fulgurant (but à la 1re minute, puis 16e et 29e). Le score était acquis à la mi-temps.",
+          "lesson": "Garder la lecture favorable à Birmingham à domicile quand la forme et le xG vont dans le même sens. Les nuls à domicile n'ont pas pesé ici."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "3 buts, tous marqués avant la 30e minute, suffisent à passer la ligne de 2,5. Millwall n'a rien ajouté, donc le total est resté à 3.",
+          "lesson": "Confiance forte justifiée par les xG combinés et la tendance de Birmingham à marquer à domicile. Mais ici tout le total vient d'une seule équipe : ne pas compter sur Millwall pour le compléter."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Millwall n'a pas marqué malgré 15 tirs et un xG de 0,91. Sa seule grosse occasion est la barre de Neghli à la 75e, avec 2 tirs cadrés seulement.",
+          "lesson": "La nuance était la bonne. Millwall à l'extérieur avec des absences (Metcalfe, gardiens) et mené très tôt cadre peu : se méfier d'un 67 % sur ce marché quand le moteur y est proche de 50 %."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Birmingham & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Victoire de Birmingham 3-0 avec 3 buts, donc le total de 1,5 buts a été dépassé sans difficulté.",
+          "lesson": "Ce combiné suit le résultat : il tient dès que le favori gagne en marquant au moins 2 fois."
+        },
+        {
+          "market": "Buts — Birmingham",
+          "marketId": "teamGoals",
+          "pick": "Birmingham — Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "3 buts de Cochrane (1'), Bird (16') et Stansfield (29'), donc plus de 1,5 sans difficulté.",
+          "lesson": "Garder la confiance dans les buts de Birmingham à domicile face à un Millwall qui concède 1,75 but à l'extérieur."
+        },
+        {
+          "market": "Buts — Millwall",
+          "marketId": "teamGoals",
+          "pick": "Millwall — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Millwall n'a pas marqué : 0 but pour 15 tirs, 2 cadrés et une barre à la 75e. Mené 3-0 dès la 29e, il n'a pas trouvé la faille.",
+          "lesson": "Une confiance moyenne sur un « plus de 0,5 » à l'extérieur est trop élevée quand l'équipe est affaiblie et que la moyenne extérieur est de 1,25. Ne pas confirmer un pronostic à 70 % sur la seule série récente (4 matchs sur 5) sans tenir compte du contexte."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 14.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Seulement 8 corners au total (6 + 2), bien sous la ligne de 14,5.",
+          "lesson": "La nuance prudente ne s'est pas justifiée ici : le total attendu (10,96) offrait vraiment de la marge. Une ligne aussi haute reste fiable."
+        },
+        {
+          "market": "Corners — Birmingham",
+          "marketId": "teamCorners",
+          "pick": "Birmingham — Plus de 3.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Birmingham a eu 6 corners, au-dessus de la ligne de 3,5, avec 55 % de possession.",
+          "lesson": "Le raisonnement (Millwall concède beaucoup de corners à l'extérieur) est à garder."
+        },
+        {
+          "market": "Corners — Millwall",
+          "marketId": "teamCorners",
+          "pick": "Millwall — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Millwall n'a obtenu que 2 corners, sous la ligne de 6,5.",
+          "lesson": "Millwall produit peu de corners à l'extérieur, y compris en étant mené : cette lecture est à garder."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 22.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "34 tirs au total (19 + 15), nettement au-dessus de la ligne de 22,5.",
+          "lesson": "Les moyennes cumulées des deux équipes se sont bien traduites. Le volume était soutenu par un match ouvert."
+        },
+        {
+          "market": "Tirs — Birmingham",
+          "marketId": "teamShots",
+          "pick": "Birmingham — Moins de 21.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "19 tirs, sous la ligne de 21,5, mais la marge était plus faible que le 16,28 attendu.",
+          "lesson": "Ligne bien choisie, mais ne pas la voir comme sûre : Birmingham a approché le seuil en menant tôt."
+        },
+        {
+          "market": "Tirs — Millwall",
+          "marketId": "teamShots",
+          "pick": "Millwall — Moins de 15.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "15 tirs, juste sous la ligne de 15,5. Millwall a tiré davantage que sa moyenne (11,8) en courant après le score.",
+          "lesson": "Mon avertissement sur le scénario où Millwall court après le score était fondé : le chiffre est monté jusqu'à 15, à un tir de la ligne. Une équipe menée tôt gonfle ses tirs."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 11.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "10 tirs cadrés au total (8 + 2), sous la ligne de 11,5, de justesse.",
+          "lesson": "Le marché a tenu mais de peu, à cause des 8 cadrés de Birmingham. Le doute sur la fiabilité du moteur ici reste de mise."
+        },
+        {
+          "market": "Tirs cadrés — Birmingham",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Birmingham — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Birmingham a cadré 8 tirs sur 19, au-dessus de la ligne de 7,5, alors que sa moyenne à domicile est de 5,2. Trois buts tôt et un adversaire affaibli ont gonflé la précision.",
+          "lesson": "J'ai eu tort de confirmer à 83 % : un favori qui domine un adversaire affaibli peut dépasser nettement sa moyenne. Garder plus de prudence sur les moins de tirs cadrés d'un gros favori."
+        },
+        {
+          "market": "Tirs cadrés — Millwall",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Millwall — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Millwall n'a cadré que 2 tirs, bien sous la ligne de 5,5, comme sa moyenne extérieure (2,5).",
+          "lesson": "Lecture à garder : Millwall cadre peu hors de ses bases."
+        }
+      ],
+      "caveats": "Un seul match : le score a dépassé le xG (1,18 pour Birmingham) et un but dès la 1re minute a faussé le scénario. Aucune donnée sur les compositions réelles de Millwall au-delà de la fiche, ni sur la performance du gardien de fortune.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 15,
+        "commentaire": 1
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4924,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 3074,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 4924,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 3074,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 4924,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 4924
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0508576,
+      "createdAt": "2026-11-05T18:33:58.417Z"
     }
   },
   {
@@ -42811,7 +45131,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-03T19:16:33.528Z",
+    "updatedAt": "2026-11-05T18:35:45.644Z",
     "createdAt": "2026-11-03T06:50:00.084Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -43232,6 +45552,238 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-03T06:50:00.083Z"
+    },
+    "postMatchReview": {
+      "summary": "Le 2-2 contredit la lecture « match fermé, Tarma muet, victoire locale ». Tarma a marqué dès la 8e sur penalty et a mené 2-1. Comerciantes a égalisé sur penalty (51e) puis sur un but contre son camp à la 90+6. Les marchés de volume (corners, tirs) ont tenu. Les marchés de résultat et de buts, ainsi que les tirs cadrés de Comerciantes, ont été battus par des penalties et un but tardif.",
+      "whatWasRight": "Les volumes ont été bien anticipés : 11 et 14 tirs, loin des lignes de 20,5, 19,5 et 36,5. Corners 4 et 5 : au-dessus de 2,5 pour chaque équipe, total de 9 sous 12,5. Comerciantes a eu 2 tirs cadrés, sous 7,5. Tarma en a eu 4, au-dessus de 2,5. Comerciantes est resté sous 2,5 buts. Le cadre à faible volume et la prudence face à deux changements d'entraîneur étaient justifiés.",
+      "whatWasMissed": "Le poids des penalties n'a pas été anticipé : deux sur trois buts ont été marqués sur penalty (8e et 51e), sans lien avec la production de jeu. Tarma a marqué malgré l'absence de Bauman et sa faiblesse offensive à l'extérieur. Le but contre son camp à la 90+6 a donné le 2-2. Comerciantes a produit peu : 2 tirs cadrés pour 1 grosse occasion, contre 4 et 3 pour Tarma. Le favori local était surévalué. Le seuil de 6,5 tirs cadrés au total a été mal jugé : il y en a eu 6.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1N2 (53 % local), sur BTTS Non (61 %) et sur moins de 3,5 buts (83 %). Le moteur est confirmé sur les marchés de corners et de tirs. Les buts attendus de 1,45 et 0,68 totalisent 2,13, contre 4 réels, dont 2 sur penalty et 1 contre son camp.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Comerciantes Unidos gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Tarma a ouvert le score sur penalty à la 8e et mené 0-1 à la pause. Comerciantes a égalisé sur penalty (51e), Tarma a repris l'avantage à la 63e, puis le local a arraché le nul à la 90+6 sur but contre son camp. Il n'a eu que 2 tirs cadrés.",
+          "lesson": "Une cote juste de 1,88 supposait une domination que la forme de Comerciantes (2 victoires en 6 à domicile) ne soutenait pas. Rester prudent sur le favori local quand l'écart est mince et que les entraîneurs sont nouveaux."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Avec 4 buts (penalty 8e, penalty 51e, but de Rodríguez 63e, but contre son camp 90+6), le seuil de 3,5 est dépassé. Deux buts sont venus de penalties et un d'un but contre son camp.",
+          "lesson": "Une confiance forte à 83 % sous une ligne de buts ignore les événements fortuits (penalties, buts contre son camp). Ne pas la juger « forte » quand une défense concède beaucoup."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Tarma a marqué dès la 8e, puis à la 63e, et Comerciantes deux fois. Les deux équipes ont marqué.",
+          "lesson": "La faible moyenne de buts de Tarma à l'extérieur (0,6) reposait sur un petit échantillon. Les absences d'attaquants ne garantissent pas un « non ». Éviter la confiance moyenne quand la défense adverse concède 1,5 but par match."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Comerciantes Unidos & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "faible",
+          "aiWasRight": false,
+          "explanation": "Comerciantes n'a pas gagné (2-2), donc le combiné est perdu, même si la composante « moins de 3,5 » échouait aussi avec 4 buts.",
+          "lesson": "Les combinés cumulent les risques des deux jambes. Quand l'une d'elles est déjà fragile, ils méritent d'être évités."
+        },
+        {
+          "market": "Buts — Comerciantes Unidos",
+          "marketId": "teamGoals",
+          "pick": "Comerciantes Unidos — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Comerciantes a marqué 2 buts (penalty 51e, but contre son camp 90+6), donc moins de 2,5. Le but contre son camp a failli faire monter le score.",
+          "lesson": "La ligne locale basse a tenu : le profil de 1,5 but par match est fiable, et la faible production offensive (2 tirs cadrés) l'a confirmé."
+        },
+        {
+          "market": "Buts — Asociación Deportiva Tarma",
+          "marketId": "teamGoals",
+          "pick": "Asociación Deportiva Tarma — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Tarma a marqué dès la 8e sur penalty puis à la 63e. L'avis nuancé (pile ou face) était donc justifié.",
+          "lesson": "Tarma avait marqué lors de 3 de ses 5 derniers matchs. Ce signal récent aurait dû peser plus que la moyenne à l'extérieur."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 12.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 9 corners (4 et 5), bien sous 12,5, conformément aux 9,95 attendus.",
+          "lesson": "Garder cette lecture : les attendus de corners du moteur sont fiables."
+        },
+        {
+          "market": "Corners — Comerciantes Unidos",
+          "marketId": "teamCorners",
+          "pick": "Comerciantes Unidos — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Comerciantes a obtenu 4 corners, au-dessus de 2,5, avec 56 % de possession.",
+          "lesson": "Une équipe qui a la possession à domicile passe la ligne basse de corners ; à conserver."
+        },
+        {
+          "market": "Corners — Asociación Deportiva Tarma",
+          "marketId": "teamCorners",
+          "pick": "Asociación Deportiva Tarma — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Tarma a eu 5 corners, au-dessus de 2,5, malgré sa moyenne de 3,2 à l'extérieur.",
+          "lesson": "La moyenne sur 10 matchs (5,8) était un meilleur guide que celle de 5 matchs à l'extérieur."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 36.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 25 tirs (11 et 14), nettement sous 36,5.",
+          "lesson": "Les lignes hautes de tirs totaux sont sûres dans les matchs à faible volume ; à conserver."
+        },
+        {
+          "market": "Tirs — Comerciantes Unidos",
+          "marketId": "teamShots",
+          "pick": "Comerciantes Unidos — Moins de 20.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Comerciantes n'a tiré que 11 fois, loin de 20,5.",
+          "lesson": "Marge large : la ligne était trop haute pour une équipe à 16 tirs de moyenne."
+        },
+        {
+          "market": "Tirs — Asociación Deportiva Tarma",
+          "marketId": "teamShots",
+          "pick": "Asociación Deportiva Tarma — Moins de 19.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Tarma a tiré 14 fois, sous 19,5, proche de ses 13,2 à l'extérieur et des 14,67 attendus.",
+          "lesson": "Les moyennes à l'extérieur guident bien les tirs de Tarma ; à conserver."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Il y a eu 6 tirs cadrés au total (2 et 4), donc pas plus de 6,5. Comerciantes a été très en dessous de ses 5,5 attendus.",
+          "lesson": "Une ligne de tirs cadrés totale proche de la somme des moyennes est fragile. Le moteur a surestimé le local, qui a tiré peu et mal. Prudence quand l'attendu repose sur une moyenne gonflée par les matchs précédents."
+        },
+        {
+          "market": "Tirs cadrés — Comerciantes Unidos",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Comerciantes Unidos — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Comerciantes n'a cadré que 2 tirs, loin de 7,5.",
+          "lesson": "La ligne haute est restée sûre, avec une grande marge."
+        },
+        {
+          "market": "Tirs cadrés — Asociación Deportiva Tarma",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Asociación Deportiva Tarma — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Tarma a cadré 4 tirs, au-dessus de 2,5, avec 3 grosses occasions. L'avis nuancé était trop prudent.",
+          "lesson": "Malgré l'absence de Bauman, Tarma a créé plus que prévu. Ne pas surpénaliser ses absences sur les marchés de tirs."
+        }
+      ],
+      "caveats": "Un seul match, dont l'issue dépend beaucoup de deux penalties et d'un but contre son camp à la 90+6, difficiles à modéliser. Pas de xG relevé dans la fiche. Les statistiques de Tarma à l'extérieur et les nouveaux entraîneurs reposent sur de petits échantillons.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 15,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5975,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 3072,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5975,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 3072,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5975,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5975
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0550416,
+      "createdAt": "2026-11-05T18:35:45.643Z"
     }
   },
   {
@@ -55490,7 +58042,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-03T20:15:36.467Z",
+    "updatedAt": "2026-11-05T18:36:30.127Z",
     "createdAt": "2026-11-03T06:51:55.565Z",
     "kickoffRuns": 2,
     "earlierAnalysis": {
@@ -55906,6 +58458,238 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-03T06:51:55.565Z"
+    },
+    "postMatchReview": {
+      "summary": "Tolima s'est imposé 3-1 à Pereira, ce qui va dans le sens du favori du moteur. Le scénario a toutefois été plus ouvert que prévu : trois buts en cinq minutes (13e, 16e, 18e) puis un penalty pour Pereira (45+2e). Les marchés de volume (tirs, corners, tirs cadrés) ont tous été bien lus. Les marchés de buts « peu de buts » ont été battus.",
+      "whatWasRight": "Le favori était bien Tolima malgré sa crise. Les volumes ont été correctement anticipés : 27 tirs au total (seuil 18,5), 9 corners (moins de 12,5), Pereira à 13 tirs (moins de 14,5) et 4 tirs cadrés, Tolima à 14 tirs et 5 cadrés. Pereira a marqué un seul but, ce qui confirme que son attaque est limitée.",
+      "whatWasMissed": "Le ton « match fermé » était faux : Tolima a marqué trois fois en 18 minutes, dont un doublé de Luis Sánchez. Cela a fait tomber moins de 2,5 buts et « les deux équipes ne marquent pas ». Le penalty de Pereira (45+2e) a fait basculer BTTS. Le xG de Pereira (1,34) dépasse largement celui de Tolima (0,74) : le match a été plus équilibré que le moteur et que moi ne l'avions prévu, et Tolima a été très efficace. Les corners de Tolima (2) et sa possession (46 %) contredisent aussi la domination supposée.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le vainqueur et sur tous les seuils de volume. Il le contredit sur le nombre de buts (moins de 2,5, BTTS non, combiné Tolima et moins de 3,5), à cause d'un début de match très efficace pour Tolima.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Tolima gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Tolima a gagné 3-1 grâce à trois buts entre la 13e et la 18e, ce qui valide le favori du moteur à 56 %.",
+          "lesson": "Une série noire ne suffit pas à écarter le favori du moteur. Mon avis nuancé était trop prudent ; la qualité offensive de Tolima restait réelle."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "4 buts au total (3 de Tolima, 1 de Pereira sur penalty), donc moins de 2,5 est faux. Trois buts sont tombés en cinq minutes.",
+          "lesson": "Des moyennes de buts basses sur 10 matchs ne protègent pas contre un début de match explosif. Ne pas confirmer trop vite un « moins de 2,5 » à 66 % quand le favori peut marquer tôt."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Pereira a marqué sur penalty à la 45+2e après une faute de Mera, ce qui rend BTTS oui. Son xG (1,34) était supérieur à celui de Tolima.",
+          "lesson": "Les penalties et la défense affaiblie de Tolima (gardien absent) rendent le « Non » fragile. Les buts de Pereira sur phase arrêtée ou penalty sont à anticiper."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Tolima & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Tolima a gagné mais avec 4 buts au total, donc moins de 3,5 est faux.",
+          "lesson": "Dans les combinés, le total bas pèse autant que le résultat. Un total à 4 buts suffit à faire perdre la combinaison malgré le bon vainqueur."
+        },
+        {
+          "market": "Buts — Deportivo Pereira",
+          "marketId": "teamGoals",
+          "pick": "Deportivo Pereira — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Pereira n'a marqué qu'un but, sur penalty (45+2e), donc moins de 1,5 est juste.",
+          "lesson": "Mon avis confirmé : l'attaque de Pereira reste limitée. À garder pour les seuils bas d'équipe."
+        },
+        {
+          "market": "Buts — Tolima",
+          "marketId": "teamGoals",
+          "pick": "Tolima — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Tolima a marqué 3 buts, Sánchez (13e, 16e) et Valencia (18e), donc plus de 0,5 est juste.",
+          "lesson": "Mon avis nuancé était trop méfiant. Le volume de tirs de Tolima suffit pour ce seuil bas, malgré les matchs blancs récents."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 12.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "9 corners (7 + 2), nettement sous 12,5.",
+          "lesson": "Seuil loin de la moyenne attendue (9,38) : bon à garder."
+        },
+        {
+          "market": "Corners — Deportivo Pereira",
+          "marketId": "teamCorners",
+          "pick": "Deportivo Pereira — Plus de 1.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Pereira a eu 7 corners, au-dessus de 1,5.",
+          "lesson": "Seuil bas de Pereira à domicile sûr ; mené, il a poussé et obtenu plus de corners."
+        },
+        {
+          "market": "Corners — Tolima",
+          "marketId": "teamCorners",
+          "pick": "Tolima — Moins de 8.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Tolima n'a eu que 2 corners, bien sous 8,5.",
+          "lesson": "Une équipe en avance au score réduit son volume. Seuil confortable confirmé."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 18.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "27 tirs (13 + 14), au-dessus de 18,5.",
+          "lesson": "Marge large : seuil à retenir. Les deux équipes ont tiré davantage que prévu."
+        },
+        {
+          "market": "Tirs — Deportivo Pereira",
+          "marketId": "teamShots",
+          "pick": "Deportivo Pereira — Moins de 14.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Pereira a tiré 13 fois, sous 14,5, mais de justesse en menant peu.",
+          "lesson": "Juste, mais marge mince : un Pereira mené pousse. Rester prudent sur ces seuils quand le score peut basculer tôt."
+        },
+        {
+          "market": "Tirs — Tolima",
+          "marketId": "teamShots",
+          "pick": "Tolima — Plus de 8.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Tolima a tiré 14 fois, au-dessus de 8,5.",
+          "lesson": "Le volume de Tolima reste stable même en crise et en avance au score."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "9 tirs cadrés (4 + 5), au-dessus de 5,5.",
+          "lesson": "Confirmé. Le total reste cohérent avec les 8,16 attendus."
+        },
+        {
+          "market": "Tirs cadrés — Deportivo Pereira",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Deportivo Pereira — Moins de 4.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Pereira a cadré 4 tirs, sous 4,5, de justesse.",
+          "lesson": "Marge fine : le seuil est à manier avec prudence quand Pereira est mené."
+        },
+        {
+          "market": "Tirs cadrés — Tolima",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Tolima — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Tolima a cadré 5 tirs, au-dessus de 2,5, dont trois buts.",
+          "lesson": "Seuil bas confirmé ; Tolima cadre régulièrement."
+        }
+      ],
+      "caveats": "Un seul match : le début de match (trois buts en cinq minutes) pèse lourd et relève en partie de l'aléa. Les stats ne montrent pas la part de l'effet score sur les volumes de Pereira. Les absences de Tolima n'ont pas empêché son succès.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 19,
+        "commentaire": 2
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5424,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2517,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5424,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2517,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5424,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5424
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0472876,
+      "createdAt": "2026-11-05T18:36:30.127Z"
     }
   },
   {
@@ -57359,7 +60143,7 @@
       ],
       "caveats": "Classement indisponible dans la fiche (seul le dossier donne Relegation Round). Pas de xG dans les statistiques. Manta : nouvel entraîneur Duarte depuis fin août, échantillon de 8 matchs. Mise PASS faute de bookmakers."
     },
-    "updatedAt": "2026-11-03T20:15:05.595Z",
+    "updatedAt": "2026-11-05T18:39:15.658Z",
     "createdAt": "2026-11-03T06:51:23.649Z",
     "kickoffRuns": 2,
     "earlierAnalysis": {
@@ -57770,6 +60554,238 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-03T06:51:23.649Z"
+    },
+    "postMatchReview": {
+      "summary": "Mushuc Runa a dominé le jeu (26 tirs à 11, 63 % de possession, 9 corners à 2) comme le moteur l'attendait, mais a perdu 2-3 sur un penalty au 90+9'. Le scénario « peu de buts » a été contredit : 5 buts, avec un Manta efficace (3 buts sur 5 tirs cadrés). Les volumes de tirs et de corners du favori ont été sous-estimés.",
+      "whatWasRight": "La domination territoriale locale et la supériorité de xG (1,59 contre 0,72) se sont vérifiées dans les volumes : 26 tirs contre 11. La fragilité défensive de Manta en déplacement s'est confirmée (3 buts encaissés au total). Les seuils bas pour Manta sont passés (plus de 0,5 but, plus de 1,5 corner, plus de 7,5 tirs, plus de 1,5 tir cadré). Le total corners sous 11,5 (11 corners) a aussi tenu.",
+      "whatWasMissed": "J'ai trop cru à l'impact de la méforme et des absences offensives sur le volume de Mushuc Runa : 26 tirs et 10 cadrés, très au-dessus des 13,97 et 4,35 attendus. J'ai aussi sous-estimé le nombre de buts (5 au total). Une fin de match chaotique a décidé du résultat : penalty manqué à 90+3', puis penalty transformé à 90+9' après VAR. Ce scénario n'était pas modélisable. L'efficacité de Manta (3 buts sur 11 tirs) et la fragilité du gardien remplaçant Pabón ont été mal évaluées.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur l'issue (victoire locale à 58 % perdue) et sur le profil de buts (moins de 3,5 à 80 % perdu). Il va dans son sens sur la domination du jeu, mais les volumes ont été très supérieurs aux attendus.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Mushuc Runa gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Mushuc Runa a ouvert le score (4') puis a été rattrapé (9'). Manta a pris l'avantage (50'), le local a égalisé (74'). Un penalty à 90+9' a donné la victoire à Manta malgré 26 tirs à 11.",
+          "lesson": "Ma prudence était justifiée : un favori à 58 % reste exposé. La domination en tirs ne garantit pas la victoire face à un adversaire efficace."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "5 buts : 4', 9', 50', 74' et un penalty à 90+9'. Le dernier but est arrivé dans un temps additionnel exceptionnel, après un penalty manqué à 90+3'.",
+          "lesson": "Ne pas confirmer un « moins de 3,5 » sur la seule base de moyennes de buts faibles quand l'adversaire concède beaucoup (3,5 par match à l'extérieur). Le risque de fin de match ouverte et de penalties compte."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Les deux équipes ont marqué dès la 9'. Manta a ensuite marqué à 50' et sur penalty à 90+9'.",
+          "lesson": "Un xG adverse de 0,72 n'exclut pas que Manta marque : sa moyenne de 1,1 but justifiait la prudence. Garder la nuance sur ce marché."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Mushuc Runa & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "La victoire locale n'est pas venue (2-3), et le total de 5 buts dépassait aussi 3,5. Les deux conditions ont échoué.",
+          "lesson": "Un combiné cumule deux erreurs possibles : éviter de lui accorder du crédit quand ses deux composantes sont contredites par le déroulé."
+        },
+        {
+          "market": "Buts — Mushuc Runa",
+          "marketId": "teamGoals",
+          "pick": "Mushuc Runa — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Bazán a marqué à 4' et Elián Caicedo à 74', soit 2 buts. Le seuil de 0,5 était donc franchi dès le premier quart d'heure.",
+          "lesson": "Face à une défense qui encaisse beaucoup, un but local reste très probable même avec des attaquants absents."
+        },
+        {
+          "market": "Buts — Manta",
+          "marketId": "teamGoals",
+          "pick": "Manta — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "faible",
+          "aiWasRight": true,
+          "explanation": "Medina a marqué à 9', Alman à 50', et Vergés sur penalty à 90+9'. Manta a donc marqué 3 fois.",
+          "lesson": "Mon avis a tenu : Manta marque régulièrement même sans Blanco et Troya titulaires. Ne pas le sous-estimer en déplacement."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 11.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "11 corners au total (9 pour Mushuc Runa, 2 pour Manta), sous la ligne de 11,5 de peu. La domination locale a gonflé le total.",
+          "lesson": "Le marché a tenu mais de justesse : avec un favori dominant, le total approche la ligne. Prudence sur la confiance forte."
+        },
+        {
+          "market": "Corners — Mushuc Runa",
+          "marketId": "teamCorners",
+          "pick": "Mushuc Runa — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "9 corners pour Mushuc Runa, contre 5,33 attendus et 4,8 de moyenne à domicile. Le pressing constant (26 tirs, 63 % de possession) a dépassé le seuil de 7,5.",
+          "lesson": "Quand le favori domine fortement, ses corners dépassent les moyennes à domicile. Ne pas se fier à une moyenne basse sans tenir compte du scénario de domination."
+        },
+        {
+          "market": "Corners — Manta",
+          "marketId": "teamCorners",
+          "pick": "Manta — Plus de 1.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Manta a obtenu exactement 2 corners, ce qui franchit tout juste le seuil de 1,5.",
+          "lesson": "Le seuil était juste atteint : si le local domine, Manta peut descendre très bas. À traiter avec moins de confiance."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 19.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "37 tirs au total (26 + 11), très au-dessus de 19,5.",
+          "lesson": "Les totaux de tirs sont solides, mais les moyennes ont sous-estimé le volume possible : 37 contre 25,09 attendus."
+        },
+        {
+          "market": "Tirs — Mushuc Runa",
+          "marketId": "teamShots",
+          "pick": "Mushuc Runa — Moins de 18.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Mushuc Runa a tiré 26 fois, bien au-dessus de 18,5, après avoir été mené (50') puis poussé à égaliser. Les 13,97 attendus ont été largement dépassés.",
+          "lesson": "Un favori mené à domicile peut doubler son volume de tirs. Ne pas utiliser sa moyenne de 11-12 tirs comme plafond."
+        },
+        {
+          "market": "Tirs — Manta",
+          "marketId": "teamShots",
+          "pick": "Manta — Plus de 7.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Manta a tiré 11 fois, au-dessus de 7,5, malgré 37 % de possession. Le moteur attendait 11,12 tirs.",
+          "lesson": "Ma nuance sur le risque d'être cantonné était inutile ici : la moyenne de tirs de Manta restait fiable."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 10.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "15 tirs cadrés (10 + 5), au-dessus de 10,5. Le moteur attendait 7,77.",
+          "lesson": "La moyenne faible des tirs cadrés ne suffit pas à protéger un « moins de » dans un match où un camp domine fortement."
+        },
+        {
+          "market": "Tirs cadrés — Mushuc Runa",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Mushuc Runa — Moins de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "10 tirs cadrés pour Mushuc Runa contre 4,35 attendus et 2,9 de moyenne. La domination a transformé le volume en tirs cadrés.",
+          "lesson": "Ma confiance forte était une erreur : les absences offensives n'ont pas freiné le volume. Réduire la confiance sur ce type de marché quand le favori peut dominer."
+        },
+        {
+          "market": "Tirs cadrés — Manta",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Manta — Plus de 1.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Manta a cadré 5 tirs, dont trois ont donné des buts. Le seuil de 1,5 était nettement franchi.",
+          "lesson": "Seuil bas, bien confirmé : à garder pour une équipe qui cadre en moyenne 3,8 tirs."
+        }
+      ],
+      "caveats": "Un seul match : l'issue dépend beaucoup d'un penalty à 90+9' décidé par la VAR et d'un penalty manqué juste avant. Les statistiques ne donnent pas le xG réel. Je ne sais pas comment le gardien remplaçant Pabón a joué.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 23,
+        "commentaire": 3
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5301,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2976,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5301,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2976,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5301,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5301
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.051385600000000003,
+      "createdAt": "2026-11-05T18:39:15.658Z"
     }
   },
   {
@@ -59258,7 +62274,7 @@
       ],
       "caveats": "Classement indisponible. Les deux équipes ont changé d'entraîneur (l'historique est déduit des compositions importées, il peut être incomplet) ; les stats d'à domicile et d'à l'extérieur portent sur 4 et 5 matchs seulement. Aucun edge chiffré (PASS)."
     },
-    "updatedAt": "2026-11-03T21:15:17.356Z",
+    "updatedAt": "2026-11-05T18:38:50.519Z",
     "createdAt": "2026-11-03T06:52:22.139Z",
     "kickoffRuns": 2,
     "earlierAnalysis": {
@@ -59674,6 +62690,238 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-03T06:52:22.138Z"
+    },
+    "postMatchReview": {
+      "summary": "Caracas a gagné 2-0 à l'extérieur, avec deux buts tardifs (81e, 88e) après une mi-temps nulle. La lecture d'un match fermé et d'un Monagas affaibli sans Rodríguez s'est confirmée sur les marchés de Monagas, le BTTS Non et les corners. Caracas a en revanche été sous-estimé : 23 tirs contre 11 et 6 cadrés, ce qui a fait tomber ses seuils de buts, de tirs et de tirs cadrés.",
+      "whatWasRight": "Monagas offensivement limité : 0 but, 11 tirs (moins de 21,5 passe) et 4 cadrés (plus de 2,5 passe). Le Non aux deux équipes est passé. Les volumes globaux sont au rendez-vous : 34 tirs et 10 cadrés. Les corners sont restés bas (9 au total, 3 pour Monagas, 6 pour Caracas). Ma nuance prudente sur le 1N2 était justifiée, car Monagas n'a pas gagné.",
+      "whatWasMissed": "La montée en puissance de Caracas à l'extérieur : 23 tirs contre 13,9 de moyenne et 12,4 attendus, et 6 cadrés. Les deux buts (81e, 88e) ont fait échouer le moins de 1,5 but. J'avais noté les 16 tirs à l'extérieur de Caracas, mais j'ai quand même confirmé ces unders avec une confiance moyenne, ce qui était trop. Les entrants tardifs de Caracas (Reinoso entré à la 74e, González à la 79e) ont marqué les deux buts, et je n'avais pas anticipé l'impact du banc.",
+      "outcomeVsEngine": "Le résultat contredit en partie le moteur : il donnait Monagas légèrement favori (0,92 contre 0,79 but attendu) et Caracas sous 1,5 but, alors que Caracas a dominé les tirs et gagné 2-0. Il le confirme sur les corners, les tirs de Monagas et les totaux de tirs. Aucun edge n'était retenu (PASS).",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Monagas SC gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Monagas ne gagne pas : 0-0 à la mi-temps, puis Caracas marque à la 81e et à la 88e. Monagas a tiré 11 fois contre 23.",
+          "lesson": "La nuance prudente était justifiée. Sans son buteur Rodríguez, ne pas accorder d'avantage de terrain à Monagas face à un Caracas en forme."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "2 buts au total, tous deux de Caracas (81e, 88e). Le plus de 0,5 passe, même si le score est resté nul jusqu'à la 81e.",
+          "lesson": "Le seuil bas est solide quand les deux défenses encaissent 1,3 but par match. À garder."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Monagas n'a pas marqué (0 but malgré 4 tirs cadrés), donc Non est juste.",
+          "lesson": "L'absence du meilleur buteur adverse favorise le Non. Ma prudence venait du 3-2 précédent, qui n'a pas pesé."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Monagas SC & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Monagas a perdu, le combiné échoue à cause du résultat, même si moins de 3,5 buts est passé (2 buts).",
+          "lesson": "Les combinés héritent de l'incertitude du 1N2 ; la prudence était juste."
+        },
+        {
+          "market": "Buts — Monagas SC",
+          "marketId": "teamGoals",
+          "pick": "Monagas SC — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Monagas est resté à 0 but avec 11 tirs et 4 cadrés, donc moins de 1,5 passe.",
+          "lesson": "Sans Rodríguez, la confirmation était juste. À garder pour Monagas tant qu'il manque."
+        },
+        {
+          "market": "Buts — Caracas",
+          "marketId": "teamGoals",
+          "pick": "Caracas — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Caracas a marqué 2 fois (81e Reinoso, 88e González) après 23 tirs et 6 cadrés. Le moins de 1,5 échoue.",
+          "lesson": "Ne pas se fier à la moyenne de 1 but à l'extérieur quand Caracas est en hausse et vient de marquer 2 buts au même adversaire. Réduire la confiance sur ces unders."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 12.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "9 corners au total (3 + 6), bien sous 12,5.",
+          "lesson": "Le seuil élevé avec un attendu de 9,4 est sûr. À garder."
+        },
+        {
+          "market": "Corners — Monagas SC",
+          "marketId": "teamCorners",
+          "pick": "Monagas SC — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Monagas a obtenu 3 corners, soit au-dessus de 2,5, mais de justesse.",
+          "lesson": "Marge mince : 3 contre un attendu de 5,06. Un Monagas dominé peut approcher le seuil ; rester prudent."
+        },
+        {
+          "market": "Corners — Caracas",
+          "marketId": "teamCorners",
+          "pick": "Caracas — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Caracas a eu 6 corners, juste sous 6,5, malgré sa domination.",
+          "lesson": "Marge d'un seul corner, alors que Caracas dominait les tirs. La confiance moyenne était adaptée."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 22.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "34 tirs (11 + 23), très au-dessus de 22,5.",
+          "lesson": "Seuil bien en dessous des moyennes, à garder."
+        },
+        {
+          "market": "Tirs — Monagas SC",
+          "marketId": "teamShots",
+          "pick": "Monagas SC — Moins de 21.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Monagas n'a tiré que 11 fois, bien sous 21,5.",
+          "lesson": "Seuil large et logique, mais Monagas a tiré moins que sa moyenne de 15,1 : l'adversaire a le ballon dans les moments clés."
+        },
+        {
+          "market": "Tirs — Caracas",
+          "marketId": "teamShots",
+          "pick": "Caracas — Moins de 16.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Caracas a tiré 23 fois, au-dessus de 16,5. Il a dominé surtout en fin de match, quand Monagas était mené.",
+          "lesson": "Quand une équipe tire 16 fois à l'extérieur en moyenne, le seuil de 16,5 est fragile. Ne pas confirmer avec confiance moyenne."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "10 tirs cadrés (4 + 6), au-dessus de 5,5.",
+          "lesson": "Seuil cohérent avec les moyennes. À garder."
+        },
+        {
+          "market": "Tirs cadrés — Monagas SC",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Monagas SC — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Monagas a cadré 4 tirs, au-dessus de 2,5.",
+          "lesson": "Même sans Rodríguez, le volume de Monagas tient. À garder."
+        },
+        {
+          "market": "Tirs cadrés — Caracas",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Caracas — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Caracas a cadré 6 tirs, au-dessus de 5,5, avec 23 tirs au total.",
+          "lesson": "Le volume de tirs a fait dépasser le seuil. Surveiller la tendance à l'extérieur (4 cadrés de moyenne) quand Caracas domine."
+        }
+      ],
+      "caveats": "Un seul match : deux buts tardifs (81e, 88e) de remplaçants pèsent lourd sur les résultats. Les stats par minute ne détaillent pas les xG ni la dynamique du score. Le rouge à Monagas (90+4e) n'a pas influencé les buts.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 18,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 6450,
+        "cache_read_input_tokens": 8944,
+        "output_tokens": 5475,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 6450,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2601,
+            "cache_read_input_tokens": 6856,
+            "cache_creation_input_tokens": 1682,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1682
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0823468,
+      "createdAt": "2026-11-05T18:38:50.519Z"
     }
   },
   {
@@ -61197,8 +64445,240 @@
         }
       ]
     },
-    "updatedAt": "2026-11-03T06:53:15.677Z",
-    "createdAt": "2026-11-03T06:53:15.677Z"
+    "updatedAt": "2026-11-05T18:34:58.459Z",
+    "createdAt": "2026-11-03T06:53:15.677Z",
+    "postMatchReview": {
+      "summary": "Mirassol s'est imposé 1-2 à Chapecoense, dans le sens du moteur (favori à 47 %). Le match a été décidé par deux penalties accordés après VAR (18' et 45+2') et un but contre son camp (57'). Mirassol a dominé en qualité (xG 2,19 contre 0,54). Presque tous les marchés de volume ont tenu, sauf les tirs de Chapecoense (11 pour un seuil de 11,5).",
+      "whatWasRight": "Le total de buts (au moins 2), la limite à moins de 3 buts pour Chapecoense et au moins un but pour Mirassol ont tenu. Les marchés de corners étaient bien calibrés : 9 au total, 4 pour Chapecoense, 5 pour Mirassol. Il en va de même pour les tirs (26 au total, 15 pour Mirassol) et les tirs cadrés de Mirassol (4). Ma lecture « buts des deux côtés » s'est confirmée. Chapecoense a ouvert le score à la 12e et Mirassol a répondu. La fragilité défensive de Chapecoense s'est vue dans les deux penalties concédés.",
+      "whatWasMissed": "J'ai trop pesé la faiblesse de Mirassol à l'extérieur et ses suspendus : l'équipe a produit 2,19 xG et 3 grosses occasions. J'ai aussi sous-estimé le poids de la discipline défensive de Chapecoense (penalty pour une main de Túlio, faute de Camilo, 4 jaunes). Pour les tirs de Chapecoense, le seuil de 11,5 était proche de sa moyenne de 12,8, et le total final (11) l'a rattrapé.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur : Mirassol favori, plus de 1,5 buts, les deux équipes marquent. Seul le marché des tirs de Chapecoense contredit le chiffrage (81 %, perdu).",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Mirassol gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Mirassol a gagné 1-2. Il a raté un penalty à la 20e, puis transformé le second à la 45+4e, avant de profiter d'un but contre son camp d'Anderson à la 57e. Le xG de 2,19 contre 0,54 confirme la supériorité.",
+          "lesson": "Face à une défense relégable indisciplinée, la faiblesse à l'extérieur de Mirassol pèse moins que la différence de niveau. Ma prudence était excessive."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Trois buts ont été marqués (12', 45+4', 57'), donc le total de 1,5 a été franchi dès la fin de la première mi-temps.",
+          "lesson": "La défense poreuse de Chapecoense rend le plus de 1,5 fiable : à garder."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Kauan a marqué à la 12e pour Chapecoense, Reinaldo à la 45+4e pour Mirassol, donc les deux équipes ont marqué.",
+          "lesson": "Chapecoense marque encore à domicile malgré sa panne. Je m'étais trop méfié de Mirassol, dont l'attaque a été productive."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Mirassol & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Mirassol a gagné avec 3 buts au total, donc les deux conditions ont été remplies.",
+          "lesson": "Le combiné suit le résultat sec. La prudence sur le vainqueur valait donc aussi pour ce marché."
+        },
+        {
+          "market": "Buts — Chapecoense",
+          "marketId": "teamGoals",
+          "pick": "Chapecoense — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Chapecoense n'a marqué qu'un seul but réel (Kauan, 12'), avec 0,54 xG. Le but contre son camp d'Anderson a profité à Mirassol.",
+          "lesson": "Une attaque en panne sous 1 xG rend le seuil de 2,5 très sûr : à garder."
+        },
+        {
+          "market": "Buts — Mirassol",
+          "marketId": "teamGoals",
+          "pick": "Mirassol — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Mirassol a marqué deux fois : Reinaldo sur penalty (45+4') et le but contre son camp (57'). Le xG était de 2,19.",
+          "lesson": "Les penalties et les fautes de Chapecoense ont soutenu Mirassol malgré les absences. Une défense en difficulté garantit des occasions."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 13.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Seulement 9 corners (4 + 5), loin du seuil de 13,5.",
+          "lesson": "Les corners sont restés proches des moyennes, très loin du seuil : à garder."
+        },
+        {
+          "market": "Corners — Chapecoense",
+          "marketId": "teamCorners",
+          "pick": "Chapecoense — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Chapecoense a obtenu 4 corners, sous le seuil de 7,5.",
+          "lesson": "Une équipe qui produit peu de corners passe sous un seuil haut sans difficulté."
+        },
+        {
+          "market": "Corners — Mirassol",
+          "marketId": "teamCorners",
+          "pick": "Mirassol — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Mirassol a obtenu 5 corners, au-dessus de 2,5.",
+          "lesson": "Le seuil bas par rapport aux moyennes (4,2 à l'extérieur) est resté sûr."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 24.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Les deux équipes ont tiré 26 fois (11 + 15), juste au-dessus de 24,5.",
+          "lesson": "La marge n'était que de 1,5 tir par rapport au total de 26. Un match avancé sur un score serré peut réduire le volume."
+        },
+        {
+          "market": "Tirs — Chapecoense",
+          "marketId": "teamShots",
+          "pick": "Chapecoense — Plus de 11.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Chapecoense a tiré 11 fois, soit 0,5 de moins que le seuil. Mené dès la 45+4e, il n'a pas fait beaucoup plus. Il a eu peu de réussite offensive (0,54 xG).",
+          "lesson": "Quand le seuil est proche de la moyenne récente (12,8), le pourcentage du moteur surestime la marge. Je l'avais signalé et ma nuance était justifiée."
+        },
+        {
+          "market": "Tirs — Mirassol",
+          "marketId": "teamShots",
+          "pick": "Mirassol — Moins de 18.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Mirassol a tiré 15 fois, sous 18,5. Il a mené dès la 57e et n'a pas eu besoin de pousser.",
+          "lesson": "Mirassol tire peu en déplacement, et le seuil de 18,5 était confortable."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 12.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Seulement 8 tirs cadrés (4 + 4), sous 12,5.",
+          "lesson": "Le seuil confortable a tenu : à garder, même si le marché reste volatil."
+        },
+        {
+          "market": "Tirs cadrés — Chapecoense",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Chapecoense — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Chapecoense a cadré 4 tirs, au-dessus de 2,5, malgré seulement 11 tirs.",
+          "lesson": "Une moyenne de 3,8-4 au-dessus du seuil a suffi, même sans volume de tirs élevé."
+        },
+        {
+          "market": "Tirs cadrés — Mirassol",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Mirassol — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Mirassol a cadré 4 tirs, sous 7,5, même avec 15 tirs au total.",
+          "lesson": "Le seuil était très loin des moyennes de Mirassol à l'extérieur (2,6) : à garder."
+        }
+      ],
+      "caveats": "Un seul match : deux penalties après VAR (un manqué) et un but contre son camp ont pesé lourd sur le score. Aucune statistique ne permettait de les anticiper. Le moteur n'avait pas d'edge chiffré (mise PASS).",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 19,
+        "commentaire": 5
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5144,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2646,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5144,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2646,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5144,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5144
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0474576,
+      "createdAt": "2026-11-05T18:34:58.459Z"
+    }
   },
   {
     "matchId": "cal-2026-11-03-nacional-sportivo-san-lorenzo",
@@ -62663,7 +66143,239 @@
         }
       ]
     },
-    "updatedAt": "2026-11-03T06:53:47.537Z",
-    "createdAt": "2026-11-03T06:53:47.537Z"
+    "updatedAt": "2026-11-05T18:40:10.086Z",
+    "createdAt": "2026-11-03T06:53:47.537Z",
+    "postMatchReview": {
+      "summary": "Nacional, favori, a perdu 0-2 à domicile contre Sportivo (12e, 1 victoire en 17 matchs). Les marchés de volume (tirs, cadrés, corners) ont tous tenu. Les marchés liés au résultat ont échoué : victoire de Nacional, Nacional & +1,5 but, et blanchissage de Sportivo. Nacional a dominé (65 % de possession, 19 tirs à 15) sans marquer. Sportivo a été plus tranchant, avec 3 grosses occasions contre 1.",
+      "whatWasRight": "Le profil de volume était bien lu : 34 tirs au total (+23,5), 9 tirs cadrés (+6,5), 9 corners (+8,5). Nacional est resté sous 21,5 tirs (19) et sous 8,5 corners (5). Sportivo est resté sous 7,5 corners (4) et sous 4,5 tirs cadrés (4), et au-dessus de 8,5 tirs (15). La domination de Nacional à la possession (65 %) était attendue. Le plus de 1,5 but est passé, grâce aux deux buts de Sportivo (23' et 71').",
+      "whatWasMissed": "J'ai surévalué Nacional et sous-estimé l'efficacité de Sportivo, malgré ses absences et sa mauvaise série. Sportivo a ouvert le score à la 23' puis doublé à la 71' avec 3 grosses occasions. Nacional n'en a eu qu'une, plus une barre sur coup franc (51'). Amarilla, entré à la 61', a marqué à la 71'. J'avais cité le risque de défaite à domicile (0-1 contre Trinidense) sans en tenir compte. Le xG de 0,5 pour Sportivo était trop bas : l'équipe a tiré 15 fois et cadré 4 tirs.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1N2 (76 % pour Nacional) et sur les buts de Sportivo (xG 0,5, deux buts marqués). Il confirme le moteur sur tous les volumes (tirs, cadrés, corners). Il s'agit d'un seul match : l'écart tient probablement en grande partie à la variance.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Nacional gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Nacional a perdu 0-2. Sportivo a marqué à la 23' (Marcelo Ferreira) et à la 71' (Amarilla). Nacional a dominé (19 tirs, 65 % de possession) mais n'a pas marqué, même avec une barre à la 51'.",
+          "lesson": "Une forte domination au classement et en volume ne garantit pas la victoire. Ne pas confirmer un favori à plus de 75 % sans nuance quand les tirs ne se traduisent pas en grosses occasions. Les remplaçants offensifs de l'adversaire comptent aussi."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Deux buts au total (23' et 71'), donc le plus de 1,5 est passé. Les deux buts sont venus de Sportivo, pas de Nacional.",
+          "lesson": "Le raisonnement était juste pour le total mais faux sur l'origine des buts. Le total de buts est plus robuste que le résultat : à garder, sans lier ce marché à la victoire du favori."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Nacional n'a pas marqué (0-2), donc le Non est passé. Mon avis était nuancé : Nacional dominait mais a manqué de réalisme.",
+          "lesson": "Un Non fondé sur une défense solide reste exposé quand l'adversaire est tranchant. Ici, le Non a tenu à cause de l'attaque de Nacional, pas de sa défense."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Nacional & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Nacional n'a pas gagné (0-2), donc le combiné est perdu. Le total de 2 buts était atteint, mais pas la victoire.",
+          "lesson": "Un combiné hérite de l'échec du marché le plus fragile, ici la victoire. Il faut être plus prudent avec ces marchés quand le résultat sec n'est pas sûr."
+        },
+        {
+          "market": "Buts — Nacional",
+          "marketId": "teamGoals",
+          "pick": "Nacional — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Nacional n'a marqué aucun but, donc le moins de 3,5 est passé facilement.",
+          "lesson": "Ce plafond large était sûr. À garder, en notant qu'il ne dit rien sur la capacité de Nacional à marquer."
+        },
+        {
+          "market": "Buts — Sportivo San Lorenzo",
+          "marketId": "teamGoals",
+          "pick": "Sportivo San Lorenzo — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Sportivo a marqué deux fois (23' et 71'), donc le moins de 0,5 est faux. Il a tiré 15 fois avec 4 cadrés et 3 grosses occasions. Mon avis nuancé, faible, a évité une erreur plus grave.",
+          "lesson": "Ne pas trop miser sur le blanchissage d'une équipe qui tire autant, même remaniée. Sa série de matchs avec but (5 sur 5) était un signal à pondérer davantage."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 8.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "9 corners (5 + 4) pour une ligne de 8,5, donc le plus est passé de justesse. Le moteur en attendait 11,57.",
+          "lesson": "Le résultat est correct mais serré. Le moteur a surestimé le volume attendu de corners (11,57 contre 9). La marge n'était pas aussi large qu'annoncé."
+        },
+        {
+          "market": "Corners — Nacional",
+          "marketId": "teamCorners",
+          "pick": "Nacional — Moins de 8.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Nacional a obtenu 5 corners, loin de 9, donc le moins de 8,5 est passé.",
+          "lesson": "Le moyenne de 5,5 corners était fiable. À garder."
+        },
+        {
+          "market": "Corners — Sportivo San Lorenzo",
+          "marketId": "teamCorners",
+          "pick": "Sportivo San Lorenzo — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sportivo a obtenu 4 corners, sous 7,5. Mener 2-0 n'a pas fait monter le total de corners, car Nacional l'a dominé sans accumuler de corners.",
+          "lesson": "La basse moyenne à l'extérieur (3,8) s'est confirmée. À garder."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 23.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "34 tirs (19 + 15) pour une ligne de 23,5, donc le plus est passé nettement. Le moteur en attendait 29,12.",
+          "lesson": "Une marge large et deux équipes qui tirent beaucoup : ce type de marché est fiable. À garder."
+        },
+        {
+          "market": "Tirs — Nacional",
+          "marketId": "teamShots",
+          "pick": "Nacional — Moins de 21.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Nacional a tiré 19 fois, sous 21,5, mais avec peu de marge malgré une domination à 65 % de possession et un adversaire qui menait.",
+          "lesson": "Le plafond a tenu mais la marge était faible. Avec un adversaire qui défend à 2-0, les tirs d'un favori peuvent approcher le plafond : être prudent avec ce marché."
+        },
+        {
+          "market": "Tirs — Sportivo San Lorenzo",
+          "marketId": "teamShots",
+          "pick": "Sportivo San Lorenzo — Plus de 8.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sportivo a tiré 15 fois, au-dessus de 8,5. L'équipe a produit plus que ce que ses 35 % de possession laissaient attendre.",
+          "lesson": "Sportivo dépasse régulièrement ce seuil, même peu en possession. Les absences n'ont pas réduit sa production."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "9 tirs cadrés (5 + 4) pour une ligne de 6,5, donc le plus est passé. Le moteur en attendait 9,13.",
+          "lesson": "Le moteur était très proche de la réalité sur ce marché. À garder."
+        },
+        {
+          "market": "Tirs cadrés — Nacional",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Nacional — Plus de 3.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Nacional a cadré 5 tirs, au-dessus de 3,5. Aucun n'a fini au fond des filets, dont une barre à la 51'.",
+          "lesson": "La défense de Sportivo concède des tirs cadrés, comme prévu. Ce marché de volume reste fiable, même quand Nacional ne marque pas."
+        },
+        {
+          "market": "Tirs cadrés — Sportivo San Lorenzo",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Sportivo San Lorenzo — Moins de 4.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sportivo a cadré 4 tirs, soit sous 4,5 de justesse, dont 2 ont fini au fond des filets. Le seuil a tenu avec peu de marge.",
+          "lesson": "La précision de Sportivo a été élevée (2 buts sur 4 cadrés). Le seuil 4,5 laisse peu de marge quand l'équipe mène."
+        }
+      ],
+      "caveats": "Un seul match : l'écart peut tenir à la variance (efficacité, une barre à la 51'). Les stats ne détaillent ni les xG réels ni les raisons tactiques de la défaite de Nacional. La composition lue très tôt était possiblement provisoire. Les remplacements de Sportivo n'ont pas pu être comparés à ceux prévus avant le match.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 20,
+        "commentaire": 2
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 7356,
+        "cache_read_input_tokens": 9886,
+        "output_tokens": 7135,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 7356,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 3145,
+            "cache_read_input_tokens": 7798,
+            "cache_creation_input_tokens": 1646,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1646
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.10275919999999998,
+      "createdAt": "2026-11-05T18:40:10.086Z"
+    }
   }
 ]

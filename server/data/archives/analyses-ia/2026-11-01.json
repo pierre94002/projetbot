@@ -3243,8 +3243,240 @@
       ]
     },
     "kickoffRuns": 2,
-    "updatedAt": "2026-11-01T00:18:25.958Z",
-    "createdAt": "2026-10-31T23:38:21.146Z"
+    "updatedAt": "2026-11-05T18:13:20.174Z",
+    "createdAt": "2026-10-31T23:38:21.146Z",
+    "postMatchReview": {
+      "summary": "Le 3-3 a contredit le scénario de match fermé (peu de buts). Instituto a mené 0-3 à la 52e, puis Estudiantes, réduit à dix dès la 50e, a recollé avec trois buts (58e, 65e, 86e). Les marchés de volume (tirs, corners totaux) ont tenu, mais ceux sur les buts ont été bousculés.",
+      "whatWasRight": "Le volume offensif d'Estudiantes (16 tirs, xG 1,97), les tirs d'Instituto en nombre limité (9) et les totaux de tirs et de corners sous les seuils. Le doute sur le « Non » à BTTS et sur le Moins de 0.5 d'Instituto s'est confirmé : Instituto a marqué dès la 3e minute. Le résultat est resté ouvert comme prévu, et le nul est arrivé.",
+      "whatWasMissed": "Le scénario de match haché et la production de buts : 6 buts contre environ 1,8 xG attendu avant le match. L'effet du rouge de Núñez à la 50e et de l'effondrement défensif n'était pas anticipable. Les corners d'Instituto (2 seulement) ont été mal évalués : 26 % de possession et un jeu de contre ont réduit ses corners. Les tirs cadrés d'Estudiantes (8) ont dépassé la moyenne.",
+      "outcomeVsEngine": "Le moteur donnait Estudiantes favori à 48 % et un match fermé : le nul 3-3 le contredit sur le résultat et sur les buts (BTTS Non, Moins de 3.5). Il avait raison sur les volumes de tirs et de corners.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Estudiantes gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Le 3-3 n'est pas une victoire locale. Estudiantes a dominé (74 % de possession, xG 1,97 contre 1,1) mais a été mené 0-3 et a joué à dix dès la 50e.",
+          "lesson": "Garder la prudence : un avis nuancé était justifié, le nul comptait. Le favori du moteur à 48 % reste fragile."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Six buts, dont le premier dès la 3e minute : le Plus de 0.5 passe sans difficulté.",
+          "lesson": "Ce seuil bas est sûr quand les deux équipes marquent régulièrement ; à garder."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Instituto a marqué 3 fois (3e, 48e, 52e) et Estudiantes 3 fois : le Oui l'emporte.",
+          "lesson": "Face à une défense locale remaniée, ne pas se fier au xG bas d'Instituto ; sa série de matchs avec but comptait davantage."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Estudiantes & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Estudiantes n'a pas gagné et il y a eu 6 buts, donc les deux conditions échouent.",
+          "lesson": "Les combinés dépendent d'un résultat incertain ; peu de valeur ici."
+        },
+        {
+          "market": "Buts — Estudiantes",
+          "marketId": "teamGoals",
+          "pick": "Estudiantes — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Estudiantes a marqué à la 58e, à la 65e et à la 86e.",
+          "lesson": "Le volume de tirs à domicile (16 tirs) se traduit en buts ; confirmer ce type de seuil bas."
+        },
+        {
+          "market": "Buts — Instituto",
+          "marketId": "teamGoals",
+          "pick": "Instituto — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "contredit",
+          "aiConfidence": "faible",
+          "aiWasRight": true,
+          "explanation": "Instituto a marqué dès la 3e (Suárez), puis à la 48e et à la 52e, donc Moins de 0.5 est faux. Mon avis contraire était bon.",
+          "lesson": "Une série de 9 matchs avec but pèse plus qu'un xG attendu bas : continuer à contredire ce type de pick."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 11.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Seulement 8 corners (6 + 2), sous 11,5.",
+          "lesson": "Seuil large et solide ; à garder."
+        },
+        {
+          "market": "Corners — Estudiantes",
+          "marketId": "teamCorners",
+          "pick": "Estudiantes — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "6 corners, sous 6,5 de justesse malgré la domination (74 % de possession).",
+          "lesson": "Une forte possession peut amener au seuil ; marge faible, rester prudent."
+        },
+        {
+          "market": "Corners — Instituto",
+          "marketId": "teamCorners",
+          "pick": "Instituto — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Instituto n'a eu que 2 corners avec 26 % de possession, alors que le seuil Plus de 2.5 était donné à 79 %. Il menait 0-3 et a subi le reste du match.",
+          "lesson": "Une moyenne de corners ignore le scénario : une équipe qui mène tôt et recule en produit peu. Ne pas viser un seuil de corners pour l'équipe qui s'attend à défendre."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 29.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "25 tirs (16 + 9), sous 29,5.",
+          "lesson": "Le total de tirs est stable malgré les 6 buts ; à garder."
+        },
+        {
+          "market": "Tirs — Estudiantes",
+          "marketId": "teamShots",
+          "pick": "Estudiantes — Plus de 8.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "16 tirs, bien au-dessus de 8,5.",
+          "lesson": "Seuil bas par rapport au volume local ; à garder."
+        },
+        {
+          "market": "Tirs — Instituto",
+          "marketId": "teamShots",
+          "pick": "Instituto — Moins de 14.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "9 tirs, sous 14,5.",
+          "lesson": "Instituto tire peu à l'extérieur ; confirmé."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 4.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "13 tirs cadrés (8 + 5), au-dessus de 4,5.",
+          "lesson": "Seuil bas franchi sans difficulté ; à garder."
+        },
+        {
+          "market": "Tirs cadrés — Estudiantes",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Estudiantes — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "8 tirs cadrés, au-dessus de 5,5. Menés au score, ils ont poussé après la 50e malgré les dix joueurs.",
+          "lesson": "Avec une moyenne à domicile de 5,8 proche du seuil, la marge était trop faible. Éviter un Moins quand la moyenne domicile frôle le seuil."
+        },
+        {
+          "market": "Tirs cadrés — Instituto",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Instituto — Plus de 1.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "5 tirs cadrés, au-dessus de 1,5.",
+          "lesson": "Seuil bas confirmé, Instituto en a marqué 3 sur ces 5."
+        }
+      ],
+      "caveats": "Un seul match. Le rouge à la 50e et le 0-3 en trois minutes (48e–52e) ont fortement altéré le scénario ; les chiffres de fin de match sont influencés par cela. Les statistiques par période ne sont pas fournies.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 26,
+        "commentaire": 1
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5702,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2298,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5702,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2298,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5702,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5702
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0462096,
+      "createdAt": "2026-11-05T18:13:20.174Z"
+    }
   },
   {
     "matchId": "cal-2026-11-01-monterrey-tijuana",
@@ -4676,8 +4908,239 @@
       ]
     },
     "kickoffRuns": 2,
-    "updatedAt": "2026-11-01T00:53:22.811Z",
-    "createdAt": "2026-11-01T00:13:22.953Z"
+    "updatedAt": "2026-11-05T18:14:32.845Z",
+    "createdAt": "2026-11-01T00:13:22.953Z",
+    "postMatchReview": {
+      "summary": "Nul 3-3 : Monterrey a dominé (xG 2,53 contre 0,72, 19 tirs contre 5, 70 % de possession), mais Tijuana a marqué trois fois sur trois tirs cadrés. Les marchés de volume, de corners et de total de buts étaient bien lus. La victoire de Monterrey et le plafond de Tijuana à 1 but ont été contredits.",
+      "whatWasRight": "Le scénario d'un Monterrey dominant en volume (19 tirs, 9 corners, 70 % de possession) et d'un match ouvert avec des buts des deux côtés (6 buts). Tous les seuils de tirs, de corners et de tirs cadrés ont tenu. Plus de 2,5 buts et BTTS ont été confirmés. Le risque de nul de Tijuana, que j'avais signalé, s'est réalisé.",
+      "whatWasMissed": "L'efficacité de Tijuana : 3 buts avec seulement 0,72 xG. Monterrey a aussi encaissé juste avant la pause (45+4') et trois minutes après avoir mené 3-2 (57' puis 60'). J'ai sous-estimé la fragilité défensive de Monterrey sous Donelli et la capacité de Tijuana à punir sur peu de tirs.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1N2 (Monterrey à 61 %, nul réel) et sur Tijuana moins de 1,5 but. Il le confirme sur les volumes, les corners, le total de buts et le BTTS. Les xG allaient dans le sens du moteur : c'est la finition de Tijuana qui l'a contredit.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Monterrey gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Monterrey a mené 3-2 à la 57' (Ocampos), mais Preciado a égalisé à la 60'. Nul 3-3 malgré xG 2,53 contre 0,72.",
+          "lesson": "Ma nuance était fondée : le profil de nul de Tijuana s'est vérifié. Ne pas convertir un xG supérieur en victoire face à une équipe qui fait souvent match nul."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Six buts : 5' Porozo, 19' Cuypers (penalty), 45' Cuypers, 45+4' Preciado, 57' Ocampos, 60' Preciado.",
+          "lesson": "Garder cette lecture : défense de Tijuana poreuse à l'extérieur et ligue ouverte favorisent le plus de 2,5 buts."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "faible",
+          "aiWasRight": true,
+          "explanation": "Tijuana a marqué dès la 5' et a ajouté deux buts de Preciado (45+4', 60'). Monterrey a aussi marqué quatre fois.",
+          "lesson": "Même avec un 5-4-1, Tijuana marque régulièrement : le BTTS reste à privilégier."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Monterrey & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Plus de 1,5 buts acquis, mais Monterrey n'a pas gagné (3-3), donc le combiné est perdu.",
+          "lesson": "Un combiné dépend du maillon incertain, ici la victoire. Mon doute était juste."
+        },
+        {
+          "market": "Buts — Monterrey",
+          "marketId": "teamGoals",
+          "pick": "Monterrey — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Monterrey a marqué 3 buts (Cuypers x2, Ocampos), donc moins de 3,5 est resté valide, de justesse avec une marge d'un seul but.",
+          "lesson": "Un seuil à 82 % peut tenir de peu quand le match devient ouvert. Rester prudent sur la confiance forte."
+        },
+        {
+          "market": "Buts — Tijuana",
+          "marketId": "teamGoals",
+          "pick": "Tijuana — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Tijuana a marqué 3 fois (Porozo 5', Preciado 45+4' et 60') avec 0,72 xG et 5 tirs : une finition exceptionnelle.",
+          "lesson": "Ne pas écarter les 2 buts d'une équipe qui marque 1,6 par match et affronte une défense qui encaisse 1,5. Mon avis nuancé était justifié."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 15.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "9 corners pour Monterrey et 2 pour Tijuana font 11, bien sous 15,5.",
+          "lesson": "Le plafond corners reste fiable quand une équipe se contente de défendre."
+        },
+        {
+          "market": "Corners — Monterrey",
+          "marketId": "teamCorners",
+          "pick": "Monterrey — Plus de 4.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Monterrey a obtenu 9 corners avec 70 % de possession, au-dessus de 4,5.",
+          "lesson": "La domination contre un bloc bas génère les corners : à garder."
+        },
+        {
+          "market": "Corners — Tijuana",
+          "marketId": "teamCorners",
+          "pick": "Tijuana — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Tijuana n'a obtenu que 2 corners, avec 30 % de possession.",
+          "lesson": "Un 5-4-1 à l'extérieur confirme un faible nombre de corners."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 34.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "19 + 5 = 24 tirs, sous 34,5.",
+          "lesson": "Le total de tirs reste mesuré même dans un match à 6 buts, car Tijuana tire peu."
+        },
+        {
+          "market": "Tirs — Monterrey",
+          "marketId": "teamShots",
+          "pick": "Monterrey — Plus de 12.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Monterrey a tiré 19 fois, au-dessus de 12,5.",
+          "lesson": "Le volume offensif de Monterrey à domicile est fiable, même sans efficacité récente."
+        },
+        {
+          "market": "Tirs — Tijuana",
+          "marketId": "teamShots",
+          "pick": "Tijuana — Moins de 15.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Tijuana n'a tiré que 5 fois, très en dessous de 15,5.",
+          "lesson": "Le faible volume de tirs de Tijuana à l'extérieur se confirme, même si l'efficacité a été forte."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "7 + 3 = 10 tirs cadrés, au-dessus de 7,5.",
+          "lesson": "Les tirs cadrés sont tenus ici par les 7 de Monterrey. Risque présent si Monterrey cadre peu."
+        },
+        {
+          "market": "Tirs cadrés — Monterrey",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Monterrey — Moins de 8.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Monterrey a cadré 7 tirs, sous 8,5 de justesse d'un tir.",
+          "lesson": "Marge d'un seul tir : prudence sur la confiance forte, la domination peut approcher le seuil."
+        },
+        {
+          "market": "Tirs cadrés — Tijuana",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Tijuana — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Tijuana a cadré 3 tirs et en a converti 3, juste au-dessus de 2,5.",
+          "lesson": "Seuil proche de la moyenne : tenu à la limite, confiance moyenne justifiée."
+        }
+      ],
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 20,
+        "commentaire": 5
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 6709,
+        "cache_read_input_tokens": 9402,
+        "output_tokens": 3261,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 6709,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2327,
+            "cache_read_input_tokens": 7314,
+            "cache_creation_input_tokens": 1483,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1483
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0613344,
+      "createdAt": "2026-11-05T18:14:32.844Z"
+    }
   },
   {
     "matchId": "cal-2026-11-01-chivas-atlante",
@@ -6051,8 +6514,240 @@
       ]
     },
     "kickoffRuns": 2,
-    "updatedAt": "2026-11-01T00:53:50.405Z",
-    "createdAt": "2026-11-01T00:13:49.207Z"
+    "updatedAt": "2026-11-05T18:11:54.123Z",
+    "createdAt": "2026-11-01T00:13:49.207Z",
+    "postMatchReview": {
+      "summary": "Chivas a gagné 4-2 comme le favori attendu, mais le match a été bien plus ouvert que prévu : 6 buts, dont 3 en première période et demie sans réponse. Les lectures sur le vainqueur, les corners et les tirs cadrés ont tenu. Celles sur un match fermé (moins de 3,5 buts, Chivas sous 2,5 buts, BTTS Non) ont échoué.",
+      "whatWasRight": "Le favori à domicile (Chivas gagne) était juste. Atlante a marqué au moins une fois (60' et 83'). Les marchés de volume ont tenu : corners totaux (10), Atlante au-dessus de 2,5 corners (4), Chivas sous 8,5 corners (6), total tirs sous 33,5 (23), Chivas sous 19,5 tirs (15), tirs cadrés totaux au-dessus de 6,5 (11), Chivas sous 7,5 (7) et Atlante sous 6,5 (4). Le contexte d'une Atlante fragile sous nouvel entraîneur s'est confirmé : son défenseur Bagüí a marqué contre son camp (36') et a été remplacé dès la mi-temps.",
+      "whatWasMissed": "Le volume de buts a été sous-estimé. Chivas a marqué 4 fois, alors que le moteur attendait 1,44 but et que la forme récente ne montrait qu'un but par match. Le xG de 1,56 contre 1,55 montre qu'Atlante a aussi bien produit en qualité, avec seulement 8 tirs. Le but contre son camp (36'), le but après vidéo (53') et le penalty (83') ont gonflé le score. Atlante a tiré 8 fois, donc la ligne de plus de 8,5 tirs a été manquée de peu. J'ai été trop confiant (« forte ») sur le total bas.",
+      "outcomeVsEngine": "Le résultat suit le moteur sur le 1N2 et sur les marchés de corners, tirs et tirs cadrés. Il le contredit sur tous les marchés de buts : 6 buts alors que le moteur chiffrait 83 % pour moins de 3,5. Ce sont des 17-18 % qui se sont réalisés, pas un défaut de lecture systématique.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Chivas gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Chivas a mené 2-0 dès la 36' (Sandoval 8', but contre son camp de Bagüí) et a gagné 4-2 malgré la réduction du score.",
+          "lesson": "Garder le favori à domicile contre une équipe 16e en transition. Le classement et la forme ont bien joué."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Six buts : 8', 36' (contre son camp), 53', 60', 64', 83' (penalty). Le seuil de 3,5 a été dépassé dès la 64'.",
+          "lesson": "Une confiance « forte » sur un total bas était excessive. Chivas a marqué 4 fois ce soir-là, et un but contre son camp et un penalty VAR ont ajouté deux buts non liés au rythme du jeu. La confiance ne doit pas être forte quand le championnat tourne à 3 buts par match."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Atlante a marqué à la 60' (Sarrafiore) et à la 83' (Julio, penalty), donc le Oui l'emporte.",
+          "lesson": "Avec 62 % de BTTS dans le championnat, la prudence (nuance, faible) était justifiée. Garder cette réserve quand le moteur est fragile sur ce marché."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Chivas & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "faible",
+          "aiWasRight": false,
+          "explanation": "Chivas a gagné, mais le total a dépassé 3,5 avec 6 buts, donc le combiné est perdu.",
+          "lesson": "Le combiné hérite de la faiblesse du total bas. Ne pas confirmer un combiné quand une de ses jambes est exposée à un match ouvert."
+        },
+        {
+          "market": "Buts — Chivas",
+          "marketId": "teamGoals",
+          "pick": "Chivas — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Chivas a marqué 4 buts (Sandoval 8' et 53', contre son camp 36', Álvarez 64'), bien au-dessus de 2,5.",
+          "lesson": "La moyenne récente (1,0 sur 4 matchs) a trop pesé. Face à une défense désorganisée, Chivas peut dépasser nettement son attendu, d'autant qu'un but contre son camp compte pour lui."
+        },
+        {
+          "market": "Buts — Atlante",
+          "marketId": "teamGoals",
+          "pick": "Atlante — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Atlante a marqué deux fois (60', 83' sur penalty), donc plus de 0,5 but.",
+          "lesson": "La nuance était bonne. Atlante marquait dans 3 de ses 5 derniers matchs, et ce marché n'était pas aussi déséquilibré que le moteur le disait."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 10 corners (6 + 4), au-dessus de 7,5.",
+          "lesson": "Confirmer ce type de ligne basse quand la moyenne du championnat (11,1) est nettement au-dessus. Ici, une marge de 2,5 corners a suffi."
+        },
+        {
+          "market": "Corners — Chivas",
+          "marketId": "teamCorners",
+          "pick": "Chivas — Moins de 8.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Chivas a obtenu 6 corners, sous 8,5.",
+          "lesson": "La nuance était prudente et a été payante. Le match s'est ouvert sans que Chivas ait besoin d'un fort volume de corners."
+        },
+        {
+          "market": "Corners — Atlante",
+          "marketId": "teamCorners",
+          "pick": "Atlante — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Atlante a obtenu 4 corners, au-dessus de 2,5, malgré 8 tirs seulement.",
+          "lesson": "Une ligne très basse reste sûre. La marge était mince, mais elle a tenu."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 33.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "15 + 8 = 23 tirs, loin de 33,5.",
+          "lesson": "Le total de tirs était bien sous la ligne, même avec 6 buts. Garder ce marché quand le moteur attend environ 28 tirs."
+        },
+        {
+          "market": "Tirs — Chivas",
+          "marketId": "teamShots",
+          "pick": "Chivas — Moins de 19.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Chivas a tiré 15 fois, sous 19,5.",
+          "lesson": "Ne pas gonfler Chivas avec sa moyenne à domicile (17,4). Il a mené tôt et n'avait pas besoin de tirer plus."
+        },
+        {
+          "market": "Tirs — Atlante",
+          "marketId": "teamShots",
+          "pick": "Atlante — Plus de 8.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Atlante n'a tiré que 8 fois, pour une ligne de plus de 8,5. Menée dès la 8', elle a été peu en position de tirer jusqu'à la 60'.",
+          "lesson": "Atlante tire beaucoup en moyenne (16,7 sur 10 matchs), mais cette moyenne ne s'est pas vérifiée contre une équipe qui mène tôt. Un score défavorable précoce réduit son volume. Je dois mieux tenir compte du scénario du match."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "7 + 4 = 11 tirs cadrés, au-dessus de 6,5.",
+          "lesson": "Le total est confirmé. Les buts ouverts ont aidé, mais la marge était confortable."
+        },
+        {
+          "market": "Tirs cadrés — Chivas",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Chivas — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Chivas a cadré 7 tirs, juste sous 7,5. C'était limite malgré 4 buts.",
+          "lesson": "La marge était mince. Attention aux lignes proches des moyennes quand Chivas marque beaucoup."
+        },
+        {
+          "market": "Tirs cadrés — Atlante",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Atlante — Moins de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Atlante a cadré 4 tirs, sous 6,5.",
+          "lesson": "Atlante crée peu de tirs cadrés. Ce marché a tenu avec l'attendu du moteur à 4,41."
+        }
+      ],
+      "caveats": "Un seul match. Le score doit beaucoup à un but contre son camp (36'), à un but validé après vidéo (53') et à un penalty (83') qui n'étaient pas prévisibles. Le xG est quasi égal (1,56 / 1,55), ce qui indique que le 4-2 surestime peut-être l'écart de jeu. Les marchés de buts sont particulièrement sensibles à ces événements.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 17,
+        "commentaire": 5
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5524,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2905,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5524,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2905,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5524,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5524
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.051567600000000005,
+      "createdAt": "2026-11-05T18:11:54.122Z"
+    }
   },
   {
     "matchId": "cal-2026-11-01-colorado-rapids-chicago-fire-fc",
@@ -7617,8 +8312,240 @@
       ]
     },
     "kickoffRuns": 1,
-    "updatedAt": "2026-11-01T00:38:24.747Z",
-    "createdAt": "2026-11-01T00:38:24.747Z"
+    "updatedAt": "2026-11-05T18:12:33.562Z",
+    "createdAt": "2026-11-01T00:38:24.747Z",
+    "postMatchReview": {
+      "summary": "Chicago a gagné 4-2 à Colorado, contre le favori du moteur (Colorado 42 %). Ma nuance sur le 1N2 était juste dans l'esprit. Les marchés de volume (tirs, corners, tirs cadrés) ont tous tenu. Seul le plafond de buts de Chicago a cédé (xG 3,22 contre 1,14 attendu).",
+      "whatWasRight": "Match ouvert, 6 buts, les deux équipes ont marqué (Whittaker 22', Aaronson 58' pour Colorado). Le volume était bien calibré : 28 tirs au total (14 chacun), 10 tirs cadrés (4 et 6), 11 corners (5 et 6). La prudence sur la victoire de Colorado, amoindri par ses absences face à une attaque complète de Chicago, s'est confirmée.",
+      "whatWasMissed": "La force offensive de Chicago a été sous-estimée : doublé de Bamba (41', 56'), Lewandowski (74', entré à la 63') et Dithejane (88'), soit 4 buts, un xG de 3,22 et 5 grosses occasions. J'ai confirmé « moins de 1,5 but » pour Chicago, à tort. L'impact des remplaçants offensifs, et d'un Bamba pourtant sur le banc, a été mal anticipé.",
+      "outcomeVsEngine": "Le résultat contredit le favori du moteur (Colorado 42 %, xG 1,67 contre 1,14) et le chiffrage des buts de Chicago. Il confirme en revanche les attendus de volume (tirs, tirs cadrés, corners).",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Colorado Rapids gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Chicago a gagné 2-4 après avoir été mené 1-0 (22'), puis 1-1 (41'), 1-2 (56'), 2-2 (58'), 2-3 (74') et 2-4 (88'). Colorado n'a pas gagné.",
+          "lesson": "Ma nuance était justifiée : avec autant d'absences chez Colorado, ne pas suivre le favori à domicile."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "6 buts, 2 avant la pause et 4 en seconde période : le seuil de 1,5 a été largement dépassé.",
+          "lesson": "Des défenses qui concèdent plus de 1,5 but par match justifient de confirmer le plus de 1,5 but."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Colorado a marqué à la 22' et à la 58', Chicago à la 41', 56', 74' et 88'.",
+          "lesson": "Confirmer le oui quand les deux défenses concèdent plus d'un but par match a été payant."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Colorado Rapids & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Le total est passé mais Colorado a perdu, donc le combiné échoue.",
+          "lesson": "Ma nuance était bonne : le combiné dépend de la victoire incertaine du favori, à ne pas suivre quand ses absences sont nombreuses."
+        },
+        {
+          "market": "Buts — Colorado Rapids",
+          "marketId": "teamGoals",
+          "pick": "Colorado Rapids — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Whittaker a marqué à la 22', puis Aaronson à la 58'.",
+          "lesson": "Plus de 0,5 but à domicile reste un seuil sûr, même sans Navarro."
+        },
+        {
+          "market": "Buts — Chicago Fire FC",
+          "marketId": "teamGoals",
+          "pick": "Chicago Fire FC — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Chicago a marqué 4 fois (Bamba 41' et 56', Lewandowski 74', Dithejane 88') pour un xG de 3,22 et 5 grosses occasions. Le moins de 1,5 but a échoué largement.",
+          "lesson": "Ne pas confirmer un plafond bas sur une attaque complète quand le total attendu est élevé ; un xG de 1,14 sur 4 matchs à l'extérieur sous-estimait l'équipe, et les remplaçants (Lewandowski, Dithejane) pèsent en fin de match."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "11 corners (5 et 6), au-dessus du seuil de 6,5.",
+          "lesson": "Le seuil bas, très en dessous de la moyenne de la ligue (10,1), était sûr."
+        },
+        {
+          "market": "Corners — Colorado Rapids",
+          "marketId": "teamCorners",
+          "pick": "Colorado Rapids — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Colorado a obtenu 5 corners, au-dessus de 2,5, avec 57 % de possession.",
+          "lesson": "Un seuil très bas pour un hôte dominant la possession se confirme."
+        },
+        {
+          "market": "Corners — Chicago Fire FC",
+          "marketId": "teamCorners",
+          "pick": "Chicago Fire FC — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Chicago a obtenu 6 corners, soit moins de 6,5 de justesse, malgré sa domination des occasions.",
+          "lesson": "Le pronostic a tenu, mais la marge était mince (6 pour un seuil de 6,5) ; la prudence se justifiait."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 20.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "28 tirs (14 chacun), nettement au-dessus de 20,5.",
+          "lesson": "Des profils à gros volume de tirs rendent ce seuil fiable."
+        },
+        {
+          "market": "Tirs — Colorado Rapids",
+          "marketId": "teamShots",
+          "pick": "Colorado Rapids — Moins de 18.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Colorado a tiré 14 fois, sous 18,5, malgré une possession de 57 %.",
+          "lesson": "Un seuil nettement au-dessus de la moyenne à domicile (15,7) s'est confirmé."
+        },
+        {
+          "market": "Tirs — Chicago Fire FC",
+          "marketId": "teamShots",
+          "pick": "Chicago Fire FC — Moins de 16.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Chicago a tiré 14 fois, sous 16,5, tout en créant un xG de 3,22 : peu de tirs mais de qualité.",
+          "lesson": "Ma nuance était justifiée ; le nombre de tirs ne mesure pas la qualité des occasions."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 12.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "10 tirs cadrés (4 et 6), sous le seuil de 12,5.",
+          "lesson": "Un total proche de 10 laissait une marge raisonnable, à garder."
+        },
+        {
+          "market": "Tirs cadrés — Colorado Rapids",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Colorado Rapids — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "4 tirs cadrés pour Colorado, sous 7,5.",
+          "lesson": "Le seuil haut s'est confirmé malgré 6 tirs cadrés de moyenne à domicile."
+        },
+        {
+          "market": "Tirs cadrés — Chicago Fire FC",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Chicago Fire FC — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "6 tirs cadrés pour Chicago, au-dessus de 2,5.",
+          "lesson": "Le seuil bas pour une attaque complète (Lewandowski, Zinckernagel) s'est confirmé."
+        }
+      ],
+      "caveats": "Un seul match : les marchés de volume ont bien tenu, mais le résultat peut tenir à la variance en finition (4 buts pour un xG de 3,22) et aux remplacements décisifs. Les données ne précisent pas l'effet des absences de Colorado.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 21,
+        "commentaire": 1
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 7128,
+        "cache_read_input_tokens": 9633,
+        "output_tokens": 5147,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 7128,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2430,
+            "cache_read_input_tokens": 7545,
+            "cache_creation_input_tokens": 1671,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1671
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0819166,
+      "createdAt": "2026-11-05T18:12:33.562Z"
+    }
   },
   {
     "matchId": "cal-2026-11-01-como-venezia",
