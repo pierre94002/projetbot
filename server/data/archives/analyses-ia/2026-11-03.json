@@ -12692,8 +12692,240 @@
         }
       ]
     },
-    "updatedAt": "2026-11-03T06:43:23.677Z",
-    "createdAt": "2026-11-03T06:43:23.677Z"
+    "updatedAt": "2026-11-06T13:56:18.042Z",
+    "createdAt": "2026-11-03T06:43:23.677Z",
+    "postMatchReview": {
+      "summary": "Sirius a gagné 2-0 comme anticipé : penalty de Bjerkebo à la 22e, but de Persson à la 45e, puis match géré. Les marchés du vainqueur et des plafonds d'Halmstads ont tenu. Les marchés de volume (total buts, corners, tirs, tirs cadrés) ont été surestimés, car le match s'est éteint après le 2-0.",
+      "whatWasRight": "Victoire de Sirius, Halmstads sous 1,5 but (xG 0,34, 1 tir cadré), Sirius au-dessus de 1,5 but, plafonds de tirs et tirs cadrés de Sirius (12 tirs, 4 cadrés). Halmstads a dépassé 7,5 tirs (10) et 2,5 corners (4). La nuance sur « les 2 équipes marquent » se justifie : Halmstads a été blanchi.",
+      "whatWasMissed": "Le volume total a été surestimé : 22 tirs contre plus de 23,5 annoncés, 5 tirs cadrés contre plus de 6,5, 9 corners contre plus de 9,5. J'ai sous-estimé le scénario d'un Sirius qui gère après un 2-0 à la mi-temps, dont un penalty. Le total de buts a échoué d'un but : aucun but en seconde période, malgré un xG de 2,31 pour Sirius.",
+      "outcomeVsEngine": "Le résultat suit le moteur sur le vainqueur et sur la faiblesse offensive d'Halmstads (xG 0,34 pour 0,77 attendu). Il contredit ses attentes de volume : 29,2 tirs attendus pour 22 réels, 9,1 tirs cadrés pour 5, 13,05 corners pour 9. Sirius a obtenu 2,31 xG, proche des 2,8 attendus, grâce à la qualité des occasions plus qu'à leur nombre.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Sirius gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sirius menait 2-0 dès la 45e (penalty après une main de Trybull à la 20e, puis but de Persson). xG 2,31 contre 0,34.",
+          "lesson": "Un favori net à domicile contre un relégable se confirme malgré une petite méforme. À garder."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Seulement 2 buts, tous avant la pause. Sirius a géré en seconde période et Halmstads n'a pas marqué (une barre à la 61e).",
+          "lesson": "Un seuil de 2,5 buts dépend d'un but adverse ou d'un 3-0. Quand l'attaque adverse est la plus faible du championnat, ne pas confirmer ce marché avec trop de confiance."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Halmstads n'a cadré qu'une fois (xG 0,34) et n'a pas marqué.",
+          "lesson": "La nuance était bonne. Pour une équipe à 0,7 but par match à l'extérieur, le Non reste le côté à privilégier."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Sirius & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sirius a gagné avec 2 buts, ce qui valide plus de 1,5 but.",
+          "lesson": "Ce seuil bas combiné à la victoire est robuste, car deux buts d'avance suffisent."
+        },
+        {
+          "market": "Buts — Sirius",
+          "marketId": "teamGoals",
+          "pick": "Sirius — Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sirius a marqué 2 fois (penalty à la 22e, Persson à la 45e).",
+          "lesson": "Le seuil de 1,5 but pour le favori face à une défense poreuse est à garder, même si l'un des deux buts était un penalty."
+        },
+        {
+          "market": "Buts — Halmstads BK",
+          "marketId": "teamGoals",
+          "pick": "Halmstads BK — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Halmstads n'a pas marqué : 1 tir cadré, xG 0,34, une barre transversale à la 61e.",
+          "lesson": "Confiance forte justifiée : l'attaque la plus pauvre, en déplacement chez le 2e, passe sous 1,5 but."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 9.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Seulement 9 corners (5 + 4), sous le seuil de 9,5. Le match s'est calmé après 2-0.",
+          "lesson": "La confiance forte était excessive : une avance précoce réduit la pression et les corners. Le moteur (13,05) a surestimé ; moins se fier aux moyennes de corners concédés."
+        },
+        {
+          "market": "Corners — Sirius",
+          "marketId": "teamCorners",
+          "pick": "Sirius — Moins de 11.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sirius a obtenu 5 corners, très loin de 11,5.",
+          "lesson": "Plafond large et sûr : à garder."
+        },
+        {
+          "market": "Corners — Halmstads BK",
+          "marketId": "teamCorners",
+          "pick": "Halmstads BK — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Halmstads a eu 4 corners, au-dessus de 2,5, dont celui qui a amené la barre à la 61e.",
+          "lesson": "Le seuil bas passe même en position défensive, mais la marge n'était que d'un corner."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 23.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "22 tirs (12 + 10), sous 23,5. Sirius a peu tiré (12) malgré 59 % de possession.",
+          "lesson": "Le moteur surestime les tirs de Sirius, dont la production récente est faible, et un 2-0 à la mi-temps ralentit le rythme."
+        },
+        {
+          "market": "Tirs — Sirius",
+          "marketId": "teamShots",
+          "pick": "Sirius — Moins de 22.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sirius a tiré 12 fois, très loin de 22,5.",
+          "lesson": "Plafond cohérent avec la moyenne de 13,4 tirs. À garder."
+        },
+        {
+          "market": "Tirs — Halmstads BK",
+          "marketId": "teamShots",
+          "pick": "Halmstads BK — Plus de 7.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Halmstads a tiré 10 fois, au-dessus de 7,5.",
+          "lesson": "Bon seuil, mais la marge n'était que de 2 tirs : la contre-attaque produit moins quand elle est menée."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "4 + 1 = 5 tirs cadrés, sous 6,5. Sirius a converti ses grosses occasions (3) avec peu de tirs cadrés.",
+          "lesson": "Les 9,13 tirs cadrés attendus étaient trop hauts. Les deux attaques sont peu précises, donc se méfier d'un seuil de 6,5 en cas de match fermé."
+        },
+        {
+          "market": "Tirs cadrés — Sirius",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Sirius — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sirius a cadré 4 fois, sous 7,5.",
+          "lesson": "Plafond large, validé par la moyenne de 4,2 par match."
+        },
+        {
+          "market": "Tirs cadrés — Halmstads BK",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Halmstads BK — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Halmstads n'a cadré qu'une fois, sous 5,5.",
+          "lesson": "Halmstads cadre peu à l'extérieur, et la marge était confortable."
+        }
+      ],
+      "caveats": "Un seul match : le recul de la seconde période tient en partie au score (2-0 à la mi-temps, dont un penalty). L'impact exact de la gestion de l'avance sur les volumes n'est pas mesurable. La feuille ne donne pas le décompte des tirs par mi-temps.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 12,
+        "commentaire": 2
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 7056,
+        "cache_read_input_tokens": 9520,
+        "output_tokens": 5350,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 7056,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2497,
+            "cache_read_input_tokens": 7432,
+            "cache_creation_input_tokens": 1712,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1712
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.083636,
+      "createdAt": "2026-11-06T13:56:18.041Z"
+    }
   },
   {
     "matchId": "cal-2026-11-03-blackburn-stoke",
@@ -24774,7 +25006,7 @@
       ],
       "lineupImpact": "Les onzes sont ceux du jour (source FotMob, 49 min avant le coup d'envoi), donc probablement officiels, avec une réserve minime. Portsmouth (4-2-3-1, Mousinho) fait tourner : Kamara, Pack, Swanson, Kavuma-McQueen, Shein et Shaughnessy, habituels titulaires, sont sur le banc. Marezi (3 buts, 4,74 xG) et Segečić (3 buts, 3,11 xG) portent l'attaque sans Bishop. Swansea (4-3-3, Matos) aligne Idah (4 buts), Opoku (3+2) et Widell, mais sans Yeo (3 buts, blessé jusqu'à mi-novembre). Cabango et Just commencent sur le banc. Les rotations côté Portsmouth tempèrent un peu l'attente de tirs."
     },
-    "updatedAt": "2026-11-03T18:56:31.584Z",
+    "updatedAt": "2026-11-06T13:54:19.743Z",
     "createdAt": "2026-11-03T06:45:17.340Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -25190,6 +25422,238 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-03T06:45:17.340Z"
+    },
+    "postMatchReview": {
+      "summary": "Portsmouth a gagné 3-1 grâce à un doublé de Devlin et à un but de Waddingham dans le temps additionnel. Le scénario ouvert avec buts des deux côtés était anticipé, mais la victoire de Portsmouth contredit le favori du moteur (Swansea). La plupart des marchés de volume (tirs, corners, tirs cadrés) ont tenu, alors que le 1N2 est resté une zone d'incertitude.",
+      "whatWasRight": "Le match ouvert avec les deux équipes qui marquent et plus de 2,5 buts (4 buts au total). Les plafonds de corners (5 partout, 10 au total), de tirs (13 contre 9, 22 au total) et de tirs cadrés (5 et 3) ont tenu. Ma prudence sur le 1N2 était justifiée : Swansea, 2e mais fragile dehors, a perdu.",
+      "whatWasMissed": "Je n'ai pas vu que Portsmouth pouvait gagner malgré 36 % de possession. Le match a basculé tard : penalty à la 85e, puis deux buts à 90+2 et 90+8. Le total de buts est monté grâce à ce temps additionnel, et pas à un volume de jeu élevé : xG 1,25 contre 1,68. La blessure de Welsh dès la 24e n'était pas prévisible. Le moteur avait aussi surestimé les tirs de Swansea (9 réels, contre 10,5 attendus).",
+      "outcomeVsEngine": "Le résultat contredit le favori du moteur sur le 1N2 : Swansea était légèrement favori (xG 1,96 contre 1,69) et a perdu, même si ses xG réels (1,68 contre 1,25) restent supérieurs. Il va dans le sens du moteur sur les totaux, les deux équipes marquent et les plafonds de volume. Le PASS sur le 1N2 a évité une erreur.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Swansea gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Swansea était donné gagnant à 36 %, mais Portsmouth s'est imposé 3-1. Devlin a ouvert le score à la 36e. Après l'égalisation sur penalty à la 85e, Devlin (90+2) puis Waddingham (90+8) ont fait basculer le match, malgré 36 % de possession.",
+          "lesson": "Le favori de classement peu convaincant dehors reste fragile. Garder la nuance sur le 1N2 quand l'écart de xG est faible. La possession n'a pas protégé Swansea."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Quatre buts : 1-0 à la 36e, 1-1 à la 85e (penalty), 2-1 à 90+2 et 3-1 à 90+8. Le total a été atteint tard, avec seulement 21 minutes de jeu efficace après l'égalisation.",
+          "lesson": "Le plus de 2,5 a été confirmé à raison, mais les buts sont arrivés tard et par à-coups : xG total de 2,93 seulement."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Swansea n'a marqué que sur penalty à la 85e (Vipotnik), après avoir eu un xG de 1,68. Portsmouth a marqué trois fois.",
+          "lesson": "Ce marché a tenu, mais de justesse : Swansea n'a marqué que sur penalty tardif. Rester prudent quand l'attaque visiteuse est diminuée."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Swansea & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Swansea n'a pas gagné, donc le marché est faux. Les 4 buts ont validé la partie « plus de 1,5 buts », mais pas la victoire.",
+          "lesson": "Ce marché dépend entièrement du 1N2. Ma nuance était correcte, à ne pas surinvestir."
+        },
+        {
+          "market": "Buts — Portsmouth",
+          "marketId": "teamGoals",
+          "pick": "Portsmouth — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Portsmouth a marqué dès la 36e (Devlin), puis deux fois en fin de match. Le seuil de 0,5 but était très facile.",
+          "lesson": "Portsmouth à domicile marque régulièrement, même avec des rotations et sans Bishop. Garder cette lecture."
+        },
+        {
+          "market": "Buts — Swansea",
+          "marketId": "teamGoals",
+          "pick": "Swansea — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Swansea n'a marqué qu'un but, sur penalty à la 85e. Sa barre transversale par Stewart à la 88e aurait pu changer le score.",
+          "lesson": "Moins de 2,5 buts pour Swansea dehors est une base solide, avec un production extérieure limitée."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 12.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Cinq corners de chaque côté, soit 10 au total, bien sous 12,5. Le score a évolué sans domination territoriale marquée.",
+          "lesson": "La marge confortable a tenu : cela vaut la peine de garder les plafonds de corners quand le moteur en attend environ 9."
+        },
+        {
+          "market": "Corners — Portsmouth",
+          "marketId": "teamCorners",
+          "pick": "Portsmouth — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Portsmouth a obtenu 5 corners, sous le seuil de 7,5, malgré 36 % de possession.",
+          "lesson": "Ma nuance sur la moyenne domicile de 8 était trop prudente : la moyenne sur 10 matchs (5,4) était plus fiable que la moyenne domicile."
+        },
+        {
+          "market": "Corners — Swansea",
+          "marketId": "teamCorners",
+          "pick": "Swansea — Moins de 5.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Swansea a obtenu 5 corners avec 64 % de possession : sous 5,5, mais de justesse.",
+          "lesson": "La marge était mince. Une forte possession peut porter les corners à la limite de la ligne."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 29.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Le total a été de 22 tirs (13 plus 9), nettement sous 29,5. Le volume attendu était de 24.",
+          "lesson": "Le plafond de tirs est resté fiable. Garder les attentes de tirs du moteur sur ce type de rencontre."
+        },
+        {
+          "market": "Tirs — Portsmouth",
+          "marketId": "teamShots",
+          "pick": "Portsmouth — Plus de 9.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Portsmouth a tiré 13 fois, au-dessus de 9,5, malgré 36 % de possession. Ses rotations n'ont pas gêné son volume.",
+          "lesson": "Le profil de tirs de Portsmouth à domicile est solide, indépendant de la possession."
+        },
+        {
+          "market": "Tirs — Swansea",
+          "marketId": "teamShots",
+          "pick": "Swansea — Plus de 6.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Swansea a tiré 9 fois, au-dessus de 6,5 mais sous son attendu de 10,5. Le seuil bas était justifié.",
+          "lesson": "Garder les seuils bas pour Swansea : le volume réel a été plus faible que sa moyenne."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 9.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Huit tirs cadrés au total (5 plus 3), sous 9,5. Le total attendu était de 7,4.",
+          "lesson": "Le plafond de tirs cadrés a tenu, même dans un match avec 4 buts."
+        },
+        {
+          "market": "Tirs cadrés — Portsmouth",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Portsmouth — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Portsmouth a cadré 5 tirs pour 3 buts, sous 5,5 mais de justesse.",
+          "lesson": "La marge était mince : à domicile, la moyenne de 4,6 rendait ce seuil sensible."
+        },
+        {
+          "market": "Tirs cadrés — Swansea",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Swansea — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Swansea n'a cadré que 3 tirs, bien sous 5,5. Son attaque a été limitée sans Yeo.",
+          "lesson": "Sans Yeo, Swansea cadre peu dehors (2,8 en moyenne) : cette lecture s'est confirmée."
+        }
+      ],
+      "caveats": "Un seul match : le résultat dépend beaucoup de buts tardifs (85e, 90+2, 90+8) et d'un penalty. Les xG réels (1,25 contre 1,68) ne confirment pas l'ampleur du score. Les blessures de Welsh, Marezi et Dia ont pu influencer le déroulé, mais leur effet n'est pas mesurable.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 17,
+        "commentaire": 5
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5570,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2820,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5570,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2820,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5570,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5570
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.050901600000000005,
+      "createdAt": "2026-11-06T13:54:19.743Z"
     }
   },
   {
@@ -26710,7 +27174,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-03T18:57:00.136Z",
+    "updatedAt": "2026-11-06T13:54:47.425Z",
     "createdAt": "2026-11-03T06:46:11.704Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -27121,6 +27585,238 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-03T06:46:11.703Z"
+    },
+    "postMatchReview": {
+      "summary": "Sheffield United a gagné 3-2 à Preston, dans le sens du moteur et de ma lecture sur le vainqueur. Le scénario de buts a été sous-estimé : Preston a marqué dès la 2e minute, Sydie Peck a signé un triplé (27e, 37e, 45+1), puis Preston est revenu à 2-3 (Lang, 76e). Mes avis sur les marchés de volume (tirs, tirs cadrés, corners de Sheffield) ont tenu, mais ceux sur les buts (peu de buts, Preston muet) ont échoué.",
+      "whatWasRight": "Le vainqueur : Sheffield United a gagné, comme je le confirmais. Les marchés de tirs étaient bien calibrés : 24 tirs au total, 18 pour Sheffield (seuil de 8,5 largement dépassé). Les tirs cadrés sont restés bas (2 pour Preston, 5 pour Sheffield, 7 au total). Preston a eu 3 corners, loin de 8,5, et Sheffield en a eu 3, au-dessus de 2,5. Sheffield a marqué (au moins un but), et le combiné victoire + plus de 1,5 but est passé.",
+      "whatWasMissed": "Le potentiel de buts : 5 buts avec un but de Preston dès la 2e minute (Leroy). Un triplé en 18 minutes avant la pause (Peck) n'était pas anticipé. J'ai surestimé le caractère fermé du match à partir des moyennes de Preston (0,8 but par match). J'ai aussi mal prévu le volume de tirs de Preston : 6 tirs seulement, contre 9,5 attendus. Preston a perdu Kenny dès la 13e minute, et ce match n'a pas suivi sa tendance de tirs moyens. Les corners totaux (6) ont été bien inférieurs à l'attendu de 10,7.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le 1N2 (Sheffield favori, xG 1,74 contre 0,67). Il le contredit sur les buts : Preston en a marqué 2 pour un xG réel de 0,88, et le total a atteint 5. Le xG réel de Sheffield (1,96) était proche de l'attendu. Le moteur avait aussi surestimé les corners. Il n'y avait aucun edge chiffré (PASS), donc rien à regretter sur la mise.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Sheffield United gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sheffield United a mené 3-1 à la pause grâce au triplé de Peck (27e, 37e, 45+1) après l'ouverture du score de Preston (2e), puis a tenu malgré le but de Lang (76e). Il a dominé les tirs (18-6) et le xG (1,96-0,88).",
+          "lesson": "Face à une équipe en crise, la forme et le classement restent de bons indicateurs du vainqueur. Garder cette lecture."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "5 buts : 1-0 (2e), puis 1-1, 1-2, 1-3 avant la pause, puis 2-3 (76e). Le seuil de 3,5 a été dépassé. Preston n'a pas été aussi pauvre offensivement que prévu et sa défense a craqué trois fois en 20 minutes.",
+          "lesson": "Ne pas faire confiance au « moins de » quand une équipe concède plus de 2 buts par match. Un début de match ouvert peut vite faire grimper le total, malgré des xG modérés (2,84 au total ici)."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "faible",
+          "aiWasRight": false,
+          "explanation": "Preston a marqué à la 2e minute (Leroy) et à la 76e (Lang), alors que son xG était de 0,88. Sheffield a aussi marqué, donc les deux équipes ont marqué.",
+          "lesson": "Un attaque muette sur 3 de 5 matchs n'est pas un signal fiable. Le taux de 62 % du championnat pour ce marché aurait dû peser plus, d'autant que mon bilan sur ce marché était faible."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Sheffield United & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Sheffield a gagné avec 5 buts au total, donc plus de 1,5 but. Mon avis nuancé évoquait une victoire 1-0 comme risque, qui ne s'est pas produite.",
+          "lesson": "Ce combiné est passé par prudence sur le seuil bas. Un seuil à 1,5 but suit bien le vainqueur probable."
+        },
+        {
+          "market": "Buts — Preston",
+          "marketId": "teamGoals",
+          "pick": "Preston — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Leroy a marqué à la 2e minute, avant tout rythme défensif de Sheffield, puis Lang a marqué à la 76e. Preston a donc marqué 2 fois avec seulement 2 tirs cadrés.",
+          "lesson": "Avec 51 %, le marché était quasi indécis, et mon avis « confirme » était trop affirmé. Même une attaque faible marque souvent avec un seul tir réussi, et l'ouverture à la 2e minute pèse beaucoup."
+        },
+        {
+          "market": "Buts — Sheffield United",
+          "marketId": "teamGoals",
+          "pick": "Sheffield United — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sheffield a marqué 3 fois, tous avant la pause, grâce à Peck (27e, 37e, 45+1).",
+          "lesson": "Garder cette lecture : une équipe qui marque depuis 6 matchs face à une défense très perméable marque presque toujours."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Seulement 6 corners (3-3), contre 10,7 attendus. Sheffield a mené vite et Preston, avec 40 % de possession, a peu attaqué.",
+          "lesson": "Un seuil bas de corners n'est pas sûr. Les corners dépendent du rythme du match et d'un scénario où l'une des équipes domine. Le moteur avait surestimé le total ; à nuancer."
+        },
+        {
+          "market": "Corners — Preston",
+          "marketId": "teamCorners",
+          "pick": "Preston — Moins de 8.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Preston n'a eu que 3 corners, très loin de 8,5, avec 40 % de possession et 6 tirs.",
+          "lesson": "Un seuil de corners très au-dessus de la moyenne d'une équipe en difficulté est solide. À garder."
+        },
+        {
+          "market": "Corners — Sheffield United",
+          "marketId": "teamCorners",
+          "pick": "Sheffield United — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sheffield a eu 3 corners, juste au-dessus de 2,5, malgré 18 tirs. Le seuil a tenu de justesse.",
+          "lesson": "Le seuil de 2,5 est passé de peu : même avec 18 tirs, les corners peuvent rester bas. Ne pas surestimer la fiabilité de ces seuils."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 21.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "24 tirs (6 + 18), au-dessus de 21,5. Les 18 tirs de Sheffield ont compensé les 6 de Preston.",
+          "lesson": "Le total de tirs est robuste quand une équipe domine, même si l'autre en fait peu. Garder cette lecture."
+        },
+        {
+          "market": "Tirs — Preston",
+          "marketId": "teamShots",
+          "pick": "Preston — Plus de 9.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Preston n'a tiré que 6 fois contre 9,5 de seuil. Kenny est sorti blessé à la 13e, et Preston a subi la possession (40 %) en étant mené 1-3 dès la mi-temps.",
+          "lesson": "Preston ne tire pas toujours à son rythme moyen. Prendre en compte la possession à 39-40 % et les blessures précoces : un seuil à 83 % était trop confiant pour une équipe en crise."
+        },
+        {
+          "market": "Tirs — Sheffield United",
+          "marketId": "teamShots",
+          "pick": "Sheffield United — Plus de 8.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sheffield a tiré 18 fois, bien au-dessus de 8,5, face à une défense qui concède beaucoup de tirs (16,7 en moyenne).",
+          "lesson": "Garder cette lecture : une défense qui concède 16,7 tirs par match permet à l'adversaire de dépasser ses moyennes."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 10.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "7 tirs cadrés au total (2 + 5), nettement sous 10,5. Les 24 tirs ont été peu précis.",
+          "lesson": "Les tirs cadrés restent bas même dans un match à 5 buts. Le « moins de » sur ce marché est fiable."
+        },
+        {
+          "market": "Tirs cadrés — Preston",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Preston — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Preston n'a cadré que 2 tirs, bien sous 5,5, même en marquant 2 buts.",
+          "lesson": "Une attaque de Preston peu prolifique en tirs cadrés (2,6 par match) confirme ce seuil. À garder."
+        },
+        {
+          "market": "Tirs cadrés — Sheffield United",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Sheffield United — Moins de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sheffield a cadré 5 tirs (dont 3 buts de Peck), donc sous 6,5, malgré 18 tirs au total.",
+          "lesson": "Sheffield cadre peu par rapport au nombre de tirs. Le seuil de 6,5 a été largement respecté ; à garder."
+        }
+      ],
+      "caveats": "Un seul match : le triplé de Peck et le but de Preston à la 2e minute pèsent lourd et sont difficilement modélisables. La blessure de Kenny (13e) a aussi pu perturber Preston. Les statistiques de FotMob ne donnent pas la séquence exacte des tirs et corners dans le temps.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 15,
+        "commentaire": 2
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5123,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 3278,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5123,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 3278,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5123,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5123
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.053693599999999994,
+      "createdAt": "2026-11-06T13:54:47.424Z"
     }
   },
   {
@@ -28708,7 +29404,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-03T18:57:32.071Z",
+    "updatedAt": "2026-11-06T13:55:24.672Z",
     "createdAt": "2026-11-03T06:46:41.463Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -29124,6 +29820,238 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-03T06:46:41.463Z"
+    },
+    "postMatchReview": {
+      "summary": "Le 1-1 contredit la victoire de QPR, mais pas sa domination : QPR a gagné les statistiques (xG 1,73 contre 0,16, tirs 20 contre 4, corners 8 contre 1) et a été tenu en échec après avoir encaissé sur la seule vraie occasion de Burnley (Ramazani, 38e). Le diagnostic de supériorité était bon, le résultat a manqué de réalisme. Les marchés de volume ont bien tenu, sauf les tirs de Burnley.",
+      "whatWasRight": "La domination de QPR et le faible danger de Burnley : un seul tir cadré concédé, 1 but (Burnley moins de 1,5 buts juste). Les marchés de corners totaux, de tirs totaux, de tirs de QPR et de tirs cadrés ont tous été justes. Le doute sur « les 2 équipes marquent » était justifié et le oui est passé.",
+      "whatWasMissed": "Burnley a produit seulement 4 tirs, contre 11,84 attendus, et 1 corner, contre 4,05 attendus. Il a donc été écrasé bien au-delà du scénario prévu. QPR n'a pas converti sa domination : 1,73 xG pour un seul but, inscrit par Varane à la 65e. Le résultat a donc été sous-estimé en variance de finition, et le risque de nul contre une équipe qui marque sur contre, pesé trop faiblement.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur les issues de score (victoire QPR à 49 %, plus de 2,5 buts à 72 %, QPR plus de 1,5 but à 77 %). Il le confirme sur la plupart des volumes (corners, tirs, tirs cadrés) et sur la faiblesse offensive de Burnley. L'écart est surtout une variance de finition.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "QPR gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Burnley a ouvert le score à la 38e (Ramazani) sur sa seule occasion. QPR n'a égalisé qu'à la 65e (Varane) malgré xG 1,73 et 20 tirs. Le nul rend le pronostic faux.",
+          "lesson": "Une forte domination statistique ne garantit pas la victoire. Le risque de nul contre un bloc bas doit rester pesé."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Seulement 2 buts, au lieu des 3 nécessaires. QPR a dominé mais n'a marqué qu'une fois, et Burnley n'a eu qu'un tir cadré.",
+          "lesson": "Une confiance forte sur un plus de 2,5 buts à 72 % était excessive. Un seul but du camp faible suffit à ruiner le marché."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Ramazani (38e) et Varane (65e) ont marqué : le oui passe, malgré 1 seul tir cadré de Burnley.",
+          "lesson": "L'avis nuancé et faible était prudent. Même une attaque amoindrie conserve une probabilité réelle de marquer."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "QPR & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Ce marché dépendait de la victoire de QPR, qui n'est pas venue (1-1).",
+          "lesson": "Les combinés héritent du risque du résultat. Confirmer avec confiance moyenne était un peu trop."
+        },
+        {
+          "market": "Buts — QPR",
+          "marketId": "teamGoals",
+          "pick": "QPR — Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "QPR n'a marqué qu'une fois (Varane, 65e) malgré 20 tirs, 5 cadrés et 1,73 xG.",
+          "lesson": "Même avec un xG de 1,73, deux buts ne sont pas acquis. Le bilan fragile du moteur sur les buts d'équipe justifiait la prudence."
+        },
+        {
+          "market": "Buts — Burnley",
+          "marketId": "teamGoals",
+          "pick": "Burnley — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Burnley n'a marqué qu'une fois, avec xG 0,16 et 4 tirs : sous 1,5.",
+          "lesson": "À garder : l'absence d'un buteur clé et un déplacement difficile limitent le total d'une équipe faible."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "9 corners (8 pour QPR, 1 pour Burnley) : le seuil de 6,5 est dépassé grâce à la pression de QPR.",
+          "lesson": "Le seuil bas par rapport aux attendus et à la moyenne du championnat est fiable. À garder."
+        },
+        {
+          "market": "Corners — QPR",
+          "marketId": "teamCorners",
+          "pick": "QPR — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "QPR a obtenu 8 corners, au-dessus de 7,5 (attendu 5,56), porté par sa domination (58 % de possession, 20 tirs).",
+          "lesson": "L'avis nuancé était juste : quand QPR domine à domicile, ses corners dépassent l'attendu."
+        },
+        {
+          "market": "Corners — Burnley",
+          "marketId": "teamCorners",
+          "pick": "Burnley — Moins de 5.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Burnley n'a eu qu'1 corner, très loin du seuil de 5,5.",
+          "lesson": "Une équipe dominée en déplacement produit peu de corners. À garder."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 21.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "24 tirs (20 + 4), au-dessus de 21,5, tirés surtout par QPR.",
+          "lesson": "Juste, mais le volume venait uniquement de QPR : le total dépend surtout de l'équipe dominante."
+        },
+        {
+          "market": "Tirs — QPR",
+          "marketId": "teamShots",
+          "pick": "QPR — Moins de 20.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "QPR a tiré 20 fois, juste sous 20,5. Le marché passe de justesse.",
+          "lesson": "Marge très faible : à domicile, QPR peut approcher la limite. 83 % était un peu haut."
+        },
+        {
+          "market": "Tirs — Burnley",
+          "marketId": "teamShots",
+          "pick": "Burnley — Plus de 7.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Burnley n'a tiré que 4 fois, contre 13,8 de moyenne, sous 7,5. QPR (58 % de possession) l'a confiné.",
+          "lesson": "Correction : la moyenne de tirs d'un outsider en déplacement ne tient pas face à une équipe dominante. Réduire la confiance sur ces plus de tirs."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 11.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "6 tirs cadrés (5 + 1), très sous 11,5.",
+          "lesson": "Le seuil élevé était sûr : le moteur est fiable ici. À garder."
+        },
+        {
+          "market": "Tirs cadrés — QPR",
+          "marketId": "teamShotsOnTarget",
+          "pick": "QPR — Moins de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "5 tirs cadrés pour QPR, sous 6,5, conforme à l'attendu 5,01.",
+          "lesson": "L'attendu a bien fonctionné, même en cas de domination."
+        },
+        {
+          "market": "Tirs cadrés — Burnley",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Burnley — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "1 seul tir cadré, très sous 5,5.",
+          "lesson": "Burnley amoindri et dominé cadre peu. À garder."
+        }
+      ],
+      "caveats": "Un seul match. Le résultat tient largement à la finition de QPR et à un but concédé sur la seule vraie occasion adverse. L'effet du nouvel entraîneur de Burnley n'est pas mesurable ici.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 14,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 8987,
+        "cache_read_input_tokens": 9597,
+        "output_tokens": 5329,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 8987,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2486,
+            "cache_read_input_tokens": 7509,
+            "cache_creation_input_tokens": 3566,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3566
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.09116540000000001,
+      "createdAt": "2026-11-06T13:55:24.672Z"
     }
   },
   {
@@ -30606,7 +31534,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-03T18:58:03.317Z",
+    "updatedAt": "2026-11-06T13:56:59.834Z",
     "createdAt": "2026-11-03T06:47:08.527Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -31022,6 +31950,238 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-03T06:47:08.526Z"
+    },
+    "postMatchReview": {
+      "summary": "Watford a gagné 1-0 sur un but de Mavididi dès le retour des vestiaires (46e), dans un match fermé : 2 tirs cadrés contre 1 seulement malgré 30 tirs au total. Ma lecture d'un match équilibré à faible total de buts s'est confirmée. J'ai surestimé les tirs cadrés et le fait que Lincoln marquerait.",
+      "whatWasRight": "Le scénario de faible score s'est réalisé : moins de 3,5 buts, Watford sous 1,5 but, et Non sur « les deux équipes marquent » avec un seul but. Les volumes de tirs étaient bien lus : 18 pour Watford (ligne 10,5), 12 pour Lincoln (ligne 8,5), 30 au total (ligne 22,5). Plus de 3,5 corners pour Watford est passé avec 7. Mon « nuance » prudent sur le 1N2 était justifié : le moteur ne voyait pas d'edge et le match s'est joué sur un but.",
+      "whatWasMissed": "J'ai surestimé la conversion des tirs en tirs cadrés : seulement 3 au total (2 et 1) pour 30 tirs, donc les lignes de plus de 6,5 au total et de plus de 2,5 pour Lincoln étaient très loin. Lincoln n'a pas marqué malgré 0,75 xG. J'ai sous-estimé les corners de Lincoln (6, contre une moyenne de 2,2 à l'extérieur) et le total de corners (13). Le match a été haché (7 jaunes, blessure de Draper à la 19e, nombreux remplacements), ce qui a pu jouer sur le rythme.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur les buts et les volumes de tirs. Il le contredit sur les tirs cadrés (9,55 attendus pour 3 réels) et sur les corners : 3,74 attendus pour Lincoln contre 6 réels, 9,95 attendus au total contre 13 réels. Le moteur voyait Lincoln légèrement devant (1,18 xG contre 0,94) mais Watford a gagné, avec des xG finaux de 0,61 contre 0,75.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Watford gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Watford a gagné 1-0 grâce à Mavididi à la 46e, après une mi-temps vierge. Les xG étaient quasi égaux (0,61 contre 0,75), donc la victoire tient à un but isolé.",
+          "lesson": "Garder la prudence sur ce 1N2 serré : avec des équipes en méforme et sans edge, l'issue dépend d'un seul but. Le terrain a pesé."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Un seul but sur le match (46e) pour 1,36 xG cumulé : le Moins de 3,5 est passé sans difficulté.",
+          "lesson": "Confirmer : les xG modestes l'emportent sur le risque de blow-out lié aux défenses fragiles quand la ligne est de 3,5."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Lincoln n'a pas marqué, avec 1 tir cadré seulement, malgré 0,75 xG. Watford a marqué une fois.",
+          "lesson": "Le Non était juste. L'offensive pauvre d'un des deux camps pèse plus que la tendance du championnat."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Watford & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Watford a gagné et il n'y a eu qu'un but, donc le combiné est passé.",
+          "lesson": "Le combiné dépend du 1N2 : il est passé par la victoire de Watford, pas par une qualité propre du pari."
+        },
+        {
+          "market": "Buts — Watford",
+          "marketId": "teamGoals",
+          "pick": "Watford — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Watford n'a marqué qu'une fois (Mavididi, 46e) pour 0,61 xG et 2 tirs cadrés.",
+          "lesson": "Confirmer : l'attaque pauvre de Watford rend la ligne de 1,5 but solide, même à domicile."
+        },
+        {
+          "market": "Buts — Lincoln City",
+          "marketId": "teamGoals",
+          "pick": "Lincoln City — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Lincoln n'a pas marqué : 1 tir cadré seulement sur 12 tirs et 0,75 xG, avec Draper blessé à la 19e (arrêt de jeu).",
+          "lesson": "Ne pas trop faire confiance à la fragilité défensive de Watford pour faire marquer Lincoln à l'extérieur : 0,8 but par match sur la route restait un signal à respecter."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 12.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "faible",
+          "aiWasRight": false,
+          "explanation": "Il y a eu 13 corners (7 et 6), au-dessus de la ligne de 12,5 et du total attendu de 9,95.",
+          "lesson": "Une ligne large à 78 % reste vulnérable quand le match est déséquilibré en tirs (30 au total). Les corners suivent les volumes de tirs, pas les moyennes de production."
+        },
+        {
+          "market": "Corners — Watford",
+          "marketId": "teamCorners",
+          "pick": "Watford — Plus de 3.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Watford a obtenu 7 corners avec 60 % de possession et 18 tirs, au-dessus de 3,5.",
+          "lesson": "Confirmer : la domination territoriale à domicile contre une défense qui concède beaucoup de corners soutient cette ligne."
+        },
+        {
+          "market": "Corners — Lincoln City",
+          "marketId": "teamCorners",
+          "pick": "Lincoln City — Moins de 5.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Lincoln a obtenu 6 corners, au-dessus de 5,5, alors qu'il en produit 2,2 par match à l'extérieur. Ses 12 tirs ont généré plus de corners que d'habitude.",
+          "lesson": "Ne pas se fier à la faible moyenne de corners d'un camp : ce chiffre peut basculer quand le match s'ouvre. Surtout quand le nombre de tirs de l'équipe monte."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 22.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 30 tirs (18 et 12) contre une ligne de 22,5 et 28,6 attendus.",
+          "lesson": "Confirmer : les défenses qui concèdent plus de 17 tirs par match donnent de bons volumes, même si les attaques produisent peu."
+        },
+        {
+          "market": "Tirs — Watford",
+          "marketId": "teamShots",
+          "pick": "Watford — Plus de 10.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Watford a tiré 18 fois, à domicile, avec 60 % de possession, au-dessus de 10,5.",
+          "lesson": "Confirmer : le terrain à domicile et une défense adverse qui concède plus de 17 tirs soutiennent la ligne."
+        },
+        {
+          "market": "Tirs — Lincoln City",
+          "marketId": "teamShots",
+          "pick": "Lincoln City — Plus de 8.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Lincoln a tiré 12 fois, au-dessus de 8,5, malgré 40 % de possession et un score défavorable après 46 minutes.",
+          "lesson": "Mon « nuance » était trop prudent : la fragilité défensive de Watford (17 tirs concédés par match) pesait plus que la moyenne de Lincoln à l'extérieur (8,2)."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Il n'y a eu que 3 tirs cadrés (2 et 1), très loin de 6,5 et de 9,55 attendus, malgré 30 tirs au total.",
+          "lesson": "Ne pas déduire les tirs cadrés des volumes de tirs. Les moyennes de tirs cadrés concédés (6 et 5,7) ont surestimé la conversion ; une ligne de 6,5 à 82 % demande plus de prudence."
+        },
+        {
+          "market": "Tirs cadrés — Watford",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Watford — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Watford n'a cadré que 2 tirs, bien sous 7,5.",
+          "lesson": "Mon réflexe de prudence (leçon du 10/10) n'a pas empêché le bon résultat : l'under de tirs cadrés d'une équipe en méforme à ligne haute est solide."
+        },
+        {
+          "market": "Tirs cadrés — Lincoln City",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Lincoln City — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Lincoln n'a cadré qu'1 seul tir sur 12 tirs, sous 2,5 ; Draper s'est blessé à la 19e.",
+          "lesson": "Une moyenne à l'extérieur à peine au-dessus de la ligne (2,6 contre 2,5) ne justifie pas une confiance moyenne. Une marge limitée implique de ne pas confirmer."
+        }
+      ],
+      "caveats": "Un seul match : l'écart sur les tirs cadrés (3 au total contre 9,55 attendus) peut relever de la variance et d'un but précoce en seconde période, sans que le modèle soit erroné. La blessure de Draper (19e) et le rythme haché peuvent avoir influé mais ne sont pas mesurables avec la fiche.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 18,
+        "commentaire": 1
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 6777,
+        "cache_read_input_tokens": 9465,
+        "output_tokens": 4038,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 6777,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 3043,
+            "cache_read_input_tokens": 7377,
+            "cache_creation_input_tokens": 1488,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1488
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.069389,
+      "createdAt": "2026-11-06T13:56:59.833Z"
     }
   },
   {
@@ -32333,7 +33493,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-03T18:58:56.148Z",
+    "updatedAt": "2026-11-06T13:58:25.282Z",
     "createdAt": "2026-11-03T06:47:38.000Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -32753,6 +33913,238 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-03T06:47:38.000Z"
+    },
+    "postMatchReview": {
+      "summary": "Le 0-0 contredit la lecture « match ouvert » (plus de 2,5 buts, BTTS) et la légère faveur donnée à Mansfield. Les marchés de volume (tirs, corners, tirs cadrés) ont presque tous tenu, sauf les corners de Mansfield. Le match a été fermé : peu de tirs cadrés (2 et 3) malgré 16 tirs de Wigan.",
+      "whatWasRight": "Les plafonds de volume : total tirs 23 sous 32,5, Wigan au-dessus de 8,5 tirs (16), Mansfield sous 18,5 (7), tirs cadrés totaux 5 sous 10,5, Wigan sous 5,5 (2), Mansfield au-dessus de 2,5 (3). Moins de 2,5 buts pour Wigan, moins de 3,5 pour Mansfield et moins de 13,5 corners (7 au total) ont tenu. Wigan a aussi dépassé 2,5 corners (5).",
+      "whatWasMissed": "Le scénario de buts : deux équipes jugées perméables n'ont pas marqué, avec 2,67 xG cumulés mais seulement 5 tirs cadrés. J'ai surestimé les corners de Mansfield (2 contre 5,09 attendus) et sous-estimé la domination de Wigan en tirs (16 contre 7). La blessure de Hogan à la 35e a perturbé l'attaque de Wigan, et Mansfield, avec 4 jaunes, a perdu Knoyle sur blessure à la 73e.",
+      "outcomeVsEngine": "Le 0-0 va contre le moteur sur le résultat (Mansfield favori à 43 %), sur plus de 2,5 buts (69 %) et sur BTTS (67 %). Il va dans son sens sur les marchés de tirs et de corners totaux. Le xG de FotMob (1,51 / 1,16) montre un match plus pauvre en buts que les attendus du moteur (1,40 / 2,17), surtout pour Mansfield.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Mansfield Town gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Aucun but : Mansfield n'a pas gagné. Wigan a dominé les tirs (16 contre 7) et le xG (1,51 contre 1,16), Mansfield n'a eu que 7 tirs.",
+          "lesson": "Ma nuance à confiance faible était prudente et justifiée. Un petit avantage de forme pour un visiteur ne suffit pas face à une équipe à domicile qui produit plus de tirs."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "0-0, mi-temps 0-0 : le plus de 2,5 buts est faux. Le xG cumulé de 2,67 et seulement 5 tirs cadrés montrent un manque de précision, pas de volume.",
+          "lesson": "Ne pas confirmer le plus de 2,5 buts sur les seules moyennes de buts concédés. Il faut regarder les tirs cadrés réellement concédés ; le xG élevé peut venir de tirs non cadrés. À ne pas surpondérer à confiance moyenne."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Aucune équipe n'a marqué. Wigan n'a cadré que 2 tirs sur 16 et Mansfield 3 sur 7, malgré 2 et 3 grosses occasions.",
+          "lesson": "Mon avis nuancé sur Wigan (0,9 but par match) était la bonne alerte. Quand l'une des équipes marque peu, le oui est fragile ; je dois baisser la confiance sur BTTS dans ce cas."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Mansfield Town & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Sans but, ni la victoire de Mansfield ni le plus de 1,5 buts ne se sont réalisés.",
+          "lesson": "Le combiné hérite de l'erreur de la jambe résultat comme de celle du total. Ma nuance à faible confiance était juste, à garder."
+        },
+        {
+          "market": "Buts — Wigan Athletic",
+          "marketId": "teamGoals",
+          "pick": "Wigan Athletic — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Wigan a marqué 0 but, bien sous 2,5, malgré 16 tirs et 1,51 xG.",
+          "lesson": "Les lignes hautes pour une attaque peu prolifique se confirment facilement. Cet avis fort est à garder."
+        },
+        {
+          "market": "Buts — Mansfield Town",
+          "marketId": "teamGoals",
+          "pick": "Mansfield Town — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Mansfield a marqué 0 but, très en dessous de 3,5, avec 7 tirs et 1,16 xG.",
+          "lesson": "Une ligne haute sur les buts d'une équipe est une cible sûre. À garder."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 13.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "7 corners au total (5 et 2), loin de 13,5. Le match fermé n'a pas produit de pression d'équipes en chaîne.",
+          "lesson": "Le plafond de corners tient bien quand les moyennes sont autour de 10. À garder."
+        },
+        {
+          "market": "Corners — Wigan Athletic",
+          "marketId": "teamCorners",
+          "pick": "Wigan Athletic — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Wigan a obtenu 5 corners, au-dessus de 2,5, grâce à ses 16 tirs et à sa domination territoriale.",
+          "lesson": "Le seuil bas de corners pour l'équipe qui domine se confirme. À garder."
+        },
+        {
+          "market": "Corners — Mansfield Town",
+          "marketId": "teamCorners",
+          "pick": "Mansfield Town — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Mansfield n'a eu que 2 corners, sous 2,5. Avec 7 tirs seulement, l'équipe a été repliée devant la pression de Wigan.",
+          "lesson": "Pour le visiteur, la ligne de corners dépend du scénario. Un seuil bas à confiance forte n'est pas sûr si l'équipe subit. Baisser la confiance quand le visiteur est un contre-attaquant dominé aux tirs."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 32.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "23 tirs au total (16 et 7), très sous 32,5.",
+          "lesson": "Plafond de tirs très solide : les moyennes cumulées (~25) étaient un bon repère. À garder."
+        },
+        {
+          "market": "Tirs — Wigan Athletic",
+          "marketId": "teamShots",
+          "pick": "Wigan Athletic — Plus de 8.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Wigan a tiré 16 fois, au-dessus de 8,5, avec une domination en tirs (16 contre 7).",
+          "lesson": "Jouer à domicile contre une équipe défensive augmente le volume de tirs. À garder."
+        },
+        {
+          "market": "Tirs — Mansfield Town",
+          "marketId": "teamShots",
+          "pick": "Mansfield Town — Moins de 18.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Mansfield n'a tiré que 7 fois, très sous 18,5.",
+          "lesson": "Le raisonnement contre-attaque limitant les tirs de Mansfield s'est confirmé. À garder."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 10.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "5 tirs cadrés au total (2 et 3), très sous 10,5.",
+          "lesson": "La ligne haute de tirs cadrés est sûre dans un match fermé. À garder."
+        },
+        {
+          "market": "Tirs cadrés — Wigan Athletic",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Wigan Athletic — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Wigan n'a cadré que 2 tirs, sous 5,5, malgré 16 tirs.",
+          "lesson": "Wigan manque de précision. Le plafond reste fiable pour cette attaque. À garder."
+        },
+        {
+          "market": "Tirs cadrés — Mansfield Town",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Mansfield Town — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Mansfield a cadré 3 tirs, juste au-dessus de 2,5, pour 7 tirs au total.",
+          "lesson": "Réussite de justesse : la ligne a tenu de peu malgré le faible volume. La confiance moyenne était appropriée ; ne pas la monter."
+        }
+      ],
+      "caveats": "Un seul match, et un 0-0 avec peu d'occasions cadrées peut tenir à la finition. La blessure de Hogan à la 35e et celle de Knoyle ont pu influencer le scénario, sans que la fiche permette de le mesurer. Pas de détail des occasions au-delà du total.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 13,
+        "commentaire": 2
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5174,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 3829,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5174,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 3829,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5174,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5174
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.05940759999999999,
+      "createdAt": "2026-11-06T13:58:25.281Z"
     }
   },
   {
@@ -56179,7 +57571,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-03T19:15:59.448Z",
+    "updatedAt": "2026-11-06T13:57:49.333Z",
     "createdAt": "2026-11-03T06:49:31.714Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -56600,6 +57992,238 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-03T06:49:31.714Z"
+    },
+    "postMatchReview": {
+      "summary": "Le nul 1-1 est cohérent avec un duel équilibré sans edge. Les marchés de volume (tirs, corners, totaux) ont tenu. « Les 2 équipes marquent : Non » et « West Brom gagne » ont échoué. West Brom a dominé en xG (2,09 contre 1,38) sans gagner.",
+      "whatWasRight": "Le scénario de peu de buts : 2 buts, donc moins de 3,5 validé. Les volumes de tirs (17 et 10, total 27 pour 27,2 attendus), les tirs cadrés (5 et 3) et les corners de Southampton (5) allaient dans le sens prévu. West Brom a marqué (penalty de Price à la 22e). Ma prudence sur le 1N2 (nuance, faible) était justifiée.",
+      "whatWasMissed": "J'ai sous-estimé la capacité de Southampton à marquer sans Larin : Edozie égalise à la 53e. Leur xG de 1,38 avec 3 grosses occasions dépassait mon attente de 1,04. Le total de corners réel (8) est resté très en dessous des 11 attendus, même si la ligne a passé. West Brom, supérieur en xG (2,09 pour 1,21 attendu), n'a marqué que sur penalty.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le vainqueur (victoire de West Brom à 39 %) et sur « Les 2 équipes marquent : Non » (54 %). Il le confirme sur les totaux, tirs, corners et tirs cadrés. Le moteur a vu juste sur la domination en volume de West Brom, pas sur le score.",
+      "caveats": "Un seul match. Le penalty (22e) et la blessure de Bree (56e) ont influencé le déroulé. Le xG supérieur de West Brom ne s'est pas traduit au score, ce qui peut relever de la variance.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "West Brom gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Penalty de Price à la 22e (1-0), égalisation d'Edozie à la 53e. West Brom a dominé en xG (2,09 contre 1,38) et en tirs (17 contre 10), sans convertir (poteau de Bany à la 88e).",
+          "lesson": "Un léger avantage à domicile à 39 % laisse une grande place au nul. Rester nuancé sur ce type de match équilibré était la bonne approche."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Seulement 2 buts (22e et 53e), malgré 27 tirs et 3,5 de xG cumulé.",
+          "lesson": "Le moins de 3,5 buts est un seuil sûr dans un match fermé, mais sa réussite tient aussi à la finition moyenne ici. À garder."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Les deux ont marqué : Price sur penalty (22e), Edozie à la 53e. Southampton avait 1,38 xG et 3 grosses occasions.",
+          "lesson": "L'absence d'un buteur (Larin) ne ferme pas l'attaque adverse. Avec 54 % et des attaques régulières, rester nuancé était juste ; ne pas sur-peser les absences."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "West Brom & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "West Brom n'a pas gagné (1-1), donc le combiné échoue, bien que moins de 3,5 buts soit validé.",
+          "lesson": "Les combinés héritent de l'incertitude du résultat. Garder la prudence."
+        },
+        {
+          "market": "Buts — West Brom",
+          "marketId": "teamGoals",
+          "pick": "West Brom — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "West Brom a marqué dès la 22e sur penalty (faute de Stephens à la 21e), avec 2,09 xG.",
+          "lesson": "Plus de 0,5 but pour l'équipe à domicile dominante est solide. À garder, même si le but venait d'un penalty."
+        },
+        {
+          "market": "Buts — Southampton",
+          "marketId": "teamGoals",
+          "pick": "Southampton — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Southampton n'a marqué qu'un but (Edozie, 53e), donc moins de 1,5 passe de justesse malgré 1,38 xG.",
+          "lesson": "Marge mince : la ligne a tenu avec un seul but. Le doute (nuance, faible) était justifié."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "8 corners (3 et 5), au-dessus de 7,5 de peu, très loin des 11 attendus.",
+          "lesson": "La ligne est passée de justesse ; le total attendu a surestimé. Ne pas supposer que les corners suivent la possession (53 % seulement)."
+        },
+        {
+          "market": "Corners — West Brom",
+          "marketId": "teamCorners",
+          "pick": "West Brom — Moins de 8.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Seulement 3 corners pour West Brom, très en dessous de 8,5.",
+          "lesson": "Le moins de corners pour l'équipe à domicile a passé largement. Le seuil bas pour une équipe reste fiable."
+        },
+        {
+          "market": "Corners — Southampton",
+          "marketId": "teamCorners",
+          "pick": "Southampton — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "5 corners pour Southampton, sous 7,5, conforme à leur moyenne (4,6 à 5).",
+          "lesson": "Confirmé : l'équipe visiteuse reste loin du seuil sans match à sens unique."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 21.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "27 tirs (17 et 10), nettement au-dessus de 21,5 et proche des 27,2 attendus.",
+          "lesson": "Le moteur est bien calibré sur le volume total de tirs. À garder."
+        },
+        {
+          "market": "Tirs — West Brom",
+          "marketId": "teamShots",
+          "pick": "West Brom — Plus de 10.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "17 tirs pour West Brom, au-dessus de 10,5, avec une domination en xG.",
+          "lesson": "À domicile, le volume de tirs de West Brom est fiable. À garder."
+        },
+        {
+          "market": "Tirs — Southampton",
+          "marketId": "teamShots",
+          "pick": "Southampton — Plus de 7.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "10 tirs pour Southampton : au-dessus de 7,5 mais sous leur moyenne (14,5).",
+          "lesson": "Le seuil bas a protégé le pari ; la moyenne de 14,5 était surestimée en match où West Brom dominait."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 10.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "8 tirs cadrés (5 et 3), pile sur l'attendu du moteur et sous 10,5.",
+          "lesson": "Marché bien calibré. À garder."
+        },
+        {
+          "market": "Tirs cadrés — West Brom",
+          "marketId": "teamShotsOnTarget",
+          "pick": "West Brom — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "5 tirs cadrés pour West Brom, au-dessus de 2,5.",
+          "lesson": "Confirmé grâce à la domination à domicile. À garder, mais avec prudence vu le bilan fragile."
+        },
+        {
+          "market": "Tirs cadrés — Southampton",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Southampton — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "3 tirs cadrés pour Southampton, sous 5,5 avec marge.",
+          "lesson": "L'absence de Larin et la pression adverse ont réduit leur menace. Confirmé."
+        }
+      ],
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 12,
+        "commentaire": 4
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 6680,
+        "cache_read_input_tokens": 9281,
+        "output_tokens": 5089,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 6680,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2406,
+            "cache_read_input_tokens": 7193,
+            "cache_creation_input_tokens": 1575,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1575
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0794742,
+      "createdAt": "2026-11-06T13:57:49.332Z"
     }
   },
   {
