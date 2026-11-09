@@ -190,7 +190,8 @@ test('T-F6 l’archive jamais après le coup d’envoi ; sans heure sûre, seule
 test('T-N7 l’étape « joueursABlanc » : entre les cartons et le contrôle quotidien ; une fois par jour, reprise si reportée, jamais au clic ; son résumé ; le module chargé par import() dynamique', async () => {
   const etapes = JOB.ETAPES().map((e) => e.key);
   // Étape 38 (lot 1b, 04/11/2026) : la combinaison à blanc entre les chiffres des joueurs et le contrôle quotidien.
-  assert.deepEqual(etapes.slice(-4), ['cartonsEtCorners', 'joueursABlanc', 'combinaisonABlanc', 'controleQuotidien']);
+  // Étape 36 (lot 1, 09/11/2026) : les coupes à blanc entre la combinaison à blanc et le contrôle quotidien.
+  assert.deepEqual(etapes.slice(-5), ['cartonsEtCorners', 'joueursABlanc', 'combinaisonABlanc', 'coupesEtMatchsAPart', 'controleQuotidien']);
   assert.ok(etapes.indexOf('joueursABlanc') > etapes.indexOf('sauvegarde') && etapes.indexOf('joueursABlanc') > etapes.indexOf('moteurABlanc'));
   const ctx = (derniere, details = null, manuel = false) => ({ manuel, derniere: () => derniere, derniersDetails: () => details });
   assert.equal(JOUEURS.dueJoueursABlanc(ctx(null)), true);
@@ -230,7 +231,8 @@ const DEBUT = /\[étape 34, lot 1b : ajout pur, début\]/;
 const FIN = /\[étape 34, lot 1b : ajout pur, fin\]/;
 function blocs(brut) {
   // Étape 38 (lot 1b, 04/11/2026) : ses blocs « ajout pur » de l'actualisation retirés d'abord (combinaisonFuite.test.mjs, T-X10).
-  const texte = brut.replace(/^[^\n]*\[étape 38, lot 1b : ajout pur, début\][\s\S]*?\[étape 38, lot 1b : ajout pur, fin\][^\n]*\n/gm, '');
+  // Étape 36 (lot 1, 09/11/2026) : de même pour ses blocs « ajout pur » (vérifiés par coupesFrontiere.test.mjs, T-X10).
+  const texte = brut.replace(/^[^\n]*\[étape 38, lot 1b : ajout pur, début\][\s\S]*?\[étape 38, lot 1b : ajout pur, fin\][^\n]*\n/gm, '').replace(/^[^\n]*\[étape 36, lot 1 : ajout pur, début\][\s\S]*?\[étape 36, lot 1 : ajout pur, fin\][^\n]*\n/gm, '');
   const garde = [];
   const ajoutes = [];
   let dans = null;

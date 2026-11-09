@@ -32,6 +32,7 @@ import crypto from 'node:crypto';
 import { preparerCopie, executer, SERVEUR, FIXTURES, RACINE_ESSAIS } from './aides/isolement.mjs';
 import { fichiersDuMoteur, empreinteDuCode, empreinteDeLaCandidate, CANDIDATE_EN_ESSAI, MODULES_DU_MOTEUR } from '../src/core/engine/engineVersions.js';
 import * as LANC from '../src/bench/lancements.js';
+import { octetsSansLesAjoutsDe36 } from './aides/ajouts36.mjs';
 import { enregistrerLancements, fenetresVues, compterVariantes, lancementDe } from '../src/bench/trialsRegistry.js';
 import { MARCHES_CONNUS } from '../src/sports/football/markets.js';
 import { DECISION_DE_PIERRE, PERIODES_DU_BANC, PAR_CHAMPIONNAT } from '../src/data/cartons/reglagesCartons.js';
@@ -115,7 +116,9 @@ test('T-X1 l’empreinte du moteur et celle de la candidate ne bougent pas ; auc
   const empreinte = fichiersDuMoteur();
   for (const f of FICHIERS_33) assert.ok(!empreinte.includes(f), `${f} dans l’empreinte`);
   assert.ok(!MODULES_DU_MOTEUR.fichiers.some((f) => /carton/i.test(f)));
-  for (const [f, attendu] of INTERDITS) assert.equal(sha1(fs.readFileSync(path.join(SRC, f))), attendu, `${f} : retouché (interdit au lot 1 de l’étape 33)`);
+  // Étape 36 (lot 1, 09/11/2026) : settlementService.js reçoit le seul mot « export » (la règle du format, importée par data/coupes/,
+  // jamais recopiée) — comparé SANS lui (aides/ajouts36.mjs ; coupesFrontiere.test.mjs, T-X1).
+  for (const [f, attendu] of INTERDITS) assert.equal(sha1(octetsSansLesAjoutsDe36(f, fs.readFileSync(path.join(SRC, f)))), attendu, `${f} : retouché (interdit au lot 1 de l’étape 33)`);
   const contexte = fs.readdirSync(path.join(SRC, 'data', 'contexte')).map((f) => `data/contexte/${f}`).sort();
   assert.deepEqual(contexte, INTERDITS.map(([f]) => f).filter((f) => f.startsWith('data/contexte/')).sort(), 'aucun fichier ajouté ni retiré sous data/contexte/');
 });
@@ -168,7 +171,8 @@ test('T-X5 la déclaration de l’étape 33 AVANT le regard : portée à la fin 
   assert.equal(LANC.verifierLancements(), true);
   // Étape 34 (03/11/2026) : « paris-joueurs » ajoutée APRÈS « cartons-corners » (joueursFrontiere T-X5).
   // Étape 38 (04/11/2026) : « combinaison » ajoutée APRÈS « paris-joueurs » (combinaisonFrontiere T-X5).
-  assert.deepEqual([...LANC.PORTEES], ['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs', 'combinaison']);
+  // Étape 36 (lot 1, 09/11/2026) : « coupes » ajoutée APRÈS « combinaison » (coupesFrontiere T-X5).
+  assert.deepEqual([...LANC.PORTEES], ['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs', 'combinaison', 'coupes']);
   assert.equal(LANC.VUES_DE_L_ETAPE_33.length, 2);
   for (const v of LANC.VUES_DE_L_ETAPE_33) {
     assert.deepEqual([...v.pour], ['cartons-corners'], `${v.de} → ${v.a}`);
@@ -183,7 +187,8 @@ test('T-X5 la déclaration de l’étape 33 AVANT le regard : portée à la fin 
   assert.equal(l33.vues, LANC.VUES_DE_L_ETAPE_33);
   // Étape 34 (03/11/2026) : le lancement 33 n'est plus suivi que du lancement 34.
   // Étape 38 (04/11/2026) : puis le lancement 38.
-  assert.deepEqual(LANC.LANCEMENTS.slice(LANC.LANCEMENTS.indexOf(l33)).map((l) => l.etape), ['33', '34', '38'], 'le lancement 33 ajouté à la fin, puis les lancements 34 et 38');
+  // Étape 36 (lot 1, 09/11/2026) : puis le lancement 36.
+  assert.deepEqual(LANC.LANCEMENTS.slice(LANC.LANCEMENTS.indexOf(l33)).map((l) => l.etape), ['33', '34', '38', '36'], 'le lancement 33 ajouté à la fin, puis les lancements 34, 38 et 36');
   for (const portee of LANC.PORTEES.filter((p) => !['tout', 'cartons-corners'].includes(p))) assert.ok(!LANC.fenetresDeclarees({ portee }).some((f) => f.etape === '33'), portee);
   assert.ok(LANC.fenetresDeclarees({ portee: 'cartons-corners' }).some((f) => f.etape === '33'));
   // Le premier démarrage date le lancement ; les fenêtres et le compte de l'étape 27 n'en voient rien.

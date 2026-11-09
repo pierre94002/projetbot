@@ -71,6 +71,9 @@ import { usePrixJuste } from '@/composables/usePrixJuste.js';
 // Étape 32 du plan : l'encadré « Contexte du match » (repos, enchaînement, déplacement, altitude, pelouse, météo, arbitre,
 // entraîneur, enjeu) — il lit le bloc `contexte` de l'analyse et la page FotMob déjà chargés, aucune requête de plus.
 import MatchContextCard from '@/components/analysis/MatchContextCard.vue';
+// Étape 36 (lot 1) : l'encadré « Coupe » (à blanc) et la phrase « 90 minutes » près des pronostics.
+import CoupeDuMatchCard from '@/components/analysis/CoupeDuMatchCard.vue';
+import { PHRASE_90_MINUTES, montrerLaPhrase90, libelleDuTourPourLEnTete } from '@/utils/coupeDuMatch.js';
 // Étape 33 du plan : la carte « Cartons attendus — à blanc » (onglet Statistiques) — elle lit le bloc `cartons` de
 // l'analyse et la page FotMob déjà chargés, aucune requête de plus.
 import CartonsABlancCard from '@/components/analysis/CartonsABlancCard.vue';
@@ -167,6 +170,9 @@ const idsDesClubs = computed(() => {
 });
 // FotMob donne un numéro (« 35 ») ; le calendrier, « Round 35 » ou « Journée 2 ».
 const journee = computed(() => {
+  // Étape 36 : pour un match de coupe, le libellé du tour que le serveur a reconnu (« Dernier tour de qualification » pour la « final » d'août).
+  const duServeur = libelleDuTourPourLEnTete(analyse.value.result?.coupe);
+  if (duServeur) return duServeur;
   const brut = String(meta.value?.round ?? match.value?.round ?? '');
   if (!brut) return null;
   return tour(/^\d+$/.test(brut) ? `Round ${brut}` : brut, match.value?.league);
@@ -628,7 +634,11 @@ const prixJuste = usePrixJuste(
       <template v-if="tab === 'resume'">
         <nav class="upcoming__jump" aria-label="Aller à un bloc de la décision">
           <span class="upcoming__jump-label">Aller à</span>
-          <button v-for="b in BLOCS" :key="b.id" type="button" class="upcoming__jump-btn" @click="allerA(b.id)">{{ b.label }}</button>
+          <template v-for="b in BLOCS" :key="b.id">
+            <button type="button" class="upcoming__jump-btn" @click="allerA(b.id)">{{ b.label }}</button>
+            <!-- Étape 36 : le saut « Coupe » juste après le verdict, pour un match de coupe seulement. -->
+            <button v-if="b.id === 'verdict' && analyse.result?.coupe" type="button" class="upcoming__jump-btn" @click="allerA('coupe')">Coupe</button>
+          </template>
         </nav>
 
         <!-- (a) LE VERDICT PAR MARCHÉ : probabilité et cote juste du moteur, meilleure cote de vos bookmakers et son heure, value, confiance. -->
@@ -773,6 +783,10 @@ const prixJuste = usePrixJuste(
 
         <!-- Étape 28 : l'enjeu de la rencontre au classement (fins de saison allumées dans Réglages) — une information. -->
         <EnjeuDuMatch v-if="enjeuMontre" id="upcoming-enjeu" class="upcoming__block" :enjeu="enjeuMontre" />
+
+        <!-- Étape 36 : la coupe (tour, aller, chance de se qualifier à blanc, règle d'après 90 minutes, lieu) — une explication, jamais de vert ;
+             pour un match de coupe seulement. Une seule place : le lieu du match et les tirs au but sont ici. -->
+        <CoupeDuMatchCard v-if="analyse.result?.coupe" id="upcoming-coupe" class="upcoming__block" :coupe="analyse.result.coupe" :page="page" :analyse="analyse" :match="match" />
 
         <!-- Étape 32 : le contexte du match — une explication ; « Effet mesuré » seulement pour ce que le banc d'essai a prouvé
              utile, et pas encore dans les pourcentages. Une seule place : la pelouse, la météo, l'arbitre et l'entraîneur sont ici. -->
@@ -1032,6 +1046,8 @@ const prixJuste = usePrixJuste(
               Le pari conseillé par le moteur, ou la value à rafraîchir, et le verdict de chaque marché (cote, heure du relevé, value) sont en tête du Résumé.
               <button type="button" class="cm-link upcoming__moved-link" @click="voirLeVerdict">Voir le verdict</button>
             </p>
+            <!-- Étape 36 : la règle des pronostics d'un match de coupe qui peut aller en prolongation (la même constante que l'encadré « Coupe »). -->
+            <p v-if="montrerLaPhrase90(analyse.result.coupe ?? null, page.data?.meta?.round ?? null)" class="upcoming__moved" data-phrase="90-minutes">{{ PHRASE_90_MINUTES }}</p>
             <MarketPicksBoard :predictions="analyse.result.marketPredictions ?? []" :match="match" :views="aiEntry?.analysis?.marketViews ?? []" :a-verifier="analyse.result.aVerifier ?? null" :provenance-buts="provenanceButs" />
           </AppCard>
 

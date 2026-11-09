@@ -352,7 +352,7 @@ function creerRattacheur(database) {
 }
 
 /** Ce que la prolongation a recouvert : « prolongation », « tirs au but » (aucun événement après la 90e) ou les deux. */
-function quoiDeLaProlongation(reason, events) {
+export function quoiDeLaProlongation(reason, events) {
   if (reason === 'afterextra') return 'prolongation';
   return events.some((e) => Number.isFinite(Number(e?.minute)) && Number(e.minute) > 90) ? 'prolongation et tirs au but' : 'tirs au but';
 }

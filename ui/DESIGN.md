@@ -756,6 +756,33 @@ tableau des verdicts reçoit toujours null), jamais une value chiffrée ni un se
 répétée ni contredite). Aucune couleur nouvelle, aucun vert. Mots : `utils/avantDeParier.js` (pur, sans Vue ; ses mots fixes = ceux du serveur,
 `reglagesCombinaison.MOTS`, scellés dans `banc-regles-etape38.md` : `server/test/combinaisonEcran.test.mjs` le vérifie).
 
+Depuis l'étape 36 du plan (lot 1, 09/11/2026) : **la coupe d'un match, à blanc** — UN encadré, sur la page d'un match de coupe à venir, dans le Résumé,
+entre « Enjeu » (étape 28) et « Contexte du match » (étape 32) : `components/analysis/CoupeDuMatchCard.vue` (sur-titre « Coupe · à blanc », titre « {Compétition} —
+{tour}{, match aller | , match retour | , match unique} », icône `trophy`, `data-bloc="coupe"`, `id="upcoming-coupe"`, un saut « Coupe » après « Verdict »). Il ne
+LIT rien lui-même : le bloc `coupe` que le serveur joint à l'analyse (APRÈS elle : le tour, la nature du match, l'aller et l'avance au cumul, la règle d'après
+90 minutes, le lieu, la chance calculée sur la grille de CETTE page) et le tour de la page FotMob déjà chargée — aucune requête de plus. Règles de dessin :
+TOUJOURS les huit lignes (`data-ligne` : tour, aller et cumul, chance de se qualifier, après 90 minutes, tirs au but, lieu, avance au cumul, 90 minutes),
+chacune avec sa raison quand elle manque (« Lieu pas encore publié par FotMob », « Tour pas encore connu », « calculée avant le retour » — jamais « 0 » ni le
+silence) ; la pastille de chaque ligne est TOUJOURS « Explication seulement » (gris, `role="note"`, icône + mot, la phrase complète dans `aria-label`) —
+**jamais de vert sur la chance de qualification** : la chance de la page part de son 1N2 et ne sera vérifiée que sur vos matchs ; sous la chance, une
+ligne grise (`data-ligne-calibration`) dit ce que la vérification sur les matchs passés a trouvé (« annoncé x %, réalisé y % » et le mot fixé d'avance :
+« calibrée », « trop sûre d'elle », « pas assez sûre d'elle », « non tranché »). Les barres face à face de la chance sont neutres (la couleur de la
+section et le gris), jamais vert ni rouge pour une valeur, jamais `ValueBadge` ni `MatchStatBars`. Le logo du club (`TeamCrest`, identifiant FotMob) sur
+chaque ligne qui nomme un club (aller, chance, lieu) ; la compétition par le nom que l'appli lui donne. La provenance de chaque ligne (`ProvenanceChip
+variante="ligne"`) : « magasin FotMob (feuilles des matchs déjà joués) » rangé la nuit (tour, aller, règle d'après 90 minutes), « FotMob, page du match »
+relevé (le tour, le stade), « archive d'avant-match », « magasin FotMob (stades des 365 derniers jours) », « Calcul CôteMaster, à blanc : le 1N2 de cette
+page » (la chance), « votre décision du 02/11/2026 » (les tirs au but, un jour sans heure inventée) ; l'ambre au-delà de 24 h pour ce que range la nuit ;
+rien lu au magasin (la nuit pas encore passée, un club sans identifiant) : aucune provenance, jamais une date vide.
+Le tableau replié « Ce que dit le banc d'essai » (`data-tableau="banc-des-coupes"`) : cinq lignes TOUJOURS là (chance, prolongation, tirs au but, terrain
+neutre, avance au cumul), « non mesuré » ou « non mesurable » pour les quatre dernières, **Σ** des confrontations vérifiées (un compte) et **⌀** de
+l'écart moyen par dixième — jamais une somme de pourcentages. **Une seule place par information** : le lieu et les tirs au but sont dans cet encadré ;
+la distance du déplacement, le repos et la trêve restent dans « Contexte du match » ; l'enjeu dans « Enjeu » ; dans l'onglet Marchés, une ligne
+`upcoming__moved` (`data-phrase="90-minutes"`) dit « Les pronostics de cette page comptent les 90 minutes et le temps additionnel : ni la prolongation, ni
+les tirs au but. » (la même constante que l'encadré) pour un retour, un match unique, une finale ou un match à la nature inconnue ; **aucun marché
+« qualifié »** dans `MarketPicksBoard`. La pastille du tour de l'en-tête prend le libellé du serveur ; `utils/fotmobLabels.js` traduit les tours de coupe
+en anglais ou en fractions (« Quarter-finals » → « Quarts de finale », « 4th Round » → « 4e tour ») et laisse « final » entre guillemets tant que le serveur
+ne l'a pas confirmée. Mots : `utils/coupeDuMatch.js` (pur, sans Vue : `server/test/coupesEcran.test.mjs` le rejoue sur les vraies réponses du serveur).
+
 Depuis l'étape 44 du plan (23/10/2026) : **la mémoire de l'IA** — un bloc, sur la page d'une équipe, juste sous « Style de jeu »,
 `components/analysis/AiDossierCard.vue` (« Mémoire de l'IA », `data-bloc="memoire-ia"`, icône `sparkles`) ; la page « Bulletin » de l'étape 45 le réutilise tel
 quel pour une équipe, et en mode `portee="championnat"` (`GET …/dossiers?league=`) pour un championnat seul. Il LIT `GET /api/match-ai-analysis/dossiers?club=fotmob-…` (le club par son IDENTIFIANT FotMob, jamais

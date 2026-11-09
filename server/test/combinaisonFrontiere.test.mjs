@@ -31,6 +31,7 @@ import crypto from 'node:crypto';
 import { preparerCopie, executer, SERVEUR, RACINE_ESSAIS } from './aides/isolement.mjs';
 import { fichiersDuMoteur, empreinteDuCode, empreinteDeLaCandidate, CANDIDATE_EN_ESSAI, MODULES_DU_MOTEUR } from '../src/core/engine/engineVersions.js';
 import * as LANC from '../src/bench/lancements.js';
+import { octetsSansLesAjoutsDe36 } from './aides/ajouts36.mjs';
 import { enregistrerLancements, fenetresVues, compterVariantes, lancementDe } from '../src/bench/trialsRegistry.js';
 import { PERIODES_DU_BANC, DECISIONS_DE_PIERRE, CONFIG_DE_LA_REGLE } from '../src/data/combinaison/reglagesCombinaison.js';
 
@@ -287,7 +288,9 @@ test('T-X1 les empreintes ne bougent pas ; rien de l’étape 38 sous core/ ni s
   assert.ok(INTERDITS.length >= 170, `${INTERDITS.length} fichiers gelés`);
   // Lot 1b : l'actualisation reçoit deux blocs « ajout pur » de la 38 — comparée SANS eux (T-X10 de combinaisonFuite).
   for (const [f, attendu] of INTERDITS) {
-    const octets = f === 'jobs/matchStatsAutoRefresh.js' ? Buffer.from(sansBlocs38(fs.readFileSync(path.join(SRC, f), 'utf8')), 'utf8') : fs.readFileSync(path.join(SRC, f));
+    // Étape 36 (lot 1, 09/11/2026) : ses ajouts purs aux fichiers gelés (blocs de l'actualisation, « export » de settlementService.js)
+    // retirés de même (aides/ajouts36.mjs ; coupesFrontiere.test.mjs, T-X1).
+    const octets = octetsSansLesAjoutsDe36(f, f === 'jobs/matchStatsAutoRefresh.js' ? Buffer.from(sansBlocs38(fs.readFileSync(path.join(SRC, f), 'utf8')), 'utf8') : fs.readFileSync(path.join(SRC, f)));
     assert.equal(sha1(octets), attendu, `${f} : retouché (gelé pendant l’essai 27, ou interdit au lot 1a de l’étape 38)`);
   }
   for (const [f, attendu] of INTERDITS_UI) assert.equal(sha1(fs.readFileSync(path.join(RACINE, f))), attendu, `${f} : retouché`);
@@ -354,8 +357,10 @@ const DOSSIER = fs.mkdtempSync(path.join(RACINE_ESSAIS, 'cm-combinaison-registre
 after(() => fs.rmSync(DOSSIER, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 }));
 
 test('T-X5 la déclaration de l’étape 38 AVANT le regard : portée à la fin ; vues « combinaison » seulement ; 38 variantes ; lancement à la fin, daté au premier démarrage ; fenetresVues(27) et compterVariantes(27) inchangés', () => {
-  assert.equal(LANC.PORTEES.at(-1), 'combinaison');
-  assert.equal(LANC.PORTEES.at(-2), 'paris-joueurs');
+  // Étape 36 (lot 1, 09/11/2026) : « coupes » vient après « combinaison » (coupesFrontiere T-X5).
+  assert.equal(LANC.PORTEES.at(-1), 'coupes');
+  assert.equal(LANC.PORTEES.at(-2), 'combinaison');
+  assert.equal(LANC.PORTEES.at(-3), 'paris-joueurs');
   assert.ok(LANC.verifierLancements());
   for (const v of LANC.VUES_DE_L_ETAPE_38) assert.deepEqual([...v.pour], ['combinaison'], `${v.de} → ${v.a}`);
   assert.deepEqual(LANC.VUES_DE_L_ETAPE_38.map((v) => [v.de, v.a]), [['2000-07-28', '2019-06-30'], ['2019-07-01', '2023-06-30'], ['2026-10-06', '2026-10-18'], ['2023-01-01', '2023-06-30']]);
@@ -369,7 +374,9 @@ test('T-X5 la déclaration de l’étape 38 AVANT le regard : portée à la fin 
   assert.deepEqual([l38.version, l38.le], ['combinaison-v1', null]);
   assert.equal(l38.variantes, LANC.VARIANTES_DE_L_ETAPE_38);
   assert.equal(l38.vues, LANC.VUES_DE_L_ETAPE_38);
-  assert.equal(LANC.LANCEMENTS.at(-1), l38, 'le lancement 38 ajouté à la fin');
+  // Étape 36 (lot 1, 09/11/2026) : le lancement 38, puis celui de la 36.
+  assert.equal(LANC.LANCEMENTS.at(-2), l38, 'le lancement 38 ajouté à la fin, puis celui de la 36');
+  assert.equal(LANC.LANCEMENTS.at(-1).etape, '36');
   for (const portee of LANC.PORTEES.filter((p) => !['tout', 'combinaison'].includes(p))) assert.ok(!LANC.fenetresDeclarees({ portee }).some((f) => f.etape === '38'), portee);
   assert.ok(LANC.fenetresDeclarees({ portee: 'combinaison' }).some((f) => f.etape === '38'));
   const fichier = path.join(DOSSIER, 'registre-t-x5.json');

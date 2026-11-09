@@ -58,8 +58,28 @@ export async function analyzeMatchById(req, res) {
   const joueurs = sportId === 'football' ? await joueursDuMatchAnalyse(avecFraicheur) : null;
   // Étape 38 : « Avant de parier — à blanc », APRÈS l'analyse elle aussi (le verdict n'en sait rien, l'IA ne la reçoit jamais).
   const combinaison = sportId === 'football' ? await combinaisonDuMatchAnalyse(avecFraicheur, getEngineConfig(sportId)) : null;
-  const reponse = { ...analyse, ...(aVerifier ? { aVerifier } : {}), ...(simulation ? { simulation } : {}), ...(contexte ? { contexte } : {}), ...(cartons ? { cartons } : {}), ...(joueurs ? { joueurs } : {}), ...(combinaison ? { combinaison } : {}) };
+  // Étape 36 : la coupe du match (tour, aller, chance de qualification à blanc, règle d’après 90 minutes, lieu), APRÈS l’analyse elle aussi
+  // (le verdict n’en sait rien, l’IA ne la reçoit jamais) ; null hors d’une coupe.
+  const coupe = sportId === 'football' ? await coupeDuMatchAnalyse(avecFraicheur, analyse, getEngineConfig(sportId)) : null;
+  const reponse = { ...analyse, ...(aVerifier ? { aVerifier } : {}), ...(simulation ? { simulation } : {}), ...(contexte ? { contexte } : {}), ...(cartons ? { cartons } : {}), ...(joueurs ? { joueurs } : {}), ...(combinaison ? { combinaison } : {}), ...(coupe ? { coupe } : {}) };
   res.json(analyseAvecLaMise(reponse, { contexte: contexteMise, match: avecFraicheur }));
+}
+
+/**
+ * Étape 36 du plan (lot 1) : la coupe de ce match (data/coupes/coupesRead.js) — le tour en français, le score de l’aller et
+ * l’avance au cumul, la chance de se qualifier À BLANC (la grille de CETTE analyse, le 1N2 affiché : les deux chiffres ne se
+ * contredisent jamais ; puis pile ou face), la règle d’après 90 minutes de la compétition et le lieu — lus par identifiants
+ * FotMob et par clé (jamais une passe dans la requête). Le module est chargé par un import() DYNAMIQUE : une erreur dans
+ * data/coupes/ n’empêche jamais l’analyse de répondre (l’encadré dit alors « illisible »). Ajouté APRÈS l’analyse : le
+ * verdict du moteur n’en sait rien, l’analyse IA ne le reçoit jamais ; null pour un match qui n’est pas de coupe.
+ */
+async function coupeDuMatchAnalyse(match, analyse, config) {
+  try {
+    const { coupeDuMatch } = await import('../../data/coupes/coupesRead.js');
+    return coupeDuMatch({ match, analyse, config, database: openDb(), maintenant: Date.now() });
+  } catch {
+    return { version: 1, etat: 'illisible', raison: 'lecture-ratee' };
+  }
 }
 
 /**

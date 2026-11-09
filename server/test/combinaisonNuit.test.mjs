@@ -163,7 +163,8 @@ test('T-N6 la fuite plantée → le second chemin la nomme, rien de rangé, l’
 
 test('T-N7 la place dans ETAPES, une fois par jour, jamais au clic ; le résumé ; le neuvième contrôle anti-fuite de l’écran', async () => {
   const etapes = JOB.ETAPES().map((e) => e.key);
-  assert.deepEqual(etapes.slice(-4), ['cartonsEtCorners', 'joueursABlanc', 'combinaisonABlanc', 'controleQuotidien']);
+  // Étape 36 (lot 1, 09/11/2026) : les coupes à blanc entre la combinaison à blanc et le contrôle quotidien.
+  assert.deepEqual(etapes.slice(-5), ['cartonsEtCorners', 'joueursABlanc', 'combinaisonABlanc', 'coupesEtMatchsAPart', 'controleQuotidien']);
   for (const avant of ['moteurABlanc', 'gelPronostics', 'sauvegarde', 'contexteDuMatch']) assert.ok(etapes.indexOf('combinaisonABlanc') > etapes.indexOf(avant), `après ${avant}`);
   const ctx = (derniere, details = null, manuel = false) => ({ manuel, derniere: () => derniere, derniersDetails: () => details });
   assert.equal(COMB.dueCombinaisonABlanc(ctx(null)), true);

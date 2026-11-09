@@ -908,7 +908,9 @@ test('les DEUX ÉTAPES de l’actualisation : après le carnet de l’IA, avant 
   assert.equal(s.etapes[i + 5], 'joueursABlanc');
   // Étape 38 (lot 1b, 04/11/2026) : la combinaison à blanc suit les chiffres des joueurs.
   assert.equal(s.etapes[i + 6], 'combinaisonABlanc');
-  assert.equal(s.etapes[i + 7], 'controleQuotidien');
+  // Étape 36 (lot 1, 09/11/2026) : les coupes à blanc suivent la combinaison à blanc.
+  assert.equal(s.etapes[i + 7], 'coupesEtMatchsAPart');
+  assert.equal(s.etapes[i + 8], 'controleQuotidien');
   assert.equal(s.etapes.at(-1), 'controleQuotidien');
   assert.equal(s.etapes.filter((k) => k === 'bulletin' || k === 'bilanSemaine').length, 2);
   assert.deepEqual(s.labels, { bulletin: "Bulletin du jour (texte de l'IA, un seul appel par jour)", bilanSemaine: "Bilan de la semaine (texte de l'IA, un seul appel par semaine)" });

@@ -1883,6 +1883,97 @@ const COMBINAISON_DDL = [
   `CREATE TABLE IF NOT EXISTS combinaison_etat (cle TEXT PRIMARY KEY, valeur TEXT NOT NULL) WITHOUT ROWID;`
 ];
 
+/**
+ * Étape 36 (lot 1, 09/11/2026 ; ajout PUR, règle du gel) : les COUPES ET LES MATCHS À PART (data/coupes/), hors de
+ * l'empreinte du moteur — rien ici n'est lu par l'empreinte ni par la fermeture des imports ; écrites par la nuit seule
+ * (le serveur, seul écrivain), jamais un JSON sous OneDrive :
+ *   coupes_rencontres  chaque rencontre de coupe : son tour normalisé, son bloc et la nature du bloc, son rôle (aller,
+ *                      retour, match unique, finale, rejouage), son aller et l'avance au cumul, son issue et l'observation
+ *                      de la règle d'après 90 minutes, son lieu ; les coupes-saisons actives réécrites chaque nuit ;
+ *   coupes_formats     la règle d'après 90 minutes observée par (coupe, saison, nature) ;
+ *   coupes_stades      les stades habituels de chaque club (365 jours, par identifiant FotMob) ;
+ *   coupes_lignes      la FICHE FIGÉE de chaque match de coupe des 14 prochains jours (aller, nature présumée, format, lieu,
+ *                      grille de la page de l'étape 28) — jamais réécrite après le coup d'envoi, jamais élaguée pour un
+ *                      match joué : la preuve après lancement de la chance affichée ;
+ *   coupes_etat        la nuit, le calendrier des matchs de coupe, les contrôles.
+ * Trois index étroits (les lectures de la page par clé). Chaque entrée commence par son ordre (aucun commentaire devant).
+ */
+const COUPES_DDL = [
+  `CREATE TABLE IF NOT EXISTS coupes_rencontres (
+  match_key TEXT PRIMARY KEY,
+  league TEXT NOT NULL,
+  saison INTEGER NOT NULL,
+  date TEXT NOT NULL,
+  home_id TEXT,
+  away_id TEXT,
+  tour_brut TEXT,
+  tour TEXT NOT NULL,
+  famille TEXT NOT NULL,
+  bloc TEXT NOT NULL,
+  nature_du_bloc TEXT NOT NULL,
+  role TEXT,
+  aller_key TEXT,
+  avance INTEGER,
+  buts_dom INTEGER,
+  buts_ext INTEGER,
+  bp90 INTEGER,
+  bc90 INTEGER,
+  fin TEXT,
+  observation_format TEXT,
+  seance_carte TEXT,
+  seance_suite TEXT,
+  qualifie TEXT,
+  comment TEXT,
+  raison TEXT,
+  stade TEXT,
+  lieu TEXT,
+  version INTEGER NOT NULL
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS coupes_formats (
+  league TEXT NOT NULL,
+  saison INTEGER NOT NULL,
+  nature TEXT NOT NULL,
+  format TEXT NOT NULL,
+  prolongations INTEGER NOT NULL,
+  directs INTEGER NOT NULL,
+  indetermines INTEGER NOT NULL,
+  buts_exterieur INTEGER NOT NULL DEFAULT 0,
+  calcule_le TEXT NOT NULL,
+  version INTEGER NOT NULL,
+  PRIMARY KEY (league, saison, nature)
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS coupes_stades (
+  club TEXT PRIMARY KEY,
+  stade TEXT NOT NULL,
+  receptions INTEGER NOT NULL,
+  autres TEXT,
+  lat REAL,
+  long REAL,
+  calcule_le TEXT NOT NULL,
+  version INTEGER NOT NULL
+) WITHOUT ROWID;`,
+  `CREATE TABLE IF NOT EXISTS coupes_lignes (
+  id INTEGER PRIMARY KEY,
+  date TEXT NOT NULL,
+  home_id TEXT NOT NULL,
+  away_id TEXT NOT NULL,
+  league TEXT NOT NULL,
+  match_id TEXT,
+  kickoff TEXT,
+  kickoff_connu INTEGER NOT NULL DEFAULT 0,
+  calcule_le TEXT NOT NULL,
+  version INTEGER NOT NULL,
+  apres_coup_d_envoi INTEGER NOT NULL DEFAULT 0,
+  faits TEXT NOT NULL,
+  grille_page TEXT,
+  UNIQUE (date, home_id, away_id)
+);`,
+  `CREATE TABLE IF NOT EXISTS coupes_etat (cle TEXT PRIMARY KEY, valeur TEXT NOT NULL) WITHOUT ROWID;`,
+  'CREATE INDEX IF NOT EXISTS idx_coupes_rencontres_paire ON coupes_rencontres(league, home_id, away_id, date);',
+  'CREATE INDEX IF NOT EXISTS idx_coupes_rencontres_ligue ON coupes_rencontres(league, date);',
+  'CREATE INDEX IF NOT EXISTS idx_coupes_lignes_date ON coupes_lignes(date);'
+];
+
 const FD_HISTORY_INDEXES = [
   'CREATE INDEX IF NOT EXISTS idx_fd_history_code_date ON fd_history(code, date);',
   'CREATE INDEX IF NOT EXISTS idx_fd_history_dom ON fd_history(dom);',
@@ -1938,6 +2029,7 @@ const DDL = [
   ...CARTONS_DDL,
   ...JOUEURS_DDL,
   ...COMBINAISON_DDL,
+  ...COUPES_DDL,
   'CREATE INDEX IF NOT EXISTS idx_matches_date ON matches(date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_league_date ON matches(league, date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_home ON matches(home_name);',

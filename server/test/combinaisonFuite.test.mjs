@@ -296,7 +296,8 @@ function blocs38(texte) {
 test('T-X10 l’actualisation (gelée pendant l’essai 27) : sans ses deux blocs « ajout pur » de la 38, identique À L’OCTET ; les blocs n’écrivent rien et n’atteignent data/combinaison/ que par import() ; les autres tables identiques avec et sans l’étape', () => {
   const [f, attendu] = GELE_RETOUCHE;
   const texte = fs.readFileSync(path.join(SRC, f), 'utf8');
-  const { garde, ajoutes } = blocs38(texte);
+  // Étape 36 (lot 1, 09/11/2026) : ses deux blocs « ajout pur » retirés d'abord (vérifiés par coupesFrontiere.test.mjs, T-X10).
+  const { garde, ajoutes } = blocs38(texte.replace(/^[^\n]*\[étape 36, lot 1 : ajout pur, début\][\s\S]*?\[étape 36, lot 1 : ajout pur, fin\][^\n]*\n/gm, ''));
   assert.equal(ajoutes.length, 2, 'deux blocs ajoutés');
   assert.equal(crypto.createHash('sha1').update(Buffer.from(garde, 'utf8')).digest('hex'), attendu, 'hors des blocs marqués, rien ne change');
   for (const b of ajoutes) {
@@ -332,7 +333,8 @@ test('T-X11 le serveur, la passe et la route de l’analyse se chargent quand da
   assert.ok(s.cles.includes('prediction') && s.cles.includes('staking') && s.cles.includes('mise'), 'l’analyse est entière');
   assert.equal(s.etape.status, 'error');
   assert.match(s.etape.summary, /le module de la combinaison ne se charge pas \(dossier de la combinaison cassé \(essai\)\)/);
-  assert.deepEqual(s.etapesChargees, ['joueursABlanc', 'combinaisonABlanc', 'controleQuotidien']);
+  // Étape 36 (lot 1, 09/11/2026) : les coupes à blanc entre la combinaison à blanc et le contrôle quotidien (les trois dernières étapes chargées).
+  assert.deepEqual(s.etapesChargees, ['combinaisonABlanc', 'coupesEtMatchsAPart', 'controleQuotidien']);
   // Rien de statique : ni l'actualisation, ni le contrôleur, ni le serveur n'importent data/combinaison/ autrement que par import().
   for (const f of ['jobs/matchStatsAutoRefresh.js', 'api/controllers/analysis.controller.js', 'server.js', 'app.js']) {
     assert.doesNotMatch(fs.readFileSync(path.join(SRC, f), 'utf8'), /^import [^;]*combinaison/m, f);

@@ -418,7 +418,8 @@ test('l’étape « carnetIA » : après la sauvegarde, avant le contrôle quoti
   // 03/11/2026) : les cartons et corners suivent le contexte du match, avant le contrôle quotidien.
   // Étape 34 (lot 1b, 03/11/2026) : les chiffres des joueurs suivent les cartons et corners.
   // Étape 38 (lot 1b, 04/11/2026) : la combinaison à blanc entre les chiffres des joueurs et le contrôle quotidien.
-  assert.deepEqual(s.etapes.slice(i + 1), ['dossiersIA', 'bulletin', 'bilanSemaine', 'resumeCorrection', 'contexteDuMatch', 'cartonsEtCorners', 'joueursABlanc', 'combinaisonABlanc', 'controleQuotidien']);
+  // Étape 36 (lot 1, 09/11/2026) : les coupes à blanc entre la combinaison à blanc et le contrôle quotidien.
+  assert.deepEqual(s.etapes.slice(i + 1), ['dossiersIA', 'bulletin', 'bilanSemaine', 'resumeCorrection', 'contexteDuMatch', 'cartonsEtCorners', 'joueursABlanc', 'combinaisonABlanc', 'coupesEtMatchsAPart', 'controleQuotidien']);
   assert.equal(s.etapes.at(-1), 'controleQuotidien');
   assert.equal(s.etapes.filter((k) => k === 'carnetIA').length, 1);
   assert.equal(s.ecrituresDuCalcul, 0, 'le calcul n’écrit rien dans la base');

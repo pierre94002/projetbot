@@ -98,7 +98,9 @@ export const DONNEES_VUES = Object.freeze([
  */
 // Étape 38 (lot 1a, 03-04/11/2026) : « combinaison » — la combinaison, la confiance et le seuil de value mesurés à blanc
 // (data/combinaison/) ; jamais lus par le moteur au lot 1 (la candidate du lot 2 recopierait ces vues avec `pour: ['moteur']`).
-export const PORTEES = Object.freeze(['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs', 'combinaison']);
+// Étape 36 (lot 1, 09/11/2026) : « coupes » — l’appariement des confrontations, la chance de qualification à blanc et sa
+// calibration rapportée (data/coupes/) ; jamais lus par le moteur.
+export const PORTEES = Object.freeze(['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs', 'combinaison', 'coupes']);
 
 /** Une fenêtre vaut-elle pour cette mesure ? `tout` vaut pour toutes. */
 export const pourLaPortee = (pour, portee) => Array.isArray(pour) && (pour.includes(portee) || pour.includes('tout'));
@@ -841,6 +843,43 @@ export const VARIANTES_DE_L_ETAPE_38 = Object.freeze([
 ]);
 
 /**
+ * Les fenêtres REGARDÉES par l'étape 36 (coupes et matchs à part, lot 1 du 09/11/2026 ; data/coupes/), portée « coupes »
+ * (déclarée DANS chaque fenêtre : le juge de l'essai de l'étape 27 n'en voit rien) : le magasin 2023-07-01 → 2026-09-23 où
+ * la calibration de la chance de qualification (UN seul regard, rapporté ; aucun banc de pronostic : décisions de
+ * l'orchestrateur du 02/11/2026) apprend le recalage de la base sur un pli et lit la calibration sur l'autre, puis
+ * l'inverse, et où les comptes d'avant le regard (appariement, fins, règle d'après 90 minutes, séances, lieux — sans base
+ * ni probabilité) sont pris ; la mise en route 2023-01-01 → 2023-06-30 (forces accumulées), où la conception a lu, dans
+ * l'export gelé du 22/09, des comptes et des égalités (buts des prolongations, paires, stades). Les comptes de
+ * l'orchestrateur et les requêtes de la critique (fins, paires, séances, intitulés) n'ont lu aucun pronostic. Jamais P5
+ * (depuis le 24/09/2026) pour un résultat : c'est la preuve après lancement (les fiches figées de la nuit).
+ */
+export const VUES_DE_L_ETAPE_36 = Object.freeze([
+  Object.freeze({
+    de: '2023-07-01',
+    a: '2026-09-23',
+    quoi: 'Étape 36 : calibration de la chance de qualification, un seul regard, rapportée (aucun banc de pronostic) — le recalage de la base appris sur 2023-07 → 2025-06 et la calibration lue sur 2025-07 → 2026-09-23, puis l’inverse ; avant lui, les comptes (appariement, fins, règle d’après 90 minutes, vainqueurs des séances, lieux), sans base ni probabilité.',
+    pour: Object.freeze(['coupes'])
+  }),
+  Object.freeze({
+    de: '2023-01-01',
+    a: '2023-06-30',
+    quoi: 'Étape 36 : mise en route (forces accumulées, rien d’appris ni de jugé) ; la conception y a lu, dans l’export gelé du 22/09, les buts des 26 prolongations à déroulé complet, les paires inversées et les stades de 12 coupes, sans base ni perte.',
+    pour: Object.freeze(['coupes'])
+  })
+]);
+
+/**
+ * Le SEUL regard de l'étape 36, déclaré AVANT lui (critique de l'étape 36, constats 1 et 2 ; décision 2 de l'orchestrateur
+ * du 02/11/2026) : la fiche retenue (coupes-v1 : appariement, issue, règle d'après 90 minutes du correctif du règlement,
+ * lieu, chance v1 « pile ou face » après 90 minutes), dont la calibration est RAPPORTÉE avec des bornes fixées d'avance —
+ * aucune variante comparée (K = 1). La prolongation modélisée, l'avance au cumul et les tirs au but « favori » ne sont pas
+ * mesurés au lot 1 ; une mesure de plus = un identifiant de plus, déclaré avant son passage.
+ */
+export const VARIANTES_DE_L_ETAPE_36 = Object.freeze([
+  Object.freeze({ id: 'coupes-v1', quoi: 'Fiche retenue (version 1) : confrontations appariées par identifiants FotMob (tour normalisé, nature par la forme du bloc, rejouages, 3e place et tours préliminaires jamais pris pour la finale), issue et vainqueur des séances (carte des tirs, puis tour suivant), règle d’après 90 minutes du correctif du règlement en service, lieu (stades habituels sur 365 jours), chance de qualification = le 1N2 des 90 minutes et le cumul, puis pile ou face ; sa calibration rapportée (Cox, dixièmes, bornes fixées d’avance), jamais un verdict.' })
+]);
+
+/**
  * Les lancements déclarés par les étapes, dans l'ordre où elles sont faites. À la FIN d'une étape qui
  * touche aux chiffres : ajouter son entrée ici (version en service, ce qu'elle change, TOUTES les
  * variantes dont on a regardé le résultat pendant la construction, les fenêtres de données regardées).
@@ -950,6 +989,17 @@ export const LANCEMENTS = Object.freeze([
     le: null,
     variantes: VARIANTES_DE_L_ETAPE_38,
     vues: VUES_DE_L_ETAPE_38
+  }),
+  // Étape 36 (lot 1, 09/11/2026) : les coupes et les matchs à part — l'appariement des confrontations, la chance de
+  // qualification à blanc et sa calibration rapportée ; ils ne règlent aucun chiffre du moteur (portée 'coupes'). Datée du
+  // premier démarrage de l'appli avec ce code ; son regard et ses vues déclarés AVANT le passage unique.
+  Object.freeze({
+    etape: '36',
+    version: 'coupes-v1',
+    quoi: 'Coupes et matchs à part : le tour en français, le score de l’aller et ce qu’il faut à chacun, la chance de se qualifier (le 1N2 des 90 minutes de la page, le cumul, puis pile ou face), la règle d’après 90 minutes de la compétition et le lieu ; calculés à blanc, la chance vérifiée une fois sur les matchs passés, jamais lus par le moteur.',
+    le: null,
+    variantes: VARIANTES_DE_L_ETAPE_36,
+    vues: VUES_DE_L_ETAPE_36
   })
 ]);
 

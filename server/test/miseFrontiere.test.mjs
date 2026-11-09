@@ -34,6 +34,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 import { preparerCopie, executer, SERVEUR, FIXTURES } from './aides/isolement.mjs';
+import { octetsSansLesAjoutsDe36 } from './aides/ajouts36.mjs';
 import { fichiersDuMoteur, empreinteDuCode, empreinteDeLaCandidate, CANDIDATE_EN_ESSAI, MODULES_DU_MOTEUR } from '../src/core/engine/engineVersions.js';
 import * as R from '../src/data/mise/regleDeMise.js';
 import { conseilDuPari } from '../src/data/screener.js';
@@ -373,7 +374,8 @@ test('T-X7 le jugement PROVISOIRE de l’essai de l’étape 27 (moteurABlanc, e
   assert.equal(s.variantes27, 320);
   // L'étape 39 n'a déclaré aucun lancement au lot 1a (le banc est au lot 1b) : les lancements vus sont ceux de 32, 33, 34 et 38.
   assert.ok(!s.lancementsVus.some((x) => x.startsWith('39:')), 'aucun lancement de l’étape 39 au lot 1a');
-  assert.deepEqual(s.lancementsVus.filter((x) => !['32:contexte-v1', '33:cartons-corners-v1', '34:joueurs-v1', '38:combinaison-v1'].includes(x)), figee.lancementsVus);
+  // Étape 36 (lot 1, 09/11/2026) : le lancement 36, noté au premier démarrage lui aussi — rien d'autre ne bouge.
+  assert.deepEqual(s.lancementsVus.filter((x) => !['32:contexte-v1', '33:cartons-corners-v1', '34:joueurs-v1', '38:combinaison-v1', '36:coupes-v1'].includes(x)), figee.lancementsVus);
 });
 
 test('T-X12 les sha1 de la partie 0 : tous les fichiers gelés identiques à l’octet (autoMatchAiTrigger.js et matchAiAnalysisService.js compris)', () => {
@@ -384,7 +386,9 @@ test('T-X12 les sha1 de la partie 0 : tous les fichiers gelés identiques à l�
   for (const [f, attendu] of GELES) {
     const chemin = f.startsWith('ui/') ? path.join(RACINE, f) : path.join(SRC, f);
     // Étape 38 (lot 1b, 04/11/2026) : l'actualisation comparée sans ses blocs « ajout pur » de la 38 (combinaisonFuite.test.mjs, T-X10).
-    const octets = f === 'jobs/matchStatsAutoRefresh.js' ? Buffer.from(fs.readFileSync(chemin, 'utf8').replace(/^[^\n]*\[étape 38, lot 1b : ajout pur, début\][\s\S]*?\[étape 38, lot 1b : ajout pur, fin\][^\n]*\n/gm, ''), 'utf8') : fs.readFileSync(chemin);
+    // Étape 36 (lot 1, 09/11/2026) : ses ajouts purs aux fichiers gelés (lancements.js, matchStatsDb.js, l'actualisation, settlementService.js)
+    // retirés de même (aides/ajouts36.mjs ; coupesFrontiere.test.mjs, T-X1).
+    const octets = octetsSansLesAjoutsDe36(f, f === 'jobs/matchStatsAutoRefresh.js' ? Buffer.from(fs.readFileSync(chemin, 'utf8').replace(/^[^\n]*\[étape 38, lot 1b : ajout pur, début\][\s\S]*?\[étape 38, lot 1b : ajout pur, fin\][^\n]*\n/gm, ''), 'utf8') : fs.readFileSync(chemin));
     assert.equal(sha1(octets), attendu, `${f} : retouché (gelé pendant l’essai 27)`);
   }
   // autoMatchAiTrigger.js garde sa base interne de 10 000 (aucune mise n'en sort vers Pierre : le prompt passe par compactContext.js).

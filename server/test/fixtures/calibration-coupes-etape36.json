@@ -1,0 +1,693 @@
+{
+ "format": 1,
+ "quoi": "Calibration de la chance de qualification (étape 36, lot 1) : le passage unique, rapporté (aucun banc de pronostic).",
+ "ou": "bac à sable",
+ "premierRegard": "2026-11-09T13:28:34.265Z",
+ "fin": "2026-11-09T13:28:45.970Z",
+ "dureeS": 11.7,
+ "base": {
+  "fichier": "C:\\Users\\PC\\CoteMaster\\bac-a-sable\\base\\match-stats.db",
+  "lectureSeule": true
+ },
+ "passeDePierre": {
+  "verifiee": true,
+  "attenduS": 0
+ },
+ "regles": {
+  "fichier": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\C--Users-PC-OneDrive-Bureau-developement-ProjetBot\\c4b41134-df35-4d3f-be49-63a4f15181fd\\scratchpad\\etape36\\banc-regles.md",
+  "sha1": "76b221587a87abd0933aa47ad1b5e24d3996744d",
+  "copie": "test/fixtures/banc-regles-etape36.md"
+ },
+ "verrou": {
+  "fichier": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\C--Users-PC-OneDrive-Bureau-developement-ProjetBot\\c4b41134-df35-4d3f-be49-63a4f15181fd\\scratchpad\\etape36\\calibration-passage-reel.lock",
+  "pose": "2026-11-09T13:28:34.265Z"
+ },
+ "decisionDePierre": {
+  "qualifieDansLaSaisie": null,
+  "tirsAuBut": {
+   "valeur": "50/50",
+   "date": "2026-11-02"
+  },
+  "finaleAuStadeDUnClub": {
+   "valeur": "pas-neutre-pour-lui",
+   "date": "2026-11-02"
+  },
+  "prolongeRegleA90": {
+   "valeur": "correctif-du-reglement",
+   "date": "2026-11-02"
+  }
+ },
+ "bornes": {
+  "beta": [
+   0.85,
+   1.15
+  ],
+  "alpha": [
+   -0.15,
+   0.15
+  ],
+  "ecartMoyenMax": 0.03
+ },
+ "empreinteDuMoteur": {
+  "sha1": "16f2459db183a99576365047da98b7777687ef05",
+  "fichiers": 37,
+  "candidate": "f01dd8496f56a415"
+ },
+ "rejeu": null,
+ "comptes": {
+  "rencontresLuesParLaPasse": 60059,
+  "unites": 5719,
+  "parNature": {
+   "match-unique": 4248,
+   "retour": 1414,
+   "finale": 57
+  },
+  "exclusions": {
+   "cumul-egal-sans-prolongation": 22,
+   "seance-inconnue": 13,
+   "attribue-ou-non-joue": 10
+  },
+  "dernierJourLu": "2026-09-23"
+ },
+ "durees": {
+  "appariement": 1459,
+  "passe": 3710,
+  "calibration": 6289,
+  "total": 11468
+ },
+ "aPart": {
+  "pid": 14968,
+  "rssMaxOctets": 188465152
+ },
+ "calibration": {
+  "recalages": [
+   {
+    "pli": 0,
+    "cDom": 0.048131,
+    "cExt": 0.055926,
+    "n": 3387
+   },
+   {
+    "pli": 1,
+    "cDom": 0.045455,
+    "cExt": 0.025053,
+    "n": 2027
+   }
+  ],
+  "toutes": {
+   "n": 5719,
+   "alpha": 0.008706,
+   "beta": 0.651787,
+   "alphaIc": [
+    -0.043824,
+    0.062112
+   ],
+   "betaIc": [
+    0.59733,
+    0.710149
+   ],
+   "dixiemes": [
+    {
+     "n": 571,
+     "chance": 0.112694,
+     "frequence": 0.185639
+    },
+    {
+     "n": 572,
+     "chance": 0.253679,
+     "frequence": 0.309441
+    },
+    {
+     "n": 572,
+     "chance": 0.32834,
+     "frequence": 0.426573
+    },
+    {
+     "n": 572,
+     "chance": 0.39263,
+     "frequence": 0.444056
+    },
+    {
+     "n": 572,
+     "chance": 0.462634,
+     "frequence": 0.52972
+    },
+    {
+     "n": 572,
+     "chance": 0.522976,
+     "frequence": 0.508741
+    },
+    {
+     "n": 572,
+     "chance": 0.576631,
+     "frequence": 0.545455
+    },
+    {
+     "n": 572,
+     "chance": 0.627577,
+     "frequence": 0.52972
+    },
+    {
+     "n": 572,
+     "chance": 0.706969,
+     "frequence": 0.641608
+    },
+    {
+     "n": 572,
+     "chance": 0.878688,
+     "frequence": 0.804196
+    }
+   ],
+   "ecartMoyen": 0.062857,
+   "tirages": {
+    "demandes": 1000,
+    "valides": 1000,
+    "graine": 36
+   },
+   "mot": "trop sûre d’elle",
+   "annonce": 0.676317,
+   "realise": 0.614268
+  },
+  "retours": {
+   "n": 1414,
+   "alpha": 0.10874,
+   "beta": 0.892072,
+   "alphaIc": [
+    -0.01938,
+    0.240589
+   ],
+   "betaIc": [
+    0.789532,
+    1.016997
+   ],
+   "dixiemes": [
+    {
+     "n": 141,
+     "chance": 0.028984,
+     "frequence": 0.049645
+    },
+    {
+     "n": 141,
+     "chance": 0.127631,
+     "frequence": 0.12766
+    },
+    {
+     "n": 142,
+     "chance": 0.265768,
+     "frequence": 0.28169
+    },
+    {
+     "n": 141,
+     "chance": 0.36895,
+     "frequence": 0.496454
+    },
+    {
+     "n": 142,
+     "chance": 0.477651,
+     "frequence": 0.570423
+    },
+    {
+     "n": 141,
+     "chance": 0.597386,
+     "frequence": 0.510638
+    },
+    {
+     "n": 141,
+     "chance": 0.689086,
+     "frequence": 0.702128
+    },
+    {
+     "n": 142,
+     "chance": 0.798461,
+     "frequence": 0.816901
+    },
+    {
+     "n": 141,
+     "chance": 0.900179,
+     "frequence": 0.865248
+    },
+    {
+     "n": 142,
+     "chance": 0.981567,
+     "frequence": 0.978873
+    }
+   ],
+   "ecartMoyen": 0.041274,
+   "tirages": {
+    "demandes": 1000,
+    "valides": 1000,
+    "graine": 36
+   },
+   "mot": null,
+   "annonce": 0.771006,
+   "realise": 0.745403
+  },
+  "parNature": {
+   "retour": {
+    "n": 1414,
+    "alpha": 0.10874,
+    "beta": 0.892072,
+    "alphaIc": [
+     -0.01938,
+     0.240589
+    ],
+    "betaIc": [
+     0.789532,
+     1.016997
+    ],
+    "dixiemes": [
+     {
+      "n": 141,
+      "chance": 0.028984,
+      "frequence": 0.049645
+     },
+     {
+      "n": 141,
+      "chance": 0.127631,
+      "frequence": 0.12766
+     },
+     {
+      "n": 142,
+      "chance": 0.265768,
+      "frequence": 0.28169
+     },
+     {
+      "n": 141,
+      "chance": 0.36895,
+      "frequence": 0.496454
+     },
+     {
+      "n": 142,
+      "chance": 0.477651,
+      "frequence": 0.570423
+     },
+     {
+      "n": 141,
+      "chance": 0.597386,
+      "frequence": 0.510638
+     },
+     {
+      "n": 141,
+      "chance": 0.689086,
+      "frequence": 0.702128
+     },
+     {
+      "n": 142,
+      "chance": 0.798461,
+      "frequence": 0.816901
+     },
+     {
+      "n": 141,
+      "chance": 0.900179,
+      "frequence": 0.865248
+     },
+     {
+      "n": 142,
+      "chance": 0.981567,
+      "frequence": 0.978873
+     }
+    ],
+    "ecartMoyen": 0.041274,
+    "tirages": {
+     "demandes": 1000,
+     "valides": 1000,
+     "graine": 36
+    },
+    "mot": null,
+    "annonce": 0.771006,
+    "realise": 0.745403
+   },
+   "match-unique": {
+    "n": 4248,
+    "alpha": -0.037619,
+    "beta": 0.463839,
+    "alphaIc": [
+     -0.096249,
+     0.021351
+    ],
+    "betaIc": [
+     0.384585,
+     0.550166
+    ],
+    "dixiemes": [
+     {
+      "n": 424,
+      "chance": 0.169914,
+      "frequence": 0.301887
+     },
+     {
+      "n": 425,
+      "chance": 0.27802,
+      "frequence": 0.348235
+     },
+     {
+      "n": 425,
+      "chance": 0.337798,
+      "frequence": 0.411765
+     },
+     {
+      "n": 425,
+      "chance": 0.396174,
+      "frequence": 0.437647
+     },
+     {
+      "n": 425,
+      "chance": 0.459366,
+      "frequence": 0.529412
+     },
+     {
+      "n": 424,
+      "chance": 0.511354,
+      "frequence": 0.492925
+     },
+     {
+      "n": 425,
+      "chance": 0.562431,
+      "frequence": 0.571765
+     },
+     {
+      "n": 425,
+      "chance": 0.596066,
+      "frequence": 0.517647
+     },
+     {
+      "n": 425,
+      "chance": 0.655191,
+      "frequence": 0.541176
+     },
+     {
+      "n": 425,
+      "chance": 0.764956,
+      "frequence": 0.611765
+     }
+    ],
+    "ecartMoyen": 0.076106,
+    "tirages": {
+     "demandes": 1000,
+     "valides": 1000,
+     "graine": 36
+    },
+    "mot": null,
+    "annonce": 0.645184,
+    "realise": 0.571798
+   },
+   "finale": {
+    "n": 57,
+    "alpha": -0.03574,
+    "beta": 0.487857,
+    "alphaIc": [
+     -0.639218,
+     0.502999
+    ],
+    "betaIc": [
+     -0.162223,
+     1.285019
+    ],
+    "dixiemes": [
+     {
+      "n": 5,
+      "chance": 0.197673,
+      "frequence": 0.2
+     },
+     {
+      "n": 6,
+      "chance": 0.303226,
+      "frequence": 0.666667
+     },
+     {
+      "n": 6,
+      "chance": 0.433077,
+      "frequence": 0.333333
+     },
+     {
+      "n": 5,
+      "chance": 0.484112,
+      "frequence": 0.8
+     },
+     {
+      "n": 6,
+      "chance": 0.529068,
+      "frequence": 0.166667
+     },
+     {
+      "n": 6,
+      "chance": 0.570826,
+      "frequence": 0.333333
+     },
+     {
+      "n": 5,
+      "chance": 0.612969,
+      "frequence": 0.8
+     },
+     {
+      "n": 6,
+      "chance": 0.671305,
+      "frequence": 0.5
+     },
+     {
+      "n": 6,
+      "chance": 0.714798,
+      "frequence": 0.833333
+     },
+     {
+      "n": 6,
+      "chance": 0.791892,
+      "frequence": 0.5
+     }
+    ],
+    "ecartMoyen": 0.215006,
+    "tirages": {
+     "demandes": 1000,
+     "valides": 1000,
+     "graine": 36
+    },
+    "mot": null,
+    "annonce": 0.647556,
+    "realise": 0.526316
+   }
+  },
+  "unNDeuxA90": {
+   "n": 5414,
+   "home": {
+    "n": 5414,
+    "alpha": -0.112556,
+    "beta": 0.436344,
+    "alphaIc": [
+     -0.172133,
+     -0.051873
+    ],
+    "betaIc": [
+     0.374092,
+     0.506329
+    ],
+    "dixiemes": [
+     {
+      "n": 541,
+      "chance": 0.10332,
+      "frequence": 0.23475
+     },
+     {
+      "n": 541,
+      "chance": 0.193044,
+      "frequence": 0.32902
+     },
+     {
+      "n": 542,
+      "chance": 0.26253,
+      "frequence": 0.346863
+     },
+     {
+      "n": 541,
+      "chance": 0.327559,
+      "frequence": 0.417745
+     },
+     {
+      "n": 542,
+      "chance": 0.379675,
+      "frequence": 0.446494
+     },
+     {
+      "n": 541,
+      "chance": 0.428019,
+      "frequence": 0.426987
+     },
+     {
+      "n": 541,
+      "chance": 0.464219,
+      "frequence": 0.443623
+     },
+     {
+      "n": 542,
+      "chance": 0.514915,
+      "frequence": 0.47048
+     },
+     {
+      "n": 541,
+      "chance": 0.577701,
+      "frequence": 0.54159
+     },
+     {
+      "n": 542,
+      "chance": 0.698802,
+      "frequence": 0.542435
+     }
+    ],
+    "ecartMoyen": 0.076729,
+    "tirages": {
+     "demandes": 1000,
+     "valides": 1000,
+     "graine": 36
+    },
+    "mot": null
+   },
+   "draw": {
+    "n": 5414,
+    "alpha": -1.381276,
+    "beta": 0.069842,
+    "alphaIc": [
+     -1.683972,
+     -1.064328
+    ],
+    "betaIc": [
+     -0.171375,
+     0.342505
+    ],
+    "dixiemes": [
+     {
+      "n": 541,
+      "chance": 0.14319,
+      "frequence": 0.195933
+     },
+     {
+      "n": 541,
+      "chance": 0.194718,
+      "frequence": 0.203327
+     },
+     {
+      "n": 542,
+      "chance": 0.21485,
+      "frequence": 0.182657
+     },
+     {
+      "n": 541,
+      "chance": 0.227963,
+      "frequence": 0.171904
+     },
+     {
+      "n": 542,
+      "chance": 0.238564,
+      "frequence": 0.171587
+     },
+     {
+      "n": 541,
+      "chance": 0.24661,
+      "frequence": 0.16451
+     },
+     {
+      "n": 541,
+      "chance": 0.254086,
+      "frequence": 0.151571
+     },
+     {
+      "n": 542,
+      "chance": 0.262212,
+      "frequence": 0.230627
+     },
+     {
+      "n": 541,
+      "chance": 0.269046,
+      "frequence": 0.171904
+     },
+     {
+      "n": 542,
+      "chance": 0.290364,
+      "frequence": 0.232472
+     }
+    ],
+    "ecartMoyen": 0.058782,
+    "tirages": {
+     "demandes": 1000,
+     "valides": 1000,
+     "graine": 36
+    },
+    "mot": null
+   },
+   "away": {
+    "n": 5414,
+    "alpha": -0.1117,
+    "beta": 0.581479,
+    "alphaIc": [
+     -0.178284,
+     -0.043455
+    ],
+    "betaIc": [
+     0.512488,
+     0.657007
+    ],
+    "dixiemes": [
+     {
+      "n": 541,
+      "chance": 0.1226,
+      "frequence": 0.232902
+     },
+     {
+      "n": 541,
+      "chance": 0.194645,
+      "frequence": 0.242144
+     },
+     {
+      "n": 542,
+      "chance": 0.240067,
+      "frequence": 0.326568
+     },
+     {
+      "n": 541,
+      "chance": 0.280254,
+      "frequence": 0.369686
+     },
+     {
+      "n": 542,
+      "chance": 0.311531,
+      "frequence": 0.287823
+     },
+     {
+      "n": 541,
+      "chance": 0.358827,
+      "frequence": 0.419593
+     },
+     {
+      "n": 541,
+      "chance": 0.411387,
+      "frequence": 0.382625
+     },
+     {
+      "n": 542,
+      "chance": 0.486583,
+      "frequence": 0.5
+     },
+     {
+      "n": 541,
+      "chance": 0.573249,
+      "frequence": 0.55268
+     },
+     {
+      "n": 542,
+      "chance": 0.728313,
+      "frequence": 0.608856
+     }
+    ],
+    "ecartMoyen": 0.060041,
+    "tirages": {
+     "demandes": 1000,
+     "valides": 1000,
+     "graine": 36
+    },
+    "mot": null
+   }
+  },
+  "unitesParPli": [
+   2125,
+   3594
+  ]
+ }
+}

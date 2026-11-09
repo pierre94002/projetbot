@@ -1686,6 +1686,45 @@ const dueCombinaisonABlanc = (ctx) => !faitAujourdhui(ctx.derniere('combinaisonA
 export const __combinaisonPourLesTests = { passeCombinaisonABlanc, dueCombinaisonABlanc };
 
 // [étape 38, lot 1b : ajout pur, fin]
+// [étape 36, lot 1 : ajout pur, début]
+/**
+ * L'étape « coupesEtMatchsAPart » (étape 36 du plan, lot 1, 09/11/2026) : LES COUPES À BLANC — chaque rencontre de coupe
+ * rangée avec son tour, la nature de son bloc, son rôle et son issue ; la règle d'après 90 minutes de chaque compétition ;
+ * les stades habituels ; la FICHE FIGÉE de chaque match de coupe des 14 prochains jours (aller, nature présumée, format,
+ * lieu, grille de la page de l'étape 28 recopiée avant le coup d'envoi) — calculées dans un PROCESSUS À PART en lecture
+ * seule et rangées par le serveur par tranches de 250 (une fiche n'est jamais réécrite après son coup d'envoi). Un autre
+ * calcul lourd en cours : REPORTÉE. APRÈS la combinaison à blanc, juste AVANT le contrôle quotidien (toujours dernier), hors
+ * du chemin de nuit de l'essai de l'étape 27 ; jamais lue par le moteur ni envoyée à l'IA. Le module est chargé par un
+ * import() DYNAMIQUE : une erreur dans data/coupes/ n'empêche jamais ce fichier de se charger ni la nuit de démarrer — elle
+ * met seulement cette étape en échec. Ajout PUR (règle du gel pendant l'essai 27) : rien d'autre de ce fichier ne change
+ * (coupesNuit.test.mjs, T-X10, le vérifie à l'octet).
+ */
+async function passeCoupes(ctx, options = {}) {
+  const { chargerLeModule = () => import('../data/coupes/coupesNuit.js'), ...reste } = options;
+  let coupes;
+  try {
+    coupes = await chargerLeModule();
+  } catch (error) {
+    const erreur = String(error?.message ?? error).slice(0, 300);
+    return { status: 'error', summary: `En échec : le module des coupes ne se charge pas (${erreur}) — rien d’avancé ; le reste de la nuit n’en dépend pas.`, details: { mode: 'echec', module: false, erreur }, changed: false };
+  }
+  try {
+    // L'heure est lue ici (la passe), jamais dans data/coupes.
+    const r = await coupes.faireLesCoupesDeLaNuit({ ...reste, maintenant: reste.maintenant ?? Date.now() });
+    return coupes.resultatDeLEtape(r, { updatedAt: new Date().toISOString() });
+  } catch (error) {
+    const erreur = String(error?.message ?? error).slice(0, 300);
+    return { status: 'error', summary: `En échec : ${erreur} — rien d’avancé, les tables d’avant restent ; la passe suivante recommence.`, details: { mode: 'echec', erreur }, changed: false };
+  }
+}
+
+/** Due : une fois par jour civil de Paris, ou quand la passe d'avant l'a REPORTÉE ; jamais forcée par un clic. */
+const dueCoupes = (ctx) => !faitAujourdhui(ctx.derniere('coupesEtMatchsAPart')) || Boolean(ctx.derniersDetails?.('coupesEtMatchsAPart')?.reporte);
+
+/** Pour les tests : l'étape des coupes à blanc (étape 36, lot 1). */
+export const __coupesPourLesTests = { passeCoupes, dueCoupes };
+
+// [étape 36, lot 1 : ajout pur, fin]
 /** Pour les tests : l'étape d'analyse IA automatique telle que la passe la lance (plafond, réserve, bilan) ; l'étape du carnet de santé ; celle de l'historique football-data ; celle des repères ; celle de la table du jour J ; celle du contrôle quotidien ; celle de la candidate à blanc ; celle de la calibration du mois écoulé ; celle de connaître le marché ; celle de l'indice de force ; celle des forces de buts ; celle des fiches des joueurs ; celle du carnet de l'IA ; celles du bulletin du jour et du bilan de la semaine ; celle du résumé du mois de la boucle de correction. */
 export const __testing = { ETAPES: () => ETAPES, passeBulletin, passeBilanSemaine, dueBulletin, dueBilanSemaine, passeCarteOuParier, dueCarteOuParier, dueMoteurABlanc, passeIaAuto, passeCarnetSante, passeHistoriqueFd, dueHistoriqueFd, passeReperes, dueReperes, passeTableJourJ, dueTableJourJ, passeControleQuotidien, passeMoteurABlanc, passeCalibrationMensuelle, dueCalibrationMensuelle, passeConnaitreMarche, dueConnaitreMarche, passeIndiceForce, dueIndiceForce, passeForcesButs, dueForcesButs, passeFichesJoueurs, dueFichesJoueurs, passeStylesDeJeu, dueStylesDeJeu, passeCarnetIA, passeDossiersIA, passeSimulationSaisons, dueSimulationSaisons, passeSimulationMatchs, dueSimulationMatchs, passeBoucleCorrection, dueBoucleCorrection, passeResumeCorrection, dueResumeCorrection, passeContexteDuMatch, dueContexteDuMatch };
 
@@ -2405,6 +2444,17 @@ const ETAPES = [
     run: (ctx) => passeCombinaisonABlanc(ctx)
   },
   // [étape 38, lot 1b : ajout pur, fin]
+  // [étape 36, lot 1 : ajout pur, début]
+  {
+    key: 'coupesEtMatchsAPart',
+    label: 'Coupes à blanc (tours, confrontations, règle d’après 90 minutes, lieux ; fiches des matchs de coupe gardées avant le coup d’envoi)',
+    // Étape 36 du plan (lot 1, 09/11/2026) : APRÈS la combinaison à blanc (et la simulation de l'étape 28, qu'elle lit), juste
+    // AVANT le contrôle quotidien (toujours dernier), hors du chemin de nuit de l'essai de l'étape 27. Une fois par jour civil
+    // de Paris, ou si la passe d'avant l'a reportée ; jamais au clic ; ni réseau ni Claude. Cf. passeCoupes.
+    due: (ctx) => dueCoupes(ctx),
+    run: (ctx) => passeCoupes(ctx)
+  },
+  // [étape 36, lot 1 : ajout pur, fin]
   {
     key: 'controleQuotidien',
     label: 'Contrôle quotidien des données et santé des sources',
