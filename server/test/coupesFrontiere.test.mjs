@@ -31,6 +31,8 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { preparerCopie, executer, SERVEUR, RACINE_ESSAIS } from './aides/isolement.mjs';
 import { sansBlocs36, sansLesAjoutsDe36 } from './aides/ajouts36.mjs';
+// Étape 35 (lot 1a, 09/11/2026) : ses ajouts purs (lancements.js, matchStatsDb.js) retirés AVANT ceux de la 36 (aides/ajouts35.mjs ; debutsFrontiere.test.mjs, T-X1).
+import { sansLesAjoutsDe35 } from './aides/ajouts35.mjs';
 import { fichiersDuMoteur, empreinteDuCode, empreinteDeLaCandidate, CANDIDATE_EN_ESSAI, MODULES_DU_MOTEUR } from '../src/core/engine/engineVersions.js';
 import * as LANC from '../src/bench/lancements.js';
 import { enregistrerLancements, fenetresVues, compterVariantes, lancementDe } from '../src/bench/trialsRegistry.js';
@@ -265,7 +267,7 @@ const PERMIS = Object.freeze({
 const ROUTE_PARTIE_0 = '97ca7fd8c61f5f5f497d4f3f4adc4a3aa42e9d00';
 
 /** Un fichier permis SANS l'ajout de l'étape 36 : le texte d'avant, refait (aides/ajouts36.mjs, la seule définition). */
-const sansLAjout = (f, texte) => sansLesAjoutsDe36(f, texte);
+const sansLAjout = (f, texte) => sansLesAjoutsDe36(f, sansLesAjoutsDe35(f, texte));
 
 /** Les fichiers atteints par les imports relatifs (statiques et dynamiques, ou statiques seulement) d'un ensemble de départ. */
 function atteints(depart, { statiquesSeulement = false } = {}) {
@@ -365,7 +367,8 @@ const DOSSIER = fs.mkdtempSync(path.join(RACINE_ESSAIS, 'cm-coupes-registre-'));
 after(() => fs.rmSync(DOSSIER, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 }));
 
 test('T-X5 — la déclaration AVANT le regard : « coupes » à la fin, l’ordre d’avant gardé ; vues « coupes » jusqu’au 23/09/2026 ; un seul regard ; lancement à la fin ; fenetresVues(27) et compterVariantes(27) inchangés', () => {
-  assert.deepEqual([...LANC.PORTEES], ['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs', 'combinaison', 'coupes']);
+  // Étape 35 (lot 1a, 09/11/2026) : « debuts-de-saison » ajoutée APRÈS « coupes » (debutsFrontiere T-X5).
+  assert.deepEqual([...LANC.PORTEES], ['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs', 'combinaison', 'coupes', 'debuts-de-saison']);
   assert.ok(LANC.verifierLancements());
   for (const v of LANC.VUES_DE_L_ETAPE_36) {
     assert.deepEqual([...v.pour], ['coupes'], `${v.de} → ${v.a}`);
@@ -377,7 +380,9 @@ test('T-X5 — la déclaration AVANT le regard : « coupes » à la fin, l’ord
   assert.deepEqual([l36.version, l36.le], ['coupes-v1', null]);
   assert.equal(l36.variantes, LANC.VARIANTES_DE_L_ETAPE_36);
   assert.equal(l36.vues, LANC.VUES_DE_L_ETAPE_36);
-  assert.equal(LANC.LANCEMENTS.at(-1), l36, 'le lancement 36 ajouté à la fin');
+  // Étape 35 (lot 1a, 09/11/2026) : puis le lancement 35.
+  assert.equal(LANC.LANCEMENTS.at(-2), l36, 'le lancement 36 ajouté à la fin, puis celui de la 35');
+  assert.equal(LANC.LANCEMENTS.at(-1).etape, '35');
   for (const portee of LANC.PORTEES.filter((p) => !['tout', 'coupes'].includes(p))) assert.ok(!LANC.fenetresDeclarees({ portee }).some((f) => f.etape === '36'), portee);
   assert.ok(LANC.fenetresDeclarees({ portee: 'coupes' }).some((f) => f.etape === '36'));
   const fichier = path.join(DOSSIER, 'registre-t-x5.json');
@@ -413,7 +418,8 @@ test('T-X8 — openDb crée les 5 tables et les 3 index ; une seconde ouverture 
   assert.deepEqual(s.indexAttendus, ['idx_coupes_lignes_date', 'idx_coupes_rencontres_ligue', 'idx_coupes_rencontres_paire']);
   assert.deepEqual(s.tables.filter((t) => t.startsWith('idx_')), s.indexAttendus);
   assert.deepEqual(s.schema2, s.schema, 'une seconde ouverture ne change rien');
-  const texte = fs.readFileSync(path.join(SRC, 'data', 'db', 'matchStatsDb.js'), 'utf8');
+  // Étape 35 (lot 1a, 09/11/2026) : DEBUTS_DDL vient juste après COUPES_DDL : retiré d'abord (aides/ajouts35.mjs).
+  const texte = sansLesAjoutsDe35('data/db/matchStatsDb.js', fs.readFileSync(path.join(SRC, 'data', 'db', 'matchStatsDb.js'), 'utf8'));
   const bloc = texte.slice(texte.indexOf('const COUPES_DDL = ['), texte.indexOf('const FD_HISTORY_INDEXES = ['));
   const entrees = bloc.split('\n').filter((l) => /^ {2}[`']/.test(l));
   assert.equal(entrees.length, 8);

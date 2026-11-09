@@ -1,0 +1,1974 @@
+{
+ "format": 1,
+ "quoi": "Banc des débuts de saison et des changements d’effectif (étape 35, lot 1a, partie B) : le passage unique.",
+ "ou": "bac à sable",
+ "premierRegard": "2026-11-09T19:17:49.765Z",
+ "fin": "2026-11-09T19:19:35.709Z",
+ "dureeS": 105.9,
+ "base": {
+  "fichier": "C:\\Users\\PC\\CoteMaster\\bac-a-sable\\base\\match-stats.db",
+  "lectureSeule": true
+ },
+ "passeDePierre": {
+  "verifiee": true,
+  "attenduS": 0
+ },
+ "regles": {
+  "fichier": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\C--Users-PC-OneDrive-Bureau-developement-ProjetBot\\c4b41134-df35-4d3f-be49-63a4f15181fd\\scratchpad\\etape35\\banc-regles.md",
+  "sha1": "49364bc1db9793a5c2bf3b8bd8f06668186df9e6",
+  "copie": "test/fixtures/banc-regles-etape35.md"
+ },
+ "modulesScelles": {
+  "src/data/db/squadChanges.js": "b93e19eccb49320b0315eec21c8e27588dfd8274",
+  "src/data/debutsDeSaison/bancDesDebuts.js": "7a5539f7eb5a473f7658444d2a47b13dc973536c",
+  "src/data/debutsDeSaison/comptesDesDebuts.js": "229392a0415571e45782aa81cc76903896164b79",
+  "src/data/debutsDeSaison/debutsAuJourJ.js": "b063df8cf65c2fa70988c49c308a68467c3f968d",
+  "src/data/debutsDeSaison/debutsBancEnfant.js": "63d90ad167e4d2d1cbfca19d90ec8403bc2ba6d4",
+  "src/data/debutsDeSaison/formulesDebuts.js": "15c12e1e2bfb1909576b03ef99d3914af3fb4eab",
+  "src/data/debutsDeSaison/lectureDesDebuts.js": "ced6a19853c829a04adfba87a2c18c6ddf05c686",
+  "src/data/debutsDeSaison/passeDesDebuts.js": "a5a9967d028afcf6a819f5dd2fbc44546c8a18fa",
+  "src/data/debutsDeSaison/reglagesDebuts.js": "1961cf732ecc955d223e4eb46021656bd537e57f",
+  "src/bench/guard.js": "60551323d356d5502684ca32276793fcb946ef84",
+  "src/bench/jugeAPart.js": "2c1434cefe5b21055c313750ce0a1c2c8f6abc12",
+  "src/bench/lancements.js": "24757023bc7b80ec7bb8d092d990a257e5efa6ab",
+  "src/bench/metrics.js": "c40ebc02607830dec623d071c0d70778f26cf806",
+  "src/bench/periodes.js": "d8b5264a88fd7ef241fb16bd209f3928c53ac628",
+  "src/bench/prix.js": "0f33a6b56d5238057be45f5720f2050dac22bf6a",
+  "src/bench/statValue.js": "d08c78df17760083f8d9d649d448598db52e5ec4",
+  "src/bench/trialsRegistry.js": "3eca30850f4844f924ed1ec47b497606a68dec30",
+  "src/config/bacASable.js": "51f4bf847f1bbb4a81d291a96566e3e9cb13af21",
+  "src/core/engine/goalModel.js": "236a33d7f952b12d4596b02ecb7c6090afca137d",
+  "src/core/engine/motsDuModeleDeButs.js": "1c81f14ce0e25e3af595318028234c565798eea0",
+  "src/core/engine/noteDuModeleDeButs.js": "654e310c28e88de98c2f2ccf247b64ba5c3babaf",
+  "src/core/engine/scorePrediction.js": "44bb6ed76ed724981de01b8d48b5a91ccb59dbed",
+  "src/core/engine/vosBookmakers.js": "9abf1962a1c47d854cbc161624249a4df657279f",
+  "src/core/market/marginRemoval.js": "b3deabcfcf1fe1d7f875d93a1b327b6efc0e883f",
+  "src/core/model/dixonColes.js": "83c4cf5111c071ca7f95422f826125ecd464484f",
+  "src/core/model/poisson.js": "78be7262cce935f745491e220804da4e8e093aa8",
+  "src/data/db/columns.js": "325d985101ae32bab53546e68eff1a437afc341b",
+  "src/data/db/dayTable.js": "afc8d42ccc9028531da8d9efc2700ece449d6a97",
+  "src/data/db/forcesButs.js": "4ecda40200d8da352bc8c51adefb1152de4af916",
+  "src/data/db/identityRegistry.js": "6a5bcdd1d85e10909de81a9174b6d3fa8afbccdf",
+  "src/data/db/leagueBenchmarks.js": "1c5c192ce3ba261f884c37541dd46b14736746c7",
+  "src/data/db/matchStatsDb.js": "fbc5b5f71cd1ffc0d54772a7a9386c9ed8d4a0a2",
+  "src/data/db/matchStatsRead.js": "7dc674629218dc5434ec97e421de3467ba440a0b",
+  "src/data/db/oddsProfileRead.js": "454e6b98f288b62eca9f945ca8940dc1301df1d4",
+  "src/data/db/oddsQuotesRepository.js": "d9c661abf573b9b22569f78b93c9d3e5d643d826",
+  "src/data/db/playerRatings.js": "86bf49658a97a61a2eda62ed72ebb600e7fc9b75",
+  "src/data/db/scoreFormRead.js": "46e2c8b26c722becce3192e7fa157ce4738ec21c",
+  "src/data/db/statInputsRead.js": "45470ac1777308c673eea1d2a127b956aeac1240",
+  "src/data/db/teamStrength.js": "558e33d3441a33cd4b6106cc64edc7e7cd68b297",
+  "src/data/db/verrouEcriture.js": "136fb6439e630a059a1bdcc832dbfa70bc9618b1",
+  "src/data/freeMarketOdds.js": "039a2790369cacf5958ff66dab413d96fb873b93",
+  "src/data/providers/footballDataCache.js": "747209bf76c3cb667d0d8bb17c9135a2547fdf80",
+  "src/data/providers/footballDataOdds.js": "c918adfbd3efea3c95531f7ac14291374b336e9f",
+  "src/data/providers/fotMobProvider.js": "5888cfc4c6df99ce91c956a7dc3376ecdf724b0e",
+  "src/data/providers/leagueCups.js": "f729d74147c8f0b59a74045056ac71040b71c923",
+  "src/data/providers/seasonWindows.js": "b4bcebaeea43ea10a0b10ac13b87e7c447d232b8",
+  "src/data/providers/sourceMatching.js": "5aaba6a9d8f5c2d0e4c3159255d96d5c7123b67f",
+  "src/data/relevesDesSources.js": "f18141322bb026f5a1a1ad32c9b9894be1c34092",
+  "src/data/roadmap/plan.js": "124d9c5086df25d06cb71b441d5f907570b21076",
+  "src/sports/football/bookmakerConsensus.js": "70ee1711b3040108d54ded41131606b81ff256eb",
+  "src/sports/football/statMarkets.js": "86fe12b131b4315e9f9020659c93f2ed7461222d",
+  "src/utils/atomicJson.js": "fbc39689e775107a6e987ef17ff01687fa8317e4",
+  "src/utils/calculLourd.js": "b8bf077054354c18d813fb6d05b29f704facccb0",
+  "src/utils/nameIdentity.js": "4d0a4b28500ab2fde0d02bbfca1ba2ab01e17d48",
+  "src/utils/statVocabulary.js": "fa33e8aec2826a2fa05f7c815a1f4006bcb1cc56",
+  "src/utils/teamNameMatch.js": "8f7c2242321185c041b0c535d79d048cc61bc9db",
+  "src/utils/travailCooperatif.js": "9a07336ed530f1e47d4d7642969be02a5f96907d"
+ },
+ "verrou": {
+  "fichier": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\C--Users-PC-OneDrive-Bureau-developement-ProjetBot\\c4b41134-df35-4d3f-be49-63a4f15181fd\\scratchpad\\etape35\\banc-passage-reel.lock",
+  "pose": "2026-11-09T19:17:49.765Z"
+ },
+ "decisionDePierre": {
+  "effectifAuBanc": {
+   "reponse": "oui",
+   "le": "2026-11-02",
+   "source": "décision n° 1 : compositions « oui partout, à l’essai »"
+  },
+  "effectifDansLesChiffres": {
+   "reponse": null,
+   "le": null,
+   "source": "seulement par le chemin habituel : banc, essai à blanc d’une candidate, clic « Adopter »"
+  },
+  "quiCompte": {
+   "reponse": 0.3,
+   "le": "2026-11-02",
+   "source": "décision n° 6 : au moins 30 % des minutes qu’il pouvait jouer"
+  },
+  "nonSuivis": {
+   "reponse": "promu moyen",
+   "le": "2026-11-02",
+   "source": "décision n° 6 : promu d’une division non suivie = traité comme un promu moyen"
+  },
+  "secondTournoi": {
+   "reponse": "pas un début de saison",
+   "le": "2026-11-02",
+   "source": "décisions de l’orchestrateur, n° 3 (défaut de Pierre)"
+  },
+  "ouAfficher": {
+   "reponse": "contexte du match",
+   "le": "2026-11-02",
+   "source": "décisions de l’orchestrateur, n° 3"
+  }
+ },
+ "empreinteDuMoteur": {
+  "sha1": "16f2459db183a99576365047da98b7777687ef05",
+  "fichiers": 37,
+  "candidate": "f01dd8496f56a415"
+ },
+ "rejeu": null,
+ "comptes": {
+  "magasin": {
+   "records": 31322,
+   "parFenetre": {
+    "A": 17228,
+    "B": 14094
+   },
+   "lues": 60059,
+   "deChampionnat": 48814,
+   "sansScore90": 0
+  },
+  "fd": {
+   "records": 124746,
+   "parFenetre": {
+    "P1": 108886,
+    "P2": 15860
+   },
+   "lues": 175018
+  },
+  "seuilFauxPromu": {
+   "magasin": {
+    "mouvements": 126,
+    "debuts": 2045,
+    "seuil": 62
+   },
+   "fd": {
+    "mouvements": 988,
+    "debuts": 5712,
+    "seuil": 173
+   }
+  },
+  "ecartTypeEffectif": {
+   "off": 0.17453423605311758,
+   "def": 0.3124542800113577,
+   "n": 14134
+  },
+  "prix1n2Magasin": 21137
+ },
+ "durees": {
+  "magasin": {
+   "lecture": 27083,
+   "passe": 39483
+  },
+  "fd": {
+   "total": 18856
+  },
+  "juge": 16234,
+  "total": 105663
+ },
+ "aPart": {
+  "pid": 15092,
+  "rssMaxOctets": 1083981824
+ },
+ "banc": {
+  "version": 1,
+  "K": 11,
+  "z": 2.837605815861865,
+  "mesure": "perte-log-score-exact",
+  "periodes": {
+   "magasin": {
+    "miseEnRoute": {
+     "de": "2023-01-01",
+     "a": "2023-06-30"
+    },
+    "plis": [
+     {
+      "apprendre": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "juger": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      }
+     },
+     {
+      "apprendre": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "juger": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      }
+     }
+    ],
+    "dernierJourLu": "2026-09-23"
+   },
+   "fd": {
+    "forcesDepuis": "2000-07-01",
+    "apprendre": {
+     "de": "2005-07-01",
+     "a": "2019-06-30"
+    },
+    "juger": {
+     "de": "2019-07-01",
+     "a": "2023-06-30"
+    },
+    "dernierJourLu": "2023-06-30",
+    "saisonsJugees": [
+     "2019-20",
+     "2020-21",
+     "2021-22",
+     "2022-23"
+    ],
+    "huisClos": {
+     "de": "2020-03-14",
+     "a": "2021-05-31"
+    }
+   }
+  },
+  "formeFd": "remis-a-zero-seul",
+  "k0Fd": {
+   "k0": 8,
+   "parK0": null,
+   "matchs": 0
+  },
+  "contextes": {
+   "magasin": [
+    {
+     "k0": null,
+     "dRappel": 2,
+     "promus": {
+      "c0": [
+       -0.12732618730916312,
+       0.04521050229085401
+      ],
+      "theta": [
+       -0.119725522877362,
+       0.08507366990627035
+      ]
+     }
+    },
+    {
+     "k0": null,
+     "dRappel": 8,
+     "promus": {
+      "c0": [
+       -0.14636900680706452,
+       -0.010050931798194293
+      ],
+      "theta": [
+       -0.05928857411617591,
+       0.09540554151090043
+      ]
+     }
+    }
+   ],
+   "fd": [
+    {
+     "k0": 8,
+     "dRappel": null,
+     "promus": {
+      "c0": [
+       0.01757284706023561,
+       0.040914467521498535
+      ],
+      "theta": [
+       -0.09704074125764393,
+       0.07109328433782248
+      ]
+     }
+    }
+   ]
+  },
+  "variantes": [
+   {
+    "id": "magasin-rappel-sans-cote",
+    "famille": "rappel",
+    "fenetre": "magasin",
+    "ensemble": "rappel",
+    "placebo": false,
+    "appris": [
+     {
+      "pli": 0,
+      "apprisSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "jugeSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "matchsAppris": 5434,
+      "matchsJuges": 5715,
+      "appris": {
+       "d": 2
+      }
+     },
+     {
+      "pli": 1,
+      "apprisSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "jugeSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "matchsAppris": 5715,
+      "matchsJuges": 5434,
+      "appris": {
+       "d": 8
+      }
+     }
+    ],
+    "recalages": [
+     {
+      "pli": 0,
+      "A": {
+       "cDom": -0.022151409398209334,
+       "cExt": -0.007904019380548999,
+       "matchs": 5434
+      },
+      "B": {
+       "cDom": -0.02194260400278368,
+       "cExt": -0.007709393250952222,
+       "matchs": 5434
+      }
+     },
+     {
+      "pli": 1,
+      "A": {
+       "cDom": -0.0073270775301584835,
+       "cExt": 0.002945593853432388,
+       "matchs": 5715
+      },
+      "B": {
+       "cDom": -0.006930281504014651,
+       "cExt": 0.003394881604157173,
+       "matchs": 5715
+      }
+     }
+    ],
+    "matchsJuges": 11149,
+    "ecartees": 0,
+    "verdict": "pas-prouve",
+    "raison": "La fourchette contient zéro : l’écart peut venir du hasard (11 149 matchs, 11 variantes essayées).",
+    "lignes": 11149,
+    "blocs": 11149,
+    "perteBase": 2.922075819336942,
+    "perteVariante": 2.9219435219520107,
+    "gain": 0.00013229738494143582,
+    "ecartType": 0.00013293285740524865,
+    "zObserve": 0.995219598252706,
+    "fourchette": [
+     -0.0002449136643508338,
+     0.0005095084342337054
+    ],
+    "gainRelatif": 0.000045275137649048365,
+    "fourchetteRelative": [
+     -0.00008381495878036731,
+     0.00017436523407846402
+    ],
+    "z": 2.837605815861865,
+    "variantes": 11,
+    "ampleur": {
+     "max": 0.002638527404104526,
+     "marche": "dom15",
+     "parMarche": {
+      "plus05": 0.000716107585745679,
+      "plus15": 0.0017537360043251625,
+      "plus25": 0.0023162636289810463,
+      "plus35": 0.002099192664716776,
+      "lesDeuxMarquent": 0.0018742635463737908,
+      "dom05": 0.0018460138869022514,
+      "dom15": 0.002638527404104526,
+      "dom25": 0.0020408349909343607,
+      "dom35": 0.0011420224649391145,
+      "ext05": 0.0019929254826468053,
+      "ext15": 0.0023037233065599677,
+      "ext25": 0.0014579077391491271,
+      "ext35": 0.0006728112594224649
+     },
+     "seuil": 0.005
+    },
+    "temoins": {
+     "perteBase": 6.418809878374653,
+     "perteVariante": 6.417978519893469,
+     "gainRelatif": 0.00012951910041526167,
+     "juge": false
+    },
+    "rapporte": {
+     "unDeuxSeul": {
+      "matchs": 4323,
+      "gain": 0.00007098046176351795,
+      "gainRelatif": 0.000024544119859410243
+     },
+     "tranches": [
+      {
+       "de": 1,
+       "a": 5,
+       "matchs": 5999,
+       "gain": 0.0002824196524822001,
+       "gainRelatif": 0.00009654206409053225
+      },
+      {
+       "de": 6,
+       "a": 10,
+       "matchs": 5150,
+       "gain": -0.000042573194261722255,
+       "gainRelatif": -0.000014588564472425207
+      }
+     ],
+     "tranche1120": {
+      "matchs": 9336,
+      "gain": -0.00005206406714407832,
+      "gainRelatif": -0.00001788368499102382
+     },
+     "saisons": null,
+     "huisClos": null
+    }
+   },
+   {
+    "id": "magasin-placebo-fausse-rentree",
+    "famille": "rappel",
+    "fenetre": "magasin",
+    "ensemble": "fausse",
+    "placebo": true,
+    "appris": [
+     {
+      "pli": 0,
+      "apprisSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "jugeSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "matchsAppris": 7008,
+      "matchsJuges": 3703,
+      "appris": {
+       "dF": 4
+      }
+     },
+     {
+      "pli": 1,
+      "apprisSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "jugeSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "matchsAppris": 3703,
+      "matchsJuges": 7008,
+      "appris": {
+       "dF": 0
+      }
+     }
+    ],
+    "recalages": [
+     {
+      "pli": 0,
+      "A": {
+       "cDom": 0.016823317532009753,
+       "cExt": 0.047265506779629526,
+       "matchs": 7008
+      },
+      "B": {
+       "cDom": 0.016613369677657343,
+       "cExt": 0.04719043126734574,
+       "matchs": 7008
+      }
+     },
+     {
+      "pli": 1,
+      "A": {
+       "cDom": 0.01298692453768057,
+       "cExt": 0.0035950200116992613,
+       "matchs": 3703
+      },
+      "B": {
+       "cDom": 0.01298692453768057,
+       "cExt": 0.0035950200116992613,
+       "matchs": 3703
+      }
+     }
+    ],
+    "matchsJuges": 10711,
+    "ecartees": 0,
+    "verdict": "pas-prouve",
+    "raison": "La fourchette contient zéro : l’écart peut venir du hasard (10 711 matchs, 11 variantes essayées).",
+    "lignes": 10711,
+    "blocs": 10711,
+    "perteBase": 2.930888034700484,
+    "perteVariante": 2.930894729529434,
+    "gain": -0.0000066948289486544365,
+    "ecartType": 0.00004132003362196404,
+    "zObserve": -0.16202380205943828,
+    "fourchette": [
+     -0.00012394479666594742,
+     0.00011055513876863854
+    ],
+    "gainRelatif": -0.0000022842322427163615,
+    "fourchetteRelative": [
+     -0.00004228916123662625,
+     0.00003772069675119353
+    ],
+    "z": 2.837605815861865,
+    "variantes": 11,
+    "ampleur": {
+     "max": 0.0005542511024199809,
+     "marche": "dom15",
+     "parMarche": {
+      "plus05": 0.00012696518798039773,
+      "plus15": 0.0003282199887933646,
+      "plus25": 0.00045802957145065794,
+      "plus35": 0.00043360799293746025,
+      "lesDeuxMarquent": 0.0003742102980658125,
+      "dom05": 0.0003738086423116747,
+      "dom15": 0.0005542511024199809,
+      "dom25": 0.0004408951530394084,
+      "dom35": 0.00025194379333464176,
+      "ext05": 0.00041559872379694885,
+      "ext15": 0.0005103679364675115,
+      "ext25": 0.000337053355627238,
+      "ext35": 0.00015934746740504395
+     },
+     "seuil": 0.005
+    },
+    "temoins": {
+     "perteBase": 6.385837542101469,
+     "perteVariante": 6.3857447936068255,
+     "gainRelatif": 0.000014524092420516361,
+     "juge": false
+    },
+    "rapporte": {
+     "unDeuxSeul": {
+      "matchs": 4712,
+      "gain": 0.000002133161019697946,
+      "gainRelatif": 7.366337991780248e-7
+     },
+     "tranches": [
+      {
+       "de": 1,
+       "a": 5,
+       "matchs": 7972,
+       "gain": -0.00002572617756212572,
+       "gainRelatif": -0.000008822368843251538
+      },
+      {
+       "de": 6,
+       "a": 10,
+       "matchs": 2739,
+       "gain": 0.00004869688743189862,
+       "gainRelatif": 0.000016373264528884787
+      }
+     ],
+     "tranche1120": null,
+     "saisons": null,
+     "huisClos": null
+    }
+   },
+   {
+    "id": "magasin-promus-sans-cote",
+    "famille": "promus",
+    "fenetre": "magasin",
+    "ensemble": "promus",
+    "placebo": false,
+    "appris": [
+     {
+      "pli": 0,
+      "apprisSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "jugeSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "matchsAppris": 391,
+      "matchsJuges": 626,
+      "appris": {
+       "c0": [
+        -0.12732618730916312,
+        0.04521050229085401
+       ],
+       "theta": [
+        -0.119725522877362,
+        0.08507366990627035
+       ]
+      }
+     },
+     {
+      "pli": 1,
+      "apprisSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "jugeSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "matchsAppris": 626,
+      "matchsJuges": 391,
+      "appris": {
+       "c0": [
+        -0.14636900680706452,
+        -0.010050931798194293
+       ],
+       "theta": [
+        -0.05928857411617591,
+        0.09540554151090043
+       ]
+      }
+     }
+    ],
+    "recalages": [
+     {
+      "pli": 0,
+      "A": {
+       "cDom": 0.0378633161737555,
+       "cExt": 0.08118676005550625,
+       "matchs": 391
+      },
+      "B": {
+       "cDom": 0.00537119420105735,
+       "cExt": 0.054621455279111476,
+       "matchs": 391
+      }
+     },
+     {
+      "pli": 1,
+      "A": {
+       "cDom": 0.06745455184959005,
+       "cExt": 0.017156944742805068,
+       "matchs": 626
+      },
+      "B": {
+       "cDom": 0.006224949983518194,
+       "cExt": -0.04058941395001992,
+       "matchs": 626
+      }
+     }
+    ],
+    "matchsJuges": 1017,
+    "ecartees": 0,
+    "verdict": "pas-prouve",
+    "raison": "La fourchette contient zéro : l’écart peut venir du hasard (1 017 matchs, 11 variantes essayées).",
+    "lignes": 1017,
+    "blocs": 1017,
+    "perteBase": 2.9627864227082483,
+    "perteVariante": 2.962697133180355,
+    "gain": 0.00008928952789964445,
+    "ecartType": 0.004473844083614886,
+    "zObserve": 0.01995812241795832,
+    "fourchette": [
+     -0.012605716463025152,
+     0.012784295518824443
+    ],
+    "gainRelatif": 0.000030137011299662276,
+    "fourchetteRelative": [
+     -0.004254682810211617,
+     0.004314956832810942
+    ],
+    "z": 2.837605815861865,
+    "variantes": 11,
+    "ampleur": {
+     "max": 0.032636671376074275,
+     "marche": "dom15",
+     "parMarche": {
+      "plus05": 0.0034176027614442293,
+      "plus15": 0.008554975429193023,
+      "plus25": 0.011653089574990724,
+      "plus35": 0.0106257007400444,
+      "lesDeuxMarquent": 0.009143632410876646,
+      "dom05": 0.022526760638985083,
+      "dom15": 0.032636671376074275,
+      "dom25": 0.02439129579058899,
+      "dom35": 0.012538224490696168,
+      "ext05": 0.023696976085948892,
+      "ext15": 0.02849509123996153,
+      "ext25": 0.01785369126788741,
+      "ext35": 0.00777663963062629
+     },
+     "seuil": 0.005
+    },
+    "temoins": {
+     "perteBase": 6.5422543650197795,
+     "perteVariante": 6.549784489357455,
+     "gainRelatif": -0.0011509984047605335,
+     "juge": false
+    },
+    "rapporte": {
+     "unDeuxSeul": {
+      "matchs": 1017,
+      "gain": -0.0019071995100579837,
+      "gainRelatif": -0.0006527105285295313
+     },
+     "tranches": [
+      {
+       "de": 1,
+       "a": 5,
+       "matchs": 587,
+       "gain": -0.004466091018878566,
+       "gainRelatif": -0.0015117634579010827
+      },
+      {
+       "de": 6,
+       "a": 10,
+       "matchs": 430,
+       "gain": 0.006307913669659916,
+       "gainRelatif": 0.0021206832789747434
+      }
+     ],
+     "tranche1120": null,
+     "saisons": null,
+     "huisClos": null
+    }
+   },
+   {
+    "id": "magasin-nouveaux-sans-cote",
+    "famille": "nouveaux",
+    "fenetre": "magasin",
+    "ensemble": "nouveaux",
+    "placebo": false,
+    "appris": [
+     {
+      "pli": 0,
+      "apprisSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "jugeSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "matchsAppris": 1105,
+      "matchsJuges": 1123,
+      "appris": {
+       "c0": [
+        -0.12732618730916312,
+        0.04521050229085401
+       ],
+       "theta": [
+        -0.119725522877362,
+        0.08507366990627035
+       ]
+      }
+     },
+     {
+      "pli": 1,
+      "apprisSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "jugeSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "matchsAppris": 1123,
+      "matchsJuges": 1105,
+      "appris": {
+       "c0": [
+        -0.14636900680706452,
+        -0.010050931798194293
+       ],
+       "theta": [
+        -0.05928857411617591,
+        0.09540554151090043
+       ]
+      }
+     }
+    ],
+    "recalages": [
+     {
+      "pli": 0,
+      "A": {
+       "cDom": -0.031108745632231836,
+       "cExt": 0.010971622746029367,
+       "matchs": 1105
+      },
+      "B": {
+       "cDom": -0.041148512967353786,
+       "cExt": 0.0014596950685692256,
+       "matchs": 1105
+      }
+     },
+     {
+      "pli": 1,
+      "A": {
+       "cDom": 0.032605924798264824,
+       "cExt": 0.004426965073242114,
+       "matchs": 1123
+      },
+      "B": {
+       "cDom": 0.0001701593546339714,
+       "cExt": -0.027882648654209957,
+       "matchs": 1123
+      }
+     }
+    ],
+    "matchsJuges": 2228,
+    "ecartees": 0,
+    "verdict": "retenu",
+    "raison": "L’amélioration dépasse ce que le hasard explique : la fourchette est entièrement au-dessus de zéro (2 228 matchs, 11 variantes essayées).",
+    "lignes": 2228,
+    "blocs": 2228,
+    "perteBase": 2.9321136086100803,
+    "perteVariante": 2.9300519391950632,
+    "gain": 0.002061669415016667,
+    "ecartType": 0.0004989966422628977,
+    "zObserve": 4.131629835558034,
+    "fourchette": [
+     0.000645713640835926,
+     0.0034776251891974084
+    ],
+    "gainRelatif": 0.0007031342199574481,
+    "fourchetteRelative": [
+     0.00022022122162654393,
+     0.0011860472182883524
+    ],
+    "z": 2.837605815861865,
+    "variantes": 11,
+    "ampleur": {
+     "max": 0.005226245828880845,
+     "marche": "dom15",
+     "parMarche": {
+      "plus05": 0.0016173604995373938,
+      "plus15": 0.003978167151260387,
+      "plus25": 0.005215769250021075,
+      "plus35": 0.004656934623520809,
+      "lesDeuxMarquent": 0.004223522623610923,
+      "dom05": 0.003686992284283064,
+      "dom15": 0.005226245828880845,
+      "dom25": 0.00394619990574667,
+      "dom35": 0.002116939230841485,
+      "ext05": 0.003968656048101358,
+      "ext15": 0.0045124597555241674,
+      "ext25": 0.002742949658997356,
+      "ext35": 0.0011859480211608112
+     },
+     "seuil": 0.005
+    },
+    "temoins": {
+     "perteBase": 6.483596107898026,
+     "perteVariante": 6.479045163677198,
+     "gainRelatif": 0.0007019166748040526,
+     "juge": false
+    },
+    "rapporte": {
+     "unDeuxSeul": {
+      "matchs": 711,
+      "gain": 0.0005541924911814647,
+      "gainRelatif": 0.00018938610997785136
+     },
+     "tranches": [
+      {
+       "de": 1,
+       "a": 5,
+       "matchs": 1179,
+       "gain": 0.0028556781517505656,
+       "gainRelatif": 0.0009674411085256254
+      },
+      {
+       "de": 6,
+       "a": 10,
+       "matchs": 1049,
+       "gain": 0.0011692611208298494,
+       "gainRelatif": 0.0004018073390311543
+      }
+     ],
+     "tranche1120": null,
+     "saisons": null,
+     "huisClos": null
+    }
+   },
+   {
+    "id": "magasin-placebo-faux-promu",
+    "famille": "promus",
+    "fenetre": "magasin",
+    "ensemble": "fauxPromu",
+    "placebo": true,
+    "appris": [
+     {
+      "pli": 0,
+      "apprisSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "jugeSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "matchsAppris": 507,
+      "matchsJuges": 610,
+      "appris": {
+       "c0": [
+        -0.12732618730916312,
+        0.04521050229085401
+       ],
+       "m": [
+        -0.10401706281589125,
+        -0.10314262076878646
+       ]
+      }
+     },
+     {
+      "pli": 1,
+      "apprisSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "jugeSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "matchsAppris": 610,
+      "matchsJuges": 507,
+      "appris": {
+       "c0": [
+        -0.14636900680706452,
+        -0.010050931798194293
+       ],
+       "m": [
+        -0.1407047545116997,
+        -0.15255473663800395
+       ]
+      }
+     }
+    ],
+    "recalages": [
+     {
+      "pli": 0,
+      "A": {
+       "cDom": -0.07613833017364438,
+       "cExt": 0.015422376569278431,
+       "matchs": 507
+      },
+      "B": {
+       "cDom": -0.0117473523794621,
+       "cExt": 0.07999768565923505,
+       "matchs": 507
+      }
+     },
+     {
+      "pli": 1,
+      "A": {
+       "cDom": 0.0344065192311745,
+       "cExt": -0.007979922808237035,
+       "matchs": 610
+      },
+      "B": {
+       "cDom": 0.12875145142745406,
+       "cExt": 0.08593828616513322,
+       "matchs": 610
+      }
+     }
+    ],
+    "matchsJuges": 1117,
+    "ecartees": 0,
+    "verdict": "pas-prouve",
+    "raison": "La fourchette contient zéro : l’écart peut venir du hasard (1 117 matchs, 11 variantes essayées).",
+    "lignes": 1117,
+    "blocs": 1117,
+    "perteBase": 2.961524710132681,
+    "perteVariante": 2.960814133622234,
+    "gain": 0.0007105765104449662,
+    "ecartType": 0.001424249405985465,
+    "zObserve": 0.4989129765185368,
+    "fourchette": [
+     -0.003330881887217196,
+     0.004752034908107128
+    ],
+    "gainRelatif": 0.00023993603970744222,
+    "fourchetteRelative": [
+     -0.001124718586956503,
+     0.0016045906663713872
+    ],
+    "z": 2.837605815861865,
+    "variantes": 11,
+    "ampleur": {
+     "max": 0.013343288128256222,
+     "marche": "plus25",
+     "parMarche": {
+      "plus05": 0.0038754322403303856,
+      "plus15": 0.009849186544651478,
+      "plus25": 0.013343288128256222,
+      "plus35": 0.012271570767490511,
+      "lesDeuxMarquent": 0.010156063243906867,
+      "dom05": 0.006821256045647898,
+      "dom15": 0.010064959374905145,
+      "dom25": 0.007878536769924718,
+      "dom35": 0.004368766859045959,
+      "ext05": 0.007244396878438455,
+      "ext15": 0.008637004302408425,
+      "ext25": 0.0055312148279826594,
+      "ext35": 0.0025417536899620657
+     },
+     "seuil": 0.005
+    },
+    "temoins": {
+     "perteBase": 6.496970029002708,
+     "perteVariante": 6.491246884603518,
+     "gainRelatif": 0.0008808943820953587,
+     "juge": false
+    },
+    "rapporte": {
+     "unDeuxSeul": {
+      "matchs": 421,
+      "gain": -0.0011194645475567223,
+      "gainRelatif": -0.00038881470055311646
+     },
+     "tranches": [
+      {
+       "de": 1,
+       "a": 5,
+       "matchs": 614,
+       "gain": 0.002504919014683175,
+       "gainRelatif": 0.0008430429365765947
+      },
+      {
+       "de": 6,
+       "a": 10,
+       "matchs": 503,
+       "gain": -0.001479734220373835,
+       "gainRelatif": -0.0005016706005067089
+      }
+     ],
+     "tranche1120": null,
+     "saisons": null,
+     "huisClos": null
+    }
+   },
+   {
+    "id": "magasin-force-effectif-sans-cote",
+    "famille": "effectif",
+    "fenetre": "magasin",
+    "ensemble": "effectif",
+    "placebo": false,
+    "appris": [
+     {
+      "pli": 0,
+      "apprisSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "jugeSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "matchsAppris": 3989,
+      "matchsJuges": 4375,
+      "appris": {
+       "d": 2,
+       "b": [
+        0.021787957183143924,
+        0.0082466975888058
+       ]
+      }
+     },
+     {
+      "pli": 1,
+      "apprisSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "jugeSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "matchsAppris": 4375,
+      "matchsJuges": 3989,
+      "appris": {
+       "d": 8,
+       "b": [
+        0.020451904445247526,
+        0.009942320484212378
+       ]
+      }
+     }
+    ],
+    "recalages": [
+     {
+      "pli": 0,
+      "A": {
+       "cDom": -0.012419201806296522,
+       "cExt": -0.001769004182135877,
+       "matchs": 3989
+      },
+      "B": {
+       "cDom": -0.014184793013099587,
+       "cExt": -0.004206164896871211,
+       "matchs": 3989
+      }
+     },
+     {
+      "pli": 1,
+      "A": {
+       "cDom": -0.005462505780819956,
+       "cExt": 0.01181932420425052,
+       "matchs": 4375
+      },
+      "B": {
+       "cDom": -0.006889616865753193,
+       "cExt": 0.009640997182949806,
+       "matchs": 4375
+      }
+     }
+    ],
+    "matchsJuges": 8364,
+    "ecartees": 0,
+    "verdict": "pas-prouve",
+    "raison": "La fourchette contient zéro : l’écart peut venir du hasard (8 364 matchs, 11 variantes essayées).",
+    "lignes": 8364,
+    "blocs": 8364,
+    "perteBase": 2.9324848503745757,
+    "perteVariante": 2.931774404088209,
+    "gain": 0.0007104462863702723,
+    "ecartType": 0.0003886262235769771,
+    "zObserve": 1.8280966215589172,
+    "fourchette": [
+     -0.00039232174584819153,
+     0.0018132143185887362
+    ],
+    "gainRelatif": 0.0002422676748967773,
+    "fourchetteRelative": [
+     -0.00013378474770230406,
+     0.0006183200974958587
+    ],
+    "z": 2.837605815861865,
+    "variantes": 11,
+    "ampleur": {
+     "max": 0.0076328386435615585,
+     "marche": "plus25",
+     "parMarche": {
+      "plus05": 0.0021881524613336007,
+      "plus15": 0.005562265497461148,
+      "plus25": 0.0076328386435615585,
+      "plus35": 0.007131140077362944,
+      "lesDeuxMarquent": 0.005576028801588551,
+      "dom05": 0.00504373452719413,
+      "dom15": 0.007603659973715595,
+      "dom25": 0.00608652875091441,
+      "dom35": 0.003449721651815548,
+      "ext05": 0.005381945542997695,
+      "ext15": 0.0066155552242227736,
+      "ext25": 0.0043714903178360175,
+      "ext35": 0.0020712988530557264
+     },
+     "seuil": 0.005
+    },
+    "temoins": {
+     "perteBase": 6.4088815819915474,
+     "perteVariante": 6.407238927935991,
+     "gainRelatif": 0.0002563090040815748,
+     "juge": false
+    },
+    "rapporte": {
+     "unDeuxSeul": {
+      "matchs": 3336,
+      "gain": -0.00007253037980465726,
+      "gainRelatif": -0.000025051927803982396
+     },
+     "tranches": [
+      {
+       "de": 1,
+       "a": 5,
+       "matchs": 3472,
+       "gain": 0.0011723475782162303,
+       "gainRelatif": 0.000398570335332739
+      },
+      {
+       "de": 6,
+       "a": 10,
+       "matchs": 4892,
+       "gain": 0.0003826210031871308,
+       "gainRelatif": 0.00013075828124461467
+      }
+     ],
+     "tranche1120": null,
+     "saisons": null,
+     "huisClos": null
+    }
+   },
+   {
+    "id": "magasin-placebo-faux-effectif",
+    "famille": "effectif",
+    "fenetre": "magasin",
+    "ensemble": "effectif",
+    "placebo": true,
+    "appris": [
+     {
+      "pli": 0,
+      "apprisSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "jugeSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "matchsAppris": 3989,
+      "matchsJuges": 4375,
+      "appris": {
+       "d": 2,
+       "b": [
+        0.0009175544962100322,
+        0.0025698678919261614
+       ]
+      }
+     },
+     {
+      "pli": 1,
+      "apprisSur": {
+       "de": "2025-07-01",
+       "a": "2026-09-23"
+      },
+      "jugeSur": {
+       "de": "2023-07-01",
+       "a": "2025-06-30"
+      },
+      "matchsAppris": 4375,
+      "matchsJuges": 3989,
+      "appris": {
+       "d": 8,
+       "b": [
+        -0.0038692763391342685,
+        0.00818542184133784
+       ]
+      }
+     }
+    ],
+    "recalages": [
+     {
+      "pli": 0,
+      "A": {
+       "cDom": -0.012419201806296522,
+       "cExt": -0.001769004182135877,
+       "matchs": 3989
+      },
+      "B": {
+       "cDom": -0.01256504374749826,
+       "cExt": -0.0018690986117289351,
+       "matchs": 3989
+      }
+     },
+     {
+      "pli": 1,
+      "A": {
+       "cDom": -0.005462505780819956,
+       "cExt": 0.01181932420425052,
+       "matchs": 4375
+      },
+      "B": {
+       "cDom": -0.005523165572724208,
+       "cExt": 0.01177656464748864,
+       "matchs": 4375
+      }
+     }
+    ],
+    "matchsJuges": 8364,
+    "ecartees": 0,
+    "verdict": "pas-prouve",
+    "raison": "La fourchette contient zéro : l’écart peut venir du hasard (8 364 matchs, 11 variantes essayées).",
+    "lignes": 8364,
+    "blocs": 8364,
+    "perteBase": 2.9324848503745757,
+    "perteVariante": 2.9324908133660377,
+    "gain": -0.000005962991455413556,
+    "ecartType": 0.00009997038627559354,
+    "zObserve": -0.05964757842362506,
+    "fourchette": [
+     -0.000289639540964995,
+     0.00027771355805416783
+    ],
+    "gainRelatif": -0.000002033426175979011,
+    "fourchetteRelative": [
+     -0.0000987693221767193,
+     0.00009470246982476128
+    ],
+    "z": 2.837605815861865,
+    "variantes": 11,
+    "ampleur": {
+     "max": 0.0017524680759682402,
+     "marche": "plus25",
+     "parMarche": {
+      "plus05": 0.0005170209495347392,
+      "plus15": 0.001300236959971297,
+      "plus25": 0.0017524680759682402,
+      "plus35": 0.0016086602371477967,
+      "lesDeuxMarquent": 0.0013554418433331863,
+      "dom05": 0.001143534424834089,
+      "dom15": 0.0016708002484098834,
+      "dom25": 0.0012912013214452212,
+      "dom35": 0.0007039071509243134,
+      "ext05": 0.0012347341885300689,
+      "ext15": 0.0014698242607776072,
+      "ext25": 0.0009375646381189069,
+      "ext35": 0.00042708380156085787
+     },
+     "seuil": 0.005
+    },
+    "temoins": {
+     "perteBase": 6.4088815819915474,
+     "perteVariante": 6.409022398616835,
+     "gainRelatif": -0.000021972105972909578,
+     "juge": false
+    },
+    "rapporte": {
+     "unDeuxSeul": {
+      "matchs": 3336,
+      "gain": 0.00007010051993945194,
+      "gainRelatif": 0.00002421265639687184
+     },
+     "tranches": [
+      {
+       "de": 1,
+       "a": 5,
+       "matchs": 3472,
+       "gain": 0.000033290798004105654,
+       "gainRelatif": 0.000011318080721572112
+      },
+      {
+       "de": 6,
+       "a": 10,
+       "matchs": 4892,
+       "gain": -0.000033822590181088485,
+       "gainRelatif": -0.000011558653922500776
+      }
+     ],
+     "tranche1120": null,
+     "saisons": null,
+     "huisClos": null
+    }
+   },
+   {
+    "id": "fd-promus-sans-cote",
+    "famille": "promus",
+    "fenetre": "fd",
+    "ensemble": "promus",
+    "placebo": false,
+    "appris": [
+     {
+      "pli": 0,
+      "apprisSur": {
+       "de": "2005-07-01",
+       "a": "2019-06-30"
+      },
+      "jugeSur": {
+       "de": "2019-07-01",
+       "a": "2023-06-30"
+      },
+      "matchsAppris": 7194,
+      "matchsJuges": 1921,
+      "appris": {
+       "c0": [
+        0.01757284706023561,
+        0.040914467521498535
+       ],
+       "theta": [
+        -0.09704074125764393,
+        0.07109328433782248
+       ]
+      }
+     }
+    ],
+    "recalages": [
+     {
+      "pli": 0,
+      "A": {
+       "cDom": -0.014624884305283522,
+       "cExt": -0.011675825167807803,
+       "matchs": 7194
+      },
+      "B": {
+       "cDom": 0.0040652564618728175,
+       "cExt": 0.006910232191660148,
+       "matchs": 7194
+      }
+     }
+    ],
+    "matchsJuges": 1921,
+    "ecartees": 0,
+    "verdict": "pas-prouve",
+    "raison": "La fourchette contient zéro : l’écart peut venir du hasard (1 921 matchs, 11 variantes essayées).",
+    "lignes": 1921,
+    "blocs": 1921,
+    "perteBase": 2.943568541560264,
+    "perteVariante": 2.938729985154512,
+    "gain": 0.004838556405753607,
+    "ecartType": 0.002396009326981819,
+    "zObserve": 2.0194230261401325,
+    "fourchette": [
+     -0.0019603735953492756,
+     0.011637486406856488
+    ],
+    "gainRelatif": 0.0016437722911622394,
+    "fourchetteRelative": [
+     -0.0006659853737634261,
+     0.003953529956087905
+    ],
+    "z": 2.837605815861865,
+    "variantes": 11,
+    "ampleur": {
+     "max": 0.027564905126000294,
+     "marche": "dom15",
+     "parMarche": {
+      "plus05": 0.002533770303478374,
+      "plus15": 0.005977162532819314,
+      "plus25": 0.0077982412606153574,
+      "plus35": 0.006871317189904726,
+      "lesDeuxMarquent": 0.00789582071450557,
+      "dom05": 0.020324914415560075,
+      "dom15": 0.027564905126000294,
+      "dom25": 0.01977400255519067,
+      "dom35": 0.010002182036508708,
+      "ext05": 0.020867265435646817,
+      "ext15": 0.02401060394999324,
+      "ext25": 0.014831103700535472,
+      "ext35": 0.006582932571406026
+     },
+     "seuil": 0.005
+    },
+    "temoins": {
+     "perteBase": 6.555947898512858,
+     "perteVariante": 6.546389387681969,
+     "gainRelatif": 0.0014579906641809925,
+     "juge": false
+    },
+    "rapporte": {
+     "unDeuxSeul": {
+      "matchs": 1920,
+      "gain": -0.0004325940733105919,
+      "gainRelatif": -0.0001502933881576158
+     },
+     "tranches": [
+      {
+       "de": 1,
+       "a": 5,
+       "matchs": 966,
+       "gain": 0.003658432946933908,
+       "gainRelatif": 0.0012569320055256074
+      },
+      {
+       "de": 6,
+       "a": 10,
+       "matchs": 955,
+       "gain": 0.006032272909648749,
+       "gainRelatif": 0.002026352803991845
+      }
+     ],
+     "tranche1120": null,
+     "saisons": [
+      {
+       "saison": "2019-20",
+       "matchs": 492,
+       "gain": 0.0012442493178355107,
+       "gainRelatif": 0.0004302652316084343
+      },
+      {
+       "saison": "2020-21",
+       "matchs": 435,
+       "gain": 0.006969364567850329,
+       "gainRelatif": 0.0023747246149536114
+      },
+      {
+       "saison": "2021-22",
+       "matchs": 484,
+       "gain": 0.004365814435147066,
+       "gainRelatif": 0.0014566667348402866
+      },
+      {
+       "saison": "2022-23",
+       "matchs": 510,
+       "gain": 0.006937192975391661,
+       "gainRelatif": 0.002351483511412619
+      }
+     ],
+     "huisClos": {
+      "matchs": 435,
+      "gain": 0.006969364567850329,
+      "gainRelatif": 0.0023747246149536114
+     }
+    }
+   },
+   {
+    "id": "fd-nouveaux-sans-cote",
+    "famille": "nouveaux",
+    "fenetre": "fd",
+    "ensemble": "nouveaux",
+    "placebo": false,
+    "appris": [
+     {
+      "pli": 0,
+      "apprisSur": {
+       "de": "2005-07-01",
+       "a": "2019-06-30"
+      },
+      "jugeSur": {
+       "de": "2019-07-01",
+       "a": "2023-06-30"
+      },
+      "matchsAppris": 3941,
+      "matchsJuges": 1063,
+      "appris": {
+       "c0": [
+        0.01757284706023561,
+        0.040914467521498535
+       ],
+       "theta": [
+        -0.09704074125764393,
+        0.07109328433782248
+       ]
+      }
+     }
+    ],
+    "recalages": [
+     {
+      "pli": 0,
+      "A": {
+       "cDom": -0.034702011786847224,
+       "cExt": -0.02403278332373667,
+       "matchs": 3941
+      },
+      "B": {
+       "cDom": -0.026314123665837404,
+       "cExt": -0.015291308800998028,
+       "matchs": 3941
+      }
+     }
+    ],
+    "matchsJuges": 1063,
+    "ecartees": 0,
+    "verdict": "pas-prouve",
+    "raison": "La fourchette contient zéro : l’écart peut venir du hasard (1 063 matchs, 11 variantes essayées).",
+    "lignes": 1063,
+    "blocs": 1063,
+    "perteBase": 2.950816400633119,
+    "perteVariante": 2.952462353313782,
+    "gain": -0.0016459526806658553,
+    "ecartType": 0.001731527730932514,
+    "zObserve": -0.9505782964154017,
+    "fourchette": [
+     -0.006559345840286055,
+     0.003267440478954345
+    ],
+    "gainRelatif": -0.0005577956935283077,
+    "fourchetteRelative": [
+     -0.0022228918881156755,
+     0.0011073005010590602
+    ],
+    "z": 2.837605815861865,
+    "variantes": 11,
+    "ampleur": {
+     "max": 0.011310378798102271,
+     "marche": "dom15",
+     "parMarche": {
+      "plus05": 0.0013109273834581562,
+      "plus15": 0.0030274948168182722,
+      "plus25": 0.003893607324505259,
+      "plus35": 0.003396849464594296,
+      "lesDeuxMarquent": 0.0027467628885748524,
+      "dom05": 0.008526410804869294,
+      "dom15": 0.011310378798102271,
+      "dom25": 0.007994865911324183,
+      "dom35": 0.004034002924139529,
+      "ext05": 0.008664747361670163,
+      "ext15": 0.009823059188536688,
+      "ext25": 0.0060113873453115614,
+      "ext35": 0.002650110801769269
+     },
+     "seuil": 0.005
+    },
+    "temoins": {
+     "perteBase": 6.441387042160354,
+     "perteVariante": 6.446214171862611,
+     "gainRelatif": -0.0007493928979367069,
+     "juge": false
+    },
+    "rapporte": {
+     "unDeuxSeul": {
+      "matchs": 1062,
+      "gain": -0.0003189381986637209,
+      "gainRelatif": -0.00010980002363827114
+     },
+     "tranches": [
+      {
+       "de": 1,
+       "a": 5,
+       "matchs": 534,
+       "gain": 0.00027403512498143964,
+       "gainRelatif": 0.00009297963497675749
+      },
+      {
+       "de": 6,
+       "a": 10,
+       "matchs": 529,
+       "gain": -0.0035840878190721653,
+       "gainRelatif": -0.0012131328148683267
+      }
+     ],
+     "tranche1120": null,
+     "saisons": [
+      {
+       "saison": "2019-20",
+       "matchs": 289,
+       "gain": -0.002520271577534624,
+       "gainRelatif": -0.0008353896215075987
+      },
+      {
+       "saison": "2020-21",
+       "matchs": 239,
+       "gain": -0.0017732641157651174,
+       "gainRelatif": -0.0006045043350173759
+      },
+      {
+       "saison": "2021-22",
+       "matchs": 250,
+       "gain": -0.003132975084988175,
+       "gainRelatif": -0.0010908261694546214
+      },
+      {
+       "saison": "2022-23",
+       "matchs": 285,
+       "gain": 0.000651805899205452,
+       "gainRelatif": 0.00021965165362795654
+      }
+     ],
+     "huisClos": {
+      "matchs": 239,
+      "gain": -0.0017732641157651174,
+      "gainRelatif": -0.0006045043350173759
+     }
+    }
+   },
+   {
+    "id": "fd-placebo-faux-promu",
+    "famille": "promus",
+    "fenetre": "fd",
+    "ensemble": "fauxPromu",
+    "placebo": true,
+    "appris": [
+     {
+      "pli": 0,
+      "apprisSur": {
+       "de": "2005-07-01",
+       "a": "2019-06-30"
+      },
+      "jugeSur": {
+       "de": "2019-07-01",
+       "a": "2023-06-30"
+      },
+      "matchsAppris": 7301,
+      "matchsJuges": 1969,
+      "appris": {
+       "c0": [
+        0.01757284706023561,
+        0.040914467521498535
+       ],
+       "m": [
+        -0.024226587897445834,
+        -0.04493690512393421
+       ]
+      }
+     }
+    ],
+    "recalages": [
+     {
+      "pli": 0,
+      "A": {
+       "cDom": -0.003001735965420285,
+       "cExt": -0.010674476897131658,
+       "matchs": 7301
+      },
+      "B": {
+       "cDom": 0.02189518513616479,
+       "cExt": 0.014188798263922494,
+       "matchs": 7301
+      }
+     }
+    ],
+    "matchsJuges": 1969,
+    "ecartees": 0,
+    "verdict": "pas-prouve",
+    "raison": "La fourchette contient zéro : l’écart peut venir du hasard (1 969 matchs, 11 variantes essayées).",
+    "lignes": 1969,
+    "blocs": 1969,
+    "perteBase": 2.92564087632709,
+    "perteVariante": 2.9253878625751533,
+    "gain": 0.0002530137519351163,
+    "ecartType": 0.0004167115064372081,
+    "zObserve": 0.6071676640233151,
+    "fourchette": [
+     -0.0009294492422676644,
+     0.001435476746137897
+    ],
+    "gainRelatif": 0.00008648147965882777,
+    "fourchetteRelative": [
+     -0.00031769081769000786,
+     0.0004906537770076634
+    ],
+    "z": 2.837605815861865,
+    "variantes": 11,
+    "ampleur": {
+     "max": 0.0040769758112841475,
+     "marche": "plus25",
+     "parMarche": {
+      "plus05": 0.001227346759670621,
+      "plus15": 0.003059730274458922,
+      "plus25": 0.0040769758112841475,
+      "plus35": 0.003697073932531736,
+      "lesDeuxMarquent": 0.00309293461514385,
+      "dom05": 0.0028550200503151416,
+      "dom15": 0.004002402324377171,
+      "dom25": 0.003032044396073358,
+      "dom35": 0.0016623879924811318,
+      "ext05": 0.0030053292805987315,
+      "ext15": 0.003578203060402764,
+      "ext25": 0.002330891711085335,
+      "ext35": 0.0011132422655405246
+     },
+     "seuil": 0.005
+    },
+    "temoins": {
+     "perteBase": 6.43937618247494,
+     "perteVariante": 6.437876445445071,
+     "gainRelatif": 0.0002329009809910031,
+     "juge": false
+    },
+    "rapporte": {
+     "unDeuxSeul": {
+      "matchs": 1968,
+      "gain": 0.00014349372956828335,
+      "gainRelatif": 0.00004961645766834194
+     },
+     "tranches": [
+      {
+       "de": 1,
+       "a": 5,
+       "matchs": 988,
+       "gain": 0.000836909817728988,
+       "gainRelatif": 0.00028666675829039514
+      },
+      {
+       "de": 6,
+       "a": 10,
+       "matchs": 981,
+       "gain": -0.0003350487485793205,
+       "gainRelatif": -0.00011427801779738217
+      }
+     ],
+     "tranche1120": null,
+     "saisons": [
+      {
+       "saison": "2019-20",
+       "matchs": 482,
+       "gain": -0.0006905566058515119,
+       "gainRelatif": -0.00023934073376049572
+      },
+      {
+       "saison": "2020-21",
+       "matchs": 447,
+       "gain": 0.0014394455388655823,
+       "gainRelatif": 0.0004947234969895657
+      },
+      {
+       "saison": "2021-22",
+       "matchs": 534,
+       "gain": 0.00021857963691700172,
+       "gainRelatif": 0.00007494280413086731
+      },
+      {
+       "saison": "2022-23",
+       "matchs": 506,
+       "gain": 0.0001400764418849037,
+       "gainRelatif": 0.000046882559291838485
+      }
+     ],
+     "huisClos": {
+      "matchs": 447,
+      "gain": 0.0014394455388655823,
+      "gainRelatif": 0.0004947234969895657
+     }
+    }
+   }
+  ],
+  "familles": {
+   "rappel": {
+    "mot": "oubli à la trêve",
+    "utile": false,
+    "fenetre": null,
+    "prudent": false,
+    "moinsBonQuelquePart": false,
+    "bancFaux": {
+     "magasin": false
+    },
+    "fenetres": {
+     "magasin": {
+      "variante": "magasin-rappel-sans-cote",
+      "placebo": "magasin-placebo-fausse-rentree",
+      "verdict": "pas-prouve",
+      "placeboVerdict": "pas-prouve",
+      "raisons": [
+       "verdict « pas-prouve »",
+       "ampleur sous 0,5 point"
+      ],
+      "retenueIci": false
+     }
+    }
+   },
+   "promus": {
+    "mot": "promus et relégués",
+    "utile": false,
+    "fenetre": null,
+    "prudent": false,
+    "moinsBonQuelquePart": false,
+    "bancFaux": {
+     "magasin": false,
+     "fd": false
+    },
+    "fenetres": {
+     "magasin": {
+      "variante": "magasin-promus-sans-cote",
+      "placebo": "magasin-placebo-faux-promu",
+      "verdict": "pas-prouve",
+      "placeboVerdict": "pas-prouve",
+      "raisons": [
+       "verdict « pas-prouve »"
+      ],
+      "retenueIci": false
+     },
+     "fd": {
+      "variante": "fd-promus-sans-cote",
+      "placebo": "fd-placebo-faux-promu",
+      "verdict": "pas-prouve",
+      "placeboVerdict": "pas-prouve",
+      "raisons": [
+       "verdict « pas-prouve »"
+      ],
+      "retenueIci": false
+     }
+    }
+   },
+   "nouveaux": {
+    "mot": "nouveaux venus",
+    "utile": true,
+    "fenetre": "magasin",
+    "prudent": true,
+    "moinsBonQuelquePart": false,
+    "bancFaux": {
+     "magasin": false,
+     "fd": false
+    },
+    "fenetres": {
+     "magasin": {
+      "variante": "magasin-nouveaux-sans-cote",
+      "placebo": "magasin-placebo-faux-promu",
+      "verdict": "retenu",
+      "placeboVerdict": "pas-prouve",
+      "raisons": [],
+      "retenueIci": true
+     },
+     "fd": {
+      "variante": "fd-nouveaux-sans-cote",
+      "placebo": "fd-placebo-faux-promu",
+      "verdict": "pas-prouve",
+      "placeboVerdict": "pas-prouve",
+      "raisons": [
+       "verdict « pas-prouve »"
+      ],
+      "retenueIci": false
+     }
+    }
+   },
+   "effectif": {
+    "mot": "force de l’effectif",
+    "utile": false,
+    "fenetre": null,
+    "prudent": true,
+    "moinsBonQuelquePart": false,
+    "bancFaux": {
+     "magasin": false
+    },
+    "fenetres": {
+     "magasin": {
+      "variante": "magasin-force-effectif-sans-cote",
+      "placebo": "magasin-placebo-faux-effectif",
+      "verdict": "pas-prouve",
+      "placeboVerdict": "pas-prouve",
+      "raisons": [
+       "verdict « pas-prouve »"
+      ],
+      "retenueIci": false
+     }
+    }
+   }
+  },
+  "utiles": [
+   "nouveaux"
+  ],
+  "bancFaux": {
+   "rappel": {
+    "magasin": false
+   },
+   "promus": {
+    "magasin": false,
+    "fd": false
+   },
+   "nouveaux": {
+    "magasin": false,
+    "fd": false
+   },
+   "effectif": {
+    "magasin": false
+   }
+  }
+ },
+ "final": {
+  "magasin": {
+   "dRappel": 8,
+   "promus": {
+    "c0": [
+     -0.15071673362747195,
+     0.0006102641352869147
+    ],
+    "theta": [
+     -0.08139967928101759,
+     0.09198539795681503
+    ]
+   },
+   "effectif": {
+    "d": 8,
+    "b": [
+     0.0211263449234519,
+     0.008297630045005059
+    ]
+   }
+  },
+  "fd": {
+   "k0": 8,
+   "promus": {
+    "c0": [
+     0.01757284706023561,
+     0.040914467521498535
+    ],
+    "theta": [
+     -0.09704074125764393,
+     0.07109328433782248
+    ]
+   }
+  }
+ },
+ "horizons": {
+  "nouveaux": {
+   "fenetre": "magasin",
+   "matchs": 1767
+  }
+ }
+}

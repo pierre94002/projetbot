@@ -347,10 +347,12 @@ after(() => fs.rmSync(DOSSIER, { recursive: true, force: true, maxRetries: 10, r
 test('T-X5 la déclaration de l’étape 34 AVANT le regard : portée à la fin de PORTEES ; vues `pour: [\'paris-joueurs\']` seulement ; les 11 variantes ; le lancement daté au premier démarrage ; fenetresVues(\'27\') et compterVariantes(\'27\') inchangés', () => {
   // Étape 38 (04/11/2026) : « combinaison » vient après « paris-joueurs » (combinaisonFrontiere T-X5).
   // Étape 36 (lot 1, 09/11/2026) : « coupes » vient après « combinaison » (coupesFrontiere T-X5).
-  assert.equal(LANC.PORTEES.at(-1), 'coupes');
-  assert.equal(LANC.PORTEES.at(-2), 'combinaison');
-  assert.equal(LANC.PORTEES.at(-3), 'paris-joueurs');
-  assert.equal(LANC.PORTEES.at(-4), 'cartons-corners');
+  // Étape 35 (lot 1a, 09/11/2026) : « debuts-de-saison » vient après « coupes » (debutsFrontiere T-X5).
+  assert.equal(LANC.PORTEES.at(-1), 'debuts-de-saison');
+  assert.equal(LANC.PORTEES.at(-2), 'coupes');
+  assert.equal(LANC.PORTEES.at(-3), 'combinaison');
+  assert.equal(LANC.PORTEES.at(-4), 'paris-joueurs');
+  assert.equal(LANC.PORTEES.at(-5), 'cartons-corners');
   assert.ok(LANC.verifierLancements());
   for (const v of LANC.VUES_DE_L_ETAPE_34) {
     assert.deepEqual([...v.pour], ['paris-joueurs'], `${v.de} → ${v.a}`);
@@ -365,9 +367,11 @@ test('T-X5 la déclaration de l’étape 34 AVANT le regard : portée à la fin 
   assert.equal(l34.vues, LANC.VUES_DE_L_ETAPE_34);
   // Étape 38 (04/11/2026) : le lancement 34, puis celui de la 38.
   // Étape 36 (lot 1, 09/11/2026) : puis celui de la 36.
-  assert.equal(LANC.LANCEMENTS.at(-3), l34, 'le lancement 34 ajouté à la fin, puis ceux de la 38 et de la 36');
-  assert.equal(LANC.LANCEMENTS.at(-2).etape, '38');
-  assert.equal(LANC.LANCEMENTS.at(-1).etape, '36');
+  // Étape 35 (lot 1a, 09/11/2026) : puis celui de la 35.
+  assert.equal(LANC.LANCEMENTS.at(-4), l34, 'le lancement 34 ajouté à la fin, puis ceux de la 38, de la 36 et de la 35');
+  assert.equal(LANC.LANCEMENTS.at(-3).etape, '38');
+  assert.equal(LANC.LANCEMENTS.at(-2).etape, '36');
+  assert.equal(LANC.LANCEMENTS.at(-1).etape, '35');
   for (const portee of LANC.PORTEES.filter((p) => !['tout', 'paris-joueurs'].includes(p))) assert.ok(!LANC.fenetresDeclarees({ portee }).some((f) => f.etape === '34'), portee);
   assert.ok(LANC.fenetresDeclarees({ portee: 'paris-joueurs' }).some((f) => f.etape === '34'));
   const fichier = path.join(DOSSIER, 'registre-t-x5.json');

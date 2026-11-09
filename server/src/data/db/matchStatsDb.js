@@ -1974,6 +1974,58 @@ const COUPES_DDL = [
   'CREATE INDEX IF NOT EXISTS idx_coupes_lignes_date ON coupes_lignes(date);'
 ];
 
+/**
+ * Étape 35 (lot 1a, 09/11/2026 ; ajout PUR, règle du gel) : les DÉBUTS DE SAISON ET LES CHANGEMENTS D'EFFECTIF
+ * (data/debutsDeSaison/), hors de l'empreinte du moteur — rien ici n'est lu par l'empreinte ni par la fermeture des imports ;
+ * écrites par la nuit seule (lot 1b ; le serveur, seul écrivain), jamais un JSON sous OneDrive ; aucun nom de club ni de
+ * joueur rangé (des numéros FotMob) :
+ *   debuts_fiches  la FICHE d'avant-match de chaque match des 14 prochains jours (les entrées de l'étape : les deux états
+ *                  scindés, rangs, statuts, continuités, moyennes de ligue ; les buts attendus des bras avec les réglages
+ *                  de la note) — réécrite chaque nuit tant que le coup d'envoi n'est pas passé, JAMAIS ensuite ; jamais
+ *                  élaguée pour un match joué (la preuve après lancement) ;
+ *   debuts_clubs   une ligne par club vu dans les 400 derniers jours : rang, statut, championnat de la saison d'avant,
+ *                  continuité, mouvements de l'effectif, force de l'effectif à blanc ;
+ *   debuts_etat    la nuit, l'état en cours, les comptes, le contrôle anti-fuite, la preuve.
+ * Un index étroit (la date des fiches). Chaque entrée commence par son ordre (aucun commentaire devant).
+ */
+const DEBUTS_DDL = [
+  `CREATE TABLE IF NOT EXISTS debuts_fiches (
+  id INTEGER PRIMARY KEY,
+  date TEXT NOT NULL,
+  home_id INTEGER NOT NULL,
+  away_id INTEGER NOT NULL,
+  league TEXT,
+  match_id TEXT,
+  kickoff TEXT,
+  kickoff_connu INTEGER NOT NULL DEFAULT 0,
+  calcule_le TEXT NOT NULL,
+  version INTEGER NOT NULL,
+  note TEXT,
+  apres_coup_d_envoi INTEGER NOT NULL DEFAULT 0,
+  entrees TEXT NOT NULL,
+  bras TEXT,
+  match_key TEXT,
+  UNIQUE (date, home_id, away_id)
+);`,
+  `CREATE TABLE IF NOT EXISTS debuts_clubs (
+  club INTEGER PRIMARY KEY,
+  league TEXT,
+  saison INTEGER,
+  rang INTEGER,
+  statut TEXT,
+  ligue_avant TEXT,
+  continuite REAL,
+  cont_moy_ligue REAL,
+  mouvements TEXT,
+  force_effectif TEXT,
+  sans_identifiant REAL,
+  calcule_le TEXT NOT NULL,
+  version INTEGER NOT NULL
+);`,
+  `CREATE TABLE IF NOT EXISTS debuts_etat (cle TEXT PRIMARY KEY, valeur TEXT NOT NULL) WITHOUT ROWID;`,
+  'CREATE INDEX IF NOT EXISTS idx_debuts_fiches_date ON debuts_fiches(date);'
+];
+
 const FD_HISTORY_INDEXES = [
   'CREATE INDEX IF NOT EXISTS idx_fd_history_code_date ON fd_history(code, date);',
   'CREATE INDEX IF NOT EXISTS idx_fd_history_dom ON fd_history(dom);',
@@ -2030,6 +2082,7 @@ const DDL = [
   ...JOUEURS_DDL,
   ...COMBINAISON_DDL,
   ...COUPES_DDL,
+  ...DEBUTS_DDL,
   'CREATE INDEX IF NOT EXISTS idx_matches_date ON matches(date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_league_date ON matches(league, date);',
   'CREATE INDEX IF NOT EXISTS idx_matches_home ON matches(home_name);',

@@ -116,7 +116,8 @@ test('T-X5 la déclaration de l’étape 32 AVANT le regard : portée « context
   // Étape 34 (03/11/2026) : sa portée « paris-joueurs » vient APRÈS « cartons-corners » (joueursFrontiere T-X5).
   // Étape 38 (04/11/2026) : sa portée « combinaison » vient APRÈS « paris-joueurs » (combinaisonFrontiere T-X5).
   // Étape 36 (lot 1, 09/11/2026) : sa portée « coupes » vient APRÈS « combinaison » (coupesFrontiere T-X5).
-  assert.deepEqual([...LANC.PORTEES].slice(9), ['cartons-corners', 'paris-joueurs', 'combinaison', 'coupes']);
+  // Étape 35 (lot 1a, 09/11/2026) : sa portée « debuts-de-saison » vient APRÈS « coupes » (debutsFrontiere T-X5).
+  assert.deepEqual([...LANC.PORTEES].slice(9), ['cartons-corners', 'paris-joueurs', 'combinaison', 'coupes', 'debuts-de-saison']);
   assert.ok(LANC.VUES_DE_L_ETAPE_32.length >= 1);
   for (const v of LANC.VUES_DE_L_ETAPE_32) assert.deepEqual([...v.pour], ['contexte'], `${v.de} → ${v.a}`);
   for (const v of LANC.VUES_DE_L_ETAPE_32) assert.ok(v.a <= '2026-09-23', 'jamais P5 : la preuve après lancement');
@@ -194,14 +195,17 @@ test('T-X7 le jugement PROVISOIRE de l’essai de l’étape 27 (moteurABlanc, e
   assert.deepEqual(registre.etapes['38'].lancements.map((l) => [l.version, l.le, l.source]), [['combinaison-v1', '2026-09-23', 'code']]);
   // Étape 36 (lot 1, 09/11/2026) : de même.
   assert.deepEqual(registre.etapes['36'].lancements.map((l) => [l.version, l.le, l.source]), [['coupes-v1', '2026-09-23', 'code']]);
+  // Étape 35 (lot 1a, 09/11/2026) : de même.
+  assert.deepEqual(registre.etapes['35'].lancements.map((l) => [l.version, l.le, l.source]), [['debuts-de-saison-v1', '2026-09-23', 'code']]);
   delete registre.etapes['32'];
   delete registre.etapes['33'];
   delete registre.etapes['34'];
   delete registre.etapes['38'];
   delete registre.etapes['36'];
+  delete registre.etapes['35'];
   assert.equal(JSON.stringify(registre), JSON.stringify(JSON.parse(figee.registreMesureTexte)), 'le registre de la mesure d’essai, à l’octet hors du lancement 32');
   assert.ok(!figee.lancementsNotes.some((x) => x.startsWith('32:')), 'avant : le premier démarrage ne note pas 32');
-  assert.deepEqual(s.lancementsNotes, [...figee.lancementsNotes, '32:contexte-v1:2026-09-23', '33:cartons-corners-v1:2026-09-23', '34:joueurs-v1:2026-09-23', '38:combinaison-v1:2026-09-23', '36:coupes-v1:2026-09-23'], 'après : 32, 33, 34, 38 et 36 notés au premier démarrage, rien d’autre de neuf');
+  assert.deepEqual(s.lancementsNotes, [...figee.lancementsNotes, '32:contexte-v1:2026-09-23', '33:cartons-corners-v1:2026-09-23', '34:joueurs-v1:2026-09-23', '38:combinaison-v1:2026-09-23', '36:coupes-v1:2026-09-23', '35:debuts-de-saison-v1:2026-09-23'], 'après : 32, 33, 34, 38, 36 et 35 notés au premier démarrage, rien d’autre de neuf');
   assert.equal(s.variantes27, figee.variantes27);
   assert.equal(s.variantes27, 320);
   assert.ok(!figee.lancementsVus.includes('32:contexte-v1'), 'avant : pas de lancement 32');
@@ -211,7 +215,9 @@ test('T-X7 le jugement PROVISOIRE de l’essai de l’étape 27 (moteurABlanc, e
   assert.ok(s.lancementsVus.includes('38:combinaison-v1'), 'après : le lancement 38 est dans le registre du juge, et rien ne change');
   // Étape 36 (lot 1, 09/11/2026) : de même.
   assert.ok(s.lancementsVus.includes('36:coupes-v1'), 'après : le lancement 36 est dans le registre du juge, et rien ne change');
-  assert.deepEqual(s.lancementsVus.filter((x) => x !== '32:contexte-v1' && x !== '33:cartons-corners-v1' && x !== '34:joueurs-v1' && x !== '38:combinaison-v1' && x !== '36:coupes-v1'), figee.lancementsVus);
+  // Étape 35 (lot 1a, 09/11/2026) : de même.
+  assert.ok(s.lancementsVus.includes('35:debuts-de-saison-v1'), 'après : le lancement 35 est dans le registre du juge, et rien ne change');
+  assert.deepEqual(s.lancementsVus.filter((x) => x !== '32:contexte-v1' && x !== '33:cartons-corners-v1' && x !== '34:joueurs-v1' && x !== '38:combinaison-v1' && x !== '36:coupes-v1' && x !== '35:debuts-de-saison-v1'), figee.lancementsVus);
 });
 
 test('T-X8 openDb sur une copie de forme réelle (la base d’essai) crée les cinq tables et les deux index du contexte ; indexAttendus() complet ; une seconde ouverture ne change rien ; chaque entrée du DDL du contexte commence par son ordre', () => {

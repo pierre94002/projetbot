@@ -100,7 +100,10 @@ export const DONNEES_VUES = Object.freeze([
 // (data/combinaison/) ; jamais lus par le moteur au lot 1 (la candidate du lot 2 recopierait ces vues avec `pour: ['moteur']`).
 // Étape 36 (lot 1, 09/11/2026) : « coupes » — l’appariement des confrontations, la chance de qualification à blanc et sa
 // calibration rapportée (data/coupes/) ; jamais lus par le moteur.
-export const PORTEES = Object.freeze(['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs', 'combinaison', 'coupes']);
+// Étape 35 (lot 1a, 09/11/2026) : « debuts-de-saison » — les débuts de saison et les changements d’effectif (rangs, statuts,
+// oubli à la trêve, centres des promus et des nouveaux venus, force de l’effectif) mesurés à blanc (data/debutsDeSaison/) ;
+// jamais lus par le moteur au lot 1 (la candidate du lot 2 recopierait ces vues avec `pour: ['moteur']`).
+export const PORTEES = Object.freeze(['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs', 'combinaison', 'coupes', 'debuts-de-saison']);
 
 /** Une fenêtre vaut-elle pour cette mesure ? `tout` vaut pour toutes. */
 export const pourLaPortee = (pour, portee) => Array.isArray(pour) && (pour.includes(portee) || pour.includes('tout'));
@@ -880,6 +883,70 @@ export const VARIANTES_DE_L_ETAPE_36 = Object.freeze([
 ]);
 
 /**
+ * Les fenêtres REGARDÉES par l'étape 35 (débuts de saison et changements d'effectif, lot 1a du 09/11/2026 ;
+ * data/debutsDeSaison/), portée « debuts-de-saison » (déclarée DANS chaque fenêtre : le juge de l'essai de l'étape 27 n'en voit
+ * rien) : le magasin 2023-07-01 → 2026-09-23 où le banc (UN seul regard) apprend sur un pli et juge l'autre, puis l'inverse, et
+ * où les comptes d'avant le regard (rangs, statuts, faux points, Δ de l'effectif — sans perte ni réglage) sont pris ; la mise
+ * en route 2023-01-01 → 2023-06-30, où la conception et la critique ont lu, dans l'export gelé du 22/09, les minutes des
+ * joueurs et le nombre de matchs par compétition, sans aucun but ni résultat ; football-data P1 (les réglages de la fenêtre
+ * football-data, dont le k0 du « commun fd », appris sur 2005-07 → 2019-06, forces accumulées depuis 2000-07) et P2 (jugée,
+ * rien n'y est appris ; l'étape 18 et la porte 1 de l'étape 27 l'ont regardée pour d'autres questions) ; et, recopiées de
+ * l'étape 30 (critique de la 35, constat 6), les fenêtres où les fiches des joueurs — la force de l'effectif — ont été réglées.
+ * Jamais P5 (depuis le 24/09/2026) : c'est la preuve après lancement. Une candidate du MOTEUR (lot 2) recopierait ces fenêtres
+ * avec `pour: ['moteur']`.
+ */
+export const VUES_DE_L_ETAPE_35 = Object.freeze([
+  Object.freeze({
+    de: '2023-07-01',
+    a: '2026-09-23',
+    quoi: 'Étape 35 : banc des débuts de saison, un seul regard — oubli à la trêve, centres des promus, relégués et nouveaux venus, force de l’effectif et leurs contrôles, appris sur 2023-07 → 2025-06 et jugés sur 2025-07 → 2026-09-23, puis l’inverse ; perte du score exact, sans cote (« 1N2 seul » rapporté) ; avant lui, les comptes (rangs, statuts, faux points, Δ de l’effectif), sans perte ni réglage.',
+    pour: Object.freeze(['debuts-de-saison'])
+  }),
+  Object.freeze({
+    de: '2023-01-01',
+    a: '2023-06-30',
+    quoi: 'Étape 35 : mise en route (états accumulés, rien d’appris ni de jugé) ; la conception et la critique y ont lu, dans l’export gelé du 22/09, les minutes des joueurs (seuil « qui compte ») et le nombre de matchs par compétition, sans aucun but ni résultat.',
+    pour: Object.freeze(['debuts-de-saison'])
+  }),
+  Object.freeze({
+    de: '2000-07-01',
+    a: '2019-06-30',
+    quoi: 'Étape 35 : football-data P1 — réglages de la fenêtre football-data (le k0 du « commun fd », les centres des promus et le déplacement du faux promu) appris sur 2005-07 → 2019-06, forces accumulées depuis 2000-07.',
+    pour: Object.freeze(['debuts-de-saison'])
+  }),
+  Object.freeze({
+    de: '2019-07-01',
+    a: '2023-06-30',
+    quoi: 'Étape 35 : football-data P2 — jugement des réglages appris sur P1 (promus, nouveaux venus et leur contrôle), sans rien y apprendre.',
+    pour: Object.freeze(['debuts-de-saison'])
+  }),
+  ...VUES_DE_L_ETAPE_30.map((f) => Object.freeze({ ...f, quoi: `Recopiée de l’étape 30 (la force de l’effectif lit ses fiches) — ${f.quoi}`, pour: Object.freeze(['debuts-de-saison']) }))
+]);
+
+/**
+ * Les VARIANTES de l'étape 35, déclarées AVANT le regard unique du banc (décisions de l'orchestrateur du 02/11/2026 : le lot
+ * allégé de la critique, K = 11 ; « 1N2 seul » et « avec cotes » non jugés ; la continuité et le faux mercato, l'oubli et la
+ * fausse rentrée à football-data retirés) : la définition retenue (debuts-de-saison-v1, en tête : elle ne lit aucun
+ * résultat, comptée par prudence comme contexte-v1), l'oubli à la trêve, les centres des promus et des nouveaux venus (au
+ * magasin et à football-data P2), la force de l'effectif (le « oui » de Pierre du 02/11, verdict prudent) et leurs contrôles.
+ * Le banc compte K = VARIANTES_DE_L_ETAPE_35.length (z = 2,8376) et refuse toute variante absente d'ici. Une variante corrigée
+ * après le regard = un identifiant de plus, déclaré avant son passage.
+ */
+export const VARIANTES_DE_L_ETAPE_35 = Object.freeze([
+  Object.freeze({ id: 'debuts-de-saison-v1', quoi: 'Définition retenue (version 1) : rang (matchs de championnat déjà joués), statut par identifiant FotMob (début de saison, promu, relégué, nouveau venu, autre changement), état scindé « cette saison » / « avant », arrivées et départs par identifiant (jamais « parti » sans l’avoir vu jouer ailleurs), continuité et force de l’effectif à blanc, fiche gardée avant le coup d’envoi ; ne lit aucun résultat.' }),
+  Object.freeze({ id: 'magasin-rappel-sans-cote', quoi: 'Oubli à la trêve, magasin : la candidate face à la candidate + d matchs de vieillissement de plus pour tout ce qui précède la saison en cours (grille 0 à 64, a priori sur ln(1 + d)) ; matchs avec un club en début de saison de rang 1 à 10 ; deux plis.' }),
+  Object.freeze({ id: 'magasin-placebo-fausse-rentree', quoi: 'Fausse rentrée de contrôle, magasin : la même machinerie posée à un faux point (mars ou septembre, FNV-1a de « club:saison:f » mod 45 jours), ses 10 matchs suivants ; doit sortir « pas prouvé ».' }),
+  Object.freeze({ id: 'magasin-promus-sans-cote', quoi: 'Promus et relégués, magasin : le commun des remis à zéro (un centre, attaque et défense, pour les promus ET les relégués) face aux centres dirigés (θ pour un promu, −θ pour un relégué), a priori 0,5, la remise à zéro faite avant leur 1er match dans les deux bras ; rangs 1 à 10 ; deux plis.' }),
+  Object.freeze({ id: 'magasin-nouveaux-sans-cote', quoi: 'Nouveaux venus d’une division non suivie, magasin : le commun des remis à zéro posé sur eux face au centre des promus posé sur eux (Pierre, 02/11 : « traité comme un promu moyen » ; rien n’est appris sur eux) ; rangs 1 à 10 ; deux plis.' }),
+  Object.freeze({ id: 'magasin-placebo-faux-promu', quoi: 'Faux promu de contrôle, magasin : des clubs en début de saison tirés (FNV-1a de « club:saison:p » mod 1000 sous le seuil compté : la taille des vrais promus) reçoivent le déplacement d’un promu, (W + 8m)/(W + 8), deux paramètres, SANS remise à zéro ; doit sortir « pas prouvé ».' }),
+  Object.freeze({ id: 'magasin-force-effectif-sans-cote', quoi: 'Force de l’effectif, magasin : le rappel du pli face au rappel + β·x (x : le Δ des apports des joueurs selon leurs minutes, cette saison face à la saison d’avant avec les mêmes fiches de l’étape 30, divisé par son écart-type compté sans résultat ; a priori 0,05) ; clubs en début de saison de rang 3 à 10 ; verdict prudent.' }),
+  Object.freeze({ id: 'magasin-placebo-faux-effectif', quoi: 'Faux effectif de contrôle, magasin : la forme de la force de l’effectif avec les Δ du club suivant dans l’ordre FNV-1a de « club:saison:m » du même championnat ; doit sortir « pas prouvé ».' }),
+  Object.freeze({ id: 'fd-promus-sans-cote', quoi: 'Promus et relégués, football-data : la forme du magasin (commun des remis à zéro face aux centres dirigés), apprise sur P1 (2005-07 → 2019-06), jugée sur P2 (2019-07 → 2023-06) ; les deux bras lisent le « commun fd » (le k0 réappris sur P1 si T-B2bis le permet).' }),
+  Object.freeze({ id: 'fd-nouveaux-sans-cote', quoi: 'Nouveaux venus, football-data : le commun des remis à zéro face au centre des promus, appris sur P1, jugés sur P2.' }),
+  Object.freeze({ id: 'fd-placebo-faux-promu', quoi: 'Faux promu de contrôle, football-data : la forme du magasin sur des clubs tirés, appris sur P1, jugé sur P2 ; doit sortir « pas prouvé ».' })
+]);
+
+/**
  * Les lancements déclarés par les étapes, dans l'ordre où elles sont faites. À la FIN d'une étape qui
  * touche aux chiffres : ajouter son entrée ici (version en service, ce qu'elle change, TOUTES les
  * variantes dont on a regardé le résultat pendant la construction, les fenêtres de données regardées).
@@ -1000,6 +1067,18 @@ export const LANCEMENTS = Object.freeze([
     le: null,
     variantes: VARIANTES_DE_L_ETAPE_36,
     vues: VUES_DE_L_ETAPE_36
+  }),
+  // Étape 35 (lot 1a, 09/11/2026) : les débuts de saison et les changements d'effectif — rangs, statuts, arrivées et départs par
+  // identifiant, force de début de saison et force de l'effectif à blanc ; ils ne règlent aucun chiffre du moteur (portée
+  // 'debuts-de-saison'). Datée du premier démarrage de l'appli avec ce code ; ses variantes et ses vues déclarées AVANT le
+  // regard unique du banc.
+  Object.freeze({
+    etape: '35',
+    version: 'debuts-de-saison-v1',
+    quoi: 'Débuts de saison et changements d’effectif : pour chaque club et par son identifiant FotMob, son rang dans la saison, son statut (début de saison, promu, relégué, nouveau venu), ses arrivées et ses départs, sa force de début de saison et la force de son effectif à blanc ; mesurés au banc d’essai, jamais lus par le moteur.',
+    le: null,
+    variantes: VARIANTES_DE_L_ETAPE_35,
+    vues: VUES_DE_L_ETAPE_35
   })
 ]);
 

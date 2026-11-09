@@ -1,0 +1,4072 @@
+{
+ "etape": "35",
+ "lot": "1a",
+ "le": "2026-11-09",
+ "quoi": "T-B2bis : football-data FABRIQUÉ sans aucun effet de promu (ρ = 1 ; promus, relégués et nouveaux venus à la moyenne du nouveau championnat ; aucune donnée réelle, aucune base), 50 graines par monde ; les trois variantes de football-data jugées avec la forme complète (commun des remis à zéro + k0 commun réappris sur P1) et avec le commun des remis à zéro seul (k0 = 8).",
+ "regle": "forme complète > 5 % de faux « retenu » (promus ou nouveaux venus) sur les graines → commun des remis à zéro seul",
+ "graines": 50,
+ "mondes": [
+  {
+   "couplage": 0.35,
+   "source": "scratchpad/etape35/partieB/t-b2bis-nul.json",
+   "sha1Source": "a7ac11f62b87c67cc921d6f0b3b557480d3fc516",
+   "graines": 50,
+   "grainesDuMonde": "3500 + 101 × g, g = 1 … 50",
+   "dureeS": 1194,
+   "k0CommunAppris": {
+    "11": 7,
+    "16": 43
+   },
+   "bilan": {
+    "k0-commun": {
+     "fd-promus-sans-cote": {
+      "retenu": 0.06,
+      "zMoyen": 1.1020242355037917
+     },
+     "fd-nouveaux-sans-cote": {
+      "retenu": 0.04,
+      "zMoyen": 0.9784179180875447
+     },
+     "fd-placebo-faux-promu": {
+      "retenu": 0,
+      "zMoyen": -0.19761056618660838
+     }
+    },
+    "remis-a-zero-seul": {
+     "fd-promus-sans-cote": {
+      "retenu": 0,
+      "zMoyen": 0.26952255549514564
+     },
+     "fd-nouveaux-sans-cote": {
+      "retenu": 0,
+      "zMoyen": -0.15551943233450982
+     },
+     "fd-placebo-faux-promu": {
+      "retenu": 0,
+      "zMoyen": -0.21744822378152726
+     }
+    }
+   },
+   "retenusATort": {
+    "k0-commun": {
+     "promus": [
+      2,
+      23,
+      28
+     ],
+     "nouveaux": [
+      23,
+      42
+     ],
+     "fauxPromu": []
+    },
+    "remis-a-zero-seul": {
+     "promus": [],
+     "nouveaux": [],
+     "fauxPromu": []
+    }
+   },
+   "moinsBonSousLeNul": {
+    "k0-commun": {
+     "promus": [],
+     "nouveaux": [],
+     "fauxPromu": []
+    },
+    "remis-a-zero-seul": {
+     "promus": [],
+     "nouveaux": [],
+     "fauxPromu": []
+    }
+   },
+   "parGraine": [
+    {
+     "g": 1,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.2404,
+       2000
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       2.0058,
+       1063
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.2438,
+       1900
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -1.2695,
+       2000
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.7287,
+       1063
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.233,
+       1900
+      ]
+     }
+    },
+    {
+     "g": 2,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "retenu",
+       3.9517,
+       1977
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.2893,
+       1067
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.097,
+       1956
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       2.4754,
+       1977
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.5602,
+       1067
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.0613,
+       1956
+      ]
+     }
+    },
+    {
+     "g": 3,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -1.5791,
+       2012
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.3414,
+       1068
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.6484,
+       1930
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -2.8345,
+       2012
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.6448,
+       1068
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.4743,
+       1930
+      ]
+     }
+    },
+    {
+     "g": 4,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       1.2344,
+       1999
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.318,
+       1060
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.2956,
+       1774
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.2545,
+       1999
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.7898,
+       1060
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.3387,
+       1774
+      ]
+     }
+    },
+    {
+     "g": 5,
+     "seuil": 168,
+     "k0": 11,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.5327,
+       1995
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.6672,
+       1062
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.1545,
+       2016
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.017,
+       1995
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.4701,
+       1062
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.1282,
+       2016
+      ]
+     }
+    },
+    {
+     "g": 6,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       1.867,
+       2017
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.5907,
+       1062
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.0945,
+       1972
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.3712,
+       2017
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.5907,
+       1062
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.1185,
+       1972
+      ]
+     }
+    },
+    {
+     "g": 7,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       2.0726,
+       2005
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.0595,
+       1064
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.6731,
+       1915
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       1.6695,
+       2005
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.361,
+       1064
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.5886,
+       1915
+      ]
+     }
+    },
+    {
+     "g": 8,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       2.8097,
+       2012
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.8548,
+       1070
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.0033,
+       2032
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       1.6133,
+       2012
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.3547,
+       1070
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.7452,
+       2032
+      ]
+     }
+    },
+    {
+     "g": 9,
+     "seuil": 168,
+     "k0": 11,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.1771,
+       2008
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.1549,
+       1059
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.2892,
+       1924
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.8421,
+       2008
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.8784,
+       1059
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.2907,
+       1924
+      ]
+     }
+    },
+    {
+     "g": 10,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.4905,
+       1998
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       2.7599,
+       1065
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.4937,
+       1984
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.1546,
+       1998
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.231,
+       1065
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.9075,
+       1984
+      ]
+     }
+    },
+    {
+     "g": 11,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       1.9065,
+       2003
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.1919,
+       1072
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.4539,
+       2107
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.6084,
+       2003
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.6521,
+       1072
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.2979,
+       2107
+      ]
+     }
+    },
+    {
+     "g": 12,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       1.07,
+       2008
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.757,
+       1064
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.8106,
+       2096
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       1.0992,
+       2008
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.4154,
+       1064
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.8328,
+       2096
+      ]
+     }
+    },
+    {
+     "g": 13,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.4059,
+       2015
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.2847,
+       1063
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.129,
+       1848
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.6325,
+       2015
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.7726,
+       1063
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.0167,
+       1848
+      ]
+     }
+    },
+    {
+     "g": 14,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.8603,
+       2004
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.7626,
+       1067
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       2.0761,
+       1894
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -1.3399,
+       2004
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.0746,
+       1067
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.8973,
+       1894
+      ]
+     }
+    },
+    {
+     "g": 15,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.8479,
+       2003
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.4495,
+       1070
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.3947,
+       1867
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.4213,
+       2003
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -2.1782,
+       1070
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.4356,
+       1867
+      ]
+     }
+    },
+    {
+     "g": 16,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.2477,
+       2001
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.7679,
+       1067
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.2827,
+       2005
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.135,
+       2001
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.4314,
+       1067
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.45,
+       2005
+      ]
+     }
+    },
+    {
+     "g": 17,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       1.3148,
+       1998
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.8202,
+       1062
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.0467,
+       2035
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.128,
+       1998
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -2.1908,
+       1062
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.9866,
+       2035
+      ]
+     }
+    },
+    {
+     "g": 18,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       1.0631,
+       2006
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       2.166,
+       1073
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.069,
+       1849
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.5532,
+       2006
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.8367,
+       1073
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.0828,
+       1849
+      ]
+     }
+    },
+    {
+     "g": 19,
+     "seuil": 168,
+     "k0": 11,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.0804,
+       1991
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.1344,
+       1078
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.63,
+       1890
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.5472,
+       1991
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.2182,
+       1078
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.4603,
+       1890
+      ]
+     }
+    },
+    {
+     "g": 20,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       2.324,
+       2008
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       2.5018,
+       1061
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.6402,
+       1874
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.6944,
+       2008
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.3438,
+       1061
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.6604,
+       1874
+      ]
+     }
+    },
+    {
+     "g": 21,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.2245,
+       2004
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.7036,
+       1056
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.6484,
+       1985
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.6133,
+       2004
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.1982,
+       1056
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.805,
+       1985
+      ]
+     }
+    },
+    {
+     "g": 22,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       1.9462,
+       2010
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.0219,
+       1076
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.3108,
+       1888
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       1.5206,
+       2010
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.3612,
+       1076
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.2461,
+       1888
+      ]
+     }
+    },
+    {
+     "g": 23,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "retenu",
+       3.0692,
+       1992
+      ],
+      "nouveaux": [
+       "retenu",
+       3.1593,
+       1067
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.9778,
+       1907
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       1.5593,
+       1992
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.6651,
+       1067
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.8454,
+       1907
+      ]
+     }
+    },
+    {
+     "g": 24,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       1.7946,
+       2003
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.8554,
+       1060
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.496,
+       1833
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.2327,
+       2003
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.1538,
+       1060
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.5938,
+       1833
+      ]
+     }
+    },
+    {
+     "g": 25,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       1.0554,
+       2005
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.112,
+       1074
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.2364,
+       1853
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.8599,
+       2005
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.5246,
+       1074
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.1693,
+       1853
+      ]
+     }
+    },
+    {
+     "g": 26,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       1.8776,
+       2010
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.7044,
+       1061
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.807,
+       1877
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.5515,
+       2010
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.3006,
+       1061
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.7299,
+       1877
+      ]
+     }
+    },
+    {
+     "g": 27,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       1.3716,
+       2006
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.7975,
+       1066
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.1914,
+       2038
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.9149,
+       2006
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.0322,
+       1066
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.9088,
+       2038
+      ]
+     }
+    },
+    {
+     "g": 28,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "retenu",
+       3.4798,
+       2008
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.2397,
+       1060
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.3857,
+       1905
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       2.6015,
+       2008
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.2983,
+       1060
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.1703,
+       1905
+      ]
+     }
+    },
+    {
+     "g": 29,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.3573,
+       2023
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.4719,
+       1062
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.7121,
+       1889
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.0733,
+       2023
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.0833,
+       1062
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.7346,
+       1889
+      ]
+     }
+    },
+    {
+     "g": 30,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       1.6849,
+       2011
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.5673,
+       1070
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.0703,
+       2048
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.7384,
+       2011
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.2089,
+       1070
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.1158,
+       2048
+      ]
+     }
+    },
+    {
+     "g": 31,
+     "seuil": 168,
+     "k0": 11,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       1.799,
+       1998
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.3449,
+       1066
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.7799,
+       1779
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       1.1158,
+       1998
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.4091,
+       1066
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.7593,
+       1779
+      ]
+     }
+    },
+    {
+     "g": 32,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.3885,
+       2015
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.908,
+       1066
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.0271,
+       1956
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.7132,
+       2015
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.6194,
+       1066
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.8981,
+       1956
+      ]
+     }
+    },
+    {
+     "g": 33,
+     "seuil": 168,
+     "k0": 11,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       1.8054,
+       2005
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       2.0399,
+       1072
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.4959,
+       1932
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       1.2242,
+       2005
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.4108,
+       1072
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.5467,
+       1932
+      ]
+     }
+    },
+    {
+     "g": 34,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       1.2863,
+       2002
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       2.0685,
+       1067
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.0013,
+       1994
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.5624,
+       2002
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.9307,
+       1067
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.0448,
+       1994
+      ]
+     }
+    },
+    {
+     "g": 35,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       2.6163,
+       2002
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.5233,
+       1063
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.2643,
+       1780
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       1.6565,
+       2002
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.0914,
+       1063
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.4086,
+       1780
+      ]
+     }
+    },
+    {
+     "g": 36,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.3073,
+       2007
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.6475,
+       1065
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.1189,
+       1836
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.2355,
+       2007
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.6503,
+       1065
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.2991,
+       1836
+      ]
+     }
+    },
+    {
+     "g": 37,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.9058,
+       2002
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       2.106,
+       1065
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -2.0959,
+       2000
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.0166,
+       2002
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.7651,
+       1065
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.9765,
+       2000
+      ]
+     }
+    },
+    {
+     "g": 38,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.3851,
+       2003
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.2597,
+       1076
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.9895,
+       2069
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.808,
+       2003
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.7116,
+       1076
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.9365,
+       2069
+      ]
+     }
+    },
+    {
+     "g": 39,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.7157,
+       2008
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.6832,
+       1068
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.4852,
+       1795
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.1525,
+       2008
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.0657,
+       1068
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.3679,
+       1795
+      ]
+     }
+    },
+    {
+     "g": 40,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.8296,
+       2001
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.0225,
+       1064
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.1586,
+       1923
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.0821,
+       2001
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.2126,
+       1064
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.0749,
+       1923
+      ]
+     }
+    },
+    {
+     "g": 41,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       1.7641,
+       2003
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       2.4144,
+       1064
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -2.8034,
+       1959
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.8193,
+       2003
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.5301,
+       1064
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -2.6045,
+       1959
+      ]
+     }
+    },
+    {
+     "g": 42,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.1301,
+       2002
+      ],
+      "nouveaux": [
+       "retenu",
+       4.753,
+       1065
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.4478,
+       1896
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -1.5643,
+       2002
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       2.1321,
+       1065
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.302,
+       1896
+      ]
+     }
+    },
+    {
+     "g": 43,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.6557,
+       2008
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.4763,
+       1067
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.7838,
+       2078
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.5498,
+       2008
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.3916,
+       1067
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.9397,
+       2078
+      ]
+     }
+    },
+    {
+     "g": 44,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       1.8128,
+       2002
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.5223,
+       1061
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.4923,
+       1844
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       1.2966,
+       2002
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.4269,
+       1061
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.4876,
+       1844
+      ]
+     }
+    },
+    {
+     "g": 45,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.3365,
+       2000
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.1257,
+       1075
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.1205,
+       2023
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.1411,
+       2000
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.0689,
+       1075
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.1049,
+       2023
+      ]
+     }
+    },
+    {
+     "g": 46,
+     "seuil": 168,
+     "k0": 11,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.2778,
+       1992
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       2.2562,
+       1062
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.429,
+       1948
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.0304,
+       1992
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.7098,
+       1062
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.328,
+       1948
+      ]
+     }
+    },
+    {
+     "g": 47,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       1.6925,
+       2003
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.4773,
+       1057
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.9087,
+       1807
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       1.1189,
+       2003
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.1816,
+       1057
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.8938,
+       1807
+      ]
+     }
+    },
+    {
+     "g": 48,
+     "seuil": 168,
+     "k0": 11,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.4012,
+       2014
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.9366,
+       1064
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.4786,
+       1996
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.0353,
+       2014
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.1299,
+       1064
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.4472,
+       1996
+      ]
+     }
+    },
+    {
+     "g": 49,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       1.7088,
+       2002
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.4815,
+       1064
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.0827,
+       1847
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       1.3323,
+       2002
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.2828,
+       1064
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.3125,
+       1847
+      ]
+     }
+    },
+    {
+     "g": 50,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.4348,
+       2013
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.4023,
+       1065
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.627,
+       1900
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.3481,
+       2013
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.4828,
+       1065
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.6386,
+       1900
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "couplage": 0,
+   "source": "scratchpad/etape35/partieB/t-b2bis-nul-pur.json",
+   "sha1Source": "e2d621bf1346dc81803f9100a02d9ec45ced3227",
+   "graines": 50,
+   "grainesDuMonde": "3500 + 101 × g, g = 1 … 50",
+   "dureeS": 1264,
+   "k0CommunAppris": {
+    "16": 50
+   },
+   "bilan": {
+    "k0-commun": {
+     "fd-promus-sans-cote": {
+      "retenu": 0.02,
+      "zMoyen": -0.10155953674365328
+     },
+     "fd-nouveaux-sans-cote": {
+      "retenu": 0.02,
+      "zMoyen": -0.09337009951380786
+     },
+     "fd-placebo-faux-promu": {
+      "retenu": 0,
+      "zMoyen": -0.40447995347876586
+     }
+    },
+    "remis-a-zero-seul": {
+     "fd-promus-sans-cote": {
+      "retenu": 0,
+      "zMoyen": -0.9228259603012863
+     },
+     "fd-nouveaux-sans-cote": {
+      "retenu": 0,
+      "zMoyen": -0.8177513384320807
+     },
+     "fd-placebo-faux-promu": {
+      "retenu": 0,
+      "zMoyen": -0.41590068474153463
+     }
+    }
+   },
+   "retenusATort": {
+    "k0-commun": {
+     "promus": [
+      20
+     ],
+     "nouveaux": [
+      34
+     ],
+     "fauxPromu": []
+    },
+    "remis-a-zero-seul": {
+     "promus": [],
+     "nouveaux": [],
+     "fauxPromu": []
+    }
+   },
+   "moinsBonSousLeNul": {
+    "k0-commun": {
+     "promus": [],
+     "nouveaux": [
+      17
+     ],
+     "fauxPromu": [
+      33,
+      50
+     ]
+    },
+    "remis-a-zero-seul": {
+     "promus": [
+      35
+     ],
+     "nouveaux": [
+      13,
+      17,
+      20
+     ],
+     "fauxPromu": [
+      33,
+      50
+     ]
+    }
+   },
+   "parGraine": [
+    {
+     "g": 1,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.6599,
+       2008
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.2778,
+       1063
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.6007,
+       1914
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -1.7598,
+       2008
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -2.1203,
+       1063
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.6809,
+       1914
+      ]
+     }
+    },
+    {
+     "g": 2,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.3607,
+       1998
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.6777,
+       1053
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.6064,
+       1927
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -1.7145,
+       1998
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.3913,
+       1053
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.5309,
+       1927
+      ]
+     }
+    },
+    {
+     "g": 3,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.3236,
+       2006
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.144,
+       1065
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.1815,
+       1963
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.5655,
+       2006
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.6369,
+       1065
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.2991,
+       1963
+      ]
+     }
+    },
+    {
+     "g": 4,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.0355,
+       2002
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.4,
+       1060
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.5568,
+       1973
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -1.5302,
+       2002
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.4059,
+       1060
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.5573,
+       1973
+      ]
+     }
+    },
+    {
+     "g": 5,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.9489,
+       2004
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -2.3664,
+       1069
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.0368,
+       2028
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -1.9152,
+       2004
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.6414,
+       1069
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.9093,
+       2028
+      ]
+     }
+    },
+    {
+     "g": 6,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.1516,
+       2000
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.0936,
+       1059
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.5104,
+       1964
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.4147,
+       2000
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.3519,
+       1059
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.4353,
+       1964
+      ]
+     }
+    },
+    {
+     "g": 7,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.45,
+       2006
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.4131,
+       1070
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.0268,
+       1791
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.1196,
+       2006
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.7235,
+       1070
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.0802,
+       1791
+      ]
+     }
+    },
+    {
+     "g": 8,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.7755,
+       1987
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.0488,
+       1064
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.3116,
+       1969
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -1.0059,
+       1987
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -2.2164,
+       1064
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.0133,
+       1969
+      ]
+     }
+    },
+    {
+     "g": 9,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.6049,
+       2002
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.6502,
+       1067
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.3128,
+       2038
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -1.4227,
+       2002
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.2217,
+       1067
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.2836,
+       2038
+      ]
+     }
+    },
+    {
+     "g": 10,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       1.0038,
+       2005
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.6577,
+       1061
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -2.1559,
+       2093
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.5687,
+       2005
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.9893,
+       1061
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -2.0083,
+       2093
+      ]
+     }
+    },
+    {
+     "g": 11,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.3554,
+       1998
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.6265,
+       1066
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.3894,
+       1981
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.7791,
+       1998
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.9543,
+       1066
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.2374,
+       1981
+      ]
+     }
+    },
+    {
+     "g": 12,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.5094,
+       1996
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.7574,
+       1069
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.1182,
+       2071
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -2.1037,
+       1996
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.8415,
+       1069
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.1561,
+       2071
+      ]
+     }
+    },
+    {
+     "g": 13,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.539,
+       2017
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.597,
+       1069
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.8817,
+       1941
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -1.5602,
+       2017
+      ],
+      "nouveaux": [
+       "moins-bon",
+       -3.0817,
+       1069
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.7852,
+       1941
+      ]
+     }
+    },
+    {
+     "g": 14,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -1.2323,
+       2007
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.5307,
+       1066
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.194,
+       2104
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -2.3607,
+       2007
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.5583,
+       1066
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.1467,
+       2104
+      ]
+     }
+    },
+    {
+     "g": 15,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.5444,
+       1996
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.9838,
+       1065
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.993,
+       1946
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.6255,
+       1996
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.1288,
+       1065
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.9244,
+       1946
+      ]
+     }
+    },
+    {
+     "g": 16,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.5375,
+       2003
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.0164,
+       1068
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.8667,
+       1901
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.6104,
+       2003
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.992,
+       1068
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -2.0994,
+       1901
+      ]
+     }
+    },
+    {
+     "g": 17,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       1.4035,
+       1993
+      ],
+      "nouveaux": [
+       "moins-bon",
+       -2.9604,
+       1061
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.0297,
+       1954
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.4606,
+       1993
+      ],
+      "nouveaux": [
+       "moins-bon",
+       -2.9803,
+       1061
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.0001,
+       1954
+      ]
+     }
+    },
+    {
+     "g": 18,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.9846,
+       2011
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.1909,
+       1060
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.8554,
+       1947
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -1.7575,
+       2011
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.7145,
+       1060
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.8232,
+       1947
+      ]
+     }
+    },
+    {
+     "g": 19,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.4378,
+       2002
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.5666,
+       1065
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.79,
+       1801
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.2884,
+       2002
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -2.2306,
+       1065
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.8195,
+       1801
+      ]
+     }
+    },
+    {
+     "g": 20,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "retenu",
+       3.0201,
+       2001
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.7405,
+       1062
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.6531,
+       2095
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.7165,
+       2001
+      ],
+      "nouveaux": [
+       "moins-bon",
+       -2.8599,
+       1062
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.5518,
+       2095
+      ]
+     }
+    },
+    {
+     "g": 21,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.6495,
+       2016
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.0868,
+       1067
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.0618,
+       1902
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.168,
+       2016
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.588,
+       1067
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.3549,
+       1902
+      ]
+     }
+    },
+    {
+     "g": 22,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.3024,
+       1998
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.7882,
+       1069
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.0392,
+       1994
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.6886,
+       1998
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.6001,
+       1069
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.2327,
+       1994
+      ]
+     }
+    },
+    {
+     "g": 23,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.3816,
+       2013
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.4359,
+       1061
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.2042,
+       1838
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.9943,
+       2013
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.3362,
+       1061
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.367,
+       1838
+      ]
+     }
+    },
+    {
+     "g": 24,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.4692,
+       2005
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.5056,
+       1073
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.8698,
+       1888
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.4744,
+       2005
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.1541,
+       1073
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.8581,
+       1888
+      ]
+     }
+    },
+    {
+     "g": 25,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.3243,
+       1992
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.3224,
+       1059
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.7516,
+       1890
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -1.0178,
+       1992
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.1297,
+       1059
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.6872,
+       1890
+      ]
+     }
+    },
+    {
+     "g": 26,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.5494,
+       1998
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.775,
+       1075
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.0383,
+       2039
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.2626,
+       1998
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.1157,
+       1075
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.2832,
+       2039
+      ]
+     }
+    },
+    {
+     "g": 27,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.3341,
+       2010
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.1186,
+       1074
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.0976,
+       1907
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.5417,
+       2010
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.2082,
+       1074
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.0195,
+       1907
+      ]
+     }
+    },
+    {
+     "g": 28,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -2.6984,
+       1997
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.277,
+       1068
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.0333,
+       1889
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -2.2546,
+       1997
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.5932,
+       1068
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.91,
+       1889
+      ]
+     }
+    },
+    {
+     "g": 29,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       2.0292,
+       2000
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.0466,
+       1061
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.7505,
+       2028
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.7128,
+       2000
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.0114,
+       1061
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.6723,
+       2028
+      ]
+     }
+    },
+    {
+     "g": 30,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.0096,
+       1991
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.6757,
+       1063
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.0094,
+       1952
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.5211,
+       1991
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.2975,
+       1063
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.902,
+       1952
+      ]
+     }
+    },
+    {
+     "g": 31,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.6159,
+       2009
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -2.1663,
+       1067
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.1813,
+       1838
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.4214,
+       2009
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -2.5911,
+       1067
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.6304,
+       1838
+      ]
+     }
+    },
+    {
+     "g": 32,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -1.2551,
+       2006
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.7388,
+       1062
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.524,
+       1971
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -2.183,
+       2006
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.1298,
+       1062
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.2748,
+       1971
+      ]
+     }
+    },
+    {
+     "g": 33,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.1618,
+       1990
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.8814,
+       1064
+      ],
+      "fauxPromu": [
+       "moins-bon",
+       -3.0438,
+       1800
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.4104,
+       1990
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.1872,
+       1064
+      ],
+      "fauxPromu": [
+       "moins-bon",
+       -3.182,
+       1800
+      ]
+     }
+    },
+    {
+     "g": 34,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.5512,
+       2004
+      ],
+      "nouveaux": [
+       "retenu",
+       3.0432,
+       1072
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.0987,
+       1875
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.3642,
+       2004
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.5166,
+       1072
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.205,
+       1875
+      ]
+     }
+    },
+    {
+     "g": 35,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -1.639,
+       2011
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.4514,
+       1068
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.5695,
+       1822
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "moins-bon",
+       -2.9526,
+       2011
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.4094,
+       1068
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.4912,
+       1822
+      ]
+     }
+    },
+    {
+     "g": 36,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.7531,
+       2004
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.8656,
+       1062
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -2.0319,
+       1818
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -1.9776,
+       2004
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.6293,
+       1062
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.9219,
+       1818
+      ]
+     }
+    },
+    {
+     "g": 37,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -2.089,
+       2004
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.6595,
+       1068
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -2.4502,
+       1889
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -2.3563,
+       2004
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.3862,
+       1068
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -2.392,
+       1889
+      ]
+     }
+    },
+    {
+     "g": 38,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -1.0113,
+       2004
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.4984,
+       1066
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.5804,
+       1964
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -1.4866,
+       2004
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.2693,
+       1066
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.4971,
+       1964
+      ]
+     }
+    },
+    {
+     "g": 39,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.863,
+       2009
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       2.3529,
+       1070
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.8158,
+       2020
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.1534,
+       2009
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.4422,
+       1070
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.2407,
+       2020
+      ]
+     }
+    },
+    {
+     "g": 40,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.2449,
+       2007
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.1248,
+       1072
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.2287,
+       2057
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.5463,
+       2007
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.6998,
+       1072
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -1.2025,
+       2057
+      ]
+     }
+    },
+    {
+     "g": 41,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.4786,
+       1995
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.9789,
+       1059
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.0687,
+       1873
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -0.9091,
+       1995
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.2916,
+       1059
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.0769,
+       1873
+      ]
+     }
+    },
+    {
+     "g": 42,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.1215,
+       2006
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.3301,
+       1066
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.4515,
+       2062
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -1.2236,
+       2006
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.4258,
+       1066
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.9888,
+       2062
+      ]
+     }
+    },
+    {
+     "g": 43,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       1.0442,
+       2004
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.5269,
+       1062
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -2.1961,
+       2116
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.1339,
+       2004
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.3287,
+       1062
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -2.0866,
+       2116
+      ]
+     }
+    },
+    {
+     "g": 44,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.3738,
+       2010
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.6748,
+       1067
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.288,
+       1703
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -2.0813,
+       2010
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.7485,
+       1067
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.292,
+       1703
+      ]
+     }
+    },
+    {
+     "g": 45,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.3348,
+       2002
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.9094,
+       1062
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.9021,
+       1823
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -1.2161,
+       2002
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.6825,
+       1062
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       1.9624,
+       1823
+      ]
+     }
+    },
+    {
+     "g": 46,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.527,
+       2022
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.4377,
+       1063
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.6451,
+       1900
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -1.2325,
+       2022
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.4193,
+       1063
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.6037,
+       1900
+      ]
+     }
+    },
+    {
+     "g": 47,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       0.2676,
+       2009
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       1.7473,
+       1071
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.898,
+       1873
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -1.2834,
+       2009
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.2884,
+       1071
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.8791,
+       1873
+      ]
+     }
+    },
+    {
+     "g": 48,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.3677,
+       1995
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       0.6789,
+       1073
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.2032,
+       1937
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -1.1536,
+       1995
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.3098,
+       1073
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.1752,
+       1937
+      ]
+     }
+    },
+    {
+     "g": 49,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       -0.8673,
+       2008
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.417,
+       1069
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       0.1567,
+       1838
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       -1.3978,
+       2008
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.6673,
+       1069
+      ],
+      "fauxPromu": [
+       "pas-prouve",
+       -0.0047,
+       1838
+      ]
+     }
+    },
+    {
+     "g": 50,
+     "seuil": 168,
+     "k0": 16,
+     "k0-commun": {
+      "promus": [
+       "pas-prouve",
+       2.3188,
+       2001
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -0.6934,
+       1067
+      ],
+      "fauxPromu": [
+       "moins-bon",
+       -2.9013,
+       1816
+      ]
+     },
+     "remis-a-zero-seul": {
+      "promus": [
+       "pas-prouve",
+       0.8208,
+       2001
+      ],
+      "nouveaux": [
+       "pas-prouve",
+       -1.6923,
+       1067
+      ],
+      "fauxPromu": [
+       "moins-bon",
+       -2.9941,
+       1816
+      ]
+     }
+    }
+   ]
+  }
+ ],
+ "decision": "remis-a-zero-seul",
+ "pourquoi": "la forme complète dépasse 5 % de faux « retenu » (promus ou nouveaux venus) dans au moins un monde : la règle écrite avant garde le commun des remis à zéro seul"
+}
