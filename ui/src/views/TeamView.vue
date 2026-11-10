@@ -28,6 +28,8 @@ import MatchCard from '@/components/matches/MatchCard.vue';
 import TeamStrengthCard from '@/components/matches/TeamStrengthCard.vue';
 import TeamStyleCard from '@/components/matches/TeamStyleCard.vue';
 import AiDossierCard from '@/components/analysis/AiDossierCard.vue';
+// Étape 35 du plan (lot 1b) : les arrivées et départs du club (rangés chaque nuit par la passe des débuts de saison).
+import EffectifCard from '@/components/matches/EffectifCard.vue';
 import { rencontreVueParEquipe } from '@/utils/rencontres.js';
 import { TEAM_STAT_GROUPS } from '@/constants/matchDetailTabs.js';
 
@@ -371,6 +373,9 @@ watch(() => [props.name, props.league, props.matchId], load, { immediate: true }
         </AppCard>
 
         <TeamStrengthCard :club-id="idClub ?? null" :club-name="nom" :league="ligue" />
+
+        <!-- Étape 35 : les arrivées et départs, juste après « Indice de force » (explication seulement). -->
+        <EffectifCard :club-id="idClub ?? null" :club-name="nom" :league="ligue" />
 
         <!-- Étape 37 : le style de jeu du club et de son entraîneur (explication seulement). -->
         <TeamStyleCard :club-id="idClub ?? null" :club-name="nom" :league="ligue" />

@@ -41,6 +41,8 @@ import { preparerCopie, executer, SERVEUR, RACINE_ESSAIS } from './aides/isoleme
 import { fichiersDuMoteur, empreinteDuCode, empreinteDeLaCandidate, CANDIDATE_EN_ESSAI, MODULES_DU_MOTEUR } from '../src/core/engine/engineVersions.js';
 import * as LANC from '../src/bench/lancements.js';
 import { octetsSansLesAjoutsDe36 } from './aides/ajouts36.mjs';
+// Étape 35 (lot 1b, 10/11/2026) : ses blocs « ajout pur » de l'actualisation retirés de même (aides/ajouts35.mjs ; debutsFrontiere.test.mjs, T-X10).
+import { octetsSansLesAjoutsDe35 } from './aides/ajouts35.mjs';
 import { enregistrerLancements, fenetresVues, compterVariantes, lancementDe } from '../src/bench/trialsRegistry.js';
 import { MARCHES_CONNUS } from '../src/sports/football/markets.js';
 import { BORNES_LAMBDA, PERIODES_DU_BANC, DECISION_DE_PIERRE } from '../src/data/joueurs/reglagesJoueurs.js';
@@ -56,7 +58,9 @@ const AJOUTS_34 = new RegExp('^[^\\n]*\\[étape 34, lot 1b : ajout pur, début\\
 const AJOUTS_38 = new RegExp('^[^\\n]*\\[étape 38, lot 1b : ajout pur, début\\][\\s\\S]*?\\[étape 38, lot 1b : ajout pur, fin\\][^\\n]*\\n', 'gm');
 const octetsHorsAjouts = (chemin) => {
   // Étape 36 (lot 1, 09/11/2026) : ses ajouts purs aux fichiers gelés retirés d'abord (aides/ajouts36.mjs ; coupesFrontiere.test.mjs, T-X1).
-  const brut = octetsSansLesAjoutsDe36(path.relative(SRC, chemin).split(path.sep).join('/'), fs.readFileSync(chemin));
+  // Étape 35 (lot 1b, 10/11/2026) : ses blocs « ajout pur » de l'actualisation retirés d'abord (aides/ajouts35.mjs ; debutsFrontiere.test.mjs, T-X10).
+  const f = path.relative(SRC, chemin).split(path.sep).join('/');
+  const brut = octetsSansLesAjoutsDe36(f, octetsSansLesAjoutsDe35(f, fs.readFileSync(chemin)));
   const texte = brut.toString('utf8');
   return texte.includes('[étape 34, lot 1b : ajout pur, début]') ? Buffer.from(texte.replace(AJOUTS_34, '').replace(AJOUTS_38, ''), 'utf8') : brut;
 };

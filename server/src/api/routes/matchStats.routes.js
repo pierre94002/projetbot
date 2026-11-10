@@ -29,6 +29,7 @@ import {
   getStyleDuel
 } from '../controllers/matchStats.controller.js';
 import { getDerouleDuMatch } from '../controllers/derouleMatch.controller.js';
+import { getEffectif } from '../controllers/effectif.controller.js';
 
 const router = Router();
 
@@ -47,6 +48,8 @@ router.get('/player-ratings', asyncHandler(getPlayerRatings));
 // Les styles de jeu (étape 37 du plan) : calculés chaque nuit, en lecture seule ; explication seulement.
 router.get('/team-style', asyncHandler(getTeamStyle));
 router.get('/style-duel', asyncHandler(getStyleDuel));
+// Les arrivées et départs d'un club (étape 35 du plan, lot 1b) : la ligne de la nuit des débuts de saison, en lecture seule ; explication seulement.
+router.get('/effectif', asyncHandler(getEffectif));
 router.post('/refresh', asyncHandler(postMatchStatsRefresh));
 router.get('/team', asyncHandler(getTeamMatchStats));
 router.get('/team-averages', asyncHandler(getTeamMatchStatsAverages));

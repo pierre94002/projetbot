@@ -186,7 +186,8 @@ test('l’étape « contexteDuMatch » : une fois par jour civil de Paris, repri
   // Étape 34 (lot 1b, 03/11/2026) : les chiffres des joueurs entre les cartons et le contrôle quotidien.
   // Étape 38 (lot 1b, 04/11/2026) : la combinaison à blanc entre les chiffres des joueurs et le contrôle quotidien.
   // Étape 36 (lot 1, 09/11/2026) : les coupes à blanc entre la combinaison à blanc et le contrôle quotidien.
-  assert.deepEqual(etapes.slice(-6), ['contexteDuMatch', 'cartonsEtCorners', 'joueursABlanc', 'combinaisonABlanc', 'coupesEtMatchsAPart', 'controleQuotidien']);
+  // Étape 35 (lot 1b, 10/11/2026) : les débuts de saison à blanc entre les coupes à blanc et le contrôle quotidien.
+  assert.deepEqual(etapes.slice(-7), ['contexteDuMatch', 'cartonsEtCorners', 'joueursABlanc', 'combinaisonABlanc', 'coupesEtMatchsAPart', 'debutsDeSaison', 'controleQuotidien']);
   assert.ok(etapes.indexOf('contexteDuMatch') > etapes.indexOf('sauvegarde'));
   assert.ok(etapes.indexOf('contexteDuMatch') > etapes.indexOf('stylesDeJeu') && etapes.indexOf('contexteDuMatch') > etapes.indexOf('tableJourJ'));
   const ctx = (derniere, details = null, manuel = false) => ({ manuel, derniere: () => derniere, derniersDetails: () => details });

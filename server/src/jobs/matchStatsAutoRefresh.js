@@ -1725,6 +1725,44 @@ const dueCoupes = (ctx) => !faitAujourdhui(ctx.derniere('coupesEtMatchsAPart')) 
 export const __coupesPourLesTests = { passeCoupes, dueCoupes };
 
 // [étape 36, lot 1 : ajout pur, fin]
+// [étape 35, lot 1b : ajout pur, début]
+/**
+ * L'étape « debutsDeSaison » (étape 35 du plan, lot 1b, 10/11/2026) : LES DÉBUTS DE SAISON À BLANC — le rang, le statut
+ * (début de saison, promu, relégué, nouveau venu…), la continuité et les mouvements de l'effectif de chaque club (par
+ * identifiant FotMob), la force de l'effectif à blanc, et la FICHE FIGÉE de chaque match de championnat des 14 prochains jours
+ * (jamais réécrite après son coup d'envoi) — calculés dans un PROCESSUS À PART en lecture seule et rangés par le serveur par
+ * tranches de 250 ; le contrôle anti-fuite par un second chemin. Un autre calcul lourd en cours : REPORTÉE. APRÈS les coupes à
+ * blanc, juste AVANT le contrôle quotidien (toujours dernier), hors du chemin de nuit de l'essai de l'étape 27 ; jamais lue par
+ * le moteur ni envoyée à l'IA. Le module est chargé par un import() DYNAMIQUE : une erreur dans data/debutsDeSaison/ n'empêche
+ * jamais ce fichier de se charger ni la nuit de démarrer — elle met seulement cette étape en échec. Ajout PUR (règle du gel
+ * pendant l'essai 27) : rien d'autre de ce fichier ne change (debutsFrontiere.test.mjs, T-X10, le vérifie à l'octet).
+ */
+async function passeDebuts(ctx, options = {}) {
+  const { chargerLeModule = () => import('../data/debutsDeSaison/debutsNuit.js'), ...reste } = options;
+  let debuts;
+  try {
+    debuts = await chargerLeModule();
+  } catch (error) {
+    const erreur = String(error?.message ?? error).slice(0, 300);
+    return { status: 'error', summary: `En échec : le module des débuts de saison ne se charge pas (${erreur}) — rien d’avancé ; le reste de la nuit n’en dépend pas.`, details: { mode: 'echec', module: false, erreur }, changed: false };
+  }
+  try {
+    // L'heure est lue ici (la passe), jamais dans data/debutsDeSaison.
+    const r = await debuts.faireLesDebutsDeLaNuit({ ...reste, maintenant: reste.maintenant ?? Date.now() });
+    return debuts.resultatDeLEtape(r, { updatedAt: new Date().toISOString() });
+  } catch (error) {
+    const erreur = String(error?.message ?? error).slice(0, 300);
+    return { status: 'error', summary: `En échec : ${erreur} — rien d’avancé, les tables d’avant restent ; la passe suivante recommence.`, details: { mode: 'echec', erreur }, changed: false };
+  }
+}
+
+/** Due : une fois par jour civil de Paris, ou quand la passe d'avant l'a REPORTÉE ; jamais forcée par un clic. */
+const dueDebuts = (ctx) => !faitAujourdhui(ctx.derniere('debutsDeSaison')) || Boolean(ctx.derniersDetails?.('debutsDeSaison')?.reporte);
+
+/** Pour les tests : l'étape des débuts de saison à blanc (étape 35, lot 1b). */
+export const __debutsPourLesTests = { passeDebuts, dueDebuts };
+
+// [étape 35, lot 1b : ajout pur, fin]
 /** Pour les tests : l'étape d'analyse IA automatique telle que la passe la lance (plafond, réserve, bilan) ; l'étape du carnet de santé ; celle de l'historique football-data ; celle des repères ; celle de la table du jour J ; celle du contrôle quotidien ; celle de la candidate à blanc ; celle de la calibration du mois écoulé ; celle de connaître le marché ; celle de l'indice de force ; celle des forces de buts ; celle des fiches des joueurs ; celle du carnet de l'IA ; celles du bulletin du jour et du bilan de la semaine ; celle du résumé du mois de la boucle de correction. */
 export const __testing = { ETAPES: () => ETAPES, passeBulletin, passeBilanSemaine, dueBulletin, dueBilanSemaine, passeCarteOuParier, dueCarteOuParier, dueMoteurABlanc, passeIaAuto, passeCarnetSante, passeHistoriqueFd, dueHistoriqueFd, passeReperes, dueReperes, passeTableJourJ, dueTableJourJ, passeControleQuotidien, passeMoteurABlanc, passeCalibrationMensuelle, dueCalibrationMensuelle, passeConnaitreMarche, dueConnaitreMarche, passeIndiceForce, dueIndiceForce, passeForcesButs, dueForcesButs, passeFichesJoueurs, dueFichesJoueurs, passeStylesDeJeu, dueStylesDeJeu, passeCarnetIA, passeDossiersIA, passeSimulationSaisons, dueSimulationSaisons, passeSimulationMatchs, dueSimulationMatchs, passeBoucleCorrection, dueBoucleCorrection, passeResumeCorrection, dueResumeCorrection, passeContexteDuMatch, dueContexteDuMatch };
 
@@ -2455,6 +2493,17 @@ const ETAPES = [
     run: (ctx) => passeCoupes(ctx)
   },
   // [étape 36, lot 1 : ajout pur, fin]
+  // [étape 35, lot 1b : ajout pur, début]
+  {
+    key: 'debutsDeSaison',
+    label: 'Débuts de saison à blanc (rangs, statuts, continuité et mouvements des effectifs ; fiches des matchs de championnat gardées avant le coup d’envoi)',
+    // Étape 35 du plan (lot 1b, 10/11/2026) : APRÈS les coupes à blanc, juste AVANT le contrôle quotidien (toujours dernier),
+    // hors du chemin de nuit de l'essai de l'étape 27. Une fois par jour civil de Paris, ou si la passe d'avant l'a reportée ;
+    // jamais au clic ; ni réseau ni Claude. Cf. passeDebuts.
+    due: (ctx) => dueDebuts(ctx),
+    run: (ctx) => passeDebuts(ctx)
+  },
+  // [étape 35, lot 1b : ajout pur, fin]
   {
     key: 'controleQuotidien',
     label: 'Contrôle quotidien des données et santé des sources',

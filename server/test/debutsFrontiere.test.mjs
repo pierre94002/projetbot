@@ -22,6 +22,18 @@
  *         guard, data/contexte/, refereeRead) : sha1 de la partie 0 ; aucun fichier neuf sous bench/ ;
  *   T-X10 lancements.js et matchStatsDb.js SANS les ajouts de la 35 = la partie 0 à l'octet ; l'ajout de lancements.js n'y
  *         change qu'une ligne (PORTEES) et n'en retire aucune.
+ *
+ * Lot 1b (10/11/2026 : la nuit, la lecture et l'écran) — ajustés PAR AJOUT :
+ *   T-X1  trois fichiers gelés de plus, retouchés par AJOUT PUR et identiques SANS leur ajout (aides/ajouts35.mjs) :
+ *         l'actualisation (deux blocs « [étape 35, lot 1b : ajout pur] »), la route de l'analyse (le bloc `debutsDeSaison`),
+ *         l'historique de la feuille de route (l'entrée 35) ;
+ *   T-X2  les blocs de la 35 dans l'actualisation retirés du graphe comme ceux de la 36 ; seules la passe, la route de
+ *         l'analyse et la route /effectif chargent data/debutsDeSaison/, par import() DYNAMIQUE ; personne d'autre ;
+ *   T-X4  l'enfant de la nuit ouvre la base EN LECTURE SEULE, une fois, sans horloge ; seul debutsNuit.js (le serveur, seul
+ *         écrivain) écrit, et seulement les trois tables debuts_* (jamais un REPLACE ni un fichier) ;
+ *   T-X10 les cinq fichiers retouchés SANS les ajouts de la 35 = la partie 0 à l'octet ; seules PORTEES et la ligne de la
+ *         réponse de la route changent ; les deux blocs de l'actualisation n'écrivent rien et ne chargent que debutsNuit.js,
+ *         par import() dynamique ; une seule entrée 35 dans l'historique.
  */
 import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
@@ -30,7 +42,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { preparerCopie, executer, SERVEUR, RACINE_ESSAIS } from './aides/isolement.mjs';
 import { sansBlocs36 } from './aides/ajouts36.mjs';
-import { sansLesAjoutsDe35, FICHIERS_AJOUTS_35 } from './aides/ajouts35.mjs';
+import { sansLesAjoutsDe35, sansBlocs35, FICHIERS_AJOUTS_35 } from './aides/ajouts35.mjs';
 // Étape 39 (lot 1b, 09/11/2026) : ses ajouts purs (lancements.js) retirés AVANT ceux de la 35 (aides/ajouts39.mjs ; miseFrontiere.test.mjs, T-X10).
 import { sansLesAjoutsDe39 } from './aides/ajouts39.mjs';
 import { fichiersDuMoteur, empreinteDuCode, empreinteDeLaCandidate, CANDIDATE_EN_ESSAI, MODULES_DU_MOTEUR } from '../src/core/engine/engineVersions.js';
@@ -271,10 +283,16 @@ const INTERDITS_UI = Object.freeze([
   ['ui/src/components/matches/LineupPitch.vue', '0bc9124c6228b303a98342128a2f7acddc6b8661']
 ]);
 
-/** Les deux fichiers gelés retouchés par AJOUT PUR, et leur sha1 de la partie 0 (sans l'ajout, le fichier redevient celui-là). */
+/**
+ * Les fichiers gelés retouchés par AJOUT PUR, et leur sha1 de la partie 0 (sans l'ajout, le fichier redevient celui-là) : les
+ * deux du lot 1a, puis les trois du lot 1b (leur sha1 de la partie 0 du lot 1b, 10/11/2026 vers 13 h 05, = celui du lot 1a).
+ */
 const PERMIS = Object.freeze({
   'bench/lancements.js': '03e81ec202c04185ef22a2f665d2a090704b12ce',
-  'data/db/matchStatsDb.js': '96b8cc4c27fd0465b4e0eab075150720d7408196'
+  'data/db/matchStatsDb.js': '96b8cc4c27fd0465b4e0eab075150720d7408196',
+  'jobs/matchStatsAutoRefresh.js': '1b23ee7fa7d4bf03eef7513a6e9bf072ffeb942f',
+  'api/controllers/analysis.controller.js': '23bb47bc03f57bb3a7628abe05e7591549e6c5db',
+  'data/roadmap/historique.js': 'aed83d2cba941078aea56a105a33a755384a23d1'
 });
 
 /** Les fichiers atteints par les imports relatifs (statiques et dynamiques) d'un ensemble de départ. */
@@ -286,7 +304,9 @@ function atteints(depart) {
     const f = pile.pop();
     if (vus.has(f) || !fs.existsSync(f)) continue;
     vus.add(f);
-    const texte = sansBlocs36(fs.readFileSync(f, 'utf8'));
+    // Lot 1b : les blocs « ajout pur » de la 35 (sa propre étape de nuit) retirés comme ceux de la 36 ; T-X2 vérifie à part que
+    // seuls eux, la route de l'analyse et la route /effectif la chargent, par import() dynamique.
+    const texte = sansBlocs35(sansBlocs36(fs.readFileSync(f, 'utf8')));
     for (const m of texte.matchAll(re)) {
       let cible = path.resolve(path.dirname(f), m[1]);
       if (!/\.(m?js|json)$/.test(cible) && fs.existsSync(`${cible}.js`)) cible += '.js';
@@ -298,7 +318,7 @@ function atteints(depart) {
 const rel = (f) => path.relative(SRC, f).split(path.sep).join('/');
 const tousLesFichiers = (dossier) => (fs.existsSync(dossier) ? fs.readdirSync(dossier, { recursive: true }).map(String).filter((f) => fs.statSync(path.join(dossier, f)).isFile()) : []);
 
-test('T-X1 — les empreintes ne bougent pas ; rien de l’étape 35 sous core/ ni sports/ ni dans l’empreinte ; les fichiers gelés identiques à l’octet (les deux ajouts purs SANS leur ajout)', () => {
+test('T-X1 — les empreintes ne bougent pas ; rien de l’étape 35 sous core/ ni sports/ ni dans l’empreinte ; les fichiers gelés identiques à l’octet (les cinq ajouts purs SANS leur ajout)', () => {
   assert.equal(empreinteDuCode({ rafraichir: true }).empreinte, '16f2459db183a99576365047da98b7777687ef05');
   assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), 'f01dd8496f56a415');
   assert.ok(FICHIERS_35.length >= 10, FICHIERS_35.join(', '));
@@ -336,11 +356,23 @@ test('T-X2 — depuis TOUTES les racines de la règle du gel, rien n’atteint d
   assert.ok(graphe.length > 150, `${graphe.length} fichiers atteints`);
   for (const f of FICHIERS_35) assert.ok(!graphe.includes(f), `${f} atteint depuis une racine du gel`);
   for (const f of ['data/db/matchStatsDb.js', 'bench/lancements.js']) assert.ok(!/['"][./]*(data\/)?(debutsDeSaison|db\/squadChanges)/.test(fs.readFileSync(path.join(SRC, f), 'utf8')), f);
-  // et personne d'autre que l'étape elle-même (son script, ses tests) ne l'importe au lot 1a
+  // Lot 1b (10/11/2026) : hors de l'étape elle-même, trois fichiers seulement la chargent, et par import() DYNAMIQUE (jamais un
+  // import statique : une erreur dans data/debutsDeSaison/ ne les empêche jamais de se charger) — l'actualisation (ses blocs
+  // « ajout pur », la nuit), la route de l'analyse (le bloc joint après l'analyse) et la route /effectif ; personne d'autre.
+  const PAR_IMPORT_DYNAMIQUE = {
+    'jobs/matchStatsAutoRefresh.js': ['../data/debutsDeSaison/debutsNuit.js'],
+    'api/controllers/analysis.controller.js': ['../../data/debutsDeSaison/debutsRead.js'],
+    'api/controllers/effectif.controller.js': ['../../data/debutsDeSaison/debutsRead.js']
+  };
   for (const f of tousLesFichiers(SRC)) {
     const r = f.split(path.sep).join('/');
     if (FICHIERS_35.includes(r) || !/\.m?js$/.test(r)) continue;
-    assert.ok(!/['"][./]*(data\/)?debutsDeSaison\/|['"][./]*squadChanges\.js/.test(fs.readFileSync(path.join(SRC, f), 'utf8')), `${r} importe l’étape 35`);
+    const texte = fs.readFileSync(path.join(SRC, f), 'utf8');
+    const refs = [...texte.matchAll(/['"`]([./]*(?:data\/)?debutsDeSaison\/[^'"`]+|[./]*(?:db\/)?squadChanges\.js)['"`]/g)].map((m) => m[1]);
+    assert.deepEqual(refs, PAR_IMPORT_DYNAMIQUE[r] ?? [], `${r} importe l’étape 35`);
+    if (!PAR_IMPORT_DYNAMIQUE[r]) continue;
+    assert.doesNotMatch(texte, /^import [^;]*(debutsDeSaison|squadChanges)/m, `${r} : un import statique de l’étape 35`);
+    for (const cible of refs) assert.ok(texte.includes(`await import('${cible}')`) || texte.includes(`() => import('${cible}')`), `${r} : ${cible} hors d’un import() dynamique`);
   }
 });
 
@@ -360,15 +392,28 @@ test('T-X3 — les modules purs : ni horloge, ni hasard, ni base, ni réseau, ni
   assert.deepEqual(imports('noteDesDebuts.js'), []);
 });
 
-test('T-X4 — l’enfant ouvre la base EN LECTURE SEULE, une fois, sans horloge ; rien de l’étape 35 n’écrit', () => {
-  for (const f of FICHIERS_35) {
+test('T-X4 — les enfants ouvrent la base EN LECTURE SEULE, une fois, sans horloge ; rien de l’étape 35 n’écrit, sauf la nuit (debutsNuit.js) dans ses trois tables', () => {
+  // Lot 1b (10/11/2026) : debutsNuit.js est le SEUL écrivain de l'étape — le serveur range ce que l'enfant a calculé, dans
+  // debuts_clubs, debuts_etat et debuts_fiches seulement ; jamais « OR REPLACE » (une fiche figée n'est jamais remplacée),
+  // jamais un fichier, jamais une table créée (la DDL vit dans matchStatsDb.js).
+  const ECRIVAIN = 'data/debutsDeSaison/debutsNuit.js';
+  for (const f of FICHIERS_35.filter((g) => g !== ECRIVAIN)) {
     const code = sansCommentaires(path.join(SRC, f));
     assert.ok(!/\.run\(|INSERT\s+(OR\s+\w+\s+)?INTO|UPDATE\s+\w+\s+SET|DELETE\s+FROM|writeJsonAtomic|writeFileSync|\b(database|db)\.exec\(|CREATE\s+(TABLE|INDEX)|'BEGIN|'COMMIT/.test(code), `${f} : aucune écriture`);
   }
+  const nuit = sansCommentaires(path.join(SRC, ECRIVAIN));
+  const tables = [...new Set([...nuit.matchAll(/(?:INSERT(?: OR \w+)? INTO|DELETE FROM|(?<!DO )UPDATE)\s+([a-z_]+)/g)].map((m) => m[1]))].sort();
+  assert.deepEqual(tables, ['debuts_clubs', 'debuts_etat', 'debuts_fiches'], 'la nuit n’écrit que ses trois tables');
+  assert.ok(!/OR\s+REPLACE|INSERT\s+OR\s+\w+|writeJsonAtomic|writeFileSync|CREATE\s+(TABLE|INDEX)|DROP\s+/.test(nuit), 'ni remplacement, ni fichier, ni table créée');
   const enfant = sansCommentaires(path.join(DEBUTS, 'debutsBancEnfant.js'));
   assert.equal((enfant.match(/openDb\(/g) ?? []).length, 1);
   assert.match(enfant, /openDb\(\{ file: m\.chemin, readonly: true \}\)/);
   assert.ok(!/Date\.now\(|new Date\(|Math\.random|fetch\(/.test(enfant));
+  // l'enfant de la nuit : l'instant lui est donné par le serveur ; ses dates viennent de Date.parse, jamais de l'horloge
+  const enfantNuit = sansCommentaires(path.join(DEBUTS, 'debutsEnfant.js'));
+  assert.equal((enfantNuit.match(/openDb\(/g) ?? []).length, 1);
+  assert.match(enfantNuit, /openDb\(\{ file: m\.chemin, readonly: true \}\)/);
+  assert.ok(!/Date\.now\(|new Date\(\)|Math\.random|fetch\(/.test(enfantNuit));
   const lecture = sansCommentaires(path.join(DEBUTS, 'lectureDesDebuts.js'));
   assert.ok(!/openDb|Date\.now\(|new Date\(/.test(lecture), 'la lecture prend la base de l’appelant');
 });
@@ -466,7 +511,14 @@ test('T-X9 — les fichiers gelés que la 35 importe en lecture : sha1 de la par
   assert.deepEqual(fs.readdirSync(path.join(SRC, 'bench')).sort(), ['apparier.js', 'bancCandidate.js', 'depotBanc.js', 'entrees.js', 'essaiCandidate.js', 'guard.js', 'horizonEssai.js', 'jugeAPart.js', 'jugeAPartFil.js', 'lancements.js', 'libellesDesCases.js', 'lignesEnginePicks.js', 'metrics.js', 'noteDeDepart.js', 'periodes.js', 'prix.js', 'resume.js', 'runner.js', 'simulateBets.js', 'statValue.js', 'trialsRegistry.js']);
 });
 
-test('T-X10 — lancements.js et matchStatsDb.js SANS les ajouts de la 35 = la partie 0 à l’octet ; l’ajout ne change qu’une ligne et n’en retire aucune', () => {
+test('T-X10 — les cinq fichiers gelés SANS les ajouts de la 35 = la partie 0 à l’octet ; chaque ajout ne change qu’une ligne au plus et n’en retire aucune ; les blocs de la nuit n’écrivent rien et ne chargent que debutsNuit.js', () => {
+  // Lot 1b (10/11/2026) : l'actualisation (deux blocs), la route de l'analyse (le bloc `debutsDeSaison` après l'analyse, sa
+  // fonction et la fin de la réponse) et l'historique (l'entrée 35, la dernière) s'ajoutent à lancements.js et matchStatsDb.js.
+  assert.deepEqual([...FICHIERS_AJOUTS_35], ['bench/lancements.js', 'data/db/matchStatsDb.js', 'jobs/matchStatsAutoRefresh.js', 'api/controllers/analysis.controller.js', 'data/roadmap/historique.js']);
+  const REMPLACEES = {
+    'bench/lancements.js': ["export const PORTEES = Object.freeze(['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs', 'combinaison', 'coupes']);"],
+    'api/controllers/analysis.controller.js': ['  const reponse = { ...analyse, ...(aVerifier ? { aVerifier } : {}), ...(simulation ? { simulation } : {}), ...(contexte ? { contexte } : {}), ...(cartons ? { cartons } : {}), ...(joueurs ? { joueurs } : {}), ...(combinaison ? { combinaison } : {}), ...(coupe ? { coupe } : {}) };']
+  };
   for (const f of FICHIERS_AJOUTS_35) {
     const texte = fs.readFileSync(path.join(SRC, f), 'utf8');
     assert.equal(sha1(Buffer.from(sansLesAjoutsDe35(f, sansLesAjoutsDe39(f, texte)), 'utf8')), PERMIS[f], f);
@@ -474,6 +526,17 @@ test('T-X10 — lancements.js et matchStatsDb.js SANS les ajouts de la 35 = la p
     const avant = sansLesAjoutsDe35(f, sansLesAjoutsDe39(f, texte)).split('\n');
     const maintenant = new Set(texte.split('\n'));
     const disparues = avant.filter((l) => !maintenant.has(l));
-    assert.deepEqual(disparues, f === 'bench/lancements.js' ? ["export const PORTEES = Object.freeze(['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs', 'combinaison', 'coupes']);"] : [], `${f} : seules des lignes AJOUTÉES (et la ligne de PORTEES)`);
+    assert.deepEqual(disparues, REMPLACEES[f] ?? [], `${f} : seules des lignes AJOUTÉES (et la ligne remplacée de PORTEES ou de la réponse)`);
   }
+  const auto = fs.readFileSync(path.join(SRC, 'jobs', 'matchStatsAutoRefresh.js'), 'utf8');
+  const blocs = [...auto.matchAll(/^[^\n]*\[étape 35, lot 1b : ajout pur, début\]\n([\s\S]*?)^[^\n]*\[étape 35, lot 1b : ajout pur, fin\]/gm)].map((m) => m[1]);
+  assert.equal(blocs.length, 2, 'deux blocs dans l’actualisation');
+  assert.equal(blocs.length, (auto.match(/\[étape 35, lot 1b : ajout pur, (début|fin)\]/g) ?? []).length / 2, 'chaque début a sa fin');
+  const code = blocs.join('\n');
+  assert.ok(!/\.run\(|INSERT\s|UPDATE\s+\w+\s+SET|DELETE\s+FROM|writeJsonAtomic|writeFileSync|\.exec\(|openDb\(/.test(code), 'les blocs n’écrivent rien et n’ouvrent pas la base');
+  assert.doesNotMatch(code, /^import /m, 'aucun import statique dans les blocs');
+  assert.deepEqual([...code.matchAll(/import\(\s*['"]([^'"]+)['"]\s*\)/g)].map((m) => m[1]), ['../data/debutsDeSaison/debutsNuit.js']);
+  assert.match(blocs[1], /key: 'debutsDeSaison'/);
+  const historique = fs.readFileSync(path.join(SRC, 'data', 'roadmap', 'historique.js'), 'utf8');
+  assert.equal((historique.match(/^ {4}etape: '35',$/gm) ?? []).length, 1, 'une seule entrée 35 dans l’historique');
 });

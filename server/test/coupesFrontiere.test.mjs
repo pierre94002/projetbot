@@ -460,8 +460,10 @@ test('T-X9 — data/coupes/ chargé seulement par import() DYNAMIQUE (la passe, 
 test('T-X10 — l’actualisation sans les blocs de la 36 = la partie 0 à l’octet ; la route sans son bloc « coupe » = la partie 0 (déclencheur)', () => {
   const auto = fs.readFileSync(path.join(SRC, 'jobs', 'matchStatsAutoRefresh.js'), 'utf8');
   assert.equal((auto.match(/\[étape 36, lot 1 : ajout pur, début\]/g) ?? []).length, 2);
-  assert.equal(sha1(Buffer.from(sansBlocs36(auto), 'utf8')), PERMIS['jobs/matchStatsAutoRefresh.js']);
-  const route = fs.readFileSync(path.join(SRC, 'api', 'controllers', 'analysis.controller.js'), 'utf8');
+  // Étape 35 (lot 1b, 10/11/2026) : ses deux blocs « ajout pur » retirés d'abord (aides/ajouts35.mjs ; debutsFrontiere.test.mjs, T-X10).
+  assert.equal(sha1(Buffer.from(sansBlocs36(sansLesAjoutsDe35('jobs/matchStatsAutoRefresh.js', auto)), 'utf8')), PERMIS['jobs/matchStatsAutoRefresh.js']);
+  // Étape 35 (lot 1b, 10/11/2026) : le bloc `debutsDeSaison` de la route retiré d'abord (aides/ajouts35.mjs ; debutsFrontiere.test.mjs, T-X10).
+  const route = sansLesAjoutsDe35('api/controllers/analysis.controller.js', fs.readFileSync(path.join(SRC, 'api', 'controllers', 'analysis.controller.js'), 'utf8'));
   const debut = route.indexOf('/**\n * Étape 36 du plan (lot 1) : la coupe de ce match');
   const fin = route.indexOf('/**\n * Étape 38 du plan (lot 1b)');
   assert.ok(debut > 0 && fin > debut);

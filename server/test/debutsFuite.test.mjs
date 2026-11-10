@@ -155,3 +155,33 @@ test('le désordre et la lecture d’un jour publié LÈVENT (jamais un `<=` sil
   assert.throws(() => d.lireLeClub(1, r1), /fuite refusée/);
   assert.throws(() => executerSansPause(passerLesRencontres(new DebutsAuJourJ({ avecForces: false }), [r1, r0], {})), /désordre/);
 });
+
+// ------------------------------------------------------------------ étape 35, lot 1b (10/11/2026) : les fiches de la nuit
+import { preparerCopie, executer, SERVEUR } from './aides/isolement.mjs';
+
+test('T-F5 une fiche gelée n’est jamais réécrite ; la première écriture d’après le coup d’envoi est marquée ; une fiche d’un match joué n’est jamais élaguée', () => {
+  const c = preparerCopie({ base: false });
+  let x;
+  try {
+    x = executer(c, path.join(SERVEUR, 'test', 'aides', 'script-debuts-nuit.mjs'), { args: ['gel', '{}'], timeout: 120_000 });
+  } finally {
+    c.nettoyer();
+  }
+  assert.equal(x.code, 0, x.erreurs.slice(-3000));
+  assert.equal(x.reseau, false);
+  const s = x.json;
+  // Seconde écriture (le 01/07 à 21 h) : la fiche du 01/07 (heure inconnue, son jour) et celle du 05/07 (coup d'envoi connu,
+  // passé) sont figées ; celle du 08/07 réécrite ; celle du 01/07 entre 7 et 8, neuve, marquée « après le coup d'envoi ».
+  assert.deepEqual(s.rangement.seconde, { ecrites: 2, nouvelles: 1, reecrites: 1, figees: 2, apresCoupDEnvoi: 1 });
+  const f = Object.fromEntries(s.fiches.map((l) => [`${l.date}|${l.home_id}`, l]));
+  assert.equal(f['2025-07-01|1'].calcule_le, '2025-06-20T00:40:00.000Z');
+  assert.equal(JSON.parse(f['2025-07-01|1'].entrees).calcule, '2025-06-20T00:40:00.000Z');
+  assert.equal(f['2025-07-05|5'].calcule_le, '2025-06-20T00:40:00.000Z', 'coup d’envoi connu et passé : figée');
+  assert.equal(f['2025-07-08|11'].calcule_le, '2025-07-01T21:00:00.000Z');
+  assert.equal(f['2025-07-01|7'].apres_coup_d_envoi, 1);
+  assert.equal(f['2025-07-01|1'].apres_coup_d_envoi, 0);
+  // 45 jours après : les deux fiches des matchs joués rattachées (date à un jour près) et gardées ; les orphelines parties.
+  assert.deepEqual(s.elagage, { rattachees: 2, orphelines: 4 });
+  // La fiche d'un match joué que le rattachement ne trouve pas (camps inversés) : l'élagage relit team_day et la garde.
+  assert.deepEqual(s.apres.map((l) => `${l.date}|${l.home_id}|${l.match_key}`), ['2025-07-01|1|joue-1-2', '2025-07-03|9|joue-9-10', '2025-07-04|10|null']);
+});

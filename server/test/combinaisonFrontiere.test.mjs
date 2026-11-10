@@ -32,6 +32,8 @@ import { preparerCopie, executer, SERVEUR, RACINE_ESSAIS } from './aides/isoleme
 import { fichiersDuMoteur, empreinteDuCode, empreinteDeLaCandidate, CANDIDATE_EN_ESSAI, MODULES_DU_MOTEUR } from '../src/core/engine/engineVersions.js';
 import * as LANC from '../src/bench/lancements.js';
 import { octetsSansLesAjoutsDe36 } from './aides/ajouts36.mjs';
+// Étape 35 (lot 1b, 10/11/2026) : ses blocs « ajout pur » de l'actualisation retirés de même (aides/ajouts35.mjs ; debutsFrontiere.test.mjs, T-X10).
+import { octetsSansLesAjoutsDe35 } from './aides/ajouts35.mjs';
 import { enregistrerLancements, fenetresVues, compterVariantes, lancementDe } from '../src/bench/trialsRegistry.js';
 import { PERIODES_DU_BANC, DECISIONS_DE_PIERRE, CONFIG_DE_LA_REGLE } from '../src/data/combinaison/reglagesCombinaison.js';
 
@@ -290,7 +292,8 @@ test('T-X1 les empreintes ne bougent pas ; rien de l’étape 38 sous core/ ni s
   for (const [f, attendu] of INTERDITS) {
     // Étape 36 (lot 1, 09/11/2026) : ses ajouts purs aux fichiers gelés (blocs de l'actualisation, « export » de settlementService.js)
     // retirés de même (aides/ajouts36.mjs ; coupesFrontiere.test.mjs, T-X1).
-    const octets = octetsSansLesAjoutsDe36(f, f === 'jobs/matchStatsAutoRefresh.js' ? Buffer.from(sansBlocs38(fs.readFileSync(path.join(SRC, f), 'utf8')), 'utf8') : fs.readFileSync(path.join(SRC, f)));
+    // Étape 35 (lot 1b, 10/11/2026) : ses blocs « ajout pur » de l'actualisation retirés de même.
+    const octets = octetsSansLesAjoutsDe36(f, f === 'jobs/matchStatsAutoRefresh.js' ? octetsSansLesAjoutsDe35(f, Buffer.from(sansBlocs38(fs.readFileSync(path.join(SRC, f), 'utf8')), 'utf8')) : fs.readFileSync(path.join(SRC, f)));
     assert.equal(sha1(octets), attendu, `${f} : retouché (gelé pendant l’essai 27, ou interdit au lot 1a de l’étape 38)`);
   }
   for (const [f, attendu] of INTERDITS_UI) assert.equal(sha1(fs.readFileSync(path.join(RACINE, f))), attendu, `${f} : retouché`);

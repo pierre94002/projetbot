@@ -61,7 +61,10 @@ export async function analyzeMatchById(req, res) {
   // Étape 36 : la coupe du match (tour, aller, chance de qualification à blanc, règle d’après 90 minutes, lieu), APRÈS l’analyse elle aussi
   // (le verdict n’en sait rien, l’IA ne la reçoit jamais) ; null hors d’une coupe.
   const coupe = sportId === 'football' ? await coupeDuMatchAnalyse(avecFraicheur, analyse, getEngineConfig(sportId)) : null;
-  const reponse = { ...analyse, ...(aVerifier ? { aVerifier } : {}), ...(simulation ? { simulation } : {}), ...(contexte ? { contexte } : {}), ...(cartons ? { cartons } : {}), ...(joueurs ? { joueurs } : {}), ...(combinaison ? { combinaison } : {}), ...(coupe ? { coupe } : {}) };
+  // Étape 35 : le début de saison (rangs, statuts, nouveaux venus à blanc, arrivées et départs), APRÈS l’analyse lui aussi
+  // (le verdict n’en sait rien, l’IA ne le reçoit jamais) ; lu par clé, jamais calculé dans la requête.
+  const debutsDeSaison = sportId === 'football' ? await debutsDeSaisonDuMatchAnalyse(avecFraicheur) : null;
+  const reponse = { ...analyse, ...(aVerifier ? { aVerifier } : {}), ...(simulation ? { simulation } : {}), ...(contexte ? { contexte } : {}), ...(cartons ? { cartons } : {}), ...(joueurs ? { joueurs } : {}), ...(combinaison ? { combinaison } : {}), ...(coupe ? { coupe } : {}), ...(debutsDeSaison ? { debutsDeSaison } : {}) };
   res.json(analyseAvecLaMise(reponse, { contexte: contexteMise, match: avecFraicheur }));
 }
 
@@ -77,6 +80,23 @@ async function coupeDuMatchAnalyse(match, analyse, config) {
   try {
     const { coupeDuMatch } = await import('../../data/coupes/coupesRead.js');
     return coupeDuMatch({ match, analyse, config, database: openDb(), maintenant: Date.now() });
+  } catch {
+    return { version: 1, etat: 'illisible', raison: 'lecture-ratee' };
+  }
+}
+
+/**
+ * Étape 35 du plan (lot 1b) : le début de saison de ce match (data/debutsDeSaison/debutsRead.js) — la fiche que la passe de
+ * nuit a gardée pour ce match (rangs, statuts, effet à blanc des nouveaux venus) et les lignes des deux clubs (continuité,
+ * mouvements, force de l’effectif à blanc), lues par identifiants FotMob et par clé (jamais un calcul dans la requête). Le
+ * module est chargé par un import() DYNAMIQUE : une erreur dans data/debutsDeSaison/ n’empêche jamais l’analyse de répondre
+ * (le bloc dit alors « illisible »). Ajouté APRÈS l’analyse : le verdict du moteur n’en sait rien, l’analyse IA ne le reçoit
+ * jamais ; EXPLICATION SEULEMENT (rien n’entre dans les chiffres).
+ */
+async function debutsDeSaisonDuMatchAnalyse(match) {
+  try {
+    const { debutsDuMatch } = await import('../../data/debutsDeSaison/debutsRead.js');
+    return debutsDuMatch({ match, database: openDb(), maintenant: Date.now() });
   } catch {
     return { version: 1, etat: 'illisible', raison: 'lecture-ratee' };
   }

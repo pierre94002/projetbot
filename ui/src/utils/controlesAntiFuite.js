@@ -2,7 +2,7 @@
  * controlesAntiFuite.js — les écarts des CONTRÔLES ANTI-FUITE de la nuit, en mots simples (étape 27 du plan,
  * vérification du branchement, constat 4 : ces alertes durables n'étaient lues par aucun écran).
  * -----------------------------------------------------------------------
- * Neuf alertes durables du serveur (refresh-status.json, GET /api/refresh → `alerts`), posées par l'actualisation
+ * Dix alertes durables du serveur (refresh-status.json, GET /api/refresh → `alerts`), posées par l'actualisation
  * (server/src/jobs/matchStatsAutoRefresh.js) et gardées jusqu'à la nuit qui ne trouve plus d'écart :
  *   tableJourJ — la table du jour J (ce que l'appli savait la veille), des lignes recalculées depuis les tables sources ;
  *   forcesButs — les forces de buts du modèle de buts unique, des lignes recalculées par un second chemin ;
@@ -20,13 +20,15 @@
  *     matchs par un second chemin (leurs apparitions d'avant, leurs minutes et leurs sommes) ; chaque écart porte sa phrase ;
  *   combinaisonABlanc — la combinaison à blanc (étape 38, lot 1b, 04/11/2026), le palier de la cote juste d'un pronostic gelé
  *     refait par un second chemin (les relevés d'avant le pronostic filtrés par la base, la règle du moteur) ; chaque écart
- *     porte sa phrase — et, s'il y en a un, rien n'est rangé cette nuit-là.
+ *     porte sa phrase — et, s'il y en a un, rien n'est rangé cette nuit-là ;
+ *   debutsDeSaison — les débuts de saison à blanc (étape 35, lot 1b, 10/11/2026), des couples (club, jour) recalculés par un
+ *     second chemin (rang, statut, sommes de buts et de matchs d'avant le jour) ; chaque écart porte sa phrase.
  * Valeur : { ecarts (20 au plus), total, lignes, updatedAt }, ou null quand la dernière nuit n'a trouvé aucun écart.
  * Un écart veut dire qu'un chiffre « d'avant le match » a pu voir le match lui-même. Pur : ne lit rien.
  * -----------------------------------------------------------------------
  */
 
-/** Les neuf contrôles, dans l'ordre de la nuit, et leur nom pour Pierre. */
+/** Les dix contrôles, dans l'ordre de la nuit, et leur nom pour Pierre. */
 export const CONTROLES_ANTI_FUITE = Object.freeze([
   Object.freeze({ cle: 'tableJourJ', nom: 'Table du jour J (ce que l’appli savait la veille)' }),
   Object.freeze({ cle: 'forcesButs', nom: 'Forces de buts du modèle de buts' }),
@@ -36,7 +38,8 @@ export const CONTROLES_ANTI_FUITE = Object.freeze([
   Object.freeze({ cle: 'contexteDuMatch', nom: 'Contexte du match (repos, entraîneur et arbitre au jour du match)' }),
   Object.freeze({ cle: 'cartonsEtCorners', nom: 'Cartons attendus (équipes et arbitre au jour du match)' }),
   Object.freeze({ cle: 'joueursABlanc', nom: 'Chiffres des joueurs (parts au jour du match)' }),
-  Object.freeze({ cle: 'combinaisonABlanc', nom: 'Combinaison à blanc (palier de la cote juste au jour du pronostic)' })
+  Object.freeze({ cle: 'combinaisonABlanc', nom: 'Combinaison à blanc (palier de la cote juste au jour du pronostic)' }),
+  Object.freeze({ cle: 'debutsDeSaison', nom: 'Débuts de saison (rangs, statuts et sommes au jour du match)' })
 ]);
 
 const entier = (x) => (Number.isFinite(Number(x)) ? Number(x).toLocaleString('fr-FR') : null);

@@ -297,7 +297,8 @@ test('T-X10 l’actualisation (gelée pendant l’essai 27) : sans ses deux bloc
   const [f, attendu] = GELE_RETOUCHE;
   const texte = fs.readFileSync(path.join(SRC, f), 'utf8');
   // Étape 36 (lot 1, 09/11/2026) : ses deux blocs « ajout pur » retirés d'abord (vérifiés par coupesFrontiere.test.mjs, T-X10).
-  const { garde, ajoutes } = blocs38(texte.replace(/^[^\n]*\[étape 36, lot 1 : ajout pur, début\][\s\S]*?\[étape 36, lot 1 : ajout pur, fin\][^\n]*\n/gm, ''));
+  // Étape 35 (lot 1b, 10/11/2026) : de même pour ses deux blocs « ajout pur » (vérifiés par debutsFrontiere.test.mjs, T-X10).
+  const { garde, ajoutes } = blocs38(texte.replace(/^[^\n]*\[étape 36, lot 1 : ajout pur, début\][\s\S]*?\[étape 36, lot 1 : ajout pur, fin\][^\n]*\n/gm, '').replace(/^[^\n]*\[étape 35, lot 1b : ajout pur, début\][\s\S]*?\[étape 35, lot 1b : ajout pur, fin\][^\n]*\n/gm, ''));
   assert.equal(ajoutes.length, 2, 'deux blocs ajoutés');
   assert.equal(crypto.createHash('sha1').update(Buffer.from(garde, 'utf8')).digest('hex'), attendu, 'hors des blocs marqués, rien ne change');
   for (const b of ajoutes) {
@@ -334,7 +335,8 @@ test('T-X11 le serveur, la passe et la route de l’analyse se chargent quand da
   assert.equal(s.etape.status, 'error');
   assert.match(s.etape.summary, /le module de la combinaison ne se charge pas \(dossier de la combinaison cassé \(essai\)\)/);
   // Étape 36 (lot 1, 09/11/2026) : les coupes à blanc entre la combinaison à blanc et le contrôle quotidien (les trois dernières étapes chargées).
-  assert.deepEqual(s.etapesChargees, ['combinaisonABlanc', 'coupesEtMatchsAPart', 'controleQuotidien']);
+  // Étape 35 (lot 1b, 10/11/2026) : les débuts de saison à blanc entre les coupes à blanc et le contrôle quotidien (les trois dernières étapes chargées).
+  assert.deepEqual(s.etapesChargees, ['coupesEtMatchsAPart', 'debutsDeSaison', 'controleQuotidien']);
   // Rien de statique : ni l'actualisation, ni le contrôleur, ni le serveur n'importent data/combinaison/ autrement que par import().
   for (const f of ['jobs/matchStatsAutoRefresh.js', 'api/controllers/analysis.controller.js', 'server.js', 'app.js']) {
     assert.doesNotMatch(fs.readFileSync(path.join(SRC, f), 'utf8'), /^import [^;]*combinaison/m, f);

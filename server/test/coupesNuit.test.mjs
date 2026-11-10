@@ -40,7 +40,9 @@ test('T-NU1 — la place de l’étape, juste avant le contrôle quotidien ; due
   const cles = __testing.ETAPES().map((e) => e.key);
   const i = cles.indexOf('coupesEtMatchsAPart');
   assert.ok(i > 0);
-  assert.equal(cles[i + 1], 'controleQuotidien');
+  // Étape 35 (lot 1b, 10/11/2026) : les débuts de saison à blanc viennent entre elle et le contrôle quotidien (debutsNuit.test.mjs).
+  assert.equal(cles[i + 1], 'debutsDeSaison');
+  assert.equal(cles[i + 2], 'controleQuotidien');
   assert.equal(cles[i - 1], 'combinaisonABlanc');
   assert.equal(cles.at(-1), 'controleQuotidien');
   assert.ok(cles.indexOf('simulationMatchs') < i, 'après la simulation de l’étape 28, qu’elle lit');

@@ -361,7 +361,9 @@ test('l’étape « resumeCorrection » : après le bilan de la semaine, avant l
   assert.equal(s.etapes[i + 4], 'combinaisonABlanc');
   // Étape 36 (lot 1, 09/11/2026) : les coupes à blanc suivent la combinaison à blanc.
   assert.equal(s.etapes[i + 5], 'coupesEtMatchsAPart');
-  assert.equal(s.etapes[i + 6], 'controleQuotidien');
+  // Étape 35 (lot 1b, 10/11/2026) : les débuts de saison à blanc suivent les coupes à blanc.
+  assert.equal(s.etapes[i + 6], 'debutsDeSaison');
+  assert.equal(s.etapes[i + 7], 'controleQuotidien');
   assert.equal(s.etapes.at(-1), 'controleQuotidien');
   assert.ok(s.etapes.indexOf('boucleCorrection') < i, 'le tri du mois est fait plus haut dans la même passe');
   assert.equal(s.label, "Résumé du mois de la boucle de correction (texte de l'IA, un seul appel par mois)");

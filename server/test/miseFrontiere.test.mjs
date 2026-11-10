@@ -404,7 +404,8 @@ test('T-X12 les sha1 de la partie 0 : tous les fichiers gelés identiques à l�
     // retirés de même (aides/ajouts36.mjs ; coupesFrontiere.test.mjs, T-X1).
     // Étape 35 (lot 1a, 09/11/2026) : ses ajouts purs (lancements.js, matchStatsDb.js) retirés d'abord.
     // Étape 39 (lot 1b, 09/11/2026) : ses ajouts purs (lancements.js) retirés AVANT ceux de la 35 (aides/ajouts39.mjs ; T-X10).
-    const octets = octetsSansLesAjoutsDe36(f, f === 'jobs/matchStatsAutoRefresh.js' ? Buffer.from(fs.readFileSync(chemin, 'utf8').replace(/^[^\n]*\[étape 38, lot 1b : ajout pur, début\][\s\S]*?\[étape 38, lot 1b : ajout pur, fin\][^\n]*\n/gm, ''), 'utf8') : octetsSansLesAjoutsDe35(f, octetsSansLesAjoutsDe39(f, fs.readFileSync(chemin))));
+    // Étape 35 (lot 1b, 10/11/2026) : ses blocs « ajout pur » de l'actualisation retirés de même (aides/ajouts35.mjs ; debutsFrontiere.test.mjs, T-X10).
+    const octets = octetsSansLesAjoutsDe36(f, f === 'jobs/matchStatsAutoRefresh.js' ? octetsSansLesAjoutsDe35(f, Buffer.from(fs.readFileSync(chemin, 'utf8').replace(/^[^\n]*\[étape 38, lot 1b : ajout pur, début\][\s\S]*?\[étape 38, lot 1b : ajout pur, fin\][^\n]*\n/gm, ''), 'utf8')) : octetsSansLesAjoutsDe35(f, octetsSansLesAjoutsDe39(f, fs.readFileSync(chemin))));
     assert.equal(sha1(octets), attendu, `${f} : retouché (gelé pendant l’essai 27)`);
   }
   // autoMatchAiTrigger.js garde sa base interne de 10 000 (aucune mise n'en sort vers Pierre : le prompt passe par compactContext.js).

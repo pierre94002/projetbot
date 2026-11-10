@@ -783,6 +783,35 @@ les tirs au but. » (la même constante que l'encadré) pour un retour, un match
 en anglais ou en fractions (« Quarter-finals » → « Quarts de finale », « 4th Round » → « 4e tour ») et laisse « final » entre guillemets tant que le serveur
 ne l'a pas confirmée. Mots : `utils/coupeDuMatch.js` (pur, sans Vue : `server/test/coupesEcran.test.mjs` le rejoue sur les vraies réponses du serveur).
 
+Depuis l'étape 35 du plan (lot 1b, 10/11/2026) : **les débuts de saison, à blanc** — deux places, chacune UNE seule. Sur la page d'un match à venir, le bloc
+« Début de saison » (`components/analysis/DebutDeSaisonBloc.vue`, `data-bloc="debut-de-saison"`, `data-debuts-etat`) posé SOUS les neuf lignes de « Contexte
+du match » et sous leur banc d'essai, à l'intérieur de `MatchContextCard.vue` : **jamais une dixième ligne** (« toujours neuf lignes » reste vrai). Il ne LIT
+rien lui-même : le bloc `debutsDeSaison` que le serveur joint à l'analyse (APRÈS elle : la fiche gelée la nuit, les lignes des deux clubs, la note du banc
+recopiée par le serveur) — aucune requête de plus. Sur la page d'une équipe, la carte « Arrivées et départs » (`components/matches/EffectifCard.vue`, sur-titre
+« Effectif », icône `users`, `data-bloc="arrivees-departs"`), juste après « Indice de force » (le style de jeu de l'étape 37 vient donc après elle) : sa
+seule lecture, `GET /api/match-stats/effectif?club=` (par identifiant FotMob ; sans lui, rien n'est lu et la carte le dit). Règles de dessin : le bloc
+garde TOUJOURS ses deux lignes (`data-club="home"` / `"away"`, `data-cas` : debut, promu, relegue, nouveau, autre-changement, premier-au-magasin,
+en-saison, coupe, sans-identifiant, vide), la carte TOUJOURS ses deux tableaux (`data-tableau="reference"` : ceux qui comptaient la saison passée, au
+moins 30 % des minutes qu'ils pouvaient jouer ; `data-tableau="arrives"`, en gras ceux qui comptent), une ligne « aucun » s'il le faut ; chaque état vide
+dit sa raison (« Pas encore calculé : la prochaine passe de nuit le fera. », « Paraîtra la nuit du … (14 jours avant le match). », « … n'est pas reconnu
+par son identifiant FotMob … », « … illisible : la base n'a pas répondu. … », « Aucune saison d'avant au magasin pour ce club : rien à comparer. ») —
+jamais « 0 » ni le silence. Les pastilles : « Explication seulement » (gris) par défaut, « pas encore mesuré au banc d'essai » sans note ; **« Effet
+mesuré » (le seul vert, `dds__vert`) seulement quand une famille UTILE au banc concerne CE match, TOUJOURS suivi de « pas encore dans le pourcentage »**,
+avec dessous la phrase du banc (matchs jugés, fenêtre, fourchette, ampleur, 11 essais comptés ; « Avec les cotes du 1N2 : rapporté sans verdict ») et la
+limite qui dit pourquoi le jugement est prudent ; la puce grise « À blanc » sur la force de l'effectif, toujours (« Pas dans les chiffres : à votre
+décision. »). Jamais de vert ni de rouge pour une VALEUR (un promu n'est pas « mauvais », une continuité basse non plus), jamais `ValueBadge` ; le tableau
+replié « Ce que dit le banc d'essai » (`data-tableau="banc-des-debuts"` : les lignes du banc RÉEL lues dans la note, le 1N2 seul « rapporté, sans
+verdict », le poids par championnat et le second tournoi dits non mesurés ; **Σ** des matchs distincts jugés par fenêtre, « au moins », et **⌀** de
+l'ampleur — jamais une somme de pourcentages ; les limites du lot) ne porte aucun vert. Le logo du club (`TeamCrest`, identifiant FotMob) sur chaque ligne
+qui nomme un club, le drapeau (`PlayerFlag` par son code pays, jamais une lecture de plus) sur chaque ligne qui nomme un joueur ; un club sans identifiant :
+aucun logo cherché d'après son nom. « Parti » seulement vu jouer pour un autre club, avec le club et la date ; sinon « pas revu » (et la liste FotMob du jour
+quand elle dit pourquoi). La provenance par ligne (`ProvenanceChip variante="ligne"`) : « magasin FotMob (feuilles des matchs déjà joués) » calculé la nuit
+(rang, statut, continuité, mouvements ; ambre au-delà de 24 h), « modèle de buts en essai (étape 27) et banc d'essai de l'étape 35 » (l'effet et la force
+de début de saison), « fiches des joueurs (étape 30) » (calculées la nuit du …), « FotMob, liste du jour » et « banc d'essai de l'étape 35 » (un jour sans
+heure inventée, jamais ambre). **Une seule place par information** : le détail nom par nom vit dans la carte de l'équipe, le bloc n'en donne qu'une ligne
+qui y renvoie ; rien de l'étape 35 dans `MarketPicksBoard`, `ScorePredictionCard`, la saisie express ni le verdict. Mots : `utils/debutsDeSaison.js` (pur,
+sans Vue : `server/test/debutsEcran.test.mjs` le rejoue sur les vraies réponses du serveur).
+
 Depuis l'étape 44 du plan (23/10/2026) : **la mémoire de l'IA** — un bloc, sur la page d'une équipe, juste sous « Style de jeu »,
 `components/analysis/AiDossierCard.vue` (« Mémoire de l'IA », `data-bloc="memoire-ia"`, icône `sparkles`) ; la page « Bulletin » de l'étape 45 le réutilise tel
 quel pour une équipe, et en mode `portee="championnat"` (`GET …/dossiers?league=`) pour un championnat seul. Il LIT `GET /api/match-ai-analysis/dossiers?club=fotmob-…` (le club par son IDENTIFIANT FotMob, jamais

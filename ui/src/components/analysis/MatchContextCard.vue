@@ -21,6 +21,9 @@ import HelpTip from '@/components/common/HelpTip.vue';
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue';
 import ProvenanceChip from '@/components/common/ProvenanceChip.vue';
 import { contexteDit } from '@/utils/contexteDuMatch.js';
+// Étape 35 (lot 1b, 10/11/2026) : le bloc « Début de saison », SOUS les neuf lignes (jamais une dixième ligne) ; il lit le
+// bloc `debutsDeSaison` de la même analyse, sans aucune requête de plus.
+import DebutDeSaisonBloc from '@/components/analysis/DebutDeSaisonBloc.vue';
 
 const props = defineProps({
   /** Le bloc `contexte` de l'analyse ; undefined : un serveur d'avant l'étape 32. */
@@ -163,6 +166,9 @@ const ancienApres = (p) => (p.vieuxApresHeures === null ? null : undefined);
         <p class="mcc__petit" data-contexte="pied-du-banc">{{ dit.tableau.pied }}</p>
         <p class="mcc__petit">{{ dit.tableau.preuve }}</p>
       </details>
+
+      <!-- Étape 35 : le début de saison, sous les neuf lignes et sous leur banc d'essai (jamais une dixième ligne). -->
+      <DebutDeSaisonBloc :debuts="analyse?.result?.debutsDeSaison" :analyse="analyse" :match="match" />
     </div>
   </AppCard>
 </template>

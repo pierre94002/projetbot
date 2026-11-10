@@ -28,6 +28,10 @@ export const matchStatsApi = {
   // Le style de jeu d'un club et de son entraîneur (étape 37 du plan) : calculé chaque nuit
   // (server/src/data/db/teamStyle.js), lu tel quel. Explication seulement : le moteur ne le lit pas. `club` : « fotmob-8456 ».
   teamStyle: (club) => httpClient.get(`/match-stats/team-style?club=${encodeURIComponent(club)}`),
+  // Les arrivées et départs d'un club (étape 35 du plan, lot 1b) : la ligne rangée chaque nuit par la passe des débuts de
+  // saison (server/src/data/debutsDeSaison/debutsRead.js), lue telle quelle. Explication seulement : le moteur ne la lit pas.
+  // `club` : « fotmob-8456 » (ou 8456).
+  effectif: (club) => httpClient.get(`/match-stats/effectif?club=${encodeURIComponent(club)}`),
   // Le duel de styles d'un match (étape 37) : les clubs par identifiant FotMob s'il est connu, sinon par nom et championnat.
   styleDuel: ({ homeId = null, awayId = null, homeName = null, awayName = null, league = null }) => {
     const params = new URLSearchParams();

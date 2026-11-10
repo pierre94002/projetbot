@@ -164,7 +164,8 @@ test('T-N6 la fuite plantée → le second chemin la nomme, rien de rangé, l’
 test('T-N7 la place dans ETAPES, une fois par jour, jamais au clic ; le résumé ; le neuvième contrôle anti-fuite de l’écran', async () => {
   const etapes = JOB.ETAPES().map((e) => e.key);
   // Étape 36 (lot 1, 09/11/2026) : les coupes à blanc entre la combinaison à blanc et le contrôle quotidien.
-  assert.deepEqual(etapes.slice(-5), ['cartonsEtCorners', 'joueursABlanc', 'combinaisonABlanc', 'coupesEtMatchsAPart', 'controleQuotidien']);
+  // Étape 35 (lot 1b, 10/11/2026) : les débuts de saison à blanc entre les coupes à blanc et le contrôle quotidien.
+  assert.deepEqual(etapes.slice(-6), ['cartonsEtCorners', 'joueursABlanc', 'combinaisonABlanc', 'coupesEtMatchsAPart', 'debutsDeSaison', 'controleQuotidien']);
   for (const avant of ['moteurABlanc', 'gelPronostics', 'sauvegarde', 'contexteDuMatch']) assert.ok(etapes.indexOf('combinaisonABlanc') > etapes.indexOf(avant), `après ${avant}`);
   const ctx = (derniere, details = null, manuel = false) => ({ manuel, derniere: () => derniere, derniersDetails: () => details });
   assert.equal(COMB.dueCombinaisonABlanc(ctx(null)), true);
@@ -176,7 +177,9 @@ test('T-N7 la place dans ETAPES, une fois par jour, jamais au clic ; le résumé
   assert.match(s.nuit1Etape.summary, /^Combinaison à blanc : 250 révisions rangées \(dont 243 rangées une nuit plus tard ; 1 gelée après le coup d’envoi, gardée hors de la preuve\) ; contrôle anti-fuite : 2 couples recomptés par un second chemin, 0 écart ; [\d,]+ s à part \(\d+ Mo\), rangement [\d,]+ s, le serveur jamais tenu plus de \d+ ms d'affilée ; 241 révisions gelées avant le contrôle en vigueur : « à vérifier » inconnu\. À blanc : jamais lu par le moteur ni envoyé à l’IA\.$/);
   assert.deepEqual(s.nuit1Etape.details.parSource, { service: 249, candidate: 1 });
   const A = await import(pathToFileURL(path.join(UI, 'src', 'utils', 'controlesAntiFuite.js')).href);
-  assert.deepEqual(A.CONTROLES_ANTI_FUITE.at(-1), { cle: 'combinaisonABlanc', nom: 'Combinaison à blanc (palier de la cote juste au jour du pronostic)' });
+  // Étape 35 (lot 1b, 10/11/2026) : le contrôle des débuts de saison vient après, en dixième (debutsNuit.test.mjs, T-N5).
+  assert.deepEqual(A.CONTROLES_ANTI_FUITE.at(-2), { cle: 'combinaisonABlanc', nom: 'Combinaison à blanc (palier de la cote juste au jour du pronostic)' });
+  assert.equal(A.CONTROLES_ANTI_FUITE.at(-1).cle, 'debutsDeSaison');
   assert.deepEqual(A.controlesAntiFuiteDits({ combinaisonABlanc: s.fuiteEtape.alert.value }).map((d) => d.texte), [
     `Combinaison à blanc (palier de la cote juste au jour du pronostic) : 1 écart sur 2 lignes recalculées (contrôle du 10/11/2026 à 01:42) — par exemple ${s.fuite.controle.ecarts[0].texte}.`
   ]);

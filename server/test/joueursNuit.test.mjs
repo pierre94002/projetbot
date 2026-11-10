@@ -191,7 +191,8 @@ test('T-N7 l’étape « joueursABlanc » : entre les cartons et le contrôle qu
   const etapes = JOB.ETAPES().map((e) => e.key);
   // Étape 38 (lot 1b, 04/11/2026) : la combinaison à blanc entre les chiffres des joueurs et le contrôle quotidien.
   // Étape 36 (lot 1, 09/11/2026) : les coupes à blanc entre la combinaison à blanc et le contrôle quotidien.
-  assert.deepEqual(etapes.slice(-5), ['cartonsEtCorners', 'joueursABlanc', 'combinaisonABlanc', 'coupesEtMatchsAPart', 'controleQuotidien']);
+  // Étape 35 (lot 1b, 10/11/2026) : les débuts de saison à blanc entre les coupes à blanc et le contrôle quotidien.
+  assert.deepEqual(etapes.slice(-6), ['cartonsEtCorners', 'joueursABlanc', 'combinaisonABlanc', 'coupesEtMatchsAPart', 'debutsDeSaison', 'controleQuotidien']);
   assert.ok(etapes.indexOf('joueursABlanc') > etapes.indexOf('sauvegarde') && etapes.indexOf('joueursABlanc') > etapes.indexOf('moteurABlanc'));
   const ctx = (derniere, details = null, manuel = false) => ({ manuel, derniere: () => derniere, derniersDetails: () => details });
   assert.equal(JOUEURS.dueJoueursABlanc(ctx(null)), true);
@@ -232,7 +233,8 @@ const FIN = /\[étape 34, lot 1b : ajout pur, fin\]/;
 function blocs(brut) {
   // Étape 38 (lot 1b, 04/11/2026) : ses blocs « ajout pur » de l'actualisation retirés d'abord (combinaisonFuite.test.mjs, T-X10).
   // Étape 36 (lot 1, 09/11/2026) : de même pour ses blocs « ajout pur » (vérifiés par coupesFrontiere.test.mjs, T-X10).
-  const texte = brut.replace(/^[^\n]*\[étape 38, lot 1b : ajout pur, début\][\s\S]*?\[étape 38, lot 1b : ajout pur, fin\][^\n]*\n/gm, '').replace(/^[^\n]*\[étape 36, lot 1 : ajout pur, début\][\s\S]*?\[étape 36, lot 1 : ajout pur, fin\][^\n]*\n/gm, '');
+  // Étape 35 (lot 1b, 10/11/2026) : de même pour ses blocs « ajout pur » (vérifiés par debutsFrontiere.test.mjs, T-X10).
+  const texte = brut.replace(/^[^\n]*\[étape 38, lot 1b : ajout pur, début\][\s\S]*?\[étape 38, lot 1b : ajout pur, fin\][^\n]*\n/gm, '').replace(/^[^\n]*\[étape 36, lot 1 : ajout pur, début\][\s\S]*?\[étape 36, lot 1 : ajout pur, fin\][^\n]*\n/gm, '').replace(/^[^\n]*\[étape 35, lot 1b : ajout pur, début\][\s\S]*?\[étape 35, lot 1b : ajout pur, fin\][^\n]*\n/gm, '');
   const garde = [];
   const ajoutes = [];
   let dans = null;
