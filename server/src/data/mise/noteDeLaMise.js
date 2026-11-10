@@ -1,0 +1,26 @@
+/**
+ * noteDeLaMise.js — CE QUE DIT LE BANC DE LA MISE (étape 39 du plan, lot 1b).
+ * -----------------------------------------------------------------------
+ * RECOPIÉ PAR SCRIPT (server/scripts/etape39.mjs --recopier, sur la sortie du passage unique du banc ; --note-nulle avant
+ * lui), jamais retapé à la main : le test T-B7 (miseBanc.test.mjs) refait ce texte à l’octet.
+ * MISE_AU_BANC : le verdict des trois variantes (mise-v1 = l’étalonnage, forme-kelly, placebo-forme), la décision sur la
+ * forme et sa garde, les creux du capital (1/16, 1/8, 1/4, les deux plates) dans le monde de la clôture, les zones par
+ * horizon, ρ̂. null = pas encore mesuré : l’écran ne dit jamais « mesuré ».
+ * Hors de l’empreinte du moteur (data/mise/) : aucun chiffre du moteur n’en dépend. Pur : ne lit rien.
+ * -----------------------------------------------------------------------
+ */
+
+/** Gèle un objet et tout ce qu’il contient : la note ne se modifie pas en mémoire. */
+const gele = (o) => {
+  if (o && typeof o === 'object' && !Object.isFrozen(o)) {
+    Object.freeze(o);
+    for (const v of Object.values(o)) gele(v);
+  }
+  return o;
+};
+
+/** Le banc de la mise (null = pas encore mesuré). */
+export const MISE_AU_BANC = gele({"format":1,"calculeLe":"2026-11-09","premierRegard":"2026-11-09T21:40:03.107Z","ou":"bac à sable","regles":{"fichier":"test/fixtures/banc-regles-etape39.md","sha1":"213bbfa0696a15a9aae6f95216d9f4731d7ce18d","ecritesAvantLeRegard":true},"scellement":{"conception":{"fichier":"scratchpad/etape39/conception.md","sha1":"c74c0cbb6c9fdd4c836bbc7ecbeb2707d7503741","ecriteLe":"2026-11-03T18:10:13Z"},"premierRegardDeLa38":"2026-11-04T01:35:13.412Z"},"sortie":{"fichier":"test/fixtures/banc-etape39.json","sha1":"01ddf2cdf886090a588d0da37acb1d24c4749f21"},"paris":{"sha1":"3039cafafc56ffc65382ce658c0c8421516bf6bc","n":555},"empreinteDuMoteur":{"sha1":"16f2459db183a99576365047da98b7777687ef05","fichiers":37,"candidate":"f01dd8496f56a415"},"etalonnage":{"ok":true,"mises":{"n":555,"egales":555},"carnet":{"n":555,"avecCloture":555,"vcMoyenne":0.0465796260605878,"pireSerie":9,"zone":15}},"K":3,"z":2.394,"variantes":[{"id":"mise-v1","verdict":"etalonnee","gain":null,"fourchette":null,"j2":null,"lignes":null},{"id":"forme-kelly","verdict":"retenu","gain":0.00011192,"fourchette":[0.00005666,0.00016718],"j2":"retenu","lignes":555},{"id":"placebo-forme","verdict":"pas-prouve","gain":-0.00001745,"fourchette":[-0.00006472,0.00002982],"j2":"pas-prouve","lignes":555}],"placebos":{"placebo-forme":"pas-prouve"},"forme":{"decision":"pas-prouvee","raisons":["garde d’utilité illisible : la note de la 38 ne porte pas la valeur de clôture par bande d’avantage"],"garde":{"lisible":false,"raison":"la note de la 38 ne porte pas la valeur de clôture par bande d’avantage","plafonnes":{"paris":11,"avecCloture":11,"vcMoyenne":0.0624020472892396,"avantageMoyen":0.12677272727272726}}},"fenetreVue":{"le":"2026-11-09T21:40:00Z","par":"orchestrateur","quoi":"La règle de choix du banc de la mise : seul un placebo « retenu » rend les règles fautives ; un placebo « moins bon » est rapporté dans les raisons de la décision, sans annuler le passage. Décidé le 09/11/2026 vers 22 h 40 (heure de Paris), APRÈS la lecture de la note du banc de la 38 (par l’écrivain à 21 h 20 et vers 22 h ; l’orchestrateur connaît ses verdicts depuis le 04/11) : une fenêtre vue, déclarée.","pourquoi":"Mesuré avant le regard (lot1b/marges-tb2-tb3.json, sha1 f1fb84089cd2e89d8024554ea7def8405cf1f592 ; mondes fabriqués sur les cotes et les avantages des 555 paris, 50 graines) : le côté « retenu » du placebo est réglé (0 sur 50 quand l’avantage ne dit rien comme quand il dit vrai), pas le côté « moins bon » (6 sur 50 sans aucune faute quand l’avantage ne dit rien : le coût en croissance de mises inégales). On ne lit un contrôle que du côté où il est réglé ; la règle de la 35 fait de même ; aucune conclusion n’en devient plus favorable à la forme (au plus « mise égale proposée », contre la règle en service) ; la note de la 38 ne dit rien de la mise.","mesure":{"fichier":"scratchpad/etape39/lot1b/marges-tb2-tb3.json","sha1":"f1fb84089cd2e89d8024554ea7def8405cf1f592"}},"creux":{"kelly-1-16":{"c50":0.0595,"c95":0.1111,"c99":0.1457,"capitalFinal":{"c5":0.9663442589504236,"c50":1.111600619514445,"c95":1.261961560012344}},"mise-v1":{"c50":0.116,"c95":0.2119,"c99":0.2672,"capitalFinal":{"c5":0.9239437868127951,"c50":1.2224304040617762,"c95":1.5794741234502692}},"kelly-1-4":{"c50":0.1946,"c95":0.3493,"c99":0.4321,"capitalFinal":{"c5":0.852976633703227,"c50":1.389133969209381,"c95":2.1786455174893673}},"plate-meme-moyenne":{"c50":0.1236,"c95":0.23,"c99":0.2813,"capitalFinal":{"c5":0.8879250840342173,"c50":1.1419999088637887,"c95":1.4739048802528636}},"plate-1pc":{"c50":0.2302,"c95":0.4057,"c99":0.4856,"capitalFinal":{"c5":0.777193128155036,"c50":1.2691615864279389,"c95":2.0748195054290046}}},"zones":[{"horizon":555,"creux":0.2931},{"horizon":1110,"creux":0.3237},{"horizon":1665,"creux":0.3592}],"rho":{"origine":0.8211,"affine":0.823},"monde":"W-cloture","paris555":555});
+
+/** Le verdict d’une variante (null avant le banc ou pour un identifiant inconnu). */
+export const verdictDe = (id) => MISE_AU_BANC?.variantes?.find((v) => v.id === id)?.verdict ?? null;

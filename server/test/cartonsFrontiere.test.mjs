@@ -173,7 +173,8 @@ test('T-X5 la déclaration de l’étape 33 AVANT le regard : portée à la fin 
   // Étape 38 (04/11/2026) : « combinaison » ajoutée APRÈS « paris-joueurs » (combinaisonFrontiere T-X5).
   // Étape 36 (lot 1, 09/11/2026) : « coupes » ajoutée APRÈS « combinaison » (coupesFrontiere T-X5).
   // Étape 35 (lot 1a, 09/11/2026) : « debuts-de-saison » ajoutée APRÈS « coupes » (debutsFrontiere T-X5).
-  assert.deepEqual([...LANC.PORTEES], ['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs', 'combinaison', 'coupes', 'debuts-de-saison']);
+  // Étape 39 (lot 1b, 09/11/2026) : « mise » ajoutée APRÈS « debuts-de-saison » (miseFrontiere T-X5).
+  assert.deepEqual([...LANC.PORTEES], ['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs', 'combinaison', 'coupes', 'debuts-de-saison', 'mise']);
   assert.equal(LANC.VUES_DE_L_ETAPE_33.length, 2);
   for (const v of LANC.VUES_DE_L_ETAPE_33) {
     assert.deepEqual([...v.pour], ['cartons-corners'], `${v.de} → ${v.a}`);
@@ -190,7 +191,8 @@ test('T-X5 la déclaration de l’étape 33 AVANT le regard : portée à la fin 
   // Étape 38 (04/11/2026) : puis le lancement 38.
   // Étape 36 (lot 1, 09/11/2026) : puis le lancement 36.
   // Étape 35 (lot 1a, 09/11/2026) : puis le lancement 35.
-  assert.deepEqual(LANC.LANCEMENTS.slice(LANC.LANCEMENTS.indexOf(l33)).map((l) => l.etape), ['33', '34', '38', '36', '35'], 'le lancement 33 ajouté à la fin, puis les lancements 34, 38, 36 et 35');
+  // Étape 39 (lot 1b, 09/11/2026) : puis le lancement 39.
+  assert.deepEqual(LANC.LANCEMENTS.slice(LANC.LANCEMENTS.indexOf(l33)).map((l) => l.etape), ['33', '34', '38', '36', '35', '39'], 'le lancement 33 ajouté à la fin, puis les lancements 34, 38, 36, 35 et 39');
   for (const portee of LANC.PORTEES.filter((p) => !['tout', 'cartons-corners'].includes(p))) assert.ok(!LANC.fenetresDeclarees({ portee }).some((f) => f.etape === '33'), portee);
   assert.ok(LANC.fenetresDeclarees({ portee: 'cartons-corners' }).some((f) => f.etape === '33'));
   // Le premier démarrage date le lancement ; les fenêtres et le compte de l'étape 27 n'en voient rien.

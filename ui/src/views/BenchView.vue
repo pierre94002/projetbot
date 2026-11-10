@@ -109,6 +109,11 @@ const tuiles = computed(() => tuilesDeLaNote(note.value));
 const titreNote = computed(() => phraseDeLaNote(note.value));
 const reproductionNote = computed(() => phraseDeLaReproduction(note.value?.reproduction));
 
+// ------------------------------------------- 5 bis. la mise conseillée au banc (étape 39, lot 1b)
+// Les phrases du serveur, telles quelles (data/mise/bancDeLaMise.js, phrasesDuBanc) : rien n'est calculé ici, jamais un euro.
+const miseAuBanc = computed(() => etat.value?.mise ?? null);
+const miseMesureeLe = computed(() => (miseAuBanc.value?.calculeLe ? miseAuBanc.value.calculeLe.split('-').reverse().join('/') : null));
+
 // --------------------------------------------------------- 2. le rejeu sur cette appli
 // Le dernier rejeu (peut-être arrêté en erreur : la ligne d'état le dit) et le dernier RÉUSSI, dont le résumé fait les tableaux
 // (correction du 19/10 : un arrêt n'efface plus le dernier rejeu réussi de la page).
@@ -387,6 +392,15 @@ const ecartees = computed(() => ecarteesDuRejeu(reussi.value, jeux.value));
       <SimulatedBetsPanel :regles="regles" :phrase-p5="phraseP5" />
     </AppCard>
 
+    <!-- 5 bis. LA MISE CONSEILLÉE AU BANC (étape 39, lot 1b) : les phrases du serveur, telles quelles -->
+    <AppCard :title="miseAuBanc?.titre ?? 'La mise conseillée, au banc d’essai'" icon="wallet" :subtitle="miseAuBanc?.provenance ?? null">
+      <template v-if="miseAuBanc">
+        <p v-for="(phrase, i) in miseAuBanc.phrases" :key="i" class="bench__mise">{{ phrase }}</p>
+        <p v-if="miseMesureeLe" class="cm-text-muted bench__petit">Mesuré le {{ miseMesureeLe }}.</p>
+      </template>
+      <p v-else class="cm-text-muted bench__petit">Le serveur ne dit pas encore où en est le banc de la mise : relancez-le pour le voir.</p>
+    </AppCard>
+
     <!-- 6. LA CARTE CHAMPIONNAT × MARCHÉ -->
     <AppCard title="Carte championnat × marché" icon="grid" subtitle="Vert seulement « retenu », rouge « moins bon », gris sinon : la grille brute que l’étape 23 reprendra.">
       <template v-if="carte">
@@ -536,6 +550,10 @@ const ecartees = computed(() => ecarteesDuRejeu(reussi.value, jeux.value));
 .bench__petit {
   font-size: 12px;
   margin: 0;
+}
+.bench__mise {
+  margin: 0 0 8px;
+  line-height: 1.5;
 }
 .bench__communs,
 .bench__preuves,

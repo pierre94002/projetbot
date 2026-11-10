@@ -25,10 +25,15 @@
  *                      football-data, les cotes gratuites et vos bookmakers
  *                      (P1 n'est pas rejouée : 6 min de plus pour une période
  *                      réservée aux apprentissages futurs).
+ *                      Étape 39 (lot 1b, 09/11/2026) : `mise` — les phrases du
+ *                      banc de la mise (data/mise/noteDeLaMise.js, recopiée par
+ *                      script ; null = « pas encore mesuré »), telles quelles.
  * -----------------------------------------------------------------------
  */
 
 import { openDb } from '../../data/db/matchStatsDb.js';
+import { MISE_AU_BANC } from '../../data/mise/noteDeLaMise.js';
+import { phrasesDuBanc } from '../../data/mise/bancDeLaMise.js';
 import { isRefreshRunning, withRefreshLock, tacheEnCours } from '../../data/providers/refreshLock.js';
 import { lireReglagesDuMoteur } from '../../core/engine/engineConfig.js';
 import { moteurDuRejeu } from '../../bench/runner.js';
@@ -85,6 +90,8 @@ export function getBench(req, res) {
     livres: BORNES_DES_LIVRES,
     parDefaut: { periodes: PERIODES_PAR_DEFAUT, prix: PRIX_PAR_DEFAUT },
     fiabilite: FIABILITE_AFFICHEE,
+    // Étape 39 (lot 1b) : la mise conseillée au banc d'essai (titre, phrases, provenance) — jamais un euro.
+    mise: phrasesDuBanc(MISE_AU_BANC),
     provenance: PROVENANCE
   });
 }

@@ -1,0 +1,813 @@
+{
+ "format": 1,
+ "quoi": "Banc de la mise (étape 39, lot 1b) : le passage unique.",
+ "ou": "bac à sable",
+ "premierRegard": "2026-11-09T21:40:03.107Z",
+ "fin": "2026-11-09T21:40:03.822Z",
+ "dureeS": 0.5,
+ "paris": {
+  "fichier": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\C--Users-PC-OneDrive-Bureau-developement-ProjetBot\\c4b41134-df35-4d3f-be49-63a4f15181fd\\scratchpad\\etape39\\p2-paris.jsonl",
+  "sha1": "3039cafafc56ffc65382ce658c0c8421516bf6bc",
+  "n": 555
+ },
+ "passeDePierre": {
+  "verifiee": true,
+  "attenduS": 0
+ },
+ "regles": {
+  "fichier": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\C--Users-PC-OneDrive-Bureau-developement-ProjetBot\\c4b41134-df35-4d3f-be49-63a4f15181fd\\scratchpad\\etape39\\banc-regles.md",
+  "sha1": "213bbfa0696a15a9aae6f95216d9f4731d7ce18d",
+  "copie": "test/fixtures/banc-regles-etape39.md"
+ },
+ "scellement": {
+  "conception": {
+   "fichier": "scratchpad/etape39/conception.md",
+   "sha1": "c74c0cbb6c9fdd4c836bbc7ecbeb2707d7503741",
+   "ecriteLe": "2026-11-03T18:10:13Z"
+  },
+  "premierRegardDeLa38": "2026-11-04T01:35:13.412Z"
+ },
+ "verrou": {
+  "fichier": "C:\\Users\\PC\\AppData\\Local\\Temp\\claude\\C--Users-PC-OneDrive-Bureau-developement-ProjetBot\\c4b41134-df35-4d3f-be49-63a4f15181fd\\scratchpad\\etape39\\banc-passage-reel.lock",
+  "pose": "2026-11-09T21:40:03.107Z"
+ },
+ "modulesScelles": {
+  "src/bench/guard.js": "60551323d356d5502684ca32276793fcb946ef84",
+  "src/bench/horizonEssai.js": "db2ee326f8f88f09a5582c7e297cfd4bd7c9d51b",
+  "src/bench/lancements.js": "056f91c188afa05c279ee2aaa9d00d84326d1d85",
+  "src/bench/metrics.js": "c40ebc02607830dec623d071c0d70778f26cf806",
+  "src/bench/prix.js": "0f33a6b56d5238057be45f5720f2050dac22bf6a",
+  "src/bench/simulateBets.js": "523189cda6c82d77368f5b04e5877321d2d5f0d1",
+  "src/bench/trialsRegistry.js": "3eca30850f4844f924ed1ec47b497606a68dec30",
+  "src/config/bacASable.js": "51f4bf847f1bbb4a81d291a96566e3e9cb13af21",
+  "src/core/engine/engineConfig.js": "87b6ac0fd2ebafa432c2adeb3beac591177a3dfa",
+  "src/core/engine/engineVersions.js": "5765ef8ea759a5413397e6b44aafb6c496fc674b",
+  "src/core/engine/goalModel.js": "236a33d7f952b12d4596b02ecb7c6090afca137d",
+  "src/core/engine/motsDuModeleDeButs.js": "1c81f14ce0e25e3af595318028234c565798eea0",
+  "src/core/engine/noteDuModeleDeButs.js": "654e310c28e88de98c2f2ccf247b64ba5c3babaf",
+  "src/core/engine/scorePrediction.js": "44bb6ed76ed724981de01b8d48b5a91ccb59dbed",
+  "src/core/engine/valueFinder.js": "25e4757198fc09a1119de41cdef52eb553368e6a",
+  "src/core/engine/verdictPari.js": "368d73a39b081948dd6d49bfa9add6789c0490f3",
+  "src/core/engine/vosBookmakers.js": "9abf1962a1c47d854cbc161624249a4df657279f",
+  "src/core/market/marginRemoval.js": "b3deabcfcf1fe1d7f875d93a1b327b6efc0e883f",
+  "src/core/model/dixonColes.js": "83c4cf5111c071ca7f95422f826125ecd464484f",
+  "src/core/model/poisson.js": "78be7262cce935f745491e220804da4e8e093aa8",
+  "src/core/risk/seriesDePertes.js": "84ad459c0c2794a2af3e89820f6ae8bbf98059ad",
+  "src/data/combinaison/noteDeLaCombinaison.js": "9e710bba2976c6b3a0363d44dc08217280c4273d",
+  "src/data/mise/bancDeLaMise.js": "d5183ad308453c22e944443450e1cdd228e6089b",
+  "src/data/mise/regleDeMise.js": "1a3424614bd9fc33fd80ffe95a0f49b9984eaf6c",
+  "src/data/providers/refreshLock.js": "c57a4c7b7ff14f598ada36a19c8e90b67ddcc4de",
+  "src/data/roadmap/plan.js": "124d9c5086df25d06cb71b441d5f907570b21076",
+  "src/sports/football/markets.js": "c1296b56003be5cb170525d69047ea6745679424",
+  "src/sports/football/statMarkets.js": "86fe12b131b4315e9f9020659c93f2ed7461222d",
+  "src/utils/atomicJson.js": "fbc39689e775107a6e987ef17ff01687fa8317e4"
+ },
+ "empreinteDuMoteur": {
+  "sha1": "16f2459db183a99576365047da98b7777687ef05",
+  "fichiers": 37,
+  "candidate": "f01dd8496f56a415"
+ },
+ "rejeu": null,
+ "etalonnage": {
+  "mises": {
+   "n": 555,
+   "egales": 555
+  },
+  "carnet": {
+   "n": 555,
+   "avecCloture": 555,
+   "vcMoyenne": 0.0465796260605878,
+   "pireSerie": 9,
+   "zone": 15
+  },
+  "attendu": {
+   "paris": 555,
+   "vcMoyenne": 0.0466,
+   "pireSerie": 9,
+   "zone": 15
+  },
+  "ecarts": [],
+  "ok": true
+ },
+ "arret": false,
+ "banc": {
+  "K": 3,
+  "z": 2.3939794453036756,
+  "tirages": 1000,
+  "graine": 39,
+  "plate": 0.005130926709375627,
+  "placebo": {
+   "groupes": 41,
+   "gardees": 34,
+   "partGardee": 0.06126126126126126
+  },
+  "variantes": [
+   {
+    "id": "mise-v1",
+    "verdict": "etalonnee",
+    "raison": "la définition redonne les 555 mises du service à l’octet : sur P2, son verdict est l’étalonnage"
+   },
+   {
+    "id": "forme-kelly",
+    "verdict": "retenu",
+    "j1": {
+     "verdict": "retenu",
+     "raison": "L’amélioration dépasse ce que le hasard explique : la fourchette est entièrement au-dessus de zéro (555 matchs, 3 variantes essayées).",
+     "gain": 0.00011191548077749429,
+     "fourchette": [
+      0.000056655246537829376,
+      0.0001671757150171592
+     ],
+     "ecartType": 0.000023083002800241324,
+     "p": 0.0000012463440359766764,
+     "n": {
+      "lignes": 555,
+      "blocs": 415,
+      "matchs": 555
+     },
+     "z": 2.3939794453036756,
+     "a": 0.00021640292384525586,
+     "b": 0.0003283184046227502
+    },
+    "j2": {
+     "verdict": "retenu",
+     "raison": "L’amélioration dépasse ce que le hasard explique : la fourchette est entièrement au-dessus de zéro (555 matchs, 3 variantes essayées).",
+     "gain": 0.0004659601276833864,
+     "fourchette": [
+      0.000009399758864286022,
+      0.0009225204965024867
+     ],
+     "ecartType": 0.0001907119001020436,
+     "p": 0.01455496263733047,
+     "n": {
+      "lignes": 555,
+      "blocs": 415,
+      "matchs": 555
+     },
+     "z": 2.3939794453036756,
+     "a": 0.0003288022033759254,
+     "b": 0.0007947623310593148
+    },
+    "lignes": 555,
+    "sansCloture": 0,
+    "blocs": 415
+   },
+   {
+    "id": "placebo-forme",
+    "verdict": "pas-prouve",
+    "j1": {
+     "verdict": "pas-prouve",
+     "raison": "La fourchette contient zéro : l’écart peut venir du hasard (555 matchs, 3 variantes essayées).",
+     "gain": -0.000017447220418159894,
+     "fourchette": [
+      -0.0000647174221092059,
+      0.00002982298127288611
+     ],
+     "ecartType": 0.0000197454501055876,
+     "p": 0.37690826054917625,
+     "n": {
+      "lignes": 555,
+      "blocs": 415,
+      "matchs": 555
+     },
+     "z": 2.3939794453036756,
+     "a": 0.00021640292384525586,
+     "b": 0.000198955703427096
+    },
+    "j2": {
+     "verdict": "pas-prouve",
+     "raison": "La fourchette contient zéro : l’écart peut venir du hasard (555 matchs, 3 variantes essayées).",
+     "gain": -0.00017581872570620886,
+     "fourchette": [
+      -0.000746352356190149,
+      0.00039471490477773125
+     ],
+     "ecartType": 0.0002383201875868939,
+     "p": 0.46067132644957676,
+     "n": {
+      "lignes": 555,
+      "blocs": 415,
+      "matchs": 555
+     },
+     "z": 2.3939794453036756,
+     "a": 0.0003288022033759254,
+     "b": 0.00015298347766971892
+    },
+    "lignes": 555,
+    "sansCloture": 0,
+    "blocs": 415
+   }
+  ],
+  "placebos": {
+   "placebo-forme": "pas-prouve"
+  },
+  "forme": {
+   "decision": "pas-prouvee",
+   "raisons": [
+    "garde d’utilité illisible : la note de la 38 ne porte pas la valeur de clôture par bande d’avantage"
+   ],
+   "garde": {
+    "lisible": false,
+    "source": null,
+    "raison": "la note de la 38 ne porte pas la valeur de clôture par bande d’avantage",
+    "bandes": null,
+    "bandeHauteMoinsBonne": null,
+    "plafonnes": {
+     "paris": 11,
+     "avecCloture": 11,
+     "vcMoyenne": 0.0624020472892396,
+     "avantageMoyen": 0.12677272727272726
+    },
+    "permetConfirme": false
+   }
+  },
+  "fenetreVue": {
+   "le": "2026-11-09T21:40:00Z",
+   "par": "orchestrateur",
+   "quoi": "La règle de choix du banc de la mise : seul un placebo « retenu » rend les règles fautives ; un placebo « moins bon » est rapporté dans les raisons de la décision, sans annuler le passage. Décidé le 09/11/2026 vers 22 h 40 (heure de Paris), APRÈS la lecture de la note du banc de la 38 (par l’écrivain à 21 h 20 et vers 22 h ; l’orchestrateur connaît ses verdicts depuis le 04/11) : une fenêtre vue, déclarée.",
+   "pourquoi": "Mesuré avant le regard (lot1b/marges-tb2-tb3.json, sha1 f1fb84089cd2e89d8024554ea7def8405cf1f592 ; mondes fabriqués sur les cotes et les avantages des 555 paris, 50 graines) : le côté « retenu » du placebo est réglé (0 sur 50 quand l’avantage ne dit rien comme quand il dit vrai), pas le côté « moins bon » (6 sur 50 sans aucune faute quand l’avantage ne dit rien : le coût en croissance de mises inégales). On ne lit un contrôle que du côté où il est réglé ; la règle de la 35 fait de même ; aucune conclusion n’en devient plus favorable à la forme (au plus « mise égale proposée », contre la règle en service) ; la note de la 38 ne dit rien de la mise.",
+   "mesure": {
+    "fichier": "scratchpad/etape39/lot1b/marges-tb2-tb3.json",
+    "sha1": "f1fb84089cd2e89d8024554ea7def8405cf1f592"
+   }
+  },
+  "rapportes": {
+   "regles": {
+    "kelly-1-16": {
+     "moyenne": 0.002595221945311362,
+     "plafonnees": 0
+    },
+    "mise-v1": {
+     "moyenne": 0.005130926709375627,
+     "plafonnees": 11
+    },
+    "kelly-1-4": {
+     "moyenne": 0.009172289483827903,
+     "plafonnees": 69
+    },
+    "plate-meme-moyenne": {
+     "moyenne": 0.005130926709375642,
+     "plafonnees": 0
+    },
+    "plate-1pc": {
+     "moyenne": 0.009999999999999867,
+     "plafonnees": 0
+    },
+    "kelly-rho": {
+     "moyenne": 0.004252924830219077,
+     "plafonnees": 1
+    }
+   },
+   "rho": {
+    "n": 555,
+    "origine": {
+     "pente": 0.8211270332792016
+    },
+    "affine": {
+     "pente": 0.8230435238534929,
+     "ordonnee": -0.00016524209876917634
+    }
+   },
+   "mondes": {
+    "W-cloture": {
+     "paris": 555,
+     "sansProbabilite": 0,
+     "jours": 291,
+     "tirages": 1000,
+     "regles": {
+      "kelly-1-16": {
+       "capitalFinal": {
+        "c5": 0.9663442589504236,
+        "c50": 1.111600619514445,
+        "c95": 1.261961560012344
+       },
+       "creux": {
+        "c50": 0.05950074144757578,
+        "c95": 0.11105118226152755,
+        "c99": 0.14567602606455432
+       },
+       "tempsSousLePlusHaut": 0.8970412371134004,
+       "partEnPerte": 0.097
+      },
+      "mise-v1": {
+       "capitalFinal": {
+        "c5": 0.9239437868127951,
+        "c50": 1.2224304040617762,
+        "c95": 1.5794741234502692
+       },
+       "creux": {
+        "c50": 0.11596248426710842,
+        "c95": 0.21191541187143959,
+        "c99": 0.26719440561346786
+       },
+       "tempsSousLePlusHaut": 0.898591065292095,
+       "partEnPerte": 0.107
+      },
+      "kelly-1-4": {
+       "capitalFinal": {
+        "c5": 0.852976633703227,
+        "c50": 1.389133969209381,
+        "c95": 2.1786455174893673
+       },
+       "creux": {
+        "c50": 0.19458681395236033,
+        "c95": 0.3492940838458971,
+        "c99": 0.4320670231393592
+       },
+       "tempsSousLePlusHaut": 0.9003608247422664,
+       "partEnPerte": 0.121
+      },
+      "plate-meme-moyenne": {
+       "capitalFinal": {
+        "c5": 0.8879250840342173,
+        "c50": 1.1419999088637887,
+        "c95": 1.4739048802528636
+       },
+       "creux": {
+        "c50": 0.12355209743153528,
+        "c95": 0.22998577864428993,
+        "c99": 0.2813237406838831
+       },
+       "tempsSousLePlusHaut": 0.9142577319587588,
+       "partEnPerte": 0.183
+      },
+      "plate-1pc": {
+       "capitalFinal": {
+        "c5": 0.777193128155036,
+        "c50": 1.2691615864279389,
+        "c95": 2.0748195054290046
+       },
+       "creux": {
+        "c50": 0.23022752491946652,
+        "c95": 0.4056612319440822,
+        "c99": 0.4855896373759705
+       },
+       "tempsSousLePlusHaut": 0.9172164948453579,
+       "partEnPerte": 0.208
+      },
+      "kelly-rho": {
+       "capitalFinal": {
+        "c5": 0.9413366675755942,
+        "c50": 1.1847246649100562,
+        "c95": 1.461202176528263
+       },
+       "creux": {
+        "c50": 0.09651017708931797,
+        "c95": 0.17722723368537452,
+        "c99": 0.2287633597090476
+       },
+       "tempsSousLePlusHaut": 0.8981408934707894,
+       "partEnPerte": 0.105
+      }
+     },
+     "pireSerie": {
+      "c50": 10,
+      "c95": 16,
+      "c99": 19
+     }
+    },
+    "W-moteur": {
+     "paris": 555,
+     "sansProbabilite": 0,
+     "jours": 291,
+     "tirages": 1000,
+     "regles": {
+      "kelly-1-16": {
+       "capitalFinal": {
+        "c5": 0.9843815312035903,
+        "c50": 1.1320211389389407,
+        "c95": 1.2873821361244169
+       },
+       "creux": {
+        "c50": 0.056710732566817024,
+        "c95": 0.10250287824824533,
+        "c99": 0.13637043287391315
+       },
+       "tempsSousLePlusHaut": 0.880223367697593,
+       "partEnPerte": 0.071
+      },
+      "mise-v1": {
+       "capitalFinal": {
+        "c5": 0.9633118332446899,
+        "c50": 1.2708046360055214,
+        "c95": 1.634478086140746
+       },
+       "creux": {
+        "c50": 0.11031119407134948,
+        "c95": 0.19513528515088296,
+        "c99": 0.2537219898898786
+       },
+       "tempsSousLePlusHaut": 0.8821683848797243,
+       "partEnPerte": 0.078
+      },
+      "kelly-1-4": {
+       "capitalFinal": {
+        "c5": 0.9169983483825214,
+        "c50": 1.4455566546723841,
+        "c95": 2.2262643901678856
+       },
+       "creux": {
+        "c50": 0.184835940020892,
+        "c95": 0.3235510166983391,
+        "c99": 0.41828714013400814
+       },
+       "tempsSousLePlusHaut": 0.8868900343642613,
+       "partEnPerte": 0.096
+      },
+      "plate-meme-moyenne": {
+       "capitalFinal": {
+        "c5": 0.9043310498613004,
+        "c50": 1.1829097776463204,
+        "c95": 1.5028075911498602
+       },
+       "creux": {
+        "c50": 0.11499732861187806,
+        "c95": 0.2112311495971605,
+        "c99": 0.26497693940097455
+       },
+       "tempsSousLePlusHaut": 0.9004329896907212,
+       "partEnPerte": 0.139
+      },
+      "plate-1pc": {
+       "capitalFinal": {
+        "c5": 0.8042767123730628,
+        "c50": 1.3548001797614038,
+        "c95": 2.1518385434019853
+       },
+       "creux": {
+        "c50": 0.215133907106695,
+        "c95": 0.37828699654821274,
+        "c99": 0.4589533835380636
+       },
+       "tempsSousLePlusHaut": 0.9035704467353927,
+       "partEnPerte": 0.16
+      },
+      "kelly-rho": {
+       "capitalFinal": {
+        "c5": 0.9742745234423557,
+        "c50": 1.2221564760587298,
+        "c95": 1.5073711799169138
+       },
+       "creux": {
+        "c50": 0.09177651672715159,
+        "c95": 0.1636984066289906,
+        "c99": 0.21555675956978293
+       },
+       "tempsSousLePlusHaut": 0.881460481099655,
+       "partEnPerte": 0.077
+      }
+     },
+     "pireSerie": {
+      "c50": 10,
+      "c95": 15,
+      "c99": 19
+     }
+    },
+    "W-zero": {
+     "paris": 555,
+     "sansProbabilite": 0,
+     "jours": 291,
+     "tirages": 1000,
+     "regles": {
+      "kelly-1-16": {
+       "capitalFinal": {
+        "c5": 0.8767557780927273,
+        "c50": 1.003163383972543,
+        "c95": 1.1414678106925626
+       },
+       "creux": {
+        "c50": 0.08455987878002547,
+        "c95": 0.16365671618400768,
+        "c99": 0.20392333521575956
+       },
+       "tempsSousLePlusHaut": 0.9419209621993117,
+       "partEnPerte": 0.48
+      },
+      "mise-v1": {
+       "capitalFinal": {
+        "c5": 0.7696620205470136,
+        "c50": 1.001536543118784,
+        "c95": 1.2881604643705138
+       },
+       "creux": {
+        "c50": 0.16300346383345798,
+        "c95": 0.2999216410410004,
+        "c99": 0.36565361453041056
+       },
+       "tempsSousLePlusHaut": 0.9431821305841894,
+       "partEnPerte": 0.499
+      },
+      "kelly-1-4": {
+       "capitalFinal": {
+        "c5": 0.6289012677834309,
+        "c50": 0.9833076675669462,
+        "c95": 1.524751908491623
+       },
+       "creux": {
+        "c50": 0.27007532366952636,
+        "c95": 0.4559682681393077,
+        "c99": 0.5436867780765777
+       },
+       "tempsSousLePlusHaut": 0.9452061855670086,
+       "partEnPerte": 0.527
+      },
+      "plate-meme-moyenne": {
+       "capitalFinal": {
+        "c5": 0.7811443275002656,
+        "c50": 1.0025311070908165,
+        "c95": 1.2752474920323449
+       },
+       "creux": {
+        "c50": 0.1566874819768751,
+        "c95": 0.2818289764995411,
+        "c99": 0.35194898018007215
+       },
+       "tempsSousLePlusHaut": 0.9452336769759425,
+       "partEnPerte": 0.493
+      },
+      "plate-1pc": {
+       "capitalFinal": {
+        "c5": 0.6050788357711921,
+        "c50": 0.9813988494157558,
+        "c95": 1.5721391280165544
+       },
+       "creux": {
+        "c50": 0.2883435497968596,
+        "c95": 0.4847222119329532,
+        "c99": 0.5770368687059377
+       },
+       "tempsSousLePlusHaut": 0.9475051546391721,
+       "partEnPerte": 0.518
+      },
+      "kelly-rho": {
+       "capitalFinal": {
+        "c5": 0.8069683780486481,
+        "c50": 1.0011016966802204,
+        "c95": 1.236374770613589
+       },
+       "creux": {
+        "c50": 0.1362669905110716,
+        "c95": 0.2556445106401012,
+        "c99": 0.31360259617205033
+       },
+       "tempsSousLePlusHaut": 0.9427560137457026,
+       "partEnPerte": 0.496
+      }
+     },
+     "pireSerie": {
+      "c50": 11,
+      "c95": 16,
+      "c99": 20
+     }
+    },
+    "W-reel": {
+     "paris": 555,
+     "jours": 291,
+     "tirages": 1000,
+     "regles": {
+      "kelly-1-16": {
+       "capitalFinal": {
+        "c5": 1.25457763920222,
+        "c50": 1.254577639202222,
+        "c95": 1.254577639202224
+       },
+       "creux": {
+        "c50": 0.045025272375129544,
+        "c95": 0.07098074451493908,
+        "c99": 0.08362045237361482
+       },
+       "tempsSousLePlusHaut": 0.8314158075601376,
+       "partEnPerte": 0
+      },
+      "mise-v1": {
+       "capitalFinal": {
+        "c5": 1.5510133748243058,
+        "c50": 1.5510133748243082,
+        "c95": 1.5510133748243102
+       },
+       "creux": {
+        "c50": 0.08827299168666247,
+        "c95": 0.13632068942298903,
+        "c99": 0.161171725616983
+       },
+       "tempsSousLePlusHaut": 0.8335635738831598,
+       "partEnPerte": 0
+      },
+      "kelly-1-4": {
+       "capitalFinal": {
+        "c5": 2.0854293438552522,
+        "c50": 2.0854293438552554,
+        "c95": 2.085429343855258
+       },
+       "creux": {
+        "c50": 0.15062801453707575,
+        "c95": 0.22239386204684986,
+        "c99": 0.26921580213527874
+       },
+       "tempsSousLePlusHaut": 0.8380446735395164,
+       "partEnPerte": 0
+      },
+      "plate-meme-moyenne": {
+       "capitalFinal": {
+        "c5": 1.1988329583091255,
+        "c50": 1.1988329583091273,
+        "c95": 1.198832958309129
+       },
+       "creux": {
+        "c50": 0.11091353920655045,
+        "c95": 0.1691600414885993,
+        "c99": 0.2011159855615695
+       },
+       "tempsSousLePlusHaut": 0.9006701030927858,
+       "partEnPerte": 0
+      },
+      "plate-1pc": {
+       "capitalFinal": {
+        "c5": 1.3893477857098215,
+        "c50": 1.3893477857098235,
+        "c95": 1.3893477857098253
+       },
+       "creux": {
+        "c50": 0.20796080112394555,
+        "c95": 0.30709853665380604,
+        "c99": 0.359097477983891
+       },
+       "tempsSousLePlusHaut": 0.9043608247422696,
+       "partEnPerte": 0
+      },
+      "kelly-rho": {
+       "capitalFinal": {
+        "c5": 1.4430303197623096,
+        "c50": 1.4430303197623116,
+        "c95": 1.4430303197623138
+       },
+       "creux": {
+        "c50": 0.0732617287016415,
+        "c95": 0.11447643690357678,
+        "c99": 0.1342076118917539
+       },
+       "tempsSousLePlusHaut": 0.8329450171821298,
+       "partEnPerte": 0
+      }
+     },
+     "pireSerie": {
+      "c50": 10,
+      "c95": 15,
+      "c99": 17
+     }
+    }
+   },
+   "cheminReel": {
+    "quoi": "un seul chemin, dans l’ordre réel des jours : la chance y pèse",
+    "regles": {
+     "kelly-1-16": {
+      "final": 1.2545776392022228,
+      "creux": 0.035032441449844964,
+      "sous": 0.8591065292096219,
+      "pireSerie": 9
+     },
+     "mise-v1": {
+      "final": 1.5510133748243107,
+      "creux": 0.06912176695027206,
+      "sous": 0.865979381443299,
+      "pireSerie": 9
+     },
+     "kelly-1-4": {
+      "final": 2.0854293438552545,
+      "creux": 0.1321757741664683,
+      "sous": 0.8556701030927835,
+      "pireSerie": 9
+     },
+     "plate-meme-moyenne": {
+      "final": 1.1988329583091268,
+      "creux": 0.07260939605261274,
+      "sous": 0.9037800687285223,
+      "pireSerie": 9
+     },
+     "plate-1pc": {
+      "final": 1.3893477857098224,
+      "creux": 0.13919316696438278,
+      "sous": 0.9072164948453608,
+      "pireSerie": 9
+     },
+     "kelly-rho": {
+      "final": 1.4430303197623129,
+      "creux": 0.05703374290291574,
+      "sous": 0.8625429553264605,
+      "pireSerie": 9
+     }
+    }
+   },
+   "zones": {
+    "regle": "mise-v1",
+    "monde": "W-cloture",
+    "zones": [
+     {
+      "horizon": 555,
+      "centile": 0.99,
+      "creux": 0.29307031891900515,
+      "c50": 0.12165915562444962,
+      "c95": 0.21889310241492743
+     },
+     {
+      "horizon": 1110,
+      "centile": 0.99,
+      "creux": 0.32366637804722986,
+      "c50": 0.15302111268641516,
+      "c95": 0.27191314131883093
+     },
+     {
+      "horizon": 1665,
+      "centile": 0.99,
+      "creux": 0.35917403204852627,
+      "c50": 0.17123098344632892,
+      "c95": 0.2967050456343806
+     }
+    ],
+    "faussesCoupures": {
+     "zone": {
+      "horizon": 555,
+      "creux": 0.29307031891900515
+     },
+     "parHorizon": [
+      {
+       "horizon": 555,
+       "cloture": 0.01,
+       "moteur": 0.008
+      },
+      {
+       "horizon": 1110,
+       "cloture": 0.025,
+       "moteur": 0.019
+      },
+      {
+       "horizon": 1665,
+       "cloture": 0.056,
+       "moteur": 0.034
+      },
+      {
+       "horizon": 2775,
+       "cloture": 0.092,
+       "moteur": 0.05
+      }
+     ]
+    },
+    "detection": {
+     "zone": {
+      "horizon": 555,
+      "creux": 0.29307031891900515
+     },
+     "panne": {
+      "auPari": 300,
+      "vc": -0.05,
+      "horizon": 1110
+     },
+     "partCoupee": 0.589,
+     "partCoupeeAvantLaPanne": 0,
+     "medianeDuPariDeCoupure": 835,
+     "medianeDuDelai": 535
+    }
+   },
+   "correlation": {
+    "memeJourEtChampionnat": {
+     "paires": 212,
+     "moyenneDesProduits": 0.014359452114444367,
+     "correlation": 0.014618178070461922
+    },
+    "memeJour": {
+     "paires": 572,
+     "moyenneDesProduits": 0.021458113185989208,
+     "correlation": 0.02184474150607625
+    }
+   },
+   "plafondsDuJour": {
+    "4 %": 6,
+    "6 %": 3,
+    "8 %": 0
+   },
+   "partPlafonnee": 0.01981981981981982,
+   "horsDuLot": [
+    {
+     "id": "francais-zero",
+     "ou": "l’ombre P5 de la mise (lot 1c), à son horizon"
+    },
+    {
+     "id": "francais-demi",
+     "ou": "l’ombre P5 de la mise (lot 1c), à son horizon"
+    },
+    {
+     "id": "fragile-demi",
+     "ou": "l’ombre P5 de la mise (lot 1c), à son horizon"
+    },
+    {
+     "id": "fragile-zero",
+     "ou": "l’ombre P5 de la mise (lot 1c), à son horizon"
+    },
+    {
+     "id": "lies-grille",
+     "ou": "un test de propriété (T-M5, lot 1a) ; P5 après la porte 2 de l’étape 28"
+    }
+   ]
+  }
+ }
+}

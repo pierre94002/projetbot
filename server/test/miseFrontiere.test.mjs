@@ -25,18 +25,27 @@
  * T-X15 ni compactContext.js ni ses appelants (le résumé gardé de matchAiAnalysisService.js, les fiches de l'IA) ne
  *       MODIFIENT le résultat du moteur qu'ils reçoivent (gelé en profondeur dans une copie isolée : une écriture lèverait) ;
  *       la fiche dit la PART, jamais un euro.
- * (T-X5 — la déclaration de l'étape 39 au registre du banc — vient avec le banc, au lot 1b.)
+ * Lot 1b (09/11/2026, le banc de la mise) :
+ * T-X5  la déclaration de l'étape 39 AVANT le regard : « mise » à la FIN de PORTEES ; ses vues `pour: ['mise']` seulement
+ *       (P2, jamais P5) ; les 3 variantes (K = 3) ; le lancement 39 à la fin de LANCEMENTS, daté au premier démarrage ;
+ *       fenetresVues('27') et compterVariantes('27') inchangés ;
+ * T-X10 lancements.js SANS les ajouts de la 39 = celui de la partie 0 du lot 1b à l'octet ; l'ajout ne change que la ligne de
+ *       PORTEES et n'en retire aucune autre (aides/ajouts39.mjs, retiré AVANT ceux de la 35, puis de la 36).
  */
-import { test } from 'node:test';
+import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { pathToFileURL } from 'node:url';
-import { preparerCopie, executer, SERVEUR, FIXTURES } from './aides/isolement.mjs';
+import { preparerCopie, executer, SERVEUR, FIXTURES, RACINE_ESSAIS } from './aides/isolement.mjs';
 import { octetsSansLesAjoutsDe36 } from './aides/ajouts36.mjs';
 // Étape 35 (lot 1a, 09/11/2026) : ses ajouts purs retirés AVANT ceux de la 36 (aides/ajouts35.mjs ; debutsFrontiere.test.mjs, T-X1).
 import { octetsSansLesAjoutsDe35 } from './aides/ajouts35.mjs';
+// Étape 39 (lot 1b, 09/11/2026) : ses ajouts purs (lancements.js) retirés AVANT ceux de la 35 (aides/ajouts39.mjs ; T-X10).
+import { octetsSansLesAjoutsDe39, sansLesAjoutsDe39, FICHIERS_AJOUTS_39 } from './aides/ajouts39.mjs';
+import * as LANC from '../src/bench/lancements.js';
+import { enregistrerLancements, fenetresVues, compterVariantes, lancementDe } from '../src/bench/trialsRegistry.js';
 import { fichiersDuMoteur, empreinteDuCode, empreinteDeLaCandidate, CANDIDATE_EN_ESSAI, MODULES_DU_MOTEUR } from '../src/core/engine/engineVersions.js';
 import * as R from '../src/data/mise/regleDeMise.js';
 import { conseilDuPari } from '../src/data/screener.js';
@@ -271,10 +280,11 @@ function atteints(depart) {
   return vus;
 }
 
-test('T-X1 les empreintes ne bougent pas ; rien de l’étape 39 sous core/ ni sports/ ni dans l’empreinte ; data/mise/ = les trois fichiers du lot 1a', () => {
+test('T-X1 les empreintes ne bougent pas ; rien de l’étape 39 sous core/ ni sports/ ni dans l’empreinte ; data/mise/ = les trois fichiers du lot 1a et les deux du banc (lot 1b)', () => {
   assert.equal(empreinteDuCode({ rafraichir: true }).empreinte, '16f2459db183a99576365047da98b7777687ef05');
   assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), 'f01dd8496f56a415');
-  assert.deepEqual(FICHIERS_39.sort(), ['data/mise/capitalDePierre.js', 'data/mise/miseRead.js', 'data/mise/regleDeMise.js']);
+  // Lot 1b (09/11/2026) : le banc de la mise (bancDeLaMise.js) et sa note (noteDeLaMise.js, écrite par script).
+  assert.deepEqual(FICHIERS_39.sort(), ['data/mise/bancDeLaMise.js', 'data/mise/capitalDePierre.js', 'data/mise/miseRead.js', 'data/mise/noteDeLaMise.js', 'data/mise/regleDeMise.js']);
   const gelesSousCore = new Set(GELES.map(([f]) => f).filter((f) => f.startsWith('core/') || f.startsWith('sports/')));
   for (const racine of ['core', 'sports']) {
     for (const f of tousLesFichiers(path.join(SRC, racine))) {
@@ -374,11 +384,12 @@ test('T-X7 le jugement PROVISOIRE de l’essai de l’étape 27 (moteurABlanc, e
   assert.equal(s.fenetresVues27Texte, figee.fenetresVues27Texte, 'fenetresVues(\'27\'), à l’octet');
   assert.equal(s.variantes27, figee.variantes27);
   assert.equal(s.variantes27, 320);
-  // L'étape 39 n'a déclaré aucun lancement au lot 1a (le banc est au lot 1b) : les lancements vus sont ceux de 32, 33, 34 et 38.
-  assert.ok(!s.lancementsVus.some((x) => x.startsWith('39:')), 'aucun lancement de l’étape 39 au lot 1a');
+  // L'étape 39 n'a déclaré aucun lancement au lot 1a ; au lot 1b (09/11/2026), le lancement 39 (le banc de la mise) est noté au
+  // premier démarrage comme ceux de 32, 33, 34, 38, 36 et 35 — rien d'autre ne bouge.
+  assert.ok(s.lancementsVus.includes('39:mise-v1'), 'lot 1b : le lancement 39 est dans le registre du juge, et rien ne change');
   // Étape 36 (lot 1, 09/11/2026) : le lancement 36, noté au premier démarrage lui aussi — rien d'autre ne bouge.
   // Étape 35 (lot 1a, 09/11/2026) : de même pour le lancement 35.
-  assert.deepEqual(s.lancementsVus.filter((x) => !['32:contexte-v1', '33:cartons-corners-v1', '34:joueurs-v1', '38:combinaison-v1', '36:coupes-v1', '35:debuts-de-saison-v1'].includes(x)), figee.lancementsVus);
+  assert.deepEqual(s.lancementsVus.filter((x) => !['32:contexte-v1', '33:cartons-corners-v1', '34:joueurs-v1', '38:combinaison-v1', '36:coupes-v1', '35:debuts-de-saison-v1', '39:mise-v1'].includes(x)), figee.lancementsVus);
 });
 
 test('T-X12 les sha1 de la partie 0 : tous les fichiers gelés identiques à l’octet (autoMatchAiTrigger.js et matchAiAnalysisService.js compris)', () => {
@@ -392,7 +403,8 @@ test('T-X12 les sha1 de la partie 0 : tous les fichiers gelés identiques à l�
     // Étape 36 (lot 1, 09/11/2026) : ses ajouts purs aux fichiers gelés (lancements.js, matchStatsDb.js, l'actualisation, settlementService.js)
     // retirés de même (aides/ajouts36.mjs ; coupesFrontiere.test.mjs, T-X1).
     // Étape 35 (lot 1a, 09/11/2026) : ses ajouts purs (lancements.js, matchStatsDb.js) retirés d'abord.
-    const octets = octetsSansLesAjoutsDe36(f, f === 'jobs/matchStatsAutoRefresh.js' ? Buffer.from(fs.readFileSync(chemin, 'utf8').replace(/^[^\n]*\[étape 38, lot 1b : ajout pur, début\][\s\S]*?\[étape 38, lot 1b : ajout pur, fin\][^\n]*\n/gm, ''), 'utf8') : octetsSansLesAjoutsDe35(f, fs.readFileSync(chemin)));
+    // Étape 39 (lot 1b, 09/11/2026) : ses ajouts purs (lancements.js) retirés AVANT ceux de la 35 (aides/ajouts39.mjs ; T-X10).
+    const octets = octetsSansLesAjoutsDe36(f, f === 'jobs/matchStatsAutoRefresh.js' ? Buffer.from(fs.readFileSync(chemin, 'utf8').replace(/^[^\n]*\[étape 38, lot 1b : ajout pur, début\][\s\S]*?\[étape 38, lot 1b : ajout pur, fin\][^\n]*\n/gm, ''), 'utf8') : octetsSansLesAjoutsDe35(f, octetsSansLesAjoutsDe39(f, fs.readFileSync(chemin))));
     assert.equal(sha1(octets), attendu, `${f} : retouché (gelé pendant l’essai 27)`);
   }
   // autoMatchAiTrigger.js garde sa base interne de 10 000 (aucune mise n'en sort vers Pierre : le prompt passe par compactContext.js).
@@ -506,4 +518,57 @@ test('T-X15 ni compactContext.js ni ses appelants ne modifient le résultat du m
     assert.doesNotMatch(fiche, /€/);
     assert.ok(!fiche.includes(String(s.stake).replace('.', ',')), 'la mise interne n’est jamais écrite');
   }
+});
+
+// ======================================================================= lot 1b (09/11/2026) : le banc de la mise
+
+fs.mkdirSync(RACINE_ESSAIS, { recursive: true });
+const DOSSIER = fs.mkdtempSync(path.join(RACINE_ESSAIS, 'cm-mise-registre-'));
+after(() => fs.rmSync(DOSSIER, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 }));
+
+test('T-X5 la déclaration de l’étape 39 AVANT le regard : « mise » à la fin de PORTEES ; vues « mise » seulement, P2 ; 3 variantes ; lancement à la fin ; fenetresVues(\'27\') et compterVariantes(\'27\') inchangés', () => {
+  assert.deepEqual([...LANC.PORTEES], ['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs', 'combinaison', 'coupes', 'debuts-de-saison', 'mise']);
+  assert.ok(LANC.verifierLancements());
+  const v39 = LANC.VUES_DE_L_ETAPE_39;
+  for (const v of v39) assert.deepEqual([...v.pour], ['mise'], `${v.de} → ${v.a}`);
+  assert.deepEqual(v39.map((v) => [v.de, v.a]), [['2019-07-01', '2023-06-30']], 'P2 seulement : jamais P5 (l’ombre, lot 1c)');
+  assert.deepEqual(LANC.VARIANTES_DE_L_ETAPE_39.map((v) => v.id), ['mise-v1', 'forme-kelly', 'placebo-forme']);
+  assert.ok(!LANC.VARIANTES_DE_L_ETAPE_39.some((v) => /1-4|1-16|rho|plate|creux|plafond/.test(v.id)), 'aucune fraction ni aucun niveau jugé : ils sont rapportés');
+  const l39 = LANC.LANCEMENTS.find((l) => l.etape === '39');
+  assert.deepEqual([l39.version, l39.le], ['mise-v1', null]);
+  assert.equal(l39.variantes, LANC.VARIANTES_DE_L_ETAPE_39);
+  assert.equal(l39.vues, LANC.VUES_DE_L_ETAPE_39);
+  assert.equal(LANC.LANCEMENTS.at(-1), l39, 'le lancement 39 ajouté à la fin');
+  assert.equal(LANC.LANCEMENTS.at(-2).etape, '35', 'juste après celui de la 35');
+  for (const portee of LANC.PORTEES.filter((p) => !['tout', 'mise'].includes(p))) assert.ok(!LANC.fenetresDeclarees({ portee }).some((f) => f.etape === '39'), portee);
+  assert.ok(LANC.fenetresDeclarees({ portee: 'mise' }).some((f) => f.etape === '39'));
+  const fichier = path.join(DOSSIER, 'registre-t-x5.json');
+  const sans39 = { fichier, lancements: LANC.LANCEMENTS.filter((l) => l.etape !== '39') };
+  const avant = { f27: JSON.stringify(fenetresVues('27', { fichier })), k27: compterVariantes('27', { fichier }), f27sans: JSON.stringify(fenetresVues('27', sans39)) };
+  assert.equal(avant.f27, avant.f27sans, 'le lancement 39 du code ne change pas les fenêtres de 27');
+  assert.equal(lancementDe('39', { fichier }), null, 'pas encore lancée');
+  const r = enregistrerLancements({ fichier, maintenant: Date.parse('2026-11-10T09:00:00Z') });
+  assert.ok(r.nouveaux.some((x) => x.etape === '39' && x.version === 'mise-v1' && x.le === '2026-11-10'), JSON.stringify(r.nouveaux));
+  assert.equal(JSON.stringify(fenetresVues('27', { fichier })), avant.f27);
+  assert.equal(compterVariantes('27', { fichier }), avant.k27);
+  assert.equal(compterVariantes('39', { fichier }), 3);
+  assert.ok(LANC.ETAPES_A_JUGER.includes('39'));
+});
+
+/** lancements.js à la partie 0 du lot 1b (09/11/2026 vers 21 h 16, le bac = le dépôt) : les ajouts de la 35 et de la 36, pas ceux de la 39. */
+const LANCEMENTS_PARTIE_0_1B = '24757023bc7b80ec7bb8d092d990a257e5efa6ab';
+
+test('T-X10 lancements.js SANS les ajouts de la 39 = la partie 0 du lot 1b à l’octet ; l’ajout ne change que la ligne de PORTEES et n’en retire aucune autre', () => {
+  assert.deepEqual([...FICHIERS_AJOUTS_39], ['bench/lancements.js']);
+  for (const f of FICHIERS_AJOUTS_39) {
+    const texte = fs.readFileSync(path.join(SRC, f), 'utf8');
+    assert.equal(sha1(Buffer.from(sansLesAjoutsDe39(f, texte), 'utf8')), LANCEMENTS_PARTIE_0_1B, f);
+    assert.equal(sha1(octetsSansLesAjoutsDe39(f, fs.readFileSync(path.join(SRC, f)))), LANCEMENTS_PARTIE_0_1B);
+    assert.notEqual(sha1(Buffer.from(texte, 'utf8')), LANCEMENTS_PARTIE_0_1B, `${f} porte bien son ajout`);
+    const maintenant = new Set(texte.split('\n'));
+    const disparues = sansLesAjoutsDe39(f, texte).split('\n').filter((l) => !maintenant.has(l));
+    assert.deepEqual(disparues, ["export const PORTEES = Object.freeze(['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs', 'combinaison', 'coupes', 'debuts-de-saison']);"], `${f} : seules des lignes AJOUTÉES (et la ligne de PORTEES)`);
+  }
+  const autre = Buffer.from('rien');
+  assert.equal(octetsSansLesAjoutsDe39('data/db/matchStatsDb.js', autre), autre, 'les autres fichiers passent tels quels');
 });

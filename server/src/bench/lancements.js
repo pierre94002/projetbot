@@ -103,7 +103,9 @@ export const DONNEES_VUES = Object.freeze([
 // Étape 35 (lot 1a, 09/11/2026) : « debuts-de-saison » — les débuts de saison et les changements d’effectif (rangs, statuts,
 // oubli à la trêve, centres des promus et des nouveaux venus, force de l’effectif) mesurés à blanc (data/debutsDeSaison/) ;
 // jamais lus par le moteur au lot 1 (la candidate du lot 2 recopierait ces vues avec `pour: ['moteur']`).
-export const PORTEES = Object.freeze(['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs', 'combinaison', 'coupes', 'debuts-de-saison']);
+// Étape 39 (lot 1b, 09/11/2026) : « mise » — le banc de la mise (data/mise/) : la forme de 1/8 de Kelly jugée à la clôture,
+// les niveaux et les creux du capital rapportés ; jamais lus par le moteur au lot 1.
+export const PORTEES = Object.freeze(['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs', 'combinaison', 'coupes', 'debuts-de-saison', 'mise']);
 
 /** Une fenêtre vaut-elle pour cette mesure ? `tout` vaut pour toutes. */
 export const pourLaPortee = (pour, portee) => Array.isArray(pour) && (pour.includes(portee) || pour.includes('tout'));
@@ -947,6 +949,35 @@ export const VARIANTES_DE_L_ETAPE_35 = Object.freeze([
 ]);
 
 /**
+ * Les fenêtres REGARDÉES par l'étape 39 (la mise juste, lot 1b du 09/11/2026 ; data/mise/), portée « mise » (déclarée DANS
+ * chaque fenêtre : le juge de l'essai de l'étape 27 n'en voit rien) : football-data P2, où le banc de la mise juge la FORME
+ * de 1/8 de Kelly en UN seul regard (rien n'y est appris ; l'étape 18, la porte 1 de l'étape 27 et l'étape 38 l'ont regardée
+ * pour d'autres questions) ; avant lui, les comptes (parts, plafonds, jours, blocs), sans issue ni clôture. Jamais P1 (≥ 2012
+ * comprise), jamais le magasin, jamais P5 (l'ombre de la mise, lot 1c, est la preuve après lancement).
+ */
+export const VUES_DE_L_ETAPE_39 = Object.freeze([
+  Object.freeze({
+    de: '2019-07-01',
+    a: '2023-06-30',
+    quoi: 'Étape 39 : P2 football-data — les 555 paris 1N2 du moteur en service ; la forme de la mise (1/8 de Kelly plafonné à 2 %) jugée en un seul regard face à la mise plate de même moyenne et à son placebo (mises permutées dans le mois), à la croissance attendue à la clôture ; les niveaux (1/16, 1/4, ρ̂, les plates) et les creux du capital rapportés, jamais jugés ; apprentissage interdit ; avant lui, les comptes (parts, plafonds, jours, blocs), sans issue ni clôture.',
+    pour: Object.freeze(['mise'])
+  })
+]);
+
+/**
+ * Les VARIANTES de l'étape 39, déclarées AVANT le regard unique du banc de la mise (conception du 03/11/2026, §2.3 : K = 3,
+ * z = 2,394) : la définition (mise-v1, en tête : sur P2 c'est le service, son verdict est l'étalonnage), la forme face à la
+ * mise plate de même moyenne, et son placebo. Les niveaux (1/16, 1/4, 1/8 × ρ̂), les plates, les bookmakers français et
+ * fragiles, les paris liés, la zone des creux et les plafonds du jour sont RAPPORTÉS, jamais jugés : aucun n'est ici. Le banc
+ * compte K = VARIANTES_DE_L_ETAPE_39.length et refuse toute variante absente d'ici.
+ */
+export const VARIANTES_DE_L_ETAPE_39 = Object.freeze([
+  Object.freeze({ id: 'mise-v1', quoi: 'Règle retenue (version 1) : la part du capital = 1/8 de Kelly sur l’avantage du moteur, au plus 2 % (le réglage en service, à l’identique) ; sur P2 c’est le service : son verdict est l’étalonnage (555 mises sur 555 à l’octet).' }),
+  Object.freeze({ id: 'forme-kelly', quoi: 'La forme : 1/8 de Kelly face à la mise plate de même moyenne (calculée sans issue), à la croissance attendue à la clôture (J1, il décide) et au rendement réalisé (J2, il qualifie) ; « confirmée » seulement avec la garde d’utilité (aucune bande d’avantage de 10 % et plus « moins bonne » que 0, lue dans la note de la 38).' }),
+  Object.freeze({ id: 'placebo-forme', quoi: 'Placebo de contrôle : les mises de 1/8 de Kelly permutées dans le mois civil (graine 39 ; une permutation qui garde plus de la moitié des mises est refusée), face à la même mise plate ; doit sortir « pas prouvé ».' })
+]);
+
+/**
  * Les lancements déclarés par les étapes, dans l'ordre où elles sont faites. À la FIN d'une étape qui
  * touche aux chiffres : ajouter son entrée ici (version en service, ce qu'elle change, TOUTES les
  * variantes dont on a regardé le résultat pendant la construction, les fenêtres de données regardées).
@@ -1079,6 +1110,17 @@ export const LANCEMENTS = Object.freeze([
     le: null,
     variantes: VARIANTES_DE_L_ETAPE_35,
     vues: VUES_DE_L_ETAPE_35
+  }),
+  // Étape 39 (lot 1b, 09/11/2026) : la mise juste — le banc de la mise (data/mise/) : la forme de 1/8 de Kelly jugée à la
+  // clôture, les niveaux et les creux du capital rapportés ; il ne règle aucun chiffre du moteur (portée 'mise'). Datée du
+  // premier démarrage de l'appli avec ce code ; ses variantes et ses vues déclarées AVANT le regard unique du banc.
+  Object.freeze({
+    etape: '39',
+    version: 'mise-v1',
+    quoi: 'La mise juste : la part du capital conseillée (1/8 de Kelly, au plus 2 %) mesurée au banc d’essai sur les 555 paris du moteur de 2019-2023 — la forme face à une mise égale, les creux du capital avec 1/16, 1/8 et 1/4 ; jamais lue par le moteur.',
+    le: null,
+    variantes: VARIANTES_DE_L_ETAPE_39,
+    vues: VUES_DE_L_ETAPE_39
   })
 ]);
 

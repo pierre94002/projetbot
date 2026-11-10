@@ -393,7 +393,7 @@ seulement) avec la table « l’appli affiche (23/09) / le banc mesure » des tr
 règle du moteur d'abord — décisions, paris, rendement « (rapporté) » sans pastille avec « écart détectable ± x », valeur de clôture et sa pastille,
 pire série et « normale jusqu’à N », raisons des refus ; le détail par tranche de cote et par championnat replié, Σ des paris et ⌀ du rendement —
 jamais une somme de pourcentages — ; les variantes repliées, chacune avec la `.cm-chip is-warning` « pas le prix d’un de vos bookmakers » ; la phrase
-des paris de P5 et du second jugement de fin mars 2027) ; (6) **la carte championnat × marché** (P2 ou P3, un groupe de marchés à la fois ; une
+des paris de P5 et du second jugement de fin mars 2027) ; (5 bis, étape 39, lot 1b, 09/11/2026) **« La mise conseillée, au banc d’essai »** (`AppCard`, icône `wallet`) : les phrases du serveur telles quelles (`mise` de la route : les creux du capital avec 1/8, 1/16 et 1/4 de Kelly en % du capital, jamais un euro ; puis la forme « confirmée » / « pas encore prouvée » / « mise égale proposée »), la provenance en sous-titre, « Mesuré le … » ; « Pas encore mesuré… » tant que le banc de la mise n’a pas tourné ; (6) **la carte championnat × marché** (P2 ou P3, un groupe de marchés à la fois ; une
 `.cm-chip` par case : le gain, ou « pas assez de matchs » en clair ; la valeur de clôture des paris du 1N2 par championnat repliée) ; (7) **d’où
 viennent ces chiffres** (la provenance de la route, mot pour mot) et **les rencontres écartées** (le rejeu entier — attribuées, lien 4 dit même à
 zéro, lien 3, hors grille — puis période par période, chaque raison comptée). Tant qu'aucun rejeu n'a tourné ici, les blocs 3 à 5 montrent la note
