@@ -2,34 +2,62 @@
   "version": 1,
   "jour": "2026-11-10",
   "canal": "claude-code",
-  "majLe": "2026-11-10T11:55:47.947Z",
+  "majLe": "2026-11-10T19:31:51.807Z",
   "totaux": {
-    "appels": 8,
-    "ok": 8,
+    "appels": 15,
+    "ok": 15,
     "echecs": 0,
     "sansTokens": 0,
     "tokens": {
-      "entree": 24,
-      "ecritureCache": 51578,
-      "lectureCache": 42404,
-      "sortie": 26475,
-      "total": 120481
+      "entree": 38,
+      "ecritureCache": 98621,
+      "lectureCache": 57902,
+      "sortie": 44822,
+      "total": 201383
     },
-    "equivalentApiUsd": 0.479593,
+    "equivalentApiUsd": 0.854363,
     "parType": {
       "revue": {
-        "appels": 8,
-        "ok": 8,
+        "appels": 10,
+        "ok": 10,
         "echecs": 0,
         "sansTokens": 0,
         "tokens": {
-          "entree": 24,
-          "ecritureCache": 51578,
-          "lectureCache": 42404,
-          "sortie": 26475,
-          "total": 120481
+          "entree": 28,
+          "ecritureCache": 64219,
+          "lectureCache": 44492,
+          "sortie": 32025,
+          "total": 140764
         },
-        "equivalentApiUsd": 0.479593
+        "equivalentApiUsd": 0.586083
+      },
+      "avance": {
+        "appels": 4,
+        "ok": 4,
+        "echecs": 0,
+        "sansTokens": 0,
+        "tokens": {
+          "entree": 8,
+          "ecritureCache": 29631,
+          "lectureCache": 8940,
+          "sortie": 11067,
+          "total": 49646
+        },
+        "equivalentApiUsd": 0.230998
+      },
+      "coup-d-envoi": {
+        "appels": 1,
+        "ok": 1,
+        "echecs": 0,
+        "sansTokens": 0,
+        "tokens": {
+          "entree": 2,
+          "ecritureCache": 4771,
+          "lectureCache": 4470,
+          "sortie": 1730,
+          "total": 10973
+        },
+        "equivalentApiUsd": 0.037282
       }
     }
   },
@@ -297,6 +325,237 @@
         "total": 10091
       },
       "equivalentApiUsd": 0.04676
+    },
+    {
+      "id": "2026-11-10T15:16:51.269Z-6380-9-6ad37d",
+      "at": "2026-11-10T15:16:51.269Z",
+      "jour": "2026-11-10",
+      "debut": "2026-11-10T15:16:32.033Z",
+      "dureeMs": 19236,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-11-12-cd-tarancon-levante",
+        "home": "CD Tarancon",
+        "away": "Levante",
+        "league": "Copa del Rey - Spain"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 7379
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 8913,
+        "lectureCache": 0,
+        "sortie": 2445,
+        "total": 11360
+      },
+      "equivalentApiUsd": 0.060106
+    },
+    {
+      "id": "2026-11-10T15:17:10.742Z-6380-10-61f0f5",
+      "at": "2026-11-10T15:17:10.742Z",
+      "jour": "2026-11-10",
+      "debut": "2026-11-10T15:16:53.236Z",
+      "dureeMs": 17506,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-11-12-cs-puertollano-albacete",
+        "home": "CS Puertollano",
+        "away": "Albacete",
+        "league": "Copa del Rey - Spain"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 7921
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 4677,
+        "lectureCache": 4470,
+        "sortie": 2447,
+        "total": 11596
+      },
+      "equivalentApiUsd": 0.044076
+    },
+    {
+      "id": "2026-11-10T15:17:34.794Z-6380-11-f962e1",
+      "at": "2026-11-10T15:17:34.794Z",
+      "jour": "2026-11-10",
+      "debut": "2026-11-10T15:17:13.494Z",
+      "dureeMs": 21300,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "7bfc2afc162934f011a8425159e340da",
+        "home": "Las Palmas",
+        "away": "CD Eldense",
+        "league": "La Liga 2 - Spain"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 8744
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7023,
+        "lectureCache": 0,
+        "sortie": 2748,
+        "total": 9773
+      },
+      "equivalentApiUsd": 0.055576
+    },
+    {
+      "id": "2026-11-10T15:17:58.201Z-6380-12-6bb027",
+      "at": "2026-11-10T15:17:58.201Z",
+      "jour": "2026-11-10",
+      "debut": "2026-11-10T15:17:36.850Z",
+      "dureeMs": 21351,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "f52b83a74c511828f6155889d751d191",
+        "home": "Sabadell FC",
+        "away": "Real Sociedad B",
+        "league": "La Liga 2 - Spain"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10378
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5618,
+        "lectureCache": 2088,
+        "sortie": 2802,
+        "total": 10510
+      },
+      "equivalentApiUsd": 0.050914
+    },
+    {
+      "id": "2026-11-10T19:31:19.721Z-2724-1-959307",
+      "at": "2026-11-10T19:31:19.721Z",
+      "jour": "2026-11-10",
+      "debut": "2026-11-10T19:30:57.379Z",
+      "dureeMs": 22342,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-10-tavernes-de-la-valldigna-valencia",
+        "home": "Tavernes de la Valldigna",
+        "away": "Valencia",
+        "league": "Copa del Rey - Spain"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 8004
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 4771,
+        "lectureCache": 4470,
+        "sortie": 1730,
+        "total": 10973
+      },
+      "equivalentApiUsd": 0.037282
+    },
+    {
+      "id": "2026-11-10T19:31:28.226Z-2724-2-ab1aa6",
+      "at": "2026-11-10T19:31:28.226Z",
+      "jour": "2026-11-10",
+      "debut": "2026-11-10T19:30:49.416Z",
+      "dureeMs": 38810,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-11-12-deportivo-pasto-junior-fc",
+        "home": "Deportivo Pasto",
+        "away": "Junior FC",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10566
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 10898,
+        "lectureCache": 0,
+        "sortie": 3723,
+        "total": 14623
+      },
+      "equivalentApiUsd": 0.080826
+    },
+    {
+      "id": "2026-11-10T19:31:51.805Z-2724-3-27fa91",
+      "at": "2026-11-10T19:31:51.805Z",
+      "jour": "2026-11-10",
+      "debut": "2026-11-10T19:31:32.598Z",
+      "dureeMs": 19207,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-11-12-navalcarnero-real-betis",
+        "home": "Navalcarnero",
+        "away": "Real Betis",
+        "league": "Copa del Rey - Spain"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 8550
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5143,
+        "lectureCache": 4470,
+        "sortie": 2452,
+        "total": 12067
+      },
+      "equivalentApiUsd": 0.04599
     }
   ]
 }
