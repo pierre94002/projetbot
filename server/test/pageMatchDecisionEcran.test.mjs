@@ -19,6 +19,10 @@
  *  4. UN MATCH SANS COTES : dit, ligne par ligne — jamais une cote, une value ni une courbe inventées.
  *  5. RIEN DE PERDU : chaque onglet d'avant garde son contenu ; le pari conseillé est monté en tête du Résumé.
  *  6. Hygiène et câblage des nouveaux composants ; aucun appel hors liste ; aucun avertissement de Vue.
+ *
+ * Étape 40 (lot 1, 10/11/2026) : la place du « pourquoi ce pourcentage » est remplie (« Pourquoi ce pourcentage ? ») — T-F13
+ * la rend sur la page entière, la composition officielle n'y entrant jamais ; la page passe les identifiants des clubs au
+ * verdict et à la fiche (le reste : ficheDuPronosticEcran.test.mjs).
  */
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
@@ -360,17 +364,54 @@ test('le pari conseillé est en tête du verdict (et plus dans l’onglet March�
   assert.match(m.texte, /Saisir une cote de vos bookmakers/);
 });
 
-test('la place du « pourquoi ce pourcentage » : réservée, discrète, sans aucune explication inventée', options, async () => {
-  scenario = lesScenarios().avecCotes;
+// Étape 40 (lot 1, 10/11/2026) : la place réservée est remplie. T-F13 la rend sur la page entière (le même rendu que les autres
+// tests de ce fichier) ; chaque ligne de la fiche est rejouée par ficheDuPronosticEcran.test.mjs.
+test('T-F13 — « Pourquoi ce pourcentage ? » (étape 40, lot 1) : sous le verdict, ses trois familles et le relevé (fournisseur, heure, âge) ; la composition officielle n’y entre jamais, la carte des compositions la garde ; sans cote, le modèle de buts ; l’analyse en panne, dite', options, async () => {
+  const S = lesScenarios();
+  const laFiche = (html) => {
+    const debut = position(html, 'upcoming-pourquoi');
+    return html.slice(html.lastIndexOf('<section', debut), html.indexOf('</section>', debut));
+  };
+  const familles = (bloc) => [...bloc.matchAll(/data-famille="(\w+)"/g)].map((m) => m[1]);
+  // (a) Avec cotes : les trois familles ; le relevé de Pinnacle chez The Odds API, son heure ET son âge ; aucune jauge ni pastille.
+  scenario = S.avecCotes;
   const r = await contexte.rendre('essai-a');
-  const debut = position(r.html, 'upcoming-pourquoi');
-  const bloc = r.html.slice(r.html.lastIndexOf('<section', debut), r.html.indexOf('</section>', debut));
-  const texte = texteDe(bloc);
-  assert.match(texte, /^Pourquoi ce pourcentage \? à venir · étape 40 du plan Place réservée\./);
-  assert.match(texte, /aucune explication inventée/);
-  // Rien d'autre que le dire : pas un chiffre, pas une pastille.
-  assert.doesNotMatch(bloc, /vbadge|cgauge|<table|otc__svg/);
-  assert.doesNotMatch(texte.replace(/étape 40/, ''), /\d/);
+  assert.deepEqual(r.avertissements, []);
+  const a = laFiche(r.html);
+  assert.ok(a.includes('data-bloc="pourquoi-du-pourcentage"') && a.includes('data-etat="pret"'));
+  assert.deepEqual(familles(a), ['resultat', 'buts', 'stats']);
+  assert.equal(S.avecCotes.analyse.fraicheurCotes.parBookmaker.pinnacle.releveAt, '2026-10-05T11:50:00.000Z');
+  assert.match(texteDe(a), /Cotes de référence relevées Pinnacle \(The Odds API\) le 05\/10 à 13 h 50 · il y a 10 min payant/);
+  assert.doesNotMatch(a, /vbadge|cgauge|<table|otc__svg/);
+  assert.ok(position(r.html, 'upcoming-verdict') < position(r.html, 'upcoming-pourquoi') && position(r.html, 'upcoming-pourquoi') < position(r.html, 'upcoming-compos'));
+  // (b) La composition officielle publiée (17 h 50 UTC, 40 min avant le coup d'envoi) : la fiche n'en dit rien de plus (O2) —
+  // ni « officielle », ni puce ; seulement que le moteur ne lit pas les compositions et que les cotes de référence ont été
+  // relevées avant l'heure habituelle de leur annonce. La carte des compositions, elle, garde son état.
+  scenario = S.officielle;
+  const o = await contexte.rendre('essai-a', { heure: Date.parse('2026-10-05T17:50:00Z') });
+  assert.deepEqual(o.avertissements, []);
+  const fo = laFiche(o.html);
+  assert.doesNotMatch(texteDe(fo), /officielle/i);
+  assert.doesNotMatch(fo, /why__compo|data-compo/);
+  assert.ok(texteDe(fo).includes('Le moteur ne lit pas les compositions : elles ne comptent dans ce pourcentage qu’à travers les cotes. Cotes de référence relevées avant l’annonce des compositions, attendue vers 19 h 30 : elles n’en tiennent pas compte.'));
+  assert.match(texteDe(o.html.slice(position(o.html, 'upcoming-compos'), position(o.html, 'upcoming-courbe'))), /Compo officielle/, 'la carte des compositions garde son état');
+  // (c) Sans cote : le modèle de buts, aucun relevé, et la phrase des compositions du modèle.
+  scenario = S.sansCotes;
+  const s = await contexte.rendre(S.sansCotes.match.matchId);
+  assert.deepEqual(s.avertissements, []);
+  const fs2 = laFiche(s.html);
+  assert.match(texteDe(fs2), /D’où il vient Du modèle de buts, .+, faute de cote pour ce match ;/);
+  assert.doesNotMatch(fs2, /data-ligne="releve"/);
+  assert.ok(texteDe(fs2).includes('Le modèle de buts ne lit pas les compositions : ce pourcentage n’en tient pas compte.'));
+  // (d) L'analyse en panne : la fiche dit l'erreur, ses trois familles toujours là.
+  scenario = { ...S.avecCotes, analyseEnPanne: true };
+  const p = await contexte.rendre('essai-a');
+  assert.deepEqual(p.avertissements, []);
+  const fp = laFiche(p.html);
+  assert.match(fp, /data-etat="erreur"/);
+  assert.deepEqual(familles(fp), ['resultat', 'buts', 'stats']);
+  // (e) La place réservée a disparu partout.
+  for (const x of [r, o, s, p]) assert.doesNotMatch(x.texte, /à venir · étape 40|Place réservée/);
 });
 
 // ------------------------------------------------------------------ 3. compositions, courbe, avis de l'IA
@@ -501,7 +542,9 @@ test('un match sans cotes : chaque absence est dite — aucune cote, aucune valu
   assert.doesNotMatch(r.html.slice(position(r.html, 'upcoming-courbe'), position(r.html, 'upcoming-ia')), /<svg class="otc__svg/);
   // Les compositions : introuvables chez FotMob, dit ; le pourquoi et le détail restent.
   assert.match(texteDe(r.html.slice(position(r.html, 'upcoming-compos'), position(r.html, 'upcoming-courbe'))), /Match introuvable chez FotMob/);
-  assert.match(r.texte, /Pourquoi ce pourcentage \? à venir/);
+  // Étape 40 (lot 1) : le pourquoi est rempli — sans cote, il vient du modèle de buts.
+  assert.match(r.texte, /Pourquoi ce pourcentage \?/);
+  assert.match(r.texte, /Du modèle de buts/);
   assert.match(r.texte, /Le détail .* Pronostic du résultat/);
 });
 
@@ -652,9 +695,11 @@ test('câblage : la page pose les trois blocs dans l’ordre, le verdict reçoit
   const sommaire = [.../const BLOCS = \[([\s\S]*?)\];/.exec(page)[1].matchAll(/id: '(\w+)'/g)].map((m) => m[1]);
   assert.deepEqual(sommaire, ['verdict', 'pourquoi', 'compos', 'courbe', 'ia', 'detail']);
   assert.deepEqual(sommaire.map((id) => page.indexOf(`id="upcoming-${id}"`)), ids, 'chaque lien du sommaire a son ancre, dans l’ordre');
-  assert.match(page, /<MarketVerdictBoard :result="analyse\.result" :match="match" :saisies="saisies\.data" @saisir="saisirUneCote" \/>/);
+  // Étape 40 (lot 1) : le verdict et la fiche reçoivent aussi les identifiants des clubs (leurs logos) ; la fiche, ce que la
+  // page a déjà lu.
+  assert.match(page, /<MarketVerdictBoard :result="analyse\.result" :match="match" :saisies="saisies\.data" :home-id="clubsDeLaPage\.home" :away-id="clubsDeLaPage\.away" @saisir="saisirUneCote" \/>/);
   assert.match(page, /<OddsTimelineChart id="upcoming-courbe" class="upcoming__block" :etat="cotes" @voir-cotes="ouvrirOnglet\('cotes'\)" \/>/);
-  assert.match(page, /<PercentageWhyCard id="upcoming-pourquoi" class="upcoming__block" \/>/);
+  assert.match(page, /<PercentageWhyCard id="upcoming-pourquoi" class="upcoming__block" :analyse="analyse" :match="match" :home-id="clubsDeLaPage\.home" :away-id="clubsDeLaPage\.away" :provenance-buts="provenanceButs" \/>/);
   // Ce que la page appelle de plus : le magasin local (cotes relevées, cotes saisies), jamais un relevé payant.
   assert.match(page, /oddsApi\.fixture\(/);
   assert.match(page, /oddsApi\.saisies\(/);

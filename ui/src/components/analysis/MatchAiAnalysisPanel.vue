@@ -5,6 +5,7 @@ import AppIcon from '@/components/common/AppIcon.vue';
 import AiLineupSnapshot from './AiLineupSnapshot.vue';
 import AiMarketCard from './AiMarketCard.vue';
 import PickCrest from '@/components/matches/PickCrest.vue';
+import { figeDeLAvis, MOTS_DE_LA_FICHE } from '@/utils/ficheDuPronostic.js';
 
 /**
  * L'analyse de l'IA d'un match, avant puis après — refaite le 01/10/2026 à
@@ -29,7 +30,12 @@ const props = defineProps({
   // false dans Historique moteur tant que le score n'est pas saisi : le
   // bouton "après-match" échouerait côté serveur (résultat requis), donc on
   // affiche un message d'attente à la place plutôt qu'un bouton voué à échouer.
-  hasResult: { type: Boolean, default: true }
+  hasResult: { type: Boolean, default: true },
+  // Étape 40 (lot 1) : depuis la page d'un match à venir — les identifiants FotMob des clubs (les logos) et « à vérifier »
+  // du contrôle quotidien ; null : rien de cela (onglet Historique moteur).
+  homeId: { type: String, default: null },
+  awayId: { type: String, default: null },
+  aVerifier: { type: Object, default: null }
 });
 
 defineEmits(['run-pre-match', 'run-post-match']);
@@ -96,12 +102,10 @@ const FAMILLES = [
   { cle: 'tirs', titre: 'Tirs', ids: ['totalShots', 'teamShots'] },
   { cle: 'cadres', titre: 'Tirs cadrés', ids: ['totalShotsOnTarget', 'teamShotsOnTarget'] }
 ];
-const cleMarche = (t) =>
-  sansAccents(t)
-    .replace(/[‐-―-]+/g, '-')
-    .replace(/\s+/g, ' ')
-    .trim();
-const pronosticDe = (v) => (props.entry?.engineSnapshot?.marketPredictions ?? []).find((m) => cleMarche(m.market) === cleMarche(v?.market)) ?? null;
+// Étape 40 (lot 1) : le pronostic figé que l'avis explique — libellé exact, départagé par le pick, puis libellé souple s'il
+// est unique, ET le même choix (ficheDuPronostic.figeDeLAvis) ; plus jamais « le premier trouvé » ni un autre choix.
+const rattachementDe = (v) => figeDeLAvis(v, props.entry?.engineSnapshot?.marketPredictions ?? []);
+const pronosticDe = (v) => rattachementDe(v).fige;
 
 // Le pourcentage du moteur que l'IA explique : enregistré avec son avis
 // (depuis le 01/10/2026), sinon celui du pronostic figé avec l'analyse.
@@ -115,9 +119,13 @@ const familles = computed(() => {
   const groupes = FAMILLES.map((f) => ({ ...f, lignes: [] }));
   const autres = { cle: 'autres', titre: 'Autres marchés', lignes: [] };
   for (const v of vues.value) {
-    const p = pronosticDe(v);
-    const groupe = groupes.find((f) => p && f.ids.includes(p.marketId)) ?? autres;
-    groupe.lignes.push({ v, p, proba: probaDe(v) });
+    // Un avis sur un autre choix que le pronostic de son marché garde sa famille et son verdict, sans pourcentage du moteur.
+    const r = rattachementDe(v);
+    const p = r.fige;
+    const marche = p ?? r.candidat;
+    const groupe = groupes.find((f) => marche && f.ids.includes(marche.marketId)) ?? autres;
+    const autreChoix = r.raison === 'autre-choix' ? MOTS_DE_LA_FICHE.autreChoix(r.choix.avis, r.choix.moteur) : null;
+    groupe.lignes.push({ v, p, proba: autreChoix ? null : probaDe(v), autreChoix });
   }
   return [...groupes, autres].filter((g) => g.lignes.length);
 });
@@ -249,6 +257,10 @@ const bilanRevue = computed(() => {
               :home="entry.homeName"
               :away="entry.awayName"
               :league="entry.league ?? null"
+              :home-id="homeId"
+              :away-id="awayId"
+              :a-verifier="aVerifier"
+              :autre-choix="l.autreChoix"
             />
           </div>
         </div>

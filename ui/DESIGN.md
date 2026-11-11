@@ -546,7 +546,7 @@ plafond, une fois par mois) ; la puce du haut (`AppTopbar`) dit l'alerte durable
 `utils/corrections.js` et `utils/versionsMoteur.js` (purs), rejoués par `server/test/boucleCorrectionEcran.test.mjs` sur les réponses du vrai serveur.
 Depuis l'étape 9 du plan (06/10/2026) : la **page d'un match à venir** (`UpcomingMatchView`, onglet Résumé) se lit dans l'ordre d'une DÉCISION, sans
 changer d'onglet : `MarketVerdictBoard` (le verdict par marché, LA carte importante de la page : `AppCard tone="section"`), `PercentageWhyCard`
-(la place réservée du « pourquoi ce pourcentage »), les compositions et les absents, `OddsTimelineChart` (les cotes de l'ouverture à maintenant),
+(« Pourquoi ce pourcentage ? » : d'où vient chaque pourcentage du verdict, depuis l'étape 40), les compositions et les absents, `OddsTimelineChart` (les cotes de l'ouverture à maintenant),
 l'avis de l'IA, puis le détail. Voir « La page d'un match, pour décider » plus bas.
 Depuis l'étape 31 du plan (22/10/2026) : **les fiches à l'écran** — des écrans qui LISENT des résultats déjà calculés par les étapes 15, 18, 22, 29 et 30,
 sans rien recalculer à l'ouverture ni appeler le moindre service payant. Règles communes aux quatre écrans : chaque bloc dit sa SOURCE réelle et l'HEURE de
@@ -812,6 +812,23 @@ heure inventée, jamais ambre). **Une seule place par information** : le détail
 qui y renvoie ; rien de l'étape 35 dans `MarketPicksBoard`, `ScorePredictionCard`, la saisie express ni le verdict. Mots : `utils/debutsDeSaison.js` (pur,
 sans Vue : `server/test/debutsEcran.test.mjs` le rejoue sur les vraies réponses du serveur).
 
+Depuis l'étape 40 du plan (lot 1, 10/11/2026) : **la fiche du pronostic** — rien de nouveau dans les chiffres, seulement d'où ils viennent. Sur la page
+d'un match à venir, juste sous le verdict, `components/analysis/PercentageWhyCard.vue` (« Pourquoi ce pourcentage ? », `data-bloc="pourquoi-du-pourcentage"`,
+`data-etat`) garde TOUJOURS ses trois familles (`data-famille` : resultat, buts, stats), même en chargement ou en erreur (chacune dit alors l'état), et en
+bas la ligne des cotes hors du 1 / N / 2. Aucune requête neuve, aucun chiffre calculé (ceux de l'analyse, mis en forme), aucune barre, aucune jauge (elle
+viendra au lot 2, avec celle de l'étape 38), aucun vert. Résultat : d'où vient le pourcentage (les bookmakers de référence sans leur marge, la moyenne des
+cotes relevées, ou le modèle de buts faute de cote), les « Cotes de référence relevées » (`ProvenanceChip variante="ligne"` : les bookmakers, où ils ont été
+lus, l'heure la plus ancienne ET l'âge ; l'ambre et l'horloge au-delà du délai réglé), et le moteur qui ne lit pas les compositions — jamais une puce de
+composition ni le mot « officielle » dans la fiche, ni « Ce qui manque », qui reste dans l'encadré « Avant de parier — à blanc ». Buts, corners et tirs :
+les attendus de l'analyse avec un logo par identifiant FotMob (`TeamCrest` ; sans identifiant, le nom seul, aucun logo cherché d'après le nom) et d'où ils
+viennent ; la candidate de l'étape 27 adoptée, la provenance de `provenanceDesButs`. **Aujourd'hui, seul le 1 / N / 2 a une cote de bookmaker relevée automatiquement** :
+la ligne du bas le dit, et les cartes de l'IA (`AiMarketCard`) disent « cote juste 1,39 · aucune cote de bookmaker relevée automatiquement ». Sur ces
+cartes, « À vérifier » (`AVerifierBadge`, par l'identifiant du marché, jamais par son libellé) à côté du verdict, jamais à sa place ; un avis de l'IA sur un
+autre choix que le pronostic de son marché garde son verdict, sans pourcentage du moteur, et le dit. Le rattachement (même marché ET même choix) et les
+identifiants des clubs (la compo de la page, sinon `combinaison.clubs`) : `utils/ficheDuPronostic.js` (pur). `MarketPicksBoard`, gelé pendant l'essai de
+l'étape 27, reçoit seulement les identifiants des clubs et garde son rattachement jusqu'au lot 2. Les mots sont dans `MOTS_DE_LA_FICHE`, rejoués par
+`server/test/ficheDuPronosticEcran.test.mjs` sur les vraies réponses du serveur.
+
 Depuis l'étape 44 du plan (23/10/2026) : **la mémoire de l'IA** — un bloc, sur la page d'une équipe, juste sous « Style de jeu »,
 `components/analysis/AiDossierCard.vue` (« Mémoire de l'IA », `data-bloc="memoire-ia"`, icône `sparkles`) ; la page « Bulletin » de l'étape 45 le réutilise tel
 quel pour une équipe, et en mode `portee="championnat"` (`GET …/dossiers?league=`) pour un championnat seul. Il LIT `GET /api/match-ai-analysis/dossiers?club=fotmob-…` (le club par son IDENTIFIANT FotMob, jamais
@@ -1056,8 +1073,8 @@ pastilles, même tri, avec ou sans le badge).
   et `OddsMoveArrow`), lisible à 343 px. Provenance réelle en tête (`ProvenanceChip` : les sources et l'heure du dernier relevé) ; ce sont des cotes de
   référence gratuites, pas celles de vos bookmakers — la note du pied le dit. Sans relevé, avec un seul relevé ou avec un serveur d'avant les mouvements, la carte
   le dit (et liste ce qui manque, source par source) au lieu de rester vide.
-- **`PercentageWhyCard`** : la place du « pourquoi ce pourcentage », en tirets, avec « à venir · étape 40 du plan ». Elle ne montre aucune explication tant que le
-  moteur n'en calcule pas ; l'étape 40 la remplira par son emplacement par défaut.
+- **`PercentageWhyCard`** : « Pourquoi ce pourcentage ? » — pour le résultat, les buts, les corners et les tirs : d'où vient le pourcentage, le relevé des
+  cotes de référence (heure et âge), la phrase des compositions ; seulement ce que l'analyse porte (voir « Depuis l'étape 40 »).
 - **À 375 px** : chaque ligne du verdict devient une petite fiche (le pari et le moteur, la cote, la value et la confiance), la légende de la courbe aussi ;
   `.upcoming__block :deep(.card__header)` laisse passer le bouton ou la provenance d'une carte sous son titre (240 px au moins pour le titre) — le terrain des
   compositions défile horizontalement, comme avant.

@@ -3,6 +3,8 @@ import { computed } from 'vue';
 import AppIcon from '@/components/common/AppIcon.vue';
 import PickCrest from '@/components/matches/PickCrest.vue';
 import ProbabilityRing from './ProbabilityRing.vue';
+import AVerifierBadge from '@/components/common/AVerifierBadge.vue';
+import { MOTS_DE_LA_FICHE } from '@/utils/ficheDuPronostic.js';
 
 /**
  * Un marché vu par l'IA avant le match (onglet Analyse IA, 01/10/2026 —
@@ -31,7 +33,11 @@ const props = defineProps({
   conseille: { type: Boolean, default: false }, // la mise recommandée par le moteur
   sansAvis: { type: Boolean, default: false }, // l'IA n'a donné aucun avis sur ce marché
   // Le championnat des deux clubs (leur logo, quand l'identifiant manque, se retrouve par le nom) :
-  league: { type: String, default: null }
+  league: { type: String, default: null },
+  // Étape 40 (lot 1) : depuis la page d'un match à venir — « à vérifier » du contrôle quotidien (par l'identifiant du marché),
+  // et la phrase d'un avis qui porte sur un autre choix que le pronostic du moteur (ficheDuPronostic.figeDeLAvis) ; null : rien.
+  aVerifier: { type: Object, default: null },
+  autreChoix: { type: String, default: null }
 });
 
 const VERDICTS = {
@@ -50,7 +56,12 @@ const issue = computed(() => ISSUES[props.statut] ?? null);
 const avisTenu = computed(() => (props.revue?.aiWasRight === true ? 'Avis de l’IA tenu' : props.revue?.aiWasRight === false ? 'Avis de l’IA démenti' : null));
 // La leçon : verte quand l'avis de l'IA a tenu, rouge quand il a été démenti, bleue (information) sans avis ou sans avis réglé.
 const tonDeLaLecon = computed(() => (props.revue?.aiWasRight === true ? 'is-ok' : props.revue?.aiWasRight === false ? 'is-ko' : ''));
-const coteDite = computed(() => (Number.isFinite(props.cote) && props.cote > 1 ? props.cote.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 'pas de cote'));
+// Étape 40 (lot 1) : la cote d'un pronostic est la cote JUSTE du moteur (1 divisée par sa probabilité), dite telle quelle ;
+// hors du 1 / N / 2, aucune cote de bookmaker n'est relevée automatiquement, et la carte le dit à côté.
+const coteDite = computed(() => (Number.isFinite(props.cote) && props.cote > 1 ? MOTS_DE_LA_FICHE.coteJuste(props.cote.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })) : 'pas de cote'));
+const estLeResultat = computed(() => (props.prediction?.marketId ? props.prediction.marketId === 'result' : props.view.market === 'Résultat'));
+// « À vérifier » par l'identifiant du marché, jamais par son libellé (« Total corners » tomberait en « buts ») ; sans lui, rien.
+const marcheDuBadge = computed(() => props.prediction?.marketId ?? null);
 
 // « 76 % : Arsenal marque… » → « Arsenal marque… » : l'anneau dit déjà 76 %.
 const pourquoi = computed(() => {
@@ -69,12 +80,14 @@ const pourquoi = computed(() => {
           <PickCrest :item="prediction ?? view.pick" :home="home" :away="away" :league="league" :home-id="homeId" :away-id="awayId" :size="18" />{{ view.pick }}
         </span>
         <span v-if="cote !== null || conseille" class="aimc__meta">
-          <span v-if="cote !== null" class="cm-pill aimc__cote cm-numeric" :title="cote > 1 ? 'Cote du pronostic' : 'Pas de vraie cote relevée pour ce marché'">{{ coteDite }}</span>
+          <span v-if="cote !== null" class="cm-pill aimc__cote cm-numeric" :title="cote > 1 ? MOTS_DE_LA_FICHE.titreCoteJuste : 'Pas de vraie cote relevée pour ce marché'">{{ coteDite }}</span>
+          <span v-if="cote !== null && cote > 1 && !estLeResultat" class="aimc__sans-livre" :title="MOTS_DE_LA_FICHE.titreSansLivre">{{ MOTS_DE_LA_FICHE.sansLivre }}</span>
           <span v-if="conseille" class="cm-chip is-info aimc__conseille" title="Mise recommandée par le moteur">conseillé</span>
         </span>
       </div>
       <div v-if="sansAvis" class="aimc__verdict" data-avis="aucun">
         <span class="aimc__badge aimc__badge--aucun" title="L’IA n’a donné aucun avis sur ce marché"><AppIcon name="minus" :size="12" />Pas d’avis de l’IA</span>
+        <AVerifierBadge v-if="aVerifier && marcheDuBadge" :a-verifier="aVerifier" :marche="marcheDuBadge" />
       </div>
       <div v-else class="aimc__verdict">
         <span class="aimc__badge"><AppIcon :name="verdict.icone" :size="12" />{{ verdict.libelle }}</span>
@@ -82,8 +95,11 @@ const pourquoi = computed(() => {
           <i v-for="n in 3" :key="n" :class="{ 'is-on': n <= niveau }" />
           {{ view.confidence }}
         </span>
+        <AVerifierBadge v-if="aVerifier && marcheDuBadge" :a-verifier="aVerifier" :marche="marcheDuBadge" />
       </div>
     </header>
+
+    <p v-if="autreChoix" class="aimc__autre" data-ligne="autre-choix"><AppIcon name="info" :size="11" />{{ autreChoix }}</p>
 
     <div v-if="issue" class="aimc__issue" data-issue>
       <span class="aimc__statut" :class="`is-${statut}`"><AppIcon :name="issue.icone" :size="11" />{{ issue.libelle }}</span>
@@ -265,6 +281,31 @@ const pourquoi = computed(() => {
 .aimc__conseille {
   padding: 1px 8px;
   font-size: 10px;
+}
+
+/* Étape 40 (lot 1) : « aucune cote de bookmaker relevée automatiquement », à côté de la cote juste ; et l'avis sur un autre
+   choix que le pronostic du moteur — neutres, sans couleur de verdict. */
+.aimc__sans-livre {
+  font-size: 10.5px;
+  color: var(--cm-text-muted);
+}
+
+.aimc__sans-livre::before {
+  content: '·';
+  margin-right: 6px;
+}
+
+.aimc__autre {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+  padding: 7px 10px;
+  border-radius: var(--cm-radius-sm);
+  background: var(--cm-surface-hover);
+  color: var(--cm-text-secondary);
+  font-size: 11.5px;
+  line-height: 1.45;
 }
 
 .aimc__badge--aucun {

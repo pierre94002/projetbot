@@ -51,6 +51,7 @@ import HelpTip from '@/components/common/HelpTip.vue';
 import { pariDuMoteur } from '@/utils/langageParis.js';
 import { phraseSansPari } from '@/utils/verdictParMarche.js';
 import { provenanceDesButs } from '@/utils/modeleDeButs.js';
+import { clubsDuMatch } from '@/utils/ficheDuPronostic.js';
 import { liveNow } from '@/utils/liveClock.js';
 import { TEAM_STAT_GROUPS } from '@/constants/matchDetailTabs.js';
 // Étape 10 du plan : le comparateur de vos bookmakers et le ticket (« J'ai parié »).
@@ -100,8 +101,8 @@ import PlayerPropsBoard from '@/components/analysis/PlayerPropsBoard.vue';
  *
  * Étape 9 du plan (06/10/2026) : le Résumé se lit dans l'ordre d'une DÉCISION —
  * (a) le verdict par marché (probabilité et cote juste du moteur, meilleure cote de
- * vos bookmakers et son heure, value, confiance), (b) la place du « pourquoi ce
- * pourcentage » (réservée, remplie à l'étape 40), (c) les compositions et les
+ * vos bookmakers et son heure, value, confiance), (b) le « pourquoi ce
+ * pourcentage » (étape 40 : d'où vient chaque pourcentage), (c) les compositions et les
  * absents, (d) la courbe des cotes de l'ouverture à maintenant, (e) l'avis de
  * l'IA, (f) le détail. Aucun calcul de plus : la page réordonne ce qu'elle
  * affichait et pose, en tête, le verdict que le serveur rend déjà. Les onglets
@@ -168,6 +169,11 @@ const idsDesClubs = computed(() => {
   const id = (x) => (/^fotmob-\d+$/.test(String(x ?? '')) ? String(x) : null);
   return { home: id(compo?.home?.teamId), away: id(compo?.away?.teamId) };
 });
+// Étape 40 (lot 1) : les identifiants FotMob des deux clubs pour le verdict, la fiche et l'avis de l'IA — la compo de la
+// page d'abord, sinon ceux de l'analyse (combinaison.clubs, posés avant toute lecture de base) ; jamais un nom.
+const clubsDeLaPage = computed(() =>
+  clubsDuMatch({ compo: page.value.data?.lineups ?? page.value.data?.lastLineups ?? null, combinaison: analyse.value.result?.combinaison ?? null })
+);
 // FotMob donne un numéro (« 35 ») ; le calendrier, « Round 35 » ou « Journée 2 ».
 const journee = computed(() => {
   // Étape 36 : pour un match de coupe, le libellé du tour que le serveur a reconnu (« Dernier tour de qualification » pour la « final » d'août).
@@ -736,7 +742,7 @@ const prixJuste = usePrixJuste(
                 <p class="cm-note__text">{{ phraseSansPari(analyse.result.staking) }}</p>
               </div>
             </div>
-            <MarketVerdictBoard :result="analyse.result" :match="match" :saisies="saisies.data" @saisir="saisirUneCote" />
+            <MarketVerdictBoard :result="analyse.result" :match="match" :saisies="saisies.data" :home-id="clubsDeLaPage.home" :away-id="clubsDeLaPage.away" @saisir="saisirUneCote" />
             <!-- Étape 38 : « Avant de parier — à blanc », sous le tableau des verdicts — ce qui manque au pronostic, le seuil et vos bookmakers ; rien n'y change le pourcentage ni le conseil. -->
             <AvantDeParierABlanc :combinaison="analyse.result.combinaison ?? null" :result="analyse.result" />
             <!-- Étape 10 : le comparateur de vos bookmakers (la cote de chacun, son heure, sa value, la cote minimale à prendre) et le ticket (« J'ai parié »). -->
@@ -800,8 +806,8 @@ const prixJuste = usePrixJuste(
           :match="match"
         />
 
-        <!-- (b) La place du « pourquoi ce pourcentage » : réservée, remplie à l'étape 40. -->
-        <PercentageWhyCard id="upcoming-pourquoi" class="upcoming__block" />
+        <!-- (b) Le « pourquoi ce pourcentage » (étape 40, lot 1) : d'où vient chaque pourcentage du verdict, d'après ce que la page a déjà lu. -->
+        <PercentageWhyCard id="upcoming-pourquoi" class="upcoming__block" :analyse="analyse" :match="match" :home-id="clubsDeLaPage.home" :away-id="clubsDeLaPage.away" :provenance-buts="provenanceButs" />
 
         <!-- (c) Les compositions et les absents. -->
         <AppCard id="upcoming-compos" class="upcoming__block" title="Compositions et absents" subtitle="Le onze de chaque équipe, publié par FotMob ; à défaut, le dernier aligné." icon="users">
@@ -851,6 +857,9 @@ const prixJuste = usePrixJuste(
             :running="aiStore.running"
             :entry="aiEntry"
             :has-result="false"
+            :home-id="clubsDeLaPage.home"
+            :away-id="clubsDeLaPage.away"
+            :a-verifier="analyse.result?.aVerifier ?? null"
             @run-pre-match="lancerAnalyseIa"
           />
         </AppCard>
@@ -1048,7 +1057,7 @@ const prixJuste = usePrixJuste(
             </p>
             <!-- Étape 36 : la règle des pronostics d'un match de coupe qui peut aller en prolongation (la même constante que l'encadré « Coupe »). -->
             <p v-if="montrerLaPhrase90(analyse.result.coupe ?? null, page.data?.meta?.round ?? null)" class="upcoming__moved" data-phrase="90-minutes">{{ PHRASE_90_MINUTES }}</p>
-            <MarketPicksBoard :predictions="analyse.result.marketPredictions ?? []" :match="match" :views="aiEntry?.analysis?.marketViews ?? []" :a-verifier="analyse.result.aVerifier ?? null" :provenance-buts="provenanceButs" />
+            <MarketPicksBoard :predictions="analyse.result.marketPredictions ?? []" :match="match" :views="aiEntry?.analysis?.marketViews ?? []" :home-id="clubsDeLaPage.home" :away-id="clubsDeLaPage.away" :a-verifier="analyse.result.aVerifier ?? null" :provenance-buts="provenanceButs" />
           </AppCard>
 
           <!-- Étape 7 : la saisie express d'une cote vue chez un de vos bookmakers (corners, cartons, buteurs, plus/moins…). -->
@@ -1071,6 +1080,9 @@ const prixJuste = usePrixJuste(
           :running="aiStore.running"
           :entry="aiEntry"
           :has-result="false"
+          :home-id="clubsDeLaPage.home"
+          :away-id="clubsDeLaPage.away"
+          :a-verifier="analyse.result?.aVerifier ?? null"
           @run-pre-match="lancerAnalyseIa"
         />
       </AppCard>
