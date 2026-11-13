@@ -1,0 +1,485 @@
+{
+  "version": 1,
+  "jour": "2026-11-13",
+  "canal": "claude-code",
+  "majLe": "2026-11-13T06:50:15.888Z",
+  "totaux": {
+    "appels": 12,
+    "ok": 12,
+    "echecs": 0,
+    "sansTokens": 0,
+    "tokens": {
+      "entree": 32,
+      "ecritureCache": 81099,
+      "lectureCache": 62608,
+      "sortie": 41244,
+      "total": 184983
+    },
+    "equivalentApiUsd": 0.749422,
+    "parType": {
+      "coup-d-envoi": {
+        "appels": 1,
+        "ok": 1,
+        "echecs": 0,
+        "sansTokens": 0,
+        "tokens": {
+          "entree": 2,
+          "ecritureCache": 6325,
+          "lectureCache": 4470,
+          "sortie": 3999,
+          "total": 14796
+        },
+        "equivalentApiUsd": 0.066188
+      },
+      "reprise": {
+        "appels": 1,
+        "ok": 1,
+        "echecs": 0,
+        "sansTokens": 0,
+        "tokens": {
+          "entree": 2,
+          "ecritureCache": 6241,
+          "lectureCache": 4470,
+          "sortie": 4001,
+          "total": 14714
+        },
+        "equivalentApiUsd": 0.065872
+      },
+      "avance": {
+        "appels": 5,
+        "ok": 5,
+        "echecs": 0,
+        "sansTokens": 0,
+        "tokens": {
+          "entree": 12,
+          "ecritureCache": 31635,
+          "lectureCache": 33095,
+          "sortie": 17542,
+          "total": 82284
+        },
+        "equivalentApiUsd": 0.308603
+      },
+      "revue": {
+        "appels": 4,
+        "ok": 4,
+        "echecs": 0,
+        "sansTokens": 0,
+        "tokens": {
+          "entree": 12,
+          "ecritureCache": 32411,
+          "lectureCache": 17292,
+          "sortie": 13741,
+          "total": 63456
+        },
+        "equivalentApiUsd": 0.270537
+      },
+      "bulletin": {
+        "appels": 1,
+        "ok": 1,
+        "echecs": 0,
+        "sansTokens": 0,
+        "tokens": {
+          "entree": 4,
+          "ecritureCache": 4487,
+          "lectureCache": 3281,
+          "sortie": 1961,
+          "total": 9733
+        },
+        "equivalentApiUsd": 0.038222
+      }
+    }
+  },
+  "appels": [
+    {
+      "id": "2026-11-12T23:06:03.805Z-16512-43-8ecf89",
+      "at": "2026-11-12T23:06:03.805Z",
+      "jour": "2026-11-13",
+      "debut": "2026-11-12T23:05:37.288Z",
+      "dureeMs": 26517,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-13-llaneros-fc-chico-fc",
+        "home": "Llaneros FC",
+        "away": "Chicó FC",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10187
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 6325,
+        "lectureCache": 4470,
+        "sortie": 3999,
+        "total": 14796
+      },
+      "equivalentApiUsd": 0.066188
+    },
+    {
+      "id": "2026-11-12T23:46:04.982Z-16512-44-287130",
+      "at": "2026-11-12T23:46:04.982Z",
+      "jour": "2026-11-13",
+      "debut": "2026-11-12T23:45:37.539Z",
+      "dureeMs": 27443,
+      "canal": "claude-code",
+      "type": "reprise",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-13-llaneros-fc-chico-fc",
+        "home": "Llaneros FC",
+        "away": "Chicó FC",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10064
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 6241,
+        "lectureCache": 4470,
+        "sortie": 4001,
+        "total": 14714
+      },
+      "equivalentApiUsd": 0.065872
+    },
+    {
+      "id": "2026-11-13T00:25:24.019Z-16512-45-09d40e",
+      "at": "2026-11-13T00:25:24.019Z",
+      "jour": "2026-11-13",
+      "debut": "2026-11-13T00:24:57.851Z",
+      "dureeMs": 26168,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-11-13-deportivo-pasto-junior-fc",
+        "home": "Deportivo Pasto",
+        "away": "Junior FC",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10775
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 6534,
+        "lectureCache": 4470,
+        "sortie": 4026,
+        "total": 15032
+      },
+      "equivalentApiUsd": 0.067294
+    },
+    {
+      "id": "2026-11-13T00:25:43.412Z-16512-46-0907a7",
+      "at": "2026-11-13T00:25:43.412Z",
+      "jour": "2026-11-13",
+      "debut": "2026-11-13T00:25:27.113Z",
+      "dureeMs": 16299,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "60e79364c168ad0ad22c0cffc02be8a9",
+        "home": "Mirassol",
+        "away": "Atletico Mineiro",
+        "league": "Brazil Série A"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 7979
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 4977,
+        "lectureCache": 4470,
+        "sortie": 2214,
+        "total": 11663
+      },
+      "equivalentApiUsd": 0.042946
+    },
+    {
+      "id": "2026-11-13T00:26:11.803Z-16512-47-02b375",
+      "at": "2026-11-13T00:26:11.803Z",
+      "jour": "2026-11-13",
+      "debut": "2026-11-13T00:25:45.784Z",
+      "dureeMs": 26019,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "cal-2026-11-14-banfield-boca-juniors",
+        "home": "Banfield",
+        "away": "Boca Juniors",
+        "league": "Copa Argentina"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10140
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7118,
+        "lectureCache": 15215,
+        "sortie": 3839,
+        "total": 26176
+      },
+      "equivalentApiUsd": 0.069913
+    },
+    {
+      "id": "2026-11-13T00:26:39.969Z-16512-48-c5228a",
+      "at": "2026-11-13T00:26:39.969Z",
+      "jour": "2026-11-13",
+      "debut": "2026-11-13T00:26:14.371Z",
+      "dureeMs": 25598,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "0380db9fc7de24aed0c27138c02467e5",
+        "home": "Querétaro",
+        "away": "Monterrey",
+        "league": "Liga MX"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 9781
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 6161,
+        "lectureCache": 4470,
+        "sortie": 3785,
+        "total": 14418
+      },
+      "equivalentApiUsd": 0.063392
+    },
+    {
+      "id": "2026-11-13T00:27:07.570Z-16512-49-8b59a4",
+      "at": "2026-11-13T00:27:07.570Z",
+      "jour": "2026-11-13",
+      "debut": "2026-11-13T00:26:42.412Z",
+      "dureeMs": 25158,
+      "canal": "claude-code",
+      "type": "avance",
+      "detail": "avant-match (avance)",
+      "match": {
+        "matchId": "8fafa425728aa8e7d2c23956ba4c2553",
+        "home": "Chapecoense",
+        "away": "Vasco da Gama",
+        "league": "Brazil Série A"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 11022
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 6845,
+        "lectureCache": 4470,
+        "sortie": 3678,
+        "total": 14995
+      },
+      "equivalentApiUsd": 0.065058
+    },
+    {
+      "id": "2026-11-13T00:27:37.267Z-16512-50-283109",
+      "at": "2026-11-13T00:27:37.267Z",
+      "jour": "2026-11-13",
+      "debut": "2026-11-13T00:27:10.527Z",
+      "dureeMs": 26740,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-11-12-academia-puerto-cabello-monagas-sc",
+        "home": "Academia Puerto Cabello",
+        "away": "Monagas SC",
+        "league": "Primera División - Venezuela"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9876
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 8693,
+        "lectureCache": 7395,
+        "sortie": 3391,
+        "total": 19483
+      },
+      "equivalentApiUsd": 0.070169
+    },
+    {
+      "id": "2026-11-13T03:46:33.203Z-16512-51-bc05d1",
+      "at": "2026-11-13T03:46:33.203Z",
+      "jour": "2026-11-13",
+      "debut": "2026-11-13T03:46:11.198Z",
+      "dureeMs": 22005,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-11-12-deportivo-pasto-junior-fc",
+        "home": "Deportivo Pasto",
+        "away": "Junior FC",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9404
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7255,
+        "lectureCache": 0,
+        "sortie": 2822,
+        "total": 10079
+      },
+      "equivalentApiUsd": 0.057244
+    },
+    {
+      "id": "2026-11-13T03:46:54.297Z-16512-52-4d7fec",
+      "at": "2026-11-13T03:46:54.297Z",
+      "jour": "2026-11-13",
+      "debut": "2026-11-13T03:46:35.216Z",
+      "dureeMs": 19081,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-11-13-llaneros-fc-chico-fc",
+        "home": "Llaneros FC",
+        "away": "Chicó FC",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10162
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 5562,
+        "lectureCache": 2088,
+        "sortie": 2384,
+        "total": 10036
+      },
+      "equivalentApiUsd": 0.04651
+    },
+    {
+      "id": "2026-11-13T06:48:20.320Z-16512-53-17ee62",
+      "at": "2026-11-13T06:48:20.320Z",
+      "jour": "2026-11-13",
+      "debut": "2026-11-13T06:47:45.261Z",
+      "dureeMs": 35059,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-11-13-deportivo-pasto-junior-fc",
+        "home": "Deportivo Pasto",
+        "away": "Junior FC",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10724
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 10901,
+        "lectureCache": 7809,
+        "sortie": 5144,
+        "total": 23858
+      },
+      "equivalentApiUsd": 0.096614
+    },
+    {
+      "id": "2026-11-13T06:50:15.887Z-16512-54-02df0d",
+      "at": "2026-11-13T06:50:15.887Z",
+      "jour": "2026-11-13",
+      "debut": "2026-11-13T06:50:02.822Z",
+      "dureeMs": 13065,
+      "canal": "claude-code",
+      "type": "bulletin",
+      "detail": "bulletin du 2026-11-13",
+      "match": null,
+      "mode": "normal",
+      "fiche": null,
+      "taille": {
+        "consignes": 2595,
+        "message": 1907
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 4487,
+        "lectureCache": 3281,
+        "sortie": 1961,
+        "total": 9733
+      },
+      "equivalentApiUsd": 0.038222
+    }
+  ]
+}
