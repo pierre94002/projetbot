@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "jour": "2026-11-15",
+  "canal": "claude-code",
+  "majLe": "2026-11-14T23:17:33.761Z",
+  "totaux": {
+    "appels": 2,
+    "ok": 1,
+    "echecs": 1,
+    "sansTokens": 1,
+    "tokens": {
+      "entree": 2,
+      "ecritureCache": 6990,
+      "lectureCache": 4470,
+      "sortie": 3987,
+      "total": 15449
+    },
+    "equivalentApiUsd": 0.068728,
+    "parType": {
+      "revue": {
+        "appels": 1,
+        "ok": 0,
+        "echecs": 1,
+        "sansTokens": 1,
+        "tokens": {
+          "entree": 0,
+          "ecritureCache": 0,
+          "lectureCache": 0,
+          "sortie": 0,
+          "total": 0
+        },
+        "equivalentApiUsd": 0
+      },
+      "reprise": {
+        "appels": 1,
+        "ok": 1,
+        "echecs": 0,
+        "sansTokens": 0,
+        "tokens": {
+          "entree": 2,
+          "ecritureCache": 6990,
+          "lectureCache": 4470,
+          "sortie": 3987,
+          "total": 15449
+        },
+        "equivalentApiUsd": 0.068728
+      }
+    }
+  },
+  "appels": [
+    {
+      "id": "2026-11-14T23:02:00.591Z-16512-142-30fcda",
+      "at": "2026-11-14T23:02:00.591Z",
+      "jour": "2026-11-15",
+      "debut": "2026-11-14T22:48:57.792Z",
+      "dureeMs": 782799,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "beaf0bb6252d3b1d42a720aa385e9414",
+        "home": "Oviedo",
+        "away": "Girona FC",
+        "league": "La Liga 2 - Spain"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9249
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "echec",
+      "erreur": "Claude Code (headless) n'a pas répondu : Command failed: C:\\Users\\PC\\AppData\\Roaming\\npm\\node_modules\\@anthropic-ai\\claude-code\\bin\\claude.exe -p --output-format json --json-schema {\"type\":\"object\",\"properties\":{\"summary\":{\"type\":\"string\",\"description\":\"Synthèse en 2-4 phrases de la confrontation en",
+      "tokens": null,
+      "equivalentApiUsd": null
+    },
+    {
+      "id": "2026-11-14T23:17:33.760Z-16512-143-4f6567",
+      "at": "2026-11-14T23:17:33.760Z",
+      "jour": "2026-11-15",
+      "debut": "2026-11-14T23:17:05.773Z",
+      "dureeMs": 27987,
+      "canal": "claude-code",
+      "type": "reprise",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "8fafa425728aa8e7d2c23956ba4c2553",
+        "home": "Chapecoense",
+        "away": "Vasco da Gama",
+        "league": "Brazil Série A"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 11394
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 6990,
+        "lectureCache": 4470,
+        "sortie": 3987,
+        "total": 15449
+      },
+      "equivalentApiUsd": 0.068728
+    }
+  ]
+}

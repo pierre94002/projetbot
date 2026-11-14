@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "majLe": "2026-11-10T11:49:36.910Z",
+  "majLe": "2026-11-14T23:09:29.454Z",
   "etapes": {
     "27": {
       "variantes": [
@@ -1929,6 +1929,70 @@
           "quoi": "Un seul modèle de buts : une grille des scores (Poisson et Dixon-Coles, rho −0,05) calée sur les cotes (1N2, et plus/moins 2,5 gratuit quand il existe), mélangée aux forces d’attaque et de défense tirées des xG ou des buts, pondérées dans le temps (demi-vies 35/25 remesurées sur 2024-25 et football-data 2001-2012 ; celles de l’étape 18, jugées sur 2019-2023, lues comme point de départ) ; tous les marchés de buts et le score en sortent ; démarrage à froid : retenu après mesure (m7). — nouvel essai face à la version n° 5",
           "ou": "a-blanc",
           "le": "2026-10-24T14:48:31.802Z"
+        }
+      ],
+      "jugements": [
+        {
+          "mode": "moyenne",
+          "sens": "min",
+          "n": {
+            "lignes": 6225,
+            "blocs": 1245,
+            "matchs": 1245
+          },
+          "a": {
+            "moyenne": 0.823489803439059
+          },
+          "b": {
+            "moyenne": 0.7540755938439201
+          },
+          "gain": 0.06941420959513986,
+          "ecartType": 0.00753916893945053,
+          "seuil": {
+            "alpha": 0.05,
+            "variantes": 321,
+            "alphaCorrige": 0.00015576323987538941,
+            "z": 3.7817777210404344
+          },
+          "fourchette": [
+            0.040902748464765805,
+            0.09792567072551392
+          ],
+          "p": 0,
+          "verdict": "retenu",
+          "raison": "L’amélioration dépasse ce que le hasard explique : la fourchette est entièrement au-dessus de zéro (1 245 matchs, 321 variantes essayées).",
+          "controle": {
+            "percentile95": [
+              0.05420054884818473,
+              0.0844529207377933
+            ],
+            "tiragesIgnores": 0
+          },
+          "tirages": 1000,
+          "graine": 1,
+          "etape": "27",
+          "mesure": "perte-log",
+          "quoi": "Essai à blanc n° 2 de la candidate « modele-buts-v1 » face à la version en service n° 5",
+          "principal": true,
+          "le": "2026-11-14T23:09:29.454Z",
+          "lancement": "2026-10-24",
+          "version": "modele-buts-v1",
+          "fenetre": {
+            "de": "2026-10-25",
+            "a": "2026-11-14"
+          },
+          "ecartees": {
+            "avantLancement": 0,
+            "donneesVues": 0
+          },
+          "enPourcent": {
+            "gain": 8.429273720846593,
+            "fourchette": [
+              4.967001205594496,
+              11.89154623609869
+            ],
+            "quoi": "de perte log en moins"
+          }
         }
       ]
     },
