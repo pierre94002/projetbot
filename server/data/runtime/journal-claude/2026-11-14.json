@@ -1,0 +1,165 @@
+{
+  "version": 1,
+  "jour": "2026-11-14",
+  "canal": "claude-code",
+  "majLe": "2026-11-14T04:23:07.834Z",
+  "totaux": {
+    "appels": 3,
+    "ok": 3,
+    "echecs": 0,
+    "sansTokens": 0,
+    "tokens": {
+      "entree": 6,
+      "ecritureCache": 25475,
+      "lectureCache": 4470,
+      "sortie": 10361,
+      "total": 40312
+    },
+    "equivalentApiUsd": 0.206416,
+    "parType": {
+      "coup-d-envoi": {
+        "appels": 1,
+        "ok": 1,
+        "echecs": 0,
+        "sansTokens": 0,
+        "tokens": {
+          "entree": 2,
+          "ecritureCache": 11095,
+          "lectureCache": 0,
+          "sortie": 3807,
+          "total": 14904
+        },
+        "equivalentApiUsd": 0.082454
+      },
+      "reprise": {
+        "appels": 1,
+        "ok": 1,
+        "echecs": 0,
+        "sansTokens": 0,
+        "tokens": {
+          "entree": 2,
+          "ecritureCache": 6690,
+          "lectureCache": 4470,
+          "sortie": 4065,
+          "total": 15227
+        },
+        "equivalentApiUsd": 0.068308
+      },
+      "revue": {
+        "appels": 1,
+        "ok": 1,
+        "echecs": 0,
+        "sansTokens": 0,
+        "tokens": {
+          "entree": 2,
+          "ecritureCache": 7690,
+          "lectureCache": 0,
+          "sortie": 2489,
+          "total": 10181
+        },
+        "equivalentApiUsd": 0.055654
+      }
+    }
+  },
+  "appels": [
+    {
+      "id": "2026-11-14T00:36:17.315Z-16512-68-71936b",
+      "at": "2026-11-14T00:36:17.315Z",
+      "jour": "2026-11-14",
+      "debut": "2026-11-14T00:35:52.213Z",
+      "dureeMs": 25102,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-14-internacional-de-bogota-santa-fe",
+        "home": "Internacional de Bogotá",
+        "away": "Santa Fe",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10896
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 11095,
+        "lectureCache": 0,
+        "sortie": 3807,
+        "total": 14904
+      },
+      "equivalentApiUsd": 0.082454
+    },
+    {
+      "id": "2026-11-14T01:11:22.911Z-16512-69-2f2fb6",
+      "at": "2026-11-14T01:11:22.911Z",
+      "jour": "2026-11-14",
+      "debut": "2026-11-14T01:10:54.241Z",
+      "dureeMs": 28670,
+      "canal": "claude-code",
+      "type": "reprise",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-14-internacional-de-bogota-santa-fe",
+        "home": "Internacional de Bogotá",
+        "away": "Santa Fe",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 11038
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 6690,
+        "lectureCache": 4470,
+        "sortie": 4065,
+        "total": 15227
+      },
+      "equivalentApiUsd": 0.068308
+    },
+    {
+      "id": "2026-11-14T04:23:07.833Z-16512-70-93a090",
+      "at": "2026-11-14T04:23:07.833Z",
+      "jour": "2026-11-14",
+      "debut": "2026-11-14T04:22:47.780Z",
+      "dureeMs": 20053,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "cal-2026-11-14-internacional-de-bogota-santa-fe",
+        "home": "Internacional de Bogotá",
+        "away": "Santa Fe",
+        "league": "Primera A - Colombia"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10242
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 7690,
+        "lectureCache": 0,
+        "sortie": 2489,
+        "total": 10181
+      },
+      "equivalentApiUsd": 0.055654
+    }
+  ]
+}
