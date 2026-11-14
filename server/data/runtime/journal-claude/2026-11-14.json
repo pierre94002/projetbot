@@ -2,62 +2,62 @@
   "version": 1,
   "jour": "2026-11-14",
   "canal": "claude-code",
-  "majLe": "2026-11-14T12:31:37.496Z",
+  "majLe": "2026-11-14T16:30:08.525Z",
   "totaux": {
-    "appels": 6,
-    "ok": 6,
+    "appels": 24,
+    "ok": 24,
     "echecs": 0,
     "sansTokens": 0,
     "tokens": {
-      "entree": 16,
-      "ecritureCache": 50457,
-      "lectureCache": 23057,
-      "sortie": 22210,
-      "total": 95740
+      "entree": 72,
+      "ecritureCache": 185771,
+      "lectureCache": 193924,
+      "sortie": 130510,
+      "total": 510277
     },
-    "equivalentApiUsd": 0.428572,
+    "equivalentApiUsd": 2.087113,
     "parType": {
       "coup-d-envoi": {
+        "appels": 17,
+        "ok": 17,
+        "echecs": 0,
+        "sansTokens": 0,
+        "tokens": {
+          "entree": 52,
+          "ecritureCache": 138108,
+          "lectureCache": 160004,
+          "sortie": 102204,
+          "total": 400368
+        },
+        "equivalentApiUsd": 1.606577
+      },
+      "reprise": {
         "appels": 3,
         "ok": 3,
         "echecs": 0,
         "sansTokens": 0,
         "tokens": {
-          "entree": 8,
-          "ecritureCache": 31677,
-          "lectureCache": 15218,
-          "sortie": 13938,
-          "total": 60841
+          "entree": 6,
+          "ecritureCache": 19237,
+          "lectureCache": 13410,
+          "sortie": 11866,
+          "total": 44519
         },
-        "equivalentApiUsd": 0.269148
-      },
-      "reprise": {
-        "appels": 1,
-        "ok": 1,
-        "echecs": 0,
-        "sansTokens": 0,
-        "tokens": {
-          "entree": 2,
-          "ecritureCache": 6690,
-          "lectureCache": 4470,
-          "sortie": 4065,
-          "total": 15227
-        },
-        "equivalentApiUsd": 0.068308
+        "equivalentApiUsd": 0.198302
       },
       "revue": {
-        "appels": 1,
-        "ok": 1,
+        "appels": 3,
+        "ok": 3,
         "echecs": 0,
         "sansTokens": 0,
         "tokens": {
-          "entree": 2,
-          "ecritureCache": 7690,
-          "lectureCache": 0,
-          "sortie": 2489,
-          "total": 10181
+          "entree": 10,
+          "ecritureCache": 24026,
+          "lectureCache": 17141,
+          "sortie": 14722,
+          "total": 55899
         },
-        "equivalentApiUsd": 0.055654
+        "equivalentApiUsd": 0.246772
       },
       "bulletin": {
         "appels": 1,
@@ -268,6 +268,600 @@
         "total": 31534
       },
       "equivalentApiUsd": 0.106778
+    },
+    {
+      "id": "2026-11-14T14:06:28.784Z-16512-74-b17fea",
+      "at": "2026-11-14T14:06:28.784Z",
+      "jour": "2026-11-14",
+      "debut": "2026-11-14T14:06:03.583Z",
+      "dureeMs": 25201,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "3af2458dd9984d806bbf46e7bd2d7872",
+        "home": "Wigan Athletic",
+        "away": "Barnsley",
+        "league": "League 1"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 9952
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 10696,
+        "lectureCache": 0,
+        "sortie": 3813,
+        "total": 14511
+      },
+      "equivalentApiUsd": 0.080918
+    },
+    {
+      "id": "2026-11-14T14:07:11.341Z-16512-75-39daac",
+      "at": "2026-11-14T14:07:11.341Z",
+      "jour": "2026-11-14",
+      "debut": "2026-11-14T14:06:33.189Z",
+      "dureeMs": 38152,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "b35b9bd8cea60f3228039ca3fc77d4ba",
+        "home": "Wimbledon",
+        "away": "Blackpool",
+        "league": "League 1"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10007
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 9837,
+        "lectureCache": 15157,
+        "sortie": 6736,
+        "total": 31734
+      },
+      "equivalentApiUsd": 0.109747
+    },
+    {
+      "id": "2026-11-14T14:07:39.242Z-16512-76-6ba74f",
+      "at": "2026-11-14T14:07:39.242Z",
+      "jour": "2026-11-14",
+      "debut": "2026-11-14T14:07:14.472Z",
+      "dureeMs": 24770,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "56de4f6858f896d0278456d0f2f8988a",
+        "home": "Milton Keynes Dons",
+        "away": "Burton Albion",
+        "league": "League 1"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 9899
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 6154,
+        "lectureCache": 4470,
+        "sortie": 3607,
+        "total": 14233
+      },
+      "equivalentApiUsd": 0.061584
+    },
+    {
+      "id": "2026-11-14T14:08:37.186Z-16512-77-554dbc",
+      "at": "2026-11-14T14:08:37.186Z",
+      "jour": "2026-11-14",
+      "debut": "2026-11-14T14:07:42.100Z",
+      "dureeMs": 55086,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "77721ceba014237d5ab331aad5bd05ac",
+        "home": "Sheffield Wednesday",
+        "away": "Plymouth Argyle",
+        "league": "League 1"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10232
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7838,
+        "lectureCache": 15272,
+        "sortie": 9649,
+        "total": 32763
+      },
+      "equivalentApiUsd": 0.130904
+    },
+    {
+      "id": "2026-11-14T14:09:33.121Z-16512-78-7498cd",
+      "at": "2026-11-14T14:09:33.121Z",
+      "jour": "2026-11-14",
+      "debut": "2026-11-14T14:08:39.711Z",
+      "dureeMs": 53410,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "371f8125767427c4b599eab458bb5549",
+        "home": "Stockport County FC",
+        "away": "Reading",
+        "league": "League 1"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10467
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7755,
+        "lectureCache": 15170,
+        "sortie": 9117,
+        "total": 32046
+      },
+      "equivalentApiUsd": 0.125232
+    },
+    {
+      "id": "2026-11-14T14:10:24.666Z-16512-79-00bb2b",
+      "at": "2026-11-14T14:10:24.666Z",
+      "jour": "2026-11-14",
+      "debut": "2026-11-14T14:09:35.900Z",
+      "dureeMs": 48766,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "fe8130a05bb9c0ca21e120279f2291de",
+        "home": "Port Vale",
+        "away": "Accrington Stanley",
+        "league": "League 2"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10140
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7709,
+        "lectureCache": 15147,
+        "sortie": 8035,
+        "total": 30895
+      },
+      "equivalentApiUsd": 0.114223
+    },
+    {
+      "id": "2026-11-14T14:10:54.107Z-16512-80-15049b",
+      "at": "2026-11-14T14:10:54.107Z",
+      "jour": "2026-11-14",
+      "debut": "2026-11-14T14:10:28.913Z",
+      "dureeMs": 25194,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "f6d830e8821f774883ee2ac32d083bd9",
+        "home": "Colchester United",
+        "away": "Gillingham",
+        "league": "League 2"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10033
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 6097,
+        "lectureCache": 4470,
+        "sortie": 3956,
+        "total": 14525
+      },
+      "equivalentApiUsd": 0.064846
+    },
+    {
+      "id": "2026-11-14T14:11:26.847Z-16512-81-fb0ba0",
+      "at": "2026-11-14T14:11:26.847Z",
+      "jour": "2026-11-14",
+      "debut": "2026-11-14T14:10:57.111Z",
+      "dureeMs": 29736,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "f71d831db05c678e7208a069210cd59d",
+        "home": "Crewe Alexandra",
+        "away": "Newport County",
+        "league": "League 2"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10275
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7039,
+        "lectureCache": 15228,
+        "sortie": 4427,
+        "total": 26698
+      },
+      "equivalentApiUsd": 0.07548
+    },
+    {
+      "id": "2026-11-14T14:11:55.330Z-16512-82-863683",
+      "at": "2026-11-14T14:11:55.330Z",
+      "jour": "2026-11-14",
+      "debut": "2026-11-14T14:11:29.431Z",
+      "dureeMs": 25899,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "8861bc687f5c3eab3ddd9ad6fec487ee",
+        "home": "Swindon Town",
+        "away": "Grimsby Town",
+        "league": "League 2"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10128
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 6251,
+        "lectureCache": 4470,
+        "sortie": 3905,
+        "total": 14628
+      },
+      "equivalentApiUsd": 0.064952
+    },
+    {
+      "id": "2026-11-14T14:12:50.869Z-16512-83-7e4f6e",
+      "at": "2026-11-14T14:12:50.869Z",
+      "jour": "2026-11-14",
+      "debut": "2026-11-14T14:11:58.225Z",
+      "dureeMs": 52644,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "8c883d569a4f4682e918e8b2b37f65ea",
+        "home": "Salford City",
+        "away": "Northampton Town",
+        "league": "League 2"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10290
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7665,
+        "lectureCache": 15198,
+        "sortie": 8663,
+        "total": 31530
+      },
+      "equivalentApiUsd": 0.120338
+    },
+    {
+      "id": "2026-11-14T14:13:20.919Z-16512-84-174006",
+      "at": "2026-11-14T14:13:20.919Z",
+      "jour": "2026-11-14",
+      "debut": "2026-11-14T14:12:53.353Z",
+      "dureeMs": 27566,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "0e3335b3ccccc54d5457fca8f68a7c16",
+        "home": "Shrewsbury Town",
+        "away": "Oldham Athletic",
+        "league": "League 2"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10701
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 6551,
+        "lectureCache": 4470,
+        "sortie": 4150,
+        "total": 15173
+      },
+      "equivalentApiUsd": 0.068602
+    },
+    {
+      "id": "2026-11-14T14:14:17.767Z-16512-85-d99f1c",
+      "at": "2026-11-14T14:14:17.767Z",
+      "jour": "2026-11-14",
+      "debut": "2026-11-14T14:13:22.926Z",
+      "dureeMs": 54841,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "c85f68dde3ac31fe8f0da78b1ddca180",
+        "home": "Rochdale",
+        "away": "York City",
+        "league": "League 2"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10350
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7902,
+        "lectureCache": 15245,
+        "sortie": 9237,
+        "total": 32388
+      },
+      "equivalentApiUsd": 0.127035
+    },
+    {
+      "id": "2026-11-14T14:21:56.830Z-16512-86-947604",
+      "at": "2026-11-14T14:21:56.830Z",
+      "jour": "2026-11-14",
+      "debut": "2026-11-14T14:21:03.088Z",
+      "dureeMs": 53742,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "d5b0e0c0934f6a58410410bd573a5065",
+        "home": "Real Sociedad B",
+        "away": "Sporting Gijón",
+        "league": "La Liga 2 - Spain"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 11406
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 8625,
+        "lectureCache": 16019,
+        "sortie": 9182,
+        "total": 33830
+      },
+      "equivalentApiUsd": 0.129532
+    },
+    {
+      "id": "2026-11-14T14:31:27.836Z-16512-87-64da6d",
+      "at": "2026-11-14T14:31:27.836Z",
+      "jour": "2026-11-14",
+      "debut": "2026-11-14T14:31:02.871Z",
+      "dureeMs": 24965,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "1cf6ac52aa2dbb22a0eeb97e0bc80579",
+        "home": "Bristol Rovers",
+        "away": "Chesterfield FC",
+        "league": "League 2"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10255
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 6312,
+        "lectureCache": 4470,
+        "sortie": 3789,
+        "total": 14573
+      },
+      "equivalentApiUsd": 0.064036
+    },
+    {
+      "id": "2026-11-14T14:41:32.154Z-16512-88-988526",
+      "at": "2026-11-14T14:41:32.154Z",
+      "jour": "2026-11-14",
+      "debut": "2026-11-14T14:41:04.473Z",
+      "dureeMs": 27681,
+      "canal": "claude-code",
+      "type": "reprise",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "371f8125767427c4b599eab458bb5549",
+        "home": "Stockport County FC",
+        "away": "Reading",
+        "league": "League 1"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 9943
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 6095,
+        "lectureCache": 4470,
+        "sortie": 4033,
+        "total": 14600
+      },
+      "equivalentApiUsd": 0.065608
+    },
+    {
+      "id": "2026-11-14T14:41:59.254Z-16512-89-e977ad",
+      "at": "2026-11-14T14:41:59.254Z",
+      "jour": "2026-11-14",
+      "debut": "2026-11-14T14:41:34.504Z",
+      "dureeMs": 24750,
+      "canal": "claude-code",
+      "type": "reprise",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "0e3335b3ccccc54d5457fca8f68a7c16",
+        "home": "Shrewsbury Town",
+        "away": "Oldham Athletic",
+        "league": "League 2"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10463
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 6452,
+        "lectureCache": 4470,
+        "sortie": 3768,
+        "total": 14692
+      },
+      "equivalentApiUsd": 0.064386
+    },
+    {
+      "id": "2026-11-14T16:29:25.339Z-16512-90-93e300",
+      "at": "2026-11-14T16:29:25.339Z",
+      "jour": "2026-11-14",
+      "debut": "2026-11-14T16:28:41.749Z",
+      "dureeMs": 43590,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "7bf0d1f95bb9b2b6003386c82ba96b6a",
+        "home": "Exeter City",
+        "away": "Cheltenham Town",
+        "league": "League 2"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 9920
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 9141,
+        "lectureCache": 7479,
+        "sortie": 6252,
+        "total": 22876
+      },
+      "equivalentApiUsd": 0.100588
+    },
+    {
+      "id": "2026-11-14T16:30:08.523Z-16512-91-a630a0",
+      "at": "2026-11-14T16:30:08.523Z",
+      "jour": "2026-11-14",
+      "debut": "2026-11-14T16:29:28.048Z",
+      "dureeMs": 40475,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "908247d5d5cd714de37956edf865668b",
+        "home": "Real Valladolid CF",
+        "away": "CD Castellón",
+        "league": "La Liga 2 - Spain"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10181
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 7195,
+        "lectureCache": 9662,
+        "sortie": 5981,
+        "total": 22842
+      },
+      "equivalentApiUsd": 0.09053
     }
   ]
 }
