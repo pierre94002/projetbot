@@ -137,6 +137,21 @@ export function montrerLaPhrase90(coupe, tourDeLaPage = null) {
 export const libelleDuTourPourLEnTete = (coupe) => coupe?.tour?.libelle ?? null;
 
 /**
+ * Le tour d'un intitulé NUMÉRIQUE NU de la page FotMob (« 1 », « 3 ») dit comme le serveur : « 1er tour », « 3e tour » (étape 36,
+ * lot 2, le repli, 13/11/2026). La règle du serveur (server/src/data/coupes/toursDeCoupe.js : `tourNormalise`, motif /^(\d{1,2})$/
+ * de TOURS_NUMEROTES → `tour-N`, puis `libelleDuTour`) est réécrite ici, pas importée (l'écran n'importe rien du serveur) ; un
+ * test compare les deux de 1 à 12 (coupesEcran, T-E11). Seulement pour l'encadré, qui est toujours une coupe : `tourDeCoupe`
+ * (fotmobLabels.js) n'apprend PAS le numéro nu, sinon `tour()` ferait dire « 35e tour » aux journées de championnat
+ * (MatchCard.vue, FixtureCard.vue). null pour tout autre intitulé (il reste tel quel).
+ */
+export function tourNumeroteDit(intitule) {
+  const m = /^(\d{1,2})$/.exec(String(intitule ?? '').trim());
+  if (!m) return null;
+  const n = Number(m[1]);
+  return n === 1 ? '1er tour' : `${n}e tour`;
+}
+
+/**
  * LES LIGNES DE L'ENCADRÉ. `coupe` : le bloc du serveur (undefined : un serveur d'avant l'étape 36 ; null : pas une
  * coupe) ; `page` : la page FotMob ({ data: { meta: { round } } }) ; `analyse` : { loading, error }. Rend { montre, etat,
  * titre, surTitre, sousTitre, lignes: [8], tableau, ligneCalibration }.
@@ -156,7 +171,9 @@ export function lignesDeLaCoupe({ coupe, page = null, analyse = null }) {
   const competition = coupe.league ? parseLeagueLabel(coupe.league)?.name || coupe.league : 'cette coupe';
   const tourPage = page?.data?.meta?.round ?? null;
   const nature = natureVue(coupe, tourPage === null || tourPage === undefined ? null : String(tourPage));
-  const libelle = coupe.tour?.libelle ?? (tourPage ? tourDeCoupe(String(tourPage))?.libelle ?? String(tourPage) : null);
+  // Avant la première nuit, le serveur ne connaît pas le tour : celui de la page, traduit ; un numéro nu (« 1 ») se dit comme
+  // le serveur, « 1er tour » (lot 2, le repli) ; tout autre intitulé reste tel quel.
+  const libelle = coupe.tour?.libelle ?? (tourPage ? tourDeCoupe(String(tourPage))?.libelle ?? tourNumeroteDit(tourPage) ?? String(tourPage) : null);
   const suffixe = nature.valeur === 'retour' ? ', match retour' : nature.valeur === 'aller' ? ', match aller' : nature.valeur === 'match-unique' ? ', match unique' : '';
   const titre = `${coupe.league ? competition : 'Coupe'}${libelle ? ` — ${libelle}${nature.valeur === 'finale' ? '' : suffixe}` : ''}`;
   const etats = {

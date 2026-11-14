@@ -22,7 +22,10 @@
  *   T-E9  les clubs par identifiant FotMob : sans identifiant → « club non reconnu » ; « Portsmouth » n'emprunte rien à
  *         « Port » ; le logo sur chaque ligne qui nomme un club ; la lecture en quelques millisecondes ;
  *   T-E10 le tableau du banc : cinq lignes, Σ des confrontations, ⌀ de l'écart, « non mesuré » / « non mesurable » ;
- *         la ligne grise de la calibration avec le mot fixé d'avance.
+ *         la ligne grise de la calibration avec le mot fixé d'avance ;
+ *   T-E11 le repli (lot 2, 13/11/2026) : avant la première nuit, le tour de la page en numéro nu (« 1 », « 3 ») se dit comme
+ *         le serveur (« 1er tour », « 3e tour » ; comparé au serveur de 1 à 12) ; un intitulé non numérique reste tel quel ;
+ *         les journées de championnat ne changent pas (`tour('35', 'Ligue 1')` reste « 35 »).
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -31,6 +34,7 @@ import path from 'node:path';
 import { preparerCopie, executer, SERVEUR } from './aides/isolement.mjs';
 import { UI, imp, optionsDuRendu, ouvrirLeRendu, reglesPures, espaces, tableauDe, corps, pied } from './aides/rendu.mjs';
 import * as R from '../src/data/coupes/coupesRead.js';
+import { tourNormalise, libelleDuTour } from '../src/data/coupes/toursDeCoupe.js';
 
 const U = await imp(path.join(UI, 'src', 'utils', 'coupeDuMatch.js'));
 const L = await imp(path.join(UI, 'src', 'utils', 'fotmobLabels.js'));
@@ -403,4 +407,40 @@ test('T-E10 — le tableau du banc : cinq lignes, Σ, ⌀, « non mesuré » ; l
   } finally {
     await rendu.fermer();
   }
+});
+
+test('T-E11 — le repli (lot 2) : avant la première nuit, le tour de la page en numéro nu se dit comme le serveur ; les journées de championnat inchangées', () => {
+  // Le bloc d'avant la première nuit, de la forme que rend le serveur (coupesRead.coupeDuMatch : « pas-encore-calcule »,
+  // tour null, nature « inconnue », historique vide), parti d'un vrai bloc.
+  const premiereNuit = { ...bloc('portsmouth'), etat: 'pas-encore-calcule', raison: 'premiere-nuit', calculeLe: null, tour: null, nature: { valeur: 'inconnue', certitude: null, source: null }, aller: null, chance: null, chanceSiMatchUnique: null, historique: {} };
+  const surLaPage = (round) => dit(premiereNuit, { page: { data: { meta: { round } } } });
+  const un = surLaPage('1');
+  assert.equal(un.titre, 'Coupe de France — 1er tour', 'jamais « Coupe de France — 1 »');
+  assert.deepEqual(phrases(un, 'tour'), ['Tour : 1er tour (nature pas encore connue).'], 'jamais « Tour : 1 »');
+  assert.deepEqual(ligne(un, 'tour').mentions, ['intitulé FotMob : « 1 »']);
+  assert.equal(ligne(un, 'tour').provenances[0].source, 'FotMob, page du match');
+  const trois = surLaPage('3');
+  assert.equal(trois.titre, 'Coupe de France — 3e tour');
+  assert.deepEqual(phrases(trois, 'tour'), ['Tour : 3e tour (nature pas encore connue).']);
+  assert.equal(surLaPage(3).titre, 'Coupe de France — 3e tour', 'le numéro rendu en nombre');
+  // Un intitulé non numérique reste tel quel (jamais deviné) ; un tour de la table reste traduit.
+  assert.equal(surLaPage('Group A').titre, 'Coupe de France — Group A');
+  assert.deepEqual(phrases(surLaPage('Group A'), 'tour'), ['Tour : Group A (nature pas encore connue).']);
+  assert.equal(surLaPage('Quarter-finals').titre, 'Coupe de France — Quarts de finale');
+  // Le serveur (toursDeCoupe.js, lu) et l'écran disent la même chose, de 1 à 12 ; au-delà de deux chiffres, l'intitulé brut des deux côtés.
+  for (let n = 1; n <= 12; n++) {
+    const duServeur = libelleDuTour(tourNormalise(String(n)));
+    assert.equal(U.tourNumeroteDit(String(n)), duServeur, `numéro ${n}`);
+    assert.equal(surLaPage(String(n)).titre, `Coupe de France — ${duServeur}`, `titre, numéro ${n}`);
+  }
+  assert.deepEqual([libelleDuTour(tourNormalise('1')), libelleDuTour(tourNormalise('3'))], ['1er tour', '3e tour'], 'la règle du serveur elle-même');
+  assert.equal(libelleDuTour(tourNormalise('100')), '100');
+  assert.equal(surLaPage('100').titre, 'Coupe de France — 100');
+  assert.equal(U.tourNumeroteDit('Round 3'), null, 'seulement le numéro nu');
+  // Le serveur connaît le tour : son libellé prime sur la page.
+  assert.equal(dit(bloc('retour'), { page: { data: { meta: { round: '1' } } } }).titre, 'UEFA Europa League — Quarts de finale, match retour');
+  // Non-régression : les journées de championnat ne deviennent pas des tours (`tourDeCoupe` n'apprend pas le numéro nu).
+  assert.equal(L.tour('35', 'Ligue 1'), '35');
+  assert.equal(L.tour('Round 3', 'Premier League'), 'Journée 3');
+  assert.equal(L.tourDeCoupe('1'), null);
 });
