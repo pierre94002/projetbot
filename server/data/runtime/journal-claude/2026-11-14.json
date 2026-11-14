@@ -2,34 +2,34 @@
   "version": 1,
   "jour": "2026-11-14",
   "canal": "claude-code",
-  "majLe": "2026-11-14T07:25:37.663Z",
+  "majLe": "2026-11-14T12:31:37.496Z",
   "totaux": {
-    "appels": 4,
-    "ok": 4,
+    "appels": 6,
+    "ok": 6,
     "echecs": 0,
     "sansTokens": 0,
     "tokens": {
-      "entree": 10,
-      "ecritureCache": 29875,
-      "lectureCache": 7839,
-      "sortie": 12079,
-      "total": 49803
+      "entree": 16,
+      "ecritureCache": 50457,
+      "lectureCache": 23057,
+      "sortie": 22210,
+      "total": 95740
     },
-    "equivalentApiUsd": 0.241878,
+    "equivalentApiUsd": 0.428572,
     "parType": {
       "coup-d-envoi": {
-        "appels": 1,
-        "ok": 1,
+        "appels": 3,
+        "ok": 3,
         "echecs": 0,
         "sansTokens": 0,
         "tokens": {
-          "entree": 2,
-          "ecritureCache": 11095,
-          "lectureCache": 0,
-          "sortie": 3807,
-          "total": 14904
+          "entree": 8,
+          "ecritureCache": 31677,
+          "lectureCache": 15218,
+          "sortie": 13938,
+          "total": 60841
         },
-        "equivalentApiUsd": 0.082454
+        "equivalentApiUsd": 0.269148
       },
       "reprise": {
         "appels": 1,
@@ -202,6 +202,72 @@
         "total": 9491
       },
       "equivalentApiUsd": 0.035462
+    },
+    {
+      "id": "2026-11-14T11:36:25.968Z-16512-72-9c9d8b",
+      "at": "2026-11-14T11:36:25.968Z",
+      "jour": "2026-11-14",
+      "debut": "2026-11-14T11:36:00.147Z",
+      "dureeMs": 25821,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "7bf0d1f95bb9b2b6003386c82ba96b6a",
+        "home": "Exeter City",
+        "away": "Cheltenham Town",
+        "league": "League 2"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10109
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 10683,
+        "lectureCache": 0,
+        "sortie": 3718,
+        "total": 14403
+      },
+      "equivalentApiUsd": 0.079916
+    },
+    {
+      "id": "2026-11-14T12:31:37.494Z-16512-73-5d7f62",
+      "at": "2026-11-14T12:31:37.494Z",
+      "jour": "2026-11-14",
+      "debut": "2026-11-14T12:31:01.144Z",
+      "dureeMs": 36350,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "908247d5d5cd714de37956edf865668b",
+        "home": "Real Valladolid CF",
+        "away": "CD Castellón",
+        "league": "La Liga 2 - Spain"
+      },
+      "mode": "normal",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10185
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 9899,
+        "lectureCache": 15218,
+        "sortie": 6413,
+        "total": 31534
+      },
+      "equivalentApiUsd": 0.106778
     }
   ]
 }
