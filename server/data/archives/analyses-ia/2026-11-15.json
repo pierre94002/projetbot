@@ -7448,7 +7448,7 @@
     "engineSnapshot": {
       "label": "Tenerife vs AD Ceuta FC",
       "expectedGoals": {
-        "home": 2.265,
+        "home": 2.247,
         "away": 0.5,
         "source": "fotmob"
       },
@@ -7547,8 +7547,8 @@
           "market": "Total buts",
           "predictedOutcome": "over",
           "predictedLabel": "Plus de 1.5 buts",
-          "predictedOdds": 1.3,
-          "probability": 77,
+          "predictedOdds": 1.31,
+          "probability": 76,
           "minOdds": 1.2
         },
         {
@@ -7572,8 +7572,8 @@
           "market": "Résultat + Total buts",
           "predictedOutcome": "homeOver",
           "predictedLabel": "Tenerife & Plus de 1.5 buts",
-          "predictedOdds": 2.4,
-          "probability": 42,
+          "predictedOdds": 2.41,
+          "probability": 41,
           "minOdds": 1.2
         },
         {
@@ -7586,7 +7586,7 @@
           "market": "Buts — Tenerife",
           "predictedOutcome": "under",
           "predictedLabel": "Tenerife — Moins de 3.5 buts",
-          "predictedOdds": 1.24,
+          "predictedOdds": 1.23,
           "probability": 81,
           "minOdds": 1.2
         },
@@ -7732,9 +7732,9 @@
     },
     "usage": {
       "input_tokens": 2,
-      "cache_creation_input_tokens": 11254,
+      "cache_creation_input_tokens": 10941,
       "cache_read_input_tokens": 0,
-      "output_tokens": 4345,
+      "output_tokens": 3086,
       "output_tokens_details": {
         "thinking_tokens": 0
       },
@@ -7744,19 +7744,19 @@
       },
       "service_tier": "standard",
       "cache_creation": {
-        "ephemeral_1h_input_tokens": 11254,
+        "ephemeral_1h_input_tokens": 10941,
         "ephemeral_5m_input_tokens": 0
       },
       "inference_geo": "global",
       "iterations": [
         {
           "input_tokens": 2,
-          "output_tokens": 4345,
+          "output_tokens": 3086,
           "cache_read_input_tokens": 0,
-          "cache_creation_input_tokens": 11254,
+          "cache_creation_input_tokens": 10941,
           "cache_creation": {
             "ephemeral_5m_input_tokens": 0,
-            "ephemeral_1h_input_tokens": 11254
+            "ephemeral_1h_input_tokens": 10941
           },
           "type": "message"
         }
@@ -7764,19 +7764,19 @@
       "speed": "standard",
       "fallback_credit": null
     },
-    "costUsd": 0.08847,
-    "analysedAt": "2026-11-13T15:55:30.125Z",
-    "timing": "avance",
+    "costUsd": 0.074628,
+    "analysedAt": "2026-11-15T12:08:07.216Z",
+    "timing": "coup-d-envoi",
     "fiche": "compacte",
     "memoire": {
-      "mots": 494,
-      "tokens": 1525,
+      "mots": 485,
+      "tokens": 1500,
       "lecons": [
         "cal-2026-10-04-castellon-ceuta|bothTeamsScore",
-        "cal-2026-10-10-ceuta-sabadell|totalGoals",
-        "cal-2026-10-03-albacete-eibar|bothTeamsScore"
+        "cal-2026-10-10-ceuta-sabadell|bothTeamsScore",
+        "cal-2026-10-10-ceuta-sabadell|totalGoals"
       ],
-      "dossiersDu": "2026-11-13T00:41:21.344Z",
+      "dossiersDu": "2026-11-14T23:17:47.317Z",
       "equipes": {
         "home": {
           "id": "fotmob-9867",
@@ -7795,54 +7795,54 @@
     "lineupSnapshot": {
       "source": "FotMob",
       "fotmobMatchId": "5868545",
-      "fetchedAt": "2026-11-13T15:55:00.318Z",
-      "minutesBeforeKickoff": 2705,
+      "fetchedAt": "2026-11-15T12:07:41.005Z",
+      "minutesBeforeKickoff": 52,
       "home": {
         "team": "Tenerife",
         "teamId": "fotmob-9867",
         "formation": "4-4-2",
-        "coach": "Álvaro Cervera",
+        "coach": null,
         "statsSince": "2026-07-01",
         "teamMatches": 12,
         "startXI": [
           {
-            "id": "fotmob-882408",
-            "name": "Dani Martín",
-            "number": 1,
+            "id": "fotmob-1715710",
+            "name": "Gabriel Lozano",
+            "number": 40,
             "position": "Goalkeeper",
-            "age": 28,
+            "age": 22,
             "countryCode": "ESP",
             "countryName": "Spain",
             "x": 0.1,
             "y": 0.5,
             "stats": {
-              "apps": 11,
-              "starts": 12,
-              "minutes": 990,
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
               "goals": 0,
               "assists": 0,
               "xg": null,
-              "rating": 6.54
+              "rating": 6.11
             }
           },
           {
-            "id": "fotmob-1197723",
-            "name": "David Rodríguez",
-            "number": 2,
+            "id": "fotmob-1585840",
+            "name": "César Álvarez",
+            "number": 19,
             "position": "Defender",
-            "age": 26,
+            "age": 23,
             "countryCode": "ESP",
             "countryName": "Spain",
             "x": 0.357,
             "y": 0.875,
             "stats": {
-              "apps": 11,
-              "starts": 12,
-              "minutes": 976,
+              "apps": 8,
+              "starts": 7,
+              "minutes": 611,
               "goals": 0,
               "assists": 0,
-              "xg": 0.3,
-              "rating": 6.99
+              "xg": 0.15,
+              "rating": 6.89
             }
           },
           {
@@ -7886,23 +7886,23 @@
             }
           },
           {
-            "id": "fotmob-1072743",
-            "name": "Roko Jureškin",
-            "number": 3,
+            "id": "fotmob-1197723",
+            "name": "David Rodríguez",
+            "number": 2,
             "position": "Defender",
             "age": 26,
-            "countryCode": "CRO",
-            "countryName": "Croatia",
+            "countryCode": "ESP",
+            "countryName": "Spain",
             "x": 0.357,
             "y": 0.125,
             "stats": {
-              "apps": 2,
-              "starts": 2,
-              "minutes": 113,
+              "apps": 11,
+              "starts": 12,
+              "minutes": 976,
               "goals": 0,
               "assists": 0,
-              "xg": null,
-              "rating": 6.62
+              "xg": 0.3,
+              "rating": 6.99
             }
           },
           {
@@ -7926,23 +7926,23 @@
             }
           },
           {
-            "id": "fotmob-1292813",
-            "name": "Juanjo",
-            "number": 6,
+            "id": "fotmob-1693583",
+            "name": "Fabricio",
+            "number": 15,
             "position": "Midfielder",
-            "age": 26,
-            "countryCode": "ESP",
-            "countryName": "Spain",
+            "age": 28,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "x": 0.613,
             "y": 0.625,
             "stats": {
-              "apps": 10,
-              "starts": 10,
-              "minutes": 733,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.09,
-              "rating": 6.69
+              "apps": 9,
+              "starts": 5,
+              "minutes": 457,
+              "goals": 1,
+              "assists": 1,
+              "xg": 0.16,
+              "rating": 6.84
             }
           },
           {
@@ -8028,21 +8028,31 @@
         ],
         "bench": [
           {
-            "id": "fotmob-1715710",
-            "name": "Gabriel Lozano",
-            "number": 40,
+            "id": "fotmob-1669214",
+            "name": "Oier Gastesi",
+            "number": 41,
             "position": "Goalkeeper",
-            "age": 22,
+            "age": 23,
             "countryCode": "ESP",
             "countryName": "Spain",
+            "stats": null
+          },
+          {
+            "id": "fotmob-1072743",
+            "name": "Roko Jureškin",
+            "number": 3,
+            "position": "Defender",
+            "age": 26,
+            "countryCode": "CRO",
+            "countryName": "Croatia",
             "stats": {
-              "apps": 0,
-              "starts": 0,
-              "minutes": 0,
+              "apps": 2,
+              "starts": 2,
+              "minutes": 113,
               "goals": 0,
               "assists": 0,
               "xg": null,
-              "rating": 6.11
+              "rating": 6.62
             }
           },
           {
@@ -8100,6 +8110,24 @@
             }
           },
           {
+            "id": "fotmob-1526620",
+            "name": "Víctor Moreno",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 21,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 7,
+              "starts": 7,
+              "minutes": 564,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.2,
+              "rating": 6.99
+            }
+          },
+          {
             "id": "fotmob-1403393",
             "name": "Anes Krdžalić",
             "number": 23,
@@ -8115,42 +8143,6 @@
               "assists": 1,
               "xg": 0.09,
               "rating": 6.43
-            }
-          },
-          {
-            "id": "fotmob-1647543",
-            "name": "Dani Fernández",
-            "number": 29,
-            "position": "Midfielder",
-            "age": 18,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "stats": {
-              "apps": 7,
-              "starts": 3,
-              "minutes": 292,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.19,
-              "rating": 6.18
-            }
-          },
-          {
-            "id": "fotmob-1693583",
-            "name": "Fabricio",
-            "number": 15,
-            "position": "Midfielder",
-            "age": 28,
-            "countryCode": "BRA",
-            "countryName": "Brazil",
-            "stats": {
-              "apps": 9,
-              "starts": 5,
-              "minutes": 457,
-              "goals": 1,
-              "assists": 1,
-              "xg": 0.16,
-              "rating": 6.84
             }
           },
           {
@@ -8172,46 +8164,10 @@
             }
           },
           {
-            "id": "fotmob-1280025",
-            "name": "Grant-Leon Ranos",
-            "number": 22,
-            "position": "Forward",
-            "age": 23,
-            "countryCode": "ARM",
-            "countryName": "Armenia",
-            "stats": {
-              "apps": 2,
-              "starts": 0,
-              "minutes": 47,
-              "goals": 1,
-              "assists": 0,
-              "xg": 0.06,
-              "rating": 6.54
-            }
-          },
-          {
-            "id": "fotmob-1199865",
-            "name": "Jesús de Miguel",
-            "number": 9,
-            "position": "Forward",
-            "age": 30,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "stats": {
-              "apps": 6,
-              "starts": 0,
-              "minutes": 85,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.01,
-              "rating": 6.1
-            }
-          },
-          {
             "id": "fotmob-1285858",
             "name": "Martin Pečar",
             "number": 7,
-            "position": "Forward",
+            "position": "Midfielder",
             "age": 24,
             "countryCode": "SVN",
             "countryName": "Slovenia",
@@ -8226,21 +8182,57 @@
             }
           },
           {
-            "id": "fotmob-1526620",
-            "name": "Víctor Moreno",
-            "number": 8,
-            "position": "Forward",
-            "age": 21,
+            "id": "fotmob-1292813",
+            "name": "Juanjo",
+            "number": 6,
+            "position": "Midfielder",
+            "age": 26,
             "countryCode": "ESP",
             "countryName": "Spain",
             "stats": {
-              "apps": 7,
-              "starts": 7,
-              "minutes": 564,
+              "apps": 10,
+              "starts": 10,
+              "minutes": 733,
               "goals": 0,
               "assists": 0,
-              "xg": 0.2,
-              "rating": 6.99
+              "xg": 0.09,
+              "rating": 6.69
+            }
+          },
+          {
+            "id": "fotmob-670416",
+            "name": "Gerard Valentín",
+            "number": 14,
+            "position": "Forward",
+            "age": 33,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 5,
+              "starts": 2,
+              "minutes": 165,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.11,
+              "rating": 6.41
+            }
+          },
+          {
+            "id": "fotmob-1130568",
+            "name": "Iván Chapela",
+            "number": 24,
+            "position": "Forward",
+            "age": 27,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 6,
+              "starts": 3,
+              "minutes": 245,
+              "goals": 1,
+              "assists": 1,
+              "xg": 0.66,
+              "rating": 6.69
             }
           }
         ],
@@ -8286,6 +8278,30 @@
         ],
         "usualStartersMissing": [
           {
+            "id": "fotmob-882408",
+            "age": 28,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Dani Martín",
+            "position": "Goalkeeper",
+            "starts": 12,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1292813",
+            "age": 26,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Juanjo",
+            "position": "Midfielder",
+            "starts": 10,
+            "goals": 0,
+            "assists": 0,
+            "status": "remplaçant"
+          },
+          {
             "id": "fotmob-543315",
             "age": 31,
             "countryCode": "ESP",
@@ -8296,18 +8312,6 @@
             "goals": 0,
             "assists": 0,
             "status": "remplaçant"
-          },
-          {
-            "id": "fotmob-1585840",
-            "age": 23,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "name": "César Álvarez",
-            "position": "Defender",
-            "starts": 7,
-            "goals": 0,
-            "assists": 0,
-            "status": "absent de la feuille de match"
           },
           {
             "id": "fotmob-1526620",
@@ -8327,14 +8331,14 @@
         "team": "AD Ceuta FC",
         "teamId": "fotmob-357259",
         "formation": "4-3-3",
-        "coach": "José Juan Romero",
+        "coach": null,
         "statsSince": "2026-07-01",
         "teamMatches": 14,
         "startXI": [
           {
-            "id": "fotmob-513707",
-            "name": "Pedro López",
-            "number": 1,
+            "id": "fotmob-627003",
+            "name": "Guillermo Vallejo",
+            "number": 13,
             "position": "Goalkeeper",
             "age": 31,
             "countryCode": "ESP",
@@ -8342,33 +8346,33 @@
             "x": 0.1,
             "y": 0.5,
             "stats": {
-              "apps": 5,
-              "starts": 5,
-              "minutes": 450,
+              "apps": 9,
+              "starts": 9,
+              "minutes": 810,
               "goals": 0,
               "assists": 0,
               "xg": null,
-              "rating": 6.15
+              "rating": 6.12
             }
           },
           {
-            "id": "fotmob-580591",
-            "name": "Anuar",
-            "number": 23,
+            "id": "fotmob-922897",
+            "name": "Álex Petxa",
+            "number": 18,
             "position": "Defender",
-            "age": 31,
-            "countryCode": "MAR",
-            "countryName": "Morocco",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
             "x": 0.357,
             "y": 0.875,
             "stats": {
-              "apps": 6,
-              "starts": 5,
-              "minutes": 390,
+              "apps": 7,
+              "starts": 3,
+              "minutes": 398,
               "goals": 0,
               "assists": 0,
-              "xg": 0.31,
-              "rating": 6.08
+              "xg": 0.42,
+              "rating": 6.62
             }
           },
           {
@@ -8392,43 +8396,63 @@
             }
           },
           {
-            "id": "fotmob-1322850",
-            "name": "Albert Caparrós",
-            "number": 4,
+            "id": "fotmob-563069",
+            "name": "Yann Bodiger",
+            "number": 14,
             "position": "Defender",
-            "age": 28,
-            "countryCode": "ESP",
-            "countryName": "Spain",
+            "age": 31,
+            "countryCode": "FRA",
+            "countryName": "France",
             "x": 0.357,
             "y": 0.375,
             "stats": {
-              "apps": 8,
-              "starts": 7,
-              "minutes": 659,
-              "goals": 0,
+              "apps": 9,
+              "starts": 8,
+              "minutes": 599,
+              "goals": 1,
               "assists": 0,
-              "xg": 0.89,
-              "rating": 6.5
+              "xg": 0.79,
+              "rating": 6.48
             }
           },
           {
-            "id": "fotmob-674492",
-            "name": "José Matos",
-            "number": 3,
+            "id": "fotmob-866969",
+            "name": "Carlos Redruello",
+            "number": 16,
             "position": "Defender",
-            "age": 31,
+            "age": 29,
             "countryCode": "ESP",
             "countryName": "Spain",
             "x": 0.357,
             "y": 0.125,
             "stats": {
-              "apps": 12,
-              "starts": 9,
-              "minutes": 812,
+              "apps": 7,
+              "starts": 6,
+              "minutes": 584,
               "goals": 0,
               "assists": 0,
-              "xg": 0.44,
-              "rating": 6.21
+              "xg": 1.12,
+              "rating": 6.41
+            }
+          },
+          {
+            "id": "fotmob-638072",
+            "name": "Kuki Zalazar",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.79,
+            "stats": {
+              "apps": 13,
+              "starts": 13,
+              "minutes": 1117,
+              "goals": 0,
+              "assists": 1,
+              "xg": 2.2,
+              "rating": 6.76
             }
           },
           {
@@ -8440,7 +8464,7 @@
             "countryCode": "ESP",
             "countryName": "Spain",
             "x": 0.613,
-            "y": 0.79,
+            "y": 0.5,
             "stats": {
               "apps": 13,
               "starts": 6,
@@ -8449,26 +8473,6 @@
               "assists": 0,
               "xg": 0.28,
               "rating": 6.44
-            }
-          },
-          {
-            "id": "fotmob-563069",
-            "name": "Yann Bodiger",
-            "number": 14,
-            "position": "Midfielder",
-            "age": 31,
-            "countryCode": "FRA",
-            "countryName": "France",
-            "x": 0.613,
-            "y": 0.5,
-            "stats": {
-              "apps": 9,
-              "starts": 8,
-              "minutes": 599,
-              "goals": 1,
-              "assists": 0,
-              "xg": 0.79,
-              "rating": 6.48
             }
           },
           {
@@ -8492,23 +8496,23 @@
             }
           },
           {
-            "id": "fotmob-638072",
-            "name": "Kuki Zalazar",
-            "number": 8,
+            "id": "fotmob-1128940",
+            "name": "Edgar Sevikyan",
+            "number": 19,
             "position": "Forward",
-            "age": 28,
-            "countryCode": "ESP",
-            "countryName": "Spain",
+            "age": 25,
+            "countryCode": "ARM",
+            "countryName": "Armenia",
             "x": 0.87,
             "y": 0.79,
             "stats": {
-              "apps": 13,
-              "starts": 13,
-              "minutes": 1117,
+              "apps": 8,
+              "starts": 5,
+              "minutes": 453,
               "goals": 0,
-              "assists": 1,
-              "xg": 2.2,
-              "rating": 6.76
+              "assists": 0,
+              "xg": 0.92,
+              "rating": 6.81
             }
           },
           {
@@ -8532,143 +8536,79 @@
             }
           },
           {
-            "id": "fotmob-1093264",
-            "name": "Cedric Teguia",
-            "number": 11,
+            "id": "fotmob-1120767",
+            "name": "Álex Camacho",
+            "number": 7,
             "position": "Forward",
-            "age": 25,
+            "age": 28,
             "countryCode": "ESP",
             "countryName": "Spain",
             "x": 0.87,
             "y": 0.21,
             "stats": {
-              "apps": 7,
-              "starts": 6,
-              "minutes": 464,
-              "goals": 0,
+              "apps": 14,
+              "starts": 10,
+              "minutes": 888,
+              "goals": 1,
               "assists": 0,
-              "xg": 0.34,
-              "rating": 6.6
+              "xg": 1.9,
+              "rating": 6.81
             }
           }
         ],
         "bench": [
           {
-            "id": "fotmob-627003",
-            "name": "Guillermo Vallejo",
-            "number": 13,
+            "id": "fotmob-513707",
+            "name": "Pedro López",
+            "number": 1,
             "position": "Goalkeeper",
             "age": 31,
             "countryCode": "ESP",
             "countryName": "Spain",
             "stats": {
-              "apps": 9,
-              "starts": 9,
-              "minutes": 810,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.12
-            }
-          },
-          {
-            "id": "fotmob-922897",
-            "name": "Álex Petxa",
-            "number": 18,
-            "position": "Defender",
-            "age": 29,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "stats": {
-              "apps": 7,
-              "starts": 3,
-              "minutes": 398,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.42,
-              "rating": 6.62
-            }
-          },
-          {
-            "id": "fotmob-866969",
-            "name": "Carlos Redruello",
-            "number": 16,
-            "position": "Defender",
-            "age": 29,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "stats": {
-              "apps": 7,
-              "starts": 6,
-              "minutes": 584,
-              "goals": 0,
-              "assists": 0,
-              "xg": 1.12,
-              "rating": 6.41
-            }
-          },
-          {
-            "id": "fotmob-2444526",
-            "name": "Magno Murillo",
-            "number": 33,
-            "position": "Defender",
-            "age": null,
-            "countryCode": "COL",
-            "countryName": "Colombia",
-            "stats": null
-          },
-          {
-            "id": "fotmob-1035341",
-            "name": "Toni Abad",
-            "number": 2,
-            "position": "Defender",
-            "age": 30,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "stats": {
               "apps": 5,
-              "starts": 3,
-              "minutes": 294,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.09,
-              "rating": 6.51
-            }
-          },
-          {
-            "id": "fotmob-2297838",
-            "name": "Abraham Bueno",
-            "number": 28,
-            "position": "Midfielder",
-            "age": 20,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "stats": {
-              "apps": 4,
-              "starts": 0,
-              "minutes": 39,
-              "goals": 0,
-              "assists": 1,
-              "xg": 0.06,
-              "rating": 6.19
-            }
-          },
-          {
-            "id": "fotmob-1928324",
-            "name": "Arick Betancourt",
-            "number": 26,
-            "position": "Midfielder",
-            "age": 22,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "stats": {
-              "apps": 4,
-              "starts": 2,
-              "minutes": 127,
+              "starts": 5,
+              "minutes": 450,
               "goals": 0,
               "assists": 0,
               "xg": null,
-              "rating": 6.25
+              "rating": 6.15
+            }
+          },
+          {
+            "id": "fotmob-1322850",
+            "name": "Albert Caparrós",
+            "number": 4,
+            "position": "Defender",
+            "age": 28,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 8,
+              "starts": 7,
+              "minutes": 659,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.89,
+              "rating": 6.5
+            }
+          },
+          {
+            "id": "fotmob-674492",
+            "name": "José Matos",
+            "number": 3,
+            "position": "Defender",
+            "age": 31,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 12,
+              "starts": 9,
+              "minutes": 812,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.44,
+              "rating": 6.21
             }
           },
           {
@@ -8690,6 +8630,60 @@
             }
           },
           {
+            "id": "fotmob-1093264",
+            "name": "Cedric Teguia",
+            "number": 11,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 7,
+              "starts": 6,
+              "minutes": 464,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.34,
+              "rating": 6.6
+            }
+          },
+          {
+            "id": "fotmob-1928324",
+            "name": "Arick Betancourt",
+            "number": 26,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 4,
+              "starts": 2,
+              "minutes": 127,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.25
+            }
+          },
+          {
+            "id": "fotmob-1348100",
+            "name": "Mawuli Mensah",
+            "number": 17,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "GHA",
+            "countryName": "Ghana",
+            "stats": {
+              "apps": 3,
+              "starts": 3,
+              "minutes": 172,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.03,
+              "rating": 6.53
+            }
+          },
+          {
             "id": "fotmob-1366899",
             "name": "Joaquín",
             "number": 15,
@@ -8708,39 +8702,39 @@
             }
           },
           {
-            "id": "fotmob-1120767",
-            "name": "Álex Camacho",
-            "number": 7,
-            "position": "Forward",
+            "id": "fotmob-1396267",
+            "name": "Kenneth Obinna Mamah",
+            "number": 21,
+            "position": "Midfielder",
             "age": 28,
-            "countryCode": "ESP",
-            "countryName": "Spain",
+            "countryCode": "NGA",
+            "countryName": "Nigeria",
             "stats": {
-              "apps": 14,
-              "starts": 10,
-              "minutes": 888,
-              "goals": 1,
+              "apps": 1,
+              "starts": 0,
+              "minutes": 12,
+              "goals": 0,
               "assists": 0,
-              "xg": 1.9,
-              "rating": 6.81
+              "xg": null,
+              "rating": 6.14
             }
           },
           {
-            "id": "fotmob-1128940",
-            "name": "Edgar Sevikyan",
-            "number": 19,
-            "position": "Forward",
-            "age": 25,
-            "countryCode": "ARM",
-            "countryName": "Armenia",
+            "id": "fotmob-2297838",
+            "name": "Abraham Bueno",
+            "number": 28,
+            "position": "Midfielder",
+            "age": 20,
+            "countryCode": "ESP",
+            "countryName": "Spain",
             "stats": {
-              "apps": 8,
-              "starts": 5,
-              "minutes": 453,
+              "apps": 4,
+              "starts": 0,
+              "minutes": 39,
               "goals": 0,
-              "assists": 0,
-              "xg": 0.92,
-              "rating": 6.81
+              "assists": 1,
+              "xg": 0.06,
+              "rating": 6.19
             }
           },
           {
@@ -8760,69 +8754,48 @@
               "xg": 1.08,
               "rating": 6.27
             }
-          }
-        ],
-        "unavailable": [
-          {
-            "id": "fotmob-1128940",
-            "age": 25,
-            "countryCode": "ARM",
-            "countryName": "Armenia",
-            "name": "Edgar Sevikyan",
-            "reason": "en sélection",
-            "expectedReturn": "Mid November 2026",
-            "position": "Midfielder",
-            "stats": {
-              "apps": 8,
-              "starts": 5,
-              "minutes": 453,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.92,
-              "rating": 6.81
-            }
           },
           {
-            "id": "fotmob-1396267",
-            "age": 28,
-            "countryCode": "NGA",
-            "countryName": "Nigeria",
-            "name": "Kenneth Obinna Mamah",
-            "reason": "blessé",
-            "expectedReturn": "Back in training",
+            "id": "fotmob-1859341",
+            "name": "Umaru Konare",
+            "number": 27,
             "position": "Forward",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
             "stats": {
-              "apps": 1,
-              "starts": 0,
-              "minutes": 12,
+              "apps": 5,
+              "starts": 1,
+              "minutes": 102,
               "goals": 0,
               "assists": 0,
-              "xg": null,
-              "rating": 6.14
+              "xg": 0.3,
+              "rating": 5.76
             }
           }
         ],
+        "unavailable": [],
         "usualStartersMissing": [
           {
-            "id": "fotmob-1120767",
-            "age": 28,
+            "id": "fotmob-674492",
+            "age": 31,
             "countryCode": "ESP",
             "countryName": "Spain",
-            "name": "Álex Camacho",
+            "name": "Matos",
             "position": "Midfielder",
-            "starts": 10,
-            "goals": 1,
+            "starts": 9,
+            "goals": 0,
             "assists": 0,
             "status": "remplaçant"
           },
           {
-            "id": "fotmob-627003",
-            "age": 31,
+            "id": "fotmob-1322850",
+            "age": 28,
             "countryCode": "ESP",
             "countryName": "Spain",
-            "name": "Guillermo Vallejo",
-            "position": "Goalkeeper",
-            "starts": 9,
+            "name": "Capa",
+            "position": "Defender",
+            "starts": 7,
             "goals": 0,
             "assists": 0,
             "status": "remplaçant"
@@ -8838,102 +8811,64 @@
         "weather": "Partly Cloudy",
         "temperature": 24,
         "windSpeed": 18,
-        "precipitation": 0
+        "precipitation": 0,
+        "referee": {
+          "name": "Iosu Galech Apezteguía",
+          "country": "Spain",
+          "league": "LaLiga2",
+          "matches": 25,
+          "yellowCardsPerMatch": 3.76,
+          "yellowCardsLeagueAverage": 5.11,
+          "redCards": 3,
+          "penalties": 6,
+          "foulsPerMatch": 25.5,
+          "foulsLeagueAverage": 26.63
+        }
       }
     },
     "analysis": {
-      "summary": "Tenerife (14e, 15 pts) est invaincu depuis 4 matchs mais sans victoire depuis 7 : cinq nuls en six sorties, 1,1 but marqué et 1,6 encaissé par match. AD Ceuta (22e, 5 pts, 1 victoire en 13) vient d'enchaîner cinq défaites, avec 10 buts marqués contre 30 encaissés, dont 4-18 à l'extérieur. Ceuta produit pourtant du volume (17,4 tirs, 1,73 xG, 7 corners), mais peu de buts. Tenerife aligne Gallego (8 buts, xG 5,06) et Nacho Gil (1+4) ; Ceuta a Escobar (5+1) et Carlos Hernández (4 buts).",
+      "summary": "Tenerife (14e, 15 pts) est invaincu depuis 4 matchs mais enchaîne les nuls (4 de suite, 1,1 but marqué et 1,6 encaissé sur 10 matchs). AD Ceuta (22e, 5 pts, 1 victoire en 13 matchs) vient de perdre ses 5 derniers matchs et encaisse 2,2 par match à l'extérieur, mais produit beaucoup de volume (17,4 tirs, 7 corners). Côté compositions, Tenerife aligne Gallego (8 buts) et Nacho Gil (1+4) mais pas son gardien habituel Dani Martín, absent de la feuille de match. Ceuta présente un onze avec Escobar et Zalazar.",
       "keyFactors": [
         {
           "factor": "classement",
-          "observation": "Tenerife milieu de tableau, Ceuta lanterne rouge avec une défense très perméable.",
-          "evidence": "Tenerife 14e, 15 pts, diff -2 ; Ceuta 22e, 5 pts, diff -20, 4-18 à l'extérieur."
+          "observation": "Tenerife milieu de tableau face à un lanterne rouge.",
+          "evidence": "Tenerife 14e, 15 pts en 12 J ; Ceuta 22e, 5 pts en 13 J, diff -20."
         },
         {
           "factor": "forme récente",
-          "observation": "Tenerife fait des nuls, Ceuta perd tout.",
-          "evidence": "Tenerife : N N N N D sur les 5 derniers ; Ceuta : D D D D D, 0 but marqué lors des 2 derniers matchs."
+          "observation": "Tenerife accroche des nuls, Ceuta enchaîne les défaites.",
+          "evidence": "Tenerife : N N N N D ; Ceuta : D D D D D, 0 victoire à l'extérieur depuis 6 matchs."
         },
         {
           "factor": "statistiques et moyennes",
-          "observation": "Ceuta domine les volumes mais concrétise peu ; Tenerife est dominé en possession.",
-          "evidence": "Ceuta 17,4 tirs, 1,73 xG, 1,1 but par match ; Tenerife 9,6 tirs, 41,1 % de possession, 1,1 but par match."
+          "observation": "Ceuta domine en volume malgré les résultats, Tenerife est plus économe.",
+          "evidence": "Tirs 17,4 / 11,8 pour Ceuta contre 9,6 / 11,1 pour Tenerife ; corners 7 contre 3,9 ; possession 41 % pour Tenerife."
         },
         {
           "factor": "compositions",
-          "observation": "Gallego mène l'attaque de Tenerife. Ceuta aligne son trio offensif mais Camacho et le gardien Vallejo sont sur le banc.",
-          "evidence": "Gallego 8+1, xG 5,06 ; Escobar 5+1 ; Pedro López est gardien titulaire à la place de Vallejo (9 titularisations)."
-        },
-        {
-          "factor": "edge du modèle",
-          "observation": "Le moteur voit Tenerife favori mais le marché le paie encore moins cher : pas de value.",
-          "evidence": "Cote juste 1,97 contre 1,92 chez Unibet ; edge -2,78 % ; PASS."
+          "observation": "Gardien titulaire de Tenerife absent, attaque en place.",
+          "evidence": "Dani Martín (12 tit.) absent de la feuille ; Gallego 8+1 ; Gabriel Lozano 0 titularisation."
         }
       ],
-      "lineupImpact": "Les compositions de FotMob datent de 2705 minutes avant le coup d'envoi, donc ce sont des prévisions. Tenerife aligne Gallego (8+1, xG 5,06), Nacho Gil (1+4) et Gomis (2 buts) en attaque. José León et Víctor Moreno sont remplaçants et César Álvarez est hors feuille de match. Dani Fernández et Ranos sont en sélection. Ceuta commence avec Pedro López dans les buts, car Vallejo (9 titularisations) est remplaçant, et Camacho (10 titularisations, 1 but) est aussi sur le banc. Son trio Zalazar, Escobar et Teguia reste en place. Sevikyan est en sélection et Mamah est blessé. Le vent de 18 km/h n'a pas assez d'effet pour peser sur un marché.",
-      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur, qui voit Tenerife favori, mais il le nuance sur les buts. Tenerife marque peu et Ceuta encaisse beaucoup. Ceuta produit pourtant du volume, et le carnet montre que les \"Non\" au BTTS et les lignes basses de buts tiennent mal.",
+      "alignmentWithModel": "Le contexte nuance un peu le moteur : l'avantage de Tenerife tient surtout à la déroute de Ceuta, alors que les tirs et corners de Ceuta sont élevés. Les marchés de tirs et de corners de Tenerife restent cohérents avec son jeu direct et peu volumineux.",
+      "lineupImpact": "Composition FotMob relue 52 min avant le coup d'envoi, donc possiblement encore une prévision. Tenerife : Gallego (8+1, xG 5,06) et Nacho Gil (1+4) sont titulaires, mais le gardien habituel Dani Martín (12 titularisations) est absent de la feuille et Lozano le remplace. Juanjo, José León et Víctor Moreno sont sur le banc. Dani Fernández et Ranos sont en sélection. Ceuta : onze offensif en 4-3-3 avec Escobar (5+1), Zalazar et Camacho. Matos et Capa, titulaires habituels, sont remplaçants. Aucun absent annoncé. Arbitre moins sévère que la moyenne (3,76 jaunes contre 5,11).",
       "marketViews": [
         {
           "market": "Résultat",
           "pick": "Tenerife gagne",
-          "verdict": "confirme",
-          "confidence": "moyenne",
-          "explanation": "51 % : Tenerife est invaincu depuis 4 matchs et joue à domicile, alors que Ceuta a perdu 5 matchs de suite et encaisse 2,2 buts par match à l'extérieur.",
-          "reasoning": "Ceuta est lanterne rouge et sans victoire à l'extérieur depuis 6 matchs. Tenerife fait beaucoup de nuls (5 sur ses 6 derniers), ce qui limite le pourcentage.",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "51 % : Tenerife a 2,247 but attendu contre 0,5 pour Ceuta, qui a perdu ses 5 derniers matchs et encaisse 2,2 par match à l'extérieur.",
+          "reasoning": "Ceuta est en pleine crise et Tenerife est à domicile. Mais Tenerife n'a pas gagné depuis 7 matchs et son gardien titulaire est absent, ce qui explique la prudence.",
           "probability": 51
-        },
-        {
-          "market": "Total buts",
-          "pick": "Plus de 1.5 buts",
-          "verdict": "confirme",
-          "confidence": "moyenne",
-          "explanation": "77 % : Ceuta encaisse 1,9 but par match et Tenerife 1,6, ce qui donne un total de buts moyen élevé même si chaque équipe marque environ 1,1.",
-          "reasoning": "Ceuta encaisse beaucoup et la ligne est basse. Le carnet signale que les lignes basses sont fragiles, mais ici c'est le plus de buts qui est pronostiqué.",
-          "probability": 77
-        },
-        {
-          "market": "Les 2 équipes marquent",
-          "pick": "Non",
-          "verdict": "nuance",
-          "confidence": "faible",
-          "explanation": "64 % : Ceuta n'a pas marqué lors de ses 2 derniers matchs et le moteur lui donne 0,5 but attendu, mais Tenerife encaisse 1,6 but par match.",
-          "reasoning": "Ceuta est muette depuis 2 matchs, mais produit 1,73 xG et 17 tirs par match. Le carnet a déjà échoué sur ce type de «Non» (0 sur 4 pour Ceuta), donc prudence.",
-          "probability": 64
-        },
-        {
-          "market": "Résultat + Total buts",
-          "pick": "Tenerife & Plus de 1.5 buts",
-          "verdict": "confirme",
-          "confidence": "faible",
-          "explanation": "42 % : combine la victoire de Tenerife (51 %) avec plus de 1,5 but, un scénario cohérent avec 2,27 buts attendus pour Tenerife.",
-          "reasoning": "Le scénario est cohérent avec la fragilité de Ceuta, mais Tenerife fait beaucoup de nuls. Le marché combiné a un bilan modeste dans mon carnet.",
-          "probability": 42
-        },
-        {
-          "market": "Buts — Tenerife",
-          "pick": "Tenerife — Moins de 3.5 buts",
-          "verdict": "confirme",
-          "confidence": "forte",
-          "explanation": "81 % : Tenerife marque 1,1 but par match sur ses 10 derniers matchs et n'a pas dépassé 3 buts sur sa forme récente (maximum 2).",
-          "reasoning": "Même contre la pire défense du championnat, 4 buts ou plus resteraient très rares pour une équipe qui marque 1,1 but par match.",
-          "probability": 81
-        },
-        {
-          "market": "Buts — AD Ceuta FC",
-          "pick": "AD Ceuta FC — Moins de 0.5 buts",
-          "verdict": "nuance",
-          "confidence": "faible",
-          "explanation": "61 % : Ceuta n'a pas marqué lors de ses 2 derniers matchs et ne marque que 1 but par match à l'extérieur, mais Tenerife encaisse 1,6 but par match.",
-          "reasoning": "Ceuta marque peu mais crée (1,77 xG à l'extérieur). Un but reste plausible, d'autant que Tenerife concède 1,9 grosse occasion par match.",
-          "probability": 61
         },
         {
           "market": "Total corners",
           "pick": "Moins de 11.5 corners",
           "verdict": "confirme",
-          "confidence": "forte",
-          "explanation": "83 % : le moteur attend 8,48 corners au total (4,07 pour Tenerife, 4,41 pour Ceuta), loin de la ligne de 11,5.",
-          "reasoning": "Ceuta produit 7 corners par match mais Tenerife n'en produit que 3,9. Atteindre 12 serait inhabituel.",
+          "confidence": "moyenne",
+          "explanation": "83 % : le total attendu est de 8,48 corners, et la moyenne du championnat est de 9,4.",
+          "reasoning": "Tenerife n'obtient que 3,9 corners par match. Ceuta en obtient 7 mais en concède 3,4, d'où une marge confortable sous la ligne.",
           "probability": 83
         },
         {
@@ -8941,17 +8876,17 @@
           "pick": "Tenerife — Moins de 5.5 corners",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "75 % : Tenerife obtient 3,9 corners par match (2,8 à domicile) et le moteur en attend 4,07.",
-          "reasoning": "Tenerife a peu le ballon (41 % de possession), ce qui limite ses corners.",
+          "explanation": "75 % : Tenerife attend 4,07 corners, avec 3,9 produits par match et 41 % de possession.",
+          "reasoning": "Son jeu direct et sa faible possession limitent les corners. Un match où Ceuta recule pourrait en donner davantage.",
           "probability": 75
         },
         {
           "market": "Corners — AD Ceuta FC",
           "pick": "AD Ceuta FC — Moins de 6.5 corners",
           "verdict": "nuance",
-          "confidence": "moyenne",
-          "explanation": "81 % : le moteur attend 4,41 corners pour Ceuta, malgré ses 7 de moyenne (7,3 à l'extérieur) et les 2,7 que Tenerife concède.",
-          "reasoning": "Ceuta dépasse cette ligne en moyenne et le chiffre est plus fragile que ne le suggère le pourcentage. Tenerife concède peu de corners (2,7).",
+          "confidence": "faible",
+          "explanation": "81 % : le moteur attend 4,41 corners pour Ceuta, alors qu'elle en obtient 7 par match (7,3 à l'extérieur).",
+          "reasoning": "Les moyennes de Ceuta dépassent la ligne, et le moteur attend nettement moins. Le contexte contredit un peu ce chiffre, et mon bilan sur les corners d'une équipe est solide mais pas infaillible.",
           "probability": 81
         },
         {
@@ -8959,17 +8894,17 @@
           "pick": "Plus de 19.5 tirs",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "82 % : le moteur attend 24,8 tirs (11,94 + 12,87), et Ceuta tire 17,4 fois par match contre 11,1 concédés par Tenerife.",
-          "reasoning": "Le volume de Ceuta et les 11,1 tirs que Tenerife concède soutiennent la ligne.",
+          "explanation": "82 % : le total attendu est de 24,8 tirs, avec 17,4 tirs par match pour Ceuta et 11,1 concédés par Tenerife.",
+          "reasoning": "Le volume de Ceuta soutient la ligne. Tenerife tire peu (9,6), mais le total reste porté par Ceuta.",
           "probability": 82
         },
         {
           "market": "Tirs — Tenerife",
           "pick": "Tenerife — Moins de 15.5 tirs",
           "verdict": "confirme",
-          "confidence": "forte",
-          "explanation": "79 % : Tenerife tire 9,6 fois par match (10 à domicile) et le moteur en attend 11,94.",
-          "reasoning": "Dépasser 15 tirs serait bien au-dessus de sa production habituelle.",
+          "confidence": "moyenne",
+          "explanation": "79 % : Tenerife attend 11,94 tirs, pour 9,6 produits par match et 9,6 à domicile.",
+          "reasoning": "Tenerife dépasse rarement 15 tirs avec son jeu direct, et la ligne est bien au-dessus de ses moyennes.",
           "probability": 79
         },
         {
@@ -8977,8 +8912,8 @@
           "pick": "AD Ceuta FC — Plus de 8.5 tirs",
           "verdict": "confirme",
           "confidence": "forte",
-          "explanation": "82 % : Ceuta tire 17,4 fois par match (15,3 à l'extérieur) et le moteur en attend 12,87.",
-          "reasoning": "Même très en dessous de sa moyenne, Ceuta resterait au-dessus de la ligne.",
+          "explanation": "82 % : Ceuta attend 12,87 tirs, pour 17,4 produits par match (15,3 à l'extérieur).",
+          "reasoning": "Ceuta dépasse largement la ligne même à l'extérieur, et Tenerife concède 11,1 tirs par match.",
           "probability": 82
         },
         {
@@ -8986,17 +8921,17 @@
           "pick": "Moins de 10.5 tirs cadrés",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "80 % : le moteur attend 8,02 tirs cadrés au total (4,24 + 3,78), contre 7,8 pour la somme des moyennes de Tenerife (2,9) et Ceuta (4,9).",
-          "reasoning": "Les moyennes des deux équipes restent sous la ligne, avec peu de marge pour Ceuta (4,9).",
+          "explanation": "80 % : le total attendu est de 8,02 tirs cadrés. Tenerife en produit 2,9 par match, contre 4,9 pour Ceuta.",
+          "reasoning": "La somme des moyennes reste sous la ligne. Seul le volume de Ceuta pourrait la rapprocher.",
           "probability": 80
         },
         {
           "market": "Tirs cadrés — Tenerife",
           "pick": "Tenerife — Plus de 2.5 tirs cadrés",
           "verdict": "nuance",
-          "confidence": "moyenne",
-          "explanation": "77 % : le moteur attend 4,24 tirs cadrés pour Tenerife, alors que sa moyenne est de 2,9 (3,2 à domicile) face à 4,9 concédés par Ceuta.",
-          "reasoning": "Ceuta concède environ 4,9 tirs cadrés par match, ce qui soutient la ligne, mais Tenerife tire peu (9,6) et sa moyenne n'est que légèrement au-dessus.",
+          "confidence": "faible",
+          "explanation": "77 % : Tenerife attend 4,24 tirs cadrés, pour 2,9 produits par match (3,2 à domicile) et 4,9 concédés par Ceuta.",
+          "reasoning": "La moyenne de Tenerife n'est que légèrement au-dessus de la ligne. C'est la défense de Ceuta, qui concède 4,9 tirs cadrés, qui soutient le chiffre.",
           "probability": 77
         },
         {
@@ -9004,15 +8939,706 @@
           "pick": "AD Ceuta FC — Moins de 5.5 tirs cadrés",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "81 % : Ceuta cadre 4,9 tirs par match (4,3 à l'extérieur), le moteur en attend 3,78 et Tenerife en concède 3,4.",
-          "reasoning": "Sa moyenne est sous la ligne, et Tenerife en concède peu (3,4). Un match très ouvert pourrait toutefois la dépasser.",
+          "explanation": "81 % : Ceuta attend 3,78 tirs cadrés, pour 4,9 produits par match (4,3 à l'extérieur).",
+          "reasoning": "Sa moyenne reste sous la ligne, même avec un volume élevé de tirs. Tenerife concède 3,4 tirs cadrés.",
           "probability": 81
         }
       ],
-      "caveats": "Les compositions sont publiées 2705 minutes avant le coup d'envoi : ce sont des prévisions. Le changement d'entraîneur signalé pour Tenerife (Cervera → Cervera) vient d'une homonymie orthographique et n'a pas de sens. L'historique des entraîneurs reste incomplet. Les échantillons de forme sont courts (5 matchs). Aucune note personnelle (userNote) n'est fournie."
+      "caveats": "Composition relue 52 min avant le match, donc possiblement une prévision. L'entraîneur n'est pas renseigné. L'entrée sur le changement d'entraîneur de Tenerife (Cervera → Cervera) est ambiguë. Les marchés de buts sont retirés, donc aucun avis dessus."
     },
-    "updatedAt": "2026-11-13T15:55:30.125Z",
-    "createdAt": "2026-11-13T15:55:30.125Z"
+    "updatedAt": "2026-11-15T21:07:27.546Z",
+    "createdAt": "2026-11-13T15:55:30.125Z",
+    "kickoffRuns": 1,
+    "earlierAnalysis": {
+      "analysis": {
+        "summary": "Tenerife (14e, 15 pts) est invaincu depuis 4 matchs mais sans victoire depuis 7 : cinq nuls en six sorties, 1,1 but marqué et 1,6 encaissé par match. AD Ceuta (22e, 5 pts, 1 victoire en 13) vient d'enchaîner cinq défaites, avec 10 buts marqués contre 30 encaissés, dont 4-18 à l'extérieur. Ceuta produit pourtant du volume (17,4 tirs, 1,73 xG, 7 corners), mais peu de buts. Tenerife aligne Gallego (8 buts, xG 5,06) et Nacho Gil (1+4) ; Ceuta a Escobar (5+1) et Carlos Hernández (4 buts).",
+        "keyFactors": [
+          {
+            "factor": "classement",
+            "observation": "Tenerife milieu de tableau, Ceuta lanterne rouge avec une défense très perméable.",
+            "evidence": "Tenerife 14e, 15 pts, diff -2 ; Ceuta 22e, 5 pts, diff -20, 4-18 à l'extérieur."
+          },
+          {
+            "factor": "forme récente",
+            "observation": "Tenerife fait des nuls, Ceuta perd tout.",
+            "evidence": "Tenerife : N N N N D sur les 5 derniers ; Ceuta : D D D D D, 0 but marqué lors des 2 derniers matchs."
+          },
+          {
+            "factor": "statistiques et moyennes",
+            "observation": "Ceuta domine les volumes mais concrétise peu ; Tenerife est dominé en possession.",
+            "evidence": "Ceuta 17,4 tirs, 1,73 xG, 1,1 but par match ; Tenerife 9,6 tirs, 41,1 % de possession, 1,1 but par match."
+          },
+          {
+            "factor": "compositions",
+            "observation": "Gallego mène l'attaque de Tenerife. Ceuta aligne son trio offensif mais Camacho et le gardien Vallejo sont sur le banc.",
+            "evidence": "Gallego 8+1, xG 5,06 ; Escobar 5+1 ; Pedro López est gardien titulaire à la place de Vallejo (9 titularisations)."
+          },
+          {
+            "factor": "edge du modèle",
+            "observation": "Le moteur voit Tenerife favori mais le marché le paie encore moins cher : pas de value.",
+            "evidence": "Cote juste 1,97 contre 1,92 chez Unibet ; edge -2,78 % ; PASS."
+          }
+        ],
+        "lineupImpact": "Les compositions de FotMob datent de 2705 minutes avant le coup d'envoi, donc ce sont des prévisions. Tenerife aligne Gallego (8+1, xG 5,06), Nacho Gil (1+4) et Gomis (2 buts) en attaque. José León et Víctor Moreno sont remplaçants et César Álvarez est hors feuille de match. Dani Fernández et Ranos sont en sélection. Ceuta commence avec Pedro López dans les buts, car Vallejo (9 titularisations) est remplaçant, et Camacho (10 titularisations, 1 but) est aussi sur le banc. Son trio Zalazar, Escobar et Teguia reste en place. Sevikyan est en sélection et Mamah est blessé. Le vent de 18 km/h n'a pas assez d'effet pour peser sur un marché.",
+        "alignmentWithModel": "Le contexte va globalement dans le sens du moteur, qui voit Tenerife favori, mais il le nuance sur les buts. Tenerife marque peu et Ceuta encaisse beaucoup. Ceuta produit pourtant du volume, et le carnet montre que les \"Non\" au BTTS et les lignes basses de buts tiennent mal.",
+        "marketViews": [
+          {
+            "market": "Résultat",
+            "pick": "Tenerife gagne",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "51 % : Tenerife est invaincu depuis 4 matchs et joue à domicile, alors que Ceuta a perdu 5 matchs de suite et encaisse 2,2 buts par match à l'extérieur.",
+            "reasoning": "Ceuta est lanterne rouge et sans victoire à l'extérieur depuis 6 matchs. Tenerife fait beaucoup de nuls (5 sur ses 6 derniers), ce qui limite le pourcentage.",
+            "probability": 51
+          },
+          {
+            "market": "Total buts",
+            "pick": "Plus de 1.5 buts",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "77 % : Ceuta encaisse 1,9 but par match et Tenerife 1,6, ce qui donne un total de buts moyen élevé même si chaque équipe marque environ 1,1.",
+            "reasoning": "Ceuta encaisse beaucoup et la ligne est basse. Le carnet signale que les lignes basses sont fragiles, mais ici c'est le plus de buts qui est pronostiqué.",
+            "probability": 77
+          },
+          {
+            "market": "Les 2 équipes marquent",
+            "pick": "Non",
+            "verdict": "nuance",
+            "confidence": "faible",
+            "explanation": "64 % : Ceuta n'a pas marqué lors de ses 2 derniers matchs et le moteur lui donne 0,5 but attendu, mais Tenerife encaisse 1,6 but par match.",
+            "reasoning": "Ceuta est muette depuis 2 matchs, mais produit 1,73 xG et 17 tirs par match. Le carnet a déjà échoué sur ce type de «Non» (0 sur 4 pour Ceuta), donc prudence.",
+            "probability": 64
+          },
+          {
+            "market": "Résultat + Total buts",
+            "pick": "Tenerife & Plus de 1.5 buts",
+            "verdict": "confirme",
+            "confidence": "faible",
+            "explanation": "42 % : combine la victoire de Tenerife (51 %) avec plus de 1,5 but, un scénario cohérent avec 2,27 buts attendus pour Tenerife.",
+            "reasoning": "Le scénario est cohérent avec la fragilité de Ceuta, mais Tenerife fait beaucoup de nuls. Le marché combiné a un bilan modeste dans mon carnet.",
+            "probability": 42
+          },
+          {
+            "market": "Buts — Tenerife",
+            "pick": "Tenerife — Moins de 3.5 buts",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "81 % : Tenerife marque 1,1 but par match sur ses 10 derniers matchs et n'a pas dépassé 3 buts sur sa forme récente (maximum 2).",
+            "reasoning": "Même contre la pire défense du championnat, 4 buts ou plus resteraient très rares pour une équipe qui marque 1,1 but par match.",
+            "probability": 81
+          },
+          {
+            "market": "Buts — AD Ceuta FC",
+            "pick": "AD Ceuta FC — Moins de 0.5 buts",
+            "verdict": "nuance",
+            "confidence": "faible",
+            "explanation": "61 % : Ceuta n'a pas marqué lors de ses 2 derniers matchs et ne marque que 1 but par match à l'extérieur, mais Tenerife encaisse 1,6 but par match.",
+            "reasoning": "Ceuta marque peu mais crée (1,77 xG à l'extérieur). Un but reste plausible, d'autant que Tenerife concède 1,9 grosse occasion par match.",
+            "probability": 61
+          },
+          {
+            "market": "Total corners",
+            "pick": "Moins de 11.5 corners",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "83 % : le moteur attend 8,48 corners au total (4,07 pour Tenerife, 4,41 pour Ceuta), loin de la ligne de 11,5.",
+            "reasoning": "Ceuta produit 7 corners par match mais Tenerife n'en produit que 3,9. Atteindre 12 serait inhabituel.",
+            "probability": 83
+          },
+          {
+            "market": "Corners — Tenerife",
+            "pick": "Tenerife — Moins de 5.5 corners",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "75 % : Tenerife obtient 3,9 corners par match (2,8 à domicile) et le moteur en attend 4,07.",
+            "reasoning": "Tenerife a peu le ballon (41 % de possession), ce qui limite ses corners.",
+            "probability": 75
+          },
+          {
+            "market": "Corners — AD Ceuta FC",
+            "pick": "AD Ceuta FC — Moins de 6.5 corners",
+            "verdict": "nuance",
+            "confidence": "moyenne",
+            "explanation": "81 % : le moteur attend 4,41 corners pour Ceuta, malgré ses 7 de moyenne (7,3 à l'extérieur) et les 2,7 que Tenerife concède.",
+            "reasoning": "Ceuta dépasse cette ligne en moyenne et le chiffre est plus fragile que ne le suggère le pourcentage. Tenerife concède peu de corners (2,7).",
+            "probability": 81
+          },
+          {
+            "market": "Total tirs",
+            "pick": "Plus de 19.5 tirs",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "82 % : le moteur attend 24,8 tirs (11,94 + 12,87), et Ceuta tire 17,4 fois par match contre 11,1 concédés par Tenerife.",
+            "reasoning": "Le volume de Ceuta et les 11,1 tirs que Tenerife concède soutiennent la ligne.",
+            "probability": 82
+          },
+          {
+            "market": "Tirs — Tenerife",
+            "pick": "Tenerife — Moins de 15.5 tirs",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "79 % : Tenerife tire 9,6 fois par match (10 à domicile) et le moteur en attend 11,94.",
+            "reasoning": "Dépasser 15 tirs serait bien au-dessus de sa production habituelle.",
+            "probability": 79
+          },
+          {
+            "market": "Tirs — AD Ceuta FC",
+            "pick": "AD Ceuta FC — Plus de 8.5 tirs",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "82 % : Ceuta tire 17,4 fois par match (15,3 à l'extérieur) et le moteur en attend 12,87.",
+            "reasoning": "Même très en dessous de sa moyenne, Ceuta resterait au-dessus de la ligne.",
+            "probability": 82
+          },
+          {
+            "market": "Total tirs cadrés",
+            "pick": "Moins de 10.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "80 % : le moteur attend 8,02 tirs cadrés au total (4,24 + 3,78), contre 7,8 pour la somme des moyennes de Tenerife (2,9) et Ceuta (4,9).",
+            "reasoning": "Les moyennes des deux équipes restent sous la ligne, avec peu de marge pour Ceuta (4,9).",
+            "probability": 80
+          },
+          {
+            "market": "Tirs cadrés — Tenerife",
+            "pick": "Tenerife — Plus de 2.5 tirs cadrés",
+            "verdict": "nuance",
+            "confidence": "moyenne",
+            "explanation": "77 % : le moteur attend 4,24 tirs cadrés pour Tenerife, alors que sa moyenne est de 2,9 (3,2 à domicile) face à 4,9 concédés par Ceuta.",
+            "reasoning": "Ceuta concède environ 4,9 tirs cadrés par match, ce qui soutient la ligne, mais Tenerife tire peu (9,6) et sa moyenne n'est que légèrement au-dessus.",
+            "probability": 77
+          },
+          {
+            "market": "Tirs cadrés — AD Ceuta FC",
+            "pick": "AD Ceuta FC — Moins de 5.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "81 % : Ceuta cadre 4,9 tirs par match (4,3 à l'extérieur), le moteur en attend 3,78 et Tenerife en concède 3,4.",
+            "reasoning": "Sa moyenne est sous la ligne, et Tenerife en concède peu (3,4). Un match très ouvert pourrait toutefois la dépasser.",
+            "probability": 81
+          }
+        ],
+        "caveats": "Les compositions sont publiées 2705 minutes avant le coup d'envoi : ce sont des prévisions. Le changement d'entraîneur signalé pour Tenerife (Cervera → Cervera) vient d'une homonymie orthographique et n'a pas de sens. L'historique des entraîneurs reste incomplet. Les échantillons de forme sont courts (5 matchs). Aucune note personnelle (userNote) n'est fournie."
+      },
+      "engineSnapshot": {
+        "label": "Tenerife vs AD Ceuta FC",
+        "expectedGoals": {
+          "home": 2.265,
+          "away": 0.5,
+          "source": "fotmob"
+        },
+        "trueOdds": {
+          "home": 1.97,
+          "draw": 3.76,
+          "away": 4.39
+        },
+        "market": {
+          "odds1": 1.81,
+          "oddsDraw": 3.33,
+          "odds2": 3.81
+        },
+        "edgePercent": -2.78,
+        "staking": {
+          "action": "PASS",
+          "stake": null,
+          "reason": "pas_de_value",
+          "candidates": [
+            {
+              "outcome": "home",
+              "label": "Tenerife gagne",
+              "odds": 1.92,
+              "displayedOdds": 1.92,
+              "bookmaker": "unibet_nl",
+              "bookmakerTitle": "Unibet (NL)",
+              "fairOdds": 1.97,
+              "ev": -0.0278,
+              "exclusion": "sous_le_seuil"
+            },
+            {
+              "outcome": "draw",
+              "label": "Match nul",
+              "odds": 3.45,
+              "displayedOdds": 3.45,
+              "bookmaker": "unibet_nl",
+              "bookmakerTitle": "Unibet (NL)",
+              "fairOdds": 3.76,
+              "ev": -0.0826,
+              "exclusion": "sous_le_seuil"
+            },
+            {
+              "outcome": "away",
+              "label": "AD Ceuta FC gagne",
+              "odds": 3.95,
+              "displayedOdds": 3.95,
+              "bookmaker": "unibet_nl",
+              "bookmakerTitle": "Unibet (NL)",
+              "fairOdds": 4.39,
+              "ev": -0.1004,
+              "exclusion": "sous_le_seuil"
+            }
+          ],
+          "limits": {
+            "edgeThresholdMin": 0.02,
+            "edgeThresholdMax": 0.25,
+            "maxValueOdds": 5
+          }
+        },
+        "statExpectations": {
+          "corners": {
+            "home": 4.07,
+            "away": 4.41,
+            "total": 8.48
+          },
+          "shots": {
+            "home": 11.94,
+            "away": 12.87,
+            "total": 24.8
+          },
+          "shotsOnTarget": {
+            "home": 4.24,
+            "away": 3.78,
+            "total": 8.02
+          }
+        },
+        "marketPredictions": [
+          {
+            "marketId": "result",
+            "params": {
+              "outcome": "home"
+            },
+            "market": "Résultat",
+            "predictedOutcome": "home",
+            "predictedLabel": "Tenerife gagne",
+            "predictedOdds": 1.97,
+            "probability": 51,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalGoals",
+            "params": {
+              "line": 1.5,
+              "side": "over"
+            },
+            "market": "Total buts",
+            "predictedOutcome": "over",
+            "predictedLabel": "Plus de 1.5 buts",
+            "predictedOdds": 1.3,
+            "probability": 77,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "bothTeamsScore",
+            "params": {
+              "outcome": "no"
+            },
+            "market": "Les 2 équipes marquent",
+            "predictedOutcome": "no",
+            "predictedLabel": "Non",
+            "predictedOdds": 1.56,
+            "probability": 64,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "resultAndTotal",
+            "params": {
+              "line": 1.5,
+              "key": "homeOver"
+            },
+            "market": "Résultat + Total buts",
+            "predictedOutcome": "homeOver",
+            "predictedLabel": "Tenerife & Plus de 1.5 buts",
+            "predictedOdds": 2.4,
+            "probability": 42,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamGoals",
+            "params": {
+              "team": "home",
+              "line": 3.5,
+              "side": "under"
+            },
+            "market": "Buts — Tenerife",
+            "predictedOutcome": "under",
+            "predictedLabel": "Tenerife — Moins de 3.5 buts",
+            "predictedOdds": 1.24,
+            "probability": 81,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamGoals",
+            "params": {
+              "team": "away",
+              "line": 0.5,
+              "side": "under"
+            },
+            "market": "Buts — AD Ceuta FC",
+            "predictedOutcome": "under",
+            "predictedLabel": "AD Ceuta FC — Moins de 0.5 buts",
+            "predictedOdds": 1.65,
+            "probability": 61,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalCorners",
+            "params": {
+              "line": 11.5,
+              "side": "under"
+            },
+            "market": "Total corners",
+            "predictedOutcome": "under",
+            "predictedLabel": "Moins de 11.5 corners",
+            "predictedOdds": 1.2,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamCorners",
+            "params": {
+              "team": "home",
+              "line": 5.5,
+              "side": "under"
+            },
+            "market": "Corners — Tenerife",
+            "predictedOutcome": "under",
+            "predictedLabel": "Tenerife — Moins de 5.5 corners",
+            "predictedOdds": 1.33,
+            "probability": 75,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamCorners",
+            "params": {
+              "team": "away",
+              "line": 6.5,
+              "side": "under"
+            },
+            "market": "Corners — AD Ceuta FC",
+            "predictedOutcome": "under",
+            "predictedLabel": "AD Ceuta FC — Moins de 6.5 corners",
+            "predictedOdds": 1.24,
+            "probability": 81,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalShots",
+            "params": {
+              "line": 19.5,
+              "side": "over"
+            },
+            "market": "Total tirs",
+            "predictedOutcome": "over",
+            "predictedLabel": "Plus de 19.5 tirs",
+            "predictedOdds": 1.22,
+            "probability": 82,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShots",
+            "params": {
+              "team": "home",
+              "line": 15.5,
+              "side": "under"
+            },
+            "market": "Tirs — Tenerife",
+            "predictedOutcome": "under",
+            "predictedLabel": "Tenerife — Moins de 15.5 tirs",
+            "predictedOdds": 1.26,
+            "probability": 79,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShots",
+            "params": {
+              "team": "away",
+              "line": 8.5,
+              "side": "over"
+            },
+            "market": "Tirs — AD Ceuta FC",
+            "predictedOutcome": "over",
+            "predictedLabel": "AD Ceuta FC — Plus de 8.5 tirs",
+            "predictedOdds": 1.22,
+            "probability": 82,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalShotsOnTarget",
+            "params": {
+              "line": 10.5,
+              "side": "under"
+            },
+            "market": "Total tirs cadrés",
+            "predictedOutcome": "under",
+            "predictedLabel": "Moins de 10.5 tirs cadrés",
+            "predictedOdds": 1.25,
+            "probability": 80,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShotsOnTarget",
+            "params": {
+              "team": "home",
+              "line": 2.5,
+              "side": "over"
+            },
+            "market": "Tirs cadrés — Tenerife",
+            "predictedOutcome": "over",
+            "predictedLabel": "Tenerife — Plus de 2.5 tirs cadrés",
+            "predictedOdds": 1.3,
+            "probability": 77,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShotsOnTarget",
+            "params": {
+              "team": "away",
+              "line": 5.5,
+              "side": "under"
+            },
+            "market": "Tirs cadrés — AD Ceuta FC",
+            "predictedOutcome": "under",
+            "predictedLabel": "AD Ceuta FC — Moins de 5.5 tirs cadrés",
+            "predictedOdds": 1.24,
+            "probability": 81,
+            "minOdds": 1.2
+          }
+        ],
+        "engineVersion": 5
+      },
+      "analysedAt": "2026-11-13T15:55:30.125Z"
+    },
+    "postMatchReview": {
+      "summary": "Tenerife a gagné 2-0 (Nacho Gil 40', Viereck 86'), dans le sens du moteur et de ma lecture prudente sur le 1N2. Ceuta a dominé la possession (65 %) et les tirs (15 contre 11), mais n'a cadré que 2 tirs (xG 0,72 contre 1,74). Les marchés de tirs et de tirs cadrés ont tenu. Le total de corners et les corners de Ceuta ont été sous-estimés.",
+      "whatWasRight": "J'avais bien lu le volume de Ceuta (15 tirs, 7 corners) et son manque d'efficacité (2 tirs cadrés). Tenerife est resté économe (11 tirs, sous 15,5) mais direct (5 tirs cadrés, 2 grosses occasions). La prudence sur le 1N2 était raisonnable, mais le résultat a donné raison au moteur.",
+      "whatWasMissed": "J'ai sous-estimé le nombre de corners dans un match où Ceuta a eu 65 % de possession : 12 au total, contre une ligne de 11,5 où je confirmais le moins de. Ceuta en a eu 7, soit exactement sa moyenne, alors que le moteur en attendait 4,41. J'ai trop peu pesé le fait que la moyenne de Ceuta (7 par match) était un signal plus fiable que l'attendu du moteur.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le 1N2, les tirs et les tirs cadrés. Il le contredit sur le total de corners et sur les corners de Ceuta, que le moteur sous-estimait pour une équipe qui avait la possession.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Tenerife gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Tenerife a gagné 2-0, avec un but à la 40' et un autre à la 86'. Il a eu plus de xG (1,74 contre 0,72) et plus de tirs cadrés (5 contre 2), malgré 35 % de possession. Un but a été refusé par la VAR à la 31'.",
+          "lesson": "Face à un Ceuta en crise, la qualité des occasions a compté plus que le volume. Ma nuance sur le gardien absent n'a pas pesé. Quand le moteur voit un net avantage de xG, il faut s'en méfier moins."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Tenerife & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Tenerife",
+          "marketId": "teamGoals",
+          "pick": "Tenerife — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — AD Ceuta FC",
+          "marketId": "teamGoals",
+          "pick": "AD Ceuta FC — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 11.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Il y a eu 12 corners (5 pour Tenerife, 7 pour Ceuta), au-dessus de la ligne de 11,5. Ceuta a eu 65 % de possession et a poussé en fin de match, alors que le moteur attendait 8,48.",
+          "lesson": "Avec une équipe qui a 7 corners de moyenne, la ligne totale doit se méfier d'un moins de. Un avis moyen sur ce type de ligne est à relever quand la moyenne d'un camp est élevée."
+        },
+        {
+          "market": "Corners — Tenerife",
+          "marketId": "teamCorners",
+          "pick": "Tenerife — Moins de 5.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Tenerife a eu 5 corners, sous la ligne de 5,5, avec 35 % de possession. C'est un résultat proche de la limite.",
+          "lesson": "La faible possession de Tenerife limite ses corners, mais la marge n'était que d'un corner. L'avis a tenu, sans grande marge."
+        },
+        {
+          "market": "Corners — AD Ceuta FC",
+          "marketId": "teamCorners",
+          "pick": "AD Ceuta FC — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Ceuta a obtenu 7 corners, au-dessus de la ligne de 6,5, soit exactement sa moyenne. Il a eu 65 % de possession et 15 tirs.",
+          "lesson": "Ma nuance était justifiée : quand la moyenne d'une équipe dépasse la ligne et que le moteur attend bien moins, il faut suivre la moyenne. Cela vaut surtout si l'équipe a le ballon."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 19.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 26 tirs (11 et 15), au-dessus de la ligne de 19,5. Ceuta a fourni le volume.",
+          "lesson": "Le volume de tirs d'un camp offensif soutient le plus de. À garder."
+        },
+        {
+          "market": "Tirs — Tenerife",
+          "marketId": "teamShots",
+          "pick": "Tenerife — Moins de 15.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Tenerife a tiré 11 fois, bien sous 15,5, avec un jeu direct et peu de possession.",
+          "lesson": "Une ligne bien au-dessus de la moyenne (9,6) d'une équipe directe est fiable pour un moins de."
+        },
+        {
+          "market": "Tirs — AD Ceuta FC",
+          "marketId": "teamShots",
+          "pick": "AD Ceuta FC — Plus de 8.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Ceuta a tiré 15 fois, au-dessus de la ligne de 8,5, avec 65 % de possession.",
+          "lesson": "Ma confiance forte était justifiée : la moyenne (17,4, 15,3 à l'extérieur) était bien au-dessus de la ligne."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 10.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 7 tirs cadrés (5 et 2), sous la ligne de 10,5.",
+          "lesson": "La somme des moyennes sous la ligne est un bon appui pour un moins de. À garder."
+        },
+        {
+          "market": "Tirs cadrés — Tenerife",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Tenerife — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Tenerife a cadré 5 tirs, au-dessus de 2,5, avec un but à la 40' et un autre à la 86'. Il a eu 2 grosses occasions.",
+          "lesson": "Ma nuance était trop prudente : la défense de Ceuta (4,9 tirs cadrés concédés) soutenait bien la ligne. Quand une défense concède beaucoup, je peux suivre le moteur."
+        },
+        {
+          "market": "Tirs cadrés — AD Ceuta FC",
+          "marketId": "teamShotsOnTarget",
+          "pick": "AD Ceuta FC — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Ceuta n'a cadré que 2 tirs, sous 5,5, malgré 15 tirs au total. Elle n'a eu aucune grosse occasion.",
+          "lesson": "Un gros volume de tirs ne se traduit pas en tirs cadrés pour Ceuta (ratio faible). Cette lecture mérite d'être gardée."
+        }
+      ],
+      "caveats": "C'est un seul match, avec un but à la 86' qui a scellé le score. Le déroulé ne dit pas si Ceuta a poussé en fin de match, ce qui pourrait expliquer une partie des corners. La fiche ne dit rien sur le gardien de Tenerife au-delà de son absence annoncée.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 15,
+        "commentaire": 5
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 6182,
+        "cache_read_input_tokens": 9103,
+        "output_tokens": 3089,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 6182,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2277,
+            "cache_read_input_tokens": 7015,
+            "cache_creation_input_tokens": 1255,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1255
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0574466,
+      "createdAt": "2026-11-15T21:07:27.545Z"
+    }
   },
   {
     "matchId": "b8308c8150f5ad55e242d7671adaffbd",
@@ -9308,9 +9934,9 @@
     },
     "usage": {
       "input_tokens": 2,
-      "cache_creation_input_tokens": 6884,
-      "cache_read_input_tokens": 4470,
-      "output_tokens": 4083,
+      "cache_creation_input_tokens": 10960,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 2717,
       "output_tokens_details": {
         "thinking_tokens": 0
       },
@@ -9320,19 +9946,19 @@
       },
       "service_tier": "standard",
       "cache_creation": {
-        "ephemeral_1h_input_tokens": 6884,
+        "ephemeral_1h_input_tokens": 10960,
         "ephemeral_5m_input_tokens": 0
       },
       "inference_geo": "global",
       "iterations": [
         {
           "input_tokens": 2,
-          "output_tokens": 4083,
-          "cache_read_input_tokens": 4470,
-          "cache_creation_input_tokens": 6884,
+          "output_tokens": 2717,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 10960,
           "cache_creation": {
             "ephemeral_5m_input_tokens": 0,
-            "ephemeral_1h_input_tokens": 6884
+            "ephemeral_1h_input_tokens": 10960
           },
           "type": "message"
         }
@@ -9340,18 +9966,18 @@
       "speed": "standard",
       "fallback_credit": null
     },
-    "costUsd": 0.06926399999999999,
-    "analysedAt": "2026-11-13T15:56:01.309Z",
-    "timing": "avance",
+    "costUsd": 0.071014,
+    "analysedAt": "2026-11-15T14:33:03.493Z",
+    "timing": "coup-d-envoi",
     "fiche": "compacte",
     "memoire": {
-      "mots": 490,
-      "tokens": 1503,
+      "mots": 498,
+      "tokens": 1518,
       "lecons": [
-        "cal-2026-10-10-ceuta-sabadell|totalGoals",
-        "cal-2026-10-03-albacete-eibar|bothTeamsScore"
+        "cal-2026-10-10-ceuta-sabadell|bothTeamsScore",
+        "cal-2026-10-10-ceuta-sabadell|totalGoals"
       ],
-      "dossiersDu": "2026-11-13T00:41:21.344Z",
+      "dossiersDu": "2026-11-14T23:17:47.317Z",
       "equipes": {
         "home": {
           "id": "fotmob-7878",
@@ -9368,73 +9994,36 @@
       }
     },
     "lineupSnapshot": {
-      "source": "magasin",
+      "source": "FotMob",
+      "fotmobMatchId": "5868540",
+      "fetchedAt": "2026-11-15T14:32:41.250Z",
+      "minutesBeforeKickoff": 42,
       "home": {
-        "team": "Granada CF",
+        "team": "Granada",
         "teamId": "fotmob-7878",
         "formation": "4-2-3-1",
-        "coach": "Pacheta",
+        "coach": null,
         "statsSince": "2026-07-01",
         "teamMatches": 13,
         "startXI": [
           {
-            "id": "fotmob-522234",
-            "name": "Gerard Gumbau",
-            "number": 6,
-            "position": "Midfielder",
-            "age": 31,
+            "id": "fotmob-1329320",
+            "name": "Alberto Flores",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 23,
             "countryCode": "ESP",
             "countryName": "Spain",
-            "x": 0.485,
-            "y": 0.3,
+            "x": 0.1,
+            "y": 0.5,
             "stats": {
-              "apps": 13,
-              "starts": 12,
-              "minutes": 1072,
-              "goals": 1,
-              "assists": 3,
-              "xg": 0.69,
-              "rating": 7.45
-            }
-          },
-          {
-            "id": "fotmob-639144",
-            "name": "Rubén Alcaraz",
-            "number": 4,
-            "position": "Midfielder",
-            "age": 35,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "x": 0.485,
-            "y": 0.7,
-            "stats": {
-              "apps": 12,
-              "starts": 12,
-              "minutes": 994,
-              "goals": 1,
-              "assists": 0,
-              "xg": 0.98,
-              "rating": 7.18
-            }
-          },
-          {
-            "id": "fotmob-881124",
-            "name": "Diego Pampín",
-            "number": 16,
-            "position": "Defender",
-            "age": 26,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "x": 0.292,
-            "y": 0.125,
-            "stats": {
-              "apps": 10,
-              "starts": 7,
-              "minutes": 635,
+              "apps": 5,
+              "starts": 5,
+              "minutes": 450,
               "goals": 0,
-              "assists": 1,
-              "xg": 0.32,
-              "rating": 6.67
+              "assists": 0,
+              "xg": null,
+              "rating": 7.89
             }
           },
           {
@@ -9458,6 +10047,26 @@
             }
           },
           {
+            "id": "fotmob-1825696",
+            "name": "Juanjo",
+            "number": 30,
+            "position": "Defender",
+            "age": 19,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 6,
+              "starts": 5,
+              "minutes": 452,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.03,
+              "rating": 7.06
+            }
+          },
+          {
             "id": "fotmob-1226848",
             "name": "Manu Lama",
             "number": 5,
@@ -9478,63 +10087,63 @@
             }
           },
           {
-            "id": "fotmob-1308894",
-            "name": "Pedro Alemañ",
-            "number": 8,
-            "position": "Midfielder",
-            "age": 24,
+            "id": "fotmob-881124",
+            "name": "Diego Pampín",
+            "number": 16,
+            "position": "Defender",
+            "age": 26,
             "countryCode": "ESP",
             "countryName": "Spain",
-            "x": 0.678,
-            "y": 0.5,
+            "x": 0.292,
+            "y": 0.125,
             "stats": {
-              "apps": 11,
-              "starts": 8,
-              "minutes": 668,
-              "goals": 2,
-              "assists": 1,
-              "xg": 1.74,
-              "rating": 6.86
-            }
-          },
-          {
-            "id": "fotmob-1329320",
-            "name": "Alberto Flores",
-            "number": 1,
-            "position": "Goalkeeper",
-            "age": 23,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "x": 0.1,
-            "y": 0.5,
-            "stats": {
-              "apps": 5,
-              "starts": 5,
-              "minutes": 450,
+              "apps": 10,
+              "starts": 7,
+              "minutes": 635,
               "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 7.89
+              "assists": 1,
+              "xg": 0.32,
+              "rating": 6.67
             }
           },
           {
-            "id": "fotmob-1336006",
-            "name": "Jorge Pascual",
-            "number": 10,
-            "position": "Forward",
-            "age": 23,
+            "id": "fotmob-639144",
+            "name": "Rubén Alcaraz",
+            "number": 4,
+            "position": "Midfielder",
+            "age": 35,
             "countryCode": "ESP",
             "countryName": "Spain",
-            "x": 0.87,
-            "y": 0.5,
+            "x": 0.485,
+            "y": 0.7,
             "stats": {
               "apps": 12,
-              "starts": 5,
-              "minutes": 536,
-              "goals": 5,
+              "starts": 12,
+              "minutes": 994,
+              "goals": 1,
               "assists": 0,
-              "xg": 3.65,
-              "rating": 6.83
+              "xg": 0.98,
+              "rating": 7.18
+            }
+          },
+          {
+            "id": "fotmob-522234",
+            "name": "Gerard Gumbau",
+            "number": 6,
+            "position": "Midfielder",
+            "age": 31,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.485,
+            "y": 0.3,
+            "stats": {
+              "apps": 13,
+              "starts": 12,
+              "minutes": 1072,
+              "goals": 1,
+              "assists": 3,
+              "xg": 0.69,
+              "rating": 7.45
             }
           },
           {
@@ -9558,43 +10167,63 @@
             }
           },
           {
-            "id": "fotmob-1800640",
-            "name": "Mario Jiménez",
-            "number": 27,
+            "id": "fotmob-1308894",
+            "name": "Pedro Alemañ",
+            "number": 8,
             "position": "Midfielder",
-            "age": 19,
+            "age": 24,
             "countryCode": "ESP",
             "countryName": "Spain",
             "x": 0.678,
-            "y": 0.163,
+            "y": 0.5,
             "stats": {
               "apps": 11,
-              "starts": 4,
-              "minutes": 415,
-              "goals": 1,
-              "assists": 0,
-              "xg": 0.66,
-              "rating": 6.52
+              "starts": 8,
+              "minutes": 668,
+              "goals": 2,
+              "assists": 1,
+              "xg": 1.74,
+              "rating": 6.86
             }
           },
           {
-            "id": "fotmob-1825696",
-            "name": "Juanjo",
-            "number": 30,
-            "position": "Defender",
-            "age": 19,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "x": 0.292,
-            "y": 0.625,
+            "id": "fotmob-913184",
+            "name": "Abdoul Kader Bamba",
+            "number": 17,
+            "position": "Midfielder",
+            "age": 32,
+            "countryCode": "FRA",
+            "countryName": "France",
+            "x": 0.678,
+            "y": 0.163,
             "stats": {
-              "apps": 6,
-              "starts": 5,
-              "minutes": 452,
+              "apps": 5,
+              "starts": 1,
+              "minutes": 130,
               "goals": 0,
               "assists": 0,
-              "xg": 0.03,
-              "rating": 7.06
+              "xg": 0.05,
+              "rating": 6.25
+            }
+          },
+          {
+            "id": "fotmob-1336006",
+            "name": "Jorge Pascual",
+            "number": 10,
+            "position": "Forward",
+            "age": 23,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 12,
+              "starts": 5,
+              "minutes": 536,
+              "goals": 5,
+              "assists": 0,
+              "xg": 3.65,
+              "rating": 6.83
             }
           }
         ],
@@ -9636,39 +10265,21 @@
             }
           },
           {
-            "id": "fotmob-913184",
-            "name": "Abdoul Kader Bamba",
-            "number": 17,
-            "position": "Midfielder",
-            "age": 32,
-            "countryCode": "FRA",
-            "countryName": "France",
+            "id": "fotmob-2140580",
+            "name": "Bourama Dembelé",
+            "number": 35,
+            "position": "Defender",
+            "age": 18,
+            "countryCode": "ESP",
+            "countryName": "Spain",
             "stats": {
               "apps": 5,
-              "starts": 1,
-              "minutes": 130,
-              "goals": 0,
+              "starts": 5,
+              "minutes": 450,
+              "goals": 1,
               "assists": 0,
-              "xg": 0.05,
-              "rating": 6.25
-            }
-          },
-          {
-            "id": "fotmob-929835",
-            "name": "Alejandro Marqués",
-            "number": 9,
-            "position": "Forward",
-            "age": 26,
-            "countryCode": "VEN",
-            "countryName": "Venezuela",
-            "stats": {
-              "apps": 8,
-              "starts": 3,
-              "minutes": 324,
-              "goals": 2,
-              "assists": 0,
-              "xg": 2.3,
-              "rating": 6.49
+              "xg": 0.5,
+              "rating": 6.77
             }
           },
           {
@@ -9690,62 +10301,8 @@
             }
           },
           {
-            "id": "fotmob-2018426",
-            "name": "Owen Emeka",
-            "number": 36,
-            "position": "Forward",
-            "age": 17,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "stats": {
-              "apps": 11,
-              "starts": 4,
-              "minutes": 466,
-              "goals": 2,
-              "assists": 0,
-              "xg": 1.01,
-              "rating": 6.45
-            }
-          },
-          {
-            "id": "fotmob-2018428",
-            "name": "Dylan Rodriguez",
-            "number": 32,
-            "position": "Midfielder",
-            "age": null,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "stats": {
-              "apps": 2,
-              "starts": 1,
-              "minutes": 106,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.59
-            }
-          },
-          {
-            "id": "fotmob-2140580",
-            "name": "Bourama Dembele",
-            "number": 35,
-            "position": "Defender",
-            "age": 18,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "stats": {
-              "apps": 5,
-              "starts": 5,
-              "minutes": 450,
-              "goals": 1,
-              "assists": 0,
-              "xg": 0.5,
-              "rating": 6.77
-            }
-          },
-          {
             "id": "fotmob-2140587",
-            "name": "Angelo Garcia",
+            "name": "Ángelo García",
             "number": 33,
             "position": "Defender",
             "age": 20,
@@ -9759,6 +10316,60 @@
               "assists": 0,
               "xg": null,
               "rating": 6.21
+            }
+          },
+          {
+            "id": "fotmob-2018428",
+            "name": "Dylan Rodríguez",
+            "number": 32,
+            "position": "Midfielder",
+            "age": 19,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 2,
+              "starts": 1,
+              "minutes": 106,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.59
+            }
+          },
+          {
+            "id": "fotmob-1800640",
+            "name": "Mario Jiménez",
+            "number": 27,
+            "position": "Midfielder",
+            "age": 19,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 11,
+              "starts": 4,
+              "minutes": 415,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.66,
+              "rating": 6.52
+            }
+          },
+          {
+            "id": "fotmob-929835",
+            "name": "Alejandro Marqués",
+            "number": 9,
+            "position": "Forward",
+            "age": 26,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "stats": {
+              "apps": 8,
+              "starts": 3,
+              "minutes": 324,
+              "goals": 2,
+              "assists": 0,
+              "xg": 2.3,
+              "rating": 6.49
             }
           },
           {
@@ -9845,44 +10456,16 @@
             "assists": 0,
             "status": "remplaçant"
           }
-        ],
-        "lastMatch": {
-          "date": "2026-11-01",
-          "league": "La Liga 2 - Spain",
-          "home": "Eldense",
-          "away": "Granada",
-          "homeGoals": 0,
-          "awayGoals": 2
-        }
+        ]
       },
       "away": {
         "team": "Las Palmas",
         "teamId": "fotmob-8306",
         "formation": "4-3-3",
-        "coach": "Albert Sánchez",
+        "coach": null,
         "statsSince": "2026-07-01",
         "teamMatches": 14,
         "startXI": [
-          {
-            "id": "fotmob-281085",
-            "name": "Jesé",
-            "number": 10,
-            "position": "Forward",
-            "age": 33,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "x": 0.87,
-            "y": 0.5,
-            "stats": {
-              "apps": 11,
-              "starts": 10,
-              "minutes": 754,
-              "goals": 4,
-              "assists": 1,
-              "xg": 2.78,
-              "rating": 7.09
-            }
-          },
           {
             "id": "fotmob-783699",
             "name": "José Antonio Caro",
@@ -9905,14 +10488,14 @@
           },
           {
             "id": "fotmob-879609",
-            "name": "Alex Suárez",
+            "name": "Álex Suárez",
             "number": 4,
             "position": "Defender",
             "age": 33,
             "countryCode": "ESP",
             "countryName": "Spain",
             "x": 0.357,
-            "y": 0.625,
+            "y": 0.875,
             "stats": {
               "apps": 12,
               "starts": 12,
@@ -9924,43 +10507,63 @@
             }
           },
           {
-            "id": "fotmob-887705",
-            "name": "Taisei Miyashiro",
-            "number": 11,
-            "position": "Forward",
-            "age": 26,
-            "countryCode": "JPN",
-            "countryName": "Japan",
-            "x": 0.87,
-            "y": 0.21,
+            "id": "fotmob-1337009",
+            "name": "Giovanni Bonfanti",
+            "number": 21,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "ITA",
+            "countryName": "Italy",
+            "x": 0.357,
+            "y": 0.625,
             "stats": {
-              "apps": 13,
-              "starts": 13,
-              "minutes": 1049,
-              "goals": 3,
-              "assists": 2,
-              "xg": 1.66,
-              "rating": 6.96
+              "apps": 12,
+              "starts": 8,
+              "minutes": 810,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.17,
+              "rating": 6.8
             }
           },
           {
-            "id": "fotmob-916546",
-            "name": "Manu Fuster",
-            "number": 14,
-            "position": "Midfielder",
-            "age": 29,
+            "id": "fotmob-1580562",
+            "name": "Andrés Rodríguez",
+            "number": 23,
+            "position": "Defender",
+            "age": 24,
             "countryCode": "ESP",
             "countryName": "Spain",
-            "x": 0.613,
-            "y": 0.21,
+            "x": 0.357,
+            "y": 0.375,
             "stats": {
-              "apps": 13,
-              "starts": 10,
-              "minutes": 781,
-              "goals": 2,
+              "apps": 8,
+              "starts": 5,
+              "minutes": 517,
+              "goals": 0,
               "assists": 1,
-              "xg": 1.82,
-              "rating": 6.95
+              "xg": 0.01,
+              "rating": 6.68
+            }
+          },
+          {
+            "id": "fotmob-2305260",
+            "name": "Adrián Rodríguez",
+            "number": 44,
+            "position": "Defender",
+            "age": 21,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.125,
+            "stats": {
+              "apps": 2,
+              "starts": 0,
+              "minutes": 26,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.13
             }
           },
           {
@@ -10004,6 +10607,26 @@
             }
           },
           {
+            "id": "fotmob-916546",
+            "name": "Manu Fuster",
+            "number": 14,
+            "position": "Midfielder",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.21,
+            "stats": {
+              "apps": 13,
+              "starts": 10,
+              "minutes": 781,
+              "goals": 2,
+              "assists": 1,
+              "xg": 1.82,
+              "rating": 6.95
+            }
+          },
+          {
             "id": "fotmob-1009832",
             "name": "Iván Jaime",
             "number": 24,
@@ -10024,101 +10647,99 @@
             }
           },
           {
-            "id": "fotmob-1526611",
-            "name": "Juanma Herzog",
-            "number": 15,
-            "position": "Defender",
-            "age": 22,
+            "id": "fotmob-281085",
+            "name": "Jesé",
+            "number": 10,
+            "position": "Forward",
+            "age": 33,
             "countryCode": "ESP",
             "countryName": "Spain",
-            "x": 0.357,
-            "y": 0.375,
+            "x": 0.87,
+            "y": 0.5,
             "stats": {
               "apps": 11,
-              "starts": 11,
-              "minutes": 945,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.13,
-              "rating": 6.67
-            }
-          },
-          {
-            "id": "fotmob-1580562",
-            "name": "Andrés Rodríguez",
-            "number": 23,
-            "position": "Defender",
-            "age": 24,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "x": 0.357,
-            "y": 0.125,
-            "stats": {
-              "apps": 8,
-              "starts": 5,
-              "minutes": 517,
-              "goals": 0,
+              "starts": 10,
+              "minutes": 754,
+              "goals": 4,
               "assists": 1,
-              "xg": 0.01,
-              "rating": 6.68
+              "xg": 2.78,
+              "rating": 7.09
             }
           },
           {
-            "id": "fotmob-1668267",
-            "name": "Valentín Pezzolesi",
-            "number": 25,
-            "position": "Defender",
-            "age": 19,
-            "countryCode": "ARG",
-            "countryName": "Argentina",
-            "x": 0.357,
-            "y": 0.875,
+            "id": "fotmob-887705",
+            "name": "Taisei Miyashiro",
+            "number": 11,
+            "position": "Forward",
+            "age": 26,
+            "countryCode": "JPN",
+            "countryName": "Japan",
+            "x": 0.87,
+            "y": 0.21,
             "stats": {
               "apps": 13,
               "starts": 13,
-              "minutes": 1170,
-              "goals": 2,
-              "assists": 1,
-              "xg": 0.63,
-              "rating": 7.27
+              "minutes": 1049,
+              "goals": 3,
+              "assists": 2,
+              "xg": 1.66,
+              "rating": 6.96
             }
           }
         ],
         "bench": [
           {
-            "id": "fotmob-287255",
-            "name": "Jefté Betancor",
-            "number": 7,
-            "position": "Forward",
-            "age": 33,
+            "id": "fotmob-1801088",
+            "name": "Adri Suárez",
+            "number": 35,
+            "position": "Goalkeeper",
+            "age": 21,
             "countryCode": "ESP",
             "countryName": "Spain",
             "stats": {
-              "apps": 13,
-              "starts": 7,
-              "minutes": 682,
-              "goals": 2,
-              "assists": 1,
-              "xg": 0.83,
-              "rating": 6.51
+              "apps": 1,
+              "starts": 1,
+              "minutes": 120,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.26
             }
           },
           {
-            "id": "fotmob-477615",
-            "name": "Sandro Ramírez",
-            "number": 19,
-            "position": "Forward",
-            "age": 31,
+            "id": "fotmob-1741509",
+            "name": "Jorge Valverde",
+            "number": 41,
+            "position": "Goalkeeper",
+            "age": 19,
             "countryCode": "ESP",
             "countryName": "Spain",
             "stats": {
-              "apps": 7,
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1106895",
+            "name": "Marvin Park",
+            "number": 2,
+            "position": "Defender",
+            "age": 26,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 1,
               "starts": 1,
-              "minutes": 141,
-              "goals": 1,
-              "assists": 1,
-              "xg": 0.13,
-              "rating": 6.49
+              "minutes": 13,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.18
             }
           },
           {
@@ -10140,39 +10761,57 @@
             }
           },
           {
-            "id": "fotmob-1291883",
-            "name": "Ale García",
-            "number": 22,
-            "position": "Forward",
-            "age": 23,
-            "countryCode": "ESP",
-            "countryName": "Spain",
+            "id": "fotmob-1664162",
+            "name": "Mateo Aćimović",
+            "number": 16,
+            "position": "Midfielder",
+            "age": 19,
+            "countryCode": "SVN",
+            "countryName": "Slovenia",
             "stats": {
               "apps": 3,
-              "starts": 1,
-              "minutes": 165,
+              "starts": 0,
+              "minutes": 69,
               "goals": 0,
               "assists": 0,
-              "xg": 0.03,
-              "rating": 6.15
+              "xg": null,
+              "rating": 6.4
             }
           },
           {
-            "id": "fotmob-1337009",
-            "name": "Giovanni Bonfanti",
-            "number": 21,
-            "position": "Defender",
-            "age": 23,
-            "countryCode": "ITA",
-            "countryName": "Italy",
+            "id": "fotmob-1664739",
+            "name": "Aboubacar Bassinga",
+            "number": 26,
+            "position": "Midfielder",
+            "age": 21,
+            "countryCode": "BFA",
+            "countryName": "Burkina Faso",
             "stats": {
-              "apps": 12,
-              "starts": 8,
-              "minutes": 810,
+              "apps": 3,
+              "starts": 2,
+              "minutes": 189,
               "goals": 0,
               "assists": 0,
-              "xg": 0.17,
-              "rating": 6.8
+              "xg": null,
+              "rating": 6.36
+            }
+          },
+          {
+            "id": "fotmob-1526614",
+            "name": "Iñaki González",
+            "number": 6,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 8,
+              "starts": 6,
+              "minutes": 507,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.14,
+              "rating": 6.7
             }
           },
           {
@@ -10194,42 +10833,6 @@
             }
           },
           {
-            "id": "fotmob-1664162",
-            "name": "Mateo Aćimović",
-            "number": 16,
-            "position": "Forward",
-            "age": 19,
-            "countryCode": "SVN",
-            "countryName": "Slovenia",
-            "stats": {
-              "apps": 3,
-              "starts": 0,
-              "minutes": 69,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.4
-            }
-          },
-          {
-            "id": "fotmob-1664739",
-            "name": "Aboubacar Bassinga",
-            "number": 26,
-            "position": "Forward",
-            "age": 21,
-            "countryCode": "BFA",
-            "countryName": "Burkina Faso",
-            "stats": {
-              "apps": 3,
-              "starts": 2,
-              "minutes": 189,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.36
-            }
-          },
-          {
             "id": "fotmob-1714481",
             "name": "Elías Romero",
             "number": 29,
@@ -10248,58 +10851,50 @@
             }
           },
           {
-            "id": "fotmob-1801088",
-            "name": "Adri Suárez",
-            "number": 35,
-            "position": "Goalkeeper",
-            "age": 21,
+            "id": "fotmob-287255",
+            "name": "Jefté Betancor",
+            "number": 7,
+            "position": "Forward",
+            "age": 33,
             "countryCode": "ESP",
             "countryName": "Spain",
             "stats": {
-              "apps": 1,
+              "apps": 13,
+              "starts": 7,
+              "minutes": 682,
+              "goals": 2,
+              "assists": 1,
+              "xg": 0.83,
+              "rating": 6.51
+            }
+          },
+          {
+            "id": "fotmob-1833151",
+            "name": "Iván Medina",
+            "number": 30,
+            "position": "Forward",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 4,
               "starts": 1,
-              "minutes": 120,
+              "minutes": 137,
               "goals": 0,
               "assists": 0,
               "xg": null,
-              "rating": 7.26
+              "rating": 6.39
             }
           },
           {
-            "id": "fotmob-1971745",
-            "name": "Rafa Cruz",
-            "number": 32,
+            "id": null,
+            "name": "Jeredian José López Méndez",
+            "number": 48,
             "position": "Forward",
-            "age": 17,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "stats": {
-              "apps": 6,
-              "starts": 0,
-              "minutes": 152,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.52,
-              "rating": 6.3
-            }
-          },
-          {
-            "id": "fotmob-2305260",
-            "name": "Adrian Rodriguez",
-            "number": 44,
-            "position": "Defender",
             "age": null,
             "countryCode": null,
             "countryName": null,
-            "stats": {
-              "apps": 2,
-              "starts": 0,
-              "minutes": 26,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.13
-            }
+            "stats": null
           }
         ],
         "unavailable": [
@@ -10361,25 +10956,6 @@
             }
           },
           {
-            "id": "fotmob-1526614",
-            "age": 22,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "name": "Iñaki González",
-            "reason": "blessé",
-            "expectedReturn": "Doubtful",
-            "position": "Midfielder",
-            "stats": {
-              "apps": 8,
-              "starts": 6,
-              "minutes": 507,
-              "goals": 0,
-              "assists": 1,
-              "xg": 0.14,
-              "rating": 6.7
-            }
-          },
-          {
             "id": "fotmob-787258",
             "age": 31,
             "countryCode": "ESP",
@@ -10427,39 +11003,32 @@
             "expectedReturn": "Early December 2026",
             "position": null,
             "stats": null
-          },
-          {
-            "id": "fotmob-1106895",
-            "age": 26,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "name": "Marvin Park",
-            "reason": "blessé",
-            "expectedReturn": "Back in training",
-            "position": "Defender",
-            "stats": {
-              "apps": 1,
-              "starts": 1,
-              "minutes": 13,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.18
-            }
           }
         ],
         "usualStartersMissing": [
           {
-            "id": "fotmob-1337009",
-            "age": 23,
-            "countryCode": "ITA",
-            "countryName": "Italy",
-            "name": "Giovanni Bonfanti",
+            "id": "fotmob-1668267",
+            "age": 19,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Valentín Pezzolesi",
+            "position": "Midfielder",
+            "starts": 13,
+            "goals": 2,
+            "assists": 1,
+            "status": "en sélection"
+          },
+          {
+            "id": "fotmob-1526611",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Juanma Herzog",
             "position": "Defender",
-            "starts": 8,
+            "starts": 11,
             "goals": 0,
             "assists": 0,
-            "status": "remplaçant"
+            "status": "en sélection"
           },
           {
             "id": "fotmob-287255",
@@ -10473,15 +11042,7 @@
             "assists": 1,
             "status": "remplaçant"
           }
-        ],
-        "lastMatch": {
-          "date": "2026-11-09",
-          "league": "La Liga 2 - Spain",
-          "home": "Las Palmas",
-          "away": "Eldense",
-          "homeGoals": 2,
-          "awayGoals": 0
-        }
+        ]
       },
       "matchInfo": {
         "round": "14",
@@ -10489,99 +11050,68 @@
         "city": "Granada",
         "capacity": 22524,
         "surface": "grass",
-        "weather": "Mostly Cloudy",
-        "temperature": 17,
+        "weather": "Cloudy",
+        "temperature": 20,
         "windSpeed": 7,
-        "precipitation": 0
+        "precipitation": 0,
+        "referee": {
+          "name": "Daniel Miranda Bolaño",
+          "country": "Spain",
+          "league": "LaLiga2",
+          "matches": 7,
+          "yellowCardsPerMatch": 5,
+          "yellowCardsLeagueAverage": 5.11,
+          "redCards": 1,
+          "penalties": 1,
+          "foulsPerMatch": 26.71,
+          "foulsLeagueAverage": 26.63
+        }
       }
     },
     "analysis": {
-      "summary": "Granada (5e, 23 pts, 7V-2N-3D) reçoit Las Palmas (10e, 20 pts) avec une forme solide : 6 victoires sur ses 10 derniers matchs, 1,8 but marqué et 1,3 encaissé de moyenne. Las Palmas vient de gagner 3 matchs de suite sous son nouvel entraîneur Albert Sánchez (2 victoires en 2 matchs), mais produit peu (0,97 xG, 10,8 tirs) et concède 1,6 but. Les compositions viennent du magasin : c'est le dernier onze aligné, pas celui du match. Las Palmas risque d'être privé de Herzog et Pezzolesi (en sélection, retour mi-novembre) et de plusieurs blessés.",
+      "summary": "Granada (7e, 7V-2N-3D) vient d'une série de six victoires, mais sa forme FotMob récente n'est pas disponible. Las Palmas (11e) a gagné ses quatre derniers matchs, dont deux sous le nouvel entraîneur Albert Sánchez. Granada produit 1,8 but et 14,7 tirs par match, contre 10,8 tirs pour Las Palmas. Chez les Canariens, les internationaux Pezzolesi et Herzog manquent. Côté Granada, Arnáiz (blessé) est absent.",
       "keyFactors": [
         {
-          "factor": "forme récente",
-          "observation": "Granada est en forme d'après son dossier, mais sa forme FotMob détaillée est introuvable. Las Palmas enchaîne les victoires.",
-          "evidence": "Granada : VVVVVVDDND sur 10 matchs. Las Palmas : V V V D D sur ses 5 derniers (2-0, 3-2, 1-0, 0-3, 1-3)."
+          "factor": "classement",
+          "observation": "Granada devant Las Palmas, avec un meilleur bilan à domicile.",
+          "evidence": "Granada 7e, 23 pts, diff +6 ; Las Palmas 11e, 20 pts, diff -2. Granada à domicile : 3V-1N-1D."
         },
         {
           "factor": "statistiques et moyennes",
-          "observation": "Granada est plus solide dans les volumes. Las Palmas est fragile derrière, surtout à l'extérieur.",
-          "evidence": "Granada xG 1,71/1,31 ; Las Palmas 0,97/1,50 ; Las Palmas à l'extérieur 2 / 1,8 but et 14,8 tirs concédés."
+          "observation": "Granada produit plus de tirs. Las Palmas concède beaucoup de tirs à l'extérieur.",
+          "evidence": "Granada 14,7 tirs et 4,2 cadrés par match. Las Palmas 10,8 tirs, et 14,8 tirs concédés à l'extérieur."
         },
         {
           "factor": "absences",
-          "observation": "Las Palmas est diminué, avec des titulaires en sélection et plusieurs blessés. Granada n'a que peu d'absents.",
-          "evidence": "Las Palmas : Herzog 11 titularisations et Pezzolesi 13 en sélection ; Granada : Arnáiz blessé (11 titularisations, 2+1)."
+          "observation": "Plusieurs cadres manquent des deux côtés.",
+          "evidence": "Arnáiz (11 tit.) blessé côté Granada ; Pezzolesi (13 tit.) et Herzog (11 tit.) en sélection côté Las Palmas."
         },
         {
-          "factor": "edge du modèle",
-          "observation": "L'edge est trop faible pour y voir une valeur. Le moteur reste favorable à Granada.",
-          "evidence": "Edge 1,69 % (seuil 2 %), PASS ; buts attendus 2,17 – 1,83."
+          "factor": "forme récente",
+          "observation": "Las Palmas est en forme avec son nouvel entraîneur.",
+          "evidence": "4 victoires de suite, 2 V sous Albert Sánchez depuis le 02/11."
         }
       ],
-      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : Granada est favori à domicile et le match devrait être ouvert, avec des buts des deux côtés. Les absences de Las Palmas et son changement d'entraîneur ajoutent de l'incertitude, mais l'edge ne change pas.",
+      "alignmentWithModel": "Le contexte va dans le même sens que le moteur : Granada est favori à domicile. L'avantage reste modeste et la mise est PASS. Les marchés de tirs et de corners cadrent avec les moyennes produites par les deux équipes.",
+      "lineupImpact": "Source FotMob, relue 42 min avant le coup d'envoi : la composition est donc presque officielle. Granada aligne un 4-2-3-1 avec Pascual (5 buts, xG 3,65) en pointe. Arnáiz est blessé et Lizoain remplace Flores dans le but. Las Palmas joue en 4-3-3 avec Jesé (4 buts), Miyashiro et Jaime. Pezzolesi et Herzog sont absents, en sélection. Betancor est remplaçant. L'arbitre est dans la moyenne et la météo est neutre.",
+      "caveats": "La forme récente de Granada n'a pas été trouvée. Ses statistiques s'arrêtent au 01/11. Le changement d'entraîneur de Granada (Pacheta) est déduit des compositions importées et reste approximatif. L'entraîneur n'est pas indiqué dans les compositions. Les marchés de buts ne sont pas commentés.",
       "marketViews": [
         {
           "market": "Résultat",
           "pick": "Granada CF gagne",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "57 % : Granada marque 1,8 but par match et a 6 victoires sur 10, contre un Las Palmas qui concède 1,8 but par match à l'extérieur.",
-          "reasoning": "La forme, le classement et les absences adverses (Herzog, Pezzolesi) favorisent Granada. Le nul et la dynamique de Las Palmas empêchent de trancher plus fort.",
+          "explanation": "57 % : Granada a gagné ses 6 derniers matchs et marque 1,8 but par match, mais Las Palmas est aussi en série de 4 victoires.",
+          "reasoning": "Le classement, l'avantage à domicile et le volume de tirs favorisent Granada. Las Palmas, en forme avec son nouvel entraîneur, limite la certitude.",
           "probability": 57
-        },
-        {
-          "market": "Total buts",
-          "pick": "Plus de 2.5 buts",
-          "verdict": "confirme",
-          "confidence": "moyenne",
-          "explanation": "76 % : buts attendus 2,17 + 1,83 = 4 ; la Liga 2 compte 2,7 buts par match et Las Palmas joue des matchs à 3,8 buts à l'extérieur.",
-          "reasoning": "Les moyennes des deux équipes et la saison à 51 % de plus de 2,5 buts vont dans ce sens. Le risque vient des xG modestes de Las Palmas.",
-          "probability": 76
-        },
-        {
-          "market": "Les 2 équipes marquent",
-          "pick": "Oui",
-          "verdict": "confirme",
-          "confidence": "moyenne",
-          "explanation": "75 % : Granada a marqué lors de ses 9 derniers matchs et Las Palmas marque 2 buts par match à l'extérieur.",
-          "reasoning": "Les deux défenses concèdent plus d'un but par match. Mon bilan sur ce marché est mitigé, donc je reste prudent.",
-          "probability": 75
-        },
-        {
-          "market": "Résultat + Total buts",
-          "pick": "Granada CF & Plus de 1.5 buts",
-          "verdict": "confirme",
-          "confidence": "faible",
-          "explanation": "53 % : combine la victoire de Granada (57 %) avec un match d'au moins 2 buts, très probable vu les 4 buts attendus.",
-          "reasoning": "Le scénario est cohérent avec la forme de Granada. Le bilan du moteur sur ce marché combiné est faible (645/1533).",
-          "probability": 53
-        },
-        {
-          "market": "Buts — Granada CF",
-          "pick": "Granada CF — Moins de 3.5 buts",
-          "verdict": "confirme",
-          "confidence": "moyenne",
-          "explanation": "83 % : Granada marque 1,8 but par match (1,75 à domicile) ; 4 buts ou plus resteraient rares malgré un xG de 2,17.",
-          "reasoning": "Une ligne haute, donc sûre, mais le moteur attend 2,17 buts. Les lignes de buts sont fragiles selon mes leçons.",
-          "probability": 83
-        },
-        {
-          "market": "Buts — Las Palmas",
-          "pick": "Las Palmas — Moins de 2.5 buts",
-          "verdict": "nuance",
-          "confidence": "moyenne",
-          "explanation": "72 % : Las Palmas marque 1,6 but par match et a un xG de 0,97, mais en inscrit 2 à l'extérieur.",
-          "reasoning": "Le faible xG soutient ce pronostic. Les 3 buts à Oviedo et les défenses fragiles de Granada (1,3 concédé) laissent un risque.",
-          "probability": 72
         },
         {
           "market": "Total corners",
           "pick": "Moins de 12.5 corners",
           "verdict": "confirme",
           "confidence": "forte",
-          "explanation": "83 % : 9,37 corners attendus (5,5 + 3,87) et 9,4 de moyenne en championnat, loin de 12,5.",
-          "reasoning": "Les moyennes de corners des deux équipes sont basses (4,8 et 4,5). Mon bilan sur ce marché est solide (625/764 en confiance forte).",
+          "explanation": "83 % : le moteur attend 9,37 corners au total, et la Liga 2 en moyenne 9,4 par match.",
+          "reasoning": "Les attendus et la moyenne du championnat sont bien sous la ligne de 12,5.",
           "probability": 83
         },
         {
@@ -10589,8 +11119,8 @@
           "pick": "Granada CF — Moins de 7.5 corners",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "78 % : 5,5 corners attendus pour Granada, qui en tire 4,8 par match (6,3 à domicile).",
-          "reasoning": "Même à domicile (6,3), Granada reste sous 7,5 en moyenne. La marge est correcte mais pas énorme.",
+          "explanation": "78 % : 5,5 corners attendus pour Granada, qui en fait 4,8 sur 10 matchs et 6,3 à domicile.",
+          "reasoning": "Même à domicile (6,3), Granada reste sous 7,5, mais la variance est réelle.",
           "probability": 78
         },
         {
@@ -10598,35 +11128,35 @@
           "pick": "Las Palmas — Moins de 5.5 corners",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "78 % : 3,87 corners attendus ; Las Palmas en obtient 3,6 à l'extérieur (4,5 sur 10 matchs).",
-          "reasoning": "Ses volumes offensifs sont faibles (10,6 tirs à l'extérieur). Ce pronostic est cohérent avec cela.",
+          "explanation": "78 % : 3,87 corners attendus pour Las Palmas, qui en fait 4,5 sur 10 matchs et 3,6 à l'extérieur.",
+          "reasoning": "Las Palmas tire peu, surtout à l'extérieur, ce qui confirme la ligne basse.",
           "probability": 78
         },
         {
           "market": "Total tirs",
           "pick": "Plus de 20.5 tirs",
           "verdict": "confirme",
-          "confidence": "moyenne",
-          "explanation": "83 % : 26,34 tirs attendus (15,4 + 10,94) et chaque équipe concède plus de 13 tirs par match.",
-          "reasoning": "Granada tire 14,7 fois par match et Las Palmas en concède 14,8 à l'extérieur, donc le total dépasse largement 20,5.",
+          "confidence": "forte",
+          "explanation": "83 % : 26,34 tirs attendus, avec 14,7 pour Granada et 13,1 concédés par Las Palmas.",
+          "reasoning": "Les moyennes des deux équipes dépassent la ligne. Las Palmas concède 14,8 tirs à l'extérieur.",
           "probability": 83
         },
         {
           "market": "Tirs — Granada CF",
           "pick": "Granada CF — Moins de 20.5 tirs",
           "verdict": "confirme",
-          "confidence": "moyenne",
-          "explanation": "83 % : 15,4 tirs attendus pour Granada, qui en tente 14,7 par match (13,8 à domicile).",
-          "reasoning": "Un score de 21 tirs ou plus serait bien au-dessus de ses moyennes. Le pronostic est cohérent.",
+          "confidence": "forte",
+          "explanation": "83 % : 15,4 tirs attendus pour Granada, qui en fait 14,7 par match et 13,8 à domicile.",
+          "reasoning": "Une ligne à 20,5 est très au-dessus de ses moyennes.",
           "probability": 83
         },
         {
           "market": "Tirs — Las Palmas",
           "pick": "Las Palmas — Moins de 14.5 tirs",
           "verdict": "confirme",
-          "confidence": "moyenne",
-          "explanation": "81 % : 10,94 tirs attendus ; Las Palmas en tente 10,8 par match (10,6 à l'extérieur).",
-          "reasoning": "Sa production reste très inférieure à 14,5. Seul un match ouvert et haché pourrait la pousser plus haut.",
+          "confidence": "forte",
+          "explanation": "81 % : 10,94 tirs attendus pour Las Palmas, qui en fait 10,8 par match et 10,6 à l'extérieur.",
+          "reasoning": "Ses volumes sont stables et bien sous 14,5.",
           "probability": 81
         },
         {
@@ -10634,8 +11164,8 @@
           "pick": "Plus de 6.5 tirs cadrés",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "82 % : 9,53 tirs cadrés attendus (5,12 + 4,41) ; Granada en concède 6,2 par match.",
-          "reasoning": "Les deux équipes cadrent environ 4 tirs par match et en concèdent 5 à 6, donc le total dépasse 6,5 sans difficulté.",
+          "explanation": "82 % : 9,53 tirs cadrés attendus, avec 4,2 produits par Granada et 3,9 par Las Palmas.",
+          "reasoning": "Les concédés (6,2 et 5 par match) poussent le total au-dessus de 6,5. Les tirs cadrés restent un marché plus volatil.",
           "probability": 82
         },
         {
@@ -10643,8 +11173,8 @@
           "pick": "Granada CF — Moins de 7.5 tirs cadrés",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "83 % : 5,12 tirs cadrés attendus pour Granada, qui en cadre 4,2 par match (4,3 à domicile).",
-          "reasoning": "Granada est loin de 7,5 sur ses moyennes. Las Palmas concède 5,8 tirs cadrés à l'extérieur, ce qui laisse peu de risque.",
+          "explanation": "83 % : 5,12 tirs cadrés attendus pour Granada, qui en fait 4,2 par match.",
+          "reasoning": "Il faudrait un match très ouvert pour atteindre 8 tirs cadrés.",
           "probability": 83
         },
         {
@@ -10652,16 +11182,700 @@
           "pick": "Las Palmas — Moins de 6.5 tirs cadrés",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "83 % : 4,41 tirs cadrés attendus ; Las Palmas en cadre 3,9 par match (4,4 à l'extérieur).",
-          "reasoning": "Sa moyenne est nettement sous 6,5. Granada en concède 6,2 par match, mais la ligne reste assez haute.",
+          "explanation": "83 % : 4,41 tirs cadrés attendus pour Las Palmas, qui en fait 3,9 par match et 4,4 à l'extérieur.",
+          "reasoning": "Ses moyennes restent bien en dessous de la ligne, même si Granada concède 4,5 à 6,2 tirs cadrés.",
           "probability": 83
         }
-      ],
-      "lineupImpact": "La source est le magasin : ce sont les derniers onze alignés, pas ceux du match. Granada (4-2-3-1, Pacheta) a aligné Flores dans le but (Lizoain remplaçant) et Pascual en pointe (5 buts, 3,65 xG). Son titulaire habituel Arnáiz (11 titularisations, 2+1) est blessé, retour incertain. Las Palmas (4-3-3, Albert Sánchez) risque de perdre Herzog (11 titularisations) et Pezzolesi (13 titularisations, 2+1), tous deux en sélection jusqu'à mi-novembre. Plusieurs blessés manquent aussi (Clemente, Sergio Ruiz, Iñaki González, Viti). Sa défense sera donc remaniée, ce qui soutient plutôt Granada et les buts. Jesé (4+1) et Iván Jaime (2+3) restent ses principales menaces.",
-      "caveats": "La forme FotMob de Granada n'a pas été trouvée. Seuls les statistiques et le dossier (série de 6 victoires au 04/11) la décrivent. Les compositions sont celles du dernier match, pas celles de cette rencontre. Le changement d'entraîneur de Granada (José Pacheta → Pacheta) paraît n'être qu'un doublon de nom. Las Palmas a un nouvel entraîneur depuis le 02/11, sur seulement 2 matchs."
+      ]
     },
-    "updatedAt": "2026-11-13T15:56:01.309Z",
-    "createdAt": "2026-11-13T15:56:01.309Z"
+    "updatedAt": "2026-11-15T21:06:59.295Z",
+    "createdAt": "2026-11-13T15:56:01.309Z",
+    "kickoffRuns": 1,
+    "earlierAnalysis": {
+      "analysis": {
+        "summary": "Granada (5e, 23 pts, 7V-2N-3D) reçoit Las Palmas (10e, 20 pts) avec une forme solide : 6 victoires sur ses 10 derniers matchs, 1,8 but marqué et 1,3 encaissé de moyenne. Las Palmas vient de gagner 3 matchs de suite sous son nouvel entraîneur Albert Sánchez (2 victoires en 2 matchs), mais produit peu (0,97 xG, 10,8 tirs) et concède 1,6 but. Les compositions viennent du magasin : c'est le dernier onze aligné, pas celui du match. Las Palmas risque d'être privé de Herzog et Pezzolesi (en sélection, retour mi-novembre) et de plusieurs blessés.",
+        "keyFactors": [
+          {
+            "factor": "forme récente",
+            "observation": "Granada est en forme d'après son dossier, mais sa forme FotMob détaillée est introuvable. Las Palmas enchaîne les victoires.",
+            "evidence": "Granada : VVVVVVDDND sur 10 matchs. Las Palmas : V V V D D sur ses 5 derniers (2-0, 3-2, 1-0, 0-3, 1-3)."
+          },
+          {
+            "factor": "statistiques et moyennes",
+            "observation": "Granada est plus solide dans les volumes. Las Palmas est fragile derrière, surtout à l'extérieur.",
+            "evidence": "Granada xG 1,71/1,31 ; Las Palmas 0,97/1,50 ; Las Palmas à l'extérieur 2 / 1,8 but et 14,8 tirs concédés."
+          },
+          {
+            "factor": "absences",
+            "observation": "Las Palmas est diminué, avec des titulaires en sélection et plusieurs blessés. Granada n'a que peu d'absents.",
+            "evidence": "Las Palmas : Herzog 11 titularisations et Pezzolesi 13 en sélection ; Granada : Arnáiz blessé (11 titularisations, 2+1)."
+          },
+          {
+            "factor": "edge du modèle",
+            "observation": "L'edge est trop faible pour y voir une valeur. Le moteur reste favorable à Granada.",
+            "evidence": "Edge 1,69 % (seuil 2 %), PASS ; buts attendus 2,17 – 1,83."
+          }
+        ],
+        "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : Granada est favori à domicile et le match devrait être ouvert, avec des buts des deux côtés. Les absences de Las Palmas et son changement d'entraîneur ajoutent de l'incertitude, mais l'edge ne change pas.",
+        "marketViews": [
+          {
+            "market": "Résultat",
+            "pick": "Granada CF gagne",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "57 % : Granada marque 1,8 but par match et a 6 victoires sur 10, contre un Las Palmas qui concède 1,8 but par match à l'extérieur.",
+            "reasoning": "La forme, le classement et les absences adverses (Herzog, Pezzolesi) favorisent Granada. Le nul et la dynamique de Las Palmas empêchent de trancher plus fort.",
+            "probability": 57
+          },
+          {
+            "market": "Total buts",
+            "pick": "Plus de 2.5 buts",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "76 % : buts attendus 2,17 + 1,83 = 4 ; la Liga 2 compte 2,7 buts par match et Las Palmas joue des matchs à 3,8 buts à l'extérieur.",
+            "reasoning": "Les moyennes des deux équipes et la saison à 51 % de plus de 2,5 buts vont dans ce sens. Le risque vient des xG modestes de Las Palmas.",
+            "probability": 76
+          },
+          {
+            "market": "Les 2 équipes marquent",
+            "pick": "Oui",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "75 % : Granada a marqué lors de ses 9 derniers matchs et Las Palmas marque 2 buts par match à l'extérieur.",
+            "reasoning": "Les deux défenses concèdent plus d'un but par match. Mon bilan sur ce marché est mitigé, donc je reste prudent.",
+            "probability": 75
+          },
+          {
+            "market": "Résultat + Total buts",
+            "pick": "Granada CF & Plus de 1.5 buts",
+            "verdict": "confirme",
+            "confidence": "faible",
+            "explanation": "53 % : combine la victoire de Granada (57 %) avec un match d'au moins 2 buts, très probable vu les 4 buts attendus.",
+            "reasoning": "Le scénario est cohérent avec la forme de Granada. Le bilan du moteur sur ce marché combiné est faible (645/1533).",
+            "probability": 53
+          },
+          {
+            "market": "Buts — Granada CF",
+            "pick": "Granada CF — Moins de 3.5 buts",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "83 % : Granada marque 1,8 but par match (1,75 à domicile) ; 4 buts ou plus resteraient rares malgré un xG de 2,17.",
+            "reasoning": "Une ligne haute, donc sûre, mais le moteur attend 2,17 buts. Les lignes de buts sont fragiles selon mes leçons.",
+            "probability": 83
+          },
+          {
+            "market": "Buts — Las Palmas",
+            "pick": "Las Palmas — Moins de 2.5 buts",
+            "verdict": "nuance",
+            "confidence": "moyenne",
+            "explanation": "72 % : Las Palmas marque 1,6 but par match et a un xG de 0,97, mais en inscrit 2 à l'extérieur.",
+            "reasoning": "Le faible xG soutient ce pronostic. Les 3 buts à Oviedo et les défenses fragiles de Granada (1,3 concédé) laissent un risque.",
+            "probability": 72
+          },
+          {
+            "market": "Total corners",
+            "pick": "Moins de 12.5 corners",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "83 % : 9,37 corners attendus (5,5 + 3,87) et 9,4 de moyenne en championnat, loin de 12,5.",
+            "reasoning": "Les moyennes de corners des deux équipes sont basses (4,8 et 4,5). Mon bilan sur ce marché est solide (625/764 en confiance forte).",
+            "probability": 83
+          },
+          {
+            "market": "Corners — Granada CF",
+            "pick": "Granada CF — Moins de 7.5 corners",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "78 % : 5,5 corners attendus pour Granada, qui en tire 4,8 par match (6,3 à domicile).",
+            "reasoning": "Même à domicile (6,3), Granada reste sous 7,5 en moyenne. La marge est correcte mais pas énorme.",
+            "probability": 78
+          },
+          {
+            "market": "Corners — Las Palmas",
+            "pick": "Las Palmas — Moins de 5.5 corners",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "78 % : 3,87 corners attendus ; Las Palmas en obtient 3,6 à l'extérieur (4,5 sur 10 matchs).",
+            "reasoning": "Ses volumes offensifs sont faibles (10,6 tirs à l'extérieur). Ce pronostic est cohérent avec cela.",
+            "probability": 78
+          },
+          {
+            "market": "Total tirs",
+            "pick": "Plus de 20.5 tirs",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "83 % : 26,34 tirs attendus (15,4 + 10,94) et chaque équipe concède plus de 13 tirs par match.",
+            "reasoning": "Granada tire 14,7 fois par match et Las Palmas en concède 14,8 à l'extérieur, donc le total dépasse largement 20,5.",
+            "probability": 83
+          },
+          {
+            "market": "Tirs — Granada CF",
+            "pick": "Granada CF — Moins de 20.5 tirs",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "83 % : 15,4 tirs attendus pour Granada, qui en tente 14,7 par match (13,8 à domicile).",
+            "reasoning": "Un score de 21 tirs ou plus serait bien au-dessus de ses moyennes. Le pronostic est cohérent.",
+            "probability": 83
+          },
+          {
+            "market": "Tirs — Las Palmas",
+            "pick": "Las Palmas — Moins de 14.5 tirs",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "81 % : 10,94 tirs attendus ; Las Palmas en tente 10,8 par match (10,6 à l'extérieur).",
+            "reasoning": "Sa production reste très inférieure à 14,5. Seul un match ouvert et haché pourrait la pousser plus haut.",
+            "probability": 81
+          },
+          {
+            "market": "Total tirs cadrés",
+            "pick": "Plus de 6.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "82 % : 9,53 tirs cadrés attendus (5,12 + 4,41) ; Granada en concède 6,2 par match.",
+            "reasoning": "Les deux équipes cadrent environ 4 tirs par match et en concèdent 5 à 6, donc le total dépasse 6,5 sans difficulté.",
+            "probability": 82
+          },
+          {
+            "market": "Tirs cadrés — Granada CF",
+            "pick": "Granada CF — Moins de 7.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "83 % : 5,12 tirs cadrés attendus pour Granada, qui en cadre 4,2 par match (4,3 à domicile).",
+            "reasoning": "Granada est loin de 7,5 sur ses moyennes. Las Palmas concède 5,8 tirs cadrés à l'extérieur, ce qui laisse peu de risque.",
+            "probability": 83
+          },
+          {
+            "market": "Tirs cadrés — Las Palmas",
+            "pick": "Las Palmas — Moins de 6.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "83 % : 4,41 tirs cadrés attendus ; Las Palmas en cadre 3,9 par match (4,4 à l'extérieur).",
+            "reasoning": "Sa moyenne est nettement sous 6,5. Granada en concède 6,2 par match, mais la ligne reste assez haute.",
+            "probability": 83
+          }
+        ],
+        "lineupImpact": "La source est le magasin : ce sont les derniers onze alignés, pas ceux du match. Granada (4-2-3-1, Pacheta) a aligné Flores dans le but (Lizoain remplaçant) et Pascual en pointe (5 buts, 3,65 xG). Son titulaire habituel Arnáiz (11 titularisations, 2+1) est blessé, retour incertain. Las Palmas (4-3-3, Albert Sánchez) risque de perdre Herzog (11 titularisations) et Pezzolesi (13 titularisations, 2+1), tous deux en sélection jusqu'à mi-novembre. Plusieurs blessés manquent aussi (Clemente, Sergio Ruiz, Iñaki González, Viti). Sa défense sera donc remaniée, ce qui soutient plutôt Granada et les buts. Jesé (4+1) et Iván Jaime (2+3) restent ses principales menaces.",
+        "caveats": "La forme FotMob de Granada n'a pas été trouvée. Seuls les statistiques et le dossier (série de 6 victoires au 04/11) la décrivent. Les compositions sont celles du dernier match, pas celles de cette rencontre. Le changement d'entraîneur de Granada (José Pacheta → Pacheta) paraît n'être qu'un doublon de nom. Las Palmas a un nouvel entraîneur depuis le 02/11, sur seulement 2 matchs."
+      },
+      "engineSnapshot": {
+        "label": "Granada CF vs Las Palmas",
+        "expectedGoals": {
+          "home": 2.17,
+          "away": 1.83,
+          "source": "league-baseline"
+        },
+        "trueOdds": {
+          "home": 1.74,
+          "draw": 4.06,
+          "away": 5.58
+        },
+        "market": {
+          "odds1": 1.65,
+          "oddsDraw": 3.42,
+          "odds2": 4.17
+        },
+        "edgePercent": 1.69,
+        "staking": {
+          "action": "PASS",
+          "stake": null,
+          "reason": "pas_de_value",
+          "candidates": [
+            {
+              "outcome": "home",
+              "label": "Granada CF gagne",
+              "odds": 1.77,
+              "displayedOdds": 1.77,
+              "bookmaker": "unibet_se",
+              "bookmakerTitle": "Unibet (SE)",
+              "fairOdds": 1.74,
+              "ev": 0.0169,
+              "exclusion": "sous_le_seuil"
+            },
+            {
+              "outcome": "draw",
+              "label": "Match nul",
+              "odds": 3.85,
+              "displayedOdds": 3.85,
+              "bookmaker": "coolbet",
+              "bookmakerTitle": "Coolbet",
+              "fairOdds": 4.06,
+              "ev": -0.0522,
+              "exclusion": "sous_le_seuil"
+            },
+            {
+              "outcome": "away",
+              "label": "Las Palmas gagne",
+              "odds": 5,
+              "displayedOdds": 5,
+              "bookmaker": "coolbet",
+              "bookmakerTitle": "Coolbet",
+              "fairOdds": 5.58,
+              "ev": -0.1035,
+              "exclusion": "sous_le_seuil"
+            }
+          ],
+          "limits": {
+            "edgeThresholdMin": 0.02,
+            "edgeThresholdMax": 0.25,
+            "maxValueOdds": 5
+          }
+        },
+        "statExpectations": {
+          "corners": {
+            "home": 5.5,
+            "away": 3.87,
+            "total": 9.37
+          },
+          "shots": {
+            "home": 15.4,
+            "away": 10.94,
+            "total": 26.34
+          },
+          "shotsOnTarget": {
+            "home": 5.12,
+            "away": 4.41,
+            "total": 9.53
+          }
+        },
+        "marketPredictions": [
+          {
+            "marketId": "result",
+            "params": {
+              "outcome": "home"
+            },
+            "market": "Résultat",
+            "predictedOutcome": "home",
+            "predictedLabel": "Granada CF gagne",
+            "predictedOdds": 1.74,
+            "probability": 57,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalGoals",
+            "params": {
+              "line": 2.5,
+              "side": "over"
+            },
+            "market": "Total buts",
+            "predictedOutcome": "over",
+            "predictedLabel": "Plus de 2.5 buts",
+            "predictedOdds": 1.31,
+            "probability": 76,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "bothTeamsScore",
+            "params": {
+              "outcome": "yes"
+            },
+            "market": "Les 2 équipes marquent",
+            "predictedOutcome": "yes",
+            "predictedLabel": "Oui",
+            "predictedOdds": 1.33,
+            "probability": 75,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "resultAndTotal",
+            "params": {
+              "line": 1.5,
+              "key": "homeOver"
+            },
+            "market": "Résultat + Total buts",
+            "predictedOutcome": "homeOver",
+            "predictedLabel": "Granada CF & Plus de 1.5 buts",
+            "predictedOdds": 1.88,
+            "probability": 53,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamGoals",
+            "params": {
+              "team": "home",
+              "line": 3.5,
+              "side": "under"
+            },
+            "market": "Buts — Granada CF",
+            "predictedOutcome": "under",
+            "predictedLabel": "Granada CF — Moins de 3.5 buts",
+            "predictedOdds": 1.21,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamGoals",
+            "params": {
+              "team": "away",
+              "line": 2.5,
+              "side": "under"
+            },
+            "market": "Buts — Las Palmas",
+            "predictedOutcome": "under",
+            "predictedLabel": "Las Palmas — Moins de 2.5 buts",
+            "predictedOdds": 1.38,
+            "probability": 72,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalCorners",
+            "params": {
+              "line": 12.5,
+              "side": "under"
+            },
+            "market": "Total corners",
+            "predictedOutcome": "under",
+            "predictedLabel": "Moins de 12.5 corners",
+            "predictedOdds": 1.21,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamCorners",
+            "params": {
+              "team": "home",
+              "line": 7.5,
+              "side": "under"
+            },
+            "market": "Corners — Granada CF",
+            "predictedOutcome": "under",
+            "predictedLabel": "Granada CF — Moins de 7.5 corners",
+            "predictedOdds": 1.29,
+            "probability": 78,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamCorners",
+            "params": {
+              "team": "away",
+              "line": 5.5,
+              "side": "under"
+            },
+            "market": "Corners — Las Palmas",
+            "predictedOutcome": "under",
+            "predictedLabel": "Las Palmas — Moins de 5.5 corners",
+            "predictedOdds": 1.28,
+            "probability": 78,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalShots",
+            "params": {
+              "line": 20.5,
+              "side": "over"
+            },
+            "market": "Total tirs",
+            "predictedOutcome": "over",
+            "predictedLabel": "Plus de 20.5 tirs",
+            "predictedOdds": 1.2,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShots",
+            "params": {
+              "team": "home",
+              "line": 20.5,
+              "side": "under"
+            },
+            "market": "Tirs — Granada CF",
+            "predictedOutcome": "under",
+            "predictedLabel": "Granada CF — Moins de 20.5 tirs",
+            "predictedOdds": 1.2,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShots",
+            "params": {
+              "team": "away",
+              "line": 14.5,
+              "side": "under"
+            },
+            "market": "Tirs — Las Palmas",
+            "predictedOutcome": "under",
+            "predictedLabel": "Las Palmas — Moins de 14.5 tirs",
+            "predictedOdds": 1.24,
+            "probability": 81,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalShotsOnTarget",
+            "params": {
+              "line": 6.5,
+              "side": "over"
+            },
+            "market": "Total tirs cadrés",
+            "predictedOutcome": "over",
+            "predictedLabel": "Plus de 6.5 tirs cadrés",
+            "predictedOdds": 1.22,
+            "probability": 82,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShotsOnTarget",
+            "params": {
+              "team": "home",
+              "line": 7.5,
+              "side": "under"
+            },
+            "market": "Tirs cadrés — Granada CF",
+            "predictedOutcome": "under",
+            "predictedLabel": "Granada CF — Moins de 7.5 tirs cadrés",
+            "predictedOdds": 1.2,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShotsOnTarget",
+            "params": {
+              "team": "away",
+              "line": 6.5,
+              "side": "under"
+            },
+            "market": "Tirs cadrés — Las Palmas",
+            "predictedOutcome": "under",
+            "predictedLabel": "Las Palmas — Moins de 6.5 tirs cadrés",
+            "predictedOdds": 1.21,
+            "probability": 83,
+            "minOdds": 1.2
+          }
+        ],
+        "engineVersion": 5
+      },
+      "analysedAt": "2026-11-13T15:56:01.309Z"
+    },
+    "postMatchReview": {
+      "summary": "Granada a gagné 1-0 grâce à un but de Pascual à la 54e, ce qui confirme la lecture favorable à Granada. Les marchés de tirs et de tirs cadrés ont tenu. Le seul raté est la ligne de corners de Las Palmas (7 corners contre moins de 5,5 prévu). Le match a aussi montré que Granada a moins tiré au but que Las Palmas, 3 tirs cadrés contre 6.",
+      "whatWasRight": "Le favori à domicile s'est imposé (1-0, but de Pascual à la 54e), comme le classement et le volume de tirs le laissaient penser. Les volumes de tirs étaient bien calés : 29 au total contre une ligne à 20,5, 17 pour Granada sous 20,5 et 12 pour Las Palmas sous 14,5. Les corners totaux (9) sont restés sous 12,5, et Granada est resté à 2 corners, sous 7,5. Les tirs cadrés ont aussi respecté les lignes (9 au total, 3 pour Granada, 6 pour Las Palmas). Le choix PASS sur le 1N2 était prudent, car l'avantage était faible.",
+      "whatWasMissed": "Les corners de Las Palmas ont été sous-estimés : 7 contre 3,6 de moyenne à l'extérieur. Las Palmas a poussé en fin de match, mené 0-1 dès la 54e. Il a fini avec 6 tirs cadrés contre 3 pour Granada et un xG de 0,77. Mon analyse présentait Las Palmas comme peu dangereux à l'extérieur. Le scénario où l'équipe qui court après le score accumule les corners n'avait pas été pris en compte.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le 1N2 et sur presque tous les marchés de volume. Il le contredit sur les corners de Las Palmas. Le moteur attendait 3,87 corners pour eux, et ils en ont obtenu 7.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Granada CF gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Granada a gagné 1-0 sur un but de Pascual à la 54e, après une mi-temps sans but. Il a aussi été plus dangereux selon le xG (1,28 contre 0,77), même s'il n'a cadré que 3 tirs. Un but a été refusé par la VAR à la 90+6e, donc la victoire n'était pas assurée avant la fin.",
+          "lesson": "Le favori à domicile avec un avantage modeste gagne souvent de peu. Le 1N2 reste confirmable, mais la marge est mince et un match serré est fréquent."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Granada CF & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Granada CF",
+          "marketId": "teamGoals",
+          "pick": "Granada CF — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Las Palmas",
+          "marketId": "teamGoals",
+          "pick": "Las Palmas — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 12.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 9 corners (2 pour Granada, 7 pour Las Palmas), bien sous 12,5, ce qui est cohérent avec la moyenne de 9,4 de la Liga 2.",
+          "lesson": "Une ligne de corners totaux très au-dessus de la moyenne du championnat est fiable. La répartition entre équipes est bien plus volatile que le total."
+        },
+        {
+          "market": "Corners — Granada CF",
+          "marketId": "teamCorners",
+          "pick": "Granada CF — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Granada n'a obtenu que 2 corners, loin de 7,5. Mener dès la 54e a réduit son besoin d'attaquer.",
+          "lesson": "Une équipe qui mène tôt produit moins de corners. La ligne basse à domicile a bien tenu."
+        },
+        {
+          "market": "Corners — Las Palmas",
+          "marketId": "teamCorners",
+          "pick": "Las Palmas — Moins de 5.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Las Palmas a obtenu 7 corners, au-dessus de 5,5. Mené 0-1 dès la 54e, il a fini avec 6 tirs cadrés. Il n'a joué à dix qu'à partir de la 85e, donc l'expulsion n'explique pas ce total.",
+          "lesson": "Ne pas se fier à la moyenne à l'extérieur (3,6) quand l'équipe est menée au score. Une ligne « moins de » sur le corners de l'outsider est risquée dès que le favori marque en premier, et la confiance « moyenne » était trop haute."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 20.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 29 tirs (17 et 12), au-dessus de 20,5, et au-dessus des 26,3 attendus par le moteur.",
+          "lesson": "Les lignes de tirs totaux sous les moyennes cumulées des équipes se confirment. Cet avis est à garder."
+        },
+        {
+          "market": "Tirs — Granada CF",
+          "marketId": "teamShots",
+          "pick": "Granada CF — Moins de 20.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Granada a tiré 17 fois, sous 20,5 mais au-dessus de sa moyenne de 14,7. Il y a eu 2 grosses occasions pour lui.",
+          "lesson": "Une ligne très au-dessus de la moyenne laisse une bonne marge, même si l'équipe tire plus que d'habitude."
+        },
+        {
+          "market": "Tirs — Las Palmas",
+          "marketId": "teamShots",
+          "pick": "Las Palmas — Moins de 14.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Las Palmas a tiré 12 fois, sous 14,5, et un peu au-dessus de sa moyenne de 10,8 en étant mené.",
+          "lesson": "Les volumes de tirs sont stables. Une marge de plus de 3 tirs sur la moyenne a suffi."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 9 tirs cadrés (3 et 6), au-dessus de 6,5. Le total est resté sous les 9,53 attendus, mais assez haut pour passer.",
+          "lesson": "Le total tient même si la répartition entre équipes est déséquilibrée. Les tirs cadrés restent volatils et la confiance moyenne était justifiée."
+        },
+        {
+          "market": "Tirs cadrés — Granada CF",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Granada CF — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Granada n'a cadré que 3 tirs, bien sous 7,5, malgré 17 tirs au total.",
+          "lesson": "Granada tire beaucoup mais cadre peu. Les lignes hautes de tirs cadrés pour lui sont à éviter."
+        },
+        {
+          "market": "Tirs cadrés — Las Palmas",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Las Palmas — Moins de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Las Palmas a cadré 6 tirs, juste sous 6,5. La marge était mince.",
+          "lesson": "Ici le « moins de » est passé de justesse. Quand l'équipe est menée, ses tirs cadrés montent vers la ligne, donc la confiance moyenne était adaptée."
+        }
+      ],
+      "caveats": "Il s'agit d'un seul match. Le 1-0 se joue sur peu d'éléments (un but, un but refusé par la VAR à la 90+6e). Les statistiques ne donnent pas la répartition des corners par période, donc le lien entre le score et les corners de Las Palmas est une hypothèse. La forme récente de Granada n'était pas disponible avant le match.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 17,
+        "commentaire": 3
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4523,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2415,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 4523,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2415,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 4523,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 4523
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0426636,
+      "createdAt": "2026-11-15T21:06:59.294Z"
+    }
   },
   {
     "matchId": "12b34c0f22c4208647c5a5472269b735",
@@ -12147,8 +13361,240 @@
         }
       ]
     },
-    "updatedAt": "2026-11-13T18:57:36.755Z",
-    "createdAt": "2026-11-13T18:57:36.755Z"
+    "updatedAt": "2026-11-15T21:05:34.321Z",
+    "createdAt": "2026-11-13T18:57:36.755Z",
+    "postMatchReview": {
+      "summary": "Eibar a dominé (xG 1,12 contre 0,53, tirs 18 contre 8, 9 tirs cadrés contre 5, 3 grosses occasions contre 0), mais il n'a fait que 1-1. Cádiz a égalisé à la 75e sur sa seule vraie occasion, 13 minutes après le but de Guruzeta (62e). Le diagnostic de supériorité d'Eibar était bon. La conversion, le faible nombre de corners et les tirs cadrés d'Eibar ont été mal calibrés.",
+      "whatWasRight": "Le favori était bien Eibar, avec un net avantage de volume (62 % de possession, 18 tirs contre 8). Les marchés de tirs ont tous tenu : total 26 tirs sous 35,5, Eibar 18 sous 20,5, Cádiz 8 sous 18,5. Cádiz a produit peu en déplacement et l'avis nuancé sur ses tirs cadrés (5, au-dessus de 2,5) a été validé. Le corner d'Eibar à 4, au-dessus de 2,5, est passé.",
+      "whatWasMissed": "Le match nul n'a pas été assez pris en compte.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1N2, car le nul l'emporte alors qu'Eibar était donné à 60 %. Le moteur voyait juste sur la supériorité (xG réel 1,12 contre 0,53), mais l'issue a mal converti. Il se trompe aussi sur les corners (trop hauts) et sur les tirs cadrés d'Eibar (trop bas). Il est confirmé sur les trois marchés de tirs.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "SD Eibar gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Eibar a ouvert le score à la 62e par Guruzeta, puis Cádiz a égalisé à la 75e par Borja Vázquez. Eibar a pourtant dominé (xG 1,12 contre 0,53, 3 grosses occasions contre 0), mais il n'a pas converti assez. La mi-temps était à 0-0.",
+          "lesson": "Une domination nette ne garantit pas la victoire : un 1N2 à 60 % laisse une vraie place au nul, surtout quand l'équipe a changé d'entraîneur. Le gain attendu est mince, donc il faut rester prudent sur cette cote."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "SD Eibar & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "faible",
+          "aiWasRight": false,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — SD Eibar",
+          "marketId": "teamGoals",
+          "pick": "SD Eibar — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Cádiz CF",
+          "marketId": "teamGoals",
+          "pick": "Cádiz CF — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Il y a eu seulement 6 corners (4 + 2), alors que 9,8 étaient attendus. Eibar a dominé le jeu sans obtenir beaucoup de corners, et Cádiz a peu attaqué.",
+          "lesson": "Une ligne de corners ne doit pas être traitée comme sûre à 83 % en se fiant aux moyennes. Les corners ont une forte variance. Un match où un seul camp domine peut rester bas."
+        },
+        {
+          "market": "Corners — SD Eibar",
+          "marketId": "teamCorners",
+          "pick": "SD Eibar — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Eibar a obtenu 4 corners, soit au-dessus de 2,5. Sa domination (62 % de possession, 18 tirs) a produit juste assez de corners.",
+          "lesson": "La prudence sur les corners d'Eibar, avec une moyenne à domicile de 4,3, a été validée. Une équipe dominante à domicile passe cette ligne modérée."
+        },
+        {
+          "market": "Corners — Cádiz CF",
+          "marketId": "teamCorners",
+          "pick": "Cádiz CF — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Cádiz n'a eu que 2 corners, contre 5,17 attendus. Mené au jeu (8 tirs, 38 % de possession), il a peu attaqué avant son égalisation.",
+          "lesson": "Pour un outsider à l'extérieur, se fier à la moyenne extérieure (3,3) plutôt qu'à la moyenne générale. Une ligne trop confiante sur un visiteur dominé est risquée."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 35.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 26 tirs (18 + 8), sous 35,5. Le total était large car Cádiz n'a presque pas tiré.",
+          "lesson": "Cette ligne large « moins de » sur les tirs est fiable quand les volumes des deux équipes restent modestes. Elle mérite d'être gardée."
+        },
+        {
+          "market": "Tirs — SD Eibar",
+          "marketId": "teamShots",
+          "pick": "SD Eibar — Moins de 20.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Eibar a tiré 18 fois, sous 20,5, mais plus que ses 13,7 de moyenne. La marge était plus mince que prévu.",
+          "lesson": "La ligne a tenu, mais Eibar à domicile peut monter près de la ligne quand il domine. Il faut garder une marge sur cette équipe."
+        },
+        {
+          "market": "Tirs — Cádiz CF",
+          "marketId": "teamShots",
+          "pick": "Cádiz CF — Moins de 18.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Cádiz n'a tiré que 8 fois, très loin de 18,5, avec 38 % de possession.",
+          "lesson": "Un visiteur en difficulté produit peu. La ligne « moins de » sur ses tirs a été sûre."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 12.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Il y a eu 14 tirs cadrés (9 + 5), au-dessus de 12,5, contre 9,35 attendus. Eibar en a mis 9 et Cádiz 5.",
+          "lesson": "Un total de tirs cadrés se dépasse quand un camp domine avec 3 grosses occasions. La confiance à 83 % était excessive."
+        },
+        {
+          "market": "Tirs cadrés — SD Eibar",
+          "marketId": "teamShotsOnTarget",
+          "pick": "SD Eibar — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Eibar a cadré 9 tirs, au-dessus de 7,5, alors que la moyenne était de 5,7. Eibar a dominé (3 grosses occasions) et Cádiz concède beaucoup.",
+          "lesson": "Une ligne « moins de » sur les tirs cadrés d'un favori à domicile est fragile face à un adversaire qui concède. Le scénario de domination doit être pesé."
+        },
+        {
+          "market": "Tirs cadrés — Cádiz CF",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Cádiz CF — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Cádiz a cadré 5 tirs, au-dessus de 2,5, malgré 8 tirs seulement. Son but à la 75e est venu en seconde période.",
+          "lesson": "L'avis nuancé était juste : l'adversaire concède des tirs cadrés. Les seuils de Cádiz peuvent être dépassés même avec peu de volume."
+        }
+      ],
+      "caveats": "Un seul match : la différence entre xG (1,12 contre 0,53) et score (1-1) relève en partie de la variance. Les statistiques ne donnent pas les raisons du faible nombre de corners ni l'effet des changements d'entraîneur. Les compositions réelles ne sont pas relevées.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 14,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4266,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2603,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 4266,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2603,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 4266,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 4266
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0435156,
+      "createdAt": "2026-11-15T21:05:34.320Z"
+    }
   },
   {
     "matchId": "976d20d0bdfd5ebae5800d5ec4f8dedf",
@@ -13638,8 +15084,240 @@
         }
       ]
     },
-    "updatedAt": "2026-11-13T18:57:10.539Z",
-    "createdAt": "2026-11-13T18:57:10.539Z"
+    "updatedAt": "2026-11-15T21:06:26.604Z",
+    "createdAt": "2026-11-13T18:57:10.539Z",
+    "postMatchReview": {
+      "summary": "Eldense a gagné 2-0 (buts à la 11e et à la 45+4e), dans le sens du moteur qui le donnait léger favori. Le rouge direct de Sabadell à la 35e a faussé le match : possession 74 % contre 26 %, tirs 14 contre 5. Les marchés de tirs et de tirs cadrés ont tenu, sauf les tirs cadrés d'Eldense. Les marchés de corners d'Eldense et le total de corners se sont effondrés (1 corner pour Eldense, 3 au total).",
+      "whatWasRight": "Le léger avantage d'Eldense à domicile : victoire 2-0, xG 1,4 contre 0,42. Sabadell peu offensif en déplacement : 5 tirs et 0 tir cadré. Les plafonds de tirs ont tenu (19 tirs au total, 14 pour Eldense, 5 pour Sabadell). Les tirs cadrés totaux (6) sont restés sous 10,5. J'avais aussi nuancé les tirs cadrés d'Eldense, et ils ont dépassé la ligne (6).",
+      "whatWasMissed": "J'ai trop fait confiance aux moyennes de corners (confiance forte). Le match n'en a produit que 3 (1 pour Eldense, 2 pour Sabadell). Je n'ai pas anticipé qu'une forte possession après un rouge à la 35e et un 2-0 à la mi-temps peut donner peu de corners. Le facteur domicile d'Eldense sur les tirs cadrés (6,3) méritait plus de poids.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le 1N2 et sur les plafonds de tirs. Il le contredit sur les corners, où des lignes basses données à 79-83 % ont échoué malgré des moyennes favorables. Le PASS (sans value) n'est pas contredit.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "CD Eldense gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Carmona a ouvert le score à la 11e et Clemente a doublé à la 45+4e. Sabadell était à dix depuis la 35e (rouge direct de Català). Le léger favori a gagné, avec l'aide du rouge.",
+          "lesson": "La nuance à faible confiance était correcte. Le xG et le domicile étaient bien lus. Garder cette prudence sans edge, et rappeler que le rouge a fortement aidé."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "CD Eldense & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — CD Eldense",
+          "marketId": "teamGoals",
+          "pick": "CD Eldense — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Sabadell FC",
+          "marketId": "teamGoals",
+          "pick": "Sabadell FC — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Seulement 3 corners (1 + 2) pour une ligne à 6,5. Eldense menait 2-0 dès la mi-temps et Sabadell était à dix. Le match est devenu un contrôle de possession (74 %) avec peu de centres bloqués.",
+          "lesson": "Ne pas confirmer avec forte confiance un over de corners uniquement sur les moyennes. Un scénario de match qui se ferme (but précoce, rouge) peut le faire échouer."
+        },
+        {
+          "market": "Corners — CD Eldense",
+          "marketId": "teamCorners",
+          "pick": "CD Eldense — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Eldense n'a obtenu qu'un seul corner malgré 14 tirs et 74 % de possession. La ligne de 2,5 était très basse par rapport à ses 6,3 à domicile, mais elle n'a pas été atteinte.",
+          "lesson": "Les corners ne suivent pas toujours la domination : 14 tirs pour 1 corner montre qu'une possession élevée contre dix joueurs peut produire peu de corners. Ne pas parler de «match atypique» comme d'un cas rare."
+        },
+        {
+          "market": "Corners — Sabadell FC",
+          "marketId": "teamCorners",
+          "pick": "Sabadell FC — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Sabadell a obtenu 2 corners, très loin de 7,5. Le rouge à la 35e et la possession de 26 % limitaient son jeu.",
+          "lesson": "Ce moins de corners était confirmé avec une grande marge. Garder les lignes hautes de corners d'une équipe qui marque peu en déplacement."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 30.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "19 tirs au total (14 + 5), très loin de 30,5. Sabadell n'a quasiment pas tiré après son rouge.",
+          "lesson": "Garder ce type de plafond total quand les moyennes sont nettement sous la ligne. Le risque est un match très ouvert, et ici il a été écarté."
+        },
+        {
+          "market": "Tirs — CD Eldense",
+          "marketId": "teamShots",
+          "pick": "CD Eldense — Moins de 16.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Eldense a tiré 14 fois, sous 16,5, malgré 74 % de possession. Après 2-0 à la mi-temps et plusieurs changements, le rythme a baissé.",
+          "lesson": "Ma nuance sur la moyenne locale de 17 était prudente et le résultat est passé sous la ligne. Une avance nette fait baisser le volume de tirs du favori."
+        },
+        {
+          "market": "Tirs — Sabadell FC",
+          "marketId": "teamShots",
+          "pick": "Sabadell FC — Moins de 16.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sabadell n'a tiré que 5 fois (moyenne 15,8), un tir sur le poteau à la 50e par Owusu. Il a joué à dix dès la 35e.",
+          "lesson": "Confirmé. Un déplacement avec peu de buts marqués donne de la marge à un under de tirs."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 10.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "6 tirs cadrés au total (6 + 0), sous 10,5. Tous venaient d'Eldense.",
+          "lesson": "Le plafond total tient quand une des deux équipes cadre peu. Garder cette lecture."
+        },
+        {
+          "market": "Tirs cadrés — CD Eldense",
+          "marketId": "teamShotsOnTarget",
+          "pick": "CD Eldense — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Eldense a cadré 6 tirs, un de plus que la ligne de 5,5 (xG 1,4). Le moteur attendait 3,91 mais Eldense à domicile (6,3) était plus proche du résultat.",
+          "lesson": "Ma nuance était juste : pour Eldense à domicile, la moyenne locale (6,3) est plus fiable que celle des 10 derniers matchs (4,2). Pondérer davantage le domicile quand l'écart est fort."
+        },
+        {
+          "market": "Tirs cadrés — Sabadell FC",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Sabadell FC — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sabadell n'a cadré aucun tir (0), loin de 5,5. Un tir sur le poteau à la 50e et un rouge à la 35e.",
+          "lesson": "Confirmé. Un déplacement avec 3,2 tirs cadrés de moyenne rend l'under très sûr."
+        }
+      ],
+      "caveats": "Un seul match. Le rouge de la 35e a faussé la plupart des statistiques après cette minute, et on ne peut pas le prévoir. Pas de données sur les corners par période ni sur les remplacements autres que ceux du déroulé. Le xG de 1,4 pour Eldense est celui de FotMob.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 17,
+        "commentaire": 5
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 6332,
+        "cache_read_input_tokens": 8932,
+        "output_tokens": 5556,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 6332,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2396,
+            "cache_read_input_tokens": 6844,
+            "cache_creation_input_tokens": 1576,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1576
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.08268239999999999,
+      "createdAt": "2026-11-15T21:06:26.603Z"
+    }
   },
   {
     "matchId": "cal-2026-11-15-comerciantes-unidos-sport-boys",
@@ -15092,8 +16770,240 @@
         }
       ]
     },
-    "updatedAt": "2026-11-13T18:58:32.703Z",
-    "createdAt": "2026-11-13T18:58:32.703Z"
+    "updatedAt": "2026-11-15T21:04:56.702Z",
+    "createdAt": "2026-11-13T18:58:32.703Z",
+    "postMatchReview": {
+      "summary": "Le 3-3 (mi-temps 2-1) a été très ouvert, avec six buts et un rouge pour Comerciantes à la 54e. Mon avis nuancé sur le 1N2 a tenu, puisque la victoire de Comerciantes ne s'est pas produite. Les marchés de tirs et de tirs cadrés ont bien tenu. Les corners ont été très bas (4 et 1), ce qui a fait tomber les deux lignes « plus de ».",
+      "whatWasRight": "Sport Boys est resté sous ses seuils de volume : 11 tirs (seuil 17,5) et 4 tirs cadrés (seuil 5,5). Comerciantes a fait 20 tirs (sous 23,5) et 6 tirs cadrés (plus de 3,5). Le total de 31 tirs est resté sous 37,5, et les 10 tirs cadrés ont dépassé 6,5. Les 4 corners de Comerciantes sont restés sous 8,5. Ma prudence sur le 1N2 s'est aussi justifiée.",
+      "whatWasMissed": "Je n'ai pas vu l'efficacité de Sport Boys : 3 buts sur 4 tirs cadrés malgré ses absences offensives. J'ai surestimé les corners : 5 au total contre 10,54 attendus. Le rouge de Guzmán (54e) et le penalty de Herrera (60e) ont aussi brouillé le scénario. Les deux défenses ont été plus fragiles que prévu, avec trois buts encaissés chacune.",
+      "outcomeVsEngine": "Le résultat contredit en partie le moteur. Le 1N2 était faux, car Comerciantes n'a pas gagné et a dû égaliser à dix à la 60e. Les marchés de tirs et de tirs cadrés ont confirmé le moteur. Les deux marchés de corners « plus de » l'ont contredit.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Comerciantes Unidos gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Le nul 3-3 contredit le pick « Comerciantes gagne ». Comerciantes menait 2-1 à la 43e. Sport Boys a ensuite marqué à la 48e et à la 52e. Le rouge de Guzmán à la 54e a précédé l'égalisation sur penalty à la 60e.",
+          "lesson": "Un favori autour de 51 % entre deux équipes proches ne justifie pas de confiance. Garder l'avis nuancé, et ne pas oublier le nul et les retournements dans les matchs ouverts."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Comerciantes Unidos & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Comerciantes Unidos",
+          "marketId": "teamGoals",
+          "pick": "Comerciantes Unidos — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Sport Boys",
+          "marketId": "teamGoals",
+          "pick": "Sport Boys — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Seulement 5 corners (4 pour Comerciantes, 1 pour Sport Boys), contre 10,54 attendus. Le match s'est joué sur des buts et des occasions, pas sur des centres ou des dégagements.",
+          "lesson": "J'avais tort de confirmer ce seuil. Les moyennes basses des équipes (3,9 et 4,6) méritaient plus de poids que les 9 corners par match du championnat. Je dois me méfier d'un « plus de » corners quand les deux équipes en produisent peu."
+        },
+        {
+          "market": "Corners — Comerciantes Unidos",
+          "marketId": "teamCorners",
+          "pick": "Comerciantes Unidos — Moins de 8.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Comerciantes a obtenu 4 corners, loin de 8,5. Cela correspond à sa moyenne à domicile de 4,8.",
+          "lesson": "Ce type de ligne très éloignée de la moyenne est solide. Il mérite d'être gardé."
+        },
+        {
+          "market": "Corners — Sport Boys",
+          "marketId": "teamCorners",
+          "pick": "Sport Boys — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Sport Boys n'a obtenu qu'un seul corner, sous le seuil de 2,5. Sa moyenne à l'extérieur (2,6) était déjà proche de ce seuil, et sa possession est basse.",
+          "lesson": "Ma nuance était justifiée. Pour une équipe visiteuse à faible possession, la moyenne à l'extérieur doit primer sur la moyenne générale."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 37.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "31 tirs au total (20 et 11), sous 37,5 et proches des 31,21 attendus. Le match a été ouvert en buts, mais pas en volume de tirs.",
+          "lesson": "Les totaux de tirs sont stables, même dans un match à six buts. Ce constat est à garder."
+        },
+        {
+          "market": "Tirs — Comerciantes Unidos",
+          "marketId": "teamShots",
+          "pick": "Comerciantes Unidos — Moins de 23.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Comerciantes a tiré 20 fois, au-dessus de sa moyenne de 17 mais sous 23,5. Son penalty à la 60e et sa supériorité territoriale ont gonflé le volume.",
+          "lesson": "La marge de 6 tirs sur une ligne haute a suffi. Le seuil reste correct, mais le total peut approcher la ligne quand le match est ouvert."
+        },
+        {
+          "market": "Tirs — Sport Boys",
+          "marketId": "teamShots",
+          "pick": "Sport Boys — Moins de 17.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sport Boys n'a tiré que 11 fois, loin de 17,5. Il a marqué trois fois en profitant de la précision plus que du volume.",
+          "lesson": "Une ligne haute sur un visiteur à faible production est sûre. Le volume de tirs mesure mal sa menace réelle."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "10 tirs cadrés (6 et 4), au-dessus de 6,5 et proches des 9,55 attendus. Les six buts ont nourri ce total.",
+          "lesson": "Ma nuance était trop prudente. Les tirs cadrés concédés par les deux équipes, avec des défenses fragiles, pesaient plus que la faible production extérieure de Sport Boys."
+        },
+        {
+          "market": "Tirs cadrés — Comerciantes Unidos",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Comerciantes Unidos — Plus de 3.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Comerciantes a eu 6 tirs cadrés, au-dessus de 3,5, avec 5 grosses occasions. Il a marqué trois fois, dont un penalty.",
+          "lesson": "La moyenne à domicile et la faiblesse de la défense adverse ont bien soutenu ce pick. Il mérite d'être gardé."
+        },
+        {
+          "market": "Tirs cadrés — Sport Boys",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Sport Boys — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sport Boys a cadré 4 tirs, sous 5,5, et en a converti 3 en buts (36e, 48e, 52e).",
+          "lesson": "Le pick a tenu grâce à la marge sur le seuil. Une conversion très forte ne change pas le nombre de tirs cadrés."
+        }
+      ],
+      "caveats": "Un seul match, avec des événements difficiles à modéliser : un rouge direct à la 54e, un penalty à la 60e et une blessure de Davey dès la 16e. Les compositions d'avant-match n'étaient que des prévisions. La fiche ne donne pas les xG réels du match.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 19,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 8253,
+        "cache_read_input_tokens": 6531,
+        "output_tokens": 5876,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 8253,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2394,
+            "cache_read_input_tokens": 6531,
+            "cache_creation_input_tokens": 1722,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1722
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0930862,
+      "createdAt": "2026-11-15T21:04:56.701Z"
+    }
   },
   {
     "matchId": "cal-2026-11-15-adc-juan-pablo-ii-deportivo-garcilaso",
