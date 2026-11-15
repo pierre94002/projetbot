@@ -15,7 +15,10 @@
  *   5. LES FICHES des matchs de championnat des 14 prochains jours : les entrées des deux clubs (rang, statut, sommes, …) et
  *      les bras des familles qui concernent le match, avec les valeurs de la note du banc (noteDesDebuts.js) ;
  *   6. LE CONTRÔLE ANTI-FUITE par le second chemin (controleDesDebuts.js) ;
- *   7. les morceaux envoyés au serveur (250 lignes au plus), puis la fin (bilan, contrôle).
+ *   7. les morceaux envoyés au serveur (250 lignes au plus), puis la fin (bilan, contrôle) ;
+ *   8. (lot 1c, 14/11/2026) LA PREUVE APRÈS LANCEMENT, seulement si le serveur la demande (`preuve` : une famille utile au banc
+ *      et l'étape 35 lancée au registre) : preuveDesDebuts.preuveDansLaBase sur les fiches figées des matchs joués depuis le
+ *      lancement — rien n'est écrit ici, le serveur range (le registre de la mesure et l'état de la preuve).
  * Rien de tout cela n'est lu par le moteur ni envoyé à l'IA.
  * -----------------------------------------------------------------------
  */
@@ -34,6 +37,7 @@ import { bras, attendusDuBras } from './bancDesDebuts.js';
 import { DEBUTS_AU_BANC } from './noteDesDebuts.js';
 import { referenceDeLaSaison, mouvementsDeLEffectif, continuiteDe, forceDeLEffectif } from '../db/squadChanges.js';
 import { tirerLesCouples, instantaneDuClub, controlerLesInstantanes, graineDuJour, nomDuClubParLAnnuaire } from './controleDesDebuts.js';
+import { preuveDansLaBase } from './preuveDesDebuts.js';
 
 const JOUR_MS = 86_400_000;
 const plusJours = (jour, n) => new Date(Date.parse(`${jour}T00:00:00Z`) + n * JOUR_MS).toISOString().slice(0, 10);
@@ -223,7 +227,7 @@ export function brasDeLaFiche(rec, ens, note = DEBUTS_AU_BANC) {
  * ('clubs', 'fiches') ; `graine`, `couples` : le contrôle (par défaut la graine du jour, 20 couples) ; `clubDe`,
  * `fichierCalendrier` : pour les essais. Rend { bilan, controle, liste }.
  */
-export function calculerLaNuitDesDebuts({ database, instant, jourD, fichierCalendrier = undefined, envoyer = () => {}, clubDe = null, graine = undefined, couples: nombreCouples = NUIT.couples, note = DEBUTS_AU_BANC }) {
+export function calculerLaNuitDesDebuts({ database, instant, jourD, fichierCalendrier = undefined, envoyer = () => {}, clubDe = null, graine = undefined, couples: nombreCouples = NUIT.couples, note = DEBUTS_AU_BANC, preuve = null }) {
   const t0 = performance.now();
   let rssMax = process.memoryUsage.rss();
   const mesure = () => (rssMax = Math.max(rssMax, process.memoryUsage.rss()));
@@ -475,6 +479,18 @@ export function calculerLaNuitDesDebuts({ database, instant, jourD, fichierCalen
   const controle = controlerLesInstantanes({ database, couples, instantanes, nomDuClub: nomDuClubParLAnnuaire(database) });
   durees.controle = Math.round(performance.now() - t);
   mesure();
+  // 8. La preuve après lancement (lot 1c), si le serveur la demande : rien n'est écrit ici, le serveur range.
+  let laPreuve = null;
+  if (preuve) {
+    t = performance.now();
+    try {
+      laPreuve = preuveDansLaBase({ database, instant, jourD, ...preuve });
+    } catch (error) {
+      laPreuve = { erreur: String(error?.message ?? error).slice(0, 300) };
+    }
+    durees.preuve = Math.round(performance.now() - t);
+    mesure();
+  }
   const avecContinuite = clubs.filter((c) => c.continuite !== null);
   return {
     bilan: {
@@ -499,7 +515,8 @@ export function calculerLaNuitDesDebuts({ database, instant, jourD, fichierCalen
       durees: { ...durees, total: Math.round(performance.now() - t0) },
       aPart: { pid: process.pid, rssMaxOctets: Math.max(rssMax, process.memoryUsage.rss()) }
     },
-    controle: { calculeLe, jourD, couples: couples.length, lignes: controle.lignes, ecarts: controle.ecarts }
+    controle: { calculeLe, jourD, couples: couples.length, lignes: controle.lignes, ecarts: controle.ecarts },
+    ...(preuve ? { preuve: laPreuve } : {})
   };
 }
 

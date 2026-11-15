@@ -134,7 +134,7 @@ export function calculerAPart({ message, surMorceau = () => {}, delaiMs = DELAI_
       if (!termine) reject(error);
       termine = true;
     });
-    enfant.on('exit', (code) => {
+    enfant.on('close', (code) => {
       clearTimeout(minuterie);
       if (!termine) reject(new Error(`calcul à part arrêté sans réponse (code ${code}) ${erreurs.trim().slice(-300)}`));
       termine = true;

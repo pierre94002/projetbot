@@ -1190,7 +1190,10 @@ export function calculerAPart({ chemin, precedente = null, force = false, graine
       if (!fini) reject(error);
       fini = true;
     });
-    enfant.on('exit', (code) => {
+    // 'close' et non 'exit' (correctif du 09/11/2026) : sous Windows, 'exit' peut arriver AVANT les derniers messages de
+    // l'enfant quand le serveur est occupé à lire les morceaux (vu à la première vraie nuit : « arrêté sans réponse
+    // (code 0) ») ; 'close' n'arrive qu'une fois le canal vidé, après le dernier message.
+    enfant.on('close', (code) => {
       clearTimeout(minuterie);
       if (!fini) reject(new Error(`calcul à part arrêté sans réponse (code ${code}) ${erreurs.trim().slice(-300)}`));
       fini = true;

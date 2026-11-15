@@ -15,7 +15,13 @@
  *      les fiches passées sont rattachées à la rencontre jouée (identifiants, date à un jour près) ; une fiche d'un match joué
  *      n'est JAMAIS élaguée, seules les orphelines de plus de 30 jours partent ;
  *   4. L'ÉTAT de la nuit (`debuts_etat` : nuit, comptes, controle) écrit en une transaction ; un écart du contrôle anti-fuite
- *      est nommé dans l'état et dans l'alerte durable (`alerts.debutsDeSaison`).
+ *      est nommé dans l'état et dans l'alerte durable (`alerts.debutsDeSaison`) ;
+ *   5. (lot 1c, 14/11/2026) LA PREUVE APRÈS LANCEMENT (preuveDesDebuts.js, patron de la C2 de l'étape 32) : la demande faite
+ *      AVANT le processus à part (l'état d'avant lu ici, le lancement de l'étape 35 au registre de la mesure), le calcul dans
+ *      le processus à part (sur les fiches figées des matchs joués après le lancement), puis ici : le principal RANGÉ au
+ *      registre de la mesure (une seule fois par famille utile), et l'état (`preuve`, `principal`, `surete`, `dementis`)
+ *      écrit avec celui de la nuit ; un démenti reste dans l'alerte durable. Une panne de la preuve n'empêche jamais le
+ *      reste de la nuit.
  * Rien de tout cela n'est lu par le moteur ni envoyé à l'IA. L'heure est lue par la passe (jamais ici).
  * -----------------------------------------------------------------------
  */
@@ -27,6 +33,7 @@ import { commencerCalculLourd, CalculLourdEnCours } from '../../utils/calculLour
 import { creerPauses, executerEnRendantLaMain, rendreLaMainParDefaut } from '../../utils/travailCooperatif.js';
 import { NUIT, VERSION_DEBUTS, VERSION_FICHE } from './reglagesDebuts.js';
 import { calculerLaNuitDesDebuts } from './debutsEnfant.js';
+import { demandeDeLaPreuve, rangerLesPrincipaux, etatApresLaPreuve, phraseDeLaPreuve, dementisDeLAlerte } from './preuveDesDebuts.js';
 
 const ENFANT = fileURLToPath(new URL('./debutsEnfant.js', import.meta.url));
 /** Le processus à part : tas plafonné (la passe de tout le magasin, ses minutes par joueur : mesuré dans le bac, lot 1b). */
@@ -283,8 +290,9 @@ export function* rattacherEtElaguer({ database, jourD, tranche = NUIT.tranche, m
 
 /**
  * L'ÉTAPE « debutsDeSaison ». `maintenant` : OBLIGATOIRE (l'heure de la passe) ; `aPart` : le processus à part (false : dans
- * ce processus, pour un essai) ; `fichierCalendrier`, `clubDe`, `graine`, `couples` : pour les essais. Jamais d'exception pour
- * une panne du calcul. Rend { mode: 'complet' | 'reporte' | 'echec', ... }.
+ * ce processus, pour un essai) ; `fichierCalendrier`, `clubDe`, `graine`, `couples` : pour les essais ; `registre` (options du
+ * registre de la mesure) et `horizonDeLaPreuve` : pour les essais de la preuve (lot 1c). Jamais d'exception pour une panne du
+ * calcul. Rend { mode: 'complet' | 'reporte' | 'echec', ..., preuve }.
  */
 export async function faireLesDebutsDeLaNuit({
   maintenant,
@@ -297,7 +305,9 @@ export async function faireLesDebutsDeLaNuit({
   graine = undefined,
   couples = NUIT.couples,
   rendreLaMain = rendreLaMainParDefaut,
-  tranche = NUIT.tranche
+  tranche = NUIT.tranche,
+  registre = {},
+  horizonDeLaPreuve = undefined
 } = {}) {
   const instant = instantDe(maintenant);
   const debut = performance.now();
@@ -312,7 +322,17 @@ export async function faireLesDebutsDeLaNuit({
     if (!recus[m?.type]) throw new Error(`morceau inconnu « ${m?.type ?? ''} »`);
     recus[m.type].push(...m.lignes);
   };
-  const message = { mode: 'nuit', chemin, instant, jourD, couples, ...(graine === undefined ? {} : { graine }), ...(fichierCalendrier ? { fichierCalendrier } : {}) };
+  // 5 (lot 1c). La preuve après lancement : ce que le processus à part doit calculer (rien sans famille utile au banc ni
+  // lancement au registre) ; l'état d'avant (principal, garde, démentis), lu ici, une clé chacun. Jamais d'exception.
+  const etatDeLaPreuve = { principal: lireLaValeur(database, 'principal'), surete: lireLaValeur(database, 'surete'), dementis: lireLaValeur(database, 'dementis') };
+  let demande;
+  try {
+    demande = demandeDeLaPreuve({ instant, registre, etat: etatDeLaPreuve, horizon: horizonDeLaPreuve ?? null });
+  } catch (error) {
+    demande = { rien: `demande en échec (${String(error?.message ?? error).slice(0, 160)}) — rien de jugé cette nuit` };
+  }
+  const aPreuver = demande.rien ? null : { lancement: demande.lancement, etat: demande.etat, dejaAuRegistre: demande.dejaAuRegistre, registre, horizon: demande.horizon };
+  const message = { mode: 'nuit', chemin, instant, jourD, couples, ...(graine === undefined ? {} : { graine }), ...(fichierCalendrier ? { fichierCalendrier } : {}), ...(aPreuver ? { preuve: aPreuver } : {}) };
   let fin;
   const tCalcul = performance.now();
   try {
@@ -353,6 +373,31 @@ export async function faireLesDebutsDeLaNuit({
   } catch (error) {
     return { mode: 'echec', erreur: `rangement : ${String(error?.message ?? error).slice(0, 300)}`, ...base, bilan: fin?.bilan ?? null, dureeMs: duree(), ...pauses.bilan() };
   }
+  // 5 (lot 1c). Le principal rangé au registre (une seule fois), puis l'état de la preuve (écrit avec celui de la nuit).
+  let preuve = { rien: demande.rien ?? null, dementis: etatDeLaPreuve.dementis ?? null };
+  let etatApres = null;
+  if (aPreuver) {
+    try {
+      if (!fin?.preuve || fin.preuve.erreur) throw new Error(fin?.preuve?.erreur ?? 'le processus à part n’a rien rendu pour la preuve');
+      const r = rangerLesPrincipaux({ principaux: fin.preuve.principaux ?? {}, lancement: demande.lancement, registre, instant });
+      etatApres = etatApresLaPreuve({ etatAvant: etatDeLaPreuve, calcul: fin.preuve, enregistres: r.enregistres, dejaAuRegistre: demande.jugementsDejaAuRegistre, lancement: demande.lancement, instant, jourD });
+      preuve = {
+        rien: null,
+        etat: etatApres.preuve,
+        principal: etatApres.principal,
+        principauxCalcules: Object.keys(fin.preuve.principaux ?? {}),
+        principauxRanges: Object.keys(r.enregistres),
+        refuses: r.refuses,
+        garde: fin.preuve.garde ?? null,
+        nouveauxDementis: etatApres.nouveauxDementis,
+        dementis: etatApres.dementis
+      };
+    } catch (error) {
+      preuve = { erreur: String(error?.message ?? error).slice(0, 300), dementis: etatDeLaPreuve.dementis ?? null };
+      etatApres = null;
+    }
+    await pauses.pause('preuve');
+  }
   // 4. L'état de la nuit, en une transaction.
   const bilan = { ...(fin?.bilan ?? {}), calculMs };
   const controle = { calculeLe, jourD, couples: fin?.controle?.couples ?? 0, lignes: fin?.controle?.lignes ?? 0, ecarts: fin?.controle?.ecarts ?? [] };
@@ -363,6 +408,12 @@ export async function faireLesDebutsDeLaNuit({
       ecrireLaValeur(database, 'nuit', nuit);
       ecrireLaValeur(database, 'comptes', { calculeLe, jourD, parStatut: bilan.parStatut ?? {}, clubs: bilan.clubs ?? 0, continuiteMoyenne: bilan.continuiteMoyenne ?? null, concernes: bilan.concernes ?? null, sansIdentifiant: bilan.sansIdentifiant ?? 0, noms: bilan.noms ?? [] });
       ecrireLaValeur(database, 'controle', controle);
+      if (etatApres) {
+        ecrireLaValeur(database, 'preuve', etatApres.preuve);
+        ecrireLaValeur(database, 'principal', etatApres.principal);
+        ecrireLaValeur(database, 'surete', etatApres.surete);
+        ecrireLaValeur(database, 'dementis', etatApres.dementis);
+      }
       effacerLaValeur(database, 'en_cours');
       database.exec('COMMIT');
     } catch (error) {
@@ -382,6 +433,7 @@ export async function faireLesDebutsDeLaNuit({
     rangementMs: Math.round(performance.now() - tRangement),
     plusLongueTrancheMs: Math.round(mesure.plusLongueTrancheMs ?? 0),
     transactions: mesure.transactions ?? 0,
+    preuve,
     dureeMs: duree(),
     ...pauses.bilan()
   };
@@ -403,11 +455,14 @@ const dureeDite = (ms) => {
 /**
  * L'ALERTE DURABLE (`alerts.debutsDeSaison`, la forme des contrôles anti-fuite de ui/src/utils/controlesAntiFuite.js) : les
  * écarts du contrôle par le second chemin (20 au plus, chacun avec sa phrase), leur total, les lignes contrôlées ; null sans
- * écart.
+ * écart. Lot 1c (14/11/2026) : les familles DÉMENTIES sur vos matchs y restent toujours (l'état les garde ; la forme de
+ * alerteDuContexte de l'étape 32), même une nuit sans écart.
  */
-export function alerteDesDebuts({ controle = null, updatedAt = null } = {}) {
+export function alerteDesDebuts({ controle = null, dementis = null, updatedAt = null } = {}) {
   const ecarts = controle?.ecarts ?? [];
-  return ecarts.length ? { ecarts: ecarts.slice(0, 20), total: ecarts.length, lignes: controle?.lignes ?? 0, updatedAt } : null;
+  const d = dementisDeLAlerte(dementis);
+  if (!ecarts.length && !d.length) return null;
+  return { ecarts: ecarts.slice(0, 20), total: ecarts.length, lignes: controle?.lignes ?? 0, updatedAt, ...(d.length ? { dementis: d } : {}) };
 }
 
 /**
@@ -428,16 +483,20 @@ export function resultatDeLEtape(r, { updatedAt = null } = {}) {
   const f = r.ecrites?.fiches ?? {};
   const s = b.parStatut ?? {};
   const ecarts = (c.ecarts ?? []).length;
-  const alerte = alerteDesDebuts({ controle: c, updatedAt });
+  const pr = r.preuve ?? null;
+  const alerte = alerteDesDebuts({ controle: c, dementis: pr?.dementis ?? null, updatedAt });
   const mo = b.aPart?.rssMaxOctets ? `${nombre(Math.round(b.aPart.rssMaxOctets / 1048576))} Mo` : 'mémoire non relevée';
   const sansId = b.sansIdentifiant ?? 0;
+  // Lot 1c : « à regarder » la nuit où la preuve tombe en panne ou où un démenti tombe (le démenti reste ensuite dans l'alerte).
+  const aRegarder = Boolean(ecarts || pr?.erreur || pr?.nouveauxDementis?.length);
   return {
-    status: alerte ? 'warn' : 'ok',
+    status: aRegarder ? 'warn' : 'ok',
     summary:
       `Débuts de saison : ${pluriel(b.clubs ?? 0, 'club', 'clubs')} (${nombre(s.debut ?? 0)} en début de saison, ${pluriel((s.promu ?? 0) + (s.relegue ?? 0), 'promu ou relégué', 'promus ou relégués')}, ${pluriel(s.nouveau ?? 0, 'nouveau venu', 'nouveaux venus')})` +
       `, ${pluriel(b.fiches ?? 0, 'fiche', 'fiches')} pour les 14 prochains jours (${pluriel(f.figees ?? 0, 'figée', 'figées')}${sansId ? `, ${pluriel(sansId, 'match', 'matchs')} de championnat sans fiche faute d’identifiant FotMob` : ''})` +
       `, continuité ⌀ ${fini(b.continuiteMoyenne) ? pourcent(b.continuiteMoyenne) : '—'}` +
       ` ; ${dureeDite(b.calculMs ?? r.dureeMs)} à part (${mo})` +
+      ` ; ${phraseDeLaPreuve(pr)}${pr?.nouveauxDementis?.length ? ' — à regarder' : ''}` +
       ` ; contrôle anti-fuite : ${pluriel(c.couples ?? 0, 'couple', 'couples')}, ${pluriel(ecarts, 'écart', 'écarts')}${ecarts ? ` (${c.ecarts[0].texte})` : ''}.`,
     details: {
       mode: r.mode,
@@ -451,8 +510,11 @@ export function resultatDeLEtape(r, { updatedAt = null } = {}) {
       rangementMs: r.rangementMs ?? null,
       plusLongueTrancheMs: r.plusLongueTrancheMs ?? null,
       transactions: r.transactions ?? null,
-      blocMaxMs: r.blocMaxMs ?? null
+      blocMaxMs: r.blocMaxMs ?? null,
+      preuve: pr ? { rien: pr.rien ?? null, erreur: pr.erreur ?? null, etat: pr.etat ?? null, principauxRanges: pr.principauxRanges ?? [], refuses: pr.refuses ?? [], nouveauxDementis: pr.nouveauxDementis ?? [] } : null
     },
+    // Les écarts du contrôle restent visibles jusqu'à la nuit qui n'en trouve plus ; les démentis de la preuve (lot 1c) y
+    // restent toujours (l'état les garde).
     alert: { key: 'debutsDeSaison', value: alerte },
     changed: false
   };

@@ -1408,7 +1408,7 @@ function calculerSousJeton({ chemin, precedente, force, options, delaiMs }) {
       if (!fini) reject(error);
       fini = true;
     });
-    enfant.on('exit', (code) => {
+    enfant.on('close', (code) => {
       clearTimeout(minuterie);
       if (!fini) reject(new Error(`calcul à part arrêté sans réponse (code ${code}) ${erreurs.trim().slice(-300)}`));
       fini = true;

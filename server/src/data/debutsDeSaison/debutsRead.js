@@ -15,6 +15,9 @@
  * jamais par un nom. Une fiche d'une date future que la dernière nuit n'a pas réécrite est ORPHELINE (match reporté ou re-daté) :
  * jamais lue (la règle de l'étape 32). Rien n'entre dans un pourcentage au lot 1 : « Effet mesuré » veut dire « mesuré utile
  * au banc d'essai, pas encore dans le pourcentage ». Les mots sont faits par l'écran (ui/src/utils/debutsDeSaison.js, pur).
+ * Lot 1c (14/11/2026) : la PREUVE sur vos matchs (preuveDesDebuts.js, rangée par la nuit dans `debuts_etat`) — une famille
+ * DÉMENTIE passe au statut « dementi » (« Explication seulement » et la note ambre à l'écran), les comptes de la preuve et les
+ * jugements principaux pris sont joints (des comptes, jamais un chiffre provisoire) ; lus ici sans importer le juge.
  * Hors de l'empreinte du moteur ; aucun fichier du moteur, du chemin de l'essai 27 ni de l'IA ne l'importe.
  * -----------------------------------------------------------------------
  */
@@ -89,6 +92,39 @@ export function choisirLaFiche(lignes, { date, nuit, enCours = null }) {
   const exacte = lisibles.find((r) => r.date === date);
   if (exacte) return exacte;
   return lisibles.sort((a, b) => (a.calcule_le < b.calcule_le ? 1 : a.calcule_le > b.calcule_le ? -1 : 0))[0] ?? null;
+}
+
+/**
+ * LA PREUVE POUR L'ÉCRAN (lot 1c, pure) : les statuts de la note, une famille DÉMENTIE sur vos matchs passant à « dementi »
+ * (jamais l'inverse : un démenti ne se retire pas), et ce que la nuit a rangé — les comptes par famille (matchs concernés
+ * depuis le lancement, attendus), les jugements principaux pris (date, verdict, matchs), les démentis par famille (depuis
+ * quand, par quoi). `etat`, `dementis`, `principal` : les valeurs `preuve`, `dementis`, `principal` de `debuts_etat`, ou null.
+ * Rend { statuts, preuve: { lancement, jourD, familles, dementis } }.
+ */
+export function preuvePourLEcran({ note = DEBUTS_AU_BANC, etat = null, dementis = null, principal = null } = {}) {
+  const statuts = note?.statuts ? { ...note.statuts } : null;
+  const familleDe = (id) => (note?.variantes ?? []).find((v) => v.id === id)?.famille ?? null;
+  const parFamille = {};
+  for (const [variante, d] of Object.entries(dementis && typeof dementis === 'object' ? dementis : {})) {
+    const famille = typeof d?.famille === 'string' ? d.famille : familleDe(variante);
+    if (!famille) continue;
+    parFamille[famille] = { variante, le: d?.le ?? null, jour: d?.jour ?? null, depuis: d?.depuis ?? null, source: d?.source ?? null };
+    if (statuts) statuts[famille] = 'dementi';
+  }
+  const familles = {};
+  for (const v of Array.isArray(etat?.variantes) ? etat.variantes : []) {
+    const famille = typeof v?.famille === 'string' ? v.famille : familleDe(v?.id);
+    if (!famille) continue;
+    const p = principal && typeof principal === 'object' ? principal[v.id] ?? null : null;
+    familles[famille] = {
+      variante: v.id,
+      matchs: fini(v.matchs) ? v.matchs : null,
+      attendus: fini(v.attendus) ? v.attendus : null,
+      principal: p ? { le: p.le ?? null, verdict: p.verdict ?? null, matchs: p.matchs ?? null } : null,
+      dementi: Boolean(parFamille[famille])
+    };
+  }
+  return { statuts, preuve: { lancement: etat?.lancement ?? null, jourD: etat?.jourD ?? null, familles, dementis: parFamille } };
 }
 
 /** Ce que l'écran dit du banc : la note recopiée par script, sans les chemins des fichiers ni leurs empreintes. */
@@ -238,6 +274,7 @@ export function debutsDuMatch({ match, database, maintenant, note = DEBUTS_AU_BA
     fiche: null,
     nuit: null,
     statuts: note?.statuts ? { ...note.statuts } : null,
+    preuve: null,
     banc: bancPourLEcran(note),
     decision: DECISION_DE_PIERRE.effectifDansLesChiffres,
     seuils: { ...SEUILS_DE_L_ECRAN }
@@ -249,9 +286,12 @@ export function debutsDuMatch({ match, database, maintenant, note = DEBUTS_AU_BA
   let enCours;
   let lignes;
   let rangs;
+  let laPreuve;
   try {
     nuit = valeurDeLEtat(database, 'nuit');
     enCours = valeurDeLEtat(database, 'en_cours');
+    // Lot 1c : la preuve sur vos matchs, rangée par la nuit (trois lectures par clé).
+    laPreuve = preuvePourLEcran({ note, etat: valeurDeLEtat(database, 'preuve'), dementis: valeurDeLEtat(database, 'dementis'), principal: valeurDeLEtat(database, 'principal') });
     lignes = coupe
       ? []
       : database
@@ -269,6 +309,8 @@ export function debutsDuMatch({ match, database, maintenant, note = DEBUTS_AU_BA
   }
   const avecEtat = {
     ...base,
+    statuts: laPreuve.statuts,
+    preuve: laPreuve.preuve,
     nuit: nuit?.calculeLe ? { calculeLe: nuit.calculeLe, jourD: nuit.jourD ?? jourParis(Date.parse(nuit.calculeLe)) } : null,
     clubs: {
       home: { ...base.clubs.home, ligne: lignesDesClubs.home },

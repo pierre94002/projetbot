@@ -16,6 +16,10 @@
  * (un promu n'est pas « mauvais », une continuité basse non plus). Σ et ⌀, jamais une somme de pourcentages. Clubs et joueurs
  * par identifiant FotMob : un club sans identifiant n'a ni chiffres ni logo retrouvé par son nom.
  * Heures de Paris, virgule décimale, espace fine des milliers (toLocaleString('fr-FR')), vrai signe moins.
+ * Lot 1c (14/11/2026) : LA PREUVE SUR VOS MATCHS (`debuts.preuve`, rangée par la nuit) — une famille utile DÉMENTIE repasse
+ * en « Explication seulement » avec la note ambre « démenti sur vos matchs depuis le … » ; sinon, sous « Effet mesuré », une
+ * phrase dit où en est la vérification (des comptes, jamais un chiffre provisoire) et quand viendra la réponse (entre fin 2028
+ * et 2029 : 1 767 matchs concernés à 550-1 100 par an, avis du 14/11, constat 3).
  * -----------------------------------------------------------------------
  */
 
@@ -299,9 +303,74 @@ export function pastilleDesDebuts(debuts) {
   const avec = (p) => ({ ...p, aria: `${titre} : ${p.libelle}${p.sous ? `, ${p.sous}` : ''}.` });
   if (debuts && debuts.etat === 'pret' && (!banc || !banc.familles)) return avec({ cle: 'non-mesure', libelle: 'Explication seulement', sous: 'pas encore mesuré au banc d’essai', vert: false, familles: [] });
   const concernees = debuts?.etat === 'pret' ? Object.keys(debuts?.fiche?.bras?.familles ?? {}) : [];
-  const mesurees = concernees.filter((f) => banc?.familles?.[f]?.utile === true && (banc.utiles ?? []).includes(f));
-  if (mesurees.length) return avec({ cle: 'mesure', libelle: 'Effet mesuré', sous: 'pas encore dans le pourcentage', vert: true, familles: mesurees });
+  const utiles = concernees.filter((f) => banc?.familles?.[f]?.utile === true && (banc.utiles ?? []).includes(f));
+  // Lot 1c : une famille démentie sur vos matchs n'est plus « Effet mesuré » (jamais l'inverse).
+  const dementies = utiles.filter((f) => familleDementie(debuts, f));
+  const mesurees = utiles.filter((f) => !dementies.includes(f));
+  if (mesurees.length) return avec({ cle: 'mesure', libelle: 'Effet mesuré', sous: 'pas encore dans le pourcentage', vert: true, familles: mesurees, dementies });
+  if (dementies.length) return avec({ cle: 'dementi', libelle: 'Explication seulement', sous: 'démenti sur vos matchs', vert: false, familles: [], dementies });
   return avec({ cle: 'explication', libelle: 'Explication seulement', sous: null, vert: false, familles: [] });
+}
+
+// ------------------------------------------------------------ la preuve sur vos matchs (lot 1c)
+
+/** L'horizon de la preuve dit tel quel à Pierre (conception §5.10 : ≈ 2 à 3 débuts de saison). */
+export const REPONSE_DE_LA_PREUVE = 'la réponse viendra entre fin 2028 et 2029 (il faut 2 à 3 débuts de saison)';
+const VERDICTS_DE_LA_PREUVE = Object.freeze({ retenu: 'confirmé', 'pas-prouve': 'pas prouvé (le banc garde le dernier mot)', 'pas-assez-de-matchs': 'pas assez de matchs pour juger' });
+
+/** Une famille démentie sur vos matchs : par le statut que le serveur a rangé, ou par la preuve jointe. */
+export function familleDementie(debuts, famille) {
+  return debuts?.statuts?.[famille] === 'dementi' || Boolean(debuts?.preuve?.dementis?.[famille]);
+}
+
+/**
+ * LA NOTE AMBRE d'une famille utile démentie qui concerne CE match : { titre, texte, familles } ou null. « Démenti sur vos
+ * matchs depuis le … » (le jour où la nuit l'a rangé) ; jamais un chiffre.
+ */
+export function noteDuDementi(debuts) {
+  const p = pastilleDesDebuts(debuts?.etat === 'pret' ? debuts : null);
+  const dementies = p.dementies ?? [];
+  if (!dementies.length) return null;
+  const banc = debuts?.banc ?? null;
+  const morceaux = dementies.map((f) => {
+    const d = debuts?.preuve?.dementis?.[f] ?? null;
+    const depuis = jjmmaaaa(d?.jour ?? String(d?.le ?? '').slice(0, 10));
+    return `${banc?.familles?.[f]?.mot ?? f} : démenti sur vos matchs${depuis ? ` depuis le ${depuis}` : ''}`;
+  });
+  return {
+    titre: 'Démenti sur vos matchs',
+    texte: `${morceaux.join(' ; ')}. Sur les matchs joués depuis le lancement, ce calcul s’est trompé plus que le modèle de buts en essai : il repasse en « Explication seulement ».`,
+    familles: dementies
+  };
+}
+
+/**
+ * LA PHRASE DE LA PREUVE sous « Effet mesuré » (familles utiles mesurées qui concernent CE match) : où en est la vérification
+ * sur vos matchs — des comptes (matchs concernés depuis le lancement, sur combien), jamais un chiffre provisoire —, et quand
+ * viendra la réponse ; le jugement principal une fois pris (« confirmé », « pas prouvé »). null sans famille mesurée.
+ */
+export function phraseDeLaPreuveDesDebuts(debuts) {
+  const p = pastilleDesDebuts(debuts?.etat === 'pret' ? debuts : null);
+  if (!p.vert) return null;
+  const banc = debuts?.banc ?? null;
+  const morceaux = p.familles.map((f) => {
+    const mot = banc?.familles?.[f]?.mot ?? f;
+    const x = debuts?.preuve?.familles?.[f] ?? null;
+    const attendus = fini(x?.attendus) ? x.attendus : banc?.horizons?.[f]?.matchs ?? null;
+    if (x?.principal?.verdict) {
+      const le = x.principal.le ? ` le ${jjmmaaaa(String(x.principal.le).slice(0, 10))}` : '';
+      return `L’effet des ${mot} a été vérifié sur vos matchs${le} : ${VERDICTS_DE_LA_PREUVE[x.principal.verdict] ?? x.principal.verdict}${fini(x.principal.matchs) ? ` (${nombre(x.principal.matchs)} matchs)` : ''}.`;
+    }
+    const lancement = debuts?.preuve?.lancement ? jjmmaaaa(debuts.preuve.lancement) : null;
+    const compte =
+      fini(x?.matchs) && lancement
+        ? `${nombre(x.matchs)} ${pluriel(x.matchs, 'match concerné', 'matchs concernés')} depuis le ${lancement}${fini(attendus) ? ` sur ${nombre(attendus)} attendus` : ''}`
+        : fini(attendus)
+          ? `${nombre(attendus)} matchs concernés attendus`
+          : null;
+    return `L’effet des ${mot} sera vérifié sur vos matchs${compte ? ` (${compte})` : ''} : ${REPONSE_DE_LA_PREUVE}. D’ici là, c’est une explication, pas un chiffre du moteur.`;
+  });
+  return morceaux.length ? morceaux.join(' ') : null;
 }
 
 // ------------------------------------------------------------ les deux lignes
@@ -491,8 +560,9 @@ function ligneVide(camp, debuts, noms, ids, etat) {
 }
 
 /**
- * LE BLOC « Début de saison » : { etat, pastille, banc (la phrase sous « Effet mesuré », ou null), prudence, lignes (TOUJOURS 2),
- * grise (les deux clubs en saison), mentions, pied, tableau }.
+ * LE BLOC « Début de saison » : { etat, pastille, banc (la phrase sous « Effet mesuré », ou null), prudence, preuve (lot 1c : la
+ * phrase de la preuve sur vos matchs, ou null), dementi (lot 1c : la note ambre, ou null), lignes (TOUJOURS 2), grise (les deux
+ * clubs en saison), mentions, pied, tableau }.
  */
 export function debutsDits({ debuts, analyse = null, match = null } = {}) {
   const etat = etatDesDebuts({ debuts, analyse, match });
@@ -511,6 +581,9 @@ export function debutsDits({ debuts, analyse = null, match = null } = {}) {
   const lignes = ['home', 'away'].map((camp) => (etat.cle === 'pret' ? ligneDuClubPret(camp, debuts, noms, ids, seuils) : ligneVide(camp, debuts, noms, ids, etat)));
   const sousLaPastille = pastille.vert ? pastille.familles.map((f) => phraseDuBancDesDebuts(f, banc)).filter(Boolean) : [];
   const prudence = pastille.vert && pastille.familles.some((f) => banc?.familles?.[f]?.prudent) ? banc?.limites?.[0] ?? null : null;
+  // Lot 1c : la preuve sur vos matchs (la phrase sous « Effet mesuré ») et la note ambre d'un démenti.
+  const preuve = etat.cle === 'pret' ? phraseDeLaPreuveDesDebuts(debuts) : null;
+  const dementi = etat.cle === 'pret' ? noteDuDementi(debuts) : null;
   // Les deux clubs en saison : le bloc reste, une ligne grise le dit (et garde ses deux lignes).
   const grise =
     etat.cle === 'pret' && lignes.every((l) => l.cas === 'en-saison')
@@ -523,6 +596,8 @@ export function debutsDits({ debuts, analyse = null, match = null } = {}) {
     pastille,
     banc: sousLaPastille.length ? sousLaPastille.join(' ') : null,
     prudence,
+    preuve,
+    dementi,
     lignes,
     grise,
     mentions: [...MENTIONS_FIXES],

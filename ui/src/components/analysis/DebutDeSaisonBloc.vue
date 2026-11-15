@@ -8,6 +8,8 @@
  * (continuité, arrivées et départs qui comptent) et la force de l'effectif à blanc (puce « À blanc ») —, chacune avec son
  * logo et sa vraie provenance. « Explication seulement » (gris) par défaut ; « Effet mesuré » (le seul vert), TOUJOURS suivi
  * de « pas encore dans le pourcentage » : rien n'entre dans les chiffres au lot 1. Jamais de vert ni de rouge pour une valeur.
+ * Lot 1c (14/11/2026) : la preuve sur vos matchs sous « Effet mesuré » (où en est la vérification, la réponse en 2027-2028) ;
+ * une famille démentie repasse en « Explication seulement » avec la note ambre « démenti sur vos matchs depuis le … ».
  *
  * AUCUNE requête : il lit le bloc `debutsDeSaison` que le serveur joint à l'analyse APRÈS elle (la fiche gelée la nuit, les
  * lignes des deux clubs, la note du banc). Les mots viennent de utils/debutsDeSaison.js (pur, rejoué par
@@ -46,6 +48,15 @@ const ancienApres = (p) => (p.vieuxApresHeures === null ? null : undefined);
     </header>
     <p v-if="dit.banc" class="dds__banc" data-debuts="banc"><AppIcon name="shield" :size="12" /><span>{{ dit.banc }}</span></p>
     <p v-if="dit.prudence" class="dds__petit" data-debuts="prudence">{{ dit.prudence }}</p>
+    <!-- Lot 1c : la preuve sur vos matchs (des comptes, jamais un chiffre provisoire) et la note ambre d'un démenti. -->
+    <p v-if="dit.preuve" class="dds__petit" data-debuts="preuve">{{ dit.preuve }}</p>
+    <div v-if="dit.dementi" class="cm-note is-warning" data-debuts="dementi" role="note" :aria-label="`${dit.dementi.titre} : ${dit.dementi.texte}`">
+      <span class="cm-icon-box is-warning"><AppIcon :name="iconeDeLaNote('is-warning')" :size="16" /></span>
+      <div>
+        <p class="cm-note__title">{{ dit.dementi.titre }}</p>
+        <p class="cm-note__text">{{ dit.dementi.texte }}</p>
+      </div>
+    </div>
 
     <LoadingSpinner v-if="dit.etat.cle === 'chargement'" label="Lecture du début de saison…" />
     <div v-else-if="dit.etat.texte" class="cm-note" :class="dit.etat.ton" :data-raison="dit.etat.cle">
