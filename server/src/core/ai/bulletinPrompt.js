@@ -18,6 +18,8 @@
  */
 
 import { jourCourt, jourEtHeureDits, ERREURS_PAR_MATCH } from './bulletinFiches.js';
+// Lot 0 (masque des buts, data/masqueDesButs.js) : la fiche du jour sans ligne de buts ; le bilan de la semaine n'y passe pas.
+import { masqueEnService, ficheDuJourSansLesButs } from '../../data/masqueDesButs.js';
 
 // ------------------------------------------------------------------ les formats
 const fr = (n, d = 0) => Number(n).toLocaleString('fr-FR', { minimumFractionDigits: d, maximumFractionDigits: d });
@@ -46,8 +48,9 @@ function carteDite(carte) {
 
 const coteReleveeDite = (c) => (!c ? '–' : c.fraiche ? `fraîche${c.ageMinutes === null ? '' : `, relevée il y a ${fr(c.ageMinutes)} min`}` : `À RAFRAÎCHIR${c.ageMinutes === null ? '' : ` (relevée il y a ${fr(c.ageMinutes)} min)`}`);
 
-/** Le texte de la fiche du jour, tel que l'IA le lit. */
-export function rendreLaFicheDuJour(f) {
+/** Le texte de la fiche du jour, tel que l'IA le lit. `masque` (lot 0) : en service par défaut ; null, la fiche d'avant. */
+export function rendreLaFicheDuJour(fiche, masque = masqueEnService()) {
+  const f = ficheDuJourSansLesButs(fiche, masque);
   const o = f.opportunites;
   const sortie = [];
   sortie.push(`FICHE DU JOUR — ${f.jourEnLettres} (${jourCourt(f.jour)}) · mode ${f.mode === 'econome' ? 'économe (fiche réduite)' : 'normal'}`);

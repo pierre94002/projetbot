@@ -43,6 +43,8 @@ import { valeursManquantes, feuilles, dispense } from './aides/ficheSansPerte.mj
 const F = JSON.parse(fs.readFileSync(path.join(FIXTURES, 'fiche-ia-etape-41.json'), 'utf8'));
 
 // ------------------------------------------------------------------ aides
+// Lot 0 (13/11/2026) : `masque: null` — ces cas de référence sont ceux d'avant le masque des buts (data/masqueDesButs.js),
+// essayé à part dans masqueDesButs.test.mjs ; sans lui, la fiche et les messages restent ceux de l'étape 41 à l'octet.
 const compacteAvant = (x, change = {}) => {
   const e = { ...x, ...change };
   return P.buildPreMatchAnalysisRequestCompacte({
@@ -55,7 +57,8 @@ const compacteAvant = (x, change = {}) => {
     lineups: e.compoBrute,
     experience: e.experience,
     commenceTime: e.commenceTime,
-    timing: e.timing
+    timing: e.timing,
+    masque: null
   });
 };
 const compacteApres = (x, change = {}) => {
@@ -71,13 +74,14 @@ const compacteApres = (x, change = {}) => {
     engineSummary: e.engineSummary,
     result: e.result,
     marketOutcomes: e.marketOutcomes,
-    matchStats: e.matchStats
+    matchStats: e.matchStats,
+    masque: null
   });
 };
 const ancienneAvant = (x) =>
-  P.buildPreMatchAnalysisRequest({ home: x.home, away: x.away, league: x.league, engineSummary: x.engineSummary, context: { ...x.contexte, lineups: x.lineupsAncienne }, experience: x.experience });
+  P.buildPreMatchAnalysisRequest({ home: x.home, away: x.away, league: x.league, engineSummary: x.engineSummary, context: { ...x.contexte, lineups: x.lineupsAncienne }, experience: x.experience, masque: null });
 const ancienneApres = (x) =>
-  P.buildPostMatchReviewRequest({ home: x.home, away: x.away, league: x.league, priorAnalysis: x.priorAnalysis, engineSummary: x.engineSummary, result: x.result, marketOutcomes: x.marketOutcomes, matchStats: x.matchStats });
+  P.buildPostMatchReviewRequest({ home: x.home, away: x.away, league: x.league, priorAnalysis: x.priorAnalysis, engineSummary: x.engineSummary, result: x.result, marketOutcomes: x.marketOutcomes, matchStats: x.matchStats, masque: null });
 /** L'ancien message d'avant-match, tel quel, sauf les pronostics sous 1,20 (que la fiche compacte écarte, voulu). */
 const ancienPayloadAvant = (x) => ({
   moteur: { ...x.engineSummary, marketPredictions: C.marchesPourIA(x.engineSummary.marketPredictions) },

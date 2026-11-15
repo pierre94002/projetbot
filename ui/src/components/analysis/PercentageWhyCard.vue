@@ -60,6 +60,8 @@ const clubs = computed(() => fiche.value.clubs);
       <div class="why__famille" data-famille="buts">
         <p class="why__titre"><AppIcon name="ball" :size="14" />{{ MOTS.familleButs }}</p>
         <p v-if="!b" class="why__etat">{{ fiche.message }}</p>
+        <!-- Lot 0 (masque des buts) : la phrase du serveur seule, ni ligne ni attendus. -->
+        <p v-else-if="b.masque" class="why__etat" data-masque-buts>{{ b.texte }}</p>
         <dl v-else class="why__lignes">
           <div v-if="b.provenance" class="why__ligne" data-ligne="provenance-buts">
             <dt>{{ MOTS.libelles.modele }}</dt>

@@ -209,6 +209,9 @@ function duree(ms) {
 
 /** Une absence dite en clair : un texte court dans la case, la raison complète au survol. */
 const absent = (texte, titre) => ({ absent: true, texte, titre });
+// Lot 0 (masque des buts) : un marché de buts dont le serveur CACHE le pourcentage (data/masqueDesButs.js) — calculé mais caché,
+// jamais « non calculé » ni compté parmi les manques ; la phrase vient du serveur.
+const cache = (k) => Boolean(k && donnees.value?.masqueDesButs?.marches?.includes(k.key));
 
 // --------------------------------------------------------- avancement
 const avancement = computed(() => {
@@ -361,6 +364,7 @@ function quandDuMatch(m) {
 }
 
 function celluleMoteur(m, k, libelle) {
+  if (k.engineProb == null && cache(k)) return absent('cachée', donnees.value.masqueDesButs.phrase);
   if (k.engineProb == null) return absent('non calculée', `Le moteur n'a pas rendu de probabilité pour « ${libelle} » sur ce match.`);
   if (m.butsProvenance) return celluleMoteurDuModele(m, k, libelle);
   const xg = m.expectedGoals;
@@ -426,6 +430,7 @@ function celluleMarche(m, k, libelle) {
 }
 
 function celluleEcart(k) {
+  if (k.engineProb == null && cache(k)) return absent('cachée', donnees.value.masqueDesButs.phrase);
   if (k.gapPoints == null) {
     if (k.engineProb == null) return absent('sans moteur', "Pas d'écart : le moteur n'a pas de probabilité pour ce marché.");
     return absent('sans marché', "Pas d'écart : il manque la probabilité du marché (la raison est dans la colonne Marché).");
@@ -635,7 +640,7 @@ const manques = computed(() => {
     avecClubInconnu: sansAucuneCote.filter((m) => !m.homeId || !m.awayId).length,
     clubsInconnus: [...clubs.values()],
     sansCeMarche: liste.filter((m) => !(m.markets ?? []).every((x) => x.marketProb == null) && duMarche(m)?.marketProb == null).length,
-    sansMoteur: liste.filter((m) => duMarche(m)?.engineProb == null).length,
+    sansMoteur: liste.filter((m) => duMarche(m)?.engineProb == null && !cache(duMarche(m))).length,
     sansContexte: sansContexte.length,
     liguesSansContexte: [...new Set(sansContexte.map((m) => m.league).filter(Boolean))]
   };
@@ -730,6 +735,12 @@ const descriptionVide = computed(() => {
           <span class="screener__source-for">Cote jouable</span>
           <ProvenanceChip source="The Odds API" :releve-le="provenanceJouable.releveLe" :fichier="provenanceJouable.fichier" payant />
         </span>
+      </div>
+
+      <!-- Lot 0 (masque des buts) : la phrase vient du serveur (data/masqueDesButs.js), jamais écrite ici. -->
+      <div v-if="donnees?.masqueDesButs" class="cm-note is-warning" data-masque-buts>
+        <span class="cm-icon-box is-warning"><AppIcon name="ball" :size="16" /></span>
+        <p class="cm-note__text">{{ donnees.masqueDesButs.phrase }}</p>
       </div>
 
       <div v-if="donnees" class="cm-toolbar screener__toolbar">

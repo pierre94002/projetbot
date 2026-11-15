@@ -5,6 +5,9 @@ import { listPredictions } from '../../data/repositories/predictionsRepository.j
 import { teamNamesLikelyMatch } from '../../utils/teamNameMatch.js';
 import { requireStringParam } from '../middlewares/errorHandler.js';
 import { carnetPourLaRoute } from '../../data/aiScorecard.js';
+// Lot 0 (masque des buts, data/masqueDesButs.js) : les entrées d'un match qui commence à `depuis` ou après, sans les
+// buts ; l'expérience sans les types de buts. Ce qui a été vu avant reste tel quel.
+import { entreeIaSansLesButs, experienceSansLesButs, pronosticsSansLesButs } from '../../data/masqueDesButs.js';
 
 const JOUR_MS = 86_400_000;
 
@@ -14,7 +17,7 @@ export async function getStatus(req, res) {
 }
 
 export function getForMatch(req, res) {
-  res.json({ entry: getByMatchId(req.params.matchId) ?? null });
+  res.json({ entry: entreeIaSansLesButs(getByMatchId(req.params.matchId) ?? null) });
 }
 
 /**
@@ -40,12 +43,12 @@ export function getForFixture(req, res) {
     return avance >= -1 && avance <= 30;
   });
   // L'expérience de l'IA par type de marché, pour jauger chacun.
-  res.json({ entry, predictions, experience: aiMarketExperience() });
+  res.json({ entry: entreeIaSansLesButs(entry), predictions: pronosticsSansLesButs(predictions, entry?.commenceTime ?? date), experience: experienceSansLesButs(aiMarketExperience()) });
 }
 
 /** Pour les badges "analyse IA disponible" dans les listes Matchs/Historique moteur — un seul appel plutôt qu'un par match visible. */
 export function getAll(req, res) {
-  res.json({ entries: listAll() });
+  res.json({ entries: listAll().map((e) => entreeIaSansLesButs(e)) });
 }
 
 // Un clic de Pierre : noté « manuel » au journal des appels (étape 4), jamais
@@ -53,12 +56,12 @@ export function getAll(req, res) {
 export async function postPreMatch(req, res) {
   const { home, away, league, engineResult } = req.body ?? {};
   const result = await runPreMatchAnalysis({ matchId: req.params.matchId, home, away, league, engineResult, appel: { type: 'manuel', detail: 'avant-match' } });
-  res.status(201).json(result);
+  res.status(201).json(entreeIaSansLesButs(result));
 }
 
 export async function postPostMatch(req, res) {
   const result = await runPostMatchAnalysis({ matchId: req.params.matchId, appel: { type: 'manuel', detail: 'après-match' } });
-  res.status(201).json(result);
+  res.status(201).json(entreeIaSansLesButs(result));
 }
 
 /**

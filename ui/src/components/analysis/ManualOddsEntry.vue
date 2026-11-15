@@ -203,6 +203,11 @@ async function retirer(s) {
     </div>
 
     <template v-else-if="donnees">
+      <!-- Lot 0 (masque des buts) : la phrase vient du serveur (data/masqueDesButs.js), jamais écrite ici. -->
+      <div v-if="donnees?.masqueDesButs" class="cm-note is-warning" data-masque-buts>
+        <span class="cm-icon-box is-warning"><AppIcon name="ball" :size="16" /></span>
+        <p class="cm-note__text">{{ donnees.masqueDesButs.phrase }}</p>
+      </div>
       <form class="manual-odds__form" @submit.prevent="enregistrer">
         <div class="manual-odds__fields">
           <AppSelect v-model="form.bookmaker" label="Bookmaker" :options="optionsBookmakers" placeholder="Choisir…" />

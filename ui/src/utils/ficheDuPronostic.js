@@ -186,6 +186,9 @@ const sourceDesButs = (s) => (s === null || s === undefined || s === '' ? 'sourc
 
 /** Les buts : les attendus de la réponse (deux décimales) et d'où viennent ces pourcentages ; candidate de la 27 adoptée : sa provenance. */
 export function butsDuMatch(result, provenanceButs = null) {
+  // Lot 0 (masque des buts) : le serveur cache les pourcentages de buts ; la famille ne dit que sa phrase (ni ligne, ni attendus).
+  const masque = typeof result?.masqueDesButs?.phrase === 'string' ? result.masqueDesButs.phrase : null;
+  if (masque) return { attendus: null, texte: masque, sansAttendus: null, provenance: null, phrases: [], masque: true };
   const eg = result?.expectedGoals ?? null;
   const attendus = !provenanceButs && fini(eg?.home) && fini(eg?.away) ? { home: enFr(eg.home, 2), away: enFr(eg.away, 2) } : null;
   return {

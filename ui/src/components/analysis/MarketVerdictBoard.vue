@@ -108,6 +108,12 @@ function titreDeLaCote(l) {
       <span v-if="resume.valeurs.length" class="mvb__valeurs" title="Les values que le moteur recommande, chez l'un de vos bookmakers, sur une cote encore fraîche.">{{ resume.valeurs.map((v) => v.texte).join(' · ') }}</span>
     </div>
 
+    <!-- Lot 0 (masque des buts) : la phrase vient du serveur (data/masqueDesButs.js), jamais écrite ici. -->
+    <div v-if="result.masqueDesButs" class="cm-note is-warning" data-masque-buts>
+      <span class="cm-icon-box is-warning"><AppIcon name="ball" :size="16" /></span>
+      <p class="cm-note__text">{{ result.masqueDesButs.phrase }}</p>
+    </div>
+
     <div class="mvb__head" aria-hidden="true">
       <span>Pari</span>
       <span>Moteur</span>

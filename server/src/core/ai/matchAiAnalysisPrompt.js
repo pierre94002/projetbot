@@ -19,6 +19,10 @@
  */
 
 import { ficheAvantMatch, ficheApresMatch } from './compactContext.js';
+// Lot 0 (masque des buts, data/masqueDesButs.js) : paramètre `masque` de chaque demande (en service par défaut ; null :
+// la demande d'avant, à l'octet). Avant-match : ni pronostic, ni marché, ni expérience des quatre familles de buts, et
+// la fiche compacte finit par la phrase de l'IA ; après-match : le même retrait pour un match qui commence à `depuis` ou après.
+import { masqueEnService, apresLeMasque, invitesAvantMatchSansLesButs, invitesApresMatchSansLesButs } from '../../data/masqueDesButs.js';
 
 export const SUBMIT_PRE_MATCH_ANALYSIS_TOOL = {
   name: 'submit_pre_match_analysis',
@@ -86,7 +90,8 @@ export const SUBMIT_PRE_MATCH_ANALYSIS_TOOL = {
 
 export const SUBMIT_PRE_MATCH_ANALYSIS_TOOL_CHOICE = { type: 'tool', name: 'submit_pre_match_analysis' };
 
-export function buildPreMatchAnalysisRequest({ home, away, league, engineSummary, context, experience = [] }) {
+export function buildPreMatchAnalysisRequest({ home, away, league, engineSummary, context, experience = [], masque = masqueEnService() }) {
+  ({ engineSummary, experience } = invitesAvantMatchSansLesButs({ engineSummary, marches: null, experience, retires: null }, masque));
   const system = [
     `Tu es un commentateur qualitatif qui accompagne, pour un match à venir (${home} vs ${away}, ${league ?? 'compétition inconnue'}), la prédiction déjà chiffrée par le moteur CôteMaster (Poisson + Dixon-Coles).`,
     "Rôle strictement consultatif : ne propose JAMAIS de cote, de probabilité ou de mise alternative, et ne prétends jamais recalculer ou corriger le chiffrage du moteur — tu apportes un contexte qualitatif (forme, statistiques et moyennes, compositions, classement) en COMPLÉMENT, jamais en remplacement. Tu peux citer les pourcentages du moteur pour les expliquer, jamais en proposer d'autres.",
@@ -144,7 +149,10 @@ export const SUBMIT_POST_MATCH_REVIEW_TOOL = {
 
 export const SUBMIT_POST_MATCH_REVIEW_TOOL_CHOICE = { type: 'tool', name: 'submit_post_match_review' };
 
-export function buildPostMatchReviewRequest({ home, away, league, priorAnalysis, engineSummary, result, marketOutcomes = [], matchStats = null }) {
+export function buildPostMatchReviewRequest({ home, away, league, priorAnalysis, engineSummary, result, marketOutcomes = [], matchStats = null, commenceTime = null, masque = masqueEnService() }) {
+  if (apresLeMasque(commenceTime ?? priorAnalysis?.commenceTime ?? result?.date ?? null, masque)) {
+    ({ engineSummary, marketOutcomes, priorAnalysis } = invitesApresMatchSansLesButs({ engineSummary, marketOutcomes, priorAnalysis }));
+  }
   const system = [
     `Tu as déjà analysé qualitativement, AVANT qu'il ne se joue, le match ${home} vs ${away} (${league ?? 'compétition inconnue'}) — le voici maintenant terminé, avec un résultat réel connu.`,
     "Confronte spécifiquement ta lecture d'avant-match au résultat réel : qu'avais-tu bien anticipé, qu'as-tu manqué ou mal évalué ? Le résultat va-t-il dans le sens du chiffrage du moteur (edge/probabilités) ou le contredit-il ?",
@@ -209,13 +217,18 @@ export const CONSIGNES_APRES_MATCH = [
  * `dossiers` (étape 44) : le texte des dossiers de la mémoire de l'IA (aiMemory.js, 300 à 500 mots), à la place des
  * trois dernières leçons de chaque type ; null : la fiche d'avant. Il va dans la fiche, jamais dans les consignes fixes.
  */
-export function buildPreMatchAnalysisRequestCompacte({ home, away, league, engineSummary, marches, context, lineups = null, experience = [], commenceTime = null, timing = null, retires = [], dossiers = null }) {
-  const user = ficheAvantMatch({ home, away, league, commenceTime, timing, engineSummary, marches, context, lineups, experience, retires, dossiers });
+export function buildPreMatchAnalysisRequestCompacte({ home, away, league, engineSummary, marches, context, lineups = null, experience = [], commenceTime = null, timing = null, retires = [], dossiers = null, masque = masqueEnService() }) {
+  ({ engineSummary, marches, experience, retires } = invitesAvantMatchSansLesButs({ engineSummary, marches, experience, retires }, masque));
+  const fiche = ficheAvantMatch({ home, away, league, commenceTime, timing, engineSummary, marches, context, lineups, experience, retires, dossiers });
+  const user = masque ? `${fiche}\n\n${masque.phraseIA}` : fiche;
   return { system: CONSIGNES_AVANT_MATCH, messages: [{ role: 'user', content: user }] };
 }
 
 /** La demande d'après-match en fiche compacte : consignes fixes + fiche du match joué. */
-export function buildPostMatchReviewRequestCompacte({ home, away, league, priorAnalysis, engineSummary, result, marketOutcomes = [], matchStats = null, commenceTime = null, timing = null, analysedAt = null }) {
+export function buildPostMatchReviewRequestCompacte({ home, away, league, priorAnalysis, engineSummary, result, marketOutcomes = [], matchStats = null, commenceTime = null, timing = null, analysedAt = null, masque = masqueEnService() }) {
+  if (apresLeMasque(commenceTime ?? priorAnalysis?.commenceTime ?? result?.date ?? null, masque)) {
+    ({ engineSummary, marketOutcomes, priorAnalysis } = invitesApresMatchSansLesButs({ engineSummary, marketOutcomes, priorAnalysis }));
+  }
   const user = ficheApresMatch({ home, away, league, commenceTime, timing, analysedAt, priorAnalysis, engineSummary, result, marketOutcomes, matchStats });
   return { system: CONSIGNES_APRES_MATCH, messages: [{ role: 'user', content: user }] };
 }

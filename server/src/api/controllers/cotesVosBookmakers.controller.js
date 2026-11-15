@@ -27,6 +27,8 @@ import { BORNES_DELAI_MINUTES, REGLAGE_FRAICHEUR_DEFAUT, COMPOS_ANNONCEES_MINUTE
 import { conseilReleveActuel } from '../../data/conseilReleve.js';
 import { etatDesSaisies, enregistrerSaisie, retirerSaisie, SaisieInvalide, SaisieIntrouvable } from '../../data/saisiesCotes.js';
 import { ApiError } from '../middlewares/errorHandler.js';
+// Lot 0 (masque des buts) : une saisie de buts garde sa cote, sans probabilité du moteur ni value (data/masqueDesButs.js).
+import { saisiesSansValeurDeButs } from '../../data/masqueDesButs.js';
 
 const etatReglage = () => ({ ...lireReglageFraicheur(), defaut: REGLAGE_FRAICHEUR_DEFAUT, bornes: BORNES_DELAI_MINUTES, composAnnonceesMinutes: COMPOS_ANNONCEES_MINUTES });
 
@@ -59,7 +61,7 @@ function traduire(error) {
 
 export async function getSaisies(req, res) {
   try {
-    res.json(await etatDesSaisies({ matchId: req.query.matchId, source: req.query.source || 'odds-api' }));
+    res.json(saisiesSansValeurDeButs(await etatDesSaisies({ matchId: req.query.matchId, source: req.query.source || 'odds-api' })));
   } catch (error) {
     throw traduire(error);
   }
@@ -67,7 +69,7 @@ export async function getSaisies(req, res) {
 
 export async function putSaisie(req, res) {
   try {
-    res.json(await enregistrerSaisie(req.body ?? {}));
+    res.json(saisiesSansValeurDeButs(await enregistrerSaisie(req.body ?? {})));
   } catch (error) {
     throw traduire(error);
   }
@@ -75,7 +77,7 @@ export async function putSaisie(req, res) {
 
 export async function putRetraitSaisie(req, res) {
   try {
-    res.json(await retirerSaisie(req.body ?? {}));
+    res.json(saisiesSansValeurDeButs(await retirerSaisie(req.body ?? {})));
   } catch (error) {
     throw traduire(error);
   }

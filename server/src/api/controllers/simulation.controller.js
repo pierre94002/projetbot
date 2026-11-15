@@ -31,6 +31,7 @@ import { saisonDe, enjeuxDu, prixDuCombine, porte1PourLEcran } from '../../data/
 import { HORIZON_DE_LA_PREUVE } from '../../data/simulation/reglages.js';
 import { CHAMPIONNATS } from '../../data/simulation/simulationSaisonsEnfant.js';
 import { lancementDe } from '../../bench/trialsRegistry.js';
+import { jambesDeButs, masqueEnService } from '../../data/masqueDesButs.js';
 
 /**
  * Le lancement EN COURS de l'étape 28 au registre de la mesure ({ le, version }) : seul un jugement principal de CE
@@ -112,6 +113,9 @@ export async function postPrixCombine(req, res) {
     if (leg.params !== undefined && leg.params !== null && (typeof leg.params !== 'object' || Array.isArray(leg.params))) throw new ApiError(400, `Sélection ${i + 1} : « params » doit être un objet.`);
   }
   if (cote !== null && (typeof cote !== 'number' || !Number.isFinite(cote) || cote <= 1)) throw new ApiError(400, '« cote » : la cote du combiné chez le bookmaker, un nombre supérieur à 1.');
+  // Lot 0 (masque des buts, data/masqueDesButs.js) : une sélection de buts est refusée AVANT tout calcul.
+  const masque = masqueEnService();
+  if (jambesDeButs(legs, masque).length) throw new ApiError(409, masque.phraseCombine);
   const maintenant = Date.now();
   res.json(await prixDuCombine({ legs, database: openDb(), maintenant, cote, reglagesEnService: getEngineConfig('football'), lancement: lancementCourant, analyser: (leg) => analyserLaSelection(leg, maintenant) }));
 }
