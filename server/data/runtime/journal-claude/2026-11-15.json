@@ -2,20 +2,20 @@
   "version": 1,
   "jour": "2026-11-15",
   "canal": "claude-code",
-  "majLe": "2026-11-15T02:28:00.849Z",
+  "majLe": "2026-11-15T08:23:14.547Z",
   "totaux": {
-    "appels": 8,
-    "ok": 7,
+    "appels": 9,
+    "ok": 8,
     "echecs": 1,
     "sansTokens": 1,
     "tokens": {
-      "entree": 26,
-      "ecritureCache": 58639,
+      "entree": 28,
+      "ecritureCache": 61615,
       "lectureCache": 60028,
-      "sortie": 37232,
-      "total": 155925
+      "sortie": 38047,
+      "total": 159718
     },
-    "equivalentApiUsd": 0.618933,
+    "equivalentApiUsd": 0.638991,
     "parType": {
       "revue": {
         "appels": 6,
@@ -58,6 +58,20 @@
           "total": 32227
         },
         "equivalentApiUsd": 0.139978
+      },
+      "bulletin": {
+        "appels": 1,
+        "ok": 1,
+        "echecs": 0,
+        "sansTokens": 0,
+        "tokens": {
+          "entree": 2,
+          "ecritureCache": 2976,
+          "lectureCache": 0,
+          "sortie": 815,
+          "total": 3793
+        },
+        "equivalentApiUsd": 0.020058
       }
     }
   },
@@ -319,6 +333,34 @@
         "total": 21571
       },
       "equivalentApiUsd": 0.084184
+    },
+    {
+      "id": "2026-11-15T08:23:14.543Z-16512-150-a1fde6",
+      "at": "2026-11-15T08:23:14.543Z",
+      "jour": "2026-11-15",
+      "debut": "2026-11-15T08:23:05.483Z",
+      "dureeMs": 9060,
+      "canal": "claude-code",
+      "type": "bulletin",
+      "detail": "bulletin du 2026-11-15",
+      "match": null,
+      "mode": "econome",
+      "fiche": null,
+      "taille": {
+        "consignes": 2595,
+        "message": 1322
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 2976,
+        "lectureCache": 0,
+        "sortie": 815,
+        "total": 3793
+      },
+      "equivalentApiUsd": 0.020058
     }
   ]
 }
