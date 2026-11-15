@@ -1506,8 +1506,240 @@
         }
       ]
     },
-    "updatedAt": "2026-11-09T11:54:27.010Z",
-    "createdAt": "2026-11-09T11:54:27.010Z"
+    "updatedAt": "2026-11-10T11:55:47.954Z",
+    "createdAt": "2026-11-09T11:54:27.010Z",
+    "postMatchReview": {
+      "summary": "Junior a gagné 2-0 (Paiva 35', Gutiérrez 50') à domicile, conformément au rôle de favori. Les marchés de volume (corners, tirs, tirs cadrés) ont presque tous tenu. Mes réserves sur le plus de 2,5 buts et sur « les deux équipes marquent » se sont révélées justes, car le match a fini à 2 buts et Cúcuta n'a pas marqué.",
+      "whatWasRight": "J'avais vu un Cúcuta limité sans Peralta : zéro but et moins de 1,5 but. J'avais aussi anticipé des volumes corrects pour Junior (18 tirs, 5 cadrés, 5 corners). Tous les plafonds de Cúcuta ont tenu (14 tirs, 5 cadrés, 3 corners). Ma prudence sur le plus de 2,5 buts et sur les deux équipes marquent était fondée.",
+      "whatWasMissed": "J'ai sous-estimé la production de Cúcuta : xG 1,37 contre 1,18 pour Junior, 14 tirs et 5 cadrés, soit à la limite de mes seuils. Un penalty manqué par Peralta à la 88' a évité un 2-1. Peralta était donné blessé mais il est entré (jaune à la 9', soin à la 55'), donc la composition n'était qu'une prévision. Junior a marqué efficacement avec un xG plus faible que prévu.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le 1N2 et sur les marchés de volume. Il contredit le total de 3,2 buts attendus et les deux équipes marquent. Le moteur surestimait Junior (2,22 attendus, 1,18 de xG réel) et sous-estimait légèrement Cúcuta.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Junior FC gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Junior a mené dès la 35' puis 2-0 à la 50' et a gagné sans être dominant (xG 1,18 contre 1,37).",
+          "lesson": "Garder l'avantage du domicile pour Junior, mais ne pas lui accorder une domination chiffrée : la victoire est venue de l'efficacité."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Seulement 2 buts (35', 50'). Après le 2-0, plus rien, et le penalty de Peralta à la 88' a été arrêté.",
+          "lesson": "Mon doute sur le 63 % était fondé : quand la moyenne récente (2,8) et la ligue (47 %) sont en dessous du modèle, il faut se méfier du total xG."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Cúcuta n'a pas marqué malgré 14 tirs, 5 cadrés et un xG de 1,37 : penalty manqué par Peralta à la 88'.",
+          "lesson": "Garder la méfiance sur le Oui d'un visiteur à faible production, mais Cúcuta a créé plus que prévu."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Junior FC & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Junior a gagné 2-0, donc avec plus de 1,5 but, grâce au but de Gutiérrez à la 50'.",
+          "lesson": "Ce marché dépend de la victoire. Ici le 2-0 a suffi, mais un 1-0 aurait été fatal : rester prudent."
+        },
+        {
+          "market": "Buts — Junior FC",
+          "marketId": "teamGoals",
+          "pick": "Junior FC — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Junior a marqué 2 buts, nettement sous 3,5.",
+          "lesson": "Les plafonds larges sur les buts d'une équipe sont fiables."
+        },
+        {
+          "market": "Buts — Cúcuta",
+          "marketId": "teamGoals",
+          "pick": "Cúcuta — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Cúcuta a fini à 0 but, y compris après le penalty arrêté à la 88'.",
+          "lesson": "Confirmé : la faible production de Cúcuta à l'extérieur est un bon repère. Un penalty manqué a pesé, ce n'est pas un acquis."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 12.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Seulement 8 corners (5 + 3), loin de 12,5.",
+          "lesson": "La marge de plus de 3 corners par rapport à l'attendu est solide."
+        },
+        {
+          "market": "Corners — Junior FC",
+          "marketId": "teamCorners",
+          "pick": "Junior FC — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Junior a obtenu 5 corners, au-dessus de 2,5.",
+          "lesson": "Confirmé : les volumes de Junior à domicile soutiennent la ligne."
+        },
+        {
+          "market": "Corners — Cúcuta",
+          "marketId": "teamCorners",
+          "pick": "Cúcuta — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Cúcuta n'a eu que 3 corners, sous 6,5.",
+          "lesson": "Même mené, Cúcuta n'a pas gonflé ses corners : les faibles visiteurs sont à garder."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 20.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "32 tirs au total (18 + 14), bien au-dessus de 20,5.",
+          "lesson": "Le seuil s'est confirmé, avec même un surplus. Les tirs de Cúcuta ont dépassé les moyennes d'extérieur."
+        },
+        {
+          "market": "Tirs — Junior FC",
+          "marketId": "teamShots",
+          "pick": "Junior FC — Moins de 20.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Junior a tiré 18 fois, sous 20,5 mais avec peu de marge.",
+          "lesson": "Ligne tenue, mais proche : un match plus ouvert aurait pu la franchir."
+        },
+        {
+          "market": "Tirs — Cúcuta",
+          "marketId": "teamShots",
+          "pick": "Cúcuta — Moins de 14.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Cúcuta a tiré 14 fois, juste sous 14,5.",
+          "lesson": "Marge très mince : la moyenne extérieure de 8 tirs a été largement dépassée. À garder avec prudence."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "5 + 5 = 10 tirs cadrés, au-dessus de 6,5.",
+          "lesson": "Marché confirmé, la marge tenait même avec un Cúcuta plus actif."
+        },
+        {
+          "market": "Tirs cadrés — Junior FC",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Junior FC — Plus de 3.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Junior a eu 5 tirs cadrés, au-dessus de 3,5 ; les deux buts en font partie.",
+          "lesson": "Confirmé : les volumes de Junior à domicile soutiennent la ligne."
+        },
+        {
+          "market": "Tirs cadrés — Cúcuta",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Cúcuta — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Cúcuta a eu 5 tirs cadrés, sous 5,5 d'un cran seulement.",
+          "lesson": "Passage de justesse : le 83 % était trop confiant, surtout avec Peralta finalement présent."
+        }
+      ],
+      "caveats": "Un seul match. Le penalty manqué à la 88' et la présence de Peralta (annoncé blessé) ont une part d'aléa. Les blessures de Rivas et Paiva ont pu modifier le rythme. La fiche ne donne pas de détail sur les occasions.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 19,
+        "commentaire": 2
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5612,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2389,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5612,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2389,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5612,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5612
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0467596,
+      "createdAt": "2026-11-10T11:55:47.953Z"
+    }
   },
   {
     "matchId": "cal-2026-11-10-aurora-universitario-de-vinto",
@@ -2970,8 +3202,239 @@
         }
       ]
     },
-    "updatedAt": "2026-11-09T11:54:55.256Z",
-    "createdAt": "2026-11-09T11:54:55.256Z"
+    "updatedAt": "2026-11-10T11:55:24.716Z",
+    "createdAt": "2026-11-09T11:54:55.256Z",
+    "postMatchReview": {
+      "summary": "Aurora a dominé (18 tirs à 10, 8 tirs cadrés à 3, 8 corners à 3, 3 grosses occasions à 0) mais n'a pas gagné : 1-1. Vinto a ouvert le score à 10 contre 11 (69'), et Aurora n'a égalisé que sur penalty à la 90+10'. La lecture de domination était bonne ; le résultat et le total de buts ont été manqués de peu.",
+      "whatWasRight": "Le profil de volume était bien lu : plus de 24,5 tirs (28 au total), plus de 7,5 tirs cadrés (11), plus de 6,5 corners (11), et les plafonds sur Vinto (10 tirs, 3 tirs cadrés, 3 corners) et sur Aurora en tirs (18) et tirs cadrés (8). Vinto à moins de 1,5 but est passé, avec un seul but. Le doute sur le nul, lié à la forme d'Aurora, s'est confirmé.",
+      "whatWasMissed": "La conversion en buts a été surestimée : malgré 3 grosses occasions, Aurora n'a marqué que sur penalty tardif. Le but de Vinto est arrivé juste après son exclusion (67'), contre le cours du jeu. Le moteur donnait 2,69 xG à Aurora pour seulement 1 but ; les 1,2 but de moyenne sur 10 matchs invitaient à plus de prudence. Les corners d'Aurora (8) ont dépassé le seuil de 7,5.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1N2 (Aurora à 54 %) et sur les buts (plus de 2,5 à 71 %, Aurora plus de 1,5 à 75 %). Il le confirme sur tous les marchés de tirs, de tirs cadrés et de corners d'équipe adverse, ainsi que sur BTTS oui.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Aurora gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Aurora a dominé mais Vinto a marqué à la 69', deux minutes après son exclusion. Aurora n'a égalisé qu'au penalty de la 90+10'. Score 1-1.",
+          "lesson": "Une forte domination statistique ne fait pas une victoire quand l'équipe convertit mal. Avec une forme en baisse et beaucoup de nuls, garder le nul comme issue crédible."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Seulement 2 buts : 0-0 à la mi-temps, un but à la 69' et un penalty à la 90+10'. Le bloc à cinq défenseurs et la faible efficacité ont limité le score.",
+          "lesson": "Ne pas suivre le xG brut quand l'attaque marque 1,2 but par match. Le plus de 2,5 à 71 % était trop confiant."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Vinto a marqué à la 69' et Aurora a égalisé au penalty (90+10'). Le oui est passé de justesse.",
+          "lesson": "Ma nuance était prudente et correcte. La série de buts de Vinto a tenu, mais le oui n'est passé que grâce à un penalty tardif."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Aurora & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "faible",
+          "aiWasRight": false,
+          "explanation": "Le total de buts (2) était suffisant, mais Aurora n'a pas gagné. Le combiné échoue sur la partie résultat.",
+          "lesson": "Dans un combiné, le risque porte sur le résultat. Un favori à domicile en méforme reste fragile."
+        },
+        {
+          "market": "Buts — Aurora",
+          "marketId": "teamGoals",
+          "pick": "Aurora — Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Aurora n'a marqué qu'une fois, sur penalty à la 90+10', malgré 18 tirs, 8 cadrés et 3 grosses occasions.",
+          "lesson": "Pour les buts d'équipe, accorder plus de poids à la moyenne récente (1,2) qu'au xG du moteur (2,69)."
+        },
+        {
+          "market": "Buts — Universitario de Vinto",
+          "marketId": "teamGoals",
+          "pick": "Universitario de Vinto — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Vinto n'a marqué qu'une fois (Llano, 69'), avec 3 tirs cadrés et 0 grosse occasion.",
+          "lesson": "Confirmé : l'attaque de Vinto, privée de ses créateurs, est restée faible. À conserver."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "11 corners (8 et 3), au-dessus de 6,5, grâce à la pression d'Aurora.",
+          "lesson": "Le seuil très en dessous du total attendu était sûr. À conserver."
+        },
+        {
+          "market": "Corners — Aurora",
+          "marketId": "teamCorners",
+          "pick": "Aurora — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Aurora a obtenu 8 corners, au-dessus de 7,5, avec 18 tirs et la pression finale face à dix joueurs.",
+          "lesson": "Quand un favori domine, sa moyenne de corners sous-estime le pic. Un seuil proche de 7,5 n'est pas sûr, surtout si l'adversaire finit à dix."
+        },
+        {
+          "market": "Corners — Universitario de Vinto",
+          "marketId": "teamCorners",
+          "pick": "Universitario de Vinto — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Vinto n'a eu que 3 corners avec 43 % de possession et dix joueurs à partir de la 67'.",
+          "lesson": "Vinto joue peu le ballon dehors, ce qui limite ses corners. À conserver."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 24.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "28 tirs au total (18 et 10), au-dessus de 24,5.",
+          "lesson": "Le total de tirs est fiable quand le moteur prévoit un écart de plus de 5 tirs. À conserver."
+        },
+        {
+          "market": "Tirs — Aurora",
+          "marketId": "teamShots",
+          "pick": "Aurora — Moins de 21.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Aurora a tiré 18 fois, sous 21,5, malgré un siège prolongé.",
+          "lesson": "Son niveau à domicile (18) s'est retrouvé exactement. La marge était juste suffisante."
+        },
+        {
+          "market": "Tirs — Universitario de Vinto",
+          "marketId": "teamShots",
+          "pick": "Universitario de Vinto — Moins de 18.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Vinto n'a tiré que 10 fois, en cohérence avec sa moyenne extérieure de 10,8.",
+          "lesson": "La moyenne à l'extérieur est un bon repère pour plafonner les tirs de Vinto."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "11 tirs cadrés (8 et 3), au-dessus de 7,5, tirés par la domination d'Aurora.",
+          "lesson": "Le plus de 7,5 tenait grâce à la pression d'Aurora. La variance reste réelle, avec une marge faible."
+        },
+        {
+          "market": "Tirs cadrés — Aurora",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Aurora — Moins de 8.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Aurora a cadré 8 tirs, soit sous 8,5 de peu, avec 2 tirs cadrés de plus que sa moyenne à domicile (6).",
+          "lesson": "Le seuil est passé de justesse. En cas de domination marquée, le dépassement de la moyenne domicile est possible."
+        },
+        {
+          "market": "Tirs cadrés — Universitario de Vinto",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Universitario de Vinto — Moins de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Vinto n'a cadré que 3 tirs sur 10, nettement sous 6,5.",
+          "lesson": "Marge confirmée. Vinto à dix et en bloc bas cadre peu."
+        }
+      ],
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 18,
+        "commentaire": 2
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5531,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2543,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5531,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2543,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5531,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5531
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.04797560000000001,
+      "createdAt": "2026-11-10T11:55:24.715Z"
+    }
   },
   {
     "matchId": "cal-2026-11-10-anaitasuna-ft-deportivo-alaves",
@@ -3762,8 +4225,132 @@
         }
       ]
     },
-    "updatedAt": "2026-11-09T11:55:20.814Z",
-    "createdAt": "2026-11-09T11:55:20.814Z"
+    "updatedAt": "2026-11-10T22:34:39.680Z",
+    "createdAt": "2026-11-09T11:55:20.814Z",
+    "postMatchReview": {
+      "summary": "Alavés a gagné 6-1 à Anaitasuna, dans le sens de la supériorité annoncée, avec même plus d'ampleur que prévu (23 tirs, xG 2,11). Le seul raté est le but d'honneur d'Anaitasuna (43'), qui a fait perdre les marchés liés au clean sheet.",
+      "whatWasRight": "Victoire d'Alavés, plus de 2,5 buts, combiné victoire + plus de 1,5 but et Alavés plus de 1,5 but : tout s'est vérifié. Mariano Díaz a signé un doublé (37', 57'). La domination (64 % de possession, 23 tirs contre 8, 7 grosses occasions contre 1) confirme l'écart de niveau. Mes réserves sur le clean sheet étaient justifiées : Anaitasuna a marqué à la 43'.",
+      "whatWasMissed": "J'ai sous-estimé l'ampleur du score : la méforme de Liga et la rotation n'ont pas freiné l'attaque, 6 buts dont deux tardifs (79', 86') après les changements. J'ai aussi trop compté sur la solidité défensive d'Alavés contre un amateur : Anaitasuna a eu une grosse occasion et un but, pour un xG réel de 0,81 contre 0,57 prévu.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le 1N2, le total et les buts d'Alavés. Il ne contredit que les deux marchés liés au clean sheet. Le xG d'Alavés (2,8 prévu, 2,11 réel) était cohérent, celui d'Anaitasuna un peu bas.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Deportivo Alavés gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Alavés a mené 0-1 dès la 28' (Otto), puis 0-2 à la 37' et fini à 1-6. La domination en tirs (23 contre 8) a été nette.",
+          "lesson": "Contre un club amateur de division inférieure en coupe, l'écart de niveau l'emporte sur la méforme de Liga et la rotation. Cet avis est à garder."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "7 buts au total (1-6), avec 3 buts entre la 55' et la 57' puis la 79' et la 86'. Le plafond de 2,5 a été dépassé largement.",
+          "lesson": "Mon avis nuancé était trop prudent : la faible production d'Alavés en Liga ne se transfère pas à un match de coupe contre un amateur. Les scores larges de ses précédents matchs de coupe (7-0, 3-0) étaient le bon indice."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Carlos Juaristi a marqué à la 43' (1-2), après une grosse occasion. Le xG d'Anaitasuna était de 0,81, un peu au-dessus de la prévision.",
+          "lesson": "Même très dominant, un favori dont la défense est friable (1,6 but encaissé par match) concède souvent un but d'honneur. Le pari « Non » sur un score large est fragile, car le favori fait tourner et se relâche."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Deportivo Alavés & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Victoire d'Alavés avec 6 buts, donc au moins 2 buts inscrits : le combiné est passé facilement.",
+          "lesson": "Ce combiné se valide dès que la victoire est acquise, tant que le risque d'un 1-0 reste faible. Il convenait pour ce type de match."
+        },
+        {
+          "market": "Buts — Anaitasuna FT",
+          "marketId": "teamGoals",
+          "pick": "Anaitasuna FT — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Anaitasuna a marqué une fois (43'), donc « moins de 0,5 » est perdu. Le xG de 0,81 a rendu ce but plausible.",
+          "lesson": "Mon avis nuancé et ma faible confiance étaient justes. Les 56 % du moteur sont trop élevés pour un hôte sans données et face à une défense friable. Il faut se méfier des marchés de clean sheet en coupe."
+        },
+        {
+          "market": "Buts — Deportivo Alavés",
+          "marketId": "teamGoals",
+          "pick": "Deportivo Alavés — Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Alavés a marqué 6 buts : Otto 28', Díaz 37' et 57', Rodríguez 55', Mañas 79', Aleñá 86', avec un xG de 2,11 et 11 tirs cadrés.",
+          "lesson": "Cet avis est à garder : l'écart de division soutient un total d'au moins 2 buts pour Alavés, même avec une rotation. Les remplaçants ont aussi marqué."
+        }
+      ],
+      "caveats": "Un seul match, sans aucune donnée sur Anaitasuna. Le 6-1 peut tenir à la variance de finition (6 buts pour 2,11 de xG). Les compositions réelles ne sont pas fournies, donc l'effet de la rotation n'est pas mesurable.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 18,
+        "commentaire": 2
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 7478,
+        "cache_read_input_tokens": 6183,
+        "output_tokens": 2543,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 7478,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1773,
+            "cache_read_input_tokens": 6183,
+            "cache_creation_input_tokens": 1295,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1295
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0565866,
+      "createdAt": "2026-11-10T22:34:39.678Z"
+    }
   },
   {
     "matchId": "cal-2026-11-10-mijas-las-lagunas-real-jaen",
@@ -4305,8 +4892,132 @@
         }
       ]
     },
-    "updatedAt": "2026-11-09T11:55:39.925Z",
-    "createdAt": "2026-11-09T11:55:39.925Z"
+    "updatedAt": "2026-11-10T22:34:58.000Z",
+    "createdAt": "2026-11-09T11:55:39.925Z",
+    "postMatchReview": {
+      "summary": "Jaén s'est imposé 2-1 à Mijas, dans le sens du favori du moteur. Mon avis prudent, fondé sur des données pauvres, n'a pas été démenti. Les six marchés du moteur sont justes, mais le scénario (deux buts de Jaén avant l'heure de jeu, réduction du score tardive) était compatible avec une lecture simple des buts attendus.",
+      "whatWasRight": "J'avais signalé que les données étaient trop minces pour contredire le moteur, et je n'ai pas cherché à le contredire : Jaén a gagné (buts à la 21e et à la 62e). Les avis « confirme » sur Mijas moins de 1,5 but (un seul but, à la 86e) et Jaén moins de 3,5 buts (2 buts) ont tenu. Le fait que Mijas marque quand même (« les 2 équipes marquent » juste) montrait que les seuls 0 but d'un match ancien étaient peu informatifs.",
+      "whatWasMissed": "J'ai trop pesé les trois défaites anciennes de Jaén en coupe et l'avantage du terrain de Mijas, qui n'ont rien changé. Je n'ai pas non plus distingué la différence de niveau entre les divisions : Jaén a dominé la première heure. Le but tardif de Mijas (86e) était difficile à prévoir avec ces données.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur tous les marchés : victoire de Jaén, plus de 2,5 buts (3), les deux équipes marquent, et les deux plafonds de buts par équipe. Aucune cote de marché n'existait, donc aucun edge n'est évaluable.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Real Jaén gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Jaén a ouvert le score à la 21e (Gallego), doublé à la 62e (Moha Keita) et a tenu malgré le but de Mijas à la 86e. Victoire 2-1.",
+          "lesson": "Face à un adversaire de niveau inférieur en coupe, le favori du moteur a confirmé son statut malgré des données récentes pauvres ; ne pas trop peser d'anciennes défaites de coupe ni l'avantage du terrain."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Trois buts au total (21e, 62e, 86e), donc plus de 2,5 buts. Le but tardif de Mijas a fait passer le seuil.",
+          "lesson": "Le total de buts attendu élevé du moteur (3,6) s'est confirmé, mais de justesse : un 2-0 aurait fait échouer le marché. À garder avec prudence."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Mijas a marqué à la 86e (Raúl Pérez), après deux buts de Jaén. Le marché est passé grâce à ce but tardif.",
+          "lesson": "Mon doute sur ce marché était justifié par l'incertitude, mais le 0 but d'un seul match ancien de Mijas ne devait pas peser ; le but est venu tard, donc fragile."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Real Jaén & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Jaén a gagné et marqué 2 buts sur 3 au total, soit plus de 1,5 buts : le combiné est passé dès la 62e.",
+          "lesson": "Comme je l'avais écrit, tout dépendait de la victoire de Jaén ; la limite de 1,5 but était sans enjeu."
+        },
+        {
+          "market": "Buts — Mijas-Las Lagunas",
+          "marketId": "teamGoals",
+          "pick": "Mijas-Las Lagunas — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Mijas n'a marqué qu'un but (86e), donc moins de 1,5 but.",
+          "lesson": "Avis confirmé : l'attaque de Mijas a été contenue pendant 85 minutes. Garder la logique d'un plafond bas pour l'équipe la plus faible, avec la réserve d'un but tardif."
+        },
+        {
+          "market": "Buts — Real Jaén",
+          "marketId": "teamGoals",
+          "pick": "Real Jaén — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Jaén s'est arrêté à 2 buts (21e et 62e), bien sous 3,5 buts. Les changements à partir de la 64e ont ralenti le jeu.",
+          "lesson": "Avis confirmé : atteindre 4 buts est rare ; ce plafond a bien tenu, même pour un favori à 2,58 buts attendus."
+        }
+      ],
+      "caveats": "Un seul match, donc rien de généralisable. Aucune statistique de tirs, de xG ni de possession n'a été relevée, ce qui empêche de juger la domination réelle. Le but tardif de Mijas a pu faire basculer plusieurs marchés (les deux équipes marquent, plus de 2,5 buts).",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 17,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3806,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 1705,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3806,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1705,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 3806,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3806
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0326956,
+      "createdAt": "2026-11-10T22:34:57.999Z"
+    }
   },
   {
     "matchId": "cal-2026-11-10-pamplona-eibar",
@@ -5139,8 +5850,132 @@
         }
       ]
     },
-    "updatedAt": "2026-11-09T11:55:58.926Z",
-    "createdAt": "2026-11-09T11:55:58.926Z"
+    "updatedAt": "2026-11-10T22:35:16.328Z",
+    "createdAt": "2026-11-09T11:55:58.926Z",
+    "postMatchReview": {
+      "summary": "Eibar a gagné 3-0 à Pamplona, dans le sens du moteur et de ma lecture : supériorité de niveau, plus de 1,5 but, Pamplona sous 1,5. Seul « Les 2 équipes marquent », où j'étais nuancé, a échoué. Le match a été plié tôt (0-2 à la 22e).",
+      "whatWasRight": "J'ai confirmé la victoire d'Eibar, le plus de 1,5 but, le combiné, Pamplona sous 1,5 but et Eibar sous 3,5 buts. Les buts de Javi Martón (2e) et Jon Magunazelaia (22e, 53e) donnent 3 buts, soit le total attendu par le moteur. Mes réserves sur le synthétique, la pluie et la défense diminuée ne se sont pas vérifiées, mais elles n'ont coûté aucun pick. Eibar s'est arrêté à 3 buts, sous le seuil de 4.",
+      "whatWasMissed": "Je n'avais aucune donnée sur Pamplona et je n'ai pas vu que cette équipe pouvait être très faible : elle n'a marqué aucun but. Mon penchant pour un but local, fondé sur les absences défensives d'Eibar, était trop faible. Le but à la 2e minute, qui a changé le scénario, était imprévisible. La fiche n'a aucune statistique de tirs, donc je ne peux pas dire si Pamplona a eu des occasions.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur, qui donnait 2,4 buts attendus à Eibar contre 0,8 à Pamplona. Eibar a même fait un peu mieux avec 3 buts. Le moteur était à 51 % pour les deux équipes marquent, et le 0-3 le contredit sur ce marché seulement.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Eibar gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Eibar a ouvert le score à la 2e minute (Martón), doublé à la 22e et plié à la 53e (Magunazelaia). Pamplona n'a jamais menacé le résultat.",
+          "lesson": "Face à un adversaire sans données, la supériorité de niveau d'un club de Liga 2 contre une équipe de division inférieure tient en coupe. Garder cette lecture, même avec une confiance moyenne."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Les 3 buts sont arrivés aux 2e, 22e et 53e minutes. Le plus de 1,5 but était acquis dès la 22e.",
+          "lesson": "Avec un écart de niveau net et des buts attendus de 3,2 au total, le plus de 1,5 but est un pari solide. À garder."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Pamplona n'a pas marqué (0-3). Eibar a pris l'avantage très tôt, puis a géré. Les absences de Bernat et d'Elgezabal n'ont pas suffi à donner un but aux locaux.",
+          "lesson": "Quand le moteur donne seulement 0,8 but à l'équipe inconnue et que l'écart de niveau est net, pencher vers le non. Les absences défensives pèsent peu face à un adversaire faible."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Eibar & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Eibar a gagné et marqué 3 buts, donc les deux conditions sont remplies. Le combiné a suivi le 1N2, comme prévu.",
+          "lesson": "Ce combiné dépend presque du seul 1N2. Quand la victoire se confirme, il passe presque automatiquement."
+        },
+        {
+          "market": "Buts — Pamplona",
+          "marketId": "teamGoals",
+          "pick": "Pamplona — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Pamplona est resté à 0 but. Eibar a mené 0-2 dès la 22e, sans qu'un but local ne soit relevé.",
+          "lesson": "Le moteur donnait 0,8 but à Pamplona. Le 0 est cohérent avec cette base, donc faire confiance à ce chiffrage même sans données sur l'équipe."
+        },
+        {
+          "market": "Buts — Eibar",
+          "marketId": "teamGoals",
+          "pick": "Eibar — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Eibar a marqué 3 buts (2e, 22e, 53e), donc sous le seuil de 4. Les 3 buts sont déjà au-dessus de sa moyenne de 1,9.",
+          "lesson": "Le moins de 3,5 buts est passé de justesse (3 buts). Le seuil de 4 reste rare, mais la marge est faible quand le moteur attend 2,4 buts."
+        }
+      ],
+      "caveats": "Un seul match, sans statistiques de tirs ni de xG. Le résultat peut tenir à l'ouverture du score à la 2e minute. Aucune donnée sur Pamplona, donc l'évaluation de son niveau reste incertaine.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 14,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3558,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 1746,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3558,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1746,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 3558,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3558
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0321136,
+      "createdAt": "2026-11-10T22:35:16.328Z"
+    }
   },
   {
     "matchId": "cal-2026-11-10-sd-amorebieta-logrones",
@@ -5882,829 +6717,132 @@
         }
       ]
     },
-    "updatedAt": "2026-11-09T11:56:17.435Z",
-    "createdAt": "2026-11-09T11:56:17.435Z"
-  },
-  {
-    "matchId": "cal-2026-11-10-tavernes-de-la-valldigna-valencia",
-    "homeName": "Tavernes de la Valldigna",
-    "awayName": "Valencia",
-    "league": "Copa del Rey - Spain",
-    "commenceTime": "2026-11-10T12:00:00Z",
-    "model": "claude-code:sonnet",
-    "engineSnapshot": {
-      "label": "Tavernes de la Valldigna vs Valencia",
-      "expectedGoals": {
-        "home": 0.5,
-        "away": 2.18,
-        "source": "league-baseline"
-      },
-      "trueOdds": {
-        "home": 4.26,
-        "draw": 4.62,
-        "away": 1.82
-      },
-      "market": {
-        "odds1": null,
-        "oddsDraw": null,
-        "odds2": null
-      },
-      "edgePercent": null,
-      "staking": {
-        "action": "PASS",
-        "stake": null,
-        "reason": "no_market_odds",
-        "candidates": []
-      },
-      "statExpectations": null,
-      "marketPredictions": [
+    "updatedAt": "2026-11-10T22:35:46.141Z",
+    "createdAt": "2026-11-09T11:56:17.435Z",
+    "postMatchReview": {
+      "summary": "Match fermé, 1-0 pour Amorebieta (but de Larralde à la 77e, mi-temps 0-0). Le moteur annonçait un match ouvert avec avantage à Logroñés (4,8 buts attendus). Mes réserves sur la faiblesse des attaques se sont révélées justifiées : un seul but, et Logroñés n'a pas marqué.",
+      "whatWasRight": "J'avais signalé la tension entre les buts attendus du moteur (2 et 2,8) et les moyennes basses relevées. Le 1-0 avec un seul but à la 77e leur donne raison. Mon doute sur Logroñés (0,4 but par match, aucun buteur identifié) est confirmé : il n'a pas marqué. Amorebieta moins de 2,5 buts est passé.",
+      "whatWasMissed": "Je suis resté trop neutre (nuance, faible confiance) alors que mes propres chiffres pointaient vers un match fermé. J'ai sous-pesé le scénario d'un score étriqué en Coupe et l'avantage du domicile. Le moteur a surestimé les buts : 4,8 attendus pour 1 réel.",
+      "outcomeVsEngine": "Le résultat contredit nettement le moteur : victoire d'Amorebieta, un seul but, Logroñés muet. Seul le marché Amorebieta moins de 2,5 buts allait dans son sens. Les cinq autres picks étaient faux.",
+      "marketReviews": [
         {
+          "market": "Résultat",
           "marketId": "result",
-          "params": {
-            "outcome": "away"
-          },
-          "market": "Résultat",
-          "predictedOutcome": "away",
-          "predictedLabel": "Valencia gagne",
-          "predictedOdds": 1.82,
-          "probability": 55,
-          "minOdds": 1.2
+          "pick": "Logroñés gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Logroñés n'a pas gagné : Amorebieta l'a emporté 1-0 grâce à Larralde (77e), entré à la 61e. Rien en première période (0-0).",
+          "lesson": "Quand le moteur favorise l'équipe sans appui de la forme (0,4 but par match), ne pas lui accorder de crédit : le domicile et la faiblesse offensive pèsent plus. Mon scepticisme était fondé et peut être assumé davantage."
         },
         {
+          "market": "Total buts",
           "marketId": "totalGoals",
-          "params": {
-            "line": 1.5,
-            "side": "over"
-          },
-          "market": "Total buts",
-          "predictedOutcome": "over",
-          "predictedLabel": "Plus de 1.5 buts",
-          "predictedOdds": 1.33,
-          "probability": 75,
-          "minOdds": 1.2
+          "pick": "Plus de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Un seul but dans le match, à la 77e, loin des 4 buts requis. Aucune statistique de tirs ou de xG n'est relevée pour détailler.",
+          "lesson": "Un total moteur de 4,8 buts contredit par les moyennes basses des deux équipes est probablement surestimé. Se méfier des plus de 3,5 dans ce cas."
         },
         {
+          "market": "Les 2 équipes marquent",
           "marketId": "bothTeamsScore",
-          "params": {
-            "outcome": "no"
-          },
-          "market": "Les 2 équipes marquent",
-          "predictedOutcome": "no",
-          "predictedLabel": "Non",
-          "predictedOdds": 1.55,
-          "probability": 65,
-          "minOdds": 1.2
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Logroñés n'a pas marqué (0-0 jusqu'à la 77e, puis 1-0 Amorebieta). Son attaque faible (0,4 but par match) l'annonçait.",
+          "lesson": "Une attaque à 0,4 but par match doit faire baisser fortement le Oui, même si l'adversaire est perméable. Ma nuance allait dans le bon sens."
         },
         {
+          "market": "Résultat + Total buts",
           "marketId": "resultAndTotal",
-          "params": {
-            "line": 1.5,
-            "key": "awayOver"
-          },
-          "market": "Résultat + Total buts",
-          "predictedOutcome": "awayOver",
-          "predictedLabel": "Valencia & Plus de 1.5 buts",
-          "predictedOdds": 2.25,
-          "probability": 44,
-          "minOdds": 1.2
+          "pick": "Logroñés & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Le combiné échoue car Logroñés n'a pas gagné ; le seuil de 1,5 but n'a de toute façon pas été atteint (un seul but).",
+          "lesson": "Un combiné dépend de son maillon le plus fragile. Ici le résultat, et même le total de buts, était trop optimiste : éviter de croire qu'un seuil bas est presque acquis sur un total moteur gonflé."
         },
         {
+          "market": "Buts — SD Amorebieta",
           "marketId": "teamGoals",
-          "params": {
-            "team": "home",
-            "line": 0.5,
-            "side": "under"
-          },
-          "market": "Buts — Tavernes de la Valldigna",
-          "predictedOutcome": "under",
-          "predictedLabel": "Tavernes de la Valldigna — Moins de 0.5 buts",
-          "predictedOdds": 1.65,
-          "probability": 61,
-          "minOdds": 1.2
+          "pick": "SD Amorebieta — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Amorebieta a marqué un seul but (Larralde, 77e), donc moins de 2,5 buts est juste. Cela colle à ses 1 à 1,25 but de moyenne.",
+          "lesson": "Confirmer les unders sur une attaque modeste dont la moyenne est nettement sous le moteur : lecture à garder."
         },
         {
+          "market": "Buts — Logroñés",
           "marketId": "teamGoals",
-          "params": {
-            "team": "away",
-            "line": 3.5,
-            "side": "under"
-          },
-          "market": "Buts — Valencia",
-          "predictedOutcome": "under",
-          "predictedLabel": "Valencia — Moins de 3.5 buts",
-          "predictedOdds": 1.21,
-          "probability": 83,
-          "minOdds": 1.2
+          "pick": "Logroñés — Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Logroñés n'a marqué aucun but, bien loin de 2. Ses remplacements (46e, 61e, 62e, 75e) n'ont rien changé.",
+          "lesson": "Une défense adverse perméable ne suffit pas quand l'attaque produit 0,4 but par match. La forme offensive doit primer sur le moteur."
         }
       ],
-      "engineVersion": 5
-    },
-    "usage": {
-      "input_tokens": 2,
-      "cache_creation_input_tokens": 4573,
-      "cache_read_input_tokens": 4470,
-      "output_tokens": 2389,
-      "output_tokens_details": {
-        "thinking_tokens": 0
+      "caveats": "Un seul match, sans statistiques détaillées (tirs, xG, possession non relevés). Un but tardif (77e) peut tenir au hasard. Les données d'avant-match étaient anciennes et partielles, donc les conclusions sont fragiles.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 15,
+        "commentaire": 0
       },
-      "server_tool_use": {
-        "web_search_requests": 0,
-        "web_fetch_requests": 0
-      },
-      "service_tier": "standard",
-      "cache_creation": {
-        "ephemeral_1h_input_tokens": 4573,
-        "ephemeral_5m_input_tokens": 0
-      },
-      "inference_geo": "global",
-      "iterations": [
-        {
-          "input_tokens": 2,
-          "output_tokens": 2389,
-          "cache_read_input_tokens": 4470,
-          "cache_creation_input_tokens": 4573,
-          "cache_creation": {
-            "ephemeral_5m_input_tokens": 0,
-            "ephemeral_1h_input_tokens": 4573
-          },
-          "type": "message"
-        }
-      ],
-      "speed": "standard",
-      "fallback_credit": null
-    },
-    "costUsd": 0.04308,
-    "analysedAt": "2026-11-09T11:56:40.008Z",
-    "timing": "avance",
-    "fiche": "compacte",
-    "memoire": {
-      "mots": 377,
-      "tokens": 1204,
-      "lecons": [
-        "cal-2026-10-27-arosa-sc-pontevedra|result",
-        "cal-2026-10-27-arosa-sc-pontevedra|resultAndTotal"
-      ],
-      "dossiersDu": "2026-11-07T23:35:38.279Z",
-      "equipes": {
-        "home": {
-          "id": null,
-          "dossier": false
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 5204,
+        "cache_read_input_tokens": 7761,
+        "output_tokens": 3354,
+        "output_tokens_details": {
+          "thinking_tokens": 0
         },
-        "away": {
-          "id": "fotmob-10267",
-          "dossier": true
-        }
-      },
-      "championnat": {
-        "league": "Copa del Rey - Spain",
-        "dossier": true
-      }
-    },
-    "lineupSnapshot": {
-      "source": "magasin",
-      "home": null,
-      "away": {
-        "team": "Valencia",
-        "teamId": "fotmob-10267",
-        "formation": "5-3-2",
-        "coach": "Javier Aguirre",
-        "statsSince": "2026-07-01",
-        "teamMatches": 12,
-        "startXI": [
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5204,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
           {
-            "id": "fotmob-254241",
-            "name": "Stole Dimitrievski",
-            "number": 1,
-            "position": "Goalkeeper",
-            "age": 32,
-            "countryCode": "MKD",
-            "countryName": "North Macedonia",
-            "x": 0.1,
-            "y": 0.5,
-            "stats": {
-              "apps": 12,
-              "starts": 12,
-              "minutes": 1080,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.95
-            }
-          },
-          {
-            "id": "fotmob-391058",
-            "name": "José Gayà",
-            "number": 14,
-            "position": "Midfielder",
-            "age": 31,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "x": 0.371,
-            "y": 0.11,
-            "stats": {
-              "apps": 10,
-              "starts": 9,
-              "minutes": 794,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.33,
-              "rating": 6.85
-            }
-          },
-          {
-            "id": "fotmob-586768",
-            "name": "Guido Rodríguez",
-            "number": 2,
-            "position": "Midfielder",
-            "age": 32,
-            "countryCode": "ARG",
-            "countryName": "Argentina",
-            "x": 0.613,
-            "y": 0.5,
-            "stats": {
-              "apps": 9,
-              "starts": 9,
-              "minutes": 736,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.07,
-              "rating": 7.07
-            }
-          },
-          {
-            "id": "fotmob-590494",
-            "name": "Umar Sadiq",
-            "number": 6,
-            "position": "Forward",
-            "age": 29,
-            "countryCode": "NGA",
-            "countryName": "Nigeria",
-            "x": 0.87,
-            "y": 0.7,
-            "stats": {
-              "apps": 5,
-              "starts": 2,
-              "minutes": 246,
-              "goals": 2,
-              "assists": 0,
-              "xg": 2.12,
-              "rating": 6.48
-            }
-          },
-          {
-            "id": "fotmob-673356",
-            "name": "Pablo Maffeo",
-            "number": 24,
-            "position": "Midfielder",
-            "age": 29,
-            "countryCode": "ARG",
-            "countryName": "Argentina",
-            "x": 0.371,
-            "y": 0.89,
-            "stats": {
-              "apps": 12,
-              "starts": 9,
-              "minutes": 740,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.21,
-              "rating": 6.65
-            }
-          },
-          {
-            "id": "fotmob-673689",
-            "name": "Pepelu",
-            "number": 18,
-            "position": "Defender",
-            "age": 28,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "x": 0.357,
-            "y": 0.695,
-            "stats": {
-              "apps": 12,
-              "starts": 12,
-              "minutes": 1018,
-              "goals": 1,
-              "assists": 0,
-              "xg": 0.9,
-              "rating": 6.8
-            }
-          },
-          {
-            "id": "fotmob-704151",
-            "name": "Arnaut Danjuma",
-            "number": 7,
-            "position": "Forward",
-            "age": 29,
-            "countryCode": "NED",
-            "countryName": "Netherlands",
-            "x": 0.87,
-            "y": 0.3,
-            "stats": {
-              "apps": 12,
-              "starts": 10,
-              "minutes": 929,
-              "goals": 0,
-              "assists": 1,
-              "xg": 1.66,
-              "rating": 6.56
-            }
-          },
-          {
-            "id": "fotmob-969711",
-            "name": "Justin De Haas",
-            "number": 12,
-            "position": "Defender",
-            "age": 26,
-            "countryCode": "NED",
-            "countryName": "Netherlands",
-            "x": 0.357,
-            "y": 0.305,
-            "stats": {
-              "apps": 7,
-              "starts": 7,
-              "minutes": 503,
-              "goals": 0,
-              "assists": 1,
-              "xg": 0.02,
-              "rating": 6.69
-            }
-          },
-          {
-            "id": "fotmob-1284429",
-            "name": "Javier Guerra",
-            "number": 8,
-            "position": "Midfielder",
-            "age": 23,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "x": 0.613,
-            "y": 0.79,
-            "stats": {
-              "apps": 12,
-              "starts": 12,
-              "minutes": 980,
-              "goals": 0,
-              "assists": 2,
-              "xg": 1.26,
-              "rating": 6.68
-            }
-          },
-          {
-            "id": "fotmob-1311985",
-            "name": "César Tárrega",
-            "number": 5,
-            "position": "Defender",
-            "age": 24,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "x": 0.357,
-            "y": 0.5,
-            "stats": {
-              "apps": 9,
-              "starts": 8,
-              "minutes": 690,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.31,
-              "rating": 6.71
-            }
-          },
-          {
-            "id": "fotmob-1905203",
-            "name": "Aaron Mayol",
-            "number": 33,
-            "position": "Midfielder",
-            "age": 18,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "x": 0.613,
-            "y": 0.21,
-            "stats": {
-              "apps": 4,
-              "starts": 4,
-              "minutes": 348,
-              "goals": 1,
-              "assists": 0,
-              "xg": 0.13,
-              "rating": 6.7
-            }
+            "input_tokens": 2,
+            "output_tokens": 1621,
+            "cache_read_input_tokens": 5673,
+            "cache_creation_input_tokens": 1619,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1619
+            },
+            "type": "message"
           }
         ],
-        "bench": [
-          {
-            "id": "fotmob-561198",
-            "name": "Mouctar Diakhaby",
-            "number": 4,
-            "position": "Defender",
-            "age": 29,
-            "countryCode": "GUI",
-            "countryName": "Guinea",
-            "stats": {
-              "apps": 6,
-              "starts": 4,
-              "minutes": 334,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.1,
-              "rating": 6.16
-            }
-          },
-          {
-            "id": "fotmob-638070",
-            "name": "Luis Rioja",
-            "number": 11,
-            "position": "Midfielder",
-            "age": 33,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "stats": {
-              "apps": 8,
-              "starts": 3,
-              "minutes": 365,
-              "goals": 1,
-              "assists": 0,
-              "xg": 0.45,
-              "rating": 6.66
-            }
-          },
-          {
-            "id": "fotmob-723148",
-            "name": "Aliou Dieng",
-            "number": 15,
-            "position": "Midfielder",
-            "age": 29,
-            "countryCode": "MLI",
-            "countryName": "Mali",
-            "stats": {
-              "apps": 6,
-              "starts": 2,
-              "minutes": 232,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.51
-            }
-          },
-          {
-            "id": "fotmob-784246",
-            "name": "Dani Raba",
-            "number": 19,
-            "position": "Midfielder",
-            "age": 31,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "stats": {
-              "apps": 5,
-              "starts": 2,
-              "minutes": 188,
-              "goals": 1,
-              "assists": 0,
-              "xg": 0.46,
-              "rating": 6.6
-            }
-          },
-          {
-            "id": "fotmob-800615",
-            "name": "Filip Ugrinic",
-            "number": 23,
-            "position": "Midfielder",
-            "age": 27,
-            "countryCode": "SUI",
-            "countryName": "Switzerland",
-            "stats": {
-              "apps": 12,
-              "starts": 7,
-              "minutes": 623,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.43,
-              "rating": 6.51
-            }
-          },
-          {
-            "id": "fotmob-896402",
-            "name": "José Copete",
-            "number": 3,
-            "position": "Defender",
-            "age": 27,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "stats": {
-              "apps": 0,
-              "starts": 0,
-              "minutes": 0,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": null
-            }
-          },
-          {
-            "id": "fotmob-929838",
-            "name": "Hugo Duro",
-            "number": 9,
-            "position": "Forward",
-            "age": 26,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "stats": {
-              "apps": 10,
-              "starts": 5,
-              "minutes": 415,
-              "goals": 0,
-              "assists": 1,
-              "xg": 1.25,
-              "rating": 6.28
-            }
-          },
-          {
-            "id": "fotmob-963964",
-            "name": "Harvey Elliott",
-            "number": 10,
-            "position": "Midfielder",
-            "age": 23,
-            "countryCode": "ENG",
-            "countryName": "England",
-            "stats": {
-              "apps": 6,
-              "starts": 0,
-              "minutes": 152,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.07,
-              "rating": 6.09
-            }
-          },
-          {
-            "id": "fotmob-1194892",
-            "name": "Arnau Martínez",
-            "number": 22,
-            "position": "Defender",
-            "age": 23,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "stats": {
-              "apps": 10,
-              "starts": 6,
-              "minutes": 563,
-              "goals": 0,
-              "assists": 1,
-              "xg": 0.15,
-              "rating": 6.3
-            }
-          },
-          {
-            "id": "fotmob-1220187",
-            "name": "Jesus Vázquez",
-            "number": 21,
-            "position": "Defender",
-            "age": 23,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "stats": {
-              "apps": 10,
-              "starts": 4,
-              "minutes": 362,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.04,
-              "rating": 6.45
-            }
-          },
-          {
-            "id": "fotmob-1348497",
-            "name": "Kayne van Oevelen",
-            "number": 25,
-            "position": "Goalkeeper",
-            "age": 23,
-            "countryCode": "NED",
-            "countryName": "Netherlands",
-            "stats": {
-              "apps": 0,
-              "starts": 0,
-              "minutes": 0,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": null
-            }
-          },
-          {
-            "id": "fotmob-1793871",
-            "name": "Aimar Blázquez",
-            "number": 37,
-            "position": "Forward",
-            "age": 20,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "stats": {
-              "apps": 2,
-              "starts": 0,
-              "minutes": 39,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.45,
-              "rating": 5.88
-            }
-          }
-        ],
-        "unavailable": [
-          {
-            "id": "fotmob-261609",
-            "age": 33,
-            "countryCode": "GLP",
-            "countryName": "Guadeloupe",
-            "name": "Dimitri Foulquier",
-            "reason": "blessé",
-            "expectedReturn": "Doubtful",
-            "position": "Defender",
-            "stats": {
-              "apps": 0,
-              "starts": 0,
-              "minutes": 0,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": null
-            }
-          },
-          {
-            "id": "fotmob-1600732",
-            "age": 19,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "name": "David Otorbi",
-            "reason": "blessé",
-            "expectedReturn": "Early December 2026",
-            "position": "Midfielder",
-            "stats": {
-              "apps": 9,
-              "starts": 3,
-              "minutes": 345,
-              "goals": 1,
-              "assists": 0,
-              "xg": 1.13,
-              "rating": 6.62
-            }
-          },
-          {
-            "id": "fotmob-1284434",
-            "age": 24,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "name": "Diego López",
-            "reason": "blessé",
-            "expectedReturn": "Mid February 2027",
-            "position": null,
-            "stats": null
-          },
-          {
-            "id": "fotmob-673937",
-            "age": 29,
-            "countryCode": "ESP",
-            "countryName": "Spain",
-            "name": "Sergi Canós",
-            "reason": "blessé",
-            "expectedReturn": "Late November 2026",
-            "position": null,
-            "stats": null
-          }
-        ],
-        "usualStartersMissing": [
-          {
-            "id": "fotmob-800615",
-            "age": 27,
-            "countryCode": "SUI",
-            "countryName": "Switzerland",
-            "name": "Filip Ugrinic",
-            "position": "Midfielder",
-            "starts": 7,
-            "goals": 0,
-            "assists": 0,
-            "status": "remplaçant"
-          }
-        ],
-        "lastMatch": {
-          "date": "2026-11-07",
-          "league": "La Liga - Spain",
-          "home": "Valencia",
-          "away": "Real Madrid",
-          "homeGoals": 0,
-          "awayGoals": 3
-        }
+        "speed": "standard",
+        "fallback_credit": null
       },
-      "matchInfo": {
-        "round": "1",
-        "stadium": "Estadio de Mestalla",
-        "city": "Valencia",
-        "capacity": 49430,
-        "surface": "grass",
-        "weather": "Cloudy",
-        "temperature": 21,
-        "windSpeed": 11,
-        "precipitation": 0,
-        "referee": {
-          "name": "Juan Martínez Munuera",
-          "country": "Spain",
-          "league": "LaLiga",
-          "matches": 37,
-          "yellowCardsPerMatch": 4.51,
-          "yellowCardsLeagueAverage": 4.45,
-          "redCards": 4,
-          "penalties": 11,
-          "foulsPerMatch": 27.47,
-          "foulsLeagueAverage": 24.97
-        }
-      }
-    },
-    "analysis": {
-      "summary": "Tavernes de la Valldigna, club de division inférieure, n'a ni forme, ni statistiques, ni composition dans la fiche. Valencia est en crise : 19e de Liga, 2 V, 2 N, 6 D sur 10 matchs (8 buts marqués, 19 encaissés), battu 0-3 par le Real Madrid le 7 novembre, avec un nouvel entraîneur, Javier Aguirre. Valencia produit peu (0,8 but par match) mais reste très supérieur sur le papier face à un adversaire amateur. Le onze probable est celui du dernier match ; en Coupe une rotation est possible.",
-      "keyFactors": [
-        {
-          "factor": "forme récente",
-          "observation": "Valencia est en méforme en championnat, mais ses derniers matchs de Coupe relevés sont nettement gagnés contre des adversaires modestes.",
-          "evidence": "10 derniers : DVDNNDVDDD, 0,8 / 1,9 buts ; Coupe : 5-0 à Maracena, 2-1 à Cartagena, 2-0 à Gijón, 2-0 à Burgos"
-        },
-        {
-          "factor": "statistiques et moyennes",
-          "observation": "Valencia marque peu et concède beaucoup face à des adversaires de Liga ; Tavernes n'a aucune donnée.",
-          "evidence": "xG 0,98 / 1,71 ; à l'extérieur 1 / 1,2 buts ; moteur : 0,5 contre 2,18 buts attendus"
-        },
-        {
-          "factor": "compositions",
-          "observation": "Onze Valencia connu seulement via le dernier match ; Tavernes inconnue. Otorbi blessé.",
-          "evidence": "Otorbi absent jusqu'à début décembre, Canós fin novembre ; Sadiq 2 buts en 5 matchs"
-        },
-        {
-          "factor": "classement",
-          "observation": "Valencia est 19e de Liga ; aucun classement de Coupe disponible.",
-          "evidence": "9 points en 12 matchs"
-        }
-      ],
-      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : Valencia largement favori, mais sa faiblesse offensive et sa crise de résultats justifient que le moteur n'aille pas plus loin. L'absence de données sur Tavernes rend l'ensemble moins sûr.",
-      "caveats": "Aucune forme, statistique, composition ni dossier pour Tavernes de la Valldigna. Classement indisponible (Coupe). Pas de cotes du marché ni d'attendus corners/tirs. Le onze de Valencia n'est pas celui du match. L'historique de changement d'entraîneur est déduit des compositions importées.",
-      "marketViews": [
-        {
-          "market": "Résultat",
-          "pick": "Valencia gagne",
-          "verdict": "confirme",
-          "confidence": "moyenne",
-          "explanation": "55 % : Valencia attend 2,18 buts contre 0,5 pour Tavernes, mais ses 6 défaites sur 10 et sa 19e place de Liga freinent le moteur.",
-          "reasoning": "L'écart de niveau est net, comme dans le cas d'Arosa du 27/10 où le moteur avait raison sans données locales. La crise de Valencia et une possible rotation en Coupe justifient la prudence.",
-          "probability": 55
-        },
-        {
-          "market": "Total buts",
-          "pick": "Plus de 1.5 buts",
-          "verdict": "nuance",
-          "confidence": "moyenne",
-          "explanation": "75 % : Valencia attend 2,18 buts et Tavernes 0,5, soit environ 2,7 au total, malgré les 0,8 but marqué par match de Valencia en Liga.",
-          "reasoning": "Valencia a marqué 2 buts ou plus dans ses 4 matchs de Coupe relevés, mais ne marque que 0,8 par match en championnat. Un 1-0 reste possible.",
-          "probability": 75
-        },
-        {
-          "market": "Les 2 équipes marquent",
-          "pick": "Non",
-          "verdict": "confirme",
-          "confidence": "moyenne",
-          "explanation": "65 % : Tavernes n'attend que 0,5 but, mais Valencia concède 1,9 but par match en moyenne.",
-          "reasoning": "Le contexte soutient ce pronostic, avec une défense de Valencia fragile contre des adversaires de Liga mais un adversaire amateur. Ce marché est historiquement mon point faible, d'où la prudence.",
-          "probability": 65
-        },
-        {
-          "market": "Résultat + Total buts",
-          "pick": "Valencia & Plus de 1.5 buts",
-          "verdict": "nuance",
-          "confidence": "faible",
-          "explanation": "44 % : combine la victoire de Valencia (55 %) et plus de 1,5 but (75 %), avec un attaque valencienne à 0,8 but par match.",
-          "reasoning": "Le combiné dépend surtout de la victoire de Valencia. Mon bilan sur ce marché est faible, et une victoire 1-0 le ferait échouer.",
-          "probability": 44
-        },
-        {
-          "market": "Buts — Tavernes de la Valldigna",
-          "pick": "Tavernes de la Valldigna — Moins de 0.5 buts",
-          "verdict": "nuance",
-          "confidence": "faible",
-          "explanation": "61 % : Tavernes attend 0,5 but selon le moteur, et Valencia concède 1,9 but par match.",
-          "reasoning": "Valencia est fragile derrière avec 19 buts encaissés en 10 matchs et une défense remaniée. Un but amateur est loin d'être exclu, donc cette issue reste fragile faute de données sur Tavernes.",
-          "probability": 61
-        },
-        {
-          "market": "Buts — Valencia",
-          "pick": "Valencia — Moins de 3.5 buts",
-          "verdict": "confirme",
-          "confidence": "forte",
-          "explanation": "83 % : Valencia attend 2,18 buts et n'en marque que 0,8 par match sur ses 10 derniers matchs.",
-          "reasoning": "Seul le 5-0 à Maracena a dépassé ce seuil sur les matchs relevés, et l'attaque est peu productive. Le seuil large est cohérent.",
-          "probability": 83
-        }
-      ],
-      "lineupImpact": "Le onze de Valencia est le dernier aligné (Real Madrid, 0-3, 5-3-2), pas celui du match, et une rotation de Coupe est possible. Otorbi (1 but, 9 matchs) est blessé, Canós aussi. Sadiq (2 buts en 5 matchs) et Danjuma (xG 1,66) portent l'attaque ; Ugrinic, habituel titulaire, était remplaçant. Dimitrievski est dans le but. Rien n'est connu pour Tavernes. Cadre : Mestalla, aucune météo gênante, mais l'arbitre siffle nettement plus de fautes que la moyenne (27,47 contre 24,97)."
-    },
-    "updatedAt": "2026-11-09T11:56:40.008Z",
-    "createdAt": "2026-11-09T11:56:40.008Z"
+      "costUsd": 0.0559162,
+      "createdAt": "2026-11-10T22:35:46.141Z"
+    }
   },
   {
     "matchId": "cal-2026-11-10-trival-valderas-leganes",
@@ -7522,7 +7660,1218 @@
       ],
       "caveats": "Aucune donnée sur Trival Valderas (forme, moyennes, composition, dossier), et classement indisponible (coupe). Composition de Leganés issue du magasin (dernier match du 07/11), pas celle du match. L'historique d'entraîneurs est déduit des compositions importées. Aucune cote de marché ni statExpectations disponibles. Le dossier de Leganés porte sur peu de matchs analysés."
     },
-    "updatedAt": "2026-11-09T11:57:01.629Z",
-    "createdAt": "2026-11-09T11:57:01.629Z"
+    "updatedAt": "2026-11-10T22:36:27.755Z",
+    "createdAt": "2026-11-09T11:57:01.629Z",
+    "postMatchReview": {
+      "summary": "Leganés s'est imposé 1-0 à l'extérieur grâce à un but d'Álex Millán à la 48e. Le sens du moteur (victoire de Leganés, adversaire limité à moins de 1,5 but) est confirmé, mais le scénario ouvert à plus de 2,5 buts et aux deux équipes qui marquent a été contredit par un match fermé. Ma prudence sur la forme de Leganés était justifiée sur le plan du score, pas sur celui du résultat.",
+      "whatWasRight": "J'avais retenu la faiblesse offensive de Leganés (0,8 but par match) : l'équipe n'a marqué qu'une fois, ce qui valide « Leganés moins de 3,5 buts ». Le plafond de Trival Valderas à moins de 1,5 but a aussi tenu, car l'écart de niveau a joué. Le pari de la nuance sur le 1N2 s'est montré raisonnable, la victoire n'étant pas écrasante.",
+      "whatWasMissed": "J'ai suivi le moteur sur plus de 2,5 buts (3,28 attendus) : le match a fini avec un seul but, marqué en début de seconde période (48e), après une première mi-temps vierge. J'ai sous-estimé la tendance des matchs de coupe contre un petit club à être fermés, et la fragilité défensive de Leganés n'a pas été exploitée par un adversaire inconnu. Le combiné victoire + plus de 1,5 but a échoué à cause d'un seul but.",
+      "outcomeVsEngine": "Le résultat suit le moteur sur le vainqueur et sur les plafonds de buts par équipe, mais contredit son volume de buts attendu (3,28) : un total de 1 but, très en dessous. Le xG de 2,14 pour Leganés était surévalué face à ce score.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Leganés gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Leganés a gagné 1-0 grâce à Álex Millán (48e) après une mi-temps sans but. Le moteur favorisait Leganés (46 %), le résultat va dans son sens.",
+          "lesson": "Garder une nuance prudente sur Leganés vu sa forme est correct, mais l'écart de division en coupe contre un petit club inconnu pèse davantage que la mauvaise série en championnat."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Un seul but dans le match (48e, 0-1), donc moins de 2,5 buts. Le moteur attendait 3,28 buts, bien trop élevé pour un match fermé.",
+          "lesson": "Ne pas confirmer un plus de 2,5 buts en coupe quand l'attaque du favori est pauvre (0,8 but par match) : la faiblesse offensive doit peser autant que la défense poreuse. Plafonner la confiance dans ce cas."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Trival Valderas n'a pas marqué, Leganés a gagné 1-0. Ma nuance à faible confiance était prudente, le « oui » du moteur (61 %) a échoué.",
+          "lesson": "Face à un adversaire sans donnée, rester sceptique sur ce marché est bon : la défense poreuse de Leganés n'a pas suffi. Garder la faible confiance."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Leganés & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Leganés a gagné mais avec un seul but (48e), donc le plus de 1,5 buts a échoué. Le combiné est tombé sur le volume de buts.",
+          "lesson": "Les combinés dépendent de la jambe la plus fragile ; ici le total, surévalué par le moteur, a fait échouer le pari. Rester prudent sur ce type de marché."
+        },
+        {
+          "market": "Buts — Trival Valderas",
+          "marketId": "teamGoals",
+          "pick": "Trival Valderas — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Trival Valderas a fini à 0 but, donc moins de 1,5 but. Leganés a concédé peu malgré sa réputation défensive.",
+          "lesson": "Plafonner l'équipe inconnue et inférieure en division s'est avéré fiable ; à conserver pour un petit club de coupe face à un club de Liga 2."
+        },
+        {
+          "market": "Buts — Leganés",
+          "marketId": "teamGoals",
+          "pick": "Leganés — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Leganés n'a marqué qu'un but (Millán, 48e), très loin de 4. Cohérent avec l'attaque pauvre (0,8 but par match).",
+          "lesson": "Ce plafond à confiance forte est confirmé : une attaque aussi pauvre atteint rarement 4 buts. À conserver pour ce type de marché."
+        }
+      ],
+      "caveats": "Un seul match, aucune statistique de tirs, xG ou possession relevée, donc impossible de savoir si le 1-0 reflète la domination réelle. Rien n'est connu sur Trival Valderas. Le résultat peut tenir à la variance d'un match de coupe.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 16,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3495,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 1769,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3495,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1769,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 3495,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3495
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0320916,
+      "createdAt": "2026-11-10T22:36:27.754Z"
+    }
+  },
+  {
+    "matchId": "cal-2026-11-10-tavernes-de-la-valldigna-valencia",
+    "homeName": "Tavernes de la Valldigna",
+    "awayName": "Valencia",
+    "league": "Copa del Rey - Spain",
+    "commenceTime": "2026-11-10T20:00:00.000Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Tavernes de la Valldigna vs Valencia",
+      "expectedGoals": {
+        "home": 0.5,
+        "away": 0.5,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 44.52,
+        "draw": 75.31,
+        "away": 1.04
+      },
+      "market": {
+        "odds1": 40,
+        "oddsDraw": 66.67,
+        "odds2": 1.04
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "trop_peu_de_bookmakers",
+        "candidates": []
+      },
+      "statExpectations": null,
+      "marketPredictions": [
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 1.5,
+            "side": "under"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 1.5 buts",
+          "predictedOdds": 1.37,
+          "probability": 73,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 2.5,
+            "key": "awayUnder"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "awayUnder",
+          "predictedLabel": "Valencia & Moins de 2.5 buts",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 0.5,
+            "side": "under"
+          },
+          "market": "Buts — Tavernes de la Valldigna",
+          "predictedOutcome": "under",
+          "predictedLabel": "Tavernes de la Valldigna — Moins de 0.5 buts",
+          "predictedOdds": 1.65,
+          "probability": 61,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 0.5,
+            "side": "under"
+          },
+          "market": "Buts — Valencia",
+          "predictedOutcome": "under",
+          "predictedLabel": "Valencia — Moins de 0.5 buts",
+          "predictedOdds": 1.65,
+          "probability": 61,
+          "minOdds": 1.2
+        }
+      ],
+      "engineVersion": 5
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 4771,
+      "cache_read_input_tokens": 4470,
+      "output_tokens": 1730,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 4771,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1730,
+          "cache_read_input_tokens": 4470,
+          "cache_creation_input_tokens": 4771,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 4771
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.037281999999999996,
+    "analysedAt": "2026-11-10T19:31:19.729Z",
+    "timing": "coup-d-envoi",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 378,
+      "tokens": 1203,
+      "lecons": [
+        "cal-2026-10-27-arosa-sc-pontevedra|result",
+        "cal-2026-10-27-arosa-sc-pontevedra|resultAndTotal"
+      ],
+      "dossiersDu": "2026-11-10T12:11:57.565Z",
+      "equipes": {
+        "home": {
+          "id": "fotmob-2341167",
+          "dossier": false
+        },
+        "away": {
+          "id": "fotmob-10267",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "Copa del Rey - Spain",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "magasin",
+      "home": null,
+      "away": {
+        "team": "Valencia",
+        "teamId": "fotmob-10267",
+        "formation": "5-3-2",
+        "coach": "Javier Aguirre",
+        "statsSince": "2026-07-01",
+        "teamMatches": 12,
+        "startXI": [
+          {
+            "id": "fotmob-254241",
+            "name": "Stole Dimitrievski",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 32,
+            "countryCode": "MKD",
+            "countryName": "North Macedonia",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 12,
+              "starts": 12,
+              "minutes": 1080,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.95
+            }
+          },
+          {
+            "id": "fotmob-391058",
+            "name": "José Gayà",
+            "number": 14,
+            "position": "Midfielder",
+            "age": 31,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.371,
+            "y": 0.11,
+            "stats": {
+              "apps": 10,
+              "starts": 9,
+              "minutes": 794,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.33,
+              "rating": 6.85
+            }
+          },
+          {
+            "id": "fotmob-586768",
+            "name": "Guido Rodríguez",
+            "number": 2,
+            "position": "Midfielder",
+            "age": 32,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.613,
+            "y": 0.5,
+            "stats": {
+              "apps": 9,
+              "starts": 9,
+              "minutes": 736,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.07,
+              "rating": 7.07
+            }
+          },
+          {
+            "id": "fotmob-590494",
+            "name": "Umar Sadiq",
+            "number": 6,
+            "position": "Forward",
+            "age": 29,
+            "countryCode": "NGA",
+            "countryName": "Nigeria",
+            "x": 0.87,
+            "y": 0.7,
+            "stats": {
+              "apps": 5,
+              "starts": 2,
+              "minutes": 246,
+              "goals": 2,
+              "assists": 0,
+              "xg": 2.12,
+              "rating": 6.48
+            }
+          },
+          {
+            "id": "fotmob-673356",
+            "name": "Pablo Maffeo",
+            "number": 24,
+            "position": "Midfielder",
+            "age": 29,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.371,
+            "y": 0.89,
+            "stats": {
+              "apps": 12,
+              "starts": 9,
+              "minutes": 740,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.21,
+              "rating": 6.65
+            }
+          },
+          {
+            "id": "fotmob-673689",
+            "name": "Pepelu",
+            "number": 18,
+            "position": "Defender",
+            "age": 28,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.695,
+            "stats": {
+              "apps": 12,
+              "starts": 12,
+              "minutes": 1018,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.9,
+              "rating": 6.8
+            }
+          },
+          {
+            "id": "fotmob-704151",
+            "name": "Arnaut Danjuma",
+            "number": 7,
+            "position": "Forward",
+            "age": 29,
+            "countryCode": "NED",
+            "countryName": "Netherlands",
+            "x": 0.87,
+            "y": 0.3,
+            "stats": {
+              "apps": 12,
+              "starts": 10,
+              "minutes": 929,
+              "goals": 0,
+              "assists": 1,
+              "xg": 1.66,
+              "rating": 6.56
+            }
+          },
+          {
+            "id": "fotmob-969711",
+            "name": "Justin De Haas",
+            "number": 12,
+            "position": "Defender",
+            "age": 26,
+            "countryCode": "NED",
+            "countryName": "Netherlands",
+            "x": 0.357,
+            "y": 0.305,
+            "stats": {
+              "apps": 7,
+              "starts": 7,
+              "minutes": 503,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.02,
+              "rating": 6.69
+            }
+          },
+          {
+            "id": "fotmob-1284429",
+            "name": "Javier Guerra",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.79,
+            "stats": {
+              "apps": 12,
+              "starts": 12,
+              "minutes": 980,
+              "goals": 0,
+              "assists": 2,
+              "xg": 1.26,
+              "rating": 6.68
+            }
+          },
+          {
+            "id": "fotmob-1311985",
+            "name": "César Tárrega",
+            "number": 5,
+            "position": "Defender",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.5,
+            "stats": {
+              "apps": 9,
+              "starts": 8,
+              "minutes": 690,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.31,
+              "rating": 6.71
+            }
+          },
+          {
+            "id": "fotmob-1905203",
+            "name": "Aaron Mayol",
+            "number": 33,
+            "position": "Midfielder",
+            "age": 18,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.21,
+            "stats": {
+              "apps": 4,
+              "starts": 4,
+              "minutes": 348,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.13,
+              "rating": 6.7
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-561198",
+            "name": "Mouctar Diakhaby",
+            "number": 4,
+            "position": "Defender",
+            "age": 29,
+            "countryCode": "GUI",
+            "countryName": "Guinea",
+            "stats": {
+              "apps": 6,
+              "starts": 4,
+              "minutes": 334,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.1,
+              "rating": 6.16
+            }
+          },
+          {
+            "id": "fotmob-638070",
+            "name": "Luis Rioja",
+            "number": 11,
+            "position": "Midfielder",
+            "age": 33,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 8,
+              "starts": 3,
+              "minutes": 365,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.45,
+              "rating": 6.66
+            }
+          },
+          {
+            "id": "fotmob-723148",
+            "name": "Aliou Dieng",
+            "number": 15,
+            "position": "Midfielder",
+            "age": 29,
+            "countryCode": "MLI",
+            "countryName": "Mali",
+            "stats": {
+              "apps": 6,
+              "starts": 2,
+              "minutes": 232,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.51
+            }
+          },
+          {
+            "id": "fotmob-784246",
+            "name": "Dani Raba",
+            "number": 19,
+            "position": "Midfielder",
+            "age": 31,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 5,
+              "starts": 2,
+              "minutes": 188,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.46,
+              "rating": 6.6
+            }
+          },
+          {
+            "id": "fotmob-800615",
+            "name": "Filip Ugrinic",
+            "number": 23,
+            "position": "Midfielder",
+            "age": 27,
+            "countryCode": "SUI",
+            "countryName": "Switzerland",
+            "stats": {
+              "apps": 12,
+              "starts": 7,
+              "minutes": 623,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.43,
+              "rating": 6.51
+            }
+          },
+          {
+            "id": "fotmob-896402",
+            "name": "José Copete",
+            "number": 3,
+            "position": "Defender",
+            "age": 27,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-929838",
+            "name": "Hugo Duro",
+            "number": 9,
+            "position": "Forward",
+            "age": 27,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 10,
+              "starts": 5,
+              "minutes": 415,
+              "goals": 0,
+              "assists": 1,
+              "xg": 1.25,
+              "rating": 6.28
+            }
+          },
+          {
+            "id": "fotmob-963964",
+            "name": "Harvey Elliott",
+            "number": 10,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "ENG",
+            "countryName": "England",
+            "stats": {
+              "apps": 6,
+              "starts": 0,
+              "minutes": 152,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.07,
+              "rating": 6.09
+            }
+          },
+          {
+            "id": "fotmob-1194892",
+            "name": "Arnau Martínez",
+            "number": 22,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 10,
+              "starts": 6,
+              "minutes": 563,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.15,
+              "rating": 6.3
+            }
+          },
+          {
+            "id": "fotmob-1220187",
+            "name": "Jesus Vázquez",
+            "number": 21,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 10,
+              "starts": 4,
+              "minutes": 362,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.04,
+              "rating": 6.45
+            }
+          },
+          {
+            "id": "fotmob-1348497",
+            "name": "Kayne van Oevelen",
+            "number": 25,
+            "position": "Goalkeeper",
+            "age": 23,
+            "countryCode": "NED",
+            "countryName": "Netherlands",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1793871",
+            "name": "Aimar Blázquez",
+            "number": 37,
+            "position": "Forward",
+            "age": 20,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 2,
+              "starts": 0,
+              "minutes": 39,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.45,
+              "rating": 5.88
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "id": "fotmob-1220187",
+            "age": 23,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Jesús Vázquez",
+            "reason": "blessé",
+            "expectedReturn": "About 1-2 weeks",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 10,
+              "starts": 4,
+              "minutes": 362,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.04,
+              "rating": 6.45
+            }
+          },
+          {
+            "id": "fotmob-261609",
+            "age": 33,
+            "countryCode": "GLP",
+            "countryName": "Guadeloupe",
+            "name": "Dimitri Foulquier",
+            "reason": "blessé",
+            "expectedReturn": "Doubtful",
+            "position": "Defender",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1600732",
+            "age": 19,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "David Otorbi",
+            "reason": "blessé",
+            "expectedReturn": "Early December 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 9,
+              "starts": 3,
+              "minutes": 345,
+              "goals": 1,
+              "assists": 0,
+              "xg": 1.13,
+              "rating": 6.62
+            }
+          },
+          {
+            "id": "fotmob-1284434",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Diego López",
+            "reason": "blessé",
+            "expectedReturn": "Mid February 2027",
+            "position": null,
+            "stats": null
+          },
+          {
+            "id": "fotmob-673937",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Sergi Canós",
+            "reason": "blessé",
+            "expectedReturn": "Late November 2026",
+            "position": null,
+            "stats": null
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-800615",
+            "age": 27,
+            "countryCode": "SUI",
+            "countryName": "Switzerland",
+            "name": "Filip Ugrinic",
+            "position": "Midfielder",
+            "starts": 7,
+            "goals": 0,
+            "assists": 0,
+            "status": "remplaçant"
+          }
+        ],
+        "lastMatch": {
+          "date": "2026-11-07",
+          "league": "La Liga - Spain",
+          "home": "Valencia",
+          "away": "Real Madrid",
+          "homeGoals": 0,
+          "awayGoals": 3
+        }
+      },
+      "matchInfo": {
+        "round": "1st Round",
+        "stadium": "Estadio de Mestalla",
+        "city": "Valencia",
+        "capacity": 49430,
+        "surface": "grass",
+        "weather": "Mostly Cloudy",
+        "temperature": 21,
+        "windSpeed": 11,
+        "precipitation": 0,
+        "referee": {
+          "name": "Juan Martínez Munuera",
+          "country": "Spain",
+          "league": "LaLiga",
+          "matches": 37,
+          "yellowCardsPerMatch": 4.51,
+          "yellowCardsLeagueAverage": 4.45,
+          "redCards": 4,
+          "penalties": 11,
+          "foulsPerMatch": 27.47,
+          "foulsLeagueAverage": 24.97
+        }
+      }
+    },
+    "analysis": {
+      "summary": "Tavernes de la Valldigna, petit club amateur, n'a que deux nuls (0-0 et 1-1 contre Maracena, 0,5 but marqué et concédé par match) : échantillon minuscule. Valencia, 19e de Liga, sort d'un 0-3 contre le Real Madrid, avec 0,8 but marqué et 1,9 concédé sur 10 matchs, sous Javier Aguirre. Aucune composition de Tavernes ; le onze de Valencia est le dernier aligné, pas celui du match.",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Tavernes est stable mais peu informatif ; Valencia est en difficulté, avec une défense friable et peu de buts.",
+          "evidence": "Tavernes NN (0,5/0,5 sur 2 matchs) ; Valencia DVDNNDVDDD, 0,8 / 1,9 sur 10 matchs"
+        },
+        {
+          "factor": "niveau et classement",
+          "observation": "Écart de division énorme, classement de coupe indisponible. Valencia est pourtant 19e de Liga et sans victoire à domicile depuis 7 matchs.",
+          "evidence": "Valencia 9 pts en 12 matchs ; moteur 2 à 1,04 de cote juste"
+        },
+        {
+          "factor": "compositions",
+          "observation": "Onze de Valencia probable seulement. Otorbi et Jesús Vázquez sont blessés, Canós aussi. Aguirre pourrait faire tourner en coupe.",
+          "evidence": "Dernier onze du 07/11 en 5-3-2 ; Otorbi 1+0, Vázquez 10 matchs"
+        }
+      ],
+      "alignmentWithModel": "Le contexte va dans le sens du moteur sur la victoire de Valencia et sur un match plutôt fermé. Il nuance les marchés de buts, car Valencia concède beaucoup (1,9 par match) et marque peu, et Tavernes n'a presque aucune donnée fiable.",
+      "caveats": "Classement indisponible (coupe). Tavernes n'a que 2 matchs relevés et aucune composition ni dossier. Les xG attendus du moteur (0,5 chacun) reposent sur un échantillon très mince. Aucune attente de corners ou de tirs. Composition de Valencia issue du magasin, donc non officielle. L'historique d'entraîneur de Tavernes manque.",
+      "marketViews": [
+        {
+          "market": "Total buts",
+          "pick": "Moins de 1.5 buts",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "73 % : Tavernes affiche 0,5 but marqué et concédé sur 2 matchs, et le moteur attend 0,5 but par équipe, mais Valencia en concède 1,9 par match.",
+          "reasoning": "Les deux nuls de Tavernes (0-0, 1-1) soutiennent un faible total. Mais Valencia encaisse 1,9 par match et pourrait tourner en coupe, ce qui rend 0 ou 1 but moins sûr que le chiffre ne le suggère.",
+          "probability": 73
+        },
+        {
+          "market": "Résultat + Total buts",
+          "pick": "Valencia & Moins de 2.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : la victoire de Valencia est quasi acquise (cote juste 1,04) et 0,5 but attendu par équipe garde le total sous 2,5.",
+          "reasoning": "La différence de niveau est énorme. Valencia marque peu (0,8 par match), donc une courte victoire est plausible, mais un score large reste possible face à un amateur.",
+          "probability": 83
+        },
+        {
+          "market": "Buts — Tavernes de la Valldigna",
+          "pick": "Tavernes de la Valldigna — Moins de 0.5 buts",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "61 % : Tavernes n'a marqué que 0,5 but par match sur 2 matchs, et Valencia en concède 1,9 par match.",
+          "reasoning": "Le faible volume offensif de Tavernes soutient le pronostic, mais la défense de Valencia (19 buts encaissés en 10 matchs) laisse un vrai risque de but.",
+          "probability": 61
+        },
+        {
+          "market": "Buts — Valencia",
+          "pick": "Valencia — Moins de 0.5 buts",
+          "verdict": "contredit",
+          "confidence": "faible",
+          "explanation": "61 % : le moteur attend 0,5 but pour Valencia, qui n'en marque que 0,8 par match sur 10 matchs.",
+          "reasoning": "Valencia est très supérieur à un club amateur et vise sûrement la qualification, avec Danjuma et Sadiq (2 buts) susceptibles de jouer. Que Valencia ne marque pas semble peu cohérent avec son net statut de favori.",
+          "probability": 61
+        }
+      ]
+    },
+    "updatedAt": "2026-11-10T22:36:08.673Z",
+    "createdAt": "2026-11-09T11:56:40.008Z",
+    "kickoffRuns": 1,
+    "earlierAnalysis": {
+      "analysis": {
+        "summary": "Tavernes de la Valldigna, club de division inférieure, n'a ni forme, ni statistiques, ni composition dans la fiche. Valencia est en crise : 19e de Liga, 2 V, 2 N, 6 D sur 10 matchs (8 buts marqués, 19 encaissés), battu 0-3 par le Real Madrid le 7 novembre, avec un nouvel entraîneur, Javier Aguirre. Valencia produit peu (0,8 but par match) mais reste très supérieur sur le papier face à un adversaire amateur. Le onze probable est celui du dernier match ; en Coupe une rotation est possible.",
+        "keyFactors": [
+          {
+            "factor": "forme récente",
+            "observation": "Valencia est en méforme en championnat, mais ses derniers matchs de Coupe relevés sont nettement gagnés contre des adversaires modestes.",
+            "evidence": "10 derniers : DVDNNDVDDD, 0,8 / 1,9 buts ; Coupe : 5-0 à Maracena, 2-1 à Cartagena, 2-0 à Gijón, 2-0 à Burgos"
+          },
+          {
+            "factor": "statistiques et moyennes",
+            "observation": "Valencia marque peu et concède beaucoup face à des adversaires de Liga ; Tavernes n'a aucune donnée.",
+            "evidence": "xG 0,98 / 1,71 ; à l'extérieur 1 / 1,2 buts ; moteur : 0,5 contre 2,18 buts attendus"
+          },
+          {
+            "factor": "compositions",
+            "observation": "Onze Valencia connu seulement via le dernier match ; Tavernes inconnue. Otorbi blessé.",
+            "evidence": "Otorbi absent jusqu'à début décembre, Canós fin novembre ; Sadiq 2 buts en 5 matchs"
+          },
+          {
+            "factor": "classement",
+            "observation": "Valencia est 19e de Liga ; aucun classement de Coupe disponible.",
+            "evidence": "9 points en 12 matchs"
+          }
+        ],
+        "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : Valencia largement favori, mais sa faiblesse offensive et sa crise de résultats justifient que le moteur n'aille pas plus loin. L'absence de données sur Tavernes rend l'ensemble moins sûr.",
+        "caveats": "Aucune forme, statistique, composition ni dossier pour Tavernes de la Valldigna. Classement indisponible (Coupe). Pas de cotes du marché ni d'attendus corners/tirs. Le onze de Valencia n'est pas celui du match. L'historique de changement d'entraîneur est déduit des compositions importées.",
+        "marketViews": [
+          {
+            "market": "Résultat",
+            "pick": "Valencia gagne",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "55 % : Valencia attend 2,18 buts contre 0,5 pour Tavernes, mais ses 6 défaites sur 10 et sa 19e place de Liga freinent le moteur.",
+            "reasoning": "L'écart de niveau est net, comme dans le cas d'Arosa du 27/10 où le moteur avait raison sans données locales. La crise de Valencia et une possible rotation en Coupe justifient la prudence.",
+            "probability": 55
+          },
+          {
+            "market": "Total buts",
+            "pick": "Plus de 1.5 buts",
+            "verdict": "nuance",
+            "confidence": "moyenne",
+            "explanation": "75 % : Valencia attend 2,18 buts et Tavernes 0,5, soit environ 2,7 au total, malgré les 0,8 but marqué par match de Valencia en Liga.",
+            "reasoning": "Valencia a marqué 2 buts ou plus dans ses 4 matchs de Coupe relevés, mais ne marque que 0,8 par match en championnat. Un 1-0 reste possible.",
+            "probability": 75
+          },
+          {
+            "market": "Les 2 équipes marquent",
+            "pick": "Non",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "65 % : Tavernes n'attend que 0,5 but, mais Valencia concède 1,9 but par match en moyenne.",
+            "reasoning": "Le contexte soutient ce pronostic, avec une défense de Valencia fragile contre des adversaires de Liga mais un adversaire amateur. Ce marché est historiquement mon point faible, d'où la prudence.",
+            "probability": 65
+          },
+          {
+            "market": "Résultat + Total buts",
+            "pick": "Valencia & Plus de 1.5 buts",
+            "verdict": "nuance",
+            "confidence": "faible",
+            "explanation": "44 % : combine la victoire de Valencia (55 %) et plus de 1,5 but (75 %), avec un attaque valencienne à 0,8 but par match.",
+            "reasoning": "Le combiné dépend surtout de la victoire de Valencia. Mon bilan sur ce marché est faible, et une victoire 1-0 le ferait échouer.",
+            "probability": 44
+          },
+          {
+            "market": "Buts — Tavernes de la Valldigna",
+            "pick": "Tavernes de la Valldigna — Moins de 0.5 buts",
+            "verdict": "nuance",
+            "confidence": "faible",
+            "explanation": "61 % : Tavernes attend 0,5 but selon le moteur, et Valencia concède 1,9 but par match.",
+            "reasoning": "Valencia est fragile derrière avec 19 buts encaissés en 10 matchs et une défense remaniée. Un but amateur est loin d'être exclu, donc cette issue reste fragile faute de données sur Tavernes.",
+            "probability": 61
+          },
+          {
+            "market": "Buts — Valencia",
+            "pick": "Valencia — Moins de 3.5 buts",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "83 % : Valencia attend 2,18 buts et n'en marque que 0,8 par match sur ses 10 derniers matchs.",
+            "reasoning": "Seul le 5-0 à Maracena a dépassé ce seuil sur les matchs relevés, et l'attaque est peu productive. Le seuil large est cohérent.",
+            "probability": 83
+          }
+        ],
+        "lineupImpact": "Le onze de Valencia est le dernier aligné (Real Madrid, 0-3, 5-3-2), pas celui du match, et une rotation de Coupe est possible. Otorbi (1 but, 9 matchs) est blessé, Canós aussi. Sadiq (2 buts en 5 matchs) et Danjuma (xG 1,66) portent l'attaque ; Ugrinic, habituel titulaire, était remplaçant. Dimitrievski est dans le but. Rien n'est connu pour Tavernes. Cadre : Mestalla, aucune météo gênante, mais l'arbitre siffle nettement plus de fautes que la moyenne (27,47 contre 24,97)."
+      },
+      "engineSnapshot": {
+        "label": "Tavernes de la Valldigna vs Valencia",
+        "expectedGoals": {
+          "home": 0.5,
+          "away": 2.18,
+          "source": "league-baseline"
+        },
+        "trueOdds": {
+          "home": 4.26,
+          "draw": 4.62,
+          "away": 1.82
+        },
+        "market": {
+          "odds1": null,
+          "oddsDraw": null,
+          "odds2": null
+        },
+        "edgePercent": null,
+        "staking": {
+          "action": "PASS",
+          "stake": null,
+          "reason": "no_market_odds",
+          "candidates": []
+        },
+        "statExpectations": null,
+        "marketPredictions": [
+          {
+            "marketId": "result",
+            "params": {
+              "outcome": "away"
+            },
+            "market": "Résultat",
+            "predictedOutcome": "away",
+            "predictedLabel": "Valencia gagne",
+            "predictedOdds": 1.82,
+            "probability": 55,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalGoals",
+            "params": {
+              "line": 1.5,
+              "side": "over"
+            },
+            "market": "Total buts",
+            "predictedOutcome": "over",
+            "predictedLabel": "Plus de 1.5 buts",
+            "predictedOdds": 1.33,
+            "probability": 75,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "bothTeamsScore",
+            "params": {
+              "outcome": "no"
+            },
+            "market": "Les 2 équipes marquent",
+            "predictedOutcome": "no",
+            "predictedLabel": "Non",
+            "predictedOdds": 1.55,
+            "probability": 65,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "resultAndTotal",
+            "params": {
+              "line": 1.5,
+              "key": "awayOver"
+            },
+            "market": "Résultat + Total buts",
+            "predictedOutcome": "awayOver",
+            "predictedLabel": "Valencia & Plus de 1.5 buts",
+            "predictedOdds": 2.25,
+            "probability": 44,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamGoals",
+            "params": {
+              "team": "home",
+              "line": 0.5,
+              "side": "under"
+            },
+            "market": "Buts — Tavernes de la Valldigna",
+            "predictedOutcome": "under",
+            "predictedLabel": "Tavernes de la Valldigna — Moins de 0.5 buts",
+            "predictedOdds": 1.65,
+            "probability": 61,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamGoals",
+            "params": {
+              "team": "away",
+              "line": 3.5,
+              "side": "under"
+            },
+            "market": "Buts — Valencia",
+            "predictedOutcome": "under",
+            "predictedLabel": "Valencia — Moins de 3.5 buts",
+            "predictedOdds": 1.21,
+            "probability": 83,
+            "minOdds": 1.2
+          }
+        ],
+        "engineVersion": 5
+      },
+      "analysedAt": "2026-11-09T11:56:40.008Z"
+    },
+    "postMatchReview": {
+      "summary": "Valencia a écrasé Tavernes 0-6 (4-0 à la mi-temps). La victoire de Valencia était bien vue, mais le scénario « match fermé » et les marchés de buts bas du moteur ont été démentis. Mon avis a été juste sur le seul marché où je contredisais le moteur (Valencia moins de 0,5 but).",
+      "whatWasRight": "J'avais contredit le pari « Valencia moins de 0,5 but » : un favori net face à un amateur marque presque sûrement. Valencia a marqué dès la 1re minute (Raba), puis à 11', 19', 23', 57' et 69'. J'avais aussi relevé que la défense et la forme de Valencia n'étaient pas un bon indicateur contre un club amateur, et que Tavernes avait peu de volume offensif : 1 tir cadré, xG 0,08, aucun but encaissé de leur part.",
+      "whatWasMissed": "J'ai sous-estimé l'ampleur de l'écart. Les 0,5 but attendu par équipe venaient de stats de Liga et de 2 matchs amateurs, peu représentatives. Le xG réel de Valencia est de 4,64 pour 22 tirs, 11 cadrés et 7 grosses occasions. Sur « Résultat + Total buts » j'ai confirmé Valencia & moins de 2,5 buts, alors que 4 buts étaient déjà marqués à la 23e. Le sous-total de Valencia en Liga (0,8 but par match) n'avait aucune valeur ici.",
+      "outcomeVsEngine": "Le résultat confirme le moteur sur la victoire de Valencia (cote 1,04), mais contredit presque tous ses marchés de buts : total sous 1,5, Valencia sous 0,5 et le combiné sous 2,5. Seul le « Tavernes sous 0,5 » est juste, ce qui est cohérent avec leur xG de 0,08.",
+      "marketReviews": [
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Le total a été de 6 buts, loin de moins de 1,5. Valencia a marqué à la 1re, 11e, 19e, 23e, 57e et 69e minute. Le xG de 4,64 pour 22 tirs montre que ce n'était pas un hasard.",
+          "lesson": "En coupe, face à un club amateur de division très inférieure, ne pas fonder le total sur des moyennes de 2 matchs amateurs. Le xG du moteur (0,5 par équipe) est sous-estimé quand l'écart de niveau est énorme. Ma nuance sur le risque de plus de buts était justifiée, il fallait lui donner plus de poids."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Valencia & Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Valencia a gagné, mais avec 6 buts, donc le « moins de 2,5 » est perdu. Le score était déjà de 0-4 à la 23e. Les 7 grosses occasions confirment la domination.",
+          "lesson": "Éviter de confirmer les combinés « favori + sous X buts » dans un match de coupe très déséquilibré. Une victoire facile s'accompagne souvent d'un score large, et le favori n'a aucune raison de ralentir si l'adversaire est amateur. Je me suis trompé en confirmant sur la seule base d'un faible volume offensif de Valencia en Liga."
+        },
+        {
+          "market": "Buts — Tavernes de la Valldigna",
+          "marketId": "teamGoals",
+          "pick": "Tavernes de la Valldigna — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Tavernes n'a pas marqué : 4 tirs dont 1 cadré, xG 0,08. Seule vraie occasion : un tir sur le poteau d'Erik Martínez à la 56e.",
+          "lesson": "Garder cette lecture : le faible volume offensif d'un club amateur contre une équipe de Liga rend un but très peu probable. Le risque de défense friable de Valencia n'a pas pesé ici."
+        },
+        {
+          "market": "Buts — Valencia",
+          "marketId": "teamGoals",
+          "pick": "Valencia — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "contredit",
+          "aiConfidence": "faible",
+          "aiWasRight": true,
+          "explanation": "Valencia a marqué 6 fois, dont le premier but à la 1re minute (Raba), puis Duro 11e, Rioja 19e, Elliott 23e et Blázquez 57e et 69e. Mon avis contre le moteur était juste.",
+          "lesson": "À conserver : contredire les marchés « favori moins de 0,5 but » en coupe contre un amateur. Les moyennes de buts de Liga du favori ne comptent pas face à un adversaire de niveau si inférieur."
+        }
+      ],
+      "caveats": "Un seul match, avec un résultat extrême (xG 4,64 contre 0,08) qui ne dit rien sur le marché hors contexte de coupe amateur. Aucune composition de Tavernes n'était disponible. On ne sait pas dans quelle mesure Valencia avait fait tourner son effectif au départ, la fiche ne donnant que les remplacements.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 19,
+        "commentaire": 1
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3337,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 1764,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3337,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1764,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 3337,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3337
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0314096,
+      "createdAt": "2026-11-10T22:36:08.672Z"
+    }
   }
 ]

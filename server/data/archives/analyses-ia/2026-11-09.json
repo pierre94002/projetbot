@@ -13520,7 +13520,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-09T17:10:08.000Z",
+    "updatedAt": "2026-11-09T20:14:09.723Z",
     "createdAt": "2026-11-09T11:51:41.434Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -13936,6 +13936,238 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-09T11:51:41.434Z"
+    },
+    "postMatchReview": {
+      "summary": "Mushuc Runa a gagné 2-1 grâce à un but à la 88e après avoir dominé en tirs (20 contre 3). La lecture prudente et le moteur voyaient juste sur le vainqueur et sur les volumes de tirs. Les marchés de buts (Moins de 2.5, BTTS Non, Delfín sans but) ont été démentis. Le match a basculé avec le rouge de Delfín (61e), puis l'égalisation de Delfín à dix (77e).",
+      "whatWasRight": "La domination de Mushuc Runa en volume est confirmée : 20 tirs et 7 cadrés contre 3 et 2. Cela valide ses lignes de tirs, les tirs bas de Delfín et le total sous 29,5. Ma prudence sur les marchés de buts était justifiée : Delfín a marqué, le Moins de 2.5 a échoué, et le 3-2 de l'aller le laissait craindre.",
+      "whatWasMissed": "L'écart était bien plus fort que prévu : 20 tirs contre 13,2 attendus pour Mushuc Runa. Les tirs cadrés (7) ont donc dépassé la ligne de 5,5. Delfín a obtenu 6 corners malgré 3 tirs seulement, contre 3,69 attendus. Les cartons rouges (Delfín 61e, Mushuc Runa 77e à un remplaçant) et la fin ouverte (buts 77e et 88e) ont gonflé le total. Delfín a marqué sur sa seule grosse occasion.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le vainqueur (58 %) et sur les volumes de tirs. Il le contredit sur les buts : Moins de 2.5, BTTS Non et Delfín à zéro étaient favoris et ont tous échoué.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Mushuc Runa gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Mushuc Runa a gagné 2-1 : but de Minda (56e), égalisation de Delfín (77e), puis but de González (88e). Delfín jouait à dix depuis la 61e et a subi 20 tirs contre 3.",
+          "lesson": "J'ai trop pesé la méforme et le gardien remplaçant. À domicile contre une équipe faible à l'extérieur, la supériorité de tirs finit par payer, et le favori du moteur mérite plus de crédit."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Trois buts (56e, 77e, 88e) : le Moins de 2.5 a échoué. Le match était fermé à 0-0 à la mi-temps, puis le rouge de Delfín a ouvert la fin de match.",
+          "lesson": "Un 0-0 à la mi-temps ne protège pas le Moins : les cartons rouges et le déséquilibre de tirs peuvent faire exploser la fin de match. Garder la prudence sur ce Moins quand une équipe domine nettement."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Delfín a égalisé à la 77e (Ozaeta) avec seulement 3 tirs, dont 2 cadrés, alors qu'il jouait à dix. Mushuc Runa a aussi marqué, donc les deux équipes ont marqué.",
+          "lesson": "La fragilité du Non, relevée avec le 3-2 de l'aller, s'est confirmée. Une équipe très faible en tirs peut marquer sur une seule occasion, donc ne pas surévaluer le Non sur ces seuls volumes."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Mushuc Runa & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Mushuc Runa a gagné et il y a eu 3 buts, donc moins de 3.5 : le marché est passé.",
+          "lesson": "Ce combiné a tenu parce que la victoire s'est réalisée. Le Moins de 3.5 est une ligne plus sûre que le Moins de 2.5 dans un match de ce profil."
+        },
+        {
+          "market": "Buts — Mushuc Runa",
+          "marketId": "teamGoals",
+          "pick": "Mushuc Runa — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Mushuc Runa a marqué deux fois (Minda 56e, González 88e) avec 20 tirs dont 7 cadrés.",
+          "lesson": "Mon avis confirmé est à garder : même sans Ibarra, la domination à domicile contre l'une des défenses les plus fragiles à l'extérieur donne des buts."
+        },
+        {
+          "market": "Buts — Delfín",
+          "marketId": "teamGoals",
+          "pick": "Delfín — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Delfín a marqué à la 77e (Ozaeta), donc le Moins de 0.5 est faux, malgré l'absence d'Ayunta et seulement 3 tirs.",
+          "lesson": "Mon avis nuancé était justifié. L'absence du buteur ne suffit pas à écarter un but, surtout si l'adversaire est à dix ou ouvre la fin de match."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 11 corners (5 + 6), au-dessus de 6,5.",
+          "lesson": "Mon avis confirmé est à garder : les lignes de corners bien en dessous du total attendu (9,25) sont fiables dans ce type de match."
+        },
+        {
+          "market": "Corners — Mushuc Runa",
+          "marketId": "teamCorners",
+          "pick": "Mushuc Runa — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Mushuc Runa a obtenu 5 corners, sous 7,5 malgré 20 tirs.",
+          "lesson": "Une forte domination en tirs ne se traduit pas forcément en corners. La ligne haute de 7,5 était bien choisie."
+        },
+        {
+          "market": "Corners — Delfín",
+          "marketId": "teamCorners",
+          "pick": "Delfín — Moins de 5.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Delfín a obtenu 6 corners, au-dessus de 5,5, avec seulement 3 tirs. Le moteur en attendait 3,69.",
+          "lesson": "Ma confiance forte était excessive. Les corners d'une équipe qui défend peuvent venir des dégagements adverses et de la fin de match à dix, pas seulement de ses tirs. Il faut une marge plus large sur ce type de ligne."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 29.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 23 tirs (20 + 3), sous 29,5.",
+          "lesson": "Mon avis confirmé est à garder : le total était bas parce que Delfín tirait très peu, même si Mushuc Runa a surperformé."
+        },
+        {
+          "market": "Tirs — Mushuc Runa",
+          "marketId": "teamShots",
+          "pick": "Mushuc Runa — Plus de 8.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Mushuc Runa a tiré 20 fois, au-dessus de 8,5.",
+          "lesson": "Mon avis confirmé est à garder : le volume de tirs à domicile est un signal solide pour cette équipe."
+        },
+        {
+          "market": "Tirs — Delfín",
+          "marketId": "teamShots",
+          "pick": "Delfín — Moins de 15.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Delfín n'a tiré que 3 fois, sous 15,5, et a joué à dix depuis la 61e.",
+          "lesson": "Mon avis confirmé est à garder : en déplacement, les tirs de Delfín sont faibles, d'où une marge de sécurité très large."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 4.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 9 tirs cadrés (7 + 2), au-dessus de 4,5.",
+          "lesson": "Mon avis confirmé est à garder, mais le résultat est surtout venu de Mushuc Runa. Surveiller que la ligne ne dépende pas d'une seule équipe."
+        },
+        {
+          "market": "Tirs cadrés — Mushuc Runa",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Mushuc Runa — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Mushuc Runa a cadré 7 tirs, au-dessus de 5,5, avec 20 tirs au total et une barre touchée (49e, Cusme).",
+          "lesson": "Ma confiance forte était excessive. Quand une équipe domine vraiment, ses tirs cadrés montent avec le volume, et sa moyenne à domicile de 5,3 était déjà un avertissement. La ligne à 5,5 aurait dû être traitée avec réserve."
+        },
+        {
+          "market": "Tirs cadrés — Delfín",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Delfín — Moins de 4.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Delfín n'a cadré que 2 tirs, sous 4,5.",
+          "lesson": "Mon avis confirmé est à garder : la faiblesse de Delfín à l'extérieur (2,5 cadrés en moyenne) était bien lue."
+        }
+      ],
+      "caveats": "Un seul match : le déroulé a été déformé par deux cartons rouges (Delfín 61e, Mushuc Runa 77e à un remplaçant) et par des buts tardifs. Le xG n'est pas relevé dans la fiche, donc la qualité des occasions n'est pas mesurable. Les corners n'ont pas de répartition par minute.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 24,
+        "commentaire": 3
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 6887,
+        "cache_read_input_tokens": 9393,
+        "output_tokens": 6831,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 6887,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2987,
+            "cache_read_input_tokens": 7305,
+            "cache_creation_input_tokens": 1670,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1670
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.09774459999999999,
+      "createdAt": "2026-11-09T20:14:09.722Z"
     }
   },
   {
@@ -17279,8 +17511,240 @@
         }
       ]
     },
-    "updatedAt": "2026-11-09T11:52:09.753Z",
-    "createdAt": "2026-11-09T11:52:09.753Z"
+    "updatedAt": "2026-11-10T11:52:35.419Z",
+    "createdAt": "2026-11-09T11:52:09.753Z",
+    "postMatchReview": {
+      "summary": "Las Palmas a gagné 2-0, mais les deux buts sont tombés dans le temps additionnel (90+5 et 90+8) après une mi-temps à 0-0. Ma lecture prudente (match fermé, léger avantage local) était bonne, mais j'ai surestimé Eldense en création : Las Palmas a dominé (xG 1,14 contre 0,33, 5 tirs cadrés contre 1, possession 61 %).",
+      "whatWasRight": "Le match fermé, peu de corners et un faible nombre de tirs cadrés étaient bien vus : 7 corners au total, 12 et 7 tirs, 6 tirs cadrés. Eldense est resté sous 1,5 but (aucun but). Le Non au BTTS et la victoire locale ont tenu. Le 0-0 à la pause confirme le scénario fermé, et la prudence de mon avis « nuancé » sur le 1N2 était justifiée.",
+      "whatWasMissed": "J'ai trop cru au xG saisonnier d'Eldense (1,52) : sur ce match il a produit 0,33 xG et un seul tir cadré, malgré l'absence de Justin Smith et une série de deux matchs sans but. J'ai aussi sous-estimé Las Palmas : deux buts, dont un VAR refusé à la 53e. La ligne « moins de 1,5 but » pour Las Palmas est tombée à cause de deux buts dans les 8 dernières minutes. Eldense a eu peu le ballon (39 %), donc seulement 2 corners et 1 tir cadré : ses lignes basses étaient trop optimistes.",
+      "outcomeVsEngine": "Le résultat va globalement dans le sens du moteur (victoire locale, match peu prolifique, Eldense muet). Il contredit seulement les lignes offensives trop hautes pour Eldense (corners, tirs cadrés) et la ligne basse sur Las Palmas.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Las Palmas gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Las Palmas a dominé (xG 1,14 contre 0,33, 61 % de possession) mais n'a marqué qu'à la fin (90+5, 90+8) après un but refusé par la VAR à la 53e.",
+          "lesson": "Le favori local à domicile contre une équipe sans but sur deux matchs reste plausible. La prudence se justifiait, car la victoire s'est jouée dans le temps additionnel."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Deux buts, donc plus de 0,5 but, mais seulement dans le temps additionnel (90+5 et 90+8).",
+          "lesson": "Une ligne très basse reste solide. Elle a pourtant failli échouer jusqu'à la 90e, ce qui rappelle que le risque de 0-0 n'est pas nul."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Eldense n'a marqué aucun but : 0,33 xG et un seul tir cadré.",
+          "lesson": "Le Non était à retenir plus fermement pour une équipe sans but sur ses deux derniers matchs. Le xG moyen saisonnier ne doit pas faire hésiter si la forme récente est nulle."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Las Palmas & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Victoire de Las Palmas 2-0, donc moins de 3,5 buts. Les deux volets sont passés.",
+          "lesson": "La combinaison s'est validée. Le scénario d'un match fermé gagné par le local était cohérent."
+        },
+        {
+          "market": "Buts — Las Palmas",
+          "marketId": "teamGoals",
+          "pick": "Las Palmas — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Las Palmas a marqué deux fois (90+5 Alex Suárez, 90+8 Jefté Betancor). La ligne a échoué à cause de ces deux buts tardifs, malgré un xG de 1,14.",
+          "lesson": "Ne pas faire confiance à une ligne moins de 1,5 avec 75 % quand l'équipe domine et que l'adversaire est en difficulté. Les buts tardifs peuvent renverser la ligne."
+        },
+        {
+          "market": "Buts — Eldense",
+          "marketId": "teamGoals",
+          "pick": "Eldense — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Eldense n'a pas marqué (0,33 xG, 1 tir cadré).",
+          "lesson": "La confirmation reposait sur la forme offensive faible. Elle est à conserver pour une équipe sans but sur deux matchs."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 13.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "7 corners au total (5 et 2), très en dessous de 13,5.",
+          "lesson": "Cette ligne haute est fiable ici. Elle reste à garder."
+        },
+        {
+          "market": "Corners — Las Palmas",
+          "marketId": "teamCorners",
+          "pick": "Las Palmas — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Las Palmas a obtenu 5 corners, sous 7,5.",
+          "lesson": "La marge confortable s'est confirmée. À garder."
+        },
+        {
+          "market": "Corners — Eldense",
+          "marketId": "teamCorners",
+          "pick": "Eldense — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Seulement 2 corners pour Eldense, qui n'a eu que 39 % de possession et 7 tirs.",
+          "lesson": "La ligne plus de 2,5 était trop fragile pour un visiteur dominé. Il faut tenir compte de la possession probable et du moindre volume offensif à l'extérieur (moyenne de 3,8) avant de confirmer une ligne si proche."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 18.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "19 tirs au total (12 et 7), juste au-dessus de 18,5.",
+          "lesson": "La ligne est passée de peu : une marge de sécurité plus large aurait été préférable malgré un pourcentage élevé."
+        },
+        {
+          "market": "Tirs — Las Palmas",
+          "marketId": "teamShots",
+          "pick": "Las Palmas — Moins de 15.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Las Palmas a tiré 12 fois, bien sous 15,5.",
+          "lesson": "Même en dominant, l'équipe reste sous sa ligne. Le profil de faible volume se confirme."
+        },
+        {
+          "market": "Tirs — Eldense",
+          "marketId": "teamShots",
+          "pick": "Eldense — Moins de 15.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Eldense n'a tiré que 7 fois, sous 15,5.",
+          "lesson": "Le seuil au-dessus de ses moyennes extérieures (10,5) était sûr."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 11.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "6 tirs cadrés au total (5 et 1), sous 11,5.",
+          "lesson": "La ligne est confirmée. Les moyennes basses sont fiables."
+        },
+        {
+          "market": "Tirs cadrés — Las Palmas",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Las Palmas — Moins de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Las Palmas a cadré 5 tirs, sous 6,5 avec une marge d'un tir.",
+          "lesson": "La ligne a tenu, même avec la domination. Elle reste à garder."
+        },
+        {
+          "market": "Tirs cadrés — Eldense",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Eldense — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Eldense n'a cadré qu'un seul tir, contre 2,5 de ligne. Les 7 tirs et le xG de 0,33 montrent une production faible.",
+          "lesson": "Une ligne plus de 2,5 tirs cadrés pour un visiteur est risquée quand le match est dominé par l'adversaire. Il faut pondérer la moyenne par le scénario probable et la forme sans but."
+        }
+      ],
+      "caveats": "Un seul match : les deux buts tardifs (90+5, 90+8) pèsent beaucoup sur plusieurs marchés et ne dessinent pas forcément une tendance. Aucun détail sur les actions des buts ni sur l'effet des 7 cartons jaunes d'Eldense. La nouveauté tactique des entraîneurs reste non mesurable.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 20,
+        "commentaire": 3
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 10575,
+        "cache_read_input_tokens": 7364,
+        "output_tokens": 5232,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 10575,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2617,
+            "cache_read_input_tokens": 7364,
+            "cache_creation_input_tokens": 3211,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3211
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0961008,
+      "createdAt": "2026-11-10T11:52:35.418Z"
+    }
   },
   {
     "matchId": "cal-2026-11-09-plymouth-parkway-berkhamsted",
@@ -18015,8 +18479,132 @@
       ]
     },
     "kickoffRuns": 1,
-    "updatedAt": "2026-11-09T19:04:15.144Z",
-    "createdAt": "2026-11-09T19:04:15.144Z"
+    "updatedAt": "2026-11-10T11:53:33.212Z",
+    "createdAt": "2026-11-09T19:04:15.144Z",
+    "postMatchReview": {
+      "summary": "Plymouth Parkway a gagné 2-1 après prolongation, conformément au moteur qui le donnait favori (xG 2,93 contre 0,83). Le scénario a été heurté: 0-0 à la mi-temps, Berkhamsted a ouvert le score à la 47e, puis deux penalties (73e et 105e+1) ont fait la différence. Les six marchés sont justes, mais la victoire est restée fragile jusqu'en prolongation.",
+      "whatWasRight": "La domination de Plymouth était bien lue: xG 2,93 contre 0,83, 18 tirs contre 14, 58 % de possession, poteau de Thomson à la 51e. Le total élevé s'est confirmé (3 buts), Berkhamsted a marqué (47e) et Plymouth est resté sous 3,5 buts. Ma prudence sur le 1N2 était justifiée: le favori a dû passer par la prolongation.",
+      "whatWasMissed": "Je n'avais pas anticipé la dépendance aux penalties: les deux buts de Plymouth sont des penalties de Neal (73e et 105e+1), avec seulement 2 tirs cadrés sur 18. Le xG élevé reflète en partie ces penalties. Je n'avais pas évoqué le format coupe, avec prolongation possible. Le vent n'a pas réduit les buts de façon visible.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur: victoire du favori, plus de 2,5 buts, les deux équipes marquent. Mais le chemin (penalties, prolongation) montre que l'issue était plus fragile que les probabilités ne le laissaient croire.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Plymouth Parkway gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Plymouth a gagné 2-1 après prolongation. Mené 0-1 sur le but d'Andrews (47e), il a égalisé sur penalty (73e) puis gagné sur un second penalty (105e+1). Le xG de 2,93 contre 0,83 appuie la domination.",
+          "lesson": "Ma nuance à faible confiance était raisonnable: la victoire a tenu à deux penalties et à la prolongation. En coupe, rester prudent sur le favori, surtout quand sa domination se convertit mal (2 tirs cadrés sur 18)."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Trois buts (47e, 73e, 105e+1), donc plus de 2,5 passe. Le 3e but n'est tombé qu'en prolongation: sur 90 minutes il n'y aurait eu que 2 buts.",
+          "lesson": "Avis confirmé, à garder. Mais vérifier si le marché inclut la prolongation en coupe: ici le total ne passe que grâce à elle."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Berkhamsted a marqué à la 47e (Andrews) et Plymouth deux fois, donc Oui. Berkhamsted n'avait que 1 tir cadré, ce qui montre que ce but a été son seul vrai danger.",
+          "lesson": "Ma nuance faible n'a pas pesé sur l'issue. Un but attendu autour de 1,3 pour l'outsider suffit ici, mais la marge est mince: un seul tir cadré."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Plymouth Parkway & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Plymouth a gagné avec 3 buts au total, donc Plymouth et plus de 1,5 passe. Le plus de 1,5 était acquis dès l'égalisation à la 73e.",
+          "lesson": "Le risque principal était la victoire de Plymouth, pas le total. Cette combinaison hérite de l'incertitude du 1N2, qui a été levée tardivement (105e+1)."
+        },
+        {
+          "market": "Buts — Plymouth Parkway",
+          "marketId": "teamGoals",
+          "pick": "Plymouth Parkway — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Plymouth a marqué 2 buts, sous 3,5. Les deux sont des penalties, malgré 18 tirs.",
+          "lesson": "Avis confirmé, à garder: une ligne haute est sûre pour un favori qui cadre peu (2 tirs cadrés)."
+        },
+        {
+          "market": "Buts — Berkhamsted",
+          "marketId": "teamGoals",
+          "pick": "Berkhamsted — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Berkhamsted a marqué à la 47e par Andrews, donc plus de 0,5 passe. Il a eu 14 tirs mais seulement 1 cadré.",
+          "lesson": "Avis confirmé, à garder. Le but est venu tôt en seconde période; un outsider avec 1,28 xG marque souvent au moins une fois."
+        }
+      ],
+      "caveats": "Un seul match, sans forme ni classement. Le rôle des penalties (73e et 105e+1) est difficile à modéliser. La fiche ne dit pas si les marchés incluent la prolongation; le total de buts n'a été atteint qu'avec elle. Le niveau relatif des clubs n'est pas mesuré.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 17,
+        "commentaire": 4
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 5389,
+        "cache_read_input_tokens": 7969,
+        "output_tokens": 3884,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5389,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1779,
+            "cache_read_input_tokens": 5881,
+            "cache_creation_input_tokens": 1596,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1596
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0619978,
+      "createdAt": "2026-11-10T11:53:33.212Z"
+    }
   },
   {
     "matchId": "cal-2026-11-09-sabadell-sociedad-b",
@@ -19508,8 +20096,240 @@
         }
       ]
     },
-    "updatedAt": "2026-11-09T11:52:34.296Z",
-    "createdAt": "2026-11-09T11:52:34.296Z"
+    "updatedAt": "2026-11-10T11:54:08.801Z",
+    "createdAt": "2026-11-09T11:52:34.296Z",
+    "postMatchReview": {
+      "summary": "0-0 à Sabadell : le favori à domicile n'a pas gagné et il n'y a eu aucun but. Les marchés de volume (corners, tirs) et les plafonds de buts par équipe ont tenu. Les marchés qui supposaient des buts ou des tirs cadrés en nombre ont échoué. Le moteur a surestimé l'attaque de Sabadell et la fragilité défensive de Sociedad B.",
+      "whatWasRight": "Les plafonds ont tenu : Sabadell moins de 2,5 buts, Sociedad B moins de 1,5 but, corners (5 et 3, soit 8 au total), tirs totaux (29, sous 32,5), Sabadell sous 20,5 tirs (19) et Sociedad B sous 14,5 (10). Sabadell n'a cadré que 3 fois, donc sous 6,5. Ma prudence sur la forme en baisse de Sabadell et sur la fiabilité du marché Résultat était fondée. Mon avis nuancé sur le BTTS et sur les tirs de Sociedad B allait dans le bon sens.",
+      "whatWasMissed": "Je n'ai pas vu le risque d'un 0-0. Sabadell a tiré 19 fois pour seulement 3 tirs cadrés (xG 0,79), soit beaucoup de tirs peu dangereux. Sociedad B a eu 1,22 xG sur 10 tirs, avec une barre à la 58e, mais n'a cadré qu'une fois. Le VAR a refusé un penalty à Sabadell à la 36e. J'avais donné une confiance forte à Plus de 1,5 but. J'ai aussi confirmé deux lignes de tirs cadrés (plus de 5,5 au total, plus de 1,5 pour Sociedad B) sans voir qu'elles dépendaient de la précision, pas du seul volume de tirs.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1N2 (Sabadell à 56 %), sur le total de buts et sur le cumul résultat + buts. Il confirme le moteur sur les corners, les tirs et les plafonds de buts par équipe. Le xG réel de Sabadell (0,79) est resté très loin des 2,05 attendus.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Sabadell gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "0-0, donc pas de victoire de Sabadell. Il a dominé en tirs (19 contre 10) mais avec 0,79 xG et 3 tirs cadrés. Le VAR a refusé un penalty à la 36e.",
+          "lesson": "Pour un favori à domicile en baisse de forme, la domination en volume de tirs ne suffit pas. Il faut regarder la qualité des tirs. Garder la prudence sur ce marché."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Aucun but. Les deux équipes ont été imprécises : 4 tirs cadrés au total, et Sociedad B a touché la barre à la 58e.",
+          "lesson": "Une confiance forte sur une ligne de 1,5 but reste fragile : un 0-0 suffit à la faire échouer. Réduire la confiance quand les tirs cadrés sont faibles."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Aucun but, donc Non. Un avis nuancé et faible était adapté.",
+          "lesson": "Garder la nuance sur le BTTS quand le domicile défend bien (0,8 but encaissé). C'est l'attitude à conserver."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Sabadell & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "faible",
+          "aiWasRight": false,
+          "explanation": "Sabadell n'a pas gagné et il n'y a eu aucun but, donc le cumul échoue.",
+          "lesson": "Un combiné hérite des erreurs de ses deux jambes. Éviter de le confirmer quand le résultat seul est déjà incertain."
+        },
+        {
+          "market": "Buts — Sabadell",
+          "marketId": "teamGoals",
+          "pick": "Sabadell — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sabadell a marqué 0 but, donc moins de 2,5. Ses 0,79 xG ont confirmé qu'il ne marquerait pas beaucoup.",
+          "lesson": "Les plafonds de buts par équipe tiennent bien, surtout pour une équipe qui marque 1,2 but par match sur ses 10 derniers."
+        },
+        {
+          "market": "Buts — Sociedad B",
+          "marketId": "teamGoals",
+          "pick": "Sociedad B — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sociedad B a marqué 0 but, donc moins de 1,5. Il n'a cadré qu'une fois malgré 1,22 xG.",
+          "lesson": "La défense à domicile de Sabadell limite bien l'adversaire. Garder ce type de plafond."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "8 corners (5 et 3), au-dessus de 6,5. La marge n'était pas énorme.",
+          "lesson": "Une ligne sous la moyenne du championnat (9,4) est bien couverte, mais 8 corners montre que la marge reste mince."
+        },
+        {
+          "market": "Corners — Sabadell",
+          "marketId": "teamCorners",
+          "pick": "Sabadell — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "5 corners pour Sabadell, sous 7,5, proche de sa moyenne de 5,2.",
+          "lesson": "Une ligne bien au-dessus de la moyenne de l'équipe est sûre. À garder."
+        },
+        {
+          "market": "Corners — Sociedad B",
+          "marketId": "teamCorners",
+          "pick": "Sociedad B — Moins de 5.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "3 corners pour Sociedad B, sous 5,5, avec peu de jeu offensif prolongé.",
+          "lesson": "Une équipe visiteuse à faible possession produit peu de corners. À garder."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 32.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "29 tirs (19 et 10), sous 32,5. Sabadell a surtout tiré beaucoup.",
+          "lesson": "La ligne a tenu, mais 29 tirs reste proche de l'attendu de 26,9. Ne pas sous-estimer un déséquilibre de volume d'un seul côté."
+        },
+        {
+          "market": "Tirs — Sabadell",
+          "marketId": "teamShots",
+          "pick": "Sabadell — Moins de 20.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "19 tirs, sous 20,5 d'une courte marge. Ce total était au-dessus de la moyenne de 16,6 à domicile.",
+          "lesson": "Sabadell a presque atteint la ligne : la marge était plus mince que ne le disait la confiance. Prendre en compte les matchs où il domine sans marquer."
+        },
+        {
+          "market": "Tirs — Sociedad B",
+          "marketId": "teamShots",
+          "pick": "Sociedad B — Moins de 14.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "10 tirs, sous 14,5, en ligne avec les 10,89 attendus.",
+          "lesson": "Mon avis nuancé était prudent, et la défense de Sabadell à domicile (environ 10 tirs concédés) a primé sur la moyenne de 14 de Sociedad B."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "4 tirs cadrés au total (3 et 1), sous 5,5, alors que 8,23 étaient attendus.",
+          "lesson": "Les tirs cadrés dépendent de la précision, pas seulement du volume. Sabadell a tiré 19 fois pour 3 cadrés. Se méfier des lignes hautes de tirs cadrés."
+        },
+        {
+          "market": "Tirs cadrés — Sabadell",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Sabadell — Moins de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "3 tirs cadrés, sous 6,5, malgré 19 tirs au total.",
+          "lesson": "Un plafond de tirs cadrés bien au-dessus de la moyenne est sûr. À garder."
+        },
+        {
+          "market": "Tirs cadrés — Sociedad B",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Sociedad B — Plus de 1.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Un seul tir cadré, donc sous 1,5. La barre de la 58e n'a pas compté comme tir cadré.",
+          "lesson": "Même une ligne très basse peut échouer pour une équipe visiteuse. Ne pas la dire atteinte presque à chaque match, surtout face à une défense à domicile solide."
+        }
+      ],
+      "caveats": "Un seul match, au résultat 0-0 qui a pu tenir à un manque de précision des deux équipes. Aucun edge chiffré, la mise était PASS. La blessure précoce de Quadri Liameed (remplacé dès la 12e) a pu perturber Sabadell, mais la fiche ne permet pas de chiffrer son effet.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 17,
+        "commentaire": 3
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 6320,
+        "cache_read_input_tokens": 9145,
+        "output_tokens": 3783,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 6320,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2849,
+            "cache_read_input_tokens": 7057,
+            "cache_creation_input_tokens": 1351,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1351
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.064947,
+      "createdAt": "2026-11-10T11:54:08.800Z"
+    }
   },
   {
     "matchId": "7bfc2afc162934f011a8425159e340da",
@@ -20988,8 +21808,240 @@
       ]
     },
     "kickoffRuns": 1,
-    "updatedAt": "2026-11-09T19:03:55.795Z",
-    "createdAt": "2026-11-09T19:03:55.795Z"
+    "updatedAt": "2026-11-10T15:17:34.798Z",
+    "createdAt": "2026-11-09T19:03:55.795Z",
+    "postMatchReview": {
+      "summary": "Las Palmas a gagné 2-0, mais les deux buts sont tombés à la 90+5' et à la 90+8' après une mi-temps 0-0. Le match est resté bas en volume, comme prévu pour les corners, les tirs et les tirs cadrés. Ma lecture a péché sur Eldense, très peu dangereux (xG 0,33, 1 tir cadré), et sur le total d'Eldense, que j'avais surestimé. Le score s'est aussi décidé tardivement.",
+      "whatWasRight": "Les marchés de volume sont bien passés : 12+7 = 19 tirs (plus de 18,5, de justesse), 6 tirs cadrés au total, 7 corners au total. Las Palmas est resté sous ses lignes individuelles (12 tirs, 5 cadrés, 5 corners). Le sous 3,5 buts est passé. Le doute sur le résultat 1N2 était justifié : il a fallu attendre le temps additionnel. Le BTTS Non a aussi été validé.",
+      "whatWasMissed": "J'ai surestimé l'attaque d'Eldense à l'extérieur : xG 0,33, 7 tirs, 1 cadré, 2 corners, alors que je m'appuyais sur sa moyenne de 13 tirs. J'ai sous-estimé la domination de Las Palmas à domicile (61 % de possession, xG 1,14, 2 grosses occasions, un but refusé par la VAR à la 53'). Les deux buts tardifs (90+5' et 90+8') ont fait basculer la ligne de Las Palmas sous 1,5 buts. Eldense, mené, s'est découvert et a pris 7 jaunes. Cela a facilité le but de Betancor à la 90+8'.",
+      "outcomeVsEngine": "Le résultat va globalement dans le sens du moteur : Las Palmas favori à 48 %, sous 3,5 buts, volumes bas. Il contredit le moteur sur Eldense, crédité de 1,33 but attendu et de 12 tirs, qui n'a produit que 0,33 xG et 7 tirs. L'edge quasi nul et le PASS étaient cohérents : le match s'est joué sur des détails et sur le temps additionnel.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Las Palmas gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "0-0 à la mi-temps, but refusé par la VAR à la 53', puis victoire de Las Palmas sur deux buts en toute fin de match (90+5' et 90+8'). La domination (61 % de possession, xG 1,14 contre 0,33) a fini par payer.",
+          "lesson": "Ma prudence était justifiée, mais Eldense à l'extérieur produit moins que ses moyennes. Quand l'écart de xG favorise nettement le domicile, ne pas surpondérer la créativité moyenne de l'adversaire."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "2 buts au total, tous deux au-delà de la 90e. Le sous 3,5 n'a jamais été menacé.",
+          "lesson": "Garder cette confiance quand les deux équipes ont des moyennes de buts basses."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Eldense n'a pas marqué : 1 tir cadré, xG 0,33.",
+          "lesson": "Mon doute sur le Non était excessif. Avec les moyennes de buts d'Eldense à l'extérieur (1 but par match), le Non reste solide."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Las Palmas & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Las Palmas a gagné 2-0, donc moins de 3,5 buts : le combiné passe. La victoire n'est arrivée qu'en temps additionnel.",
+          "lesson": "Ce combiné dépend du 1N2. Il reste fragile quand le match est équilibré jusqu'à la fin."
+        },
+        {
+          "market": "Buts — Las Palmas",
+          "marketId": "teamGoals",
+          "pick": "Las Palmas — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Las Palmas a marqué 2 fois, tard (90+5' et 90+8'). Le xG de 1,14 était supérieur à mon estimation de 0,86.",
+          "lesson": "Ne pas confirmer une ligne basse sur un domicile dominant. Les buts tardifs, quand l'adversaire se découvre, sont un risque sur les lignes serrées."
+        },
+        {
+          "market": "Buts — CD Eldense",
+          "marketId": "teamGoals",
+          "pick": "CD Eldense — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Eldense n'a marqué aucun but : 7 tirs, 1 cadré, xG 0,33, aucune grosse occasion.",
+          "lesson": "Ne pas confirmer le plus de 0,5 but pour une équipe extérieure qui marque peu. Les moyennes de tirs ne garantissent pas un but. Ne pas se fier à un xG moyen, mais à la production réelle à l'extérieur."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 13.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "7 corners au total (5+2), très loin de la ligne de 13,5.",
+          "lesson": "Marché solide quand la ligne est bien au-dessus de l'attendu : à conserver."
+        },
+        {
+          "market": "Corners — Las Palmas",
+          "marketId": "teamCorners",
+          "pick": "Las Palmas — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "5 corners pour Las Palmas, sous la ligne de 7,5.",
+          "lesson": "La moyenne basse était un bon indicateur ; à garder."
+        },
+        {
+          "market": "Corners — CD Eldense",
+          "marketId": "teamCorners",
+          "pick": "CD Eldense — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Eldense n'a obtenu que 2 corners, sous la ligne de 2,5. Possession de 39 % et domination adverse.",
+          "lesson": "Une ligne basse peut échouer quand l'équipe est dominée. Pour une équipe extérieure, ajuster selon le rapport de force attendu (moyenne dehors 3,8)."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 18.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "19 tirs (12+7), juste au-dessus de 18,5. La marge était faible, car Eldense n'a tiré que 7 fois.",
+          "lesson": "Le total a passé de justesse. La marge de sécurité était moins large que le 83 % ne le laissait penser."
+        },
+        {
+          "market": "Tirs — Las Palmas",
+          "marketId": "teamShots",
+          "pick": "Las Palmas — Moins de 15.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "12 tirs, sous la ligne de 15,5.",
+          "lesson": "Las Palmas a un volume de tirs limité, même en dominant."
+        },
+        {
+          "market": "Tirs — CD Eldense",
+          "marketId": "teamShots",
+          "pick": "CD Eldense — Moins de 15.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "7 tirs, très sous la ligne de 15,5.",
+          "lesson": "Le plus gros écart de ce match : Eldense a produit moitié moins que sa moyenne à l'extérieur. Les lignes basses d'équipes visiteuses sont plus sûres que les lignes hautes."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 11.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "6 tirs cadrés au total (5+1), loin de 11,5.",
+          "lesson": "Marché fiable quand les moyennes sont basses."
+        },
+        {
+          "market": "Tirs cadrés — Las Palmas",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Las Palmas — Moins de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "5 tirs cadrés, sous la ligne de 6,5.",
+          "lesson": "Confirmé : les moyennes à domicile (2,6) restent un bon repère."
+        },
+        {
+          "market": "Tirs cadrés — CD Eldense",
+          "marketId": "teamShotsOnTarget",
+          "pick": "CD Eldense — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "1 seul tir cadré, sous la ligne de 2,5. Eldense a été dominé et n'a pas créé de danger.",
+          "lesson": "Une ligne basse sur un visiteur peut échouer si le favori domine. Ne pas confirmer avec une confiance élevée sur une marge réduite (3 contre 2,5)."
+        }
+      ],
+      "caveats": "Un seul match. Le résultat dépend de deux buts tardifs, en temps additionnel, dont la survenue est peu modélisable. Je n'ai pas d'information sur la composition réelle du jour. Les statistiques sont celles de FotMob et ne montrent pas l'effet d'un éventuel nouvel entraîneur.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 20,
+        "commentaire": 3
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 7023,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 2748,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 7023,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2748,
+            "cache_read_input_tokens": 0,
+            "cache_creation_input_tokens": 7023,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 7023
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.055576,
+      "createdAt": "2026-11-10T15:17:34.798Z"
+    }
   },
   {
     "matchId": "f52b83a74c511828f6155889d751d191",
@@ -22587,8 +23639,240 @@
       ]
     },
     "kickoffRuns": 1,
-    "updatedAt": "2026-11-09T18:39:02.883Z",
-    "createdAt": "2026-11-09T18:39:02.883Z"
+    "updatedAt": "2026-11-10T15:17:58.207Z",
+    "createdAt": "2026-11-09T18:39:02.883Z",
+    "postMatchReview": {
+      "summary": "Le 0-0 contredit le scénario d'un match ouvert avec but des deux côtés. Les marchés de volume (tirs, corners, buts par équipe en « moins de ») ont tenu. Les marchés de buts (1N2, plus de 2,5, BTTS) et deux lignes de tirs cadrés ont échoué : les tirs cadrés étaient trop rares (3 et 1).",
+      "whatWasRight": "Les volumes ont été bien lus : 29 tirs au total (sous 32,5), Sabadell 19 tirs (sous 20,5), Real B 10 tirs (sous 14,5), corners 8 au total (au-dessus de 6,5), 5 pour Sabadell et 3 pour la Real B. Les lignes « moins de 2,5 buts » par équipe étaient sûres. Le moteur sous-estimait déjà la Real B en tirs et en corners.",
+      "whatWasMissed": "J'ai surestimé la production offensive : 3 tirs cadrés pour Sabadell et 1 pour la Real B, soit 4 au total, très loin des 8,2 attendus. Sabadell a pris 19 tirs mais pour 0,79 xG, donc de la quantité sans qualité. Je me suis appuyé sur la défense perméable de la Real B et sur le gardien remplaçant, sans voir que le match pouvait se fermer. Le VAR a refusé un penalty à Sabadell à la 36e. La Real B a touché la barre à la 58e. La blessure de Liameed, remplacé dès la 12e, a perturbé Sabadell.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1N2, le plus de 2,5 et le BTTS. Il le confirme sur les volumes de tirs et de corners ainsi que sur les « moins de » par équipe. Le xG réel de 0,79 / 1,22 était bien sous les 2 / 1,5 attendus.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Sabadell FC gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Sabadell n'a pas gagné : 0-0, avec 3 tirs cadrés seulement et 0 grosse occasion. Un penalty a été refusé après VAR à la 36e.",
+          "lesson": "Une forme à domicile favorable ne garantit pas la victoire quand la domination ne produit que 0,79 xG. Rester prudent sur un favori à 56 % qui n'a marqué que 1,2 but par match sur 10 matchs."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Aucun but, malgré 29 tirs. Les tirs cadrés sont restés très bas (4) et la barre de la 58e est la seule occasion nette.",
+          "lesson": "Le plus de 2,5 repose sur des moyennes de buts encaissés qui varient beaucoup. Il faut regarder la qualité des tirs, pas seulement leur nombre, surtout quand l'attaque locale est faible (1,2 but par match)."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "0-0. La Real B n'a cadré qu'un tir, et Sabadell trois, sans transformer.",
+          "lesson": "Le BTTS à 68 % a surestimé les deux équipes. Avec une attaque sous 1,3 but par match de chaque côté, le non reste crédible."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Sabadell FC & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Sabadell n'a pas gagné et il n'y a eu aucun but, donc les deux conditions ont échoué.",
+          "lesson": "Les combinés héritent de l'erreur du 1N2. Un 0-0 les fait tous échouer."
+        },
+        {
+          "market": "Buts — Sabadell FC",
+          "marketId": "teamGoals",
+          "pick": "Sabadell FC — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sabadell a marqué 0 but, nettement sous 2,5, conformément à sa moyenne de 1,2 but.",
+          "lesson": "Les lignes « moins de » sur les buts d'une équipe sont solides quand son attaque est modeste. À garder."
+        },
+        {
+          "market": "Buts — Real Sociedad B",
+          "marketId": "teamGoals",
+          "pick": "Real Sociedad B — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "La Real B a marqué 0 but, avec 1 tir cadré seulement et un poteau/barre à la 58e.",
+          "lesson": "Une équipe qui marque 1,3 but par match, à l'extérieur, passe rarement 2,5. Ligne à conserver."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "8 corners (5 + 3), au-dessus de 6,5 mais avec une marge de 1,5 seulement.",
+          "lesson": "La ligne basse a bien fonctionné. Le total réel (8) est resté sous l'attendu (9,13), donc ne pas pousser vers des lignes plus hautes."
+        },
+        {
+          "market": "Corners — Sabadell FC",
+          "marketId": "teamCorners",
+          "pick": "Sabadell FC — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Sabadell a obtenu 5 corners, sous 7,5, proche de sa moyenne de 5,2.",
+          "lesson": "Se fier à la moyenne de corners de l'équipe a bien marché."
+        },
+        {
+          "market": "Corners — Real Sociedad B",
+          "marketId": "teamCorners",
+          "pick": "Real Sociedad B — Moins de 5.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "La Real B a eu 3 corners, sous 5,5, avec 10 tirs seulement.",
+          "lesson": "Le jeu direct à l'extérieur limite bien les corners. À garder."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 32.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "29 tirs (19 + 10), sous 32,5, mais plus que les 26,9 attendus : Sabadell a poussé davantage que prévu.",
+          "lesson": "La ligne était sûre. Ne pas descendre trop près de l'attendu, puisque Sabadell a dépassé son volume prévu."
+        },
+        {
+          "market": "Tirs — Sabadell FC",
+          "marketId": "teamShots",
+          "pick": "Sabadell FC — Moins de 20.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "19 tirs, soit juste sous la ligne de 20,5. C'était serré.",
+          "lesson": "Les 19 tirs contre 16 attendus montrent que la ligne était trop proche. La marge réelle était mince malgré les 80 %."
+        },
+        {
+          "market": "Tirs — Real Sociedad B",
+          "marketId": "teamShots",
+          "pick": "Real Sociedad B — Moins de 14.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "10 tirs, nettement sous 14,5, avec Sabadell en contrôle de la possession territoriale. Mon avis nuancé était trop prudent.",
+          "lesson": "Quand le moteur voit nettement moins que la ligne (10,9 contre 14,5) et que l'adversaire concède peu, faire davantage confiance au moteur."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Seulement 4 tirs cadrés (3 + 1), bien sous 5,5. Sabadell a tiré 19 fois pour 3 cadrés.",
+          "lesson": "Ma confiance sur le plus de 5,5 était trop haute. La conversion tirs/cadrés varie beaucoup (3 sur 19 ici), donc ce marché est plus fragile que les tirs bruts."
+        },
+        {
+          "market": "Tirs cadrés — Sabadell FC",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Sabadell FC — Moins de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "3 tirs cadrés, sous 6,5. Le moteur voyait 4,9, ce qui était plus juste.",
+          "lesson": "Suivre l'attendu du moteur plutôt que la moyenne à domicile. La ligne tient avec une marge confortable."
+        },
+        {
+          "market": "Tirs cadrés — Real Sociedad B",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Real Sociedad B — Plus de 1.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "1 seul tir cadré, sous 1,5, pour 10 tirs. Pourtant 1,22 xG avec 2 grosses occasions, dont la barre à la 58e.",
+          "lesson": "Même un seuil très bas (1,5) peut échouer dans un match fermé. Ne pas traiter le plus de 1,5 tir cadré comme quasi acquis, car la moyenne de 4 cache une forte variance."
+        }
+      ],
+      "caveats": "Un seul match : un 0-0 avec un penalty refusé par le VAR et une barre touchée relève en partie de la variance. La fiche ne détaille pas les tirs bloqués ni les causes du manque de tirs cadrés, et ne donne pas de forme récente de Sabadell.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 17,
+        "commentaire": 3
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5618,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2802,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5618,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2802,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5618,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5618
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.050913599999999996,
+      "createdAt": "2026-11-10T15:17:58.206Z"
+    }
   },
   {
     "matchId": "cal-2026-11-09-sportivo-san-lorenzo-rubio-nu",
@@ -24077,7 +25361,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-09T19:43:53.948Z",
+    "updatedAt": "2026-11-10T11:54:38.936Z",
     "createdAt": "2026-11-09T11:53:06.554Z",
     "kickoffRuns": 2,
     "earlierAnalysis": {
@@ -24498,6 +25782,238 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-09T11:53:06.553Z"
+    },
+    "postMatchReview": {
+      "summary": "Le 2-2 (mi-temps 2-1) contredit la lecture « match fermé » sur les buts : San Lorenzo a marqué deux fois en trois minutes (10', 13'), puis Rubio Ñú a égalisé sur penalty à la 84e. Les marchés de volume (tirs, tirs cadrés, corners) ont tous été bien anticipés.",
+      "whatWasRight": "Tous les marchés de tirs, tirs cadrés et corners sont justes. Les tirs ont été 19 et 14 (33 au total). Les tirs cadrés ont été 3 et 4 (7 au total). Les corners ont été 4 et 6 (10 au total). Rubio Ñú a marqué au moins un but (16', 84'). La méfiance sur le résultat sec (nuance, faible) était justifiée, puisque Rubio Ñú n'a pas gagné.",
+      "whatWasMissed": "J'ai sous-estimé la capacité de San Lorenzo à marquer à domicile malgré l'absence de Meza et Torres : Barrios (10') et Ferreira (13') ont marqué. J'ai confirmé « Moins de 2.5 buts » et « San Lorenzo moins de 1.5 », deux avis faux. Le penalty tardif (82e concédé, 84e transformé) n'était pas prévisible. Le Non aux deux équipes marquent a été invalidé dès la 16e. Mon raisonnement sur l'attaque pauvre de San Lorenzo reposait trop sur la moyenne.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur les marchés de buts (résultat, total, BTTS, combiné, buts de San Lorenzo). Il le confirme sur tous les marchés de tirs, tirs cadrés et corners, ainsi que sur les buts de Rubio Ñú.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Rubio Ñú gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Rubio Ñú n'a pas gagné : 2-2. Il était mené 2-0 à la 13e, a réduit à la 16e, puis égalisé sur penalty à la 84e.",
+          "lesson": "La prudence (nuance, faible) était la bonne approche. Un favori à 50 % sans edge reste fragile, surtout face à un adversaire capable de marquer tôt."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Quatre buts : 10', 13', 16' et 84' (penalty). Le Moins de 2.5 est donc faux. L'ouverture rapide a cassé le scénario fermé.",
+          "lesson": "Ne pas confirmer un Moins de 2.5 sur la seule faiblesse des attaques quand les deux défenses concèdent 1,5 à 1,9 but. Le risque de buts précoces est réel."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "San Lorenzo a marqué à la 10e et à la 13e, Rubio Ñú à la 16e et à la 84e : les deux équipes ont marqué.",
+          "lesson": "La nuance sur le Non était fondée : San Lorenzo avait marqué lors de ses 6 derniers matchs. Cette série doit peser davantage que sa moyenne à domicile."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Rubio Ñú & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Rubio Ñú n'a pas gagné (2-2), donc le combiné est perdu, même si moins de 4 buts était respecté.",
+          "lesson": "Un combiné dépend de la jambe la plus fragile, ici la victoire. La confiance faible était cohérente."
+        },
+        {
+          "market": "Buts — Sportivo San Lorenzo",
+          "marketId": "teamGoals",
+          "pick": "Sportivo San Lorenzo — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "San Lorenzo a marqué 2 fois en 3 minutes (10', 13'), donc Moins de 1.5 est faux. Les 19 tirs montrent une vraie pression offensive.",
+          "lesson": "Ne pas s'appuyer sur la moyenne de buts seule : le volume de tirs élevé (13,5 à domicile en moyenne) signalait un potentiel supérieur à 0,83 but. Les absences au milieu n'ont pas freiné l'attaque."
+        },
+        {
+          "market": "Buts — Rubio Ñú",
+          "marketId": "teamGoals",
+          "pick": "Rubio Ñú — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Rubio Ñú a marqué par Fretes (16') et par Elías Alfonso sur penalty (84').",
+          "lesson": "Confirmé : avec une moyenne extérieure de 1,6 but, le Plus de 0.5 est solide malgré un 0-5 récent."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 12.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "10 corners au total (4 et 6), sous 12,5, conforme aux 10,04 attendus.",
+          "lesson": "Les attendus moteur et la moyenne du championnat (9,2) sont fiables pour ce marché."
+        },
+        {
+          "market": "Corners — Sportivo San Lorenzo",
+          "marketId": "teamCorners",
+          "pick": "Sportivo San Lorenzo — Moins de 8.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "San Lorenzo a eu 4 corners, bien sous 8,5.",
+          "lesson": "Bonne lecture : la faible possession (42 %) limite les corners. À garder."
+        },
+        {
+          "market": "Corners — Rubio Ñú",
+          "marketId": "teamCorners",
+          "pick": "Rubio Ñú — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Rubio Ñú a eu 6 corners, sous 6,5 de justesse malgré 58 % de possession.",
+          "lesson": "Juste, mais la marge était mince : la possession élevée peut pousser vers le seuil. La confiance forte était un peu généreuse."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 23.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "33 tirs (19 et 14), bien au-dessus de 23,5.",
+          "lesson": "Les volumes élevés des deux équipes se confirment. Marché à garder."
+        },
+        {
+          "market": "Tirs — Sportivo San Lorenzo",
+          "marketId": "teamShots",
+          "pick": "Sportivo San Lorenzo — Plus de 10.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "San Lorenzo a tiré 19 fois, bien au-dessus de 10,5, malgré 42 % de possession.",
+          "lesson": "La possession faible n'empêche pas le volume de tirs. À retenir : elle est un faux signal d'alerte ici."
+        },
+        {
+          "market": "Tirs — Rubio Ñú",
+          "marketId": "teamShots",
+          "pick": "Rubio Ñú — Plus de 9.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Rubio Ñú a tiré 14 fois, au-dessus de 9,5, en ligne avec les 14,09 attendus.",
+          "lesson": "Ses moyennes extérieures (16,8) restent un bon indicateur. À garder."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 11.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "7 tirs cadrés au total (3 et 4), sous 11,5, malgré 33 tirs.",
+          "lesson": "Confirmé : peu de tirs cadrés malgré le volume. La ligne haute à 11,5 laissait une grande marge."
+        },
+        {
+          "market": "Tirs cadrés — Sportivo San Lorenzo",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Sportivo San Lorenzo — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "San Lorenzo a cadré 3 tirs sur 19, soit juste au-dessus de 2,5.",
+          "lesson": "Validé de justesse : 19 tirs pour seulement 3 cadrés. La marge réelle était mince malgré la confiance moyenne, à surveiller sur les seuils bas."
+        },
+        {
+          "market": "Tirs cadrés — Rubio Ñú",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Rubio Ñú — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Rubio Ñú a cadré 4 tirs, au-dessus de 2,5, en ligne avec les 4,23 attendus.",
+          "lesson": "Confirmé : sa moyenne extérieure (5,2) est fiable, et le 0-5 était un accident."
+        }
+      ],
+      "caveats": "Un seul match : le penalty tardif et les deux buts rapides tiennent en partie au hasard. Le xG du match n'est pas fourni.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 20,
+        "commentaire": 2
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 6805,
+        "cache_read_input_tokens": 9574,
+        "output_tokens": 3541,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 6805,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2656,
+            "cache_read_input_tokens": 7486,
+            "cache_creation_input_tokens": 1407,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1407
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.06455280000000001,
+      "createdAt": "2026-11-10T11:54:38.936Z"
     }
   },
   {
@@ -25919,7 +27435,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-09T19:38:51.585Z",
+    "updatedAt": "2026-11-10T11:55:02.160Z",
     "createdAt": "2026-11-09T11:53:31.996Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -26334,6 +27850,237 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-09T11:53:31.996Z"
+    },
+    "postMatchReview": {
+      "summary": "Manta a gagné 1-2 à Quito malgré le statut de favori de Técnico (70 %). Le scénario de marchés à faible volume (tirs, tirs cadrés, corners d'équipe) s'est bien confirmé, mais l'issue 1X2 a été contredite par une égalisation juste après la pause, un rouge technique pour Técnico (63e) et un but de Manta dans le temps additionnel (90+4').",
+      "whatWasRight": "Les volumes de tirs et de tirs cadrés sont restés modestes : Técnico 10 tirs (3 cadrés), Manta 16 tirs (5 cadrés), tous sous les seuils retenus. Le plus de 1,5 but et le Oui des deux équipes sont passés (3 buts, les deux ont marqué). Les corners par équipe (8 et 5) ont dépassé 2,5. La prudence sur le 1X2 (avis nuancé) était justifiée vu l'attaque modeste de Técnico et la défaite à l'aller.",
+      "whatWasMissed": "La capacité de Manta à marquer deux fois malgré un milieu remanié : égalisation de Chalá à la 47e puis but de Vergés à la 90+4'. Manta a pris 16 tirs, plus que les 12,55 attendus. Le total de corners (13) a dépassé largement les 10,07 attendus. L'expulsion de l'entraîneur Usúcar (63e) et la blessure de Delgado ont aussi perturbé le match, sans que cela soit modélisable. Le moteur a sous-estimé la fin de match ouverte.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1X2 (70 % Técnico), le combiné Résultat + Total buts, Manta moins de 1,5 but et les moins de 12,5 corners. Il le confirme sur le plus de 1,5 but, les deux équipes marquent et tous les marchés de tirs et tirs cadrés.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Técnico Universitario gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Técnico a marqué dès le début (0'), mais Manta a égalisé à la 47e et a gagné à la 90+4' par Vergés. Manta a pris 16 tirs contre 10 pour Técnico.",
+          "lesson": "Un favori à fort pourcentage mais à faible production offensive reste vulnérable, surtout contre une équipe en forme. La nuance était la bonne ; garder la prudence sur ces favoris."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "3 buts (0', 47', 90+4'), donc largement au-dessus de 1,5.",
+          "lesson": "La défense extérieure fragile de Manta a bien servi de base pour le plus de 1,5 but ; à conserver."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "faible",
+          "aiWasRight": true,
+          "explanation": "Anaya a marqué pour Técnico, Chalá et Vergés pour Manta.",
+          "lesson": "Quand les deux défenses concèdent, le Oui tient ; confirmer reste raisonnable même avec une confiance faible."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Técnico Universitario & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Plus de 1,5 but passé, mais Técnico a perdu 1-2, donc le combiné échoue.",
+          "lesson": "Le combiné cumule le risque de non-victoire du favori ; la prudence (nuance, confiance faible) était justifiée."
+        },
+        {
+          "market": "Buts — Técnico Universitario",
+          "marketId": "teamGoals",
+          "pick": "Técnico Universitario — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Técnico n'a marqué qu'un but (Anaya, 0'), puis a fini à dix dès la 63e.",
+          "lesson": "Le niveau offensif modeste de Técnico (1,3 but par match) est un bon repère pour les seuils bas ; à garder."
+        },
+        {
+          "market": "Buts — Manta",
+          "marketId": "teamGoals",
+          "pick": "Manta — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Manta a marqué deux fois (Chalá 47', Vergés 90+4'), dépassant le seuil de 1,5. Le deuxième but est arrivé en fin de match contre une équipe à dix.",
+          "lesson": "Ne pas sous-estimer une équipe qui court après le score contre dix en fin de match ; l'absence de milieux créateurs n'a pas bloqué sa production (16 tirs). Le Moins de 1,5 mérite moins de confiance sur Manta."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 12.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Les corners ont atteint 13 (8 + 5), au-dessus de la ligne de 12,5, alors que le moteur attendait 10,07. Le jeu s'est ouvert après le rouge et la domination de Manta en fin de match.",
+          "lesson": "Une confiance forte sur un Moins de corners est trop élevée : la variance est grande et les événements (rouge, fin ouverte) la font monter. Réduire la confiance sur ces lignes."
+        },
+        {
+          "market": "Corners — Técnico Universitario",
+          "marketId": "teamCorners",
+          "pick": "Técnico Universitario — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Técnico a obtenu 8 corners, au-dessus de 2,5.",
+          "lesson": "Le seuil bas par équipe est sûr ; à garder."
+        },
+        {
+          "market": "Corners — Manta",
+          "marketId": "teamCorners",
+          "pick": "Manta — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Manta a obtenu 5 corners, au-dessus de 2,5, en poussant pour gagner.",
+          "lesson": "Une équipe qui court après le score génère des corners, comme le raisonnement l'anticipait ; à garder."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 33.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "26 tirs au total (10 + 16), sous la ligne de 33,5.",
+          "lesson": "Les volumes de tirs modestes se confirment ; à garder."
+        },
+        {
+          "market": "Tirs — Técnico Universitario",
+          "marketId": "teamShots",
+          "pick": "Técnico Universitario — Moins de 20.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Técnico n'a tiré que 10 fois, très loin de 20,5.",
+          "lesson": "Marché robuste quand l'équipe produit peu ; à garder."
+        },
+        {
+          "market": "Tirs — Manta",
+          "marketId": "teamShots",
+          "pick": "Manta — Moins de 16.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Manta a tiré 16 fois, juste sous 16,5 : le pari est passé de peu.",
+          "lesson": "La confiance forte était trop élevée, car la marge a été minime. Une équipe qui court après le score peut approcher le seuil."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 11.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "8 tirs cadrés au total (3 + 5), sous 11,5.",
+          "lesson": "Les deux équipes cadrent peu ; à garder."
+        },
+        {
+          "market": "Tirs cadrés — Técnico Universitario",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Técnico Universitario — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "3 tirs cadrés, très sous 7,5.",
+          "lesson": "Confirme le bon bilan sur les tirs cadrés d'une équipe ; à garder."
+        },
+        {
+          "market": "Tirs cadrés — Manta",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Manta — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "5 tirs cadrés, sous 5,5 mais de peu.",
+          "lesson": "Le risque signalé (Manta vers 6) s'est presque réalisé ; la confiance moyenne était adaptée."
+        }
+      ],
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 18,
+        "commentaire": 3
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 6034,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2423,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 6034,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2423,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 6034,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 6034
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0487876,
+      "createdAt": "2026-11-10T11:55:02.160Z"
     }
   },
   {
@@ -26356,9 +28103,9 @@
         "away": 2.93
       },
       "market": {
-        "odds1": 2.42,
-        "oddsDraw": 3.15,
-        "odds2": 2.65
+        "odds1": 2.45,
+        "oddsDraw": 3.2,
+        "odds2": 2.69
       },
       "edgePercent": null,
       "staking": {
@@ -26431,7 +28178,7 @@
           "market": "Résultat + Total buts",
           "predictedOutcome": "homeOver",
           "predictedLabel": "Luqueño & Plus de 1.5 buts",
-          "predictedOdds": 3.2,
+          "predictedOdds": 3.21,
           "probability": 31,
           "minOdds": 1.2
         },
@@ -26591,9 +28338,9 @@
     },
     "usage": {
       "input_tokens": 2,
-      "cache_creation_input_tokens": 6158,
-      "cache_read_input_tokens": 4470,
-      "output_tokens": 3301,
+      "cache_creation_input_tokens": 10633,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 3577,
       "output_tokens_details": {
         "thinking_tokens": 0
       },
@@ -26603,19 +28350,19 @@
       },
       "service_tier": "standard",
       "cache_creation": {
-        "ephemeral_1h_input_tokens": 6158,
+        "ephemeral_1h_input_tokens": 10633,
         "ephemeral_5m_input_tokens": 0
       },
       "inference_geo": "global",
       "iterations": [
         {
           "input_tokens": 2,
-          "output_tokens": 3301,
-          "cache_read_input_tokens": 4470,
-          "cache_creation_input_tokens": 6158,
+          "output_tokens": 3577,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 10633,
           "cache_creation": {
             "ephemeral_5m_input_tokens": 0,
-            "ephemeral_1h_input_tokens": 6158
+            "ephemeral_1h_input_tokens": 10633
           },
           "type": "message"
         }
@@ -26623,15 +28370,15 @@
       "speed": "standard",
       "fallback_credit": null
     },
-    "costUsd": 0.058539999999999995,
-    "analysedAt": "2026-11-09T11:53:55.994Z",
-    "timing": "avance",
+    "costUsd": 0.07830599999999999,
+    "analysedAt": "2026-11-09T21:37:15.937Z",
+    "timing": "coup-d-envoi",
     "fiche": "compacte",
     "memoire": {
-      "mots": 375,
-      "tokens": 1159,
+      "mots": 376,
+      "tokens": 1165,
       "lecons": [],
-      "dossiersDu": "2026-11-07T23:35:38.279Z",
+      "dossiersDu": "2026-11-09T12:56:06.206Z",
       "equipes": {
         "home": {
           "id": "fotmob-49687",
@@ -26650,8 +28397,8 @@
     "lineupSnapshot": {
       "source": "FotMob",
       "fotmobMatchId": "1000017462",
-      "fetchedAt": "2026-11-09T11:53:33.762Z",
-      "minutesBeforeKickoff": 636,
+      "fetchedAt": "2026-11-09T21:36:47.439Z",
+      "minutesBeforeKickoff": 53,
       "home": {
         "team": "Luqueño",
         "teamId": "fotmob-49687",
@@ -27635,39 +29382,40 @@
       }
     },
     "analysis": {
-      "summary": "Luqueño (9e, 19 pts) sort d'un 5-0 à Rubio Ñú mais reste fragile : 3 V sur 10, 1,2 but marqué pour 1,8 concédé. 2 de Mayo (6e, 30 pts) est solide mais stérile : 0,8 but par match, sans victoire depuis 4 matchs et sans but sur les 2 derniers. Luqueño, sous Lucas Barrios, aligne un 4-4-2 sans Wiechniak, Maíz ni Quintana (absents de la feuille). 2 de Mayo, en 4-2-3-1, laisse Sosa et Fariña sur le banc. Le match s'annonce très ouvert.",
+      "summary": "Luqueño (9e, 19 pts) sort d'un 5-0 à Rubio Ñú mais reste fragile : 1,2 but marqué pour 1,8 encaissé sur 10 matchs, 0,83 / 1,83 à domicile. 2 de Mayo (6e, 30 pts) est sans victoire depuis 4 matchs, produit peu (0,8 but, 2,9 tirs cadrés par match) mais encaisse 1,3. Luqueño aligne un 4-4-2 avec Maggi (15 buts) et Bogado (3+6) ; 2 de Mayo se présente en 4-2-3-1 avec Sosa et Fariña sur le banc.",
       "keyFactors": [
         {
           "factor": "forme récente",
-          "observation": "Luqueño en reprise après un 5-0, 2 de Mayo en panne offensive.",
-          "evidence": "Luqueño : V-D-D-V-D sur 5 matchs. 2 de Mayo : N-D-N-D-V, 2 matchs sans marquer."
+          "observation": "Luqueño a gagné largement à l'extérieur mais perdu 3 de ses 5 derniers matchs ; 2 de Mayo est stérile.",
+          "evidence": "Luqueño : V D D V D (5-0 à Rubio Ñú). 2 de Mayo : N D N D V, 0 but marqué lors de 2 des 3 derniers matchs."
         },
         {
           "factor": "statistiques et moyennes",
-          "observation": "Luqueño perméable, 2 de Mayo peu productif.",
-          "evidence": "Luqueño à domicile 0,83 / 1,83 buts. 2 de Mayo à l'extérieur 1 / 1,67 buts, 3 tirs cadrés produits par match."
+          "observation": "Luqueño est plus offensif en volume, mais très perméable ; 2 de Mayo produit peu.",
+          "evidence": "Luqueño 13,8 tirs, 5,2 cadrés, 1,2 / 1,8 buts. 2 de Mayo 12,1 tirs, 2,9 cadrés, 0,8 / 1,3 buts."
         },
         {
           "factor": "compositions",
-          "observation": "Luqueño sans trois titulaires habituels, dont Quintana (4+1). Maggi (15 buts) est titulaire.",
-          "evidence": "Absents : Wiechniak (33 tit.), Maíz (23), Quintana (20). 2 de Mayo : Sosa et Fariña (2+5) remplaçants."
+          "observation": "Luqueño sans trois titulaires habituels (Wiechniak, Maíz, Quintana) ; 2 de Mayo avec Sosa, Fariña et le gardien habituel Martínez hors du onze.",
+          "evidence": "Quintana 4+1 absent ; Rossi 18/18 dans le but de 2 de Mayo ; Maggi 15+4 titulaire."
         },
         {
           "factor": "edge du modèle",
-          "observation": "Pas d'edge chiffré et mise PASS, faute de bookmakers.",
-          "evidence": "xG 1,50 contre 1,57 ; 1N2 très équilibré."
+          "observation": "Aucun edge ; mise PASS faute de bookmakers.",
+          "evidence": "Buts attendus 1,502 contre 1,565 ; 1N2 très ouvert (38 % pour Luqueño)."
         }
       ],
-      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur sur l'ouverture du match et les volumes. Il nuance la victoire de Luqueño : la forme à domicile est mauvaise et l'équipe est remaniée.",
-      "caveats": "Le changement d'entraîneur de Luqueño est déduit des compositions importées, ce n'est pas un flux d'actualité. La composition est relue 636 minutes avant le match : ce peut être une prévision. Les xG par match sont non relevés. Le bilan de l'historique sur ces deux équipes porte sur peu de matchs.",
+      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : match équilibré, peu de tirs et de corners, mais les deux défenses fragiles. Le 1N2 reste très incertain, sans avantage net.",
+      "caveats": "Luqueño a un nouvel entraîneur depuis septembre (Barrios), donc un échantillon récent réduit. Les xG ne sont pas relevés. Jonathan Diaz est inconnu du magasin. Les stats à domicile reposent sur 6 matchs seulement.",
+      "lineupImpact": "Luqueño aligne Maggi (15 buts) et Bogado (3+6, note 7,45), son noyau offensif, mais sans Quintana (4+1), Maíz et Wiechniak (33 titularisations) : défense et milieu remaniés. 2 de Mayo garde Rossi dans le but et Cáceres (7 buts) devant, avec Fariña (2+5) et Sosa sur le banc, ce qui peut atténuer sa créativité. Terrain en herbe, temps sec : sans impact marqué.",
       "marketViews": [
         {
           "market": "Résultat",
           "pick": "Luqueño gagne",
           "verdict": "nuance",
           "confidence": "faible",
-          "explanation": "38 % : les xG sont quasi égaux (1,50 contre 1,57) et Luqueño a perdu 6 de ses 9 matchs à domicile, d'où une probabilité modeste.",
-          "reasoning": "Le 5-0 récent aide, mais Luqueño a perdu 6 matchs sur 9 à domicile et aligne un onze remanié. 2 de Mayo est mieux classé, donc le choix reste fragile.",
+          "explanation": "38 % : buts attendus quasi égaux (1,50 contre 1,57) et Luqueño n'a gagné que 3 de ses 9 matchs à domicile.",
+          "reasoning": "Luqueño a l'avantage du terrain et du volume de tirs, mais sa défense (1,83 encaissé à domicile) et ses absences au milieu freinent. Match très ouvert.",
           "probability": 38
         },
         {
@@ -27675,8 +29423,8 @@
           "pick": "Plus de 1.5 buts",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "82 % : les xG cumulent 3,07 buts et Luqueño concède 1,8 but par match, mais 2 de Mayo ne marque que 0,8.",
-          "reasoning": "La défense de Luqueño laisse passer des buts et l'attaque a marqué 5 fois en dernier match. Le risque tient aux 0-0 de 2 de Mayo.",
+          "explanation": "82 % : environ 3,07 buts attendus au total et Luqueño encaisse 1,8 par match sur 10 matchs.",
+          "reasoning": "La défense de Luqueño laisse passer des buts, mais 2 de Mayo est stérile (0,8 but par match), d'où un risque de 0-0 ou 1-0.",
           "probability": 82
         },
         {
@@ -27684,8 +29432,8 @@
           "pick": "Oui",
           "verdict": "nuance",
           "confidence": "faible",
-          "explanation": "62 % : Luqueño encaisse 1,8 but par match, mais 2 de Mayo n'a pas marqué lors de ses 2 derniers matchs.",
-          "reasoning": "Luqueño encaisse beaucoup, mais 2 de Mayo est stérile (0,8 but par match). Luqueño a aussi été muet dans 2 de ses 3 derniers matchs à domicile.",
+          "explanation": "62 % : Luqueño encaisse 1,8 par match, mais 2 de Mayo n'a pas marqué dans 2 de ses 3 derniers matchs.",
+          "reasoning": "La fragilité de Luqueño plaide pour le oui, mais l'attaque de 2 de Mayo (2,9 tirs cadrés) est peu fiable ; le 0-0 récent à Trinidense pèse.",
           "probability": 62
         },
         {
@@ -27693,8 +29441,8 @@
           "pick": "Luqueño & Plus de 1.5 buts",
           "verdict": "nuance",
           "confidence": "faible",
-          "explanation": "31 % : il faut que Luqueño gagne (38 %) avec au moins 2 buts au total, ce qui est probable mais pas acquis.",
-          "reasoning": "Ce pronostic dépend de la victoire de Luqueño, déjà incertaine. Le bilan de ce type de marché est faible.",
+          "explanation": "31 % : cumule la victoire de Luqueño (38 %) et plus de 1,5 but (82 %), le résultat étant l'élément incertain.",
+          "reasoning": "Le volet buts est solide, le résultat reste ouvert ; combiné peu fiable, comme le montre mon bilan sur ce marché.",
           "probability": 31
         },
         {
@@ -27702,8 +29450,8 @@
           "pick": "Luqueño — Moins de 2.5 buts",
           "verdict": "confirme",
           "confidence": "forte",
-          "explanation": "81 % : Luqueño marque 1,2 but par match (0,83 à domicile), donc 3 buts ou plus reste rare.",
-          "reasoning": "Même après un 5-0, sa moyenne reste basse. Maggi est présent, mais 2 de Mayo concède seulement 1,3 but par match.",
+          "explanation": "81 % : Luqueño marque 1,2 par match (0,83 à domicile) et 2 de Mayo en encaisse 1,3.",
+          "reasoning": "Le 5-0 de Rubio Ñú est atypique ; Luqueño a marqué 3 buts ou plus seulement une fois sur ses 5 derniers matchs.",
           "probability": 81
         },
         {
@@ -27711,8 +29459,8 @@
           "pick": "2 de Mayo — Plus de 0.5 buts",
           "verdict": "nuance",
           "confidence": "faible",
-          "explanation": "79 % : Luqueño concède 1,8 but par match, mais 2 de Mayo n'a pas marqué lors de ses 2 derniers matchs.",
-          "reasoning": "La défense adverse est poreuse, ce qui soutient le pronostic. La panne offensive récente de 2 de Mayo (0,8 but par match) pèse pourtant.",
+          "explanation": "79 % : Luqueño encaisse 1,8 par match, mais 2 de Mayo ne marque que 0,8 et reste muet depuis 2 matchs.",
+          "reasoning": "La défense adverse laisse des espaces, mais la panne offensive est réelle (0 but dans 2 matchs sur 3).",
           "probability": 79
         },
         {
@@ -27720,8 +29468,8 @@
           "pick": "Moins de 13.5 corners",
           "verdict": "confirme",
           "confidence": "forte",
-          "explanation": "81 % : 10,37 corners attendus et 9,2 par match en championnat, loin de 13,5.",
-          "reasoning": "Les moyennes des deux équipes restent autour de 5 corners par match. Le seuil est haut.",
+          "explanation": "81 % : 10,37 corners attendus et des moyennes basses (5,5 et 4,9 par match).",
+          "reasoning": "Les deux équipes produisent peu de corners ; le seuil est nettement au-dessus de l'attendu.",
           "probability": 81
         },
         {
@@ -27729,8 +29477,8 @@
           "pick": "Luqueño — Moins de 8.5 corners",
           "verdict": "confirme",
           "confidence": "forte",
-          "explanation": "83 % : 5,78 corners attendus pour Luqueño, qui en produit 5,5 par match.",
-          "reasoning": "Il est loin du seuil de 8,5, avec 5,7 corners par match à domicile.",
+          "explanation": "83 % : 5,78 corners attendus pour Luqueño, qui en moyenne 5,5 par match.",
+          "reasoning": "Très loin de 8,5 dans les moyennes ; seul un match de domination totale dépasserait.",
           "probability": 83
         },
         {
@@ -27738,8 +29486,8 @@
           "pick": "2 de Mayo — Moins de 6.5 corners",
           "verdict": "confirme",
           "confidence": "forte",
-          "explanation": "79 % : 4,59 corners attendus et 4,5 par match à l'extérieur.",
-          "reasoning": "Sa production à l'extérieur est modeste, nettement sous 6,5.",
+          "explanation": "79 % : 4,59 corners attendus et 4,5 de moyenne à l'extérieur.",
+          "reasoning": "Une équipe visiteuse peu offensive, loin du seuil.",
           "probability": 79
         },
         {
@@ -27747,8 +29495,8 @@
           "pick": "Moins de 31.5 tirs",
           "verdict": "confirme",
           "confidence": "forte",
-          "explanation": "83 % : 25,83 tirs attendus, avec 13,8 et 12,1 tirs par match pour les deux équipes.",
-          "reasoning": "Le total est confortablement sous le seuil. Aucune des deux équipes n'a un volume élevé.",
+          "explanation": "83 % : 25,83 tirs attendus au total, sous le seuil de 31,5.",
+          "reasoning": "Les moyennes (13,8 et 12,1) laissent une marge confortable.",
           "probability": 83
         },
         {
@@ -27756,8 +29504,8 @@
           "pick": "Luqueño — Moins de 19.5 tirs",
           "verdict": "confirme",
           "confidence": "forte",
-          "explanation": "82 % : 14,85 tirs attendus et 14,8 par match à domicile.",
-          "reasoning": "Le seuil est nettement plus haut que sa moyenne.",
+          "explanation": "82 % : 14,85 tirs attendus et 13,8 de moyenne sur 10 matchs.",
+          "reasoning": "Même à domicile (14,8), la marge est large.",
           "probability": 82
         },
         {
@@ -27765,8 +29513,8 @@
           "pick": "2 de Mayo — Moins de 14.5 tirs",
           "verdict": "confirme",
           "confidence": "forte",
-          "explanation": "81 % : 10,98 tirs attendus et 11,7 par match à l'extérieur.",
-          "reasoning": "Sa moyenne est sous le seuil, même si Luqueño concède 12,3 tirs par match.",
+          "explanation": "81 % : 10,98 tirs attendus et 11,7 de moyenne à l'extérieur.",
+          "reasoning": "2 de Mayo tire peu ; le seuil n'est approché que si Luqueño concède beaucoup (12,3 par match).",
           "probability": 81
         },
         {
@@ -27774,8 +29522,8 @@
           "pick": "Plus de 5.5 tirs cadrés",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "83 % : 8,52 tirs cadrés attendus, Luqueño en produisant 5,2 par match.",
-          "reasoning": "Luqueño concède 4,8 tirs cadrés par match, et 2 de Mayo en concède 4. Le seuil de 5,5 est bas.",
+          "explanation": "83 % : 8,52 tirs cadrés attendus, bien au-dessus de 5,5.",
+          "reasoning": "Luqueño en cadre 5,2 et en concède 4,8 ; 2 de Mayo est faible (2,9), mais la défense adverse l'aide.",
           "probability": 83
         },
         {
@@ -27783,8 +29531,8 @@
           "pick": "Luqueño — Moins de 6.5 tirs cadrés",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "74 % : 5,06 tirs cadrés attendus et 5,3 par match à domicile.",
-          "reasoning": "Sa moyenne est sous le seuil, mais un match très offensif comme le 5-0 reste possible.",
+          "explanation": "74 % : 5,06 tirs cadrés attendus et 5,2 de moyenne, soit moins de 6,5 le plus souvent.",
+          "reasoning": "Le seuil est proche de la moyenne haute ; un match prolifique reste possible.",
           "probability": 74
         },
         {
@@ -27792,13 +29540,659 @@
           "pick": "2 de Mayo — Moins de 4.5 tirs cadrés",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "72 % : 3,46 tirs cadrés attendus, 2 de Mayo en produisant 2,9 par match.",
-          "reasoning": "Sa production est faible, même si Luqueño en concède 4,8 par match.",
+          "explanation": "72 % : 3,46 tirs cadrés attendus ; 2 de Mayo en cadre 2,9 par match (3 à l'extérieur).",
+          "reasoning": "Attaque peu efficace, mais Luqueño en concède 4,8, d'où un risque de dépassement.",
           "probability": 72
         }
       ]
     },
-    "updatedAt": "2026-11-09T11:53:55.994Z",
-    "createdAt": "2026-11-09T11:53:55.994Z"
+    "updatedAt": "2026-11-10T11:53:00.560Z",
+    "createdAt": "2026-11-09T11:53:55.994Z",
+    "kickoffRuns": 1,
+    "earlierAnalysis": {
+      "analysis": {
+        "summary": "Luqueño (9e, 19 pts) sort d'un 5-0 à Rubio Ñú mais reste fragile : 3 V sur 10, 1,2 but marqué pour 1,8 concédé. 2 de Mayo (6e, 30 pts) est solide mais stérile : 0,8 but par match, sans victoire depuis 4 matchs et sans but sur les 2 derniers. Luqueño, sous Lucas Barrios, aligne un 4-4-2 sans Wiechniak, Maíz ni Quintana (absents de la feuille). 2 de Mayo, en 4-2-3-1, laisse Sosa et Fariña sur le banc. Le match s'annonce très ouvert.",
+        "keyFactors": [
+          {
+            "factor": "forme récente",
+            "observation": "Luqueño en reprise après un 5-0, 2 de Mayo en panne offensive.",
+            "evidence": "Luqueño : V-D-D-V-D sur 5 matchs. 2 de Mayo : N-D-N-D-V, 2 matchs sans marquer."
+          },
+          {
+            "factor": "statistiques et moyennes",
+            "observation": "Luqueño perméable, 2 de Mayo peu productif.",
+            "evidence": "Luqueño à domicile 0,83 / 1,83 buts. 2 de Mayo à l'extérieur 1 / 1,67 buts, 3 tirs cadrés produits par match."
+          },
+          {
+            "factor": "compositions",
+            "observation": "Luqueño sans trois titulaires habituels, dont Quintana (4+1). Maggi (15 buts) est titulaire.",
+            "evidence": "Absents : Wiechniak (33 tit.), Maíz (23), Quintana (20). 2 de Mayo : Sosa et Fariña (2+5) remplaçants."
+          },
+          {
+            "factor": "edge du modèle",
+            "observation": "Pas d'edge chiffré et mise PASS, faute de bookmakers.",
+            "evidence": "xG 1,50 contre 1,57 ; 1N2 très équilibré."
+          }
+        ],
+        "alignmentWithModel": "Le contexte va globalement dans le sens du moteur sur l'ouverture du match et les volumes. Il nuance la victoire de Luqueño : la forme à domicile est mauvaise et l'équipe est remaniée.",
+        "caveats": "Le changement d'entraîneur de Luqueño est déduit des compositions importées, ce n'est pas un flux d'actualité. La composition est relue 636 minutes avant le match : ce peut être une prévision. Les xG par match sont non relevés. Le bilan de l'historique sur ces deux équipes porte sur peu de matchs.",
+        "marketViews": [
+          {
+            "market": "Résultat",
+            "pick": "Luqueño gagne",
+            "verdict": "nuance",
+            "confidence": "faible",
+            "explanation": "38 % : les xG sont quasi égaux (1,50 contre 1,57) et Luqueño a perdu 6 de ses 9 matchs à domicile, d'où une probabilité modeste.",
+            "reasoning": "Le 5-0 récent aide, mais Luqueño a perdu 6 matchs sur 9 à domicile et aligne un onze remanié. 2 de Mayo est mieux classé, donc le choix reste fragile.",
+            "probability": 38
+          },
+          {
+            "market": "Total buts",
+            "pick": "Plus de 1.5 buts",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "82 % : les xG cumulent 3,07 buts et Luqueño concède 1,8 but par match, mais 2 de Mayo ne marque que 0,8.",
+            "reasoning": "La défense de Luqueño laisse passer des buts et l'attaque a marqué 5 fois en dernier match. Le risque tient aux 0-0 de 2 de Mayo.",
+            "probability": 82
+          },
+          {
+            "market": "Les 2 équipes marquent",
+            "pick": "Oui",
+            "verdict": "nuance",
+            "confidence": "faible",
+            "explanation": "62 % : Luqueño encaisse 1,8 but par match, mais 2 de Mayo n'a pas marqué lors de ses 2 derniers matchs.",
+            "reasoning": "Luqueño encaisse beaucoup, mais 2 de Mayo est stérile (0,8 but par match). Luqueño a aussi été muet dans 2 de ses 3 derniers matchs à domicile.",
+            "probability": 62
+          },
+          {
+            "market": "Résultat + Total buts",
+            "pick": "Luqueño & Plus de 1.5 buts",
+            "verdict": "nuance",
+            "confidence": "faible",
+            "explanation": "31 % : il faut que Luqueño gagne (38 %) avec au moins 2 buts au total, ce qui est probable mais pas acquis.",
+            "reasoning": "Ce pronostic dépend de la victoire de Luqueño, déjà incertaine. Le bilan de ce type de marché est faible.",
+            "probability": 31
+          },
+          {
+            "market": "Buts — Luqueño",
+            "pick": "Luqueño — Moins de 2.5 buts",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "81 % : Luqueño marque 1,2 but par match (0,83 à domicile), donc 3 buts ou plus reste rare.",
+            "reasoning": "Même après un 5-0, sa moyenne reste basse. Maggi est présent, mais 2 de Mayo concède seulement 1,3 but par match.",
+            "probability": 81
+          },
+          {
+            "market": "Buts — 2 de Mayo",
+            "pick": "2 de Mayo — Plus de 0.5 buts",
+            "verdict": "nuance",
+            "confidence": "faible",
+            "explanation": "79 % : Luqueño concède 1,8 but par match, mais 2 de Mayo n'a pas marqué lors de ses 2 derniers matchs.",
+            "reasoning": "La défense adverse est poreuse, ce qui soutient le pronostic. La panne offensive récente de 2 de Mayo (0,8 but par match) pèse pourtant.",
+            "probability": 79
+          },
+          {
+            "market": "Total corners",
+            "pick": "Moins de 13.5 corners",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "81 % : 10,37 corners attendus et 9,2 par match en championnat, loin de 13,5.",
+            "reasoning": "Les moyennes des deux équipes restent autour de 5 corners par match. Le seuil est haut.",
+            "probability": 81
+          },
+          {
+            "market": "Corners — Luqueño",
+            "pick": "Luqueño — Moins de 8.5 corners",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "83 % : 5,78 corners attendus pour Luqueño, qui en produit 5,5 par match.",
+            "reasoning": "Il est loin du seuil de 8,5, avec 5,7 corners par match à domicile.",
+            "probability": 83
+          },
+          {
+            "market": "Corners — 2 de Mayo",
+            "pick": "2 de Mayo — Moins de 6.5 corners",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "79 % : 4,59 corners attendus et 4,5 par match à l'extérieur.",
+            "reasoning": "Sa production à l'extérieur est modeste, nettement sous 6,5.",
+            "probability": 79
+          },
+          {
+            "market": "Total tirs",
+            "pick": "Moins de 31.5 tirs",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "83 % : 25,83 tirs attendus, avec 13,8 et 12,1 tirs par match pour les deux équipes.",
+            "reasoning": "Le total est confortablement sous le seuil. Aucune des deux équipes n'a un volume élevé.",
+            "probability": 83
+          },
+          {
+            "market": "Tirs — Luqueño",
+            "pick": "Luqueño — Moins de 19.5 tirs",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "82 % : 14,85 tirs attendus et 14,8 par match à domicile.",
+            "reasoning": "Le seuil est nettement plus haut que sa moyenne.",
+            "probability": 82
+          },
+          {
+            "market": "Tirs — 2 de Mayo",
+            "pick": "2 de Mayo — Moins de 14.5 tirs",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "81 % : 10,98 tirs attendus et 11,7 par match à l'extérieur.",
+            "reasoning": "Sa moyenne est sous le seuil, même si Luqueño concède 12,3 tirs par match.",
+            "probability": 81
+          },
+          {
+            "market": "Total tirs cadrés",
+            "pick": "Plus de 5.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "83 % : 8,52 tirs cadrés attendus, Luqueño en produisant 5,2 par match.",
+            "reasoning": "Luqueño concède 4,8 tirs cadrés par match, et 2 de Mayo en concède 4. Le seuil de 5,5 est bas.",
+            "probability": 83
+          },
+          {
+            "market": "Tirs cadrés — Luqueño",
+            "pick": "Luqueño — Moins de 6.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "74 % : 5,06 tirs cadrés attendus et 5,3 par match à domicile.",
+            "reasoning": "Sa moyenne est sous le seuil, mais un match très offensif comme le 5-0 reste possible.",
+            "probability": 74
+          },
+          {
+            "market": "Tirs cadrés — 2 de Mayo",
+            "pick": "2 de Mayo — Moins de 4.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "72 % : 3,46 tirs cadrés attendus, 2 de Mayo en produisant 2,9 par match.",
+            "reasoning": "Sa production est faible, même si Luqueño en concède 4,8 par match.",
+            "probability": 72
+          }
+        ]
+      },
+      "engineSnapshot": {
+        "label": "Luqueño vs 2 de Mayo",
+        "expectedGoals": {
+          "home": 1.502,
+          "away": 1.565,
+          "source": "fotmob"
+        },
+        "trueOdds": {
+          "home": 2.65,
+          "draw": 3.55,
+          "away": 2.93
+        },
+        "market": {
+          "odds1": 2.42,
+          "oddsDraw": 3.15,
+          "odds2": 2.65
+        },
+        "edgePercent": null,
+        "staking": {
+          "action": "PASS",
+          "stake": null,
+          "reason": "trop_peu_de_bookmakers",
+          "candidates": []
+        },
+        "statExpectations": {
+          "corners": {
+            "home": 5.78,
+            "away": 4.59,
+            "total": 10.37
+          },
+          "shots": {
+            "home": 14.85,
+            "away": 10.98,
+            "total": 25.83
+          },
+          "shotsOnTarget": {
+            "home": 5.06,
+            "away": 3.46,
+            "total": 8.52
+          }
+        },
+        "marketPredictions": [
+          {
+            "marketId": "result",
+            "params": {
+              "outcome": "home"
+            },
+            "market": "Résultat",
+            "predictedOutcome": "home",
+            "predictedLabel": "Luqueño gagne",
+            "predictedOdds": 2.65,
+            "probability": 38,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalGoals",
+            "params": {
+              "line": 1.5,
+              "side": "over"
+            },
+            "market": "Total buts",
+            "predictedOutcome": "over",
+            "predictedLabel": "Plus de 1.5 buts",
+            "predictedOdds": 1.22,
+            "probability": 82,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "bothTeamsScore",
+            "params": {
+              "outcome": "yes"
+            },
+            "market": "Les 2 équipes marquent",
+            "predictedOutcome": "yes",
+            "predictedLabel": "Oui",
+            "predictedOdds": 1.61,
+            "probability": 62,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "resultAndTotal",
+            "params": {
+              "line": 1.5,
+              "key": "homeOver"
+            },
+            "market": "Résultat + Total buts",
+            "predictedOutcome": "homeOver",
+            "predictedLabel": "Luqueño & Plus de 1.5 buts",
+            "predictedOdds": 3.2,
+            "probability": 31,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamGoals",
+            "params": {
+              "team": "home",
+              "line": 2.5,
+              "side": "under"
+            },
+            "market": "Buts — Luqueño",
+            "predictedOutcome": "under",
+            "predictedLabel": "Luqueño — Moins de 2.5 buts",
+            "predictedOdds": 1.24,
+            "probability": 81,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamGoals",
+            "params": {
+              "team": "away",
+              "line": 0.5,
+              "side": "over"
+            },
+            "market": "Buts — 2 de Mayo",
+            "predictedOutcome": "over",
+            "predictedLabel": "2 de Mayo — Plus de 0.5 buts",
+            "predictedOdds": 1.26,
+            "probability": 79,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalCorners",
+            "params": {
+              "line": 13.5,
+              "side": "under"
+            },
+            "market": "Total corners",
+            "predictedOutcome": "under",
+            "predictedLabel": "Moins de 13.5 corners",
+            "predictedOdds": 1.23,
+            "probability": 81,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamCorners",
+            "params": {
+              "team": "home",
+              "line": 8.5,
+              "side": "under"
+            },
+            "market": "Corners — Luqueño",
+            "predictedOutcome": "under",
+            "predictedLabel": "Luqueño — Moins de 8.5 corners",
+            "predictedOdds": 1.21,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamCorners",
+            "params": {
+              "team": "away",
+              "line": 6.5,
+              "side": "under"
+            },
+            "market": "Corners — 2 de Mayo",
+            "predictedOutcome": "under",
+            "predictedLabel": "2 de Mayo — Moins de 6.5 corners",
+            "predictedOdds": 1.27,
+            "probability": 79,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalShots",
+            "params": {
+              "line": 31.5,
+              "side": "under"
+            },
+            "market": "Total tirs",
+            "predictedOutcome": "under",
+            "predictedLabel": "Moins de 31.5 tirs",
+            "predictedOdds": 1.2,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShots",
+            "params": {
+              "team": "home",
+              "line": 19.5,
+              "side": "under"
+            },
+            "market": "Tirs — Luqueño",
+            "predictedOutcome": "under",
+            "predictedLabel": "Luqueño — Moins de 19.5 tirs",
+            "predictedOdds": 1.22,
+            "probability": 82,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShots",
+            "params": {
+              "team": "away",
+              "line": 14.5,
+              "side": "under"
+            },
+            "market": "Tirs — 2 de Mayo",
+            "predictedOutcome": "under",
+            "predictedLabel": "2 de Mayo — Moins de 14.5 tirs",
+            "predictedOdds": 1.24,
+            "probability": 81,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalShotsOnTarget",
+            "params": {
+              "line": 5.5,
+              "side": "over"
+            },
+            "market": "Total tirs cadrés",
+            "predictedOutcome": "over",
+            "predictedLabel": "Plus de 5.5 tirs cadrés",
+            "predictedOdds": 1.2,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShotsOnTarget",
+            "params": {
+              "team": "home",
+              "line": 6.5,
+              "side": "under"
+            },
+            "market": "Tirs cadrés — Luqueño",
+            "predictedOutcome": "under",
+            "predictedLabel": "Luqueño — Moins de 6.5 tirs cadrés",
+            "predictedOdds": 1.35,
+            "probability": 74,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShotsOnTarget",
+            "params": {
+              "team": "away",
+              "line": 4.5,
+              "side": "under"
+            },
+            "market": "Tirs cadrés — 2 de Mayo",
+            "predictedOutcome": "under",
+            "predictedLabel": "2 de Mayo — Moins de 4.5 tirs cadrés",
+            "predictedOdds": 1.38,
+            "probability": 72,
+            "minOdds": 1.2
+          }
+        ],
+        "engineVersion": 5
+      },
+      "analysedAt": "2026-11-09T11:53:55.994Z"
+    },
+    "postMatchReview": {
+      "summary": "Luqueño a gagné 3-0 (Maggi 16', Bogado 75', W. González 82'). Le match équilibré du moteur a basculé avec le rouge direct de Sanguina (2 de Mayo) à la 54e : deux buts sont venus en supériorité numérique. Mes avis sur corners et tirs étaient solides ; j'ai raté la fragilité offensive de 2 de Mayo et la capacité de Luqueño à marquer 3 buts.",
+      "whatWasRight": "Les volumes bas : 2 corners et 3 pour 2 de Mayo, 5 cadrés contre 3, 10 tirs de chaque côté, tout sous les seuils. Plus de 1,5 but est passé (3 buts). Le cadre global « peu de corners et de tirs » et le 1N2 ouvert (victoire Luqueño à 38 %) se sont vérifiés. L'équipe à domicile avait l'avantage du terrain.",
+      "whatWasMissed": "J'ai confirmé avec une forte confiance Luqueño moins de 2,5 buts, en jugeant le 5-0 atypique : Luqueño a marqué 3 buts, dont deux après le rouge. J'ai aussi sous-estimé la stérilité de 2 de Mayo : zéro but, malgré 63 % de possession et 10 tirs. Je n'avais pas intégré le risque d'un carton rouge, qui a fait basculer le match. Luqueño a aussi touché la barre à la 15e et eu 3 grosses occasions, contre aucune pour 2 de Mayo.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le 1N2 (Luqueño favori à 38 %) et sur les marchés de volume. Il le contredit sur les marchés de buts : les deux équipes ne marquent pas, 2 de Mayo à zéro et Luqueño à 3 buts, alors que le moteur voyait un match de buts partagés. Le rouge est un facteur que le moteur ne modélise pas.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Luqueño gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Victoire 3-0 de Luqueño : but de Maggi à la 16e, puis Bogado (75e) et W. González (82e) face à dix après le rouge de la 54e.",
+          "lesson": "Un avis nuancé était prudent. Un favori à domicile même modeste profite d'un rouge adverse ; ce risque d'événement reste hors modèle."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "3 buts (16e, 75e, 82e), donc plus de 1,5 but passé facilement.",
+          "lesson": "La confirmation tient : la défense fragile de Luqueño et un total attendu d'environ 3 buts soutiennent ce marché, même en cas de blanchissage."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "2 de Mayo n'a pas marqué (3 tirs cadrés, 0 grosse occasion). Luqueño a mené dès la 16e, puis le rouge a achevé la rencontre.",
+          "lesson": "Mon doute sur l'attaque stérile de 2 de Mayo était fondé. À privilégier : un visiteur muet sur 2 de ses 3 derniers matchs pèse plus que la fragilité défensive adverse."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Luqueño & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Victoire de Luqueño et 3 buts : les deux volets sont passés.",
+          "lesson": "Le combiné ne se valide que si le résultat passe ; l'avis nuancé était raisonnable. Le volet buts était le plus fiable."
+        },
+        {
+          "market": "Buts — Luqueño",
+          "marketId": "teamGoals",
+          "pick": "Luqueño — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Luqueño a marqué 3 buts, donc moins de 2,5 est faux. Deux buts sont venus entre la 75e et la 82e, contre dix hommes.",
+          "lesson": "Ne pas confirmer avec une forte confiance un plafond de buts basé sur une moyenne de 1,2 : la variance est grande, et un rouge adverse ou un remplaçant frais peut faire exploser le total. Surtout à domicile contre une attaque sans mordant."
+        },
+        {
+          "market": "Buts — 2 de Mayo",
+          "marketId": "teamGoals",
+          "pick": "2 de Mayo — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "2 de Mayo est resté à zéro malgré 63 % de possession et 10 tirs (3 cadrés), sans grosse occasion.",
+          "lesson": "Ma méfiance sur la panne offensive était juste. Une équipe qui marque 0,8 but par match et reste muette depuis plusieurs matchs justifie de ne pas suivre un 79 % sur « au moins un but »."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 13.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Seulement 5 corners au total (2 + 3), très loin de 13,5.",
+          "lesson": "Les marchés de corners à seuil très haut se confirment quand les deux équipes sont basses : à garder."
+        },
+        {
+          "market": "Corners — Luqueño",
+          "marketId": "teamCorners",
+          "pick": "Luqueño — Moins de 8.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Luqueño n'a obtenu que 2 corners, avec seulement 37 % de possession.",
+          "lesson": "Le seuil de 8,5 était très large. Garder cette lecture, y compris pour une équipe qui mène : peu de possession, peu de corners."
+        },
+        {
+          "market": "Corners — 2 de Mayo",
+          "marketId": "teamCorners",
+          "pick": "2 de Mayo — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "2 de Mayo a obtenu 3 corners malgré 63 % de possession.",
+          "lesson": "Même avec la possession, une équipe peu créative ne génère pas de corners en volume : seuil très sûr."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 31.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "10 tirs de chaque côté, soit 20 au total, sous 31,5.",
+          "lesson": "Les moyennes laissaient une grande marge ; garder cette lecture. Le rouge n'a pas fait exploser les tirs."
+        },
+        {
+          "market": "Tirs — Luqueño",
+          "marketId": "teamShots",
+          "pick": "Luqueño — Moins de 19.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "10 tirs pour Luqueño, sous 19,5, malgré 3 grosses occasions et 3 buts.",
+          "lesson": "Luqueño marque avec peu de tirs ; le seuil de volume reste sûr."
+        },
+        {
+          "market": "Tirs — 2 de Mayo",
+          "marketId": "teamShots",
+          "pick": "2 de Mayo — Moins de 14.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "10 tirs pour 2 de Mayo, sous 14,5, malgré la possession.",
+          "lesson": "Confirmé : peu de tirs pour cette équipe. Le rouge a réduit sa marge de manœuvre."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "8 tirs cadrés (5 + 3), au-dessus de 5,5.",
+          "lesson": "Passé, mais avec une confiance moyenne : le total n'a que 2,5 de marge. Le moteur attendait 8,52, proche du réel."
+        },
+        {
+          "market": "Tirs cadrés — Luqueño",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Luqueño — Moins de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "5 tirs cadrés, sous 6,5.",
+          "lesson": "Le seuil proche de la moyenne a tenu ; la prudence (confiance moyenne) était adaptée."
+        },
+        {
+          "market": "Tirs cadrés — 2 de Mayo",
+          "marketId": "teamShotsOnTarget",
+          "pick": "2 de Mayo — Moins de 4.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "3 tirs cadrés, sous 4,5.",
+          "lesson": "Le risque de dépassement que je signalais ne s'est pas produit ; la faible efficacité de 2 de Mayo se confirme."
+        }
+      ],
+      "caveats": "Un seul match, fortement influencé par le carton rouge de la 54e, imprévisible avant coup. Pas de xG relevés. L'échantillon est réduit à cause du nouvel entraîneur de Luqueño. Je ne peux pas dire si le résultat aurait été le même à onze contre onze.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 17,
+        "commentaire": 5
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 5312,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2680,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5312,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2680,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 5312,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 5312
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0484696,
+      "createdAt": "2026-11-10T11:53:00.559Z"
+    }
   }
 ]

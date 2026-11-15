@@ -1,0 +1,5151 @@
+[
+  {
+    "matchId": "cal-2026-11-12-cd-tarancon-levante",
+    "homeName": "CD Tarancon",
+    "awayName": "Levante",
+    "league": "Copa del Rey - Spain",
+    "commenceTime": "2026-11-12T12:00:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "CD Tarancon vs Levante",
+      "expectedGoals": {
+        "home": 1.6,
+        "away": 1.8,
+        "source": "league-baseline"
+      },
+      "trueOdds": {
+        "home": 2.6,
+        "draw": 3.99,
+        "away": 2.75
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds",
+        "candidates": []
+      },
+      "statExpectations": null,
+      "marketPredictions": [
+        {
+          "marketId": "result",
+          "params": {
+            "outcome": "home"
+          },
+          "market": "Résultat",
+          "predictedOutcome": "home",
+          "predictedLabel": "CD Tarancon gagne",
+          "predictedOdds": 2.6,
+          "probability": 38,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 2.5 buts",
+          "predictedOdds": 1.51,
+          "probability": 66,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "yes"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "yes",
+          "predictedLabel": "Oui",
+          "predictedOdds": 1.49,
+          "probability": 67,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 1.5,
+            "key": "homeOver"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "homeOver",
+          "predictedLabel": "CD Tarancon & Plus de 1.5 buts",
+          "predictedOdds": 3.01,
+          "probability": 33,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 0.5,
+            "side": "over"
+          },
+          "market": "Buts — CD Tarancon",
+          "predictedOutcome": "over",
+          "predictedLabel": "CD Tarancon — Plus de 0.5 buts",
+          "predictedOdds": 1.25,
+          "probability": 80,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 0.5,
+            "side": "over"
+          },
+          "market": "Buts — Levante",
+          "predictedOutcome": "over",
+          "predictedLabel": "Levante — Plus de 0.5 buts",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        }
+      ],
+      "engineVersion": 5
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 8913,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 2445,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 8913,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 2445,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 8913,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 8913
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.06010600000000001,
+    "analysedAt": "2026-11-10T15:16:51.275Z",
+    "timing": "avance",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 379,
+      "tokens": 1193,
+      "lecons": [
+        "cal-2026-10-27-arosa-sc-pontevedra|result",
+        "cal-2026-10-27-arosa-sc-pontevedra|resultAndTotal"
+      ],
+      "dossiersDu": "2026-11-10T12:11:57.565Z",
+      "equipes": {
+        "home": {
+          "id": null,
+          "dossier": false
+        },
+        "away": {
+          "id": "fotmob-8581",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "Copa del Rey - Spain",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "magasin",
+      "home": null,
+      "away": {
+        "team": "Levante",
+        "teamId": "fotmob-8581",
+        "formation": "4-3-3",
+        "coach": "Luís Castro",
+        "statsSince": "2026-07-01",
+        "teamMatches": 12,
+        "startXI": [
+          {
+            "id": "fotmob-185644",
+            "name": "Mathew Ryan",
+            "number": 13,
+            "position": "Goalkeeper",
+            "age": 34,
+            "countryCode": "AUS",
+            "countryName": "Australia",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 12,
+              "starts": 12,
+              "minutes": 1080,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.96
+            }
+          },
+          {
+            "id": "fotmob-210683",
+            "name": "Aïssa Mandi",
+            "number": 2,
+            "position": "Defender",
+            "age": 35,
+            "countryCode": "ALG",
+            "countryName": "Algeria",
+            "x": 0.357,
+            "y": 0.625,
+            "stats": {
+              "apps": 10,
+              "starts": 10,
+              "minutes": 873,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.05,
+              "rating": 6.74
+            }
+          },
+          {
+            "id": "fotmob-443966",
+            "name": "Jeremy Toljan",
+            "number": 22,
+            "position": "Defender",
+            "age": 32,
+            "countryCode": "GER",
+            "countryName": "Germany",
+            "x": 0.357,
+            "y": 0.875,
+            "stats": {
+              "apps": 11,
+              "starts": 6,
+              "minutes": 611,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.3,
+              "rating": 6.25
+            }
+          },
+          {
+            "id": "fotmob-1131957",
+            "name": "Jon Olasagasti",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 26,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.21,
+            "stats": {
+              "apps": 12,
+              "starts": 11,
+              "minutes": 975,
+              "goals": 1,
+              "assists": 1,
+              "xg": 0.8,
+              "rating": 6.78
+            }
+          },
+          {
+            "id": "fotmob-1254218",
+            "name": "Hugo Sotelo",
+            "number": 5,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.5,
+            "stats": {
+              "apps": 5,
+              "starts": 2,
+              "minutes": 144,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.08,
+              "rating": 6.23
+            }
+          },
+          {
+            "id": "fotmob-1286471",
+            "name": "Roger Brugué",
+            "number": 7,
+            "position": "Forward",
+            "age": 30,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.87,
+            "y": 0.79,
+            "stats": {
+              "apps": 11,
+              "starts": 11,
+              "minutes": 921,
+              "goals": 5,
+              "assists": 1,
+              "xg": 4.23,
+              "rating": 7.09
+            }
+          },
+          {
+            "id": "fotmob-1392779",
+            "name": "Etta Eyong",
+            "number": 21,
+            "position": "Forward",
+            "age": 23,
+            "countryCode": "CMR",
+            "countryName": "Cameroon",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 7,
+              "starts": 2,
+              "minutes": 226,
+              "goals": 1,
+              "assists": 1,
+              "xg": 2,
+              "rating": 6.26
+            }
+          },
+          {
+            "id": "fotmob-1460063",
+            "name": "Thiago Fernández",
+            "number": 24,
+            "position": "Forward",
+            "age": 22,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.87,
+            "y": 0.21,
+            "stats": {
+              "apps": 10,
+              "starts": 9,
+              "minutes": 705,
+              "goals": 0,
+              "assists": 1,
+              "xg": 1.05,
+              "rating": 6.78
+            }
+          },
+          {
+            "id": "fotmob-1481503",
+            "name": "Dani Requena",
+            "number": 6,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.79,
+            "stats": {
+              "apps": 9,
+              "starts": 6,
+              "minutes": 555,
+              "goals": 1,
+              "assists": 1,
+              "xg": 0.74,
+              "rating": 6.8
+            }
+          },
+          {
+            "id": "fotmob-1780239",
+            "name": "Ifeanyi Ndukwe",
+            "number": 3,
+            "position": "Defender",
+            "age": 18,
+            "countryCode": "AUT",
+            "countryName": "Austria",
+            "x": 0.357,
+            "y": 0.375,
+            "stats": {
+              "apps": 8,
+              "starts": 6,
+              "minutes": 541,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.49,
+              "rating": 6.65
+            }
+          },
+          {
+            "id": "fotmob-1800611",
+            "name": "Nacho Pérez",
+            "number": 29,
+            "position": "Defender",
+            "age": 18,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.125,
+            "stats": {
+              "apps": 11,
+              "starts": 8,
+              "minutes": 627,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.85,
+              "rating": 6.71
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-914401",
+            "name": "Oriol Rey",
+            "number": 20,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 11,
+              "starts": 7,
+              "minutes": 692,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.04,
+              "rating": 6.46
+            }
+          },
+          {
+            "id": "fotmob-952528",
+            "name": "Adrián De La Fuente",
+            "number": 4,
+            "position": "Defender",
+            "age": 27,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 10,
+              "starts": 8,
+              "minutes": 765,
+              "goals": 2,
+              "assists": 0,
+              "xg": 0.89,
+              "rating": 6.82
+            }
+          },
+          {
+            "id": "fotmob-977618",
+            "name": "Víctor García",
+            "number": 17,
+            "position": "Forward",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 11,
+              "starts": 3,
+              "minutes": 396,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.25,
+              "rating": 6.23
+            }
+          },
+          {
+            "id": "fotmob-1209441",
+            "name": "Iván Romero",
+            "number": 9,
+            "position": "Forward",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 12,
+              "starts": 10,
+              "minutes": 828,
+              "goals": 3,
+              "assists": 0,
+              "xg": 3.43,
+              "rating": 6.83
+            }
+          },
+          {
+            "id": "fotmob-1237455",
+            "name": "Pablo Campos",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1302821",
+            "name": "Petar Ratkov",
+            "number": 10,
+            "position": "Forward",
+            "age": 23,
+            "countryCode": "SRB",
+            "countryName": "Serbia",
+            "stats": {
+              "apps": 8,
+              "starts": 3,
+              "minutes": 292,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.27,
+              "rating": 6.33
+            }
+          },
+          {
+            "id": "fotmob-1332540",
+            "name": "Enzo Bardeli",
+            "number": 18,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "FRA",
+            "countryName": "France",
+            "stats": {
+              "apps": 7,
+              "starts": 5,
+              "minutes": 449,
+              "goals": 1,
+              "assists": 1,
+              "xg": 0.23,
+              "rating": 6.71
+            }
+          },
+          {
+            "id": "fotmob-1617146",
+            "name": "Jorge Cabello",
+            "number": 14,
+            "position": "Defender",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1649293",
+            "name": "Paco Cortés",
+            "number": 27,
+            "position": "Forward",
+            "age": 19,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 6,
+              "starts": 1,
+              "minutes": 80,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.04,
+              "rating": 6.16
+            }
+          },
+          {
+            "id": "fotmob-1836083",
+            "name": "Yanis Musuayi",
+            "number": 11,
+            "position": "Forward",
+            "age": 19,
+            "countryCode": "BEL",
+            "countryName": "Belgium",
+            "stats": {
+              "apps": 4,
+              "starts": 1,
+              "minutes": 123,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.06,
+              "rating": 6.09
+            }
+          },
+          {
+            "id": "fotmob-1859295",
+            "name": "Huseini Nakoha",
+            "number": 35,
+            "position": "Defender",
+            "age": 20,
+            "countryCode": "GHA",
+            "countryName": "Ghana",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-2141146",
+            "name": "Marc Santos",
+            "number": 33,
+            "position": "Defender",
+            "age": 16,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 3,
+              "starts": 0,
+              "minutes": 48,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.24
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "id": "fotmob-1052330",
+            "age": 26,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Manuel Sánchez",
+            "reason": "blessé",
+            "expectedReturn": "Late November 2026",
+            "position": "Defender",
+            "stats": {
+              "apps": 10,
+              "starts": 10,
+              "minutes": 881,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.05,
+              "rating": 6.71
+            }
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-1209441",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Iván Romero",
+            "position": "Midfielder",
+            "starts": 10,
+            "goals": 3,
+            "assists": 0,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-1052330",
+            "age": 26,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Manuel Sánchez",
+            "position": "Defender",
+            "starts": 10,
+            "goals": 0,
+            "assists": 0,
+            "status": "blessé"
+          },
+          {
+            "id": "fotmob-952528",
+            "age": 27,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Adrián de la Fuente",
+            "position": "Defender",
+            "starts": 8,
+            "goals": 2,
+            "assists": 0,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-914401",
+            "age": 28,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Oriol Rey",
+            "position": "Midfielder",
+            "starts": 7,
+            "goals": 0,
+            "assists": 0,
+            "status": "remplaçant"
+          }
+        ],
+        "lastMatch": {
+          "date": "2026-11-08",
+          "league": "La Liga - Spain",
+          "home": "Celta Vigo",
+          "away": "Levante",
+          "homeGoals": 0,
+          "awayGoals": 0
+        }
+      },
+      "matchInfo": {
+        "round": "1st Round",
+        "stadium": "Polideportivo Estadio Municipal Tarancón",
+        "city": "Tarancón",
+        "capacity": 1500,
+        "surface": "grass",
+        "weather": "Showers",
+        "temperature": 13,
+        "windSpeed": 22,
+        "precipitation": 0.15,
+        "referee": {
+          "name": "Miguel Sesma Espinosa",
+          "country": "Spain",
+          "league": "LaLiga",
+          "matches": 27,
+          "yellowCardsPerMatch": 3.78,
+          "yellowCardsLeagueAverage": 4.45,
+          "redCards": 4,
+          "penalties": 12,
+          "foulsPerMatch": 26.89,
+          "foulsLeagueAverage": 24.97
+        }
+      }
+    },
+    "analysis": {
+      "summary": "CD Tarancon, petit club à domicile en Copa del Rey (stade de 1500 places), n'a aucune donnée de forme, de moyennes ou de composition. Levante (17e de La Liga, 11 pts en 12 matchs) est irrégulier : 2 V, 4 N, 4 D sur 10 matchs, 1,6 but marqué et 1,8 encaissé par match, et 0,6 / 1,2 à l'extérieur. Son dernier onze (0-0 à Vigo) servirait de base mais une rotation est probable en coupe. Le moteur voit un match ouvert, presque équilibré.",
+      "keyFactors": [
+        {
+          "factor": "données Tarancon",
+          "observation": "Aucune forme, moyenne ou composition disponible pour l'équipe locale.",
+          "evidence": "homeForm et homeStats : non trouvées ; lineups : composition inconnue"
+        },
+        {
+          "factor": "statistiques Levante",
+          "observation": "Défense poreuse et attaque modeste, surtout dehors.",
+          "evidence": "10 derniers : 1,6 / 1,8 ; extérieur sur 5 matchs : 0,6 / 1,2, xG concédé 2,51"
+        },
+        {
+          "factor": "classement et forme",
+          "observation": "Levante est en difficulté en championnat, sans victoire à l'extérieur depuis 8 matchs et muet depuis 2 matchs.",
+          "evidence": "17e sur 20, 11 pts en 12 matchs ; 0-0 à Vigo le 08/11"
+        },
+        {
+          "factor": "cadre",
+          "observation": "Petit stade, averses et vent pouvant perturber le jeu.",
+          "evidence": "Showers, 13 °C, vent 22 km/h ; 1500 places"
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Pas de cote de marché, donc pas d'edge mesurable.",
+          "evidence": "Mise PASS (no_market_odds) ; xG 1,6 contre 1,8"
+        }
+      ],
+      "alignmentWithModel": "Le contexte nuance le chiffrage : l'absence de toute donnée sur Tarancon rend ses attendus peu fiables (ils reposent sur une base de ligue), alors que la défense friable de Levante va plutôt dans le sens des marchés de buts.",
+      "caveats": "Aucune donnée pour CD Tarancon (forme, moyennes, composition, dossier). Classement indisponible pour la coupe. La forme FotMob de Levante est ancienne (dernier match listé en décembre 2025). Composition de Levante = dernier onze aligné, pas celui du match ; rotation possible en coupe. Pas de corners ni de tirs attendus. Expérience : mes avis sur Les 2 équipes marquent et Résultat + Total buts sont peu fiables (4/10 et 7/14 en Copa).",
+      "lineupImpact": "Composition de Tarancon inconnue. Pour Levante, le onze de Vigo (source magasin, dernière composition alignée, pas celle de ce match) comptait Brugué (5+1, xG 4,23) et le gardien Ryan (12/12). Iván Romero (3 buts, xG 3,43), De La Fuente et Oriol Rey, habituels titulaires, étaient sur le banc. Manuel Sánchez est blessé jusqu'à fin novembre. Une rotation en coupe est plausible mais non confirmée.",
+      "marketViews": [
+        {
+          "market": "Résultat",
+          "pick": "CD Tarancon gagne",
+          "verdict": "contredit",
+          "confidence": "faible",
+          "explanation": "38 % : le moteur part de buts attendus de 1,6 contre 1,8 sur une base de ligue, sans donnée propre à Tarancon, d'où un résultat très ouvert.",
+          "reasoning": "Levante, de division supérieure, est plus fort sur le papier malgré ses 11 pts en 12 matchs. Le pronostic sur Tarancon repose sur un chiffrage sans données et paraît fragile. Mon bilan sur ce marché est médiocre.",
+          "probability": 38
+        },
+        {
+          "market": "Total buts",
+          "pick": "Plus de 2.5 buts",
+          "verdict": "nuance",
+          "confidence": "moyenne",
+          "explanation": "66 % : Levante marque 1,6 et encaisse 1,8 sur 10 matchs, soit environ 3,4 buts par match, avec un total attendu de 3,4 pour le moteur.",
+          "reasoning": "La défense de Levante (xG concédé 2,21) soutient les buts. En revanche, 0,6 / 1,2 dehors, un terrain mouillé et un possible turnover tempèrent.",
+          "probability": 66
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "pick": "Oui",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "67 % : Levante encaisse 1,8 par match et en a concédé 1,2 dehors, tandis que Tarancon est supposé marquer environ 1,6 par le moteur.",
+          "reasoning": "Levante a encaissé dans la plupart de ses sorties, mais n'a pas marqué lors des 2 derniers matchs et Tarancon est inconnu. Marché où mes avis tiennent peu en Copa (4/10).",
+          "probability": 67
+        },
+        {
+          "market": "Résultat + Total buts",
+          "pick": "CD Tarancon & Plus de 1.5 buts",
+          "verdict": "contredit",
+          "confidence": "faible",
+          "explanation": "33 % : combine la victoire de Tarancon (38 %) et au moins 2 buts, très probable si Tarancon gagne.",
+          "reasoning": "Tout dépend d'une victoire locale peu étayée sans donnée sur Tarancon. Le volet de buts est solide, mais le résultat reste incertain. Mes avis sur ce marché tiennent mal (7/14 en Copa).",
+          "probability": 33
+        },
+        {
+          "market": "Buts — CD Tarancon",
+          "pick": "CD Tarancon — Plus de 0.5 buts",
+          "verdict": "nuance",
+          "confidence": "moyenne",
+          "explanation": "80 % : environ 1,6 but attendu pour Tarancon face à une défense de Levante qui en concède 1,8 par match et 1,2 dehors.",
+          "reasoning": "La fragilité défensive de Levante (xG concédé 2,51 dehors) appuie ce pronostic. Mais rien ne mesure l'attaque de Tarancon.",
+          "probability": 80
+        },
+        {
+          "market": "Buts — Levante",
+          "pick": "Levante — Plus de 0.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : environ 1,8 but attendu pour Levante, qui en marque 1,6 par match sur 10 matchs, face à un adversaire amateur.",
+          "reasoning": "Levante a pourtant marqué seulement 0,6 par match dehors et reste muet depuis 2 matchs. Mais l'écart de niveau et la présence de Brugué et Romero rendent un but probable.",
+          "probability": 83
+        }
+      ]
+    },
+    "updatedAt": "2026-11-12T21:22:48.013Z",
+    "createdAt": "2026-11-10T15:16:51.275Z",
+    "postMatchReview": {
+      "summary": "Levante a gagné 2-1 après prolongation (0-0 à la mi-temps, 1-1 à 90 min) en dominant largement (xG 2,84 contre 0,61, 27 tirs contre 10). Ma méfiance envers la victoire de Tarancon était justifiée. Les marchés de buts étaient bien orientés, mais le moteur sous-estimait l'écart de niveau entre les deux équipes.",
+      "whatWasRight": "J'avais jugé fragile le pronostic sur Tarancon, qui reposait sur une base de ligue sans donnée propre. Levante a dominé (72 % de possession, 14 corners contre 3, xG 2,84 contre 0,61). J'avais aussi vu juste sur les buts des deux équipes : Nieto a marqué à la 53e pour Tarancon, puis Ratkov à la 80e et De La Fuente sur penalty à la 120+4e pour Levante. La fragilité défensive de Levante a été confirmée par le but encaissé.",
+      "whatWasMissed": "J'ai laissé passer l'écart de niveau : un xG de 1,6 pour Tarancon face à 1,8 pour Levante était bien trop flatteur pour le petit club. Tarancon n'a eu que 2 tirs cadrés. J'ai aussi trop pesé la rotation et le terrain mouillé : Levante a fini par utiliser Ratkov, Brugué et De La Fuente. La prolongation et le penalty tardif ne pouvaient pas être anticipés.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1N2 et sur le combiné, qui favorisaient Tarancon à 38 % et 33 %. Il le confirme sur les marchés de buts : plus de 2,5 buts, les deux équipes marquent et un but minimum pour chaque équipe. Le moteur a donc bien lu le volume de buts, mais mal lu le rapport de force.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "CD Tarancon gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "contredit",
+          "aiConfidence": "faible",
+          "aiWasRight": true,
+          "explanation": "Tarancon a ouvert le score à la 53e, mais Levante a égalisé à la 80e puis l'a emporté sur penalty à la 120+4e. Levante a dominé : xG 2,84 contre 0,61 et 27 tirs contre 10.",
+          "lesson": "En Copa, quand une équipe n'a aucune donnée propre, ne pas suivre un chiffrage de ligue qui rapproche artificiellement un amateur d'un club de première division. Garder la méfiance envers le petit club."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Trois buts (53e, 80e, 120+4e), dont un penalty en fin de prolongation. Le total de 3 dépasse 2,5, mais seulement grâce à la prolongation. À 90 minutes, il n'y en avait que 2.",
+          "lesson": "Vérifier si le marché inclut la prolongation. Ici le plus de 2,5 a été sauvé par le penalty de la 120+4e, ce qui tempère la solidité du pronostic."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Nieto a marqué pour Tarancon à la 53e. Ratkov puis De La Fuente ont marqué pour Levante. Le marché a été validé dès la 80e, donc dans le temps réglementaire.",
+          "lesson": "Un favori qui domine mais ne ferme pas le match laisse souvent une occasion à l'outsider (ici 2 tirs cadrés, 1 but). Le oui reste jouable, malgré mes résultats médiocres sur ce marché en Copa."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "CD Tarancon & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "contredit",
+          "aiConfidence": "faible",
+          "aiWasRight": true,
+          "explanation": "Le combiné dépendait d'une victoire de Tarancon, qui a mené 1-0 à la 53e avant de perdre 1-2. Le volet de buts était rempli, pas le volet résultat.",
+          "lesson": "Quand le volet résultat est fragile, le combiné l'est aussi, même avec un volet de buts solide. Continuer à contredire ce type de pari."
+        },
+        {
+          "market": "Buts — CD Tarancon",
+          "marketId": "teamGoals",
+          "pick": "CD Tarancon — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Sergio Nieto a marqué à la 53e, sur l'une des 2 tirs cadrés de Tarancon, malgré 28 % de possession et un xG de 0,61.",
+          "lesson": "Même un amateur très dominé marque souvent un but sur une occasion. Le seuil de 0,5 but reste plausible, mais la fiabilité dépend d'un chiffrage sans donnée."
+        },
+        {
+          "market": "Buts — Levante",
+          "marketId": "teamGoals",
+          "pick": "Levante — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Levante a marqué deux fois, par Ratkov (80e) et par De La Fuente sur penalty (120+4e), avec 27 tirs et un xG de 2,84.",
+          "lesson": "Confirmer ce type de pari quand l'écart de niveau est net. La rotation n'a pas empêché Levante de marquer, car les remplaçants offensifs sont entrés."
+        }
+      ],
+      "caveats": "Un seul match, avec prolongation et penalty tardif, qui pèsent sur plusieurs marchés. Aucune donnée sur Tarancon avant le match. La fiche ne dit pas si les marchés incluent la prolongation. La composition de départ n'est pas connue.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 19,
+        "commentaire": 3
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 6168,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 1906,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 6168,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1906,
+            "cache_read_input_tokens": 0,
+            "cache_creation_input_tokens": 6168,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 6168
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.043736,
+      "createdAt": "2026-11-12T21:22:48.013Z"
+    }
+  },
+  {
+    "matchId": "cal-2026-11-12-cs-puertollano-albacete",
+    "homeName": "CS Puertollano",
+    "awayName": "Albacete",
+    "league": "Copa del Rey - Spain",
+    "commenceTime": "2026-11-12T12:00:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "CS Puertollano vs Albacete",
+      "expectedGoals": {
+        "home": 1,
+        "away": 1.5,
+        "source": "league-baseline"
+      },
+      "trueOdds": {
+        "home": 3.01,
+        "draw": 3.68,
+        "away": 2.53
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds",
+        "candidates": []
+      },
+      "statExpectations": null,
+      "marketPredictions": [
+        {
+          "marketId": "result",
+          "params": {
+            "outcome": "away"
+          },
+          "market": "Résultat",
+          "predictedOutcome": "away",
+          "predictedLabel": "Albacete gagne",
+          "predictedOdds": 2.53,
+          "probability": 40,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 3.5,
+            "side": "under"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 3.5 buts",
+          "predictedOdds": 1.32,
+          "probability": 76,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "yes"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "yes",
+          "predictedLabel": "Oui",
+          "predictedOdds": 2,
+          "probability": 50,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 1.5,
+            "key": "awayOver"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "awayOver",
+          "predictedLabel": "Albacete & Plus de 1.5 buts",
+          "predictedOdds": 3.32,
+          "probability": 30,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 1.5,
+            "side": "under"
+          },
+          "market": "Buts — CS Puertollano",
+          "predictedOutcome": "under",
+          "predictedLabel": "CS Puertollano — Moins de 1.5 buts",
+          "predictedOdds": 1.36,
+          "probability": 74,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 2.5,
+            "side": "under"
+          },
+          "market": "Buts — Albacete",
+          "predictedOutcome": "under",
+          "predictedLabel": "Albacete — Moins de 2.5 buts",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        }
+      ],
+      "engineVersion": 5
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 4677,
+      "cache_read_input_tokens": 4470,
+      "output_tokens": 2447,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 4677,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 2447,
+          "cache_read_input_tokens": 4470,
+          "cache_creation_input_tokens": 4677,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 4677
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.044076,
+    "analysedAt": "2026-11-10T15:17:10.746Z",
+    "timing": "avance",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 375,
+      "tokens": 1197,
+      "lecons": [
+        "cal-2026-10-27-arosa-sc-pontevedra|result",
+        "cal-2026-10-27-arosa-sc-pontevedra|resultAndTotal"
+      ],
+      "dossiersDu": "2026-11-10T12:11:57.565Z",
+      "equipes": {
+        "home": {
+          "id": null,
+          "dossier": false
+        },
+        "away": {
+          "id": "fotmob-8393",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "Copa del Rey - Spain",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "magasin",
+      "home": null,
+      "away": {
+        "team": "Albacete",
+        "teamId": "fotmob-8393",
+        "formation": "4-4-2",
+        "coach": "Joseba Etxeberria",
+        "statsSince": "2026-07-01",
+        "teamMatches": 13,
+        "startXI": [
+          {
+            "id": "fotmob-213504",
+            "name": "Diego Mariño",
+            "number": 13,
+            "position": "Goalkeeper",
+            "age": 36,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 9,
+              "starts": 9,
+              "minutes": 810,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.48
+            }
+          },
+          {
+            "id": "fotmob-391165",
+            "name": "Higinio Marín",
+            "number": 12,
+            "position": "Forward",
+            "age": 33,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.87,
+            "y": 0.3,
+            "stats": {
+              "apps": 9,
+              "starts": 3,
+              "minutes": 331,
+              "goals": 3,
+              "assists": 0,
+              "xg": 3.38,
+              "rating": 6.47
+            }
+          },
+          {
+            "id": "fotmob-574631",
+            "name": "Jesús Vallejo",
+            "number": 24,
+            "position": "Defender",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.375,
+            "stats": {
+              "apps": 8,
+              "starts": 7,
+              "minutes": 602,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.47,
+              "rating": 6.54
+            }
+          },
+          {
+            "id": "fotmob-670006",
+            "name": "Lluís López",
+            "number": 22,
+            "position": "Defender",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.625,
+            "stats": {
+              "apps": 13,
+              "starts": 13,
+              "minutes": 1155,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.25,
+              "rating": 6.38
+            }
+          },
+          {
+            "id": "fotmob-889544",
+            "name": "Carlos Neva",
+            "number": 21,
+            "position": "Defender",
+            "age": 30,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.125,
+            "stats": {
+              "apps": 13,
+              "starts": 13,
+              "minutes": 1150,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.24,
+              "rating": 6.77
+            }
+          },
+          {
+            "id": "fotmob-940745",
+            "name": "Victor San Bartolomé",
+            "number": 14,
+            "position": "Midfielder",
+            "age": 27,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.875,
+            "stats": {
+              "apps": 8,
+              "starts": 8,
+              "minutes": 519,
+              "goals": 2,
+              "assists": 0,
+              "xg": 0.69,
+              "rating": 6.97
+            }
+          },
+          {
+            "id": "fotmob-1127223",
+            "name": "Antonio Pacheco",
+            "number": 6,
+            "position": "Midfielder",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.625,
+            "stats": {
+              "apps": 12,
+              "starts": 8,
+              "minutes": 793,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.33,
+              "rating": 6.77
+            }
+          },
+          {
+            "id": "fotmob-1322880",
+            "name": "Sergio Ortuño",
+            "number": 18,
+            "position": "Midfielder",
+            "age": 27,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.375,
+            "stats": {
+              "apps": 12,
+              "starts": 10,
+              "minutes": 919,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.49,
+              "rating": 6.79
+            }
+          },
+          {
+            "id": "fotmob-1323669",
+            "name": "Lorenzo Aguado",
+            "number": 2,
+            "position": "Defender",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.875,
+            "stats": {
+              "apps": 8,
+              "starts": 7,
+              "minutes": 503,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.25,
+              "rating": 6.83
+            }
+          },
+          {
+            "id": "fotmob-1446819",
+            "name": "Víctor Valverde",
+            "number": 11,
+            "position": "Midfielder",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.125,
+            "stats": {
+              "apps": 7,
+              "starts": 7,
+              "minutes": 495,
+              "goals": 0,
+              "assists": 2,
+              "xg": 0.71,
+              "rating": 7.05
+            }
+          },
+          {
+            "id": "fotmob-1532255",
+            "name": "Álex Rubio",
+            "number": 19,
+            "position": "Forward",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.87,
+            "y": 0.7,
+            "stats": {
+              "apps": 11,
+              "starts": 6,
+              "minutes": 536,
+              "goals": 2,
+              "assists": 0,
+              "xg": 2.2,
+              "rating": 6.34
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-574186",
+            "name": "Agus Medina",
+            "number": 4,
+            "position": "Forward",
+            "age": 32,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 11,
+              "starts": 5,
+              "minutes": 499,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.46,
+              "rating": 6.19
+            }
+          },
+          {
+            "id": "fotmob-874482",
+            "name": "Roberto González",
+            "number": 10,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 7,
+              "starts": 3,
+              "minutes": 259,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.91,
+              "rating": 6.38
+            }
+          },
+          {
+            "id": "fotmob-1031321",
+            "name": "Mario Soberón",
+            "number": 9,
+            "position": "Forward",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 12,
+              "starts": 7,
+              "minutes": 687,
+              "goals": 0,
+              "assists": 1,
+              "xg": 1.63,
+              "rating": 6.42
+            }
+          },
+          {
+            "id": "fotmob-1106821",
+            "name": "Carlos Marín",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 4,
+              "starts": 4,
+              "minutes": 360,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.46
+            }
+          },
+          {
+            "id": "fotmob-1121204",
+            "name": "Pepe Sánchez",
+            "number": 23,
+            "position": "Defender",
+            "age": 26,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 4,
+              "starts": 3,
+              "minutes": 248,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.17,
+              "rating": 6.46
+            }
+          },
+          {
+            "id": "fotmob-1473706",
+            "name": "Agustín Albarracín",
+            "number": 32,
+            "position": "Midfielder",
+            "age": 21,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "stats": {
+              "apps": 7,
+              "starts": 1,
+              "minutes": 314,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.29,
+              "rating": 6.27
+            }
+          },
+          {
+            "id": "fotmob-1605140",
+            "name": "Javi Villar",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 8,
+              "starts": 4,
+              "minutes": 301,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 5.97
+            }
+          },
+          {
+            "id": "fotmob-1712755",
+            "name": "Jota",
+            "number": 40,
+            "position": "Defender",
+            "age": 20,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1766338",
+            "name": "Daniel Bernabéu",
+            "number": 27,
+            "position": "Defender",
+            "age": 19,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 10,
+              "starts": 1,
+              "minutes": 290,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.19,
+              "rating": 6.39
+            }
+          },
+          {
+            "id": "fotmob-1796527",
+            "name": "Antonio David",
+            "number": 44,
+            "position": "Midfielder",
+            "age": 21,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 2,
+              "starts": 0,
+              "minutes": 16,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.09
+            }
+          },
+          {
+            "id": "fotmob-1801500",
+            "name": "Antonio Velilla",
+            "number": 28,
+            "position": "Defender",
+            "age": 19,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1997604",
+            "name": "Fabio Garcia",
+            "number": 39,
+            "position": "Forward",
+            "age": 18,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "id": "fotmob-676517",
+            "age": 35,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "José Corpas",
+            "reason": "suspendu",
+            "expectedReturn": null,
+            "position": "Midfielder",
+            "stats": {
+              "apps": 12,
+              "starts": 12,
+              "minutes": 1032,
+              "goals": 0,
+              "assists": 0,
+              "xg": 2.04,
+              "rating": 6.63
+            }
+          },
+          {
+            "id": "fotmob-391165",
+            "age": 33,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Higinio Marín",
+            "reason": "blessé",
+            "expectedReturn": "Doubtful",
+            "position": "Forward",
+            "stats": {
+              "apps": 9,
+              "starts": 3,
+              "minutes": 331,
+              "goals": 3,
+              "assists": 0,
+              "xg": 3.38,
+              "rating": 6.47
+            }
+          },
+          {
+            "id": "fotmob-803203",
+            "age": 35,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Fran Gámez",
+            "reason": "blessé",
+            "expectedReturn": "Late November 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 9,
+              "starts": 7,
+              "minutes": 599,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.22,
+              "rating": 6.83
+            }
+          },
+          {
+            "id": "fotmob-1700855",
+            "age": 20,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Capi",
+            "reason": "blessé",
+            "expectedReturn": "Back in training",
+            "position": null,
+            "stats": null
+          },
+          {
+            "id": "fotmob-1325580",
+            "age": 26,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Javi Moreno",
+            "reason": "blessé",
+            "expectedReturn": "Late November 2026",
+            "position": "Defender",
+            "stats": {
+              "apps": 3,
+              "starts": 3,
+              "minutes": 245,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.83
+            }
+          },
+          {
+            "id": "fotmob-965013",
+            "age": 29,
+            "countryCode": "GHA",
+            "countryName": "Ghana",
+            "name": "Samuel Obeng",
+            "reason": "blessé",
+            "expectedReturn": "Back in training",
+            "position": "Forward",
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 53,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.27
+            }
+          },
+          {
+            "id": "fotmob-434593",
+            "age": 34,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Antonio Puertas",
+            "reason": "blessé",
+            "expectedReturn": "Early December 2026",
+            "position": null,
+            "stats": null
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-676517",
+            "age": 35,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "José Corpas",
+            "position": "Midfielder",
+            "starts": 12,
+            "goals": 0,
+            "assists": 0,
+            "status": "suspendu"
+          },
+          {
+            "id": "fotmob-803203",
+            "age": 35,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Fran Gámez",
+            "position": "Midfielder",
+            "starts": 7,
+            "goals": 0,
+            "assists": 0,
+            "status": "blessé"
+          },
+          {
+            "id": "fotmob-1031321",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Mario Soberón",
+            "position": "Midfielder",
+            "starts": 7,
+            "goals": 0,
+            "assists": 1,
+            "status": "remplaçant"
+          }
+        ],
+        "lastMatch": {
+          "date": "2026-11-07",
+          "league": "La Liga 2 - Spain",
+          "home": "Leganés",
+          "away": "Albacete",
+          "homeGoals": 1,
+          "awayGoals": 3
+        }
+      },
+      "matchInfo": {
+        "round": "1st Round",
+        "stadium": "Estadio Ciudad de Puertollano",
+        "city": "Puertollano",
+        "capacity": 7240,
+        "surface": "grass",
+        "weather": "Few Showers",
+        "temperature": 15,
+        "windSpeed": 22,
+        "precipitation": 0.1,
+        "referee": {
+          "name": "José Luis Guzmán Mansilla",
+          "country": "Spain",
+          "league": "LaLiga2",
+          "matches": 22,
+          "yellowCardsPerMatch": 4.05,
+          "yellowCardsLeagueAverage": 5.1,
+          "redCards": 2,
+          "penalties": 4,
+          "foulsPerMatch": 25.6,
+          "foulsLeagueAverage": 26.63
+        }
+      }
+    },
+    "analysis": {
+      "summary": "Albacete (21e de Liga 2, 3 victoires de suite, nouvel entraîneur Etxeberria 2 V sur 2) affronte au 1er tour de Copa un CS Puertollano dont on ne connaît ni la forme, ni les moyennes, ni la composition. Albacete produit peu (1,1 but par match sur 10 matchs, 0,83 à l'extérieur) et en concède beaucoup (1,9 ; 2,17 à l'extérieur). Plusieurs absences côté Albacete (Corpas suspendu, Gámez, Puertas, Javi Moreno blessés, Higinio Marín incertain). Le moteur penche pour Albacete sans marge nette.",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Albacete en hausse sous le nouvel entraîneur, mais sur 10 matchs le bilan reste fragile.",
+          "evidence": "10 derniers : VVVDDDDDND ; dossier : 1,8 point par match sur les 5 derniers contre 0,2 sur les 5 d'avant ; 2 V en 2 matchs avec Etxeberria."
+        },
+        {
+          "factor": "statistiques et moyennes",
+          "observation": "Albacete marque peu et encaisse beaucoup, surtout à l'extérieur : matchs ouverts côté défense, pauvres côté attaque.",
+          "evidence": "10 derniers 1,1 / 1,9 ; extérieur (6 matchs) 0,83 / 2,17 ; xG 1,24 / 2,02 à l'extérieur."
+        },
+        {
+          "factor": "absences",
+          "observation": "Albacete diminué au milieu et en attaque.",
+          "evidence": "Corpas suspendu (12 tit.), Gámez blessé, Higinio Marín (3 buts) incertain, Javi Moreno blessé."
+        },
+        {
+          "factor": "classement",
+          "observation": "Classement indisponible pour la coupe ; Puertollano sans aucune donnée de forme ni de stats.",
+          "evidence": "Albacete 21e de Liga 2 avec 10 pts en 13 matchs (dossier)."
+        },
+        {
+          "factor": "cadre du match",
+          "observation": "Pluie légère et vent modéré, sans effet marqué ; arbitre moins sévère que la moyenne.",
+          "evidence": "Vent 22 km/h, 0,1 de précipitations ; arbitre 4,05 jaunes par match contre 5,1."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur (Albacete légèrement favori, match plutôt fermé), mais l'absence totale de données sur Puertollano et la défense poreuse d'Albacete invitent à la prudence.",
+      "caveats": "Aucune donnée pour CS Puertollano (forme, moyennes, composition, dossier). Classement indisponible (coupe). Composition d'Albacete = dernier onze aligné (magasin), pas celui de ce match ; Higinio Marín, présent dans ce onze, est annoncé blessé. Pas de cotes du marché ni de statExpectations. Historique d'entraîneur déduit seulement des compositions importées.",
+      "lineupImpact": "Source magasin : le onze d'Albacete (4-4-2, Etxeberria, dernier match 3-1 à Leganés le 07/11) est le onze probable, pas officiel. Higinio Marín (3 buts, xG 3,38) y figure mais est annoncé blessé, retour incertain : un buteur en moins. Corpas (12 titularisations) est suspendu, Gámez et Javi Moreno blessés. Rien sur Puertollano, composition inconnue. Une rotation d'Albacete avant la coupe est possible.",
+      "marketViews": [
+        {
+          "market": "Résultat",
+          "pick": "Albacete gagne",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "40 % : Albacete est favori avec 1,5 but attendu contre 1, mais ses 0,83 but marqué par match à l'extérieur et l'inconnue Puertollano limitent le chiffre.",
+          "reasoning": "Albacete est en série de 3 victoires, mais son attaque est amoindrie et sa défense encaisse 2,17 buts à l'extérieur. Face à une équipe inconnue en coupe, l'issue reste très ouverte.",
+          "probability": 40
+        },
+        {
+          "market": "Total buts",
+          "pick": "Moins de 3.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "76 % : le moteur attend 2,5 buts au total et Albacete n'a marqué que 1,1 par match sur ses 10 derniers.",
+          "reasoning": "Attaque d'Albacete peu prolifique, mais sa défense concède 1,9 but par match : un match très ouvert reste possible, sans être le scénario central.",
+          "probability": 76
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "pick": "Oui",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "50 % : Albacete encaisse 1,9 but par match, mais ne marque que 0,83 à l'extérieur et Puertollano est sans donnée.",
+          "reasoning": "La défense poreuse d'Albacete plaide pour le oui, son attaque réduite et l'absence de données sur Puertollano rendent ce marché très incertain (mon bilan : faible).",
+          "probability": 50
+        },
+        {
+          "market": "Résultat + Total buts",
+          "pick": "Albacete & Plus de 1.5 buts",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "30 % : combine la victoire d'Albacete (40 %) et au moins 2 buts, avec 2,5 buts attendus au total.",
+          "reasoning": "Cela dépend surtout de la victoire d'Albacete, déjà incertaine. Mon bilan sur ce marché est médiocre.",
+          "probability": 30
+        },
+        {
+          "market": "Buts — CS Puertollano",
+          "pick": "CS Puertollano — Moins de 1.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "74 % : le moteur attend 1 but pour Puertollano ; Albacete concède pourtant 1,9 par match, d'où une marge limitée.",
+          "reasoning": "Un but ou moins est le scénario courant, mais la défense d'Albacete (2,17 concédés à l'extérieur) laisse place à un deuxième but. Aucune donnée sur Puertollano.",
+          "probability": 74
+        },
+        {
+          "market": "Buts — Albacete",
+          "pick": "Albacete — Moins de 2.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "81 % : Albacete marque 1,1 but par match (0,83 à l'extérieur) et le moteur lui en attend 1,5.",
+          "reasoning": "Son attaque faible et les absences (Marín incertain) vont dans ce sens ; son 3-1 à Leganés montre qu'un match plus prolifique est possible.",
+          "probability": 81
+        }
+      ]
+    },
+    "updatedAt": "2026-11-12T21:23:07.311Z",
+    "createdAt": "2026-11-10T15:17:10.746Z",
+    "postMatchReview": {
+      "summary": "Albacete s'est imposé 0-3 à Puertollano, avec deux buts en trois minutes (16', 19') puis un troisième à la 82'. Le sens général (Albacete favori, Puertollano limité à peu de buts) était juste. Le plafond de 2,5 buts d'Albacete a sauté, et le match a été moins serré que ma lecture prudente ne le laissait penser.",
+      "whatWasRight": "Albacete favori en coupe, malgré ses absences : victoire 0-3. Puertollano est resté sous 1,5 but (zéro but), ce qui confirme le marché « moins de 1.5 » et le total sous 3,5 (3 buts). Ma méfiance sur « les 2 équipes marquent » s'est vérifiée : Puertollano n'a pas marqué.",
+      "whatWasMissed": "J'ai surestimé la fragilité défensive d'Albacete à l'extérieur (2,17 encaissés) face à un adversaire inconnu, probablement d'un niveau inférieur. J'ai aussi sous-estimé l'écart de niveau en Copa contre une équipe de division inférieure : Albacete a marqué trois fois malgré ses absences et ses 0,83 but par match à l'extérieur. Le 0-2 dès la 19' a ouvert le match.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le vainqueur, le total et les buts de Puertollano. Il le contredit sur « Albacete moins de 2.5 buts » (81 %) : Albacete a marqué 3 fois, et le moteur sous-estimait sa production face à un adversaire amateur ou de niveau inférieur.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Albacete gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Albacete a gagné 0-3 : buts de Roberto González (16') et Mario Soberón (19'), puis Álex Rubio (82'). Le favori a pris le match en main très tôt.",
+          "lesson": "En Copa, un club de Liga 2 contre une équipe inférieure l'emporte plus nettement que ses moyennes de championnat ne le suggèrent. Il faut moins se laisser freiner par l'absence de données sur l'adversaire."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "3 buts au total, donc sous 3,5. Le 0-2 à la 19' n'a pas débouché sur un score fleuve, Albacete ayant géré ensuite (un seul but après la pause, à la 82').",
+          "lesson": "Le sous 3,5 est tenu parce qu'un favori qui mène tôt ralentit. Ce type de marché large reste utile, mais la marge n'est pas énorme avec un 0-3."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Puertollano n'a pas marqué (0-3). La défense d'Albacete a tenu, malgré ses moyennes poreuses en championnat.",
+          "lesson": "Contre un adversaire de division inférieure, la défense poreuse d'Albacete en championnat pèse moins. Une équipe sans données doit pousser vers « non » plutôt que vers un avis neutre."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Albacete & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Victoire d'Albacete avec 3 buts, donc plus de 1,5 : le combiné passe. Les deux buts avant la 20' ont fait l'essentiel.",
+          "lesson": "Ce combiné suit surtout la victoire d'Albacete. Le favori gagnant avec au moins deux buts était plausible, et ce scénario reste à considérer en coupe face à un petit adversaire."
+        },
+        {
+          "market": "Buts — CS Puertollano",
+          "marketId": "teamGoals",
+          "pick": "CS Puertollano — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Puertollano a fini à zéro but, avec cinq changements et un seul jaune. Aucune donnée de tirs n'a été relevée, donc on ne peut pas mesurer le danger créé.",
+          "lesson": "Confirmer le « moins de 1.5 » pour l'outsider de coupe était sain : un adversaire de niveau inférieur marque peu face à un club de division supérieure, même défensivement fragile."
+        },
+        {
+          "market": "Buts — Albacete",
+          "marketId": "teamGoals",
+          "pick": "Albacete — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Albacete a marqué 3 buts (16', 19', 82'), dépassant le seuil de 2,5. Le moteur attendait 1,5 but et la moyenne extérieure était de 0,83. L'ouverture du score précoce et l'écart de niveau ont fait sauter ce plafond.",
+          "lesson": "Ne pas confirmer un « moins de 2.5 » pour un favori de coupe face à un adversaire inconnu, surtout à 81 %. Les moyennes de championnat sous-estiment sa production quand il affronte un club inférieur."
+        }
+      ],
+      "caveats": "Un seul match. Aucune statistique de tirs, de xG ni de possession n'a été relevée, et on ne sait rien du niveau réel de Puertollano. Le 0-3 peut tenir à la qualité de l'adversaire et à l'ouverture du score rapide, deux facteurs que le moteur ne modélise pas.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 16,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3743,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 1842,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3743,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1842,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 3743,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3743
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0338136,
+      "createdAt": "2026-11-12T21:23:07.310Z"
+    }
+  },
+  {
+    "matchId": "cal-2026-11-12-navalcarnero-real-betis",
+    "homeName": "Navalcarnero",
+    "awayName": "Real Betis",
+    "league": "Copa del Rey - Spain",
+    "commenceTime": "2026-11-12T18:00:00.000Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Navalcarnero vs Real Betis",
+      "expectedGoals": {
+        "home": 1.557,
+        "away": 2.464,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 26.09,
+        "draw": 13.35,
+        "away": 1.13
+      },
+      "market": {
+        "odds1": 17,
+        "oddsDraw": 9.5,
+        "odds2": 1.11
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "trop_peu_de_bookmakers",
+        "candidates": []
+      },
+      "statExpectations": null,
+      "marketPredictions": [
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 2.5 buts",
+          "predictedOdds": 1.31,
+          "probability": 76,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "yes"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "yes",
+          "predictedLabel": "Oui",
+          "predictedOdds": 1.38,
+          "probability": 72,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 1.5,
+            "key": "awayOver"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "awayOver",
+          "predictedLabel": "Real Betis & Plus de 1.5 buts",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 2.5,
+            "side": "under"
+          },
+          "market": "Buts — Navalcarnero",
+          "predictedOutcome": "under",
+          "predictedLabel": "Navalcarnero — Moins de 2.5 buts",
+          "predictedOdds": 1.26,
+          "probability": 79,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 3.5,
+            "side": "under"
+          },
+          "market": "Buts — Real Betis",
+          "predictedOutcome": "under",
+          "predictedLabel": "Real Betis — Moins de 3.5 buts",
+          "predictedOdds": 1.31,
+          "probability": 76,
+          "minOdds": 1.2
+        }
+      ],
+      "engineVersion": 5
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 5143,
+      "cache_read_input_tokens": 4470,
+      "output_tokens": 2452,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 5143,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 2452,
+          "cache_read_input_tokens": 4470,
+          "cache_creation_input_tokens": 5143,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 5143
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.04599,
+    "analysedAt": "2026-11-10T19:31:51.817Z",
+    "timing": "avance",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 375,
+      "tokens": 1178,
+      "lecons": [
+        "cal-2026-10-27-arosa-sc-pontevedra|result",
+        "cal-2026-10-27-arosa-sc-pontevedra|resultAndTotal"
+      ],
+      "dossiersDu": "2026-11-10T12:11:57.565Z",
+      "equipes": {
+        "home": {
+          "id": "fotmob-161758",
+          "dossier": true
+        },
+        "away": {
+          "id": "fotmob-8603",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "Copa del Rey - Spain",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "magasin",
+      "home": {
+        "team": "Navalcarnero",
+        "teamId": "fotmob-161758",
+        "formation": "4-4-2",
+        "coach": null,
+        "statsSince": "2026-01-16",
+        "teamMatches": 0,
+        "startXI": [
+          {
+            "id": "fotmob-924163",
+            "name": "Juanmi Heredero",
+            "number": 3,
+            "position": "Defender",
+            "age": 33,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.125,
+            "stats": null
+          },
+          {
+            "id": "fotmob-1324135",
+            "name": "Javi Bueno",
+            "number": 14,
+            "position": "Midfielder",
+            "age": 30,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.375,
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 90,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1691108",
+            "name": "Alvaro Calado",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": null
+          },
+          {
+            "id": "fotmob-1705479",
+            "name": "Jaime Perez",
+            "number": 9,
+            "position": "Forward",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.87,
+            "y": 0.7,
+            "stats": null
+          },
+          {
+            "id": "fotmob-1714718",
+            "name": "Iker Perera",
+            "number": 21,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.875,
+            "stats": null
+          },
+          {
+            "id": "fotmob-1869693",
+            "name": "Axel Espinola",
+            "number": 5,
+            "position": "Defender",
+            "age": 21,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.375,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Richi",
+            "number": 6,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.357,
+            "y": 0.625,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Jesús Cruz",
+            "number": 15,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.613,
+            "y": 0.625,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Ángel Auñón",
+            "number": 19,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.357,
+            "y": 0.875,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Diego Guerrero",
+            "number": 20,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.613,
+            "y": 0.125,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Mario Jiménez",
+            "number": 11,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.87,
+            "y": 0.3,
+            "stats": null
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-1233930",
+            "name": "Alex Altube",
+            "number": 24,
+            "position": "Forward",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": null
+          },
+          {
+            "id": "fotmob-1692303",
+            "name": "Miguel Garcia",
+            "number": 4,
+            "position": "Defender",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": null
+          },
+          {
+            "id": "fotmob-1694861",
+            "name": "Peque",
+            "number": 10,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": null
+          },
+          {
+            "id": "fotmob-1701842",
+            "name": "Rober",
+            "number": 7,
+            "position": "Forward",
+            "age": null,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Daniel Simón",
+            "number": 13,
+            "position": null,
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Iván Quivira",
+            "number": 8,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Chus Villar",
+            "number": 22,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "João Dias",
+            "number": 23,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Marcos Moraga",
+            "number": 30,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Roberto Esteban",
+            "number": 33,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Walid Chahid",
+            "number": 12,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": null
+          }
+        ],
+        "unavailable": [],
+        "usualStartersMissing": [],
+        "lastMatch": {
+          "date": "2025-12-02",
+          "league": "Copa del Rey - Spain",
+          "home": "Navalcarnero",
+          "away": "Getafe",
+          "homeGoals": 2,
+          "awayGoals": 3
+        }
+      },
+      "away": {
+        "team": "Real Betis",
+        "teamId": "fotmob-8603",
+        "formation": "4-2-3-1",
+        "coach": "Manuel Pellegrini",
+        "statsSince": "2026-07-01",
+        "teamMatches": 16,
+        "startXI": [
+          {
+            "id": "fotmob-191315",
+            "name": "Isco",
+            "number": 22,
+            "position": "Midfielder",
+            "age": 34,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.678,
+            "y": 0.5,
+            "stats": {
+              "apps": 15,
+              "starts": 11,
+              "minutes": 870,
+              "goals": 4,
+              "assists": 2,
+              "xg": 4.84,
+              "rating": 7.47
+            }
+          },
+          {
+            "id": "fotmob-195305",
+            "name": "Marc Bartra",
+            "number": 5,
+            "position": "Defender",
+            "age": 35,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 11,
+              "starts": 9,
+              "minutes": 805,
+              "goals": 5,
+              "assists": 0,
+              "xg": 1.04,
+              "rating": 7.57
+            }
+          },
+          {
+            "id": "fotmob-427438",
+            "name": "Héctor Bellerín",
+            "number": 2,
+            "position": "Defender",
+            "age": 31,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.292,
+            "y": 0.875,
+            "stats": {
+              "apps": 13,
+              "starts": 11,
+              "minutes": 1019,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.97,
+              "rating": 6.65
+            }
+          },
+          {
+            "id": "fotmob-640220",
+            "name": "Marc Roca",
+            "number": 21,
+            "position": "Midfielder",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.485,
+            "y": 0.3,
+            "stats": {
+              "apps": 13,
+              "starts": 11,
+              "minutes": 988,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.45,
+              "rating": 7.27
+            }
+          },
+          {
+            "id": "fotmob-683450",
+            "name": "Pablo Fornals",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 30,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.485,
+            "y": 0.7,
+            "stats": {
+              "apps": 14,
+              "starts": 11,
+              "minutes": 945,
+              "goals": 1,
+              "assists": 2,
+              "xg": 1.55,
+              "rating": 7.52
+            }
+          },
+          {
+            "id": "fotmob-750028",
+            "name": "Fran García",
+            "number": 11,
+            "position": "Defender",
+            "age": 27,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.292,
+            "y": 0.125,
+            "stats": {
+              "apps": 14,
+              "starts": 11,
+              "minutes": 1050,
+              "goals": 0,
+              "assists": 2,
+              "xg": 0.1,
+              "rating": 7.13
+            }
+          },
+          {
+            "id": "fotmob-942365",
+            "name": "Troy Parrott",
+            "number": 19,
+            "position": "Forward",
+            "age": 24,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 14,
+              "starts": 8,
+              "minutes": 730,
+              "goals": 2,
+              "assists": 1,
+              "xg": 3.49,
+              "rating": 6.75
+            }
+          },
+          {
+            "id": "fotmob-967622",
+            "name": "Antony",
+            "number": 7,
+            "position": "Midfielder",
+            "age": 26,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.678,
+            "y": 0.837,
+            "stats": {
+              "apps": 15,
+              "starts": 12,
+              "minutes": 1003,
+              "goals": 0,
+              "assists": 1,
+              "xg": 2.86,
+              "rating": 7.28
+            }
+          },
+          {
+            "id": "fotmob-999171",
+            "name": "Álvaro Vallés",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 16,
+              "starts": 16,
+              "minutes": 1440,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.42
+            }
+          },
+          {
+            "id": "fotmob-1188375",
+            "name": "Natan",
+            "number": 4,
+            "position": "Defender",
+            "age": 25,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.292,
+            "y": 0.375,
+            "stats": {
+              "apps": 14,
+              "starts": 14,
+              "minutes": 1231,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.59,
+              "rating": 7.15
+            }
+          },
+          {
+            "id": "fotmob-1209399",
+            "name": "Abdessamad Ezzalzouli",
+            "number": 10,
+            "position": "Midfielder",
+            "age": 24,
+            "countryCode": "MAR",
+            "countryName": "Morocco",
+            "x": 0.678,
+            "y": 0.163,
+            "stats": {
+              "apps": 12,
+              "starts": 11,
+              "minutes": 951,
+              "goals": 4,
+              "assists": 1,
+              "xg": 3.37,
+              "rating": 7.44
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-420568",
+            "name": "Diego Llorente",
+            "number": 3,
+            "position": "Defender",
+            "age": 33,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 6,
+              "starts": 6,
+              "minutes": 467,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.03,
+              "rating": 6.45
+            }
+          },
+          {
+            "id": "fotmob-531629",
+            "name": "Dani Ceballos",
+            "number": 25,
+            "position": "Midfielder",
+            "age": 30,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 11,
+              "starts": 3,
+              "minutes": 374,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.04,
+              "rating": 6.91
+            }
+          },
+          {
+            "id": "fotmob-676533",
+            "name": "Aitor Ruibal",
+            "number": 24,
+            "position": "Defender",
+            "age": 30,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 3,
+              "starts": 0,
+              "minutes": 64,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.37,
+              "rating": 6.6
+            }
+          },
+          {
+            "id": "fotmob-743192",
+            "name": "Júnior Firpo",
+            "number": 23,
+            "position": "Defender",
+            "age": 30,
+            "countryCode": "DOM",
+            "countryName": "Dominican Republic",
+            "stats": {
+              "apps": 3,
+              "starts": 3,
+              "minutes": 230,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.03
+            }
+          },
+          {
+            "id": "fotmob-895954",
+            "name": "Álvaro Fidalgo",
+            "number": 15,
+            "position": "Midfielder",
+            "age": 29,
+            "countryCode": "MEX",
+            "countryName": "Mexico",
+            "stats": {
+              "apps": 5,
+              "starts": 0,
+              "minutes": 95,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.35
+            }
+          },
+          {
+            "id": "fotmob-1022354",
+            "name": "Diego Conde",
+            "number": 13,
+            "position": "Goalkeeper",
+            "age": 28,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1072200",
+            "name": "Rodrigo Riquelme",
+            "number": 17,
+            "position": "Forward",
+            "age": 26,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 14,
+              "starts": 7,
+              "minutes": 588,
+              "goals": 3,
+              "assists": 1,
+              "xg": 1.99,
+              "rating": 6.95
+            }
+          },
+          {
+            "id": "fotmob-1082930",
+            "name": "Iker Losada",
+            "number": 14,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1315711",
+            "name": "Nelson Deossa",
+            "number": 18,
+            "position": "Midfielder",
+            "age": 26,
+            "countryCode": "COL",
+            "countryName": "Colombia",
+            "stats": {
+              "apps": 16,
+              "starts": 6,
+              "minutes": 618,
+              "goals": 0,
+              "assists": 1,
+              "xg": 1.06,
+              "rating": 6.79
+            }
+          },
+          {
+            "id": "fotmob-1338016",
+            "name": "Valentín Gómez",
+            "number": 16,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 7,
+              "starts": 5,
+              "minutes": 537,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.26,
+              "rating": 6.92
+            }
+          },
+          {
+            "id": "fotmob-1580522",
+            "name": "Ángel Ortiz",
+            "number": 12,
+            "position": "Defender",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 8,
+              "starts": 5,
+              "minutes": 421,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.28,
+              "rating": 7.04
+            }
+          },
+          {
+            "id": "fotmob-1793845",
+            "name": "José Antonio Morante",
+            "number": 27,
+            "position": "Forward",
+            "age": 19,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 3,
+              "starts": 0,
+              "minutes": 25,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.31,
+              "rating": 6.06
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "id": "fotmob-1436133",
+            "age": 23,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "name": "Facundo Bernal",
+            "reason": "suspendu",
+            "expectedReturn": null,
+            "position": "Midfielder",
+            "stats": {
+              "apps": 11,
+              "starts": 8,
+              "minutes": 616,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.24,
+              "rating": 6.65
+            }
+          },
+          {
+            "id": "fotmob-852071",
+            "age": 27,
+            "countryCode": "COL",
+            "countryName": "Colombia",
+            "name": "Juan Hernández",
+            "reason": "blessé",
+            "expectedReturn": "Late November 2026",
+            "position": "Forward",
+            "stats": {
+              "apps": 10,
+              "starts": 7,
+              "minutes": 617,
+              "goals": 3,
+              "assists": 2,
+              "xg": 2.65,
+              "rating": 7.05
+            }
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-1436133",
+            "age": 23,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "name": "Facundo Bernal",
+            "position": "Midfielder",
+            "starts": 8,
+            "goals": 0,
+            "assists": 0,
+            "status": "suspendu"
+          }
+        ],
+        "lastMatch": {
+          "date": "2026-11-08",
+          "league": "La Liga - Spain",
+          "home": "Elche",
+          "away": "Real Betis",
+          "homeGoals": 0,
+          "awayGoals": 2
+        }
+      },
+      "matchInfo": {
+        "round": "1st Round",
+        "stadium": "Estadio Municipal Santo Domingo",
+        "city": "Alcorcón",
+        "capacity": 5430,
+        "surface": "grass",
+        "weather": "Mostly Cloudy",
+        "temperature": 14,
+        "windSpeed": 22,
+        "precipitation": 0,
+        "referee": {
+          "name": "Adrián Cordero Vega",
+          "country": "Spain",
+          "league": "LaLiga",
+          "matches": 37,
+          "yellowCardsPerMatch": 4.46,
+          "yellowCardsLeagueAverage": 4.45,
+          "redCards": 3,
+          "penalties": 11,
+          "foulsPerMatch": 24.17,
+          "foulsLeagueAverage": 24.97
+        }
+      }
+    },
+    "analysis": {
+      "summary": "Le Real Betis (4e de La Liga, 6 V 2 N 2 D sur 10 matchs, 1,8 but marqué et 1,3 encaissé) est un net favori face à Navalcarnero, un club de division inférieure. Les données de Navalcarnero sont anciennes et très partielles (3 matchs, dernier le 02/12/2025, défaite 2-3 contre Getafe en Copa). La composition de Navalcarnero est le dernier onze connu, quasi inconnu du magasin. Le Betis a la suspension de Bernal et la blessure de Juan Hernández, mais garde Isco, Antony, Ezzalzouli et Parrott dans son onze probable.",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Betis en bonne dynamique ; la forme de Navalcarnero est trop ancienne pour être fiable.",
+          "evidence": "Betis : VDVNVDVVNV sur 10 matchs, 18 buts marqués et 13 encaissés. Navalcarnero : 3 matchs, du 01/11/2023 au 02/12/2025."
+        },
+        {
+          "factor": "statistiques et moyennes",
+          "observation": "Les deux équipes marquent assez facilement. Navalcarnero a créé des occasions mais a beaucoup encaissé contre des adversaires supérieurs.",
+          "evidence": "Navalcarnero : 1,33 / 1,67 sur 3 matchs, xG 2,76 / 2,12. Betis à l'extérieur : 1 / 0,75 sur 4 matchs."
+        },
+        {
+          "factor": "compositions",
+          "observation": "Onze du Betis solide malgré deux absents ; celui de Navalcarnero est un ancien onze presque inconnu.",
+          "evidence": "Bernal (8 titularisations) suspendu ; Juan Hernández (3+2) blessé jusqu'à fin novembre ; Isco 4+2, Ezzalzouli 4+1."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Aucun edge ni mise : le moteur dit PASS faute de bookmakers.",
+          "evidence": "Buts attendus 1,557 contre 2,464 ; cote juste du Betis 1,13 contre 1,11 au marché."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va dans le sens du moteur : le Betis est supérieur et marque régulièrement. Les données de Navalcarnero sont trop minces pour aller plus loin, et un Betis en rotation en Copa est le principal aléa.",
+      "marketViews": [
+        {
+          "market": "Total buts",
+          "pick": "Plus de 2.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "76 % : le moteur attend 1,56 + 2,46 buts, soit environ 4 au total, et Navalcarnero a pris 3 buts contre Getafe en Copa.",
+          "reasoning": "Le Betis marque 1,8 par match et Navalcarnero concède 1,67 sur son petit échantillon. Une rotation en Copa pourrait toutefois freiner le rythme.",
+          "probability": 76
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "pick": "Oui",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "72 % : Navalcarnero a marqué 2 buts dans chacun de ses deux derniers matchs de Copa, et le Betis encaisse 1,3 par match.",
+          "reasoning": "Navalcarnero a de la production offensive (xG 2,76 sur 3 matchs), mais l'écart de niveau est grand. Le Betis a laissé 0 but à Elche le 08/11, et son bilan à l'extérieur est de 0,75 encaissé.",
+          "probability": 72
+        },
+        {
+          "market": "Résultat + Total buts",
+          "pick": "Real Betis & Plus de 1.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : le Betis est annoncé gagnant à 1,13 de cote juste, et plus de 1,5 buts est très probable avec 2,46 buts attendus pour lui.",
+          "reasoning": "Le combiné repose surtout sur la victoire du Betis, très probable. Le seuil de 1,5 buts est bas et couvre bien le risque d'une victoire 1-0.",
+          "probability": 83
+        },
+        {
+          "market": "Buts — Navalcarnero",
+          "pick": "Navalcarnero — Moins de 2.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "79 % : le moteur attend 1,56 but pour Navalcarnero, qui a marqué 1,33 par match sur 3 matchs, face à un Betis qui encaisse 1,3.",
+          "reasoning": "Atteindre 3 buts contre le Betis serait un cas peu courant. L'échantillon de Navalcarnero reste ancien et réduit.",
+          "probability": 79
+        },
+        {
+          "market": "Buts — Real Betis",
+          "pick": "Real Betis — Moins de 3.5 buts",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "76 % : le moteur attend 2,46 buts pour le Betis, mais le club a déjà marqué 7 buts à Palma del Río en Copa.",
+          "reasoning": "Le Betis a marqué 7 et 4 buts lors de ses deux matchs de Copa à l'extérieur, ce qui laisse un vrai risque de 4 buts ou plus. Il tourne à 1,8 but par match sur ses 10 derniers matchs.",
+          "probability": 76
+        }
+      ],
+      "lineupImpact": "Les deux compositions viennent du magasin : c'est la dernière alignée, pas celle du match. Côté Betis, la dernière composition contenait Isco, Bartra, Bellerín, Roca, Fornals, Fran García, Parrott, Antony, Vallés, Natan et Ezzalzouli. Facundo Bernal (milieu, 8 titularisations) est suspendu et Juan Hernández (3+2) est blessé jusqu'à fin novembre, ce qui pèse peu sur l'attaque. Le banc compte aussi Riquelme (3+1) et Ceballos. Pour Navalcarnero, le onze du 02/12/2025 est quasi inconnu du magasin : aucun chiffre individuel n'est exploitable. Le match se joue à Alcorcón, sur un terrain en herbe, avec 22 km/h de vent et un arbitre dans la moyenne.",
+      "caveats": "Classement indisponible (coupe). Les données de Navalcarnero sont anciennes et portent sur 3 matchs seulement, et son entraîneur est inconnu. Les compositions sont issues du magasin, donc probables et non officielles. Aucun attendu de corners ou de tirs n'est disponible. Une rotation du Betis en Copa n'est pas mesurable. L'historique d'entraîneur est incomplet, donc un changement éventuel n'est pas exclu."
+    },
+    "updatedAt": "2026-11-12T21:23:31.310Z",
+    "createdAt": "2026-11-10T19:31:51.817Z",
+    "postMatchReview": {
+      "summary": "Le Betis a gagné 3-2 après prolongation, après avoir mené 1-0 puis été mené 2-1 jusqu'à la 90+2e. Le sens général était juste : Betis supérieur et match à buts. La victoire a pourtant été beaucoup plus laborieuse que prévu, car Navalcarnero a marqué deux fois.",
+      "whatWasRight": "Le Betis a dominé comme prévu : xG 4,82 contre 2,2, 29 tirs contre 12, 73 % de possession. Le match a compté 5 buts, ce qui confirme le Plus de 2.5. Navalcarnero a marqué (49e, 79e), ce qui valide la prudence sur « Les 2 équipes marquent ». Le Betis a gagné avec plus de 1,5 but. L'alerte sur un Betis capable de marquer beaucoup s'est vérifiée : 3 buts, dont 2 après la 90e.",
+      "whatWasMissed": "J'ai sous-estimé la fragilité du Betis face à un club de division inférieure. Il a été mené 2-1 et n'a égalisé qu'à la 90+2e. Navalcarnero a été plus dangereux que sa forme ancienne ne le laissait croire : 2 buts, 2,2 xG et un poteau de Víctor Rodríguez à la 49e. Je n'avais pas prévu la prolongation, qui a ajouté un but à la 96e, un penalty manqué par Isco (117e) et le rouge de Ruibal (118e).",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le vainqueur et sur le nombre de buts. Il contredit en partie son plafond de buts pour Navalcarnero (1,56 attendu, 2 marqués) et le scénario d'une victoire tranquille.",
+      "marketReviews": [
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "5 buts : 0-1 (5e), 1-1 (49e), 2-1 (79e), 2-2 (90+2e), 2-3 (96e). Le seuil de 2,5 a été dépassé dès le 3e but, à la 79e.",
+          "lesson": "Garder le Plus de 2.5 quand le Betis est très supérieur : 4,82 xG et 29 tirs soutiennent le volume. Le marché reste exposé aux scores étriqués, mais ici l'adversaire a aussi marqué."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Navalcarnero a marqué à la 49e (Varo López) et à la 79e (Kensly Vázquez), tandis que le Betis a marqué dès la 5e.",
+          "lesson": "Même sans avis tranché, un petit club motivé en Copa marque souvent face à un Betis qui tourne. Le Oui mérite plus de crédit dans ce contexte de coupe, surtout quand le favori fait tourner."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Real Betis & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Le Betis a gagné 3-2 après prolongation, avec plus de 1,5 but. Le résultat a pourtant été acquis tard, à la 96e.",
+          "lesson": "L'avis était juste, mais en Copa le résultat final peut se jouer en prolongation. Vérifier si le marché compte la prolongation, car le combiné a failli être perdu à 2-1 à la 89e."
+        },
+        {
+          "market": "Buts — Navalcarnero",
+          "marketId": "teamGoals",
+          "pick": "Navalcarnero — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Navalcarnero a marqué 2 buts (49e, 79e), ce qui reste sous 2,5 buts. Un troisième but n'est pas venu malgré 2,2 xG et un poteau à la 49e.",
+          "lesson": "Le plafond a tenu, mais sans grande marge : l'équipe inférieure a atteint 2 buts. Rester prudent avec les petits clubs de Copa face à un Betis en rotation."
+        },
+        {
+          "market": "Buts — Real Betis",
+          "marketId": "teamGoals",
+          "pick": "Real Betis — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Le Betis a marqué 3 buts (5e, 90+2e, 96e), donc moins de 3,5. Les 29 tirs et 4,82 xG laissaient pourtant un vrai risque de 4 buts ou plus. Le penalty d'Isco a été arrêté à la 117e.",
+          "lesson": "Le doute émis était fondé : le Betis a presque atteint le seuil, et seul un penalty manqué l'en a séparé. Le seuil de 3,5 reste fragile contre un adversaire faible quand le Betis domine autant."
+        }
+      ],
+      "caveats": "Un seul match, avec des données anciennes sur Navalcarnero. Le jeu a été prolongé (nature des marchés non précisée dans la fiche). Un penalty manqué (117e) et un rouge (118e) ont pesé en fin de match, ce qui n'est pas modélisable.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 25,
+        "commentaire": 5
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 5594,
+        "cache_read_input_tokens": 8531,
+        "output_tokens": 2508,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5594,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1755,
+            "cache_read_input_tokens": 6443,
+            "cache_creation_input_tokens": 1239,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1239
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.049170200000000004,
+      "createdAt": "2026-11-12T21:23:31.309Z"
+    }
+  },
+  {
+    "matchId": "cal-2026-11-12-academia-puerto-cabello-monagas-sc",
+    "homeName": "Academia Puerto Cabello",
+    "awayName": "Monagas SC",
+    "league": "Primera División - Venezuela",
+    "commenceTime": "2026-11-12T22:00:00.000Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Academia Puerto Cabello vs Monagas SC",
+      "expectedGoals": {
+        "home": 2.419,
+        "away": 1.064,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 1.59,
+        "draw": 4.43,
+        "away": 6.95
+      },
+      "market": {
+        "odds1": 1.5,
+        "oddsDraw": 3.7,
+        "odds2": 5.5
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "trop_peu_de_bookmakers",
+        "candidates": []
+      },
+      "statExpectations": {
+        "corners": {
+          "home": 6.66,
+          "away": 3.38,
+          "total": 10.03
+        },
+        "shots": {
+          "home": 17.27,
+          "away": 11.34,
+          "total": 28.61
+        },
+        "shotsOnTarget": {
+          "home": 5.17,
+          "away": 3.56,
+          "total": 8.72
+        }
+      },
+      "marketPredictions": [
+        {
+          "marketId": "result",
+          "params": {
+            "outcome": "home"
+          },
+          "market": "Résultat",
+          "predictedOutcome": "home",
+          "predictedLabel": "Academia Puerto Cabello gagne",
+          "predictedOdds": 1.59,
+          "probability": 63,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 2.5 buts",
+          "predictedOdds": 1.48,
+          "probability": 68,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "yes"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "yes",
+          "predictedLabel": "Oui",
+          "predictedOdds": 1.66,
+          "probability": 60,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 1.5,
+            "key": "homeOver"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "homeOver",
+          "predictedLabel": "Academia Puerto Cabello & Plus de 1.5 buts",
+          "predictedOdds": 1.77,
+          "probability": 56,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 3.5,
+            "side": "under"
+          },
+          "market": "Buts — Academia Puerto Cabello",
+          "predictedOutcome": "under",
+          "predictedLabel": "Academia Puerto Cabello — Moins de 3.5 buts",
+          "predictedOdds": 1.29,
+          "probability": 78,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 1.5,
+            "side": "under"
+          },
+          "market": "Buts — Monagas SC",
+          "predictedOutcome": "under",
+          "predictedLabel": "Monagas SC — Moins de 1.5 buts",
+          "predictedOdds": 1.4,
+          "probability": 71,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalCorners",
+          "params": {
+            "line": 12.5,
+            "side": "under"
+          },
+          "market": "Total corners",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 12.5 corners",
+          "predictedOdds": 1.3,
+          "probability": 77,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "home",
+            "line": 3.5,
+            "side": "over"
+          },
+          "market": "Corners — Academia Puerto Cabello",
+          "predictedOutcome": "over",
+          "predictedLabel": "Academia Puerto Cabello — Plus de 3.5 corners",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "away",
+            "line": 1.5,
+            "side": "over"
+          },
+          "market": "Corners — Monagas SC",
+          "predictedOutcome": "over",
+          "predictedLabel": "Monagas SC — Plus de 1.5 corners",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShots",
+          "params": {
+            "line": 22.5,
+            "side": "over"
+          },
+          "market": "Total tirs",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 22.5 tirs",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "home",
+            "line": 11.5,
+            "side": "over"
+          },
+          "market": "Tirs — Academia Puerto Cabello",
+          "predictedOutcome": "over",
+          "predictedLabel": "Academia Puerto Cabello — Plus de 11.5 tirs",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "away",
+            "line": 15.5,
+            "side": "under"
+          },
+          "market": "Tirs — Monagas SC",
+          "predictedOutcome": "under",
+          "predictedLabel": "Monagas SC — Moins de 15.5 tirs",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShotsOnTarget",
+          "params": {
+            "line": 11.5,
+            "side": "under"
+          },
+          "market": "Total tirs cadrés",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 11.5 tirs cadrés",
+          "predictedOdds": 1.23,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "home",
+            "line": 7.5,
+            "side": "under"
+          },
+          "market": "Tirs cadrés — Academia Puerto Cabello",
+          "predictedOutcome": "under",
+          "predictedLabel": "Academia Puerto Cabello — Moins de 7.5 tirs cadrés",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "away",
+            "line": 5.5,
+            "side": "under"
+          },
+          "market": "Tirs cadrés — Monagas SC",
+          "predictedOutcome": "under",
+          "predictedLabel": "Monagas SC — Moins de 5.5 tirs cadrés",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        }
+      ],
+      "engineVersion": 5
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 5969,
+      "cache_read_input_tokens": 4470,
+      "output_tokens": 3853,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 5969,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 3853,
+          "cache_read_input_tokens": 4470,
+          "cache_creation_input_tokens": 5969,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 5969
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.063304,
+    "analysedAt": "2026-11-12T21:06:34.816Z",
+    "timing": "coup-d-envoi",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 449,
+      "tokens": 1412,
+      "lecons": [
+        "cal-2026-10-27-academia-puerto-cabello-caracas|resultAndTotal"
+      ],
+      "dossiersDu": "2026-11-11T23:43:20.972Z",
+      "equipes": {
+        "home": {
+          "id": "fotmob-657277",
+          "dossier": true
+        },
+        "away": {
+          "id": "fotmob-49683",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "Primera División - Venezuela",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "FotMob",
+      "fotmobMatchId": "1000022597",
+      "fetchedAt": "2026-11-12T21:06:07.778Z",
+      "minutesBeforeKickoff": 54,
+      "home": {
+        "team": "Academia Puerto Cabello",
+        "teamId": "fotmob-657277",
+        "formation": "4-3-3",
+        "coach": "Eduardo Saragó",
+        "statsSince": "2026-01-01",
+        "teamMatches": 45,
+        "startXI": [
+          {
+            "id": "fotmob-832403",
+            "name": "Joel Graterol",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 29,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 27,
+              "starts": 27,
+              "minutes": 2430,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.51
+            }
+          },
+          {
+            "id": "fotmob-1186364",
+            "name": "Luis Casiani",
+            "number": 30,
+            "position": "Defender",
+            "age": 25,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "x": 0.357,
+            "y": 0.875,
+            "stats": {
+              "apps": 26,
+              "starts": 11,
+              "minutes": 1142,
+              "goals": 0,
+              "assists": 2,
+              "xg": null,
+              "rating": 6.05
+            }
+          },
+          {
+            "id": "fotmob-688448",
+            "name": "Jiovany Ramos",
+            "number": 26,
+            "position": "Defender",
+            "age": 29,
+            "countryCode": "PAN",
+            "countryName": "Panama",
+            "x": 0.357,
+            "y": 0.625,
+            "stats": {
+              "apps": 32,
+              "starts": 32,
+              "minutes": 2867,
+              "goals": 2,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.25
+            }
+          },
+          {
+            "id": "fotmob-1031999",
+            "name": "Gerónimo Bortagaray",
+            "number": 14,
+            "position": "Defender",
+            "age": 26,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "x": 0.357,
+            "y": 0.375,
+            "stats": {
+              "apps": 34,
+              "starts": 31,
+              "minutes": 2806,
+              "goals": 3,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.13
+            }
+          },
+          {
+            "id": "fotmob-104382",
+            "name": "Roberto Rosales",
+            "number": 16,
+            "position": "Defender",
+            "age": 37,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "x": 0.357,
+            "y": 0.125,
+            "stats": {
+              "apps": 33,
+              "starts": 26,
+              "minutes": 2223,
+              "goals": 0,
+              "assists": 6,
+              "xg": null,
+              "rating": 7.05
+            }
+          },
+          {
+            "id": "fotmob-429997",
+            "name": "Pablo Lima",
+            "number": 6,
+            "position": "Midfielder",
+            "age": 36,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "x": 0.613,
+            "y": 0.79,
+            "stats": {
+              "apps": 33,
+              "starts": 18,
+              "minutes": 1636,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.14
+            }
+          },
+          {
+            "id": "fotmob-439179",
+            "name": "Júnior Moreno",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 33,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "x": 0.613,
+            "y": 0.5,
+            "stats": {
+              "apps": 31,
+              "starts": 20,
+              "minutes": 1743,
+              "goals": 0,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.7
+            }
+          },
+          {
+            "id": null,
+            "name": "José Mendoza",
+            "number": 36,
+            "position": "Midfielder",
+            "age": 16,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "x": 0.613,
+            "y": 0.21,
+            "stats": null
+          },
+          {
+            "id": "fotmob-1037543",
+            "name": "Robinson Flores",
+            "number": 70,
+            "position": "Forward",
+            "age": 28,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "x": 0.87,
+            "y": 0.79,
+            "stats": {
+              "apps": 37,
+              "starts": 27,
+              "minutes": 2501,
+              "goals": 7,
+              "assists": 6,
+              "xg": null,
+              "rating": 7.27
+            }
+          },
+          {
+            "id": "fotmob-583846",
+            "name": "Andrés Ponce",
+            "number": 9,
+            "position": "Forward",
+            "age": 30,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 30,
+              "starts": 19,
+              "minutes": 1708,
+              "goals": 6,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.31
+            }
+          },
+          {
+            "id": "fotmob-1102750",
+            "name": "Jean Castillo",
+            "number": 19,
+            "position": "Forward",
+            "age": 24,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "x": 0.87,
+            "y": 0.21,
+            "stats": {
+              "apps": 45,
+              "starts": 35,
+              "minutes": 3194,
+              "goals": 9,
+              "assists": 3,
+              "xg": null,
+              "rating": 6.89
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-422759",
+            "name": "Eduardo Herrera",
+            "number": 12,
+            "position": "Goalkeeper",
+            "age": 33,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 90,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-2035109",
+            "name": "Fabricio Baptista",
+            "number": 4,
+            "position": "Defender",
+            "age": 20,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "stats": {
+              "apps": 6,
+              "starts": 4,
+              "minutes": 370,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-480103",
+            "name": "Jefre Vargas",
+            "number": 29,
+            "position": "Defender",
+            "age": 31,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "stats": {
+              "apps": 39,
+              "starts": 36,
+              "minutes": 3126,
+              "goals": 2,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.04
+            }
+          },
+          {
+            "id": "fotmob-1732761",
+            "name": "Diego Osorio",
+            "number": 28,
+            "position": "Midfielder",
+            "age": 21,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "stats": {
+              "apps": 13,
+              "starts": 3,
+              "minutes": 413,
+              "goals": 5,
+              "assists": 1,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-422774",
+            "name": "Harrison Contreras",
+            "number": 24,
+            "position": "Midfielder",
+            "age": 37,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "stats": {
+              "apps": 16,
+              "starts": 9,
+              "minutes": 789,
+              "goals": 2,
+              "assists": 1,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-2019531",
+            "name": "Jesús Camacho",
+            "number": 32,
+            "position": "Midfielder",
+            "age": 18,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 74,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1965126",
+            "name": "Leander Pimentel",
+            "number": 37,
+            "position": "Midfielder",
+            "age": 19,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "stats": {
+              "apps": 5,
+              "starts": 0,
+              "minutes": 42,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-385301",
+            "name": "Ángel Cassú",
+            "number": 38,
+            "position": "Midfielder",
+            "age": 19,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-685183",
+            "name": "Daniel Saggiomo",
+            "number": 15,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "stats": {
+              "apps": 30,
+              "starts": 23,
+              "minutes": 1713,
+              "goals": 2,
+              "assists": 4,
+              "xg": null,
+              "rating": 6.47
+            }
+          },
+          {
+            "id": "fotmob-840429",
+            "name": "Jhon Marchán",
+            "number": 20,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "stats": {
+              "apps": 30,
+              "starts": 14,
+              "minutes": 1243,
+              "goals": 4,
+              "assists": 3,
+              "xg": null,
+              "rating": 6.29
+            }
+          },
+          {
+            "id": null,
+            "name": "Rafael Marin",
+            "number": 34,
+            "position": "Forward",
+            "age": 17,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "stats": null
+          }
+        ],
+        "unavailable": [],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-480103",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Jefre Vargas",
+            "position": "Midfielder",
+            "starts": 36,
+            "goals": 2,
+            "assists": 0,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-593211",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Gustavo González",
+            "position": "Midfielder",
+            "starts": 32,
+            "goals": 3,
+            "assists": 2,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-685183",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Daniel Saggiomo",
+            "position": "Midfielder",
+            "starts": 23,
+            "goals": 2,
+            "assists": 4,
+            "status": "remplaçant"
+          }
+        ]
+      },
+      "away": {
+        "team": "Monagas SC",
+        "teamId": "fotmob-49683",
+        "formation": "4-2-3-1",
+        "coach": "Daniel Eduardo Velázquez Tábata",
+        "statsSince": "2026-01-01",
+        "teamMatches": 32,
+        "startXI": [
+          {
+            "id": "fotmob-2035582",
+            "name": "Thomas Eugui",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 25,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 17,
+              "starts": 16,
+              "minutes": 1461,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1843281",
+            "name": "Dioner Fuentes",
+            "number": 31,
+            "position": "Defender",
+            "age": 18,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "x": 0.292,
+            "y": 0.875,
+            "stats": {
+              "apps": 2,
+              "starts": 2,
+              "minutes": 167,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1723672",
+            "name": "Yulwuis Pérez",
+            "number": 34,
+            "position": "Defender",
+            "age": 21,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 5,
+              "starts": 2,
+              "minutes": 274,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1269446",
+            "name": "Nicolás Henry",
+            "number": 29,
+            "position": "Defender",
+            "age": 28,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.292,
+            "y": 0.375,
+            "stats": {
+              "apps": 19,
+              "starts": 19,
+              "minutes": 1637,
+              "goals": 1,
+              "assists": 1,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1259587",
+            "name": "Cristian Ramírez",
+            "number": 8,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "x": 0.292,
+            "y": 0.125,
+            "stats": {
+              "apps": 24,
+              "starts": 18,
+              "minutes": 1615,
+              "goals": 0,
+              "assists": 1,
+              "xg": null,
+              "rating": 5.86
+            }
+          },
+          {
+            "id": "fotmob-1032813",
+            "name": "Felipe Jaramillo",
+            "number": 14,
+            "position": "Midfielder",
+            "age": 30,
+            "countryCode": "COL",
+            "countryName": "Colombia",
+            "x": 0.485,
+            "y": 0.7,
+            "stats": {
+              "apps": 24,
+              "starts": 21,
+              "minutes": 1785,
+              "goals": 1,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.96
+            }
+          },
+          {
+            "id": "fotmob-1458780",
+            "name": "Santiago Natera",
+            "number": 35,
+            "position": "Midfielder",
+            "age": 21,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "x": 0.485,
+            "y": 0.3,
+            "stats": {
+              "apps": 22,
+              "starts": 9,
+              "minutes": 947,
+              "goals": 0,
+              "assists": 1,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-496166",
+            "name": "Rafael Arace",
+            "number": 70,
+            "position": "Midfielder",
+            "age": 31,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "x": 0.678,
+            "y": 0.837,
+            "stats": {
+              "apps": 30,
+              "starts": 17,
+              "minutes": 1401,
+              "goals": 0,
+              "assists": 2,
+              "xg": null,
+              "rating": 5.64
+            }
+          },
+          {
+            "id": "fotmob-1209413",
+            "name": "Andrés Romero",
+            "number": 6,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "x": 0.678,
+            "y": 0.5,
+            "stats": {
+              "apps": 17,
+              "starts": 13,
+              "minutes": 1039,
+              "goals": 3,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.17
+            }
+          },
+          {
+            "id": "fotmob-1263839",
+            "name": "Édgar Carrión",
+            "number": 16,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "x": 0.678,
+            "y": 0.163,
+            "stats": {
+              "apps": 19,
+              "starts": 6,
+              "minutes": 674,
+              "goals": 1,
+              "assists": 4,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1357425",
+            "name": "Fernando Basante",
+            "number": 7,
+            "position": "Forward",
+            "age": 23,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 27,
+              "starts": 21,
+              "minutes": 1786,
+              "goals": 4,
+              "assists": 2,
+              "xg": null,
+              "rating": 6.33
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-243303",
+            "name": "Eduardo Lima",
+            "number": 33,
+            "position": "Goalkeeper",
+            "age": 34,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "stats": {
+              "apps": 16,
+              "starts": 16,
+              "minutes": 1419,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.1
+            }
+          },
+          {
+            "id": "fotmob-921621",
+            "name": "Kevin De la Hoz",
+            "number": 30,
+            "position": "Defender",
+            "age": 28,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "stats": {
+              "apps": 15,
+              "starts": 14,
+              "minutes": 1237,
+              "goals": 1,
+              "assists": 2,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-950414",
+            "name": "Alexis Rodas",
+            "number": 21,
+            "position": "Defender",
+            "age": 29,
+            "countryCode": "PAR",
+            "countryName": "Paraguay",
+            "stats": {
+              "apps": 31,
+              "starts": 27,
+              "minutes": 2448,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.9
+            }
+          },
+          {
+            "id": "fotmob-2037273",
+            "name": "Alex Lecumberre",
+            "number": 59,
+            "position": "Defender",
+            "age": 18,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "stats": {
+              "apps": 1,
+              "starts": 0,
+              "minutes": 13,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1390277",
+            "name": "Facundo Queiroz",
+            "number": 3,
+            "position": "Defender",
+            "age": 28,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "stats": {
+              "apps": 8,
+              "starts": 7,
+              "minutes": 514,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-97331",
+            "name": "Edder Farías",
+            "number": 27,
+            "position": "Forward",
+            "age": 38,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "stats": {
+              "apps": 21,
+              "starts": 4,
+              "minutes": 587,
+              "goals": 2,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-2036067",
+            "name": "José Carrasco",
+            "number": 47,
+            "position": "Forward",
+            "age": 19,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "stats": {
+              "apps": 2,
+              "starts": 0,
+              "minutes": 24,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1458782",
+            "name": "Leandro Rodríguez",
+            "number": 77,
+            "position": "Forward",
+            "age": 21,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "stats": {
+              "apps": 8,
+              "starts": 0,
+              "minutes": 156,
+              "goals": 0,
+              "assists": 2,
+              "xg": null,
+              "rating": null
+            }
+          }
+        ],
+        "unavailable": [],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-1053728",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Jean Colorado",
+            "position": "Midfielder",
+            "starts": 22,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1819534",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Marcos Maitán",
+            "position": "Defender",
+            "starts": 21,
+            "goals": 1,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-243303",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Eduardo Lima",
+            "position": "Goalkeeper",
+            "starts": 16,
+            "goals": 0,
+            "assists": 0,
+            "status": "remplaçant"
+          }
+        ]
+      },
+      "matchInfo": {
+        "round": "Clausura - Quadrangular - Round 6",
+        "stadium": "Estadio La Bombonerita",
+        "city": "Puerto Cabello",
+        "capacity": 7500,
+        "surface": "grass",
+        "weather": "Showers",
+        "temperature": 29,
+        "windSpeed": 11,
+        "precipitation": 0.1
+      }
+    },
+    "analysis": {
+      "summary": "Academia Puerto Cabello reçoit un Monagas SC en crise. Les locaux ont une forme mitigée (2 victoires sur les 5 derniers, dont 2-1 à Caracas) mais dominent à domicile : 18,4 tirs et 7,4 corners par match. Monagas a perdu 4 de ses 5 derniers matchs, n'a pas marqué lors des 2 derniers et vient de changer d'entraîneur (Velázquez, 1 match, 1 défaite). Les compositions sont officielles ou presque : Puerto Cabello aligne Flores, Castillo et Ponce devant. Monagas se présente avec un 4-2-3-1 remanié, sans Colorado ni Maitán.",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Puerto Cabello irrégulier mais vainqueur à Caracas ; Monagas en nette baisse.",
+          "evidence": "Puerto Cabello : V D D D V sur les 5 derniers matchs ; Monagas : D D V D D, 0,6 pt/match sur les 5 derniers contre 2,2 avant."
+        },
+        {
+          "factor": "statistiques et moyennes",
+          "observation": "Les locaux produisent beaucoup à domicile ; Monagas est modeste en attaque à l'extérieur.",
+          "evidence": "Puerto Cabello à domicile : 18,4 tirs, 5,6 cadrés, 7,4 corners ; Monagas : 13,2 tirs, 4,4 cadrés, 4 corners en déplacement, 1,6 but marqué et 1,6 encaissé."
+        },
+        {
+          "factor": "compositions",
+          "observation": "Monagas change d'entraîneur et perd deux titulaires habituels ; Puerto Cabello garde son noyau offensif.",
+          "evidence": "Monagas : Colorado (22 tit.) et Maitán (21 tit.) hors feuille ; Puerto Cabello : Flores 7+6, Castillo 9+3 titulaires."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Aucun edge ; mise PASS faute de bookmakers.",
+          "evidence": "xG 2,42 – 1,06 ; 1N2 juste 1,59 contre 1,5 au marché."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va dans le sens du moteur : domination attendue des locaux, visiteurs fragilisés. Les nuances viennent des buts de Monagas (offensive moyenne mais défense poreuse) et de la fragilité historique des combinés.",
+      "lineupImpact": "Source FotMob, 54 min avant le coup d'envoi : probablement proche de l'officiel. Puerto Cabello (4-3-3, Saragó) aligne Flores (7+6), Castillo (9+3) et Ponce (6+1) ; Vargas et Saggiomo sont remplaçants, González hors feuille, sans grand effet. Monagas (4-2-3-1, Velázquez) se passe de Colorado et Maitán, avec Eugui dans les buts et Eduardo Lima sur le banc, et Basante seul en pointe (4+2). Cela renforce la lecture d'une domination locale et d'un Monagas peu menaçant. Le terrain est herbeux avec quelques averses, sans impact marqué.",
+      "marketViews": [
+        {
+          "market": "Résultat",
+          "pick": "Academia Puerto Cabello gagne",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "63 % : Puerto Cabello a 2,42 xG attendus contre 1,06, a déjà battu Monagas 2-1 le 24/10, et Monagas a perdu 4 de ses 5 derniers.",
+          "reasoning": "Monagas est en crise avec un entraîneur arrivé depuis un match, tandis que les locaux dominent à domicile. Leur propre forme en défaites à domicile tempère toutefois la confiance.",
+          "probability": 63
+        },
+        {
+          "market": "Total buts",
+          "pick": "Plus de 2.5 buts",
+          "verdict": "nuance",
+          "confidence": "moyenne",
+          "explanation": "68 % : xG cumulés d'environ 3,5, mais les moyennes sur 10 matchs restent modestes (1,3 et 1,2 but marqués).",
+          "reasoning": "Le championnat tourne à 46 % de plus de 2,5 buts, et les 10 derniers matchs des deux équipes sont peu prolifiques. Le profil du match reste favorable mais le pourcentage paraît généreux.",
+          "probability": 68
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "pick": "Oui",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "60 % : Monagas encaisse 1,6 but à l'extérieur et Puerto Cabello 1,6 à domicile, mais Monagas n'a pas marqué depuis 2 matchs.",
+          "reasoning": "Les défenses sont poreuses, mais l'attaque de Monagas est en panne avec Basante seul devant. Mon historique sur ce marché reste faible.",
+          "probability": 60
+        },
+        {
+          "market": "Résultat + Total buts",
+          "pick": "Academia Puerto Cabello & Plus de 1.5 buts",
+          "verdict": "confirme",
+          "confidence": "faible",
+          "explanation": "56 % : il suffit d'une victoire locale avec 2 buts au total, avec 2,42 buts attendus pour Puerto Cabello.",
+          "reasoning": "Le seuil de 1,5 but est bas, ce qui limite le risque, mais ce combiné hérite de la fragilité du 1N2 : la leçon du 27/10 contre Caracas incite à la prudence.",
+          "probability": 56
+        },
+        {
+          "market": "Buts — Academia Puerto Cabello",
+          "pick": "Academia Puerto Cabello — Moins de 3.5 buts",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "78 % : Puerto Cabello ne marque que 1,3 but par match (1 à domicile) pour 2,42 attendus.",
+          "reasoning": "Atteindre 4 buts demanderait un match très ouvert, ce que rien dans ses moyennes ne laisse présager.",
+          "probability": 78
+        },
+        {
+          "market": "Buts — Monagas SC",
+          "pick": "Monagas SC — Moins de 1.5 buts",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "71 % : Monagas marque 1,2 but par match, 1,06 attendu, et n'a pas marqué depuis 2 matchs.",
+          "reasoning": "L'attaque est en panne et l'entraîneur est nouveau. Les 1,6 but à l'extérieur en moyenne laissent toutefois un risque de 2 buts.",
+          "probability": 71
+        },
+        {
+          "market": "Total corners",
+          "pick": "Moins de 12.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "77 % : 10,03 corners attendus au total et 9,1 de moyenne dans le championnat.",
+          "reasoning": "Le seuil est nettement au-dessus de l'attendu et des moyennes (6,4 + 4 par équipe), ce qui sécurise ce pari.",
+          "probability": 77
+        },
+        {
+          "market": "Corners — Academia Puerto Cabello",
+          "pick": "Academia Puerto Cabello — Plus de 3.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : 6,66 corners attendus, 7,4 par match à domicile et Monagas en concède 5,7.",
+          "reasoning": "Seuil très bas pour une équipe qui domine la possession (63 % à domicile).",
+          "probability": 83
+        },
+        {
+          "market": "Corners — Monagas SC",
+          "pick": "Monagas SC — Plus de 1.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "81 % : 3,38 corners attendus et 4 de moyenne à l'extérieur.",
+          "reasoning": "Même en étant dominé, Monagas obtient régulièrement plus de 2 corners ; le seuil est bas.",
+          "probability": 81
+        },
+        {
+          "market": "Total tirs",
+          "pick": "Plus de 22.5 tirs",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : 28,61 tirs attendus (17,27 + 11,34).",
+          "reasoning": "Puerto Cabello tire 18,4 fois à domicile et Monagas 13,2 à l'extérieur : le total dépasse le seuil avec une marge confortable.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs — Academia Puerto Cabello",
+          "pick": "Academia Puerto Cabello — Plus de 11.5 tirs",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : 17,27 tirs attendus, 18,4 à domicile et 15,8 sur 10 matchs.",
+          "reasoning": "Le seuil est bien en dessous de leur volume habituel, d'autant plus face à un Monagas qui en concède 15,6.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs — Monagas SC",
+          "pick": "Monagas SC — Moins de 15.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : 11,34 tirs attendus et 13,2 en déplacement.",
+          "reasoning": "Monagas dépasse rarement 15 tirs et fait face à une équipe qui garde le ballon ; le contexte de crise va dans le même sens.",
+          "probability": 83
+        },
+        {
+          "market": "Total tirs cadrés",
+          "pick": "Moins de 11.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "81 % : 8,72 cadrés attendus (5,17 + 3,56).",
+          "reasoning": "Les moyennes (5,6 et 4,4) donnent un total proche de 10, sous le seuil, mais une variance existe.",
+          "probability": 81
+        },
+        {
+          "market": "Tirs cadrés — Academia Puerto Cabello",
+          "pick": "Academia Puerto Cabello — Moins de 7.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : 5,17 cadrés attendus et 5,6 à domicile.",
+          "reasoning": "Il faudrait un volume exceptionnel pour dépasser 7 cadrés. Le seuil est au-dessus de leurs moyennes.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs cadrés — Monagas SC",
+          "pick": "Monagas SC — Moins de 5.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : 3,56 cadrés attendus, 4,4 de moyenne à l'extérieur.",
+          "reasoning": "Attaque en panne et peu de volume de tirs ; le seuil laisse de la marge.",
+          "probability": 83
+        }
+      ],
+      "caveats": "Classement indisponible dans la fiche (dossiers : Puerto Cabello 3e, Monagas 4e du Quadrangular Group B). L'effet du nouvel entraîneur de Monagas repose sur un seul match. Aucun edge chiffré : mise PASS faute de bookmakers. xG par match non relevé. Plusieurs joueurs de Monagas sans note ni statistique détaillée."
+    },
+    "updatedAt": "2026-11-13T00:27:37.273Z",
+    "createdAt": "2026-11-11T10:56:32.493Z",
+    "kickoffRuns": 1,
+    "earlierAnalysis": {
+      "analysis": {
+        "summary": "Academia Puerto Cabello (3e de son groupe du Quadrangular, 6 pts) alterne : 2 victoires sur 5 derniers, dont 2-1 à Caracas, et domine la possession (58 %) avec 15,8 tirs par match. Monagas SC (4e, 3 pts) est en baisse, 4 défaites sur ses 5 derniers, et vient de changer d'entraîneur (Velázquez Tábata, 1 match, 1 défaite). Il a déjà perdu 1-2 face à cette équipe le 24/10. Les compositions sont officielles, 4-3-3 contre 4-2-3-1. Côté hôte, González est absent de la feuille de match, Vargas et Saggiomo sont sur le banc. Côté visiteur, Colorado et Maitán sont absents de la feuille.",
+        "keyFactors": [
+          {
+            "factor": "forme récente",
+            "observation": "Puerto Cabello irrégulier mais gagnant au dernier match ; Monagas en nette baisse.",
+            "evidence": "Puerto Cabello : V D D D... sur 5 derniers = 2 V, 3 D ; Monagas : 1 V, 4 D, 0,6 pt/match sur 5 derniers contre 2,2 avant."
+          },
+          {
+            "factor": "statistiques et moyennes",
+            "observation": "Puerto Cabello domine en volume, notamment à domicile ; Monagas concède peu de tirs à l'extérieur mais en produit peu.",
+            "evidence": "Domicile : 18,4 tirs, 7,4 corners, 63,2 % de possession ; Monagas 10 derniers : 12,9 tirs produits, 15,6 concédés, 1,2 but marqué."
+          },
+          {
+            "factor": "compositions",
+            "observation": "Monagas aligne une défense peu rodée et un nouvel entraîneur ; Puerto Cabello a son trio offensif.",
+            "evidence": "Monagas : Dioner Fuentes 2 matchs, Yulwuis Pérez 5 matchs ; Puerto Cabello : Flores 7+6, Castillo 9+3, Ponce 6+1."
+          },
+          {
+            "factor": "edge du modèle",
+            "observation": "Pas de cote de marché, donc pas d'edge mesurable ; mise PASS.",
+            "evidence": "Buts attendus 2,42 contre 1,06 ; cote juste 1,77 pour Puerto Cabello."
+          }
+        ],
+        "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : domination attendue de Puerto Cabello, Monagas fragilisé. Il nuance les marchés de buts et de résultat, car Puerto Cabello n'a marqué que 1,3 but par match et enchaîne les défaites à domicile.",
+        "caveats": "Classement indisponible dans la fiche (les positions viennent des dossiers). Pas de cotes de marché. Historique du nouvel entraîneur de Monagas limité à un match. xG et grosses occasions non relevés. Le bilan de mes avis sur ces deux équipes porte sur peu de matchs.",
+        "marketViews": [
+          {
+            "market": "Résultat",
+            "pick": "Academia Puerto Cabello gagne",
+            "verdict": "nuance",
+            "confidence": "moyenne",
+            "explanation": "56 % : 2,42 buts attendus contre 1,06 et victoire 2-1 à Monagas le 24/10, mais seulement 1 point sur 5 matchs à domicile récents.",
+            "reasoning": "Monagas est en crise (4 défaites sur 5) et change d'entraîneur, ce qui soutient l'hôte. Les 3 défaites récentes de Puerto Cabello et son bilan à domicile (DDNVD) invitent à la prudence.",
+            "probability": 56
+          },
+          {
+            "market": "Total buts",
+            "pick": "Plus de 2.5 buts",
+            "verdict": "nuance",
+            "confidence": "moyenne",
+            "explanation": "68 % : 3,48 buts attendus au total, mais Puerto Cabello marque 1,3 et Monagas 1,2 par match sur 10 matchs.",
+            "reasoning": "Les moyennes de buts sont modestes et le championnat tourne à 46 % de plus de 2,5 buts. La domination offensive attendue de l'hôte soutient toutefois le pronostic.",
+            "probability": 68
+          },
+          {
+            "market": "Les 2 équipes marquent",
+            "pick": "Oui",
+            "verdict": "nuance",
+            "confidence": "faible",
+            "explanation": "60 % : Monagas encaisse 1,5 but par match mais n'a pas marqué lors de ses 2 derniers matchs, Puerto Cabello encaisse 1,4.",
+            "reasoning": "Les défenses concèdent, mais l'attaque de Monagas est muette et sa défense remaniée. Mon bilan sur ce marché est faible.",
+            "probability": 60
+          },
+          {
+            "market": "Résultat + Total buts",
+            "pick": "Academia Puerto Cabello & Plus de 1.5 buts",
+            "verdict": "nuance",
+            "confidence": "faible",
+            "explanation": "51 % : combiné de la victoire de l'hôte (56 %) avec au moins 2 buts, très probables vu les 3,48 buts attendus.",
+            "reasoning": "Il hérite de la fragilité du 1N2. Ma leçon confirmée du 27/10 sur ce type de combiné pèse : le moteur s'y trompe souvent.",
+            "probability": 51
+          },
+          {
+            "market": "Buts — Academia Puerto Cabello",
+            "pick": "Academia Puerto Cabello — Moins de 3.5 buts",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "78 % : Puerto Cabello marque 1,3 but par match sur 10 matchs et 1 à domicile, pour 2,42 attendus.",
+            "reasoning": "Atteindre 4 buts serait très inhabituel pour cette attaque. Le contexte confirme.",
+            "probability": 78
+          },
+          {
+            "market": "Buts — Monagas SC",
+            "pick": "Monagas SC — Moins de 1.5 buts",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "71 % : 1,06 but attendu, Monagas muet depuis 2 matchs et face à une défense de 1,4 but concédé.",
+            "reasoning": "Monagas est en baisse et son nouvel entraîneur n'a pas encore marqué. Il a pourtant inscrit 1,6 but par match à l'extérieur, d'où la prudence.",
+            "probability": 71
+          },
+          {
+            "market": "Total corners",
+            "pick": "Moins de 12.5 corners",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "77 % : 10,03 corners attendus et 9,1 par match en moyenne dans le championnat.",
+            "reasoning": "Le total attendu est bien sous la barre. Le marché des corners totaux a été fiable dans mon bilan.",
+            "probability": 77
+          },
+          {
+            "market": "Corners — Academia Puerto Cabello",
+            "pick": "Academia Puerto Cabello — Plus de 3.5 corners",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "83 % : 6,66 corners attendus, 6,4 par match sur 10 matchs et 7,4 à domicile.",
+            "reasoning": "La pression de l'hôte (63 % de possession à domicile) et la faiblesse de Monagas (5,7 corners concédés) soutiennent le pronostic.",
+            "probability": 83
+          },
+          {
+            "market": "Corners — Monagas SC",
+            "pick": "Monagas SC — Plus de 1.5 corners",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "81 % : 3,38 corners attendus et 4 par match produits par Monagas, y compris à l'extérieur.",
+            "reasoning": "Même en infériorité, Monagas passe rarement sous 2 corners avec cette moyenne.",
+            "probability": 81
+          },
+          {
+            "market": "Total tirs",
+            "pick": "Plus de 22.5 tirs",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "83 % : 28,61 tirs attendus au total, avec 15,8 et 12,9 tirs produits par les deux équipes.",
+            "reasoning": "Le volume attendu dépasse nettement la barre. Les 18,4 tirs de l'hôte à domicile y contribuent.",
+            "probability": 83
+          },
+          {
+            "market": "Tirs — Academia Puerto Cabello",
+            "pick": "Academia Puerto Cabello — Plus de 11.5 tirs",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "83 % : 17,27 tirs attendus, 15,8 par match et 18,4 à domicile, contre 15,6 concédés par Monagas.",
+            "reasoning": "L'hôte tire beaucoup, surtout à domicile, face à une défense qui concède 15,6 tirs. Le trio offensif est présent.",
+            "probability": 83
+          },
+          {
+            "market": "Tirs — Monagas SC",
+            "pick": "Monagas SC — Moins de 15.5 tirs",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "83 % : 11,34 tirs attendus, Monagas en produit 12,9 par match et 13,2 à l'extérieur.",
+            "reasoning": "Son volume de tirs est faible et il est en infériorité de possession (47 %). Dépasser 15 serait une exception.",
+            "probability": 83
+          },
+          {
+            "market": "Total tirs cadrés",
+            "pick": "Moins de 11.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "81 % : 8,72 tirs cadrés attendus, avec 4,8 et 4,3 produits par les deux équipes.",
+            "reasoning": "Le total attendu laisse une marge confortable sous la barre. La variance est plus grande sur ce marché que sur les tirs.",
+            "probability": 81
+          },
+          {
+            "market": "Tirs cadrés — Academia Puerto Cabello",
+            "pick": "Academia Puerto Cabello — Moins de 7.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "83 % : 5,17 tirs cadrés attendus, 4,8 par match sur 10 matchs et 5,6 à domicile.",
+            "reasoning": "Même à domicile, l'hôte reste loin de 8 tirs cadrés. Seul un match très ouvert menacerait le pronostic.",
+            "probability": 83
+          },
+          {
+            "market": "Tirs cadrés — Monagas SC",
+            "pick": "Monagas SC — Moins de 5.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "83 % : 3,56 tirs cadrés attendus, Monagas en produit 4,3 par match et 4,4 à l'extérieur.",
+            "reasoning": "Son attaque est peu productive et en panne de buts. Le contexte soutient le pronostic.",
+            "probability": 83
+          }
+        ]
+      },
+      "engineSnapshot": {
+        "label": "Academia Puerto Cabello vs Monagas SC",
+        "expectedGoals": {
+          "home": 2.419,
+          "away": 1.064,
+          "source": "fotmob"
+        },
+        "trueOdds": {
+          "home": 1.77,
+          "draw": 4.48,
+          "away": 4.73
+        },
+        "market": {
+          "odds1": null,
+          "oddsDraw": null,
+          "odds2": null
+        },
+        "edgePercent": null,
+        "staking": {
+          "action": "PASS",
+          "stake": null,
+          "reason": "no_market_odds",
+          "candidates": []
+        },
+        "statExpectations": {
+          "corners": {
+            "home": 6.66,
+            "away": 3.38,
+            "total": 10.03
+          },
+          "shots": {
+            "home": 17.27,
+            "away": 11.34,
+            "total": 28.61
+          },
+          "shotsOnTarget": {
+            "home": 5.17,
+            "away": 3.56,
+            "total": 8.72
+          }
+        },
+        "marketPredictions": [
+          {
+            "marketId": "result",
+            "params": {
+              "outcome": "home"
+            },
+            "market": "Résultat",
+            "predictedOutcome": "home",
+            "predictedLabel": "Academia Puerto Cabello gagne",
+            "predictedOdds": 1.77,
+            "probability": 56,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalGoals",
+            "params": {
+              "line": 2.5,
+              "side": "over"
+            },
+            "market": "Total buts",
+            "predictedOutcome": "over",
+            "predictedLabel": "Plus de 2.5 buts",
+            "predictedOdds": 1.48,
+            "probability": 68,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "bothTeamsScore",
+            "params": {
+              "outcome": "yes"
+            },
+            "market": "Les 2 équipes marquent",
+            "predictedOutcome": "yes",
+            "predictedLabel": "Oui",
+            "predictedOdds": 1.66,
+            "probability": 60,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "resultAndTotal",
+            "params": {
+              "line": 1.5,
+              "key": "homeOver"
+            },
+            "market": "Résultat + Total buts",
+            "predictedOutcome": "homeOver",
+            "predictedLabel": "Academia Puerto Cabello & Plus de 1.5 buts",
+            "predictedOdds": 1.97,
+            "probability": 51,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamGoals",
+            "params": {
+              "team": "home",
+              "line": 3.5,
+              "side": "under"
+            },
+            "market": "Buts — Academia Puerto Cabello",
+            "predictedOutcome": "under",
+            "predictedLabel": "Academia Puerto Cabello — Moins de 3.5 buts",
+            "predictedOdds": 1.29,
+            "probability": 78,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamGoals",
+            "params": {
+              "team": "away",
+              "line": 1.5,
+              "side": "under"
+            },
+            "market": "Buts — Monagas SC",
+            "predictedOutcome": "under",
+            "predictedLabel": "Monagas SC — Moins de 1.5 buts",
+            "predictedOdds": 1.4,
+            "probability": 71,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalCorners",
+            "params": {
+              "line": 12.5,
+              "side": "under"
+            },
+            "market": "Total corners",
+            "predictedOutcome": "under",
+            "predictedLabel": "Moins de 12.5 corners",
+            "predictedOdds": 1.3,
+            "probability": 77,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamCorners",
+            "params": {
+              "team": "home",
+              "line": 3.5,
+              "side": "over"
+            },
+            "market": "Corners — Academia Puerto Cabello",
+            "predictedOutcome": "over",
+            "predictedLabel": "Academia Puerto Cabello — Plus de 3.5 corners",
+            "predictedOdds": 1.21,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamCorners",
+            "params": {
+              "team": "away",
+              "line": 1.5,
+              "side": "over"
+            },
+            "market": "Corners — Monagas SC",
+            "predictedOutcome": "over",
+            "predictedLabel": "Monagas SC — Plus de 1.5 corners",
+            "predictedOdds": 1.24,
+            "probability": 81,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalShots",
+            "params": {
+              "line": 22.5,
+              "side": "over"
+            },
+            "market": "Total tirs",
+            "predictedOutcome": "over",
+            "predictedLabel": "Plus de 22.5 tirs",
+            "predictedOdds": 1.2,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShots",
+            "params": {
+              "team": "home",
+              "line": 11.5,
+              "side": "over"
+            },
+            "market": "Tirs — Academia Puerto Cabello",
+            "predictedOutcome": "over",
+            "predictedLabel": "Academia Puerto Cabello — Plus de 11.5 tirs",
+            "predictedOdds": 1.2,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShots",
+            "params": {
+              "team": "away",
+              "line": 15.5,
+              "side": "under"
+            },
+            "market": "Tirs — Monagas SC",
+            "predictedOutcome": "under",
+            "predictedLabel": "Monagas SC — Moins de 15.5 tirs",
+            "predictedOdds": 1.2,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalShotsOnTarget",
+            "params": {
+              "line": 11.5,
+              "side": "under"
+            },
+            "market": "Total tirs cadrés",
+            "predictedOutcome": "under",
+            "predictedLabel": "Moins de 11.5 tirs cadrés",
+            "predictedOdds": 1.23,
+            "probability": 81,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShotsOnTarget",
+            "params": {
+              "team": "home",
+              "line": 7.5,
+              "side": "under"
+            },
+            "market": "Tirs cadrés — Academia Puerto Cabello",
+            "predictedOutcome": "under",
+            "predictedLabel": "Academia Puerto Cabello — Moins de 7.5 tirs cadrés",
+            "predictedOdds": 1.21,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShotsOnTarget",
+            "params": {
+              "team": "away",
+              "line": 5.5,
+              "side": "under"
+            },
+            "market": "Tirs cadrés — Monagas SC",
+            "predictedOutcome": "under",
+            "predictedLabel": "Monagas SC — Moins de 5.5 tirs cadrés",
+            "predictedOdds": 1.2,
+            "probability": 83,
+            "minOdds": 1.2
+          }
+        ],
+        "engineVersion": 5
+      },
+      "analysedAt": "2026-11-11T10:56:32.491Z"
+    },
+    "postMatchReview": {
+      "summary": "Monagas a gagné 1-0 sur un but tardif (90+3', Cristian Ramírez), contredisant la lecture d'une victoire locale. Les marchés de volume (corners, tirs, tirs cadrés) ont tenu, mais le 1N2, le plus de 2,5 buts et le BTTS ont échoué : Puerto Cabello a dominé la possession (62 %) sans danger réel (2 tirs cadrés, 0 grosse occasion).",
+      "whatWasRight": "Les seuils de volume étaient bien calibrés : 14 tirs de chaque côté, 4 corners locaux et 6 pour Monagas (10 au total), possession locale 62 %. Les plafonds de buts par équipe (Puerto Cabello moins de 3,5, Monagas moins de 1,5) ont tenu, ainsi que les tirs cadrés bas (2 et 5).",
+      "whatWasMissed": "J'ai confirmé la victoire locale (confiance moyenne) sur la base du xG 2,42 et de la crise de Monagas. Or Puerto Cabello n'a cadré que 2 tirs sur 14, sans grosse occasion, alors que Monagas a cadré 5 fois. J'ai sous-estimé l'inefficacité offensive locale (environ 1 but par match à domicile) et un possible sursaut du nouvel entraîneur. Le xG était trop généreux pour les buts.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1N2 (63 % local), le total de buts (68 % pour plus de 2,5), le BTTS (60 %) et le combiné. Il le confirme sur tous les marchés de corners, tirs, tirs cadrés et sur les plafonds de buts par équipe.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Academia Puerto Cabello gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Monagas a gagné 0-1 sur un but à 90+3' alors que les locaux n'ont cadré que 2 tirs sur 14, sans grosse occasion, malgré 62 % de possession.",
+          "lesson": "Ne pas confondre domination territoriale et danger : tirs cadrés et grosses occasions comptent plus que le xG agrégé. Un changement d'entraîneur peut produire un sursaut ; à confiance moyenne, rester prudent sur un favori à faible efficacité à domicile."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Un seul but dans le match, à 90+3'. Mi-temps 0-0, le xG cumulé de 3,5 était très au-dessus de la réalité.",
+          "lesson": "Ma nuance était juste : quand les moyennes de buts sont modestes et le championnat à 46 % de plus de 2,5, le pourcentage du moteur est trop généreux."
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Puerto Cabello n'a pas marqué (2 tirs cadrés seulement), Monagas a marqué une fois tardivement.",
+          "lesson": "Mon scepticisme faible était fondé : la faiblesse offensive locale à domicile pèse sur le BTTS malgré des défenses poreuses."
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Academia Puerto Cabello & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "faible",
+          "aiWasRight": false,
+          "explanation": "Échec dû à la défaite locale 0-1, le combiné dépendait entièrement du 1N2.",
+          "lesson": "Un combiné hérite de la fragilité du 1N2 ; ne pas le confirmer quand le résultat de base est incertain."
+        },
+        {
+          "market": "Buts — Academia Puerto Cabello",
+          "marketId": "teamGoals",
+          "pick": "Academia Puerto Cabello — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Zéro but local, donc moins de 3,5 largement tenu.",
+          "lesson": "Confirmer les plafonds de buts quand la moyenne locale est d'environ 1 but : bon réflexe à garder."
+        },
+        {
+          "market": "Buts — Monagas SC",
+          "marketId": "teamGoals",
+          "pick": "Monagas SC — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Monagas n'a marqué qu'une fois, à 90+3', sous le seuil de 1,5.",
+          "lesson": "Le plafond a tenu, mais le but montre que l'attaque n'était pas aussi éteinte (5 tirs cadrés). Garder ce marché avec prudence."
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 12.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "4 + 6 = 10 corners, sous 12,5 comme attendu (10,03).",
+          "lesson": "Seuil très au-dessus de l'attendu : marge fiable à conserver."
+        },
+        {
+          "market": "Corners — Academia Puerto Cabello",
+          "marketId": "teamCorners",
+          "pick": "Academia Puerto Cabello — Plus de 3.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "4 corners locaux, juste au-dessus de 3,5 : le seuil a tenu de peu malgré 62 % de possession.",
+          "lesson": "Le résultat reste juste mais proche du seuil : les 6,66 attendus étaient surévalués ; Monagas a fait plus de corners (6)."
+        },
+        {
+          "market": "Corners — Monagas SC",
+          "marketId": "teamCorners",
+          "pick": "Monagas SC — Plus de 1.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "6 corners pour Monagas, nettement au-dessus de 1,5.",
+          "lesson": "Seuil bas fiable, même pour une équipe dominée."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 22.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "14 + 14 = 28 tirs, au-dessus de 22,5 et proche des 28,61 attendus.",
+          "lesson": "Le modèle des volumes de tirs est fiable ; à garder."
+        },
+        {
+          "market": "Tirs — Academia Puerto Cabello",
+          "marketId": "teamShots",
+          "pick": "Academia Puerto Cabello — Plus de 11.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "14 tirs locaux, au-dessus de 11,5.",
+          "lesson": "Seuil sous le volume habituel : confirmé, mais le volume n'a pas produit de danger."
+        },
+        {
+          "market": "Tirs — Monagas SC",
+          "marketId": "teamShots",
+          "pick": "Monagas SC — Moins de 15.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "14 tirs de Monagas, sous 15,5 de peu, alors que 11,34 étaient attendus.",
+          "lesson": "Monagas a dépassé l'attendu et frôlé le seuil : marge plus mince que ne le suggérait l'avis, à surveiller quand l'équipe doit courir après le score ou en cas de sursaut."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 11.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "2 + 5 = 7 tirs cadrés, nettement sous 11,5.",
+          "lesson": "Plafonds de tirs cadrés bien calibrés ; le total est resté sous les moyennes."
+        },
+        {
+          "market": "Tirs cadrés — Academia Puerto Cabello",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Academia Puerto Cabello — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Seulement 2 tirs cadrés locaux, sous 7,5.",
+          "lesson": "Confirmation, mais la faible précision locale aurait dû pondérer davantage le résultat 1N2."
+        },
+        {
+          "market": "Tirs cadrés — Monagas SC",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Monagas SC — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "5 tirs cadrés de Monagas, sous 5,5 d'une marge d'un seul tir.",
+          "lesson": "Marge serrée : le seuil a tenu de justesse, ne pas surestimer la sécurité du plafond."
+        }
+      ],
+      "caveats": "Un seul match : le but à 90+3' a pesé lourd sur 1N2, total et BTTS. Aucun xG réel ni détail des occasions relevé, donc la part de malchance est difficile à mesurer.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 13,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 8693,
+        "cache_read_input_tokens": 7395,
+        "output_tokens": 3391,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 8693,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2488,
+            "cache_read_input_tokens": 7395,
+            "cache_creation_input_tokens": 1298,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1298
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.07016900000000001,
+      "createdAt": "2026-11-13T00:27:37.272Z"
+    }
+  }
+]
