@@ -22,19 +22,30 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { preparerCopie, executer, SERVEUR, FIXTURES } from './aides/isolement.mjs';
 import { empreinteDuCode, empreinteDeLaCandidate, CANDIDATE_EN_ESSAI, fichiersDuMoteur, MODULES_DU_MOTEUR } from '../src/core/engine/engineVersions.js';
+import { EMPREINTE_EN_SERVICE, EMPREINTE_AVANT_LOTS_2 } from './aides/enService.mjs'; // Partie 0 des lots 2 (P0-1, 14/11)
 
 const SCRIPT = path.join(SERVEUR, 'test', 'aides', 'script-relais-27.mjs');
 const SRC = path.join(SERVEUR, 'src');
 const VERSIONS_DE_PIERRE = path.join(FIXTURES, 'engine-versions-27-en-essai.json');
 const MESURE_DE_PIERRE = path.join(FIXTURES, 'registre-mesure-27-en-essai.json');
 const sha1 = (texte) => crypto.createHash('sha1').update(texte).digest('hex');
-/** Les empreintes du jour (27/10/2026) : une nouvelle version du moteur les changera — c'est voulu, et cela se dit à Pierre. */
+/** Les empreintes de la COPIE FIGÉE des registres de Pierre (27/10/2026 ; fixtures : ne changent jamais) ; le code du jour se compare à EMPREINTE_EN_SERVICE (l. T-EV3). */ // Partie 0 des lots 2 (A)
 const EMPREINTE_DU_MOTEUR = '16f2459db183a99576365047da98b7777687ef05';
 const EMPREINTE_DE_LA_27 = 'f01dd8496f56a415';
+/**
+ * Partie 0 des lots 2 (vérification du 14/11, P0-1) : les deux « T-EV1 réduit » et « partie B — pendant l’essai de la 27 » rejouent
+ * l’essai 27 sur la COPIE FIGÉE des registres, avec le code du jour. Dès qu’un lot DÉCLARE une empreinte du moteur ou de la candidate
+ * autre que le départ (EMPREINTE_EN_SERVICE ≠ EMPREINTE_AVANT_LOTS_2 : les constantes déclarées, JAMAIS l’empreinte relue par le
+ * code), ils sont sautés avec leur raison. Un moteur changé SANS déclaration les fait encore rougir (avec D4 de declarationsLots2).
+ * T-EV3 et B17 ne sautent jamais. La réécriture de la 26 (T-EV1 complet, T-EV2) retire ce saut.
+ */
+const RAISON_DU_SAUT = (EMPREINTE_EN_SERVICE.moteur !== EMPREINTE_AVANT_LOTS_2.moteur || EMPREINTE_EN_SERVICE.candidate !== EMPREINTE_AVANT_LOTS_2.candidate)
+  ? 'essai 27 terminé, rejouable seulement avec le code de l’essai'
+  : null;
 
 test('T-EV3 : l’empreinte du code du moteur reste 16f2459… et celle de la candidate de l’étape 27 f01dd8496f56a415 ; aucun fichier de la boucle de correction (data/correction/) n’entre dans l’empreinte ; la copie figée du registre de Pierre tourne avec CE code', () => {
-  assert.equal(empreinteDuCode({ racine: SRC, rafraichir: true }).empreinte, EMPREINTE_DU_MOTEUR);
-  assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), EMPREINTE_DE_LA_27);
+  assert.equal(empreinteDuCode({ racine: SRC, rafraichir: true }).empreinte, EMPREINTE_EN_SERVICE.moteur); // Partie 0 des lots 2 (A)
+  assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), EMPREINTE_EN_SERVICE.candidate); // Partie 0 des lots 2 (A)
   const fichiers = fichiersDuMoteur();
   assert.ok(!fichiers.some((f) => f.startsWith('data/correction/')), 'la boucle hors de l’empreinte');
   assert.ok(!MODULES_DU_MOTEUR.dossiers.some((d) => 'data/correction'.startsWith(d)));
@@ -63,7 +74,7 @@ function reel() {
   }
 }
 
-test('T-EV1 réduit : avec les registres de Pierre, le tri d’octobre se fait (lignée {4, 5}, mois PARTIEL depuis le 22/10, familles de buts « en essai ») ; les deux registres restent identiques À L’OCTET, après le tri comme après une nuit', () => {
+test('T-EV1 réduit : avec les registres de Pierre, le tri d’octobre se fait (lignée {4, 5}, mois PARTIEL depuis le 22/10, familles de buts « en essai ») ; les deux registres restent identiques À L’OCTET, après le tri comme après une nuit', { skip: RAISON_DU_SAUT || false }, () => { // Partie 0 des lots 2 (P0-1, 14/11)
   const s = reel();
   const fixtures = { versions: sha1(fs.readFileSync(VERSIONS_DE_PIERRE)), mesure: sha1(fs.readFileSync(MESURE_DE_PIERRE)) };
   assert.deepEqual(s.avant, fixtures, 'la copie porte les registres de Pierre');
@@ -81,7 +92,7 @@ test('T-EV1 réduit : avec les registres de Pierre, le tri d’octobre se fait (
   assert.ok(s.tri.ecartees.some(([raison, n]) => raison === 'autreVersion' && n > 0), 'les pronostics de la version 3 : une autre lignée');
 });
 
-test('T-EV1 réduit : la candidate de l’étape 27 garde sa place et son essai n° 2 — la carte, la nuit (aucun recommencement), et le point d’entrée des candidates proposées reste fermé (« déclarée dans le code »)', () => {
+test('T-EV1 réduit : la candidate de l’étape 27 garde sa place et son essai n° 2 — la carte, la nuit (aucun recommencement), et le point d’entrée des candidates proposées reste fermé (« déclarée dans le code »)', { skip: RAISON_DU_SAUT || false }, () => { // Partie 0 des lots 2 (P0-1, 14/11)
   const s = reel();
   assert.deepEqual(s.carteAvant, { candidate: 'modele-buts-v1', statut: 'en-essai', essai: 2, enService: 5, adoption: 'pas-encore-jugee' });
   assert.deepEqual(s.carteApres, s.carteAvant);
@@ -99,7 +110,7 @@ test('la partie A ne retouche AUCUNE ligne du chemin de nuit de l’essai : engi
   }
 });
 
-test('partie B — pendant l’essai de la 27, l’étape de la passe ne retrie rien (octobre est figé), ne propose RIEN, laisse la place à la 27 ; une correction ACCEPTÉE attend en file, dit en mots (proposerUneCandidate n’est jamais appelé) ; les deux registres restent identiques à l’octet, la 27 garde son essai n° 2', () => {
+test('partie B — pendant l’essai de la 27, l’étape de la passe ne retrie rien (octobre est figé), ne propose RIEN, laisse la place à la 27 ; une correction ACCEPTÉE attend en file, dit en mots (proposerUneCandidate n’est jamais appelé) ; les deux registres restent identiques à l’octet, la 27 garde son essai n° 2', { skip: RAISON_DU_SAUT || false }, () => { // Partie 0 des lots 2 (P0-1, 14/11)
   const s = reel();
   const fixtures = { versions: sha1(fs.readFileSync(VERSIONS_DE_PIERRE)), mesure: sha1(fs.readFileSync(MESURE_DE_PIERRE)) };
   const p = s.partieB.passe;

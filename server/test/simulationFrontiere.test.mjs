@@ -32,6 +32,7 @@ import * as BANC from '../src/data/simulation/simulationBanc.js';
 import { simulerMatch, MI_TEMPS_INCONNUE } from '../src/data/simulation/simulationMatch.js';
 import { PARAMS } from '../src/data/simulation/reglages.js';
 import { __testing as JOB, REFRESH_STEPS } from '../src/jobs/matchStatsAutoRefresh.js';
+import { EMPREINTE_EN_SERVICE } from './aides/enService.mjs';
 
 const SRC = path.join(SERVEUR, 'src');
 const SIM = path.join(SRC, 'data', 'simulation');
@@ -53,8 +54,8 @@ function atteints(depart) {
 
 test('B1 l’empreinte du moteur du bac est 16f2459db183a99576365047da98b7777687ef05 (37 fichiers) : l’étape 28 n’a créé ni retouché aucun fichier du moteur — l’essai de l’étape 27 ne recommence pas', () => {
   const code = empreinteDuCode({ rafraichir: true });
-  assert.equal(code.empreinte, '16f2459db183a99576365047da98b7777687ef05');
-  assert.equal(Object.keys(code.fichiers).length, 37);
+  assert.equal(code.empreinte, EMPREINTE_EN_SERVICE.moteur); // Partie 0 des lots 2 (A)
+  assert.equal(Object.keys(code.fichiers).length, EMPREINTE_EN_SERVICE.fichiersDuMoteur); // Partie 0 des lots 2 (A)
 });
 
 test('T12/B1 frontière : rien de data/simulation dans l’empreinte ni atteint depuis elle ; aucun fichier de l’étape 28 sous core/ ni sports/ (ni .mjs, ni core/settlement) ; data/simulation n’écrit jamais les réglages du moteur', () => {

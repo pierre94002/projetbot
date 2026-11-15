@@ -18,6 +18,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { preparerCopie, executer, SERVEUR } from './aides/isolement.mjs';
 import { UI, imp, interfacePrete, optionsDuRendu, ouvrirLeRendu, reglesPures, espaces, corps, pied, entetes, tableauDe } from './aides/rendu.mjs';
+import { EMPREINTE_EN_SERVICE } from './aides/enService.mjs';
 
 const options = optionsDuRendu;
 const U = await imp(path.join(UI, 'src', 'utils', 'stylesDeJeu.js'));
@@ -287,5 +288,5 @@ test('aucun fichier du moteur n’est touché par l’étape : les nouveaux fich
     assert.ok(!moteur.has(f), `${f} n’est pas un fichier du moteur`);
   }
   for (const f of moteur) assert.doesNotMatch(fs.readFileSync(path.join(SERVEUR, 'src', f), 'utf8'), /teamStyle|TeamStyleCard|StyleDuelCard|team_style|coach_style/, f);
-  assert.equal(moteur.size, 37);
+  assert.equal(moteur.size, EMPREINTE_EN_SERVICE.fichiersDuMoteur); // Partie 0 des lots 2 (A)
 });

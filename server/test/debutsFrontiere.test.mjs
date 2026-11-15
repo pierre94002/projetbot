@@ -49,6 +49,7 @@ import { fichiersDuMoteur, empreinteDuCode, empreinteDeLaCandidate, CANDIDATE_EN
 import * as LANC from '../src/bench/lancements.js';
 import { enregistrerLancements, fenetresVues, compterVariantes, lancementDe } from '../src/bench/trialsRegistry.js';
 import { PERIODES_DU_BANC } from '../src/data/debutsDeSaison/reglagesDebuts.js';
+import { EMPREINTE_EN_SERVICE, declareParUnLot2 } from './aides/enService.mjs';
 
 const SRC = path.join(SERVEUR, 'src');
 const RACINE = path.join(SERVEUR, '..');
@@ -319,8 +320,8 @@ const rel = (f) => path.relative(SRC, f).split(path.sep).join('/');
 const tousLesFichiers = (dossier) => (fs.existsSync(dossier) ? fs.readdirSync(dossier, { recursive: true }).map(String).filter((f) => fs.statSync(path.join(dossier, f)).isFile()) : []);
 
 test('T-X1 — les empreintes ne bougent pas ; rien de l’étape 35 sous core/ ni sports/ ni dans l’empreinte ; les fichiers gelés identiques à l’octet (les cinq ajouts purs SANS leur ajout)', () => {
-  assert.equal(empreinteDuCode({ rafraichir: true }).empreinte, '16f2459db183a99576365047da98b7777687ef05');
-  assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), 'f01dd8496f56a415');
+  assert.equal(empreinteDuCode({ rafraichir: true }).empreinte, EMPREINTE_EN_SERVICE.moteur); // Partie 0 des lots 2 (A)
+  assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), EMPREINTE_EN_SERVICE.candidate); // Partie 0 des lots 2 (A)
   assert.ok(FICHIERS_35.length >= 10, FICHIERS_35.join(', '));
   for (const racine of ['core', 'sports']) {
     for (const f of tousLesFichiers(path.join(SRC, racine))) {
@@ -333,12 +334,13 @@ test('T-X1 — les empreintes ne bougent pas ; rien de l’étape 35 sous core/ 
   assert.ok(!MODULES_DU_MOTEUR.fichiers.some((f) => /debuts|squad/i.test(f)));
   assert.ok(INTERDITS.length >= 216, `${INTERDITS.length} fichiers gelés`);
   for (const [f, attendu] of INTERDITS) {
+    if (declareParUnLot2(f)) continue; // Partie 0 des lots 2 (B) : déclaré par un lot 2, son sha1 de partie 0 est historique
     // Étape 39 (lot 1b, 09/11/2026) : les ajouts de la 39 retirés d'abord.
     const octets = PERMIS[f] ? Buffer.from(sansLesAjoutsDe35(f, sansLesAjoutsDe39(f, fs.readFileSync(path.join(SRC, f), 'utf8'))), 'utf8') : fs.readFileSync(path.join(SRC, f));
     assert.equal(sha1(octets), attendu, `${f} : retouché (gelé pendant l’essai 27${PERMIS[f] ? ', au-delà de son ajout pur' : ''})`);
   }
   for (const [f, attendu] of Object.entries(PERMIS)) assert.ok(INTERDITS.some(([g, s]) => g === f && s === attendu), `${f} : son sha1 de partie 0`);
-  for (const [f, attendu] of INTERDITS_UI) assert.equal(sha1(fs.readFileSync(path.join(RACINE, f))), attendu, `${f} : retouché`);
+  for (const [f, attendu] of INTERDITS_UI) if (!declareParUnLot2(f)) assert.equal(sha1(fs.readFileSync(path.join(RACINE, f))), attendu, `${f} : retouché`); // Partie 0 des lots 2 (B)
 });
 
 test('T-X2 — depuis TOUTES les racines de la règle du gel, rien n’atteint data/debutsDeSaison/ ni squadChanges.js ; lancements.js et matchStatsDb.js n’en importent rien', () => {
@@ -501,6 +503,7 @@ test('T-X9 — les fichiers gelés que la 35 importe en lecture : sha1 de la par
   for (const f of LUS) {
     const ligne = INTERDITS.find(([g]) => g === f);
     assert.ok(ligne, `${f} relevé en partie 0`);
+    if (declareParUnLot2(f)) continue; // Partie 0 des lots 2 (B) : déclaré par un lot 2, son sha1 de partie 0 est historique
     assert.equal(sha1(fs.readFileSync(path.join(SRC, f))), ligne[1], f);
   }
   for (const f of fs.readdirSync(path.join(SRC, 'data', 'contexte'))) {
@@ -520,6 +523,7 @@ test('T-X10 — les cinq fichiers gelés SANS les ajouts de la 35 = la partie 0 
     'api/controllers/analysis.controller.js': ['  const reponse = { ...analyse, ...(aVerifier ? { aVerifier } : {}), ...(simulation ? { simulation } : {}), ...(contexte ? { contexte } : {}), ...(cartons ? { cartons } : {}), ...(joueurs ? { joueurs } : {}), ...(combinaison ? { combinaison } : {}), ...(coupe ? { coupe } : {}) };']
   };
   for (const f of FICHIERS_AJOUTS_35) {
+    if (declareParUnLot2(f)) continue; // Partie 0 des lots 2 (B) : déclaré par un lot 2, son sha1 de partie 0 est historique
     const texte = fs.readFileSync(path.join(SRC, f), 'utf8');
     assert.equal(sha1(Buffer.from(sansLesAjoutsDe35(f, sansLesAjoutsDe39(f, texte)), 'utf8')), PERMIS[f], f);
     assert.notEqual(sha1(Buffer.from(texte, 'utf8')), PERMIS[f], `${f} porte bien son ajout`);

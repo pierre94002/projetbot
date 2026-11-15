@@ -54,6 +54,7 @@ import { comptesDesCartons } from '../src/data/cartons/comptesDesCartons.js';
 import { CartonsAuJourJ, passerLesRencontres } from '../src/data/cartons/cartonsAuJourJ.js';
 import { indiceDArbitre, cleDArbitre, perteDesComptes, probabilitePlusDe } from '../src/data/cartons/formulesDesCartons.js';
 import { PREUVE } from '../src/data/cartons/reglagesCartons.js';
+import { EMPREINTE_EN_SERVICE } from './aides/enService.mjs';
 
 const SRC = path.join(SERVEUR, 'src');
 const donnees = (monde) => executerSansPause(BANC.donneesDuBanc(monde));
@@ -458,8 +459,8 @@ test('T-B10 le script : UN SEUL regard — K, règles vérifiées par sha1, verr
     assert.equal(sortie.regles.sha1, sR);
     assert.equal(sortie.base.lectureSeule, true);
     assert.deepEqual([sortie.convention.valeur, sortie.convention.date, sortie.convention.expulsionApresDeuxJaunes], ['C', '2026-11-02', 2]);
-    assert.equal(sortie.empreinteDuMoteur.sha1, '16f2459db183a99576365047da98b7777687ef05');
-    assert.equal(sortie.empreinteDuMoteur.candidate, 'f01dd8496f56a415');
+    assert.equal(sortie.empreinteDuMoteur.sha1, EMPREINTE_EN_SERVICE.moteur); // Partie 0 des lots 2 (A)
+    assert.equal(sortie.empreinteDuMoteur.candidate, EMPREINTE_EN_SERVICE.candidate); // Partie 0 des lots 2 (A)
     assert.deepEqual(sortie.banc.variantes.map((x) => x.id), [...BANC.VARIANTES_JUGEES]);
     assert.ok(sortie.comptes.cartons.A + sortie.comptes.cartons.B > 0, JSON.stringify(sortie.comptes));
     // Un second passage : refusé ; puis rejoué avec une raison, les deux verdicts côte à côte.

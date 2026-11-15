@@ -47,6 +47,7 @@ import { enregistrerLancements, fenetresVues, compterVariantes, lancementDe } fr
 import { MARCHES_CONNUS } from '../src/sports/football/markets.js';
 import { BORNES_LAMBDA, PERIODES_DU_BANC, DECISION_DE_PIERRE } from '../src/data/joueurs/reglagesJoueurs.js';
 import { BASE_STATISTIQUE } from '../src/data/contexte/bancDuContexte.js';
+import { EMPREINTE_EN_SERVICE, declareParUnLot2 } from './aides/enService.mjs';
 
 /**
  * Lot 1b (03/11/2026) : les deux fichiers gelés retouchés par AJOUT PUR (matchStatsAutoRefresh.js, enregistreurs.js) sont
@@ -270,8 +271,8 @@ const rel = (f) => path.relative(SRC, f).split(path.sep).join('/');
 const tousLesFichiers = (dossier) => (fs.existsSync(dossier) ? fs.readdirSync(dossier, { recursive: true }).map(String).filter((f) => fs.statSync(path.join(dossier, f)).isFile()) : []);
 
 test('T-X1 les empreintes ne bougent pas ; aucun fichier de l’étape 34 sous core/ ni sports/ ni dans l’empreinte ; playerPropsInputs.js absent ; tous les fichiers gelés identiques à l’octet à la partie 0', () => {
-  assert.equal(empreinteDuCode({ rafraichir: true }).empreinte, '16f2459db183a99576365047da98b7777687ef05');
-  assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), 'f01dd8496f56a415');
+  assert.equal(empreinteDuCode({ rafraichir: true }).empreinte, EMPREINTE_EN_SERVICE.moteur); // Partie 0 des lots 2 (A)
+  assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), EMPREINTE_EN_SERVICE.candidate); // Partie 0 des lots 2 (A)
   assert.ok(FICHIERS_34.length >= 8, FICHIERS_34.join(', '));
   for (const racine of ['core', 'sports']) {
     for (const f of tousLesFichiers(path.join(SRC, racine))) {
@@ -284,8 +285,8 @@ test('T-X1 les empreintes ne bougent pas ; aucun fichier de l’étape 34 sous c
   assert.ok(!MODULES_DU_MOTEUR.fichiers.some((f) => /joueurs\/|playerProps/i.test(f)));
   assert.equal(fs.existsSync(path.join(SRC, 'data', 'db', 'playerPropsInputs.js')), false, 'data/db/playerPropsInputs.js n’est pas créé au lot 1');
   assert.ok(INTERDITS.length >= 160, `${INTERDITS.length} fichiers gelés`);
-  for (const [f, attendu] of INTERDITS) assert.equal(sha1(octetsHorsAjouts(path.join(SRC, f))), attendu, `${f} : retouché (gelé pendant l’essai 27, ou interdit au lot 1 de l’étape 34)`);
-  for (const [f, attendu] of INTERDITS_UI) assert.equal(sha1(fs.readFileSync(path.join(RACINE, f))), attendu, `${f} : retouché`);
+  for (const [f, attendu] of INTERDITS) if (!declareParUnLot2(f)) assert.equal(sha1(octetsHorsAjouts(path.join(SRC, f))), attendu, `${f} : retouché (gelé pendant l’essai 27, ou interdit au lot 1 de l’étape 34)`); // Partie 0 des lots 2 (B)
+  for (const [f, attendu] of INTERDITS_UI) if (!declareParUnLot2(f)) assert.equal(sha1(fs.readFileSync(path.join(RACINE, f))), attendu, `${f} : retouché`); // Partie 0 des lots 2 (B)
   for (const dossier of ['contexte', 'cartons']) {
     const presents = fs.readdirSync(path.join(SRC, 'data', dossier)).map((f) => `data/${dossier}/${f}`).sort();
     assert.deepEqual(presents, INTERDITS.map(([f]) => f).filter((f) => f.startsWith(`data/${dossier}/`)).sort(), `aucun fichier ajouté ni retiré sous data/${dossier}/`);
@@ -444,7 +445,8 @@ test('T-X9 (lot 1a) aucun fichier hors de data/joueurs/ n’importe data/joueurs
   for (const f of ['data/providers/lineupContext.js', 'jobs/matchStatsAutoRefresh.js', 'jobs/enregistreurs.js']) {
     const x = INTERDITS.find(([g]) => g === f);
     assert.ok(x, `${f} gardé à l’octet`);
+    if (declareParUnLot2(f)) continue; // Partie 0 des lots 2 (B) : déclaré par un lot 2, son sha1 de partie 0 est historique
     assert.equal(sha1(octetsHorsAjouts(path.join(SRC, f))), x[1], `${f} : hors des blocs « ajout pur » du lot 1b, non touché`);
   }
-  assert.equal(sha1(fs.readFileSync(path.join(SRC, 'data', 'providers', 'lineupContext.js'))), INTERDITS.find(([g]) => g === 'data/providers/lineupContext.js')[1], 'lineupContext.js : pas un octet (critique, constat 1)');
+  if (!declareParUnLot2('data/providers/lineupContext.js')) assert.equal(sha1(fs.readFileSync(path.join(SRC, 'data', 'providers', 'lineupContext.js'))), INTERDITS.find(([g]) => g === 'data/providers/lineupContext.js')[1], 'lineupContext.js : pas un octet (critique, constat 1)'); // Partie 0 des lots 2 (B)
 });

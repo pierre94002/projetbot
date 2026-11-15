@@ -27,6 +27,7 @@ import { empreinteDuCode, empreinteDeLaCandidate, CANDIDATE_EN_ESSAI } from '../
 import { DEFAULT_ENGINE_CONFIG_BY_SPORT } from '../src/core/engine/engineConfig.js';
 import { HISTORIQUE, ETAPES_EN_COURS } from '../src/data/roadmap/historique.js';
 import { LANCEMENTS } from '../src/bench/lancements.js';
+import { EMPREINTE_EN_SERVICE, declareParUnLot2 } from './aides/enService.mjs';
 
 const SRC = path.join(SERVEUR, 'src');
 const RACINE = path.join(SERVEUR, '..');
@@ -278,8 +279,8 @@ const GEL = Object.freeze([
 ]);
 
 test('T-G1 — les empreintes ne bougent pas ; ni fichier ni mention de ficheDuPronostic sous server/src ; aucune « étape 40 » sous core/ ni sports/', () => {
-  assert.equal(empreinteDuCode({ rafraichir: true }).empreinte, '16f2459db183a99576365047da98b7777687ef05');
-  assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), 'f01dd8496f56a415');
+  assert.equal(empreinteDuCode({ rafraichir: true }).empreinte, EMPREINTE_EN_SERVICE.moteur); // Partie 0 des lots 2 (A)
+  assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), EMPREINTE_EN_SERVICE.candidate); // Partie 0 des lots 2 (A)
   for (const f of tousLesFichiers(SRC)) {
     assert.ok(!/fiche-?du-?pronostic/i.test(f), `server/src/${f} : un fichier de l’étape 40 sous server/src`);
     assert.doesNotMatch(fs.readFileSync(path.join(SRC, f), 'utf8'), /ficheDuPronostic/, `server/src/${f}`);
@@ -305,6 +306,7 @@ test('T-G2 — le gel : les 235 fichiers de code identiques à l’octet ; histo
   assert.equal(sha['ui/src/components/matches/LineupPitch.vue'], '0bc9124c6228b303a98342128a2f7acddc6b8661');
   assert.equal(sha[HISTORIQUE_JS], '96f9a0878c0f92aa48d1ff75272784f24a082a51');
   for (const [f, attendu] of GEL) {
+    if (declareParUnLot2(f)) continue; // Partie 0 des lots 2 (B) : déclaré par un lot 2, son sha1 de partie 0 est historique
     const octets = fs.readFileSync(path.join(RACINE, f));
     if (f !== HISTORIQUE_JS) {
       assert.equal(sha1(octets), attendu, f);
@@ -322,7 +324,7 @@ test('T-G2 — le gel : les 235 fichiers de code identiques à l’octet ; histo
 });
 
 test('T-G3 — ce que l’IA reçoit ne bouge pas : compactContext.js à l’octet, le service et l’invite dans le gel, rien du serveur n’importe ficheDuPronostic', () => {
-  assert.equal(sha1(fs.readFileSync(path.join(SRC, 'core', 'ai', 'compactContext.js'))), 'd948305e88c86445e8b19fc6fb38c779a046708c');
+  if (!declareParUnLot2('core/ai/compactContext.js')) assert.equal(sha1(fs.readFileSync(path.join(SRC, 'core', 'ai', 'compactContext.js'))), 'd948305e88c86445e8b19fc6fb38c779a046708c'); // Partie 0 des lots 2 (B)
   const sha = Object.fromEntries(GEL);
   assert.equal(sha['server/src/core/ai/matchAiAnalysisService.js'], '0f252e469aa8d3b896324e26f8be21a8d0a81aa2');
   assert.equal(sha['server/src/core/ai/webLookupPrompt.js'], 'c43ea47071de9a60556cb3098937f0cd9ccdb2b9');

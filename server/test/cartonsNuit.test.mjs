@@ -34,6 +34,7 @@ import crypto from 'node:crypto';
 import { preparerCopie, executer, SERVEUR } from './aides/isolement.mjs';
 import { __testing as JOB, __cartonsPourLesTests as CARTONS } from '../src/jobs/matchStatsAutoRefresh.js';
 import { fichiersDuMoteur } from '../src/core/engine/engineVersions.js';
+import { declareParUnLot2 } from './aides/enService.mjs';
 
 const SCRIPT = path.join(SERVEUR, 'test', 'aides', 'script-cartons-nuit.mjs');
 const SRC = path.join(SERVEUR, 'src');
@@ -206,7 +207,7 @@ test('T-X10 les fichiers GELÉS retouchés (matchStatsAutoRefresh.js, lineupCont
   for (const [f, attendu] of GELES_RETOUCHES) {
     const { garde, ajoutes } = blocs(fs.readFileSync(path.join(SRC, f), 'utf8'));
     assert.ok(ajoutes.length >= 1, `${f} : au moins un bloc ajouté`);
-    assert.equal(sha1(Buffer.from(garde, 'utf8')), attendu, `${f} : hors des blocs marqués, rien ne change (ce qu’il écrit non plus)`);
+    if (!declareParUnLot2(f)) assert.equal(sha1(Buffer.from(garde, 'utf8')), attendu, `${f} : hors des blocs marqués, rien ne change (ce qu’il écrit non plus)`); // Partie 0 des lots 2 (B)
     for (const b of ajoutes) {
       const code = sansCommentaires(b);
       assert.doesNotMatch(code, /\.run\(|INSERT\s|UPDATE\s|DELETE\s|upsert|writeJson|writeFile|\.exec\(/, `${f} : un bloc ajouté écrit`);

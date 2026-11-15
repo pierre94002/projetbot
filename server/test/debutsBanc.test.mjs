@@ -52,6 +52,7 @@ import { VARIANTES_DE_L_ETAPE_35 } from '../src/bench/lancements.js';
 import { zPour } from '../src/bench/guard.js';
 import { grilleDesButs } from '../src/core/engine/goalModel.js';
 import { executerSansPause } from '../src/utils/travailCooperatif.js';
+import { EMPREINTE_EN_SERVICE } from './aides/enService.mjs';
 
 const SRC = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'src');
 const sha1 = (t) => crypto.createHash('sha1').update(t).digest('hex');
@@ -283,8 +284,8 @@ test('T-B10 le script : K, règles par sha1, modules scellés, verrou posé avan
     const sortie = JSON.parse(fs.readFileSync(d('premier.json'), 'utf8'));
     assert.equal(sortie.premierRegard, verrou.pose, 'le verrou posé AVANT la lecture');
     assert.equal(sortie.base.lectureSeule, true);
-    assert.equal(sortie.empreinteDuMoteur.sha1, '16f2459db183a99576365047da98b7777687ef05');
-    assert.equal(sortie.empreinteDuMoteur.candidate, 'f01dd8496f56a415');
+    assert.equal(sortie.empreinteDuMoteur.sha1, EMPREINTE_EN_SERVICE.moteur); // Partie 0 des lots 2 (A)
+    assert.equal(sortie.empreinteDuMoteur.candidate, EMPREINTE_EN_SERVICE.candidate); // Partie 0 des lots 2 (A)
     assert.equal(sortie.banc.K, 11);
     assert.equal(sortie.banc.variantes.length, 10);
     assert.match(banc('second.json').json.refus, /DÉJÀ été passé/);

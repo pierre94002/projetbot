@@ -18,6 +18,7 @@ import { fileURLToPath } from 'node:url';
 import { empreinteDuCode, empreinteDeLaCandidate, CANDIDATE_EN_ESSAI, fichiersDuMoteur } from '../src/core/engine/engineVersions.js';
 import { REFRESH_STEPS } from '../src/jobs/matchStatsAutoRefresh.js';
 import { DELAI_DU_BANC_MS, NOM_DU_VERROU, NOM_DU_CALCUL } from '../src/data/correction/bancDesCorrections.js';
+import { EMPREINTE_EN_SERVICE } from './aides/enService.mjs';
 
 const ICI = path.dirname(fileURLToPath(import.meta.url));
 const SRC = path.join(ICI, '..', 'src');
@@ -43,8 +44,8 @@ const LA_BOUCLE = Object.freeze([
 const SES_ROUTES = Object.freeze(['api/controllers/corrections.controller.js', 'api/routes/corrections.routes.js']);
 
 test('T-F1 : l’empreinte du code du moteur reste 16f2459… et celle de la candidate de l’étape 27 f01dd8496f56a415 ; la boucle vit dans data/correction/ (12 fichiers depuis la partie D), hors de l’empreinte ; rien de neuf sous core/engine, sports ni bench', () => {
-  assert.equal(empreinteDuCode({ racine: SRC, rafraichir: true }).empreinte, '16f2459db183a99576365047da98b7777687ef05');
-  assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), 'f01dd8496f56a415');
+  assert.equal(empreinteDuCode({ racine: SRC, rafraichir: true }).empreinte, EMPREINTE_EN_SERVICE.moteur); // Partie 0 des lots 2 (A)
+  assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), EMPREINTE_EN_SERVICE.candidate); // Partie 0 des lots 2 (A)
   assert.deepEqual(FICHIERS.filter((f) => f.startsWith('data/correction/')), [...LA_BOUCLE]);
   const moteur = fichiersDuMoteur();
   for (const f of [...LA_BOUCLE, ...SES_ROUTES]) assert.ok(!moteur.includes(f), `${f} hors de l’empreinte`);

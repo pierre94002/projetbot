@@ -36,6 +36,7 @@ import { octetsSansLesAjoutsDe36 } from './aides/ajouts36.mjs';
 import { octetsSansLesAjoutsDe35 } from './aides/ajouts35.mjs';
 import { enregistrerLancements, fenetresVues, compterVariantes, lancementDe } from '../src/bench/trialsRegistry.js';
 import { PERIODES_DU_BANC, DECISIONS_DE_PIERRE, CONFIG_DE_LA_REGLE } from '../src/data/combinaison/reglagesCombinaison.js';
+import { EMPREINTE_EN_SERVICE, declareParUnLot2 } from './aides/enService.mjs';
 
 const SRC = path.join(SERVEUR, 'src');
 const RACINE = path.join(SERVEUR, '..');
@@ -275,8 +276,8 @@ const rel = (f) => path.relative(SRC, f).split(path.sep).join('/');
 const tousLesFichiers = (dossier) => (fs.existsSync(dossier) ? fs.readdirSync(dossier, { recursive: true }).map(String).filter((f) => fs.statSync(path.join(dossier, f)).isFile()) : []);
 
 test('T-X1 les empreintes ne bougent pas ; rien de l’étape 38 sous core/ ni sports/ ni dans l’empreinte ; tous les fichiers gelés identiques à l’octet à la partie 0', () => {
-  assert.equal(empreinteDuCode({ rafraichir: true }).empreinte, '16f2459db183a99576365047da98b7777687ef05');
-  assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), 'f01dd8496f56a415');
+  assert.equal(empreinteDuCode({ rafraichir: true }).empreinte, EMPREINTE_EN_SERVICE.moteur); // Partie 0 des lots 2 (A)
+  assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), EMPREINTE_EN_SERVICE.candidate); // Partie 0 des lots 2 (A)
   assert.ok(FICHIERS_38.length >= 10, FICHIERS_38.join(', '));
   for (const racine of ['core', 'sports']) {
     for (const f of tousLesFichiers(path.join(SRC, racine))) {
@@ -290,13 +291,14 @@ test('T-X1 les empreintes ne bougent pas ; rien de l’étape 38 sous core/ ni s
   assert.ok(INTERDITS.length >= 170, `${INTERDITS.length} fichiers gelés`);
   // Lot 1b : l'actualisation reçoit deux blocs « ajout pur » de la 38 — comparée SANS eux (T-X10 de combinaisonFuite).
   for (const [f, attendu] of INTERDITS) {
+    if (declareParUnLot2(f)) continue; // Partie 0 des lots 2 (B) : déclaré par un lot 2, son sha1 de partie 0 est historique
     // Étape 36 (lot 1, 09/11/2026) : ses ajouts purs aux fichiers gelés (blocs de l'actualisation, « export » de settlementService.js)
     // retirés de même (aides/ajouts36.mjs ; coupesFrontiere.test.mjs, T-X1).
     // Étape 35 (lot 1b, 10/11/2026) : ses blocs « ajout pur » de l'actualisation retirés de même.
     const octets = octetsSansLesAjoutsDe36(f, f === 'jobs/matchStatsAutoRefresh.js' ? octetsSansLesAjoutsDe35(f, Buffer.from(sansBlocs38(fs.readFileSync(path.join(SRC, f), 'utf8')), 'utf8')) : fs.readFileSync(path.join(SRC, f)));
     assert.equal(sha1(octets), attendu, `${f} : retouché (gelé pendant l’essai 27, ou interdit au lot 1a de l’étape 38)`);
   }
-  for (const [f, attendu] of INTERDITS_UI) assert.equal(sha1(fs.readFileSync(path.join(RACINE, f))), attendu, `${f} : retouché`);
+  for (const [f, attendu] of INTERDITS_UI) if (!declareParUnLot2(f)) assert.equal(sha1(fs.readFileSync(path.join(RACINE, f))), attendu, `${f} : retouché`); // Partie 0 des lots 2 (B)
   for (const dossier of ['contexte', 'cartons', 'joueurs']) {
     const presents = fs.readdirSync(path.join(SRC, 'data', dossier)).map((f) => `data/${dossier}/${f}`).sort();
     assert.deepEqual(presents, INTERDITS.map(([f]) => f).filter((f) => f.startsWith(`data/${dossier}/`)).sort(), `aucun fichier ajouté ni retiré sous data/${dossier}/`);

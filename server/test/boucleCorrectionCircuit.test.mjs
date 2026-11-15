@@ -17,6 +17,7 @@ import assert from 'node:assert/strict';
 import path from 'node:path';
 import { preparerCopie, sansCandidateDuCode, executer, SERVEUR } from './aides/isolement.mjs';
 import { CANDIDATE_EN_ESSAI } from '../src/core/engine/engineVersions.js';
+import { EMPREINTE_EN_SERVICE } from './aides/enService.mjs';
 
 const SCRIPT = path.join(SERVEUR, 'test', 'aides', 'script-boucle-circuit.mjs');
 const MDB = JSON.parse(JSON.stringify(CANDIDATE_EN_ESSAI.modifications.football.modeleDeButs));
@@ -37,7 +38,7 @@ const PHASES = [
   ['orphelins', '2027-02-24T10:00:00.000Z']
 ];
 const RHO = 'c26-2026-12-rho-1';
-const EMPREINTE_DU_MOTEUR = '16f2459db183a99576365047da98b7777687ef05';
+const EMPREINTE_DU_MOTEUR = EMPREINTE_EN_SERVICE.moteur; // Partie 0 des lots 2 (A)
 
 let sorties = null;
 function circuit() {

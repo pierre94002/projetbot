@@ -18,12 +18,13 @@ import { SERVEUR, FIXTURES } from './aides/isolement.mjs';
 import { empreinteDuCode, fichiersDuMoteur, MODULES_DU_MOTEUR } from '../src/core/engine/engineVersions.js';
 import { elementDuGel } from '../src/data/enregistreurs/gelPronostics.js';
 import { FAMILLES_DE_BUTS } from '../src/data/masqueDesButs.js';
+import { EMPREINTE_EN_SERVICE, EMPREINTE_AVANT_LOTS_2 } from './aides/enService.mjs';
 
 const CODE = path.resolve(SERVEUR, '..');
 const SRC = path.join(SERVEUR, 'src');
 const sansFins = (p) => p.split(path.sep).join('/');
 
-/** Mesurée dans la piste du lot 0 le 13/11/2026 à 12 h 44 (bac = piste = dépôt). */
+/** Mesurée dans la piste du lot 0 le 13/11/2026 à 12 h 44 (bac = piste = dépôt) ; historique ; F1 lit l’empreinte EN SERVICE (aides/enService.mjs). */ // Partie 0 des lots 2 (A)
 const EMPREINTE_DE_DEPART = '16f2459db183a99576365047da98b7777687ef05';
 
 /** Les 13 fichiers du lot 0 (chemins depuis le dossier du code). */
@@ -75,16 +76,17 @@ const GARDES = Object.freeze([
   'core/ai/matchAiAnalysisService.js'
 ]);
 
-test('F1 — l’empreinte du code du moteur est celle du départ (13/11/2026 12 h 44) : aucune ligne du moteur n’a bougé, aucune version', () => {
-  assert.equal(empreinteDuCode({ rafraichir: true }).empreinte, EMPREINTE_DE_DEPART);
+test('F1 — l’empreinte du code du moteur est celle EN SERVICE (aides/enService.mjs, partie 0 des lots 2) : le lot 0 ne crée aucune version', () => {
+  assert.equal(empreinteDuCode({ rafraichir: true }).empreinte, EMPREINTE_EN_SERVICE.moteur); // Partie 0 des lots 2 (A)
+  assert.equal(EMPREINTE_DE_DEPART, EMPREINTE_AVANT_LOTS_2.moteur, 'la mesure du 13/11 (historique) = le départ des lots 2'); // Partie 0 des lots 2 (A)
 });
 
 test('F2 — les 13 fichiers du lot ne croisent ni les dossiers ni les fichiers du moteur (liste importée)', () => {
   assert.equal(FICHIERS_DU_LOT.length, 15);
   assert.equal(new Set(FICHIERS_DU_LOT).size, 15);
   for (const f of FICHIERS_DU_LOT) assert.ok(fs.existsSync(path.join(CODE, f)), `${f} existe`);
-  assert.equal(MODULES_DU_MOTEUR.dossiers.length, 7);
-  assert.equal(MODULES_DU_MOTEUR.fichiers.length, 6);
+  assert.equal(MODULES_DU_MOTEUR.dossiers.length, EMPREINTE_EN_SERVICE.modules.dossiers); // Partie 0 des lots 2 (A)
+  assert.equal(MODULES_DU_MOTEUR.fichiers.length, EMPREINTE_EN_SERVICE.modules.fichiers); // Partie 0 des lots 2 (A)
   const duMoteur = new Set(fichiersDuMoteur());
   for (const f of FICHIERS_DU_LOT.filter((x) => x.startsWith('server/src/'))) {
     const rel = f.slice('server/src/'.length);

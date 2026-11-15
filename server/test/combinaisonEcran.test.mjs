@@ -32,6 +32,7 @@ import { UI, imp, interfacePrete, optionsDuRendu, ouvrirLeRendu, reglesPures } f
 import { nuitFabriquee } from './aides/combinaisonNuitFabriquee.mjs';
 import * as R from '../src/data/combinaison/combinaisonRead.js';
 import { MOTS } from '../src/data/combinaison/reglagesCombinaison.js';
+import { declareParUnLot2 } from './aides/enService.mjs';
 
 const SRC = path.join(SERVEUR, 'src');
 const sha1 = (b) => crypto.createHash('sha1').update(b).digest('hex');
@@ -93,7 +94,7 @@ test('T-E2 ConfidenceGauge toujours null ; l’encadré n’a ni jauge ni chiffr
   assert.doesNotMatch(vue, /ConfidenceGauge|cm-bar|<progress|<meter|width:\s*\$\{|:style/);
   const r = await rendu.rendre(Encadre, { combinaison: s.lectures.M1, result: null });
   assert.doesNotMatch(r.html, /role="progressbar"|<progress|<meter|aria-valuenow/);
-  assert.equal(sha1(fs.readFileSync(path.join(UI, 'src', 'components', 'common', 'ConfidenceGauge.vue'))), '1bb8634a1200b245f9c92288e260cf6a725e9309', 'ConfidenceGauge.vue jamais retouchée');
+  if (!declareParUnLot2('ui/src/components/common/ConfidenceGauge.vue')) assert.equal(sha1(fs.readFileSync(path.join(UI, 'src', 'components', 'common', 'ConfidenceGauge.vue'))), '1bb8634a1200b245f9c92288e260cf6a725e9309', 'ConfidenceGauge.vue jamais retouchée'); // Partie 0 des lots 2 (B)
 });
 
 test('T-E3 jamais une value sans mesure ni deux verdicts : la mention de la mise n’est pas redite ; la mise ni répétée ni contredite ; Q-B non touchée', optionsDuRendu, async () => {
@@ -112,7 +113,7 @@ test('T-E3 jamais une value sans mesure ni deux verdicts : la mention de la mise
   const sans = await rendu.rendre(Encadre, { combinaison: route.combinaison, result: { mise: { conseil: false, raisons: [] }, staking: { action: 'PASS' } } });
   assert.deepEqual(lignesDe(sans.html).filter(([c]) => c.startsWith('livre-')).map(([, t]) => t), [`Chez Unibet : ${MOTS.livreJamais}.`, `Chez Betclic : ${MOTS.livreJamais}.`]);
   // Q-B sans réponse : les cotes saisies ne sont pas touchées au lot 1.
-  assert.equal(sha1(fs.readFileSync(path.join(SRC, 'data', 'saisiesCotes.js'))), '1449bbbdc1fd5f08d94af42dc17a82fc728512b4', 'saisiesCotes.js : le sha1 de la partie 0 du lot 1b (= dépôt), jamais retouché');
+  if (!declareParUnLot2('data/saisiesCotes.js')) assert.equal(sha1(fs.readFileSync(path.join(SRC, 'data', 'saisiesCotes.js'))), '1449bbbdc1fd5f08d94af42dc17a82fc728512b4', 'saisiesCotes.js : le sha1 de la partie 0 du lot 1b (= dépôt), jamais retouché'); // Partie 0 des lots 2 (B)
   for (const f of ['avantDeParier.js']) assert.doesNotMatch(fs.readFileSync(path.join(UI, 'src', 'utils', f), 'utf8'), /saisie/i);
 });
 

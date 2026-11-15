@@ -34,6 +34,7 @@ import { MIN_BLOCS } from '../src/bench/resume.js';
 import { comparer } from '../src/bench/guard.js';
 import { perteLog } from '../src/bench/metrics.js';
 import { etatFeuilleDeRoute } from '../src/data/roadmap/feuilleDeRoute.js';
+import { EMPREINTE_EN_SERVICE } from './aides/enService.mjs';
 
 const SRC = path.join(SERVEUR, 'src');
 const SCRIPT = path.join(SERVEUR, 'test', 'aides', 'script-adoption-moteur.mjs');
@@ -553,10 +554,10 @@ test('étape 27 — la phrase EN MOTS de la candidate (`enMots`) : facultative, 
   assert.match(CANDIDATE_EN_ESSAI.enMots, /^Un seul modèle pour tous les marchés de buts et le score : les pourcentages partent des cotes/);
   assert.doesNotMatch(CANDIDATE_EN_ESSAI.enMots, /Poisson|Dixon|rho|demi-vie|m7|ancr/i);
   assert.equal(validerCandidate(CANDIDATE_EN_ESSAI).enMots, CANDIDATE_EN_ESSAI.enMots);
-  assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), 'f01dd8496f56a415');
+  assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), EMPREINTE_EN_SERVICE.candidate); // Partie 0 des lots 2 (A)
   const { enMots, ...sansLaPhrase } = CANDIDATE_EN_ESSAI;
   assert.ok(enMots);
-  assert.equal(empreinteDeLaCandidate(sansLaPhrase), 'f01dd8496f56a415');
+  assert.equal(empreinteDeLaCandidate(sansLaPhrase), EMPREINTE_EN_SERVICE.candidate); // Partie 0 des lots 2 (A)
 });
 
 /** Un essai réglé fabriqué : 300 matchs, deux familles, la perte log de chaque version et le pronostic retenu de la candidate. */

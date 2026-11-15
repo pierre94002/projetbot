@@ -36,6 +36,7 @@ import { zPour, comparer } from '../src/bench/guard.js';
 import { grilleDesButs, marchesDeLaGrille, reglagesDuModeleDeButs, empreinteDesForces } from '../src/core/engine/goalModel.js';
 import { CANDIDATE_EN_ESSAI, fichiersDuMoteur, MODULES_DU_MOTEUR } from '../src/core/engine/engineVersions.js';
 import { PERIODES_DU_BANC, JUGE_DU_BANC, AMPLEUR, PRIOR_SD } from '../src/data/contexte/reglagesContexte.js';
+import { EMPREINTE_EN_SERVICE } from './aides/enService.mjs';
 
 const SRC = path.join(SERVEUR, 'src');
 const AIDE = path.join(SERVEUR, 'test', 'aides', 'script-contexte-banc.mjs');
@@ -538,7 +539,7 @@ test('T-B14 le script : UN SEUL regard — K, règles et pelouses vérifiés par
     assert.equal(sortie.banc.K, 9);
     assert.equal(sortie.regles.sha1, sR);
     assert.equal(sortie.base.lectureSeule, true);
-    assert.equal(sortie.empreinteDuMoteur.sha1, '16f2459db183a99576365047da98b7777687ef05');
+    assert.equal(sortie.empreinteDuMoteur.sha1, EMPREINTE_EN_SERVICE.moteur); // Partie 0 des lots 2 (A)
     assert.ok(sortie.comptes.dernierJourLu <= '2026-09-23');
     // Un second passage : refusé ; puis rejoué avec une raison, les deux verdicts côte à côte.
     assert.match(banc('second.json').json.refus, /DÉJÀ été passé/);

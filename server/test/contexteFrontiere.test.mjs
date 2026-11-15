@@ -30,6 +30,7 @@ import * as LANC from '../src/bench/lancements.js';
 import { enregistrerLancements, fenetresVues, compterVariantes, lancementDe } from '../src/bench/trialsRegistry.js';
 import { DECISION_DE_PIERRE, PERIODES_DU_BANC, JUGE_DU_BANC, AMPLEUR, COUPES_CONTINENTALES } from '../src/data/contexte/reglagesContexte.js';
 import { FOTMOB_LEAGUES } from '../src/data/providers/fotMobProvider.js';
+import { EMPREINTE_EN_SERVICE } from './aides/enService.mjs';
 
 const SRC = path.join(SERVEUR, 'src');
 const UI = path.join(SERVEUR, '..', 'ui', 'src');
@@ -52,8 +53,8 @@ function atteints(depart) {
 const tousLesFichiers = (dossier) => (fs.existsSync(dossier) ? fs.readdirSync(dossier, { recursive: true }).map(String).filter((f) => fs.statSync(path.join(dossier, f)).isFile()) : []);
 
 test('T-X1 l’empreinte du moteur et celle de la candidate de l’étape 27 ne bougent pas ; aucun fichier de l’étape 32 sous core/ ni sports/, quelle qu’en soit l’extension ; aucun dans l’empreinte', () => {
-  assert.equal(empreinteDuCode({ rafraichir: true }).empreinte, '16f2459db183a99576365047da98b7777687ef05');
-  assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), 'f01dd8496f56a415');
+  assert.equal(empreinteDuCode({ rafraichir: true }).empreinte, EMPREINTE_EN_SERVICE.moteur); // Partie 0 des lots 2 (A)
+  assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), EMPREINTE_EN_SERVICE.candidate); // Partie 0 des lots 2 (A)
   assert.ok(FICHIERS_32.length >= 8, FICHIERS_32.join(', '));
   for (const racine of ['core', 'sports']) {
     for (const f of tousLesFichiers(path.join(SRC, racine))) {

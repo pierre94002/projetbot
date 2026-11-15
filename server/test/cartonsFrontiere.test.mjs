@@ -36,6 +36,7 @@ import { octetsSansLesAjoutsDe36 } from './aides/ajouts36.mjs';
 import { enregistrerLancements, fenetresVues, compterVariantes, lancementDe } from '../src/bench/trialsRegistry.js';
 import { MARCHES_CONNUS } from '../src/sports/football/markets.js';
 import { DECISION_DE_PIERRE, PERIODES_DU_BANC, PAR_CHAMPIONNAT } from '../src/data/cartons/reglagesCartons.js';
+import { EMPREINTE_EN_SERVICE, declareParUnLot2 } from './aides/enService.mjs';
 
 const SRC = path.join(SERVEUR, 'src');
 const UI = path.join(SERVEUR, '..', 'ui', 'src');
@@ -104,8 +105,8 @@ function atteints(depart) {
 const tousLesFichiers = (dossier) => (fs.existsSync(dossier) ? fs.readdirSync(dossier, { recursive: true }).map(String).filter((f) => fs.statSync(path.join(dossier, f)).isFile()) : []);
 
 test('T-X1 l’empreinte du moteur et celle de la candidate ne bougent pas ; aucun fichier de l’étape 33 sous core/ ni sports/ ni dans l’empreinte ; les fichiers interdits identiques à l’octet à ceux de la partie 0', () => {
-  assert.equal(empreinteDuCode({ rafraichir: true }).empreinte, '16f2459db183a99576365047da98b7777687ef05');
-  assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), 'f01dd8496f56a415');
+  assert.equal(empreinteDuCode({ rafraichir: true }).empreinte, EMPREINTE_EN_SERVICE.moteur); // Partie 0 des lots 2 (A)
+  assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), EMPREINTE_EN_SERVICE.candidate); // Partie 0 des lots 2 (A)
   assert.ok(FICHIERS_33.length >= 5, FICHIERS_33.join(', '));
   for (const racine of ['core', 'sports']) {
     for (const f of tousLesFichiers(path.join(SRC, racine))) {
@@ -118,7 +119,7 @@ test('T-X1 l’empreinte du moteur et celle de la candidate ne bougent pas ; auc
   assert.ok(!MODULES_DU_MOTEUR.fichiers.some((f) => /carton/i.test(f)));
   // Étape 36 (lot 1, 09/11/2026) : settlementService.js reçoit le seul mot « export » (la règle du format, importée par data/coupes/,
   // jamais recopiée) — comparé SANS lui (aides/ajouts36.mjs ; coupesFrontiere.test.mjs, T-X1).
-  for (const [f, attendu] of INTERDITS) assert.equal(sha1(octetsSansLesAjoutsDe36(f, fs.readFileSync(path.join(SRC, f)))), attendu, `${f} : retouché (interdit au lot 1 de l’étape 33)`);
+  for (const [f, attendu] of INTERDITS) if (!declareParUnLot2(f)) assert.equal(sha1(octetsSansLesAjoutsDe36(f, fs.readFileSync(path.join(SRC, f)))), attendu, `${f} : retouché (interdit au lot 1 de l’étape 33)`); // Partie 0 des lots 2 (B)
   const contexte = fs.readdirSync(path.join(SRC, 'data', 'contexte')).map((f) => `data/contexte/${f}`).sort();
   assert.deepEqual(contexte, INTERDITS.map(([f]) => f).filter((f) => f.startsWith('data/contexte/')).sort(), 'aucun fichier ajouté ni retiré sous data/contexte/');
 });

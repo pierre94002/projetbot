@@ -51,6 +51,7 @@ import * as R from '../src/data/mise/regleDeMise.js';
 import { conseilDuPari } from '../src/data/screener.js';
 import { LIVRES_FRANCAIS } from '../src/data/combinaison/reglagesCombinaison.js';
 import { MISE_EN_PART_DANS_LE_MESSAGE } from '../src/core/ai/compactContext.js';
+import { EMPREINTE_EN_SERVICE, declareParUnLot2, retireParUnLot2 } from './aides/enService.mjs'; // Partie 0 des lots 2 (P0-2, 14/11)
 
 const SRC = path.join(SERVEUR, 'src');
 const RACINE = path.join(SERVEUR, '..');
@@ -281,8 +282,8 @@ function atteints(depart) {
 }
 
 test('T-X1 les empreintes ne bougent pas ; rien de l’étape 39 sous core/ ni sports/ ni dans l’empreinte ; data/mise/ = les trois fichiers du lot 1a et les deux du banc (lot 1b)', () => {
-  assert.equal(empreinteDuCode({ rafraichir: true }).empreinte, '16f2459db183a99576365047da98b7777687ef05');
-  assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), 'f01dd8496f56a415');
+  assert.equal(empreinteDuCode({ rafraichir: true }).empreinte, EMPREINTE_EN_SERVICE.moteur); // Partie 0 des lots 2 (A)
+  assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), EMPREINTE_EN_SERVICE.candidate); // Partie 0 des lots 2 (A)
   // Lot 1b (09/11/2026) : le banc de la mise (bancDeLaMise.js) et sa note (noteDeLaMise.js, écrite par script).
   assert.deepEqual(FICHIERS_39.sort(), ['data/mise/bancDeLaMise.js', 'data/mise/capitalDePierre.js', 'data/mise/miseRead.js', 'data/mise/noteDeLaMise.js', 'data/mise/regleDeMise.js']);
   const gelesSousCore = new Set(GELES.map(([f]) => f).filter((f) => f.startsWith('core/') || f.startsWith('sports/')));
@@ -301,7 +302,7 @@ test('T-X1 les empreintes ne bougent pas ; rien de l’étape 39 sous core/ ni s
 });
 
 test('T-X2 depuis TOUTES les racines du gel (empreinte, chemin de nuit, les 78, les 12, autoMatchAiTrigger.js, matchAiAnalysisService.js), data/mise/ n’est jamais atteint', () => {
-  const fermeture = GELES.map(([f]) => f).filter((f) => !f.startsWith('ui/') && /\.m?js$/.test(f));
+  const fermeture = GELES.map(([f]) => f).filter((f) => !f.startsWith('ui/') && /\.m?js$/.test(f) && !retireParUnLot2(f)); // Partie 0 des lots 2 (P0-2, 14/11) : un fichier déclaré « retire » n’est plus une racine (D3 tient qu’il est absent)
   const racines = [
     ...new Set([
       ...fichiersDuMoteur(),
@@ -398,6 +399,7 @@ test('T-X12 les sha1 de la partie 0 : tous les fichiers gelés identiques à l�
     assert.ok(GELES.some(([g]) => g === f), `${f} est dans la liste du gel`);
   }
   for (const [f, attendu] of GELES) {
+    if (declareParUnLot2(f)) continue; // Partie 0 des lots 2 (B) : déclaré par un lot 2, son sha1 de partie 0 est historique
     const chemin = f.startsWith('ui/') ? path.join(RACINE, f) : path.join(SRC, f);
     // Étape 38 (lot 1b, 04/11/2026) : l'actualisation comparée sans ses blocs « ajout pur » de la 38 (combinaisonFuite.test.mjs, T-X10).
     // Étape 36 (lot 1, 09/11/2026) : ses ajouts purs aux fichiers gelés (lancements.js, matchStatsDb.js, l'actualisation, settlementService.js)
@@ -494,7 +496,7 @@ test('T-X14 la règle « déclencheur » : dans chaque déclencheur retouché, l
   for (const [f, attendu] of [
     ['core/ai/bulletinFiches.js', '924bb3f7481d219034d354a8cbd8980a933cdc52'],
     ['data/opportunities.js', '35c7932e4390f9b13e46e494de628d8f4a13ebfe']
-  ]) assert.equal(sha1(fs.readFileSync(path.join(SRC, f))), attendu, `${f} : non retouché au lot 1a`);
+  ]) if (!declareParUnLot2(f)) assert.equal(sha1(fs.readFileSync(path.join(SRC, f))), attendu, `${f} : non retouché au lot 1a`); // Partie 0 des lots 2 (B)
 });
 
 test('T-X15 ni compactContext.js ni ses appelants ne modifient le résultat du moteur (gelé en profondeur, copie isolée) ; la fiche de l’IA dit la PART, jamais un euro', () => {
@@ -562,6 +564,7 @@ const LANCEMENTS_PARTIE_0_1B = '24757023bc7b80ec7bb8d092d990a257e5efa6ab';
 test('T-X10 lancements.js SANS les ajouts de la 39 = la partie 0 du lot 1b à l’octet ; l’ajout ne change que la ligne de PORTEES et n’en retire aucune autre', () => {
   assert.deepEqual([...FICHIERS_AJOUTS_39], ['bench/lancements.js']);
   for (const f of FICHIERS_AJOUTS_39) {
+    if (declareParUnLot2(f)) continue; // Partie 0 des lots 2 (B) : déclaré par un lot 2, son sha1 de partie 0 est historique
     const texte = fs.readFileSync(path.join(SRC, f), 'utf8');
     assert.equal(sha1(Buffer.from(sansLesAjoutsDe39(f, texte), 'utf8')), LANCEMENTS_PARTIE_0_1B, f);
     assert.equal(sha1(octetsSansLesAjoutsDe39(f, fs.readFileSync(path.join(SRC, f)))), LANCEMENTS_PARTIE_0_1B);

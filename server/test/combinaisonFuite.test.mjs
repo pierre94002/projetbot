@@ -45,6 +45,7 @@ import { degreDeF } from '../src/data/combinaison/reglesDeConfiance.js';
 import * as B from '../src/data/combinaison/bancDeLaCombinaison.js';
 import { referenceDuMatch } from '../src/core/engine/verdictPari.js';
 import { COLONNES_CLOTURE } from '../src/bench/periodes.js';
+import { declareParUnLot2 } from './aides/enService.mjs';
 
 const SRC = path.join(SERVEUR, 'src');
 const COMB = path.join(SRC, 'data', 'combinaison');
@@ -300,7 +301,7 @@ test('T-X10 l’actualisation (gelée pendant l’essai 27) : sans ses deux bloc
   // Étape 35 (lot 1b, 10/11/2026) : de même pour ses deux blocs « ajout pur » (vérifiés par debutsFrontiere.test.mjs, T-X10).
   const { garde, ajoutes } = blocs38(texte.replace(/^[^\n]*\[étape 36, lot 1 : ajout pur, début\][\s\S]*?\[étape 36, lot 1 : ajout pur, fin\][^\n]*\n/gm, '').replace(/^[^\n]*\[étape 35, lot 1b : ajout pur, début\][\s\S]*?\[étape 35, lot 1b : ajout pur, fin\][^\n]*\n/gm, ''));
   assert.equal(ajoutes.length, 2, 'deux blocs ajoutés');
-  assert.equal(crypto.createHash('sha1').update(Buffer.from(garde, 'utf8')).digest('hex'), attendu, 'hors des blocs marqués, rien ne change');
+  if (!declareParUnLot2(f)) assert.equal(crypto.createHash('sha1').update(Buffer.from(garde, 'utf8')).digest('hex'), attendu, 'hors des blocs marqués, rien ne change'); // Partie 0 des lots 2 (B)
   for (const b of ajoutes) {
     const code = b.replace(new RegExp('/[*][^]*?[*]/', 'g'), '').replace(new RegExp('(^|[^:\'"`])//.*$', 'gm'), '$1');
     assert.doesNotMatch(code, /\.run\(|INSERT\s|UPDATE\s|DELETE\s|upsert|writeJson|writeFile|\.exec\(/, 'un bloc ajouté écrit');

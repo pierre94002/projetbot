@@ -26,6 +26,7 @@ import * as E from '../src/data/coupes/coupesEnfant.js';
 import { VARIANTES_DE_L_ETAPE_36 } from '../src/bench/lancements.js';
 import { COUPES_AU_BANC } from '../src/data/coupes/noteDesCoupes.js';
 import { MOTS_DE_LA_CALIBRATION, PERIODES_DU_BANC, CALIBRATION } from '../src/data/coupes/reglagesCoupes.js';
+import { EMPREINTE_EN_SERVICE } from './aides/enService.mjs';
 
 const SRC = path.join(SERVEUR, 'src');
 const sha1 = (t) => crypto.createHash('sha1').update(t).digest('hex');
@@ -167,8 +168,8 @@ test('T-B10 — le script : un seul regard (K, règles par sha1, verrou posé av
   const sortie = JSON.parse(fs.readFileSync(d('premier.json'), 'utf8'));
   assert.equal(sortie.premierRegard, verrou.pose);
   assert.equal(sortie.base.lectureSeule, true);
-  assert.equal(sortie.empreinteDuMoteur.sha1, '16f2459db183a99576365047da98b7777687ef05');
-  assert.equal(sortie.empreinteDuMoteur.candidate, 'f01dd8496f56a415');
+  assert.equal(sortie.empreinteDuMoteur.sha1, EMPREINTE_EN_SERVICE.moteur); // Partie 0 des lots 2 (A)
+  assert.equal(sortie.empreinteDuMoteur.candidate, EMPREINTE_EN_SERVICE.candidate); // Partie 0 des lots 2 (A)
   assert.ok(sortie.comptes.unites > 0, JSON.stringify(sortie.comptes));
   assert.equal(sortie.comptes.dernierJourLu, PERIODES_DU_BANC.dernierJourLu);
   assert.ok(Object.values(MOTS_DE_LA_CALIBRATION).includes(sortie.calibration.toutes.mot));

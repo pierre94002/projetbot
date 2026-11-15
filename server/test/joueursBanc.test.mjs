@@ -44,6 +44,7 @@ import { zPour } from '../src/bench/guard.js';
 import * as BANC from '../src/data/joueurs/bancDesJoueurs.js';
 import { GRILLE_KAPPA, PERIODES_DU_BANC, PREUVE } from '../src/data/joueurs/reglagesJoueurs.js';
 import { calibrationDe, perteDUneLigne, recaler } from '../src/data/joueurs/formulesDesJoueurs.js';
+import { EMPREINTE_EN_SERVICE } from './aides/enService.mjs';
 
 const SRC = path.join(SERVEUR, 'src');
 const uneFois = (fabrique) => {
@@ -357,8 +358,8 @@ test('T-B9 le script : UN SEUL regard — K, règles par sha1, sceau de data/car
     assert.equal(sortie.premierRegard, verrou.pose);
     assert.equal(sortie.banc.K, 11);
     assert.equal(sortie.base.lectureSeule, true);
-    assert.equal(sortie.empreinteDuMoteur.sha1, '16f2459db183a99576365047da98b7777687ef05');
-    assert.equal(sortie.empreinteDuMoteur.candidate, 'f01dd8496f56a415');
+    assert.equal(sortie.empreinteDuMoteur.sha1, EMPREINTE_EN_SERVICE.moteur); // Partie 0 des lots 2 (A)
+    assert.equal(sortie.empreinteDuMoteur.candidate, EMPREINTE_EN_SERVICE.candidate); // Partie 0 des lots 2 (A)
     assert.deepEqual(sortie.banc.variantes.map((x) => x.id), [...BANC.VARIANTES_JUGEES]);
     assert.equal(Object.keys(sortie.cartons.scelles).length, fs.readdirSync(cartons).length);
     assert.match(banc('second.json').json.refus, /DÉJÀ été passé/);

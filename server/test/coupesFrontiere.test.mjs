@@ -39,6 +39,7 @@ import { fichiersDuMoteur, empreinteDuCode, empreinteDeLaCandidate, CANDIDATE_EN
 import * as LANC from '../src/bench/lancements.js';
 import { enregistrerLancements, fenetresVues, compterVariantes, lancementDe } from '../src/bench/trialsRegistry.js';
 import { DECISION_DE_PIERRE, PERIODES_DU_BANC } from '../src/data/coupes/reglagesCoupes.js';
+import { EMPREINTE_EN_SERVICE, declareParUnLot2 } from './aides/enService.mjs';
 
 const SRC = path.join(SERVEUR, 'src');
 const RACINE = path.join(SERVEUR, '..');
@@ -293,8 +294,8 @@ const rel = (f) => path.relative(SRC, f).split(path.sep).join('/');
 const tousLesFichiers = (dossier) => (fs.existsSync(dossier) ? fs.readdirSync(dossier, { recursive: true }).map(String).filter((f) => fs.statSync(path.join(dossier, f)).isFile()) : []);
 
 test('T-X1 — les empreintes ne bougent pas ; rien de l’étape 36 sous core/ ni sports/ ni dans l’empreinte ; les fichiers gelés identiques à l’octet (les quatre ajouts purs SANS leur ajout)', () => {
-  assert.equal(empreinteDuCode({ rafraichir: true }).empreinte, '16f2459db183a99576365047da98b7777687ef05');
-  assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), 'f01dd8496f56a415');
+  assert.equal(empreinteDuCode({ rafraichir: true }).empreinte, EMPREINTE_EN_SERVICE.moteur); // Partie 0 des lots 2 (A)
+  assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), EMPREINTE_EN_SERVICE.candidate); // Partie 0 des lots 2 (A)
   assert.ok(FICHIERS_36.length >= 12, FICHIERS_36.join(', '));
   for (const racine of ['core', 'sports']) {
     for (const f of tousLesFichiers(path.join(SRC, racine))) {
@@ -307,12 +308,13 @@ test('T-X1 — les empreintes ne bougent pas ; rien de l’étape 36 sous core/ 
   assert.ok(!MODULES_DU_MOTEUR.fichiers.some((f) => /coupes/i.test(f)));
   assert.ok(INTERDITS.length >= 200, `${INTERDITS.length} fichiers gelés`);
   for (const [f, attendu] of INTERDITS) {
+    if (declareParUnLot2(f)) continue; // Partie 0 des lots 2 (B) : déclaré par un lot 2, son sha1 de partie 0 est historique
     const texte = fs.readFileSync(path.join(SRC, f), 'utf8');
     const octets = PERMIS[f] ? Buffer.from(sansLAjout(f, texte), 'utf8') : fs.readFileSync(path.join(SRC, f));
     assert.equal(sha1(octets), attendu, `${f} : retouché (gelé pendant l’essai 27${PERMIS[f] ? ', au-delà de son ajout pur' : ''})`);
   }
   for (const [f, attendu] of Object.entries(PERMIS)) assert.ok(INTERDITS.some(([g, s]) => g === f && s === attendu), `${f} : son sha1 de partie 0`);
-  for (const [f, attendu] of INTERDITS_UI) assert.equal(sha1(fs.readFileSync(path.join(RACINE, f))), attendu, `${f} : retouché`);
+  for (const [f, attendu] of INTERDITS_UI) if (!declareParUnLot2(f)) assert.equal(sha1(fs.readFileSync(path.join(RACINE, f))), attendu, `${f} : retouché`); // Partie 0 des lots 2 (B)
 });
 
 test('T-X2 — depuis TOUTES les racines de la règle du gel, rien n’atteint data/coupes/ ; lancements.js, matchStatsDb.js et settlementService.js n’en importent rien', () => {
@@ -461,8 +463,9 @@ test('T-X10 — l’actualisation sans les blocs de la 36 = la partie 0 à l’o
   const auto = fs.readFileSync(path.join(SRC, 'jobs', 'matchStatsAutoRefresh.js'), 'utf8');
   assert.equal((auto.match(/\[étape 36, lot 1 : ajout pur, début\]/g) ?? []).length, 2);
   // Étape 35 (lot 1b, 10/11/2026) : ses deux blocs « ajout pur » retirés d'abord (aides/ajouts35.mjs ; debutsFrontiere.test.mjs, T-X10).
-  assert.equal(sha1(Buffer.from(sansBlocs36(sansLesAjoutsDe35('jobs/matchStatsAutoRefresh.js', auto)), 'utf8')), PERMIS['jobs/matchStatsAutoRefresh.js']);
+  if (!declareParUnLot2('jobs/matchStatsAutoRefresh.js')) assert.equal(sha1(Buffer.from(sansBlocs36(sansLesAjoutsDe35('jobs/matchStatsAutoRefresh.js', auto)), 'utf8')), PERMIS['jobs/matchStatsAutoRefresh.js']); // Partie 0 des lots 2 (B)
   // Étape 35 (lot 1b, 10/11/2026) : le bloc `debutsDeSaison` de la route retiré d'abord (aides/ajouts35.mjs ; debutsFrontiere.test.mjs, T-X10).
+  if (!declareParUnLot2('api/controllers/analysis.controller.js')) { // Partie 0 des lots 2 (B) : la route déclarée par un lot 2, son sha1 de partie 0 est historique
   const route = sansLesAjoutsDe35('api/controllers/analysis.controller.js', fs.readFileSync(path.join(SRC, 'api', 'controllers', 'analysis.controller.js'), 'utf8'));
   const debut = route.indexOf('/**\n * Étape 36 du plan (lot 1) : la coupe de ce match');
   const fin = route.indexOf('/**\n * Étape 38 du plan (lot 1b)');
@@ -471,6 +474,7 @@ test('T-X10 — l’actualisation sans les blocs de la 36 = la partie 0 à l’o
     .replace("  // Étape 36 : la coupe du match (tour, aller, chance de qualification à blanc, règle d’après 90 minutes, lieu), APRÈS l’analyse elle aussi\n  // (le verdict n’en sait rien, l’IA ne la reçoit jamais) ; null hors d’une coupe.\n  const coupe = sportId === 'football' ? await coupeDuMatchAnalyse(avecFraicheur, analyse, getEngineConfig(sportId)) : null;\n", '')
     .replace(', ...(combinaison ? { combinaison } : {}), ...(coupe ? { coupe } : {}) };', ', ...(combinaison ? { combinaison } : {}) };');
   assert.equal(sha1(Buffer.from(sans, 'utf8')), ROUTE_PARTIE_0);
+  } // Partie 0 des lots 2 (B)
 });
 
 test('T-X11 — rien n’écrit engine-config.json ; « qualifié » dans la saisie : null, lu par aucun fichier du moteur', () => {
@@ -485,6 +489,6 @@ test('T-X12 — la règle du format : UNE seule définition, celle du correctif 
   assert.match(conf, /quoiDeLaProlongation\(fin, events\)/);
   assert.doesNotMatch(conf, /minute\)?\s*>\s*90|> 90\b/, 'aucune copie de la règle « un événement après la 90e »');
   const s = fs.readFileSync(path.join(SRC, 'data', 'providers', 'settlementService.js'), 'utf8');
-  assert.equal(sha1(Buffer.from(sansLAjout('data/providers/settlementService.js', s), 'utf8')), 'ee5ed0786f48fb36558184356f26c0a8e95c5436');
+  if (!declareParUnLot2('data/providers/settlementService.js')) assert.equal(sha1(Buffer.from(sansLAjout('data/providers/settlementService.js', s), 'utf8')), 'ee5ed0786f48fb36558184356f26c0a8e95c5436'); // Partie 0 des lots 2 (B)
   assert.equal((s.match(/^export function quoiDeLaProlongation\(/gm) ?? []).length, 1);
 });
