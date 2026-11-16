@@ -1357,6 +1357,3087 @@
     "createdAt": "2026-11-14T19:32:07.995Z"
   },
   {
+    "matchId": "cal-2026-11-16-albacete-celta-fortuna",
+    "homeName": "Albacete",
+    "awayName": "Celta Fortuna",
+    "league": "La Liga 2 - Spain",
+    "commenceTime": "2026-11-16T19:30:00.000Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Albacete vs Celta Fortuna",
+      "expectedGoals": {
+        "home": 1.5,
+        "away": 1.285,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 1.65,
+        "draw": 4.46,
+        "away": 5.89
+      },
+      "market": {
+        "odds1": 1.57,
+        "oddsDraw": 3.86,
+        "odds2": 4.98
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "trop_peu_de_bookmakers",
+        "candidates": []
+      },
+      "statExpectations": {
+        "corners": {
+          "home": 6.44,
+          "away": 3.65,
+          "total": 10.08
+        },
+        "shots": {
+          "home": 15.07,
+          "away": 12.6,
+          "total": 27.67
+        },
+        "shotsOnTarget": {
+          "home": 4.95,
+          "away": 4.23,
+          "total": 9.18
+        }
+      },
+      "marketPredictions": [
+        {
+          "marketId": "result",
+          "params": {
+            "outcome": "home"
+          },
+          "market": "Résultat",
+          "predictedOutcome": "home",
+          "predictedLabel": "Albacete gagne",
+          "predictedOdds": 1.65,
+          "probability": 61,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 1.5,
+            "side": "over"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 1.5 buts",
+          "predictedOdds": 1.29,
+          "probability": 78,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "yes"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "yes",
+          "predictedLabel": "Oui",
+          "predictedOdds": 1.75,
+          "probability": 57,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 1.5,
+            "key": "homeOver"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "homeOver",
+          "predictedLabel": "Albacete & Plus de 1.5 buts",
+          "predictedOdds": 2.07,
+          "probability": 48,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 2.5,
+            "side": "under"
+          },
+          "market": "Buts — Albacete",
+          "predictedOutcome": "under",
+          "predictedLabel": "Albacete — Moins de 2.5 buts",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 0.5,
+            "side": "over"
+          },
+          "market": "Buts — Celta Fortuna",
+          "predictedOutcome": "over",
+          "predictedLabel": "Celta Fortuna — Plus de 0.5 buts",
+          "predictedOdds": 1.38,
+          "probability": 72,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalCorners",
+          "params": {
+            "line": 12.5,
+            "side": "under"
+          },
+          "market": "Total corners",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 12.5 corners",
+          "predictedOdds": 1.3,
+          "probability": 77,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "home",
+            "line": 9.5,
+            "side": "under"
+          },
+          "market": "Corners — Albacete",
+          "predictedOutcome": "under",
+          "predictedLabel": "Albacete — Moins de 9.5 corners",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "away",
+            "line": 1.5,
+            "side": "over"
+          },
+          "market": "Corners — Celta Fortuna",
+          "predictedOutcome": "over",
+          "predictedLabel": "Celta Fortuna — Plus de 1.5 corners",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShots",
+          "params": {
+            "line": 33.5,
+            "side": "under"
+          },
+          "market": "Total tirs",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 33.5 tirs",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "home",
+            "line": 19.5,
+            "side": "under"
+          },
+          "market": "Tirs — Albacete",
+          "predictedOutcome": "under",
+          "predictedLabel": "Albacete — Moins de 19.5 tirs",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "away",
+            "line": 8.5,
+            "side": "over"
+          },
+          "market": "Tirs — Celta Fortuna",
+          "predictedOutcome": "over",
+          "predictedLabel": "Celta Fortuna — Plus de 8.5 tirs",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShotsOnTarget",
+          "params": {
+            "line": 6.5,
+            "side": "over"
+          },
+          "market": "Total tirs cadrés",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 6.5 tirs cadrés",
+          "predictedOdds": 1.27,
+          "probability": 79,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "home",
+            "line": 6.5,
+            "side": "under"
+          },
+          "market": "Tirs cadrés — Albacete",
+          "predictedOutcome": "under",
+          "predictedLabel": "Albacete — Moins de 6.5 tirs cadrés",
+          "predictedOdds": 1.33,
+          "probability": 75,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "away",
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Tirs cadrés — Celta Fortuna",
+          "predictedOutcome": "over",
+          "predictedLabel": "Celta Fortuna — Plus de 2.5 tirs cadrés",
+          "predictedOdds": 1.31,
+          "probability": 76,
+          "minOdds": 1.2
+        }
+      ],
+      "engineVersion": 5
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 11470,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 3029,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 11470,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 3029,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 11470,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 11470
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.07617399999999999,
+    "analysedAt": "2026-11-16T06:21:57.783Z",
+    "timing": "avance",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 494,
+      "tokens": 1519,
+      "lecons": [
+        "cal-2026-10-10-ceuta-sabadell|bothTeamsScore",
+        "cal-2026-10-10-ceuta-sabadell|totalGoals"
+      ],
+      "dossiersDu": "2026-11-14T23:17:47.317Z",
+      "equipes": {
+        "home": {
+          "id": "fotmob-8393",
+          "dossier": true
+        },
+        "away": {
+          "id": "fotmob-161743",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "La Liga 2 - Spain",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "FotMob",
+      "fotmobMatchId": "5868536",
+      "fetchedAt": "2026-11-16T06:21:34.433Z",
+      "minutesBeforeKickoff": 788,
+      "home": {
+        "team": "Albacete",
+        "teamId": "fotmob-8393",
+        "formation": "4-4-2",
+        "coach": "Joseba Etxeberria",
+        "statsSince": "2026-07-01",
+        "teamMatches": 14,
+        "startXI": [
+          {
+            "id": "fotmob-1106821",
+            "name": "Carlos Marín",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 5,
+              "starts": 5,
+              "minutes": 450,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.46
+            }
+          },
+          {
+            "id": "fotmob-1801500",
+            "name": "Antonio Velilla",
+            "number": 28,
+            "position": "Defender",
+            "age": 19,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.875,
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 90,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1121204",
+            "name": "Pepe Sánchez",
+            "number": 23,
+            "position": "Defender",
+            "age": 26,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.625,
+            "stats": {
+              "apps": 5,
+              "starts": 4,
+              "minutes": 294,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.17,
+              "rating": 6.46
+            }
+          },
+          {
+            "id": "fotmob-1766338",
+            "name": "Daniel Bernabéu",
+            "number": 27,
+            "position": "Defender",
+            "age": 19,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.375,
+            "stats": {
+              "apps": 11,
+              "starts": 2,
+              "minutes": 361,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.19,
+              "rating": 6.39
+            }
+          },
+          {
+            "id": null,
+            "name": "Miguel Belem",
+            "number": 35,
+            "position": "Defender",
+            "age": 18,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.125,
+            "stats": null
+          },
+          {
+            "id": "fotmob-676517",
+            "name": "José Corpas",
+            "number": 17,
+            "position": "Midfielder",
+            "age": 35,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.875,
+            "stats": {
+              "apps": 13,
+              "starts": 13,
+              "minutes": 1122,
+              "goals": 0,
+              "assists": 0,
+              "xg": 2.04,
+              "rating": 6.63
+            }
+          },
+          {
+            "id": "fotmob-574186",
+            "name": "Agus Medina",
+            "number": 4,
+            "position": "Midfielder",
+            "age": 32,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.625,
+            "stats": {
+              "apps": 12,
+              "starts": 6,
+              "minutes": 589,
+              "goals": 0,
+              "assists": 2,
+              "xg": 0.46,
+              "rating": 6.19
+            }
+          },
+          {
+            "id": "fotmob-1605140",
+            "name": "Javi Villar",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.375,
+            "stats": {
+              "apps": 9,
+              "starts": 5,
+              "minutes": 347,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 5.97
+            }
+          },
+          {
+            "id": "fotmob-1473706",
+            "name": "Agustín Albarracín",
+            "number": 32,
+            "position": "Midfielder",
+            "age": 21,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "x": 0.613,
+            "y": 0.125,
+            "stats": {
+              "apps": 8,
+              "starts": 2,
+              "minutes": 404,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.29,
+              "rating": 6.27
+            }
+          },
+          {
+            "id": "fotmob-1031321",
+            "name": "Mario Soberón",
+            "number": 9,
+            "position": "Forward",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.87,
+            "y": 0.7,
+            "stats": {
+              "apps": 13,
+              "starts": 8,
+              "minutes": 749,
+              "goals": 1,
+              "assists": 1,
+              "xg": 1.63,
+              "rating": 6.42
+            }
+          },
+          {
+            "id": "fotmob-874482",
+            "name": "Roberto González",
+            "number": 10,
+            "position": "Forward",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.87,
+            "y": 0.3,
+            "stats": {
+              "apps": 8,
+              "starts": 4,
+              "minutes": 349,
+              "goals": 2,
+              "assists": 0,
+              "xg": 0.91,
+              "rating": 6.38
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-213504",
+            "name": "Diego Mariño",
+            "number": 13,
+            "position": "Goalkeeper",
+            "age": 36,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 9,
+              "starts": 9,
+              "minutes": 810,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.48
+            }
+          },
+          {
+            "id": "fotmob-1712755",
+            "name": "Jota",
+            "number": 40,
+            "position": "Defender",
+            "age": 20,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 1,
+              "starts": 0,
+              "minutes": 19,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-670006",
+            "name": "Lluís López",
+            "number": 22,
+            "position": "Defender",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 14,
+              "starts": 13,
+              "minutes": 1199,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.25,
+              "rating": 6.38
+            }
+          },
+          {
+            "id": "fotmob-1700855",
+            "name": "Capi",
+            "number": 26,
+            "position": "Midfielder",
+            "age": 20,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": null
+          },
+          {
+            "id": "fotmob-1796527",
+            "name": "Antonio David",
+            "number": 44,
+            "position": "Midfielder",
+            "age": 21,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 2,
+              "starts": 0,
+              "minutes": 16,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.09
+            }
+          },
+          {
+            "id": "fotmob-1322880",
+            "name": "Sergio Ortuño",
+            "number": 18,
+            "position": "Midfielder",
+            "age": 27,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 13,
+              "starts": 10,
+              "minutes": 930,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.49,
+              "rating": 6.79
+            }
+          },
+          {
+            "id": "fotmob-940745",
+            "name": "Víctor San Bartolomé",
+            "number": 14,
+            "position": "Midfielder",
+            "age": 27,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 9,
+              "starts": 8,
+              "minutes": 563,
+              "goals": 2,
+              "assists": 0,
+              "xg": 0.69,
+              "rating": 6.97
+            }
+          },
+          {
+            "id": "fotmob-1532255",
+            "name": "Álex Rubio",
+            "number": 19,
+            "position": "Forward",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 12,
+              "starts": 6,
+              "minutes": 564,
+              "goals": 3,
+              "assists": 0,
+              "xg": 2.2,
+              "rating": 6.34
+            }
+          },
+          {
+            "id": "fotmob-1997604",
+            "name": "Fabio Garcia",
+            "number": 39,
+            "position": "Forward",
+            "age": 18,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "id": "fotmob-676517",
+            "age": 35,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "José Corpas",
+            "reason": "suspendu",
+            "expectedReturn": "Late November 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 13,
+              "starts": 13,
+              "minutes": 1122,
+              "goals": 0,
+              "assists": 0,
+              "xg": 2.04,
+              "rating": 6.63
+            }
+          },
+          {
+            "id": "fotmob-391165",
+            "age": 33,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Higinio Marín",
+            "reason": "blessé",
+            "expectedReturn": "Doubtful",
+            "position": "Forward",
+            "stats": {
+              "apps": 9,
+              "starts": 3,
+              "minutes": 331,
+              "goals": 3,
+              "assists": 0,
+              "xg": 3.38,
+              "rating": 6.47
+            }
+          },
+          {
+            "id": "fotmob-803203",
+            "age": 35,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Fran Gámez",
+            "reason": "blessé",
+            "expectedReturn": "Late November 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 9,
+              "starts": 7,
+              "minutes": 599,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.22,
+              "rating": 6.83
+            }
+          },
+          {
+            "id": "fotmob-1700855",
+            "age": 20,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Capi",
+            "reason": "blessé",
+            "expectedReturn": "Back in training",
+            "position": null,
+            "stats": null
+          },
+          {
+            "id": "fotmob-1325580",
+            "age": 26,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Javi Moreno",
+            "reason": "blessé",
+            "expectedReturn": "Late November 2026",
+            "position": "Defender",
+            "stats": {
+              "apps": 3,
+              "starts": 3,
+              "minutes": 245,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.83
+            }
+          },
+          {
+            "id": "fotmob-965013",
+            "age": 29,
+            "countryCode": "GHA",
+            "countryName": "Ghana",
+            "name": "Samuel Obeng",
+            "reason": "blessé",
+            "expectedReturn": "Back in training",
+            "position": "Forward",
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 53,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.27
+            }
+          },
+          {
+            "id": "fotmob-434593",
+            "age": 34,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Antonio Puertas",
+            "reason": "blessé",
+            "expectedReturn": "Early December 2026",
+            "position": null,
+            "stats": null
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-889544",
+            "age": 30,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Carlos Neva",
+            "position": "Midfielder",
+            "starts": 13,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-670006",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Lluís López",
+            "position": "Defender",
+            "starts": 13,
+            "goals": 0,
+            "assists": 0,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-1322880",
+            "age": 27,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Sergio Ortuño",
+            "position": "Midfielder",
+            "starts": 10,
+            "goals": 0,
+            "assists": 1,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-213504",
+            "age": 36,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Diego Mariño",
+            "position": "Goalkeeper",
+            "starts": 9,
+            "goals": 0,
+            "assists": 0,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-940745",
+            "age": 27,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Víctor San Bartolomé",
+            "position": "Midfielder",
+            "starts": 8,
+            "goals": 2,
+            "assists": 0,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-1127223",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Antonio Pacheco Ruiz",
+            "position": "Midfielder",
+            "starts": 8,
+            "goals": 1,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-803203",
+            "age": 35,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Fran Gámez",
+            "position": "Midfielder",
+            "starts": 7,
+            "goals": 0,
+            "assists": 0,
+            "status": "blessé"
+          },
+          {
+            "id": "fotmob-574631",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Jesús Vallejo",
+            "position": "Defender",
+            "starts": 7,
+            "goals": 1,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1446819",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Víctor Valverde Da Silva",
+            "position": "Midfielder",
+            "starts": 7,
+            "goals": 0,
+            "assists": 2,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1323669",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Lorenzo Aguado",
+            "position": "Midfielder",
+            "starts": 7,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          }
+        ]
+      },
+      "away": {
+        "team": "Celta Fortuna",
+        "teamId": "fotmob-161743",
+        "formation": "3-4-2-1",
+        "coach": "Fredi Alvarez",
+        "statsSince": "2026-07-01",
+        "teamMatches": 13,
+        "startXI": [
+          {
+            "id": "fotmob-1308413",
+            "name": "Coke Carrillo",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 13,
+              "starts": 13,
+              "minutes": 1170,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.73
+            }
+          },
+          {
+            "id": "fotmob-1609347",
+            "name": "Kike Ribes",
+            "number": 3,
+            "position": "Defender",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.292,
+            "y": 0.79,
+            "stats": {
+              "apps": 13,
+              "starts": 13,
+              "minutes": 1102,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.2,
+              "rating": 6.78
+            }
+          },
+          {
+            "id": "fotmob-1792245",
+            "name": "Seyni Ndiaye",
+            "number": 4,
+            "position": "Defender",
+            "age": 21,
+            "countryCode": "SEN",
+            "countryName": "Senegal",
+            "x": 0.292,
+            "y": 0.5,
+            "stats": {
+              "apps": 6,
+              "starts": 3,
+              "minutes": 349,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.21,
+              "rating": 6.67
+            }
+          },
+          {
+            "id": "fotmob-1092372",
+            "name": "Joel López",
+            "number": 18,
+            "position": "Defender",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.292,
+            "y": 0.21,
+            "stats": {
+              "apps": 13,
+              "starts": 11,
+              "minutes": 938,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.18,
+              "rating": 6.78
+            }
+          },
+          {
+            "id": "fotmob-1910012",
+            "name": "Germain Milla",
+            "number": 23,
+            "position": "Midfielder",
+            "age": 20,
+            "countryCode": "CMR",
+            "countryName": "Cameroon",
+            "x": 0.485,
+            "y": 0.875,
+            "stats": {
+              "apps": 14,
+              "starts": 11,
+              "minutes": 859,
+              "goals": 0,
+              "assists": 3,
+              "xg": 0.78,
+              "rating": 6.6
+            }
+          },
+          {
+            "id": "fotmob-1721088",
+            "name": "Adria Capdevila",
+            "number": 16,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.485,
+            "y": 0.625,
+            "stats": {
+              "apps": 13,
+              "starts": 13,
+              "minutes": 1058,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.47,
+              "rating": 6.85
+            }
+          },
+          {
+            "id": "fotmob-2140586",
+            "name": "Mateo Sobral",
+            "number": 29,
+            "position": "Midfielder",
+            "age": 17,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.485,
+            "y": 0.375,
+            "stats": {
+              "apps": 8,
+              "starts": 5,
+              "minutes": 472,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.24,
+              "rating": 6.51
+            }
+          },
+          {
+            "id": "fotmob-1329533",
+            "name": "Jan Oliveras",
+            "number": 14,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.485,
+            "y": 0.125,
+            "stats": {
+              "apps": 7,
+              "starts": 2,
+              "minutes": 240,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.52
+            }
+          },
+          {
+            "id": "fotmob-2136736",
+            "name": "Aldrine Kibet",
+            "number": 15,
+            "position": "Midfielder",
+            "age": 19,
+            "countryCode": "KEN",
+            "countryName": "Kenya",
+            "x": 0.678,
+            "y": 0.7,
+            "stats": {
+              "apps": 11,
+              "starts": 7,
+              "minutes": 595,
+              "goals": 3,
+              "assists": 2,
+              "xg": 1.86,
+              "rating": 7.08
+            }
+          },
+          {
+            "id": "fotmob-1700562",
+            "name": "Ángel Arcos",
+            "number": 11,
+            "position": "Midfielder",
+            "age": 20,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.678,
+            "y": 0.3,
+            "stats": {
+              "apps": 14,
+              "starts": 12,
+              "minutes": 981,
+              "goals": 1,
+              "assists": 1,
+              "xg": 1.24,
+              "rating": 6.94
+            }
+          },
+          {
+            "id": "fotmob-1552439",
+            "name": "Álvaro Marín",
+            "number": 9,
+            "position": "Forward",
+            "age": 23,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 13,
+              "starts": 11,
+              "minutes": 950,
+              "goals": 8,
+              "assists": 1,
+              "xg": 6.3,
+              "rating": 7.03
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-1640271",
+            "name": "Caio Barone",
+            "number": 13,
+            "position": "Goalkeeper",
+            "age": 20,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1843631",
+            "name": "Marcos González",
+            "number": 25,
+            "position": "Goalkeeper",
+            "age": 20,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-2299895",
+            "name": "David Sueiro",
+            "number": 33,
+            "position": "Defender",
+            "age": 16,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 2,
+              "starts": 0,
+              "minutes": 19,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.05,
+              "rating": 6.43
+            }
+          },
+          {
+            "id": "fotmob-1426067",
+            "name": "Pablo Meixus",
+            "number": 6,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 11,
+              "starts": 7,
+              "minutes": 547,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.09,
+              "rating": 5.89
+            }
+          },
+          {
+            "id": "fotmob-2392848",
+            "name": "Raul Chirveches",
+            "number": 31,
+            "position": "Defender",
+            "age": 18,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1515132",
+            "name": "Hugo Cuenca",
+            "number": 17,
+            "position": "Midfielder",
+            "age": 21,
+            "countryCode": "PAR",
+            "countryName": "Paraguay",
+            "stats": {
+              "apps": 9,
+              "starts": 3,
+              "minutes": 412,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.36,
+              "rating": 6.69
+            }
+          },
+          {
+            "id": "fotmob-2337837",
+            "name": "Noah Rodriguez",
+            "number": 27,
+            "position": "Midfielder",
+            "age": 18,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 1,
+              "starts": 0,
+              "minutes": 7,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1310118",
+            "name": "Stefan Bajčetić",
+            "number": 22,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 3,
+              "starts": 0,
+              "minutes": 32,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.02,
+              "rating": 6.12
+            }
+          },
+          {
+            "id": "fotmob-2071072",
+            "name": "Angel Davila",
+            "number": 19,
+            "position": "Forward",
+            "age": 19,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 4,
+              "starts": 0,
+              "minutes": 32,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.11,
+              "rating": 5.83
+            }
+          },
+          {
+            "id": "fotmob-1797312",
+            "name": "Vladimir Silva",
+            "number": 28,
+            "position": "Forward",
+            "age": 17,
+            "countryCode": "GNB",
+            "countryName": "Guinea-Bissau",
+            "stats": {
+              "apps": 7,
+              "starts": 0,
+              "minutes": 154,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.31,
+              "rating": 6.48
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "id": "fotmob-1721088",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Adria Capdevila",
+            "reason": "suspendu",
+            "expectedReturn": "Mid November 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 13,
+              "starts": 13,
+              "minutes": 1058,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.47,
+              "rating": 6.85
+            }
+          },
+          {
+            "id": "fotmob-1609347",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Kike Ribes",
+            "reason": "suspendu",
+            "expectedReturn": "Mid November 2026",
+            "position": "Defender",
+            "stats": {
+              "apps": 13,
+              "starts": 13,
+              "minutes": 1102,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.2,
+              "rating": 6.78
+            }
+          },
+          {
+            "id": "fotmob-1092372",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Joel López",
+            "reason": "suspendu",
+            "expectedReturn": "Mid November 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 13,
+              "starts": 11,
+              "minutes": 938,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.18,
+              "rating": 6.78
+            }
+          },
+          {
+            "id": "fotmob-2140586",
+            "age": 17,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Mateo Sobral",
+            "reason": "en sélection",
+            "expectedReturn": "Mid November 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 8,
+              "starts": 5,
+              "minutes": 472,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.24,
+              "rating": 6.51
+            }
+          },
+          {
+            "id": "fotmob-1515132",
+            "age": 21,
+            "countryCode": "PAR",
+            "countryName": "Paraguay",
+            "name": "Hugo Cuenca",
+            "reason": "en sélection",
+            "expectedReturn": "Mid November 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 9,
+              "starts": 3,
+              "minutes": 412,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.36,
+              "rating": 6.69
+            }
+          },
+          {
+            "id": "fotmob-2136736",
+            "age": 19,
+            "countryCode": "KEN",
+            "countryName": "Kenya",
+            "name": "Aldrine Kibet",
+            "reason": "en sélection",
+            "expectedReturn": "Mid November 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 11,
+              "starts": 7,
+              "minutes": 595,
+              "goals": 3,
+              "assists": 2,
+              "xg": 1.86,
+              "rating": 7.08
+            }
+          },
+          {
+            "id": "fotmob-1797312",
+            "age": 17,
+            "countryCode": "GNB",
+            "countryName": "Guinea-Bissau",
+            "name": "Vladimir Silva",
+            "reason": "en sélection",
+            "expectedReturn": "Mid November 2026",
+            "position": "Forward",
+            "stats": {
+              "apps": 7,
+              "starts": 0,
+              "minutes": 154,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.31,
+              "rating": 6.48
+            }
+          },
+          {
+            "id": "fotmob-1838575",
+            "age": 20,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Pablo Gavian",
+            "reason": "blessé",
+            "expectedReturn": "Out for season",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 10,
+              "starts": 7,
+              "minutes": 637,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.03,
+              "rating": 6.58
+            }
+          },
+          {
+            "id": "fotmob-2136754",
+            "age": 19,
+            "countryCode": "UAE",
+            "countryName": "UAE",
+            "name": "Anthony Khayat",
+            "reason": "blessé",
+            "expectedReturn": "Doubtful",
+            "position": null,
+            "stats": null
+          },
+          {
+            "id": "fotmob-1842712",
+            "age": 19,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Anxo Rodriguez",
+            "reason": "blessé",
+            "expectedReturn": "Doubtful",
+            "position": "Defender",
+            "stats": {
+              "apps": 8,
+              "starts": 7,
+              "minutes": 646,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.06,
+              "rating": 6.42
+            }
+          },
+          {
+            "id": "fotmob-1623141",
+            "age": 20,
+            "countryCode": "GHA",
+            "countryName": "Ghana",
+            "name": "Bernard Somuah",
+            "reason": "blessé",
+            "expectedReturn": "Late January 2027",
+            "position": "Forward",
+            "stats": {
+              "apps": 6,
+              "starts": 2,
+              "minutes": 204,
+              "goals": 2,
+              "assists": 0,
+              "xg": 1.56,
+              "rating": 6.57
+            }
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-1697454",
+            "age": 20,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Óscar Marcos",
+            "position": "Midfielder",
+            "starts": 10,
+            "goals": 3,
+            "assists": 1,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1842712",
+            "age": 19,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Anxo Rodríguez",
+            "position": "Defender",
+            "starts": 7,
+            "goals": 0,
+            "assists": 1,
+            "status": "blessé"
+          },
+          {
+            "id": "fotmob-1838575",
+            "age": 20,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Pablo Gavián Alonso",
+            "position": "Midfielder",
+            "starts": 7,
+            "goals": 0,
+            "assists": 1,
+            "status": "blessé"
+          },
+          {
+            "id": "fotmob-1426067",
+            "age": 23,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Pablo Meixús",
+            "position": "Midfielder",
+            "starts": 7,
+            "goals": 0,
+            "assists": 0,
+            "status": "remplaçant"
+          }
+        ]
+      },
+      "matchInfo": {
+        "round": "14",
+        "stadium": "Estadio Carlos Belmonte",
+        "city": "Albacete",
+        "capacity": 17524,
+        "surface": "grass",
+        "weather": "Partly Cloudy",
+        "temperature": 12,
+        "windSpeed": 4,
+        "precipitation": 0,
+        "referee": {
+          "name": "Eder Mallo Fernández",
+          "country": "Spain",
+          "league": "LaLiga2",
+          "matches": 44,
+          "yellowCardsPerMatch": 5.57,
+          "yellowCardsLeagueAverage": 5.11,
+          "redCards": 2,
+          "penalties": 8,
+          "foulsPerMatch": 26.26,
+          "foulsLeagueAverage": 26.62
+        }
+      }
+    },
+    "analysis": {
+      "summary": "Albacete (21e, 10 pts) arrive avec 3 victoires de suite sous Etxeberria (3 V en 3 matchs), mais reste contre-attaquant et peu dominant (43 % de possession, 12,8 tirs par match). Celta Fortuna (17e, 13 pts) est sans victoire depuis 4 matchs (1 D 1-2, 1 N, 1 D 1-5, 1 N) et concède 2,4 buts par match à l'extérieur. Les deux équipes sont très amputées : Albacete sans Corpas (suspendu), Higinio Marín (3 buts) et Moreno ; Celta Fortuna sans Capdevila, Ribes et Joel López (suspendus) ni Kibet, Sobral et Cuenca (en sélection, retour mi-novembre).",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Albacete en nette hausse, Celta Fortuna en difficulté",
+          "evidence": "Albacete : V V V D D (dernier 3-1 à Leganés) ; Celta Fortuna : D N D N V, 1 point par match sur les 5 derniers."
+        },
+        {
+          "factor": "statistiques et moyennes",
+          "observation": "Celta Fortuna produit peu en déplacement et concède beaucoup",
+          "evidence": "À l'extérieur : 1,2 / 2,4 buts, 10,2 / 17,4 tirs, 3,6 / 6,6 corners. Albacete à domicile : 14,8 / 14 tirs, 6,8 / 3,3 corners."
+        },
+        {
+          "factor": "compositions",
+          "observation": "Défense et milieu du Celta Fortuna remaniés",
+          "evidence": "Trois titulaires habituels suspendus (Capdevila, Ribes, Joel López) et Kibet (3+2) en sélection ; Albacete sans Corpas (13 titularisations) ni Higinio Marín (3 buts)."
+        },
+        {
+          "factor": "classement",
+          "observation": "Deux équipes du bas de tableau",
+          "evidence": "Albacete 21e sur 22, 10 pts ; Celta Fortuna 17e, 13 pts."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : Albacete est favori à domicile et en confiance. Les absences nombreuses des deux côtés rendent toutefois les volumes de tirs et de corners plus incertains. Le moteur ne retient aucun edge chiffré, et la mise est PASS.",
+      "caveats": "Les compositions sont publiées 788 minutes avant le coup d'envoi : elles peuvent changer. Le Celta Fortuna est une équipe réserve, et les statistiques de ses joueurs peuvent mélanger plusieurs équipes. Albacete a un nouvel entraîneur depuis 3 matchs seulement, donc l'échantillon est réduit. Les marchés de buts sont retirés et ne sont pas commentés.",
+      "marketViews": [
+        {
+          "market": "Résultat",
+          "pick": "Albacete gagne",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "61 % : Albacete a gagné ses 3 derniers matchs sous Etxeberria et le Celta Fortuna concède 2,4 buts par match à l'extérieur, mais le moteur reste prudent sur un match entre deux équipes mal classées.",
+          "reasoning": "La dynamique d'Albacete et les suspensions du Celta Fortuna (Capdevila, Ribes, Joel López) soutiennent ce pronostic. Mon bilan sur le résultat est faible (428/728), donc ma confiance reste moyenne.",
+          "probability": 61
+        },
+        {
+          "market": "Total corners",
+          "pick": "Moins de 12.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "77 % : le moteur attend 10,08 corners au total (6,44 et 3,65) et la moyenne de la division est de 9,4 par match.",
+          "reasoning": "Il y a de la marge sur la ligne de 12,5. Mon bilan est solide sur ce marché, avec 652/799 pour les avis « forte ».",
+          "probability": 77
+        },
+        {
+          "market": "Corners — Albacete",
+          "pick": "Albacete — Moins de 9.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : le moteur attend 6,44 corners pour Albacete, qui en produit 5,8 sur ses 10 derniers matchs et 6,8 à domicile.",
+          "reasoning": "Même la moyenne à domicile reste bien sous 9,5, et le Celta Fortuna n'en concède que 6,2. Ce marché m'a bien réussi (2109/2665).",
+          "probability": 83
+        },
+        {
+          "market": "Corners — Celta Fortuna",
+          "pick": "Celta Fortuna — Plus de 1.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : le moteur attend 3,65 corners pour le Celta Fortuna, qui en produit 3,5 par match et 3,6 à l'extérieur.",
+          "reasoning": "La ligne est très basse. Seul un match à sens unique la mettrait en danger.",
+          "probability": 83
+        },
+        {
+          "market": "Total tirs",
+          "pick": "Moins de 33.5 tirs",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : le moteur attend 27,67 tirs au total (15,07 et 12,6), loin de la ligne de 33,5.",
+          "reasoning": "Les moyennes sont de 12,8 tirs pour Albacete et 12,3 pour le Celta Fortuna, qui n'en tire que 10,2 à l'extérieur. Mon bilan sur ce marché est bon (1160/1377).",
+          "probability": 83
+        },
+        {
+          "market": "Tirs — Albacete",
+          "pick": "Albacete — Moins de 19.5 tirs",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "81 % : le moteur attend 15,07 tirs pour Albacete, qui en produit 12,8 par match et 14,8 à domicile.",
+          "reasoning": "Il faudrait un volume très supérieur à la moyenne pour atteindre 20 tirs. Le Celta Fortuna concède pourtant 17,4 tirs à l'extérieur, ce qui laisse un risque modéré.",
+          "probability": 81
+        },
+        {
+          "market": "Tirs — Celta Fortuna",
+          "pick": "Celta Fortuna — Plus de 8.5 tirs",
+          "verdict": "nuance",
+          "confidence": "moyenne",
+          "explanation": "81 % : le moteur attend 12,6 tirs pour le Celta Fortuna, qui en produit 12,3 par match mais seulement 10,2 à l'extérieur.",
+          "reasoning": "La moyenne à l'extérieur reste au-dessus de 8,5 mais sans grande marge. Le retard au score ou l'absence de joueurs offensifs comme Kibet pourraient réduire le volume.",
+          "probability": 81
+        },
+        {
+          "market": "Total tirs cadrés",
+          "pick": "Plus de 6.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "79 % : le moteur attend 9,18 tirs cadrés au total (4,95 et 4,23), au-dessus de la ligne de 6,5.",
+          "reasoning": "Le Celta Fortuna cadre 4,6 tirs par match et concède 5,5 cadrés, tandis qu'Albacete en cadre 3,6. La somme dépasse la ligne, mais Albacete est à la limite.",
+          "probability": 79
+        },
+        {
+          "market": "Tirs cadrés — Albacete",
+          "pick": "Albacete — Moins de 6.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "75 % : le moteur attend 4,95 tirs cadrés pour Albacete, qui en produit 3,6 par match et 3,8 à domicile.",
+          "reasoning": "Les moyennes d'Albacete sont nettement sous la ligne. Le Celta Fortuna concède 6,6 cadrés à l'extérieur, d'où un risque modéré.",
+          "probability": 75
+        },
+        {
+          "market": "Tirs cadrés — Celta Fortuna",
+          "pick": "Celta Fortuna — Plus de 2.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "76 % : le moteur attend 4,23 tirs cadrés pour le Celta Fortuna, qui en produit 4,6 par match et 3,4 à l'extérieur.",
+          "reasoning": "Même la moyenne à l'extérieur dépasse la ligne. Les absences de Kibet et des suspendus peuvent tout de même réduire la production offensive.",
+          "probability": 76
+        }
+      ]
+    },
+    "updatedAt": "2026-11-16T06:21:57.784Z",
+    "createdAt": "2026-11-16T06:21:57.784Z"
+  },
+  {
+    "matchId": "cal-2026-11-16-club-deportivo-moquegua-atletico-grau",
+    "homeName": "Club Deportivo Moquegua",
+    "awayName": "Atlético Grau",
+    "league": "Liga 1 - Peru",
+    "commenceTime": "2026-11-16T20:15:00.000Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Club Deportivo Moquegua vs Atlético Grau",
+      "expectedGoals": {
+        "home": 1.159,
+        "away": 0.826,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 1.54,
+        "draw": 4.49,
+        "away": 7.73
+      },
+      "market": {
+        "odds1": 1.48,
+        "oddsDraw": 3.88,
+        "odds2": 6.38
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "trop_peu_de_bookmakers",
+        "candidates": []
+      },
+      "statExpectations": {
+        "corners": {
+          "home": 5.5,
+          "away": 4.41,
+          "total": 9.91
+        },
+        "shots": {
+          "home": 16.34,
+          "away": 12.6,
+          "total": 28.94
+        },
+        "shotsOnTarget": {
+          "home": 5.12,
+          "away": 4.45,
+          "total": 9.57
+        }
+      },
+      "marketPredictions": [
+        {
+          "marketId": "result",
+          "params": {
+            "outcome": "home"
+          },
+          "market": "Résultat",
+          "predictedOutcome": "home",
+          "predictedLabel": "Club Deportivo Moquegua gagne",
+          "predictedOdds": 1.54,
+          "probability": 65,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 2.5,
+            "side": "under"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 2.5 buts",
+          "predictedOdds": 1.47,
+          "probability": 68,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "no"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "no",
+          "predictedLabel": "Non",
+          "predictedOdds": 1.65,
+          "probability": 61,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 3.5,
+            "key": "homeUnder"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "homeUnder",
+          "predictedLabel": "Club Deportivo Moquegua & Moins de 3.5 buts",
+          "predictedOdds": 1.86,
+          "probability": 54,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 0.5,
+            "side": "over"
+          },
+          "market": "Buts — Club Deportivo Moquegua",
+          "predictedOutcome": "over",
+          "predictedLabel": "Club Deportivo Moquegua — Plus de 0.5 buts",
+          "predictedOdds": 1.46,
+          "probability": 68,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 1.5,
+            "side": "under"
+          },
+          "market": "Buts — Atlético Grau",
+          "predictedOutcome": "under",
+          "predictedLabel": "Atlético Grau — Moins de 1.5 buts",
+          "predictedOdds": 1.25,
+          "probability": 80,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalCorners",
+          "params": {
+            "line": 12.5,
+            "side": "under"
+          },
+          "market": "Total corners",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 12.5 corners",
+          "predictedOdds": 1.28,
+          "probability": 78,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "home",
+            "line": 7.5,
+            "side": "under"
+          },
+          "market": "Corners — Club Deportivo Moquegua",
+          "predictedOutcome": "under",
+          "predictedLabel": "Club Deportivo Moquegua — Moins de 7.5 corners",
+          "predictedOdds": 1.29,
+          "probability": 78,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "away",
+            "line": 6.5,
+            "side": "under"
+          },
+          "market": "Corners — Atlético Grau",
+          "predictedOutcome": "under",
+          "predictedLabel": "Atlético Grau — Moins de 6.5 corners",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShots",
+          "params": {
+            "line": 34.5,
+            "side": "under"
+          },
+          "market": "Total tirs",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 34.5 tirs",
+          "predictedOdds": 1.23,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "home",
+            "line": 21.5,
+            "side": "under"
+          },
+          "market": "Tirs — Club Deportivo Moquegua",
+          "predictedOutcome": "under",
+          "predictedLabel": "Club Deportivo Moquegua — Moins de 21.5 tirs",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "away",
+            "line": 8.5,
+            "side": "over"
+          },
+          "market": "Tirs — Atlético Grau",
+          "predictedOutcome": "over",
+          "predictedLabel": "Atlético Grau — Plus de 8.5 tirs",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShotsOnTarget",
+          "params": {
+            "line": 6.5,
+            "side": "over"
+          },
+          "market": "Total tirs cadrés",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 6.5 tirs cadrés",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "home",
+            "line": 7.5,
+            "side": "under"
+          },
+          "market": "Tirs cadrés — Club Deportivo Moquegua",
+          "predictedOutcome": "under",
+          "predictedLabel": "Club Deportivo Moquegua — Moins de 7.5 tirs cadrés",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "away",
+            "line": 6.5,
+            "side": "under"
+          },
+          "market": "Tirs cadrés — Atlético Grau",
+          "predictedOutcome": "under",
+          "predictedLabel": "Atlético Grau — Moins de 6.5 tirs cadrés",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        }
+      ],
+      "engineVersion": 5
+    },
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 6792,
+      "cache_read_input_tokens": 14926,
+      "output_tokens": 3389,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 6792,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 2905,
+          "cache_read_input_tokens": 10456,
+          "cache_creation_input_tokens": 806,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 806
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.0640512,
+    "analysedAt": "2026-11-16T06:22:26.259Z",
+    "timing": "avance",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 385,
+      "tokens": 1170,
+      "lecons": [],
+      "dossiersDu": "2026-11-14T23:17:47.317Z",
+      "equipes": {
+        "home": {
+          "id": "fotmob-1573140",
+          "dossier": true
+        },
+        "away": {
+          "id": "fotmob-920789",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "Liga 1 - Peru",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "FotMob",
+      "fotmobMatchId": "1000017304",
+      "fetchedAt": "2026-11-16T06:21:59.578Z",
+      "minutesBeforeKickoff": 833,
+      "home": {
+        "team": "Club Deportivo Moquegua",
+        "teamId": "fotmob-1573140",
+        "formation": "5-4-1",
+        "coach": "José Soto",
+        "statsSince": "2026-01-01",
+        "teamMatches": 33,
+        "startXI": [
+          {
+            "id": "fotmob-547739",
+            "name": "Carlos Grados",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 31,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 30,
+              "starts": 30,
+              "minutes": 2700,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.04
+            }
+          },
+          {
+            "id": "fotmob-147990",
+            "name": "Juan Lojas",
+            "number": 13,
+            "position": "Defender",
+            "age": 37,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "x": 0.357,
+            "y": 0.695,
+            "stats": {
+              "apps": 29,
+              "starts": 27,
+              "minutes": 2387,
+              "goals": 1,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.39
+            }
+          },
+          {
+            "id": "fotmob-497341",
+            "name": "Cristian Enciso",
+            "number": 3,
+            "position": "Defender",
+            "age": 35,
+            "countryCode": "PAR",
+            "countryName": "Paraguay",
+            "x": 0.357,
+            "y": 0.5,
+            "stats": {
+              "apps": 30,
+              "starts": 29,
+              "minutes": 2524,
+              "goals": 0,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.65
+            }
+          },
+          {
+            "id": "fotmob-1898419",
+            "name": "Eros Montenegro",
+            "number": 22,
+            "position": "Defender",
+            "age": 24,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "x": 0.357,
+            "y": 0.305,
+            "stats": {
+              "apps": 23,
+              "starts": 13,
+              "minutes": 1289,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.68
+            }
+          },
+          {
+            "id": "fotmob-617767",
+            "name": "Aldair Perleche",
+            "number": 4,
+            "position": "Midfielder",
+            "age": 31,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "x": 0.371,
+            "y": 0.89,
+            "stats": {
+              "apps": 31,
+              "starts": 30,
+              "minutes": 2553,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.48
+            }
+          },
+          {
+            "id": "fotmob-1268812",
+            "name": "Yorman Zapata",
+            "number": 17,
+            "position": "Midfielder",
+            "age": 26,
+            "countryCode": "COL",
+            "countryName": "Colombia",
+            "x": 0.371,
+            "y": 0.11,
+            "stats": {
+              "apps": 30,
+              "starts": 28,
+              "minutes": 2315,
+              "goals": 2,
+              "assists": 4,
+              "xg": null,
+              "rating": 6.67
+            }
+          },
+          {
+            "id": "fotmob-1201258",
+            "name": "Edgar Lastre",
+            "number": 7,
+            "position": "Midfielder",
+            "age": 27,
+            "countryCode": "ECU",
+            "countryName": "Ecuador",
+            "x": 0.613,
+            "y": 0.875,
+            "stats": {
+              "apps": 31,
+              "starts": 26,
+              "minutes": 2208,
+              "goals": 8,
+              "assists": 5,
+              "xg": null,
+              "rating": 6.87
+            }
+          },
+          {
+            "id": "fotmob-973729",
+            "name": "Cristian Mejía",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 33,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "x": 0.613,
+            "y": 0.625,
+            "stats": {
+              "apps": 32,
+              "starts": 29,
+              "minutes": 2388,
+              "goals": 2,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.41
+            }
+          },
+          {
+            "id": "fotmob-1797168",
+            "name": "Ricardo Chipao",
+            "number": 25,
+            "position": "Midfielder",
+            "age": 29,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "x": 0.613,
+            "y": 0.375,
+            "stats": {
+              "apps": 32,
+              "starts": 30,
+              "minutes": 2633,
+              "goals": 3,
+              "assists": 2,
+              "xg": null,
+              "rating": 7
+            }
+          },
+          {
+            "id": "fotmob-547855",
+            "name": "Diego Ramírez",
+            "number": 20,
+            "position": "Midfielder",
+            "age": 32,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "x": 0.613,
+            "y": 0.125,
+            "stats": {
+              "apps": 18,
+              "starts": 11,
+              "minutes": 761,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.55
+            }
+          },
+          {
+            "id": "fotmob-824770",
+            "name": "Jeferson Collazos",
+            "number": 90,
+            "position": "Forward",
+            "age": 35,
+            "countryCode": "COL",
+            "countryName": "Colombia",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 31,
+              "starts": 19,
+              "minutes": 1823,
+              "goals": 4,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.46
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-1898420",
+            "name": "Renzo Figueroa",
+            "number": 29,
+            "position": "Goalkeeper",
+            "age": 28,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "stats": {
+              "apps": 3,
+              "starts": 3,
+              "minutes": 270,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.73
+            }
+          },
+          {
+            "id": "fotmob-1477845",
+            "name": "Yhonier López",
+            "number": 88,
+            "position": "Defender",
+            "age": 22,
+            "countryCode": "COL",
+            "countryName": "Colombia",
+            "stats": {
+              "apps": 7,
+              "starts": 0,
+              "minutes": 163,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.25
+            }
+          },
+          {
+            "id": "fotmob-346017",
+            "name": "José Granda",
+            "number": 30,
+            "position": "Defender",
+            "age": 34,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "stats": {
+              "apps": 16,
+              "starts": 11,
+              "minutes": 887,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.41
+            }
+          },
+          {
+            "id": "fotmob-2131111",
+            "name": "Edgar Santillán",
+            "number": 35,
+            "position": "Midfielder",
+            "age": 30,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "stats": {
+              "apps": 6,
+              "starts": 0,
+              "minutes": 38,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.01
+            }
+          },
+          {
+            "id": "fotmob-1898418",
+            "name": "Claudio Ramírez",
+            "number": 14,
+            "position": "Midfielder",
+            "age": 26,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "stats": {
+              "apps": 24,
+              "starts": 3,
+              "minutes": 723,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.28
+            }
+          },
+          {
+            "id": "fotmob-497359",
+            "name": "Nicolás Chávez",
+            "number": 10,
+            "position": "Midfielder",
+            "age": 33,
+            "countryCode": "PAR",
+            "countryName": "Paraguay",
+            "stats": {
+              "apps": 26,
+              "starts": 14,
+              "minutes": 1256,
+              "goals": 0,
+              "assists": 2,
+              "xg": null,
+              "rating": 6.6
+            }
+          },
+          {
+            "id": "fotmob-1697459",
+            "name": "Allonso Dávila",
+            "number": 16,
+            "position": "Forward",
+            "age": 24,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "stats": {
+              "apps": 29,
+              "starts": 16,
+              "minutes": 1424,
+              "goals": 0,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.58
+            }
+          },
+          {
+            "id": "fotmob-617597",
+            "name": "Bryan Angulo",
+            "number": 11,
+            "position": "Forward",
+            "age": 30,
+            "countryCode": "ECU",
+            "countryName": "Ecuador",
+            "stats": {
+              "apps": 26,
+              "starts": 13,
+              "minutes": 1102,
+              "goals": 5,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.46
+            }
+          },
+          {
+            "id": "fotmob-891684",
+            "name": "Alexander Lecaros",
+            "number": 24,
+            "position": "Forward",
+            "age": 27,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "stats": {
+              "apps": 8,
+              "starts": 3,
+              "minutes": 272,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.45
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "id": "fotmob-1268812",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Yorman Zapata",
+            "reason": "blessé",
+            "expectedReturn": "Doubtful",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 30,
+              "starts": 28,
+              "minutes": 2315,
+              "goals": 2,
+              "assists": 4,
+              "xg": null,
+              "rating": 6.67
+            }
+          },
+          {
+            "id": "fotmob-547852",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Kevin Ruiz",
+            "reason": "blessé",
+            "expectedReturn": "Doubtful",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 9,
+              "starts": 4,
+              "minutes": 318,
+              "goals": 2,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.64
+            }
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-1432694",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Nicolás Amasifuén",
+            "position": "Defender",
+            "starts": 21,
+            "goals": 0,
+            "assists": 2,
+            "status": "absent de la feuille de match"
+          }
+        ]
+      },
+      "away": {
+        "team": "Atlético Grau",
+        "teamId": "fotmob-920789",
+        "formation": "4-2-3-1",
+        "coach": "Gerardo Ameli",
+        "statsSince": "2026-01-01",
+        "teamMatches": 33,
+        "startXI": [
+          {
+            "id": "fotmob-678060",
+            "name": "Patricio Álvarez",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 32,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 31,
+              "starts": 31,
+              "minutes": 2790,
+              "goals": 4,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.11
+            }
+          },
+          {
+            "id": "fotmob-1360566",
+            "name": "Diego Rodríguez",
+            "number": 4,
+            "position": "Defender",
+            "age": 24,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "x": 0.292,
+            "y": 0.875,
+            "stats": {
+              "apps": 20,
+              "starts": 17,
+              "minutes": 1510,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.58
+            }
+          },
+          {
+            "id": "fotmob-724476",
+            "name": "Rodrigo Tapia",
+            "number": 27,
+            "position": "Defender",
+            "age": 32,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 32,
+              "starts": 32,
+              "minutes": 2818,
+              "goals": 1,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.05
+            }
+          },
+          {
+            "id": "fotmob-772309",
+            "name": "Ignacio Tapia",
+            "number": 3,
+            "position": "Defender",
+            "age": 27,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "x": 0.292,
+            "y": 0.375,
+            "stats": {
+              "apps": 27,
+              "starts": 24,
+              "minutes": 2242,
+              "goals": 1,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.71
+            }
+          },
+          {
+            "id": "fotmob-1433783",
+            "name": "Gabriel Alfaro",
+            "number": 25,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "x": 0.292,
+            "y": 0.125,
+            "stats": {
+              "apps": 22,
+              "starts": 14,
+              "minutes": 1310,
+              "goals": 0,
+              "assists": 2,
+              "xg": null,
+              "rating": 6.6
+            }
+          },
+          {
+            "id": "fotmob-1442679",
+            "name": "Eslyn Correa",
+            "number": 21,
+            "position": "Midfielder",
+            "age": 21,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "x": 0.485,
+            "y": 0.7,
+            "stats": {
+              "apps": 11,
+              "starts": 3,
+              "minutes": 330,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.43
+            }
+          },
+          {
+            "id": "fotmob-497733",
+            "name": "Rafael Guarderas",
+            "number": 5,
+            "position": "Midfielder",
+            "age": 33,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "x": 0.485,
+            "y": 0.3,
+            "stats": {
+              "apps": 32,
+              "starts": 32,
+              "minutes": 2815,
+              "goals": 1,
+              "assists": 3,
+              "xg": null,
+              "rating": 6.89
+            }
+          },
+          {
+            "id": "fotmob-1357712",
+            "name": "Paulo de la Cruz",
+            "number": 10,
+            "position": "Midfielder",
+            "age": 27,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "x": 0.678,
+            "y": 0.837,
+            "stats": {
+              "apps": 25,
+              "starts": 15,
+              "minutes": 1293,
+              "goals": 1,
+              "assists": 2,
+              "xg": null,
+              "rating": 6.48
+            }
+          },
+          {
+            "id": "fotmob-127268",
+            "name": "Pablo Lavandeira",
+            "number": 15,
+            "position": "Midfielder",
+            "age": 36,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "x": 0.678,
+            "y": 0.5,
+            "stats": {
+              "apps": 20,
+              "starts": 13,
+              "minutes": 1144,
+              "goals": 1,
+              "assists": 2,
+              "xg": null,
+              "rating": 6.66
+            }
+          },
+          {
+            "id": "fotmob-793284",
+            "name": "Luis Benítes",
+            "number": 96,
+            "position": "Midfielder",
+            "age": 30,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "x": 0.678,
+            "y": 0.163,
+            "stats": {
+              "apps": 29,
+              "starts": 13,
+              "minutes": 1311,
+              "goals": 4,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.65
+            }
+          },
+          {
+            "id": "fotmob-439415",
+            "name": "Adrián Fernández",
+            "number": 99,
+            "position": "Forward",
+            "age": 34,
+            "countryCode": "PAR",
+            "countryName": "Paraguay",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 33,
+              "starts": 25,
+              "minutes": 2186,
+              "goals": 9,
+              "assists": 3,
+              "xg": null,
+              "rating": 6.98
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-1133041",
+            "name": "Aamet Calderón",
+            "number": 33,
+            "position": "Goalkeeper",
+            "age": 28,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "stats": {
+              "apps": 2,
+              "starts": 2,
+              "minutes": 180,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.01
+            }
+          },
+          {
+            "id": "fotmob-492642",
+            "name": "Lucas Acevedo",
+            "number": 2,
+            "position": "Defender",
+            "age": 35,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 27,
+              "starts": 25,
+              "minutes": 2119,
+              "goals": 1,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.8
+            }
+          },
+          {
+            "id": "fotmob-1432959",
+            "name": "Christian Vásquez",
+            "number": 8,
+            "position": "Defender",
+            "age": 27,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "stats": {
+              "apps": 17,
+              "starts": 11,
+              "minutes": 1080,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.33
+            }
+          },
+          {
+            "id": "fotmob-1711026",
+            "name": "Adrián De La Cruz",
+            "number": 66,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "stats": {
+              "apps": 21,
+              "starts": 15,
+              "minutes": 1303,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.72
+            }
+          },
+          {
+            "id": "fotmob-1855619",
+            "name": "Henri Espinoza",
+            "number": 17,
+            "position": "Midfielder",
+            "age": 19,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "stats": {
+              "apps": 3,
+              "starts": 0,
+              "minutes": 37,
+              "goals": 1,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.19
+            }
+          },
+          {
+            "id": "fotmob-1254927",
+            "name": "Aldair Vásquez",
+            "number": 20,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "stats": {
+              "apps": 23,
+              "starts": 11,
+              "minutes": 940,
+              "goals": 3,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.47
+            }
+          },
+          {
+            "id": "fotmob-872685",
+            "name": "Diego Barreto",
+            "number": 7,
+            "position": "Midfielder",
+            "age": 33,
+            "countryCode": "PAR",
+            "countryName": "Paraguay",
+            "stats": {
+              "apps": 25,
+              "starts": 13,
+              "minutes": 1092,
+              "goals": 1,
+              "assists": 2,
+              "xg": null,
+              "rating": 6.64
+            }
+          },
+          {
+            "id": "fotmob-1220860",
+            "name": "Freddy Oncoy",
+            "number": 13,
+            "position": "Midfielder",
+            "age": 26,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "stats": {
+              "apps": 20,
+              "starts": 10,
+              "minutes": 1092,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.4
+            }
+          },
+          {
+            "id": "fotmob-1711024",
+            "name": "Yamir Ruidíaz",
+            "number": 24,
+            "position": "Forward",
+            "age": 24,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "stats": {
+              "apps": 13,
+              "starts": 3,
+              "minutes": 305,
+              "goals": 0,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.11
+            }
+          }
+        ],
+        "unavailable": [],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-492642",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Lucas Acevedo",
+            "position": "Defender",
+            "starts": 25,
+            "goals": 1,
+            "assists": 0,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-547851",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Elsar Rodas Mendoza",
+            "position": "Midfielder",
+            "starts": 18,
+            "goals": 0,
+            "assists": 1,
+            "status": "absent de la feuille de match"
+          }
+        ]
+      },
+      "matchInfo": {
+        "round": "Clausura - Round 17",
+        "stadium": "Estadio 25 de Noviembre",
+        "city": "Moquegua",
+        "capacity": 21000,
+        "surface": "grass",
+        "weather": "Sunny",
+        "temperature": 26,
+        "windSpeed": 22,
+        "precipitation": 0,
+        "referee": {
+          "name": "Jordi Espinoza",
+          "country": "Peru",
+          "league": "Liga 1",
+          "matches": 44,
+          "yellowCardsPerMatch": 5.43,
+          "yellowCardsLeagueAverage": 4.67,
+          "redCards": 10,
+          "penalties": 17,
+          "foulsPerMatch": 24.45,
+          "foulsLeagueAverage": 23.63
+        }
+      }
+    },
+    "analysis": {
+      "summary": "Moquegua (17e, 12 pts) n'a pas gagné à domicile en championnat depuis 10 matchs, mais vient de faire 2-2 et 0-0 sous le nouvel entraîneur José Soto. Atlético Grau (11e, 21 pts) est fragile à l'extérieur (1V-1N-5D, 4 défaites sur ses 4 derniers déplacements, 3,25 buts concédés). Les deux équipes tirent peu (11,9 et 9,8 par match) et en concèdent beaucoup (18,2 et 17,8). Moquegua jouera en 5-4-1 sans Zapata ni Ruiz, blessés. Grau aligne son onze type, avec Acevedo sur le banc.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Grau est mieux classé, mais loin de chez lui.",
+          "evidence": "Moquegua 17e, 12 pts, 0V-4N-4D à domicile ; Grau 11e, 21 pts, 1V-1N-5D à l'extérieur."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Moquegua est en légère hausse, Grau en baisse.",
+          "evidence": "Moquegua : N, N, D, D, V ; Grau : V, D, D, N, D (0,8 pt par match sur les 5 derniers)."
+        },
+        {
+          "factor": "statistiques et moyennes",
+          "observation": "Peu de tirs produits, beaucoup concédés des deux côtés.",
+          "evidence": "Moquegua 11,9 / 18,2 tirs ; Grau 9,8 / 17,8 ; Grau dehors 8 / 21,5 tirs."
+        },
+        {
+          "factor": "absences",
+          "observation": "Moquegua perd deux joueurs offensifs.",
+          "evidence": "Zapata (2+4) et Ruiz (2+0) blessés, retour incertain."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va dans le sens du moteur sur les tirs et les corners, qui suivent les moyennes des deux équipes. Il nuance le favori à domicile : Moquegua ne gagne plus chez lui, et Grau est aussi faible dehors. Aucun edge chiffré n'est annoncé.",
+      "lineupImpact": "Compositions FotMob relues 833 min avant le match : ce peut être une prévision. Moquegua est en 5-4-1 sans Zapata ni Ruiz, blessés, et sans Amasifuén (21 titularisations), absent de la feuille. Lastre (8+5) et Collazos (4+1) restent les relais offensifs. Grau aligne Fernández (9+3) et le gardien Álvarez ; Acevedo est remplaçant. L'arbitre est un peu plus sévère que la moyenne (5,43 jaunes contre 4,67), sans effet net sur ces marchés.",
+      "marketViews": [
+        {
+          "market": "Résultat",
+          "pick": "Club Deportivo Moquegua gagne",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "65 % : Grau a perdu ses 4 derniers matchs à l'extérieur, mais Moquegua n'a marqué que 0,5 but par match sur 10 matchs.",
+          "reasoning": "Grau est très faible dehors, ce qui aide Moquegua. Mais Moquegua n'a pas gagné à domicile en championnat depuis 10 matchs et son attaque est amoindrie par les blessures.",
+          "probability": 65
+        },
+        {
+          "market": "Total corners",
+          "pick": "Moins de 12.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "78 % : 9,91 corners attendus au total, et la moyenne du championnat est de 9 par match.",
+          "reasoning": "Les moyennes de corners sont modestes (4,4 et 3,5 produits), donc le seuil de 12,5 paraît large.",
+          "probability": 78
+        },
+        {
+          "market": "Corners — Club Deportivo Moquegua",
+          "pick": "Club Deportivo Moquegua — Moins de 7.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "78 % : 5,5 corners attendus pour Moquegua, qui en produit 4,4 sur 10 matchs et 5,8 à domicile.",
+          "reasoning": "Même sa meilleure moyenne à domicile (5,8) reste sous 7,5.",
+          "probability": 78
+        },
+        {
+          "market": "Corners — Atlético Grau",
+          "pick": "Atlético Grau — Moins de 6.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "81 % : 4,41 corners attendus pour Grau, qui en produit 3,5 par match, dehors comme sur 10 matchs.",
+          "reasoning": "Grau produit peu de corners et possède peu le ballon (40,5 % dehors).",
+          "probability": 81
+        },
+        {
+          "market": "Total tirs",
+          "pick": "Moins de 34.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "81 % : 28,94 tirs attendus, soit nettement sous 34,5.",
+          "reasoning": "Les deux équipes produisent peu (11,9 et 9,8), même si elles en concèdent beaucoup. Un match ouvert pourrait faire monter le total.",
+          "probability": 81
+        },
+        {
+          "market": "Tirs — Club Deportivo Moquegua",
+          "pick": "Club Deportivo Moquegua — Moins de 21.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : 16,34 tirs attendus pour Moquegua, qui en tire 15,4 à domicile et 11,9 sur 10 matchs.",
+          "reasoning": "Il faudrait un match très déséquilibré pour dépasser 21,5, et Moquegua n'a pas cette force offensive.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs — Atlético Grau",
+          "pick": "Atlético Grau — Plus de 8.5 tirs",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "81 % : 12,6 tirs attendus pour Grau, qui en tire 9,8 par match mais seulement 8 en moyenne dehors.",
+          "reasoning": "Le seuil de 8,5 est proche de ce que Grau produit dehors (8). Mais Moquegua en concède 18,2 par match, ce qui soutient le pronostic.",
+          "probability": 81
+        },
+        {
+          "market": "Total tirs cadrés",
+          "pick": "Plus de 6.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "82 % : 9,57 tirs cadrés attendus, alors que les deux équipes en produisent 3,3 et 3,8 et en concèdent 6,1 et 6.",
+          "reasoning": "Les tirs cadrés concédés (6,1 et 6) font passer le total au-dessus du seuil. Mon bilan sur ce marché est correct, sans être exceptionnel.",
+          "probability": 82
+        },
+        {
+          "market": "Tirs cadrés — Club Deportivo Moquegua",
+          "pick": "Club Deportivo Moquegua — Moins de 7.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : 5,12 tirs cadrés attendus pour Moquegua, qui en produit 3,3 sur 10 matchs et 5 à domicile.",
+          "reasoning": "Moquegua est loin de 7,5, d'autant qu'il perd deux joueurs offensifs.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs cadrés — Atlético Grau",
+          "pick": "Atlético Grau — Moins de 6.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "82 % : 4,45 tirs cadrés attendus pour Grau, qui en produit 3,8 par match et 3,3 dehors.",
+          "reasoning": "Grau reste bien sous 6,5 dans ses moyennes. Les 6,1 tirs cadrés concédés par Moquegua laissent un léger risque.",
+          "probability": 82
+        }
+      ],
+      "caveats": "Les compositions datent de 833 min avant le match et peuvent encore changer. Les xG ne sont pas relevés. Le changement d'entraîneur de Moquegua est déduit des compositions déjà importées. Le marché des buts est retiré, donc aucun avis dessus."
+    },
+    "updatedAt": "2026-11-16T06:22:26.260Z",
+    "createdAt": "2026-11-16T06:22:26.260Z"
+  },
+  {
     "matchId": "cal-2026-11-16-cusco-fc-asociacion-deportiva-tarma",
     "homeName": "Cusco FC",
     "awayName": "Asociación Deportiva Tarma",
