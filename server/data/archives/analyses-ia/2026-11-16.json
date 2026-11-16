@@ -9,19 +9,19 @@
     "engineSnapshot": {
       "label": "CD UT Cajamarca vs Los Chankas",
       "expectedGoals": {
-        "home": 1.172,
-        "away": 1.121,
+        "home": 1.168,
+        "away": 1.111,
         "source": "fotmob"
       },
       "trueOdds": {
-        "home": 3.22,
-        "draw": 3.46,
-        "away": 2.5
+        "home": 2.66,
+        "draw": 3.34,
+        "away": 3.09
       },
       "market": {
-        "odds1": 2.9,
+        "odds1": 2.5,
         "oddsDraw": 3.1,
-        "odds2": 2.3
+        "odds2": 2.88
       },
       "edgePercent": null,
       "staking": {
@@ -51,13 +51,13 @@
         {
           "marketId": "result",
           "params": {
-            "outcome": "away"
+            "outcome": "home"
           },
           "market": "Résultat",
-          "predictedOutcome": "away",
-          "predictedLabel": "Los Chankas gagne",
-          "predictedOdds": 2.5,
-          "probability": 40,
+          "predictedOutcome": "home",
+          "predictedLabel": "CD UT Cajamarca gagne",
+          "predictedOdds": 2.66,
+          "probability": 38,
           "minOdds": 1.2
         },
         {
@@ -69,8 +69,8 @@
           "market": "Total buts",
           "predictedOutcome": "under",
           "predictedLabel": "Moins de 3.5 buts",
-          "predictedOdds": 1.25,
-          "probability": 80,
+          "predictedOdds": 1.24,
+          "probability": 81,
           "minOdds": 1.2
         },
         {
@@ -81,21 +81,21 @@
           "market": "Les 2 équipes marquent",
           "predictedOutcome": "no",
           "predictedLabel": "Non",
-          "predictedOdds": 1.91,
-          "probability": 52,
+          "predictedOdds": 1.89,
+          "probability": 53,
           "minOdds": 1.2
         },
         {
           "marketId": "resultAndTotal",
           "params": {
             "line": 3.5,
-            "key": "awayUnder"
+            "key": "homeUnder"
           },
           "market": "Résultat + Total buts",
-          "predictedOutcome": "awayUnder",
-          "predictedLabel": "Los Chankas & Moins de 3.5 buts",
-          "predictedOdds": 3.16,
-          "probability": 32,
+          "predictedOutcome": "homeUnder",
+          "predictedLabel": "CD UT Cajamarca & Moins de 3.5 buts",
+          "predictedOdds": 3.38,
+          "probability": 30,
           "minOdds": 1.2
         },
         {
@@ -122,7 +122,7 @@
           "market": "Buts — Los Chankas",
           "predictedOutcome": "under",
           "predictedLabel": "Los Chankas — Moins de 1.5 buts",
-          "predictedOdds": 1.45,
+          "predictedOdds": 1.44,
           "probability": 69,
           "minOdds": 1.2
         },
@@ -253,10 +253,10 @@
       "engineVersion": 5
     },
     "usage": {
-      "input_tokens": 2,
-      "cache_creation_input_tokens": 6294,
-      "cache_read_input_tokens": 4470,
-      "output_tokens": 4082,
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 6937,
+      "cache_read_input_tokens": 15169,
+      "output_tokens": 3750,
       "output_tokens_details": {
         "thinking_tokens": 0
       },
@@ -266,19 +266,19 @@
       },
       "service_tier": "standard",
       "cache_creation": {
-        "ephemeral_1h_input_tokens": 6294,
+        "ephemeral_1h_input_tokens": 6937,
         "ephemeral_5m_input_tokens": 0
       },
       "inference_geo": "global",
       "iterations": [
         {
           "input_tokens": 2,
-          "output_tokens": 4082,
-          "cache_read_input_tokens": 4470,
-          "cache_creation_input_tokens": 6294,
+          "output_tokens": 3370,
+          "cache_read_input_tokens": 10699,
+          "cache_creation_input_tokens": 708,
           "cache_creation": {
             "ephemeral_5m_input_tokens": 0,
-            "ephemeral_1h_input_tokens": 6294
+            "ephemeral_1h_input_tokens": 708
           },
           "type": "message"
         }
@@ -286,15 +286,18 @@
       "speed": "standard",
       "fallback_credit": null
     },
-    "costUsd": 0.066894,
-    "analysedAt": "2026-11-14T19:32:07.995Z",
-    "timing": "avance",
+    "costUsd": 0.0682898,
+    "analysedAt": "2026-11-16T17:42:51.195Z",
+    "timing": "coup-d-envoi",
     "fiche": "compacte",
     "memoire": {
-      "mots": 403,
-      "tokens": 1239,
-      "lecons": [],
-      "dossiersDu": "2026-11-14T01:17:28.205Z",
+      "mots": 489,
+      "tokens": 1521,
+      "lecons": [
+        "cal-2026-10-29-los-chankas-cusco-fc|totalGoals",
+        "cal-2026-10-08-club-deportivo-moquegua-cienciano|bothTeamsScore"
+      ],
+      "dossiersDu": "2026-11-16T06:34:46.821Z",
       "equipes": {
         "home": {
           "id": "fotmob-425692",
@@ -313,13 +316,13 @@
     "lineupSnapshot": {
       "source": "FotMob",
       "fotmobMatchId": "1000017307",
-      "fetchedAt": "2026-11-14T19:31:41.505Z",
-      "minutesBeforeKickoff": 2788,
+      "fetchedAt": "2026-11-16T17:42:22.422Z",
+      "minutesBeforeKickoff": 18,
       "home": {
         "team": "CD UT Cajamarca",
         "teamId": "fotmob-425692",
         "formation": "4-2-3-1",
-        "coach": "Cristián Molins",
+        "coach": "Edwin Arévalo",
         "statsSince": "2026-01-01",
         "teamMatches": 33,
         "startXI": [
@@ -444,23 +447,23 @@
             }
           },
           {
-            "id": "fotmob-1042108",
-            "name": "Luis Arce",
-            "number": 88,
+            "id": "fotmob-244013",
+            "name": "Arquímedes Figuera",
+            "number": 16,
             "position": "Midfielder",
-            "age": 32,
-            "countryCode": "ECU",
-            "countryName": "Ecuador",
+            "age": 37,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
             "x": 0.485,
             "y": 0.3,
             "stats": {
-              "apps": 26,
-              "starts": 14,
-              "minutes": 1226,
-              "goals": 2,
-              "assists": 2,
+              "apps": 28,
+              "starts": 21,
+              "minutes": 2029,
+              "goals": 0,
+              "assists": 0,
               "xg": null,
-              "rating": 6.78
+              "rating": 6.63
             }
           },
           {
@@ -484,23 +487,23 @@
             }
           },
           {
-            "id": "fotmob-731797",
-            "name": "Marcos Lliuya",
-            "number": 10,
+            "id": "fotmob-1042108",
+            "name": "Luis Arce",
+            "number": 88,
             "position": "Midfielder",
-            "age": 34,
-            "countryCode": "PER",
-            "countryName": "Peru",
+            "age": 32,
+            "countryCode": "ECU",
+            "countryName": "Ecuador",
             "x": 0.678,
             "y": 0.5,
             "stats": {
-              "apps": 33,
-              "starts": 33,
-              "minutes": 2869,
-              "goals": 5,
-              "assists": 4,
+              "apps": 26,
+              "starts": 14,
+              "minutes": 1226,
+              "goals": 2,
+              "assists": 2,
               "xg": null,
-              "rating": 7.38
+              "rating": 6.78
             }
           },
           {
@@ -524,23 +527,23 @@
             }
           },
           {
-            "id": "fotmob-78912",
-            "name": "Marlon de Jesús",
-            "number": 9,
+            "id": "fotmob-526712",
+            "name": "Abdiel Arroyo",
+            "number": 11,
             "position": "Forward",
-            "age": 35,
-            "countryCode": "ECU",
-            "countryName": "Ecuador",
+            "age": 32,
+            "countryCode": "PAN",
+            "countryName": "Panama",
             "x": 0.87,
             "y": 0.5,
             "stats": {
-              "apps": 30,
-              "starts": 19,
-              "minutes": 1530,
-              "goals": 8,
-              "assists": 1,
+              "apps": 29,
+              "starts": 11,
+              "minutes": 1341,
+              "goals": 4,
+              "assists": 0,
               "xg": null,
-              "rating": 6.65
+              "rating": 6.51
             }
           }
         ],
@@ -582,24 +585,6 @@
             }
           },
           {
-            "id": "fotmob-955334",
-            "name": "Bruno Duarte",
-            "number": 2,
-            "position": "Defender",
-            "age": 31,
-            "countryCode": "ARG",
-            "countryName": "Argentina",
-            "stats": {
-              "apps": 29,
-              "starts": 29,
-              "minutes": 2594,
-              "goals": 3,
-              "assists": 1,
-              "xg": null,
-              "rating": 6.81
-            }
-          },
-          {
             "id": "fotmob-964610",
             "name": "Junior Huerto",
             "number": 5,
@@ -618,21 +603,39 @@
             }
           },
           {
-            "id": "fotmob-244013",
-            "name": "Arquímedes Figuera",
-            "number": 16,
+            "id": "fotmob-731797",
+            "name": "Marcos Lliuya",
+            "number": 10,
             "position": "Midfielder",
-            "age": 37,
-            "countryCode": "VEN",
-            "countryName": "Venezuela",
+            "age": 34,
+            "countryCode": "PER",
+            "countryName": "Peru",
             "stats": {
-              "apps": 28,
-              "starts": 21,
-              "minutes": 2029,
+              "apps": 33,
+              "starts": 33,
+              "minutes": 2869,
+              "goals": 5,
+              "assists": 4,
+              "xg": null,
+              "rating": 7.38
+            }
+          },
+          {
+            "id": "fotmob-1605275",
+            "name": "Joshua Cantt",
+            "number": 15,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "stats": {
+              "apps": 18,
+              "starts": 12,
+              "minutes": 945,
               "goals": 0,
               "assists": 0,
               "xg": null,
-              "rating": 6.63
+              "rating": 6.29
             }
           },
           {
@@ -670,28 +673,22 @@
               "xg": null,
               "rating": 6.07
             }
-          },
-          {
-            "id": "fotmob-526712",
-            "name": "Abdiel Arroyo",
-            "number": 11,
-            "position": "Forward",
-            "age": 32,
-            "countryCode": "PAN",
-            "countryName": "Panama",
-            "stats": {
-              "apps": 29,
-              "starts": 11,
-              "minutes": 1341,
-              "goals": 4,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.51
-            }
           }
         ],
         "unavailable": [],
         "usualStartersMissing": [
+          {
+            "id": "fotmob-731797",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Marcos Lliuya",
+            "position": "Midfielder",
+            "starts": 33,
+            "goals": 5,
+            "assists": 4,
+            "status": "remplaçant"
+          },
           {
             "id": "fotmob-955334",
             "age": null,
@@ -702,26 +699,26 @@
             "starts": 29,
             "goals": 3,
             "assists": 1,
-            "status": "remplaçant"
+            "status": "absent de la feuille de match"
           },
           {
-            "id": "fotmob-244013",
+            "id": "fotmob-78912",
             "age": null,
             "countryCode": null,
             "countryName": null,
-            "name": "Arquímedes Figuera",
-            "position": "Midfielder",
-            "starts": 21,
-            "goals": 0,
-            "assists": 0,
-            "status": "remplaçant"
+            "name": "Marlon de Jesús",
+            "position": "Forward",
+            "starts": 19,
+            "goals": 8,
+            "assists": 1,
+            "status": "absent de la feuille de match"
           }
         ]
       },
       "away": {
         "team": "Los Chankas",
         "teamId": "fotmob-741328",
-        "formation": "3-4-2-1",
+        "formation": "5-3-2",
         "coach": "Juan Carlos Bazalar",
         "statsSince": "2026-01-01",
         "teamMatches": 33,
@@ -754,8 +751,8 @@
             "age": 34,
             "countryCode": "URU",
             "countryName": "Uruguay",
-            "x": 0.292,
-            "y": 0.79,
+            "x": 0.357,
+            "y": 0.695,
             "stats": {
               "apps": 32,
               "starts": 32,
@@ -774,7 +771,7 @@
             "age": 34,
             "countryCode": "ARG",
             "countryName": "Argentina",
-            "x": 0.292,
+            "x": 0.357,
             "y": 0.5,
             "stats": {
               "apps": 23,
@@ -794,8 +791,8 @@
             "age": 29,
             "countryCode": "PER",
             "countryName": "Peru",
-            "x": 0.292,
-            "y": 0.21,
+            "x": 0.357,
+            "y": 0.305,
             "stats": {
               "apps": 28,
               "starts": 26,
@@ -807,63 +804,23 @@
             }
           },
           {
-            "id": "fotmob-905979",
-            "name": "Félix Espinoza",
-            "number": 77,
+            "id": "fotmob-1897193",
+            "name": "Michel Kaufman",
+            "number": 30,
             "position": "Midfielder",
-            "age": 27,
+            "age": 24,
             "countryCode": "PER",
             "countryName": "Peru",
-            "x": 0.485,
-            "y": 0.875,
+            "x": 0.371,
+            "y": 0.89,
             "stats": {
-              "apps": 10,
-              "starts": 3,
-              "minutes": 344,
-              "goals": 1,
-              "assists": 1,
-              "xg": null,
-              "rating": 6.78
-            }
-          },
-          {
-            "id": "fotmob-1345062",
-            "name": "Christian Velarde",
-            "number": 17,
-            "position": "Midfielder",
-            "age": 28,
-            "countryCode": "PER",
-            "countryName": "Peru",
-            "x": 0.485,
-            "y": 0.625,
-            "stats": {
-              "apps": 15,
-              "starts": 10,
-              "minutes": 814,
-              "goals": 0,
-              "assists": 2,
-              "xg": null,
-              "rating": 6.58
-            }
-          },
-          {
-            "id": "fotmob-1381138",
-            "name": "Jorge Palomino",
-            "number": 5,
-            "position": "Midfielder",
-            "age": 31,
-            "countryCode": "PER",
-            "countryName": "Peru",
-            "x": 0.485,
-            "y": 0.375,
-            "stats": {
-              "apps": 29,
-              "starts": 29,
-              "minutes": 2462,
+              "apps": 21,
+              "starts": 9,
+              "minutes": 1012,
               "goals": 0,
               "assists": 0,
               "xg": null,
-              "rating": 7.1
+              "rating": 6.61
             }
           },
           {
@@ -874,8 +831,8 @@
             "age": 28,
             "countryCode": "PER",
             "countryName": "Peru",
-            "x": 0.485,
-            "y": 0.125,
+            "x": 0.371,
+            "y": 0.11,
             "stats": {
               "apps": 19,
               "starts": 6,
@@ -887,14 +844,74 @@
             }
           },
           {
+            "id": "fotmob-571225",
+            "name": "Jarlín Quintero",
+            "number": 11,
+            "position": "Midfielder",
+            "age": 33,
+            "countryCode": "COL",
+            "countryName": "Colombia",
+            "x": 0.613,
+            "y": 0.79,
+            "stats": {
+              "apps": 29,
+              "starts": 23,
+              "minutes": 2028,
+              "goals": 8,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.82
+            }
+          },
+          {
+            "id": "fotmob-1381138",
+            "name": "Jorge Palomino",
+            "number": 5,
+            "position": "Midfielder",
+            "age": 31,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "x": 0.613,
+            "y": 0.5,
+            "stats": {
+              "apps": 29,
+              "starts": 29,
+              "minutes": 2462,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.1
+            }
+          },
+          {
+            "id": "fotmob-1345062",
+            "name": "Christian Velarde",
+            "number": 17,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "x": 0.613,
+            "y": 0.21,
+            "stats": {
+              "apps": 15,
+              "starts": 10,
+              "minutes": 814,
+              "goals": 0,
+              "assists": 2,
+              "xg": null,
+              "rating": 6.58
+            }
+          },
+          {
             "id": "fotmob-988189",
             "name": "Franco Torres",
             "number": 10,
-            "position": "Midfielder",
+            "position": "Forward",
             "age": 30,
             "countryCode": "ARG",
             "countryName": "Argentina",
-            "x": 0.678,
+            "x": 0.87,
             "y": 0.7,
             "stats": {
               "apps": 29,
@@ -907,26 +924,6 @@
             }
           },
           {
-            "id": "fotmob-571225",
-            "name": "Jarlín Quintero",
-            "number": 11,
-            "position": "Midfielder",
-            "age": 33,
-            "countryCode": "COL",
-            "countryName": "Colombia",
-            "x": 0.678,
-            "y": 0.3,
-            "stats": {
-              "apps": 29,
-              "starts": 23,
-              "minutes": 2028,
-              "goals": 8,
-              "assists": 1,
-              "xg": null,
-              "rating": 6.82
-            }
-          },
-          {
             "id": "fotmob-1130739",
             "name": "Marlon Torres",
             "number": 20,
@@ -935,7 +932,7 @@
             "countryCode": "COL",
             "countryName": "Colombia",
             "x": 0.87,
-            "y": 0.5,
+            "y": 0.3,
             "stats": {
               "apps": 27,
               "starts": 16,
@@ -1093,45 +1090,25 @@
             }
           },
           {
-            "id": "fotmob-1440919",
-            "name": "Juan Ospina",
-            "number": 7,
+            "id": "fotmob-905979",
+            "name": "Félix Espinoza",
+            "number": 77,
             "position": "Forward",
-            "age": 25,
-            "countryCode": "COL",
-            "countryName": "Colombia",
-            "stats": {
-              "apps": 12,
-              "starts": 5,
-              "minutes": 426,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.63
-            }
-          }
-        ],
-        "unavailable": [
-          {
-            "id": "fotmob-1345062",
-            "age": 28,
+            "age": 27,
             "countryCode": "PER",
             "countryName": "Peru",
-            "name": "Christian Velarde",
-            "reason": "blessé",
-            "expectedReturn": "Doubtful",
-            "position": "Midfielder",
             "stats": {
-              "apps": 15,
-              "starts": 10,
-              "minutes": 814,
-              "goals": 0,
-              "assists": 2,
+              "apps": 10,
+              "starts": 3,
+              "minutes": 344,
+              "goals": 1,
+              "assists": 1,
               "xg": null,
-              "rating": 6.58
+              "rating": 6.78
             }
           }
         ],
+        "unavailable": [],
         "usualStartersMissing": [
           {
             "id": "fotmob-625150",
@@ -1166,16 +1143,16 @@
         "capacity": 18000,
         "surface": "artificial turf",
         "weather": "Thunderstorms",
-        "temperature": 19,
+        "temperature": 20,
         "windSpeed": 14,
-        "precipitation": 0.5,
+        "precipitation": 0.62,
         "referee": {
           "name": "Rudy Méndez",
           "country": "Peru",
           "league": "Liga 1",
           "matches": 7,
           "yellowCardsPerMatch": 4.43,
-          "yellowCardsLeagueAverage": 4.66,
+          "yellowCardsLeagueAverage": 4.67,
           "redCards": 3,
           "penalties": 1,
           "foulsPerMatch": 22.86,
@@ -1184,97 +1161,48 @@
       }
     },
     "analysis": {
-      "summary": "Duel de bas de tableau : Cajamarca, 18e avec 1 point (pénalité de -5), n'a pas gagné à domicile depuis 14 matchs. Los Chankas, 15e avec 14 points, n'a pas gagné à l'extérieur depuis 11 matchs. Cajamarca a pris 1 point sur ses 5 derniers matchs (0-0, 2-3, 3-1, 1-2, 0-1) contre 2 points pour Los Chankas (1-1, 0-0, 0-1, 1-4, 2-1). Les deux attaques sont faibles (1,3 et 0,9 but par match) et les deux défenses poreuses (2,0 et 1,9 but concédé). La composition de Cajamarca est complète. Chez Los Chankas, Takeuchi est remplaçant et Velarde est annoncé blessé, mais il figure dans le onze.",
+      "summary": "Duel de mal classés : Cajamarca est 18e avec 1 point (pénalité de -5), sans victoire à domicile depuis 14 matchs, et sort d'un 0-0 à Sport Boys. Los Chankas (15e, 14 points) n'a pas gagné à l'extérieur depuis 11 matchs, mais vient de faire deux nuls (1-1 contre Alianza Lima, 0-0 à Moquegua). Les deux attaques sont modestes : 1,3 but par match pour Cajamarca et 0,9 pour Los Chankas sur 10 matchs. Cajamarca laisse Lliuya (5+4) sur le banc et n'a ni Duarte ni De Jesús. Los Chankas met Takeuchi (5+3) sur le banc et se passe de Quintana.",
       "keyFactors": [
         {
           "factor": "classement",
-          "observation": "Les deux équipes sont dans le bas du tableau, avec un gros écart de points mais une même fragilité.",
-          "evidence": "Cajamarca 18e, 1 pt en 16 matchs (pénalité -5). Los Chankas 15e, 14 pts, 0 victoire et 4 nuls en 8 matchs à l'extérieur."
-        },
-        {
-          "factor": "forme récente",
-          "observation": "Cajamarca est un peu en hausse mais reste très faible. Los Chankas enchaîne les nuls et les défaites.",
-          "evidence": "Cajamarca : N D V D D sur les 5 derniers. Los Chankas : N N D D V."
+          "observation": "Les deux équipes sont dans le bas du tableau. Cajamarca est lourdement pénalisé.",
+          "evidence": "Cajamarca 18e, 1 pt en 16 matchs (pénalité -5) ; Los Chankas 15e, 14 pts."
         },
         {
           "factor": "statistiques et moyennes",
-          "observation": "Los Chankas produit très peu à l'extérieur et en concède beaucoup. Cajamarca tire plus à domicile.",
-          "evidence": "Los Chankas à l'extérieur : 0,4 but marqué et 2 concédés, 8,8 tirs pour et 21 contre. Cajamarca à domicile : 15 tirs, 1,2 but marqué et 2,4 concédés."
+          "observation": "Cajamarca tire davantage à domicile. Los Chankas produit très peu à l'extérieur et en concède beaucoup.",
+          "evidence": "Cajamarca à domicile : 15 tirs, 5,8 cadrés par match. Los Chankas à l'extérieur : 8,8 tirs, 2,2 cadrés produits, 21 tirs et 8,8 cadrés concédés, 7 corners concédés."
         },
         {
           "factor": "compositions",
-          "observation": "Cajamarca aligne son onze type, avec Lliuya (5+4) et de Jesús (8 buts). Los Chankas a Franco Torres (9+5) mais Takeuchi sur le banc.",
-          "evidence": "Takeuchi : 32 titularisations, 5+3. Quintana (0+5) hors de la feuille de match. Velarde : blessé, retour incertain."
+          "observation": "Les deux équipes ont changé d'entraîneur récemment et laissent un cadre offensif sur le banc.",
+          "evidence": "Lliuya remplaçant (33 titularisations), Takeuchi remplaçant (32 titularisations) ; Duarte et De Jesús absents de la feuille de match."
         },
         {
-          "factor": "edge du modèle",
-          "observation": "Le moteur ne relève aucun edge et la mise est PASS.",
-          "evidence": "Staking PASS (trop_peu_de_bookmakers). Buts attendus : 1,17 contre 1,12."
+          "factor": "cadre du match",
+          "observation": "Le terrain est synthétique et l'orage est annoncé, ce qui peut jouer sur le rythme.",
+          "evidence": "Pelouse artificielle, orage, précipitations 0,62, vent 14 km/h."
         }
       ],
-      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : match fermé, peu de buts, peu de tirs pour Los Chankas. Il nuance le 1N2, très ouvert, et le marché des tirs de Cajamarca à domicile. La composition de Los Chankas est un peu affaiblie par l'absence de Takeuchi dans le onze.",
+      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur. Cajamarca est légèrement favori à domicile et domine les volumes de tirs. Son 38 % reste fragile, vu sa forme et le fait qu'il n'a pas gagné à domicile depuis 14 matchs. Les marchés de volume (corners, tirs) sont plus lisibles que le résultat.",
+      "lineupImpact": "Cajamarca (4-2-3-1, Arévalo) aligne Campos, Camacho (5+3) et Muñoz (3+5). Lliuya, son meilleur contributeur (5+4), est sur le banc, et Duarte et De Jesús (8+1) sont absents, ce qui affaiblit l'attaque. Los Chankas (5-3-2, Bazalar) a F. Torres (9+5) et Quintero (8+1) mais Takeuchi sur le banc et Quintana absent. Le 5-3-2 laisse attendre une équipe prudente, avec peu de tirs. La composition est lue 18 minutes avant le coup d'envoi, donc quasi officielle. Le terrain synthétique et l'orage peuvent perturber le jeu.",
       "marketViews": [
         {
           "market": "Résultat",
-          "pick": "Los Chankas gagne",
+          "pick": "CD UT Cajamarca gagne",
           "verdict": "nuance",
           "confidence": "faible",
-          "explanation": "40 % : Los Chankas est 15e contre 18e, mais n'a pas gagné à l'extérieur depuis 11 matchs et marque 0,4 but par match dehors.",
-          "reasoning": "L'écart de niveau est mince et le match très ouvert. Le nul reste plausible, et l'équipe visiteuse peine à marquer dehors.",
-          "probability": 40
-        },
-        {
-          "market": "Total buts",
-          "pick": "Moins de 3.5 buts",
-          "verdict": "confirme",
-          "confidence": "forte",
-          "explanation": "80 % : les attaques font 1,3 et 0,9 but par match et les buts attendus totalisent environ 2,3.",
-          "reasoning": "Deux attaques faibles. Le seuil de 3,5 est haut, même si les défenses concèdent environ 2 buts par match.",
-          "probability": 80
-        },
-        {
-          "market": "Les 2 équipes marquent",
-          "pick": "Non",
-          "verdict": "nuance",
-          "confidence": "faible",
-          "explanation": "52 % : Los Chankas ne marque que 0,4 but par match dehors, mais Cajamarca concède 2,4 buts à domicile.",
-          "reasoning": "Los Chankas a une attaque très pauvre à l'extérieur, mais la défense de Cajamarca est ouverte. C'est presque un pile ou face.",
-          "probability": 52
-        },
-        {
-          "market": "Résultat + Total buts",
-          "pick": "Los Chankas & Moins de 3.5 buts",
-          "verdict": "nuance",
-          "confidence": "faible",
-          "explanation": "32 % : combine un résultat à 40 % et un total bas à 80 %.",
-          "reasoning": "Le volet total est solide, mais le volet résultat reste incertain. Le moteur n'a eu raison que 648 fois sur 1538 sur ce marché.",
-          "probability": 32
-        },
-        {
-          "market": "Buts — CD UT Cajamarca",
-          "pick": "CD UT Cajamarca — Plus de 0.5 buts",
-          "verdict": "confirme",
-          "confidence": "moyenne",
-          "explanation": "69 % : Cajamarca marque 1,2 but par match à domicile et Los Chankas en concède 2 dehors.",
-          "reasoning": "La défense visiteuse laisse 21 tirs et 8,8 tirs cadrés par match dehors. Cajamarca a pourtant été muet 2 fois sur ses 5 derniers matchs.",
-          "probability": 69
-        },
-        {
-          "market": "Buts — Los Chankas",
-          "pick": "Los Chankas — Moins de 1.5 buts",
-          "verdict": "confirme",
-          "confidence": "moyenne",
-          "explanation": "69 % : Los Chankas marque 0,4 but par match à l'extérieur et 0,9 sur 10 matchs.",
-          "reasoning": "L'attaque est faible dehors, avec 8,8 tirs par match. Takeuchi est remplaçant, ce qui n'aide pas.",
-          "probability": 69
+          "explanation": "38 % : Cajamarca a l'avantage du terrain et plus de tirs à domicile (15 par match), mais n'a gagné qu'un match sur 10 et aucun à domicile depuis 14 matchs.",
+          "reasoning": "L'avantage est mince. Los Chankas n'a pas gagné à l'extérieur depuis 11 matchs, mais Cajamarca est dernier et sans victoire à domicile. Le résultat reste très ouvert.",
+          "probability": 38
         },
         {
           "market": "Total corners",
           "pick": "Plus de 5.5 corners",
           "verdict": "confirme",
-          "confidence": "forte",
-          "explanation": "83 % : le moteur attend 8,61 corners (4,51 et 4,1) et la moyenne du championnat est de 9.",
-          "reasoning": "Le seuil est bas par rapport aux attendus et à la moyenne du championnat.",
+          "confidence": "moyenne",
+          "explanation": "83 % : le moteur attend 8,61 corners au total, et Los Chankas en concède 7 par match à l'extérieur.",
+          "reasoning": "Le seuil de 5,5 est bien en dessous de l'attendu. La moyenne du championnat est de 9 corners par match.",
           "probability": 83
         },
         {
@@ -1282,8 +1210,8 @@
           "pick": "CD UT Cajamarca — Moins de 6.5 corners",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "80 % : 4,51 corners attendus pour Cajamarca, qui en obtient 3,6 par match sur 10 matchs et 4,2 à domicile.",
-          "reasoning": "La moyenne est loin de 6,5. Los Chankas concède 7 corners dehors, ce qui laisse un peu de risque.",
+          "explanation": "80 % : Cajamarca attend 4,51 corners et en produit 3,6 par match sur 10 matchs (4,2 à domicile).",
+          "reasoning": "Sa production est loin de 6,5. Los Chankas en concède beaucoup à l'extérieur (7), ce qui explique que le pourcentage ne monte pas plus haut.",
           "probability": 80
         },
         {
@@ -1291,17 +1219,17 @@
           "pick": "Los Chankas — Moins de 5.5 corners",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "75 % : 4,1 corners attendus, pour 3,7 par match sur 10 matchs et 3,4 à l'extérieur.",
-          "reasoning": "Los Chankas tient peu le ballon dehors (42 % de possession), donc peu de corners.",
+          "explanation": "75 % : le moteur attend 4,1 corners pour Los Chankas, qui en produit 3,7 sur 10 matchs et 3,4 à l'extérieur.",
+          "reasoning": "Cajamarca en concède 5,4 par match à domicile, ce qui laisse une marge d'incertitude.",
           "probability": 75
         },
         {
           "market": "Total tirs",
           "pick": "Moins de 36.5 tirs",
           "verdict": "confirme",
-          "confidence": "forte",
-          "explanation": "83 % : le moteur attend 30,13 tirs, loin de 36,5.",
-          "reasoning": "Les deux équipes tirent environ 12,5 fois par match. Le seuil est élevé.",
+          "confidence": "moyenne",
+          "explanation": "83 % : le moteur attend 30,13 tirs au total, et chaque équipe tire 12,5 fois par match sur 10 matchs.",
+          "reasoning": "Deux attaques peu productives et un orage sur terrain synthétique vont dans le sens d'un total modéré. La défense très ouverte de Los Chankas (21 tirs concédés à l'extérieur) est le principal risque.",
           "probability": 83
         },
         {
@@ -1309,8 +1237,8 @@
           "pick": "CD UT Cajamarca — Moins de 21.5 tirs",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "81 % : 16,5 tirs attendus, pour 12,5 par match et 15 à domicile.",
-          "reasoning": "Même avec 21 tirs concédés par Los Chankas dehors, 21,5 reste un seuil haut.",
+          "explanation": "81 % : Cajamarca est attendu à 16,5 tirs, avec 15 par match à domicile.",
+          "reasoning": "Même face à une défense qui concède 21 tirs à l'extérieur, 21,5 reste haut pour une équipe qui tire 12,5 fois en moyenne.",
           "probability": 81
         },
         {
@@ -1318,17 +1246,17 @@
           "pick": "Los Chankas — Plus de 9.5 tirs",
           "verdict": "nuance",
           "confidence": "faible",
-          "explanation": "79 % : 13,63 tirs attendus, mais Los Chankas n'en fait que 8,8 par match à l'extérieur.",
-          "reasoning": "Sa moyenne dehors est sous le seuil, alors que sa moyenne sur 10 matchs (12,5) le dépasse. Le moteur s'appuie sur ce que Cajamarca concède (17,8 sur 10 matchs).",
+          "explanation": "79 % : Los Chankas est attendu à 13,63 tirs et en produit 12,5 sur 10 matchs, mais seulement 8,8 à l'extérieur.",
+          "reasoning": "Sa moyenne à l'extérieur est sous le seuil, mais Cajamarca concède 15 à 17,8 tirs par match. Le pourcentage tient surtout grâce à cette défense perméable.",
           "probability": 79
         },
         {
           "market": "Total tirs cadrés",
           "pick": "Plus de 7.5 tirs cadrés",
-          "verdict": "confirme",
+          "verdict": "nuance",
           "confidence": "moyenne",
-          "explanation": "81 % : 10,57 tirs cadrés attendus (6,38 et 4,19).",
-          "reasoning": "Les deux défenses concèdent 5,7 et 6,9 tirs cadrés par match. L'écart avec le seuil est confortable.",
+          "explanation": "81 % : le moteur attend 10,57 tirs cadrés au total, avec 6,38 pour Cajamarca et 4,19 pour Los Chankas.",
+          "reasoning": "Les défenses concèdent beaucoup de tirs cadrés (5,7 et 6,9 par match), ce qui soutient le plus. Les attaques peu efficaces et un match possiblement haché par l'orage invitent à la prudence.",
           "probability": 81
         },
         {
@@ -1336,8 +1264,8 @@
           "pick": "CD UT Cajamarca — Moins de 8.5 tirs cadrés",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "78 % : 6,38 tirs cadrés attendus, pour 4,7 par match et 5,8 à domicile.",
-          "reasoning": "Il faudrait un match exceptionnel pour dépasser 8. La moyenne à domicile est de 5,8.",
+          "explanation": "78 % : Cajamarca est attendu à 6,38 tirs cadrés et en produit 4,7 par match (5,8 à domicile).",
+          "reasoning": "Même sa meilleure moyenne à domicile reste bien sous 8,5. Los Chankas concède 8,8 tirs cadrés à l'extérieur, d'où la marge d'incertitude.",
           "probability": 78
         },
         {
@@ -1345,16 +1273,435 @@
           "pick": "Los Chankas — Plus de 2.5 tirs cadrés",
           "verdict": "nuance",
           "confidence": "faible",
-          "explanation": "76 % : 4,19 tirs cadrés attendus, alors que Los Chankas n'en cadre que 2,2 par match à l'extérieur.",
-          "reasoning": "Sa moyenne dehors est sous le seuil, mais Cajamarca concède 5,7 tirs cadrés par match. Les chiffres se contredisent donc.",
+          "explanation": "76 % : Los Chankas est attendu à 4,19 tirs cadrés, mais n'en produit que 3,6 par match et 2,2 à l'extérieur.",
+          "reasoning": "Sa moyenne à l'extérieur est sous le seuil. Cajamarca concède 5,7 tirs cadrés par match, 5,8 à domicile, ce qui soutient le pronostic. L'avis reste donc nuancé.",
           "probability": 76
         }
       ],
-      "caveats": "Les compositions sont lues 2788 minutes avant le coup d'envoi, donc ce sont plutôt des prévisions que des onzes officiels. Les deux clubs ont changé d'entraîneur récemment, et le nouveau est en place depuis peu de matchs (9 pour Cajamarca, 7 pour Los Chankas). Les xG ne sont pas relevés. La pelouse est synthétique et il y a un risque d'orage, sans effet chiffrable sur un marché précis. Le magasin ne donne qu'un seul écart d'arbitre, proche de la moyenne du championnat.",
-      "lineupImpact": "Cajamarca (4-2-3-1, Molins) aligne ses meneurs Lliuya (5+4), Muñoz (3+5), Camacho (5+3) et de Jesús (8 buts). Duarte et Figuera, habituels titulaires, sont remplaçants, ce qui est une rotation modérée. Los Chankas (3-4-2-1, Bazalar) a Franco Torres (9+5) et Quintero (8 buts). Takeuchi (32 titularisations, 5+3) est remplaçant et Quintana (0+5) n'est pas sur la feuille, ce qui réduit la créativité visiteuse et conforte les marchés sous. Velarde est annoncé blessé, retour incertain, mais figure dans le onze : cette contradiction est à surveiller."
+      "caveats": "Les marchés de buts sont retirés, donc sans avis. Le dossier de Cajamarca date du 09/11, et le changement d'entraîneur n'est déduit que des compositions importées (Molins → Arévalo, dernier match connu avec Molins le 08/11). L'échantillon de 5 matchs à domicile ou à l'extérieur est réduit. Le moteur n'a pas d'edge chiffré (PASS, trop peu de bookmakers)."
     },
-    "updatedAt": "2026-11-14T19:32:07.995Z",
-    "createdAt": "2026-11-14T19:32:07.995Z"
+    "updatedAt": "2026-11-16T17:42:51.195Z",
+    "createdAt": "2026-11-14T19:32:07.995Z",
+    "kickoffRuns": 2,
+    "earlierAnalysis": {
+      "analysis": {
+        "summary": "Duel de bas de tableau : Cajamarca, 18e avec 1 point (pénalité de -5), n'a pas gagné à domicile depuis 14 matchs. Los Chankas, 15e avec 14 points, n'a pas gagné à l'extérieur depuis 11 matchs. Cajamarca a pris 1 point sur ses 5 derniers matchs (0-0, 2-3, 3-1, 1-2, 0-1) contre 2 points pour Los Chankas (1-1, 0-0, 0-1, 1-4, 2-1). Les deux attaques sont faibles (1,3 et 0,9 but par match) et les deux défenses poreuses (2,0 et 1,9 but concédé). La composition de Cajamarca est complète. Chez Los Chankas, Takeuchi est remplaçant et Velarde est annoncé blessé, mais il figure dans le onze.",
+        "keyFactors": [
+          {
+            "factor": "classement",
+            "observation": "Les deux équipes sont dans le bas du tableau, avec un gros écart de points mais une même fragilité.",
+            "evidence": "Cajamarca 18e, 1 pt en 16 matchs (pénalité -5). Los Chankas 15e, 14 pts, 0 victoire et 4 nuls en 8 matchs à l'extérieur."
+          },
+          {
+            "factor": "forme récente",
+            "observation": "Cajamarca est un peu en hausse mais reste très faible. Los Chankas enchaîne les nuls et les défaites.",
+            "evidence": "Cajamarca : N D V D D sur les 5 derniers. Los Chankas : N N D D V."
+          },
+          {
+            "factor": "statistiques et moyennes",
+            "observation": "Los Chankas produit très peu à l'extérieur et en concède beaucoup. Cajamarca tire plus à domicile.",
+            "evidence": "Los Chankas à l'extérieur : 0,4 but marqué et 2 concédés, 8,8 tirs pour et 21 contre. Cajamarca à domicile : 15 tirs, 1,2 but marqué et 2,4 concédés."
+          },
+          {
+            "factor": "compositions",
+            "observation": "Cajamarca aligne son onze type, avec Lliuya (5+4) et de Jesús (8 buts). Los Chankas a Franco Torres (9+5) mais Takeuchi sur le banc.",
+            "evidence": "Takeuchi : 32 titularisations, 5+3. Quintana (0+5) hors de la feuille de match. Velarde : blessé, retour incertain."
+          },
+          {
+            "factor": "edge du modèle",
+            "observation": "Le moteur ne relève aucun edge et la mise est PASS.",
+            "evidence": "Staking PASS (trop_peu_de_bookmakers). Buts attendus : 1,17 contre 1,12."
+          }
+        ],
+        "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : match fermé, peu de buts, peu de tirs pour Los Chankas. Il nuance le 1N2, très ouvert, et le marché des tirs de Cajamarca à domicile. La composition de Los Chankas est un peu affaiblie par l'absence de Takeuchi dans le onze.",
+        "marketViews": [
+          {
+            "market": "Résultat",
+            "pick": "Los Chankas gagne",
+            "verdict": "nuance",
+            "confidence": "faible",
+            "explanation": "40 % : Los Chankas est 15e contre 18e, mais n'a pas gagné à l'extérieur depuis 11 matchs et marque 0,4 but par match dehors.",
+            "reasoning": "L'écart de niveau est mince et le match très ouvert. Le nul reste plausible, et l'équipe visiteuse peine à marquer dehors.",
+            "probability": 40
+          },
+          {
+            "market": "Total buts",
+            "pick": "Moins de 3.5 buts",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "80 % : les attaques font 1,3 et 0,9 but par match et les buts attendus totalisent environ 2,3.",
+            "reasoning": "Deux attaques faibles. Le seuil de 3,5 est haut, même si les défenses concèdent environ 2 buts par match.",
+            "probability": 80
+          },
+          {
+            "market": "Les 2 équipes marquent",
+            "pick": "Non",
+            "verdict": "nuance",
+            "confidence": "faible",
+            "explanation": "52 % : Los Chankas ne marque que 0,4 but par match dehors, mais Cajamarca concède 2,4 buts à domicile.",
+            "reasoning": "Los Chankas a une attaque très pauvre à l'extérieur, mais la défense de Cajamarca est ouverte. C'est presque un pile ou face.",
+            "probability": 52
+          },
+          {
+            "market": "Résultat + Total buts",
+            "pick": "Los Chankas & Moins de 3.5 buts",
+            "verdict": "nuance",
+            "confidence": "faible",
+            "explanation": "32 % : combine un résultat à 40 % et un total bas à 80 %.",
+            "reasoning": "Le volet total est solide, mais le volet résultat reste incertain. Le moteur n'a eu raison que 648 fois sur 1538 sur ce marché.",
+            "probability": 32
+          },
+          {
+            "market": "Buts — CD UT Cajamarca",
+            "pick": "CD UT Cajamarca — Plus de 0.5 buts",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "69 % : Cajamarca marque 1,2 but par match à domicile et Los Chankas en concède 2 dehors.",
+            "reasoning": "La défense visiteuse laisse 21 tirs et 8,8 tirs cadrés par match dehors. Cajamarca a pourtant été muet 2 fois sur ses 5 derniers matchs.",
+            "probability": 69
+          },
+          {
+            "market": "Buts — Los Chankas",
+            "pick": "Los Chankas — Moins de 1.5 buts",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "69 % : Los Chankas marque 0,4 but par match à l'extérieur et 0,9 sur 10 matchs.",
+            "reasoning": "L'attaque est faible dehors, avec 8,8 tirs par match. Takeuchi est remplaçant, ce qui n'aide pas.",
+            "probability": 69
+          },
+          {
+            "market": "Total corners",
+            "pick": "Plus de 5.5 corners",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "83 % : le moteur attend 8,61 corners (4,51 et 4,1) et la moyenne du championnat est de 9.",
+            "reasoning": "Le seuil est bas par rapport aux attendus et à la moyenne du championnat.",
+            "probability": 83
+          },
+          {
+            "market": "Corners — CD UT Cajamarca",
+            "pick": "CD UT Cajamarca — Moins de 6.5 corners",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "80 % : 4,51 corners attendus pour Cajamarca, qui en obtient 3,6 par match sur 10 matchs et 4,2 à domicile.",
+            "reasoning": "La moyenne est loin de 6,5. Los Chankas concède 7 corners dehors, ce qui laisse un peu de risque.",
+            "probability": 80
+          },
+          {
+            "market": "Corners — Los Chankas",
+            "pick": "Los Chankas — Moins de 5.5 corners",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "75 % : 4,1 corners attendus, pour 3,7 par match sur 10 matchs et 3,4 à l'extérieur.",
+            "reasoning": "Los Chankas tient peu le ballon dehors (42 % de possession), donc peu de corners.",
+            "probability": 75
+          },
+          {
+            "market": "Total tirs",
+            "pick": "Moins de 36.5 tirs",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "83 % : le moteur attend 30,13 tirs, loin de 36,5.",
+            "reasoning": "Les deux équipes tirent environ 12,5 fois par match. Le seuil est élevé.",
+            "probability": 83
+          },
+          {
+            "market": "Tirs — CD UT Cajamarca",
+            "pick": "CD UT Cajamarca — Moins de 21.5 tirs",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "81 % : 16,5 tirs attendus, pour 12,5 par match et 15 à domicile.",
+            "reasoning": "Même avec 21 tirs concédés par Los Chankas dehors, 21,5 reste un seuil haut.",
+            "probability": 81
+          },
+          {
+            "market": "Tirs — Los Chankas",
+            "pick": "Los Chankas — Plus de 9.5 tirs",
+            "verdict": "nuance",
+            "confidence": "faible",
+            "explanation": "79 % : 13,63 tirs attendus, mais Los Chankas n'en fait que 8,8 par match à l'extérieur.",
+            "reasoning": "Sa moyenne dehors est sous le seuil, alors que sa moyenne sur 10 matchs (12,5) le dépasse. Le moteur s'appuie sur ce que Cajamarca concède (17,8 sur 10 matchs).",
+            "probability": 79
+          },
+          {
+            "market": "Total tirs cadrés",
+            "pick": "Plus de 7.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "81 % : 10,57 tirs cadrés attendus (6,38 et 4,19).",
+            "reasoning": "Les deux défenses concèdent 5,7 et 6,9 tirs cadrés par match. L'écart avec le seuil est confortable.",
+            "probability": 81
+          },
+          {
+            "market": "Tirs cadrés — CD UT Cajamarca",
+            "pick": "CD UT Cajamarca — Moins de 8.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "78 % : 6,38 tirs cadrés attendus, pour 4,7 par match et 5,8 à domicile.",
+            "reasoning": "Il faudrait un match exceptionnel pour dépasser 8. La moyenne à domicile est de 5,8.",
+            "probability": 78
+          },
+          {
+            "market": "Tirs cadrés — Los Chankas",
+            "pick": "Los Chankas — Plus de 2.5 tirs cadrés",
+            "verdict": "nuance",
+            "confidence": "faible",
+            "explanation": "76 % : 4,19 tirs cadrés attendus, alors que Los Chankas n'en cadre que 2,2 par match à l'extérieur.",
+            "reasoning": "Sa moyenne dehors est sous le seuil, mais Cajamarca concède 5,7 tirs cadrés par match. Les chiffres se contredisent donc.",
+            "probability": 76
+          }
+        ],
+        "caveats": "Les compositions sont lues 2788 minutes avant le coup d'envoi, donc ce sont plutôt des prévisions que des onzes officiels. Les deux clubs ont changé d'entraîneur récemment, et le nouveau est en place depuis peu de matchs (9 pour Cajamarca, 7 pour Los Chankas). Les xG ne sont pas relevés. La pelouse est synthétique et il y a un risque d'orage, sans effet chiffrable sur un marché précis. Le magasin ne donne qu'un seul écart d'arbitre, proche de la moyenne du championnat.",
+        "lineupImpact": "Cajamarca (4-2-3-1, Molins) aligne ses meneurs Lliuya (5+4), Muñoz (3+5), Camacho (5+3) et de Jesús (8 buts). Duarte et Figuera, habituels titulaires, sont remplaçants, ce qui est une rotation modérée. Los Chankas (3-4-2-1, Bazalar) a Franco Torres (9+5) et Quintero (8 buts). Takeuchi (32 titularisations, 5+3) est remplaçant et Quintana (0+5) n'est pas sur la feuille, ce qui réduit la créativité visiteuse et conforte les marchés sous. Velarde est annoncé blessé, retour incertain, mais figure dans le onze : cette contradiction est à surveiller."
+      },
+      "engineSnapshot": {
+        "label": "CD UT Cajamarca vs Los Chankas",
+        "expectedGoals": {
+          "home": 1.172,
+          "away": 1.121,
+          "source": "fotmob"
+        },
+        "trueOdds": {
+          "home": 3.22,
+          "draw": 3.46,
+          "away": 2.5
+        },
+        "market": {
+          "odds1": 2.9,
+          "oddsDraw": 3.1,
+          "odds2": 2.3
+        },
+        "edgePercent": null,
+        "staking": {
+          "action": "PASS",
+          "stake": null,
+          "reason": "trop_peu_de_bookmakers",
+          "candidates": []
+        },
+        "statExpectations": {
+          "corners": {
+            "home": 4.51,
+            "away": 4.1,
+            "total": 8.61
+          },
+          "shots": {
+            "home": 16.5,
+            "away": 13.63,
+            "total": 30.13
+          },
+          "shotsOnTarget": {
+            "home": 6.38,
+            "away": 4.19,
+            "total": 10.57
+          }
+        },
+        "marketPredictions": [
+          {
+            "marketId": "result",
+            "params": {
+              "outcome": "away"
+            },
+            "market": "Résultat",
+            "predictedOutcome": "away",
+            "predictedLabel": "Los Chankas gagne",
+            "predictedOdds": 2.5,
+            "probability": 40,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalGoals",
+            "params": {
+              "line": 3.5,
+              "side": "under"
+            },
+            "market": "Total buts",
+            "predictedOutcome": "under",
+            "predictedLabel": "Moins de 3.5 buts",
+            "predictedOdds": 1.25,
+            "probability": 80,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "bothTeamsScore",
+            "params": {
+              "outcome": "no"
+            },
+            "market": "Les 2 équipes marquent",
+            "predictedOutcome": "no",
+            "predictedLabel": "Non",
+            "predictedOdds": 1.91,
+            "probability": 52,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "resultAndTotal",
+            "params": {
+              "line": 3.5,
+              "key": "awayUnder"
+            },
+            "market": "Résultat + Total buts",
+            "predictedOutcome": "awayUnder",
+            "predictedLabel": "Los Chankas & Moins de 3.5 buts",
+            "predictedOdds": 3.16,
+            "probability": 32,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamGoals",
+            "params": {
+              "team": "home",
+              "line": 0.5,
+              "side": "over"
+            },
+            "market": "Buts — CD UT Cajamarca",
+            "predictedOutcome": "over",
+            "predictedLabel": "CD UT Cajamarca — Plus de 0.5 buts",
+            "predictedOdds": 1.45,
+            "probability": 69,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamGoals",
+            "params": {
+              "team": "away",
+              "line": 1.5,
+              "side": "under"
+            },
+            "market": "Buts — Los Chankas",
+            "predictedOutcome": "under",
+            "predictedLabel": "Los Chankas — Moins de 1.5 buts",
+            "predictedOdds": 1.45,
+            "probability": 69,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalCorners",
+            "params": {
+              "line": 5.5,
+              "side": "over"
+            },
+            "market": "Total corners",
+            "predictedOutcome": "over",
+            "predictedLabel": "Plus de 5.5 corners",
+            "predictedOdds": 1.2,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamCorners",
+            "params": {
+              "team": "home",
+              "line": 6.5,
+              "side": "under"
+            },
+            "market": "Corners — CD UT Cajamarca",
+            "predictedOutcome": "under",
+            "predictedLabel": "CD UT Cajamarca — Moins de 6.5 corners",
+            "predictedOdds": 1.25,
+            "probability": 80,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamCorners",
+            "params": {
+              "team": "away",
+              "line": 5.5,
+              "side": "under"
+            },
+            "market": "Corners — Los Chankas",
+            "predictedOutcome": "under",
+            "predictedLabel": "Los Chankas — Moins de 5.5 corners",
+            "predictedOdds": 1.34,
+            "probability": 75,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalShots",
+            "params": {
+              "line": 36.5,
+              "side": "under"
+            },
+            "market": "Total tirs",
+            "predictedOutcome": "under",
+            "predictedLabel": "Moins de 36.5 tirs",
+            "predictedOdds": 1.2,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShots",
+            "params": {
+              "team": "home",
+              "line": 21.5,
+              "side": "under"
+            },
+            "market": "Tirs — CD UT Cajamarca",
+            "predictedOutcome": "under",
+            "predictedLabel": "CD UT Cajamarca — Moins de 21.5 tirs",
+            "predictedOdds": 1.23,
+            "probability": 81,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShots",
+            "params": {
+              "team": "away",
+              "line": 9.5,
+              "side": "over"
+            },
+            "market": "Tirs — Los Chankas",
+            "predictedOutcome": "over",
+            "predictedLabel": "Los Chankas — Plus de 9.5 tirs",
+            "predictedOdds": 1.26,
+            "probability": 79,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalShotsOnTarget",
+            "params": {
+              "line": 7.5,
+              "side": "over"
+            },
+            "market": "Total tirs cadrés",
+            "predictedOutcome": "over",
+            "predictedLabel": "Plus de 7.5 tirs cadrés",
+            "predictedOdds": 1.24,
+            "probability": 81,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShotsOnTarget",
+            "params": {
+              "team": "home",
+              "line": 8.5,
+              "side": "under"
+            },
+            "market": "Tirs cadrés — CD UT Cajamarca",
+            "predictedOutcome": "under",
+            "predictedLabel": "CD UT Cajamarca — Moins de 8.5 tirs cadrés",
+            "predictedOdds": 1.28,
+            "probability": 78,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShotsOnTarget",
+            "params": {
+              "team": "away",
+              "line": 2.5,
+              "side": "over"
+            },
+            "market": "Tirs cadrés — Los Chankas",
+            "predictedOutcome": "over",
+            "predictedLabel": "Los Chankas — Plus de 2.5 tirs cadrés",
+            "predictedOdds": 1.32,
+            "probability": 76,
+            "minOdds": 1.2
+          }
+        ],
+        "engineVersion": 5
+      },
+      "analysedAt": "2026-11-14T19:32:07.995Z"
+    }
   },
   {
     "matchId": "cal-2026-11-16-albacete-celta-fortuna",
