@@ -4067,6 +4067,1763 @@
     "createdAt": "2026-11-17T02:37:50.251Z"
   },
   {
+    "matchId": "1c0decf6a961edaef153ea4223ec22ce",
+    "homeName": "Corinthians",
+    "awayName": "Botafogo",
+    "league": "Brazil Série A",
+    "commenceTime": "2026-11-19T00:30:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Corinthians vs Botafogo",
+      "expectedGoals": {
+        "home": 1.26,
+        "away": 0.989,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 1.86,
+        "draw": 4,
+        "away": 4.7
+      },
+      "market": {
+        "odds1": 1.8,
+        "oddsDraw": 3.45,
+        "odds2": 3.87
+      },
+      "edgePercent": 3.68,
+      "staking": {
+        "action": "RECOMMENDED",
+        "stake": 49.46,
+        "outcome": "home",
+        "label": "Corinthians gagne",
+        "odds": 1.93,
+        "displayedOdds": 1.93,
+        "bookmaker": "unibet_se",
+        "bookmakerTitle": "Unibet (SE)",
+        "fairOdds": 1.86,
+        "ev": 0.0368,
+        "exclusion": null,
+        "candidates": [
+          {
+            "outcome": "home",
+            "label": "Corinthians gagne",
+            "odds": 1.93,
+            "displayedOdds": 1.93,
+            "bookmaker": "unibet_se",
+            "bookmakerTitle": "Unibet (SE)",
+            "fairOdds": 1.86,
+            "ev": 0.0368,
+            "exclusion": null
+          },
+          {
+            "outcome": "draw",
+            "label": "Match nul",
+            "odds": 3.7,
+            "displayedOdds": 3.7,
+            "bookmaker": "betsson",
+            "bookmakerTitle": "Betsson",
+            "fairOdds": 4,
+            "ev": -0.0756,
+            "exclusion": "sous_le_seuil"
+          },
+          {
+            "outcome": "away",
+            "label": "Botafogo gagne",
+            "odds": 4.25,
+            "displayedOdds": 4.25,
+            "bookmaker": "nordicbet",
+            "bookmakerTitle": "Nordic Bet",
+            "fairOdds": 4.7,
+            "ev": -0.095,
+            "exclusion": "sous_le_seuil"
+          }
+        ],
+        "limits": {
+          "edgeThresholdMin": 0.02,
+          "edgeThresholdMax": 0.25,
+          "maxValueOdds": 5
+        }
+      },
+      "statExpectations": {
+        "corners": {
+          "home": 6.33,
+          "away": 4.77,
+          "total": 11.1
+        },
+        "shots": {
+          "home": 16.23,
+          "away": 13.41,
+          "total": 29.63
+        },
+        "shotsOnTarget": {
+          "home": 5.12,
+          "away": 4.77,
+          "total": 9.89
+        }
+      },
+      "marketPredictions": [
+        {
+          "marketId": "result",
+          "params": {
+            "outcome": "home"
+          },
+          "market": "Résultat",
+          "predictedOutcome": "home",
+          "predictedLabel": "Corinthians gagne",
+          "predictedOdds": 1.86,
+          "probability": 54,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 3.5,
+            "side": "under"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 3.5 buts",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "no"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "no",
+          "predictedLabel": "Non",
+          "predictedOdds": 1.85,
+          "probability": 54,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 3.5,
+            "key": "homeUnder"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "homeUnder",
+          "predictedLabel": "Corinthians & Moins de 3.5 buts",
+          "predictedOdds": 2.38,
+          "probability": 42,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 0.5,
+            "side": "over"
+          },
+          "market": "Buts — Corinthians",
+          "predictedOutcome": "over",
+          "predictedLabel": "Corinthians — Plus de 0.5 buts",
+          "predictedOdds": 1.4,
+          "probability": 71,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 1.5,
+            "side": "under"
+          },
+          "market": "Buts — Botafogo",
+          "predictedOutcome": "under",
+          "predictedLabel": "Botafogo — Moins de 1.5 buts",
+          "predictedOdds": 1.35,
+          "probability": 74,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalCorners",
+          "params": {
+            "line": 7.5,
+            "side": "over"
+          },
+          "market": "Total corners",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 7.5 corners",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "home",
+            "line": 3.5,
+            "side": "over"
+          },
+          "market": "Corners — Corinthians",
+          "predictedOutcome": "over",
+          "predictedLabel": "Corinthians — Plus de 3.5 corners",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "away",
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Corners — Botafogo",
+          "predictedOutcome": "over",
+          "predictedLabel": "Botafogo — Plus de 2.5 corners",
+          "predictedOdds": 1.26,
+          "probability": 79,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShots",
+          "params": {
+            "line": 23.5,
+            "side": "over"
+          },
+          "market": "Total tirs",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 23.5 tirs",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "home",
+            "line": 21.5,
+            "side": "under"
+          },
+          "market": "Tirs — Corinthians",
+          "predictedOutcome": "under",
+          "predictedLabel": "Corinthians — Moins de 21.5 tirs",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "away",
+            "line": 17.5,
+            "side": "under"
+          },
+          "market": "Tirs — Botafogo",
+          "predictedOutcome": "under",
+          "predictedLabel": "Botafogo — Moins de 17.5 tirs",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShotsOnTarget",
+          "params": {
+            "line": 12.5,
+            "side": "under"
+          },
+          "market": "Total tirs cadrés",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 12.5 tirs cadrés",
+          "predictedOdds": 1.27,
+          "probability": 79,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "home",
+            "line": 7.5,
+            "side": "under"
+          },
+          "market": "Tirs cadrés — Corinthians",
+          "predictedOutcome": "under",
+          "predictedLabel": "Corinthians — Moins de 7.5 tirs cadrés",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "away",
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Tirs cadrés — Botafogo",
+          "predictedOutcome": "over",
+          "predictedLabel": "Botafogo — Plus de 2.5 tirs cadrés",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        }
+      ],
+      "engineVersion": 5
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 11670,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 2925,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 11670,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 2925,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 11670,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 11670
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.075934,
+    "analysedAt": "2026-11-17T05:39:51.141Z",
+    "timing": "avance",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 500,
+      "tokens": 1618,
+      "lecons": [
+        "cal-2026-10-07-botafogo-vasco-da-gama|totalCorners",
+        "cal-2026-10-26-flamengo-atletico-mg|result",
+        "cal-2026-10-03-atletico-mg-rb-bragantino|teamCorners:away"
+      ],
+      "dossiersDu": "2026-11-16T23:32:45.014Z",
+      "equipes": {
+        "home": {
+          "id": "fotmob-9808",
+          "dossier": true
+        },
+        "away": {
+          "id": "fotmob-8517",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "Brazil Série A",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "FotMob",
+      "fotmobMatchId": "5103707",
+      "fetchedAt": "2026-11-17T05:39:28.408Z",
+      "minutesBeforeKickoff": 2571,
+      "home": {
+        "team": "Corinthians",
+        "teamId": "fotmob-9808",
+        "formation": "4-2-3-1",
+        "coach": "Clarence Seedorf",
+        "statsSince": "2026-01-01",
+        "teamMatches": 48,
+        "startXI": [
+          {
+            "id": "fotmob-960887",
+            "name": "Hugo Souza",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 27,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 43,
+              "starts": 43,
+              "minutes": 3870,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.96
+            }
+          },
+          {
+            "id": "fotmob-1350024",
+            "name": "Pedro Milans",
+            "number": 20,
+            "position": "Defender",
+            "age": 24,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "x": 0.292,
+            "y": 0.875,
+            "stats": {
+              "apps": 10,
+              "starts": 8,
+              "minutes": 630,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.54,
+              "rating": 6.93
+            }
+          },
+          {
+            "id": "fotmob-251244",
+            "name": "André Ramalho",
+            "number": 5,
+            "position": "Defender",
+            "age": 34,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 13,
+              "starts": 10,
+              "minutes": 937,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.04,
+              "rating": 6.82
+            }
+          },
+          {
+            "id": "fotmob-323352",
+            "name": "Gustavo Henrique",
+            "number": 13,
+            "position": "Defender",
+            "age": 33,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.292,
+            "y": 0.375,
+            "stats": {
+              "apps": 43,
+              "starts": 43,
+              "minutes": 3852,
+              "goals": 8,
+              "assists": 2,
+              "xg": 3.78,
+              "rating": 7.1
+            }
+          },
+          {
+            "id": "fotmob-427877",
+            "name": "Fabrizio Angileri",
+            "number": 26,
+            "position": "Defender",
+            "age": 32,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.292,
+            "y": 0.125,
+            "stats": {
+              "apps": 17,
+              "starts": 13,
+              "minutes": 1149,
+              "goals": 1,
+              "assists": 1,
+              "xg": 0.25,
+              "rating": 7.23
+            }
+          },
+          {
+            "id": "fotmob-1804815",
+            "name": "André",
+            "number": 49,
+            "position": "Midfielder",
+            "age": 20,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.485,
+            "y": 0.7,
+            "stats": {
+              "apps": 33,
+              "starts": 26,
+              "minutes": 2113,
+              "goals": 4,
+              "assists": 2,
+              "xg": 3.1,
+              "rating": 6.71
+            }
+          },
+          {
+            "id": "fotmob-1380775",
+            "name": "Breno Bidon",
+            "number": 7,
+            "position": "Midfielder",
+            "age": 21,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.485,
+            "y": 0.3,
+            "stats": {
+              "apps": 43,
+              "starts": 40,
+              "minutes": 3171,
+              "goals": 3,
+              "assists": 2,
+              "xg": 2.21,
+              "rating": 6.86
+            }
+          },
+          {
+            "id": "fotmob-1395944",
+            "name": "Kaio",
+            "number": 37,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.678,
+            "y": 0.837,
+            "stats": {
+              "apps": 33,
+              "starts": 20,
+              "minutes": 2071,
+              "goals": 4,
+              "assists": 2,
+              "xg": 4.54,
+              "rating": 7.04
+            }
+          },
+          {
+            "id": "fotmob-1093746",
+            "name": "Rodrigo Garro",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.678,
+            "y": 0.5,
+            "stats": {
+              "apps": 44,
+              "starts": 37,
+              "minutes": 3219,
+              "goals": 3,
+              "assists": 13,
+              "xg": 4.07,
+              "rating": 7.29
+            }
+          },
+          {
+            "id": "fotmob-1130833",
+            "name": "Bidu",
+            "number": 21,
+            "position": "Midfielder",
+            "age": 27,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.678,
+            "y": 0.163,
+            "stats": {
+              "apps": 40,
+              "starts": 37,
+              "minutes": 3317,
+              "goals": 5,
+              "assists": 2,
+              "xg": 2.99,
+              "rating": 7.24
+            }
+          },
+          {
+            "id": "fotmob-892752",
+            "name": "Yuri Alberto",
+            "number": 9,
+            "position": "Forward",
+            "age": 25,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 31,
+              "starts": 28,
+              "minutes": 2455,
+              "goals": 6,
+              "assists": 3,
+              "xg": 9,
+              "rating": 6.89
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-1511563",
+            "name": "Kauê Camargo",
+            "number": 51,
+            "position": "Goalkeeper",
+            "age": 22,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 5,
+              "starts": 5,
+              "minutes": 450,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.73
+            }
+          },
+          {
+            "id": "fotmob-1198558",
+            "name": "Hugo",
+            "number": 46,
+            "position": "Defender",
+            "age": 29,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1503653",
+            "name": "Tchoca",
+            "number": 4,
+            "position": "Defender",
+            "age": 22,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 7,
+              "starts": 4,
+              "minutes": 405,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.2,
+              "rating": 7.11
+            }
+          },
+          {
+            "id": "fotmob-246414",
+            "name": "André Carrillo",
+            "number": 19,
+            "position": "Midfielder",
+            "age": 35,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "stats": {
+              "apps": 35,
+              "starts": 16,
+              "minutes": 1463,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.85,
+              "rating": 6.62
+            }
+          },
+          {
+            "id": "fotmob-676625",
+            "name": "Allan",
+            "number": 29,
+            "position": "Midfielder",
+            "age": 29,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 34,
+              "starts": 19,
+              "minutes": 1846,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.84,
+              "rating": 6.67
+            }
+          },
+          {
+            "id": "fotmob-775266",
+            "name": "Charles",
+            "number": 35,
+            "position": "Midfielder",
+            "age": 30,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 11,
+              "starts": 4,
+              "minutes": 321,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.32
+            }
+          },
+          {
+            "id": "fotmob-637670",
+            "name": "Matheus Pereira",
+            "number": 23,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 26,
+              "starts": 9,
+              "minutes": 874,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.4,
+              "rating": 6.58
+            }
+          },
+          {
+            "id": "fotmob-1744337",
+            "name": "Dieguinho",
+            "number": 61,
+            "position": "Midfielder",
+            "age": 19,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 23,
+              "starts": 5,
+              "minutes": 516,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.41,
+              "rating": 6.44
+            }
+          },
+          {
+            "id": "fotmob-1652599",
+            "name": "Gui Negão",
+            "number": 56,
+            "position": "Forward",
+            "age": 19,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 16,
+              "starts": 3,
+              "minutes": 420,
+              "goals": 1,
+              "assists": 0,
+              "xg": 1.42,
+              "rating": 6.21
+            }
+          },
+          {
+            "id": "fotmob-319599",
+            "name": "Vitinho",
+            "number": 11,
+            "position": "Forward",
+            "age": 33,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 16,
+              "starts": 5,
+              "minutes": 604,
+              "goals": 0,
+              "assists": 2,
+              "xg": 1.2,
+              "rating": 6.59
+            }
+          },
+          {
+            "id": "fotmob-303824",
+            "name": "Memphis Depay",
+            "number": 10,
+            "position": "Forward",
+            "age": 32,
+            "countryCode": "NED",
+            "countryName": "Netherlands",
+            "stats": {
+              "apps": 19,
+              "starts": 14,
+              "minutes": 1197,
+              "goals": 1,
+              "assists": 1,
+              "xg": 3.62,
+              "rating": 6.45
+            }
+          },
+          {
+            "id": "fotmob-890637",
+            "name": "Pedro Raul",
+            "number": 18,
+            "position": "Forward",
+            "age": 30,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 30,
+              "starts": 9,
+              "minutes": 875,
+              "goals": 2,
+              "assists": 1,
+              "xg": 1.74,
+              "rating": 6.51
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "id": "fotmob-637670",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Matheus Pereira",
+            "reason": "suspendu",
+            "expectedReturn": "Mid November 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 26,
+              "starts": 9,
+              "minutes": 874,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.4,
+              "rating": 6.58
+            }
+          },
+          {
+            "id": "fotmob-892752",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Yuri Alberto",
+            "reason": "suspendu",
+            "expectedReturn": "Late November 2026",
+            "position": "Forward",
+            "stats": {
+              "apps": 31,
+              "starts": 28,
+              "minutes": 2455,
+              "goals": 6,
+              "assists": 3,
+              "xg": 9,
+              "rating": 6.89
+            }
+          },
+          {
+            "id": "fotmob-251244",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "André Ramalho",
+            "reason": "suspendu",
+            "expectedReturn": "Mid November 2026",
+            "position": "Defender",
+            "stats": {
+              "apps": 13,
+              "starts": 10,
+              "minutes": 937,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.04,
+              "rating": 6.82
+            }
+          },
+          {
+            "id": "fotmob-1093746",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Rodrigo Garro",
+            "reason": "blessé",
+            "expectedReturn": "Early December 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 44,
+              "starts": 37,
+              "minutes": 3219,
+              "goals": 3,
+              "assists": 13,
+              "xg": 4.07,
+              "rating": 7.29
+            }
+          },
+          {
+            "id": "fotmob-494241",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Alex Santana",
+            "reason": "blessé",
+            "expectedReturn": "Mid November 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 1,
+              "starts": 0,
+              "minutes": 9,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.05,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-177503",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Gabriel Paulista",
+            "reason": "blessé",
+            "expectedReturn": "About 1-2 weeks",
+            "position": "Defender",
+            "stats": {
+              "apps": 36,
+              "starts": 36,
+              "minutes": 3168,
+              "goals": 1,
+              "assists": 0,
+              "xg": 1.02,
+              "rating": 7.11
+            }
+          },
+          {
+            "id": "fotmob-841656",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Raniele",
+            "reason": "blessé",
+            "expectedReturn": "Late November 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 35,
+              "starts": 33,
+              "minutes": 2709,
+              "goals": 3,
+              "assists": 0,
+              "xg": 1.97,
+              "rating": 6.98
+            }
+          },
+          {
+            "id": "fotmob-193177",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Zakaria Labyad",
+            "reason": "blessé",
+            "expectedReturn": "Out for season",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 17,
+              "starts": 3,
+              "minutes": 400,
+              "goals": 2,
+              "assists": 2,
+              "xg": 0.73,
+              "rating": 6.62
+            }
+          },
+          {
+            "id": "fotmob-1503652",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Kayke",
+            "reason": "blessé",
+            "expectedReturn": "Out for season",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 9,
+              "starts": 5,
+              "minutes": 410,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.5,
+              "rating": 6.77
+            }
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-1174660",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Matheuzinho",
+            "position": "Midfielder",
+            "starts": 39,
+            "goals": 1,
+            "assists": 4,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-177503",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Gabriel Paulista",
+            "position": "Defender",
+            "starts": 36,
+            "goals": 1,
+            "assists": 0,
+            "status": "blessé"
+          },
+          {
+            "id": "fotmob-841656",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Raniele",
+            "position": "Midfielder",
+            "starts": 33,
+            "goals": 3,
+            "assists": 0,
+            "status": "blessé"
+          }
+        ]
+      },
+      "away": {
+        "team": "Botafogo",
+        "teamId": "fotmob-8517",
+        "formation": "3-5-2",
+        "coach": "Tite",
+        "statsSince": "2026-01-01",
+        "teamMatches": 48,
+        "startXI": [
+          {
+            "id": "fotmob-846023",
+            "name": "Gabriel Batista",
+            "number": 12,
+            "position": "Goalkeeper",
+            "age": 28,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 30,
+              "starts": 29,
+              "minutes": 2656,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.15,
+              "rating": 6.76
+            }
+          },
+          {
+            "id": "fotmob-847910",
+            "name": "Nahuel Ferraresi",
+            "number": 5,
+            "position": "Defender",
+            "age": 28,
+            "countryCode": "VEN",
+            "countryName": "Venezuela",
+            "x": 0.357,
+            "y": 0.79,
+            "stats": {
+              "apps": 35,
+              "starts": 31,
+              "minutes": 2829,
+              "goals": 1,
+              "assists": 0,
+              "xg": 1.59,
+              "rating": 7.12
+            }
+          },
+          {
+            "id": "fotmob-1793991",
+            "name": "Gabriel Justino",
+            "number": 34,
+            "position": "Defender",
+            "age": 20,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.357,
+            "y": 0.5,
+            "stats": {
+              "apps": 18,
+              "starts": 13,
+              "minutes": 1269,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.26,
+              "rating": 6.63
+            }
+          },
+          {
+            "id": "fotmob-304014",
+            "name": "Marçal",
+            "number": 21,
+            "position": "Defender",
+            "age": 37,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.357,
+            "y": 0.21,
+            "stats": {
+              "apps": 20,
+              "starts": 12,
+              "minutes": 1122,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.29,
+              "rating": 6.79
+            }
+          },
+          {
+            "id": "fotmob-905498",
+            "name": "Vitinho",
+            "number": 2,
+            "position": "Midfielder",
+            "age": 27,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.613,
+            "y": 0.89,
+            "stats": {
+              "apps": 42,
+              "starts": 40,
+              "minutes": 3436,
+              "goals": 1,
+              "assists": 5,
+              "xg": 1.69,
+              "rating": 6.96
+            }
+          },
+          {
+            "id": "fotmob-268394",
+            "name": "Edenílson",
+            "number": 88,
+            "position": "Midfielder",
+            "age": 36,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.613,
+            "y": 0.695,
+            "stats": {
+              "apps": 31,
+              "starts": 16,
+              "minutes": 1404,
+              "goals": 6,
+              "assists": 2,
+              "xg": 2.95,
+              "rating": 6.66
+            }
+          },
+          {
+            "id": "fotmob-1761942",
+            "name": "Huguinho",
+            "number": 75,
+            "position": "Midfielder",
+            "age": 19,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.613,
+            "y": 0.5,
+            "stats": {
+              "apps": 20,
+              "starts": 18,
+              "minutes": 1475,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.56,
+              "rating": 6.83
+            }
+          },
+          {
+            "id": "fotmob-1199960",
+            "name": "Cristian Medina",
+            "number": 6,
+            "position": "Midfielder",
+            "age": 24,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.613,
+            "y": 0.305,
+            "stats": {
+              "apps": 40,
+              "starts": 35,
+              "minutes": 2927,
+              "goals": 2,
+              "assists": 2,
+              "xg": 4.88,
+              "rating": 6.88
+            }
+          },
+          {
+            "id": "fotmob-891678",
+            "name": "Paulinho",
+            "number": 29,
+            "position": "Midfielder",
+            "age": 31,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.613,
+            "y": 0.11,
+            "stats": {
+              "apps": 13,
+              "starts": 2,
+              "minutes": 306,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.15,
+              "rating": 6.54
+            }
+          },
+          {
+            "id": "fotmob-931862",
+            "name": "Danilo",
+            "number": 90,
+            "position": "Forward",
+            "age": 27,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.87,
+            "y": 0.7,
+            "stats": {
+              "apps": 25,
+              "starts": 7,
+              "minutes": 893,
+              "goals": 3,
+              "assists": 2,
+              "xg": 3.38,
+              "rating": 6.44
+            }
+          },
+          {
+            "id": "fotmob-614970",
+            "name": "Tiquinho Soares",
+            "number": 9,
+            "position": "Forward",
+            "age": 35,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.87,
+            "y": 0.3,
+            "stats": {
+              "apps": 18,
+              "starts": 9,
+              "minutes": 806,
+              "goals": 2,
+              "assists": 0,
+              "xg": 2.86,
+              "rating": 6.39
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-810487",
+            "name": "Warleson",
+            "number": 17,
+            "position": "Goalkeeper",
+            "age": 30,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 21,
+              "starts": 21,
+              "minutes": 1763,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.99
+            }
+          },
+          {
+            "id": "fotmob-428672",
+            "name": "Alex Telles",
+            "number": 13,
+            "position": "Defender",
+            "age": 33,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 43,
+              "starts": 39,
+              "minutes": 3263,
+              "goals": 6,
+              "assists": 5,
+              "xg": 2.93,
+              "rating": 7.09
+            }
+          },
+          {
+            "id": "fotmob-1436176",
+            "name": "Mateo Ponte",
+            "number": 4,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "stats": {
+              "apps": 22,
+              "starts": 14,
+              "minutes": 1298,
+              "goals": 1,
+              "assists": 1,
+              "xg": 0.55,
+              "rating": 6.72
+            }
+          },
+          {
+            "id": "fotmob-1295307",
+            "name": "Lucas Monzón",
+            "number": 33,
+            "position": "Defender",
+            "age": 25,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "stats": {
+              "apps": 24,
+              "starts": 23,
+              "minutes": 1906,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.62,
+              "rating": 6.32
+            }
+          },
+          {
+            "id": "fotmob-360559",
+            "name": "Hakim Ziyech",
+            "number": 22,
+            "position": "Midfielder",
+            "age": 33,
+            "countryCode": "MAR",
+            "countryName": "Morocco",
+            "stats": {
+              "apps": 6,
+              "starts": 4,
+              "minutes": 355,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.53,
+              "rating": 6.94
+            }
+          },
+          {
+            "id": "fotmob-1312637",
+            "name": "Domingos Andrade",
+            "number": 91,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "ANG",
+            "countryName": "Angola",
+            "stats": {
+              "apps": 6,
+              "starts": 1,
+              "minutes": 170,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.31
+            }
+          },
+          {
+            "id": "fotmob-1607035",
+            "name": "Álvaro Montoro",
+            "number": 10,
+            "position": "Midfielder",
+            "age": 19,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 39,
+              "starts": 34,
+              "minutes": 2727,
+              "goals": 2,
+              "assists": 6,
+              "xg": 2.54,
+              "rating": 7.09
+            }
+          },
+          {
+            "id": "fotmob-1817873",
+            "name": "Kauan Toledo",
+            "number": 59,
+            "position": "Midfielder",
+            "age": 20,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 17,
+              "starts": 6,
+              "minutes": 672,
+              "goals": 1,
+              "assists": 2,
+              "xg": 1.15,
+              "rating": 6.59
+            }
+          },
+          {
+            "id": "fotmob-188652",
+            "name": "Allan",
+            "number": 25,
+            "position": "Midfielder",
+            "age": 35,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 19,
+              "starts": 14,
+              "minutes": 1071,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.21,
+              "rating": 6.69
+            }
+          },
+          {
+            "id": "fotmob-1262084",
+            "name": "Matheus Martins",
+            "number": 11,
+            "position": "Forward",
+            "age": 23,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 38,
+              "starts": 27,
+              "minutes": 2206,
+              "goals": 6,
+              "assists": 2,
+              "xg": 5.71,
+              "rating": 6.9
+            }
+          },
+          {
+            "id": "fotmob-1474166",
+            "name": "Lucas Villalba",
+            "number": 77,
+            "position": "Forward",
+            "age": 25,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "stats": {
+              "apps": 23,
+              "starts": 9,
+              "minutes": 899,
+              "goals": 1,
+              "assists": 1,
+              "xg": 0.8,
+              "rating": 6.39
+            }
+          },
+          {
+            "id": "fotmob-670948",
+            "name": "Arthur Cabral",
+            "number": 19,
+            "position": "Forward",
+            "age": 28,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 40,
+              "starts": 31,
+              "minutes": 2764,
+              "goals": 9,
+              "assists": 1,
+              "xg": 5.61,
+              "rating": 6.7
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "id": "fotmob-1181700",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Danilo",
+            "reason": "blessé",
+            "expectedReturn": "About 1-2 weeks",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 35,
+              "starts": 33,
+              "minutes": 2892,
+              "goals": 13,
+              "assists": 3,
+              "xg": 3.77,
+              "rating": 7.37
+            }
+          },
+          {
+            "id": "fotmob-1355636",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Arthur Chaves",
+            "reason": "blessé",
+            "expectedReturn": "About a week",
+            "position": "Defender",
+            "stats": {
+              "apps": 13,
+              "starts": 11,
+              "minutes": 1009,
+              "goals": 2,
+              "assists": 0,
+              "xg": 1.18,
+              "rating": 6.83
+            }
+          },
+          {
+            "id": "fotmob-1477851",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Jordan Barrera",
+            "reason": "blessé",
+            "expectedReturn": "Out for season",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 20,
+              "starts": 8,
+              "minutes": 805,
+              "goals": 2,
+              "assists": 1,
+              "xg": 1.79,
+              "rating": 6.62
+            }
+          },
+          {
+            "id": "fotmob-866415",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Kaio",
+            "reason": "blessé",
+            "expectedReturn": "Late November 2026",
+            "position": null,
+            "stats": null
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-428672",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Alex Telles",
+            "position": "Midfielder",
+            "starts": 39,
+            "goals": 6,
+            "assists": 5,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-1607035",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Álvaro Montoro",
+            "position": "Midfielder",
+            "starts": 34,
+            "goals": 2,
+            "assists": 6,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-1181700",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Danilo",
+            "position": "Midfielder",
+            "starts": 33,
+            "goals": 13,
+            "assists": 3,
+            "status": "blessé"
+          },
+          {
+            "id": "fotmob-670948",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Arthur Cabral",
+            "position": "Forward",
+            "starts": 31,
+            "goals": 9,
+            "assists": 1,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-1262084",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Matheus Martins",
+            "position": "Midfielder",
+            "starts": 27,
+            "goals": 6,
+            "assists": 2,
+            "status": "remplaçant"
+          }
+        ]
+      },
+      "matchInfo": {
+        "round": "35",
+        "stadium": "Neo Química Arena",
+        "city": "São Paulo, São Paulo",
+        "capacity": 49205,
+        "surface": "grass",
+        "weather": "Mostly Cloudy",
+        "temperature": 23,
+        "windSpeed": 7,
+        "precipitation": 0,
+        "referee": {
+          "name": "Wilton Pereira Sampaio",
+          "country": "Brazil",
+          "league": "Série A",
+          "matches": 46,
+          "yellowCardsPerMatch": 5.15,
+          "yellowCardsLeagueAverage": 4.79,
+          "redCards": 8,
+          "penalties": 12,
+          "foulsPerMatch": 27.07,
+          "foulsLeagueAverage": 26.97
+        }
+      }
+    },
+    "analysis": {
+      "summary": "Corinthians (17e, zone de relégation, 37 pts) reçoit Botafogo (12e, 42 pts). Les deux équipes sont de forme moyenne : Corinthians 1 V, 2 N, 2 D sur ses 5 derniers matchs (0-0 à São Paulo, 2-0 contre Mirassol), Botafogo 2 V, 1 N, 2 D (1-0 contre Atlético-MG). Les deux ont un nouvel entraîneur (Seedorf, Tite). Corinthians est très diminué : Yuri Alberto (6+3), Garro (3+13) et Ramalho sont absents. Yuri Alberto et Ramalho sont suspendus, Garro est blessé. Les compositions datent de 2571 minutes avant le coup d'envoi, ce sont donc des prévisions. Botafogo aligne un 3-5-2 avec Cabral, Martins, Telles et Montoro sur le banc.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Corinthians est menacé de relégation, Botafogo est à l'aise en milieu de tableau.",
+          "evidence": "17e, 37 pts (6-4-7 à domicile) contre 12e, 42 pts (4-3-10 à l'extérieur)."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Les deux formes sont mitigées.",
+          "evidence": "Corinthians : N V D N D ; Botafogo : V D D V N."
+        },
+        {
+          "factor": "statistiques et moyennes",
+          "observation": "Corinthians produit peu de buts mais domine à domicile. Botafogo est fragile à l'extérieur.",
+          "evidence": "Corinthians à domicile : 21,3 tirs et 6,8 corners par match ; Botafogo à l'extérieur : 0,5 but marqué et 2 concédés."
+        },
+        {
+          "factor": "absences",
+          "observation": "Le Corinthians perd son meilleur attaquant et son meilleur passeur.",
+          "evidence": "Yuri Alberto (xG 9) suspendu, Garro (13 passes décisives) blessé."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "L'edge est faible mais positif sur Corinthians.",
+          "evidence": "54 % du moteur, edge 3,68 %."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : l'avantage du domicile et la fragilité extérieure de Botafogo jouent pour Corinthians. Les absences offensives du Corinthians nuancent cette lecture, surtout sur les tirs et les tirs cadrés.",
+      "caveats": "Compositions publiées très tôt, donc probablement des prévisions. Les deux entraîneurs sont nouveaux, avec peu de matchs. Les marchés de buts ne sont pas commentés, comme demandé.",
+      "marketViews": [
+        {
+          "market": "Résultat",
+          "pick": "Corinthians gagne",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "54 % : Corinthians domine à domicile (21,3 tirs, 60 % de possession) et Botafogo n'a marqué que 0,5 but par match à l'extérieur.",
+          "reasoning": "L'avantage du domicile et la faiblesse extérieure de Botafogo soutiennent le choix. Les absences de Yuri Alberto et de Garro, ainsi que les 2 nuls sur 5 matchs, appellent à la prudence.",
+          "probability": 54
+        },
+        {
+          "market": "Total corners",
+          "pick": "Plus de 7.5 corners",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : le moteur attend 11,1 corners (6,33 + 4,77), bien au-dessus de la ligne de 7,5.",
+          "reasoning": "Le Corinthians fait 6,8 corners à domicile et Botafogo 6,5 à l'extérieur, et le championnat tourne à 10,6 par match. La ligne est basse, mais mon carnet signale que les corners totaux ont déjà déçu.",
+          "probability": 83
+        },
+        {
+          "market": "Corners — Corinthians",
+          "pick": "Corinthians — Plus de 3.5 corners",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "81 % : 6,33 corners attendus pour Corinthians, qui en obtient 6,8 par match à domicile.",
+          "reasoning": "La possession à domicile soutient ce volume. Botafogo ne concède que 2 corners par match à l'extérieur d'après ce relevé, mais la marge reste large.",
+          "probability": 81
+        },
+        {
+          "market": "Corners — Botafogo",
+          "pick": "Botafogo — Plus de 2.5 corners",
+          "verdict": "confirme",
+          "confidence": "faible",
+          "explanation": "79 % : 4,77 corners attendus pour Botafogo, qui en obtient 6,5 par match à l'extérieur.",
+          "reasoning": "Le volume moyen laisse de la marge. Mon carnet montre que les corners d'une équipe sont mon marché le moins fiable (38/59 dans ce championnat), et un Botafogo mené ou dominé peut s'écarter des moyennes.",
+          "probability": 79
+        },
+        {
+          "market": "Total tirs",
+          "pick": "Plus de 23.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : 29,63 tirs attendus (16,23 + 13,41) contre une ligne de 23,5.",
+          "reasoning": "Les deux équipes tirent 15,9 et 14,7 fois par match sur leurs 10 derniers matchs, et le Corinthians monte à 21,3 à domicile. Les absences offensives du Corinthians pèsent peu sur le volume.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs — Corinthians",
+          "pick": "Corinthians — Moins de 21.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : 16,23 tirs attendus pour Corinthians, contre 15,9 de moyenne sur 10 matchs.",
+          "reasoning": "Sans Yuri Alberto ni Garro, un volume très élevé est peu probable. Les 21,3 tirs de moyenne à domicile sur 4 matchs seulement laissent un petit risque.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs — Botafogo",
+          "pick": "Botafogo — Moins de 17.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "81 % : 13,41 tirs attendus pour Botafogo, qui en fait 13,8 à l'extérieur.",
+          "reasoning": "Le niveau habituel est bien en dessous de la ligne. Si Botafogo court après le score, le volume peut monter.",
+          "probability": 81
+        },
+        {
+          "market": "Total tirs cadrés",
+          "pick": "Moins de 12.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "79 % : 9,89 tirs cadrés attendus (5,12 + 4,77), sous la ligne de 12,5.",
+          "reasoning": "Les moyennes sont de 4,5 et 4,9 tirs cadrés par match, ce qui est cohérent. Les tirs cadrés d'une équipe restent un marché où mes avis tiennent mieux que sur les corners.",
+          "probability": 79
+        },
+        {
+          "market": "Tirs cadrés — Corinthians",
+          "pick": "Corinthians — Moins de 7.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : 5,12 tirs cadrés attendus, pour une moyenne de 4,5 sur 10 matchs et 5,8 à domicile.",
+          "reasoning": "Sans Yuri Alberto, le Corinthians perd en pointe, ce qui renforce le sous. La moyenne à domicile reste sous la ligne.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs cadrés — Botafogo",
+          "pick": "Botafogo — Plus de 2.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : 4,77 tirs cadrés attendus pour Botafogo, qui en fait 4,9 par match (4 à l'extérieur).",
+          "reasoning": "Cabral et Martins sont sur le banc, mais Tiquinho Soares et Danilo sont alignés. La moyenne dépasse nettement la ligne. Seul un match fermé la mettrait en danger.",
+          "probability": 83
+        }
+      ]
+    },
+    "updatedAt": "2026-11-17T05:39:51.142Z",
+    "createdAt": "2026-11-17T05:39:51.142Z"
+  },
+  {
     "matchId": "4a0ed971930ed1355d19497b2aa72744",
     "homeName": "Grêmio",
     "awayName": "Bahia",
