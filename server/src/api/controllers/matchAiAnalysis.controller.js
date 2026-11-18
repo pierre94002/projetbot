@@ -7,7 +7,7 @@ import { requireStringParam } from '../middlewares/errorHandler.js';
 import { carnetPourLaRoute } from '../../data/aiScorecard.js';
 // Lot 0 (masque des buts, data/masqueDesButs.js) : les entrées d'un match qui commence à `depuis` ou après, sans les
 // buts ; l'expérience sans les types de buts. Ce qui a été vu avant reste tel quel.
-import { entreeIaSansLesButs, experienceSansLesButs, pronosticsSansLesButs } from '../../data/masqueDesButs.js';
+import { entreeIaSansLesButs, experienceSansLesButs, pronosticsSansLesButs, masqueEnService } from '../../data/masqueDesButs.js';
 
 const JOUR_MS = 86_400_000;
 
@@ -26,12 +26,18 @@ export function getForMatch(req, res) {
  * connaît que les équipes, la compétition et la date ; les pronostics se
  * retrouvent par l'identifiant de cotes de l'analyse, ou, sans analyse, par
  * l'affiche relevée dans le mois qui précède.
+ *
+ * Étape 40 (lot 1b, 17/11/2026) : avec `matchKey` (la clé de la rencontre au magasin, page d'un match joué), la réponse porte
+ * aussi `fiche` — ce que le match a donné et l'issue de chaque pronostic (juste, faux, non réglable et sa raison), lue par
+ * data/fiche/ficheApresMatch.js, chargé à la demande : une panne de ce module ne casse jamais l'onglet (`fiche.etat` = « panne »).
+ * Sans `matchKey`, la réponse est celle d'avant, à l'identique.
  */
-export function getForFixture(req, res) {
+export async function getForFixture(req, res) {
   const homeName = requireStringParam(req.query.home, 'home');
   const awayName = requireStringParam(req.query.away, 'away');
   const date = requireStringParam(req.query.date, 'date');
   const league = typeof req.query.league === 'string' && req.query.league.trim() ? req.query.league.trim() : null;
+  const matchKey = typeof req.query.matchKey === 'string' && req.query.matchKey.trim() ? req.query.matchKey.trim() : null;
 
   const entry = findAnalysisForFixture({ homeName, awayName, league, date });
   const jour = Date.parse(date.slice(0, 10));
@@ -43,7 +49,31 @@ export function getForFixture(req, res) {
     return avance >= -1 && avance <= 30;
   });
   // L'expérience de l'IA par type de marché, pour jauger chacun.
-  res.json({ entry: entreeIaSansLesButs(entry), predictions: pronosticsSansLesButs(predictions, entry?.commenceTime ?? date), experience: experienceSansLesButs(aiMarketExperience()) });
+  if (!matchKey) {
+    res.json({ entry: entreeIaSansLesButs(entry), predictions: pronosticsSansLesButs(predictions, entry?.commenceTime ?? date), experience: experienceSansLesButs(aiMarketExperience()) });
+    return;
+  }
+  const corps = { entry: entreeIaSansLesButs(entry), predictions: pronosticsSansLesButs(predictions, entry?.commenceTime ?? date), experience: experienceSansLesButs(aiMarketExperience()) };
+  corps.fiche = await ficheDeLaPage({ matchKey, entree: corps.entry, commenceTime: entry?.commenceTime ?? date });
+  res.json(corps);
+}
+
+/**
+ * La fiche d'après-match de la page (étape 40, lot 1b) : le module chargé par `import()` (hors du chemin de nuit), puis le masque
+ * des buts appliqué à ses pronostics gelés comme au journal (un match qui commence à son `depuis` ou après). Toute panne
+ * devient une fiche « panne » qui le dit : l'analyse de l'IA, les pronostics et l'expérience restent.
+ */
+async function ficheDeLaPage({ matchKey, entree, commenceTime }) {
+  try {
+    const { ficheDuMatchJoue } = await import('../../data/fiche/ficheApresMatch.js');
+    const fiche = ficheDuMatchJoue({ matchKey, entry: entree });
+    const gardes = pronosticsSansLesButs(fiche.pronostics, fiche.coupDEnvoi ?? commenceTime);
+    if (gardes.length === fiche.pronostics.length) return fiche;
+    return { ...fiche, pronostics: gardes, butsCaches: masqueEnService()?.phrase ?? null };
+  } catch (e) {
+    const raison = String(e?.message ?? e).replace(/[.\s]+$/, '');
+    return { etat: 'panne', matchKey, message: `La fiche d’après-match n’a pas pu être lue (${raison}) : l’analyse de l’IA reste affichée, sans le vert ni le rouge du magasin.`, reel: null, pronostics: [], avis: [] };
+  }
 }
 
 /** Pour les badges "analyse IA disponible" dans les listes Matchs/Historique moteur — un seul appel plutôt qu'un par match visible. */

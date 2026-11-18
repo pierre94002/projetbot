@@ -4,6 +4,8 @@ import { matchStatsApi } from '@/services/matchStatsApi.js';
 import { matchAiAnalysisApi } from '@/services/matchAiAnalysisApi.js';
 import { useMatchAiAnalysisStore } from '@/stores/matchAiAnalysisStore.js';
 import MatchAiReviewPanel from '@/components/analysis/MatchAiReviewPanel.vue';
+// Étape 40 (lot 1b) : les pronostics gelés du moteur, réglés au magasin (vert « Juste », rouge « Faux », gris « Non réglable »).
+import PronosticsGelesCard from '@/components/analysis/PronosticsGelesCard.vue';
 import KeyMomentsList from '@/components/analysis/KeyMomentsList.vue';
 import AppCard from '@/components/common/AppCard.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
@@ -43,7 +45,8 @@ const TAB_ICONS = { resume: 'list', events: 'clock', lineups: 'users', stats: 'b
 // Onglet « Analyse IA » : chargé au premier affichage de l'onglet, une fois
 // par match (l'analyse est retrouvée par équipes, compétition et date).
 const aiStore = useMatchAiAnalysisStore();
-const ai = ref({ loading: false, error: null, entry: null, predictions: [], experience: [], loadedFor: null });
+// `fiche` (étape 40, lot 1b) : la fiche d'après-match du serveur, lue avec l'analyse par la clé de la rencontre ; null tant qu'elle n'est pas lue.
+const ai = ref({ loading: false, error: null, entry: null, predictions: [], experience: [], fiche: null, loadedFor: null });
 const aiRunning = ref(false);
 // L'instant où l'analyse et l'expérience de l'IA ont été lues (ISO) : l'heure de leur relevé, dite sous le tableau de l'expérience (étape 45).
 const aiLueLe = ref(null);
@@ -58,13 +61,13 @@ async function loadAi({ force = false } = {}) {
   ai.value = { ...ai.value, loading: true, error: null };
   try {
     const [r] = await Promise.all([
-      matchAiAnalysisApi.getForFixture({ home: match.homeName, away: match.awayName, league: match.league, date: match.date }),
+      matchAiAnalysisApi.getForFixture({ home: match.homeName, away: match.awayName, league: match.league, date: match.date, matchKey: match.matchKey ?? null }),
       aiStore.fetchStatus().catch(() => false)
     ]);
-    ai.value = { loading: false, error: null, entry: r.entry ?? null, predictions: r.predictions ?? [], experience: r.experience ?? [], loadedFor: cle };
+    ai.value = { loading: false, error: null, entry: r.entry ?? null, predictions: r.predictions ?? [], experience: r.experience ?? [], fiche: r.fiche ?? null, loadedFor: cle };
     aiLueLe.value = new Date().toISOString();
   } catch (e) {
-    ai.value = { loading: false, error: e.message, entry: null, predictions: [], experience: [], loadedFor: null };
+    ai.value = { loading: false, error: e.message, entry: null, predictions: [], experience: [], fiche: null, loadedFor: null };
   }
 }
 
@@ -241,8 +244,9 @@ const topStats = computed(() => TEAM_STAT_GROUPS[0]);
         <MatchPlayerStats :entry="entry" />
       </AppCard>
 
-      <!-- ANALYSE IA -->
-      <AppCard v-else-if="tab === 'ai'" title="Analyse IA" subtitle="La lecture de l'IA avant le match, puis son bilan une fois le résultat connu." icon="sparkles">
+      <!-- ANALYSE IA, puis (étape 40, lot 1b) les pronostics gelés du moteur réglés au magasin. -->
+      <div v-else-if="tab === 'ai'" class="match-detail__ai cm-stagger">
+      <AppCard title="Analyse IA" subtitle="La lecture de l'IA avant le match, puis son bilan une fois le résultat connu." icon="sparkles">
         <LoadingSpinner v-if="ai.loading" label="Chargement de l'analyse IA…" />
         <EmptyState v-else-if="ai.error" icon="alert" title="Analyse IA indisponible" :description="ai.error" />
         <MatchAiReviewPanel
@@ -254,9 +258,21 @@ const topStats = computed(() => TEAM_STAT_GROUPS[0]);
           :connected="aiStore.connected"
           :running="aiRunning"
           :lue-le="aiLueLe"
+          :fiche="ai.fiche"
           @run-post-match="runPostMatchAi"
         />
       </AppCard>
+      <PronosticsGelesCard
+        :fiche="ai.fiche"
+        :chargement="ai.loading"
+        :erreur="ai.error"
+        :home="entry.homeName"
+        :away="entry.awayName"
+        :league="entry.league ?? null"
+        :home-id="entry.homeId ?? null"
+        :away-id="entry.awayId ?? null"
+      />
+      </div>
     </template>
   </div>
 </template>
@@ -435,6 +451,13 @@ const topStats = computed(() => TEAM_STAT_GROUPS[0]);
   grid-template-columns: minmax(0, 1fr);
   gap: 16px;
   align-items: start;
+}
+
+/* Onglet Analyse IA : l'analyse, puis les pronostics gelés du moteur (étape 40, lot 1b), l'une sous l'autre. */
+.match-detail__ai {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
 }
 
 /* Assez de place : le résumé et les groupes de statistiques sur deux colonnes,

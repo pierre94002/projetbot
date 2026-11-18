@@ -13,6 +13,8 @@ import { LIEN_VERS_LA_FIABILITE, PROVENANCE_DE_L_EXPERIENCE, groupesDeMarches, t
 // Étape 39 (lot 1a) : la mise d'une analyse gardée se dit en PART du capital, recalculée par la règle depuis l'avantage et
 // la cote du résumé — jamais les euros gardés (calculés sur une base interne).
 import { miseDeLaRevue } from '@/utils/miseAffichee.js';
+// Étape 40 (lot 1b) : le règlement au magasin de chaque marché, avec le chiffre réel (la fiche d'après-match du serveur).
+import { reelDeLaCarte } from '@/utils/apresLeMatch.js';
 
 /**
  * Onglet « Analyse IA » de la page de match : ce qui était prédit AVANT
@@ -40,6 +42,8 @@ const props = defineProps({
   // L'instant où la page a lu l'analyse et l'expérience (ISO) : l'heure de leur relevé, dite sous le tableau de l'expérience.
   lueLe: { type: String, default: null },
   connected: { type: Boolean, default: false },
+  // Étape 40 (lot 1b) : la fiche d'après-match (GET /api/match-ai-analysis/fixture avec `matchKey`) ; null : les cartes d'avant.
+  fiche: { type: Object, default: null },
   running: { type: Boolean, default: false }
 });
 
@@ -134,6 +138,8 @@ const familles = computed(() =>
   )
 );
 const coteDe = (l) => (Number.isFinite(Number(l.odds)) ? Number(l.odds) : 0);
+// Le vert ou le rouge du magasin, avec le chiffre réel ; le statut du bilan de l'IA reste, la note ambre dit s'ils diffèrent.
+const reelDe = (l) => reelDeLaCarte(l, props.fiche, { statut: l.status, noms: { home: props.match.homeName, away: props.match.awayName } });
 
 // L'expérience de l'IA par type de marché : toujours les onze types, avec Σ et ⌀.
 const xp = computed(() => tableauDeLExperience(props.experience));
@@ -304,6 +310,7 @@ const etatDuBilan = computed(() => (review.value ? 'bilan' : props.entry?.analys
             :away-id="match.awayId ?? null"
             :revue="l.revue"
             :statut="l.status"
+            :reel="reelDe(l)"
             :cote="coteDe(l)"
             :conseille="l.action === 'RECOMMENDED'"
           />

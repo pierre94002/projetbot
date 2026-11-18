@@ -833,6 +833,20 @@ identifiants des clubs (la compo de la page, sinon `combinaison.clubs`) : `utils
 l'étape 27, reçoit seulement les identifiants des clubs et garde son rattachement jusqu'au lot 2. Les mots sont dans `MOTS_DE_LA_FICHE`, rejoués par
 `server/test/ficheDuPronosticEcran.test.mjs` sur les vraies réponses du serveur.
 
+Étape 40, lot 1b (17/11/2026) : **vert ou rouge, avec le chiffre réel, après le match**. Sur la page d'un match joué (`MatchDetailView`, onglet Analyse IA),
+la fiche d'après-match vient avec l'analyse (`GET /api/match-ai-analysis/fixture` avec `matchKey`, module serveur `data/fiche/ficheApresMatch.js`, chargé à la
+demande : sa panne ne casse jamais l'onglet et se dit en ambre, avec son icône). Chaque pronostic y est réglé comme le bilan de la fiabilité : score de la 90e
+minute, match attribué écarté, 0-0 de corners ou de tirs = non relevé. Trois mots, toujours avec leur icône : **vert « Juste »** et la coche, **rouge « Faux »** et
+la croix, **gris « Non réglable »** et sa raison en mots (tapis vert, match reporté, statistique non relevée, prolongation…) ; puis le chiffre réel (« 11 corners
+(5 + 6) », « Score à la 90e minute : 2-1 (match prolongé) », « 2 buts pour Arsenal (2-1) »). **Jamais de vert ni de rouge pour une value** : la couleur ne suit
+que le mot juste / faux (`data-reel`, `data-issue`), « conseillé » reste neutre. Sur les cartes de l'IA (`AiMarketCard`, prop `reel`, depuis
+`MatchAiReviewPanel` prop `fiche`), la ligne du magasin se pose sous l'issue du bilan de l'IA, qui reste ; s'ils divergent, une note ambre le dit. Sous
+l'analyse, la carte neuve `components/analysis/PronosticsGelesCard.vue` (`data-bloc="pronostics-geles"`, `data-etat`) : les pronostics gelés du moteur
+(la dernière valeur avant le coup d'envoi, la première quand elle différait, la version du moteur), un logo par identifiant FotMob (`PickCrest`), le compte
+juste / faux / non réglable, la provenance ; elle garde sa structure en chargement, en panne, à venir ou sans pronostic (la phrase de l'état), une colonne
+sous 520 px. Mots et règles : `MOTS_APRES_MATCH`, `chiffreReel`, `reelDeLaCarte`, `pronosticsGeles` dans `utils/apresLeMatch.js` (pur, neuf), rejoués
+par `server/test/ficheApresMatch.test.mjs`.
+
 Depuis l'étape 44 du plan (23/10/2026) : **la mémoire de l'IA** — un bloc, sur la page d'une équipe, juste sous « Style de jeu »,
 `components/analysis/AiDossierCard.vue` (« Mémoire de l'IA », `data-bloc="memoire-ia"`, icône `sparkles`) ; la page « Bulletin » de l'étape 45 le réutilise tel
 quel pour une équipe, et en mode `portee="championnat"` (`GET …/dossiers?league=`) pour un championnat seul. Il LIT `GET /api/match-ai-analysis/dossiers?club=fotmob-…` (le club par son IDENTIFIANT FotMob, jamais

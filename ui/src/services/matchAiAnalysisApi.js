@@ -4,10 +4,12 @@ export const matchAiAnalysisApi = {
   getStatus: () => httpClient.get('/match-ai-analysis/status'),
   getAll: () => httpClient.get('/match-ai-analysis'),
   getForMatch: (matchId) => httpClient.get(`/match-ai-analysis/match/${encodeURIComponent(matchId)}`),
-  // Page de match : retrouvée par équipes, compétition et date (cf. getForFixture côté serveur).
-  getForFixture: ({ home, away, league, date }) => {
+  // Page de match : retrouvée par équipes, compétition et date (cf. getForFixture côté serveur). Étape 40 (lot 1b) : avec `matchKey`
+  // (la clé de la rencontre au magasin, page d'un match joué), la réponse porte aussi la fiche d'après-match (`fiche`).
+  getForFixture: ({ home, away, league, date, matchKey = null }) => {
     const params = new URLSearchParams({ home, away, date });
     if (league) params.set('league', league);
+    if (matchKey) params.set('matchKey', matchKey);
     return httpClient.get(`/match-ai-analysis/fixture?${params.toString()}`);
   },
   runPreMatch: (matchId, { home, away, league, engineResult }) =>

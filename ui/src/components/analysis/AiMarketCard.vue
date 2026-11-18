@@ -37,6 +37,9 @@ const props = defineProps({
   // Étape 40 (lot 1) : depuis la page d'un match à venir — « à vérifier » du contrôle quotidien (par l'identifiant du marché),
   // et la phrase d'un avis qui porte sur un autre choix que le pronostic du moteur (ficheDuPronostic.figeDeLAvis) ; null : rien.
   aVerifier: { type: Object, default: null },
+  // Étape 40 (lot 1b) : après le match, le règlement au magasin FotMob (apresLeMatch.reelDeLaCarte) — { cle: juste | faux |
+  // non-reglable, libelle, icone, raison, chiffre, ecart, titre } ; null : rien de plus (l'onglet d'avant-match, mot pour mot).
+  reel: { type: Object, default: null },
   autreChoix: { type: String, default: null }
 });
 
@@ -105,6 +108,13 @@ const pourquoi = computed(() => {
       <span class="aimc__statut" :class="`is-${statut}`"><AppIcon :name="issue.icone" :size="11" />{{ issue.libelle }}</span>
       <span v-if="avisTenu" class="aimc__tenu" :class="{ 'is-wrong': revue.aiWasRight === false }">{{ avisTenu }}</span>
     </div>
+
+    <div v-if="reel" class="aimc__reel" :data-reel="reel.cle" :title="reel.titre">
+      <span class="aimc__reel-issue"><AppIcon :name="reel.icone" :size="11" />{{ reel.libelle }}</span>
+      <span v-if="reel.chiffre" class="aimc__reel-chiffre cm-numeric">{{ reel.chiffre }}</span>
+      <span v-if="reel.raison" class="aimc__reel-raison">{{ reel.raison }}</span>
+    </div>
+    <p v-if="reel?.ecart" class="aimc__ecart" data-ligne="ecart"><AppIcon name="alert" :size="11" />{{ reel.ecart }}</p>
 
     <p v-if="pourquoi" class="aimc__why">{{ pourquoi }}</p>
     <blockquote v-if="view.reasoning" class="aimc__opinion">
@@ -311,6 +321,63 @@ const pourquoi = computed(() => {
 .aimc__badge--aucun {
   background: var(--cm-surface-hover);
   color: var(--cm-text-muted);
+}
+
+/* Étape 40 (lot 1b) : le règlement au magasin, avec le chiffre réel — vert « Juste » et sa coche, rouge « Faux » et sa croix,
+   gris « Non réglable » et sa raison ; la couleur dit toujours le mot, jamais une value. L'écart avec le bilan de l'IA : ambre, avec son icône. */
+.aimc__reel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  font-size: 12px;
+  color: var(--cm-text-secondary);
+}
+
+.aimc__reel-issue {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  background: var(--cm-surface-hover);
+  color: var(--cm-text-muted);
+}
+
+.aimc__reel[data-reel='juste'] .aimc__reel-issue {
+  background: var(--cm-accent-soft);
+  color: var(--cm-accent);
+}
+
+.aimc__reel[data-reel='faux'] .aimc__reel-issue {
+  background: var(--cm-danger-soft);
+  color: var(--cm-danger);
+}
+
+.aimc__reel-chiffre {
+  font-weight: 700;
+  color: var(--cm-text-primary);
+}
+
+.aimc__reel-raison {
+  min-width: 0;
+  color: var(--cm-text-muted);
+}
+
+.aimc__ecart {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+  padding: 7px 10px;
+  border-radius: var(--cm-radius-sm);
+  background: var(--cm-warning-soft);
+  color: var(--cm-warning);
+  font-size: 11.5px;
+  line-height: 1.45;
 }
 
 /* L'issue du pronostic et l'avis de l'IA tenu ou démenti (le dessin du bilan de l'onglet Analyse IA). */
