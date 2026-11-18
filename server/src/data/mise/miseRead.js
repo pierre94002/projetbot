@@ -13,15 +13,24 @@
  *   - raisons = ce qui a réduit ou qualifie le conseil, dans l'ordre : coupe-circuit, plafond en euros (avec capital),
  *     « vos plafonds en euros ne peuvent pas s'appliquer sans votre capital », la mention d'un bookmaker français ;
  *   - aBlanc = la règle candidate entière (fractionDeMise : paris liés, livre, plafonds, plancher), en gris, JAMAIS à la
- *     place du conseil ; `differe` dit si elle diffère ;
+ *     place du conseil ; `differe` dit si elle diffère — AU LOT 1 seulement (voir ci-dessous) ;
  *   - capital = vueDuCapital (des sommes seulement, jamais un pari précis).
  * Le Repérage et les Opportunités gardent leur calcul (sur la base interne de leur passe) : ils ne rendent que `ev` et
  * `cote` du conseil ; les euros y sont refaits ICI sur le capital, par l'identité de la règle (T-M1) puis le plafond du
  * moment du moteur (plafonnerLeConseil, gardé) — le même centime que la page du match.
+ *
+ * LOT 2 (16/11/2026) — UNE SEULE RÈGLE DE MISE, EN SERVICE. Le contrôleur joint au match ce qu'il a lu pour la mise
+ * (contexteDuMoteur → `match.contexteDeMise`) : le moteur (core/engine/valueFinder.js, miseDuConseil → stakeSizing.js)
+ * applique alors la règle ENTIÈRE et sa décision porte `regleDeMise`. Le Repérage et les Opportunités passent par la même
+ * fonction du moteur (stakingDuConseil). Quand la décision porte `regleDeMise`, la mise rendue EST celle de la règle :
+ * `fraction` = sa part (paris liés et plafonds compris), `euros` = la mise du moteur, `raisons` = celles de la règle,
+ * `aBlanc` = null (plus rien n'est « à blanc » : la candidate du lot 1 est la règle). Une décision sans `regleDeMise`
+ * (calculée sans contexte) garde la lecture du lot 1.
  * -----------------------------------------------------------------------
  */
 
 import { getEngineConfig } from '../../core/engine/engineConfig.js';
+import { miseDuConseil } from '../../core/engine/valueFinder.js';
 import { getTiltState, gardeFousDuMoment } from '../../core/engine/tiltState.js';
 import { plafonnerLeConseil } from '../../core/risk/gardeFous.js';
 import { listBets } from '../repositories/betsRepository.js';
@@ -85,15 +94,47 @@ export function misesEnAttenteDuMatch(paris = [], match = null) {
 }
 
 /**
+ * LOT 2 — ce que l'APPELANT passe au moteur pour la mise (`match.contexteDeMise`, lu par core/engine/verdictPari.js) :
+ * le capital du moment (indiqué ou non, son plus haut), les mises en attente de Pierre sur CE match, ses plafonds en
+ * euros (mise maximale, reste de la semaine), les fiches de ses comptes (mise acceptée connue, solde déclaré), son
+ * plancher. Le moteur ne lit aucun de ces fichiers lui-même (miseLot2.test.mjs, T-L2-3).
+ */
+export function contexteDuMoteur(contexte, match = null) {
+  const c = contexte?.capital ?? null;
+  const C = c?.indique && fini(c.montant) ? c.montant : null;
+  return {
+    capital: C !== null ? { indique: true, montant: C, plusHaut: c.plusHaut } : { indique: false },
+    enAttenteDuMatch: misesEnAttenteDuMatch(contexte?.paris ?? [], match),
+    gardeFous: contexte?.gardeFous ?? null,
+    comptes: contexte?.comptes ?? {},
+    plancher: c?.plancher ?? null
+  };
+}
+
+/** Les raisons de la règle que l'écran montre : toutes, sauf le plafond du moteur (2 %), que le titre de la mise dit déjà. */
+const raisonsDites = (raisons) => (raisons ?? []).filter((r) => r.code !== 'plafond-du-moteur');
+
+/**
  * LA MISE D'UN MATCH (§1.8). `staking` : la décision du moteur (staking de analyzeMatch, ou le conseil du Repérage remis
  * en forme : action, ev, odds, stake, misePlafonnee, bookmaker, bookmakerTitle). `contexte` : contexteDeLaMise().
  */
 export function miseDuMatch({ staking = null, contexte, match = null } = {}) {
   const { capital, reglageMoteur, gardeFous, comptes, paris } = contexte;
   const conseil = staking?.action === 'RECOMMENDED';
-  const fraction = conseil ? partDeMise({ ev: staking.ev, cote: staking.odds, reglageMoteur }) : 0;
   const C = capital?.indique && fini(capital.montant) ? capital.montant : null;
   const euros = conseil && C !== null && fini(staking.stake) ? staking.stake : null;
+  // LOT 2 : la décision porte la règle de mise (calculée par le moteur avec le contexte de l'appelant) — la mise rendue
+  // est celle de la règle, ses raisons sont les siennes, plus rien n'est « à blanc ».
+  const regle = conseil && staking.regleDeMise && fini(staking.regleDeMise.f) ? staking.regleDeMise : null;
+  if (regle) {
+    const dites = raisonsDites(regle.raisons);
+    // Un plafond du moment posé APRÈS la règle (un appelant qui n'aurait pas passé les plafonds à la règle) reste dit.
+    const p = staking.misePlafonnee;
+    if (p && !dites.some((r) => r.code === p.par)) dites.push({ code: p.par, avant: regle.f, apres: C !== null && C > 0 && fini(euros) ? euros / C : regle.f, texte: `ramenée par : ${p.par === 'mise-max' ? 'votre mise maximale par pari' : 'ce qui reste avant votre perte maximale de la semaine'} (${eurosDits(p.plafond)})` });
+    const f = C !== null && C > 0 && fini(euros) && p && !regle.plafond ? euros / C : regle.f;
+    return { version: REGLE_DE_MISE_V1.version, conseil, fraction: f, euros, capital: vueDuCapital(capital), raisons: dites, aBlanc: null, alerteSeriesLiees: MOTS_DE_LA_MISE.seriesLiees };
+  }
+  const fraction = conseil ? partDeMise({ ev: staking.ev, cote: staking.odds, reglageMoteur }) : 0;
   const raisons = [];
   if (staking?.action === 'CIRCUIT_BREAKER_ACTIVE') raisons.push({ code: 'coupe-circuit', avant: 0, apres: 0, texte: 'coupe-circuit enclenché : relancez-le dans Réglages' });
   if (conseil && staking.misePlafonnee) {
@@ -178,12 +219,18 @@ export function analyseAvecLaMise(analyse, { contexte, match = null } = {}) {
   return { ...sortie, mise };
 }
 
-/** La décision d'un conseil du Repérage remise en forme, ses euros refaits sur le capital (identité T-M1 + plafond du moment). */
-export function stakingDuConseil(conseil, contexte, { tiltState = null } = {}) {
+/**
+ * La décision d'un conseil du Repérage remise en forme, ses euros refaits sur le capital. LOT 2 : par LA fonction du
+ * moteur (valueFinder.js, miseDuConseil → la règle entière, avec le contexte de CE match : paris en attente, plafonds,
+ * fiche du compte, plancher), puis le plafond du moment (plafonnerLeConseil, qui nomme le plafond) — le même centime
+ * que la page du match.
+ */
+export function stakingDuConseil(conseil, contexte, { tiltState = null, match = null } = {}) {
   if (!conseil) return null;
-  const fraction = partDeMise({ ev: conseil.ev, cote: conseil.cote, reglageMoteur: contexte.reglageMoteur });
   const C = contexte.capital?.indique && fini(contexte.capital.montant) ? contexte.capital.montant : null;
-  const brut = { action: 'RECOMMENDED', ev: conseil.ev, odds: conseil.cote, outcome: conseil.issue ?? null, bookmaker: conseil.bookmaker ?? null, bookmakerTitle: conseil.bookmakerTitle ?? null, stake: C === null ? null : Number((fraction * C).toFixed(2)) };
+  const choix = { ev: conseil.ev, odds: conseil.cote, bookmaker: conseil.bookmaker ?? null, bookmakerTitle: conseil.bookmakerTitle ?? null };
+  const { stake, regleDeMise } = miseDuConseil(choix, contexte.reglageMoteur ?? {}, contexte.base, contexteDuMoteur(contexte, match));
+  const brut = { action: 'RECOMMENDED', ev: conseil.ev, odds: conseil.cote, outcome: conseil.issue ?? null, bookmaker: conseil.bookmaker ?? null, bookmakerTitle: conseil.bookmakerTitle ?? null, stake: C === null ? null : stake, regleDeMise };
   if (C === null) return brut;
   let tilt = tiltState;
   if (!tilt) {
@@ -203,7 +250,7 @@ export function reperageAvecLaMise(lu, contexte, { tiltState = null } = {}) {
     const sans = { ...m, markets: (m.markets ?? []).map((k) => (k.verdict ? { ...k, verdict: sansCles(k.verdict) } : k)) };
     const conseil = m.pari?.conseil ?? null;
     if (!conseil) return sans;
-    return { ...sans, mise: miseDuMatch({ staking: stakingDuConseil(conseil, contexte, { tiltState }), contexte, match: m }) };
+    return { ...sans, mise: miseDuMatch({ staking: stakingDuConseil(conseil, contexte, { tiltState, match: m }), contexte, match: m }) };
   });
   return { ...lu, data: { ...lu.data, matches, capital: vueDuCapital(contexte.capital) } };
 }
@@ -219,7 +266,7 @@ export function opportunitesAvecLaMise(op, contexte, { tiltState = null } = {}) 
     const sans = l.verdict ? { ...l, verdict: sansCles(l.verdict) } : l;
     if (!conseil) return sans;
     const match = { matchId: l.matchId, home: l.home, away: l.away, commenceTime: l.commenceTime };
-    return { ...sans, mise: miseDuMatch({ staking: stakingDuConseil(conseil, contexte, { tiltState }), contexte, match }) };
+    return { ...sans, mise: miseDuMatch({ staking: stakingDuConseil(conseil, contexte, { tiltState, match }), contexte, match }) };
   });
   return { ...op, data: { ...op.data, lignes, capital: vueDuCapital(contexte.capital) } };
 }

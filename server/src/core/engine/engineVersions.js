@@ -148,6 +148,14 @@ export const MODULES_DU_MOTEUR = Object.freeze({
 export const TEMOINS_CONNUS = Object.freeze(['scoreExact']);
 
 /**
+ * Étape 38 (lot 2a, 16/11/2026 ; critique de la 38, constat 2) : LE 1N2 N'EST PAS UNE FAMILLE ISOLABLE. La grille des buts
+ * est ancrée sur le 1N2 du moteur (oddsEngine.js) : une candidate dont la combinaison change le 1N2 (`modifications.
+ * football.combinaison` avec la famille « 1n2 ») change aussi les quatre familles de buts. Elle les déclare donc toutes les
+ * cinq, sinon validerCandidate la refuse (combinaisonLot2.test.mjs, T-L2-5).
+ */
+export const FAMILLES_ANCREES_SUR_LE_1N2 = Object.freeze(['result', 'totalGoals', 'teamGoals', 'bothTeamsScore', 'resultAndTotal']);
+
+/**
  * LA CANDIDATE, déclarée dans le CODE comme les lancements de l'étape 16 (les
  * données d'exécution du bac ne sont jamais recopiées chez Pierre : une
  * candidate notée seulement dans data/runtime disparaîtrait à la mise en
@@ -277,7 +285,6 @@ export const LIBELLES_REGLAGES = Object.freeze({
   maxStakePercent: Object.freeze({ libelle: 'Mise max (% bankroll)', format: 'pourcent' }),
   homeAdvantage: Object.freeze({ libelle: 'Avantage du terrain', format: 'nombre' }),
   cornersAdjustmentMax: Object.freeze({ libelle: 'Écart max affiché du signal corners', format: 'pourcent' }),
-  maxExpectedRateGap: Object.freeze({ libelle: 'Écart maximal de buts attendus (garde-fou des mises)', format: 'nombre' }),
   'weights.market': Object.freeze({ libelle: 'Poids du marché dans le 1N2', format: 'pourcent' }),
   'weights.structural': Object.freeze({ libelle: 'Poids des facteurs structurels', format: 'pourcent' }),
   'weights.exogenous': Object.freeze({ libelle: 'Poids des facteurs exogènes', format: 'pourcent' }),
@@ -1018,6 +1025,17 @@ export function validerCandidate(candidate) {
     if (!MARCHES_CONNUS.includes(m)) throw new CandidateInvalide(`Candidate « ${id} » : marché inconnu « ${String(m)} » (connus : ${MARCHES_CONNUS.join(', ')}).`);
     if (vus.has(m)) throw new CandidateInvalide(`Candidate « ${id} » : le marché « ${m} » est écrit deux fois.`);
     vus.add(m);
+  }
+  // Étape 38 (lot 2a) : une combinaison qui change le 1N2 déclare les cinq familles ancrées sur lui (jamais « result » seul).
+  const combinaison = modifications.football?.combinaison;
+  if (combinaison !== undefined) {
+    if (!objetSimple(combinaison) || !Object.keys(combinaison).length) throw new CandidateInvalide(`Candidate « ${id} » : « combinaison » est un objet non vide, une clé par famille (1n2, buts…).`);
+    if (Object.hasOwn(combinaison, '1n2')) {
+      const manquantes = FAMILLES_ANCREES_SUR_LE_1N2.filter((m) => !marches.includes(m));
+      if (manquantes.length) {
+        throw new CandidateInvalide(`Candidate « ${id} » : une combinaison qui change le 1N2 change aussi la grille des buts, ancrée sur lui — elle déclare les cinq familles (${FAMILLES_ANCREES_SUR_LE_1N2.join(', ')}) ; il manque : ${manquantes.join(', ')}.`);
+      }
+    }
   }
   // Étape 27 : des réglages du modèle de buts fautifs refusent la candidate (jamais calculée à moitié).
   try {

@@ -177,6 +177,10 @@ if (phase === 'analyse') {
   const pari = { id: 'essai-attente', createdAt: iso(T0 - 3_600_000), settledAt: null, status: 'pending', stake: 50, odds: 2.3, legs: [{ matchId: 'essai-a', homeName: 'Man City', awayName: 'Liverpool', league: 'EPL', commenceTime: '2026-10-05T18:30:00Z', market: 'Résultat', pick: 'Man City', odds: 2.3, status: 'pending' }] };
   fs.writeFileSync(path.join(runtime, 'bets.json'), JSON.stringify([pari]));
   sortie.analyseAttente = await analyse();
+  // Correction du 17/11/2026 (vérification des lots d'argent, mise C3) : le Repérage et les Opportunités relus avec ce pari en
+  // attente — leur mise doit être celle de la page du match (le contexte de CE match), la raison « lie-au-match » dite.
+  sortie.reperageAttente = (await appel('GET', '/api/screener')).corps;
+  sortie.opportunitesAttente = (await appel('GET', '/api/opportunities')).corps;
   console.log(JSON.stringify(sortie));
   process.exit(0);
 }

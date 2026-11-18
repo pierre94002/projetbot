@@ -286,7 +286,7 @@ test('analyse IA (Claude SIMULÉ) : la version dans engineSnapshot ; jamais dans
     assert.deepEqual(s[`revue-${fiche}`], { identique: true, version: false }, `revue, fiche ${fiche}`);
   }
   assert.equal(s.snapshot.version, 1);
-  assert.deepEqual(s.snapshot.cles, ['label', 'expectedGoals', 'trueOdds', 'market', 'edgePercent', 'staking', 'statExpectations', 'marketPredictions', 'engineVersion']);
+  assert.deepEqual(s.snapshot.cles, ['label', 'expectedGoals', 'trueOdds', 'market', 'edgePercent', 'staking', 'statExpectations', 'marketPredictions', 'baseDuCalcul', 'engineVersion']); // étape 39, lot 2 (16/11/2026) : la base du calcul de la mise, gardée, jamais lue par l'IA
   assert.deepEqual(s.messageEnvoye, { nombre: 1, version: false });
 });
 
@@ -347,7 +347,7 @@ test('l’empreinte du code : stable (fins de ligne Windows, marque d’ordre de
   assert.deepEqual(Object.keys(e0.fichiers), fichiersDuMoteur());
   for (const f of MODULES_DU_MOTEUR.fichiers) assert.ok(e0.fichiers[f] && e0.fichiers[f] !== 'absent', f);
   assert.ok(!('core/engine/engineVersions.js' in e0.fichiers));
-  for (const f of ['core/engine/oddsEngine.js', 'core/engine/resultPrediction.js', 'sports/football/markets.js', 'sports/football/statMarkets.js', 'core/risk/staking.js', 'data/db/statInputsRead.js']) assert.ok(f in e0.fichiers, f);
+  for (const f of ['core/engine/oddsEngine.js', 'core/engine/resultPrediction.js', 'sports/football/markets.js', 'sports/football/statMarkets.js', 'core/engine/stakeSizing.js', 'data/db/statInputsRead.js']) assert.ok(f in e0.fichiers, f);
   const modifier = (rel, f) => {
     const chemin = path.join(racine, rel);
     const avant = fs.readFileSync(chemin, 'utf8');

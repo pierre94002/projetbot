@@ -25,6 +25,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { preparerCopie, executer, SERVEUR } from './aides/isolement.mjs';
 import { entreesDuJour, entreesDeLaSemaine } from './aides/decorBulletins.mjs';
+import { EMPREINTE_EN_SERVICE } from './aides/enService.mjs';
 
 const imp = (rel) => import(pathToFileURL(path.join(SERVEUR, 'src', rel)).href);
 const G = await imp('core/ai/gardeDesChiffres.js');
@@ -999,5 +1000,5 @@ test('aucun fichier du moteur n’est touché par l’étape : les nouveaux fich
     const texte = lireSrc(...f.split('/'));
     assert.doesNotMatch(texte, /bulletinService|bulletinPrompt|bulletinFiches|gardeDesChiffres|aiBulletinRepository|bulletins\.controller|ai-bulletins/, `${f}`);
   }
-  assert.equal(moteur.size, 37, 'le moteur compte 37 fichiers, comme avant l’étape');
+  assert.equal(moteur.size, EMPREINTE_EN_SERVICE.fichiersDuMoteur, 'le moteur compte les fichiers de l’empreinte en service (37 à l’étape) : l’étape n’en ajoute aucun'); // Partie 0 des lots 2 (A), vu le 16/11/2026
 });

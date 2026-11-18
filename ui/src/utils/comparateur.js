@@ -88,7 +88,7 @@ function caseDuVerdict(cellule, maintenant) {
 /** Une case d'un autre marché : la cote saisie à la main, sa value et sa fraîcheur (la règle de la pastille, etatValue). */
 function caseDeLaSaisie(s, regle, maintenant) {
   const fraicheur = s.fraicheur ? fraicheurVivante(s.fraicheur, maintenant) : null;
-  const etat = etatValue({ pourcent: nombre(s.pourcent), jouable: Boolean(s.jouable), cote: nombre(s.cote), regle, fraicheur });
+  const etat = etatValue({ pourcent: nombre(s.pourcent), jouable: Boolean(s.jouable), cote: nombre(s.cote), regle, fraicheur, aVerifier: s.aVerifier ?? null });
   return {
     cote: s.cote,
     bookmaker: s.bookmaker,

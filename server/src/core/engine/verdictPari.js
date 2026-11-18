@@ -36,6 +36,7 @@ import { findValueBetFraiche, evaluateurDeFraicheur } from './fraicheurCotes.js'
 import { bornesDuMoteur, bornesDeLaRegle, regleEnPourcent } from './coteMinimale.js';
 import { titreBookmaker, vosBookmakersDe } from './vosBookmakers.js';
 import { plafonnerLeConseil } from '../risk/gardeFous.js';
+import { estAVerifier, raisonAVerifier } from './confidence.js';
 
 /** Les trois issues 1N2, leur champ de cote et leur rang dans les probabilités justes. */
 export const ISSUES_1N2 = Object.freeze([
@@ -110,7 +111,10 @@ function parametresDuPari(match, reference, config, tiltState) {
     config,
     tiltState,
     bankroll: match.bankroll,
-    labels: libellesDuMatch(match)
+    labels: libellesDuMatch(match),
+    // Étape 39 (lot 2) : le contexte de la mise que l'APPELANT a lu (capital, paris en attente sur ce match, plafonds en
+    // euros, fiches des comptes, plancher) — jamais lu ici ni dans la mise ; absent : la mise d'avant, à l'octet.
+    contexteDeMise: match.contexteDeMise ?? null
   };
 }
 
@@ -124,13 +128,56 @@ function parametresDuPari(match, reference, config, tiltState) {
  * plafonnerLeConseil) — la mise conseillée ne dépasse jamais le plafond du
  * moment (`misePlafonnee` le dit) et un coupe-circuit enclenché dit pourquoi
  * (`coupeCircuit`). Sans garde-fou réglé, la décision est celle d'avant.
+ * Étape 39 (lot 2, 16/11/2026) : UNE SEULE RÈGLE DE MISE (stakeSizing.js, appelée par findValueBet). Quand l'appelant
+ * joint au match ce qu'il a lu pour la mise (`match.contexteDeMise` : capital du moment, paris en attente sur ce
+ * match, plafonds en euros, fiches des comptes, plancher), la règle entière s'applique et la décision porte
+ * `regleDeMise` ; sans ce contexte (banc, passes de la nuit, analyse IA automatique), la mise est celle d'avant.
  */
 export function stakingDuMatch(match, { disponible, reference }, config, tiltState) {
   if (disponible && !reference) return { action: 'PASS', stake: null, reason: 'trop_peu_de_bookmakers', candidates: [] };
   if (!disponible) return { action: 'PASS', stake: null, reason: 'no_market_odds', candidates: [] };
   const parametres = parametresDuPari(match, reference, config, tiltState);
   const decision = match.fraicheurCotes ? findValueBetFraiche(parametres, match.fraicheurCotes) : findValueBet(parametres);
-  return plafonnerLeConseil(decision, tiltState);
+  return sansConseilAVerifier(plafonnerLeConseil(decision, tiltState), match);
+}
+
+/** La raison d'une décision qui refuse un conseil parce que le match est « à vérifier » (étape 38, lot 2a). */
+export const RAISON_A_VERIFIER = 'a_verifier';
+
+/**
+ * Étape 38 (lot 2a, 16/11/2026 ; décision de Pierre du 15/11, D5) : AUCUN CONSEIL DE PARI SUR UN MATCH « À VÉRIFIER ».
+ * La donnée vient de l'APPELANT (`match.aVerifier` : ce que le contrôle quotidien dit de ce match, la même chose que le
+ * badge de l'écran — { raisons, texte } —, ou `true`) ; rien n'est lu ici. Un conseil (RECOMMENDED) devient alors un
+ * refus : `action: 'PASS'`, `reason: 'a_verifier'`, ni mise ni règle de mise ; les candidats sont gardés (chaque issue
+ * dit toujours son avantage) et `conseilRefuse` dit ce qui aurait été conseillé. Toute autre décision (aucune value,
+ * coupe-circuit, cote à rafraîchir…) reste telle quelle ; sans `match.aVerifier`, rien ne change, à l'octet. Aucune
+ * probabilité n'est touchée : une donnée douteuse se refuse, elle ne se tarife pas.
+ */
+export function sansConseilAVerifier(decision, match) {
+  if (decision?.action !== 'RECOMMENDED' || !estAVerifier(match?.aVerifier)) return decision;
+  const raison = raisonAVerifier(match.aVerifier);
+  return {
+    action: 'PASS',
+    stake: null,
+    reason: RAISON_A_VERIFIER,
+    candidates: decision.candidates ?? [],
+    aVerifier: { texte: raison },
+    conseilRefuse: {
+      outcome: decision.outcome ?? null,
+      label: decision.label ?? null,
+      bookmaker: decision.bookmaker ?? null,
+      bookmakerTitle: decision.bookmakerTitle ?? null,
+      odds: decision.odds ?? null,
+      displayedOdds: decision.displayedOdds ?? decision.odds ?? null,
+      ev: decision.ev ?? null
+    }
+  };
+}
+
+/** « … : ce match est marqué « à vérifier » (raison) : aucun pari n'est conseillé dessus. » — la fin de phrase d'un verdict. */
+function refusAVerifierDit(staking) {
+  const raison = staking?.aVerifier?.texte ? ` (${staking.aVerifier.texte})` : '';
+  return `ce match est marqué « à vérifier »${raison} : aucun pari n'est conseillé dessus tant que ses données ne sont pas vérifiées`;
 }
 
 /** « (perte maximale de la semaine atteinte : …) » quand un garde-fou a enclenché le coupe-circuit ; rien pour l'interrupteur manuel. */
@@ -321,6 +368,10 @@ export function verdictsDuMatch(match, { disponible, reference, staking }, confi
     }
     // Au-dessus du seuil et dans les limites, mais ce n'est pas le pari du moteur : il n'en retient qu'un par match.
     const autre = retenue && retenue !== issue ? ` : le moteur ne retient qu'un pari par match, « ${libelles[retenue]} », qui paie davantage` : '';
+    // Étape 38 (lot 2a) : le match est « à vérifier » — l'avantage est dit, le pari n'est pas conseillé (sansConseilAVerifier).
+    if (staking?.reason === RAISON_A_VERIFIER) {
+      return dit('value-secondaire', `${avantage}, au-dessus du seuil de ${seuilDit(limites.min)}, mais ${refusAVerifierDit(staking)}.${ecarte}`, offre);
+    }
     if (staking?.reason === 'a_rafraichir') {
       return dit('a-rafraichir', `${avantage}, mais les cotes de ce match sont à rafraîchir${autre} : ce n'est pas une value tant qu'elles ne sont pas relevées de nouveau.`, offre);
     }
@@ -490,6 +541,8 @@ export function comparateurDuMatch(match, { disponible, reference, staking }, co
         { pourcent }
       );
     }
+    // Étape 38 (lot 2a) : le match est « à vérifier » — l'avantage est dit, le pari n'est pas conseillé.
+    if (staking?.reason === RAISON_A_VERIFIER) return dit('value-secondaire', `${avantage}, au-dessus du seuil de ${seuilDit(limites.min)}, mais ${refusAVerifierDit(staking)}.`, { pourcent });
     const autre = retenue && retenue !== issue ? ` : le moteur ne retient qu'un pari par match, « ${libelles[retenue]} », qui paie davantage` : " : le moteur n'en retient pas le pari";
     return dit('value-secondaire', `${avantage}, au-dessus du seuil de ${seuilDit(limites.min)}${autre}.`, { pourcent });
   };
@@ -504,7 +557,7 @@ export function comparateurDuMatch(match, { disponible, reference, staking }, co
       // findValueBet sur CE SEUL bookmaker : son jugement de chaque issue (« juge et partie », ligne incohérente compris).
       const seul =
         reference && !coupeCircuit
-          ? findValueBet({ byBookmaker: [b], fair: reference.probabilities, referenceKeys: reference.keys, config, tiltState: {}, bankroll: match?.bankroll, labels: libelles })
+          ? findValueBet({ byBookmaker: [b], fair: reference.probabilities, referenceKeys: reference.keys, config, tiltState: {}, bankroll: match?.bankroll, labels: libelles, contexteDeMise: match?.contexteDeMise ?? null })
           : null;
       const cellules = Object.fromEntries(ISSUES_1N2.map(({ issue, champ, index }) => [issue, Object.freeze(cellule({ b, titre, juge, sain, seul, f, issue, champ, index }))]));
       return Object.freeze({ cle: b.key, titre, releveAt: f?.releveAt ?? null, origineReleve: origine(b.key), fraicheur: f, juge, ligneSaine: sain, cellules: Object.freeze(cellules) });

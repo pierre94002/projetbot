@@ -49,16 +49,18 @@
  * … »), jamais en euros — ni la mise calculée sur la base interne du
  * déclencheur automatique, ni celle d'une analyse manuelle ; le capital n'est
  * pas lu ici. Seule exception à « aucune lecture » : k et s_max du réglage du
- * moteur, lus par getEngineConfig (import seulement, lecture seule). Ce fichier
- * est atteint par les racines du gel de l'essai 27 (matchAiAnalysisService.js) :
- * il n'importe rien de data/mise/ et garde une COPIE TEMPORAIRE de la règle
- * (partDuCapitalPourIA), remplacée par l'import au lot 2.
+ * moteur, lus par getEngineConfig (import seulement, lecture seule).
+ * Étape 39 (lot 2, 16/11/2026) : la part vient de LA règle de mise du moteur
+ * (core/engine/stakeSizing.js, partDeMise), importée — la copie temporaire du
+ * lot 1a est retirée ; le texte écrit à l'IA est le même, à l'octet
+ * (miseLot2.test.mjs, T-L2-6). Ce fichier n'importe toujours rien de data/mise/.
  * -----------------------------------------------------------------------
  */
 
 import { COTE_MINIMALE } from '../../sports/football/markets.js';
 import { lignesDuDeroule } from './derouleDuMatch.js';
 import { getEngineConfig } from '../engine/engineConfig.js';
+import { partDeMise } from '../engine/stakeSizing.js';
 
 export const FICHES = Object.freeze({ compacte: 'compacte', ancienne: 'ancienne' });
 
@@ -306,17 +308,14 @@ function reglageDeMiseDuMoteur() {
 }
 
 /**
- * COPIE TEMPORAIRE de la règle de mise (data/mise/regleDeMise.js, partDeMise : min(k · ev / (cote − 1), s_max), jamais
- * négative), REMPLACÉE PAR L'IMPORT AU LOT 2 : ce fichier est atteint par les racines du gel de l'essai 27, il ne peut rien
- * importer de data/mise/ (T-X2). Un test garde l'identité à l'octet avec partDeMise (10 000 cas). Entrées illisibles : null.
+ * La part du capital écrite à l'IA : LA règle de mise du moteur (core/engine/stakeSizing.js, partDeMise), importée depuis
+ * le lot 2 de l'étape 39 — plus aucune copie de la formule ici (miseLot2.test.mjs, T-L2-6). Entrées illisibles : null
+ * (la fiche écrit alors « part du capital non calculée », comme avant).
  */
 export function partDuCapitalPourIA({ ev, cote, reglage = reglageDeMiseDuMoteur() } = {}) {
-  const k = reglage?.kellyFraction;
-  const sMax = reglage?.maxStakePercent;
   const fini = (x) => typeof x === 'number' && Number.isFinite(x);
-  if (!fini(ev) || !fini(cote) || !(cote > 1) || !fini(k) || !fini(sMax)) return null;
-  const kelly = (k * ev) / (cote - 1);
-  return Math.max(0, Math.min(kelly, sMax));
+  if (!fini(ev) || !fini(cote) || !(cote > 1) || !fini(reglage?.kellyFraction) || !fini(reglage?.maxStakePercent)) return null;
+  return partDeMise({ ev, cote, reglageMoteur: reglage });
 }
 
 /** « 0,39 % du capital » ; sans part calculable, « part du capital non calculée » — jamais un euro. */
@@ -325,11 +324,46 @@ function partDite(f) {
   return `${(100 * f).toFixed(2).replace('.', ',')} % du capital`;
 }
 
-/** La décision du moteur sans aucun montant en euros (la mise, son plafond), à toute profondeur : l'IA ne lit que la part. */
+/**
+ * La décision du moteur sans aucun montant en euros (la mise, son plafond, et depuis le lot 2 de l'étape 39 le détail de
+ * la règle de mise, dont les raisons citent les plafonds en euros de Pierre), à toute profondeur : l'IA ne lit que la part.
+ */
 function sansEuros(v) {
   if (Array.isArray(v)) return v.map(sansEuros);
   if (!v || typeof v !== 'object') return v;
-  return Object.fromEntries(Object.entries(v).filter(([k]) => k !== 'stake' && k !== 'misePlafonnee').map(([k, x]) => [k, sansEuros(x)]));
+  return Object.fromEntries(Object.entries(v).filter(([k]) => k !== 'stake' && k !== 'misePlafonnee' && k !== 'regleDeMise').map(([k, x]) => [k, sansEuros(x)]));
+}
+
+/**
+ * Étape 39 (lot 2) : la décision du moteur telle que l'ANCIENNE fiche la passe à l'IA (matchAiAnalysisService.js) — le
+ * même filtre que la fiche compacte : aucun euro (ni la mise, ni son plafond, ni le détail de la règle), et la part du
+ * capital à la place (`partDuCapital`, un nombre ; null si elle n'est pas calculable). Sans décision : rendue telle quelle.
+ * Une mise ABSENTE (`stake: null` : le moteur ne conseille pas de pari) n'est pas un euro : elle reste, à sa place — une
+ * décision sans conseil garde ainsi ses octets d'avant le lot 2 (la référence de l'ancienne forme, aiScorecard.test.mjs).
+ */
+export function stakingSansEuros(staking) {
+  if (!staking || typeof staking !== 'object') return staking ?? null;
+  const s = Object.fromEntries(
+    Object.entries(staking)
+      .filter(([k, v]) => !(k === 'stake' && v !== null) && k !== 'misePlafonnee' && k !== 'regleDeMise')
+      .map(([k, v]) => [k, k === 'stake' ? v : sansEuros(v)])
+  );
+  return s.action === 'RECOMMENDED' ? { ...s, partDuCapital: partDuCapitalPourIA({ ev: s.ev, cote: s.odds }) } : s;
+}
+
+/**
+ * Étape 39 (lot 2, 16/11/2026) : LA BASE DU CALCUL de la mise gardée avec l'analyse (engineSnapshot.baseDuCalcul). La
+ * mise en euros du résumé gardé (`staking.stake`) n'a de sens que sur la somme qui l'a calculée : le capital réglé par
+ * Pierre quand l'analyse vient d'un écran qui le porte (`mise.capital`, data/mise/miseRead.js), sinon la base interne
+ * du calcul si l'appelant la donne (`bankroll` : un nombre de calcul, jamais affiché). Rien n'est lu ici : tout vient de
+ * l'analyse reçue. Inconnue : dit « inconnue », jamais devinée. JAMAIS envoyée à l'IA (matchAiAnalysisService.js, pourIA).
+ */
+export function baseDuCalculDe(engineResult) {
+  const fini = (x) => typeof x === 'number' && Number.isFinite(x) && x > 0;
+  const capital = engineResult?.mise?.capital;
+  if (capital?.indique && fini(capital.montant)) return { montant: capital.montant, origine: 'capital-regle' };
+  if (fini(engineResult?.bankroll)) return { montant: engineResult.bankroll, origine: 'base-interne' };
+  return { montant: null, origine: 'inconnue' };
 }
 
 function mise(staking) {

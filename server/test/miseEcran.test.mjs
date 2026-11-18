@@ -7,7 +7,8 @@
  * T-E1 € et % partout, à la française (toLocaleString('fr-FR') : l'espace fine insécable des milliers) ;
  * T-E2 jamais un euro ni « 10 000 » sans capital ; « votre capital » ne vient JAMAIS d'un chiffre de la requête ; avec le
  *      capital, les euros = la mise du moteur sur ce capital (le même centime partout : page du match, Repérage, Opportunités) ;
- * T-E3 la règle candidate (à blanc) ne remplace jamais le conseil, en gris, quand elle diffère ; jamais « sûr » ;
+ * T-E3 (lot 2, 16/11/2026) la règle de mise est EN SERVICE : un pari en attente sur le match réduit le conseil lui-même
+ *      (« la place est prise »), sa raison dite ; plus rien n'est « à blanc » ; jamais « sûr » ;
  * T-E4 le ticket « J'ai parié » : vide sans capital, pré-rempli et marqué « conseil du moteur, modifiable » avec, pour LE
  *      pari du moteur seulement ;
  * T-E5 l'IA : la part dans le message (jamais un euro), la revue recalcule la part (jamais les euros gardés), le changement
@@ -128,19 +129,39 @@ test('T-E2 jamais un euro ni « 10 000 » sans capital ; votre capital ne vient 
   assert.doesNotMatch(codeUi('views', 'MyBetsView.vue'), /matchesStore\.bankroll|label="Bankroll"|10000/);
 });
 
-test('T-E3 la règle candidate (à blanc) : en gris, seulement quand elle diffère, jamais à la place du conseil ; jamais « sûr »', () => {
+test('T-E3 (lot 2) la règle de mise est EN SERVICE : un pari en attente sur le match réduit le conseil lui-même (« la place est prise »), sa raison dite ; plus rien n’est « à blanc » ; jamais « sûr »', () => {
   const s = serveur();
   const m = s.analyseAttente.mise;
   assert.equal(m.capital.montant, 1000);
-  assert.equal(m.euros, Number((s.partAttendue * 1000).toFixed(2)), 'le conseil reste celui du moteur');
-  assert.equal(m.aBlanc.differe, true);
-  assert.equal(m.aBlanc.f, 0, 'un pari de 50 € en attente sur ce match : la place est prise');
+  // Lot 2 de l'étape 39 (16/11/2026) : la règle entière est le conseil — un pari de 50 € en attente sur ce match (5 % de
+  // 1 000 €, au-dessus du plafond de 2 %) : la place est prise, le moteur ne conseille plus de mise sur ce match.
+  assert.equal(m.conseil, true, 'la value reste dite');
+  assert.equal(m.euros, 0, 'un pari de 50 € en attente sur ce match : la place est prise');
+  assert.equal(m.fraction, 0);
+  assert.notEqual(Number((s.partAttendue * 1000).toFixed(2)), 0, 'sans le pari en attente, le moteur conseillait une mise');
+  assert.equal(m.aBlanc, null, 'plus rien n’est « à blanc » : la règle candidate du lot 1 est la règle');
+  assert.ok(m.raisons.some((r) => r.code === 'lie-au-match' && /la place est prise/.test(r.texte)), JSON.stringify(m.raisons));
+  assert.equal(s.analyseAttente.staking.stake, 0, 'la mise du moteur elle-même (une seule place)');
+  // Correction du 17/11/2026 (vérification des lots d'argent, mise C3) : le Repérage et les Opportunités, relus avec ce pari en
+  // attente, donnent la mise de la page du match (le contexte de CE match), avec la raison « lie-au-match ».
+  const ra = s.reperageAttente.data.matches.find((x) => x.matchId === 'essai-a');
+  const oa = s.opportunitesAttente.data.lignes.find((x) => x.cle === 'essai-a|home');
+  for (const [nom, x] of [['le Repérage', ra], ['les Opportunités', oa]]) {
+    assert.ok(x?.mise, `${nom} : aucune mise`);
+    assert.equal(x.mise.euros, m.euros, `${nom} : la mise de la page du match`);
+    assert.equal(x.mise.fraction, m.fraction, `${nom} : la part de la page du match`);
+    assert.ok((x.mise.raisons ?? []).some((r) => r.code === 'lie-au-match' && /la place est prise/.test(r.texte)), `${nom} : ${JSON.stringify(x.mise.raisons)}`);
+  }
   const l = U.lignesDeLaMise(m);
-  assert.equal(l.titre, `Mise conseillée : ${U.pourcentDuCapital(m.fraction)} de votre capital`, 'le titre reste le conseil');
-  assert.match(l.euros, new RegExp(`^soit ${fr2(m.euros).replace(/\s/gu, '\\s')} €`, 'u'));
-  assert.ok(l.aBlanc.startsWith(`${MOTS_DE_LA_MISE.aBlanc} : ${U.pourcentDuCapital(0)} de votre capital`), l.aBlanc);
-  assert.match(l.aBlanc, /la place est prise/);
-  assert.equal(U.lignesDeLaMise(s.analyseAvec.mise).aBlanc, null, 'identique au conseil : rien en gris');
+  assert.equal(l.titre, `Mise conseillée : ${U.pourcentDuCapital(0)} de votre capital`);
+  assert.match(l.euros, new RegExp(`^soit ${fr2(0).replace(/\s/gu, '\\s')} €`, 'u'));
+  assert.ok(l.raisons.some((t) => /la place est prise/.test(t)), l.raisons.join(' · '));
+  assert.equal(l.aBlanc, null);
+  // Sans pari en attente : le conseil du moteur, la même mise qu'avant le lot 2, rien en gris.
+  assert.equal(s.analyseAvec.mise.aBlanc, null);
+  assert.equal(U.lignesDeLaMise(s.analyseAvec.mise).aBlanc, null, 'rien en gris');
+  assert.equal(s.analyseAvec.mise.euros, Number((s.partAttendue * 2000).toFixed(2)), 'sans rien qui la réduise : la mise d’avant le lot 2');
+  assert.equal(s.analyseAvec.mise.fraction, s.partAttendue);
   for (const t of [fs.readFileSync(path.join(SERVEUR, 'src', 'data', 'mise', 'regleDeMise.js'), 'utf8'), fs.readFileSync(path.join(SERVEUR, 'src', 'data', 'mise', 'miseRead.js'), 'utf8'), lireUi('utils', 'miseAffichee.js'), lireUi('components', 'settings', 'CapitalPanel.vue')]) {
     assert.doesNotMatch(t.replace(/«\s*sûr\s*»\s*n’augmente rien|« sûr » n'augmente/g, ''), /['"«]\s*sûr\s*['"»]/, 'jamais « sûr » à l’écran');
   }

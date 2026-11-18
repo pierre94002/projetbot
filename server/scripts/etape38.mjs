@@ -24,6 +24,11 @@
  *       telles quelles dans test/fixtures (banc-etape38.json, banc-regles-etape38.md) : T-B7 refait la note à l'octet.
  *   --note-nulle
  *       ÉCRIT noteDeLaCombinaison.js avec COMBINAISON_AU_BANC = null (avant le passage), PAR SCRIPT.
+ *   --recopier-moteur [--verifier]
+ *       LOT 2a (16/11/2026) : ÉCRIT src/core/engine/poidsDeLaCombinaison.js (les β de la combinaison DANS l'empreinte du
+ *       moteur) PAR SCRIPT, depuis la note du banc (noteDeLaCombinaison.js) : 0 partout tant qu'aucune variante à poids
+ *       n'est « retenu » ; REFUSÉ si l'une l'est (son poids entre par une candidate du lot 2b, jamais par recopie).
+ *       --verifier : n'écrit rien, dit seulement si le fichier en place est celui que la note donne (code 0 / 3).
  *   --ombre
  *       L'ombre P5-b du seuil : au lot 1c seulement (refusée ici).
  *
@@ -42,11 +47,14 @@ import { modeBacASable, verifierBaseDuBac, VRAIE_BASE } from '../src/config/bacA
 import { VARIANTES_DE_L_ETAPE_38 } from '../src/bench/lancements.js';
 import { PERIODES_DU_BANC, DECISIONS_DE_PIERRE, JUGE } from '../src/data/combinaison/reglagesCombinaison.js';
 import { aRecopier, texteDeLaNote, VERSION_DU_BANC } from '../src/data/combinaison/bancDeLaCombinaison.js';
+import { COMBINAISON_AU_BANC } from '../src/data/combinaison/noteDeLaCombinaison.js';
+import { poidsRetenus, texteDesPoids } from '../src/data/combinaison/poidsPourLeMoteur.js';
 import { empreinteDuCode, empreinteDeLaCandidate, CANDIDATE_EN_ESSAI } from '../src/core/engine/engineVersions.js';
 
 const SERVEUR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ENFANT = path.join(SERVEUR, 'src', 'data', 'combinaison', 'combinaisonEnfant.js');
 const NOTE = path.join(SERVEUR, 'src', 'data', 'combinaison', 'noteDeLaCombinaison.js');
+const POIDS_DU_MOTEUR = path.join(SERVEUR, 'src', 'core', 'engine', 'poidsDeLaCombinaison.js');
 const FIXTURE_SORTIE = 'test/fixtures/banc-etape38.json';
 const FIXTURE_REGLES = 'test/fixtures/banc-regles-etape38.md';
 
@@ -71,8 +79,8 @@ function modulesScellesDansLesRegles(texte) {
 const pct = (x, d = 3) => (Number.isFinite(x) ? `${(100 * x).toLocaleString('fr-FR', { maximumFractionDigits: d, minimumFractionDigits: d })} %` : '?');
 
 // ------------------------------------------------------------ garde-fous
-const modes = ['--comptes', '--banc', '--recopier', '--note-nulle', '--ombre'].filter(drapeau);
-if (modes.length !== 1) refuser('un seul mode : --comptes, --banc, --recopier, --note-nulle ou --ombre.');
+const modes = ['--comptes', '--banc', '--recopier', '--note-nulle', '--recopier-moteur', '--ombre'].filter(drapeau);
+if (modes.length !== 1) refuser('un seul mode : --comptes, --banc, --recopier, --note-nulle, --recopier-moteur ou --ombre.');
 const MODE = modes[0];
 if (MODE === '--ombre') refuser('l’ombre P5-b du seuil vient au lot 1c (rejouée depuis l’archive, jamais la nuit) : rien lancé.');
 if (sousOneDrive(SERVEUR)) refuser(`à lancer depuis la copie du bac (bac-a-sable\\code\\server), jamais sous OneDrive (${SERVEUR}).`);
@@ -85,7 +93,7 @@ if (modeBacASable()) {
   const v = verifierBaseDuBac(BASE);
   if (!v.ok) refuser(`base refusée : ${v.raison}`);
 }
-if (MODE !== '--recopier' && MODE !== '--note-nulle' && !fs.existsSync(BASE)) refuser(`la copie de la base n'existe pas (${BASE}).`);
+if (MODE !== '--recopier' && MODE !== '--note-nulle' && MODE !== '--recopier-moteur' && !fs.existsSync(BASE)) refuser(`la copie de la base n'existe pas (${BASE}).`);
 const sortie = option('--sortie');
 if (sortie && sousOneDrive(sortie)) refuser(`une sortie sous OneDrive est refusée (${sortie}).`);
 const periodes = process.env.CM_ESSAI_PERIODES ? JSON.parse(process.env.CM_ESSAI_PERIODES) : PERIODES_DU_BANC;
@@ -280,6 +288,29 @@ if (MODE === '--recopier') {
   fs.writeFileSync(NOTE, texteDeLaNote(note));
   dire(`[étape 38] note écrite PAR SCRIPT : ${NOTE} (${fs.statSync(NOTE).size} octets) ; sortie et règles gardées dans test/fixtures.`);
   process.stdout.write(`${JSON.stringify({ ok: true, mode: 'recopier', note: NOTE, sha1Note: sha1(NOTE), sortie: cibleSortie, sha1Sortie: sha1(cibleSortie), regles: cibleRegles, sha1Regles: sha1(cibleRegles) })}\n`);
+  process.exit(0);
+}
+
+// ------------------------------------------------------------ --recopier-moteur (lot 2a : les β dans l'empreinte)
+if (MODE === '--recopier-moteur') {
+  let texte;
+  try {
+    texte = texteDesPoids(poidsRetenus(COMBINAISON_AU_BANC));
+  } catch (error) {
+    refuser(`les poids ne se recopient pas : ${error.message}`);
+  }
+  const enPlace = fs.existsSync(POIDS_DU_MOTEUR) ? fs.readFileSync(POIDS_DU_MOTEUR, 'utf8') : null;
+  if (drapeau('--verifier')) {
+    const identique = enPlace === texte;
+    dire(`[étape 38] poids du moteur ${identique ? 'identiques à ceux de la note' : 'DIFFÉRENTS de ceux de la note'} : ${POIDS_DU_MOTEUR}`);
+    process.stdout.write(`${JSON.stringify({ ok: identique, mode: 'recopier-moteur', verifier: true, poids: POIDS_DU_MOTEUR, sha1Poids: enPlace === null ? null : sha1(POIDS_DU_MOTEUR), sha1Note: sha1(NOTE) })}
+`);
+    process.exit(identique ? 0 : 3);
+  }
+  if (enPlace !== texte) fs.writeFileSync(POIDS_DU_MOTEUR, texte);
+  dire(`[étape 38] poids du moteur ${enPlace === texte ? 'déjà à jour' : 'écrits PAR SCRIPT'} : ${POIDS_DU_MOTEUR} (${fs.statSync(POIDS_DU_MOTEUR).size} octets).`);
+  process.stdout.write(`${JSON.stringify({ ok: true, mode: 'recopier-moteur', change: enPlace !== texte, poids: POIDS_DU_MOTEUR, sha1Poids: sha1(POIDS_DU_MOTEUR), sha1Note: sha1(NOTE) })}
+`);
   process.exit(0);
 }
 

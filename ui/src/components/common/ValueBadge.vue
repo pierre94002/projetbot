@@ -50,13 +50,14 @@ const props = defineProps({
   bookmaker: { type: String, default: null }, // chez qui, pour la phrase complète
   precision: { type: String, default: null }, // ce que la page qui la pose ne voit pas : ajouté à la phrase d'UNE value seulement
   verdict: { type: Object, default: null }, // le verdict du moteur sur cette issue (étape 8) : il décide seul du vert
+  aVerifier: { type: Object, default: null }, // 17/11/2026 (D5) : le marché d'une cote saisie « à vérifier » (joint par le serveur) — jamais vert
   taille: { type: String, default: 'md' } // 'sm' | 'md'
 });
 
 const fraicheurLue = computed(() => (props.fraicheur ? fraicheurVivante(props.fraicheur, props.maintenant ?? liveNow.value) : null));
 // Sans verdict du moteur : la règle de l'étape 6, rejouée ici (etatValue).
 const luParLaRegle = computed(() =>
-  etatValue({ pourcent: props.pourcent, jouable: props.jouable, reference: props.reference, cote: props.cote, regle: props.regle, fraicheur: fraicheurLue.value })
+  etatValue({ pourcent: props.pourcent, jouable: props.jouable, reference: props.reference, cote: props.cote, regle: props.regle, fraicheur: fraicheurLue.value, aVerifier: props.aVerifier })
 );
 // Avec lui (étape 8) : le verdict du moteur, sa fraîcheur réévaluée à l'horloge (etatVerdict).
 const lu = computed(() =>

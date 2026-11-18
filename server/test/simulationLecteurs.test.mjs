@@ -342,7 +342,13 @@ test('B7 le suivi : un combiné noté et réglé compte dans le gain attendu, so
 test('B7 un carnet ANCIEN (simples notés, combinés sans prix juste, en attente, annulé) → le rapport de suivi du nouveau code est celui de l’ancien code, à l’octet (fixture calculée avec betsRepository.js et suiviParis.js d’avant l’étape 28) ; le gain attendu d’un combiné ancien reste « combine »', () => {
   const f = JSON.parse(fs.readFileSync(path.join(FIXTURES, 'suivi-carnet-ancien-etape-28.json'), 'utf8'));
   const r = rapportDeSuivi({ paris: f.carnet, ...f.options });
-  assert.equal(JSON.stringify(r), JSON.stringify(f.rapport));
+  // Lots d'argent, correction 1.8 (17/11/2026) : les 4 bookmakers français ont un titre (core/engine/vosBookmakers.js) ;
+  // le rapport d'avant l'étape 28 les nommait par leur clé. Seul ce libellé change ; tout le reste à l'octet.
+  const TITRES_1_8 = { betclic_fr: 'Betclic', unibet_fr: 'Unibet (FR)', winamax_fr: 'Winamax (FR)', pmu_fr: 'PMU' };
+  let titres = 0;
+  const attendu = JSON.parse(JSON.stringify(f.rapport), (k, v) => (v && typeof v === 'object' && !Array.isArray(v) && Object.hasOwn(TITRES_1_8, v.cle) && v.libelle === v.cle ? (titres++, { ...v, libelle: TITRES_1_8[v.cle] }) : v));
+  assert.ok(titres > 0, 'la fixture nomme bien des bookmakers français par leur clé');
+  assert.equal(JSON.stringify(r), JSON.stringify(attendu));
   for (const bet of f.carnet.filter((b) => b.legs.length > 1)) assert.deepEqual(gainAttenduDuPari(bet), { montant: null, pourcent: null, raison: 'combine' });
 });
 

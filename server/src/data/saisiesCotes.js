@@ -46,6 +46,8 @@ import { TITRES_BOOKMAKERS, titreBookmaker, vosBookmakersDe } from '../core/engi
 import { getSport } from '../sports/index.js';
 import { STAT_KINDS, coteJusteLigne } from '../sports/football/statMarkets.js';
 import { MARKET_LABELS } from '../sports/football/markets.js';
+import { estAVerifier, raisonAVerifier } from '../core/engine/confidence.js';
+import { preparerAVerifierParFamille, familleDuMarche } from './aVerifierPourLeMoteur.js';
 
 export const PROVENANCE_SAISIE = 'Saisie à la main dans CôteMaster (page du match)';
 
@@ -221,21 +223,39 @@ export function regleDuMoteur(config = getEngineConfig('football')) {
  * quelques millièmes du seuil, il disait « value » et la pastille « sous le
  * seuil »). `bornes` : la cote minimale et la cote maximale à prendre pour cette
  * issue (core/engine/coteMinimale.js, la même règle).
+ *
+ * « À VÉRIFIER » (correction du 17/11/2026, après la vérification des lots d'argent ; décision de Pierre D5) : une value sur
+ * une cote saisie est un conseil comme une autre — `aVerifierDuMarche` (famille → null | { raisons, texte }, préparé par
+ * etatDesSaisies avec aVerifierPourLeMoteur.js, preparerAVerifierParFamille) est lu pour la famille du marché SAISI : des
+ * corners douteux retirent la value d'une cote de corners, pas celle d'une cote de buts. Une value refusée devient
+ * « value-secondaire » (jamais verte), la raison jointe (`aVerifier.texte`) ; les autres verdicts restent tels quels. Sans
+ * raison : la sortie d'avant, sans clé de plus.
  */
-export function valueDeLaSaisie({ saisie, cote, releveAt, resultat, config, reglage, maintenant, coupDEnvoi, heureSure }) {
+export function valueDeLaSaisie({ saisie, cote, releveAt, resultat, config, reglage, maintenant, coupDEnvoi, heureSure, aVerifierDuMarche = null }) {
   const moteur = probabiliteDuMoteur(resultat, saisie);
   const fraicheur = fraicheurCote({ releveAt, maintenant, coupDEnvoi, heureSure, reglage });
   const pourcent = moteur.probabilite === null ? null : pourcentDeLaCote(moteur.probabilite, cote);
   const jouable = vosBookmakers(config).includes(saisie.bookmaker);
   const regle = regleDuMoteur(config);
+  const verdict = verdictValue({ pourcent, cote, regle, jouable, fraicheur });
+  let aVerifier = null;
+  if (typeof aVerifierDuMarche === 'function') {
+    try {
+      const lu = aVerifierDuMarche(familleDuMarche(saisie?.marketId));
+      aVerifier = estAVerifier(lu) ? { texte: raisonAVerifier(lu) } : null;
+    } catch {
+      aVerifier = null;
+    }
+  }
   return {
     moteur,
     fraicheur,
     jouable,
     regle,
     pourcent,
-    verdict: verdictValue({ pourcent, cote, regle, jouable, fraicheur }),
-    bornes: moteur.probabilite === null ? null : bornesDeLaRegle(moteur.probabilite, regle)
+    verdict: aVerifier && verdict === 'value' ? 'value-secondaire' : verdict,
+    bornes: moteur.probabilite === null ? null : bornesDeLaRegle(moteur.probabilite, regle),
+    ...(aVerifier ? { aVerifier } : {})
   };
 }
 
@@ -352,11 +372,11 @@ function groupesDuMatch(sourceEvent, database) {
 }
 
 /** Une saisie telle que la page l'affiche. */
-function decrire(g, { match, heureSure, resultat, config, reglage, maintenant }) {
+function decrire(g, { match, heureSure, resultat, config, reglage, maintenant, aVerifierDuMarche = null }) {
   const s = depuisArchive(g);
   if (!s) return null;
   const cote = g.derniere.price;
-  const v = valueDeLaSaisie({ saisie: s, cote, releveAt: g.derniere.releveAt, resultat, config, reglage, maintenant, coupDEnvoi: match.commenceTime, heureSure });
+  const v = valueDeLaSaisie({ saisie: s, cote, releveAt: g.derniere.releveAt, resultat, config, reglage, maintenant, coupDEnvoi: match.commenceTime, heureSure, aVerifierDuMarche });
   const prix = g.versions.filter((x) => x.price !== null);
   return {
     cle: g.cle,
@@ -385,7 +405,7 @@ function decrire(g, { match, heureSure, resultat, config, reglage, maintenant })
  * saisies attendent d'être écrites et que plus personne ne tient le verrou,
  * elles partent d'abord (écriture décidée par une saisie, faite par le serveur).
  */
-export async function etatDesSaisies({ matchId, source = 'odds-api', maintenant = Date.now(), database = null } = {}) {
+export async function etatDesSaisies({ matchId, source = 'odds-api', maintenant = Date.now(), database = null, aVerifierParFamilleDe = null } = {}) {
   const base = database ?? openDb();
   const { match, heureSure, fixture } = matchDeLaSaisie(matchId, { source, database: base });
   if (lignesEnAttente('saisies').some((l) => l.sourceEvent === fixture.sourceEvent)) {
@@ -401,7 +421,12 @@ export async function etatDesSaisies({ matchId, source = 'odds-api', maintenant 
   } catch (error) {
     raisonMoteur = `analyse du moteur impossible : ${String(error?.message ?? error).slice(0, 160)}`;
   }
-  const contexte = { match, heureSure, resultat, config, reglage: reglageLu.reglage, maintenant };
+  // Correction du 17/11/2026 (D5) : « à vérifier » pour la famille de chaque marché saisi, par les identifiants FotMob de la
+  // clé du match (lu une fois ; `aVerifierParFamilleDe` : pour les essais). Une lecture qui échoue : rien à dire.
+  const parFamille = aVerifierParFamilleDe ?? preparerAVerifierParFamille({ maintenant });
+  const ids = { league: fixture.league, date: fixture.date, homeId: fixture.homeId, awayId: fixture.awayId };
+  const aVerifierDuMarche = (famille) => parFamille(ids, famille);
+  const contexte = { match, heureSure, resultat, config, reglage: reglageLu.reglage, maintenant, aVerifierDuMarche };
   const liste = [...groupes.values()];
   const enVigueur = liste.filter((g) => g.derniere.price !== null).map((g) => decrire(g, contexte)).filter(Boolean);
   const retirees = liste

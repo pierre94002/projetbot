@@ -24,6 +24,14 @@
  * ligne du pronostic (toutes les issues et leur probabilité, cf.
  * sports/football/markets.js, distributionDuMarche) — ce que le juge de
  * l'étape 16 attend. Les lignes gelées avant restent « sans version ».
+ * Depuis l'étape 38 du plan (lot 2a, 16/11/2026) : aussi les TRACES de chaque pronostic (core/engine/confidence.js,
+ * tracesDuPronostic) — le palier de la cote juste, la classe de seuil (« a-verifier » quand le contrôle quotidien le dit du
+ * match pour le pari conseillé : data/aVerifierPourLeMoteur.js), le seuil appliqué (le 1 / N / 2 seulement) et ce que le
+ * moteur sait de la confiance. Les lignes gelées avant restent sans traces (« palier reconstruit ») ; une trace seule
+ * n'ajoute jamais de version. La même donnée « à vérifier » est jointe au match donné au moteur : aucun conseil dessus.
+ * Depuis le 17/11/2026 (correction après la vérification des lots d'argent) : la classe « a-verifier » et la confiance de
+ * CHAQUE ligne suivent la famille de SON marché (des corners douteux marquent les lignes de corners, pas le 1 / N / 2) ; la
+ * ligne du 1 / N / 2 garde ce que le moteur a reçu.
  *
  * Un match se reconnaît par les identifiants FotMob de ses clubs et son jour
  * (le même match vient des cotes payantes OU du calendrier, sous deux
@@ -44,6 +52,32 @@ import { getSport } from '../../sports/index.js';
 import { mettreEnFile, vider } from './file.js';
 import { compterLignes } from './depot.js';
 import { iso, jourUtc, nomCle, pause } from './communs.js';
+import { tracesDuPronostic } from '../../core/engine/confidence.js';
+import { preparerAVerifierDuConseil, preparerAVerifierParFamille, avecAVerifierPourLeMoteur, familleDuMarche, FAMILLE_DU_CONSEIL } from '../aVerifierPourLeMoteur.js';
+
+/**
+ * Correction du 17/11/2026 : « à vérifier » d'une ligne gelée, par la famille de son marché. La famille du conseil (le
+ * 1 / N / 2) rend TOUJOURS ce que le moteur a reçu (`aVerifier`) : la trace et le refus ne se contredisent jamais ; les
+ * autres familles sont lues par identifiants (`parFamille`, cf. aVerifierPourLeMoteur.js). Sans `parFamille` : null (les
+ * lignes gardent `aVerifier`, comme avant).
+ */
+function aVerifierParMarche(parFamille, ids, aVerifier) {
+  if (typeof parFamille !== 'function') return null;
+  const lus = new Map();
+  return (famille) => {
+    if (famille === FAMILLE_DU_CONSEIL) return aVerifier ?? null;
+    if (!lus.has(famille)) {
+      let a = null;
+      try {
+        a = parFamille(ids, famille) ?? null;
+      } catch {
+        a = null;
+      }
+      lus.set(famille, a);
+    }
+    return lus.get(famille);
+  };
+}
 
 export const ORIGINES = { nuit: 'nuit', avance: 'analyse-avance', coupDEnvoi: 'analyse-coup-d-envoi' };
 
@@ -114,7 +148,16 @@ export function distributionGelee(engineResult, prediction) {
 export const versionDuResultat = (engineResult) => (Number.isInteger(engineResult?.engineVersion) && engineResult.engineVersion >= 1 ? engineResult.engineVersion : null);
 
 /** Ce qu'on gèle d'un résultat du moteur pour un match : un élément de la file « gel ». */
-export function elementDuGel({ match, engineResult, origine, maintenant = Date.now(), homeId = null, awayId = null, cotes, compo, engineHash }) {
+export function elementDuGel({ match, engineResult, origine, maintenant = Date.now(), homeId = null, awayId = null, cotes, compo, engineHash, config = null, aVerifier = null, aVerifierDuMarche = null }) {
+  // Étape 38 (lot 2a) : d'où vient la cote juste de CE calcul (le palier des bookmakers de référence, dit par le verdict du
+  // moteur ; sinon le repli ou « sans cote »), ce que l'appelant sait d'« à vérifier » et le seuil de value du réglage (lu ICI,
+  // jamais par confidence.js : aucun fichier du moteur hors de la value et du verdict ne lit un réglage de pari).
+  // Correction du 17/11/2026 (vérification des lots d'argent, « à vérifier » C3) : chaque pronostic est marqué d'après la
+  // famille de SON marché (`aVerifierDuMarche(famille)`, donné par l'appelant), comme la règle mesurée au banc juge une ligne
+  // (controleEnVigueur) — des corners douteux marquent les lignes de corners, pas celle du 1 / N / 2. Sans elle (un ancien
+  // appelant, un essai) : `aVerifier` pour toutes les lignes, comme avant.
+  const seuilDuReglage = Number(config?.edgeThresholdMin);
+  const origineDuPronostic = { basis: engineResult?.verdicts?.home?.juges?.palier ?? null, surCotes: engineResult?.prediction?.source === 'cotes', aVerifier, seuil: Number.isFinite(seuilDuReglage) ? seuilDuReglage : null };
   const date = jourUtc(Date.parse(match.commenceTime));
   const fixture = {
     fixtureKey: cleDuMatch({ homeId, awayId, league: match.league, home: match.home, away: match.away, date }),
@@ -140,6 +183,7 @@ export function elementDuGel({ match, engineResult, origine, maintenant = Date.n
     marketOdds: nombre(p.predictedMarketOdds),
     minOdds: nombre(p.minOdds),
     distribution: distributionGelee(engineResult, p),
+    ...tracesDuPronostic({ ...origineDuPronostic, aVerifier: aVerifierDuMarche ? aVerifierDuMarche(familleDuMarche(p.marketId)) : aVerifier, avecSeuil: p.marketId === 'result' }),
     ...cotes,
     ...compo
   }));
@@ -184,12 +228,17 @@ export function matchsAVenir(maintenant = Date.now()) {
  * (seules ces lignes-là sont écrites) ; sinon, elles attendent que le verrou
  * soit libre. `matchs` : pour les tests (sinon la page Matchs).
  */
-export async function gelerLaNuit({ maintenant = Date.now(), database = openDb(), matchs = null, dansLaPasse = true } = {}) {
+export async function gelerLaNuit({ maintenant = Date.now(), database = openDb(), matchs = null, dansLaPasse = true, aVerifierDe: aVerifierDeLaNuit = null, aVerifierParFamilleDe = null } = {}) {
   const liste = matchs ?? matchsAVenir(maintenant);
   const config = getEngineConfig('football');
   const engineHash = empreinteMoteur(config);
   const sport = getSport('football');
   const club = resolveur(database);
+  // Étape 38 (lot 2a) : « à vérifier » pour le pari conseillé, lu une fois pour la nuit ; `aVerifierDe` : pour les essais.
+  const aVerifierDe = aVerifierDeLaNuit ?? preparerAVerifierDuConseil({ maintenant });
+  // Correction du 17/11/2026 : les autres familles, pour les traces de chaque ligne (`aVerifierParFamilleDe` : pour les
+  // essais ; un essai qui ne donne que `aVerifierDe` garde la trace d'avant, la même pour toutes les lignes).
+  const parFamille = aVerifierParFamilleDe ?? (aVerifierDeLaNuit ? null : preparerAVerifierParFamille({ maintenant }));
   let heureInstantanePayant = null;
   try {
     heureInstantanePayant = getFixturesStatus().oddsLastSyncedAt ?? null;
@@ -202,11 +251,12 @@ export async function gelerLaNuit({ maintenant = Date.now(), database = openDb()
     try {
       const enrichi = await enrichMatchWithRealAverages(match, { sansRepliPayant: true });
       // L'heure de la nuit (étape 27) : le modèle de buts ne lit rien d'après ce moment.
-      const resultat = await analyzeMatch(enrichi, config, getTiltState(), sport, { maintenant });
       const homeId = club(match.home, match.league);
       const awayId = club(match.away, match.league);
       if (!homeId || !awayId) bilan.sansIdentifiant++;
       const date = jourUtc(Date.parse(match.commenceTime));
+      const aVerifier = aVerifierDe({ league: match.league, date, homeId, awayId });
+      const resultat = await analyzeMatch(avecAVerifierPourLeMoteur(enrichi, aVerifier), config, getTiltState(), sport, { maintenant });
       const element = elementDuGel({
         match,
         engineResult: resultat,
@@ -216,7 +266,10 @@ export async function gelerLaNuit({ maintenant = Date.now(), database = openDb()
         awayId,
         cotes: sourceDesCotes(match, { heureInstantanePayant }),
         compo: etatDeLaCompo({ homeId, date, database }),
-        engineHash
+        engineHash,
+        config,
+        aVerifier,
+        aVerifierDuMarche: aVerifierParMarche(parFamille, { league: match.league, date, homeId, awayId }, aVerifier)
       });
       elements.push(element);
       bilan.calcules++;
@@ -250,7 +303,7 @@ export async function gelerLaNuit({ maintenant = Date.now(), database = openDb()
  * d'un match, mis en file (écrit dès que le verrou est libre). Ne lève jamais :
  * un gel raté ne doit pas empêcher l'analyse.
  */
-export function gelerAnalyse({ match, engineResult, lineups = null, origine = ORIGINES.avance, database = null, maintenant = Date.now() }) {
+export function gelerAnalyse({ match, engineResult, lineups = null, origine = ORIGINES.avance, database = null, maintenant = Date.now(), aVerifier = null, aVerifierParFamilleDe = null }) {
   try {
     if (!match?.commenceTime || !engineResult?.marketPredictions) return false;
     const base = database ?? openDb();
@@ -273,7 +326,12 @@ export function gelerAnalyse({ match, engineResult, lineups = null, origine = OR
       awayId,
       cotes: sourceDesCotes(match, { heureInstantanePayant }),
       compo: etatDeLaCompo({ lineups, homeId, date, database: base }),
-      engineHash: empreinteMoteur()
+      engineHash: empreinteMoteur(),
+      config: getEngineConfig('football'),
+      // Étape 38 (lot 2a) : ce que l'analyse a joint au match pour le moteur (autoMatchAiTrigger.js).
+      aVerifier,
+      // Correction du 17/11/2026 : les autres familles, lues par identifiants (`aVerifierParFamilleDe` : pour les essais).
+      aVerifierDuMarche: aVerifierParMarche(aVerifierParFamilleDe ?? preparerAVerifierParFamille({ maintenant }), { league: match.league, date, homeId, awayId }, aVerifier)
     });
     mettreEnFile('gel', [element]);
     return true;

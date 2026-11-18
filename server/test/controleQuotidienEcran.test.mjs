@@ -783,8 +783,14 @@ test('hygiène des trois composants (jetons, pas de !important, polices ≥ 10 p
   assert.match(lireUi('views', 'OpportunitiesView.vue'), /<AVerifierBadge v-if="r\.l\.aVerifier" :a-verifier="r\.l\.aVerifier" :marche="r\.l\.marche"/);
   assert.match(lireUi('views', 'PredictionMatchDetailView.vue'), /<AVerifierBadge v-if="entry\.aVerifier" :a-verifier="entry\.aVerifier" \/>/);
   assert.match(lireUi('views', 'PredictionsHistoryView.vue'), /<AVerifierBadge v-if="aVerifierDuGroupe\(group\)" :a-verifier="aVerifierDuGroupe\(group\)" avec-raison \/>/);
-  // Jamais une pastille de value conditionnée par « à vérifier ».
+  // Jamais une pastille de value conditionnée par le « à vérifier » DU MATCH (le bandeau). Seule exception (lots d'argent,
+  // correction 1.7 du 17/11/2026) : la pastille d'une cote SAISIE à la main lit le verdict que le serveur a rendu pour la
+  // famille de SON marché (saisiesCotes.js) — `l.saisie.aVerifier`, une fois, jamais la prop `aVerifier` du tableau.
+  const SAISIE_1_7 = ':a-verifier="l.saisie.aVerifier ?? null"';
+  const tableau = lireUi('components', 'analysis', 'MarketVerdictBoard.vue');
+  assert.equal(tableau.split(SAISIE_1_7).length - 1, 1, 'la pastille de la saisie lit son propre « à vérifier », une fois');
+  assert.match(tableau, /<ValueBadge\s+v-else-if="l\.saisie"[^>]*:a-verifier="l\.saisie\.aVerifier \?\? null"/);
   for (const f of [['components', 'analysis', 'MarketVerdictBoard.vue'], ['components', 'analysis', 'MarketPicksBoard.vue'], ['views', 'OpportunitiesView.vue'], ['views', 'PredictionMatchDetailView.vue'], ['views', 'PredictionsHistoryView.vue']]) {
-    assert.doesNotMatch(lireUi(...f), /<ValueBadge[^>]*aVerifier/, f.join('/'));
+    assert.doesNotMatch(lireUi(...f).replace(SAISIE_1_7, ''), /<ValueBadge[^>]*aVerifier/, f.join('/'));
   }
 });

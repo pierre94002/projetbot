@@ -163,10 +163,19 @@ export const RAISONS_DU_TRI = gel({
 
 /**
  * Les RÉGLAGES DE PARI : ils décident d'une mise ou d'une value, jamais d'une probabilité (lus seulement par
- * staking.js, valueFinder.js, coteMinimale.js et verdictPari.js ; prouvé par leviersEtPari.test.mjs, T-PA1). Deux
+ * stakeSizing.js, valueFinder.js, coteMinimale.js et verdictPari.js ; prouvé par leviersEtPari.test.mjs, T-PA1). Deux
  * versions qui ne diffèrent que par eux donnent les mêmes pronostics : la même LIGNÉE.
  */
-export const REGLAGES_DE_PARI = gel(['edgeThresholdMin', 'edgeThresholdMax', 'valueBookmakers', 'maxValueOdds', 'kellyFraction', 'maxStakePercent', 'maxExpectedRateGap']);
+export const REGLAGES_DE_PARI = gel(['edgeThresholdMin', 'edgeThresholdMax', 'valueBookmakers', 'maxValueOdds', 'kellyFraction', 'maxStakePercent']);
+
+/**
+ * Les réglages de pari RETIRÉS du moteur (étape 39, lot 2, 16/11/2026) : la clé n'existe plus dans les réglages par défaut,
+ * ni à l'écran, et plus aucun calcul ne la lit (son seul lecteur, core/risk/staking.js, était du code mort). Elle reste
+ * NOMMÉE ici pour une seule raison : les versions 1 à 5 du registre la portent encore dans leurs réglages gelés, et la
+ * LIGNÉE (lignee.js, sansReglagesDePari) doit continuer de l'ôter — sinon l'empreinte des pronostics de ces versions
+ * changerait, et avec elle le fil des mois déjà jugés par la boucle de correction (tri.js, boucle.js).
+ */
+export const REGLAGES_DE_PARI_RETIRES = gel(['maxExpectedRateGap']);
 
 // ============================================================ les réglages qu'on peut proposer
 

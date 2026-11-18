@@ -552,6 +552,10 @@ const ENREGISTREURS_DDL = [
   engine_hash TEXT,
   engine_version INTEGER,
   distribution TEXT,
+  confiance TEXT,
+  classe_seuil TEXT,
+  seuil_applique REAL,
+  palier TEXT,
   PRIMARY KEY (fixture_key, market_key, version)
 ) WITHOUT ROWID;`,
   `CREATE TABLE IF NOT EXISTS engine_candidate_picks (
@@ -2142,7 +2146,14 @@ const ADDED_COLUMNS = [
   // Étape 25 du plan (07/10/2026) : la version du moteur et la distribution
   // complète de chaque pronostic gelé ; NULL pour les lignes d'avant.
   ['engine_picks', 'engine_version', 'INTEGER'],
-  ['engine_picks', 'distribution', 'TEXT']
+  ['engine_picks', 'distribution', 'TEXT'],
+  // Étape 38 du plan (lot 2a, 16/11/2026) : les traces gelées avec chaque pronostic — ce que le moteur sait de sa
+  // confiance (texte JSON), sa classe de seuil, le seuil appliqué et le palier de la cote juste (core/engine/
+  // confidence.js) ; NULL pour les lignes d'avant (« palier reconstruit »), jamais réécrites.
+  ['engine_picks', 'confiance', 'TEXT'],
+  ['engine_picks', 'classe_seuil', 'TEXT'],
+  ['engine_picks', 'seuil_applique', 'REAL'],
+  ['engine_picks', 'palier', 'TEXT']
 ];
 
 function migrateSchema(db) {

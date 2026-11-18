@@ -306,6 +306,37 @@ export function etatDesGardeFous({ paris = [], reglage = REGLAGE_GARDE_FOUS_DEFA
 // ---------------------------------------------------------- le conseil
 
 /**
+ * Étape 39 (lot 2) : les plafonds en euros de la règle de mise (core/engine/stakeSizing.js, fractionDeMise, point 7 :
+ * « le plus petit gagne »), chacun NOMMÉ — le code de la règle → les mots dits à Pierre.
+ */
+export const PLAFONDS_NOMMES = Object.freeze({
+  'mise-max': 'votre mise maximale par pari, fixée dans Réglages',
+  'perte-semaine': 'ce qui reste avant votre perte maximale de la semaine (mises en attente comprises), fixée dans Réglages',
+  'mise-acceptee': 'la mise maximale acceptée connue chez ce bookmaker (fiche du compte, Réglages)',
+  'solde-declare': 'le solde déclaré de votre compte chez ce bookmaker (fiche du compte, Réglages)',
+  plancher: 'votre plancher sous votre plus haut, fixé dans Réglages'
+});
+
+/**
+ * Le plafond en euros que la règle de mise a appliqué (`regleDeMise.plafond` : { par, mise, plafond }, posé par
+ * findValueBet), dit dans `misePlafonnee` avec son nom. Une décision sans règle, ou qu'aucun plafond n'a ramenée :
+ * rendue telle quelle (le même objet).
+ */
+function plafondDeLaRegle(staking) {
+  const p = staking.regleDeMise?.plafond ?? null;
+  if (!p || !Object.hasOwn(PLAFONDS_NOMMES, p.par) || !Number.isFinite(p.mise) || !Number.isFinite(p.plafond)) return staking;
+  return {
+    ...staking,
+    misePlafonnee: {
+      mise: p.mise,
+      plafond: p.plafond,
+      par: p.par,
+      texte: `Mise conseillée ramenée à ${euros(p.plafond)} : ${PLAFONDS_NOMMES[p.par]}. Le moteur conseillait ${euros(p.mise)}.`
+    }
+  };
+}
+
+/**
  * Le conseil de mise du moteur passé aux garde-fous (appelé par
  * verdictPari.stakingDuMatch, la seule décision de pari) :
  *   - coupe-circuit enclenché : la décision garde CIRCUIT_BREAKER_ACTIVE et
@@ -314,6 +345,11 @@ export function etatDesGardeFous({ paris = [], reglage = REGLAGE_GARDE_FOUS_DEFA
  *     elle y est ramenée et la décision le dit (`misePlafonnee`).
  * Un `tiltState` sans garde-fou (`{}`, `{ circuitBreakerActive: true }`) ne
  * change rien.
+ * Étape 39 (lot 2, 16/11/2026) : quand la décision porte la règle de mise (`regleDeMise`, posée par findValueBet avec
+ * le contexte de l'appelant), la règle a DÉJÀ pris le plus petit des plafonds en euros — la mise maximale par pari, ce
+ * qui reste de la semaine, la mise acceptée connue chez ce bookmaker, le solde déclaré du compte, le plancher. Celui
+ * qui a mordu est NOMMÉ ici (`misePlafonnee`, PLAFONDS_NOMMES) : la mise acceptée connue PLAFONNE le conseil, elle
+ * n'est plus une simple alerte (alertesDuPari continue de signaler le pari que Pierre saisit lui-même).
  */
 export function plafonnerLeConseil(staking, tiltState) {
   if (!staking || typeof staking !== 'object') return staking;
@@ -321,8 +357,8 @@ export function plafonnerLeConseil(staking, tiltState) {
     return tiltState?.coupeCircuit ? { ...staking, coupeCircuit: tiltState.coupeCircuit } : staking;
   }
   const plafond = tiltState?.plafondDeMise ?? null;
-  if (staking.action !== 'RECOMMENDED' || !plafond || !Number.isFinite(plafond.montant) || !Number.isFinite(staking.stake)) return staking;
-  if (staking.stake <= plafond.montant) return staking;
+  if (staking.action !== 'RECOMMENDED' || !Number.isFinite(staking.stake)) return staking;
+  if (!plafond || !Number.isFinite(plafond.montant) || staking.stake <= plafond.montant) return plafondDeLaRegle(staking);
   const pourquoi = plafond.par === 'mise-max' ? 'votre mise maximale par pari' : "ce qui reste avant votre perte maximale de la semaine (mises en attente comprises)";
   return {
     ...staking,

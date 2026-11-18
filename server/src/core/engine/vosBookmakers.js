@@ -18,7 +18,11 @@ export const TITRES_BOOKMAKERS = Object.freeze({
   leovegas_se: 'LeoVegas (SE)',
   tipico_de: 'Tipico (DE)',
   coolbet: 'Coolbet',
-  codere_it: 'Codere (IT)'
+  codere_it: 'Codere (IT)',
+  betclic_fr: 'Betclic',
+  unibet_fr: 'Unibet (FR)',
+  winamax_fr: 'Winamax (FR)',
+  pmu_fr: 'PMU'
 });
 export const titreBookmaker = (cle) => TITRES_BOOKMAKERS[cle] ?? cle;
 

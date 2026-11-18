@@ -29,6 +29,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { preparerCopie, executer, SERVEUR, RACINE_ESSAIS, MANIFESTE_ECHANTILLON } from './aides/isolement.mjs';
+import { EMPREINTE_EN_SERVICE, EMPREINTE_AVANT_LOTS_2 } from './aides/enService.mjs'; // lots 2 (étape 39 lot 2, 16/11) : voir PORTE_1_D_UNE_AUTRE_CANDIDATE
 import * as D from './aides/donneesEcransParis.mjs';
 import { CANDIDATE_EN_ESSAI, empreinteDeLaCandidate, porte1DeLaCandidate } from '../src/core/engine/engineVersions.js';
 import { FIABILITE_SCORE_MODELE_DE_BUTS } from '../src/core/engine/noteDuModeleDeButs.js';
@@ -496,6 +497,17 @@ test('le Repérage : la pastille du régime par match et, sur la colonne 2,5, la
 
 // ================================================================ 4. Réglages
 
+/**
+ * Lots 2 (étape 39 lot 2, 16/11/2026 ; même règle que relaisEtape27.test.mjs, partie 0, P0-1) : la porte 1 du banc d’essai n’est
+ * jointe à la candidate que si son empreinte est celle de la note du modèle de buts (engineVersions.js, porte1DeLaCandidate), et cette
+ * empreinte CONTIENT celle du code du moteur. Dès qu’un lot DÉCLARE une empreinte autre que le départ (les constantes déclarées,
+ * jamais l’empreinte relue par le code), la candidate du code n’est plus celle que le banc a mesurée : l’essai de la carte « avec sa
+ * porte 1 » est sauté avec sa raison. Un moteur changé SANS déclaration le fait encore rougir (avec D4 de declarationsLots2).
+ */
+const PORTE_1_D_UNE_AUTRE_CANDIDATE = (EMPREINTE_EN_SERVICE.moteur !== EMPREINTE_AVANT_LOTS_2.moteur || EMPREINTE_EN_SERVICE.candidate !== EMPREINTE_AVANT_LOTS_2.candidate)
+  ? 'la porte 1 du banc a été mesurée pour la candidate de l’essai 27 (empreinte du départ) : depuis une version neuve du moteur, la candidate du code n’est plus celle-là'
+  : null;
+
 /** La candidate telle que GET /api/config/versions la donne (vueDeLaCandidate), à un moment de son essai. */
 function candidateAuMoment({ essai = null, premiersChiffres = null, jugement = null } = {}) {
   const c = CANDIDATE_EN_ESSAI;
@@ -533,7 +545,7 @@ const JUGEMENT = {
   regimes: PREMIERS.regimes
 };
 
-test('Réglages › la carte de la candidate du modèle de buts : la porte 1 du banc et sa réserve ACCEPTÉE telle quelle, un chiffre par famille, la calibration, les régimes, la porte de l’adoption, l’horizon et « pas prouvé est l’issue normale »', options, async () => {
+test('Réglages › la carte de la candidate du modèle de buts : la porte 1 du banc et sa réserve ACCEPTÉE telle quelle, un chiffre par famille, la calibration, les régimes, la porte de l’adoption, l’horizon et « pas prouvé est l’issue normale »', { ...options, skip: options.skip || PORTE_1_D_UNE_AUTRE_CANDIDATE || false }, async () => {
   const { rendre, composants } = contexte;
   // Avant la mise à blanc.
   const declaree = candidateAuMoment();

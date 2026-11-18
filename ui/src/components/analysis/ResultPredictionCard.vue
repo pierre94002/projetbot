@@ -123,6 +123,8 @@ const value = computed(() => {
     case 'aucun_bookmaker_autorise': return { ton: 'neutre', texte: 'Aucun de vos bookmakers ne propose ce match.' };
     case 'bookmakers_juges': return { ton: 'neutre', texte: 'Vos bookmakers ont eux-mêmes fixé la cote juste de ce match : aucun pari possible contre eux.' };
     case 'cotes_incoherentes': return { ton: 'alerte', texte: 'Les cotes de vos bookmakers sont incohérentes pour ce match, sans doute périmées : aucun pari recommandé.' };
+    // Étape 38 (lot 2a) : le contrôle quotidien marque ce match « à vérifier » — aucun conseil, la raison dite quand le serveur l'a.
+    case 'a_verifier': return { ton: 'alerte', camp: s.conseilRefuse?.outcome ?? null, texte: `Ce match est marqué « à vérifier »${s.aVerifier?.texte ? ` (${s.aVerifier.texte})` : ''} : aucun pari recommandé tant que ses données ne sont pas vérifiées.` };
     default: return { ton: 'neutre', texte: 'Aucun pari recommandé.' };
   }
 });

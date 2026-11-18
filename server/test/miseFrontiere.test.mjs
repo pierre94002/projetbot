@@ -281,6 +281,9 @@ function atteints(depart) {
   return vus;
 }
 
+/** Étape 39, lot 2 : la règle de mise recopiée dans le moteur (le seul fichier neuf du lot sous core/). */
+const FICHIER_DU_LOT_2 = 'core/engine/stakeSizing.js';
+
 test('T-X1 les empreintes ne bougent pas ; rien de l’étape 39 sous core/ ni sports/ ni dans l’empreinte ; data/mise/ = les trois fichiers du lot 1a et les deux du banc (lot 1b)', () => {
   assert.equal(empreinteDuCode({ rafraichir: true }).empreinte, EMPREINTE_EN_SERVICE.moteur); // Partie 0 des lots 2 (A)
   assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), EMPREINTE_EN_SERVICE.candidate); // Partie 0 des lots 2 (A)
@@ -290,7 +293,11 @@ test('T-X1 les empreintes ne bougent pas ; rien de l’étape 39 sous core/ ni s
   for (const racine of ['core', 'sports']) {
     for (const f of tousLesFichiers(path.join(SRC, racine))) {
       const r = `${racine}/${f.split(path.sep).join('/')}`;
+      // Étape 39, lot 2 (16/11/2026) : LE fichier de la règle de mise dans le moteur, et lui seul (miseLot2.test.mjs, T-L2-0 : son corps = regleDeMise.js).
+      if (r === FICHIER_DU_LOT_2) continue;
       assert.doesNotMatch(r, /mise|capital|stakeSizing/i, `${r} : un fichier de l’étape 39 sous ${racine}/`);
+      // Étape 38, lot 2a (16/11/2026) : ses trois fichiers neufs dans l'empreinte (combinaisonFrontiere.test.mjs, T-X1 ; combinaisonLot2.test.mjs).
+      if (['core/engine/combiner.js', 'core/engine/confidence.js', 'core/engine/poidsDeLaCombinaison.js'].includes(r)) continue;
       if (/^core\/(engine|market|model|risk|signals|xg)\//.test(r) || r.startsWith('sports/')) assert.ok(gelesSousCore.has(r), `${r} : un fichier neuf dans l’empreinte`);
     }
   }
@@ -462,7 +469,8 @@ const CHAINES = Object.freeze({
   'api/controllers/analysis.controller.js': [
     'findAdaptedMatch(source, req.params.matchId, bankroll)',
     'enrichMatchWithRealAverages(match, { includeCorners, cornersSampleSize })',
-    'analyzeMatch(avecFraicheur, getEngineConfig(sportId), getTiltState(), getSport(sportId))',
+    // Étape 39, lot 2 (16/11/2026) : le match donné au moteur porte ce que le contrôleur a lu pour la mise (le reste de la chaîne : à l'octet).
+    'analyzeMatch({ ...avecFraicheur, contexteDeMise: contexteDuMoteur(contexteMise, avecFraicheur) }, getEngineConfig(sportId), getTiltState(), getSport(sportId))',
     'fraicheurDuMatch(finalMatch)',
     'aVerifierDuMatchAnalyse(avecFraicheur)',
     'simulationDuMatchAnalyse(avecFraicheur, analyse, getEngineConfig(sportId))',

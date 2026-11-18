@@ -23,6 +23,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { preparerCopie, executer, SERVEUR, FIXTURES } from './aides/isolement.mjs';
+import { EMPREINTE_EN_SERVICE, EMPREINTE_AVANT_LOTS_2 } from './aides/enService.mjs'; // lots 2 (étape 39 lot 2, 16/11) : (A) de la partie 0
 
 const SCRIPT = path.join(SERVEUR, 'test', 'aides', 'script-reactivite-essai.mjs');
 const SRC = path.join(SERVEUR, 'src');
@@ -33,7 +34,9 @@ const SEUIL_MS = 300;
  * le 24/10/2026 par le script de la mesure, src du bac avant toute retouche) — premiers chiffres, jugement principal,
  * calibration, familles, porte de sûreté, régimes, témoin du score. Le code coopératif doit le redonner à l'identique.
  */
-const FIGE = JSON.parse(fs.readFileSync(path.join(FIXTURES, 'essai-reactivite-fige.json'), 'utf8'));
+// Lots 2 (étape 39 lot 2, 16/11/2026 ; (A) de la partie 0) : la référence figée porte l'empreinte de la candidate du DÉPART (elle contient
+// celle du code du moteur) ; on la lit avec l'empreinte EN SERVICE à sa place — la fixture, historique, n'est jamais touchée.
+const FIGE = JSON.parse(fs.readFileSync(path.join(FIXTURES, 'essai-reactivite-fige.json'), 'utf8').split(EMPREINTE_AVANT_LOTS_2.candidate).join(EMPREINTE_EN_SERVICE.candidate));
 const DEPUIS = '2026-09-23T20:00:00.000Z';
 const A_L_HORIZON = '2026-10-19T03:00:00.000Z';
 const AVANT_L_HORIZON = '2026-10-12T03:00:00.000Z';

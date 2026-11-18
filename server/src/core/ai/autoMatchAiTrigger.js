@@ -55,6 +55,7 @@ import { isClaudeCodeAuthenticated } from './claudeCodeClient.js';
 import { modeBudget, lireFavoris, estFavori, favorisDabord, noterEffetEconome } from './claudeBudget.js';
 import { gelerAnalyse, ORIGINES } from '../../data/enregistreurs/gelPronostics.js';
 import { env } from '../../config/env.js';
+import { preparerAVerifierDuConseilParNoms, avecAVerifierPourLeMoteur } from '../../data/aVerifierPourLeMoteur.js';
 
 const FENETRE_AVANT_MATCH_MS = 48 * 60 * 60 * 1000;
 /**
@@ -99,8 +100,11 @@ const PANNES_CONSECUTIVES_MAX = 3;
 // un gel raté n'empêche jamais l'analyse.
 async function calculerEngineResult(match, { lineups = null, origine = ORIGINES.avance } = {}) {
   const enrichi = await enrichMatchWithRealAverages(match, { sansRepliPayant: true });
-  const engineResult = await analyzeMatch(enrichi, getEngineConfig('football'), getTiltState(), getSport('football'));
-  if (env.enregistreurs?.enabled && env.matchStatsRefresh.enabled) gelerAnalyse({ match, engineResult, lineups, origine });
+  // Étape 38 (lot 2a, 16/11/2026) : aucun conseil de pari sur un match « à vérifier » — la donnée du contrôle quotidien est
+  // jointe au match donné au moteur (data/aVerifierPourLeMoteur.js) ; l'IA lit alors « aucun pari conseillé », comme la page.
+  const aVerifier = preparerAVerifierDuConseilParNoms()(enrichi);
+  const engineResult = await analyzeMatch(avecAVerifierPourLeMoteur(enrichi, aVerifier), getEngineConfig('football'), getTiltState(), getSport('football'));
+  if (env.enregistreurs?.enabled && env.matchStatsRefresh.enabled) gelerAnalyse({ match, engineResult, lineups, origine, aVerifier });
   return engineResult;
 }
 

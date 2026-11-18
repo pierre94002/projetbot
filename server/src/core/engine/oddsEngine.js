@@ -8,6 +8,7 @@ import { stakingDuMatch, verdictsDuMatch, comparateurDuMatch } from './verdictPa
 import { predictScore } from './scorePrediction.js';
 import { numeroDeVersion } from './engineVersions.js';
 import { reglagesDuModeleDeButs, modeleDeButs } from './goalModel.js';
+import { combinerLe1N2 } from './combiner.js';
 
 const EXPECTED_GOALS_BOUNDS = { min: 0.5, max: 2.8 };
 
@@ -118,12 +119,15 @@ export async function analyzeMatch(match, config, tiltState, sport, { maintenant
   // point donné au modèle de buts dégradait la prévision. Over 2.5 / BTTS
   // n'ont pas d'équivalent marché dans cette app (seules les cotes 1N2 sont
   // ingérées) : dérivés de P_exogène, le modèle de buts corrigé.
-  const weights = config.weights;
-  const resultat = {
-    home: weights.market * marketProbHome + weights.structural * probabilitiesStructural.home + weights.exogenous * probabilitiesExogenous.home,
-    draw: weights.market * marketProbDraw + weights.structural * probabilitiesStructural.draw + weights.exogenous * probabilitiesExogenous.draw,
-    away: weights.market * marketProbAway + weights.structural * probabilitiesStructural.away + weights.exogenous * probabilitiesExogenous.away
-  };
+  // Étape 38 (lot 2a, 16/11/2026) : cette fusion vit dans combiner.js (combinerLe1N2), la même expression dans le même
+  // ordre ; les β de la combinaison (poidsDeLaCombinaison.js, recopiés par script) sont tous nuls : le résultat est
+  // celui d'avant, à l'octet (test/combinaisonLot2.test.mjs, T-L2-1).
+  const resultat = combinerLe1N2({
+    marche: [marketProbHome, marketProbDraw, marketProbAway],
+    structurel: probabilitiesStructural,
+    exogene: probabilitiesExogenous,
+    fusion: config.weights
+  });
   // Étape 27 : avec la clé, les marchés de buts et le score sortent de la grille du modèle de buts unique, calée
   // sur la MÊME référence 1N2 que le pronostic du résultat ; le combiné reste aligné sur le 1N2 final. Les entrées
   // (forces, moyennes du championnat, plus/moins relevé avant `maintenant`) : posées par le banc, sinon lues dans le

@@ -7,7 +7,7 @@ import {
   SUBMIT_PRE_MATCH_ANALYSIS_TOOL,
   SUBMIT_POST_MATCH_REVIEW_TOOL
 } from './matchAiAnalysisPrompt.js';
-import { FICHES, formeDeLaFiche, marchesPourIA, cleMarche, rattacherAuxMarches } from './compactContext.js';
+import { FICHES, formeDeLaFiche, marchesPourIA, cleMarche, rattacherAuxMarches, stakingSansEuros, baseDuCalculDe } from './compactContext.js';
 import { lireDeroule } from './derouleDuMatch.js';
 import { commentaireDuMatch } from '../../data/providers/fotMobCommentaire.js';
 import { env } from '../../config/env.js';
@@ -231,14 +231,24 @@ function resumeDuMoteur(engineResult) {
  * relit depuis sa mémoire cache (l'ancienne fiche doit revenir à l'octet).
  */
 function avecLaVersion(engineSummary, engineResult) {
+  // Étape 39 (lot 2) : la base du calcul de la mise (compactContext.js, baseDuCalculDe) — gardée, jamais envoyée à l'IA.
   const v = engineResult?.engineVersion;
-  return Number.isInteger(v) && v >= 1 ? { ...engineSummary, engineVersion: v } : engineSummary;
+  const avecLaBase = { ...engineSummary, baseDuCalcul: baseDuCalculDe(engineResult) };
+  return Number.isInteger(v) && v >= 1 ? { ...avecLaBase, engineVersion: v } : avecLaBase;
 }
 
-/** Le résumé du moteur tel que l'IA le lit : sans le numéro de version du moteur (étape 25). */
+/**
+ * Le résumé du moteur tel que l'IA le lit : sans le numéro de version du moteur (étape 25), ni la base du calcul de la
+ * mise, ni le détail de la règle de mise dont les raisons citent les plafonds en euros de Pierre (étape 39, lot 2 : ces
+ * deux champs sont neufs, l'IA ne les a jamais lus — le message de la revue reste celui d'avant, à l'octet).
+ */
 function pourIA(engineSnapshot) {
   if (!engineSnapshot || typeof engineSnapshot !== 'object') return engineSnapshot;
-  const { engineVersion, ...resume } = engineSnapshot;
+  const { engineVersion, baseDuCalcul, ...resume } = engineSnapshot;
+  if (resume.staking && typeof resume.staking === 'object' && 'regleDeMise' in resume.staking) {
+    const { regleDeMise, ...staking } = resume.staking;
+    return { ...resume, staking };
+  }
   return resume;
 }
 
@@ -609,7 +619,8 @@ export async function preparerAnalyseAvantMatch({ matchId, home, away, league, e
     // L'ancienne forme est celle d'avant l'étape 41, octet pour octet : jamais filtrée par le carnet (étape 21).
     if (compo) context.lineups = compositionPourIA(compo);
     marches = engineSummary.marketPredictions;
-    demande = buildPreMatchAnalysisRequest({ home, away, league, engineSummary, context, experience });
+    // Étape 39 (lot 2) : la décision du moteur y passe par le même filtre que la fiche compacte — aucun euro, la part du capital.
+    demande = buildPreMatchAnalysisRequest({ home, away, league, engineSummary: { ...engineSummary, staking: stakingSansEuros(engineSummary.staking) }, context, experience });
   } else {
     // Étape 21 : les types de marché où l'IA n'apporte rien (carnet de la nuit) sortent de sa liste — et de son
     // bilan, inutile pour des marchés qu'elle ne commente plus ; une ligne de la fiche le lui dit. Carnet absent

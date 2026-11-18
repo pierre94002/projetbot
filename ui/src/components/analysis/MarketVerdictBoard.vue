@@ -187,6 +187,7 @@ function titreDeLaCote(l) {
               :cote="l.saisie.cote"
               :regle="lu.regle"
               :fraicheur="l.saisie.fraicheur"
+              :a-verifier="l.saisie.aVerifier ?? null"
               :bookmaker="l.saisie.bookmakerTitre"
               :precision="precisionDeLaSaisie(l.saisie)"
             />

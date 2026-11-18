@@ -624,7 +624,7 @@ test('la nuit : l’étape « indiceForce » après « connaitreMarche » et ava
   assert.equal(n.premier.details.mode, 'premier');
   assert.equal(n.premier.status, 'ok');
   // Les nombres de fr-FR séparent les milliers par une espace fine insécable (U+202F) : \s la couvre.
-  assert.match(n.premier.summary, /^Premier calcul : \d+ championnats, [\d\s]+ lignes écrites \([\d\s]+ lignes actuelles\), 0 retirée en .* \(rejeu à part .*, \d+ Mo chez lui ; rangement .*, le serveur jamais tenu plus de \d+ ms d'affilée\) ; [\d\s]+ rencontres utilisées, .*\. Proposé seulement : le moteur ne lit pas l’indice\.$/u);
+  assert.match(n.premier.summary, /^Premier calcul : \d+ championnats, [\d\s]+ lignes écrites \([\d\s]+ lignes actuelles\), 0 retirée en .* \(rejeu à part .*, \d+ Mo chez lui ; rangement .*, le serveur jamais tenu plus de [\d\s]+ ms d'affilée\) ; [\d\s]+ rencontres utilisées, .*\. Proposé seulement : le moteur ne lit pas l’indice\.$/u);
   assert.ok(n.premier.lignes > 1000, `${n.premier.lignes} lignes`);
   assert.equal(n.premier.lignes, n.comptes.premier.lignes, 'les lignes écrites sont dans la table');
   assert.deepEqual(n.due, { aujourdhui: false, hier: true, clic: true, autresReglages: true, enCours: true });

@@ -37,6 +37,7 @@
  */
 
 import { removeMargin } from '../market/marginRemoval.js';
+import { partDeMise, fractionDeMise, REGLE_DE_MISE_V1, LIVRES_FRANCAIS } from './stakeSizing.js';
 
 const ISSUES = [
   { outcome: 'home', champ: 'odds1', index: 0 },
@@ -164,6 +165,53 @@ function ligneSaine(b) {
 }
 
 /**
+ * LA MISE DU CONSEIL (étape 39, lot 2, 16/11/2026) — une seule règle : stakeSizing.js.
+ *   - SANS contexte (le banc, les passes de la nuit, l'analyse IA automatique) : partDeMise × la base, arrondie au
+ *     centime — la mise d'avant le lot 2 À L'OCTET (miseLot2.test.mjs, T-L2-1 et T-L2-2). Rien d'autre n'est rendu.
+ *   - AVEC le contexte que l'APPELANT a lu (`contexteDeMise` : le capital du moment, les paris en attente sur ce match,
+ *     les plafonds en euros de Pierre, les fiches de ses comptes, son plancher) : fractionDeMise en entier, dans son
+ *     ordre fixe — les paris liés du même match (« la place qui reste »), la mention d'un bookmaker français, puis
+ *     le plus petit des plafonds en euros, chacun nommé. La décision porte alors `regleDeMise` (la part, les raisons).
+ * Cette fonction ne lit AUCUN fichier : ni le capital, ni le carnet, ni une fiche (T-L2-3).
+ * Exportée pour data/mise/miseRead.js (stakingDuConseil), qui refait sur le capital de Pierre les euros d'un conseil du
+ * Repérage ou des Opportunités : le MÊME calcul que la page du match, au centime (`choix` : { ev, odds, bookmaker,
+ * bookmakerTitle } ; `config` : kellyFraction et maxStakePercent du réglage en vigueur).
+ */
+const PLAFONDS_EN_EUROS = Object.freeze(['mise-max', 'perte-semaine', 'mise-acceptee', 'solde-declare', 'plancher']);
+
+export function miseDuConseil(choix, config, bankroll, contexteDeMise) {
+  const reglageMoteur = { kellyFraction: config.kellyFraction, maxStakePercent: config.maxStakePercent };
+  const surLaBase = (f) => Number(Math.max(0, Number(bankroll) * f).toFixed(2));
+  if (!contexteDeMise || typeof contexteDeMise !== 'object') {
+    return { stake: surLaBase(partDeMise({ ev: choix.ev, cote: choix.odds, reglageMoteur })), regleDeMise: null };
+  }
+  const r = fractionDeMise({
+    decision: 'RECOMMENDED',
+    ev: choix.ev,
+    cote: choix.odds,
+    livre: { cle: choix.bookmaker, titre: choix.bookmakerTitle, francais: LIVRES_FRANCAIS.includes(choix.bookmaker) },
+    nature: 'simple',
+    marcheAvecValue: true,
+    enAttenteDuMatch: contexteDeMise.enAttenteDuMatch ?? [],
+    enAttenteDuJour: contexteDeMise.enAttenteDuJour ?? [],
+    reglageMoteur,
+    regle: REGLE_DE_MISE_V1,
+    gardeFous: contexteDeMise.gardeFous ?? null,
+    compte: contexteDeMise.comptes?.[choix.bookmaker] ?? null,
+    capital: contexteDeMise.capital ?? null,
+    coupeCircuit: false,
+    creuxDePierre: contexteDeMise.plancher ?? null
+  });
+  // Avec le capital de Pierre : les euros de la règle (son arrondi, jamais un centime au-dessus d'un plafond). Sans
+  // lui : la part sur la base interne de l'appelant (un nombre de calcul, jamais rendu par l'API).
+  // Le plafond en euros qui a mordu (un seul : le plus petit) : son code, la mise d'avant lui et la mise ramenée — les
+  // garde-fous le nomment (core/risk/gardeFous.js, plafonnerLeConseil → `misePlafonnee`).
+  const mordu = r.euros !== null ? r.raisons.find((x) => PLAFONDS_EN_EUROS.includes(x.code) && x.apres < x.avant) : null;
+  const plafond = mordu ? { par: mordu.code, mise: Number((mordu.avant * contexteDeMise.capital.montant).toFixed(2)), plafond: r.euros } : null;
+  return { stake: r.euros !== null ? r.euros : surLaBase(r.f), regleDeMise: { regle: REGLE_DE_MISE_V1.id, f: r.f, fKelly: r.fKelly, raisons: r.raisons, plafond } };
+}
+
+/**
  * @param {object} p
  * @param {Array}  p.byBookmaker   cotes par bookmaker [{ key, title, odds1, oddsDraw, odds2 }]
  * @param {number[]} p.fair        probabilités justes [domicile, nul, extérieur]
@@ -172,8 +220,11 @@ function ligneSaine(b) {
  * @param {object} p.tiltState     coupe-circuit
  * @param {number} p.bankroll      bankroll de référence pour la mise
  * @param {object} p.labels        libellés { home, draw, away }
+ * @param {object|null} p.contexteDeMise  étape 39, lot 2 : ce que l'APPELANT a lu pour la mise ({ capital: { indique,
+ *                                 montant, plusHaut }, enAttenteDuMatch, gardeFous, comptes, plancher }) ; absent : la
+ *                                 mise d'avant, à l'octet
  */
-export function findValueBet({ byBookmaker = [], fair, referenceKeys = [], config, tiltState = {}, bankroll, labels = {} }) {
+export function findValueBet({ byBookmaker = [], fair, referenceKeys = [], config, tiltState = {}, bankroll, labels = {}, contexteDeMise = null }) {
   if (tiltState.circuitBreakerActive) return { action: 'CIRCUIT_BREAKER_ACTIVE', stake: null, candidates: [] };
   const limites = {
     edgeThresholdMin: config.edgeThresholdMin,
@@ -240,9 +291,8 @@ export function findValueBet({ byBookmaker = [], fair, referenceKeys = [], confi
   }
   const choix = eligibles.reduce((m, c) => (c.ev > m.ev ? c : m));
 
-  // Kelly fractionné : fraction × avantage / (cote − 1), plafonné.
-  const kelly = (config.kellyFraction * choix.ev) / (choix.odds - 1);
-  const stake = Math.min(Number(bankroll) * kelly, Number(bankroll) * config.maxStakePercent);
+  // Kelly fractionné : fraction × avantage / (cote − 1), plafonné — la règle de mise unique (stakeSizing.js).
+  const { stake, regleDeMise } = miseDuConseil(choix, config, bankroll, contexteDeMise);
 
-  return { action: 'RECOMMENDED', stake: Number(Math.max(0, stake).toFixed(2)), ...choix, candidates, limits: limites };
+  return { action: 'RECOMMENDED', stake, ...choix, candidates, limits: limites, ...(regleDeMise ? { regleDeMise } : {}) };
 }

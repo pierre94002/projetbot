@@ -11,7 +11,8 @@ import { openDb } from '../../data/db/matchStatsDb.js';
 import { simulationDuMatch } from '../../data/simulation/simulationRead.js';
 import { lancementDe } from '../../bench/trialsRegistry.js';
 import { contexteDuMatch } from '../../data/contexte/contexteRead.js';
-import { contexteDeLaMise, analyseAvecLaMise } from '../../data/mise/miseRead.js';
+import { contexteDeLaMise, contexteDuMoteur, analyseAvecLaMise } from '../../data/mise/miseRead.js';
+import { preparerAVerifierDuConseilParNoms, avecAVerifierPourLeMoteur } from '../../data/aVerifierPourLeMoteur.js';
 
 /**
  * Analyse un match existant d'une source de données, par son identifiant.
@@ -27,6 +28,16 @@ import { contexteDeLaMise, analyseAvecLaMise } from '../../data/mise/miseRead.js
  * Étape 39 (lot 1a) : la base de la mise vient du capital de Pierre (data/mise/capitalDePierre.js), JAMAIS de la requête
  * (`bankroll` n'y est plus lu) ; la réponse porte `mise` (la part du capital, les euros seulement sur son capital réglé)
  * et, sans capital, aucun euro calculé sur la base interne (data/mise/miseRead.js, analyseAvecLaMise).
+ *
+ * Étape 39 (lot 2, 16/11/2026) : UNE SEULE RÈGLE DE MISE. Ce que ce contrôleur a lu pour la mise (capital du moment, paris
+ * en attente sur ce match, plafonds en euros, fiches des comptes, plancher) accompagne le match DONNÉ AU MOTEUR
+ * (`contexteDeMise`, data/mise/miseRead.js, contexteDuMoteur) : le moteur applique la règle entière sans rien lire
+ * lui-même. Les autres lectures du match (simulation, contexte, cartons…) ne reçoivent pas ce contexte.
+ *
+ * Étape 38 (lot 2a, 16/11/2026 ; décision de Pierre du 15/11) : AUCUN CONSEIL DE PARI SUR UN MATCH « À VÉRIFIER ». Ce que le
+ * contrôle quotidien dit de ce match pour le pari conseillé (data/aVerifierPourLeMoteur.js) est joint au match AVANT
+ * l'analyse (`aVerifier`) : le moteur refuse alors le conseil sans rien lire lui-même (core/engine/verdictPari.js,
+ * sansConseilAVerifier). Le bandeau « à vérifier » de la réponse (toutes familles) reste calculé après, comme avant.
  */
 export async function analyzeMatchById(req, res) {
   const source = req.query.source || 'odds-api';
@@ -44,9 +55,11 @@ export async function analyzeMatchById(req, res) {
     ? await enrichMatchWithRealAverages(match, { includeCorners, cornersSampleSize })
     : match;
   // Le jeu de test (source « sample ») n'a ni relevé ni archive : rien à juger.
-  const avecFraicheur = source === 'odds-api' ? { ...finalMatch, fraicheurCotes: fraicheurDuMatch(finalMatch) } : finalMatch;
+  const avecHeures = source === 'odds-api' ? { ...finalMatch, fraicheurCotes: fraicheurDuMatch(finalMatch) } : finalMatch;
+  // Étape 38 (lot 2a) : « à vérifier » pour le pari conseillé, joint au match donné au moteur (aucune clé de plus sans raison).
+  const avecFraicheur = avecAVerifierPourLeMoteur(avecHeures, sportId === 'football' ? preparerAVerifierDuConseilParNoms()(avecHeures) : null);
 
-  const analyse = await analyzeMatch(avecFraicheur, getEngineConfig(sportId), getTiltState(), getSport(sportId));
+  const analyse = await analyzeMatch({ ...avecFraicheur, contexteDeMise: contexteDuMoteur(contexteMise, avecFraicheur) }, getEngineConfig(sportId), getTiltState(), getSport(sportId));
   const aVerifier = aVerifierDuMatchAnalyse(avecFraicheur);
   // Étape 28 : le bloc de la simulation, APRÈS l'analyse (le verdict n'en sait rien, l'IA ne le reçoit jamais).
   const simulation = sportId === 'football' ? simulationDuMatchAnalyse(avecFraicheur, analyse, getEngineConfig(sportId)) : null;

@@ -7,7 +7,8 @@
  * par eux (les versions 4 et 5 de Pierre). Les matchs cibles de la base d'essai (12 avec cotes, 8 sans), présentés
  * au moteur comme dans script-pronostics.mjs ; pour chacun, analyzeMatch avec les réglages en service (les valeurs
  * par défaut de la copie) SANS puis AVEC le modèle de buts unique (la clé `modeleDeButs` de la candidate de
- * l'étape 27), puis avec CHACUNE des 7 clés changée : tout ce qui est une probabilité (distributions, attendus,
+ * l'étape 27), puis avec CHACUNE des clés changée (6 depuis le lot 2 de l'étape 39), puis avec 5 CONTEXTES DE MISE
+ * (étape 39, lot 2 : capital, paris en attente sur le match, plafonds en euros, fiches de comptes, plancher) : tout ce qui est une probabilité (distributions, attendus,
  * buts attendus, cotes justes, 1N2, pronostics de marché et leur distribution gelée, modèle de buts) doit rester
  * identique à l'octet. Témoin : un réglage qui change les probabilités (defaultCorrelation sans le modèle de buts,
  * rho avec) doit, lui, changer quelque chose. Sortie : une ligne JSON.
@@ -17,6 +18,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { pathToFileURL } from 'node:url';
+import { contexteFabrique } from './miseFabrique.mjs';
 
 const [serveur, fichierManifeste] = process.argv.slice(2);
 const imp = (rel) => import(pathToFileURL(path.join(serveur, 'src', rel)).href);
@@ -79,7 +81,7 @@ function probabilites(r) {
 }
 
 /** Une valeur changée pour chaque réglage de pari (valide, différente de celle en service). */
-const CHANGEES = { edgeThresholdMin: 0.07, edgeThresholdMax: 0.6, valueBookmakers: ['pinnacle', 'unibet_fr'], maxValueOdds: 2.1, kellyFraction: 0.5, maxStakePercent: 0.1, maxExpectedRateGap: 0.05 };
+const CHANGEES = { edgeThresholdMin: 0.07, edgeThresholdMax: 0.6, valueBookmakers: ['pinnacle', 'unibet_fr'], maxValueOdds: 2.1, kellyFraction: 0.5, maxStakePercent: 0.1 };
 
 const manifeste = JSON.parse(fs.readFileSync(fichierManifeste, 'utf8'));
 const avecCotes = manifeste.cibles.filter((c) => c.cotes).slice(0, 12);
@@ -94,7 +96,7 @@ const REGIMES = {
 };
 const sortie = { ok: true, cles: [...REGLAGES_DE_PARI], cibles: { avecCotes: avecCotes.length, sansCotes: sansCotes.length }, regimes: {} };
 for (const [nom, regime] of Object.entries(REGIMES)) {
-  const r = { analyses: 0, identiques: Object.fromEntries(REGLAGES_DE_PARI.map((k) => [k, 0])), differents: Object.fromEntries(REGLAGES_DE_PARI.map((k) => [k, []])), temoinChange: 0, pronostics: 0, avecProvenance: 0 };
+  const r = { analyses: 0, identiques: Object.fromEntries(REGLAGES_DE_PARI.map((k) => [k, 0])), differents: Object.fromEntries(REGLAGES_DE_PARI.map((k) => [k, []])), temoinChange: 0, pronostics: 0, avecProvenance: 0, contexte: { identiques: 0, differents: [] } };
   for (const cible of [...avecCotes, ...sansCotes]) {
     const ligne = lire.get(cible.cle);
     if (!ligne) throw new Error(`Cible absente : ${cible.cle}`);
@@ -109,6 +111,12 @@ for (const [nom, regime] of Object.entries(REGIMES)) {
       const apres = probabilites(await analyzeMatch(enrichi, reglages, tilt, sport, { maintenant: MAINTENANT }));
       if (apres === avant) r.identiques[cle]++;
       else r.differents[cle].push({ cle: cible.cle, avant: sha1(avant).slice(0, 12), apres: sha1(apres).slice(0, 12) });
+    }
+    // Étape 39, lot 2 : le même match donné au moteur AVEC ce qu'un appelant a lu pour la mise — les probabilités ne bougent pas.
+    for (let k = 1; k <= 5; k++) {
+      const apres = probabilites(await analyzeMatch({ ...enrichi, contexteDeMise: contexteFabrique(k, 10000) }, regime.reglages, tilt, sport, { maintenant: MAINTENANT }));
+      if (apres === avant) r.contexte.identiques++;
+      else r.contexte.differents.push({ cle: cible.cle, contexte: k, avant: sha1(avant).slice(0, 12), apres: sha1(apres).slice(0, 12) });
     }
     if (probabilites(await analyzeMatch(enrichi, regime.temoin, tilt, sport, { maintenant: MAINTENANT })) !== avant) r.temoinChange++;
   }

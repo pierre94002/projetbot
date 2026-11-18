@@ -40,6 +40,8 @@ import { conseilDeReleve } from '../src/data/conseilReleve.js';
 import { TRACKED_SPORT_KEYS, NOMS_DES_CLES } from '../src/data/providers/oddsApiCompetitions.js';
 import { bilanDuReleve } from '../src/data/repositories/relevePayantRepository.js';
 import { FOTMOB_LEAGUES } from '../src/data/providers/fotMobProvider.js';
+import { preparerAVerifierParFamille } from '../src/data/aVerifierPourLeMoteur.js';
+import { aVerifierDuMatch } from '../src/data/db/dailyChecks.js';
 
 const UI_SRC = path.resolve(SERVEUR, '..', 'ui', 'src');
 const fichierRegles = path.join(UI_SRC, 'utils', 'langageParis.js');
@@ -400,6 +402,83 @@ test('saisie : la value = probabilité du moteur × cote − 1, jugée par les s
   // Un bookmaker décoché depuis la saisie : plus jouable.
   const decoche = S.valueDeLaSaisie({ saisie: { bookmaker: 'williamhill', marketId: 'totalGoals', sens: 'over', ligne: 2.5 }, cote: 1.95, releveAt: '2026-10-05T11:58:00Z', resultat: RESULTAT, config: { ...CONFIG, valueBookmakers: ['betsson'] }, reglage: R, maintenant: MAINTENANT, coupDEnvoi: null, heureSure: false });
   assert.deepEqual([decoche.jouable, decoche.verdict], [false, 'non-jouable']);
+});
+
+// Correction du 17/11/2026 (vérification des lots d'argent, « à vérifier » C4 ; décision de Pierre D5) : la value d'une cote
+// SAISIE est un conseil comme une autre — elle lit « à vérifier » pour la famille de SON marché.
+const ETAT_CORNERS_DOUTEUX = { aVerifier: { clubs: { 'fotmob-1': [{ id: 'essai-corners', controle: 'chiffres-equipe', texte: 'Statistiques impossibles : A – B du 20/09/2026 (fabriqué)', date: '2026-09-20', familles: ['corners', 'tirs'] }] }, ligues: {}, global: [] } };
+
+test('« à vérifier » (D5) : une cote SAISIE lit le contrôle pour la famille de SON marché — des corners douteux retirent la value d’une cote de corners (jamais verte, la raison jointe), pas celle d’une cote de buts', () => {
+  const parFamille = preparerAVerifierParFamille({ verifier: (x) => aVerifierDuMatch(ETAT_CORNERS_DOUTEUX, x) });
+  const ids = { league: 'EPL', date: '2026-10-06', homeId: 'fotmob-1', awayId: 'fotmob-2' };
+  const aVerifierDuMarche = (famille) => parFamille(ids, famille);
+  const v = (saisie, cote, extra = {}) =>
+    S.valueDeLaSaisie({ saisie: { bookmaker: 'williamhill', equipe: null, joueur: null, ...saisie }, cote, releveAt: '2026-10-05T11:58:00Z', resultat: RESULTAT, config: CONFIG, reglage: R, maintenant: MAINTENANT, coupDEnvoi: '2026-10-06T19:00:00Z', heureSure: true, ...extra });
+  // Une cote de BUTS, même état du contrôle : la value gardée, à l'octet (aucune clé de plus).
+  const buts = { marketId: 'totalGoals', sens: 'over', ligne: 2.5 };
+  const butsAvec = v(buts, 1.95, { aVerifierDuMarche });
+  assert.equal(butsAvec.verdict, 'value', 'des corners douteux ne retirent pas la value d’une cote de buts');
+  assert.deepEqual(butsAvec, v(buts, 1.95));
+  // Une cote de CORNERS (+10 % face au moteur) : value sans contrôle, refusée avec des corners douteux.
+  const corners = { marketId: 'totalCorners', sens: 'over', ligne: 9.5 };
+  const p = S.probabiliteDuMoteur(RESULTAT, { ...corners, bookmaker: 'williamhill' }).probabilite;
+  assert.ok(p > 0.2 && p < 1, `probabilité du moteur : ${p}`);
+  const cote = Number((1.1 / p).toFixed(2));
+  const libre = v(corners, cote);
+  assert.equal(libre.verdict, 'value');
+  assert.ok(!('aVerifier' in libre));
+  const refusee = v(corners, cote, { aVerifierDuMarche });
+  assert.equal(refusee.verdict, 'value-secondaire', 'une value sur un marché « à vérifier » n’est jamais verte');
+  assert.deepEqual(refusee.aVerifier, { texte: 'Statistiques impossibles : A – B du 20/09/2026 (fabriqué)' });
+  assert.deepEqual([refusee.pourcent, refusee.bornes, refusee.moteur, refusee.jouable], [libre.pourcent, libre.bornes, libre.moteur, libre.jouable], 'l’avantage reste dit');
+  // Les tirs (la même raison) : refusés aussi ; un verdict déjà non vert reste tel quel, la raison jointe.
+  const tirs = v({ marketId: 'totalShots', sens: 'over', ligne: 20.5 }, 1.9, { aVerifierDuMarche });
+  assert.notEqual(tirs.verdict, 'value');
+  const sousLeSeuil = v(corners, Number((1.01 / p).toFixed(2)), { aVerifierDuMarche });
+  assert.equal(sousLeSeuil.verdict, 'sous-seuil');
+  assert.ok(sousLeSeuil.aVerifier);
+  // Une lecture qui lève, ou rien à dire : la value d'avant.
+  assert.equal(v(corners, cote, { aVerifierDuMarche: () => { throw new Error('contrôle illisible'); } }).verdict, 'value');
+  assert.deepEqual(v(corners, cote, { aVerifierDuMarche: () => null }), libre);
+  // La page du match : etatDesSaisies lit la règle par famille, une fois, et la passe à chaque saisie.
+  const code = fs.readFileSync(path.join(SERVEUR, 'src', 'data', 'saisiesCotes.js'), 'utf8');
+  assert.ok(code.includes('const parFamille = aVerifierParFamilleDe ?? preparerAVerifierParFamille({ maintenant });'));
+  assert.ok(code.includes('valueDeLaSaisie({ saisie: s, cote, releveAt: g.derniere.releveAt, resultat, config, reglage, maintenant, coupDEnvoi: match.commenceTime, heureSure, aVerifierDuMarche })'));});
+
+test('« à vérifier » (D5) : la pastille d’une cote saisie (etatValue) n’est jamais verte sur un marché « à vérifier », sa phrase dit la raison ; écran = serveur ; les cinq appelants passent la donnée', avecEcran, () => {
+  const REGLE = S.regleDuMoteur(CONFIG);
+  const av = { texte: 'Statistiques impossibles (fabriqué)' };
+  const e = L.etatValue({ pourcent: 10, jouable: true, cote: 2.1, regle: REGLE, aVerifier: av });
+  assert.deepEqual([e.etat, e.vert, e.qualificatif], ['value-secondaire', false, 'à vérifier']);
+  assert.ok(e.raison.startsWith('Avantage de +10,0'), e.raison);
+  assert.ok(e.raison.includes('au-dessus du seuil de 2'), e.raison);
+  assert.ok(e.raison.includes("mais à vérifier : Statistiques impossibles (fabriqué). Aucun pari n'est conseillé sur ce marché tant que ses données ne sont pas vérifiées."), e.raison);
+  for (const rien of [undefined, null]) assert.equal(L.etatValue({ pourcent: 10, jouable: true, cote: 2.1, regle: REGLE, aVerifier: rien }).etat, 'value');
+  // Écran = serveur, « à vérifier » compris : la value refusée, les autres états tels quels.
+  const hasard = generateur(1711);
+  const fraiche = fraicheurCote({ releveAt: '2026-10-05T11:30:00Z', maintenant: MAINTENANT, reglage: R });
+  const vieille = fraicheurCote({ releveAt: '2026-10-05T07:00:00Z', maintenant: MAINTENANT, reglage: R });
+  let refusees = 0;
+  for (let i = 0; i < 600; i++) {
+    const pourcent = -10 + hasard() * 45;
+    const cote = Number((1.2 + hasard() * 6).toFixed(2));
+    const jouable = hasard() > 0.1;
+    const f = [fraiche, vieille, null][i % 3];
+    const avant = S.verdictValue({ pourcent, cote, regle: REGLE, jouable, fraicheur: f });
+    const ecran = L.etatValue({ pourcent, jouable, cote, regle: REGLE, fraicheur: f, aVerifier: av });
+    assert.equal(ecran.etat, avant === 'value' ? 'value-secondaire' : avant, `tirage ${i}`);
+    assert.equal(ecran.vert, false, `tirage ${i} : vert sur un marché « à vérifier »`);
+    if (avant === 'value') refusees++;
+  }
+  assert.ok(refusees >= 20, `${refusees} values refusées`);
+  // Les cinq appelants d'etatValue pour une cote saisie lui passent « à vérifier ».
+  const ui = (...p) => fs.readFileSync(path.join(UI_SRC, ...p), 'utf8');
+  assert.ok(ui('utils', 'verdictParMarche.js').includes('aVerifier: s.aVerifier ?? null'));
+  assert.ok(ui('utils', 'comparateur.js').includes('aVerifier: s.aVerifier ?? null'));
+  assert.ok(ui('components', 'common', 'ValueBadge.vue').includes('aVerifier: props.aVerifier'));
+  assert.ok(ui('components', 'analysis', 'ManualOddsEntry.vue').includes(':a-verifier="s.aVerifier ?? null"'));
+  assert.ok(ui('components', 'analysis', 'MarketVerdictBoard.vue').includes(':a-verifier="l.saisie.aVerifier ?? null"'));
+  assert.ok(ui('components', 'betting', 'BookmakerComparator.vue').includes(':a-verifier="l.cases[col.cle].saisie.aVerifier ?? null"'));
 });
 
 // ------------------------------------------------ 5. dans une copie isolée

@@ -281,7 +281,13 @@ test('T-X1 les empreintes ne bougent pas ; rien de l’étape 38 sous core/ ni s
   assert.ok(FICHIERS_38.length >= 10, FICHIERS_38.join(', '));
   for (const racine of ['core', 'sports']) {
     for (const f of tousLesFichiers(path.join(SRC, racine))) {
+      // Étape 38, lot 2a (16/11/2026) : les TROIS fichiers du lot dans le moteur, et eux seuls — le combiner à l'identité, ses poids recopiés
+      // par script et ce que le moteur sait dire d'un pronostic avant de parier (combinaisonLot2.test.mjs : T-L2-1, T-L2-2, T-L2-6, T-L2-7).
+      if (racine === 'core' && ['engine/combiner.js', 'engine/confidence.js', 'engine/poidsDeLaCombinaison.js'].includes(f.split(path.sep).join('/'))) continue;
       assert.doesNotMatch(f, /combinaison|combiner|poidsDeLaCombinaison|confidence\.js/i, `${racine}/${f} : un fichier de l’étape 38 sous ${racine}/`);
+      // Étape 39, lot 2 (16/11/2026) : core/engine/stakeSizing.js est la règle de mise recopiée à l'identité (corps de data/mise/regleDeMise.js,
+      // miseLot2.test.mjs T-L2-0) ; son corps cite la liste des bookmakers français de l'étape 38 — ce n'est pas un fichier de l'étape 38.
+      if (racine === 'core' && f.split(path.sep).join('/') === 'engine/stakeSizing.js') continue;
       assert.doesNotMatch(fs.readFileSync(path.join(SRC, racine, f), 'utf8').slice(0, 4000), /[ée]tape 38/i, `${racine}/${f} parle de l’étape 38`);
     }
   }

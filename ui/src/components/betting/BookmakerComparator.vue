@@ -153,6 +153,7 @@ function titreDuMoteur(l) {
                       :cote="l.cases[col.cle].saisie.cote"
                       :regle="lu.regle"
                       :fraicheur="l.cases[col.cle].saisie.fraicheur"
+                      :a-verifier="l.cases[col.cle].saisie.aVerifier ?? null"
                       :bookmaker="l.cases[col.cle].saisie.bookmakerTitre"
                     />
                     <small class="bkc__when" :class="{ 'is-stale': l.cases[col.cle].etat === 'a-rafraichir' }">{{ l.cases[col.cle].releve }}</small>

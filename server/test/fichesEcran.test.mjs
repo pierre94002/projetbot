@@ -22,6 +22,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { preparerCopie, executer, SERVEUR } from './aides/isolement.mjs';
+import { EMPREINTE_EN_SERVICE } from './aides/enService.mjs';
 import { UI, imp, interfacePrete, optionsDuRendu, ouvrirLeRendu, reglesPures, espaces, blocDe, corps, pied, entetes, tableauDe, texteDe } from './aides/rendu.mjs';
 
 const options = optionsDuRendu;
@@ -870,5 +871,5 @@ test('aucun fichier du moteur n’est touché par l’étape : les nouveaux fich
     const texte = fs.readFileSync(path.join(SERVEUR, 'src', f), 'utf8');
     assert.doesNotMatch(texte, /marketKnowledge\.controller|marketKnowledge\.routes|TeamStrengthCard|PlayerRatingCard|PredictorsTable|BookmakersView/, `${f}`);
   }
-  assert.equal(moteur.size, 37, 'le moteur compte 37 fichiers, comme avant l’étape');
+  assert.equal(moteur.size, EMPREINTE_EN_SERVICE.fichiersDuMoteur, 'le moteur compte les fichiers de l’empreinte en service (37 à l’étape) : l’étape n’en ajoute aucun'); // Partie 0 des lots 2 (A), vu le 16/11/2026
 });

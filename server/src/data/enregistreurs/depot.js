@@ -48,10 +48,10 @@ function prepares(database) {
       WHERE p.fixture_key = ? AND p.version = (SELECT MAX(version) FROM engine_picks WHERE fixture_key = p.fixture_key AND market_key = p.market_key)`),
     pronostic: database.prepare(`INSERT INTO engine_picks (fixture_key, market_key, version, recorded_at, origin, match_id, league, date, kickoff, home_name, away_name,
         home_id, away_id, market_id, market, params, choice, label, probability, predicted_odds, market_odds, min_odds, odds_source, odds_at, lineup_state, lineup_at, engine_hash,
-        engine_version, distribution)
+        engine_version, distribution, confiance, classe_seuil, seuil_applique, palier)
       VALUES (@fixtureKey, @marketKey, @version, @recordedAt, @origin, @matchId, @league, @date, @kickoff, @homeName, @awayName,
         @homeId, @awayId, @marketId, @market, @params, @choice, @label, @probability, @predictedOdds, @marketOdds, @minOdds, @oddsSource, @oddsAt, @lineupState, @lineupAt, @engineHash,
-        @engineVersion, @distribution)
+        @engineVersion, @distribution, @confiance, @classeSeuil, @seuilApplique, @palier)
       ON CONFLICT(fixture_key, market_key, version) DO NOTHING`),
     // Étape 25 : la version candidate calculée à blanc (moteurABlanc.js), dans sa table à part.
     dernierABlanc: database.prepare(`SELECT revision, candidate_hash AS candidateHash, service_version AS serviceVersion, params, choice, predicted_odds AS predictedOdds,
@@ -292,7 +292,13 @@ export function ecrirePronostics(elements, { database = openDb() } = {}) {
           oddsAt: texteOuNull(p.oddsAt),
           lineupState: texteOuNull(p.lineupState),
           lineupAt: texteOuNull(p.lineupAt),
-          distribution: texteOuNull(p.distribution)
+          distribution: texteOuNull(p.distribution),
+          // Étape 38 (lot 2a) : les traces du pronostic, écrites AVEC sa ligne (jamais sur une ligne d'avant) ; elles ne
+          // comptent pas dans « le pronostic a changé » (memeValeur) : une trace seule n'ajoute pas de version.
+          confiance: texteOuNull(p.confiance),
+          classeSeuil: texteOuNull(p.classeSeuil),
+          seuilApplique: nombreOuNull(p.seuilApplique),
+          palier: texteOuNull(p.palier)
         }).changes;
       }
       if (!e.complet) continue;
@@ -316,7 +322,11 @@ export function ecrirePronostics(elements, { database = openDb() } = {}) {
           oddsAt: texteOuNull(e.oddsAt),
           lineupState: texteOuNull(e.lineupState),
           lineupAt: texteOuNull(e.lineupAt),
-          distribution: null
+          distribution: null,
+          confiance: null,
+          classeSeuil: null,
+          seuilApplique: null,
+          palier: null
         }).changes;
       }
     }
@@ -330,7 +340,8 @@ export function pronosticsGeles(fixtureKey, { database = openDb() } = {}) {
     .prepare(`SELECT fixture_key AS fixtureKey, market_key AS marketKey, version, recorded_at AS recordedAt, origin, match_id AS matchId, league, date, kickoff,
                      home_name AS homeName, away_name AS awayName, home_id AS homeId, away_id AS awayId, market_id AS marketId, market, params, choice, label,
                      probability, predicted_odds AS predictedOdds, market_odds AS marketOdds, min_odds AS minOdds, odds_source AS oddsSource, odds_at AS oddsAt,
-                     lineup_state AS lineupState, lineup_at AS lineupAt, engine_hash AS engineHash, engine_version AS engineVersion, distribution
+                     lineup_state AS lineupState, lineup_at AS lineupAt, engine_hash AS engineHash, engine_version AS engineVersion, distribution,
+                     confiance, classe_seuil AS classeSeuil, seuil_applique AS seuilApplique, palier
               FROM engine_picks WHERE fixture_key = ? ORDER BY market_key, version`)
     .all(fixtureKey);
 }

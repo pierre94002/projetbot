@@ -281,7 +281,9 @@ export function etatDeLaLigne(ligne, regle = null, maintenant = Date.now()) {
       jouable: Boolean(s.jouable),
       cote: nombre(s.cote),
       regle,
-      fraicheur: s.fraicheur ? fraicheurVivante(s.fraicheur, maintenant) : null
+      fraicheur: s.fraicheur ? fraicheurVivante(s.fraicheur, maintenant) : null,
+      // 17/11/2026 (D5) : le marché saisi « à vérifier » (joint par le serveur) — jamais vert.
+      aVerifier: s.aVerifier ?? null
     });
   }
   return null;
@@ -407,6 +409,11 @@ export function phraseSansPari(staking) {
       return 'Une cote paie au-dessus de la cote juste, mais hors des limites du moteur (cote trop haute, ou avantage trop beau pour être vrai) : le moteur ne la conseille pas.';
     case 'a_rafraichir':
       return 'Les cotes de ce match sont à rafraîchir : elles ne sont pas une value tant qu\'elles ne sont pas relevées de nouveau.';
+    case 'a_verifier': {
+      // Étape 38 (lot 2a) : le contrôle quotidien marque ce match « à vérifier » — le serveur en donne la raison quand il l'a.
+      const raison = typeof staking.aVerifier?.texte === 'string' && staking.aVerifier.texte.trim() ? ` (${staking.aVerifier.texte.trim()})` : '';
+      return `Ce match est marqué « à vérifier »${raison} : aucun pari n'est conseillé dessus tant que ses données ne sont pas vérifiées.`;
+    }
     default:
       return 'Aucun pari conseillé par le moteur pour ce match.';
   }

@@ -1,5 +1,6 @@
 /**
- * La boucle de correction (étape 26 du plan, 27/10/2026) — T-PA1 : les 7 RÉGLAGES DE PARI ne changent aucune
+ * La boucle de correction (étape 26 du plan, 27/10/2026) — T-PA1 : les 6 RÉGLAGES DE PARI (7 jusqu'au lot 2 de l'étape 39, qui retire
+ * le garde-fou des buts attendus, lu par le seul staking.js) et le CONTEXTE DE LA MISE (étape 39, lot 2) ne changent aucune
  * probabilité du moteur ; c'est ce qui met dans une même lignée deux versions qui ne diffèrent que par eux (les
  * versions 4 et 5 de Pierre : vos bookmakers seuls). Calcul réel dans une copie isolée (aides/script-boucle-pari.mjs) :
  * 20 matchs de la base d'essai (12 avec cotes, 8 sans), SANS puis AVEC le modèle de buts unique de l'étape 27.
@@ -34,7 +35,7 @@ function reel() {
   }
 }
 
-test('T-PA1 : chacun des 7 réglages de pari (seuils de value, vos bookmakers, cote maximale, Kelly, mise maximale, garde-fou des buts attendus) laisse IDENTIQUES toutes les probabilités du moteur — distributions, attendus, cotes justes, 1N2, pronostics et leur distribution gelée —, avec et sans le modèle de buts unique', (t) => {
+test('T-PA1 : chacun des 6 réglages de pari (seuils de value, vos bookmakers, cote maximale, Kelly, mise maximale), et le contexte de la mise passé par l’appelant (étape 39, lot 2), laisse IDENTIQUES toutes les probabilités du moteur — distributions, attendus, cotes justes, 1N2, pronostics et leur distribution gelée —, avec et sans le modèle de buts unique', (t) => {
   const r = reel();
   assert.deepEqual(r.cles, [...REGLAGES_DE_PARI]);
   assert.equal(r.cibles.avecCotes, 12);
@@ -47,6 +48,9 @@ test('T-PA1 : chacun des 7 réglages de pari (seuils de value, vos bookmakers, c
       assert.deepEqual(x.differents[cle], [], `${nom} : ${cle} change une probabilité`);
       assert.equal(x.identiques[cle], 20, `${nom} : ${cle}`);
     }
+    // Étape 39, lot 2 (16/11/2026) : le contexte de la mise (capital, paris en attente, plafonds, fiches, plancher) ne change aucune probabilité.
+    assert.deepEqual(x.contexte.differents, [], `${nom} : le contexte de la mise change une probabilité`);
+    assert.equal(x.contexte.identiques, 20 * 5, `${nom} : 5 contextes de mise sur chacun des 20 matchs`);
   }
 });
 
@@ -58,11 +62,11 @@ test('T-PA1, le témoin : la comparaison voit bien un changement de probabilité
   assert.equal(r.regimes.ancienModele.avecProvenance, 0);
 });
 
-test('les réglages de pari ne sont LUS que par la mise, la value, la cote minimale et le verdict d’un pari (staking.js, valueFinder.js, coteMinimale.js, verdictPari.js) — jamais par le calcul des probabilités', () => {
+test('les réglages de pari ne sont LUS que par la mise, la value, la cote minimale et le verdict d’un pari (stakeSizing.js, valueFinder.js, coteMinimale.js, verdictPari.js) — jamais par le calcul des probabilités', () => {
   const SRC = path.join(SERVEUR, 'src');
   const fichiers = fs.readdirSync(SRC, { recursive: true }).filter((f) => String(f).endsWith('.js')).map((f) => String(f).split(path.sep).join('/'));
   const lire = (f) => fs.readFileSync(path.join(SRC, f), 'utf8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '');
-  const moteur = fichiers.filter((f) => /^(core\/(engine|market|model|signals|xg)|sports)\//.test(f) && !/engineVersions|engineConfig|valueFinder|coteMinimale|verdictPari|vosBookmakers|tiltState/.test(f));
+  const moteur = fichiers.filter((f) => /^(core\/(engine|market|model|signals|xg)|sports)\//.test(f) && !/engineVersions|engineConfig|stakeSizing|valueFinder|coteMinimale|verdictPari|vosBookmakers|tiltState/.test(f));
   for (const f of moteur) {
     const texte = lire(f);
     for (const cle of REGLAGES_DE_PARI) assert.doesNotMatch(texte, new RegExp(`\\b${cle}\\b`), `${f} lit ${cle}`);

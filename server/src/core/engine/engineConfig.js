@@ -41,10 +41,6 @@ export const DEFAULT_ENGINE_CONFIG_BY_SPORT = {
     maxStakePercent: 0.02,
     homeAdvantage: 1.06,
     cornersAdjustmentMax: 0.08,
-    // Garde-fou plausibilité du staking (cf. risk/staking.js) : au-delà de cet
-    // écart de taux domicile/extérieur, on ne recommande pas de mise. Sorti
-    // du fichier générique vers la config du sport qui l'utilise.
-    maxExpectedRateGap: 0.4,
     // 100 % marché pour le résultat : testé sur 12 943 matchs de
     // vérification, chaque point donné au modèle de buts ou à l'ajustement
     // météo dégradait la prévision (l'ancien 70/20/10 comme le 80/20
@@ -150,7 +146,7 @@ export function updateEngineConfig(sportId, partialConfig) {
 }
 
 export function resetEngineConfig(sportId = 'football') {
-  const next = { ...getConfigBySport(), [sportId]: { ...DEFAULT_ENGINE_CONFIG_BY_SPORT[sportId] } };
+  const next = { ...getConfigBySport(), [sportId]: { ...DEFAULT_ENGINE_CONFIG_BY_SPORT[sportId], valueBookmakers: [...(getEngineConfig(sportId).valueBookmakers ?? DEFAULT_ENGINE_CONFIG_BY_SPORT[sportId].valueBookmakers)] } };
   persistConfig(next);
   return next[sportId];
 }

@@ -21,7 +21,7 @@
 
 import crypto from 'node:crypto';
 import { empreinteDesReglages } from '../../core/engine/engineVersions.js';
-import { REGLAGES_DE_PARI } from './regles.js';
+import { REGLAGES_DE_PARI, REGLAGES_DE_PARI_RETIRES } from './regles.js';
 
 const sha1 = (t) => crypto.createHash('sha1').update(t).digest('hex');
 const objetSimple = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
@@ -32,10 +32,13 @@ const instant = (x) => {
 const iso = (t) => new Date(t).toISOString();
 const MOIS = /^(\d{4})-(0[1-9]|1[0-2])$/;
 
-/** Les réglages d'un sport SANS les réglages de pari : une COPIE PROFONDE (l'objet reçu n'est jamais touché). */
+/**
+ * Les réglages d'un sport SANS les réglages de pari : une COPIE PROFONDE (l'objet reçu n'est jamais touché). Les réglages de
+ * pari RETIRÉS (étape 39, lot 2) sont ôtés eux aussi : les anciennes versions du registre les portent encore.
+ */
 export function sansReglagesDePari(reglages) {
   const copie = objetSimple(reglages) ? JSON.parse(JSON.stringify(reglages)) : {};
-  for (const cle of REGLAGES_DE_PARI) delete copie[cle];
+  for (const cle of [...REGLAGES_DE_PARI, ...REGLAGES_DE_PARI_RETIRES]) delete copie[cle];
   return copie;
 }
 

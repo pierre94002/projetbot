@@ -3,9 +3,10 @@
  *   node --test test/miseRegle.test.mjs        (depuis server/)
  *
  * T-M1 sans contexte, la part × la base redonne la mise du moteur À L'OCTET : Number((partDeMise × base).toFixed(2)) =
- *      findValueBet(…).stake sur 10 000 conseils (bases 1 000, 10 000 et tirées) ; la copie de compactContext.js
- *      (partDuCapitalPourIA, copie temporaire du lot 1a) et celle de l'écran (ui/src/utils/miseAffichee.js) aussi ;
- * T-M2 jamais la formule de core/risk/staking.js:21 (k × avantage, sans diviser par cote − 1) ;
+ *      findValueBet(…).stake sur 10 000 conseils (bases 1 000, 10 000 et tirées) ; la part écrite à l'IA (compactContext.js,
+ *      partDuCapitalPourIA : la règle du moteur importée depuis le lot 2) et celle de l'écran (ui/src/utils/miseAffichee.js) aussi ;
+ * T-M2 jamais la formule fausse de l'ancien core/risk/staking.js (k × avantage, sans diviser par cote − 1 ; fichier retiré au
+ *      lot 2) : ni dans la règle, ni dans sa copie du moteur (core/engine/stakeSizing.js) ;
  * T-M3 « le plus petit gagne » : la raison nommée est celle du plafond qui mord, quel que soit le plafond tiré ;
  * T-M4 les paris liés (E7, « la place qui reste ») : Σ conseils ≤ place, un pari placé jamais réduit, placé ≥ cap → 0,
  *      sans capital l'attente est ignorée ET dite ; la formule proportionnelle sur le pari placé est refusée ;
@@ -14,7 +15,8 @@
  * T-M7 capital absent → euros = null ;  T-M8 coupe-circuit → 0 ;  T-M9 jamais un centime au-dessus d'un plafond ;
  * T-Z1 12 paris liés sur un match : la zone normale des séries tirée par match dépasse celle tirée pari par pari (l'alerte
  *      de l'étape 11 sonne trop souvent chez Pierre : le texte de l'écran le dit) ;
- * T-M10 (lot 2) une classe non mesurée ne mise jamais plus qu'une classe mesurée — « à faire ».
+ * T-M10 (lot 2, 16/11/2026) une classe non mesurée ne mise jamais plus qu'une classe mesurée : la règle ne lit aucune classe ni
+ *      aucune confiance (v1 reste : décision de Pierre du 15/11), et un marché sans value mesurée ne reçoit aucune mise.
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -23,6 +25,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { SERVEUR } from './aides/isolement.mjs';
 import * as R from '../src/data/mise/regleDeMise.js';
+import * as M from '../src/core/engine/stakeSizing.js';
 import { findValueBet } from '../src/core/engine/valueFinder.js';
 import { partDuCapitalPourIA } from '../src/core/ai/compactContext.js';
 import { zoneNormaleDesSeries } from '../src/core/risk/seriesDePertes.js';
@@ -76,7 +79,7 @@ test('T-M1 sans contexte, Number((partDeMise × base).toFixed(2)) = findValueBet
     const f = R.partDeMise({ ev: r.ev, cote: r.odds, reglageMoteur: REGLAGE });
     assert.equal(Number((f * base).toFixed(2)), r.stake, `base ${base}, ev ${r.ev}, cote ${r.odds}`);
     if (f === REGLAGE.maxStakePercent) plafonnes++;
-    // La copie temporaire de compactContext.js (décision 7 c) : identique à l'octet.
+    // La part écrite à l'IA (compactContext.js ; depuis le lot 2, la règle du moteur importée) : identique à l'octet.
     assert.equal(partDuCapitalPourIA({ ev: r.ev, cote: r.odds, reglage: REGLAGE }), f, `copie de compactContext.js : ev ${r.ev}, cote ${r.odds}`);
     // La copie de l'écran (ui/src/utils/miseAffichee.js) : identique à l'octet.
     assert.equal(U.partDuCapital({ ev: r.ev, cote: r.odds, reglage: REGLAGE }), f, `copie de l’écran : ev ${r.ev}, cote ${r.odds}`);
@@ -88,7 +91,7 @@ test('T-M1 sans contexte, Number((partDeMise × base).toFixed(2)) = findValueBet
   assert.ok(plafonnes > 50, `le plafond de 2 % mord sur une partie des conseils (${plafonnes})`);
 });
 
-test('T-M2 jamais la formule de core/risk/staking.js:21 (k × avantage) : la part est k × avantage / (cote − 1)', () => {
+test('T-M2 jamais la formule fausse de l’ancien core/risk/staking.js (k × avantage ; retiré au lot 2) : la part est k × avantage / (cote − 1), dans la règle et dans sa copie du moteur (stakeSizing.js)', () => {
   for (const [ev, cote] of [[0.05, 1.3], [0.0466, 2.5], [0.06, 3.5], [0.04, 5]]) {
     const f = R.partDeMise({ ev, cote, reglageMoteur: { ...REGLAGE, maxStakePercent: 1 } });
     assert.equal(f, (0.125 * ev) / (cote - 1));
@@ -98,6 +101,11 @@ test('T-M2 jamais la formule de core/risk/staking.js:21 (k × avantage) : la par
   assert.equal(R.partDite(R.partDeMise({ ev: 0.0466, cote: 2.5, reglageMoteur: REGLAGE })).replace(/\s/g, ' '), '0,39 %');
   const texte = fs.readFileSync(path.join(SERVEUR, 'src', 'data', 'mise', 'regleDeMise.js'), 'utf8');
   assert.doesNotMatch(texte, /staking\.js'|evaluateStakingDecision/, 'la règle n’emploie jamais le code mort de staking.js');
+  // Lot 2 (16/11/2026) : la copie de la règle dans le moteur, de même ; et l'ancien fichier n'existe plus.
+  const moteur = fs.readFileSync(path.join(SERVEUR, 'src', 'core', 'engine', 'stakeSizing.js'), 'utf8');
+  assert.doesNotMatch(moteur, /staking\.js'|evaluateStakingDecision|kellyFraction \* edge\b/, 'stakeSizing.js n’emploie jamais la formule fausse');
+  for (const [ev, cote] of [[0.05, 1.3], [0.0466, 2.5], [0.06, 3.5], [0.04, 5]]) assert.equal(M.partDeMise({ ev, cote, reglageMoteur: { ...REGLAGE, maxStakePercent: 1 } }), (0.125 * ev) / (cote - 1));
+  assert.ok(!fs.existsSync(path.join(SERVEUR, 'src', 'core', 'risk', 'staking.js')), 'core/risk/staking.js est retiré');
 });
 
 test('T-M3 « le plus petit gagne », chaque plafond nommé : sur des plafonds tirés, la raison nommée est celle qui mord, au centime en dessous', () => {
@@ -327,4 +335,22 @@ test('T-Z1 12 paris liés sur un match : la zone normale des séries tirée PAR 
   assert.match(panneau, /MOTS_DE_LA_MISE\.seriesLiees/, 'la phrase est sous l’alerte des séries');
 });
 
-test('T-M10 (lot 2) une classe d’ancre non mesurée ne mise jamais plus qu’une classe mesurée', { todo: 'lot 2 de l’étape 39 (après le verdict de la 27) : la règle ne lit encore aucune classe' }, () => {});
+test('T-M10 (lot 2) une classe d’ancre non mesurée ne mise jamais plus qu’une classe mesurée : la règle ne lit ni classe ni confiance, et un marché sans value mesurée ne reçoit aucune mise', () => {
+  // Lot 2 de l'étape 39 (16/11/2026) : la règle v1 reste (1/8 de Kelly, 2 % au plus — décision de Pierre du 15/11). Elle n'a
+  // AUCUNE entrée de classe ni de confiance : quoi qu'un appelant lui passe, la mise d'une classe « non mesurée » est celle
+  // d'une classe « mesurée », jamais plus ; et ce que l'étape 38 dit « sans value mesurée » ne reçoit rien.
+  const tirer = semer(3910);
+  for (const regle of [R, M]) {
+    for (let i = 0; i < 2000; i++) {
+      const base = { decision: 'RECOMMENDED', ev: 0.021 + tirer() * 0.22, cote: 1.2 + tirer() * 3.8, reglageMoteur: REGLAGE, capital: { indique: true, montant: 1000 + Math.floor(tirer() * 3) * 500 }, livre: { cle: 'unibet_fr', titre: 'Unibet', francais: tirer() < 0.5 } };
+      const mesuree = regle.fractionDeMise({ ...base, classe: 'mesuree', classeDAncre: 'pinnacle', confiance: 'sure', mesure: true });
+      const nonMesuree = regle.fractionDeMise({ ...base, classe: 'non-mesuree', classeDAncre: 'repli', confiance: 'fragile', mesure: false });
+      assert.ok(nonMesuree.f <= mesuree.f, `cas ${i} : une classe non mesurée (${nonMesuree.f}) mise plus qu’une mesurée (${mesuree.f})`);
+      assert.ok(nonMesuree.euros <= mesuree.euros);
+      assert.equal(nonMesuree.f, regle.fractionDeMise(base).f, 'la règle ne lit aucune classe');
+      // Un marché sans value mesurée (repli, sans cote, corners, tirs, cartons, joueurs) : aucune mise, quelle que soit sa classe.
+      assert.equal(regle.fractionDeMise({ ...base, marcheAvecValue: false, classe: 'mesuree', confiance: 'sure' }).f, 0);
+    }
+    assert.doesNotMatch(regle.fractionDeMise.toString(), /classe|confiance/, 'la règle n’a aucune entrée de classe ni de confiance');
+  }
+});

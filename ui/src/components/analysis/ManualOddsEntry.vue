@@ -265,6 +265,7 @@ async function retirer(s) {
               :cote="s.cote"
               :regle="regle"
               :fraicheur="s.fraicheur"
+              :a-verifier="s.aVerifier ?? null"
               :bookmaker="s.bookmakerTitre"
               :precision="precisionDe(s)"
             />

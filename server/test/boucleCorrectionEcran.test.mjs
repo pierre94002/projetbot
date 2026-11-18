@@ -23,6 +23,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { preparerCopie, executer, SERVEUR } from './aides/isolement.mjs';
+import { EMPREINTE_EN_SERVICE, EMPREINTE_AVANT_LOTS_2 } from './aides/enService.mjs'; // lots 2 (étape 39 lot 2, 16/11) : voir RAISON_DU_SAUT
 import { ouvrirLeRendu, reglesPures, texteDe, blocDe, tableauDe, corps, pied, interfacePrete, optionsDuRendu, UI, espaces } from './aides/rendu.mjs';
 import { REGLAGES_MODELE_DE_BUTS } from './aides/modeleDeButsCommun.mjs';
 
@@ -49,6 +50,17 @@ const sansCommentaires = (t) => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*
 // ------------------------------------------------------------ les réponses du vrai serveur (une fois par phase)
 const fixture = (n) => JSON.parse(fs.readFileSync(path.join(SERVEUR, 'test', 'fixtures', n), 'utf8'));
 const memo = {};
+/**
+ * Lots 2 (étape 39 lot 2, 16/11/2026 ; même règle que relaisEtape27.test.mjs, partie 0, P0-1) : cet essai REJOUE l’essai 27 sur la
+ * copie figée des registres de Pierre, avec le code du jour. Dès qu’un lot DÉCLARE une empreinte du moteur ou de la candidate autre
+ * que le départ (EMPREINTE_EN_SERVICE ≠ EMPREINTE_AVANT_LOTS_2 : les constantes déclarées, jamais l’empreinte relue par le code), le
+ * code du jour note une version neuve au démarrage et l’essai recommence : le rejeu n’est plus celui de l’essai 27. Il est alors
+ * sauté avec sa raison. Un moteur changé SANS déclaration le fait encore rougir (avec D4 de declarationsLots2).
+ */
+const RAISON_DU_SAUT = (EMPREINTE_EN_SERVICE.moteur !== EMPREINTE_AVANT_LOTS_2.moteur || EMPREINTE_EN_SERVICE.candidate !== EMPREINTE_AVANT_LOTS_2.candidate)
+  ? 'essai 27 terminé, rejouable seulement avec le code de l’essai'
+  : null;
+
 function phase(nom) {
   if (memo[nom]) return memo[nom];
   const versions = fixture('engine-versions-27-en-essai.json');
@@ -370,7 +382,7 @@ test('le formulaire « Proposer une correction », ouvert (après l’essai du m
 const CONFIG = { edgeThresholdMin: 0.02, edgeThresholdMax: 0.3, kellyFraction: 0.25, maxStakePercent: 0.02, defaultCorrelation: -0.05, cornersAdjustmentMax: 0.08, valueBookmakers: [], maxValueOdds: 5 };
 const TEXTE_JUGEE = 'Enregistrer efface le verdict « retenu » de la candidate et recommence son essai (au moins 21 jours) : adoptez-la d’abord, ou attendez.';
 
-test('Réglages (B34, B46) : avec la candidate de l’étape 27 EN ESSAI, la note dit « si cette version est encore en service la nuit prochaine, l’essai repart de zéro » ; JUGÉE « retenu », le texte exact du constat 8 ; sans candidate, aucune note — et « Enregistrer » redemande (window.confirm), la remise à zéro aussi', options, async () => {
+test('Réglages (B34, B46) : avec la candidate de l’étape 27 EN ESSAI, la note dit « si cette version est encore en service la nuit prochaine, l’essai repart de zéro » ; JUGÉE « retenu », le texte exact du constat 8 ; sans candidate, aucune note — et « Enregistrer » redemande (window.confirm), la remise à zéro aussi', { ...options, skip: RAISON_DU_SAUT || false }, async () => {
   const versionsEnEssai = phase('vide').versions.corps;
   const versionsJugee = phase('jugee').versions.corps;
   assert.deepEqual([versionsEnEssai.candidate.statut, versionsJugee.candidate.statut, versionsJugee.candidate.jugement.verdict], ['en-essai', 'jugee', 'retenu']);

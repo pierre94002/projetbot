@@ -354,9 +354,12 @@ export function pariDuMoteur(staking, maintenant = Date.now()) {
  * @param {number|null} p.cote      la cote payée, nette de commission (maxValueOdds)
  * @param {{min:number,max:number,coteMax:number}|null} p.regle  les seuils du moteur (min et max en %)
  * @param {object|null} p.fraicheur la fraîcheur de la cote (etatFraicheur / fraicheurVivante) ; absente : pas de contrôle
+ * @param {{texte?: string}|null} p.aVerifier  (17/11/2026, décision D5) le marché de cette cote est « à vérifier » (le
+ *   serveur le joint à une cote saisie, pour la famille de SON marché) : une value devient « value-secondaire », jamais
+ *   verte, et la phrase dit « à vérifier : <raison> » ; les autres états restent tels quels
  * @returns {{ etat: string, vert: boolean, qualificatif: string, raison: string }}
  */
-export function etatValue({ pourcent = null, jouable = false, reference = false, cote = null, regle = null, fraicheur = null } = {}) {
+export function etatValue({ pourcent = null, jouable = false, reference = false, cote = null, regle = null, fraicheur = null, aVerifier = null } = {}) {
   const dit = (etat, qualificatif, raison) => ({ etat, vert: etat === 'value', qualificatif, raison });
   if (reference) {
     return dit('reference', 'référence', "Cote de référence relevée gratuitement : elle sert à mesurer le marché, jamais à parier. Aucune value n'en sort.");
@@ -387,6 +390,10 @@ export function etatValue({ pourcent = null, jouable = false, reference = false,
   if (pourcent <= regleLue.min) {
     if (pourcent <= 0) return dit('sans-value', '', `Avantage de ${pourcentSigne(pourcent)} : la cote est sous la cote juste, aucune value.`);
     return dit('sous-seuil', 'sous le seuil', `Avantage de ${pourcentSigne(pourcent)}, sous le seuil de ${decimales(regleLue.min, 0)} % du moteur : pas assez pour parler de value.`);
+  }
+  if (aVerifier) {
+    const raison = typeof aVerifier.texte === 'string' && aVerifier.texte.trim() ? aVerifier.texte.trim() : 'les données de ce match';
+    return dit('value-secondaire', 'à vérifier', `Avantage de ${pourcentSigne(pourcent)} chez l'un de vos bookmakers, au-dessus du seuil de ${decimales(regleLue.min, 0)} % du moteur, mais à vérifier : ${raison}. Aucun pari n'est conseillé sur ce marché tant que ses données ne sont pas vérifiées.`);
   }
   return dit('value', '', `Value : avantage de ${pourcentSigne(pourcent)} chez l'un de vos bookmakers, au-dessus du seuil de ${decimales(regleLue.min, 0)} % du moteur.`);
 }

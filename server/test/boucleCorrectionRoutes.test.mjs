@@ -12,11 +12,23 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { preparerCopie, executer, SERVEUR, FIXTURES } from './aides/isolement.mjs';
+import { EMPREINTE_EN_SERVICE, EMPREINTE_AVANT_LOTS_2 } from './aides/enService.mjs'; // lots 2 (étape 39 lot 2, 16/11) : voir RAISON_DU_SAUT
 
 const SCRIPT = path.join(SERVEUR, 'test', 'aides', 'script-boucle-routes.mjs');
 const VERSIONS_DE_PIERRE = path.join(FIXTURES, 'engine-versions-27-en-essai.json');
 const MESURE_DE_PIERRE = path.join(FIXTURES, 'registre-mesure-27-en-essai.json');
 const sha1 = (texte) => crypto.createHash('sha1').update(texte).digest('hex');
+
+/**
+ * Lots 2 (étape 39 lot 2, 16/11/2026 ; même règle que relaisEtape27.test.mjs, partie 0, P0-1) : cet essai REJOUE l’essai 27 sur la
+ * copie figée des registres de Pierre, avec le code du jour. Dès qu’un lot DÉCLARE une empreinte du moteur ou de la candidate autre
+ * que le départ (EMPREINTE_EN_SERVICE ≠ EMPREINTE_AVANT_LOTS_2 : les constantes déclarées, jamais l’empreinte relue par le code), le
+ * code du jour note une version neuve au démarrage et l’essai recommence : le rejeu n’est plus celui de l’essai 27. Il est alors
+ * sauté avec sa raison. Un moteur changé SANS déclaration le fait encore rougir (avec D4 de declarationsLots2).
+ */
+const RAISON_DU_SAUT = (EMPREINTE_EN_SERVICE.moteur !== EMPREINTE_AVANT_LOTS_2.moteur || EMPREINTE_EN_SERVICE.candidate !== EMPREINTE_AVANT_LOTS_2.candidate)
+  ? 'essai 27 terminé, rejouable seulement avec le code de l’essai'
+  : null;
 
 let sortie = null;
 function reel() {
@@ -34,7 +46,7 @@ function reel() {
   }
 }
 
-test('GET /api/corrections, à vide, pendant l’essai de l’étape 27 : disponible, aucun tri, aucune proposition ; la place PRISE par « Modèle de buts unique » (verdict au plus tôt le 14/11/2026) ; le formulaire FERMÉ, avec sa raison ; la lecture prend moins de 250 ms (rien n’est calculé)', () => {
+test('GET /api/corrections, à vide, pendant l’essai de l’étape 27 : disponible, aucun tri, aucune proposition ; la place PRISE par « Modèle de buts unique » (verdict au plus tôt le 14/11/2026) ; le formulaire FERMÉ, avec sa raison ; la lecture prend moins de 250 ms (rien n’est calculé)', { skip: RAISON_DU_SAUT || false }, () => {
   const s = reel();
   assert.equal(s.etat.disponible, true);
   assert.equal(s.etat.dernierTri, null);
@@ -74,7 +86,7 @@ test('GET /tri et /journal : un mois est requis, lisible, pas à venir (400) ; u
   assert.deepEqual(s.journal.vide, { entrees: [], suivant: null });
 });
 
-test('POST /proposer pendant l’essai de l’étape 27 : refusé (409) avec la phrase de la décision 8 — rien d’écrit ; une correction inconnue : 404 ; sans « vue » : 400', () => {
+test('POST /proposer pendant l’essai de l’étape 27 : refusé (409) avec la phrase de la décision 8 — rien d’écrit ; une correction inconnue : 404 ; sans « vue » : 400', { skip: RAISON_DU_SAUT || false }, () => {
   const s = reel();
   assert.deepEqual([s.proposer.code, s.proposer.raison], [409, 'essai-27']);
   assert.equal(s.proposer.error, 'Le formulaire est fermé pendant l’essai du modèle de buts (étape 27) : rien ne peut être essayé à blanc avant son verdict (au plus tôt le 14/11/2026). Rien n’a été proposé.');

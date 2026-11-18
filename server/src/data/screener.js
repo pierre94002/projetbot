@@ -50,6 +50,7 @@ import { getFixturePaths } from './repositories/fixturesRepository.js';
 import { decisionDePari } from '../core/engine/verdictPari.js';
 import { aUneDerniereComposition } from './db/derniereComposition.js';
 import { carteDesLecteurs, avecLaCarteSurLeReperage } from './bettingMap.js';
+import { preparerAVerifierDuConseil, avecAVerifierPourLeMoteur } from './aVerifierPourLeMoteur.js';
 
 const TTL_MS = 30 * 60 * 1000;
 const JOURS = 7;
@@ -434,19 +435,24 @@ async function calculer() {
  * et le coupe-circuit du moment — exactement ce que l'analyse d'un match
  * (route /api/analysis, onglet « Value bets » de Mes paris) donnerait au même
  * instant. Chaque marché 1N2 reçoit `verdict` ; le match, `pari` (la décision).
+ * Étape 38 (lot 2a, 16/11/2026) : aucun conseil de pari sur un match « à vérifier » — ce que le contrôle quotidien dit du
+ * match pour le pari conseillé (aVerifierPourLeMoteur.js, par identifiants FotMob, lu UNE fois par lecture) est joint au
+ * match donné au moteur ; le Repérage et les Opportunités, qui passent tous deux par ici, prennent la même décision que la
+ * page du match. `aVerifierDe` : pour les essais.
  */
-export function avecVerdicts(data, internes, { maintenant = Date.now(), reglage = null, config = null, tiltState = null } = {}) {
+export function avecVerdicts(data, internes, { maintenant = Date.now(), reglage = null, config = null, tiltState = null, aVerifierDe = null } = {}) {
   if (!data?.matches) return data;
   reglage ??= lireReglageFraicheur().reglage;
   config ??= getEngineConfig('football');
   tiltState ??= getTiltState();
+  aVerifierDe ??= preparerAVerifierDuConseil({ maintenant });
   return {
     ...data,
     verdicts: { evaluesLe: new Date(maintenant).toISOString() },
     matches: data.matches.map((m) => {
       const interne = internes?.get(m.matchId);
       if (!interne) return m;
-      const match = {
+      const avecHeures = {
         ...interne.match,
         fraicheurCotes: {
           maintenant,
@@ -457,6 +463,8 @@ export function avecVerdicts(data, internes, { maintenant = Date.now(), reglage 
           parBookmaker: interne.heures?.parBookmaker ?? {}
         }
       };
+      // Étape 38 (lot 2a) : le match donné au moteur, avec « à vérifier » s'il y a une raison (aucune clé de plus sinon).
+      const match = avecAVerifierPourLeMoteur(avecHeures, aVerifierDe({ league: m.league, commenceTime: m.commenceTime, homeId: m.homeId, awayId: m.awayId }));
       const { staking, verdicts } = decisionDePari(match, config, tiltState);
       // Étape 39 (lot 1a) : le CONSEIL du moteur — son avantage et sa cote nette, jamais sa mise (calculée sur la base
       // interne de la passe) : le contrôleur refait la part du capital et ses euros sur le capital de Pierre
