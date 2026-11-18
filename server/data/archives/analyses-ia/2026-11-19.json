@@ -7460,5 +7460,3185 @@
     },
     "updatedAt": "2026-11-17T02:38:14.763Z",
     "createdAt": "2026-11-17T02:38:14.763Z"
+  },
+  {
+    "matchId": "2a054ad1a9985edb5db37136cf40a382",
+    "homeName": "Vasco da Gama",
+    "awayName": "Internacional",
+    "league": "Brazil Série A",
+    "commenceTime": "2026-11-19T22:30:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Vasco da Gama vs Internacional",
+      "expectedGoals": {
+        "home": 1.411,
+        "away": 1.171,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 1.72,
+        "draw": 4.2,
+        "away": 5.56
+      },
+      "market": {
+        "odds1": 1.58,
+        "oddsDraw": 3.49,
+        "odds2": 4.45
+      },
+      "edgePercent": -2.82,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "pas_de_value",
+        "candidates": [
+          {
+            "outcome": "home",
+            "label": "Vasco da Gama gagne",
+            "odds": 1.67,
+            "displayedOdds": 1.67,
+            "bookmaker": "williamhill",
+            "bookmakerTitle": "William Hill",
+            "fairOdds": 1.72,
+            "ev": -0.0282,
+            "exclusion": "sous_le_seuil"
+          },
+          {
+            "outcome": "draw",
+            "label": "Match nul",
+            "odds": 4,
+            "displayedOdds": 4,
+            "bookmaker": "coolbet",
+            "bookmakerTitle": "Coolbet",
+            "fairOdds": 4.2,
+            "ev": -0.0475,
+            "exclusion": "sous_le_seuil"
+          },
+          {
+            "outcome": "away",
+            "label": "Internacional gagne",
+            "odds": 4.9,
+            "displayedOdds": 4.9,
+            "bookmaker": "nordicbet",
+            "bookmakerTitle": "Nordic Bet",
+            "fairOdds": 5.56,
+            "ev": -0.1184,
+            "exclusion": "sous_le_seuil"
+          }
+        ],
+        "limits": {
+          "edgeThresholdMin": 0.02,
+          "edgeThresholdMax": 0.25,
+          "maxValueOdds": 5
+        }
+      },
+      "statExpectations": {
+        "corners": {
+          "home": 4.79,
+          "away": 5.63,
+          "total": 10.41
+        },
+        "shots": {
+          "home": 14.08,
+          "away": 12.51,
+          "total": 26.59
+        },
+        "shotsOnTarget": {
+          "home": 4.02,
+          "away": 3.65,
+          "total": 7.66
+        }
+      },
+      "marketPredictions": [
+        {
+          "marketId": "result",
+          "params": {
+            "outcome": "home"
+          },
+          "market": "Résultat",
+          "predictedOutcome": "home",
+          "predictedLabel": "Vasco da Gama gagne",
+          "predictedOdds": 1.72,
+          "probability": 58,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 1.5,
+            "side": "over"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 1.5 buts",
+          "predictedOdds": 1.35,
+          "probability": 74,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "yes"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "yes",
+          "predictedLabel": "Oui",
+          "predictedOdds": 1.88,
+          "probability": 53,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 1.5,
+            "key": "homeOver"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "homeOver",
+          "predictedLabel": "Vasco da Gama & Plus de 1.5 buts",
+          "predictedOdds": 2.24,
+          "probability": 45,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 2.5,
+            "side": "under"
+          },
+          "market": "Buts — Vasco da Gama",
+          "predictedOutcome": "under",
+          "predictedLabel": "Vasco da Gama — Moins de 2.5 buts",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 0.5,
+            "side": "over"
+          },
+          "market": "Buts — Internacional",
+          "predictedOutcome": "over",
+          "predictedLabel": "Internacional — Plus de 0.5 buts",
+          "predictedOdds": 1.45,
+          "probability": 69,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalCorners",
+          "params": {
+            "line": 13.5,
+            "side": "under"
+          },
+          "market": "Total corners",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 13.5 corners",
+          "predictedOdds": 1.23,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "home",
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Corners — Vasco da Gama",
+          "predictedOutcome": "over",
+          "predictedLabel": "Vasco da Gama — Plus de 2.5 corners",
+          "predictedOdds": 1.25,
+          "probability": 80,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "away",
+            "line": 7.5,
+            "side": "under"
+          },
+          "market": "Corners — Internacional",
+          "predictedOutcome": "under",
+          "predictedLabel": "Internacional — Moins de 7.5 corners",
+          "predictedOdds": 1.32,
+          "probability": 76,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShots",
+          "params": {
+            "line": 21.5,
+            "side": "over"
+          },
+          "market": "Total tirs",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 21.5 tirs",
+          "predictedOdds": 1.25,
+          "probability": 80,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "home",
+            "line": 9.5,
+            "side": "over"
+          },
+          "market": "Tirs — Vasco da Gama",
+          "predictedOutcome": "over",
+          "predictedLabel": "Vasco da Gama — Plus de 9.5 tirs",
+          "predictedOdds": 1.23,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "away",
+            "line": 16.5,
+            "side": "under"
+          },
+          "market": "Tirs — Internacional",
+          "predictedOutcome": "under",
+          "predictedLabel": "Internacional — Moins de 16.5 tirs",
+          "predictedOdds": 1.23,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShotsOnTarget",
+          "params": {
+            "line": 10.5,
+            "side": "under"
+          },
+          "market": "Total tirs cadrés",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 10.5 tirs cadrés",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "home",
+            "line": 5.5,
+            "side": "under"
+          },
+          "market": "Tirs cadrés — Vasco da Gama",
+          "predictedOutcome": "under",
+          "predictedLabel": "Vasco da Gama — Moins de 5.5 tirs cadrés",
+          "predictedOdds": 1.3,
+          "probability": 77,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "away",
+            "line": 5.5,
+            "side": "under"
+          },
+          "market": "Tirs cadrés — Internacional",
+          "predictedOutcome": "under",
+          "predictedLabel": "Internacional — Moins de 5.5 tirs cadrés",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        }
+      ],
+      "engineVersion": 5
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 7226,
+      "cache_read_input_tokens": 4470,
+      "output_tokens": 2783,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 7226,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 2783,
+          "cache_read_input_tokens": 4470,
+          "cache_creation_input_tokens": 7226,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 7226
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.057632,
+    "analysedAt": "2026-11-17T23:48:23.720Z",
+    "timing": "avance",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 499,
+      "tokens": 1573,
+      "lecons": [
+        "cal-2026-10-26-flamengo-atletico-mg|result",
+        "cal-2026-10-03-atletico-mg-rb-bragantino|teamCorners:away"
+      ],
+      "dossiersDu": "2026-11-16T23:32:45.014Z",
+      "equipes": {
+        "home": {
+          "id": "fotmob-10276",
+          "dossier": true
+        },
+        "away": {
+          "id": "fotmob-8702",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "Brazil Série A",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "magasin",
+      "home": {
+        "team": "Vasco da Gama",
+        "teamId": "fotmob-10276",
+        "formation": "4-1-4-1",
+        "coach": "Pedro Emanuel",
+        "statsSince": "2026-01-01",
+        "teamMatches": 56,
+        "startXI": [
+          {
+            "id": "fotmob-543804",
+            "name": "Jair",
+            "number": 8,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.485,
+            "y": 0.5,
+            "stats": {
+              "apps": 13,
+              "starts": 7,
+              "minutes": 615,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.29,
+              "rating": 6.74
+            }
+          },
+          {
+            "id": "fotmob-577950",
+            "name": "Léo",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 54,
+              "starts": 54,
+              "minutes": 4860,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.71
+            }
+          },
+          {
+            "id": "fotmob-816753",
+            "name": "José Rodríguez",
+            "number": 2,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.292,
+            "y": 0.875,
+            "stats": {
+              "apps": 42,
+              "starts": 26,
+              "minutes": 2685,
+              "goals": 8,
+              "assists": 8,
+              "xg": 4.18,
+              "rating": 7.25
+            }
+          },
+          {
+            "id": "fotmob-949735",
+            "name": "Facundo Colidio",
+            "number": 9,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.678,
+            "y": 0.375,
+            "stats": {
+              "apps": 41,
+              "starts": 33,
+              "minutes": 2785,
+              "goals": 9,
+              "assists": 7,
+              "xg": 9.8,
+              "rating": 7.05
+            }
+          },
+          {
+            "id": "fotmob-951043",
+            "name": "Bruno Duarte",
+            "number": 19,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.89,
+            "y": 0.5,
+            "stats": {
+              "apps": 37,
+              "starts": 27,
+              "minutes": 2311,
+              "goals": 15,
+              "assists": 6,
+              "xg": 3.34,
+              "rating": 7.08
+            }
+          },
+          {
+            "id": "fotmob-1045161",
+            "name": "Lucas Piton",
+            "number": 6,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.292,
+            "y": 0.125,
+            "stats": {
+              "apps": 34,
+              "starts": 25,
+              "minutes": 2084,
+              "goals": 0,
+              "assists": 1,
+              "xg": 1.26,
+              "rating": 6.91
+            }
+          },
+          {
+            "id": "fotmob-1205222",
+            "name": "Marino Hinestroza",
+            "number": 18,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.678,
+            "y": 0.875,
+            "stats": {
+              "apps": 32,
+              "starts": 10,
+              "minutes": 1181,
+              "goals": 2,
+              "assists": 0,
+              "xg": 0.84,
+              "rating": 6.66
+            }
+          },
+          {
+            "id": "fotmob-1342579",
+            "name": "Alan Lescano",
+            "number": 22,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.678,
+            "y": 0.625,
+            "stats": {
+              "apps": 41,
+              "starts": 40,
+              "minutes": 3346,
+              "goals": 9,
+              "assists": 1,
+              "xg": 6.58,
+              "rating": 7.3
+            }
+          },
+          {
+            "id": "fotmob-1353421",
+            "name": "Andrés Gómez",
+            "number": 11,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.678,
+            "y": 0.125,
+            "stats": {
+              "apps": 43,
+              "starts": 38,
+              "minutes": 3309,
+              "goals": 7,
+              "assists": 6,
+              "xg": 4.99,
+              "rating": 7.06
+            }
+          },
+          {
+            "id": "fotmob-1360308",
+            "name": "Robert Renan",
+            "number": 30,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.292,
+            "y": 0.375,
+            "stats": {
+              "apps": 47,
+              "starts": 47,
+              "minutes": 4166,
+              "goals": 1,
+              "assists": 0,
+              "xg": 1.1,
+              "rating": 7.21
+            }
+          },
+          {
+            "id": "fotmob-1381731",
+            "name": "Alan Saldivia",
+            "number": 4,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 28,
+              "starts": 26,
+              "minutes": 2402,
+              "goals": 0,
+              "assists": 2,
+              "xg": 0.76,
+              "rating": 6.97
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-656526",
+            "name": "David",
+            "number": 7,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 39,
+              "starts": 19,
+              "minutes": 1684,
+              "goals": 6,
+              "assists": 3,
+              "xg": 3.73,
+              "rating": 6.71
+            }
+          },
+          {
+            "id": "fotmob-844493",
+            "name": "Daniel Fuzato",
+            "number": 13,
+            "position": "Goalkeeper",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 2,
+              "starts": 2,
+              "minutes": 180,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.58
+            }
+          },
+          {
+            "id": "fotmob-856464",
+            "name": "Brenner",
+            "number": 20,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 33,
+              "starts": 12,
+              "minutes": 1299,
+              "goals": 4,
+              "assists": 2,
+              "xg": 3.72,
+              "rating": 6.49
+            }
+          },
+          {
+            "id": "fotmob-1200802",
+            "name": "Paulo Henrique",
+            "number": 96,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 37,
+              "starts": 28,
+              "minutes": 2355,
+              "goals": 0,
+              "assists": 3,
+              "xg": 0.3,
+              "rating": 7.02
+            }
+          },
+          {
+            "id": "fotmob-1224887",
+            "name": "Lucas Freitas",
+            "number": 43,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 15,
+              "starts": 9,
+              "minutes": 859,
+              "goals": 1,
+              "assists": 0,
+              "xg": 1.04,
+              "rating": 6.94
+            }
+          },
+          {
+            "id": "fotmob-1240979",
+            "name": "Loide Augusto",
+            "number": 45,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 15,
+              "starts": 8,
+              "minutes": 759,
+              "goals": 3,
+              "assists": 1,
+              "xg": 1.13,
+              "rating": 6.77
+            }
+          },
+          {
+            "id": "fotmob-1255479",
+            "name": "Adson",
+            "number": 28,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 35,
+              "starts": 20,
+              "minutes": 1696,
+              "goals": 5,
+              "assists": 4,
+              "xg": 1.64,
+              "rating": 6.96
+            }
+          },
+          {
+            "id": "fotmob-1288187",
+            "name": "Gabriel Pereira",
+            "number": 55,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 27,
+              "starts": 24,
+              "minutes": 2007,
+              "goals": 3,
+              "assists": 1,
+              "xg": 1.46,
+              "rating": 7.06
+            }
+          },
+          {
+            "id": "fotmob-1433058",
+            "name": "Johan Rojas",
+            "number": 10,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 26,
+              "starts": 16,
+              "minutes": 1410,
+              "goals": 2,
+              "assists": 3,
+              "xg": 1.64,
+              "rating": 7.21
+            }
+          },
+          {
+            "id": "fotmob-1476545",
+            "name": "Cuiabano",
+            "number": 66,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 36,
+              "starts": 29,
+              "minutes": 2630,
+              "goals": 1,
+              "assists": 6,
+              "xg": 2.15,
+              "rating": 7.33
+            }
+          },
+          {
+            "id": "fotmob-1478294",
+            "name": "Mateus Carvalho",
+            "number": 85,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1950789",
+            "name": "Ramon Rique",
+            "number": 83,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 26,
+              "starts": 10,
+              "minutes": 974,
+              "goals": 1,
+              "assists": 2,
+              "xg": 0.42,
+              "rating": 6.7
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "id": "fotmob-339032",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Thiago Mendes",
+            "reason": "blessé",
+            "expectedReturn": "Doubtful",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 46,
+              "starts": 43,
+              "minutes": 3731,
+              "goals": 8,
+              "assists": 3,
+              "xg": 2.15,
+              "rating": 7.39
+            }
+          },
+          {
+            "id": "fotmob-958860",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Santiago Sosa",
+            "reason": "blessé",
+            "expectedReturn": "Doubtful",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 44,
+              "starts": 40,
+              "minutes": 3585,
+              "goals": 3,
+              "assists": 1,
+              "xg": 1.63,
+              "rating": 7.29
+            }
+          },
+          {
+            "id": "fotmob-1459657",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Cauan Barros",
+            "reason": "blessé",
+            "expectedReturn": "About 1-2 weeks",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 31,
+              "starts": 24,
+              "minutes": 2072,
+              "goals": 3,
+              "assists": 0,
+              "xg": 1.7,
+              "rating": 6.91
+            }
+          },
+          {
+            "id": "fotmob-834032",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Carlos Cuesta",
+            "reason": "blessé",
+            "expectedReturn": "Mid November 2026",
+            "position": "Defender",
+            "stats": {
+              "apps": 27,
+              "starts": 27,
+              "minutes": 2355,
+              "goals": 1,
+              "assists": 2,
+              "xg": 0.44,
+              "rating": 6.78
+            }
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-339032",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Thiago Mendes",
+            "position": "Midfielder",
+            "starts": 43,
+            "goals": 8,
+            "assists": 3,
+            "status": "blessé"
+          },
+          {
+            "id": "fotmob-1476545",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Cuiabano",
+            "position": "Midfielder",
+            "starts": 29,
+            "goals": 1,
+            "assists": 6,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-1200802",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Paulo Henrique",
+            "position": "Defender",
+            "starts": 28,
+            "goals": 0,
+            "assists": 3,
+            "status": "remplaçant"
+          }
+        ],
+        "lastMatch": {
+          "date": "2026-11-14",
+          "league": "Brazil Série A",
+          "home": "Chapecoense",
+          "away": "Vasco da Gama",
+          "homeGoals": 0,
+          "awayGoals": 2
+        }
+      },
+      "away": {
+        "team": "Internacional",
+        "teamId": "fotmob-8702",
+        "formation": "3-4-2-1",
+        "coach": "Eduardo Baptista",
+        "statsSince": "2026-01-01",
+        "teamMatches": 40,
+        "startXI": [
+          {
+            "id": "fotmob-113668",
+            "name": "Gabriel Mercado",
+            "number": 25,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.292,
+            "y": 0.5,
+            "stats": {
+              "apps": 27,
+              "starts": 27,
+              "minutes": 2331,
+              "goals": 1,
+              "assists": 0,
+              "xg": 1.75,
+              "rating": 6.87
+            }
+          },
+          {
+            "id": "fotmob-592922",
+            "name": "Thiago Maia",
+            "number": 29,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.485,
+            "y": 0.375,
+            "stats": {
+              "apps": 21,
+              "starts": 10,
+              "minutes": 875,
+              "goals": 0,
+              "assists": 2,
+              "xg": 0.65,
+              "rating": 6.87
+            }
+          },
+          {
+            "id": "fotmob-658261",
+            "name": "Juninho",
+            "number": 18,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.292,
+            "y": 0.21,
+            "stats": {
+              "apps": 17,
+              "starts": 9,
+              "minutes": 822,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.66,
+              "rating": 6.76
+            }
+          },
+          {
+            "id": "fotmob-935036",
+            "name": "Alerrandro",
+            "number": 9,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 31,
+              "starts": 18,
+              "minutes": 1502,
+              "goals": 4,
+              "assists": 6,
+              "xg": 7.87,
+              "rating": 6.67
+            }
+          },
+          {
+            "id": "fotmob-1028443",
+            "name": "Rodrigo Villagra",
+            "number": 5,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.485,
+            "y": 0.625,
+            "stats": {
+              "apps": 30,
+              "starts": 27,
+              "minutes": 2389,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.24,
+              "rating": 6.93
+            }
+          },
+          {
+            "id": "fotmob-1046082",
+            "name": "Vitinho",
+            "number": 28,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.678,
+            "y": 0.7,
+            "stats": {
+              "apps": 38,
+              "starts": 31,
+              "minutes": 2860,
+              "goals": 5,
+              "assists": 3,
+              "xg": 5.27,
+              "rating": 6.93
+            }
+          },
+          {
+            "id": "fotmob-1053727",
+            "name": "Johan Carbonero",
+            "number": 7,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.678,
+            "y": 0.3,
+            "stats": {
+              "apps": 35,
+              "starts": 26,
+              "minutes": 2299,
+              "goals": 7,
+              "assists": 4,
+              "xg": 6.77,
+              "rating": 6.85
+            }
+          },
+          {
+            "id": "fotmob-1090263",
+            "name": "Bruno Gomes",
+            "number": 15,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.292,
+            "y": 0.79,
+            "stats": {
+              "apps": 39,
+              "starts": 38,
+              "minutes": 3302,
+              "goals": 0,
+              "assists": 0,
+              "xg": 1.25,
+              "rating": 7.23
+            }
+          },
+          {
+            "id": "fotmob-1174662",
+            "name": "Matheus Bahia",
+            "number": 6,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.485,
+            "y": 0.125,
+            "stats": {
+              "apps": 28,
+              "starts": 24,
+              "minutes": 1854,
+              "goals": 2,
+              "assists": 3,
+              "xg": 1.42,
+              "rating": 6.92
+            }
+          },
+          {
+            "id": "fotmob-1200667",
+            "name": "Braian Aguirre",
+            "number": 35,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.485,
+            "y": 0.875,
+            "stats": {
+              "apps": 28,
+              "starts": 13,
+              "minutes": 1274,
+              "goals": 2,
+              "assists": 1,
+              "xg": 1.67,
+              "rating": 6.73
+            }
+          },
+          {
+            "id": "fotmob-1659682",
+            "name": "Kauan",
+            "number": 22,
+            "position": "Goalkeeper",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 4,
+              "starts": 3,
+              "minutes": 343,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.07
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-402830",
+            "name": "Guillermo Maripán",
+            "number": 3,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 28,
+              "starts": 23,
+              "minutes": 2150,
+              "goals": 1,
+              "assists": 0,
+              "xg": 1.24,
+              "rating": 6.73
+            }
+          },
+          {
+            "id": "fotmob-438825",
+            "name": "Niclas Eliasson",
+            "number": 17,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 18,
+              "starts": 3,
+              "minutes": 417,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.82,
+              "rating": 6.35
+            }
+          },
+          {
+            "id": "fotmob-535599",
+            "name": "Bruno Henrique",
+            "number": 8,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 35,
+              "starts": 23,
+              "minutes": 1957,
+              "goals": 3,
+              "assists": 2,
+              "xg": 2.64,
+              "rating": 6.72
+            }
+          },
+          {
+            "id": "fotmob-690362",
+            "name": "Ronaldo",
+            "number": 16,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 18,
+              "starts": 8,
+              "minutes": 762,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.21,
+              "rating": 6.61
+            }
+          },
+          {
+            "id": "fotmob-881609",
+            "name": "Paulinho",
+            "number": 27,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 30,
+              "starts": 13,
+              "minutes": 1315,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.8,
+              "rating": 6.47
+            }
+          },
+          {
+            "id": "fotmob-1104156",
+            "name": "Alexandro Bernabéi",
+            "number": 26,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 36,
+              "starts": 34,
+              "minutes": 2929,
+              "goals": 8,
+              "assists": 2,
+              "xg": 3.74,
+              "rating": 7.16
+            }
+          },
+          {
+            "id": "fotmob-1174300",
+            "name": "Calebe",
+            "number": 30,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 16,
+              "starts": 7,
+              "minutes": 518,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.08,
+              "rating": 6.55
+            }
+          },
+          {
+            "id": "fotmob-1260080",
+            "name": "Victor Gabriel",
+            "number": 41,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 19,
+              "starts": 14,
+              "minutes": 1325,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.29,
+              "rating": 6.81
+            }
+          },
+          {
+            "id": "fotmob-1800906",
+            "name": "Henrique Menke",
+            "number": 43,
+            "position": "Goalkeeper",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1804462",
+            "name": "Allex",
+            "number": 31,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 14,
+              "starts": 6,
+              "minutes": 527,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.39,
+              "rating": 6.52
+            }
+          },
+          {
+            "id": "fotmob-1893746",
+            "name": "João Victor",
+            "number": 44,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 4,
+              "starts": 0,
+              "minutes": 65,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.02,
+              "rating": 6.48
+            }
+          },
+          {
+            "id": "fotmob-1899001",
+            "name": "João Bezerra",
+            "number": 49,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 5,
+              "starts": 0,
+              "minutes": 25,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.32,
+              "rating": null
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "id": "fotmob-402830",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Guillermo Maripán",
+            "reason": "suspendu",
+            "expectedReturn": null,
+            "position": "Defender",
+            "stats": {
+              "apps": 28,
+              "starts": 23,
+              "minutes": 2150,
+              "goals": 1,
+              "assists": 0,
+              "xg": 1.24,
+              "rating": 6.73
+            }
+          },
+          {
+            "id": "fotmob-172185",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Alan Patrick",
+            "reason": "blessé",
+            "expectedReturn": "Doubtful",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 33,
+              "starts": 28,
+              "minutes": 2385,
+              "goals": 7,
+              "assists": 6,
+              "xg": 4.06,
+              "rating": 7.24
+            }
+          },
+          {
+            "id": "fotmob-1320958",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Matheus Cunha",
+            "reason": "blessé",
+            "expectedReturn": "About 1-2 weeks",
+            "position": "Goalkeeper",
+            "stats": {
+              "apps": 23,
+              "starts": 22,
+              "minutes": 1920,
+              "goals": 0,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.4
+            }
+          },
+          {
+            "id": "fotmob-1260081",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Anthoni",
+            "reason": "blessé",
+            "expectedReturn": "About a week",
+            "position": "Goalkeeper",
+            "stats": {
+              "apps": 14,
+              "starts": 13,
+              "minutes": 1183,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.5
+            }
+          },
+          {
+            "id": "fotmob-474448",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Antonio Sanabria",
+            "reason": "blessé",
+            "expectedReturn": "Mid November 2026",
+            "position": "Forward",
+            "stats": {
+              "apps": 18,
+              "starts": 6,
+              "minutes": 601,
+              "goals": 0,
+              "assists": 0,
+              "xg": 1.34,
+              "rating": 6.03
+            }
+          },
+          {
+            "id": "fotmob-1244631",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Kayky",
+            "reason": "blessé",
+            "expectedReturn": "Late November 2026",
+            "position": "Forward",
+            "stats": {
+              "apps": 8,
+              "starts": 0,
+              "minutes": 109,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.41,
+              "rating": 6.33
+            }
+          },
+          {
+            "id": "fotmob-1836585",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Benjamin Arhin",
+            "reason": "blessé",
+            "expectedReturn": "Mid November 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 1,
+              "starts": 0,
+              "minutes": 1,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-553476",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Sergio Rochet",
+            "reason": "blessé",
+            "expectedReturn": "Mid November 2026",
+            "position": "Goalkeeper",
+            "stats": {
+              "apps": 12,
+              "starts": 12,
+              "minutes": 1080,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.56
+            }
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-1104156",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Alexandro Bernabéi",
+            "position": "Midfielder",
+            "starts": 34,
+            "goals": 8,
+            "assists": 2,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-172185",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Alan Patrick",
+            "position": "Midfielder",
+            "starts": 28,
+            "goals": 7,
+            "assists": 6,
+            "status": "blessé"
+          },
+          {
+            "id": "fotmob-535599",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Bruno Henrique",
+            "position": "Midfielder",
+            "starts": 23,
+            "goals": 3,
+            "assists": 2,
+            "status": "remplaçant"
+          }
+        ],
+        "lastMatch": {
+          "date": "2026-11-04",
+          "league": "Brazil Série A",
+          "home": "Internacional",
+          "away": "Coritiba",
+          "homeGoals": 1,
+          "awayGoals": 0
+        }
+      },
+      "matchInfo": {
+        "round": "35",
+        "stadium": "Estádio São Januário",
+        "city": "Rio de Janeiro, Rio de Janeiro",
+        "capacity": 24584,
+        "surface": "grass",
+        "weather": "Scattered Thunderstorms",
+        "temperature": 27,
+        "windSpeed": 11,
+        "precipitation": 0.2,
+        "referee": {
+          "name": "Paulo Cezar Zanovelli Da Silva",
+          "country": "Brazil",
+          "league": "Série A",
+          "matches": 34,
+          "yellowCardsPerMatch": 5.15,
+          "yellowCardsLeagueAverage": 4.79,
+          "redCards": 8,
+          "penalties": 13,
+          "foulsPerMatch": 29.27,
+          "foulsLeagueAverage": 26.97
+        }
+      }
+    },
+    "analysis": {
+      "summary": "Vasco (11e, 3 victoires de suite, 2-0 à Chapecoense) reçoit un Internacional 16e, irrégulier (V D V D N sur 5) et très à la peine dehors (0,83 but marqué pour 1,67 encaissé en 6 matchs). Vasco domine la possession à domicile (60 %) et produit 16 tirs par match chez lui. L'Inter est diminué : Maripán suspendu, trois gardiens blessés (Rochet, Cunha, Anthoni) et Alan Patrick absent. Compositions issues du magasin (dernier onze aligné), donc probables seulement.",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Vasco en meilleure dynamique que l'Inter.",
+          "evidence": "Vasco : V V D V D sur 5 derniers ; Inter : V D V D N."
+        },
+        {
+          "factor": "statistiques à domicile/extérieur",
+          "observation": "Vasco produit beaucoup de tirs chez lui ; l'Inter est faible en déplacement.",
+          "evidence": "Vasco dom. 16 tirs / 11,2 concédés, possession 60,4 % ; Inter ext. 0,83 / 1,67 buts, 13,3 tirs, 3,7 cadrés."
+        },
+        {
+          "factor": "absences",
+          "observation": "Inter affaibli derrière, notamment au poste de gardien.",
+          "evidence": "Maripán suspendu ; Rochet, Cunha, Anthoni blessés ; Alan Patrick incertain. Vasco sans Sosa, Cuesta, T. Mendes."
+        },
+        {
+          "factor": "classement",
+          "observation": "Vasco 11e (44 pts) contre Inter 16e (38 pts).",
+          "evidence": "Vasco dom. 8-3-6 ; Inter ext. 3-6-8."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va dans le sens du moteur : avantage net du Vasco à domicile. Le moteur ne voit pas de value face au marché, ce qui est cohérent avec une cote déjà basse sur le favori.",
+      "caveats": "Compositions non officielles (source magasin). Pas de changement d'entraîneur côté Vasco récent. Les marchés de buts sont retirés. Dernier match de l'Inter connu le 04/11 : données un peu anciennes. Orages possibles annoncés.",
+      "lineupImpact": "Onzes probables = derniers alignés, pas ceux du match. Vasco : Colidio (9+7), Bruno Duarte (15+6), Lescano et Rodríguez (8+8) restent la base offensive ; Thiago Mendes est absent, Cuiabano et Paulo Henrique sur le banc. Inter : Maripán suspendu, Alan Patrick blessé, Kauan (4 matchs) dans le but faute de Rochet, Cunha, Anthoni ; Alerrandro (4+6) et Carbonero (7+4) sont les menaces. Cela renforce le Vasco et sa pression, donc ses tirs. L'arbitre siffle plus de fautes que la moyenne (29,3 contre 27).",
+      "marketViews": [
+        {
+          "market": "Résultat",
+          "pick": "Vasco da Gama gagne",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "58 % : Vasco compte 8 victoires en 17 matchs à domicile, l'Inter 3 victoires en 17 à l'extérieur, et les buts attendus sont 1,41 contre 1,17.",
+          "reasoning": "Forme, domicile et absences côté Inter vont dans le même sens. Le nul reste plausible, d'où une confiance modérée, comme pour le favori tardif de Flamengo.",
+          "probability": 58
+        },
+        {
+          "market": "Total corners",
+          "pick": "Moins de 13.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "81 % : le moteur attend 10,41 corners au total, et le championnat tourne à 10,6 par match.",
+          "reasoning": "Il faudrait trois corners de plus que l'attendu ; les moyennes des deux équipes ne le suggèrent pas.",
+          "probability": 81
+        },
+        {
+          "market": "Corners — Vasco da Gama",
+          "pick": "Vasco da Gama — Plus de 2.5 corners",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "80 % : attendu 4,79 corners, et Vasco en obtient 4,4 par match à domicile (3,4 sur 10 matchs).",
+          "reasoning": "Le seuil est bas par rapport à ses moyennes, avec une domination de possession chez lui.",
+          "probability": 80
+        },
+        {
+          "market": "Corners — Internacional",
+          "pick": "Internacional — Moins de 7.5 corners",
+          "verdict": "nuance",
+          "confidence": "moyenne",
+          "explanation": "76 % : attendu 5,63 corners, l'Inter en prend 6,4 sur 10 matchs et 5 en déplacement.",
+          "reasoning": "La moyenne est sous le seuil, mais mener la course derrière peut gonfler les corners ; ma leçon confirmée sur les plafonds de corners d'un visiteur mené invite à la prudence.",
+          "probability": 76
+        },
+        {
+          "market": "Total tirs",
+          "pick": "Plus de 21.5 tirs",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "80 % : attendu 26,59 tirs, avec 13,2 et 14,8 par match sur 10 matchs pour les deux équipes.",
+          "reasoning": "Le total attendu dépasse largement le seuil, et les deux équipes tirent au moins 13 fois en moyenne.",
+          "probability": 80
+        },
+        {
+          "market": "Tirs — Vasco da Gama",
+          "pick": "Vasco da Gama — Plus de 9.5 tirs",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "81 % : attendu 14,08 tirs, Vasco tire 16 fois par match à domicile.",
+          "reasoning": "Le seuil est très en dessous de ses moyennes à domicile.",
+          "probability": 81
+        },
+        {
+          "market": "Tirs — Internacional",
+          "pick": "Internacional — Moins de 16.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "81 % : attendu 12,51 tirs, l'Inter en tire 13,3 en déplacement et Vasco en concède 11,2 chez lui.",
+          "reasoning": "Un plafond éloigné des moyennes ; seul un scénario où l'Inter est mené pourrait le fragiliser.",
+          "probability": 81
+        },
+        {
+          "market": "Total tirs cadrés",
+          "pick": "Moins de 10.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : attendu 7,66 tirs cadrés, soit 3,4 et 4,8 par match sur 10 matchs.",
+          "reasoning": "La marge est confortable face aux moyennes ; la variance sur les tirs cadrés reste forte.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs cadrés — Vasco da Gama",
+          "pick": "Vasco da Gama — Moins de 5.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "77 % : attendu 4,02 tirs cadrés, Vasco en cadre 4 à domicile.",
+          "reasoning": "La moyenne est sous le seuil, mais 16 tirs par match chez lui laissent une marge de dépassement, d'où 77 % seulement.",
+          "probability": 77
+        },
+        {
+          "market": "Tirs cadrés — Internacional",
+          "pick": "Internacional — Moins de 5.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "82 % : attendu 3,65 tirs cadrés, l'Inter en cadre 3,7 en déplacement.",
+          "reasoning": "Attaque en difficulté dehors (0,83 but par match) et Vasco n'en concède que 3,8 à domicile.",
+          "probability": 82
+        }
+      ]
+    },
+    "updatedAt": "2026-11-17T23:48:23.720Z",
+    "createdAt": "2026-11-17T23:48:23.720Z"
+  },
+  {
+    "matchId": "fa3ad7ccd23c6fe47c3062a2b69d3ddd",
+    "homeName": "Vitoria",
+    "awayName": "Bragantino-SP",
+    "league": "Brazil Série A",
+    "commenceTime": "2026-11-19T22:30:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Vitoria vs Bragantino-SP",
+      "expectedGoals": {
+        "home": 1.35,
+        "away": 0.94,
+        "source": "league-baseline"
+      },
+      "trueOdds": {
+        "home": 2.94,
+        "draw": 3.6,
+        "away": 2.62
+      },
+      "market": {
+        "odds1": 2.65,
+        "oddsDraw": 3.3,
+        "odds2": 2.42
+      },
+      "edgePercent": -0.77,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "pas_de_value",
+        "candidates": [
+          {
+            "outcome": "home",
+            "label": "Vitoria gagne",
+            "odds": 2.72,
+            "displayedOdds": 2.72,
+            "bookmaker": "nordicbet",
+            "bookmakerTitle": "Nordic Bet",
+            "fairOdds": 2.94,
+            "ev": -0.0733,
+            "exclusion": "sous_le_seuil"
+          },
+          {
+            "outcome": "draw",
+            "label": "Match nul",
+            "odds": 3.4,
+            "displayedOdds": 3.4,
+            "bookmaker": "coolbet",
+            "bookmakerTitle": "Coolbet",
+            "fairOdds": 3.6,
+            "ev": -0.0561,
+            "exclusion": "sous_le_seuil"
+          },
+          {
+            "outcome": "away",
+            "label": "Bragantino-SP gagne",
+            "odds": 2.6,
+            "displayedOdds": 2.6,
+            "bookmaker": "coolbet",
+            "bookmakerTitle": "Coolbet",
+            "fairOdds": 2.62,
+            "ev": -0.0077,
+            "exclusion": "sous_le_seuil"
+          }
+        ],
+        "limits": {
+          "edgeThresholdMin": 0.02,
+          "edgeThresholdMax": 0.25,
+          "maxValueOdds": 5
+        }
+      },
+      "statExpectations": {
+        "corners": {
+          "home": 5.67,
+          "away": 5.85,
+          "total": 11.52
+        },
+        "shots": {
+          "home": 15.68,
+          "away": 15.97,
+          "total": 31.65
+        },
+        "shotsOnTarget": {
+          "home": 5.61,
+          "away": 5.54,
+          "total": 11.14
+        }
+      },
+      "marketPredictions": [
+        {
+          "marketId": "result",
+          "params": {
+            "outcome": "away"
+          },
+          "market": "Résultat",
+          "predictedOutcome": "away",
+          "predictedLabel": "Bragantino-SP gagne",
+          "predictedOdds": 2.62,
+          "probability": 38,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 3.5,
+            "side": "under"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 3.5 buts",
+          "predictedOdds": 1.25,
+          "probability": 80,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "no"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "no",
+          "predictedLabel": "Non",
+          "predictedOdds": 1.86,
+          "probability": 54,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 3.5,
+            "key": "awayUnder"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "awayUnder",
+          "predictedLabel": "Bragantino-SP & Moins de 3.5 buts",
+          "predictedOdds": 3.22,
+          "probability": 31,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 0.5,
+            "side": "over"
+          },
+          "market": "Buts — Vitoria",
+          "predictedOutcome": "over",
+          "predictedLabel": "Vitoria — Plus de 0.5 buts",
+          "predictedOdds": 1.35,
+          "probability": 74,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 1.5,
+            "side": "under"
+          },
+          "market": "Buts — Bragantino-SP",
+          "predictedOutcome": "under",
+          "predictedLabel": "Bragantino-SP — Moins de 1.5 buts",
+          "predictedOdds": 1.32,
+          "probability": 76,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalCorners",
+          "params": {
+            "line": 14.5,
+            "side": "under"
+          },
+          "market": "Total corners",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 14.5 corners",
+          "predictedOdds": 1.26,
+          "probability": 79,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "home",
+            "line": 8.5,
+            "side": "under"
+          },
+          "market": "Corners — Vitoria",
+          "predictedOutcome": "under",
+          "predictedLabel": "Vitoria — Moins de 8.5 corners",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "away",
+            "line": 8.5,
+            "side": "under"
+          },
+          "market": "Corners — Bragantino-SP",
+          "predictedOutcome": "under",
+          "predictedLabel": "Bragantino-SP — Moins de 8.5 corners",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShots",
+          "params": {
+            "line": 25.5,
+            "side": "over"
+          },
+          "market": "Total tirs",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 25.5 tirs",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "home",
+            "line": 10.5,
+            "side": "over"
+          },
+          "market": "Tirs — Vitoria",
+          "predictedOutcome": "over",
+          "predictedLabel": "Vitoria — Plus de 10.5 tirs",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "away",
+            "line": 20.5,
+            "side": "under"
+          },
+          "market": "Tirs — Bragantino-SP",
+          "predictedOutcome": "under",
+          "predictedLabel": "Bragantino-SP — Moins de 20.5 tirs",
+          "predictedOdds": 1.25,
+          "probability": 80,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShotsOnTarget",
+          "params": {
+            "line": 14.5,
+            "side": "under"
+          },
+          "market": "Total tirs cadrés",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 14.5 tirs cadrés",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "home",
+            "line": 3.5,
+            "side": "over"
+          },
+          "market": "Tirs cadrés — Vitoria",
+          "predictedOutcome": "over",
+          "predictedLabel": "Vitoria — Plus de 3.5 tirs cadrés",
+          "predictedOdds": 1.29,
+          "probability": 78,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "away",
+            "line": 7.5,
+            "side": "under"
+          },
+          "market": "Tirs cadrés — Bragantino-SP",
+          "predictedOutcome": "under",
+          "predictedLabel": "Bragantino-SP — Moins de 7.5 tirs cadrés",
+          "predictedOdds": 1.28,
+          "probability": 78,
+          "minOdds": 1.2
+        }
+      ],
+      "engineVersion": 5
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 10643,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 3131,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 10643,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 3131,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 10643,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 10643
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.07388600000000001,
+    "analysedAt": "2026-11-17T23:48:01.055Z",
+    "timing": "avance",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 489,
+      "tokens": 1553,
+      "lecons": [
+        "cal-2026-10-26-flamengo-atletico-mg|result",
+        "cal-2026-10-03-atletico-mg-rb-bragantino|teamCorners:away"
+      ],
+      "dossiersDu": "2026-11-16T23:32:45.014Z",
+      "equipes": {
+        "home": {
+          "id": "fotmob-7733",
+          "dossier": true
+        },
+        "away": {
+          "id": "fotmob-109705",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "Brazil Série A",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "magasin",
+      "home": {
+        "team": "Vitoria",
+        "teamId": "fotmob-7733",
+        "formation": "4-1-4-1",
+        "coach": "Cléber dos Santos",
+        "statsSince": "2026-01-01",
+        "teamMatches": 40,
+        "startXI": [
+          {
+            "id": "fotmob-632708",
+            "name": "Emmanuel Martínez",
+            "number": 6,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.678,
+            "y": 0.375,
+            "stats": {
+              "apps": 32,
+              "starts": 29,
+              "minutes": 2500,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.93,
+              "rating": 6.89
+            }
+          },
+          {
+            "id": "fotmob-637585",
+            "name": "Matheuzinho",
+            "number": 10,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.678,
+            "y": 0.125,
+            "stats": {
+              "apps": 37,
+              "starts": 32,
+              "minutes": 2436,
+              "goals": 5,
+              "assists": 4,
+              "xg": 3.79,
+              "rating": 6.85
+            }
+          },
+          {
+            "id": "fotmob-864464",
+            "name": "Erick",
+            "number": 33,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.678,
+            "y": 0.875,
+            "stats": {
+              "apps": 38,
+              "starts": 32,
+              "minutes": 2731,
+              "goals": 8,
+              "assists": 6,
+              "xg": 2.96,
+              "rating": 7.05
+            }
+          },
+          {
+            "id": "fotmob-919212",
+            "name": "Gabriel Baralhas",
+            "number": 44,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.678,
+            "y": 0.625,
+            "stats": {
+              "apps": 23,
+              "starts": 22,
+              "minutes": 1917,
+              "goals": 2,
+              "assists": 4,
+              "xg": 1.99,
+              "rating": 6.96
+            }
+          },
+          {
+            "id": "fotmob-954213",
+            "name": "Cacá",
+            "number": 25,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 31,
+              "starts": 31,
+              "minutes": 2676,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.75,
+              "rating": 6.51
+            }
+          },
+          {
+            "id": "fotmob-966069",
+            "name": "Luan Cândido",
+            "number": 36,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.292,
+            "y": 0.375,
+            "stats": {
+              "apps": 31,
+              "starts": 29,
+              "minutes": 2615,
+              "goals": 1,
+              "assists": 2,
+              "xg": 1.51,
+              "rating": 6.64
+            }
+          },
+          {
+            "id": "fotmob-1010274",
+            "name": "Jamerson",
+            "number": 83,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.292,
+            "y": 0.125,
+            "stats": {
+              "apps": 22,
+              "starts": 16,
+              "minutes": 1521,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.51,
+              "rating": 7.02
+            }
+          },
+          {
+            "id": "fotmob-1281584",
+            "name": "Lucas Arcanjo",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 36,
+              "starts": 36,
+              "minutes": 3240,
+              "goals": 0,
+              "assists": 1,
+              "xg": null,
+              "rating": 7.01
+            }
+          },
+          {
+            "id": "fotmob-1350017",
+            "name": "Caíque",
+            "number": 95,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.485,
+            "y": 0.5,
+            "stats": {
+              "apps": 34,
+              "starts": 32,
+              "minutes": 2458,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.06,
+              "rating": 6.75
+            }
+          },
+          {
+            "id": "fotmob-1357732",
+            "name": "Mateusinho",
+            "number": 98,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.292,
+            "y": 0.875,
+            "stats": {
+              "apps": 14,
+              "starts": 10,
+              "minutes": 881,
+              "goals": 0,
+              "assists": 2,
+              "xg": 0.98,
+              "rating": 7.28
+            }
+          },
+          {
+            "id": "fotmob-1605930",
+            "name": "Renê",
+            "number": 91,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.89,
+            "y": 0.5,
+            "stats": {
+              "apps": 35,
+              "starts": 27,
+              "minutes": 2472,
+              "goals": 16,
+              "assists": 1,
+              "xg": 8.49,
+              "rating": 6.77
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-339125",
+            "name": "Marinho",
+            "number": 7,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 19,
+              "starts": 4,
+              "minutes": 494,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.63,
+              "rating": 6.33
+            }
+          },
+          {
+            "id": "fotmob-538540",
+            "name": "Walace",
+            "number": 15,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 12,
+              "starts": 3,
+              "minutes": 351,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.12,
+              "rating": 6.4
+            }
+          },
+          {
+            "id": "fotmob-679873",
+            "name": "Renato Kayzer",
+            "number": 79,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 29,
+              "starts": 14,
+              "minutes": 1221,
+              "goals": 5,
+              "assists": 1,
+              "xg": 5.08,
+              "rating": 6.45
+            }
+          },
+          {
+            "id": "fotmob-971433",
+            "name": "Ignacio Laquintana",
+            "number": 77,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 9,
+              "starts": 4,
+              "minutes": 431,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.27,
+              "rating": 6.33
+            }
+          },
+          {
+            "id": "fotmob-1031130",
+            "name": "Lucas Silva",
+            "number": 20,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 11,
+              "starts": 1,
+              "minutes": 219,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.97,
+              "rating": 6.36
+            }
+          },
+          {
+            "id": "fotmob-1185179",
+            "name": "Rúben Ismael",
+            "number": 16,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 1,
+              "starts": 0,
+              "minutes": 6,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1436124",
+            "name": "Alex Bruno",
+            "number": 9,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 7,
+              "starts": 2,
+              "minutes": 185,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.19,
+              "rating": 5.98
+            }
+          },
+          {
+            "id": "fotmob-1459694",
+            "name": "Yuri",
+            "number": 71,
+            "position": "Goalkeeper",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1607054",
+            "name": "Diego Tarzia",
+            "number": 12,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 32,
+              "starts": 14,
+              "minutes": 1409,
+              "goals": 2,
+              "assists": 2,
+              "xg": 1.82,
+              "rating": 6.53
+            }
+          },
+          {
+            "id": "fotmob-1637669",
+            "name": "Zé Vitor",
+            "number": 88,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 31,
+              "starts": 21,
+              "minutes": 1998,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.73,
+              "rating": 6.86
+            }
+          },
+          {
+            "id": "fotmob-1753486",
+            "name": "Edenilson",
+            "number": 26,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 15,
+              "starts": 5,
+              "minutes": 502,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.33,
+              "rating": 6.4
+            }
+          },
+          {
+            "id": "fotmob-1797938",
+            "name": "Gean",
+            "number": 59,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 90,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.75
+            }
+          }
+        ],
+        "unavailable": [],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-1174633",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Ramon",
+            "position": "Midfielder",
+            "starts": 26,
+            "goals": 2,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          }
+        ],
+        "lastMatch": {
+          "date": "2026-11-06",
+          "league": "Brazil Série A",
+          "home": "Vitória",
+          "away": "Fluminense",
+          "homeGoals": 0,
+          "awayGoals": 3
+        }
+      },
+      "away": {
+        "team": "Bragantino-SP",
+        "teamId": "fotmob-109705",
+        "formation": "4-2-3-1",
+        "coach": "Vágner Mancini",
+        "statsSince": "2026-01-01",
+        "teamMatches": 46,
+        "startXI": [
+          {
+            "id": "fotmob-215051",
+            "name": "Eduardo Sasha",
+            "number": 8,
+            "position": "Forward",
+            "age": 34,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 35,
+              "starts": 21,
+              "minutes": 1879,
+              "goals": 4,
+              "assists": 0,
+              "xg": 6.96,
+              "rating": 6.56
+            }
+          },
+          {
+            "id": "fotmob-409017",
+            "name": "Tiago Volpi",
+            "number": 18,
+            "position": "Goalkeeper",
+            "age": 35,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 29,
+              "starts": 29,
+              "minutes": 2597,
+              "goals": 2,
+              "assists": 0,
+              "xg": 1.58,
+              "rating": 7.12
+            }
+          },
+          {
+            "id": "fotmob-844510",
+            "name": "Juninho Capixaba",
+            "number": 29,
+            "position": "Defender",
+            "age": 29,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.292,
+            "y": 0.125,
+            "stats": {
+              "apps": 39,
+              "starts": 38,
+              "minutes": 3360,
+              "goals": 3,
+              "assists": 2,
+              "xg": 1.45,
+              "rating": 7.23
+            }
+          },
+          {
+            "id": "fotmob-960494",
+            "name": "Ramires",
+            "number": 7,
+            "position": "Midfielder",
+            "age": 26,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.485,
+            "y": 0.7,
+            "stats": {
+              "apps": 33,
+              "starts": 20,
+              "minutes": 1769,
+              "goals": 2,
+              "assists": 2,
+              "xg": 1.05,
+              "rating": 6.77
+            }
+          },
+          {
+            "id": "fotmob-1132936",
+            "name": "Guzmán Rodríguez",
+            "number": 2,
+            "position": "Defender",
+            "age": 26,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "x": 0.292,
+            "y": 0.375,
+            "stats": {
+              "apps": 11,
+              "starts": 11,
+              "minutes": 990,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.04,
+              "rating": 7.03
+            }
+          },
+          {
+            "id": "fotmob-1249293",
+            "name": "Fabinho",
+            "number": 5,
+            "position": "Midfielder",
+            "age": 24,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.485,
+            "y": 0.3,
+            "stats": {
+              "apps": 23,
+              "starts": 14,
+              "minutes": 1180,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.29,
+              "rating": 6.54
+            }
+          },
+          {
+            "id": "fotmob-1256634",
+            "name": "Lucas Barbosa",
+            "number": 21,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.678,
+            "y": 0.837,
+            "stats": {
+              "apps": 41,
+              "starts": 38,
+              "minutes": 3327,
+              "goals": 8,
+              "assists": 6,
+              "xg": 6.88,
+              "rating": 7.15
+            }
+          },
+          {
+            "id": "fotmob-1262152",
+            "name": "Gustavo Marques",
+            "number": 16,
+            "position": "Defender",
+            "age": 25,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 38,
+              "starts": 35,
+              "minutes": 3073,
+              "goals": 2,
+              "assists": 1,
+              "xg": 1.94,
+              "rating": 7.14
+            }
+          },
+          {
+            "id": "fotmob-1407217",
+            "name": "Henry Mosquera",
+            "number": 30,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "COL",
+            "countryName": "Colombia",
+            "x": 0.678,
+            "y": 0.163,
+            "stats": {
+              "apps": 33,
+              "starts": 20,
+              "minutes": 1888,
+              "goals": 1,
+              "assists": 5,
+              "xg": 3.25,
+              "rating": 7.14
+            }
+          },
+          {
+            "id": "fotmob-1640270",
+            "name": "Wallace Yan",
+            "number": 47,
+            "position": "Midfielder",
+            "age": 21,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.678,
+            "y": 0.5,
+            "stats": {
+              "apps": 19,
+              "starts": 8,
+              "minutes": 675,
+              "goals": 3,
+              "assists": 2,
+              "xg": 2.87,
+              "rating": 6.94
+            }
+          },
+          {
+            "id": "fotmob-1926959",
+            "name": "Ryan Augusto",
+            "number": 52,
+            "position": "Defender",
+            "age": 19,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.292,
+            "y": 0.875,
+            "stats": {
+              "apps": 13,
+              "starts": 9,
+              "minutes": 857,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.38,
+              "rating": 7.28
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-319589",
+            "name": "Gabriel",
+            "number": 6,
+            "position": "Midfielder",
+            "age": 34,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 29,
+              "starts": 24,
+              "minutes": 1843,
+              "goals": 2,
+              "assists": 0,
+              "xg": 0.69,
+              "rating": 6.66
+            }
+          },
+          {
+            "id": "fotmob-704019",
+            "name": "Agustín Sant'Anna",
+            "number": 23,
+            "position": "Defender",
+            "age": 29,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "stats": {
+              "apps": 22,
+              "starts": 17,
+              "minutes": 1479,
+              "goals": 0,
+              "assists": 2,
+              "xg": 0.46,
+              "rating": 7.15
+            }
+          },
+          {
+            "id": "fotmob-768389",
+            "name": "Cleiton",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 29,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 18,
+              "starts": 17,
+              "minutes": 1543,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.01
+            }
+          },
+          {
+            "id": "fotmob-789877",
+            "name": "Matheus Fernandes",
+            "number": 35,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 24,
+              "starts": 14,
+              "minutes": 1193,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.85,
+              "rating": 6.69
+            }
+          },
+          {
+            "id": "fotmob-920420",
+            "name": "Eduardo Santos",
+            "number": 3,
+            "position": "Defender",
+            "age": 28,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 7,
+              "starts": 2,
+              "minutes": 301,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.09,
+              "rating": 6.39
+            }
+          },
+          {
+            "id": "fotmob-1033279",
+            "name": "Isidro Pitta",
+            "number": 9,
+            "position": "Forward",
+            "age": 27,
+            "countryCode": "PAR",
+            "countryName": "Paraguay",
+            "stats": {
+              "apps": 42,
+              "starts": 27,
+              "minutes": 2522,
+              "goals": 8,
+              "assists": 5,
+              "xg": 6.89,
+              "rating": 6.7
+            }
+          },
+          {
+            "id": "fotmob-1209100",
+            "name": "Vanderlan",
+            "number": 12,
+            "position": "Defender",
+            "age": 24,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 3,
+              "starts": 1,
+              "minutes": 80,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.02,
+              "rating": 6.52
+            }
+          },
+          {
+            "id": "fotmob-1231596",
+            "name": "Alix",
+            "number": 4,
+            "position": "Defender",
+            "age": 27,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 32,
+              "starts": 26,
+              "minutes": 2315,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.7,
+              "rating": 6.92
+            }
+          },
+          {
+            "id": "fotmob-1317192",
+            "name": "Bruninho",
+            "number": 19,
+            "position": "Forward",
+            "age": 23,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 1,
+              "starts": 0,
+              "minutes": 18,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.14,
+              "rating": 6.38
+            }
+          },
+          {
+            "id": "fotmob-1372718",
+            "name": "José Herrera",
+            "number": 32,
+            "position": "Forward",
+            "age": 23,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 37,
+              "starts": 24,
+              "minutes": 1859,
+              "goals": 3,
+              "assists": 2,
+              "xg": 2.74,
+              "rating": 6.65
+            }
+          },
+          {
+            "id": "fotmob-1448300",
+            "name": "Gustavinho",
+            "number": 22,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 25,
+              "starts": 10,
+              "minutes": 1084,
+              "goals": 2,
+              "assists": 2,
+              "xg": 0.61,
+              "rating": 6.68
+            }
+          },
+          {
+            "id": "fotmob-1638434",
+            "name": "Vinicinho",
+            "number": 17,
+            "position": "Forward",
+            "age": 22,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 24,
+              "starts": 11,
+              "minutes": 992,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.86,
+              "rating": 6.76
+            }
+          }
+        ],
+        "unavailable": [],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-1033279",
+            "age": 27,
+            "countryCode": "PAR",
+            "countryName": "Paraguay",
+            "name": "Isidro Pitta",
+            "position": "Forward",
+            "starts": 27,
+            "goals": 8,
+            "assists": 5,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-1231596",
+            "age": 27,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "name": "Alix",
+            "position": "Midfielder",
+            "starts": 26,
+            "goals": 1,
+            "assists": 0,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-319589",
+            "age": 34,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "name": "Gabriel",
+            "position": "Midfielder",
+            "starts": 24,
+            "goals": 2,
+            "assists": 0,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-1372718",
+            "age": 23,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "José Herrera",
+            "position": "Midfielder",
+            "starts": 24,
+            "goals": 3,
+            "assists": 2,
+            "status": "remplaçant"
+          }
+        ],
+        "lastMatch": {
+          "date": "2026-11-02",
+          "league": "Brazil Série A",
+          "home": "RB Bragantino",
+          "away": "Santos",
+          "homeGoals": 2,
+          "awayGoals": 1
+        }
+      },
+      "matchInfo": null
+    },
+    "analysis": {
+      "summary": "Vitória (15e, 38 pts) est en crise : 5 matchs sans victoire, deux défaites sans marquer (0-3 Fluminense, 0-2 Coritiba), et un nouvel entraîneur, Cléber dos Santos, depuis le 06/11 (1 match, 1 défaite). Bragantino (8e, 47 pts) est en hausse sur ses 5 derniers matchs mais n'a pas gagné à l'extérieur depuis 8 matchs de championnat. Les compositions sont celles des derniers matchs, donc un onze probable : Renê (16 buts) mène l'attaque de Vitória, Ramon est absent de la feuille. Chez Bragantino, Pitta, Alix, Gabriel et Herrera étaient remplaçants.",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Vitória enchaîne les mauvais résultats, Bragantino est en reprise.",
+          "evidence": "Vitória : D D N N D sur les 5 derniers ; 11 buts marqués et 16 encaissés sur 10 matchs. Bragantino : 2 pts/match sur 5 matchs contre 0,4 avant."
+        },
+        {
+          "factor": "statistiques et moyennes",
+          "observation": "Bragantino produit plus de volume que Vitória, mais sort de son registre à l'extérieur.",
+          "evidence": "10 derniers : tirs 19,4 contre 12,4, corners 7,3 contre 4,2. Bragantino à l'extérieur : 0,6 but marqué, 15,8 tirs, 6,2 corners."
+        },
+        {
+          "factor": "classement",
+          "observation": "Vitória est solide à domicile et nulle à l'extérieur. Bragantino est mieux classé.",
+          "evidence": "Vitória à domicile : 10 V sur 17 ; à l'extérieur : 0 V. Bragantino à l'extérieur : 4 V, 5 N, 8 D."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le marché et le moteur sont quasi alignés, sans valeur.",
+          "evidence": "edge -0,77 % ; mise PASS ; Bragantino 38 % (cote juste 2,62)."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : Bragantino est en meilleure dynamique et plus productif. Mais Vitória est très solide à domicile et le match reste ouvert, ce qui nuance la confiance sur le résultat.",
+      "caveats": "La forme récente de Bragantino n'a pas été trouvée dans la fiche. Le dossier de Bragantino date du 03/11. Les compositions viennent du magasin (derniers onzes alignés) et ne sont pas officielles. L'historique des changements d'entraîneur est partiel.",
+      "lineupImpact": "Source magasin : ce sont les derniers onzes alignés, pas ceux du match. Vitória, avec un nouvel entraîneur en 4-1-4-1, s'appuie sur Renê (16 buts, 8,49 xG) et Erick (8+6) ; Ramon, titulaire habituel (26 titularisations), n'était pas sur la feuille. Bragantino alignait Lucas Barbosa (8+6) et Mosquera (1+5) mais laissait Pitta (8+5) sur le banc. Rien n'est annoncé absent pour ce match par FotMob.",
+      "marketViews": [
+        {
+          "market": "Résultat",
+          "pick": "Bragantino-SP gagne",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "38 % : Bragantino a une meilleure dynamique (2 pts/match sur 5 matchs), mais seulement 4 V en 17 déplacements, face à un Vitória fort à domicile (10 V en 17).",
+          "reasoning": "La crise de Vitória (5 matchs sans victoire, aucun but sur 2 matchs) soutient le pronostic. Mais Bragantino n'a pas gagné à l'extérieur depuis 8 matchs et le moteur ne donne que 38 %. Mon bilan sur ce marché est faible (429/730).",
+          "probability": 38
+        },
+        {
+          "market": "Total corners",
+          "pick": "Moins de 14.5 corners",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "79 % : le moteur attend 11,52 corners au total et le championnat tourne à 10,6 par match, loin de 14,5.",
+          "reasoning": "Les moyennes de corners des deux équipes (4,2 et 7,3) sont bien sous le seuil. Seul un scénario très ouvert pourrait l'approcher.",
+          "probability": 79
+        },
+        {
+          "market": "Corners — Vitoria",
+          "pick": "Vitoria — Moins de 8.5 corners",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : Vitória produit 4,2 corners par match sur 10 (4,8 à domicile), et le moteur en attend 5,67.",
+          "reasoning": "Le volume de Vitória est faible et loin de 8,5. Ils doivent rester sous ce plafond sauf scénario de course au score.",
+          "probability": 83
+        },
+        {
+          "market": "Corners — Bragantino-SP",
+          "pick": "Bragantino-SP — Moins de 8.5 corners",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "82 % : Bragantino produit 7,3 corners par match (6,2 à l'extérieur), et le moteur en attend 5,85.",
+          "reasoning": "Ma leçon du 03/10 (Atlético-MG – Bragantino) invite à la prudence sur ce type de plafond : un visiteur mené court après le score. Les moyennes à l'extérieur restent toutefois sous 8,5.",
+          "probability": 82
+        },
+        {
+          "market": "Total tirs",
+          "pick": "Plus de 25.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "82 % : le moteur attend 31,65 tirs au total, et Bragantino en tire 19,4 par match contre 16,1 concédés pour Vitória.",
+          "reasoning": "Les 10 derniers matchs des deux équipes mènent à un total confortable au-dessus du seuil. Les 12,4 tirs de Vitória sont le point faible.",
+          "probability": 82
+        },
+        {
+          "market": "Tirs — Vitoria",
+          "pick": "Vitoria — Plus de 10.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : Vitória tire 12,4 fois par match sur 10 (15,3 à domicile) et le moteur en attend 15,68.",
+          "reasoning": "À domicile, Vitória dépasse nettement le seuil. Le risque est un onze remanié par le nouvel entraîneur.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs — Bragantino-SP",
+          "pick": "Bragantino-SP — Moins de 20.5 tirs",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "80 % : Bragantino tire 19,4 fois par match sur 10 mais 15,8 à l'extérieur ; le moteur en attend 15,97.",
+          "reasoning": "Sa moyenne est proche du plafond, et un visiteur qui doit courir après le score peut tirer davantage. La moyenne à l'extérieur reste confortable.",
+          "probability": 80
+        },
+        {
+          "market": "Total tirs cadrés",
+          "pick": "Moins de 14.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : le moteur attend 11,14 tirs cadrés au total ; les deux équipes en tirent 4,6 et 7,2 par match.",
+          "reasoning": "Même en additionnant les deux meilleures moyennes, on atteint 11,8, sous 14,5. Seul un match très ouvert l'approcherait.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs cadrés — Vitoria",
+          "pick": "Vitoria — Plus de 3.5 tirs cadrés",
+          "verdict": "nuance",
+          "confidence": "moyenne",
+          "explanation": "78 % : Vitória en cadre 4,6 par match (5,3 à domicile) et le moteur en attend 5,61, au-dessus de 3,5.",
+          "reasoning": "À domicile, la marge est correcte, mais l'équipe est muette devant (aucun but sur 2 matchs). Le seuil de 3,5 laisse peu de marge.",
+          "probability": 78
+        },
+        {
+          "market": "Tirs cadrés — Bragantino-SP",
+          "pick": "Bragantino-SP — Moins de 7.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "78 % : Bragantino cadre 7,2 tirs par match sur 10 mais 5,4 à l'extérieur, et le moteur en attend 5,54.",
+          "reasoning": "Sa moyenne à l'extérieur est nettement sous le seuil. Sa moyenne générale (7,2) est juste en dessous, d'où une marge réduite.",
+          "probability": 78
+        }
+      ]
+    },
+    "updatedAt": "2026-11-17T23:48:01.055Z",
+    "createdAt": "2026-11-17T23:48:01.055Z"
   }
 ]

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "majLe": "2026-11-14T23:09:29.454Z",
+  "majLe": "2026-11-17T23:59:59.666Z",
   "etapes": {
     "27": {
       "variantes": [
@@ -2004,6 +2004,70 @@
           "le": "2026-10-27",
           "heure": "2026-10-27T21:59:54.653Z",
           "source": "code"
+        }
+      ],
+      "jugements": [
+        {
+          "mode": "moyenne",
+          "sens": "min",
+          "n": {
+            "lignes": 14280,
+            "blocs": 1020,
+            "matchs": 1020
+          },
+          "a": {
+            "moyenne": 0.5336968603126196
+          },
+          "b": {
+            "moyenne": 0.5192405744853056
+          },
+          "gain": 0.014456285827310837,
+          "ecartType": 0.0014452041354129984,
+          "seuil": {
+            "alpha": 0.05,
+            "variantes": 27,
+            "alphaCorrige": 0.001851851851851852,
+            "z": 3.1130388404010105
+          },
+          "fourchette": [
+            0.009957309221462013,
+            0.01895526243315966
+          ],
+          "p": 0,
+          "verdict": "retenu",
+          "raison": "L’amélioration dépasse ce que le hasard explique : la fourchette est entièrement au-dessus de zéro (1 020 matchs, 27 variantes essayées).",
+          "controle": {
+            "percentile95": [
+              0.011749248119352686,
+              0.01738972681118563
+            ],
+            "tiragesIgnores": 0
+          },
+          "tirages": 1000,
+          "graine": 1,
+          "etape": "28",
+          "mesure": "perte-log",
+          "quoi": "Étape 28 — combinés d’un même match : la grille du modèle de buts contre le produit des simples (14 combinés par match, bloc = le match), lignes rangées chaque nuit",
+          "principal": true,
+          "le": "2026-11-17T23:59:59.666Z",
+          "lancement": "2026-10-27",
+          "version": "simulation-v1",
+          "fenetre": {
+            "de": "2026-10-28",
+            "a": "2026-11-16"
+          },
+          "ecartees": {
+            "avantLancement": 0,
+            "donneesVues": 0
+          },
+          "enPourcent": {
+            "gain": 2.708707302276968,
+            "fourchette": [
+              1.8657237772823685,
+              3.5516908272715675
+            ],
+            "quoi": "de perte log en moins"
+          }
         }
       ]
     },
