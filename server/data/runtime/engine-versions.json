@@ -1,12 +1,13 @@
 {
   "format": 1,
-  "enService": 5,
+  "enService": 6,
   "pile": [
     1,
     2,
     3,
     4,
-    5
+    5,
+    6
   ],
   "versions": [
     {
@@ -533,6 +534,204 @@
           "retires": []
         }
       ]
+    },
+    {
+      "numero": 6,
+      "creeeLe": "2026-11-18T11:07:04.272Z",
+      "origine": "code-et-reglages",
+      "pourquoi": "mise à jour du code du moteur et de ses réglages (notée au démarrage de l’appli)",
+      "empreinte": "93e15c005555538e03845fd54d2790bc67e0d4d6",
+      "empreinteReglages": {
+        "football": "07b792fe787cbfe805874b8153342e20e7e16e2f"
+      },
+      "reglages": {
+        "football": {
+          "edgeThresholdMin": 0.02,
+          "edgeThresholdMax": 0.25,
+          "valueBookmakers": [
+            "unibet_fr",
+            "betclic_fr",
+            "winamax_fr",
+            "pmu_fr"
+          ],
+          "maxValueOdds": 5,
+          "defaultCorrelation": -0.075,
+          "kellyFraction": 0.125,
+          "maxStakePercent": 0.02,
+          "homeAdvantage": 1.06,
+          "cornersAdjustmentMax": 0.08,
+          "weights": {
+            "market": 1,
+            "structural": 0,
+            "exogenous": 0
+          }
+        }
+      },
+      "code": {
+        "empreinte": "0b091899d40c8331a771d8c963b033a6f067aecf",
+        "fichiers": {
+          "core/engine/combiner.js": "d15e6d7bec7204f5",
+          "core/engine/confidence.js": "25dd1e7877dbe32c",
+          "core/engine/coteMinimale.js": "0ea5dee5c0b3e1fa",
+          "core/engine/engineConfig.js": "2966f7ae061ccc43",
+          "core/engine/fraicheurCotes.js": "d7f4bf125d8b7902",
+          "core/engine/goalModel.js": "236a33d7f952b12d",
+          "core/engine/oddsEngine.js": "8e59a0c5a0afd077",
+          "core/engine/poidsDeLaCombinaison.js": "b95090c75ca90657",
+          "core/engine/resultPrediction.js": "df32c8d76e8c720c",
+          "core/engine/scorePrediction.js": "44bb6ed76ed72498",
+          "core/engine/stakeSizing.js": "21c1a015077c6316",
+          "core/engine/tiltState.js": "de63bb4a3c63d88f",
+          "core/engine/valueFinder.js": "416b1fd5e3596e40",
+          "core/engine/verdictPari.js": "3b4d376c117580c7",
+          "core/engine/vosBookmakers.js": "a552e24a4e6334f1",
+          "core/market/marginRemoval.js": "b3deabcfcf1fe1d7",
+          "core/model/dixonColes.js": "83c4cf5111c071ca",
+          "core/model/poisson.js": "78be7262cce935f7",
+          "core/risk/exogenousFactors.js": "fd7749a7d45ba0fd",
+          "core/risk/gardeFous.js": "ec648da597f04395",
+          "core/risk/seriesDePertes.js": "84ad459c0c2794a2",
+          "core/risk/structuralFactors.js": "4a21c27362e21c93",
+          "core/signals/cornersSignal.js": "28e6d8c721386a52",
+          "core/xg/xgSmoothing.js": "3a125f8d663be5c0",
+          "core/xg/xgStructural.js": "724a35bcf329112a",
+          "data/db/entreesButs.js": "85ef724fc5749bc9",
+          "data/db/matchStatsRead.js": "7dc674629218dc54",
+          "data/db/scoreFormRead.js": "46e2c8b26c722bec",
+          "data/db/statInputsRead.js": "45470ac1777308c6",
+          "data/providers/matchEnrichment.js": "22c9be3d901c23c3",
+          "data/providers/standingsService.js": "5ff06688e36c3035",
+          "sports/football/bookmakerConsensus.js": "70ee1711b3040108",
+          "sports/football/index.js": "7862358c3a6c3564",
+          "sports/football/markets.js": "c1296b56003be5cb",
+          "sports/football/model.js": "253a664344483f8a",
+          "sports/football/scoreMatrix.js": "d04ef225bae98fa8",
+          "sports/football/statMarkets.js": "86fe12b131b4315e",
+          "sports/football/xgBaseline.js": "1774c087b4d30769",
+          "sports/index.js": "963bc8caf965c7bc",
+          "sports/sportPort.js": "433369bfb949df9c"
+        }
+      },
+      "lancements": [
+        {
+          "etape": "29",
+          "version": "indice-v1"
+        },
+        {
+          "etape": "30",
+          "version": "fiches-v1"
+        },
+        {
+          "etape": "37",
+          "version": "style-v1"
+        },
+        {
+          "etape": "28",
+          "version": "simulation-v1"
+        },
+        {
+          "etape": "32",
+          "version": "contexte-v1"
+        },
+        {
+          "etape": "33",
+          "version": "cartons-corners-v1"
+        },
+        {
+          "etape": "34",
+          "version": "joueurs-v1"
+        },
+        {
+          "etape": "38",
+          "version": "combinaison-v1"
+        },
+        {
+          "etape": "36",
+          "version": "coupes-v1"
+        },
+        {
+          "etape": "35",
+          "version": "debuts-de-saison-v1"
+        },
+        {
+          "etape": "39",
+          "version": "mise-v1"
+        }
+      ],
+      "depuis": 5,
+      "changements": [
+        {
+          "type": "reglage",
+          "sport": "football",
+          "cle": "maxExpectedRateGap",
+          "libelle": "maxExpectedRateGap",
+          "format": "brut",
+          "avant": 0.4,
+          "apres": null
+        },
+        {
+          "type": "reglage",
+          "sport": "football",
+          "cle": "valueBookmakers",
+          "libelle": "Vos bookmakers (un pari n’est recommandé que chez eux)",
+          "format": "liste",
+          "avant": [
+            "williamhill",
+            "sport888",
+            "betsson",
+            "nordicbet",
+            "unibet_nl",
+            "unibet_se",
+            "leovegas_se",
+            "tipico_de",
+            "coolbet",
+            "codere_it",
+            "betclic_fr",
+            "unibet_fr",
+            "winamax_fr",
+            "pmu_fr"
+          ],
+          "apres": [
+            "unibet_fr",
+            "betclic_fr",
+            "winamax_fr",
+            "pmu_fr"
+          ],
+          "ajoutes": [],
+          "retires": [
+            "William Hill",
+            "888sport",
+            "Betsson",
+            "Nordic Bet",
+            "Unibet (NL)",
+            "Unibet (SE)",
+            "LeoVegas (SE)",
+            "Tipico (DE)",
+            "Coolbet",
+            "Codere (IT)"
+          ]
+        },
+        {
+          "type": "code",
+          "modifies": [
+            "core/engine/engineConfig.js",
+            "core/engine/oddsEngine.js",
+            "core/engine/valueFinder.js",
+            "core/engine/verdictPari.js",
+            "core/engine/vosBookmakers.js",
+            "core/risk/gardeFous.js"
+          ],
+          "ajoutes": [
+            "core/engine/combiner.js",
+            "core/engine/confidence.js",
+            "core/engine/poidsDeLaCombinaison.js",
+            "core/engine/stakeSizing.js"
+          ],
+          "retires": [
+            "core/risk/staking.js"
+          ]
+        }
+      ]
     }
   ],
   "journal": [
@@ -569,6 +768,13 @@
       "version": 5,
       "depuis": 4,
       "origine": "reglages"
+    },
+    {
+      "le": "2026-11-18T11:07:04.272Z",
+      "action": "creation",
+      "version": 6,
+      "depuis": 5,
+      "origine": "code-et-reglages"
     }
   ],
   "candidate": {
@@ -1969,1355 +2175,2770 @@
       "matchs": 800,
       "jours": 21
     },
-    "empreinte": "f01dd8496f56a415",
-    "enEssaiDepuis": "2026-10-22T15:45:40.552Z",
+    "empreinte": "ae993f5bbe690aa2",
+    "enEssaiDepuis": "2026-11-18T11:07:04.315Z",
     "varianteDeclareeLe": "2026-10-22T15:45:40.552Z",
     "essai": {
-      "depuis": "2026-10-24T14:48:31.802Z",
-      "versionEnService": 5,
-      "numero": 2,
-      "variante": "modele-buts-v1~2"
+      "depuis": "2026-11-18T11:07:04.315Z",
+      "versionEnService": 6,
+      "numero": 3,
+      "variante": "modele-buts-v1~3"
     },
-    "premiersChiffres": {
-      "regimes": {
-        "cotes-1n2-xg": 164,
-        "cotes-plusmoins-xg": 517,
-        "cotes-plusmoins-buts": 261,
-        "xg-seuls": 4,
-        "cotes-1n2-buts": 250,
-        "buts-seuls": 49
-      },
-      "calibration": {
-        "a": {
-          "bothTeamsScore": {
-            "pronostics": 1218,
-            "matchs": 1218,
-            "biais": -0.113344,
-            "ece": 0.113344
-          },
-          "resultAndTotal": {
-            "pronostics": 1245,
-            "matchs": 1245,
-            "biais": -0.013865,
-            "ece": 0.030166
-          },
-          "teamGoals": {
-            "pronostics": 2490,
-            "matchs": 1245,
-            "biais": -0.077843,
-            "ece": 0.077843
-          },
-          "totalGoals": {
-            "pronostics": 1245,
-            "matchs": 1245,
-            "biais": -0.078251,
-            "ece": 0.078251
-          }
-        },
-        "b": {
-          "bothTeamsScore": {
-            "pronostics": 1245,
-            "matchs": 1245,
-            "biais": -0.02919,
-            "ece": 0.032409
-          },
-          "resultAndTotal": {
-            "pronostics": 1245,
-            "matchs": 1245,
-            "biais": 0.018497,
-            "ece": 0.024911
-          },
-          "teamGoals": {
-            "pronostics": 2490,
-            "matchs": 1245,
-            "biais": -0.00248,
-            "ece": 0.015615
-          },
-          "totalGoals": {
-            "pronostics": 1245,
-            "matchs": 1245,
-            "biais": -0.011484,
-            "ece": 0.022158
-          }
-        }
-      },
-      "temoins": {
-        "matchs": 1245,
-        "a": 3.004775,
-        "b": 2.997892,
-        "exactA": 11,
-        "exactB": 11.73,
-        "horsGrille": 2,
-        "ecartees": {
-          "sansResultat": 44,
-          "apresCoupDEnvoi": 12,
-          "prolongationSansScore90": 1,
-          "sansIdentifiant": 72
-        },
-        "juge": false
-      },
-      "calculeLe": "2026-11-14T23:09:29.454Z",
-      "matchs": 1245,
-      "lignes": 6225,
-      "a": 0.82349,
-      "b": 0.754076,
-      "gainPct": 8.429,
-      "horizon": {
-        "matchs": 800,
-        "jours": 21
-      },
-      "joursEcoules": 21,
-      "auPlusTotLe": "2026-11-14T14:48:31.802Z",
-      "aVenir": {
-        "pronostics": 3190,
-        "matchs": 638
-      },
-      "ecartees": {
-        "autreVersionEnService": 1210,
-        "heureInconnue": 5,
-        "sansResultat": 160,
-        "apresCoupDEnvoi": 60,
-        "prolongationSansScore90": 5,
-        "sansIdentifiant": 360
-      },
-      "parMarche": [
-        {
-          "marketId": "bothTeamsScore",
-          "lignes": 1245,
-          "matchs": 1245,
-          "a": 0.741444,
-          "b": 0.685984
-        },
-        {
-          "marketId": "resultAndTotal",
-          "lignes": 1245,
-          "matchs": 1245,
-          "a": 1.502575,
-          "b": 1.434388
-        },
-        {
-          "marketId": "teamGoals",
-          "lignes": 2490,
-          "matchs": 1245,
-          "a": 0.625882,
-          "b": 0.550134
-        },
-        {
-          "marketId": "totalGoals",
-          "lignes": 1245,
-          "matchs": 1245,
-          "a": 0.621666,
-          "b": 0.549738
-        }
-      ]
-    },
-    "jugement": {
-      "parFamille": {
-        "bothTeamsScore": {
-          "lignes": 1245,
-          "matchs": 1245,
-          "a": 0.741444,
-          "b": 0.685984,
-          "gainPct": 7.48,
-          "fourchettePct": [
-            2.203,
-            12.757
-          ],
-          "verdict": "retenu",
-          "variantes": 321
-        },
-        "resultAndTotal": {
-          "lignes": 1245,
-          "matchs": 1245,
-          "a": 1.502575,
-          "b": 1.434388,
-          "gainPct": 4.538,
-          "fourchettePct": [
-            1.914,
-            7.162
-          ],
-          "verdict": "retenu",
-          "variantes": 321
-        },
-        "teamGoals": {
-          "lignes": 2490,
-          "matchs": 1245,
-          "a": 0.625882,
-          "b": 0.550134,
-          "gainPct": 12.103,
-          "fourchettePct": [
-            7.289,
-            16.916
-          ],
-          "verdict": "retenu",
-          "variantes": 321
-        },
-        "totalGoals": {
-          "lignes": 1245,
-          "matchs": 1245,
-          "a": 0.621666,
-          "b": 0.549738,
-          "gainPct": 11.57,
-          "fourchettePct": [
-            4.786,
-            18.355
-          ],
-          "verdict": "retenu",
-          "variantes": 321
-        }
-      },
-      "calibration": {
-        "a": {
-          "bothTeamsScore": {
-            "pronostics": 1218,
-            "matchs": 1218,
-            "biais": -0.113344,
-            "ece": 0.113344,
-            "verdict": "trop-haut",
-            "variantes": 321
-          },
-          "resultAndTotal": {
-            "pronostics": 1245,
-            "matchs": 1245,
-            "biais": -0.013865,
-            "ece": 0.030166,
-            "verdict": "dans-le-hasard",
-            "variantes": 321
-          },
-          "teamGoals": {
-            "pronostics": 2490,
-            "matchs": 1245,
-            "biais": -0.077843,
-            "ece": 0.077843,
-            "verdict": "trop-haut",
-            "variantes": 321
-          },
-          "totalGoals": {
-            "pronostics": 1245,
-            "matchs": 1245,
-            "biais": -0.078251,
-            "ece": 0.078251,
-            "verdict": "trop-haut",
-            "variantes": 321
-          }
-        },
-        "b": {
-          "bothTeamsScore": {
-            "pronostics": 1245,
-            "matchs": 1245,
-            "biais": -0.02919,
-            "ece": 0.032409,
-            "verdict": "dans-le-hasard",
-            "variantes": 321
-          },
-          "resultAndTotal": {
-            "pronostics": 1245,
-            "matchs": 1245,
-            "biais": 0.018497,
-            "ece": 0.024911,
-            "verdict": "dans-le-hasard",
-            "variantes": 321
-          },
-          "teamGoals": {
-            "pronostics": 2490,
-            "matchs": 1245,
-            "biais": -0.00248,
-            "ece": 0.015615,
-            "verdict": "dans-le-hasard",
-            "variantes": 321
-          },
-          "totalGoals": {
-            "pronostics": 1245,
-            "matchs": 1245,
-            "biais": -0.011484,
-            "ece": 0.022158,
-            "verdict": "dans-le-hasard",
-            "variantes": 321
-          }
-        }
-      },
-      "surete": {
-        "totalGoals|2.5": {
-          "pronostics": 339,
-          "matchs": 339,
-          "biais": -0.018308,
-          "ece": 0.033359,
-          "verdict": "dans-le-hasard",
-          "variantes": 1
-        },
-        "bothTeamsScore": {
-          "pronostics": 1245,
-          "matchs": 1245,
-          "biais": -0.02919,
-          "ece": 0.032409,
-          "verdict": "trop-haut",
-          "variantes": 1
-        }
-      },
-      "regimes": {
-        "cotes-1n2-xg": 164,
-        "cotes-plusmoins-xg": 517,
-        "cotes-plusmoins-buts": 261,
-        "xg-seuls": 4,
-        "cotes-1n2-buts": 250,
-        "buts-seuls": 49
-      },
-      "temoins": {
-        "matchs": 1245,
-        "a": 3.004775,
-        "b": 2.997892,
-        "exactA": 11,
-        "exactB": 11.73,
-        "horsGrille": 2,
-        "ecartees": {
-          "sansResultat": 44,
-          "apresCoupDEnvoi": 12,
-          "prolongationSansScore90": 1,
-          "sansIdentifiant": 72
-        },
-        "juge": false
-      },
-      "le": "2026-11-14T23:09:29.454Z",
-      "principal": true,
-      "verdict": "retenu",
-      "raison": "L’amélioration dépasse ce que le hasard explique : la fourchette est entièrement au-dessus de zéro (1 245 matchs, 321 variantes essayées).",
-      "matchs": 1245,
-      "lignes": 6225,
-      "a": 0.82349,
-      "b": 0.754076,
-      "gainPct": 8.429,
-      "fourchettePct": [
-        4.967,
-        11.892
-      ],
-      "quoi": "de perte log en moins",
-      "variantes": 321,
-      "fenetre": {
-        "de": "2026-10-25",
-        "a": "2026-11-14"
-      },
-      "lancement": "2026-10-24",
-      "ecartees": {
-        "autreVersionEnService": 1210,
-        "heureInconnue": 5,
-        "sansResultat": 160,
-        "apresCoupDEnvoi": 60,
-        "prolongationSansScore90": 5,
-        "sansIdentifiant": 360,
-        "avantLancement": 0,
-        "donneesVues": 0
-      },
-      "parMarche": [
-        {
-          "marketId": "bothTeamsScore",
-          "lignes": 1245,
-          "matchs": 1245,
-          "a": 0.741444,
-          "b": 0.685984
-        },
-        {
-          "marketId": "resultAndTotal",
-          "lignes": 1245,
-          "matchs": 1245,
-          "a": 1.502575,
-          "b": 1.434388
-        },
-        {
-          "marketId": "teamGoals",
-          "lignes": 2490,
-          "matchs": 1245,
-          "a": 0.625882,
-          "b": 0.550134
-        },
-        {
-          "marketId": "totalGoals",
-          "lignes": 1245,
-          "matchs": 1245,
-          "a": 0.621666,
-          "b": 0.549738
-        }
-      ],
-      "versionEnService": 5,
-      "empreinte": "f01dd8496f56a415",
-      "essai": 2
-    },
+    "premiersChiffres": null,
+    "jugement": null,
     "jugementsPerimes": [],
-    "banc": {
-      "indicatif": true,
-      "le": "2026-11-07T22:18:43.156Z",
-      "candidate": "modele-buts-v1",
-      "empreinte": "f01dd8496f56a415",
-      "periodes": [
-        "P2"
-      ],
-      "prix": [
-        "fd-avant-match"
-      ],
+    "banc": null
+  },
+  "candidatesPassees": [
+    {
+      "id": "modele-buts-v1",
+      "etape": "27",
+      "quoi": "Un seul modèle de buts : une grille des scores (Poisson et Dixon-Coles, rho −0,05) calée sur les cotes (1N2, et plus/moins 2,5 gratuit quand il existe), mélangée aux forces d’attaque et de défense tirées des xG ou des buts, pondérées dans le temps (demi-vies 35/25 remesurées sur 2024-25 et football-data 2001-2012 ; celles de l’étape 18, jugées sur 2019-2023, lues comme point de départ) ; tous les marchés de buts et le score en sortent ; démarrage à froid : retenu après mesure (m7).",
+      "modifications": {
+        "football": {
+          "modeleDeButs": {
+            "version": 1,
+            "rho": -0.05,
+            "demiVies": {
+              "attaque": 35,
+              "defense": 25
+            },
+            "prior": 8,
+            "statistique": "mix",
+            "poidsXg": 0.7,
+            "changementDeChampionnat": "remise-a-zero",
+            "ancrage": {
+              "ligne": 2.5,
+              "methode": "total-equilibre"
+            },
+            "melange": {
+              "avecPlusMoins": {
+                "wT": 0.1,
+                "wS": 0.1
+              },
+              "sans": {
+                "wT": 0.55,
+                "wS": 0.1
+              }
+            },
+            "demarrageAFroid": {
+              "matchs": 8
+            },
+            "bornes": [
+              0.2,
+              6
+            ]
+          }
+        }
+      },
       "marches": [
         "totalGoals",
         "bothTeamsScore",
         "teamGoals",
         "resultAndTotal"
       ],
-      "mesure": "perte-log",
-      "paires": 744112,
-      "matchs": 46507,
-      "ecartees": {
-        "sansPaire": 0,
-        "lignesDifferentes": 0,
-        "nonReglable": 0
-      },
-      "variantes": 321,
-      "a": 0.738705,
-      "b": 0.69601,
-      "gainPct": 5.78,
-      "fourchettePct": [
-        5.326,
-        6.234
-      ],
-      "verdict": "retenu",
-      "raison": "L’amélioration dépasse ce que le hasard explique : la fourchette est entièrement au-dessus de zéro (46 507 matchs, 321 variantes essayées).",
-      "dejaVues": {
-        "lignes": 0,
-        "part": 0,
-        "vuesDeclarees": true
-      },
-      "moteurs": {
-        "a": "fc14ea5a3e7827dd3d6f7a3eefde72a66207021b",
-        "b": "8eb8d83b6e0b710d243db6b6f6d70764247d1227"
-      },
-      "dureeMs": 599096,
-      "erreur": null,
-      "parFamille": {
-        "bothTeamsScore": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.727209,
-          "b": 0.688029,
-          "gainPct": 5.388,
-          "fourchettePct": [
-            4.671,
-            6.105
-          ],
-          "verdict": "retenu"
-        },
-        "resultAndTotal": {
-          "lignes": 139521,
-          "matchs": 46507,
-          "a": 1.658057,
-          "b": 1.607921,
-          "gainPct": 3.024,
-          "fourchettePct": [
-            2.715,
-            3.333
-          ],
-          "verdict": "retenu"
-        },
-        "teamGoals": {
-          "lignes": 372056,
-          "matchs": 46507,
-          "a": 0.483011,
-          "b": 0.442737,
-          "gainPct": 8.338,
-          "fourchettePct": [
-            7.746,
-            8.93
-          ],
-          "verdict": "retenu"
-        },
-        "totalGoals": {
-          "lignes": 186028,
-          "matchs": 46507,
-          "a": 0.563451,
-          "b": 0.520618,
-          "gainPct": 7.602,
-          "fourchettePct": [
-            6.843,
-            8.36
-          ],
-          "verdict": "retenu"
-        }
-      },
-      "parCase": {
-        "bothTeamsScore": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.727209,
-          "b": 0.688029,
-          "gainPct": 5.388,
-          "fourchettePct": [
-            4.671,
-            6.105
-          ],
-          "verdict": "retenu"
-        },
-        "resultAndTotal|1.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 1.623195,
-          "b": 1.57833,
-          "gainPct": 2.764,
-          "fourchettePct": [
-            2.422,
-            3.106
-          ],
-          "verdict": "retenu"
-        },
-        "resultAndTotal|2.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 1.704764,
-          "b": 1.651841,
-          "gainPct": 3.104,
-          "fourchettePct": [
-            2.738,
-            3.471
-          ],
-          "verdict": "retenu"
-        },
-        "resultAndTotal|3.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 1.646211,
-          "b": 1.593592,
-          "gainPct": 3.196,
-          "fourchettePct": [
-            2.798,
-            3.595
-          ],
-          "verdict": "retenu"
-        },
-        "teamGoals:away|0.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.64459,
-          "b": 0.602875,
-          "gainPct": 6.472,
-          "fourchettePct": [
-            5.672,
-            7.271
-          ],
-          "verdict": "retenu"
-        },
-        "teamGoals:away|1.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.658132,
-          "b": 0.604028,
-          "gainPct": 8.221,
-          "fourchettePct": [
-            7.266,
-            9.176
-          ],
-          "verdict": "retenu"
-        },
-        "teamGoals:away|2.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.387759,
-          "b": 0.346221,
-          "gainPct": 10.712,
-          "fourchettePct": [
-            9.308,
-            12.117
-          ],
-          "verdict": "retenu"
-        },
-        "teamGoals:away|3.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.173002,
-          "b": 0.1502,
-          "gainPct": 13.18,
-          "fourchettePct": [
-            10.765,
-            15.595
-          ],
-          "verdict": "retenu"
-        },
-        "teamGoals:home|0.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.568711,
-          "b": 0.52936,
-          "gainPct": 6.919,
-          "fourchettePct": [
-            6.016,
-            7.823
-          ],
-          "verdict": "retenu"
-        },
-        "teamGoals:home|1.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.697552,
-          "b": 0.643539,
-          "gainPct": 7.743,
-          "fourchettePct": [
-            6.801,
-            8.685
-          ],
-          "verdict": "retenu"
-        },
-        "teamGoals:home|2.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.484271,
-          "b": 0.441972,
-          "gainPct": 8.735,
-          "fourchettePct": [
-            7.516,
-            9.953
-          ],
-          "verdict": "retenu"
-        },
-        "teamGoals:home|3.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.250075,
-          "b": 0.223698,
-          "gainPct": 10.548,
-          "fourchettePct": [
-            8.696,
-            12.399
-          ],
-          "verdict": "retenu"
-        },
-        "totalGoals|0.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.285088,
-          "b": 0.265162,
-          "gainPct": 6.989,
-          "fourchettePct": [
-            5.873,
-            8.105
-          ],
-          "verdict": "retenu"
-        },
-        "totalGoals|1.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.604763,
-          "b": 0.561473,
-          "gainPct": 7.158,
-          "fourchettePct": [
-            6.246,
-            8.07
-          ],
-          "verdict": "retenu"
-        },
-        "totalGoals|2.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.735735,
-          "b": 0.679346,
-          "gainPct": 7.664,
-          "fourchettePct": [
-            6.775,
-            8.554
-          ],
-          "verdict": "retenu"
-        },
-        "totalGoals|3.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.628217,
-          "b": 0.576491,
-          "gainPct": 8.234,
-          "fourchettePct": [
-            7.2,
-            9.267
-          ],
-          "verdict": "retenu"
-        }
-      },
-      "faceAuRepere": {
-        "bothTeamsScore": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.692542,
-          "b": 0.688029,
-          "gainPct": 0.652,
-          "fourchettePct": [
-            0.331,
-            0.972
-          ],
-          "verdict": "retenu"
-        },
-        "resultAndTotal|1.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 1.650926,
-          "b": 1.57833,
-          "gainPct": 4.397,
-          "fourchettePct": [
-            3.992,
-            4.803
-          ],
-          "verdict": "retenu"
-        },
-        "resultAndTotal|2.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 1.771111,
-          "b": 1.651841,
-          "gainPct": 6.734,
-          "fourchettePct": [
-            6.257,
-            7.211
-          ],
-          "verdict": "retenu"
-        },
-        "resultAndTotal|3.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 1.667777,
-          "b": 1.593592,
-          "gainPct": 4.448,
-          "fourchettePct": [
-            4.04,
-            4.856
-          ],
-          "verdict": "retenu"
-        },
-        "teamGoals:away|0.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.624547,
-          "b": 0.602875,
-          "gainPct": 3.47,
-          "fourchettePct": [
-            2.891,
-            4.049
-          ],
-          "verdict": "retenu"
-        },
-        "teamGoals:away|1.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.633,
-          "b": 0.604028,
-          "gainPct": 4.577,
-          "fourchettePct": [
-            3.901,
-            5.252
-          ],
-          "verdict": "retenu"
-        },
-        "teamGoals:away|2.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.370931,
-          "b": 0.346221,
-          "gainPct": 6.662,
-          "fourchettePct": [
-            5.506,
-            7.818
-          ],
-          "verdict": "retenu"
-        },
-        "teamGoals:away|3.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.176269,
-          "b": 0.1502,
-          "gainPct": 14.789,
-          "fourchettePct": [
-            10.563,
-            19.016
-          ],
-          "verdict": "retenu"
-        },
-        "teamGoals:home|0.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.553796,
-          "b": 0.52936,
-          "gainPct": 4.412,
-          "fourchettePct": [
-            3.773,
-            5.052
-          ],
-          "verdict": "retenu"
-        },
-        "teamGoals:home|1.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.681027,
-          "b": 0.643539,
-          "gainPct": 5.505,
-          "fourchettePct": [
-            4.852,
-            6.157
-          ],
-          "verdict": "retenu"
-        },
-        "teamGoals:home|2.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.475544,
-          "b": 0.441972,
-          "gainPct": 7.06,
-          "fourchettePct": [
-            6.056,
-            8.063
-          ],
-          "verdict": "retenu"
-        },
-        "teamGoals:home|3.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.253105,
-          "b": 0.223698,
-          "gainPct": 11.618,
-          "fourchettePct": [
-            9.157,
-            14.08
-          ],
-          "verdict": "retenu"
-        },
-        "totalGoals|0.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.27357,
-          "b": 0.265162,
-          "gainPct": 3.074,
-          "fourchettePct": [
-            1.672,
-            4.475
-          ],
-          "verdict": "retenu"
-        },
-        "totalGoals|1.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.568341,
-          "b": 0.561473,
-          "gainPct": 1.208,
-          "fourchettePct": [
-            0.777,
-            1.64
-          ],
-          "verdict": "retenu"
-        },
-        "totalGoals|2.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.688526,
-          "b": 0.679346,
-          "gainPct": 1.333,
-          "fourchettePct": [
-            0.951,
-            1.716
-          ],
-          "verdict": "retenu"
-        },
-        "totalGoals|3.5": {
-          "lignes": 46507,
-          "matchs": 46507,
-          "a": 0.585192,
-          "b": 0.576491,
-          "gainPct": 1.487,
-          "fourchettePct": [
-            1.008,
-            1.966
-          ],
-          "verdict": "retenu"
-        }
-      },
-      "faceAuMarche": {
-        "candidate": {
-          "totalGoals|2.5": {
-            "lignes": 30157,
-            "matchs": 30157,
-            "a": 0.677013,
-            "b": 0.677197,
-            "gainPct": -0.027,
-            "fourchettePct": [
-              -0.073,
-              0.018
-            ],
-            "verdict": "pas-prouve"
-          }
-        },
-        "enService": {
-          "totalGoals|2.5": {
-            "lignes": 30157,
-            "matchs": 30157,
-            "a": 0.677013,
-            "b": 0.734249,
-            "gainPct": -8.454,
-            "fourchettePct": [
-              -9.656,
-              -7.252
-            ],
-            "verdict": "moins-bon"
-          }
-        }
-      },
-      "calibration": {
-        "a": {
-          "parCase": {
-            "bothTeamsScore": {
-              "pronostics": 45929,
-              "matchs": 45929,
-              "biais": -0.095964,
-              "ece": 0.096077,
-              "verdict": "trop-haut",
-              "fourchette": [
-                -0.104736,
-                -0.087193
-              ]
-            },
-            "resultAndTotal|1.5": {
-              "pronostics": 26890,
-              "matchs": 26890,
-              "biais": -0.023838,
-              "ece": 0.024508,
-              "verdict": "trop-haut",
-              "fourchette": [
-                -0.034767,
-                -0.012908
-              ]
-            },
-            "resultAndTotal|2.5": {
-              "pronostics": 511,
-              "matchs": 511,
-              "biais": -0.079487,
-              "ece": 0.094343,
-              "verdict": "trop-haut",
-              "fourchette": [
-                -0.154985,
-                -0.003989
-              ]
-            },
-            "resultAndTotal|3.5": {
-              "pronostics": 19106,
-              "matchs": 19106,
-              "biais": -0.045001,
-              "ece": 0.045001,
-              "verdict": "trop-haut",
-              "fourchette": [
-                -0.057381,
-                -0.03262
-              ]
-            },
-            "teamGoals:away|0.5": {
-              "pronostics": 21427,
-              "matchs": 21427,
-              "biais": -0.095978,
-              "ece": 0.097336,
-              "verdict": "trop-haut",
-              "fourchette": [
-                -0.108108,
-                -0.083848
-              ]
-            },
-            "teamGoals:away|1.5": {
-              "pronostics": 16658,
-              "matchs": 16658,
-              "biais": -0.076759,
-              "ece": 0.076759,
-              "verdict": "trop-haut",
-              "fourchette": [
-                -0.090034,
-                -0.063485
-              ]
-            },
-            "teamGoals:away|2.5": {
-              "pronostics": 6349,
-              "matchs": 6349,
-              "biais": 0.073568,
-              "ece": 0.073568,
-              "verdict": "trop-bas",
-              "fourchette": [
-                0.055616,
-                0.091521
-              ]
-            },
-            "teamGoals:away|3.5": {
-              "pronostics": 2073,
-              "matchs": 2073,
-              "biais": 0.109609,
-              "ece": 0.109609,
-              "verdict": "trop-bas",
-              "fourchette": [
-                0.085729,
-                0.133489
-              ]
-            },
-            "teamGoals:home|0.5": {
-              "pronostics": 18701,
-              "matchs": 18701,
-              "biais": -0.062348,
-              "ece": 0.077287,
-              "verdict": "trop-haut",
-              "fourchette": [
-                -0.07546,
-                -0.049236
-              ]
-            },
-            "teamGoals:home|1.5": {
-              "pronostics": 14393,
-              "matchs": 14393,
-              "biais": -0.114341,
-              "ece": 0.114341,
-              "verdict": "trop-haut",
-              "fourchette": [
-                -0.129484,
-                -0.099197
-              ]
-            },
-            "teamGoals:home|2.5": {
-              "pronostics": 9337,
-              "matchs": 9337,
-              "biais": 0.044812,
-              "ece": 0.044812,
-              "verdict": "trop-bas",
-              "fourchette": [
-                0.029617,
-                0.060007
-              ]
-            },
-            "teamGoals:home|3.5": {
-              "pronostics": 4076,
-              "matchs": 4076,
-              "biais": 0.089266,
-              "ece": 0.089266,
-              "verdict": "trop-bas",
-              "fourchette": [
-                0.070862,
-                0.10767
-              ]
-            },
-            "totalGoals|0.5": {
-              "pronostics": 5280,
-              "matchs": 5280,
-              "biais": 0.120813,
-              "ece": 0.120813,
-              "verdict": "trop-bas",
-              "fourchette": [
-                0.105239,
-                0.136388
-              ]
-            },
-            "totalGoals|1.5": {
-              "pronostics": 13320,
-              "matchs": 13320,
-              "biais": -0.053486,
-              "ece": 0.053486,
-              "verdict": "trop-haut",
-              "fourchette": [
-                -0.068053,
-                -0.038919
-              ]
-            },
-            "totalGoals|2.5": {
-              "pronostics": 16146,
-              "matchs": 16146,
-              "biais": -0.145284,
-              "ece": 0.145284,
-              "verdict": "trop-haut",
-              "fourchette": [
-                -0.16018,
-                -0.130387
-              ]
-            },
-            "totalGoals|3.5": {
-              "pronostics": 11761,
-              "matchs": 11761,
-              "biais": -0.059597,
-              "ece": 0.059597,
-              "verdict": "trop-haut",
-              "fourchette": [
-                -0.075457,
-                -0.043736
+      "origine": "code",
+      "declaration": {
+        "id": "modele-buts-v1",
+        "etape": "27",
+        "quoi": "Un seul modèle de buts : une grille des scores (Poisson et Dixon-Coles, rho −0,05) calée sur les cotes (1N2, et plus/moins 2,5 gratuit quand il existe), mélangée aux forces d’attaque et de défense tirées des xG ou des buts, pondérées dans le temps (demi-vies 35/25 remesurées sur 2024-25 et football-data 2001-2012 ; celles de l’étape 18, jugées sur 2019-2023, lues comme point de départ) ; tous les marchés de buts et le score en sortent ; démarrage à froid : retenu après mesure (m7).",
+        "modifications": {
+          "football": {
+            "modeleDeButs": {
+              "version": 1,
+              "rho": -0.05,
+              "demiVies": {
+                "attaque": 35,
+                "defense": 25
+              },
+              "prior": 8,
+              "statistique": "mix",
+              "poidsXg": 0.7,
+              "changementDeChampionnat": "remise-a-zero",
+              "ancrage": {
+                "ligne": 2.5,
+                "methode": "total-equilibre"
+              },
+              "melange": {
+                "avecPlusMoins": {
+                  "wT": 0.1,
+                  "wS": 0.1
+                },
+                "sans": {
+                  "wT": 0.55,
+                  "wS": 0.1
+                }
+              },
+              "demarrageAFroid": {
+                "matchs": 8
+              },
+              "bornes": [
+                0.2,
+                6
               ]
             }
+          }
+        },
+        "marches": [
+          "totalGoals",
+          "bothTeamsScore",
+          "teamGoals",
+          "resultAndTotal"
+        ],
+        "enMots": "Un seul modèle pour tous les marchés de buts et le score : les pourcentages partent des cotes (1N2, et plus/moins 2,5 quand il est relevé) et sont ajustés par les xG des deux équipes ; sans cote, les xG (ou, à défaut, les buts) seuls.",
+        "horizon": {
+          "matchs": 800,
+          "jours": 21
+        },
+        "variantes": [
+          {
+            "id": "m1-v1-1n2-seul-rho-m0-04",
+            "quoi": "m1 calage sur les cotes : v1 1N2 seul (rho −0,04)"
           },
-          "parFamille": {
+          {
+            "id": "m1-v2-total-par-plusmoins-2-5-equilibre-par-1n2-rho-m0-04",
+            "quoi": "m1 calage sur les cotes : v2 total par +/−2,5, équilibre par 1N2 (rho −0,04)"
+          },
+          {
+            "id": "m1-v3-moindres-carres-h-a-o-rho-m0-04",
+            "quoi": "m1 calage sur les cotes : v3 moindres carrés H,A,O (rho −0,04)"
+          },
+          {
+            "id": "m1-v4-rho-libre-par-match",
+            "quoi": "m1 calage sur les cotes : v4 rho libre par match"
+          },
+          {
+            "id": "m1-v2-borne-0-5-2-8",
+            "quoi": "m1 calage sur les cotes : v2 borné [0,5 ; 2,8]"
+          },
+          {
+            "id": "m1-v2-grille-0-10",
+            "quoi": "m1 calage sur les cotes : v2 grille 0-10"
+          },
+          {
+            "id": "m1-v2-grille-0-12",
+            "quoi": "m1 calage sur les cotes : v2 grille 0-12"
+          },
+          {
+            "id": "m1-v2-avec-plusmoins-maximum-du-marche",
+            "quoi": "m1 calage sur les cotes : v2 avec +/− maximum du marché"
+          },
+          {
+            "id": "m1-v2-avec-marge-proportionnelle-sur-le-plusmoins",
+            "quoi": "m1 calage sur les cotes : v2 avec marge proportionnelle sur le +/−"
+          },
+          {
+            "id": "m1-v2-avec-1n2-pinnacle-depuis-2012-07",
+            "quoi": "m1 calage sur les cotes : v2 avec 1N2 Pinnacle (≥ 2012-07)"
+          },
+          {
+            "id": "m1-v2-avec-1n2-moyenne-depuis-2012-07-meme-matchs",
+            "quoi": "m1 calage sur les cotes : v2 avec 1N2 moyenne (≥ 2012-07, même matchs)"
+          },
+          {
+            "id": "m1-v1-1n2-seul-pinnacle-depuis-2012-07",
+            "quoi": "m1 calage sur les cotes : v1 1N2 seul Pinnacle (≥ 2012-07)"
+          },
+          {
+            "id": "m1-rho-m0.14",
+            "quoi": "m1 corrélation des petits scores rho = -0.14 (tour 2)"
+          },
+          {
+            "id": "m1-rho-m0.12",
+            "quoi": "m1 corrélation des petits scores rho = -0.12 (tour 2)"
+          },
+          {
+            "id": "m1-rho-m0.1",
+            "quoi": "m1 corrélation des petits scores rho = -0.1 (tour 2)"
+          },
+          {
+            "id": "m1-rho-m0.08",
+            "quoi": "m1 corrélation des petits scores rho = -0.08 (tour 2)"
+          },
+          {
+            "id": "m1-rho-m0.07",
+            "quoi": "m1 corrélation des petits scores rho = -0.07 (tour 2)"
+          },
+          {
+            "id": "m1-rho-m0.06",
+            "quoi": "m1 corrélation des petits scores rho = -0.06 (tour 2)"
+          },
+          {
+            "id": "m1-rho-m0.05",
+            "quoi": "m1 corrélation des petits scores rho = -0.05 (tour 2)"
+          },
+          {
+            "id": "m1-rho-m0.04",
+            "quoi": "m1 corrélation des petits scores rho = -0.04 (tour 2)"
+          },
+          {
+            "id": "m1-rho-m0.03",
+            "quoi": "m1 corrélation des petits scores rho = -0.03 (tour 2)"
+          },
+          {
+            "id": "m1-rho-m0.02",
+            "quoi": "m1 corrélation des petits scores rho = -0.02 (tour 2)"
+          },
+          {
+            "id": "m1-rho-m0.01",
+            "quoi": "m1 corrélation des petits scores rho = -0.01 (tour 2)"
+          },
+          {
+            "id": "m1-rho-0",
+            "quoi": "m1 corrélation des petits scores rho = 0 (tour 2)"
+          },
+          {
+            "id": "m1-rho-0.02",
+            "quoi": "m1 corrélation des petits scores rho = 0.02 (tour 2)"
+          },
+          {
+            "id": "m1-loi-poisson-et-dc",
+            "quoi": "m1 loi des scores : Poisson + DC"
+          },
+          {
+            "id": "m1-loi-poisson-sans-dc-rho-0",
+            "quoi": "m1 loi des scores : Poisson sans DC (rho 0)"
+          },
+          {
+            "id": "m1-loi-binomiale-negative-a-0.01-et-dc",
+            "quoi": "m1 loi des scores : Binomiale négative a=0.01 + DC"
+          },
+          {
+            "id": "m1-loi-binomiale-negative-a-0.02-et-dc",
+            "quoi": "m1 loi des scores : Binomiale négative a=0.02 + DC"
+          },
+          {
+            "id": "m1-loi-binomiale-negative-a-0.04-et-dc",
+            "quoi": "m1 loi des scores : Binomiale négative a=0.04 + DC"
+          },
+          {
+            "id": "m1-loi-binomiale-negative-a-0.08-et-dc",
+            "quoi": "m1 loi des scores : Binomiale négative a=0.08 + DC"
+          },
+          {
+            "id": "m6-nuls-delta-0",
+            "quoi": "m6 nuls ≥ 2-2 gonflés de δ = 0"
+          },
+          {
+            "id": "m6-nuls-delta-0.05",
+            "quoi": "m6 nuls ≥ 2-2 gonflés de δ = 0.05"
+          },
+          {
+            "id": "m6-nuls-delta-0.1",
+            "quoi": "m6 nuls ≥ 2-2 gonflés de δ = 0.1"
+          },
+          {
+            "id": "m6-nuls-delta-0.15",
+            "quoi": "m6 nuls ≥ 2-2 gonflés de δ = 0.15"
+          },
+          {
+            "id": "m6-nuls-delta-0.2",
+            "quoi": "m6 nuls ≥ 2-2 gonflés de δ = 0.2"
+          },
+          {
+            "id": "m2-fd-tour-1-hatt-6",
+            "quoi": "m2 forces des équipes : fd: tour 1 hAtt=6"
+          },
+          {
+            "id": "m2-fd-tour-1-hatt-8",
+            "quoi": "m2 forces des équipes : fd: tour 1 hAtt=8"
+          },
+          {
+            "id": "m2-fd-tour-1-hatt-13",
+            "quoi": "m2 forces des équipes : fd: tour 1 hAtt=13"
+          },
+          {
+            "id": "m2-fd-tour-1-hatt-18",
+            "quoi": "m2 forces des équipes : fd: tour 1 hAtt=18"
+          },
+          {
+            "id": "m2-fd-tour-1-hatt-25",
+            "quoi": "m2 forces des équipes : fd: tour 1 hAtt=25"
+          },
+          {
+            "id": "m2-fd-tour-1-hatt-35",
+            "quoi": "m2 forces des équipes : fd: tour 1 hAtt=35"
+          },
+          {
+            "id": "m2-fd-tour-1-hatt-50",
+            "quoi": "m2 forces des équipes : fd: tour 1 hAtt=50"
+          },
+          {
+            "id": "m2-fd-tour-1-hatt-100",
+            "quoi": "m2 forces des équipes : fd: tour 1 hAtt=100"
+          },
+          {
+            "id": "m2-fd-tour-1-hatt-inf",
+            "quoi": "m2 forces des équipes : fd: tour 1 hAtt=Infinity"
+          },
+          {
+            "id": "m2-fd-tour-1-hdef-6",
+            "quoi": "m2 forces des équipes : fd: tour 1 hDef=6"
+          },
+          {
+            "id": "m2-fd-tour-1-hdef-8",
+            "quoi": "m2 forces des équipes : fd: tour 1 hDef=8"
+          },
+          {
+            "id": "m2-fd-tour-1-hdef-13",
+            "quoi": "m2 forces des équipes : fd: tour 1 hDef=13"
+          },
+          {
+            "id": "m2-fd-tour-1-hdef-18",
+            "quoi": "m2 forces des équipes : fd: tour 1 hDef=18"
+          },
+          {
+            "id": "m2-fd-tour-1-hdef-25",
+            "quoi": "m2 forces des équipes : fd: tour 1 hDef=25"
+          },
+          {
+            "id": "m2-fd-tour-1-hdef-35",
+            "quoi": "m2 forces des équipes : fd: tour 1 hDef=35"
+          },
+          {
+            "id": "m2-fd-tour-1-hdef-50",
+            "quoi": "m2 forces des équipes : fd: tour 1 hDef=50"
+          },
+          {
+            "id": "m2-fd-tour-1-hdef-100",
+            "quoi": "m2 forces des équipes : fd: tour 1 hDef=100"
+          },
+          {
+            "id": "m2-fd-tour-1-hdef-inf",
+            "quoi": "m2 forces des équipes : fd: tour 1 hDef=Infinity"
+          },
+          {
+            "id": "m2-fd-tour-1-k0-0.5",
+            "quoi": "m2 forces des équipes : fd: tour 1 k0=0.5"
+          },
+          {
+            "id": "m2-fd-tour-1-k0-1",
+            "quoi": "m2 forces des équipes : fd: tour 1 k0=1"
+          },
+          {
+            "id": "m2-fd-tour-1-k0-2",
+            "quoi": "m2 forces des équipes : fd: tour 1 k0=2"
+          },
+          {
+            "id": "m2-fd-tour-1-k0-4",
+            "quoi": "m2 forces des équipes : fd: tour 1 k0=4"
+          },
+          {
+            "id": "m2-fd-tour-1-k0-8",
+            "quoi": "m2 forces des équipes : fd: tour 1 k0=8"
+          },
+          {
+            "id": "m2-fd-tour-1-k0-16",
+            "quoi": "m2 forces des équipes : fd: tour 1 k0=16"
+          },
+          {
+            "id": "m2-fd-tour-1-stat-buts",
+            "quoi": "m2 forces des équipes : fd: tour 1 stat=buts"
+          },
+          {
+            "id": "m2-fd-tour-1-fligue-1",
+            "quoi": "m2 forces des équipes : fd: tour 1 fLigue=1"
+          },
+          {
+            "id": "m2-fd-tour-1-fligue-0.5",
+            "quoi": "m2 forces des équipes : fd: tour 1 fLigue=0.5"
+          },
+          {
+            "id": "m2-fd-tour-1-fligue-0",
+            "quoi": "m2 forces des équipes : fd: tour 1 fLigue=0"
+          },
+          {
+            "id": "m2-fd-tour-2-hatt-6",
+            "quoi": "m2 forces des équipes : fd: tour 2 hAtt=6"
+          },
+          {
+            "id": "m2-fd-tour-2-hatt-8",
+            "quoi": "m2 forces des équipes : fd: tour 2 hAtt=8"
+          },
+          {
+            "id": "m2-fd-tour-2-hatt-13",
+            "quoi": "m2 forces des équipes : fd: tour 2 hAtt=13"
+          },
+          {
+            "id": "m2-fd-tour-2-hatt-18",
+            "quoi": "m2 forces des équipes : fd: tour 2 hAtt=18"
+          },
+          {
+            "id": "m2-fd-tour-2-hatt-25",
+            "quoi": "m2 forces des équipes : fd: tour 2 hAtt=25"
+          },
+          {
+            "id": "m2-fd-tour-2-hatt-35",
+            "quoi": "m2 forces des équipes : fd: tour 2 hAtt=35"
+          },
+          {
+            "id": "m2-fd-tour-2-hatt-50",
+            "quoi": "m2 forces des équipes : fd: tour 2 hAtt=50"
+          },
+          {
+            "id": "m2-fd-tour-2-hatt-100",
+            "quoi": "m2 forces des équipes : fd: tour 2 hAtt=100"
+          },
+          {
+            "id": "m2-fd-tour-2-hatt-inf",
+            "quoi": "m2 forces des équipes : fd: tour 2 hAtt=Infinity"
+          },
+          {
+            "id": "m2-fd-tour-2-hdef-6",
+            "quoi": "m2 forces des équipes : fd: tour 2 hDef=6"
+          },
+          {
+            "id": "m2-fd-tour-2-hdef-8",
+            "quoi": "m2 forces des équipes : fd: tour 2 hDef=8"
+          },
+          {
+            "id": "m2-fd-tour-2-hdef-13",
+            "quoi": "m2 forces des équipes : fd: tour 2 hDef=13"
+          },
+          {
+            "id": "m2-fd-tour-2-hdef-18",
+            "quoi": "m2 forces des équipes : fd: tour 2 hDef=18"
+          },
+          {
+            "id": "m2-fd-tour-2-hdef-25",
+            "quoi": "m2 forces des équipes : fd: tour 2 hDef=25"
+          },
+          {
+            "id": "m2-fd-tour-2-hdef-35",
+            "quoi": "m2 forces des équipes : fd: tour 2 hDef=35"
+          },
+          {
+            "id": "m2-fd-tour-2-hdef-50",
+            "quoi": "m2 forces des équipes : fd: tour 2 hDef=50"
+          },
+          {
+            "id": "m2-fd-tour-2-hdef-100",
+            "quoi": "m2 forces des équipes : fd: tour 2 hDef=100"
+          },
+          {
+            "id": "m2-fd-tour-2-hdef-inf",
+            "quoi": "m2 forces des équipes : fd: tour 2 hDef=Infinity"
+          },
+          {
+            "id": "m2-fd-tour-2-k0-0.5",
+            "quoi": "m2 forces des équipes : fd: tour 2 k0=0.5"
+          },
+          {
+            "id": "m2-fd-tour-2-k0-1",
+            "quoi": "m2 forces des équipes : fd: tour 2 k0=1"
+          },
+          {
+            "id": "m2-fd-tour-2-k0-2",
+            "quoi": "m2 forces des équipes : fd: tour 2 k0=2"
+          },
+          {
+            "id": "m2-fd-tour-2-k0-4",
+            "quoi": "m2 forces des équipes : fd: tour 2 k0=4"
+          },
+          {
+            "id": "m2-fd-tour-2-k0-8",
+            "quoi": "m2 forces des équipes : fd: tour 2 k0=8"
+          },
+          {
+            "id": "m2-fd-tour-2-k0-16",
+            "quoi": "m2 forces des équipes : fd: tour 2 k0=16"
+          },
+          {
+            "id": "m2-fd-tour-2-stat-buts",
+            "quoi": "m2 forces des équipes : fd: tour 2 stat=buts"
+          },
+          {
+            "id": "m2-fd-tour-2-fligue-1",
+            "quoi": "m2 forces des équipes : fd: tour 2 fLigue=1"
+          },
+          {
+            "id": "m2-fd-tour-2-fligue-0.5",
+            "quoi": "m2 forces des équipes : fd: tour 2 fLigue=0.5"
+          },
+          {
+            "id": "m2-fd-tour-2-fligue-0",
+            "quoi": "m2 forces des équipes : fd: tour 2 fLigue=0"
+          },
+          {
+            "id": "m2-fd-avantage-global-1.15",
+            "quoi": "m2 forces des équipes : fd: avantage global 1.15"
+          },
+          {
+            "id": "m2-fd-avantage-global-1.2",
+            "quoi": "m2 forces des équipes : fd: avantage global 1.2"
+          },
+          {
+            "id": "m2-fd-avantage-global-1.25",
+            "quoi": "m2 forces des équipes : fd: avantage global 1.25"
+          },
+          {
+            "id": "m2-fd-avantage-global-1.3",
+            "quoi": "m2 forces des équipes : fd: avantage global 1.3"
+          },
+          {
+            "id": "m2-fd-avantage-global-1.35",
+            "quoi": "m2 forces des équipes : fd: avantage global 1.35"
+          },
+          {
+            "id": "m2-fd-avantage-par-championnat-retenu",
+            "quoi": "m2 forces des équipes : fd: avantage par championnat (retenu)"
+          },
+          {
+            "id": "m2-fd-rho-stats-m0.14",
+            "quoi": "m2 forces des équipes : fd: rho stats -0.14"
+          },
+          {
+            "id": "m2-fd-rho-stats-m0.12",
+            "quoi": "m2 forces des équipes : fd: rho stats -0.12"
+          },
+          {
+            "id": "m2-fd-rho-stats-m0.1",
+            "quoi": "m2 forces des équipes : fd: rho stats -0.1"
+          },
+          {
+            "id": "m2-fd-rho-stats-m0.08",
+            "quoi": "m2 forces des équipes : fd: rho stats -0.08"
+          },
+          {
+            "id": "m2-fd-rho-stats-m0.06",
+            "quoi": "m2 forces des équipes : fd: rho stats -0.06"
+          },
+          {
+            "id": "m2-fd-rho-stats-m0.05",
+            "quoi": "m2 forces des équipes : fd: rho stats -0.05"
+          },
+          {
+            "id": "m2-fd-rho-stats-m0.04",
+            "quoi": "m2 forces des équipes : fd: rho stats -0.04"
+          },
+          {
+            "id": "m2-fd-rho-stats-m0.03",
+            "quoi": "m2 forces des équipes : fd: rho stats -0.03"
+          },
+          {
+            "id": "m2-fd-rho-stats-m0.02",
+            "quoi": "m2 forces des équipes : fd: rho stats -0.02"
+          },
+          {
+            "id": "m2-fd-rho-stats-0",
+            "quoi": "m2 forces des équipes : fd: rho stats 0"
+          },
+          {
+            "id": "m2-magasin-tour-1-hatt-6",
+            "quoi": "m2 forces des équipes : magasin: tour 1 hAtt=6"
+          },
+          {
+            "id": "m2-magasin-tour-1-hatt-8",
+            "quoi": "m2 forces des équipes : magasin: tour 1 hAtt=8"
+          },
+          {
+            "id": "m2-magasin-tour-1-hatt-13",
+            "quoi": "m2 forces des équipes : magasin: tour 1 hAtt=13"
+          },
+          {
+            "id": "m2-magasin-tour-1-hatt-18",
+            "quoi": "m2 forces des équipes : magasin: tour 1 hAtt=18"
+          },
+          {
+            "id": "m2-magasin-tour-1-hatt-25",
+            "quoi": "m2 forces des équipes : magasin: tour 1 hAtt=25"
+          },
+          {
+            "id": "m2-magasin-tour-1-hatt-35",
+            "quoi": "m2 forces des équipes : magasin: tour 1 hAtt=35"
+          },
+          {
+            "id": "m2-magasin-tour-1-hatt-50",
+            "quoi": "m2 forces des équipes : magasin: tour 1 hAtt=50"
+          },
+          {
+            "id": "m2-magasin-tour-1-hatt-100",
+            "quoi": "m2 forces des équipes : magasin: tour 1 hAtt=100"
+          },
+          {
+            "id": "m2-magasin-tour-1-hatt-inf",
+            "quoi": "m2 forces des équipes : magasin: tour 1 hAtt=Infinity"
+          },
+          {
+            "id": "m2-magasin-tour-1-hdef-6",
+            "quoi": "m2 forces des équipes : magasin: tour 1 hDef=6"
+          },
+          {
+            "id": "m2-magasin-tour-1-hdef-8",
+            "quoi": "m2 forces des équipes : magasin: tour 1 hDef=8"
+          },
+          {
+            "id": "m2-magasin-tour-1-hdef-13",
+            "quoi": "m2 forces des équipes : magasin: tour 1 hDef=13"
+          },
+          {
+            "id": "m2-magasin-tour-1-hdef-18",
+            "quoi": "m2 forces des équipes : magasin: tour 1 hDef=18"
+          },
+          {
+            "id": "m2-magasin-tour-1-hdef-25",
+            "quoi": "m2 forces des équipes : magasin: tour 1 hDef=25"
+          },
+          {
+            "id": "m2-magasin-tour-1-hdef-35",
+            "quoi": "m2 forces des équipes : magasin: tour 1 hDef=35"
+          },
+          {
+            "id": "m2-magasin-tour-1-hdef-50",
+            "quoi": "m2 forces des équipes : magasin: tour 1 hDef=50"
+          },
+          {
+            "id": "m2-magasin-tour-1-hdef-100",
+            "quoi": "m2 forces des équipes : magasin: tour 1 hDef=100"
+          },
+          {
+            "id": "m2-magasin-tour-1-hdef-inf",
+            "quoi": "m2 forces des équipes : magasin: tour 1 hDef=Infinity"
+          },
+          {
+            "id": "m2-magasin-tour-1-k0-0.5",
+            "quoi": "m2 forces des équipes : magasin: tour 1 k0=0.5"
+          },
+          {
+            "id": "m2-magasin-tour-1-k0-1",
+            "quoi": "m2 forces des équipes : magasin: tour 1 k0=1"
+          },
+          {
+            "id": "m2-magasin-tour-1-k0-2",
+            "quoi": "m2 forces des équipes : magasin: tour 1 k0=2"
+          },
+          {
+            "id": "m2-magasin-tour-1-k0-4",
+            "quoi": "m2 forces des équipes : magasin: tour 1 k0=4"
+          },
+          {
+            "id": "m2-magasin-tour-1-k0-8",
+            "quoi": "m2 forces des équipes : magasin: tour 1 k0=8"
+          },
+          {
+            "id": "m2-magasin-tour-1-k0-16",
+            "quoi": "m2 forces des équipes : magasin: tour 1 k0=16"
+          },
+          {
+            "id": "m2-magasin-tour-1-stat-xg",
+            "quoi": "m2 forces des équipes : magasin: tour 1 stat=xg"
+          },
+          {
+            "id": "m2-magasin-tour-1-stat-buts",
+            "quoi": "m2 forces des équipes : magasin: tour 1 stat=buts"
+          },
+          {
+            "id": "m2-magasin-tour-1-stat-mix",
+            "quoi": "m2 forces des équipes : magasin: tour 1 stat=mix"
+          },
+          {
+            "id": "m2-magasin-tour-1-fligue-1",
+            "quoi": "m2 forces des équipes : magasin: tour 1 fLigue=1"
+          },
+          {
+            "id": "m2-magasin-tour-1-fligue-0.5",
+            "quoi": "m2 forces des équipes : magasin: tour 1 fLigue=0.5"
+          },
+          {
+            "id": "m2-magasin-tour-1-fligue-0",
+            "quoi": "m2 forces des équipes : magasin: tour 1 fLigue=0"
+          },
+          {
+            "id": "m2-magasin-tour-1-wxg-0.3",
+            "quoi": "m2 forces des équipes : magasin: tour 1 wXg=0.3"
+          },
+          {
+            "id": "m2-magasin-tour-1-wxg-0.5",
+            "quoi": "m2 forces des équipes : magasin: tour 1 wXg=0.5"
+          },
+          {
+            "id": "m2-magasin-tour-1-wxg-0.7",
+            "quoi": "m2 forces des équipes : magasin: tour 1 wXg=0.7"
+          },
+          {
+            "id": "m2-magasin-tour-1-wxg-0.85",
+            "quoi": "m2 forces des équipes : magasin: tour 1 wXg=0.85"
+          },
+          {
+            "id": "m2-magasin-tour-2-hatt-6",
+            "quoi": "m2 forces des équipes : magasin: tour 2 hAtt=6"
+          },
+          {
+            "id": "m2-magasin-tour-2-hatt-8",
+            "quoi": "m2 forces des équipes : magasin: tour 2 hAtt=8"
+          },
+          {
+            "id": "m2-magasin-tour-2-hatt-13",
+            "quoi": "m2 forces des équipes : magasin: tour 2 hAtt=13"
+          },
+          {
+            "id": "m2-magasin-tour-2-hatt-18",
+            "quoi": "m2 forces des équipes : magasin: tour 2 hAtt=18"
+          },
+          {
+            "id": "m2-magasin-tour-2-hatt-25",
+            "quoi": "m2 forces des équipes : magasin: tour 2 hAtt=25"
+          },
+          {
+            "id": "m2-magasin-tour-2-hatt-35",
+            "quoi": "m2 forces des équipes : magasin: tour 2 hAtt=35"
+          },
+          {
+            "id": "m2-magasin-tour-2-hatt-50",
+            "quoi": "m2 forces des équipes : magasin: tour 2 hAtt=50"
+          },
+          {
+            "id": "m2-magasin-tour-2-hatt-100",
+            "quoi": "m2 forces des équipes : magasin: tour 2 hAtt=100"
+          },
+          {
+            "id": "m2-magasin-tour-2-hatt-inf",
+            "quoi": "m2 forces des équipes : magasin: tour 2 hAtt=Infinity"
+          },
+          {
+            "id": "m2-magasin-tour-2-hdef-6",
+            "quoi": "m2 forces des équipes : magasin: tour 2 hDef=6"
+          },
+          {
+            "id": "m2-magasin-tour-2-hdef-8",
+            "quoi": "m2 forces des équipes : magasin: tour 2 hDef=8"
+          },
+          {
+            "id": "m2-magasin-tour-2-hdef-13",
+            "quoi": "m2 forces des équipes : magasin: tour 2 hDef=13"
+          },
+          {
+            "id": "m2-magasin-tour-2-hdef-18",
+            "quoi": "m2 forces des équipes : magasin: tour 2 hDef=18"
+          },
+          {
+            "id": "m2-magasin-tour-2-hdef-25",
+            "quoi": "m2 forces des équipes : magasin: tour 2 hDef=25"
+          },
+          {
+            "id": "m2-magasin-tour-2-hdef-35",
+            "quoi": "m2 forces des équipes : magasin: tour 2 hDef=35"
+          },
+          {
+            "id": "m2-magasin-tour-2-hdef-50",
+            "quoi": "m2 forces des équipes : magasin: tour 2 hDef=50"
+          },
+          {
+            "id": "m2-magasin-tour-2-hdef-100",
+            "quoi": "m2 forces des équipes : magasin: tour 2 hDef=100"
+          },
+          {
+            "id": "m2-magasin-tour-2-hdef-inf",
+            "quoi": "m2 forces des équipes : magasin: tour 2 hDef=Infinity"
+          },
+          {
+            "id": "m2-magasin-tour-2-k0-0.5",
+            "quoi": "m2 forces des équipes : magasin: tour 2 k0=0.5"
+          },
+          {
+            "id": "m2-magasin-tour-2-k0-1",
+            "quoi": "m2 forces des équipes : magasin: tour 2 k0=1"
+          },
+          {
+            "id": "m2-magasin-tour-2-k0-2",
+            "quoi": "m2 forces des équipes : magasin: tour 2 k0=2"
+          },
+          {
+            "id": "m2-magasin-tour-2-k0-4",
+            "quoi": "m2 forces des équipes : magasin: tour 2 k0=4"
+          },
+          {
+            "id": "m2-magasin-tour-2-k0-8",
+            "quoi": "m2 forces des équipes : magasin: tour 2 k0=8"
+          },
+          {
+            "id": "m2-magasin-tour-2-k0-16",
+            "quoi": "m2 forces des équipes : magasin: tour 2 k0=16"
+          },
+          {
+            "id": "m2-magasin-tour-2-stat-xg",
+            "quoi": "m2 forces des équipes : magasin: tour 2 stat=xg"
+          },
+          {
+            "id": "m2-magasin-tour-2-stat-buts",
+            "quoi": "m2 forces des équipes : magasin: tour 2 stat=buts"
+          },
+          {
+            "id": "m2-magasin-tour-2-stat-mix",
+            "quoi": "m2 forces des équipes : magasin: tour 2 stat=mix"
+          },
+          {
+            "id": "m2-magasin-tour-2-fligue-1",
+            "quoi": "m2 forces des équipes : magasin: tour 2 fLigue=1"
+          },
+          {
+            "id": "m2-magasin-tour-2-fligue-0.5",
+            "quoi": "m2 forces des équipes : magasin: tour 2 fLigue=0.5"
+          },
+          {
+            "id": "m2-magasin-tour-2-fligue-0",
+            "quoi": "m2 forces des équipes : magasin: tour 2 fLigue=0"
+          },
+          {
+            "id": "m2-magasin-tour-2-wxg-0.3",
+            "quoi": "m2 forces des équipes : magasin: tour 2 wXg=0.3"
+          },
+          {
+            "id": "m2-magasin-tour-2-wxg-0.5",
+            "quoi": "m2 forces des équipes : magasin: tour 2 wXg=0.5"
+          },
+          {
+            "id": "m2-magasin-tour-2-wxg-0.7",
+            "quoi": "m2 forces des équipes : magasin: tour 2 wXg=0.7"
+          },
+          {
+            "id": "m2-magasin-tour-2-wxg-0.85",
+            "quoi": "m2 forces des équipes : magasin: tour 2 wXg=0.85"
+          },
+          {
+            "id": "m2-magasin-avantage-global-1.15",
+            "quoi": "m2 forces des équipes : magasin: avantage global 1.15"
+          },
+          {
+            "id": "m2-magasin-avantage-global-1.2",
+            "quoi": "m2 forces des équipes : magasin: avantage global 1.2"
+          },
+          {
+            "id": "m2-magasin-avantage-global-1.25",
+            "quoi": "m2 forces des équipes : magasin: avantage global 1.25"
+          },
+          {
+            "id": "m2-magasin-avantage-global-1.3",
+            "quoi": "m2 forces des équipes : magasin: avantage global 1.3"
+          },
+          {
+            "id": "m2-magasin-avantage-global-1.35",
+            "quoi": "m2 forces des équipes : magasin: avantage global 1.35"
+          },
+          {
+            "id": "m2-magasin-avantage-par-championnat-retenu",
+            "quoi": "m2 forces des équipes : magasin: avantage par championnat (retenu)"
+          },
+          {
+            "id": "m2-magasin-rho-stats-m0.14",
+            "quoi": "m2 forces des équipes : magasin: rho stats -0.14"
+          },
+          {
+            "id": "m2-magasin-rho-stats-m0.12",
+            "quoi": "m2 forces des équipes : magasin: rho stats -0.12"
+          },
+          {
+            "id": "m2-magasin-rho-stats-m0.1",
+            "quoi": "m2 forces des équipes : magasin: rho stats -0.1"
+          },
+          {
+            "id": "m2-magasin-rho-stats-m0.08",
+            "quoi": "m2 forces des équipes : magasin: rho stats -0.08"
+          },
+          {
+            "id": "m2-magasin-rho-stats-m0.06",
+            "quoi": "m2 forces des équipes : magasin: rho stats -0.06"
+          },
+          {
+            "id": "m2-magasin-rho-stats-m0.05",
+            "quoi": "m2 forces des équipes : magasin: rho stats -0.05"
+          },
+          {
+            "id": "m2-magasin-rho-stats-m0.04",
+            "quoi": "m2 forces des équipes : magasin: rho stats -0.04"
+          },
+          {
+            "id": "m2-magasin-rho-stats-m0.03",
+            "quoi": "m2 forces des équipes : magasin: rho stats -0.03"
+          },
+          {
+            "id": "m2-magasin-rho-stats-m0.02",
+            "quoi": "m2 forces des équipes : magasin: rho stats -0.02"
+          },
+          {
+            "id": "m2-magasin-rho-stats-0",
+            "quoi": "m2 forces des équipes : magasin: rho stats 0"
+          },
+          {
+            "id": "m2-magasin-indice-de-force-de-l-etape-29-comme-forces",
+            "quoi": "m2 forces des équipes : magasin: indice de force de l’étape 29 comme forces"
+          },
+          {
+            "id": "m3-fd-1n2-seul-w-0",
+            "quoi": "m3 mélange : fd 1N2 seul w=0"
+          },
+          {
+            "id": "m3-fd-1n2-seul-w-0.05",
+            "quoi": "m3 mélange : fd 1N2 seul w=0.05"
+          },
+          {
+            "id": "m3-fd-1n2-seul-w-0.1",
+            "quoi": "m3 mélange : fd 1N2 seul w=0.1"
+          },
+          {
+            "id": "m3-fd-1n2-seul-w-0.15",
+            "quoi": "m3 mélange : fd 1N2 seul w=0.15"
+          },
+          {
+            "id": "m3-fd-1n2-seul-w-0.2",
+            "quoi": "m3 mélange : fd 1N2 seul w=0.2"
+          },
+          {
+            "id": "m3-fd-1n2-seul-w-0.25",
+            "quoi": "m3 mélange : fd 1N2 seul w=0.25"
+          },
+          {
+            "id": "m3-fd-1n2-seul-w-0.3",
+            "quoi": "m3 mélange : fd 1N2 seul w=0.3"
+          },
+          {
+            "id": "m3-fd-1n2-seul-w-0.35",
+            "quoi": "m3 mélange : fd 1N2 seul w=0.35"
+          },
+          {
+            "id": "m3-fd-1n2-seul-w-0.4",
+            "quoi": "m3 mélange : fd 1N2 seul w=0.4"
+          },
+          {
+            "id": "m3-fd-1n2-seul-w-0.45",
+            "quoi": "m3 mélange : fd 1N2 seul w=0.45"
+          },
+          {
+            "id": "m3-fd-1n2-seul-w-0.5",
+            "quoi": "m3 mélange : fd 1N2 seul w=0.5"
+          },
+          {
+            "id": "m3-fd-1n2-seul-w-0.55",
+            "quoi": "m3 mélange : fd 1N2 seul w=0.55"
+          },
+          {
+            "id": "m3-fd-1n2-seul-w-0.6",
+            "quoi": "m3 mélange : fd 1N2 seul w=0.6"
+          },
+          {
+            "id": "m3-fd-1n2-seul-w-0.65",
+            "quoi": "m3 mélange : fd 1N2 seul w=0.65"
+          },
+          {
+            "id": "m3-fd-1n2-seul-w-0.7",
+            "quoi": "m3 mélange : fd 1N2 seul w=0.7"
+          },
+          {
+            "id": "m3-fd-1n2-seul-w-0.75",
+            "quoi": "m3 mélange : fd 1N2 seul w=0.75"
+          },
+          {
+            "id": "m3-fd-1n2-seul-w-0.8",
+            "quoi": "m3 mélange : fd 1N2 seul w=0.8"
+          },
+          {
+            "id": "m3-fd-1n2-seul-w-0.85",
+            "quoi": "m3 mélange : fd 1N2 seul w=0.85"
+          },
+          {
+            "id": "m3-fd-1n2-seul-w-0.9",
+            "quoi": "m3 mélange : fd 1N2 seul w=0.9"
+          },
+          {
+            "id": "m3-fd-1n2-seul-w-0.95",
+            "quoi": "m3 mélange : fd 1N2 seul w=0.95"
+          },
+          {
+            "id": "m3-fd-1n2-seul-w-1",
+            "quoi": "m3 mélange : fd 1N2 seul w=1"
+          },
+          {
+            "id": "m3-fd-1n2-seul-grille-wt-ws-126-couples",
+            "quoi": "m3 mélange : fd 1N2 seul grille (wT, wS) 126 couples"
+          },
+          {
+            "id": "m3-fd-1n2-seul-poids-par-championnat-k-0",
+            "quoi": "m3 mélange : fd 1N2 seul poids par championnat k=0"
+          },
+          {
+            "id": "m3-fd-1n2-seul-poids-par-championnat-k-100",
+            "quoi": "m3 mélange : fd 1N2 seul poids par championnat k=100"
+          },
+          {
+            "id": "m3-fd-1n2-seul-poids-par-championnat-k-300",
+            "quoi": "m3 mélange : fd 1N2 seul poids par championnat k=300"
+          },
+          {
+            "id": "m3-fd-1n2-seul-poids-par-championnat-k-1000",
+            "quoi": "m3 mélange : fd 1N2 seul poids par championnat k=1000"
+          },
+          {
+            "id": "m3-fd-1n2-seul-poids-par-championnat-k-3000",
+            "quoi": "m3 mélange : fd 1N2 seul poids par championnat k=3000"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-w-0",
+            "quoi": "m3 mélange : fd 1N2+plus/moins w=0"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-w-0.05",
+            "quoi": "m3 mélange : fd 1N2+plus/moins w=0.05"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-w-0.1",
+            "quoi": "m3 mélange : fd 1N2+plus/moins w=0.1"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-w-0.15",
+            "quoi": "m3 mélange : fd 1N2+plus/moins w=0.15"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-w-0.2",
+            "quoi": "m3 mélange : fd 1N2+plus/moins w=0.2"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-w-0.25",
+            "quoi": "m3 mélange : fd 1N2+plus/moins w=0.25"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-w-0.3",
+            "quoi": "m3 mélange : fd 1N2+plus/moins w=0.3"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-w-0.35",
+            "quoi": "m3 mélange : fd 1N2+plus/moins w=0.35"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-w-0.4",
+            "quoi": "m3 mélange : fd 1N2+plus/moins w=0.4"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-w-0.45",
+            "quoi": "m3 mélange : fd 1N2+plus/moins w=0.45"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-w-0.5",
+            "quoi": "m3 mélange : fd 1N2+plus/moins w=0.5"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-w-0.55",
+            "quoi": "m3 mélange : fd 1N2+plus/moins w=0.55"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-w-0.6",
+            "quoi": "m3 mélange : fd 1N2+plus/moins w=0.6"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-w-0.65",
+            "quoi": "m3 mélange : fd 1N2+plus/moins w=0.65"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-w-0.7",
+            "quoi": "m3 mélange : fd 1N2+plus/moins w=0.7"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-w-0.75",
+            "quoi": "m3 mélange : fd 1N2+plus/moins w=0.75"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-w-0.8",
+            "quoi": "m3 mélange : fd 1N2+plus/moins w=0.8"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-w-0.85",
+            "quoi": "m3 mélange : fd 1N2+plus/moins w=0.85"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-w-0.9",
+            "quoi": "m3 mélange : fd 1N2+plus/moins w=0.9"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-w-0.95",
+            "quoi": "m3 mélange : fd 1N2+plus/moins w=0.95"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-w-1",
+            "quoi": "m3 mélange : fd 1N2+plus/moins w=1"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-grille-wt-ws-126-couples",
+            "quoi": "m3 mélange : fd 1N2+plus/moins grille (wT, wS) 126 couples"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-poids-par-championnat-k-0",
+            "quoi": "m3 mélange : fd 1N2+plus/moins poids par championnat k=0"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-poids-par-championnat-k-100",
+            "quoi": "m3 mélange : fd 1N2+plus/moins poids par championnat k=100"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-poids-par-championnat-k-300",
+            "quoi": "m3 mélange : fd 1N2+plus/moins poids par championnat k=300"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-poids-par-championnat-k-1000",
+            "quoi": "m3 mélange : fd 1N2+plus/moins poids par championnat k=1000"
+          },
+          {
+            "id": "m3-fd-1n2-et-plus-moins-poids-par-championnat-k-3000",
+            "quoi": "m3 mélange : fd 1N2+plus/moins poids par championnat k=3000"
+          },
+          {
+            "id": "m3-fd-rho-du-melange-m0.08",
+            "quoi": "m3 mélange : fd rho du mélange -0.08"
+          },
+          {
+            "id": "m3-fd-rho-du-melange-m0.06",
+            "quoi": "m3 mélange : fd rho du mélange -0.06"
+          },
+          {
+            "id": "m3-fd-rho-du-melange-m0.05",
+            "quoi": "m3 mélange : fd rho du mélange -0.05"
+          },
+          {
+            "id": "m3-fd-rho-du-melange-m0.04",
+            "quoi": "m3 mélange : fd rho du mélange -0.04"
+          },
+          {
+            "id": "m3-fd-rho-du-melange-m0.03",
+            "quoi": "m3 mélange : fd rho du mélange -0.03"
+          },
+          {
+            "id": "m3-fd-rho-du-melange-m0.02",
+            "quoi": "m3 mélange : fd rho du mélange -0.02"
+          },
+          {
+            "id": "m3-fd-rho-du-melange-0",
+            "quoi": "m3 mélange : fd rho du mélange 0"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-w-0",
+            "quoi": "m3 mélange : magasin 1N2 seul w=0"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-w-0.05",
+            "quoi": "m3 mélange : magasin 1N2 seul w=0.05"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-w-0.1",
+            "quoi": "m3 mélange : magasin 1N2 seul w=0.1"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-w-0.15",
+            "quoi": "m3 mélange : magasin 1N2 seul w=0.15"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-w-0.2",
+            "quoi": "m3 mélange : magasin 1N2 seul w=0.2"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-w-0.25",
+            "quoi": "m3 mélange : magasin 1N2 seul w=0.25"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-w-0.3",
+            "quoi": "m3 mélange : magasin 1N2 seul w=0.3"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-w-0.35",
+            "quoi": "m3 mélange : magasin 1N2 seul w=0.35"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-w-0.4",
+            "quoi": "m3 mélange : magasin 1N2 seul w=0.4"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-w-0.45",
+            "quoi": "m3 mélange : magasin 1N2 seul w=0.45"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-w-0.5",
+            "quoi": "m3 mélange : magasin 1N2 seul w=0.5"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-w-0.55",
+            "quoi": "m3 mélange : magasin 1N2 seul w=0.55"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-w-0.6",
+            "quoi": "m3 mélange : magasin 1N2 seul w=0.6"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-w-0.65",
+            "quoi": "m3 mélange : magasin 1N2 seul w=0.65"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-w-0.7",
+            "quoi": "m3 mélange : magasin 1N2 seul w=0.7"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-w-0.75",
+            "quoi": "m3 mélange : magasin 1N2 seul w=0.75"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-w-0.8",
+            "quoi": "m3 mélange : magasin 1N2 seul w=0.8"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-w-0.85",
+            "quoi": "m3 mélange : magasin 1N2 seul w=0.85"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-w-0.9",
+            "quoi": "m3 mélange : magasin 1N2 seul w=0.9"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-w-0.95",
+            "quoi": "m3 mélange : magasin 1N2 seul w=0.95"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-w-1",
+            "quoi": "m3 mélange : magasin 1N2 seul w=1"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-grille-wt-ws-126-couples",
+            "quoi": "m3 mélange : magasin 1N2 seul grille (wT, wS) 126 couples"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-poids-par-championnat-k-0",
+            "quoi": "m3 mélange : magasin 1N2 seul poids par championnat k=0"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-poids-par-championnat-k-100",
+            "quoi": "m3 mélange : magasin 1N2 seul poids par championnat k=100"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-poids-par-championnat-k-300",
+            "quoi": "m3 mélange : magasin 1N2 seul poids par championnat k=300"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-poids-par-championnat-k-1000",
+            "quoi": "m3 mélange : magasin 1N2 seul poids par championnat k=1000"
+          },
+          {
+            "id": "m3-magasin-1n2-seul-poids-par-championnat-k-3000",
+            "quoi": "m3 mélange : magasin 1N2 seul poids par championnat k=3000"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-w-0",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins w=0"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-w-0.05",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.05"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-w-0.1",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.1"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-w-0.15",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.15"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-w-0.2",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.2"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-w-0.25",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.25"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-w-0.3",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.3"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-w-0.35",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.35"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-w-0.4",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.4"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-w-0.45",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.45"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-w-0.5",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.5"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-w-0.55",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.55"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-w-0.6",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.6"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-w-0.65",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.65"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-w-0.7",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.7"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-w-0.75",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.75"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-w-0.8",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.8"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-w-0.85",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.85"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-w-0.9",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.9"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-w-0.95",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins w=0.95"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-w-1",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins w=1"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-grille-wt-ws-126-couples",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins grille (wT, wS) 126 couples"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-poids-par-championnat-k-0",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins poids par championnat k=0"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-poids-par-championnat-k-100",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins poids par championnat k=100"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-poids-par-championnat-k-300",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins poids par championnat k=300"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-poids-par-championnat-k-1000",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins poids par championnat k=1000"
+          },
+          {
+            "id": "m3-magasin-1n2-et-plus-moins-poids-par-championnat-k-3000",
+            "quoi": "m3 mélange : magasin 1N2+plus/moins poids par championnat k=3000"
+          },
+          {
+            "id": "m3-magasin-rho-du-melange-m0.08",
+            "quoi": "m3 mélange : magasin rho du mélange -0.08"
+          },
+          {
+            "id": "m3-magasin-rho-du-melange-m0.06",
+            "quoi": "m3 mélange : magasin rho du mélange -0.06"
+          },
+          {
+            "id": "m3-magasin-rho-du-melange-m0.05",
+            "quoi": "m3 mélange : magasin rho du mélange -0.05"
+          },
+          {
+            "id": "m3-magasin-rho-du-melange-m0.04",
+            "quoi": "m3 mélange : magasin rho du mélange -0.04"
+          },
+          {
+            "id": "m3-magasin-rho-du-melange-m0.03",
+            "quoi": "m3 mélange : magasin rho du mélange -0.03"
+          },
+          {
+            "id": "m3-magasin-rho-du-melange-m0.02",
+            "quoi": "m3 mélange : magasin rho du mélange -0.02"
+          },
+          {
+            "id": "m3-magasin-rho-du-melange-0",
+            "quoi": "m3 mélange : magasin rho du mélange 0"
+          },
+          {
+            "id": "m4-livres-moyenne-fd",
+            "quoi": "m4 plus/moins 2,5 : la moyenne football-data (pré-clôture), retenue"
+          },
+          {
+            "id": "m4-livres-pinnacle-fd",
+            "quoi": "m4 plus/moins 2,5 : Pinnacle (football-data, pré-clôture)"
+          },
+          {
+            "id": "m4-livres-espn",
+            "quoi": "m4 plus/moins 2,5 : la moyenne des livres ESPN admis"
+          },
+          {
+            "id": "m7-demarrage-n0-8",
+            "quoi": "m7 démarrage à froid : le total statistique rapproché de celui du championnat tant que le club le moins connu a moins de 8 matchs (retenu)"
+          }
+        ],
+        "vues": [
+          {
+            "de": "2000-07-01",
+            "a": "2019-06-30",
+            "quoi": "football-data P1 : rho, calage sur les cotes, loi des scores, livres et marge (cotes 2005-07-29 → 2019-06-30) ; forces apprises 2001-07 → 2012-06, mélange appris 2005-07 → 2012-06, vérifiés 2012-07 → 2019-06 ; promus et démarrage à froid (m5, m7)."
+          },
+          {
+            "de": "2023-07-01",
+            "a": "2026-09-23",
+            "quoi": "Magasin : forces chauffées 2023-07 → 2024-06 ; demi-vies, rétrécissement, statistique, changement de championnat, rho, poids du mélange et démarrage à froid appris sur 2024-07 → 2025-06, vérifiés sur 2025-07 → 2026-09-23 ; livres et heures de relevé ; puissance du juge et score face au score en service sur 2025-07 → 2026-09-23."
+          }
+        ],
+        "temoins": [
+          "scoreExact"
+        ]
+      },
+      "horizon": {
+        "matchs": 800,
+        "jours": 21
+      },
+      "empreinte": "f01dd8496f56a415",
+      "enEssaiDepuis": "2026-10-22T15:45:40.552Z",
+      "varianteDeclareeLe": "2026-10-22T15:45:40.552Z",
+      "essai": {
+        "depuis": "2026-10-24T14:48:31.802Z",
+        "versionEnService": 5,
+        "numero": 2,
+        "variante": "modele-buts-v1~2"
+      },
+      "premiersChiffres": {
+        "regimes": {
+          "cotes-1n2-xg": 164,
+          "cotes-plusmoins-xg": 517,
+          "cotes-plusmoins-buts": 261,
+          "xg-seuls": 4,
+          "cotes-1n2-buts": 250,
+          "buts-seuls": 49
+        },
+        "calibration": {
+          "a": {
             "bothTeamsScore": {
-              "pronostics": 45929,
-              "matchs": 45929,
-              "biais": -0.095964,
-              "ece": 0.096077,
-              "verdict": "trop-haut",
-              "fourchette": [
-                -0.104736,
-                -0.087193
-              ]
+              "pronostics": 1218,
+              "matchs": 1218,
+              "biais": -0.113344,
+              "ece": 0.113344
             },
             "resultAndTotal": {
-              "pronostics": 46507,
-              "matchs": 46507,
-              "biais": -0.033143,
-              "ece": 0.033237,
-              "verdict": "trop-haut",
-              "fourchette": [
-                -0.041801,
-                -0.024486
-              ]
+              "pronostics": 1245,
+              "matchs": 1245,
+              "biais": -0.013865,
+              "ece": 0.030166
             },
             "teamGoals": {
-              "pronostics": 93014,
-              "matchs": 46507,
-              "biais": -0.050211,
-              "ece": 0.050685,
-              "verdict": "trop-haut",
-              "fourchette": [
-                -0.055577,
-                -0.044845
-              ]
+              "pronostics": 2490,
+              "matchs": 1245,
+              "biais": -0.077843,
+              "ece": 0.077843
             },
             "totalGoals": {
-              "pronostics": 46507,
-              "matchs": 46507,
-              "biais": -0.067113,
-              "ece": 0.067113,
-              "verdict": "trop-haut",
-              "fourchette": [
-                -0.07539,
-                -0.058836
-              ]
+              "pronostics": 1245,
+              "matchs": 1245,
+              "biais": -0.078251,
+              "ece": 0.078251
+            }
+          },
+          "b": {
+            "bothTeamsScore": {
+              "pronostics": 1245,
+              "matchs": 1245,
+              "biais": -0.02919,
+              "ece": 0.032409
+            },
+            "resultAndTotal": {
+              "pronostics": 1245,
+              "matchs": 1245,
+              "biais": 0.018497,
+              "ece": 0.024911
+            },
+            "teamGoals": {
+              "pronostics": 2490,
+              "matchs": 1245,
+              "biais": -0.00248,
+              "ece": 0.015615
+            },
+            "totalGoals": {
+              "pronostics": 1245,
+              "matchs": 1245,
+              "biais": -0.011484,
+              "ece": 0.022158
             }
           }
         },
-        "b": {
-          "parCase": {
-            "bothTeamsScore": {
-              "pronostics": 46507,
-              "matchs": 46507,
-              "biais": -0.012636,
-              "ece": 0.013226,
-              "verdict": "trop-haut",
-              "fourchette": [
-                -0.021257,
-                -0.004015
-              ]
-            },
-            "resultAndTotal|1.5": {
-              "pronostics": 32303,
-              "matchs": 32303,
-              "biais": 0.000101,
-              "ece": 0.005853,
-              "verdict": "dans-le-hasard",
-              "fourchette": [
-                -0.009925,
-                0.010126
-              ]
-            },
-            "resultAndTotal|2.5": {
-              "pronostics": 564,
-              "matchs": 564,
-              "biais": -0.024461,
-              "ece": 0.052678,
-              "verdict": "dans-le-hasard",
-              "fourchette": [
-                -0.094711,
-                0.045789
-              ]
-            },
-            "resultAndTotal|3.5": {
-              "pronostics": 13640,
-              "matchs": 13640,
-              "biais": -0.014614,
-              "ece": 0.014649,
-              "verdict": "dans-le-hasard",
-              "fourchette": [
-                -0.030057,
-                0.000829
-              ]
-            },
-            "teamGoals:away|0.5": {
-              "pronostics": 17651,
-              "matchs": 17651,
-              "biais": -0.002805,
-              "ece": 0.008019,
-              "verdict": "dans-le-hasard",
-              "fourchette": [
-                -0.015056,
-                0.009446
-              ]
-            },
-            "teamGoals:away|1.5": {
-              "pronostics": 21245,
-              "matchs": 21245,
-              "biais": -0.002076,
-              "ece": 0.005232,
-              "verdict": "dans-le-hasard",
-              "fourchette": [
-                -0.012945,
-                0.008793
-              ]
-            },
-            "teamGoals:away|2.5": {
-              "pronostics": 6641,
-              "matchs": 6641,
-              "biais": 0.014778,
-              "ece": 0.014778,
-              "verdict": "dans-le-hasard",
-              "fourchette": [
-                -0.004444,
-                0.034
-              ]
-            },
-            "teamGoals:away|3.5": {
-              "pronostics": 970,
-              "matchs": 970,
-              "biais": 0.02243,
-              "ece": 0.02243,
-              "verdict": "dans-le-hasard",
-              "fourchette": [
-                -0.026163,
-                0.071024
-              ]
-            },
-            "teamGoals:home|0.5": {
-              "pronostics": 20579,
-              "matchs": 20579,
-              "biais": 0.002284,
-              "ece": 0.004203,
-              "verdict": "dans-le-hasard",
-              "fourchette": [
-                -0.009183,
-                0.013751
-              ]
-            },
-            "teamGoals:home|1.5": {
-              "pronostics": 10055,
-              "matchs": 10055,
-              "biais": 0.00118,
-              "ece": 0.003545,
-              "verdict": "dans-le-hasard",
-              "fourchette": [
-                -0.015405,
-                0.017764
-              ]
-            },
-            "teamGoals:home|2.5": {
-              "pronostics": 13058,
-              "matchs": 13058,
-              "biais": 0.008544,
-              "ece": 0.008544,
-              "verdict": "dans-le-hasard",
-              "fourchette": [
-                -0.004932,
-                0.022021
-              ]
-            },
-            "teamGoals:home|3.5": {
-              "pronostics": 2815,
-              "matchs": 2815,
-              "biais": 0.012411,
-              "ece": 0.012411,
-              "verdict": "dans-le-hasard",
-              "fourchette": [
-                -0.016278,
-                0.041101
-              ]
-            },
-            "totalGoals|0.5": {
-              "pronostics": 325,
-              "matchs": 325,
-              "biais": 0.046288,
-              "ece": 0.046288,
-              "verdict": "dans-le-hasard",
-              "fourchette": [
-                -0.028916,
-                0.121492
-              ]
-            },
-            "totalGoals|1.5": {
-              "pronostics": 21115,
-              "matchs": 21115,
-              "biais": -0.007799,
-              "ece": 0.007799,
-              "verdict": "dans-le-hasard",
-              "fourchette": [
-                -0.018738,
-                0.00314
-              ]
-            },
-            "totalGoals|2.5": {
-              "pronostics": 6636,
-              "matchs": 6636,
-              "biais": -0.03364,
-              "ece": 0.03364,
-              "verdict": "trop-haut",
-              "fourchette": [
-                -0.055533,
-                -0.011747
-              ]
-            },
-            "totalGoals|3.5": {
-              "pronostics": 18431,
-              "matchs": 18431,
-              "biais": -0.004202,
-              "ece": 0.004202,
-              "verdict": "dans-le-hasard",
-              "fourchette": [
-                -0.015735,
-                0.007332
-              ]
-            }
+        "temoins": {
+          "matchs": 1245,
+          "a": 3.004775,
+          "b": 2.997892,
+          "exactA": 11,
+          "exactB": 11.73,
+          "horsGrille": 2,
+          "ecartees": {
+            "sansResultat": 44,
+            "apresCoupDEnvoi": 12,
+            "prolongationSansScore90": 1,
+            "sansIdentifiant": 72
           },
-          "parFamille": {
+          "juge": false
+        },
+        "calculeLe": "2026-11-14T23:09:29.454Z",
+        "matchs": 1245,
+        "lignes": 6225,
+        "a": 0.82349,
+        "b": 0.754076,
+        "gainPct": 8.429,
+        "horizon": {
+          "matchs": 800,
+          "jours": 21
+        },
+        "joursEcoules": 21,
+        "auPlusTotLe": "2026-11-14T14:48:31.802Z",
+        "aVenir": {
+          "pronostics": 3190,
+          "matchs": 638
+        },
+        "ecartees": {
+          "autreVersionEnService": 1210,
+          "heureInconnue": 5,
+          "sansResultat": 160,
+          "apresCoupDEnvoi": 60,
+          "prolongationSansScore90": 5,
+          "sansIdentifiant": 360
+        },
+        "parMarche": [
+          {
+            "marketId": "bothTeamsScore",
+            "lignes": 1245,
+            "matchs": 1245,
+            "a": 0.741444,
+            "b": 0.685984
+          },
+          {
+            "marketId": "resultAndTotal",
+            "lignes": 1245,
+            "matchs": 1245,
+            "a": 1.502575,
+            "b": 1.434388
+          },
+          {
+            "marketId": "teamGoals",
+            "lignes": 2490,
+            "matchs": 1245,
+            "a": 0.625882,
+            "b": 0.550134
+          },
+          {
+            "marketId": "totalGoals",
+            "lignes": 1245,
+            "matchs": 1245,
+            "a": 0.621666,
+            "b": 0.549738
+          }
+        ]
+      },
+      "jugement": {
+        "parFamille": {
+          "bothTeamsScore": {
+            "lignes": 1245,
+            "matchs": 1245,
+            "a": 0.741444,
+            "b": 0.685984,
+            "gainPct": 7.48,
+            "fourchettePct": [
+              2.203,
+              12.757
+            ],
+            "verdict": "retenu",
+            "variantes": 321
+          },
+          "resultAndTotal": {
+            "lignes": 1245,
+            "matchs": 1245,
+            "a": 1.502575,
+            "b": 1.434388,
+            "gainPct": 4.538,
+            "fourchettePct": [
+              1.914,
+              7.162
+            ],
+            "verdict": "retenu",
+            "variantes": 321
+          },
+          "teamGoals": {
+            "lignes": 2490,
+            "matchs": 1245,
+            "a": 0.625882,
+            "b": 0.550134,
+            "gainPct": 12.103,
+            "fourchettePct": [
+              7.289,
+              16.916
+            ],
+            "verdict": "retenu",
+            "variantes": 321
+          },
+          "totalGoals": {
+            "lignes": 1245,
+            "matchs": 1245,
+            "a": 0.621666,
+            "b": 0.549738,
+            "gainPct": 11.57,
+            "fourchettePct": [
+              4.786,
+              18.355
+            ],
+            "verdict": "retenu",
+            "variantes": 321
+          }
+        },
+        "calibration": {
+          "a": {
             "bothTeamsScore": {
-              "pronostics": 46507,
-              "matchs": 46507,
-              "biais": -0.012636,
-              "ece": 0.013226,
+              "pronostics": 1218,
+              "matchs": 1218,
+              "biais": -0.113344,
+              "ece": 0.113344,
               "verdict": "trop-haut",
-              "fourchette": [
-                -0.021257,
-                -0.004015
-              ]
+              "variantes": 321
             },
             "resultAndTotal": {
-              "pronostics": 46507,
-              "matchs": 46507,
-              "biais": -0.004513,
-              "ece": 0.005387,
+              "pronostics": 1245,
+              "matchs": 1245,
+              "biais": -0.013865,
+              "ece": 0.030166,
               "verdict": "dans-le-hasard",
-              "fourchette": [
-                -0.013008,
-                0.003982
-              ]
+              "variantes": 321
             },
             "teamGoals": {
-              "pronostics": 93014,
-              "matchs": 46507,
-              "biais": 0.00249,
-              "ece": 0.003853,
-              "verdict": "dans-le-hasard",
-              "fourchette": [
-                -0.002754,
-                0.007735
-              ]
+              "pronostics": 2490,
+              "matchs": 1245,
+              "biais": -0.077843,
+              "ece": 0.077843,
+              "verdict": "trop-haut",
+              "variantes": 321
             },
             "totalGoals": {
-              "pronostics": 46507,
-              "matchs": 46507,
-              "biais": -0.009683,
-              "ece": 0.009683,
+              "pronostics": 1245,
+              "matchs": 1245,
+              "biais": -0.078251,
+              "ece": 0.078251,
               "verdict": "trop-haut",
-              "fourchette": [
-                -0.017289,
-                -0.002076
-              ]
+              "variantes": 321
+            }
+          },
+          "b": {
+            "bothTeamsScore": {
+              "pronostics": 1245,
+              "matchs": 1245,
+              "biais": -0.02919,
+              "ece": 0.032409,
+              "verdict": "dans-le-hasard",
+              "variantes": 321
+            },
+            "resultAndTotal": {
+              "pronostics": 1245,
+              "matchs": 1245,
+              "biais": 0.018497,
+              "ece": 0.024911,
+              "verdict": "dans-le-hasard",
+              "variantes": 321
+            },
+            "teamGoals": {
+              "pronostics": 2490,
+              "matchs": 1245,
+              "biais": -0.00248,
+              "ece": 0.015615,
+              "verdict": "dans-le-hasard",
+              "variantes": 321
+            },
+            "totalGoals": {
+              "pronostics": 1245,
+              "matchs": 1245,
+              "biais": -0.011484,
+              "ece": 0.022158,
+              "verdict": "dans-le-hasard",
+              "variantes": 321
             }
           }
+        },
+        "surete": {
+          "totalGoals|2.5": {
+            "pronostics": 339,
+            "matchs": 339,
+            "biais": -0.018308,
+            "ece": 0.033359,
+            "verdict": "dans-le-hasard",
+            "variantes": 1
+          },
+          "bothTeamsScore": {
+            "pronostics": 1245,
+            "matchs": 1245,
+            "biais": -0.02919,
+            "ece": 0.032409,
+            "verdict": "trop-haut",
+            "variantes": 1
+          }
+        },
+        "regimes": {
+          "cotes-1n2-xg": 164,
+          "cotes-plusmoins-xg": 517,
+          "cotes-plusmoins-buts": 261,
+          "xg-seuls": 4,
+          "cotes-1n2-buts": 250,
+          "buts-seuls": 49
+        },
+        "temoins": {
+          "matchs": 1245,
+          "a": 3.004775,
+          "b": 2.997892,
+          "exactA": 11,
+          "exactB": 11.73,
+          "horsGrille": 2,
+          "ecartees": {
+            "sansResultat": 44,
+            "apresCoupDEnvoi": 12,
+            "prolongationSansScore90": 1,
+            "sansIdentifiant": 72
+          },
+          "juge": false
+        },
+        "le": "2026-11-14T23:09:29.454Z",
+        "principal": true,
+        "verdict": "retenu",
+        "raison": "L’amélioration dépasse ce que le hasard explique : la fourchette est entièrement au-dessus de zéro (1 245 matchs, 321 variantes essayées).",
+        "matchs": 1245,
+        "lignes": 6225,
+        "a": 0.82349,
+        "b": 0.754076,
+        "gainPct": 8.429,
+        "fourchettePct": [
+          4.967,
+          11.892
+        ],
+        "quoi": "de perte log en moins",
+        "variantes": 321,
+        "fenetre": {
+          "de": "2026-10-25",
+          "a": "2026-11-14"
+        },
+        "lancement": "2026-10-24",
+        "ecartees": {
+          "autreVersionEnService": 1210,
+          "heureInconnue": 5,
+          "sansResultat": 160,
+          "apresCoupDEnvoi": 60,
+          "prolongationSansScore90": 5,
+          "sansIdentifiant": 360,
+          "avantLancement": 0,
+          "donneesVues": 0
+        },
+        "parMarche": [
+          {
+            "marketId": "bothTeamsScore",
+            "lignes": 1245,
+            "matchs": 1245,
+            "a": 0.741444,
+            "b": 0.685984
+          },
+          {
+            "marketId": "resultAndTotal",
+            "lignes": 1245,
+            "matchs": 1245,
+            "a": 1.502575,
+            "b": 1.434388
+          },
+          {
+            "marketId": "teamGoals",
+            "lignes": 2490,
+            "matchs": 1245,
+            "a": 0.625882,
+            "b": 0.550134
+          },
+          {
+            "marketId": "totalGoals",
+            "lignes": 1245,
+            "matchs": 1245,
+            "a": 0.621666,
+            "b": 0.549738
+          }
+        ],
+        "versionEnService": 5,
+        "empreinte": "f01dd8496f56a415",
+        "essai": 2
+      },
+      "jugementsPerimes": [],
+      "banc": {
+        "indicatif": true,
+        "le": "2026-11-07T22:18:43.156Z",
+        "candidate": "modele-buts-v1",
+        "empreinte": "f01dd8496f56a415",
+        "periodes": [
+          "P2"
+        ],
+        "prix": [
+          "fd-avant-match"
+        ],
+        "marches": [
+          "totalGoals",
+          "bothTeamsScore",
+          "teamGoals",
+          "resultAndTotal"
+        ],
+        "mesure": "perte-log",
+        "paires": 744112,
+        "matchs": 46507,
+        "ecartees": {
+          "sansPaire": 0,
+          "lignesDifferentes": 0,
+          "nonReglable": 0
+        },
+        "variantes": 321,
+        "a": 0.738705,
+        "b": 0.69601,
+        "gainPct": 5.78,
+        "fourchettePct": [
+          5.326,
+          6.234
+        ],
+        "verdict": "retenu",
+        "raison": "L’amélioration dépasse ce que le hasard explique : la fourchette est entièrement au-dessus de zéro (46 507 matchs, 321 variantes essayées).",
+        "dejaVues": {
+          "lignes": 0,
+          "part": 0,
+          "vuesDeclarees": true
+        },
+        "moteurs": {
+          "a": "fc14ea5a3e7827dd3d6f7a3eefde72a66207021b",
+          "b": "8eb8d83b6e0b710d243db6b6f6d70764247d1227"
+        },
+        "dureeMs": 599096,
+        "erreur": null,
+        "parFamille": {
+          "bothTeamsScore": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.727209,
+            "b": 0.688029,
+            "gainPct": 5.388,
+            "fourchettePct": [
+              4.671,
+              6.105
+            ],
+            "verdict": "retenu"
+          },
+          "resultAndTotal": {
+            "lignes": 139521,
+            "matchs": 46507,
+            "a": 1.658057,
+            "b": 1.607921,
+            "gainPct": 3.024,
+            "fourchettePct": [
+              2.715,
+              3.333
+            ],
+            "verdict": "retenu"
+          },
+          "teamGoals": {
+            "lignes": 372056,
+            "matchs": 46507,
+            "a": 0.483011,
+            "b": 0.442737,
+            "gainPct": 8.338,
+            "fourchettePct": [
+              7.746,
+              8.93
+            ],
+            "verdict": "retenu"
+          },
+          "totalGoals": {
+            "lignes": 186028,
+            "matchs": 46507,
+            "a": 0.563451,
+            "b": 0.520618,
+            "gainPct": 7.602,
+            "fourchettePct": [
+              6.843,
+              8.36
+            ],
+            "verdict": "retenu"
+          }
+        },
+        "parCase": {
+          "bothTeamsScore": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.727209,
+            "b": 0.688029,
+            "gainPct": 5.388,
+            "fourchettePct": [
+              4.671,
+              6.105
+            ],
+            "verdict": "retenu"
+          },
+          "resultAndTotal|1.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 1.623195,
+            "b": 1.57833,
+            "gainPct": 2.764,
+            "fourchettePct": [
+              2.422,
+              3.106
+            ],
+            "verdict": "retenu"
+          },
+          "resultAndTotal|2.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 1.704764,
+            "b": 1.651841,
+            "gainPct": 3.104,
+            "fourchettePct": [
+              2.738,
+              3.471
+            ],
+            "verdict": "retenu"
+          },
+          "resultAndTotal|3.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 1.646211,
+            "b": 1.593592,
+            "gainPct": 3.196,
+            "fourchettePct": [
+              2.798,
+              3.595
+            ],
+            "verdict": "retenu"
+          },
+          "teamGoals:away|0.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.64459,
+            "b": 0.602875,
+            "gainPct": 6.472,
+            "fourchettePct": [
+              5.672,
+              7.271
+            ],
+            "verdict": "retenu"
+          },
+          "teamGoals:away|1.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.658132,
+            "b": 0.604028,
+            "gainPct": 8.221,
+            "fourchettePct": [
+              7.266,
+              9.176
+            ],
+            "verdict": "retenu"
+          },
+          "teamGoals:away|2.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.387759,
+            "b": 0.346221,
+            "gainPct": 10.712,
+            "fourchettePct": [
+              9.308,
+              12.117
+            ],
+            "verdict": "retenu"
+          },
+          "teamGoals:away|3.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.173002,
+            "b": 0.1502,
+            "gainPct": 13.18,
+            "fourchettePct": [
+              10.765,
+              15.595
+            ],
+            "verdict": "retenu"
+          },
+          "teamGoals:home|0.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.568711,
+            "b": 0.52936,
+            "gainPct": 6.919,
+            "fourchettePct": [
+              6.016,
+              7.823
+            ],
+            "verdict": "retenu"
+          },
+          "teamGoals:home|1.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.697552,
+            "b": 0.643539,
+            "gainPct": 7.743,
+            "fourchettePct": [
+              6.801,
+              8.685
+            ],
+            "verdict": "retenu"
+          },
+          "teamGoals:home|2.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.484271,
+            "b": 0.441972,
+            "gainPct": 8.735,
+            "fourchettePct": [
+              7.516,
+              9.953
+            ],
+            "verdict": "retenu"
+          },
+          "teamGoals:home|3.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.250075,
+            "b": 0.223698,
+            "gainPct": 10.548,
+            "fourchettePct": [
+              8.696,
+              12.399
+            ],
+            "verdict": "retenu"
+          },
+          "totalGoals|0.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.285088,
+            "b": 0.265162,
+            "gainPct": 6.989,
+            "fourchettePct": [
+              5.873,
+              8.105
+            ],
+            "verdict": "retenu"
+          },
+          "totalGoals|1.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.604763,
+            "b": 0.561473,
+            "gainPct": 7.158,
+            "fourchettePct": [
+              6.246,
+              8.07
+            ],
+            "verdict": "retenu"
+          },
+          "totalGoals|2.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.735735,
+            "b": 0.679346,
+            "gainPct": 7.664,
+            "fourchettePct": [
+              6.775,
+              8.554
+            ],
+            "verdict": "retenu"
+          },
+          "totalGoals|3.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.628217,
+            "b": 0.576491,
+            "gainPct": 8.234,
+            "fourchettePct": [
+              7.2,
+              9.267
+            ],
+            "verdict": "retenu"
+          }
+        },
+        "faceAuRepere": {
+          "bothTeamsScore": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.692542,
+            "b": 0.688029,
+            "gainPct": 0.652,
+            "fourchettePct": [
+              0.331,
+              0.972
+            ],
+            "verdict": "retenu"
+          },
+          "resultAndTotal|1.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 1.650926,
+            "b": 1.57833,
+            "gainPct": 4.397,
+            "fourchettePct": [
+              3.992,
+              4.803
+            ],
+            "verdict": "retenu"
+          },
+          "resultAndTotal|2.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 1.771111,
+            "b": 1.651841,
+            "gainPct": 6.734,
+            "fourchettePct": [
+              6.257,
+              7.211
+            ],
+            "verdict": "retenu"
+          },
+          "resultAndTotal|3.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 1.667777,
+            "b": 1.593592,
+            "gainPct": 4.448,
+            "fourchettePct": [
+              4.04,
+              4.856
+            ],
+            "verdict": "retenu"
+          },
+          "teamGoals:away|0.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.624547,
+            "b": 0.602875,
+            "gainPct": 3.47,
+            "fourchettePct": [
+              2.891,
+              4.049
+            ],
+            "verdict": "retenu"
+          },
+          "teamGoals:away|1.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.633,
+            "b": 0.604028,
+            "gainPct": 4.577,
+            "fourchettePct": [
+              3.901,
+              5.252
+            ],
+            "verdict": "retenu"
+          },
+          "teamGoals:away|2.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.370931,
+            "b": 0.346221,
+            "gainPct": 6.662,
+            "fourchettePct": [
+              5.506,
+              7.818
+            ],
+            "verdict": "retenu"
+          },
+          "teamGoals:away|3.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.176269,
+            "b": 0.1502,
+            "gainPct": 14.789,
+            "fourchettePct": [
+              10.563,
+              19.016
+            ],
+            "verdict": "retenu"
+          },
+          "teamGoals:home|0.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.553796,
+            "b": 0.52936,
+            "gainPct": 4.412,
+            "fourchettePct": [
+              3.773,
+              5.052
+            ],
+            "verdict": "retenu"
+          },
+          "teamGoals:home|1.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.681027,
+            "b": 0.643539,
+            "gainPct": 5.505,
+            "fourchettePct": [
+              4.852,
+              6.157
+            ],
+            "verdict": "retenu"
+          },
+          "teamGoals:home|2.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.475544,
+            "b": 0.441972,
+            "gainPct": 7.06,
+            "fourchettePct": [
+              6.056,
+              8.063
+            ],
+            "verdict": "retenu"
+          },
+          "teamGoals:home|3.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.253105,
+            "b": 0.223698,
+            "gainPct": 11.618,
+            "fourchettePct": [
+              9.157,
+              14.08
+            ],
+            "verdict": "retenu"
+          },
+          "totalGoals|0.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.27357,
+            "b": 0.265162,
+            "gainPct": 3.074,
+            "fourchettePct": [
+              1.672,
+              4.475
+            ],
+            "verdict": "retenu"
+          },
+          "totalGoals|1.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.568341,
+            "b": 0.561473,
+            "gainPct": 1.208,
+            "fourchettePct": [
+              0.777,
+              1.64
+            ],
+            "verdict": "retenu"
+          },
+          "totalGoals|2.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.688526,
+            "b": 0.679346,
+            "gainPct": 1.333,
+            "fourchettePct": [
+              0.951,
+              1.716
+            ],
+            "verdict": "retenu"
+          },
+          "totalGoals|3.5": {
+            "lignes": 46507,
+            "matchs": 46507,
+            "a": 0.585192,
+            "b": 0.576491,
+            "gainPct": 1.487,
+            "fourchettePct": [
+              1.008,
+              1.966
+            ],
+            "verdict": "retenu"
+          }
+        },
+        "faceAuMarche": {
+          "candidate": {
+            "totalGoals|2.5": {
+              "lignes": 30157,
+              "matchs": 30157,
+              "a": 0.677013,
+              "b": 0.677197,
+              "gainPct": -0.027,
+              "fourchettePct": [
+                -0.073,
+                0.018
+              ],
+              "verdict": "pas-prouve"
+            }
+          },
+          "enService": {
+            "totalGoals|2.5": {
+              "lignes": 30157,
+              "matchs": 30157,
+              "a": 0.677013,
+              "b": 0.734249,
+              "gainPct": -8.454,
+              "fourchettePct": [
+                -9.656,
+                -7.252
+              ],
+              "verdict": "moins-bon"
+            }
+          }
+        },
+        "calibration": {
+          "a": {
+            "parCase": {
+              "bothTeamsScore": {
+                "pronostics": 45929,
+                "matchs": 45929,
+                "biais": -0.095964,
+                "ece": 0.096077,
+                "verdict": "trop-haut",
+                "fourchette": [
+                  -0.104736,
+                  -0.087193
+                ]
+              },
+              "resultAndTotal|1.5": {
+                "pronostics": 26890,
+                "matchs": 26890,
+                "biais": -0.023838,
+                "ece": 0.024508,
+                "verdict": "trop-haut",
+                "fourchette": [
+                  -0.034767,
+                  -0.012908
+                ]
+              },
+              "resultAndTotal|2.5": {
+                "pronostics": 511,
+                "matchs": 511,
+                "biais": -0.079487,
+                "ece": 0.094343,
+                "verdict": "trop-haut",
+                "fourchette": [
+                  -0.154985,
+                  -0.003989
+                ]
+              },
+              "resultAndTotal|3.5": {
+                "pronostics": 19106,
+                "matchs": 19106,
+                "biais": -0.045001,
+                "ece": 0.045001,
+                "verdict": "trop-haut",
+                "fourchette": [
+                  -0.057381,
+                  -0.03262
+                ]
+              },
+              "teamGoals:away|0.5": {
+                "pronostics": 21427,
+                "matchs": 21427,
+                "biais": -0.095978,
+                "ece": 0.097336,
+                "verdict": "trop-haut",
+                "fourchette": [
+                  -0.108108,
+                  -0.083848
+                ]
+              },
+              "teamGoals:away|1.5": {
+                "pronostics": 16658,
+                "matchs": 16658,
+                "biais": -0.076759,
+                "ece": 0.076759,
+                "verdict": "trop-haut",
+                "fourchette": [
+                  -0.090034,
+                  -0.063485
+                ]
+              },
+              "teamGoals:away|2.5": {
+                "pronostics": 6349,
+                "matchs": 6349,
+                "biais": 0.073568,
+                "ece": 0.073568,
+                "verdict": "trop-bas",
+                "fourchette": [
+                  0.055616,
+                  0.091521
+                ]
+              },
+              "teamGoals:away|3.5": {
+                "pronostics": 2073,
+                "matchs": 2073,
+                "biais": 0.109609,
+                "ece": 0.109609,
+                "verdict": "trop-bas",
+                "fourchette": [
+                  0.085729,
+                  0.133489
+                ]
+              },
+              "teamGoals:home|0.5": {
+                "pronostics": 18701,
+                "matchs": 18701,
+                "biais": -0.062348,
+                "ece": 0.077287,
+                "verdict": "trop-haut",
+                "fourchette": [
+                  -0.07546,
+                  -0.049236
+                ]
+              },
+              "teamGoals:home|1.5": {
+                "pronostics": 14393,
+                "matchs": 14393,
+                "biais": -0.114341,
+                "ece": 0.114341,
+                "verdict": "trop-haut",
+                "fourchette": [
+                  -0.129484,
+                  -0.099197
+                ]
+              },
+              "teamGoals:home|2.5": {
+                "pronostics": 9337,
+                "matchs": 9337,
+                "biais": 0.044812,
+                "ece": 0.044812,
+                "verdict": "trop-bas",
+                "fourchette": [
+                  0.029617,
+                  0.060007
+                ]
+              },
+              "teamGoals:home|3.5": {
+                "pronostics": 4076,
+                "matchs": 4076,
+                "biais": 0.089266,
+                "ece": 0.089266,
+                "verdict": "trop-bas",
+                "fourchette": [
+                  0.070862,
+                  0.10767
+                ]
+              },
+              "totalGoals|0.5": {
+                "pronostics": 5280,
+                "matchs": 5280,
+                "biais": 0.120813,
+                "ece": 0.120813,
+                "verdict": "trop-bas",
+                "fourchette": [
+                  0.105239,
+                  0.136388
+                ]
+              },
+              "totalGoals|1.5": {
+                "pronostics": 13320,
+                "matchs": 13320,
+                "biais": -0.053486,
+                "ece": 0.053486,
+                "verdict": "trop-haut",
+                "fourchette": [
+                  -0.068053,
+                  -0.038919
+                ]
+              },
+              "totalGoals|2.5": {
+                "pronostics": 16146,
+                "matchs": 16146,
+                "biais": -0.145284,
+                "ece": 0.145284,
+                "verdict": "trop-haut",
+                "fourchette": [
+                  -0.16018,
+                  -0.130387
+                ]
+              },
+              "totalGoals|3.5": {
+                "pronostics": 11761,
+                "matchs": 11761,
+                "biais": -0.059597,
+                "ece": 0.059597,
+                "verdict": "trop-haut",
+                "fourchette": [
+                  -0.075457,
+                  -0.043736
+                ]
+              }
+            },
+            "parFamille": {
+              "bothTeamsScore": {
+                "pronostics": 45929,
+                "matchs": 45929,
+                "biais": -0.095964,
+                "ece": 0.096077,
+                "verdict": "trop-haut",
+                "fourchette": [
+                  -0.104736,
+                  -0.087193
+                ]
+              },
+              "resultAndTotal": {
+                "pronostics": 46507,
+                "matchs": 46507,
+                "biais": -0.033143,
+                "ece": 0.033237,
+                "verdict": "trop-haut",
+                "fourchette": [
+                  -0.041801,
+                  -0.024486
+                ]
+              },
+              "teamGoals": {
+                "pronostics": 93014,
+                "matchs": 46507,
+                "biais": -0.050211,
+                "ece": 0.050685,
+                "verdict": "trop-haut",
+                "fourchette": [
+                  -0.055577,
+                  -0.044845
+                ]
+              },
+              "totalGoals": {
+                "pronostics": 46507,
+                "matchs": 46507,
+                "biais": -0.067113,
+                "ece": 0.067113,
+                "verdict": "trop-haut",
+                "fourchette": [
+                  -0.07539,
+                  -0.058836
+                ]
+              }
+            }
+          },
+          "b": {
+            "parCase": {
+              "bothTeamsScore": {
+                "pronostics": 46507,
+                "matchs": 46507,
+                "biais": -0.012636,
+                "ece": 0.013226,
+                "verdict": "trop-haut",
+                "fourchette": [
+                  -0.021257,
+                  -0.004015
+                ]
+              },
+              "resultAndTotal|1.5": {
+                "pronostics": 32303,
+                "matchs": 32303,
+                "biais": 0.000101,
+                "ece": 0.005853,
+                "verdict": "dans-le-hasard",
+                "fourchette": [
+                  -0.009925,
+                  0.010126
+                ]
+              },
+              "resultAndTotal|2.5": {
+                "pronostics": 564,
+                "matchs": 564,
+                "biais": -0.024461,
+                "ece": 0.052678,
+                "verdict": "dans-le-hasard",
+                "fourchette": [
+                  -0.094711,
+                  0.045789
+                ]
+              },
+              "resultAndTotal|3.5": {
+                "pronostics": 13640,
+                "matchs": 13640,
+                "biais": -0.014614,
+                "ece": 0.014649,
+                "verdict": "dans-le-hasard",
+                "fourchette": [
+                  -0.030057,
+                  0.000829
+                ]
+              },
+              "teamGoals:away|0.5": {
+                "pronostics": 17651,
+                "matchs": 17651,
+                "biais": -0.002805,
+                "ece": 0.008019,
+                "verdict": "dans-le-hasard",
+                "fourchette": [
+                  -0.015056,
+                  0.009446
+                ]
+              },
+              "teamGoals:away|1.5": {
+                "pronostics": 21245,
+                "matchs": 21245,
+                "biais": -0.002076,
+                "ece": 0.005232,
+                "verdict": "dans-le-hasard",
+                "fourchette": [
+                  -0.012945,
+                  0.008793
+                ]
+              },
+              "teamGoals:away|2.5": {
+                "pronostics": 6641,
+                "matchs": 6641,
+                "biais": 0.014778,
+                "ece": 0.014778,
+                "verdict": "dans-le-hasard",
+                "fourchette": [
+                  -0.004444,
+                  0.034
+                ]
+              },
+              "teamGoals:away|3.5": {
+                "pronostics": 970,
+                "matchs": 970,
+                "biais": 0.02243,
+                "ece": 0.02243,
+                "verdict": "dans-le-hasard",
+                "fourchette": [
+                  -0.026163,
+                  0.071024
+                ]
+              },
+              "teamGoals:home|0.5": {
+                "pronostics": 20579,
+                "matchs": 20579,
+                "biais": 0.002284,
+                "ece": 0.004203,
+                "verdict": "dans-le-hasard",
+                "fourchette": [
+                  -0.009183,
+                  0.013751
+                ]
+              },
+              "teamGoals:home|1.5": {
+                "pronostics": 10055,
+                "matchs": 10055,
+                "biais": 0.00118,
+                "ece": 0.003545,
+                "verdict": "dans-le-hasard",
+                "fourchette": [
+                  -0.015405,
+                  0.017764
+                ]
+              },
+              "teamGoals:home|2.5": {
+                "pronostics": 13058,
+                "matchs": 13058,
+                "biais": 0.008544,
+                "ece": 0.008544,
+                "verdict": "dans-le-hasard",
+                "fourchette": [
+                  -0.004932,
+                  0.022021
+                ]
+              },
+              "teamGoals:home|3.5": {
+                "pronostics": 2815,
+                "matchs": 2815,
+                "biais": 0.012411,
+                "ece": 0.012411,
+                "verdict": "dans-le-hasard",
+                "fourchette": [
+                  -0.016278,
+                  0.041101
+                ]
+              },
+              "totalGoals|0.5": {
+                "pronostics": 325,
+                "matchs": 325,
+                "biais": 0.046288,
+                "ece": 0.046288,
+                "verdict": "dans-le-hasard",
+                "fourchette": [
+                  -0.028916,
+                  0.121492
+                ]
+              },
+              "totalGoals|1.5": {
+                "pronostics": 21115,
+                "matchs": 21115,
+                "biais": -0.007799,
+                "ece": 0.007799,
+                "verdict": "dans-le-hasard",
+                "fourchette": [
+                  -0.018738,
+                  0.00314
+                ]
+              },
+              "totalGoals|2.5": {
+                "pronostics": 6636,
+                "matchs": 6636,
+                "biais": -0.03364,
+                "ece": 0.03364,
+                "verdict": "trop-haut",
+                "fourchette": [
+                  -0.055533,
+                  -0.011747
+                ]
+              },
+              "totalGoals|3.5": {
+                "pronostics": 18431,
+                "matchs": 18431,
+                "biais": -0.004202,
+                "ece": 0.004202,
+                "verdict": "dans-le-hasard",
+                "fourchette": [
+                  -0.015735,
+                  0.007332
+                ]
+              }
+            },
+            "parFamille": {
+              "bothTeamsScore": {
+                "pronostics": 46507,
+                "matchs": 46507,
+                "biais": -0.012636,
+                "ece": 0.013226,
+                "verdict": "trop-haut",
+                "fourchette": [
+                  -0.021257,
+                  -0.004015
+                ]
+              },
+              "resultAndTotal": {
+                "pronostics": 46507,
+                "matchs": 46507,
+                "biais": -0.004513,
+                "ece": 0.005387,
+                "verdict": "dans-le-hasard",
+                "fourchette": [
+                  -0.013008,
+                  0.003982
+                ]
+              },
+              "teamGoals": {
+                "pronostics": 93014,
+                "matchs": 46507,
+                "biais": 0.00249,
+                "ece": 0.003853,
+                "verdict": "dans-le-hasard",
+                "fourchette": [
+                  -0.002754,
+                  0.007735
+                ]
+              },
+              "totalGoals": {
+                "pronostics": 46507,
+                "matchs": 46507,
+                "biais": -0.009683,
+                "ece": 0.009683,
+                "verdict": "trop-haut",
+                "fourchette": [
+                  -0.017289,
+                  -0.002076
+                ]
+              }
+            }
+          }
+        },
+        "regimes": {
+          "buts-seuls": 16347,
+          "cotes-plusmoins-buts": 30156,
+          "cotes-1n2-buts": 2,
+          "moyennes-seules": 2
         }
       },
-      "regimes": {
-        "buts-seuls": 16347,
-        "cotes-plusmoins-buts": 30156,
-        "cotes-1n2-buts": 2,
-        "moyennes-seules": 2
-      }
+      "finLe": "2026-11-18T11:07:04.315Z",
+      "fin": "modifiee"
     }
-  },
-  "candidatesPassees": [],
-  "majLe": "2026-11-14T23:09:29.454Z"
+  ],
+  "majLe": "2026-11-18T11:07:04.315Z"
 }
