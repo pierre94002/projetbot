@@ -6095,5 +6095,955 @@
     },
     "updatedAt": "2026-11-18T11:40:45.054Z",
     "createdAt": "2026-11-18T11:40:45.054Z"
+  },
+  {
+    "matchId": "cal-2026-11-20-fc-porto-paredes",
+    "homeName": "FC Porto",
+    "awayName": "Paredes",
+    "league": "Taça de Portugal",
+    "commenceTime": "2026-11-20T12:00:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "FC Porto vs Paredes",
+      "expectedGoals": {
+        "home": 2.8,
+        "away": 0.5,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 1.51,
+        "draw": 5.45,
+        "away": 6.5
+      },
+      "market": {
+        "odds1": null,
+        "oddsDraw": null,
+        "odds2": null
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "no_market_odds",
+        "candidates": []
+      },
+      "statExpectations": null,
+      "marketPredictions": [
+        {
+          "marketId": "result",
+          "params": {
+            "outcome": "home"
+          },
+          "market": "Résultat",
+          "predictedOutcome": "home",
+          "predictedLabel": "FC Porto gagne",
+          "predictedOdds": 1.51,
+          "probability": 66,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 2.5 buts",
+          "predictedOdds": 1.56,
+          "probability": 64,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "no"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "no",
+          "predictedLabel": "Non",
+          "predictedOdds": 1.6,
+          "probability": 63,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 1.5,
+            "key": "homeOver"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "homeOver",
+          "predictedLabel": "FC Porto & Plus de 1.5 buts",
+          "predictedOdds": 1.71,
+          "probability": 58,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 1.5,
+            "side": "over"
+          },
+          "market": "Buts — FC Porto",
+          "predictedOutcome": "over",
+          "predictedLabel": "FC Porto — Plus de 1.5 buts",
+          "predictedOdds": 1.3,
+          "probability": 77,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 0.5,
+            "side": "under"
+          },
+          "market": "Buts — Paredes",
+          "predictedOutcome": "under",
+          "predictedLabel": "Paredes — Moins de 0.5 buts",
+          "predictedOdds": 1.65,
+          "probability": 61,
+          "minOdds": 1.2
+        }
+      ],
+      "baseDuCalcul": {
+        "montant": 300.92,
+        "origine": "capital-regle"
+      },
+      "engineVersion": 6
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 9313,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 1450,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 9313,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1450,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 9313,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 9313
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.051755999999999996,
+    "analysedAt": "2026-11-18T13:22:38.740Z",
+    "timing": "avance",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 311,
+      "tokens": 1000,
+      "lecons": [],
+      "dossiersDu": "2026-11-18T00:05:37.382Z",
+      "equipes": {
+        "home": {
+          "id": "fotmob-9773",
+          "dossier": true
+        },
+        "away": {
+          "id": "fotmob-2503",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "Taça de Portugal",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "magasin",
+      "home": {
+        "team": "FC Porto",
+        "teamId": "fotmob-9773",
+        "formation": "4-3-3",
+        "coach": "Francesco Farioli",
+        "statsSince": "2026-07-01",
+        "teamMatches": 16,
+        "startXI": [
+          {
+            "id": "fotmob-490868",
+            "name": "Jan Bednarek",
+            "number": 5,
+            "position": "Defender",
+            "age": 30,
+            "countryCode": "POL",
+            "countryName": "Poland",
+            "x": 0.357,
+            "y": 0.625,
+            "stats": {
+              "apps": 14,
+              "starts": 13,
+              "minutes": 1095,
+              "goals": 2,
+              "assists": 0,
+              "xg": 1.04,
+              "rating": 7.55
+            }
+          },
+          {
+            "id": "fotmob-664226",
+            "name": "Pablo Rosario",
+            "number": 13,
+            "position": "Midfielder",
+            "age": 29,
+            "countryCode": "DOM",
+            "countryName": "Dominican Republic",
+            "x": 0.613,
+            "y": 0.5,
+            "stats": {
+              "apps": 16,
+              "starts": 13,
+              "minutes": 1233,
+              "goals": 0,
+              "assists": 1,
+              "xg": 1.03,
+              "rating": 7.02
+            }
+          },
+          {
+            "id": "fotmob-795630",
+            "name": "Diogo Costa",
+            "number": 99,
+            "position": "Goalkeeper",
+            "age": 27,
+            "countryCode": "POR",
+            "countryName": "Portugal",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 15,
+              "starts": 15,
+              "minutes": 1350,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.09
+            }
+          },
+          {
+            "id": "fotmob-850356",
+            "name": "Pepê",
+            "number": 11,
+            "position": "Forward",
+            "age": 29,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.87,
+            "y": 0.79,
+            "stats": {
+              "apps": 16,
+              "starts": 15,
+              "minutes": 1290,
+              "goals": 0,
+              "assists": 7,
+              "xg": 1.34,
+              "rating": 7.3
+            }
+          },
+          {
+            "id": "fotmob-1021834",
+            "name": "Jakub Kiwior",
+            "number": 4,
+            "position": "Defender",
+            "age": 26,
+            "countryCode": "POL",
+            "countryName": "Poland",
+            "x": 0.357,
+            "y": 0.375,
+            "stats": {
+              "apps": 15,
+              "starts": 15,
+              "minutes": 1350,
+              "goals": 2,
+              "assists": 1,
+              "xg": 0.78,
+              "rating": 7.39
+            }
+          },
+          {
+            "id": "fotmob-1079056",
+            "name": "Zaidu Sanusi",
+            "number": 12,
+            "position": "Defender",
+            "age": 29,
+            "countryCode": "NGA",
+            "countryName": "Nigeria",
+            "x": 0.357,
+            "y": 0.125,
+            "stats": {
+              "apps": 10,
+              "starts": 8,
+              "minutes": 622,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.05,
+              "rating": 6.85
+            }
+          },
+          {
+            "id": "fotmob-1083204",
+            "name": "Borja Sainz",
+            "number": 17,
+            "position": "Forward",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.87,
+            "y": 0.21,
+            "stats": {
+              "apps": 15,
+              "starts": 5,
+              "minutes": 599,
+              "goals": 6,
+              "assists": 1,
+              "xg": 3.4,
+              "rating": 6.9
+            }
+          },
+          {
+            "id": "fotmob-1116734",
+            "name": "Gabriel Veiga",
+            "number": 10,
+            "position": "Midfielder",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.21,
+            "stats": {
+              "apps": 15,
+              "starts": 14,
+              "minutes": 1004,
+              "goals": 7,
+              "assists": 5,
+              "xg": 4.4,
+              "rating": 7.71
+            }
+          },
+          {
+            "id": "fotmob-1387439",
+            "name": "Alberto Costa",
+            "number": 20,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "POR",
+            "countryName": "Portugal",
+            "x": 0.357,
+            "y": 0.875,
+            "stats": {
+              "apps": 14,
+              "starts": 12,
+              "minutes": 1099,
+              "goals": 0,
+              "assists": 1,
+              "xg": 2.21,
+              "rating": 7.14
+            }
+          },
+          {
+            "id": "fotmob-1414859",
+            "name": "Samuel Aghehowa",
+            "number": 9,
+            "position": "Forward",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 8,
+              "starts": 3,
+              "minutes": 307,
+              "goals": 2,
+              "assists": 0,
+              "xg": 1.7,
+              "rating": 6.59
+            }
+          },
+          {
+            "id": "fotmob-1436856",
+            "name": "Victor Froholdt",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 20,
+            "countryCode": "DEN",
+            "countryName": "Denmark",
+            "x": 0.613,
+            "y": 0.79,
+            "stats": {
+              "apps": 14,
+              "starts": 13,
+              "minutes": 1167,
+              "goals": 3,
+              "assists": 0,
+              "xg": 3.71,
+              "rating": 7.01
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-181433",
+            "name": "Cláudio Ramos",
+            "number": 14,
+            "position": "Goalkeeper",
+            "age": 35,
+            "countryCode": "POR",
+            "countryName": "Portugal",
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 90,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.59
+            }
+          },
+          {
+            "id": "fotmob-388523",
+            "name": "André Silva",
+            "number": 19,
+            "position": "Forward",
+            "age": 31,
+            "countryCode": "POR",
+            "countryName": "Portugal",
+            "stats": {
+              "apps": 15,
+              "starts": 11,
+              "minutes": 887,
+              "goals": 4,
+              "assists": 2,
+              "xg": 4.46,
+              "rating": 6.96
+            }
+          },
+          {
+            "id": "fotmob-602211",
+            "name": "Seko Fofana",
+            "number": 42,
+            "position": "Midfielder",
+            "age": 31,
+            "countryCode": "CIV",
+            "countryName": "Ivory Coast",
+            "stats": {
+              "apps": 7,
+              "starts": 1,
+              "minutes": 138,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.06,
+              "rating": 6.42
+            }
+          },
+          {
+            "id": "fotmob-623698",
+            "name": "In-Beom Hwang",
+            "number": 16,
+            "position": "Midfielder",
+            "age": 30,
+            "countryCode": "KOR",
+            "countryName": "South Korea",
+            "stats": {
+              "apps": 14,
+              "starts": 3,
+              "minutes": 514,
+              "goals": 1,
+              "assists": 2,
+              "xg": 0.28,
+              "rating": 6.74
+            }
+          },
+          {
+            "id": "fotmob-902383",
+            "name": "Nehuén Pérez",
+            "number": 18,
+            "position": "Defender",
+            "age": 26,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 9,
+              "starts": 3,
+              "minutes": 327,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.4,
+              "rating": 6.76
+            }
+          },
+          {
+            "id": "fotmob-919374",
+            "name": "Francisco Moura",
+            "number": 74,
+            "position": "Defender",
+            "age": 27,
+            "countryCode": "POR",
+            "countryName": "Portugal",
+            "stats": {
+              "apps": 6,
+              "starts": 4,
+              "minutes": 372,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.22,
+              "rating": 6.5
+            }
+          },
+          {
+            "id": "fotmob-954092",
+            "name": "Santiago Giménez",
+            "number": 29,
+            "position": "Forward",
+            "age": 25,
+            "countryCode": "MEX",
+            "countryName": "Mexico",
+            "stats": {
+              "apps": 8,
+              "starts": 1,
+              "minutes": 208,
+              "goals": 2,
+              "assists": 1,
+              "xg": 2.45,
+              "rating": 6.84
+            }
+          },
+          {
+            "id": "fotmob-1186684",
+            "name": "Alan Varela",
+            "number": 22,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 10,
+              "starts": 5,
+              "minutes": 445,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.18,
+              "rating": 6.48
+            }
+          },
+          {
+            "id": "fotmob-1404949",
+            "name": "Martim Fernandes",
+            "number": 52,
+            "position": "Defender",
+            "age": 20,
+            "countryCode": "POR",
+            "countryName": "Portugal",
+            "stats": {
+              "apps": 10,
+              "starts": 6,
+              "minutes": 572,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.21,
+              "rating": 6.71
+            }
+          },
+          {
+            "id": "fotmob-1510854",
+            "name": "Dominik Prpić",
+            "number": 21,
+            "position": "Defender",
+            "age": 22,
+            "countryCode": "CRO",
+            "countryName": "Croatia",
+            "stats": {
+              "apps": 2,
+              "starts": 1,
+              "minutes": 91,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.94
+            }
+          },
+          {
+            "id": "fotmob-1636513",
+            "name": "Souza",
+            "number": 33,
+            "position": "Defender",
+            "age": 20,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 3,
+              "starts": 1,
+              "minutes": 139,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.14,
+              "rating": 6.71
+            }
+          },
+          {
+            "id": "fotmob-1647807",
+            "name": "Oskar Pietuszewski",
+            "number": 77,
+            "position": "Forward",
+            "age": 18,
+            "countryCode": "POL",
+            "countryName": "Poland",
+            "stats": {
+              "apps": 4,
+              "starts": 1,
+              "minutes": 105,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.85,
+              "rating": 6.71
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "id": "fotmob-165823",
+            "age": 36,
+            "countryCode": "ENG",
+            "countryName": "England",
+            "name": "Chris Smalling",
+            "reason": "blessé",
+            "expectedReturn": "About a week",
+            "position": "Defender",
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 54,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.09
+            }
+          },
+          {
+            "id": "fotmob-1580427",
+            "age": 20,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "name": "William Gomes",
+            "reason": "blessé",
+            "expectedReturn": "Day to day",
+            "position": "Forward",
+            "stats": {
+              "apps": 9,
+              "starts": 9,
+              "minutes": 589,
+              "goals": 2,
+              "assists": 2,
+              "xg": 2.03,
+              "rating": 7.17
+            }
+          },
+          {
+            "id": "fotmob-1285532",
+            "age": 23,
+            "countryCode": "POR",
+            "countryName": "Portugal",
+            "name": "Vasco Sousa",
+            "reason": "blessé",
+            "expectedReturn": "Day to day",
+            "position": null,
+            "stats": null
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-388523",
+            "age": 31,
+            "countryCode": "POR",
+            "countryName": "Portugal",
+            "name": "André Silva",
+            "position": "Forward",
+            "starts": 11,
+            "goals": 4,
+            "assists": 2,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-1580427",
+            "age": 20,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "name": "William Gomes",
+            "position": "Forward",
+            "starts": 9,
+            "goals": 2,
+            "assists": 2,
+            "status": "blessé"
+          }
+        ],
+        "lastMatch": {
+          "date": "2026-11-08",
+          "league": "Primeira Liga - Portugal",
+          "home": "Vitória de Guimarães",
+          "away": "FC Porto",
+          "homeGoals": 1,
+          "awayGoals": 2
+        }
+      },
+      "away": {
+        "team": "Paredes",
+        "teamId": "fotmob-2503",
+        "formation": null,
+        "coach": null,
+        "statsSince": "2026-01-24",
+        "teamMatches": 2,
+        "startXI": [
+          {
+            "id": null,
+            "name": "Pedro Alberto Rocha Araújo",
+            "number": 2,
+            "position": null,
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": null,
+            "y": null,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Franco Laureano Almara",
+            "number": 11,
+            "position": null,
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": null,
+            "y": null,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Fábio Bruno Costa Matos",
+            "number": 31,
+            "position": null,
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": null,
+            "y": null,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Gustavo Fernandes Henrique Queri",
+            "number": 44,
+            "position": null,
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": null,
+            "y": null,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Erik Santana da Silva",
+            "number": 14,
+            "position": null,
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": null,
+            "y": null,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Brais Val Alonso",
+            "number": 6,
+            "position": null,
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": null,
+            "y": null,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Daniel Oliveira Rodrigues",
+            "number": 10,
+            "position": null,
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": null,
+            "y": null,
+            "stats": null
+          },
+          {
+            "id": "fotmob-566477",
+            "name": "João Vigário",
+            "number": 13,
+            "position": null,
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": null,
+            "y": null,
+            "stats": {
+              "apps": 2,
+              "starts": 2,
+              "minutes": 180,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.03,
+              "rating": 7.15
+            }
+          },
+          {
+            "id": "fotmob-612887",
+            "name": "Dénis Duarte",
+            "number": 3,
+            "position": null,
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": null,
+            "y": null,
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 90,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1107347",
+            "name": "Diogo Silva",
+            "number": 8,
+            "position": null,
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": null,
+            "y": null,
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 90,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1560013",
+            "name": "Miguel Moreno",
+            "number": 7,
+            "position": null,
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": null,
+            "y": null,
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 90,
+              "goals": 1,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          }
+        ],
+        "bench": [],
+        "unavailable": [],
+        "usualStartersMissing": [],
+        "lastMatch": {
+          "date": "2026-10-18",
+          "league": "Taça de Portugal",
+          "home": "Paredes",
+          "away": "Famalicão",
+          "homeGoals": 1,
+          "awayGoals": 0
+        }
+      },
+      "matchInfo": {
+        "round": "4",
+        "stadium": "Estádio Do Dragão",
+        "city": "Porto",
+        "capacity": 50399,
+        "surface": "grass",
+        "weather": "Rain",
+        "temperature": 14,
+        "windSpeed": 18,
+        "precipitation": 0.75
+      }
+    },
+    "analysis": {
+      "summary": "Porto est en grande forme : 8 victoires sur 10 toutes compétitions, 2,3 buts marqués et 0,9 encaissé par match, 5 victoires de suite, et 2,4 / 0,6 à domicile. Paredes (échelon inférieur) a battu Famalicão 1-0 et Maria da Fonte 5-1 récemment, mais son seul déplacement connu s'est soldé par 1-4. Le onze de Porto est probable, pas officiel : Smalling est blessé et William Gomes aussi, mais l'effectif reste très riche. Le onze de Paredes est presque inconnu du magasin.",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Porto domine ses matchs, Paredes gagne mais contre des adversaires moins relevés.",
+          "evidence": "Porto 10 derniers : VVVVVDDVVV, 2,3 / 0,9 ; Paredes 8 derniers : VVDDVDVV, 2,13 / 1,63."
+        },
+        {
+          "factor": "statistiques à domicile",
+          "observation": "Porto produit beaucoup au Dragão et concède peu.",
+          "evidence": "À domicile 5 matchs : 2,4 / 0,6 buts, xG 2,06 / 1, tirs 18,8 / 11,6."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur voit Porto largement devant, mais sans cote de marché il n'y a pas d'edge mesuré.",
+          "evidence": "Buts attendus 2,8 contre 0,5 ; mise PASS (no_market_odds)."
+        },
+        {
+          "factor": "absences",
+          "observation": "Absences sans grand impact vu la profondeur de l'effectif.",
+          "evidence": "Smalling blessé (retour environ une semaine), William Gomes (9 titularisations) blessé."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va dans le sens du moteur : Porto est supérieur en forme, en moyennes et à domicile. Une coupe, avec un risque de rotation et une pelouse sous la pluie, justifie qu'on ne vise pas une certitude.",
+      "marketViews": [
+        {
+          "market": "Résultat",
+          "pick": "FC Porto gagne",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "66 % : Porto a gagné 8 de ses 10 derniers matchs et concède 0,6 but à domicile, alors que Paredes a encaissé 4 buts lors de son seul déplacement connu.",
+          "reasoning": "Le niveau de Porto, sa série de 5 victoires et l'écart avec Paredes soutiennent le pronostic. Le pourcentage reste mesuré à cause du format coupe, des rotations possibles et de la pluie. Mon bilan en Taça (1/4) incite à la prudence.",
+          "probability": 66
+        }
+      ],
+      "lineupImpact": "Compositions issues du magasin : c'est la dernière alignée, pas celle du match. Porto (4-3-3, Farioli) a gagné 2-1 à Guimarães avec Diogo Costa, Kiwior, Bednarek, Veiga (7+5) et Pepê. Smalling et William Gomes sont blessés, André Silva (4+2) était remplaçant. Une rotation en coupe est possible, mais le banc compte Giménez et Silva. Le onze de Paredes est largement inconnu du magasin, ce qui limite l'analyse. Pluie et vent de 18 km/h au Dragão : rien de décisif.",
+      "caveats": "Porto est absent du classement de la coupe. Les statistiques détaillées de Paredes sont absentes (pas de xG ni de tirs), sur 8 matchs étalés depuis 2023. Les compositions viennent du magasin, pas de FotMob pour ce match. L'entraîneur de Paredes est inconnu. Aucune cote de marché. Les marchés de buts sont volontairement écartés."
+    },
+    "updatedAt": "2026-11-18T13:22:38.741Z",
+    "createdAt": "2026-11-18T13:22:38.741Z"
   }
 ]
