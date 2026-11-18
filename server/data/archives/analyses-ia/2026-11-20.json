@@ -4678,5 +4678,1422 @@
     },
     "updatedAt": "2026-11-18T03:11:14.791Z",
     "createdAt": "2026-11-18T03:11:14.791Z"
+  },
+  {
+    "matchId": "cal-2026-11-20-beijing-guoan-shanghai-port",
+    "homeName": "Beijing Guoan",
+    "awayName": "Shanghai Port",
+    "league": "Coupe de Chine",
+    "commenceTime": "2026-11-20T11:35:00.000Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Beijing Guoan vs Shanghai Port",
+      "expectedGoals": {
+        "home": 2.344,
+        "away": 0.8,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 2.82,
+        "draw": 3.63,
+        "away": 2.7
+      },
+      "market": {
+        "odds1": 2.55,
+        "oddsDraw": 3.2,
+        "odds2": 2.45
+      },
+      "edgePercent": null,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "trop_peu_de_bookmakers",
+        "candidates": []
+      },
+      "statExpectations": {
+        "corners": {
+          "home": 4.46,
+          "away": 5.36,
+          "total": 9.81
+        },
+        "shots": {
+          "home": 13.26,
+          "away": 12.92,
+          "total": 26.17
+        },
+        "shotsOnTarget": {
+          "home": 5,
+          "away": 4.73,
+          "total": 9.73
+        }
+      },
+      "marketPredictions": [
+        {
+          "marketId": "result",
+          "params": {
+            "outcome": "away"
+          },
+          "market": "Résultat",
+          "predictedOutcome": "away",
+          "predictedLabel": "Shanghai Port gagne",
+          "predictedOdds": 2.7,
+          "probability": 37,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 1.5,
+            "side": "over"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 1.5 buts",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "yes"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "yes",
+          "predictedLabel": "Oui",
+          "predictedOdds": 1.99,
+          "probability": 50,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 3.5,
+            "key": "awayUnder"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "awayUnder",
+          "predictedLabel": "Shanghai Port & Moins de 3.5 buts",
+          "predictedOdds": 3.6,
+          "probability": 28,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 3.5,
+            "side": "under"
+          },
+          "market": "Buts — Beijing Guoan",
+          "predictedOutcome": "under",
+          "predictedLabel": "Beijing Guoan — Moins de 3.5 buts",
+          "predictedOdds": 1.26,
+          "probability": 79,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 1.5,
+            "side": "under"
+          },
+          "market": "Buts — Shanghai Port",
+          "predictedOutcome": "under",
+          "predictedLabel": "Shanghai Port — Moins de 1.5 buts",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalCorners",
+          "params": {
+            "line": 6.5,
+            "side": "over"
+          },
+          "market": "Total corners",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 6.5 corners",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "home",
+            "line": 6.5,
+            "side": "under"
+          },
+          "market": "Corners — Beijing Guoan",
+          "predictedOutcome": "under",
+          "predictedLabel": "Beijing Guoan — Moins de 6.5 corners",
+          "predictedOdds": 1.25,
+          "probability": 80,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "away",
+            "line": 7.5,
+            "side": "under"
+          },
+          "market": "Corners — Shanghai Port",
+          "predictedOutcome": "under",
+          "predictedLabel": "Shanghai Port — Moins de 7.5 corners",
+          "predictedOdds": 1.27,
+          "probability": 79,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShots",
+          "params": {
+            "line": 20.5,
+            "side": "over"
+          },
+          "market": "Total tirs",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 20.5 tirs",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "home",
+            "line": 17.5,
+            "side": "under"
+          },
+          "market": "Tirs — Beijing Guoan",
+          "predictedOutcome": "under",
+          "predictedLabel": "Beijing Guoan — Moins de 17.5 tirs",
+          "predictedOdds": 1.23,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "away",
+            "line": 17.5,
+            "side": "under"
+          },
+          "market": "Tirs — Shanghai Port",
+          "predictedOutcome": "under",
+          "predictedLabel": "Shanghai Port — Moins de 17.5 tirs",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShotsOnTarget",
+          "params": {
+            "line": 6.5,
+            "side": "over"
+          },
+          "market": "Total tirs cadrés",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 6.5 tirs cadrés",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "home",
+            "line": 6.5,
+            "side": "under"
+          },
+          "market": "Tirs cadrés — Beijing Guoan",
+          "predictedOutcome": "under",
+          "predictedLabel": "Beijing Guoan — Moins de 6.5 tirs cadrés",
+          "predictedOdds": 1.34,
+          "probability": 75,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "away",
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Tirs cadrés — Shanghai Port",
+          "predictedOutcome": "over",
+          "predictedLabel": "Shanghai Port — Plus de 2.5 tirs cadrés",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        }
+      ],
+      "baseDuCalcul": {
+        "montant": 300.92,
+        "origine": "capital-regle"
+      },
+      "engineVersion": 6
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 9949,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 2793,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 9949,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 2793,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 9949,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 9949
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.06773,
+    "analysedAt": "2026-11-18T11:40:45.054Z",
+    "timing": "avance",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 319,
+      "tokens": 972,
+      "lecons": [],
+      "dossiersDu": "2026-11-18T00:05:37.382Z",
+      "equipes": {
+        "home": {
+          "id": "fotmob-4177",
+          "dossier": true
+        },
+        "away": {
+          "id": "fotmob-198616",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "Coupe de Chine",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "FotMob",
+      "fotmobMatchId": "6146317",
+      "fetchedAt": "2026-11-18T11:40:21.816Z",
+      "minutesBeforeKickoff": 2875,
+      "home": {
+        "team": "Beijing Guoan",
+        "teamId": "fotmob-4177",
+        "formation": "4-4-2",
+        "coach": "Nick Montgomery",
+        "statsSince": "2026-01-01",
+        "teamMatches": 33,
+        "startXI": [
+          {
+            "id": "fotmob-117465",
+            "name": "Sen Hou",
+            "number": 34,
+            "position": "Goalkeeper",
+            "age": 37,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 29,
+              "starts": 29,
+              "minutes": 2609,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.91
+            }
+          },
+          {
+            "id": "fotmob-185706",
+            "name": "Gang Wang",
+            "number": 27,
+            "position": "Defender",
+            "age": 37,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "x": 0.357,
+            "y": 0.875,
+            "stats": {
+              "apps": 26,
+              "starts": 21,
+              "minutes": 1823,
+              "goals": 0,
+              "assists": 2,
+              "xg": null,
+              "rating": 6.92
+            }
+          },
+          {
+            "id": "fotmob-435214",
+            "name": "Uroš Spajić",
+            "number": 25,
+            "position": "Defender",
+            "age": 33,
+            "countryCode": "SRB",
+            "countryName": "Serbia",
+            "x": 0.357,
+            "y": 0.625,
+            "stats": {
+              "apps": 6,
+              "starts": 5,
+              "minutes": 429,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.32
+            }
+          },
+          {
+            "id": "fotmob-711074",
+            "name": "Guilherme Ramos",
+            "number": 5,
+            "position": "Defender",
+            "age": 29,
+            "countryCode": "POR",
+            "countryName": "Portugal",
+            "x": 0.357,
+            "y": 0.375,
+            "stats": {
+              "apps": 31,
+              "starts": 29,
+              "minutes": 2548,
+              "goals": 3,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.22
+            }
+          },
+          {
+            "id": "fotmob-1913080",
+            "name": "Jiefu Deng",
+            "number": 47,
+            "position": "Defender",
+            "age": 19,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "x": 0.357,
+            "y": 0.125,
+            "stats": {
+              "apps": 24,
+              "starts": 13,
+              "minutes": 1086,
+              "goals": 2,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.65
+            }
+          },
+          {
+            "id": "fotmob-623080",
+            "name": "Yongjing Cao",
+            "number": 37,
+            "position": "Midfielder",
+            "age": 29,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "x": 0.613,
+            "y": 0.875,
+            "stats": {
+              "apps": 30,
+              "starts": 16,
+              "minutes": 1670,
+              "goals": 4,
+              "assists": 4,
+              "xg": null,
+              "rating": 6.91
+            }
+          },
+          {
+            "id": "fotmob-1035199",
+            "name": "Aboubacar Konté",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "MLI",
+            "countryName": "Mali",
+            "x": 0.613,
+            "y": 0.625,
+            "stats": {
+              "apps": 27,
+              "starts": 27,
+              "minutes": 2428,
+              "goals": 0,
+              "assists": 1,
+              "xg": null,
+              "rating": 7.35
+            }
+          },
+          {
+            "id": "fotmob-535906",
+            "name": "Sai Erjini'ao",
+            "number": 7,
+            "position": "Midfielder",
+            "age": 31,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "x": 0.613,
+            "y": 0.375,
+            "stats": {
+              "apps": 27,
+              "starts": 24,
+              "minutes": 2218,
+              "goals": 6,
+              "assists": 8,
+              "xg": null,
+              "rating": 7.7
+            }
+          },
+          {
+            "id": "fotmob-807090",
+            "name": "Liangming Lin",
+            "number": 11,
+            "position": "Midfielder",
+            "age": 29,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "x": 0.613,
+            "y": 0.125,
+            "stats": {
+              "apps": 23,
+              "starts": 17,
+              "minutes": 1455,
+              "goals": 7,
+              "assists": 1,
+              "xg": null,
+              "rating": 7.01
+            }
+          },
+          {
+            "id": "fotmob-197461",
+            "name": "Xizhe Zhang",
+            "number": 10,
+            "position": "Forward",
+            "age": 35,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "x": 0.87,
+            "y": 0.7,
+            "stats": {
+              "apps": 29,
+              "starts": 15,
+              "minutes": 1512,
+              "goals": 7,
+              "assists": 4,
+              "xg": null,
+              "rating": 7.06
+            }
+          },
+          {
+            "id": "fotmob-623091",
+            "name": "Yuning Zhang",
+            "number": 9,
+            "position": "Forward",
+            "age": 29,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "x": 0.87,
+            "y": 0.3,
+            "stats": {
+              "apps": 31,
+              "starts": 30,
+              "minutes": 2474,
+              "goals": 17,
+              "assists": 7,
+              "xg": null,
+              "rating": 7.5
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-978467",
+            "name": "Jiaqi Han",
+            "number": 22,
+            "position": "Goalkeeper",
+            "age": 27,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "stats": {
+              "apps": 1,
+              "starts": 0,
+              "minutes": 1,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-854808",
+            "name": "Abduhamit Abdugheni",
+            "number": 24,
+            "position": "Defender",
+            "age": 28,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "stats": {
+              "apps": 19,
+              "starts": 13,
+              "minutes": 1237,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.65
+            }
+          },
+          {
+            "id": "fotmob-1304798",
+            "name": "Feifan Jia",
+            "number": 36,
+            "position": "Defender",
+            "age": 25,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "stats": {
+              "apps": 12,
+              "starts": 4,
+              "minutes": 355,
+              "goals": 1,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.41
+            }
+          },
+          {
+            "id": "fotmob-167985",
+            "name": "Lei Li",
+            "number": 4,
+            "position": "Defender",
+            "age": 34,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "stats": {
+              "apps": 17,
+              "starts": 5,
+              "minutes": 616,
+              "goals": 0,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.54
+            }
+          },
+          {
+            "id": "fotmob-1679835",
+            "name": "Shuangjie Fan",
+            "number": 30,
+            "position": "Defender",
+            "age": 21,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "stats": {
+              "apps": 5,
+              "starts": 2,
+              "minutes": 195,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.66
+            }
+          },
+          {
+            "id": "fotmob-1130091",
+            "name": "Tze-Nam Yue",
+            "number": 21,
+            "position": "Defender",
+            "age": 28,
+            "countryCode": "HKG",
+            "countryName": "Hong Kong",
+            "stats": {
+              "apps": 22,
+              "starts": 17,
+              "minutes": 1369,
+              "goals": 1,
+              "assists": 2,
+              "xg": null,
+              "rating": 6.95
+            }
+          },
+          {
+            "id": "fotmob-1249785",
+            "name": "Yang Bai",
+            "number": 26,
+            "position": "Defender",
+            "age": 28,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "stats": {
+              "apps": 30,
+              "starts": 28,
+              "minutes": 2433,
+              "goals": 0,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.86
+            }
+          },
+          {
+            "id": "fotmob-1919180",
+            "name": "Xi Cheng",
+            "number": 41,
+            "position": "Midfielder",
+            "age": 18,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "stats": {
+              "apps": 5,
+              "starts": 0,
+              "minutes": 35,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.32
+            }
+          },
+          {
+            "id": "fotmob-2092753",
+            "name": "Xiaoyu Xia",
+            "number": 43,
+            "position": "Midfielder",
+            "age": 19,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "stats": {
+              "apps": 1,
+              "starts": 0,
+              "minutes": 19,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1277615",
+            "name": "Yu Wang",
+            "number": 18,
+            "position": "Midfielder",
+            "age": 24,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "stats": {
+              "apps": 7,
+              "starts": 2,
+              "minutes": 239,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.51
+            }
+          },
+          {
+            "id": "fotmob-622244",
+            "name": "Zhongguo Chi",
+            "number": 6,
+            "position": "Midfielder",
+            "age": 37,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "stats": {
+              "apps": 14,
+              "starts": 3,
+              "minutes": 336,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.01
+            }
+          },
+          {
+            "id": "fotmob-2092763",
+            "name": "Zicheng Jiang",
+            "number": 58,
+            "position": "Midfielder",
+            "age": 19,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "stats": {
+              "apps": 5,
+              "starts": 0,
+              "minutes": 57,
+              "goals": 0,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.15
+            }
+          }
+        ],
+        "unavailable": [],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-1249785",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Yang Bai",
+            "position": "Defender",
+            "starts": 28,
+            "goals": 0,
+            "assists": 1,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-470523",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Fábio Abreu",
+            "position": "Midfielder",
+            "starts": 23,
+            "goals": 11,
+            "assists": 6,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-961502",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Dawhan",
+            "position": "Midfielder",
+            "starts": 19,
+            "goals": 4,
+            "assists": 1,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1130091",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Tze-Nam Yue",
+            "position": "Midfielder",
+            "starts": 17,
+            "goals": 1,
+            "assists": 2,
+            "status": "remplaçant"
+          }
+        ]
+      },
+      "away": {
+        "team": "Shanghai Port",
+        "teamId": "fotmob-198616",
+        "formation": "3-4-3",
+        "coach": "Kevin Muscat",
+        "statsSince": "2026-01-01",
+        "teamMatches": 33,
+        "startXI": [
+          {
+            "id": "fotmob-432795",
+            "name": "Junling Yan",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 35,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 31,
+              "starts": 31,
+              "minutes": 2790,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.87
+            }
+          },
+          {
+            "id": "fotmob-768631",
+            "name": "Zhen Wei",
+            "number": 13,
+            "position": "Defender",
+            "age": 29,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "x": 0.357,
+            "y": 0.79,
+            "stats": {
+              "apps": 31,
+              "starts": 31,
+              "minutes": 2740,
+              "goals": 4,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.28
+            }
+          },
+          {
+            "id": "fotmob-419196",
+            "name": "Tyias Browning",
+            "number": 3,
+            "position": "Defender",
+            "age": 32,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "x": 0.357,
+            "y": 0.5,
+            "stats": {
+              "apps": 17,
+              "starts": 13,
+              "minutes": 1199,
+              "goals": 1,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.97
+            }
+          },
+          {
+            "id": "fotmob-1616162",
+            "name": "Umidjan Yusup",
+            "number": 40,
+            "position": "Defender",
+            "age": 22,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "x": 0.357,
+            "y": 0.21,
+            "stats": {
+              "apps": 27,
+              "starts": 26,
+              "minutes": 2334,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.97
+            }
+          },
+          {
+            "id": "fotmob-1717071",
+            "name": "Alex Yang",
+            "number": 22,
+            "position": "Midfielder",
+            "age": 21,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "x": 0.613,
+            "y": 0.875,
+            "stats": {
+              "apps": 31,
+              "starts": 28,
+              "minutes": 2476,
+              "goals": 3,
+              "assists": 4,
+              "xg": null,
+              "rating": 7.24
+            }
+          },
+          {
+            "id": "fotmob-802987",
+            "name": "Óscar Melendo",
+            "number": 21,
+            "position": "Midfielder",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.625,
+            "stats": {
+              "apps": 17,
+              "starts": 17,
+              "minutes": 1453,
+              "goals": 1,
+              "assists": 5,
+              "xg": null,
+              "rating": 7.5
+            }
+          },
+          {
+            "id": "fotmob-688992",
+            "name": "Mateus Vital",
+            "number": 10,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.613,
+            "y": 0.375,
+            "stats": {
+              "apps": 32,
+              "starts": 31,
+              "minutes": 2769,
+              "goals": 2,
+              "assists": 6,
+              "xg": null,
+              "rating": 7.47
+            }
+          },
+          {
+            "id": "fotmob-854646",
+            "name": "Shuai Li",
+            "number": 32,
+            "position": "Midfielder",
+            "age": 31,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "x": 0.613,
+            "y": 0.125,
+            "stats": {
+              "apps": 25,
+              "starts": 18,
+              "minutes": 1705,
+              "goals": 1,
+              "assists": 4,
+              "xg": null,
+              "rating": 6.82
+            }
+          },
+          {
+            "id": "fotmob-432819",
+            "name": "Lei Wu",
+            "number": 7,
+            "position": "Forward",
+            "age": 35,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "x": 0.87,
+            "y": 0.79,
+            "stats": {
+              "apps": 25,
+              "starts": 4,
+              "minutes": 630,
+              "goals": 7,
+              "assists": 2,
+              "xg": null,
+              "rating": 6.82
+            }
+          },
+          {
+            "id": "fotmob-1025609",
+            "name": "Leonardo",
+            "number": 45,
+            "position": "Forward",
+            "age": 29,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 28,
+              "starts": 26,
+              "minutes": 2293,
+              "goals": 14,
+              "assists": 6,
+              "xg": null,
+              "rating": 7.36
+            }
+          },
+          {
+            "id": "fotmob-1187260",
+            "name": "Prince Ampem",
+            "number": 17,
+            "position": "Forward",
+            "age": 28,
+            "countryCode": "GHA",
+            "countryName": "Ghana",
+            "x": 0.87,
+            "y": 0.21,
+            "stats": {
+              "apps": 29,
+              "starts": 23,
+              "minutes": 2034,
+              "goals": 9,
+              "assists": 5,
+              "xg": 0.42,
+              "rating": 7.21
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-845522",
+            "name": "Wei Chen",
+            "number": 12,
+            "position": "Goalkeeper",
+            "age": 28,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "stats": {
+              "apps": 2,
+              "starts": 2,
+              "minutes": 210,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-432803",
+            "name": "Huan Fu",
+            "number": 23,
+            "position": "Defender",
+            "age": 33,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "stats": {
+              "apps": 12,
+              "starts": 4,
+              "minutes": 370,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.52
+            }
+          },
+          {
+            "id": "fotmob-196406",
+            "name": "Linpeng Zhang",
+            "number": 5,
+            "position": "Defender",
+            "age": 37,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "stats": {
+              "apps": 14,
+              "starts": 5,
+              "minutes": 554,
+              "goals": 1,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.5
+            }
+          },
+          {
+            "id": "fotmob-432801",
+            "name": "Shenchao Wang",
+            "number": 4,
+            "position": "Defender",
+            "age": 37,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "stats": {
+              "apps": 17,
+              "starts": 4,
+              "minutes": 406,
+              "goals": 1,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.54
+            }
+          },
+          {
+            "id": "fotmob-1616203",
+            "name": "Shimeng Bao",
+            "number": 31,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "stats": {
+              "apps": 8,
+              "starts": 5,
+              "minutes": 396,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.4
+            }
+          },
+          {
+            "id": "fotmob-949269",
+            "name": "Zhenao Wang",
+            "number": 19,
+            "position": "Defender",
+            "age": 27,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "stats": {
+              "apps": 15,
+              "starts": 6,
+              "minutes": 640,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.57
+            }
+          },
+          {
+            "id": "fotmob-1324726",
+            "name": "Jean Claude",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "TOG",
+            "countryName": "Togo",
+            "stats": {
+              "apps": 18,
+              "starts": 16,
+              "minutes": 1337,
+              "goals": 3,
+              "assists": 1,
+              "xg": null,
+              "rating": 7.28
+            }
+          },
+          {
+            "id": "fotmob-527968",
+            "name": "Shiyuan Yang",
+            "number": 20,
+            "position": "Midfielder",
+            "age": 32,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "stats": {
+              "apps": 4,
+              "starts": 0,
+              "minutes": 74,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.2
+            }
+          },
+          {
+            "id": "fotmob-1284599",
+            "name": "Yongtao Lu",
+            "number": 38,
+            "position": "Midfielder",
+            "age": 26,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "stats": {
+              "apps": 17,
+              "starts": 10,
+              "minutes": 852,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.34
+            }
+          },
+          {
+            "id": "fotmob-862121",
+            "name": "Yuan Zhang",
+            "number": 6,
+            "position": "Midfielder",
+            "age": 29,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "stats": {
+              "apps": 15,
+              "starts": 9,
+              "minutes": 754,
+              "goals": 1,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.65
+            }
+          },
+          {
+            "id": "fotmob-1130089",
+            "name": "Matthew Orr",
+            "number": 14,
+            "position": "Forward",
+            "age": 29,
+            "countryCode": "HKG",
+            "countryName": "Hong Kong",
+            "stats": {
+              "apps": 6,
+              "starts": 2,
+              "minutes": 198,
+              "goals": 1,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.13
+            }
+          },
+          {
+            "id": "fotmob-1710746",
+            "name": "Xinxiang Li",
+            "number": 49,
+            "position": "Forward",
+            "age": 20,
+            "countryCode": "CHN",
+            "countryName": "China",
+            "stats": {
+              "apps": 29,
+              "starts": 15,
+              "minutes": 1309,
+              "goals": 5,
+              "assists": 3,
+              "xg": null,
+              "rating": 6.62
+            }
+          }
+        ],
+        "unavailable": [],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-1168820",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Zhurun Liu",
+            "position": "Midfielder",
+            "starts": 17,
+            "goals": 5,
+            "assists": 4,
+            "status": "absent de la feuille de match"
+          }
+        ]
+      },
+      "matchInfo": {
+        "round": "1/2",
+        "stadium": "Workers' Stadium",
+        "city": "Beijing",
+        "capacity": 68000,
+        "surface": "grass",
+        "weather": "Clear",
+        "temperature": 3,
+        "windSpeed": 14,
+        "precipitation": 0
+      }
+    },
+    "analysis": {
+      "summary": "Beijing Guoan (3e de Super League, 7V-3N sur 10) et Shanghai Port (5e, 8V-2N) arrivent en grande forme. Beijing produit 2,3 buts et 13,4 tirs par match, Shanghai 2,6 buts et 14,9 tirs, avec une défense solide (0,8 concédé). Beijing est privé de Fábio Abreu (11+6) et Dawhan, Shanghai de Zhurun Liu. Les compositions sont lues très tôt (plus de 47 h avant) et peuvent être des prévisions.",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Deux équipes invaincues sur 10 matchs, Shanghai un peu plus efficace.",
+          "evidence": "Beijing VVVVNVNNVV (2,3 / 1 buts) ; Shanghai VVVVNVVVNV (2,6 / 0,8 buts)"
+        },
+        {
+          "factor": "statistiques et moyennes",
+          "observation": "Beijing domine à domicile en tirs et corners ; Shanghai produit moins à l'extérieur.",
+          "evidence": "Beijing à domicile 17,5 tirs et 8,5 corners ; Shanghai à l'extérieur 13,2 tirs et 4 corners"
+        },
+        {
+          "factor": "absences",
+          "observation": "Beijing sans son meilleur créateur de la ligne médiane ; Shanghai sans Liu.",
+          "evidence": "Fábio Abreu 23 titularisations, 11+6 ; Dawhan 19 tit. ; Zhurun Liu 17 tit., 5+4"
+        },
+        {
+          "factor": "classement",
+          "observation": "Le classement de Coupe ne sépare rien (1 journée chacun).",
+          "evidence": "20e et 21e, 3 pts, diff +1 chacun"
+        }
+      ],
+      "lineupImpact": "Source FotMob mais relue 2875 min avant le coup d'envoi : ce peut être une prévision. Beijing (4-4-2, Montgomery) sans Fábio Abreu et Dawhan, avec Yuning Zhang (17+7) et Sai Erjini'ao (6+8) en pointe créative ; Yang Bai et Yue sur le banc. Shanghai (3-4-3, Muscat) aligne Leonardo (14+6), Ampem (9+5), Wu et Melendo, mais sans Zhurun Liu. Le froid (3 °C) et le vent léger ne pèsent pas.",
+      "alignmentWithModel": "Le résultat du moteur est très incertain (aucun edge, mise PASS). Le contexte nuance un peu le choix de Shanghai, car Beijing est plus fort à domicile. Les marchés de volume (corners, tirs) sont plutôt cohérents avec les moyennes.",
+      "caveats": "Composition lue très tôt, possiblement prévisionnelle. Peu de matchs de Coupe en forme (dates espacées). Classement de Coupe sur 1 journée seulement. Pas de xG relevé. Marchés de buts volontairement non commentés.",
+      "marketViews": [
+        {
+          "market": "Résultat",
+          "pick": "Shanghai Port gagne",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "37 % : Shanghai a 8V-2N sur 10 et concède 0,8 but, mais Beijing est invaincu à domicile et marque 2,3 par match.",
+          "reasoning": "Les deux formes sont proches ; l'avantage du terrain et la possession de Beijing à domicile (65,5 %) nuancent ce choix, d'autant que le pourcentage reste bas. Mon bilan sur le résultat est médiocre.",
+          "probability": 37
+        },
+        {
+          "market": "Total corners",
+          "pick": "Plus de 6.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : le moteur attend 9,81 corners au total (4,46 + 5,36) et Beijing en obtient 8,5 à domicile.",
+          "reasoning": "Deux équipes de possession avec des moyennes de corners élevées rendent le seuil de 6,5 confortable. Mon bilan sur ce marché est solide.",
+          "probability": 83
+        },
+        {
+          "market": "Corners — Beijing Guoan",
+          "pick": "Beijing Guoan — Moins de 6.5 corners",
+          "verdict": "nuance",
+          "confidence": "moyenne",
+          "explanation": "80 % : attendu 4,46 corners pour Beijing, qui en produit 5 sur 10 matchs, même si 8,5 à domicile.",
+          "reasoning": "La moyenne à domicile (8,5) contredit un peu le moteur, mais Shanghai n'en concède que 3,1 à 4,2, ce qui limite Beijing.",
+          "probability": 80
+        },
+        {
+          "market": "Corners — Shanghai Port",
+          "pick": "Shanghai Port — Moins de 7.5 corners",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "79 % : attendu 5,36 corners, Shanghai en produit 5,9 sur 10 matchs et 4 à l'extérieur.",
+          "reasoning": "Les moyennes sont nettement sous 7,5, surtout à l'extérieur.",
+          "probability": 79
+        },
+        {
+          "market": "Total tirs",
+          "pick": "Plus de 20.5 tirs",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : attendu 26,17 tirs au total, 13,4 + 14,9 produits par match.",
+          "reasoning": "Les deux équipes tirent beaucoup et concèdent 13,8 et 10,7 tirs, ce qui dépasse largement 20,5.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs — Beijing Guoan",
+          "pick": "Beijing Guoan — Moins de 17.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "81 % : attendu 13,26 tirs, 13,4 sur 10 matchs, mais 17,5 à domicile.",
+          "reasoning": "La moyenne à domicile frôle le seuil, ce qui laisse un risque, mais Shanghai ne concède que 10,7 tirs.",
+          "probability": 81
+        },
+        {
+          "market": "Tirs — Shanghai Port",
+          "pick": "Shanghai Port — Moins de 17.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : attendu 12,92 tirs, Shanghai en tire 14,9 sur 10 et 13,2 à l'extérieur.",
+          "reasoning": "Ses moyennes restent sous 17,5 même à l'extérieur.",
+          "probability": 83
+        },
+        {
+          "market": "Total tirs cadrés",
+          "pick": "Plus de 6.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : attendu 9,73 tirs cadrés (5 + 4,73), avec 5,5 et 6 produits par match.",
+          "reasoning": "Les deux attaques cadrent bien, le total dépasse nettement 6,5.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs cadrés — Beijing Guoan",
+          "pick": "Beijing Guoan — Moins de 6.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "75 % : attendu 5 tirs cadrés, 5,5 par match, et Shanghai n'en concède que 3,6.",
+          "reasoning": "Le seuil est proche de la moyenne, d'où un pourcentage plus bas que les autres marchés.",
+          "probability": 75
+        },
+        {
+          "market": "Tirs cadrés — Shanghai Port",
+          "pick": "Shanghai Port — Plus de 2.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "82 % : attendu 4,73 tirs cadrés, 6 par match et 6,4 à l'extérieur.",
+          "reasoning": "Même l'absence de Zhurun Liu ne change guère la production d'une attaque avec Leonardo et Ampem.",
+          "probability": 82
+        }
+      ]
+    },
+    "updatedAt": "2026-11-18T11:40:45.054Z",
+    "createdAt": "2026-11-18T11:40:45.054Z"
   }
 ]
