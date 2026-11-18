@@ -12,6 +12,8 @@
  *           de la dernière nuit, les lectures de la preuve (T-F6) : une fiche « après le coup d'envoi », un avant-match
  *           relevé après le coup d'envoi, un autre stade relevé avant, une météo absurde plantée ; et la base au jour J de
  *           la preuve face à celle du banc (contexteBancEnfant.passeDuBanc), à l'égalité exacte.
+ *           Lot A2 (17/11/2026) : le registre relu dit aussi, pour chaque principal, les matchs jugés et ceux que le juge a
+ *           écartés (déjà vus), pour comparer au compte de l'horizon.
  * Sortie : une ligne JSON.
  */
 
@@ -49,7 +51,7 @@ if (phase === 'nuits') {
   s.dernierMatch = fab.matchs.at(-1).date;
   const horizon = o.horizon ?? { jours: 18, matchs: { 'repos-court': 6, 'enchainement-serre': 6, 'deplacement-altitude': 3 } };
   s.horizon = horizon;
-  const registre = (t) => R.jugementsDe('32', { maintenant: t }).map((j) => ({ quoi: j.quoi, principal: j.principal === true, lancement: j.lancement, le: j.le, verdict: j.verdict, etape: j.etape }));
+  const registre = (t) => R.jugementsDe('32', { maintenant: t }).map((j) => ({ quoi: j.quoi, principal: j.principal === true, lancement: j.lancement, le: j.le, verdict: j.verdict, etape: j.etape, matchs: j.n?.matchs ?? null, ecartees: j.ecartees?.donneesVues ?? null }));
   const nuits = [];
   const dernierJour = o.dernierJour ?? '2026-10-11';
   for (let jourD = lancementLe; jourD <= dernierJour; jourD = plusJours(jourD, 3)) {

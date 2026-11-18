@@ -540,7 +540,9 @@ test('branchements : le serveur accorde les versions AVANT d’écouter, sans ja
   // Le résumé donné à l'IA ne prend pas le numéro : il n'est ajouté qu'au résumé GARDÉ, et retiré avant la revue.
   const ia = lire('core', 'ai', 'matchAiAnalysisService.js');
   assert.match(ia, /engineSnapshot: avecLaVersion\(engineSummary, engineResult\),/);
-  assert.equal((ia.match(/engineSummary: pourIA\(prior\.engineSnapshot\),/g) ?? []).length, 2);
+  assert.equal((ia.match(/engineSummary: pourIA\(prior\.engineSnapshot\),/g) ?? []).length, 1);
+  // Lot A1 (passe 2, K3) : la revue en ANCIENNE forme passe par pourIA avec le filtre de l’ancienne fiche (toujours sans le numéro).
+  assert.equal((ia.match(/engineSummary: pourIA\(prior\.engineSnapshot, \{ ancienne: true \}\),/g) ?? []).length, 1);
 });
 
 test('étape 27 (vérification du branchement, constat 2) — PUT /api/config REFUSE (400) une clé modeleDeButs fautive, en mots simples, sans rien écrire (ni réglages, ni version) ; null reste accepté (la sortie de secours) ; une clé juste passe', () => {

@@ -589,6 +589,8 @@ test('chaîne complète : ANCIENNE forme à l’octet près — empreinte du mes
   for (const [cle, ref] of Object.entries(REFERENCE)) {
     const a = s.preparees[cle].ancienne;
     assert.equal(a.faits, ref.ancienne.faits, `${cle} : les faits de l'ancienne forme`);
+    // Lot A1, passe 2 (17/11/2026, K3) : empreintes ADAPTÉES (fixture, champ « adaptation ») — la décision de l'avant-match y
+    // passe par stakingSansEuros, comme dans l'ancienne fiche d'avant-match ; les faits, eux, sont ceux du 07/10 à l'octet.
     assert.equal(a.sha1, ref.ancienne.sha1, `${cle} : l'ancienne forme a changé (empreinte du message entier)`);
     assert.equal(a.contientSectionNeuve, false, cle);
     assert.equal(a.systemSansLaRegleNeuve, true, cle);

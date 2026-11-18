@@ -43,7 +43,8 @@ const RAISON_DU_SAUT = (EMPREINTE_EN_SERVICE.moteur !== EMPREINTE_AVANT_LOTS_2.m
   ? 'essai 27 terminé, rejouable seulement avec le code de l’essai'
   : null;
 
-test('T-EV3 : l’empreinte du code du moteur reste 16f2459… et celle de la candidate de l’étape 27 f01dd8496f56a415 ; aucun fichier de la boucle de correction (data/correction/) n’entre dans l’empreinte ; la copie figée du registre de Pierre tourne avec CE code', () => {
+// Lot A1 (17/11/2026, M4) : le titre dit les empreintes EN SERVICE (aides/enService.mjs), plus celles d'avant les lots 2.
+test(`T-EV3 : l’empreinte du code du moteur reste celle en service (${EMPREINTE_EN_SERVICE.moteur.slice(0, 8)}…) et celle de la candidate du code aussi (${EMPREINTE_EN_SERVICE.candidate}) ; aucun fichier de la boucle de correction (data/correction/) n’entre dans l’empreinte ; la copie figée du registre de Pierre tourne avec CE code`, () => {
   assert.equal(empreinteDuCode({ racine: SRC, rafraichir: true }).empreinte, EMPREINTE_EN_SERVICE.moteur); // Partie 0 des lots 2 (A)
   assert.equal(empreinteDeLaCandidate(CANDIDATE_EN_ESSAI), EMPREINTE_EN_SERVICE.candidate); // Partie 0 des lots 2 (A)
   const fichiers = fichiersDuMoteur();

@@ -263,8 +263,11 @@ const GELES = Object.freeze([
   ['ui/src/components/matches/LineupPitch.vue', '0bc9124c6228b303a98342128a2f7acddc6b8661']
 ]);
 
-/** Les fichiers atteints par les imports relatifs (statiques, import() à chemin littéral, réexports) d'un ensemble de départ. */
-function atteints(depart) {
+/**
+ * Les fichiers atteints par les imports relatifs (statiques, import() à chemin littéral, réexports) d'un ensemble de départ.
+ * `sauf(de, vers)` (lot A1, 17/11/2026) : une arête nommée à ne pas suivre (T-X2) ; par défaut, aucune.
+ */
+function atteints(depart, sauf = () => false) {
   const vus = new Set();
   const pile = [...depart];
   const re = /(?:import\s[^'"]*?from\s*|import\s*\(\s*|export\s[^'"]*?from\s*|import\s*)['"](\.{1,2}\/[^'"]+)['"]/g;
@@ -275,6 +278,7 @@ function atteints(depart) {
     for (const m of sansCommentaires(f).matchAll(re)) {
       let cible = path.resolve(path.dirname(f), m[1]);
       if (!/\.(m?js|json)$/.test(cible) && fs.existsSync(`${cible}.js`)) cible += '.js';
+      if (sauf(f, cible)) continue;
       pile.push(cible);
     }
   }
@@ -308,7 +312,7 @@ test('T-X1 les empreintes ne bougent pas ; rien de l’étape 39 sous core/ ni s
   assert.ok(!empreinte.includes('core/ai/compactContext.js'));
 });
 
-test('T-X2 depuis TOUTES les racines du gel (empreinte, chemin de nuit, les 78, les 12, autoMatchAiTrigger.js, matchAiAnalysisService.js), data/mise/ n’est jamais atteint', () => {
+test('T-X2 depuis TOUTES les racines du gel (empreinte, chemin de nuit, les 78, les 12, autoMatchAiTrigger.js, matchAiAnalysisService.js), data/mise/ n’est jamais atteint, hors de l’arête nommée autoMatchAiTrigger.js → data/mise/miseRead.js', () => {
   const fermeture = GELES.map(([f]) => f).filter((f) => !f.startsWith('ui/') && /\.m?js$/.test(f) && !retireParUnLot2(f)); // Partie 0 des lots 2 (P0-2, 14/11) : un fichier déclaré « retire » n’est plus une racine (D3 tient qu’il est absent)
   const racines = [
     ...new Set([
@@ -323,7 +327,19 @@ test('T-X2 depuis TOUTES les racines du gel (empreinte, chemin de nuit, les 78, 
     ])
   ].map((f) => path.join(SRC, f));
   for (const f of racines) assert.ok(fs.existsSync(f), `racine absente : ${rel(f)}`);
-  const graphe = [...atteints(racines)].map(rel);
+  // Lot A1 (17/11/2026, pendant l'essai n° 3 ; l'essai 27 est jugé depuis le 15/11) : autoMatchAiTrigger.js, libre pour l'essai
+  // n° 3 (liste gelée du plan de l'essai n° 3), lit le contexte de la mise comme la page du match (mise C8). Son import de
+  // data/mise/miseRead.js est la SEULE exception nommée : le graphe est parcouru sans cette arête, et elle doit être la seule.
+  // Note (vérification de A1, CH-5 ; exception ACCEPTÉE par l'orchestrateur le 17/11/2026) : le processus de nuit
+  // (jobs/matchStatsAutoRefresh.js) charge donc maintenant data/mise/miseRead.js par le déclencheur. Sur ce chemin, la séparation
+  // entre la mise et le gel n'est plus prouvée par la structure mais par les DONNÉES : elementDuGel ne lit ni `staking` ni la mise,
+  // et miseLot2.test.mjs (T-A1 mise) compare à l'octet ce que le gel écrirait avec et sans contexte de mise.
+  const DECLENCHEUR = path.join(SRC, 'core', 'ai', 'autoMatchAiTrigger.js');
+  const MISE_READ = path.join(MISE, 'miseRead.js');
+  assert.deepEqual([...sansCommentaires(DECLENCHEUR).matchAll(/['"]([^'"\n]*\/mise\/[^'"\n]+)['"]/g)].map((m) => m[1]), ['../../data/mise/miseRead.js'], 'autoMatchAiTrigger.js : un seul import de data/mise/ (miseRead.js)');
+  assert.ok(atteints([DECLENCHEUR]).has(MISE_READ), 'témoin : l’arête nommée existe');
+  const exceptionNommee = (de, vers) => de === DECLENCHEUR && vers === MISE_READ;
+  const graphe = [...atteints(racines, exceptionNommee)].map(rel);
   assert.ok(graphe.length > 250, `${graphe.length} fichiers atteints`);
   for (const f of FICHIERS_39) assert.ok(!graphe.includes(f), `${f} atteint depuis une racine du gel`);
   // Les fichiers libres ATTEINTS par ces racines n'importent rien de data/mise/ (compactContext.js, screener.js, bulletinFiches.js…).

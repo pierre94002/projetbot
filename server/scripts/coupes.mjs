@@ -124,7 +124,7 @@ function lancerLEnfant(message, { delaiMs = 3 * 3_600_000 } = {}) {
         reject(new Error(m.erreur));
       }
     });
-    enfant.on('exit', (code) => {
+    enfant.on('close', (code) => {
       if (fini) return;
       fini = true;
       clearTimeout(minuterie);

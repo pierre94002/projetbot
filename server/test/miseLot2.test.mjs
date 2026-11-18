@@ -16,6 +16,17 @@
  * T-L2-7 l'ancienne fiche ne porte plus ni mise en euros, ni plafond, ni « € » (une mise absente, « stake: null », reste : ce n'est pas un euro) ;
  * T-L2-8 le résumé gardé avec l'analyse note la base du calcul de la mise (jamais envoyée à l'IA) ;
  * T-L2-9 une mise au-dessus de la mise acceptée connue chez le bookmaker est RAMENÉE, la raison nommée ; « le plus petit gagne » ;
+ * T-A1   (lot A1, 17/11/2026, pendant l'essai n° 3) « àv » : un match « à vérifier » écrit en clair à l'IA, sans les chiffres du
+ *        conseil refusé ; « mise » : l'analyse IA automatique lit le contexte de la mise comme la page du match — la même part
+ *        sur la page et dans la fiche de l'IA, le gel de l'analyse inchangé (copie isolée, aides/script-mise-ia-auto.mjs) ;
+ *        passe 2 (17/11/2026, vérification de A1) : le VRAI calculerEngineResult (K6) ; une lecture ratée de la mise (carnet,
+ *        capital, comptes, garde-fous, par de VRAIS fichiers illisibles) → « Mise non calculée » sur la page ET dans la fiche de
+ *        l'IA, la même décision (K1, O1) ; un plafond du moment posé après la règle (K5) ; le MESSAGE ENTIER des 4 chemins vers
+ *        l'IA d'un match « à vérifier » sans la cote, le bookmaker ni l'avantage du conseil refusé (K2, K3) ; la revue lit la part
+ *        de l'avant-match (K4) ; passe 4 (17/11/2026, N1 à N3) : l'analyse IA DEMANDÉE PAR UN CLIC (la réponse de la page en
+ *        JSON, comme l'écran l'envoie) lit la décision de la page — « non calculée » sous une lecture ratée, la part de la page
+ *        sous K5 —, avant-match et revue, compacte et ancienne ; la réponse de la page sans la règle de mise sous une lecture
+ *        ratée (N2) ; l'écran de la revue (miseDeLaRevue) dit la même chose (N3) ;
  * T-PA1  ni les réglages de pari ni le contexte de la mise ne changent une probabilité (ici : sur la cote juste et par la
  *        structure du code ; sur le moteur entier : leviersEtPari.test.mjs, T-PA1, dans une copie isolée).
  */
@@ -23,13 +34,14 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import crypto from 'node:crypto';
 import { SERVEUR, FIXTURES, preparerCopie, executer } from './aides/isolement.mjs';
 import { semer, matchsFabriques, contexteFabrique, configAvec, LIVRES_FR, LIVRES_ETRANGERS } from './aides/miseFabrique.mjs';
 import * as S from '../src/core/engine/stakeSizing.js';
 import * as R from '../src/data/mise/regleDeMise.js';
 import { findValueBet, miseDuConseil, fairFromBookmakers } from '../src/core/engine/valueFinder.js';
-import { stakingDuMatch, decisionDePari, referenceDuMatch } from '../src/core/engine/verdictPari.js';
+import { stakingDuMatch, decisionDePari, referenceDuMatch, sansConseilAVerifier, RAISON_A_VERIFIER } from '../src/core/engine/verdictPari.js';
 import { plafonnerLeConseil, PLAFONDS_NOMMES } from '../src/core/risk/gardeFous.js';
 import { REGLAGES_DE_PARI, REGLAGES_DE_PARI_RETIRES } from '../src/data/correction/regles.js';
 import { sansReglagesDePari, empreinteDesPronostics } from '../src/data/correction/lignee.js';
@@ -356,12 +368,19 @@ test('T-L2-6 compactContext.js n’a plus de copie de la formule (il importe la 
     assert.ok(ligne?.startsWith(attendue), `${String(ligne).slice(0, 120)} — attendu : ${attendue}`);
     assert.doesNotMatch(ligne, /€|stake|misePlafonnee|regleDeMise/);
     if (i % 20 !== 0) return;
-    // La décision calculée AVEC un contexte (elle porte regleDeMise et parfois misePlafonnee) : le même message, à l'octet.
+    // La décision calculée AVEC un contexte (elle porte regleDeMise et parfois misePlafonnee). Lot A1 (17/11/2026, mise C8) : la
+    // part écrite est celle de la règle entière (regleDeMise.f, la part de la page du match) ; ses euros et son détail ne sont
+    // jamais écrits : le message est celui d'avant à l'octet, la part de la règle à la place de la part pleine.
     const enrichie = { ...staking, stake: 3.21, regleDeMise: { regle: 'mise-v1', f: 0.001, fKelly: 0.004, raisons: [{ code: 'mise-max', avant: 0.004, apres: 0.001, texte: 'ramenée par : votre mise maximale par pari (2 €)' }], plafond: { par: 'mise-max', mise: 8, plafond: 2 } }, misePlafonnee: { mise: 8, plafond: 2, par: 'mise-max', texte: 'Mise conseillée ramenée à 2 €' } };
-    assert.equal(JSON.stringify(ficheCompacte(x, enrichie, null)), JSON.stringify(sans), 'le détail de la règle et ses euros ne changent pas un octet du message');
+    const pleine = `Mise (staking) : RECOMMENDED : ${partDiteDuLot1a(partDuLot1a({ ev: r.ev, cote: r.odds, reglage: REGLAGE }))} sur `;
+    const deLaRegle = 'Mise (staking) : RECOMMENDED : 0,10 % du capital sur ';
+    const avecLaRegle = (demande) => JSON.stringify(demande).split(pleine).join(deLaRegle);
+    assert.ok(ligneDeMise(ficheCompacte(x, enrichie, null))?.startsWith(deLaRegle), 'la part de la règle (0,10 %), pas la part pleine');
+    assert.equal(JSON.stringify(ficheCompacte(x, enrichie, null)), avecLaRegle(sans), 'seule la part change : le détail de la règle et ses euros ne changent pas un autre octet du message');
+    assert.doesNotMatch(ligneDeMise(ficheCompacte(x, enrichie, null)), /€|stake|misePlafonnee|regleDeMise/);
     enrichies++;
     if (masque) {
-      assert.equal(JSON.stringify(ficheCompacte(x, enrichie, masque)), JSON.stringify(ficheCompacte(x, staking, masque)));
+      assert.equal(JSON.stringify(ficheCompacte(x, enrichie, masque)), avecLaRegle(ficheCompacte(x, staking, masque)));
       assert.ok(ligneDeMise(ficheCompacte(x, staking, masque))?.startsWith(attendue));
       avecMasque++;
     }
@@ -375,7 +394,7 @@ test('T-L2-6 compactContext.js n’a plus de copie de la formule (il importe la 
 
 test('T-L2-7 l’ancienne fiche (AI_ANALYSIS_FICHE=ancienne) passe par le même filtre que la compacte : ni mise en euros, ni plafond, ni « € » — la part du capital à la place (3 matchs fabriqués)', () => {
   const service = lire('core', 'ai', 'matchAiAnalysisService.js');
-  assert.ok(service.includes('demande = buildPreMatchAnalysisRequest({ home, away, league, engineSummary: { ...engineSummary, staking: stakingSansEuros(engineSummary.staking) }, context, experience });'), 'l’ancienne fiche reçoit la décision filtrée');
+  assert.ok(service.includes('demande = buildPreMatchAnalysisRequest({ home, away, league, engineSummary: { ...ancienneSansLeRefus(engineSummary), staking: stakingSansEuros(engineSummary.staking) }, context, experience });'), 'l’ancienne fiche reçoit la décision filtrée (et, pour un refus « à vérifier », sans son avantage)');
   assert.equal(service.split('buildPreMatchAnalysisRequest({').length - 1, 1, 'un seul appel de l’ancienne fiche d’avant-match dans le service');
   const decisions = CONSEILS.slice(0, 3).map(({ r }, i) => ({
     ...r,
@@ -418,6 +437,228 @@ test('T-L2-8 le résumé gardé avec l’analyse (engineSnapshot) note la base d
   assert.ok(service.includes('const { regleDeMise, ...staking } = resume.staking;'), 'pourIA retire le détail de la règle de mise');
   // Le service ne lit toujours pas le capital lui-même (aucun import de data/mise/).
   assert.doesNotMatch(sansCommentaires(service), /data\/mise\//);
+});
+
+// ------------------------------------------------------------------ T-A1 : l'IA et la mise en mots clairs (lot A1, 17/11/2026)
+
+/** La copie isolée (aides/script-mise-ia-auto.mjs) : lancée UNE fois, lue par T-A1 àv (les 4 chemins) et T-A1 mise. */
+let sortieDeLaCopie = null;
+function miseIAAuto() {
+  if (sortieDeLaCopie) return sortieDeLaCopie;
+  const copie = preparerCopie({});
+  try {
+    const x = executer(copie, path.join(SERVEUR, 'test', 'aides', 'script-mise-ia-auto.mjs'), { timeout: 300_000 });
+    assert.equal(x.code, 0, `script-mise-ia-auto.mjs :\n${x.erreurs.slice(-3000)}\n${x.sortie.slice(-1500)}`);
+    assert.equal(x.reseau, false, 'un appel réseau a été tenté');
+    assert.ok(x.json?.ok, `sortie illisible : ${x.sortie.slice(-500)}`);
+    sortieDeLaCopie = x.json;
+  } finally {
+    copie.nettoyer();
+  }
+  return sortieDeLaCopie;
+}
+
+test('T-A1 àv : un match « à vérifier » est écrit à l’IA en clair — « aucun pari conseillé : données du match à vérifier (raison) » —, sans les chiffres du conseil refusé (ni sa cote, ni son bookmaker, ni son avantage), dans la fiche compacte comme dans l’ancienne (500 refus fabriqués) ; par le vrai moteur, le MESSAGE ENTIER des 4 chemins vers l’IA (avant-match et revue, compacte et ancienne) sans la cote, le bookmaker ni l’avantage refusés, en fraction comme en pourcentage', () => {
+  const x = F.avantA.entree;
+  const raison = 'Man City – Everton du 20/09 : score différent chez football-data (fabriqué)';
+  const aVerifier = { raisons: [{ id: 'essai', texte: raison, familles: ['tout'] }], texte: raison };
+  const virgule = (n) => String(n).replace('.', ',');
+  let vus = 0;
+  CONSEILS.slice(0, 500).forEach(({ r }, i) => {
+    const conseil = { ...r, label: 'Domicile gagne', bookmakerTitle: 'William Hill' };
+    const refus = sansConseilAVerifier(conseil, { aVerifier: i % 50 === 0 ? { raisons: [{ id: 'sans-texte' }] } : aVerifier });
+    assert.equal(refus.action, 'PASS');
+    assert.equal(refus.reason, RAISON_A_VERIFIER);
+    assert.ok(refus.conseilRefuse && refus.candidates.length > 0, 'le moteur garde le conseil refusé et les cotes jugées (la page les montre)');
+    const ligne = ligneDeMise(ficheCompacte(x, refus, null));
+    // K2 : l'avantage du conseil refusé (edgePercent) n'est pas dit non plus.
+    const ligne1N2 = texteDe(ficheCompacte(x, refus, null)).split('\n').find((l) => l.startsWith('1N2 — '));
+    assert.ok(ligne1N2.endsWith('edgePercent : non dit (match à vérifier)'), ligne1N2);
+    const attendue = i % 50 === 0 ? 'Mise (staking) : PASS — aucun pari conseillé : données du match à vérifier' : `Mise (staking) : PASS — aucun pari conseillé : données du match à vérifier (${raison})`;
+    assert.equal(ligne, attendue, 'la phrase en clair, seule');
+    // Aucun chiffre du conseil refusé : ni sa cote (affichée ou nette), ni son bookmaker, ni son avantage, ni sa cote juste.
+    const c = refus.conseilRefuse;
+    const horsRaison = ligne.split(raison).join('');
+    assert.doesNotMatch(horsRaison, /\d/, `${ligne} : aucun chiffre hors de la raison du contrôle`);
+    for (const v of [c.odds, c.displayedOdds, c.ev, conseil.fairOdds].filter((n) => typeof n === 'number')) {
+      assert.ok(!horsRaison.includes(String(v)) && !horsRaison.includes(virgule(v)), `${ligne} : le chiffre ${v} du conseil refusé`);
+    }
+    for (const mot of [c.bookmaker, c.bookmakerTitle, 'williamhill', 'William Hill', 'conseilRefuse', 'cotes jugées', 'EV', 'RECOMMENDED', '% du capital']) assert.ok(!ligne.includes(mot), `${ligne} : « ${mot} »`);
+    // L'ancienne fiche (AI_ANALYSIS_FICHE=ancienne) : le même filtre — la phrase, ni conseilRefuse ni candidates.
+    const ancienne = C.stakingSansEuros(refus);
+    assert.deepEqual(Object.keys(ancienne).sort(), ['action', 'conseil', 'reason', 'stake']);
+    assert.equal(ancienne.conseil, attendue.replace('Mise (staking) : PASS — ', ''));
+    const message = texteDe(P.buildPreMatchAnalysisRequest({ home: x.home, away: x.away, league: x.league, engineSummary: { ...x.engineSummary, staking: ancienne }, context: { ...x.contexte, lineups: x.lineupsAncienne }, experience: x.experience }));
+    assert.doesNotMatch(message, /conseilRefuse|"candidates"/);
+    vus++;
+  });
+  assert.equal(vus, 500);
+  // Les autres refus (aucune value, coupe-circuit…) : la ligne d'avant, mot pour mot.
+  const sansValue = { action: 'PASS', stake: null, reason: 'pas_de_value', candidates: [], limits: { edgeThresholdMin: 0.02 } };
+  assert.ok(ligneDeMise(ficheCompacte(x, sansValue, null)).startsWith('Mise (staking) : PASS (pas_de_value) ; seuils : '));
+  assert.equal(JSON.stringify(C.stakingSansEuros(sansValue)), JSON.stringify(sansValue));
+  assert.ok(texteDe(ficheCompacte(x, sansValue, null)).includes(`edgePercent : ${String(x.engineSummary.edgePercent).replace('.', ',')} %`), 'hors « à vérifier », l’avantage reste dit');
+  // K2 et K3 — par le VRAI moteur, un match fabriqué « à vérifier » : le message ENTIER (consignes et message) des 4 chemins.
+  const { chemins } = miseIAAuto();
+  const refuse = chemins.conseilRefuse;
+  assert.deepEqual([refuse.action, refuse.reason, refuse.actionSans], ['PASS', RAISON_A_VERIFIER, 'RECOMMENDED'], 'le moteur refuse le conseil du match « à vérifier » (et le donne sans)');
+  assert.ok(typeof refuse.odds === 'number' && typeof refuse.ev === 'number' && refuse.bookmaker, 'le conseil refusé a une cote, un avantage et un bookmaker');
+  assert.ok(refuse.aiguilles.includes(String(refuse.odds).replace('.', ',')) && refuse.aiguilles.includes((100 * refuse.ev).toFixed(2)), 'les aiguilles : la cote, l’avantage en fraction et en pourcentage');
+  for (const nom of ['avant-match compacte', 'avant-match ancienne', 'revue compacte', 'revue ancienne']) {
+    const c = chemins[nom];
+    assert.ok(c && c.longueur > 500, `${nom} : message absent`);
+    assert.deepEqual(c.trouves, [], `${nom} : le conseil refusé est dans le message — ${JSON.stringify(c.trouves).slice(0, 600)}`);
+    assert.ok(c.phrase, `${nom} : la phrase « aucun pari conseillé : données du match à vérifier (…) »`);
+    assert.ok(c.edgeNonDit, `${nom} : edgePercent « non dit » (compacte) ou null (ancienne)`);
+    // Témoin : sans « à vérifier », le même chemin porte la cote et le bookmaker du conseil (les aiguilles se trouvent bien).
+    assert.ok(c.temoin.includes(refuse.bookmaker) || c.temoin.includes('William Hill'), `${nom} : témoin sans le bookmaker (${c.temoin.join(', ')})`);
+  }
+});
+
+test('T-A1 mise : l’analyse IA AUTOMATIQUE (le vrai calculerEngineResult) écrit la part de la PAGE DU MATCH — même match, même contexte de mise (capital, plafonds, paris en attente, mise acceptée, plafond du moment après la règle) → la même part sur la page et dans la fiche de l’IA, et la revue la relit ; le gel de l’analyse inchangé ; une lecture ratée (carnet, capital, comptes, garde-fous : de vrais fichiers illisibles) → la page ET l’IA disent « non calculée », jamais une part ni un euro — comparées dans TOUS les cas ; l’analyse IA DEMANDÉE PAR UN CLIC (la réponse de la page en JSON) lit la même décision que la page, avant-match et revue, compacte et ancienne, et l’écran de la revue aussi', async () => {
+  // L'écran (ui/src/utils/miseAffichee.js) : la phrase du serveur seule, ni part ni euro.
+  const U = await import(pathToFileURL(path.join(UI, 'utils', 'miseAffichee.js')).href);
+  // La lecture : le déclencheur lit le contexte comme la page (contexteDeLaMise, puis contexteDuMoteur), et le gel garde son appel.
+  const declencheur = sansCommentaires(lire('core', 'ai', 'autoMatchAiTrigger.js'));
+  assert.match(declencheur, /import \{ contexteDeLaMise, contexteDuMoteur, miseDuMatch, miseNonCalculee, ceQuiNaPasPuEtreLu \} from '\.\.\/\.\.\/data\/mise\/miseRead\.js';/);
+  assert.ok(declencheur.includes("const lireLeContexteDeMise = () => contexteDeLaMise({ sportId: 'football' });"), 'le contexte lu comme la page (sportId football)');
+  assert.ok(declencheur.includes('contexteDeMise: contexteDuMoteur(contexte, match)'));
+  assert.ok(declencheur.includes('geler({ match, engineResult, lineups, origine, aVerifier });'), 'calculerEngineResult donne au gel le match d’origine');
+  assert.ok(lire('api', 'controllers', 'analysis.controller.js').includes('contexteDeMise: contexteDuMoteur(contexteMise, avecFraicheur)'), 'la page : le même appel');
+  assert.ok(declencheur.includes('gelerAnalyse({ match, engineResult, lineups, origine, aVerifier })'), 'le gel reçoit le match d’origine et le résultat du moteur');
+  // Par le vrai moteur et le vrai calculerEngineResult, dans une copie isolée (base d'essai, matchs et contextes fabriqués).
+  const r = miseIAAuto();
+  const conseilles = r.cas.filter((c) => !c.illisible && c.action === 'RECOMMENDED');
+  assert.ok(conseilles.length >= 12, `conseils fabriqués : ${conseilles.length}`);
+  let reduites = 0;
+  for (const c of r.cas.filter((y) => !y.illisible)) {
+    assert.equal(c.contexteLu, true, c.nom);
+    assert.equal(c.memeContexte, true, `${c.nom} : le contexte joint au match est celui de la page`);
+    assert.equal(c.gelIdentique, true, `${c.nom} : le gel de l’analyse ne dépend pas de la mise`);
+    assert.ok(c.lignesGelees >= 10, `${c.nom} : ${c.lignesGelees} lignes gelées`);
+    assert.equal(c.moteurIntact, true, `${c.nom} : le résultat du moteur n’est pas modifié`);
+    assert.equal(c.gelRecoitLeMatch, true, `${c.nom} : le gel reçoit le match d’origine, une fois`);
+    assert.equal(c.nonCalculeePage, null, `${c.nom} : toutes les lectures réussies, la page calcule la mise`);
+    if (c.action !== 'RECOMMENDED') continue;
+    assert.ok(typeof c.fractionPage === 'number', `${c.nom} : la page a une part`);
+    assert.ok(c.ligne?.startsWith(c.attendue), `${c.nom} : la page dit ${c.attendue} ; l’IA lit ${c.ligne}`);
+    assert.doesNotMatch(c.ligne, /€/);
+    if (c.fractionPage < c.partPleine - 1e-9) {
+      reduites++;
+      assert.ok(!c.ligneSansContexte.startsWith(c.attendue), `${c.nom} : sans contexte, la part pleine (témoin)`);
+    }
+    if (c.nom.endsWith('sansCapital')) assert.notEqual(c.base.origine, 'capital-regle', `${c.nom} : sans capital, la base gardée n’est pas un capital`);
+    else assert.deepEqual(c.base.origine, 'capital-regle', `${c.nom} : la base du calcul gardée est le capital (la mise du moteur a été calculée sur lui)`);
+  }
+  assert.ok(reduites >= 6, `la règle entière réduit la part (mise maximale, pari en attente, mise acceptée) : ${reduites}`);
+  for (const c of r.cas.filter((y) => y.illisible)) {
+    assert.equal(c.contexteLu, false);
+    assert.equal(c.memeMatch, true, 'le match tel quel');
+    if (c.action !== 'RECOMMENDED') continue;
+    const phraseContexte = 'Mise (staking) : RECOMMENDED : part du capital non calculée : lecture impossible du contexte de la mise (capital, plafonds, paris en attente) sur ';
+    assert.ok(c.ligne.startsWith(phraseContexte), c.ligne);
+    assert.ok(c.ligneAuto?.startsWith(phraseContexte), `calculerEngineResult : ${c.ligneAuto}`);
+    assert.doesNotMatch(c.ligne, /\d+,\d\d % du capital|€|contexteDeLaMise|miseNonLue/);
+    assert.equal(c.ancienne.partDuCapital, null);
+    assert.equal(c.ancienne.contexteDeLaMise, C.CONTEXTE_DE_MISE_ILLISIBLE);
+  }
+  assert.ok(r.cas.some((y) => y.illisible && y.action === 'RECOMMENDED'), 'au moins un conseil sous un contexte illisible');
+
+  // K5 : un plafond du moment posé APRÈS la règle (garde-fous de la copie, contexte sans garde-fous) — la même part.
+  let horsRegle = 0;
+  for (const c of r.plafondHorsRegle) {
+    assert.deepEqual(c.plafondDuMoment?.montant, 2, `${c.nom} : le plafond du moment de la copie`);
+    if (c.action !== 'RECOMMENDED') continue;
+    assert.ok(c.ligne?.startsWith(c.attendue), `${c.nom} : la page dit ${c.attendue} ; l’IA lit ${c.ligne}`);
+    if (c.horsRegle && c.fractionPage < c.regleF - 1e-9) horsRegle++;
+  }
+  assert.ok(horsRegle >= 1, `témoin : au moins un conseil ramené par le plafond du moment APRÈS la règle (la page montre la mise ramenée) : ${horsRegle}`);
+
+  // K1 et O1 : de VRAIS fichiers illisibles — la page et l'IA, la même décision, dans TOUS les cas.
+  const MOTS = { carnet: 'du carnet de paris', capital: 'du capital', comptes: 'des fiches de vos comptes', 'garde-fous': 'de vos garde-fous' };
+  assert.deepEqual(r.lectures.map((l) => l.nom), ['tout se lit', 'bets.json illisible', 'capital.json illisible', 'comptes-bookmakers.json illisible', 'garde-fous.json illisible', 'tout se relit']);
+  for (const l of r.lectures) {
+    assert.deepEqual(l.lecturesRatees, l.attendues, `${l.nom} : les lectures ratées nommées`);
+    assert.equal(l.actionAuto, l.action, `${l.nom} : la page et l’automatique ont la même décision`);
+    if (!l.attendues.length) {
+      assert.equal(l.action, 'RECOMMENDED', `${l.nom} : un conseil`);
+      assert.ok(!('nonCalculee' in l.mise) && typeof l.mise.fraction === 'number', `${l.nom} : la page calcule la mise`);
+      assert.ok(l.ligne.startsWith(`Mise (staking) : RECOMMENDED : ${(100 * l.mise.fraction).toFixed(2).replace('.', ',')} % du capital sur `), `${l.nom} : ${l.ligne}`);
+      continue;
+    }
+    if (l.attendues[0] !== 'garde-fous') assert.equal(l.action, 'RECOMMENDED', `${l.nom} : un conseil (la lecture ratée ne bloque pas le moteur)`);
+    if (l.action !== 'RECOMMENDED') continue;
+    const ce = `lecture impossible ${MOTS[l.attendues[0]]}`;
+    assert.deepEqual({ fraction: l.mise.fraction, euros: l.mise.euros, raisons: l.mise.raisons, aBlanc: l.mise.aBlanc }, { fraction: null, euros: null, raisons: [], aBlanc: null }, `${l.nom} : ni part ni euro sur la page`);
+    assert.equal(l.mise.nonCalculee?.texte, `Mise non calculée : ${ce} — réessayez dans un instant`, `${l.nom} : la phrase de la page`);
+    assert.equal(l.eurosDansLaPage, false, `${l.nom} : aucun euro interne ni règle de mise dans la réponse de la page`);
+    assert.equal(l.regleDansLaPage, false, `${l.nom} : la réponse de la page ne porte pas la règle de mise (sa part) — passe 4, N2`);
+    assert.ok(l.ligne.startsWith(`Mise (staking) : RECOMMENDED : part du capital non calculée : ${ce} sur `), `${l.nom} : l’IA lit ${l.ligne}`);
+    assert.doesNotMatch(l.ligne, /\d+,\d\d % du capital|€/);
+    assert.equal(l.ancienne.partDuCapital, null, `${l.nom} : l’ancienne fiche, aucune part`);
+    assert.equal(l.ancienne.miseNonLue, ce, `${l.nom} : l’ancienne fiche dit ce qui n’a pas pu être lu`);
+    const ecran = U.lignesDeLaMise(l.mise);
+    assert.deepEqual(ecran, { conseil: true, titre: l.mise.nonCalculee.texte, euros: null, sansCapital: null, raisons: [], aBlanc: null }, `${l.nom} : l’écran de la page`);
+    assert.equal(U.miseEnUneLigne(l.mise), `non calculée : ${ce} — réessayez dans un instant`, `${l.nom} : Repérage, Opportunités, Mes paris`);
+    assert.equal(U.misePourLeTicket(l.mise), null, `${l.nom} : le ticket n’est pas pré-rempli`);
+    assert.doesNotMatch(U.titreDeLaMise(l.mise), /%|€/);
+  }
+  assert.ok(r.lectures.filter((l) => l.attendues.length && l.action === 'RECOMMENDED').length >= 3, 'au moins trois lectures ratées sous un conseil');
+
+  // K4 : la revue d'après-match lit la part de l'avant-match (même résumé gardé), sous les deux formes ; analyse d'avant A1 : le
+  // résumé que la revue reçoit est celui d'avant, à l'octet (sous la forme compacte ; l'ancienne passe maintenant par le filtre).
+  let revues = 0;
+  for (const v of r.revue) {
+    if (v.avantA1) {
+      assert.equal(v.memeResume, true, `${v.nom} : le résumé d’une analyse gardée avant A1 change`);
+      continue;
+    }
+    revues++;
+    assert.ok(v.compacte.avant?.startsWith(v.attendue), `${v.nom} : avant-match ${v.compacte.avant}`);
+    assert.equal(v.compacte.revue, v.compacte.avant, `${v.nom} : la revue compacte lit la même part que l’avant-match`);
+    assert.ok(v.ancienne.avant !== 'absente' && v.ancienne.avant !== 'null', `${v.nom} : la part de l’ancienne fiche`);
+    assert.equal(v.ancienne.revue, v.ancienne.avant, `${v.nom} : la revue ancienne lit la même part que l’avant-match`);
+    assert.equal(Number(v.ancienne.avant), v.fractionPage, `${v.nom} : la part de la page`);
+    assert.equal(v.ancienne.eurosRevue, false, `${v.nom} : aucun euro dans la revue ancienne`);
+  }
+  assert.ok(revues >= 12, `revues comparées : ${revues}`);
+  assert.equal(r.revue.filter((v) => v.avantA1).length, 3);
+
+  // Passe 4 (N1, N2, N3) : l'analyse IA DEMANDÉE PAR UN CLIC — la réponse de la page en JSON, comme l'écran l'envoie
+  // (UpcomingMatchView.vue, `engineResult: analyse.value.result`), l'avant-match puis la revue, sous les deux formes. Une lecture
+  // ratée : « non calculée », jamais une part ; K5 (plafond du moment après la règle) : la part de la page, pas celle de la règle ;
+  // l'écran de la revue (miseDeLaRevue, sur le résumé gardé) dit la même chose que la page.
+  const demandes = r.demande ?? [];
+  assert.deepEqual(demandes.filter((d) => !d.nom.startsWith('K5|')).map((d) => d.nom), r.lectures.map((l) => l.nom), 'chaque lecture rejouée à la demande');
+  assert.equal(demandes.filter((d) => d.nom.startsWith('K5|')).length, r.plafondHorsRegle.length, 'chaque cas K5 rejoué à la demande');
+  let demandesNonCalculees = 0;
+  let demandesK5 = 0;
+  for (const d of demandes) {
+    if (d.action !== 'RECOMMENDED') continue;
+    assert.equal(d.ancienne.regle, false, `${d.nom} : la règle de mise n’est jamais écrite à l’IA`);
+    assert.equal(d.ancienne.euros, false, `${d.nom} : aucun euro écrit à l’IA (ancienne forme)`);
+    if (d.nonCalculee) {
+      demandesNonCalculees++;
+      const ce = d.nonCalculee.ceQuiNaPasPuEtreLu;
+      assert.equal(d.regleDansLaPage, false, `${d.nom} : la réponse de la page ne porte pas la règle de mise (N2)`);
+      for (const [quoi, ligne] of [['avant-match', d.compacte.avant], ['revue', d.compacte.revue]]) {
+        assert.ok(ligne?.startsWith(`Mise (staking) : RECOMMENDED : part du capital non calculée : ${ce} sur `), `${d.nom} : à la demande (${quoi}), l’IA lit ${ligne}`);
+        assert.doesNotMatch(ligne, /\d+,\d\d % du capital|€/);
+      }
+      assert.deepEqual([d.ancienne.avant, d.ancienne.revue], ['null', 'null'], `${d.nom} : l’ancienne fiche à la demande, aucune part`);
+      assert.deepEqual([d.ancienne.nonLueAvant, d.ancienne.nonLueRevue], [JSON.stringify(ce), JSON.stringify(ce)], `${d.nom} : l’ancienne fiche dit ce qui n’a pas pu être lu`);
+      assert.equal(U.miseDeLaRevue(d.compacte.stakingGarde), 'mise recommandée (part du capital non calculée)', `${d.nom} : l’écran de la revue (N3)`);
+      continue;
+    }
+    assert.ok(typeof d.fractionPage === 'number', `${d.nom} : la page a une part`);
+    const attendue = `Mise (staking) : RECOMMENDED : ${(100 * d.fractionPage).toFixed(2).replace('.', ',')} % du capital sur `;
+    for (const [quoi, ligne] of [['avant-match', d.compacte.avant], ['revue', d.compacte.revue]]) assert.ok(ligne?.startsWith(attendue), `${d.nom} : la page dit ${attendue} ; à la demande (${quoi}), l’IA lit ${ligne}`);
+    assert.deepEqual([Number(d.ancienne.avant), Number(d.ancienne.revue)], [d.fractionPage, d.fractionPage], `${d.nom} : l’ancienne fiche à la demande, la part de la page`);
+    assert.equal(U.miseDeLaRevue(d.compacte.stakingGarde), `mise recommandée : ${U.pourcentDuCapital(d.fractionPage)} du capital`, `${d.nom} : l’écran de la revue (N3)`);
+    if (d.nom.startsWith('K5|') && typeof d.regleF === 'number' && d.fractionPage < d.regleF - 1e-9) demandesK5++;
+  }
+  assert.ok(demandesNonCalculees >= 3, `au moins trois lectures ratées sous un conseil, à la demande : ${demandesNonCalculees}`);
+  assert.ok(demandesK5 >= 1, `témoin : au moins un conseil ramené par le plafond du moment APRÈS la règle, à la demande : ${demandesK5}`);
 });
 
 // ------------------------------------------------------------------ T-L2-9 : les plafonds

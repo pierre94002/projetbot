@@ -26,6 +26,12 @@
  * `fraction` = sa part (paris liés et plafonds compris), `euros` = la mise du moteur, `raisons` = celles de la règle,
  * `aBlanc` = null (plus rien n'est « à blanc » : la candidate du lot 1 est la règle). Une décision sans `regleDeMise`
  * (calculée sans contexte) garde la lecture du lot 1.
+ *
+ * LOT A1 (17/11/2026, passe 2) : une lecture utile à la mise qui échoue (carnet, capital, fiches des comptes, garde-fous,
+ * réglage) est nommée (`lecturesRatees`) ; la page du match ne montre alors ni part ni euros, mais « Mise non calculée :
+ * lecture impossible du … — réessayez dans un instant » (miseNonCalculee) — la même décision que l'analyse IA automatique,
+ * qui importe ce module (seule arête de core/ai/ vers data/mise/, miseFrontiere.test.mjs T-X2). Toutes les lectures
+ * réussies : la réponse d'avant, à l'octet.
  * -----------------------------------------------------------------------
  */
 
@@ -41,38 +47,82 @@ import { capitalDuMomentLu, baseDeCalcul, vueDuCapital } from './capitalDePierre
 const fini = (x) => typeof x === 'number' && Number.isFinite(x);
 
 /**
+ * Lot A1 (17/11/2026, passe 2 ; vérification de A1, K1 et décision O1) : les lectures utiles à la mise qui peuvent échouer,
+ * dans l'ordre où elles sont dites, et ce que la page et l'IA en disent (« lecture impossible du carnet de paris… »).
+ */
+export const LECTURES_DE_LA_MISE = Object.freeze({
+  carnet: 'du carnet de paris',
+  capital: 'du capital',
+  comptes: 'des fiches de vos comptes',
+  'garde-fous': 'de vos garde-fous',
+  reglage: 'du réglage de la mise',
+  contexte: 'du contexte de la mise (capital, plafonds, paris en attente)'
+});
+
+/** « lecture impossible du carnet de paris et du capital » : ce qui n'a pas pu être lu, dans l'ordre des lectures. */
+export function ceQuiNaPasPuEtreLu(lectures = []) {
+  const mots = Object.keys(LECTURES_DE_LA_MISE).filter((k) => lectures.includes(k)).map((k) => LECTURES_DE_LA_MISE[k]);
+  if (!mots.length) mots.push(LECTURES_DE_LA_MISE.contexte);
+  const liste = mots.length > 1 ? `${mots.slice(0, -1).join(', ')} et ${mots.at(-1)}` : mots[0];
+  return `lecture impossible ${liste}`;
+}
+
+/**
+ * Lot A1 (passe 2, K1 et O1) : LA décision « mise non calculée », la même pour la page du match (miseDuMatch) et pour
+ * l'analyse IA automatique (core/ai/autoMatchAiTrigger.js) : dès qu'une lecture utile à la mise a échoué (carnet, capital,
+ * fiches des comptes, garde-fous, réglage), aucune part ni aucun euro n'est montré — la raison à la place. null sinon.
+ */
+export function miseNonCalculee(contexte) {
+  const lectures = Array.isArray(contexte?.lecturesRatees) ? contexte.lecturesRatees : [];
+  if (!lectures.length) return null;
+  const ce = ceQuiNaPasPuEtreLu(lectures);
+  return { lectures: [...lectures], ceQuiNaPasPuEtreLu: ce, texte: `Mise non calculée : ${ce} — réessayez dans un instant` };
+}
+
+/**
  * Le contexte de la mise, lu UNE fois par requête : le carnet (une lecture), le capital du moment, la base de calcul du
  * moteur, k et s_max du réglage en vigueur, les garde-fous du moment, les fiches des comptes. Ne lève jamais.
+ * Lot A1 (passe 2, K1) : chaque lecture qui échoue est NOMMÉE dans `lecturesRatees` (carnet, capital, comptes, garde-fous,
+ * reglage) — elle ne passe plus pour un carnet vide ou un capital non indiqué (miseNonCalculee).
  */
 export function contexteDeLaMise({ maintenant = Date.now(), sportId = 'football' } = {}) {
+  const ratees = new Set();
   let paris;
   try {
     paris = listBets();
   } catch {
     paris = null;
+    ratees.add('carnet');
   }
   const capital = capitalDuMomentLu({ maintenant, paris });
+  if (capital?.raison === 'capital-illisible') ratees.add('capital');
+  if (capital?.raison === 'carnet-illisible') ratees.add('carnet');
   let reglageMoteur = null;
   try {
     const c = getEngineConfig(sportId);
     reglageMoteur = { kellyFraction: c.kellyFraction, maxStakePercent: c.maxStakePercent };
   } catch {
     reglageMoteur = null;
+    ratees.add('reglage');
   }
   let gardeFous = null;
   try {
     const gf = gardeFousDuMoment(maintenant);
     gardeFous = gf.etat ? { miseMaxParPari: gf.etat.reglage?.miseMaxParPari ?? null, resteSemaine: gf.etat.resteSemaine ?? null } : null;
+    if (gf.probleme) ratees.add(gf.probleme.motif === 'carnet-illisible' ? 'carnet' : 'garde-fous');
   } catch {
     gardeFous = null;
+    ratees.add('garde-fous');
   }
   let comptes = {};
   try {
     comptes = lireComptes().comptes ?? {};
   } catch {
     comptes = {};
+    ratees.add('comptes');
   }
-  return { capital, base: baseDeCalcul(capital), reglageMoteur, gardeFous, comptes, paris: paris ?? [], maintenant };
+  const lecturesRatees = Object.keys(LECTURES_DE_LA_MISE).filter((k) => ratees.has(k));
+  return { capital, base: baseDeCalcul(capital), reglageMoteur, gardeFous, comptes, paris: paris ?? [], maintenant, lecturesRatees };
 }
 
 /** Le bookmaker du conseil : { cle, titre, francais } (les quatre français de l'étape 38, recopiés dans regleDeMise.js). */
@@ -121,6 +171,9 @@ const raisonsDites = (raisons) => (raisons ?? []).filter((r) => r.code !== 'plaf
 export function miseDuMatch({ staking = null, contexte, match = null } = {}) {
   const { capital, reglageMoteur, gardeFous, comptes, paris } = contexte;
   const conseil = staking?.action === 'RECOMMENDED';
+  // Lot A1 (passe 2, O1) : une lecture utile à la mise a échoué — ni part, ni euros : « Mise non calculée : … ».
+  const nonCalculee = conseil ? miseNonCalculee(contexte) : null;
+  if (nonCalculee) return { version: REGLE_DE_MISE_V1.version, conseil, fraction: null, euros: null, capital: vueDuCapital(capital), raisons: [], aBlanc: null, nonCalculee, alerteSeriesLiees: MOTS_DE_LA_MISE.seriesLiees };
   const C = capital?.indique && fini(capital.montant) ? capital.montant : null;
   const euros = conseil && C !== null && fini(staking.stake) ? staking.stake : null;
   // LOT 2 : la décision porte la règle de mise (calculée par le moteur avec le contexte de l'appelant) — la mise rendue
@@ -215,7 +268,14 @@ export function sansEurosInternes(analyse) {
 /** La réponse de l'analyse d'un match : la mise jointe ; sans capital indiqué, aucun euro interne ne sort. */
 export function analyseAvecLaMise(analyse, { contexte, match = null } = {}) {
   const mise = miseDuMatch({ staking: analyse?.staking ?? null, contexte, match });
-  const sortie = contexte.capital?.indique ? sansBase(analyse) : sansEurosInternes(analyse);
+  // Lot A1 (passe 2, O1) : mise non calculée — aucun euro interne ne sort non plus (comme sans capital).
+  const sortie = contexte.capital?.indique && !mise.nonCalculee ? sansBase(analyse) : sansEurosInternes(analyse);
+  // Lot A1 (passe 4, N2) : mise non calculée — la règle de mise de la décision (`regleDeMise` : sa part, ses raisons) ne sort
+  // pas non plus : aucune part du capital dans la réponse (ni pour l'écran, ni pour l'analyse IA demandée par un clic).
+  if (mise.nonCalculee && sortie.staking && typeof sortie.staking === 'object' && 'regleDeMise' in sortie.staking) {
+    const { regleDeMise, ...staking } = sortie.staking;
+    return { ...sortie, staking, mise };
+  }
   return { ...sortie, mise };
 }
 

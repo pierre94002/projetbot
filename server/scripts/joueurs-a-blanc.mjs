@@ -128,7 +128,10 @@ function lancerLEnfant(message, { delaiMs = 3 * 3_600_000 } = {}) {
         reject(new Error(m.erreur));
       }
     });
-    enfant.on('exit', (code) => {
+    // 'close' et non 'exit' (correctif du 09/11/2026 ; lot A3, 17/11/2026) : sous Windows, 'exit' peut arriver AVANT les derniers
+    // messages de l'enfant quand le processus est occupé à lire les morceaux ; 'close' n'arrive qu'une fois le canal vidé, après
+    // le dernier message (mémoire « calculs à part : close, pas exit » ; calculsAPartFin.test.mjs, T-CF5).
+    enfant.on('close', (code) => {
       if (fini) return;
       fini = true;
       clearTimeout(minuterie);

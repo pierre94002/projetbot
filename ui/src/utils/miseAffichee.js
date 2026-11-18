@@ -107,6 +107,9 @@ export function provenanceDuCapital(capital) {
  * `sansCapital` le dit ; `aBlanc` (en gris) seulement quand la règle candidate diffère du conseil, jamais à sa place.
  */
 export function lignesDeLaMise(mise) {
+  // Lot A1 (passe 2, O1) : une lecture utile à la mise a échoué (carnet, capital, comptes, garde-fous, réglage) — la phrase du
+  // serveur seule (« Mise non calculée : lecture impossible du … — réessayez dans un instant »), ni part ni euros.
+  if (mise?.conseil && mise.nonCalculee) return { conseil: true, titre: String(mise.nonCalculee.texte ?? 'Mise non calculée'), euros: null, sansCapital: null, raisons: [], aBlanc: null };
   if (!mise?.conseil) return { conseil: false, titre: null, euros: null, sansCapital: null, raisons: (mise?.raisons ?? []).map((r) => r.texte), aBlanc: null };
   const titre = `${MOTS_DE_LA_MISE.miseConseillee} : ${pourcentDuCapital(mise.fraction)} de votre capital`;
   const indique = Boolean(mise.capital?.indique) && fini(mise.euros);
@@ -132,6 +135,8 @@ export function titreDeLaMise(mise) {
 /** Le texte court d'une mise, en une ligne : « 0,39 % de votre capital · 7,80 € » ou « 0,39 % de votre capital ». */
 export function miseEnUneLigne(mise) {
   if (!mise?.conseil) return null;
+  // Lot A1 (passe 2, O1) : « non calculée : lecture impossible du … — réessayez dans un instant », jamais une part ni un euro.
+  if (mise.nonCalculee) return `non calculée : ${mise.nonCalculee.ceQuiNaPasPuEtreLu ?? 'lecture impossible'} — réessayez dans un instant`;
   const part = `${pourcentDuCapital(mise.fraction)} de votre capital`;
   return mise.capital?.indique && fini(mise.euros) ? `${part} · ${eurosDeMise(mise.euros)}` : part;
 }
@@ -164,6 +169,11 @@ export function misePourLaSelection({ selections = [], staking = null, mise = nu
 export function miseDeLaRevue(staking, reglage = REGLE_DE_MISE_AFFICHEE) {
   if (!staking) return null;
   if (staking.action !== 'RECOMMENDED') return 'pas de mise';
+  // Lot A1 (passe 4, N3) : l'analyse gardée dit ce que la page disait — une mise non calculée (la marque « illisible » de
+  // server/src/core/ai/compactContext.js, CONTEXTE_DE_MISE_ILLISIBLE) n'est jamais recalculée ; la part de la page notée avec
+  // le conseil (`partDuCapital`) est celle qu'on montre ; sinon (une analyse d'avant le lot A1), la part recalculée, comme avant.
+  if (staking.contexteDeLaMise === 'illisible') return 'mise recommandée (part du capital non calculée)';
+  if (typeof staking.partDuCapital === 'number' && Number.isFinite(staking.partDuCapital)) return `mise recommandée : ${pourcentDuCapital(staking.partDuCapital)} du capital`;
   const f = partDuCapital({ ev: staking.ev, cote: staking.odds, reglage });
   return f === null ? 'mise recommandée (part du capital non calculée)' : `mise recommandée : ${pourcentDuCapital(f)} du capital`;
 }

@@ -490,6 +490,25 @@ test('T-L2-7 bis par les VRAIES portes — le vrai serveur, un faux relevé de c
   assert.deepEqual(gb.tirs, ['a-verifier']);
   assert.ok(gb.buts.length > 0 && !gb.buts.includes('a-verifier'), gb.buts.join(', '));
   assert.deepEqual(gb.resultat, [{ classe: 'pinnacle', palier: 'pinnacle', seuil: 0.02 }]);
+  // Lot A1 (17/11/2026 ; C1 de la vérification des corrections) : le câblage de la pastille d'une cote SAISIE (correction 1.7,
+  // saisiesCotes.js, etatDesSaisies) par le vrai module, sur Brighton (essai-b) — une cote de corners et une de buts à + 10 % :
+  // « value » sans contrôle ; corners douteux : la cote de corners « value-secondaire » avec la raison, celle des buts reste
+  // « value » ; score douteux (famille « tout ») et magasin pas à jour : les deux « value-secondaire », la raison dite.
+  assert.ok(r.saisies.pCorners > 0 && r.saisies.pButs > 0, `les probabilités du moteur pour les deux saisies : ${JSON.stringify(r.saisies)}`);
+  const saisieDe = (e, id) => e.saisiesBrighton.find((s) => s.marketId === id) ?? null;
+  const RAISON_CORNERS_B = 'Statistiques impossibles : Brighton & Hove Albion – Everton du 20/09 (fabriqué)';
+  const RAISON_SCORE_B = 'Brighton & Hove Albion – Everton du 20/09 (1-1) : score différent chez football-data (fabriqué)';
+  for (const [nom, e, corners, buts] of [
+    ['sans contrôle', sansControle, { verdict: 'value', aVerifier: null }, { verdict: 'value', aVerifier: null }],
+    ['contrôle retiré', controleRetire, { verdict: 'value', aVerifier: null }, { verdict: 'value', aVerifier: null }],
+    ['corners douteux', cornersDouteux, { verdict: 'value-secondaire', aVerifier: RAISON_CORNERS_B }, { verdict: 'value', aVerifier: null }],
+    ['score douteux', scoreDouteux, { verdict: 'value-secondaire', aVerifier: RAISON_SCORE_B }, { verdict: 'value-secondaire', aVerifier: RAISON_SCORE_B }],
+    ['magasin pas à jour', magasinPasAJour, { verdict: 'value-secondaire', aVerifier: 'Le magasin n’est pas à jour (fabriqué)' }, { verdict: 'value-secondaire', aVerifier: 'Le magasin n’est pas à jour (fabriqué)' }]
+  ]) {
+    assert.equal(e.saisiesBrighton.length, 2, `${nom} : les deux saisies`);
+    assert.deepEqual(saisieDe(e, 'totalCorners'), { marketId: 'totalCorners', ...corners }, `${nom} : la cote de corners saisie`);
+    assert.deepEqual(saisieDe(e, 'totalGoals'), { marketId: 'totalGoals', ...buts }, `${nom} : la cote de buts saisie`);
+  }
   // Dans les cinq états : les MÊMES cotes justes, le même pronostic, les mêmes buts attendus, à l'octet.
   assert.equal(new Set(Object.values(r.etats).map((e) => e.page.probabilites)).size, 1, 'une probabilité a changé avec l’état du contrôle');
   assert.ok(sansControle.page.probabilites.length > 500);

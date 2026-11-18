@@ -16,6 +16,8 @@
  * Depuis le 17/11/2026 (corrections après la vérification des lots d'argent) : un second match, « Brighton and Hove Albion »
  * (l'annuaire dit « Brighton & Hove Albion »), lu par la page dans chaque état ; et son gel de la nuit pendant que ses
  * corners sont douteux (chaque ligne par la famille de son marché).
+ * Lot A1 (17/11/2026) : sur essai-b, une cote de corners et une cote de buts SAISIES à la main (data/saisiesCotes.js), relues
+ * dans chaque état (etatDesSaisies : la pastille suit le « à vérifier » de la famille de SON marché).
  * Ce script ne vérifie rien ; il rend une ligne JSON.
  */
 
@@ -162,6 +164,27 @@ const laPage = (a) => ({
 
 const { familleDuMarche } = await imp('data/aVerifierPourLeMoteur.js');
 const sortie = { ok: true, manCity, liverpool, brighton, etats: {} };
+
+// Lot A1 (17/11/2026 ; vérification des corrections des lots d'argent, C1) : le câblage de la pastille d'une cote SAISIE (correction
+// 1.7, data/saisiesCotes.js, etatDesSaisies) par le vrai module — sur essai-b, sans contrôle, une cote de corners et une cote de buts
+// chez William Hill à + 10 % face au moteur (cote = 1,1 / probabilité du moteur), relues dans chaque état du contrôle (le texte du
+// relecteur « code », verif2/code/scripts/rejeu-suite.mjs.txt).
+const S = await imp('data/saisiesCotes.js');
+const resumeSaisie = (s) => ({ marketId: s.marketId, verdict: s.verdict, aVerifier: s.aVerifier?.texte ?? null });
+const lireSaisies = async () => {
+  S.__oublierMoteur();
+  const e = await S.etatDesSaisies({ matchId: 'essai-b', source: 'odds-api', maintenant: T0, database });
+  return { saisies: e.saisies.map(resumeSaisie), p: Object.fromEntries(e.saisies.map((s) => [s.marketId, s.moteur?.probabilite ?? null])) };
+};
+const saisir = (marketId, sens, ligne, cote) => S.enregistrerSaisie({ matchId: 'essai-b', source: 'odds-api', bookmaker: 'williamhill', marketId, sens, ligne, cote }, { maintenant: T0, database });
+poserLeControle(null);
+await saisir('totalCorners', 'over', 9.5, 2);
+await saisir('totalGoals', 'over', 2.5, 2);
+const premiere = await lireSaisies();
+const coteA10 = (p) => (typeof p === 'number' && p > 0 ? Number((1.1 / p).toFixed(2)) : null);
+sortie.saisies = { pCorners: premiere.p.totalCorners ?? null, pButs: premiere.p.totalGoals ?? null };
+if (coteA10(premiere.p.totalCorners)) await saisir('totalCorners', 'over', 9.5, coteA10(premiere.p.totalCorners));
+if (coteA10(premiere.p.totalGoals)) await saisir('totalGoals', 'over', 2.5, coteA10(premiere.p.totalGoals));
 let instant = T0;
 for (const [nom, aVerifier] of Object.entries(ETATS)) {
   poserLeControle(aVerifier);
@@ -198,7 +221,8 @@ for (const [nom, aVerifier] of Object.entries(ETATS)) {
     opportunites: { lignes: lignesDuMatch.length, vertes: lignesDuMatch.filter((l) => l.verdict?.vert).length, etats: [...new Set(lignesDuMatch.filter((l) => l.verdict).map((l) => l.verdict.etat))].sort() },
     vertes: (vertes?.vertes ?? []).filter((l) => l.matchId === 'essai-a').length,
     gel: nuit ? { echecs: nuit.echecs, calcules: nuit.calcules, ecrits: nuit.ecrits, erreur: nuit.erreur ?? null, derniere: derniere ? { ...derniere } : null } : null,
-    gelBrighton: gelB
+    gelBrighton: gelB,
+    saisiesBrighton: (await lireSaisies()).saisies
   };
 }
 console.log(JSON.stringify(sortie));

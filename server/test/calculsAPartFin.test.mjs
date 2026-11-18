@@ -19,7 +19,10 @@
  *         contexte, joueurs ; les coupes et les débuts ont déjà le leur) : un faux enfant « rafale » (10 gros morceaux puis sa
  *         fin, arrêt aussitôt), le serveur lent (150 ms par morceau) → la fin et les 10 morceaux toujours rendus (trois essais),
  *         le jeton du calcul lourd rendu ;
- *   T-CF4 les mêmes avec un faux enfant muet → rejet « arrêté sans réponse (code 3) », jamais une attente sans fin ; jeton rendu.
+ *   T-CF4 les mêmes avec un faux enfant muet → rejet « arrêté sans réponse (code 3) », jamais une attente sans fin ; jeton rendu ;
+ *   T-CF5 (statique, lot A3 du 17/11/2026) les scripts de banc sous server/scripts qui lancent un enfant (fork) : aucun n'écoute
+ *         plus 'exit' pour conclure ; chacun conclut « sans réponse » sur 'close' ; les six nommés un à un (les débuts depuis le
+ *         10/11, puis cartons-corners, coupes, etape38, joueurs-a-blanc, match-context le 17/11) ; même garde de repli.
  * Aucune base ouverte, aucun réseau : des faux enfants écrits dans un dossier temporaire, effacé à la fin.
  */
 import { test, after } from 'node:test';
@@ -151,6 +154,29 @@ test('T-CF1 (statique) : aucune écoute de « exit » pour conclure, hors de la 
   //    quinze corrigés ; exactement un, son écoute, dans chaque entrée de la liste blanche.
   for (const f of CORRIGES) assert.equal(litterauxExit(f), 0, `${f} : un littéral « exit » hors commentaires (une écoute cachée : events.once, une constante ?) — conclure sur « close »`);
   for (const f of Object.keys(LISTE_BLANCHE)) assert.equal(litterauxExit(f), 1, `${f} : exactement un littéral « exit » attendu (son écoute de la liste blanche)`);
+});
+
+/** Lot A3 (17/11/2026) : les scripts de banc qui lancent un enfant — tous concluent sur 'close' (aucune liste blanche ici). */
+const SCRIPTS = fileURLToPath(new URL('../scripts/', import.meta.url));
+const SCRIPTS_CORRIGES = Object.freeze(['cartons-corners.mjs', 'coupes.mjs', 'debuts-de-saison.mjs', 'etape38.mjs', 'joueurs-a-blanc.mjs', 'match-context.mjs']);
+
+test('T-CF5 (statique, lot A3) : les scripts de banc qui lancent un enfant concluent « sans réponse » sur « close », jamais sur « exit »', () => {
+  const tous = fs
+    .readdirSync(SCRIPTS, { recursive: true })
+    .map((f) => String(f).split(path.sep).join('/'))
+    .filter((f) => /\.(m?js|cjs)$/.test(f))
+    .sort();
+  assert.ok(tous.length > 40, `le relevé a trouvé ${tous.length} scripts sous server/scripts`);
+  const lus = new Map(tous.map((f) => [f, lire(path.relative(SRC, path.join(SCRIPTS, f)))]));
+  const ecouteExit = tous.filter((f) => lus.get(f).exits.length);
+  assert.deepEqual(ecouteExit, [], `un script de banc écoute « exit » pour conclure : passer à « close » (piège du 09/11/2026) — ${ecouteExit.join(', ')}`);
+  const enfants = tous.filter((f) => lus.get(f).enfant);
+  assert.deepEqual(enfants, [...SCRIPTS_CORRIGES].sort(), 'les scripts de banc qui lancent un enfant : exactement les six nommés (un nouveau ? l’ajouter ici)');
+  for (const f of SCRIPTS_CORRIGES) {
+    const l = lus.get(f);
+    assert.ok(l.closes.some((c) => c.includes('sans réponse')), `${f} : ne conclut pas « sans réponse » sur « close »`);
+    assert.equal(litterauxExit(path.relative(SRC, path.join(SCRIPTS, f))), 0, `${f} : un littéral « exit » hors commentaires — conclure sur « close »`);
+  }
 });
 
 const dossier = fs.mkdtempSync(path.join(os.tmpdir(), 'cm-calculs-fin-'));

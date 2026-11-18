@@ -54,6 +54,10 @@
  * (core/engine/stakeSizing.js, partDeMise), importée — la copie temporaire du
  * lot 1a est retirée ; le texte écrit à l'IA est le même, à l'octet
  * (miseLot2.test.mjs, T-L2-6). Ce fichier n'importe toujours rien de data/mise/.
+ * Lot A1 (17/11/2026, pendant l'essai n° 3, hors empreinte) : (1) un refus « à vérifier » est écrit en clair (« aucun pari
+ * conseillé : données du match à vérifier (raison) »), sans les chiffres du conseil refusé ; (2) la part écrite est celle de
+ * la page du match : la règle entière (`regleDeMise.f`) quand la décision la porte, sinon la part pleine, comme avant
+ * (miseLot2.test.mjs, T-L2-6 et T-A1).
  * -----------------------------------------------------------------------
  */
 
@@ -325,6 +329,58 @@ function partDite(f) {
 }
 
 /**
+ * Lot A1 (17/11/2026, pendant l'essai n° 3 ; vérification des lots d'argent, mise C8) : la marque que l'analyse IA AUTOMATIQUE
+ * pose sur un conseil quand le contexte de la mise (capital, plafonds en euros, paris en attente, fiches des comptes, plancher)
+ * n'a pas pu être lu (core/ai/autoMatchAiTrigger.js) : la part n'est alors pas écrite, et la fiche le dit.
+ */
+export const CONTEXTE_DE_MISE_ILLISIBLE = 'illisible';
+/** Lot A1 (passe 2, K1) : ce qui n'a pas pu être lu, quand la marque ne le dit pas (une lecture du contexte qui a levé). */
+const CONTEXTE_NON_LU = 'lecture impossible du contexte de la mise (capital, plafonds, paris en attente)';
+
+/**
+ * Lot A1 (mise C8) : LA part du capital que la page du match montre. La décision calculée AVEC le contexte de la mise (la page
+ * du match, analysis.controller.js ; l'analyse IA automatique depuis le lot A1) porte la règle entière (`regleDeMise.f` :
+ * paris liés, plafonds en euros, plancher) — c'est cette part qui est écrite, la même que la page (data/mise/miseRead.js,
+ * miseDuMatch : fraction = regleDeMise.f). Sans règle (une décision calculée sans contexte) : la part pleine, comme avant, à
+ * l'octet. Contexte illisible (marque ci-dessus) : null, la fiche le dit.
+ */
+export function partPourIA(staking) {
+  if (!staking || typeof staking !== 'object') return null;
+  // Passe 2 (K1, K4) : la marque « illisible » d'abord — aucune part, même si la décision porte une règle.
+  if (staking.contexteDeLaMise === CONTEXTE_DE_MISE_ILLISIBLE) return null;
+  // Passe 2 (K4, K5) : la part de la page notée avec le conseil (`partDuCapital` : l'analyse automatique, miseDuMatch ; la revue
+  // d'après-match, pourIA de matchAiAnalysisService.js, qui la pose depuis la règle gardée).
+  if (typeof staking.partDuCapital === 'number' && Number.isFinite(staking.partDuCapital)) return staking.partDuCapital;
+  const f = staking.regleDeMise?.f;
+  if (typeof f === 'number' && Number.isFinite(f)) return f;
+  return partDuCapitalPourIA({ ev: staking.ev, cote: staking.odds });
+}
+
+/** La part dite à l'IA ; contexte de la mise illisible : « part du capital non calculée : lecture impossible du … ». */
+function partPourIADite(staking) {
+  if (staking?.contexteDeLaMise !== CONTEXTE_DE_MISE_ILLISIBLE) return partDite(partPourIA(staking));
+  const ce = typeof staking.miseNonLue === 'string' && staking.miseNonLue.trim() ? staking.miseNonLue.trim() : CONTEXTE_NON_LU;
+  return `part du capital non calculée : ${ce}`;
+}
+
+/**
+ * Lot A1 (17/11/2026 ; vérification des lots d'argent, « à vérifier » C5) : la phrase écrite à l'IA quand le moteur refuse le
+ * conseil parce que le match est « à vérifier » (core/engine/verdictPari.js, RAISON_A_VERIFIER) — en clair, avec la raison du
+ * contrôle quotidien, SANS les chiffres du conseil refusé (ni sa cote, ni son bookmaker, ni son avantage : ni `conseilRefuse`,
+ * ni les cotes jugées, où ils se retrouvent).
+ */
+const RAISON_DU_REFUS_A_VERIFIER = 'a_verifier';
+/**
+ * Lot A1 (passe 2, K2) : un refus « à vérifier ». Son `edgePercent` (oddsEngine.js : le meilleur avantage jouable, donc celui
+ * du conseil refusé) n'est pas dit non plus : « non dit (match à vérifier) » dans la fiche compacte, null dans l'ancienne.
+ */
+export const refusAVerifier = (staking) => staking?.action === 'PASS' && staking?.reason === RAISON_DU_REFUS_A_VERIFIER;
+export function aucunPariAVerifierDit(staking) {
+  const raison = typeof staking?.aVerifier?.texte === 'string' && staking.aVerifier.texte.trim() ? ` (${staking.aVerifier.texte.trim()})` : '';
+  return `aucun pari conseillé : données du match à vérifier${raison}`;
+}
+
+/**
  * La décision du moteur sans aucun montant en euros (la mise, son plafond, et depuis le lot 2 de l'étape 39 le détail de
  * la règle de mise, dont les raisons citent les plafonds en euros de Pierre), à toute profondeur : l'IA ne lit que la part.
  */
@@ -343,12 +399,17 @@ function sansEuros(v) {
  */
 export function stakingSansEuros(staking) {
   if (!staking || typeof staking !== 'object') return staking ?? null;
+  // Lot A1 (« à vérifier » C5) : un refus « à vérifier » est dit en clair, sans les chiffres du conseil refusé.
+  if (staking.action === 'PASS' && staking.reason === RAISON_DU_REFUS_A_VERIFIER) {
+    return { action: 'PASS', stake: null, reason: RAISON_DU_REFUS_A_VERIFIER, conseil: aucunPariAVerifierDit(staking), ...(staking.limits ? { limits: sansEuros(staking.limits) } : {}) };
+  }
   const s = Object.fromEntries(
     Object.entries(staking)
       .filter(([k, v]) => !(k === 'stake' && v !== null) && k !== 'misePlafonnee' && k !== 'regleDeMise')
       .map(([k, v]) => [k, k === 'stake' ? v : sansEuros(v)])
   );
-  return s.action === 'RECOMMENDED' ? { ...s, partDuCapital: partDuCapitalPourIA({ ev: s.ev, cote: s.odds }) } : s;
+  // Lot A1 (mise C8) : la part de la page du match (la règle entière quand la décision la porte).
+  return s.action === 'RECOMMENDED' ? { ...s, partDuCapital: partPourIA(staking) } : s;
 }
 
 /**
@@ -368,12 +429,14 @@ export function baseDuCalculDe(engineResult) {
 
 function mise(staking) {
   if (!staking || typeof staking !== 'object') return 'aucune information';
+  // Lot A1 (« à vérifier » C5) : la phrase en clair, seule — ni le conseil refusé, ni les cotes jugées (ses chiffres y sont).
+  if (staking.action === 'PASS' && staking.reason === RAISON_DU_REFUS_A_VERIFIER) return `PASS — ${aucunPariAVerifierDit(staking)}`;
   const s = sansEuros(staking);
   const morceaux = [];
   if (s.action === 'RECOMMENDED') {
     const affichee = !estVide(s.displayedOdds) && s.displayedOdds !== s.odds ? ` (affichée ${texte(s.displayedOdds)})` : '';
     morceaux.push(
-      `RECOMMENDED : ${partDite(partDuCapitalPourIA({ ev: s.ev, cote: s.odds }))} sur ${texte(s.label)} à ${texte(s.odds)}${affichee} chez ${texte(s.bookmakerTitle ?? s.bookmaker)} (cote juste ${texte(s.fairOdds)}, EV ${texte(s.ev)}${s.exclusion ? `, ${s.exclusion}` : ''})`
+      `RECOMMENDED : ${partPourIADite(staking)} sur ${texte(s.label)} à ${texte(s.odds)}${affichee} chez ${texte(s.bookmakerTitle ?? s.bookmaker)} (cote juste ${texte(s.fairOdds)}, EV ${texte(s.ev)}${s.exclusion ? `, ${s.exclusion}` : ''})`
     );
   } else if (s.action) {
     morceaux.push(`${s.action}${s.reason ? ` (${s.reason})` : ''}`);
@@ -389,7 +452,7 @@ function mise(staking) {
   }
   if (s.limits) morceaux.push(`seuils : ${enLigne(s.limits)}`);
   const connues = ['action', 'stake', 'reason', 'recommended', 'candidates', 'limits'];
-  if (s.action === 'RECOMMENDED') connues.push('outcome', 'label', 'odds', 'displayedOdds', 'bookmaker', 'bookmakerTitle', 'fairOdds', 'ev', 'exclusion');
+  if (s.action === 'RECOMMENDED') connues.push('outcome', 'label', 'odds', 'displayedOdds', 'bookmaker', 'bookmakerTitle', 'fairOdds', 'ev', 'exclusion', 'contexteDeLaMise', 'partDuCapital', 'miseNonLue');
   const r = reste(s, connues);
   if (r) morceaux.push(`autres : ${r}`);
   return morceaux.length ? morceaux.join(' ; ') : 'aucune information';
@@ -415,7 +478,7 @@ function blocMoteur(es, { home, away }) {
   const m = es.market ?? {};
   const marche = [m.odds1, m.oddsDraw, m.odds2].some((x) => !estVide(x)) ? `1 ${texte(m.odds1)} · N ${texte(m.oddsDraw)} · 2 ${texte(m.odds2)}` : 'aucune';
   lignes.push(
-    `1N2 — cote juste du moteur (trueOdds) : 1 ${texte(t.home)} · N ${texte(t.draw)} · 2 ${texte(t.away)} ; cotes du marché (market) : ${marche} ; edgePercent : ${estVide(es.edgePercent) ? 'aucun' : `${texte(es.edgePercent)} %`}`
+    `1N2 — cote juste du moteur (trueOdds) : 1 ${texte(t.home)} · N ${texte(t.draw)} · 2 ${texte(t.away)} ; cotes du marché (market) : ${marche} ; edgePercent : ${refusAVerifier(es.staking) ? 'non dit (match à vérifier)' : estVide(es.edgePercent) ? 'aucun' : `${texte(es.edgePercent)} %`}`
   );
   lignes.push(`Mise (staking) : ${mise(es.staking)}`);
   const se = es.statExpectations;

@@ -541,7 +541,8 @@ test('étape 27 — les TÉMOINS : `temoins: ["scoreExact"]` reste HORS de l’e
   assert.notEqual(empreinteDeLaCandidate({ ...base, modifications: { football: { modeleDeButs: reglagesDuModele({ rho: -0.06 }) } } }), empreinteDeLaCandidate(base));
 });
 
-test('étape 27 — la phrase EN MOTS de la candidate (`enMots`) : facultative, rendue telle quelle, HORS de l’empreinte (comme variantes, vues et témoins) ; vide ou sur plusieurs lignes, refusée ; la candidate du code garde son empreinte f01dd8496f56a415', async () => {
+// Lot A1 (17/11/2026, M4) : le titre dit l'empreinte de la candidate EN SERVICE (aides/enService.mjs), plus celle d'avant les lots 2.
+test(`étape 27 — la phrase EN MOTS de la candidate (« enMots ») : facultative, rendue telle quelle, HORS de l’empreinte (comme variantes, vues et témoins) ; vide ou sur plusieurs lignes, refusée ; la candidate du code garde son empreinte en service (${EMPREINTE_EN_SERVICE.candidate})`, async () => {
   const { CANDIDATE_EN_ESSAI } = await import('../src/core/engine/engineVersions.js');
   const base = { id: 'buts-unique-essai', etape: '27', quoi: 'Modèle de buts unique (Poisson et Dixon-Coles, rho −0,05)', modifications: { football: { modeleDeButs: reglagesDuModele() } }, marches: ['totalGoals'] };
   const avec = { ...base, enMots: 'Les pourcentages de buts partent des cotes.' };

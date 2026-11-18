@@ -56,6 +56,9 @@ import { modeBudget, lireFavoris, estFavori, favorisDabord, noterEffetEconome } 
 import { gelerAnalyse, ORIGINES } from '../../data/enregistreurs/gelPronostics.js';
 import { env } from '../../config/env.js';
 import { preparerAVerifierDuConseilParNoms, avecAVerifierPourLeMoteur } from '../../data/aVerifierPourLeMoteur.js';
+// Lot A1 (17/11/2026, pendant l'essai n° 3 ; l'essai 27 est jugé, ce fichier est libre) : le contexte de la mise, lu comme la page.
+import { contexteDeLaMise, contexteDuMoteur, miseDuMatch, miseNonCalculee, ceQuiNaPasPuEtreLu } from '../../data/mise/miseRead.js';
+import { CONTEXTE_DE_MISE_ILLISIBLE } from './compactContext.js';
 
 const FENETRE_AVANT_MATCH_MS = 48 * 60 * 60 * 1000;
 /**
@@ -98,14 +101,78 @@ const PANNES_CONSECUTIVES_MAX = 3;
 // E du plan, correction 7 : data/enregistreurs/gelPronostics.js) — avec la
 // composition qu'elle a lue. Mis en file, écrit quand le verrou est libre ;
 // un gel raté n'empêche jamais l'analyse.
-async function calculerEngineResult(match, { lineups = null, origine = ORIGINES.avance } = {}) {
-  const enrichi = await enrichMatchWithRealAverages(match, { sansRepliPayant: true });
+/** Le gel de l'analyse en service : seulement si les enregistreurs et l'actualisation sont allumés (inchangé). */
+function gelerEnService({ match, engineResult, lineups, origine, aVerifier }) {
+  if (env.enregistreurs?.enabled && env.matchStatsRefresh.enabled) gelerAnalyse({ match, engineResult, lineups, origine, aVerifier });
+}
+
+/** Le contexte de la mise lu comme la page du match (analysis.controller.js). */
+const lireLeContexteDeMise = () => contexteDeLaMise({ sportId: 'football' });
+
+/** L'enrichissement du match en service : jamais de repli payant dans une chaîne automatique. */
+const enrichirSansRepliPayant = (match) => enrichMatchWithRealAverages(match, { sansRepliPayant: true });
+
+/**
+ * Lot A1 (passe 2, K6) : exporté, avec ses lectures INJECTABLES pour les essais (`lire` le contexte de la mise, `geler`
+ * l'analyse, `enrichir` le match) ; sans elles, le comportement en service, inchangé (miseLot2.test.mjs, T-A1 mise, l'appelle
+ * dans une copie isolée).
+ */
+export async function calculerEngineResult(match, { lineups = null, origine = ORIGINES.avance, lire = lireLeContexteDeMise, geler = gelerEnService, enrichir = enrichirSansRepliPayant } = {}) {
+  // Lot A1 (17/11/2026, vérification des lots d'argent, mise C8) : le contexte de la mise est lu comme la page du match
+  // (analysis.controller.js : contexteDeLaMise, puis contexteDuMoteur) et joint au match donné au moteur — la part écrite à
+  // l'IA est celle de la page (compactContext.js, partPourIA). Le gel de l'analyse reçoit le même match qu'avant, et rien de
+  // ce qu'il écrit ne dépend de la mise (miseLot2.test.mjs, T-A1).
+  const lu = avecLeContexteDeMise(await enrichir(match), { lire });
+  const enrichi = lu.match;
   // Étape 38 (lot 2a, 16/11/2026) : aucun conseil de pari sur un match « à vérifier » — la donnée du contrôle quotidien est
   // jointe au match donné au moteur (data/aVerifierPourLeMoteur.js) ; l'IA lit alors « aucun pari conseillé », comme la page.
   const aVerifier = preparerAVerifierDuConseilParNoms()(enrichi);
   const engineResult = await analyzeMatch(avecAVerifierPourLeMoteur(enrichi, aVerifier), getEngineConfig('football'), getTiltState(), getSport('football'));
-  if (env.enregistreurs?.enabled && env.matchStatsRefresh.enabled) gelerAnalyse({ match, engineResult, lineups, origine, aVerifier });
-  return engineResult;
+  geler({ match, engineResult, lineups, origine, aVerifier });
+  return resultatPourLIA(engineResult, lu);
+}
+
+/**
+ * Lot A1 (mise C8) : le match avec le contexte de la mise lu comme sur la page du match (`contexteDeMise`, data/mise/miseRead.js :
+ * capital du moment, paris en attente sur CE match, plafonds en euros, fiches des comptes, plancher). Passe 2 (K1) : une lecture
+ * utile à la mise qui a échoué (`lecturesRatees` de contexteDeLaMise : carnet, capital, comptes, garde-fous, réglage) donne
+ * `contexteLu: false` et la nomme (`miseNonLue`, miseNonCalculee : la même décision que la page) ; le match porte alors le
+ * contexte lu, comme sur la page. Une lecture qui lève : le match tel quel. `lire` : pour les essais.
+ */
+export function avecLeContexteDeMise(match, { lire = lireLeContexteDeMise } = {}) {
+  let contexte;
+  try {
+    contexte = lire();
+    const lu = { ...match, contexteDeMise: contexteDuMoteur(contexte, match) };
+    const nonLue = miseNonCalculee(contexte);
+    if (nonLue) return { match: lu, contexteLu: false, contexte, lecturesRatees: nonLue.lectures, miseNonLue: nonLue.ceQuiNaPasPuEtreLu };
+    return { match: lu, contexteLu: true, contexte, lecturesRatees: [] };
+  } catch {
+    return { match, contexteLu: false, lecturesRatees: ['contexte'], miseNonLue: ceQuiNaPasPuEtreLu(['contexte']) };
+  }
+}
+
+/**
+ * Lot A1 (mise C8) : le résultat du moteur tel que l'analyse IA le reçoit — un objet neuf, le résultat du moteur n'est jamais
+ * modifié. Contexte illisible : le conseil porte la marque CONTEXTE_DE_MISE_ILLISIBLE et ce qui n'a pas pu être lu (`miseNonLue` ;
+ * la fiche écrit « part du capital non calculée : lecture impossible du … »). Contexte lu : le conseil porte `partDuCapital`,
+ * LA part de la page (miseDuMatch, data/mise/miseRead.js : la règle, ou la mise ramenée par un plafond du moment posé après
+ * elle — K5) ; avec le capital indiqué, `mise.capital` (la base du calcul gardée avec l'analyse, compactContext.js
+ * baseDuCalculDe, est alors le capital — la mise du moteur a été calculée sur lui ; jamais envoyée à l'IA).
+ */
+export function resultatPourLIA(engineResult, lu) {
+  if (!engineResult || typeof engineResult !== 'object') return engineResult;
+  const conseil = engineResult.staking?.action === 'RECOMMENDED';
+  if (!lu?.contexteLu) {
+    if (!conseil) return engineResult;
+    return { ...engineResult, staking: { ...engineResult.staking, contexteDeLaMise: CONTEXTE_DE_MISE_ILLISIBLE, miseNonLue: lu?.miseNonLue ?? ceQuiNaPasPuEtreLu(['contexte']) } };
+  }
+  const c = lu.match?.contexteDeMise?.capital;
+  const avecCapital = c?.indique && typeof c.montant === 'number' && Number.isFinite(c.montant) ? { mise: { capital: { indique: true, montant: c.montant } } } : {};
+  if (!conseil || !lu.contexte) return { ...engineResult, ...avecCapital };
+  const f = miseDuMatch({ staking: engineResult.staking, contexte: lu.contexte, match: lu.match }).fraction;
+  const part = typeof f === 'number' && Number.isFinite(f) ? { partDuCapital: f } : {};
+  return { ...engineResult, ...avecCapital, staking: { ...engineResult.staking, ...part } };
 }
 
 /**

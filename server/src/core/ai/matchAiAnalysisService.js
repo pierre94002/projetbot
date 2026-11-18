@@ -7,7 +7,7 @@ import {
   SUBMIT_PRE_MATCH_ANALYSIS_TOOL,
   SUBMIT_POST_MATCH_REVIEW_TOOL
 } from './matchAiAnalysisPrompt.js';
-import { FICHES, formeDeLaFiche, marchesPourIA, cleMarche, rattacherAuxMarches, stakingSansEuros, baseDuCalculDe } from './compactContext.js';
+import { FICHES, formeDeLaFiche, marchesPourIA, cleMarche, rattacherAuxMarches, stakingSansEuros, baseDuCalculDe, refusAVerifier, CONTEXTE_DE_MISE_ILLISIBLE } from './compactContext.js';
 import { lireDeroule } from './derouleDuMatch.js';
 import { commentaireDuMatch } from '../../data/providers/fotMobCommentaire.js';
 import { env } from '../../config/env.js';
@@ -197,6 +197,25 @@ function curateEngineSummary(engineResult, { sansApport = null } = {}) {
   return { ...resume, marketPredictions: resume.marketPredictions.filter((m) => !sansApport.has(typeDeMarche(m))) };
 }
 
+/**
+ * Lot A1 (passe 4, N1) : l'analyse IA DEMANDÉE PAR UN CLIC reçoit la réponse de la page du match (ui : UpcomingMatchView.vue,
+ * `engineResult: analyse.value.result`), qui porte LA décision de la page (`mise`, data/mise/miseRead.js, miseDuMatch). Sur un
+ * conseil, l'IA lit donc la même chose que la page : une mise non calculée (une lecture ratée) → la marque « illisible » et ce
+ * qui n'a pas pu être lu (compactContext.js, partPourIADite : « part du capital non calculée : … ») ; sinon la part de la page
+ * (`mise.fraction`, plafond du moment compris). Sans `mise.fraction` (l'analyse automatique, qui note déjà la part ; un appel
+ * sans la page) : la décision telle quelle, comme avant.
+ */
+function stakingDeLaPage(engineResult) {
+  const staking = engineResult.staking ?? null;
+  const mise = engineResult.mise;
+  if (!staking || typeof staking !== 'object' || staking.action !== 'RECOMMENDED' || !mise || typeof mise !== 'object' || !('fraction' in mise)) return staking;
+  if (mise.nonCalculee) {
+    const ce = mise.nonCalculee.ceQuiNaPasPuEtreLu;
+    return { ...staking, contexteDeLaMise: CONTEXTE_DE_MISE_ILLISIBLE, ...(typeof ce === 'string' && ce.trim() ? { miseNonLue: ce } : {}) };
+  }
+  return typeof mise.fraction === 'number' && Number.isFinite(mise.fraction) ? { ...staking, partDuCapital: mise.fraction } : staking;
+}
+
 function resumeDuMoteur(engineResult) {
   return {
     label: engineResult.label ?? null,
@@ -204,7 +223,8 @@ function resumeDuMoteur(engineResult) {
     trueOdds: { home: engineResult.trueOdds?.home, draw: engineResult.trueOdds?.draw, away: engineResult.trueOdds?.away },
     market: { odds1: engineResult.market?.odds1, oddsDraw: engineResult.market?.oddsDraw, odds2: engineResult.market?.odds2 },
     edgePercent: engineResult.edgePercent ?? null,
-    staking: engineResult.staking ?? null,
+    // Lot A1 (passe 4, N1) : la décision de la page quand le résultat la porte (stakingDeLaPage).
+    staking: stakingDeLaPage(engineResult),
     // Corners, tirs et tirs cadrés attendus de chaque équipe (cf. sports/football/statMarkets.js).
     statExpectations: engineResult.statExpectations ?? null,
     // Le pronostic du moteur sur CHAQUE marché joué (cf. sports/football/markets.js) :
@@ -242,14 +262,28 @@ function avecLaVersion(engineSummary, engineResult) {
  * mise, ni le détail de la règle de mise dont les raisons citent les plafonds en euros de Pierre (étape 39, lot 2 : ces
  * deux champs sont neufs, l'IA ne les a jamais lus — le message de la revue reste celui d'avant, à l'octet).
  */
-function pourIA(engineSnapshot) {
+function pourIA(engineSnapshot, { ancienne = false } = {}) {
   if (!engineSnapshot || typeof engineSnapshot !== 'object') return engineSnapshot;
   const { engineVersion, baseDuCalcul, ...resume } = engineSnapshot;
+  let sortie = resume;
   if (resume.staking && typeof resume.staking === 'object' && 'regleDeMise' in resume.staking) {
     const { regleDeMise, ...staking } = resume.staking;
-    return { ...resume, staking };
+    // Lot A1 (passe 2, K4) : la part de la règle gardée est notée avant que son détail ne soit retiré — la revue lit la même
+    // part que l'avant-match (compactContext.js, partPourIA) ; une part déjà notée (l'analyse automatique) reste.
+    const f = regleDeMise?.f;
+    const dejaNotee = typeof staking.partDuCapital === 'number' && Number.isFinite(staking.partDuCapital);
+    sortie = { ...resume, staking: !dejaNotee && typeof f === 'number' && Number.isFinite(f) ? { ...staking, partDuCapital: f } : staking };
   }
-  return resume;
+  if (!ancienne) return sortie;
+  // Lot A1 (passe 2, K3 et K2) : la revue en ANCIENNE forme reçoit la décision par le même filtre que l'ancienne fiche
+  // d'avant-match (stakingSansEuros : ni euros, ni plafond ; un refus « à vérifier » en clair, sans le conseil refusé ni les
+  // cotes jugées), et l'avantage d'un refus « à vérifier » n'y est pas dit (edgePercent null).
+  return { ...ancienneSansLeRefus(sortie), ...('staking' in sortie ? { staking: stakingSansEuros(sortie.staking) } : {}) };
+}
+
+/** Lot A1 (passe 2, K2) : l'ancienne forme ne dit pas l'avantage d'un refus « à vérifier » (celui du conseil refusé). */
+function ancienneSansLeRefus(resume) {
+  return refusAVerifier(resume?.staking) ? { ...resume, edgePercent: null } : resume;
 }
 
 // Le rattachement des avis et des bilans de l'IA aux marchés du moteur
@@ -620,7 +654,7 @@ export async function preparerAnalyseAvantMatch({ matchId, home, away, league, e
     if (compo) context.lineups = compositionPourIA(compo);
     marches = engineSummary.marketPredictions;
     // Étape 39 (lot 2) : la décision du moteur y passe par le même filtre que la fiche compacte — aucun euro, la part du capital.
-    demande = buildPreMatchAnalysisRequest({ home, away, league, engineSummary: { ...engineSummary, staking: stakingSansEuros(engineSummary.staking) }, context, experience });
+    demande = buildPreMatchAnalysisRequest({ home, away, league, engineSummary: { ...ancienneSansLeRefus(engineSummary), staking: stakingSansEuros(engineSummary.staking) }, context, experience });
   } else {
     // Étape 21 : les types de marché où l'IA n'apporte rien (carnet de la nuit) sortent de sa liste — et de son
     // bilan, inutile pour des marchés qu'elle ne commente plus ; une ligne de la fiche le lui dit. Carnet absent
@@ -911,7 +945,7 @@ export function preparerRevueApresMatch({ prior, result, fiche = null, commentai
       away: prior.awayName,
       league: prior.league,
       priorAnalysis: prior.analysis,
-      engineSummary: pourIA(prior.engineSnapshot),
+      engineSummary: pourIA(prior.engineSnapshot, { ancienne: true }),
       result: resultat,
       marketOutcomes,
       matchStats: envoye

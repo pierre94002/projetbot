@@ -32,7 +32,7 @@ import { preparerCopie, executer, SERVEUR, RACINE_ESSAIS, MANIFESTE_ECHANTILLON 
 import { EMPREINTE_EN_SERVICE, EMPREINTE_AVANT_LOTS_2 } from './aides/enService.mjs'; // lots 2 (étape 39 lot 2, 16/11) : voir PORTE_1_D_UNE_AUTRE_CANDIDATE
 import * as D from './aides/donneesEcransParis.mjs';
 import { CANDIDATE_EN_ESSAI, empreinteDeLaCandidate, porte1DeLaCandidate } from '../src/core/engine/engineVersions.js';
-import { FIABILITE_SCORE_MODELE_DE_BUTS } from '../src/core/engine/noteDuModeleDeButs.js';
+import { FIABILITE_SCORE_MODELE_DE_BUTS, NOTE_DU_MODELE_DE_BUTS } from '../src/core/engine/noteDuModeleDeButs.js';
 import { blocDuBancEtape27, LIGNES_DU_BANC_27, PHRASE_SANS_XG } from '../src/data/roadmap/bancEtape27.js';
 import { etatFeuilleDeRoute } from '../src/data/roadmap/feuilleDeRoute.js';
 import { etatPourFeuilleDeRoute } from '../src/bench/trialsRegistry.js';
@@ -503,6 +503,9 @@ test('le Repérage : la pastille du régime par match et, sur la colonne 2,5, la
  * empreinte CONTIENT celle du code du moteur. Dès qu’un lot DÉCLARE une empreinte autre que le départ (les constantes déclarées,
  * jamais l’empreinte relue par le code), la candidate du code n’est plus celle que le banc a mesurée : l’essai de la carte « avec sa
  * porte 1 » est sauté avec sa raison. Un moteur changé SANS déclaration le fait encore rougir (avec D4 de declarationsLots2).
+ * Lot A1 (17/11/2026, E17) : le saut est DÉFAIT — la carte « avec sa porte 1 » est rendue pour l'empreinte de la note (celle que le
+ * banc a mesurée), et la carte de la candidate du code d'aujourd'hui (sans porte 1) est essayée à part : « Porte 1 au banc d'essai :
+ * pas mesurée pour cette candidate », jamais « Porte 1 franchie ». Cette constante ne sert plus qu'à cet essai-là.
  */
 const PORTE_1_D_UNE_AUTRE_CANDIDATE = (EMPREINTE_EN_SERVICE.moteur !== EMPREINTE_AVANT_LOTS_2.moteur || EMPREINTE_EN_SERVICE.candidate !== EMPREINTE_AVANT_LOTS_2.candidate)
   ? 'la porte 1 du banc a été mesurée pour la candidate de l’essai 27 (empreinte du départ) : depuis une version neuve du moteur, la candidate du code n’est plus celle-là'
@@ -512,7 +515,10 @@ const PORTE_1_D_UNE_AUTRE_CANDIDATE = (EMPREINTE_EN_SERVICE.moteur !== EMPREINTE
 function candidateAuMoment({ essai = null, premiersChiffres = null, jugement = null } = {}) {
   const c = CANDIDATE_EN_ESSAI;
   const empreinte = empreinteDeLaCandidate(c);
-  const porte1 = porte1DeLaCandidate(c, empreinte);
+  // Lot A1 (17/11/2026, E17) : la carte est rendue pour la candidate TELLE QUE LE BANC L'A MESURÉE (l'empreinte de la note) ;
+  // depuis une version neuve du moteur, l'empreinte du jour n'est plus celle-là, et la carte du jour (sans porte 1) est essayée
+  // à part, plus bas.
+  const porte1 = porte1DeLaCandidate(c, NOTE_DU_MODELE_DE_BUTS.porte1.candidate.empreinte);
   return JSON.parse(JSON.stringify({ ...c, origine: 'code', origineDite: 'déclarée dans le code', horizon: c.horizon, empreinte, statut: jugement ? 'jugee' : essai ? 'en-essai' : 'pas-en-essai', essai, premiersChiffres, jugement, banc: null, ...(porte1 ? { porte1 } : {}) }));
 }
 const calib = (biais, n, verdict) => ({ pronostics: n, matchs: n, biais, ece: Math.abs(biais), ...(verdict ? { verdict } : {}) });
@@ -545,12 +551,20 @@ const JUGEMENT = {
   regimes: PREMIERS.regimes
 };
 
-test('Réglages › la carte de la candidate du modèle de buts : la porte 1 du banc et sa réserve ACCEPTÉE telle quelle, un chiffre par famille, la calibration, les régimes, la porte de l’adoption, l’horizon et « pas prouvé est l’issue normale »', { ...options, skip: options.skip || PORTE_1_D_UNE_AUTRE_CANDIDATE || false }, async () => {
+test('Réglages › la carte de la candidate du modèle de buts : la porte 1 du banc et sa réserve ACCEPTÉE telle quelle, un chiffre par famille, la calibration, les régimes, la porte de l’adoption, l’horizon et « pas prouvé est l’issue normale »', options, async () => {
   const { rendre, composants } = contexte;
   // Avant la mise à blanc.
   const declaree = candidateAuMoment();
   assert.ok(V.estUnModeleDeButs(declaree));
   assert.equal(declaree.porte1.franchie, true, 'la porte 1 mesurée pour CETTE candidate');
+  // Lot A1 (E17) : la candidate du code AUJOURD'HUI — sans porte 1 dès qu'un lot a déclaré une version neuve : la carte le dit,
+  // sans avertissement, et ne dit jamais « Porte 1 franchie ».
+  assert.equal(porte1DeLaCandidate(CANDIDATE_EN_ESSAI, empreinteDeLaCandidate(CANDIDATE_EN_ESSAI)) === null, PORTE_1_D_UNE_AUTRE_CANDIDATE !== null);
+  const { porte1: porte1Otee, ...sansPorte1 } = declaree;
+  const rs = await rendre(composants.Candidate, { candidate: sansPorte1 });
+  assert.deepEqual(rs.avertissements, []);
+  assert.match(rs.texte, /Porte 1 au banc d.essai : pas mesurée pour cette candidate/);
+  assert.doesNotMatch(rs.texte, /Porte 1 franchie/);
   const r0 = await rendre(composants.Candidate, { candidate: declaree });
   assert.deepEqual(r0.avertissements, []);
   assert.ok(r0.html.includes(MARQUE));

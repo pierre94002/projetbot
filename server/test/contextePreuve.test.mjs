@@ -18,7 +18,13 @@
  *       lus sont ceux d'après le jour du lancement et d'avant le jour de la nuit ; la base au jour J = celle du banc ;
  * T-P1  la frontière : le module n'a ni horloge, ni hasard, ni écriture de la base ; le registre n'est écrit qu'à un
  *       endroit, par le serveur ; les coefficients FIGÉS (pli 1 du banc) et les horizons de la note ; jamais le faux
- *       facteur ; rien du chemin de nuit de l'essai de l'étape 27 ne le cite.
+ *       facteur ; rien du chemin de nuit de l'essai de l'étape 27 ne le cite ;
+ * T-A2  (lot A2, 17/11/2026, le geste du 1c de la 35) l'horizon, le principal et la garde comptent les lignes que le juge
+ *       GARDERA (hors des fenêtres déjà vues, dont la fenêtre « moteur » d'une autre étape lancée) ; la phrase « N au total,
+ *       dont M écartés (déjà vus par une version du moteur) » ; le démenti d'un principal « moins bon » déjà au registre jamais
+ *       perdu (transaction de sa nuit en échec, garde arrêtée ou non) ; les fenêtres calculées dans le processus à part ; le
+ *       regard de novembre 2026 : aucune fenêtre ne finit après le lancement réel (rien de faussé). T-N6 le tient aussi dans
+ *       le VRAI processus à part : le magasin fabriqué jusqu'au 23/09/2026 est déjà vu, ses lignes ne sont jamais comptées.
  * Aucune base ouverte dans le processus du test (le magasin fabriqué vit dans une copie isolée) ; aucun appel à Claude.
  */
 import { test, after } from 'node:test';
@@ -34,7 +40,8 @@ import { GARDE_MENSUELLE } from '../src/data/contexte/reglagesContexte.js';
 import { FORMES } from '../src/data/contexte/bancDuContexte.js';
 import { zPour } from '../src/bench/guard.js';
 import { MESURES } from '../src/bench/metrics.js';
-import { enregistrerLancements, jugementsDe } from '../src/bench/trialsRegistry.js';
+import { enregistrerLancements, jugementsDe, fenetresVues } from '../src/bench/trialsRegistry.js';
+import { LANCEMENTS } from '../src/bench/lancements.js';
 
 const SRC = path.join(SERVEUR, 'src');
 const UI = path.join(SERVEUR, '..', 'ui', 'src');
@@ -45,6 +52,15 @@ const IDS = ['repos-court', 'enchainement-serre', 'deplacement-altitude'];
 const LANCEMENT = '2026-08-25';
 /** L'horizon d'essai : 18 jours ; 6, 6 et 5 matchs concernés (l'altitude l'atteint plus tard que les deux autres). */
 const HORIZON = { jours: 18, matchs: { 'repos-court': 6, 'enchainement-serre': 6, 'deplacement-altitude': 5 } };
+/**
+ * Lot A2 (17/11/2026) : l'horizon compte les lignes que le juge GARDERA. Le magasin fabriqué commence le 01/08/2026 : ses matchs
+ * jusqu'au 23/09/2026 sont dans les fenêtres déjà vues de l'étape 32 (DONNEES_VUES et les vues de la 32 : jusqu'au 2026-09-23),
+ * écartés par le juge ; les nuits vont donc plus loin (magasin de 110 jours, nuits jusqu'au 10/11/2026) pour que chaque facteur
+ * atteigne son horizon d'essai sur des lignes gardées (avant A2 : 75 jours, nuits jusqu'au 11/10, l'horizon comptait les écartées).
+ */
+const DERNIER_JOUR = '2026-11-10';
+const JOURS_DU_MAGASIN = 110;
+const FIN_DES_VUES = '2026-09-23';
 
 const uneFois = (f) => {
   let v;
@@ -53,7 +69,7 @@ const uneFois = (f) => {
 const nuits = uneFois(() => {
   const copie = preparerCopie({ base: false });
   try {
-    const r = executer(copie, SCRIPT, { args: ['nuits', JSON.stringify({ horizon: HORIZON, lancement: LANCEMENT, dernierJour: '2026-10-11' })], timeout: 600_000 });
+    const r = executer(copie, SCRIPT, { args: ['nuits', JSON.stringify({ horizon: HORIZON, lancement: LANCEMENT, dernierJour: DERNIER_JOUR, jours: JOURS_DU_MAGASIN })], timeout: 600_000 });
     assert.equal(r.code, 0, `nuits :\n${r.erreurs.slice(-3000)}\n${r.sortie.slice(-1500)}`);
     assert.equal(r.reseau, false, 'aucun appel réseau');
     assert.ok(r.json, r.sortie.slice(-500));
@@ -118,6 +134,9 @@ test('T-N6 les premiers chiffres ne sont JAMAIS au registre (des comptes, ni gai
         assert.equal(auRegistre.length, 1);
         assert.equal(n.etat.principal[id].le, new Date(n.maintenant).toISOString());
         assert.match(n.phrase, /jugement principal pris cette nuit pour/);
+        // Lot A2 : le principal juge exactement les lignes que l'horizon a comptées (les gardées), ni plus ni moins.
+        const v = n.etat.preuve.variantes.find((x) => x.id === id);
+        assert.deepEqual([auRegistre[0].matchs, auRegistre[0].ecartees], [v.matchs, v.ecarteesDejaVues], `${n.jourD} ${id} : jugé sur le nombre compté`);
       } else {
         assert.ok(!n.preuve.principauxCalcules.includes(id), `${n.jourD} ${id} : jamais refait (${JSON.stringify(n.preuve.principauxCalcules)})`);
         assert.equal(auRegistre.length, 1, `${n.jourD} ${id} : toujours un seul principal au registre`);
@@ -131,6 +150,11 @@ test('T-N6 les premiers chiffres ne sont JAMAIS au registre (des comptes, ni gai
     // L'horizon refait ici, sans le code : les jours depuis le lancement ET les matchs concernés.
     const jours = Math.round((Date.parse(`${n.jourD}T00:00:00Z`) - Date.parse(`${LANCEMENT}T00:00:00Z`)) / 86_400_000);
     for (const v of n.etat.preuve.variantes) assert.deepEqual([v.jours, v.atteint], [jours, v.matchs >= HORIZON.matchs[v.id] && jours >= HORIZON.jours], `${n.jourD} ${v.id}`);
+    // Lot A2 : le VRAI processus à part écarte les lignes déjà vues (jusqu'au 23/09/2026) : rien de compté avant, et le reste dit à part.
+    for (const v of n.etat.preuve.variantes) {
+      assert.ok(Number.isInteger(v.ecarteesDejaVues) && v.ecarteesDejaVues >= 0, `${n.jourD} ${v.id}`);
+      if (n.jourD <= '2026-09-24') assert.equal(v.matchs, 0, `${n.jourD} ${v.id} : toutes ses lignes sont déjà vues`);
+    }
     if (avant) for (const v of n.etat.preuve.variantes) assert.ok(v.matchs >= avant.find((x) => x.id === v.id).matchs, 'les comptes ne reculent pas');
     avant = n.etat.preuve.variantes;
     // La garde : trop peu de matchs (200 au moins) — aucun regard compté, refaite la nuit suivante.
@@ -140,6 +164,9 @@ test('T-N6 les premiers chiffres ne sont JAMAIS au registre (des comptes, ni gai
     if (i < Math.min(...Object.values(premiere))) assert.match(n.phrase, /rien n’est jugé avant l’horizon \(des comptes seulement\)/);
   });
   assert.match(s.nuits.at(-1).phrase, /jugement principal déjà pris \(jamais refait\)/);
+  // Lot A2 : des lignes écartées par le processus à part, dites dans la phrase tant que le facteur attend son horizon.
+  assert.ok(s.nuits.some((n) => n.jourD > FIN_DES_VUES && n.etat.preuve.variantes.some((v) => v.ecarteesDejaVues > 0)), 'des lignes déjà vues écartées');
+  assert.ok(s.nuits.some((n) => /au total, dont \d+ écartés? \(déjà vus? par une version du moteur\)/.test(n.phrase)), 'la phrase dit les écartés');
   assert.ok(s.nuits.every((n) => n.blocMaxMs < 300), `le serveur jamais tenu plus de 300 ms : ${s.nuits.map((n) => n.blocMaxMs).join(', ')}`);
 });
 
@@ -318,4 +345,113 @@ test('T-P1 la frontière de la preuve : ni horloge, ni hasard, ni écriture de l
   for (const f of ['data/enregistreurs/gelPronostics.js', 'data/enregistreurs/depot.js', 'data/enregistreurs/moteurABlanc.js', 'bench/essaiCandidate.js', 'core/engine/engineVersions.js', 'core/engine/engineConfig.js']) {
     assert.doesNotMatch(lire(...f.split('/')), /preuveDuContexte|contexteNuit|contexteEnfant/, f);
   }
+});
+
+// ======================================================================== T-A2 (lot A2, 17/11/2026)
+
+/**
+ * Un registre d'ESSAI (jamais le vrai) où l'étape 32 est lancée le 29/10/2026 ; avec `vue`, il connaît aussi, par `lancements`,
+ * le lancement d'une AUTRE étape dont une version du moteur a vu `vue` (portée « moteur ») : le juge de la 32 en écarte les lignes.
+ */
+function registreDEssai(nom, vue = null) {
+  const fichier = path.join(DOSSIER, nom);
+  enregistrerLancements({ fichier, maintenant: Date.parse('2026-10-28T23:30:00Z') });
+  if (!vue) return { fichier };
+  const autre = { etape: '40', version: 'essai-moteur-apres-le-lancement', quoi: 'Essai : une version du moteur apprise sur des matchs d’après le lancement de la 32', le: '2026-11-20', variantes: [], vues: [{ de: vue.de, a: vue.a, quoi: 'Essai : fenêtre vue par le moteur', pour: ['moteur'] }] };
+  return { fichier, lancements: [...LANCEMENTS, autre] };
+}
+const VUE_2027 = Object.freeze({ de: '2027-01-01', a: '2027-12-31' });
+/** `n` lignes datées en 2027 (dans la fenêtre vue), un match par jour sur l'année. */
+const dans2027 = ({ n, ecart, graine, prefixe = 'v' }) => lignesFabriquees({ n, de: '2027-01-01', ecart, graine, prefixe }).map((l, i) => ({ ...l, date: new Date(Date.parse('2027-01-01T00:00:00Z') + (i % 365) * 86_400_000).toISOString().slice(0, 10) }));
+
+test('T-A2 l’horizon, le principal et la garde comptent les lignes que le juge GARDERA (hors des fenêtres déjà vues, dont celle « moteur » d’une autre étape lancée) ; la phrase dit les écartés ; le démenti d’un principal « moins bon » jamais perdu (transaction ratée, garde arrêtée) ; la nuit calcule les fenêtres dans le processus à part', () => {
+  const V = P.variantesDeLaPreuve();
+  const lancement = { le: '2026-10-29', version: 'contexte-v1' };
+  const reg = registreDEssai('registre-t-a2-vues.json', VUE_2027);
+  const fenetres = fenetresVues('32', { ...reg, maintenant: Date.parse('2028-01-15T01:00:00Z') });
+  assert.ok(fenetres.some((f) => f.de === VUE_2027.de && f.a === VUE_2027.a), 'la fenêtre « moteur » d’une autre étape lancée est écartée par le juge de la 32');
+  assert.ok(fenetres.every((f) => f.a < '2026-10-29' || (f.de === VUE_2027.de && f.a === VUE_2027.a)), 'aucune autre fenêtre ne touche les lignes fabriquées');
+  // 1. L'horizon : 250 lignes gardées (novembre 2026) et 250 déjà vues (2027) ; horizon d'essai de 300 → PAS atteint, aucun principal.
+  const horizon = { jours: 1, matchs: { 'repos-court': 300, 'enchainement-serre': 300, 'deplacement-altitude': 300 } };
+  const hors = (n) => lignesFabriquees({ n, de: '2026-11-01', ecart: 0, graine: 41, prefixe: 'h' });
+  const commun = { variantes: V, lancement, jourD: '2028-01-15', instant: Date.parse('2028-01-15T01:00:00Z'), registre: reg, horizon, etat: { surete: { lancement: lancement.le, regards: 12 } } };
+  const avecVues = (L) => ({ 'repos-court': L, 'enchainement-serre': [], 'deplacement-altitude': [] });
+  const c1 = P.calculerLaPreuve({ ...commun, lignes: avecVues([...hors(250), ...dans2027({ n: 250, ecart: 0, graine: 42 })]), fenetres });
+  assert.deepEqual(c1.parVariante.map((x) => [x.id, x.matchs, x.ecarteesDejaVues, x.atteint]), [['repos-court', 250, 250, false], ['enchainement-serre', 0, 0, false], ['deplacement-altitude', 0, 0, false]], '250 lignes jugeables sur 500');
+  assert.deepEqual(c1.principaux, {}, 'l’horizon n’est pas atteint : aucun principal');
+  // Témoin (la faille d'avant A2) : sans les fenêtres, les 500 comptées, l'horizon « atteint ».
+  assert.deepEqual(P.calculerLaPreuve({ ...commun, lignes: avecVues([...hors(250), ...dans2027({ n: 250, ecart: 0, graine: 42 })]) }).parVariante[0].matchs, 500);
+  // 2. Le principal : 350 gardées et les mêmes 250 → atteint ; jugé sur les 350 exactement (le juge écarte les 250 lui aussi).
+  const c2 = P.calculerLaPreuve({ ...commun, lignes: avecVues([...hors(350), ...dans2027({ n: 250, ecart: 0, graine: 42 })]), fenetres });
+  assert.deepEqual(c2.parVariante.map((x) => [x.matchs, x.ecarteesDejaVues, x.atteint]).slice(0, 1), [[350, 250, true]]);
+  assert.deepEqual([c2.principaux['repos-court']?.n?.matchs, c2.principaux['repos-court']?.ecartees?.donneesVues], [350, 250], 'le principal juge les lignes que l’horizon a comptées, ni plus ni moins');
+  // 3. La garde du mois : 260 gardées, neutres ; 300 déjà vues, très mauvaises pour b → la garde ne les lit pas (pas de démenti).
+  const garde = { variantes: V, lancement, jourD: '2028-02-02', instant: Date.parse('2028-02-02T01:00:00Z'), registre: reg };
+  const neutres = lignesFabriquees({ n: 260, de: '2026-11-01', ecart: 0, graine: 43, prefixe: 'g' });
+  const tout = avecVues([...neutres, ...dans2027({ n: 300, ecart: 0.3, graine: 44, prefixe: 'w' })]);
+  const g1 = P.calculerLaPreuve({ ...garde, lignes: tout, fenetres }).garde;
+  assert.deepEqual(g1, P.calculerLaPreuve({ ...garde, lignes: avecVues(neutres) }).garde, 'la garde juge les 260 gardées, comme si les vues n’existaient pas');
+  assert.equal(g1.resultats['repos-court'].matchs, 260);
+  assert.notEqual(g1.resultats['repos-court'].verdict, 'moins-bon');
+  const temoin = P.calculerLaPreuve({ ...garde, lignes: tout }).garde.resultats['repos-court'];
+  assert.deepEqual([temoin.matchs, temoin.verdict], [560, 'moins-bon'], 'témoin : sans les fenêtres, les 560 et un faux démenti');
+  // 4. La phrase : « N au total, dont M écartés (déjà vus par une version du moteur) » ; sans écarté, la phrase d'avant.
+  const e1 = P.etatApresLaPreuve({ calcul: c1, lancement, instant: commun.instant, jourD: commun.jourD });
+  const phrase = P.phraseDeLaPreuve({ etat: e1.preuve, principal: {}, principauxRanges: [], dementis: {} });
+  assert.match(phrase, /repos court 250 matchs concernés sur 300 — 500 au total, dont 250 écartés \(déjà vus par une version du moteur\), enchaînement serré 0 match concerné sur 300, /);
+  const un = P.phraseDeLaPreuve({ etat: { ...e1.preuve, variantes: e1.preuve.variantes.map((v, i) => ({ ...v, ecarteesDejaVues: i === 0 ? 1 : 0 })) }, dementis: {} });
+  assert.match(un, /251 au total, dont 1 écarté \(déjà vu par une version du moteur\)/);
+  const sans = P.phraseDeLaPreuve({ etat: { ...e1.preuve, variantes: e1.preuve.variantes.map((v) => ({ ...v, ecarteesDejaVues: 0 })) }, dementis: {} });
+  assert.doesNotMatch(sans, /écarté|au total/);
+  assert.match(sans, /^Preuve sur vos matchs : repos court 250 matchs concernés sur 300, enchaînement serré 0 match concerné sur 300, altitude 0 match concerné sur 300, /);
+  // 5. Le démenti d'un principal « moins bon » jamais perdu : rangé au registre la nuit N, puis la transaction de l'état de cette
+  // nuit-là en échec (l'état n'a ni le principal ni le démenti). Les deux autres facteurs ont leur principal (état) et la garde
+  // est ARRÊTÉE (12 regards) : avant A2, la demande répondait « preuve terminée » et le démenti était perdu.
+  const reg5 = registreDEssai('registre-t-a2-dementi.json');
+  const pire = avecVues(lignesFabriquees({ n: 300, de: '2026-11-01', ecart: 0.6, graine: 45 }));
+  const nuitN = Date.parse('2027-05-10T01:00:00Z');
+  const surete12 = { lancement: lancement.le, regards: 12, dernierMois: '2027-04', historique: [] };
+  const autres = { 'enchainement-serre': { le: '2027-05-01T01:00:00.000Z', lancement: lancement.le, verdict: 'pas-prouve' }, 'deplacement-altitude': { le: '2027-05-01T01:00:00.000Z', lancement: lancement.le, verdict: 'pas-prouve' } };
+  const horizon5 = { jours: 1, matchs: { 'repos-court': 300 } };
+  const cN = P.calculerLaPreuve({ lignes: pire, variantes: V, lancement, jourD: '2027-05-10', instant: nuitN, registre: reg5, etat: { principal: autres, surete: surete12 }, horizon: horizon5 });
+  assert.equal(cN.principaux['repos-court']?.verdict, 'moins-bon');
+  assert.deepEqual(Object.keys(P.rangerLesPrincipaux({ principaux: cN.principaux, lancement, registre: reg5, instant: nuitN }).enregistres), ['repos-court']);
+  const nuitN1 = Date.parse('2027-05-11T01:00:00Z');
+  const dA = P.demandeDeLaPreuve({ instant: nuitN1, registre: reg5, etat: { principal: autres, surete: surete12, dementis: null } });
+  assert.equal(dA.rien, undefined, 'le démenti manque : la nuit doit encore le ranger (jamais « preuve terminée »)');
+  assert.deepEqual(dA.dejaAuRegistre, ['repos-court']);
+  const cA = P.calculerLaPreuve({ lignes: pire, variantes: V, lancement: dA.lancement, jourD: '2027-05-11', instant: nuitN1, registre: reg5, etat: dA.etat, dejaAuRegistre: dA.dejaAuRegistre, horizon: horizon5 });
+  assert.deepEqual([cA.principaux, cA.garde.faite, cA.garde.raison], [{}, false, 'arrêtée après 12 regards'], 'jamais rejugé ; la garde arrêtée');
+  const eA = P.etatApresLaPreuve({ etatAvant: dA.etat, calcul: cA, enregistres: {}, dejaAuRegistre: dA.jugementsDejaAuRegistre, lancement: dA.lancement, instant: nuitN1, jourD: '2027-05-11' });
+  assert.deepEqual(eA.nouveauxDementis, ['repos-court'], 'le démenti d’un principal déjà au registre n’est pas perdu');
+  assert.deepEqual([eA.dementis['repos-court'].source, eA.dementis['repos-court'].le, eA.dementis['repos-court'].depuis, eA.principal['repos-court'].verdict], ['principal', new Date(nuitN).toISOString(), lancement.le, 'moins-bon']);
+  assert.deepEqual(P.alerteDuContexte({ ecarts: [], lignes: 20, dementis: eA.dementis, updatedAt: 'u' }).dementis, [{ variante: 'repos-court', le: new Date(nuitN).toISOString(), depuis: lancement.le, source: 'principal' }], 'l’alerte durable');
+  assert.equal(statutsDesFacteurs(CONTEXTE_AU_BANC, eA.dementis).repos.statut, 'dementi', 'l’écran : démenti');
+  assert.match(P.phraseDeLaPreuve({ etat: eA.preuve, principal: eA.principal, principauxRanges: [], dementis: eA.dementis }), /DÉMENTI sur vos matchs : repos court \(depuis le 10\/05\/2027\)/);
+  // Une fois le démenti rangé : « preuve terminée » ; la nuit d'après, rien de neuf.
+  assert.match(P.demandeDeLaPreuve({ instant: nuitN1 + 86_400_000, registre: reg5, etat: { principal: eA.principal, surete: eA.surete, dementis: eA.dementis } }).rien ?? '', /preuve terminée/);
+  const eB = P.etatApresLaPreuve({ etatAvant: { principal: eA.principal, surete: eA.surete, dementis: eA.dementis }, calcul: cA, enregistres: {}, dejaAuRegistre: dA.jugementsDejaAuRegistre, lancement, instant: nuitN1 + 86_400_000, jourD: '2027-05-12' });
+  assert.deepEqual([eB.nouveauxDementis, eB.dementis], [[], eA.dementis], 'un démenti n’est jamais retiré ni refait');
+  // La garde pas arrêtée (3 regards, déjà faite ce mois-ci) : la transaction ratée ne perd pas non plus le démenti.
+  const surete3 = { lancement: lancement.le, regards: 3, dernierMois: '2027-05', historique: [] };
+  const dB = P.demandeDeLaPreuve({ instant: nuitN1, registre: reg5, etat: { principal: null, surete: surete3, dementis: null } });
+  const cB = P.calculerLaPreuve({ lignes: pire, variantes: V, lancement: dB.lancement, jourD: '2027-05-11', instant: nuitN1, registre: reg5, etat: dB.etat, dejaAuRegistre: dB.dejaAuRegistre, horizon: horizon5 });
+  assert.deepEqual([cB.principaux, cB.garde.raison], [{}, 'déjà faite ce mois-ci']);
+  assert.deepEqual(P.etatApresLaPreuve({ etatAvant: dB.etat, calcul: cB, dejaAuRegistre: dB.jugementsDejaAuRegistre, lancement: dB.lancement, instant: nuitN1, jourD: '2027-05-11' }).nouveauxDementis, ['repos-court']);
+  // 6. La nuit calcule les fenêtres DANS le processus à part, avec le registre qu'elle reçoit (preuveDansLaBase) : un registre
+  // illisible lève (la nuit le dit « en échec », rien de jugé ni de rangé) ; lisible, la preuve se calcule.
+  const vide = { prepare: () => ({ iterate: () => [][Symbol.iterator]() }) };
+  const casse = path.join(DOSSIER, 'registre-t-a2-casse.json');
+  fs.writeFileSync(casse, '{ pas du json');
+  assert.throws(() => P.preuveDansLaBase({ database: vide, instant: nuitN1, jourD: '2027-05-11', lancement, registre: { fichier: casse } }), /registre de la mesure .* est illisible/i);
+  const lu = P.preuveDansLaBase({ database: vide, instant: nuitN1, jourD: '2027-05-11', lancement, registre: reg });
+  assert.deepEqual(lu.parVariante.map((x) => [x.matchs, x.ecarteesDejaVues]), [[0, 0], [0, 0], [0, 0]]);
+  const code = sansCommentaires(lire('data', 'contexte', 'preuveDuContexte.js'));
+  assert.match(code, /const fenetres = fenetresVues\(ETAPE_DE_LA_PREUVE, \{ \.\.\.registre, maintenant: instant \}\);/);
+  assert.match(code, /calculerLaPreuve\(\{ lignes, variantes, lancement, jourD, instant, etat, dejaAuRegistre, registre, horizon, fenetres \}\)/);
+  assert.equal(code.match(/fenetresVues\(/g).length, 1, 'un seul calcul des fenêtres, dans le processus à part');
+  // Le regard de novembre 2026 (lancement réel le 29/10/2026) : aucune fenêtre déjà vue de l'étape 32 ne finit après le jour du
+  // lancement (le code : DONNEES_VUES et les vues des lancements, jamais lues du registre) — gardées = après, rien n'a été faussé.
+  const reelles = fenetresVues('32', { fichier: path.join(DOSSIER, 'registre-absent.json'), maintenant: Date.parse('2026-11-17T00:00:00Z') });
+  assert.ok(reelles.length > 0 && reelles.every((f) => f.a < '2026-10-29'), JSON.stringify(reelles.map((f) => [f.de, f.a])));
 });

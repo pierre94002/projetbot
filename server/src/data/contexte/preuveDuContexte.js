@@ -27,6 +27,12 @@
  *   concernés depuis le lancement, jours écoulés, l'horizon et sa date au plus tôt. Aucun gain, aucun verdict, rien au
  *   registre (décision 10 : regarder chaque nuit et s'arrêter au premier « retenu » fabriquerait de fausses preuves).
  *
+ *   L'HORIZON ET LA GARDE COMPTENT LES LIGNES QUE LE JUGE GARDERA (lot A2, 17/11/2026 ; le geste du 1c de la 35, avis du
+ *   14/11, constat 3) : après le jour du lancement ET hors des fenêtres déjà vues (fenetresVues de l'étape 32 : DONNEES_VUES,
+ *   celles de la 32, celles de portée « moteur » des autres étapes lancées ; bornes comprises, comparaison de textes, la règle
+ *   de guard.js). Une version du moteur qui apprendrait sur des matchs d'après le lancement les retire donc aussi du compte
+ *   (il peut reculer : la phrase le dit, « dont N écartés »).
+ *
  *   LE JUGEMENT PRINCIPAL (une seule fois par facteur, à l'horizon) : autant de matchs concernés que le banc en a jugé
  *   pour ce facteur ET au moins 180 jours depuis le lancement ; jugerEtape (le juge de preuve de l'étape 16 : lignes
  *   après le jour du lancement, K = les variantes déclarées de l'étape 32, seuils par défaut) calculé dans le processus à
@@ -47,7 +53,7 @@
  */
 
 import { comparer, jugerEtape } from '../../bench/guard.js';
-import { lancementDe, jugementsDe, enregistrerJugement } from '../../bench/trialsRegistry.js';
+import { lancementDe, jugementsDe, enregistrerJugement, fenetresVues } from '../../bench/trialsRegistry.js';
 import { AccumulateurDesForces } from '../db/forcesButs.js';
 import { modeleDeButs, faitsDeLaRencontre, saisonEnNombre, empreinteDesForces } from '../../core/engine/goalModel.js';
 import { VERSION_CONTEXTE, GARDE_MENSUELLE, JUGE_DU_BANC } from './reglagesContexte.js';
@@ -311,19 +317,25 @@ const principauxDuLancement = (principal, le) => Object.fromEntries(Object.entri
  * LE CALCUL DE LA PREUVE d'une nuit (dans le processus à part ; aucune écriture) : les premiers chiffres (des comptes),
  * le jugement principal des variantes qui atteignent leur horizon et ne l'ont pas encore (état de la nuit ou registre,
  * pour CE lancement) — jugerEtape SANS enregistrer —, et la garde du mois si elle est due. `lignes` : { [id]: lignes } ;
- * `etat` : { principal, surete, dementis } rangés ; `dejaAuRegistre` : les variantes dont le principal est au registre.
- * Rend { lancement, parVariante, principaux: { [id]: jugement }, garde }.
+ * `etat` : { principal, surete, dementis } rangés ; `dejaAuRegistre` : les variantes dont le principal est au registre ;
+ * `fenetres` : les fenêtres déjà vues que le juge écarte (fenetresVues de l'étape 32, calculées par preuveDansLaBase avec le
+ * même registre). Rend { lancement, parVariante, principaux: { [id]: jugement }, garde }.
  */
-export function calculerLaPreuve({ lignes, variantes, lancement, jourD, instant, etat = null, dejaAuRegistre = [], registre = {}, horizon = null }) {
+export function calculerLaPreuve({ lignes, variantes, lancement, jourD, instant, etat = null, dejaAuRegistre = [], registre = {}, horizon = null, fenetres = [] }) {
   const le = lancement.le;
   const apres = (L) => (L ?? []).filter((l) => l.date > le);
+  // Les lignes que le juge GARDERA (guard.js, jugerEtape, point 4) : après le jour du lancement ET hors de toute fenêtre déjà vue,
+  // bornes comprises, comparaison de textes AAAA-MM-JJ. L'horizon et la garde comptent celles-là (lot A2 ; avis du 14/11, constat 3).
+  const vues = Array.isArray(fenetres) ? fenetres : [];
+  const gardees = (L) => apres(L).filter((l) => !vues.some((f) => l.date >= f.de && l.date <= f.a));
   const pris = new Set([...Object.keys(principauxDuLancement(etat?.principal, le)), ...dejaAuRegistre]);
   const dementis = etat?.dementis && typeof etat.dementis === 'object' ? etat.dementis : {};
   const parVariante = [];
   const principaux = {};
   for (const v of variantes) {
-    const h = horizonDe(v, { matchs: apres(lignes[v.id]).length, lancementLe: le, jourD, horizon });
-    parVariante.push({ id: v.id, facteur: v.facteur, matchs: h.matchs, attendus: h.attendus, jours: h.jours, joursAttendus: h.joursAttendus, atteint: h.atteint, auPlusTotLe: h.auPlusTotLe, principalPris: pris.has(v.id), dementi: Boolean(dementis[v.id]) });
+    const h = horizonDe(v, { matchs: gardees(lignes[v.id]).length, lancementLe: le, jourD, horizon });
+    const ecarteesDejaVues = apres(lignes[v.id]).length - h.matchs;
+    parVariante.push({ id: v.id, facteur: v.facteur, matchs: h.matchs, ecarteesDejaVues, attendus: h.attendus, jours: h.jours, joursAttendus: h.joursAttendus, atteint: h.atteint, auPlusTotLe: h.auPlusTotLe, principalPris: pris.has(v.id), dementi: Boolean(dementis[v.id]) });
     // Jamais refait : un principal déjà pris pour ce lancement n'est plus jamais rejugé.
     if (pris.has(v.id)) continue;
     // Rien avant l'horizon.
@@ -344,7 +356,7 @@ export function calculerLaPreuve({ lignes, variantes, lancement, jourD, instant,
         garde.resultats[v.id] = { verdict: null, deja: 'dementi' };
         continue;
       }
-      const r = comparer(apres(lignes[v.id]), { mode: 'moyenne', sens: 'min', variantes: GARDE_MENSUELLE.variantes, tirages: JUGE_DU_BANC.tirages, graine: JUGE_DU_BANC.graine });
+      const r = comparer(gardees(lignes[v.id]), { mode: 'moyenne', sens: 'min', variantes: GARDE_MENSUELLE.variantes, tirages: JUGE_DU_BANC.tirages, graine: JUGE_DU_BANC.graine });
       garde.resultats[v.id] = { verdict: r.verdict, gain: r.gain, fourchette: r.fourchette, matchs: r.n.matchs, blocs: r.n.blocs, z: r.seuil.z, variantes: r.seuil.variantes, raison: r.raison };
     }
     // Un regard ne compte que si le juge a pu juger au moins un facteur (« pas assez de matchs » n'est pas un regard).
@@ -361,11 +373,14 @@ export function calculerLaPreuve({ lignes, variantes, lancement, jourD, instant,
  */
 export function preuveDansLaBase({ database, instant, jourD, lancement, etat = null, dejaAuRegistre = [], registre = {}, horizon = null, note = CONTEXTE_AU_BANC }) {
   const variantes = variantesDeLaPreuve(note);
+  // Les fenêtres que le juge écarte, avec le registre qu'il lira (lecture seule, comme jugerEtape) : un registre illisible lève
+  // ici, la nuit le range dans `preuve.erreur` (« en échec », rien de jugé ni de rangé), jamais un compte faux (lot A2).
+  const fenetres = fenetresVues(ETAPE_DE_LA_PREUVE, { ...registre, maintenant: instant });
   const { matchs, comptes } = lireLesMatchsDeLaPreuve(database, { depuis: lancement.le, avant: jourD });
   comptes.bases = matchs.length ? basesDesMatchs(database, matchs, { jusqua: plusJours(jourD, -1) }) : 0;
   const lignes = lignesDeLaPreuve(matchs, variantes);
   comptes.lignes = Object.fromEntries(Object.entries(lignes).map(([id, L]) => [id, L.length]));
-  return { comptes, ...calculerLaPreuve({ lignes, variantes, lancement, jourD, instant, etat, dejaAuRegistre, registre, horizon }) };
+  return { comptes, ...calculerLaPreuve({ lignes, variantes, lancement, jourD, instant, etat, dejaAuRegistre, registre, horizon, fenetres }) };
 }
 
 // ======================================================= le serveur : la demande, le registre, l'état rangé
@@ -397,7 +412,10 @@ export function demandeDeLaPreuve({ instant, registre = {}, etat = null, horizon
   const pris = new Set([...Object.keys(principauxDuLancement(e.principal, lancement.le)), ...deja.map((d) => d.id)]);
   const dementis = e.dementis && typeof e.dementis === 'object' ? e.dementis : {};
   const gardeArretee = e.surete?.lancement === lancement.le && (e.surete.regards ?? 0) >= GARDE_MENSUELLE.regardsMax;
-  if (gardeArretee && variantes.every((v) => pris.has(v.id) || dementis[v.id])) return { rien: 'preuve terminée : chaque facteur a son jugement principal (ou un démenti) et la garde du mois s’est arrêtée après 12 regards' };
+  // Un principal « moins bon » au registre sans son démenti dans l'état (la transaction de sa nuit a échoué) : la preuve n'est pas
+  // terminée, la nuit doit encore le démentir (etatApresLaPreuve) — lot A2, le geste du 1c de la 35 (vérification du 14/11, constat 2).
+  const sansSonDementi = deja.some((d) => d.jugement?.verdict === 'moins-bon' && !dementis[d.id]);
+  if (gardeArretee && !sansSonDementi && variantes.every((v) => pris.has(v.id) || dementis[v.id])) return { rien: 'preuve terminée : chaque facteur a son jugement principal (ou un démenti) et la garde du mois s’est arrêtée après 12 regards' };
   return { lancement: { le: lancement.le, version: lancement.version ?? null }, etat: e, dejaAuRegistre: deja.map((d) => d.id), jugementsDejaAuRegistre: deja, horizon: horizon ?? null };
 }
 
@@ -444,6 +462,11 @@ export function etatApresLaPreuve({ etatAvant = null, calcul, enregistres = {}, 
   for (const [id, j] of Object.entries(enregistres)) {
     if (j.verdict === 'moins-bon') dementir(id, { le: quand, depuis: le, source: 'principal', verdict: j.verdict, gain: j.gain ?? null, fourchette: j.fourchette ?? null, matchs: j.n?.matchs ?? null });
   }
+  // Un principal « moins bon » déjà au registre mais absent de l'état (la transaction de la nuit qui l'a rangé a échoué) dément
+  // quand même, la nuit suivante : sinon son démenti et son alerte seraient perdus (lot A2 ; vérification du 14/11, constat 2).
+  for (const d of dejaAuRegistre) {
+    if (d?.jugement?.verdict === 'moins-bon') dementir(d.id, { le: d.jugement.le ?? quand, depuis: le, source: 'principal', verdict: d.jugement.verdict, gain: d.jugement.gain ?? null, fourchette: d.jugement.fourchette ?? null, matchs: d.jugement.matchs ?? null });
+  }
   const g = calcul.garde ?? { faite: false, regard: false };
   const avant = etatAvant?.surete?.lancement === le ? etatAvant.surete : { lancement: le, regards: 0, dernierMois: null, historique: [] };
   let surete;
@@ -474,6 +497,15 @@ const entier = (n) => (fini(Number(n)) ? Number(n).toLocaleString('fr-FR') : '?'
 const jourDit = (j) => (typeof j === 'string' && /^\d{4}-\d{2}-\d{2}/.test(j) ? `${j.slice(8, 10)}/${j.slice(5, 7)}/${j.slice(0, 4)}` : String(j ?? '?'));
 const nomDe = (facteur, id) => NOMS_DES_FACTEURS[facteur] ?? id;
 const VERDICTS_DITS = Object.freeze({ retenu: 'confirmé', 'pas-prouve': 'pas prouvé (le facteur garde son statut du banc)', 'moins-bon': 'moins bon : démenti', 'pas-assez-de-matchs': 'pas assez de matchs' });
+/**
+ * Les matchs d'après le lancement que le juge écarte (déjà vus par une version du moteur) : jamais comptés ni jugés, dits à part
+ * (lot A2) — « N au total, dont M écartés » : le compte affiché ne les contient pas ; il peut reculer le jour où une telle
+ * fenêtre est déclarée. Rien quand aucun n'est écarté (la phrase d'avant, à l'octet).
+ */
+const ecartesDits = (v) => {
+  const n = Number(v?.ecarteesDejaVues);
+  return fini(n) && n > 0 ? ` — ${entier(Number(v.matchs) + n)} au total, dont ${entier(n)} ${n > 1 ? 'écartés (déjà vus' : 'écarté (déjà vu'} par une version du moteur)` : '';
+};
 
 /**
  * La phrase de la preuve pour le résumé de l'étape de nuit (`p` : le bloc `preuve` rendu par faireLeContexteDeLaNuit).
@@ -489,7 +521,7 @@ export function phraseDeLaPreuve(p) {
   const enAttente = vs.filter((v) => !v.principalPris && !v.dementi);
   if (enAttente.length) {
     morceaux.push(
-      `${enAttente.map((v) => `${nomDe(v.facteur, v.id)} ${entier(v.matchs)} ${v.matchs > 1 ? 'matchs concernés' : 'match concerné'} sur ${entier(v.attendus)}`).join(', ')}, ${entier(vs[0]?.jours ?? 0)} jour${(vs[0]?.jours ?? 0) > 1 ? 's' : ''} sur ${entier(vs[0]?.joursAttendus ?? 180)} depuis le ${jourDit(e.lancement)} — rien n’est jugé avant l’horizon (des comptes seulement)`
+      `${enAttente.map((v) => `${nomDe(v.facteur, v.id)} ${entier(v.matchs)} ${v.matchs > 1 ? 'matchs concernés' : 'match concerné'} sur ${entier(v.attendus)}${ecartesDits(v)}`).join(', ')}, ${entier(vs[0]?.jours ?? 0)} jour${(vs[0]?.jours ?? 0) > 1 ? 's' : ''} sur ${entier(vs[0]?.joursAttendus ?? 180)} depuis le ${jourDit(e.lancement)} — rien n’est jugé avant l’horizon (des comptes seulement)`
     );
   }
   const ranges = new Set(p.principauxRanges ?? []);

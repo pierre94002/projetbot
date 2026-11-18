@@ -735,7 +735,11 @@ déclarent … € » (rapporté à côté, jamais mélangé), le montant, la da
 « Si vous n'enregistrez pas vos paris… » ; sous l'alerte des séries (`GardeFousPanel`), en ambre : « Cette alerte compte les paris d'un même match comme indépendants : chez
 vous, elle sonne trop souvent. » ; et dans le carnet de l'IA (`AiScorecardPanel`, « Par forme de fiche ») le jour où la mise est passée en part du capital dans le message de
 l'IA. Couleurs : aucune nouvelle (la part en `--cm-text-primary`, le reste en `--cm-text-secondary` / `--cm-text-muted`, l'ambre `--cm-warning` pour la phrase des séries) ;
-jamais de vert sur une mise, jamais « sûr ».
+jamais de vert sur une mise, jamais « sûr ». Depuis le lot A1 (17/11/2026, passe 2) : quand une lecture utile à la mise a échoué (carnet de paris, capital, fiches des
+comptes, garde-fous, réglage), l'objet `mise` porte `nonCalculee` et l'écran n'affiche **ni part ni euro** : à la place de la part, la phrase du serveur telle quelle,
+« Mise non calculée : lecture impossible du carnet de paris — réessayez dans un instant » (`lignesDeLaMise`, même place, même style que la part ; Repérage, Opportunités et
+Mes paris : « non calculée : lecture impossible du … — réessayez dans un instant » par `miseEnUneLigne`) ; le ticket n'est pas pré-rempli. L'analyse IA automatique
+reçoit la même décision (« part du capital non calculée : lecture impossible du … »). Toutes les lectures réussies : rien ne change.
 
 Depuis l'étape 38 du plan (lot 1b, 04/11/2026) : **« Avant de parier — à blanc »** — UN encadré gris, sur la page d'un match à venir, dans la carte
 « Verdict par marché », **juste sous le tableau des verdicts** (`MarketVerdictBoard`) : `components/analysis/AvantDeParierABlanc.vue`
