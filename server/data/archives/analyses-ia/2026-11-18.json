@@ -738,7 +738,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-18T17:22:20.606Z",
+    "updatedAt": "2026-11-18T22:43:44.344Z",
     "createdAt": "2026-11-16T17:11:19.471Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -884,6 +884,130 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-16T17:11:19.471Z"
+    },
+    "postMatchReview": {
+      "summary": "0-0 après 120 minutes (prolongation jouée, tirs au but non comptés dans le score). Real Unión, favori du moteur, n'a pas gagné dans le temps joué. Mon avis nuancé et prudent s'est révélé adapté, sans être tranché.",
+      "whatWasRight": "Je doutais de la domination attendue de Real Unión (forme à l'extérieur NNDD, 1,75 but encaissé par match en déplacement, données de Portugalete minces). Le match est resté fermé, sans but en 120 minutes, et le nul que je jugeais plausible s'est réalisé.",
+      "whatWasMissed": "Je n'ai pas anticipé un match de coupe aussi fermé, qui va jusqu'en prolongation. Le 1,5 but attendu pour Real Unión était trop élevé : l'équipe n'a pas marqué en 120 minutes. Real Unión a pris 4 jaunes contre 2 pour Portugalete, ce qui indique un match haché que les données ne laissaient pas voir.",
+      "outcomeVsEngine": "Le résultat contredit le moteur, qui donnait Real Unión à 47 % avec 1,5 but attendu contre 0,5. Mon scepticisme allait dans le bon sens, sans être décisif.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Real Unión gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Le pronostic « Real Unión gagne » est faux : 0-0 à la mi-temps et au terme des 120 minutes, aucun but. Real Unión a reçu 4 jaunes (40', 47', 77', 83') et Portugalete 2 (18', 101'). Real Unión a fait entrer des offensifs dès la 63' sans débloquer le match. Les statistiques de tirs et de xG ne sont pas relevées, donc on ne sait pas si l'équipe a dominé sans concrétiser.",
+          "lesson": "Ma nuance prudente était justifiée. En coupe, face à un adversaire dont on a peu de données, il vaut mieux ne pas suivre un avantage de buts attendus issu d'une base de ligue générique, surtout si le favori est irrégulier à l'extérieur. Le nul reste à garder en tête, y compris sur 120 minutes."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Real Unión & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Portugalete",
+          "marketId": "teamGoals",
+          "pick": "Portugalete — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Real Unión",
+          "marketId": "teamGoals",
+          "pick": "Real Unión — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        }
+      ],
+      "caveats": "Un seul match, sans statistiques de tirs, xG ni possession relevées. Le résultat de la séance de tirs au but n'est pas fourni. Un 0-0 en coupe ne dit pas grand-chose de la valeur réelle du modèle.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 18,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 4062,
+        "cache_read_input_tokens": 7095,
+        "output_tokens": 1676,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 4062,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 984,
+            "cache_read_input_tokens": 5007,
+            "cache_creation_input_tokens": 1143,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1143
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.034435,
+      "createdAt": "2026-11-18T22:43:44.343Z"
     }
   },
   {
@@ -1895,7 +2019,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-18T17:27:16.128Z",
+    "updatedAt": "2026-11-18T22:44:20.035Z",
     "createdAt": "2026-11-16T20:12:51.480Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -2046,6 +2170,130 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-16T20:12:51.480Z"
+    },
+    "postMatchReview": {
+      "summary": "Sabadell s'est imposé 3-0, avec trois buts en première période (10', 25', 38'). Le moteur le donnait favori (58 %, xG 2,14 contre 0,5) et mon avis nuancé allait dans ce sens, mais il sous-estimait l'écart réel. La méforme, la rotation et le synthétique sous la pluie n'ont pas pesé.",
+      "whatWasRight": "Le sens général était juste : Sabadell, club de division supérieure, était favori. Les xG du moteur annonçaient un net avantage, et les 3 buts marqués contre un Utebo faible en attaque le confirment. J'avais aussi noté la fragilité défensive d'Utebo (3 buts encaissés par match sur son petit échantillon).",
+      "whatWasMissed": "J'ai trop pesé la méforme de Sabadell, la rotation (Priego, Ripoll, Fuoli, Pons, Baena sur le banc) et le synthétique sous la pluie comme facteurs de nivellement. Le match était plié à la 38e (0-3), et le penalty manqué par Vallés à la 60e n'a rien changé. L'écart de niveau a dominé ces nuances, et la rotation n'a pas affaibli l'équipe.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur et le dépasse : le favori a gagné largement, au-delà des 2,14 buts attendus. Aucun edge n'était chiffré (PASS), donc rien n'est contredit. Mon nuancement était trop prudent.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Sabadell gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Sabadell a gagné 0-3 : buts d'Obolskiy (10'), Ribeiro (25') et Rahmani (38'), tous avant la pause. Vallés a manqué un penalty à la 60e, sinon le score aurait été plus lourd. Utebo a fini à dix après un rouge direct de Royo (90+2'). Aucune statistique de tirs ou de xG n'a été relevée pour détailler la domination.",
+          "lesson": "Mon avis nuancé (moyenne) n'était pas faux mais trop timide : en coupe, face à un club de division inférieure, l'écart de niveau l'emporte souvent sur la rotation, la méforme et la pelouse synthétique. À retenir : ne pas trop abaisser la confiance sur le favori pour ces seuls facteurs, surtout quand l'adversaire a des données très anciennes et une attaque quasi nulle."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Sabadell & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Utebo",
+          "marketId": "teamGoals",
+          "pick": "Utebo — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Sabadell",
+          "marketId": "teamGoals",
+          "pick": "Sabadell — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        }
+      ],
+      "caveats": "Un seul match : un 3-0 avec trois buts en 28 minutes peut tenir à un début de match précoce et à la faiblesse d'Utebo. Aucune statistique (tirs, xG, possession) n'a été relevée, donc la domination réelle n'est pas mesurable. L'effet de la rotation et du synthétique ne peut pas être isolé.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 16,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 3831,
+        "cache_read_input_tokens": 6832,
+        "output_tokens": 1821,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 3831,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1109,
+            "cache_read_input_tokens": 4744,
+            "cache_creation_input_tokens": 1175,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1175
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.03490839999999999,
+      "createdAt": "2026-11-18T22:44:20.034Z"
     }
   },
   {
@@ -3053,7 +3301,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-18T18:32:17.174Z",
+    "updatedAt": "2026-11-18T22:42:01.706Z",
     "createdAt": "2026-11-16T17:10:46.738Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -3204,6 +3452,130 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-16T17:10:46.738Z"
+    },
+    "postMatchReview": {
+      "summary": "Mallorca a gagné 1-3, dans le sens du favori du moteur, mais après prolongation : 1-1 à la mi-temps et dans le temps réglementaire, puis deux buts à la 108e et à la 116e. Ma lecture nuancée (rotation, adversaire inconnu) était justifiée : le match a été serré pendant 90 minutes.",
+      "whatWasRight": "J'avais vu que la rotation et l'adversaire inconnu rendaient le tableau moins net que l'écart de buts attendus. Mallorca a bien ouvert le score (Prats, 18e) mais Alcoyano a égalisé à la 45+1e, et il a fallu la prolongation pour trancher. Les remplaçants que j'avais notés (Fuentes, Sala, Torre, Liso) sont entrés et Fuentes a marqué le 3e but à la 116e. La qualité du groupe a fini par peser.",
+      "whatWasMissed": "Je n'avais pas anticipé le format de la Copa : une égalité après 90 minutes mène à la prolongation, donc le « nul » n'était pas un résultat final. Alcoyano, inconnu du magasin, a montré un vrai niveau en tenant 1-1 jusqu'à la 108e. Aucune statistique de tirs ou de xG n'est relevée, je ne peux donc pas dire si Mallorca dominait vraiment.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur, qui donnait Mallorca favori (1,8 contre 0,8 de buts attendus). Le score réel de 3 buts à 1 est cohérent avec cet écart, mais l'avantage ne s'est concrétisé qu'en prolongation.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Mallorca gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Mallorca gagne 1-3. Prats a ouvert le score à la 18e, Guille Andrés a égalisé à la 45+1e et le score est resté 1-1 jusqu'à la fin du temps réglementaire. En prolongation, Buksa (108e) puis Fuentes (116e), entré à la 99e, ont fait la différence. Le pick du moteur était donc juste, mais l'issue est restée ouverte longtemps.",
+          "lesson": "Ma position nuancée était raisonnable : le favori l'emporte, mais pas facilement avec un onze remanié. En coupe, vérifier si le marché porte sur le temps réglementaire ou sur la qualification, car un nul à 90 minutes peut se transformer en victoire en prolongation. Le banc de Mallorca (Fuentes, Sala, Torre, Liso) a compté dans la décision."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Mallorca & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Alcoyano",
+          "marketId": "teamGoals",
+          "pick": "Alcoyano — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Mallorca",
+          "marketId": "teamGoals",
+          "pick": "Mallorca — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        }
+      ],
+      "caveats": "C'est un seul match, avec une prolongation qui brouille la lecture du résultat. Aucune statistique de tir, de xG ou de possession n'est relevée, et Alcoyano reste inconnu du magasin. Le but d'Alcoyano arrivé juste avant la pause peut être un simple hasard de calendrier.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 21,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4780,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 1154,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 4780,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1154,
+            "cache_read_input_tokens": 0,
+            "cache_creation_input_tokens": 4780,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 4780
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.030664000000000004,
+      "createdAt": "2026-11-18T22:42:01.705Z"
     }
   },
   {
@@ -4182,7 +4554,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-18T18:27:19.663Z",
+    "updatedAt": "2026-11-18T22:42:59.557Z",
     "createdAt": "2026-11-16T17:11:03.772Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -4333,6 +4705,130 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-16T17:11:03.772Z"
+    },
+    "postMatchReview": {
+      "summary": "Tenerife s'impose 5-2 à Badajoz malgré un onze remanié, ce qui confirme l'écart de division vu par le moteur. Mon avis nuancé (rotation, nuls fréquents, vent) était trop prudent : le match était plié à la 38e (0-3), et Tenerife a tenu malgré un rouge à la 57e.",
+      "whatWasRight": "Le favori était bien Tenerife, comme le moteur (53 %, xG 2 contre 0,5). L'écart de niveau entre divisions a joué : buts à la 6e, 7e et 38e. La profondeur de l'effectif a compensé l'absence de Gallego : les remplaçants Chapela (69e) et Moreno (90+5) ont marqué.",
+      "whatWasMissed": "J'ai trop pesé la rotation, l'absence de Gallego et la tendance aux nuls de Tenerife en Segunda. Le match n'a pas été serré : 0-3 à la mi-temps. J'ai aussi sous-estimé le volume de buts : 7 au total, bien au-dessus des 2,5 attendus par le moteur. Badajoz a marqué à la 48e et à la 74e, et le match a été ouvert, y compris après le rouge de Jureškin à la 57e.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur, qui donnait Tenerife favori. Il va même plus loin, avec 5 buts marqués contre 2 attendus. Mon scepticisme sur l'ampleur de l'avantage est contredit.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Tenerife gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Tenerife gagne 2-5. Ranos marque à la 6e et à la 38e, Juanjo à la 7e, d'où 0-3 à la mi-temps. Badajoz revient à 1-3 (48e) puis 2-4 (74e). Tenerife joue à dix dès la 57e (rouge direct), mais Chapela (69e) et Moreno (90+5) valident la victoire.",
+          "lesson": "En Coupe, face à une équipe de division inférieure, l'écart de niveau prime sur la rotation : les remplaçants de Tenerife ont suffi. Il ne faut pas plaquer la tendance aux nuls de Segunda sur ce cas. Mon avis nuancé n'était ni juste ni faux, mais frileux : quand l'écart de division est net, la rotation ne devrait pas suffire à ramener la confiance à moyenne."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Tenerife & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — CD Badajoz",
+          "marketId": "teamGoals",
+          "pick": "CD Badajoz — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Tenerife",
+          "marketId": "teamGoals",
+          "pick": "Tenerife — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        }
+      ],
+      "caveats": "Un seul match, donc peu de valeur statistique. Aucune statistique (tirs, xG réel, possession) n'a été relevée. Deux buts très tôt (6e, 7e) ont pu rendre le match atypique. Aucune cote de marché n'était disponible pour comparer.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 22,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 4480,
+        "cache_read_input_tokens": 7007,
+        "output_tokens": 2246,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 4480,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1084,
+            "cache_read_input_tokens": 4919,
+            "cache_creation_input_tokens": 1649,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1649
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.041789400000000004,
+      "createdAt": "2026-11-18T22:42:59.557Z"
     }
   },
   {
@@ -5169,7 +5665,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-18T19:02:29.456Z",
+    "updatedAt": "2026-11-18T22:43:20.682Z",
     "createdAt": "2026-11-16T20:13:06.829Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -5320,6 +5816,130 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-16T20:13:06.829Z"
+    },
+    "postMatchReview": {
+      "summary": "Cartagena a gagné 1-2 après prolongation (0-0 à la mi-temps, 1-1 à 90 min, but décisif à la 116e). Ma lecture prudente, légèrement favorable à Cartagena et sans avis tranché sur Minera, est confirmée sur le fond. Le match est resté très serré, comme le laissaient attendre les xG faibles du moteur.",
+      "whatWasRight": "J'avais jugé la victoire de Minera fragile et le contexte plutôt favorable à Cartagena : Cartagena l'emporte. Le caractère serré annoncé (0,5 contre 0,75 but attendu) se retrouve : 0-0 à la pause, 1-1 après 90 minutes, décidé à la 116e. J'avais aussi prévenu que les données de Minera étaient trop anciennes pour être fiables.",
+      "whatWasMissed": "Je n'avais pas envisagé la prolongation, qui a profité à Cartagena. Je n'ai pas prévu non plus l'indiscipline de Minera : Kouassi jaune à la 21e, puis rouge à la 86e, ce qui a laissé Minera à dix avant le but de la 116e. Minera a égalisé à la 64e (Kouassi), après le but de Cartagena à la 57e : l'équipe locale était plus compétitive que ma lecture ne le laissait croire.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur, qui voyait Cartagena un peu devant en buts attendus (0,75 contre 0,5) et ne donnait que 35 % à Minera. Il n'y avait ni edge ni mise (PASS). L'écart est resté mince : égalité jusqu'à la fin du temps réglementaire.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Deportiva Minera gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Minera ne gagne pas : Cartagena ouvre le score à la 57e (Marcelo dos Santos), Minera égalise à la 64e (Kouassi), puis Minera finit à dix après le second jaune de Kouassi à la 86e. Cartagena marque à la 116e en prolongation (Dacosta) et gagne 1-2. Aucune statistique de tirs ou de xG n'est relevée pour détailler la domination.",
+          "lesson": "Mon avis nuancé, faible confiance, était cohérent : le pick de Minera à 35 % était faux. En Copa avec un faible écart attendu, penser à la prolongation et aux cartons, qui peuvent faire basculer le résultat. Garder la prudence quand les données d'une équipe sont très anciennes, sans écarter l'avantage du terrain."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Deportiva Minera & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Deportiva Minera",
+          "marketId": "teamGoals",
+          "pick": "Deportiva Minera — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Cartagena",
+          "marketId": "teamGoals",
+          "pick": "Cartagena — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        }
+      ],
+      "caveats": "Un seul match, décidé en prolongation après un rouge, donc très sensible au hasard. Aucune statistique de match (tirs, xG, possession) n'a été relevée, ce qui empêche de juger la domination réelle. Données d'avant-match très anciennes pour Minera.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 22,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 4223,
+        "cache_read_input_tokens": 7116,
+        "output_tokens": 1907,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 4223,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1133,
+            "cache_read_input_tokens": 5028,
+            "cache_creation_input_tokens": 1283,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1283
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0373932,
+      "createdAt": "2026-11-18T22:43:20.682Z"
     }
   },
   {
@@ -6035,7 +6655,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-18T18:37:17.883Z",
+    "updatedAt": "2026-11-18T22:43:59.864Z",
     "createdAt": "2026-11-16T20:13:24.475Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -6181,6 +6801,130 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-16T20:13:24.475Z"
+    },
+    "postMatchReview": {
+      "summary": "Le match s'est conclu par un 1-1 après 90 minutes, puis prolongation sans but supplémentaire, et la qualification s'est jouée aux tirs au but (séance non incluse dans le score). Mon avis nuancé et prudent, sans mise, était adapté : le favori Barakaldo selon le moteur n'a pas gagné dans le temps réglementaire. Reus, donné très inférieur en buts attendus (0,89 contre 2,14), a tenu et même mené.",
+      "whatWasRight": "J'avais insisté sur la volatilité de la coupe, l'avantage du terrain pour Reus et la faiblesse des données, et j'avais refusé de confirmer fortement le moteur. Le résultat le valide : 0-0 à la mi-temps, Reus ouvre le score à la 65e (Alya Camara), Barakaldo égalise à la 73e (Urko Collado), puis rien en prolongation. Le nul que je disais très ouvert (cote juste 3,39) est bien celui qui est survenu.",
+      "whatWasMissed": "Je n'avais pas anticipé un match aussi fermé et haché : 7 jaunes, dont 3 pour Reus et 4 pour Barakaldo, et aucun rouge. Je n'avais aucun moyen d'évaluer la solidité réelle de Reus, dont les données dataient de fin 2025. Les statistiques de tirs et de xG du match ne sont pas relevées, donc je ne peux pas dire si Barakaldo a dominé sans conclure.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1N2 dans le temps réglementaire : il donnait Barakaldo favori à 43 % avec un écart de buts attendus net, et c'est un nul. L'absence d'edge chiffré et de mise (PASS) a limité l'impact de cet écart. Barakaldo n'a pas perdu et a rattrapé son retard, ce qui reste compatible avec une supériorité modérée.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Barakaldo gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Le pick Barakaldo gagne est faux : score de 1-1 après 90 minutes, sans but ensuite en prolongation. Reus a marqué à la 65e par Alya Camara, Barakaldo a égalisé à la 73e par Urko Collado. Le match, haché (7 jaunes), est resté équilibré. La qualification aux tirs au but n'entre pas dans le score du marché.",
+          "lesson": "Quand l'écart de xG est grand mais que les données de forme sont anciennes ou maigres, garder un avis nuancé et faible était juste. En Copa del Rey au premier tour, le nul dans le temps réglementaire reste très plausible, même contre un favori du moteur. Il faut vérifier à quoi le marché se rapporte (90 minutes ou qualification) et ne pas surpondérer un xG calculé sans historique solide."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Barakaldo & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Reus",
+          "marketId": "teamGoals",
+          "pick": "Reus — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Barakaldo",
+          "marketId": "teamGoals",
+          "pick": "Barakaldo — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        }
+      ],
+      "caveats": "Un seul match, issue tenant à peu de choses (deux buts en huit minutes). Aucune statistique de tirs, xG ou possession relevée, donc impossible de juger la domination réelle. La séance de tirs au but n'est pas dans le score.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 19,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 2823,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 1221,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 2823,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1221,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 2823,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2823
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.023923600000000003,
+      "createdAt": "2026-11-18T22:43:59.863Z"
     }
   },
   {
@@ -6198,14 +6942,14 @@
         "source": "fotmob"
       },
       "trueOdds": {
-        "home": 1.75,
-        "draw": 3.99,
-        "away": 5.63
+        "home": 1.94,
+        "draw": 3.8,
+        "away": 4.51
       },
       "market": {
-        "odds1": 1.69,
-        "oddsDraw": 3.63,
-        "odds2": 5.08
+        "odds1": 1.83,
+        "oddsDraw": 3.48,
+        "odds2": 4.15
       },
       "edgePercent": null,
       "staking": {
@@ -6240,8 +6984,8 @@
           "market": "Résultat",
           "predictedOutcome": "home",
           "predictedLabel": "Alianza Atlético gagne",
-          "predictedOdds": 1.75,
-          "probability": 57,
+          "predictedOdds": 1.94,
+          "probability": 52,
           "minOdds": 1.2
         },
         {
@@ -6278,8 +7022,8 @@
           "market": "Résultat + Total buts",
           "predictedOutcome": "homeUnder",
           "predictedLabel": "Alianza Atlético & Moins de 3.5 buts",
-          "predictedOdds": 2.29,
-          "probability": 44,
+          "predictedOdds": 2.54,
+          "probability": 39,
           "minOdds": 1.2
         },
         {
@@ -6442,9 +7186,9 @@
     },
     "usage": {
       "input_tokens": 2,
-      "cache_creation_input_tokens": 6334,
+      "cache_creation_input_tokens": 6200,
       "cache_read_input_tokens": 4470,
-      "output_tokens": 2977,
+      "output_tokens": 2955,
       "output_tokens_details": {
         "thinking_tokens": 0
       },
@@ -6454,19 +7198,19 @@
       },
       "service_tier": "standard",
       "cache_creation": {
-        "ephemeral_1h_input_tokens": 6334,
+        "ephemeral_1h_input_tokens": 6200,
         "ephemeral_5m_input_tokens": 0
       },
       "inference_geo": "global",
       "iterations": [
         {
           "input_tokens": 2,
-          "output_tokens": 2977,
+          "output_tokens": 2955,
           "cache_read_input_tokens": 4470,
-          "cache_creation_input_tokens": 6334,
+          "cache_creation_input_tokens": 6200,
           "cache_creation": {
             "ephemeral_5m_input_tokens": 0,
-            "ephemeral_1h_input_tokens": 6334
+            "ephemeral_1h_input_tokens": 6200
           },
           "type": "message"
         }
@@ -6474,8 +7218,8 @@
       "speed": "standard",
       "fallback_credit": null
     },
-    "costUsd": 0.056004,
-    "analysedAt": "2026-11-18T19:07:36.851Z",
+    "costUsd": 0.055248,
+    "analysedAt": "2026-11-18T19:42:43.615Z",
     "timing": "coup-d-envoi",
     "fiche": "compacte",
     "memoire": {
@@ -6504,13 +7248,13 @@
     "lineupSnapshot": {
       "source": "FotMob",
       "fotmobMatchId": "1000017301",
-      "fetchedAt": "2026-11-18T19:07:13.176Z",
-      "minutesBeforeKickoff": 53,
+      "fetchedAt": "2026-11-18T19:42:16.612Z",
+      "minutesBeforeKickoff": 18,
       "home": {
         "team": "Alianza Atlético",
         "teamId": "fotmob-4410",
-        "formation": "4-2-3-1",
-        "coach": "Pablo Trento",
+        "formation": "4-3-3",
+        "coach": "Federico Urciuoli",
         "statsSince": "2026-01-01",
         "teamMatches": 40,
         "startXI": [
@@ -6542,7 +7286,7 @@
             "age": 26,
             "countryCode": "PER",
             "countryName": "Peru",
-            "x": 0.292,
+            "x": 0.357,
             "y": 0.875,
             "stats": {
               "apps": 34,
@@ -6562,7 +7306,7 @@
             "age": 25,
             "countryCode": "ARG",
             "countryName": "Argentina",
-            "x": 0.292,
+            "x": 0.357,
             "y": 0.625,
             "stats": {
               "apps": 34,
@@ -6582,7 +7326,7 @@
             "age": 29,
             "countryCode": "PER",
             "countryName": "Peru",
-            "x": 0.292,
+            "x": 0.357,
             "y": 0.375,
             "stats": {
               "apps": 27,
@@ -6602,7 +7346,7 @@
             "age": 32,
             "countryCode": "PER",
             "countryName": "Peru",
-            "x": 0.292,
+            "x": 0.357,
             "y": 0.125,
             "stats": {
               "apps": 33,
@@ -6615,6 +7359,26 @@
             }
           },
           {
+            "id": "fotmob-1246591",
+            "name": "José Ingratti",
+            "number": 27,
+            "position": "Midfielder",
+            "age": 26,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.613,
+            "y": 0.79,
+            "stats": {
+              "apps": 17,
+              "starts": 14,
+              "minutes": 1148,
+              "goals": 3,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.68
+            }
+          },
+          {
             "id": "fotmob-1623272",
             "name": "Hernán Lupu",
             "number": 15,
@@ -6622,8 +7386,8 @@
             "age": 22,
             "countryCode": "PER",
             "countryName": "Peru",
-            "x": 0.485,
-            "y": 0.7,
+            "x": 0.613,
+            "y": 0.5,
             "stats": {
               "apps": 39,
               "starts": 33,
@@ -6635,46 +7399,6 @@
             }
           },
           {
-            "id": "fotmob-1311675",
-            "name": "Germán Díaz",
-            "number": 10,
-            "position": "Midfielder",
-            "age": 30,
-            "countryCode": "ARG",
-            "countryName": "Argentina",
-            "x": 0.485,
-            "y": 0.3,
-            "stats": {
-              "apps": 39,
-              "starts": 36,
-              "minutes": 3181,
-              "goals": 1,
-              "assists": 4,
-              "xg": null,
-              "rating": 7.3
-            }
-          },
-          {
-            "id": "fotmob-1435216",
-            "name": "Ariel Muñoz",
-            "number": 23,
-            "position": "Midfielder",
-            "age": 26,
-            "countryCode": "ARG",
-            "countryName": "Argentina",
-            "x": 0.678,
-            "y": 0.837,
-            "stats": {
-              "apps": 31,
-              "starts": 19,
-              "minutes": 1644,
-              "goals": 5,
-              "assists": 4,
-              "xg": null,
-              "rating": 7.07
-            }
-          },
-          {
             "id": "fotmob-1710852",
             "name": "Juan Delgado",
             "number": 37,
@@ -6682,8 +7406,8 @@
             "age": 21,
             "countryCode": "PER",
             "countryName": "Peru",
-            "x": 0.678,
-            "y": 0.5,
+            "x": 0.613,
+            "y": 0.21,
             "stats": {
               "apps": 8,
               "starts": 2,
@@ -6695,15 +7419,55 @@
             }
           },
           {
+            "id": "fotmob-1249292",
+            "name": "Guillermo Larios",
+            "number": 11,
+            "position": "Forward",
+            "age": 24,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "x": 0.87,
+            "y": 0.79,
+            "stats": {
+              "apps": 27,
+              "starts": 14,
+              "minutes": 1230,
+              "goals": 4,
+              "assists": 6,
+              "xg": null,
+              "rating": 6.56
+            }
+          },
+          {
+            "id": "fotmob-496951",
+            "name": "Jairo Molina",
+            "number": 29,
+            "position": "Forward",
+            "age": 33,
+            "countryCode": "COL",
+            "countryName": "Colombia",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 32,
+              "starts": 25,
+              "minutes": 2144,
+              "goals": 8,
+              "assists": 0,
+              "xg": 5.33,
+              "rating": 6.57
+            }
+          },
+          {
             "id": "fotmob-196830",
             "name": "Cristian Penilla",
             "number": 17,
-            "position": "Midfielder",
+            "position": "Forward",
             "age": 35,
             "countryCode": "ECU",
             "countryName": "Ecuador",
-            "x": 0.678,
-            "y": 0.163,
+            "x": 0.87,
+            "y": 0.21,
             "stats": {
               "apps": 37,
               "starts": 28,
@@ -6712,26 +7476,6 @@
               "assists": 5,
               "xg": null,
               "rating": 7.02
-            }
-          },
-          {
-            "id": "fotmob-1246591",
-            "name": "José Ingratti",
-            "number": 27,
-            "position": "Forward",
-            "age": 26,
-            "countryCode": "ARG",
-            "countryName": "Argentina",
-            "x": 0.87,
-            "y": 0.5,
-            "stats": {
-              "apps": 17,
-              "starts": 14,
-              "minutes": 1148,
-              "goals": 3,
-              "assists": 1,
-              "xg": null,
-              "rating": 6.68
             }
           }
         ],
@@ -6827,39 +7571,39 @@
             }
           },
           {
-            "id": "fotmob-1502875",
-            "name": "Stefano Fernández",
-            "number": 16,
+            "id": "fotmob-1435216",
+            "name": "Ariel Muñoz",
+            "number": 23,
             "position": "Midfielder",
-            "age": 24,
-            "countryCode": "PER",
-            "countryName": "Peru",
+            "age": 26,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
             "stats": {
-              "apps": 28,
-              "starts": 14,
-              "minutes": 1231,
-              "goals": 0,
-              "assists": 1,
+              "apps": 31,
+              "starts": 19,
+              "minutes": 1644,
+              "goals": 5,
+              "assists": 4,
               "xg": null,
-              "rating": 6.35
+              "rating": 7.07
             }
           },
           {
-            "id": "fotmob-1249292",
-            "name": "Guillermo Larios",
-            "number": 11,
-            "position": "Forward",
-            "age": 24,
+            "id": "fotmob-1242309",
+            "name": "Franchesco Flores",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 25,
             "countryCode": "PER",
             "countryName": "Peru",
             "stats": {
-              "apps": 27,
-              "starts": 14,
-              "minutes": 1230,
-              "goals": 4,
-              "assists": 6,
+              "apps": 24,
+              "starts": 10,
+              "minutes": 950,
+              "goals": 2,
+              "assists": 2,
               "xg": null,
-              "rating": 6.56
+              "rating": 6.51
             }
           },
           {
@@ -6881,21 +7625,21 @@
             }
           },
           {
-            "id": "fotmob-496951",
-            "name": "Jairo Molina",
-            "number": 29,
+            "id": "fotmob-1528233",
+            "name": "Cristhian Valladolid",
+            "number": 77,
             "position": "Forward",
-            "age": 33,
-            "countryCode": "COL",
-            "countryName": "Colombia",
+            "age": 22,
+            "countryCode": "PER",
+            "countryName": "Peru",
             "stats": {
-              "apps": 32,
-              "starts": 25,
-              "minutes": 2144,
-              "goals": 8,
+              "apps": 9,
+              "starts": 2,
+              "minutes": 282,
+              "goals": 1,
               "assists": 0,
-              "xg": 5.33,
-              "rating": 6.57
+              "xg": null,
+              "rating": 6.25
             }
           }
         ],
@@ -6920,12 +7664,25 @@
             }
           }
         ],
-        "usualStartersMissing": []
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-1311675",
+            "age": 30,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Germán Díaz",
+            "position": "Midfielder",
+            "starts": 36,
+            "goals": 1,
+            "assists": 4,
+            "status": "absent de la feuille de match"
+          }
+        ]
       },
       "away": {
         "team": "FBC Melgar",
         "teamId": "fotmob-4417",
-        "formation": "4-2-3-1",
+        "formation": "4-4-2",
         "coach": "Miguel Rondelli",
         "statsSince": "2026-01-01",
         "teamMatches": 34,
@@ -6958,7 +7715,7 @@
             "age": 23,
             "countryCode": "PER",
             "countryName": "Peru",
-            "x": 0.292,
+            "x": 0.357,
             "y": 0.875,
             "stats": {
               "apps": 32,
@@ -6978,7 +7735,7 @@
             "age": 31,
             "countryCode": "PAR",
             "countryName": "Paraguay",
-            "x": 0.292,
+            "x": 0.357,
             "y": 0.625,
             "stats": {
               "apps": 26,
@@ -6998,7 +7755,7 @@
             "age": 32,
             "countryCode": "ARG",
             "countryName": "Argentina",
-            "x": 0.292,
+            "x": 0.357,
             "y": 0.375,
             "stats": {
               "apps": 27,
@@ -7018,7 +7775,7 @@
             "age": 26,
             "countryCode": "PER",
             "countryName": "Peru",
-            "x": 0.292,
+            "x": 0.357,
             "y": 0.125,
             "stats": {
               "apps": 23,
@@ -7031,23 +7788,43 @@
             }
           },
           {
-            "id": "fotmob-402800",
-            "name": "Horacio Orzán",
-            "number": 66,
+            "id": "fotmob-1212175",
+            "name": "Nicolás Quagliata",
+            "number": 10,
             "position": "Midfielder",
-            "age": 38,
-            "countryCode": "ARG",
-            "countryName": "Argentina",
-            "x": 0.485,
-            "y": 0.7,
+            "age": 27,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "x": 0.613,
+            "y": 0.875,
             "stats": {
-              "apps": 12,
-              "starts": 7,
-              "minutes": 623,
+              "apps": 28,
+              "starts": 26,
+              "minutes": 2182,
+              "goals": 7,
+              "assists": 12,
+              "xg": null,
+              "rating": 7.66
+            }
+          },
+          {
+            "id": "fotmob-1028039",
+            "name": "Walter Tandazo",
+            "number": 24,
+            "position": "Midfielder",
+            "age": 26,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "x": 0.613,
+            "y": 0.625,
+            "stats": {
+              "apps": 28,
+              "starts": 28,
+              "minutes": 2385,
               "goals": 0,
               "assists": 1,
               "xg": null,
-              "rating": 6.99
+              "rating": 6.86
             }
           },
           {
@@ -7058,8 +7835,8 @@
             "age": 27,
             "countryCode": "ECU",
             "countryName": "Ecuador",
-            "x": 0.485,
-            "y": 0.3,
+            "x": 0.613,
+            "y": 0.375,
             "stats": {
               "apps": 29,
               "starts": 19,
@@ -7071,46 +7848,6 @@
             }
           },
           {
-            "id": "fotmob-469332",
-            "name": "Cristian Bordacahar",
-            "number": 7,
-            "position": "Midfielder",
-            "age": 35,
-            "countryCode": "ARG",
-            "countryName": "Argentina",
-            "x": 0.678,
-            "y": 0.837,
-            "stats": {
-              "apps": 24,
-              "starts": 21,
-              "minutes": 1752,
-              "goals": 7,
-              "assists": 3,
-              "xg": null,
-              "rating": 7.37
-            }
-          },
-          {
-            "id": "fotmob-971890",
-            "name": "Lautaro Guzmán",
-            "number": 8,
-            "position": "Midfielder",
-            "age": 26,
-            "countryCode": "ARG",
-            "countryName": "Argentina",
-            "x": 0.678,
-            "y": 0.5,
-            "stats": {
-              "apps": 27,
-              "starts": 13,
-              "minutes": 1086,
-              "goals": 2,
-              "assists": 2,
-              "xg": null,
-              "rating": 6.62
-            }
-          },
-          {
             "id": "fotmob-1897207",
             "name": "Matías Zegarra",
             "number": 45,
@@ -7118,8 +7855,8 @@
             "age": 19,
             "countryCode": "PER",
             "countryName": "Peru",
-            "x": 0.678,
-            "y": 0.163,
+            "x": 0.613,
+            "y": 0.125,
             "stats": {
               "apps": 30,
               "starts": 20,
@@ -7131,6 +7868,26 @@
             }
           },
           {
+            "id": "fotmob-469332",
+            "name": "Cristian Bordacahar",
+            "number": 7,
+            "position": "Forward",
+            "age": 35,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.87,
+            "y": 0.7,
+            "stats": {
+              "apps": 24,
+              "starts": 21,
+              "minutes": 1752,
+              "goals": 7,
+              "assists": 3,
+              "xg": null,
+              "rating": 7.37
+            }
+          },
+          {
             "id": "fotmob-355713",
             "name": "Jhonny Vidales",
             "number": 11,
@@ -7139,7 +7896,7 @@
             "countryCode": "PER",
             "countryName": "Peru",
             "x": 0.87,
-            "y": 0.5,
+            "y": 0.3,
             "stats": {
               "apps": 34,
               "starts": 29,
@@ -7153,58 +7910,24 @@
         ],
         "bench": [
           {
-            "id": "fotmob-118607",
-            "name": "Carlos Cáceda",
-            "number": 12,
+            "id": "fotmob-116918",
+            "name": "Ricardo Farro",
+            "number": 1,
             "position": "Goalkeeper",
-            "age": 35,
+            "age": 41,
             "countryCode": "PER",
             "countryName": "Peru",
-            "stats": {
-              "apps": 8,
-              "starts": 8,
-              "minutes": 720,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.54
-            }
+            "stats": null
           },
           {
-            "id": "fotmob-1170829",
-            "name": "Jesús Alcántar",
-            "number": 90,
+            "id": "fotmob-1897209",
+            "name": "Ángel Obando",
+            "number": 38,
             "position": "Defender",
-            "age": 23,
-            "countryCode": "MEX",
-            "countryName": "Mexico",
-            "stats": {
-              "apps": 20,
-              "starts": 11,
-              "minutes": 1152,
-              "goals": 2,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.7
-            }
-          },
-          {
-            "id": "fotmob-1039251",
-            "name": "Alec Deneumostier",
-            "number": 5,
-            "position": "Defender",
-            "age": 27,
+            "age": 20,
             "countryCode": "PER",
             "countryName": "Peru",
-            "stats": {
-              "apps": 17,
-              "starts": 12,
-              "minutes": 1106,
-              "goals": 1,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.7
-            }
+            "stats": null
           },
           {
             "id": "fotmob-1607758",
@@ -7225,22 +7948,14 @@
             }
           },
           {
-            "id": "fotmob-1181405",
-            "name": "Jhamir D'Arrigo",
-            "number": 80,
+            "id": "fotmob-2036465",
+            "name": "Keith Yáñez",
+            "number": 44,
             "position": "Midfielder",
-            "age": 27,
+            "age": 17,
             "countryCode": "PER",
             "countryName": "Peru",
-            "stats": {
-              "apps": 19,
-              "starts": 1,
-              "minutes": 325,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.37
-            }
+            "stats": null
           },
           {
             "id": "fotmob-1754539",
@@ -7261,21 +7976,31 @@
             }
           },
           {
-            "id": "fotmob-1321686",
-            "name": "Marcos Portillo",
-            "number": 26,
+            "id": "fotmob-2037285",
+            "name": "Ian Arróspide",
+            "number": 42,
             "position": "Midfielder",
-            "age": 26,
-            "countryCode": "ARG",
-            "countryName": "Argentina",
+            "age": 17,
+            "countryCode": "PER",
+            "countryName": "Peru",
+            "stats": null
+          },
+          {
+            "id": "fotmob-1710861",
+            "name": "César Doy",
+            "number": 39,
+            "position": "Midfielder",
+            "age": 21,
+            "countryCode": "PER",
+            "countryName": "Peru",
             "stats": {
-              "apps": 11,
-              "starts": 2,
-              "minutes": 237,
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
               "goals": 0,
               "assists": 0,
               "xg": null,
-              "rating": 6.53
+              "rating": null
             }
           },
           {
@@ -7294,24 +8019,6 @@
               "assists": 0,
               "xg": null,
               "rating": null
-            }
-          },
-          {
-            "id": "fotmob-1197554",
-            "name": "Franco Zanelatto",
-            "number": 77,
-            "position": "Forward",
-            "age": 26,
-            "countryCode": "PER",
-            "countryName": "Peru",
-            "stats": {
-              "apps": 17,
-              "starts": 4,
-              "minutes": 410,
-              "goals": 0,
-              "assists": 1,
-              "xg": null,
-              "rating": 6.28
             }
           }
         ],
@@ -7357,30 +8064,6 @@
         ],
         "usualStartersMissing": [
           {
-            "id": "fotmob-1028039",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "name": "Walter Tandazo",
-            "position": "Midfielder",
-            "starts": 28,
-            "goals": 0,
-            "assists": 1,
-            "status": "absent de la feuille de match"
-          },
-          {
-            "id": "fotmob-1212175",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "name": "Nicolás Quagliata",
-            "position": "Midfielder",
-            "starts": 26,
-            "goals": 7,
-            "assists": 12,
-            "status": "absent de la feuille de match"
-          },
-          {
             "id": "fotmob-361099",
             "age": null,
             "countryCode": null,
@@ -7400,10 +8083,10 @@
         "city": "Sullana",
         "capacity": 12000,
         "surface": "grass",
-        "weather": "Showers",
-        "temperature": 33,
-        "windSpeed": 14,
-        "precipitation": 0.36,
+        "weather": "Mostly Cloudy",
+        "temperature": 32,
+        "windSpeed": 18,
+        "precipitation": 0,
         "referee": {
           "name": "Edwin Ordóñez",
           "country": "Peru",
@@ -7419,49 +8102,53 @@
       }
     },
     "analysis": {
-      "summary": "Alianza (7e, 28 pts) est en baisse : 1 victoire sur ses 3 derniers matchs hors 3-2 contre Garcilaso, défaites 0-2 à Cajamarca et 1-4 à Huancayo, mais 7 victoires en 8 à domicile. Melgar (5e, 29 pts) est plus stable (2 points par match sur 5 matchs) et plus solide défensivement (1,1 encaissé par match), mais privé de Cuesta (15 buts) et Quagliata (7+12), absents. Alianza a un nouvel entraîneur, Trento, et aucun titulaire habituel absent.",
+      "summary": "Alianza Atlético (7e, 28 pts) reçoit Melgar (5e, 29 pts). Alianza est en baisse (D, V, V, D, D sur les 5 derniers), mais très solide à domicile (7 V en 8 matchs). Melgar est plus stable (2 V, 1 N, 1 D sur les 4 derniers hors derby) et plus efficace en attaque, mais il est privé de son buteur Cuesta (15 buts, blessé). Alianza aligne un 4-3-3 sans Germán Díaz et sans Villegas ; Melgar un 4-4-2 avec Vidales (14 buts) et Quagliata (7+12).",
       "keyFactors": [
         {
-          "factor": "classement",
-          "observation": "Deux équipes voisines, Melgar un point devant, mais Alianza très fort à domicile.",
-          "evidence": "Alianza 7e, 28 pts, domicile 7-0-1 ; Melgar 5e, 29 pts, extérieur 4-2-2."
-        },
-        {
           "factor": "forme récente",
-          "observation": "Alianza vient de perdre 0-2 à Cajamarca ; Melgar a battu Juan Pablo II 2-1 puis perdu 0-2 à Huancayo.",
-          "evidence": "Alianza DVVDD sur les 5 derniers ; Melgar VDNVV."
+          "observation": "Alianza en baisse, Melgar plus régulier",
+          "evidence": "Alianza 1,2 pt/match sur 5 derniers vs 2,4 avant ; Melgar 2 pts/match sur 5 derniers"
         },
         {
-          "factor": "compositions",
-          "observation": "Melgar sans Cuesta ni Quagliata, ses principaux créateurs et buteurs ; Alianza complet.",
-          "evidence": "Cuesta 15+6, Quagliata 7+12 ; Villegas seul absent côté Alianza (blessé)."
+          "factor": "statistiques à domicile/extérieur",
+          "observation": "Alianza produit beaucoup à domicile, Melgar peu à l'extérieur",
+          "evidence": "Alianza dom. 20 tirs, 7,2 corners par match ; Melgar ext. 14,4 tirs, 3,8 corners, 1 but / 1,2 concédé"
         },
         {
-          "factor": "statistiques et moyennes",
-          "observation": "Alianza tire beaucoup à domicile, Melgar produit peu à l'extérieur.",
-          "evidence": "Alianza 20 tirs et 7,2 corners à domicile ; Melgar 14,4 tirs et 3,8 corners à l'extérieur."
+          "factor": "absences",
+          "observation": "Melgar sans son meilleur buteur",
+          "evidence": "Bernardo Cuesta 24 tit., 15+6, blessé, retour incertain ; Alianza sans Germán Díaz (36 tit., 1+4) ni Villegas"
+        },
+        {
+          "factor": "entraîneur",
+          "observation": "Alianza a de nouveau Urciuoli sur le banc, après Trento, vu seulement le 07/11 (défaite 0-2)",
+          "evidence": "Changement signalé : Trento → Urciuoli ; l'historique des compositions est partiel"
+        },
+        {
+          "factor": "classement",
+          "observation": "Équipes proches au classement",
+          "evidence": "7e 28 pts (diff -1) contre 5e 29 pts (diff +9)"
         }
       ],
-      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : avantage domicile net et Melgar amoindri en attaque. Il nuance toutefois la domination d'Alianza, en baisse de forme avec un nouvel entraîneur.",
-      "caveats": "Le changement d'entraîneur est déduit des compositions importées, pas d'un flux d'actualité. Pas d'edge chiffré ni de mise (trop peu de bookmakers). Les marchés de buts sont retirés et ne sont pas commentés. Composition relue 53 min avant le coup d'envoi : elle peut encore évoluer.",
-      "lineupImpact": "Alianza aligne son onze type (Penilla 9+5, Muñoz 5+4, Díaz 1+4) sans titulaire habituel absent, seul Villegas est blessé. Melgar se présente sans Cuesta (15+6, blessé, retour incertain), ni Quagliata (7+12) et Tandazo, absents de la feuille de match ; Vidales (14 buts) et Bordacahar (7+3) portent l'attaque. Cela pèse surtout sur les tirs et tirs cadrés de Melgar. Pluie possible (averses), arbitre moins sévère que la moyenne en cartons, sans effet sur ces marchés.",
+      "alignmentWithModel": "Le contexte nuance un peu le favori du moteur : Alianza est fort à domicile, mais en méforme et avec une défense perméable. Melgar a le meilleur bilan global, malgré l'absence de Cuesta. Les marchés de volumes (corners, tirs) vont plutôt dans le sens du moteur.",
+      "caveats": "Marchés de buts non commentés (retirés). Aucun edge chiffré, mise PASS faute de bookmakers. Historique des entraîneurs déduit des compositions importées : le retour d'Urciuoli et la confusion avec Trento sont approximatifs. Le onze est relu 18 minutes avant le coup d'envoi, donc quasi officiel. Le match se joue à Sullana (Estadio Campeones del '36), 32 °C.",
       "marketViews": [
         {
           "market": "Résultat",
           "pick": "Alianza Atlético gagne",
           "verdict": "nuance",
           "confidence": "faible",
-          "explanation": "57 % : Alianza a gagné 7 de ses 8 matchs à domicile et Melgar n'a gagné que 4 de 8 à l'extérieur, avec des buts attendus quasi égaux (1,21 contre 1,19).",
-          "reasoning": "L'avantage du terrain et les absents de Melgar soutiennent le choix, mais la forme d'Alianza (3 défaites sur les 5 derniers matchs) et son nouvel entraîneur incitent à la prudence.",
-          "probability": 57
+          "explanation": "52 % : Alianza a gagné 7 de ses 8 matchs à domicile, mais n'a pris que 1,2 pt par match sur ses 5 derniers.",
+          "reasoning": "Le bilan à domicile soutient Alianza, mais sa forme récente est faible, et Melgar (diff +9) est solide même sans Cuesta. Résultat incertain, historique du moteur sur ce marché modeste.",
+          "probability": 52
         },
         {
           "market": "Total corners",
           "pick": "Moins de 13.5 corners",
           "verdict": "confirme",
-          "confidence": "moyenne",
-          "explanation": "82 % : 10,3 corners attendus au total, et le championnat tourne à 9 corners par match.",
-          "reasoning": "Les moyennes des deux équipes (5,7 chacune sur 10 matchs) restent loin de 13,5, la ligne laisse une large marge.",
+          "confidence": "forte",
+          "explanation": "82 % : 10,3 corners attendus au total, loin de 13,5, et 9 corners par match en championnat.",
+          "reasoning": "Les moyennes (5,7 pour chaque équipe) laissent une large marge sous la ligne. Marché où le moteur est fiable.",
           "probability": 82
         },
         {
@@ -7469,8 +8156,8 @@
           "pick": "Alianza Atlético — Moins de 7.5 corners",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "78 % : 5,45 corners attendus pour Alianza, moyenne de 5,7 sur 10 matchs, même si 7,2 à domicile.",
-          "reasoning": "La moyenne à domicile (7,2) frôle la ligne, ce qui limite la marge malgré l'attendu de 5,45.",
+          "explanation": "78 % : 5,45 corners attendus pour Alianza, 5,7 en moyenne sur 10 matchs, même s'ils montent à 7,2 à domicile.",
+          "reasoning": "Sa moyenne à domicile (7,2) est proche de la ligne, ce qui limite la marge.",
           "probability": 78
         },
         {
@@ -7478,17 +8165,17 @@
           "pick": "FBC Melgar — Plus de 2.5 corners",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "81 % : 4,86 corners attendus pour Melgar, qui en obtient 5,7 en moyenne sur 10 matchs.",
-          "reasoning": "Même à l'extérieur (3,8 de moyenne), Melgar dépasse la ligne, mais la marge est plus mince si Alianza domine la possession.",
+          "explanation": "81 % : 4,86 corners attendus pour Melgar, 5,7 en moyenne, et 3,8 à l'extérieur.",
+          "reasoning": "Même sa moyenne à l'extérieur (3,8) reste au-dessus de la ligne, qui est basse.",
           "probability": 81
         },
         {
           "market": "Total tirs",
           "pick": "Moins de 37.5 tirs",
           "verdict": "confirme",
-          "confidence": "moyenne",
-          "explanation": "83 % : 31,2 tirs attendus au total, avec des moyennes de 17,6 et 17,8 sur 10 matchs.",
-          "reasoning": "Même le cumul des meilleurs profils (20 pour Alianza à domicile, 14,4 pour Melgar dehors) reste sous la ligne.",
+          "confidence": "forte",
+          "explanation": "83 % : 31,2 tirs attendus au total, contre 37,5 pour la ligne.",
+          "reasoning": "Les deux équipes totalisent environ 31 tirs ; même la moyenne de 20 tirs d'Alianza à domicile laisse de la marge.",
           "probability": 83
         },
         {
@@ -7496,8 +8183,8 @@
           "pick": "Alianza Atlético — Moins de 22.5 tirs",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "83 % : 17 tirs attendus pour Alianza, 17,6 de moyenne sur 10 matchs et 20 à domicile.",
-          "reasoning": "La moyenne à domicile (20) reste sous la ligne, qui ne serait franchie que par un match exceptionnel.",
+          "explanation": "83 % : 17 tirs attendus pour Alianza, 17,6 en moyenne, 20 à domicile.",
+          "reasoning": "Même à domicile (20), Alianza reste sous la ligne ; Melgar concède 13,3 tirs.",
           "probability": 83
         },
         {
@@ -7505,8 +8192,8 @@
           "pick": "FBC Melgar — Plus de 9.5 tirs",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "82 % : 14,22 tirs attendus pour Melgar, 17,8 de moyenne sur 10 matchs et 14,4 à l'extérieur.",
-          "reasoning": "Même sans Cuesta et Quagliata, le volume habituel de Melgar dépasse nettement 9,5.",
+          "explanation": "82 % : 14,22 tirs attendus pour Melgar, 14,4 à l'extérieur et 17,8 sur 10 matchs.",
+          "reasoning": "La ligne est basse par rapport à toutes ses moyennes.",
           "probability": 82
         },
         {
@@ -7514,8 +8201,8 @@
           "pick": "Moins de 13.5 tirs cadrés",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "83 % : 10,29 tirs cadrés attendus au total, avec 4,8 et 6,3 de moyenne sur 10 matchs.",
-          "reasoning": "Il faudrait environ trois tirs cadrés de plus que l'attendu ; l'absence des créateurs de Melgar va dans le même sens.",
+          "explanation": "83 % : 10,29 tirs cadrés attendus au total (5,12 + 5,17).",
+          "reasoning": "Les moyennes des deux équipes (4,8 et 6,3) restent bien sous 13,5 au total. Marché plus fragile dans mon bilan.",
           "probability": 83
         },
         {
@@ -7523,8 +8210,8 @@
           "pick": "Alianza Atlético — Moins de 7.5 tirs cadrés",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "83 % : 5,12 tirs cadrés attendus pour Alianza, 4,8 de moyenne sur 10 matchs et 5,6 à domicile.",
-          "reasoning": "La moyenne à domicile reste à deux tirs de la ligne, ce qui soutient le pronostic.",
+          "explanation": "83 % : 5,12 tirs cadrés attendus pour Alianza, 4,8 en moyenne, 5,6 à domicile.",
+          "reasoning": "Même à domicile, Alianza reste sous 7,5, et Melgar n'en concède que 4,5.",
           "probability": 83
         },
         {
@@ -7532,15 +8219,16 @@
           "pick": "FBC Melgar — Moins de 7.5 tirs cadrés",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "83 % : 5,17 tirs cadrés attendus pour Melgar, 6,3 de moyenne sur 10 matchs et 5,6 à l'extérieur.",
-          "reasoning": "Les absences de Cuesta et Quagliata réduisent encore le potentiel offensif de Melgar, ce qui soutient le moins de 7,5.",
+          "explanation": "83 % : 5,17 tirs cadrés attendus pour Melgar, 6,3 en moyenne, 5,6 à l'extérieur.",
+          "reasoning": "Melgar approche 6 tirs cadrés sans atteindre 7,5, d'autant que Cuesta est absent.",
           "probability": 83
         }
-      ]
+      ],
+      "lineupImpact": "Composition FotMob relue 18 min avant le coup d'envoi, donc quasi officielle. Alianza (4-3-3, Urciuoli) se passe de Germán Díaz (36 titularisations, 1+4) et de Villegas (blessé) ; Penilla (9+5) et Molina (8 buts) mènent l'attaque. Melgar (4-4-2, Rondelli) n'a pas Cuesta (15+6, blessé), mais Vidales (14 buts) et Quagliata (7+12) sont là, et son banc n'a pas compté. Ces absences pèsent surtout sur les tirs et tirs cadrés de Melgar."
     },
-    "updatedAt": "2026-11-18T19:07:36.851Z",
+    "updatedAt": "2026-11-18T22:42:39.304Z",
     "createdAt": "2026-11-16T20:14:08.710Z",
-    "kickoffRuns": 1,
+    "kickoffRuns": 2,
     "earlierAnalysis": {
       "analysis": {
         "summary": "Alianza Atlético (7e, 28 pts) est très fort à domicile (7V-0N-1D, buts 17-11) mais en baisse : 3 défaites sur ses 5 derniers matchs, dont 0-2 à Cajamarca. Il a aussi un nouvel entraîneur, Pablo Trento, dont le seul match connu est une défaite. FBC Melgar (5e, 29 pts) est plus stable : 1,1 but concédé par match sur 10 matchs. Il joue sans Cuesta (15 buts, 6 passes, retour incertain), Quagliata (7 buts, 12 passes) ni Tandazo, tous absents du onze. Alianza aligne son onze type.",
@@ -7904,6 +8592,238 @@
         "engineVersion": 5
       },
       "analysedAt": "2026-11-16T20:14:08.710Z"
+    },
+    "postMatchReview": {
+      "summary": "Match 1-1 faussé par le rouge direct de Quagliata (10e) : Melgar a marqué dès la 5e, puis s'est replié à dix. Alianza a dominé (70 % de possession, 32 tirs, 13 corners) et n'a égalisé qu'à la 90e. Mon avis prudent sur le 1N2 a tenu. Mes avis « confirme » sur les marchés de volume d'Alianza et sur les totaux ont été battus par ce scénario.",
+      "whatWasRight": "J'ai nuancé le favori du moteur : Alianza n'a pas gagné, ce qui valide la prudence. Les marchés Melgar (plus de 2,5 corners : 3 ; plus de 9,5 tirs : 10 ; moins de 7,5 tirs cadrés : 3) sont passés, mais de justesse sur deux d'entre eux. Je prévoyais aussi qu'Alianza domine à domicile en volume, avec ses 20 tirs et 7,2 corners de moyenne à domicile.",
+      "whatWasMissed": "Je n'ai pas pris en compte le risque de scénario extrême. Un but précoce puis un rouge à la 10e ont placé Alianza en attaque permanente contre un bloc bas : 32 tirs contre 17 attendus, 11 tirs cadrés contre 5,1, 13 corners contre 5,45. J'ai donc été trop confiant, même « forte », sur des « moins de » qui reposaient sur des moyennes. Les trois marchés de Melgar sont passés de peu : 3 corners pour une ligne à 2,5, 10 tirs pour 9,5.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1N2 (Alianza à 52 % n'a pas gagné) et sur tous les marchés de volume côté Alianza et totaux. Il le confirme sur les trois marchés de Melgar. Les attentes du moteur (31 tirs, 10 corners au total) ne pouvaient pas intégrer un rouge à la 10e.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Alianza Atlético gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Melgar a marqué à la 5e, puis a perdu Quagliata (rouge direct à la 10e). Alianza a dominé mais n'a égalisé qu'à la 90e (Molina) : 1-1, donc pas de victoire d'Alianza.",
+          "lesson": "Garder la prudence sur ce 1N2 : la forme récente et l'écart au classement restaient serrés. Une domination d'Alianza ne garantit pas la victoire face à un bloc à dix."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Alianza Atlético & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Alianza Atlético",
+          "marketId": "teamGoals",
+          "pick": "Alianza Atlético — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — FBC Melgar",
+          "marketId": "teamGoals",
+          "pick": "FBC Melgar — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 13.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "13 corners d'Alianza et 3 de Melgar font 16, au-dessus de 13,5. Le rouge à la 10e a enfermé Melgar dans son camp pendant 80 minutes.",
+          "lesson": "Un « moins de » sur les corners est fragile face à un rouge précoce ou à une équipe qui domine à 70 %. Ne pas mettre une confiance « forte » sur la seule moyenne quand le scénario peut basculer."
+        },
+        {
+          "market": "Corners — Alianza Atlético",
+          "marketId": "teamCorners",
+          "pick": "Alianza Atlético — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Alianza a obtenu 13 corners, soit presque le double de la ligne de 7,5 : il a attaqué sans relâche à onze contre dix après l'ouverture du score adverse.",
+          "lesson": "Pour une équipe à domicile qui mène le jeu, la moyenne domicile (7,2) sous-estime l'effet d'un retard au score combiné à une supériorité numérique. Prévoir une queue haute."
+        },
+        {
+          "market": "Corners — FBC Melgar",
+          "marketId": "teamCorners",
+          "pick": "FBC Melgar — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Melgar n'a eu que 3 corners, au-dessus de la ligne de 2,5 d'un seul. Il était à dix dès la 10e et a subi 70 % de possession.",
+          "lesson": "Le pronostic est passé de justesse. Une ligne basse reste exposée si l'équipe est acculée : le risque d'un rouge pèse sur ce type de marché."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 37.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "32 tirs d'Alianza et 10 de Melgar font 42, au-dessus de 37,5. Alianza a tiré sans cesse contre dix joueurs.",
+          "lesson": "Les totaux de tirs attendus (31,2) ignorent les scénarios à sens unique. Ne pas afficher une confiance « forte » sans marge face à ce risque."
+        },
+        {
+          "market": "Tirs — Alianza Atlético",
+          "marketId": "teamShots",
+          "pick": "Alianza Atlético — Moins de 22.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Alianza a tiré 32 fois contre une ligne à 22,5, avec 70 % de possession et un adversaire en infériorité dès la 10e.",
+          "lesson": "Pour le favori à domicile, la moyenne (17,6 ; 20 à domicile) n'est pas un plafond : un rouge adverse précoce peut l'emmener bien au-delà."
+        },
+        {
+          "market": "Tirs — FBC Melgar",
+          "marketId": "teamShots",
+          "pick": "FBC Melgar — Plus de 9.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Melgar a tiré 10 fois, soit 0,5 de plus que la ligne de 9,5, malgré 70 % de possession adverse et l'infériorité numérique depuis la 10e.",
+          "lesson": "La ligne était basse mais le résultat très serré : l'avis était juste pour une raison fragile, car la moyenne de 14,4 tirs s'est effondrée à dix."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 13.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "11 tirs cadrés d'Alianza et 3 de Melgar font 14, au-dessus de 13,5 d'un seul. La domination d'Alianza a suffi à faire basculer le total.",
+          "lesson": "J'avais noté que ce marché était fragile, et il l'a été. Garder une confiance modérée sur les totaux de tirs cadrés."
+        },
+        {
+          "market": "Tirs cadrés — Alianza Atlético",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Alianza Atlético — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Alianza a cadré 11 tirs contre une ligne de 7,5. La défense de Melgar, réduite à dix, a été sollicitée sans arrêt, ce qui a rendu le 1-1 tardif (90e) frustrant.",
+          "lesson": "Sa moyenne de 4,8 tirs cadrés ne reflète pas son potentiel quand le match est à sens unique ; prévoir une marge pour les cas de supériorité numérique."
+        },
+        {
+          "market": "Tirs cadrés — FBC Melgar",
+          "marketId": "teamShotsOnTarget",
+          "pick": "FBC Melgar — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Melgar n'a cadré que 3 tirs, bien sous 7,5, après avoir marqué à la 5e et s'être replié à dix dès la 10e.",
+          "lesson": "Confirmé : l'absence de Cuesta et l'infériorité numérique ont limité son attaque. Ce marché reste solide quand Melgar défend."
+        }
+      ],
+      "caveats": "Échantillon d'un seul match, dominé par un facteur non modélisable avant le coup d'envoi : un rouge direct à la 10e. Les statistiques ne distinguent pas ce qui tient au rouge de ce qui tient à la qualité d'Alianza. Les stats sont celles de FotMob ; aucune cote de bookmaker n'était disponible.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 17,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 7821,
+        "cache_read_input_tokens": 8691,
+        "output_tokens": 5117,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 7821,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2574,
+            "cache_read_input_tokens": 6603,
+            "cache_creation_input_tokens": 3306,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3306
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0842002,
+      "createdAt": "2026-11-18T22:42:39.304Z"
     }
   },
   {
@@ -7930,7 +8850,7 @@
         "oddsDraw": 3.46,
         "odds2": 2.07
       },
-      "edgePercent": -2.46,
+      "edgePercent": -10.1,
       "staking": {
         "action": "PASS",
         "stake": null,
@@ -7939,34 +8859,34 @@
           {
             "outcome": "home",
             "label": "Coritiba gagne",
-            "odds": 3.2,
-            "displayedOdds": 3.2,
-            "bookmaker": "coolbet",
-            "bookmakerTitle": "Coolbet",
+            "odds": 3,
+            "displayedOdds": 3,
+            "bookmaker": "pmu_fr",
+            "bookmakerTitle": "PMU (FR)",
             "fairOdds": 3.43,
-            "ev": -0.0659,
+            "ev": -0.1242,
             "exclusion": "sous_le_seuil"
           },
           {
             "outcome": "draw",
             "label": "Match nul",
-            "odds": 3.6,
-            "displayedOdds": 3.6,
-            "bookmaker": "coolbet",
-            "bookmakerTitle": "Coolbet",
+            "odds": 3.4,
+            "displayedOdds": 3.4,
+            "bookmaker": "pmu_fr",
+            "bookmakerTitle": "PMU (FR)",
             "fairOdds": 3.87,
-            "ev": -0.0691,
+            "ev": -0.1208,
             "exclusion": "sous_le_seuil"
           },
           {
             "outcome": "away",
             "label": "Santos gagne",
-            "odds": 2.17,
-            "displayedOdds": 2.17,
-            "bookmaker": "coolbet",
-            "bookmakerTitle": "Coolbet",
+            "odds": 2,
+            "displayedOdds": 2,
+            "bookmaker": "pmu_fr",
+            "bookmakerTitle": "PMU (FR)",
             "fairOdds": 2.22,
-            "ev": -0.0246,
+            "ev": -0.101,
             "exclusion": "sous_le_seuil"
           }
         ],
@@ -8196,13 +9116,17 @@
           "minOdds": 1.2
         }
       ],
-      "engineVersion": 5
+      "baseDuCalcul": {
+        "montant": 300.92,
+        "origine": "capital-regle"
+      },
+      "engineVersion": 6
     },
     "usage": {
-      "input_tokens": 4,
-      "cache_creation_input_tokens": 12769,
-      "cache_read_input_tokens": 11255,
-      "output_tokens": 7097,
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 11186,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 3200,
       "output_tokens_details": {
         "thinking_tokens": 0
       },
@@ -8212,19 +9136,19 @@
       },
       "service_tier": "standard",
       "cache_creation": {
-        "ephemeral_1h_input_tokens": 12769,
+        "ephemeral_1h_input_tokens": 11186,
         "ephemeral_5m_input_tokens": 0
       },
       "inference_geo": "global",
       "iterations": [
         {
           "input_tokens": 2,
-          "output_tokens": 3031,
-          "cache_read_input_tokens": 11255,
-          "cache_creation_input_tokens": 1514,
+          "output_tokens": 3200,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 11186,
           "cache_creation": {
             "ephemeral_5m_input_tokens": 0,
-            "ephemeral_1h_input_tokens": 1514
+            "ephemeral_1h_input_tokens": 11186
           },
           "type": "message"
         }
@@ -8232,9 +9156,9 @@
       "speed": "standard",
       "fallback_credit": null
     },
-    "costUsd": 0.124305,
-    "analysedAt": "2026-11-16T23:16:29.775Z",
-    "timing": "avance",
+    "costUsd": 0.076748,
+    "analysedAt": "2026-11-18T21:42:44.289Z",
+    "timing": "coup-d-envoi",
     "fiche": "compacte",
     "memoire": {
       "mots": 486,
@@ -8243,7 +9167,7 @@
         "cal-2026-10-26-flamengo-atletico-mg|result",
         "cal-2026-10-03-atletico-mg-rb-bragantino|teamCorners:away"
       ],
-      "dossiersDu": "2026-11-16T06:34:46.821Z",
+      "dossiersDu": "2026-11-18T00:05:37.382Z",
       "equipes": {
         "home": {
           "id": "fotmob-9767",
@@ -8260,7 +9184,10 @@
       }
     },
     "lineupSnapshot": {
-      "source": "magasin",
+      "source": "FotMob",
+      "fotmobMatchId": "5103711",
+      "fetchedAt": "2026-11-18T21:42:17.003Z",
+      "minutesBeforeKickoff": 48,
       "home": {
         "team": "Coritiba",
         "teamId": "fotmob-9767",
@@ -8270,23 +9197,23 @@
         "teamMatches": 36,
         "startXI": [
           {
-            "id": "fotmob-163824",
-            "name": "Josué",
-            "number": 10,
-            "position": "Forward",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "x": 0.87,
+            "id": "fotmob-1211858",
+            "name": "Pedro Rangel",
+            "number": 22,
+            "position": "Goalkeeper",
+            "age": 26,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.1,
             "y": 0.5,
             "stats": {
-              "apps": 33,
-              "starts": 31,
-              "minutes": 2566,
-              "goals": 1,
-              "assists": 11,
-              "xg": 2.5,
-              "rating": 7.15
+              "apps": 20,
+              "starts": 19,
+              "minutes": 1744,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.89
             }
           },
           {
@@ -8294,9 +9221,9 @@
             "name": "Tinga",
             "number": 2,
             "position": "Defender",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 33,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "x": 0.292,
             "y": 0.875,
             "stats": {
@@ -8310,63 +9237,23 @@
             }
           },
           {
-            "id": "fotmob-638652",
-            "name": "Pedro Rocha",
-            "number": 32,
-            "position": "Midfielder",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "x": 0.678,
-            "y": 0.163,
-            "stats": {
-              "apps": 35,
-              "starts": 34,
-              "minutes": 2638,
-              "goals": 9,
-              "assists": 1,
-              "xg": 9.5,
-              "rating": 6.84
-            }
-          },
-          {
-            "id": "fotmob-655294",
-            "name": "Thiago Santos",
-            "number": 21,
-            "position": "Midfielder",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "x": 0.485,
-            "y": 0.7,
-            "stats": {
-              "apps": 26,
-              "starts": 20,
-              "minutes": 1537,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.37,
-              "rating": 6.64
-            }
-          },
-          {
-            "id": "fotmob-789790",
-            "name": "Bruno Melo",
-            "number": 26,
+            "id": "fotmob-1257285",
+            "name": "Tiago",
+            "number": 23,
             "position": "Defender",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 22,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "x": 0.292,
-            "y": 0.125,
+            "y": 0.625,
             "stats": {
-              "apps": 32,
-              "starts": 32,
-              "minutes": 2576,
-              "goals": 1,
+              "apps": 31,
+              "starts": 26,
+              "minutes": 2328,
+              "goals": 4,
               "assists": 1,
-              "xg": 0.99,
-              "rating": 6.57
+              "xg": 2.17,
+              "rating": 6.63
             }
           },
           {
@@ -8374,9 +9261,9 @@
             "name": "Jacy",
             "number": 55,
             "position": "Defender",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 29,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "x": 0.292,
             "y": 0.375,
             "stats": {
@@ -8390,13 +9277,53 @@
             }
           },
           {
+            "id": "fotmob-789790",
+            "name": "Bruno Melo",
+            "number": 26,
+            "position": "Defender",
+            "age": 34,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.292,
+            "y": 0.125,
+            "stats": {
+              "apps": 32,
+              "starts": 32,
+              "minutes": 2576,
+              "goals": 1,
+              "assists": 1,
+              "xg": 0.99,
+              "rating": 6.57
+            }
+          },
+          {
+            "id": "fotmob-655294",
+            "name": "Thiago Santos",
+            "number": 21,
+            "position": "Midfielder",
+            "age": 37,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.485,
+            "y": 0.7,
+            "stats": {
+              "apps": 26,
+              "starts": 20,
+              "minutes": 1537,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.37,
+              "rating": 6.64
+            }
+          },
+          {
             "id": "fotmob-927094",
             "name": "Sebastián Gómez",
             "number": 19,
             "position": "Midfielder",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 30,
+            "countryCode": "COL",
+            "countryName": "Colombia",
             "x": 0.485,
             "y": 0.3,
             "stats": {
@@ -8414,11 +9341,11 @@
             "name": "Nicolás Fonseca",
             "number": 5,
             "position": "Midfielder",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 28,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
             "x": 0.678,
-            "y": 0.5,
+            "y": 0.837,
             "stats": {
               "apps": 26,
               "starts": 16,
@@ -8430,15 +9357,35 @@
             }
           },
           {
+            "id": "fotmob-163824",
+            "name": "Josué",
+            "number": 10,
+            "position": "Midfielder",
+            "age": 36,
+            "countryCode": "POR",
+            "countryName": "Portugal",
+            "x": 0.678,
+            "y": 0.5,
+            "stats": {
+              "apps": 33,
+              "starts": 31,
+              "minutes": 2566,
+              "goals": 1,
+              "assists": 11,
+              "xg": 2.5,
+              "rating": 7.15
+            }
+          },
+          {
             "id": "fotmob-1053847",
             "name": "Breno Lopes",
             "number": 77,
             "position": "Midfielder",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 30,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "x": 0.678,
-            "y": 0.837,
+            "y": 0.163,
             "stats": {
               "apps": 32,
               "starts": 25,
@@ -8450,55 +9397,71 @@
             }
           },
           {
-            "id": "fotmob-1257285",
-            "name": "Tiago",
-            "number": 23,
-            "position": "Defender",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "x": 0.292,
-            "y": 0.625,
-            "stats": {
-              "apps": 31,
-              "starts": 26,
-              "minutes": 2328,
-              "goals": 4,
-              "assists": 1,
-              "xg": 2.17,
-              "rating": 6.63
-            }
-          },
-          {
-            "id": "fotmob-1509085",
-            "name": "Pedro Morisco",
-            "number": 1,
-            "position": "Goalkeeper",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "x": 0.1,
+            "id": "fotmob-638652",
+            "name": "Pedro Rocha",
+            "number": 32,
+            "position": "Forward",
+            "age": 32,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.87,
             "y": 0.5,
             "stats": {
-              "apps": 17,
-              "starts": 17,
-              "minutes": 1496,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 7.19
+              "apps": 35,
+              "starts": 34,
+              "minutes": 2638,
+              "goals": 9,
+              "assists": 1,
+              "xg": 9.5,
+              "rating": 6.84
             }
           }
         ],
         "bench": [
           {
+            "id": "fotmob-750108",
+            "name": "Keiller",
+            "number": 13,
+            "position": "Goalkeeper",
+            "age": 30,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-941736",
+            "name": "Felipe Jonatan",
+            "number": 6,
+            "position": "Defender",
+            "age": 28,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 21,
+              "starts": 8,
+              "minutes": 1020,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.61,
+              "rating": 6.45
+            }
+          },
+          {
             "id": "fotmob-150041",
             "name": "Maicon",
             "number": 3,
             "position": "Defender",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 38,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "stats": {
               "apps": 15,
               "starts": 12,
@@ -8510,31 +9473,13 @@
             }
           },
           {
-            "id": "fotmob-184500",
-            "name": "Rodrigo Moledo",
-            "number": 4,
-            "position": "Defender",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "stats": {
-              "apps": 10,
-              "starts": 3,
-              "minutes": 520,
-              "goals": 3,
-              "assists": 0,
-              "xg": 0.48,
-              "rating": 6.76
-            }
-          },
-          {
             "id": "fotmob-798148",
             "name": "Fabricio Bustos",
             "number": 14,
             "position": "Defender",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 30,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
             "stats": {
               "apps": 16,
               "starts": 11,
@@ -8550,9 +9495,9 @@
             "name": "Richard",
             "number": 25,
             "position": "Midfielder",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 32,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "stats": {
               "apps": 3,
               "starts": 0,
@@ -8564,121 +9509,13 @@
             }
           },
           {
-            "id": "fotmob-950286",
-            "name": "Brian Ocampo",
-            "number": 17,
-            "position": "Forward",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "stats": {
-              "apps": 22,
-              "starts": 7,
-              "minutes": 736,
-              "goals": 3,
-              "assists": 2,
-              "xg": 0.63,
-              "rating": 6.54
-            }
-          },
-          {
-            "id": "fotmob-1085975",
-            "name": "Rodrigo Rodrigues",
-            "number": 99,
-            "position": "Forward",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "stats": {
-              "apps": 3,
-              "starts": 0,
-              "minutes": 100,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.06,
-              "rating": 6.01
-            }
-          },
-          {
-            "id": "fotmob-1211858",
-            "name": "Pedro Rangel",
-            "number": 22,
-            "position": "Goalkeeper",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "stats": {
-              "apps": 20,
-              "starts": 19,
-              "minutes": 1744,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.89
-            }
-          },
-          {
-            "id": "fotmob-1259119",
-            "name": "Vini Paulista",
-            "number": 36,
-            "position": "Forward",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "stats": {
-              "apps": 29,
-              "starts": 8,
-              "minutes": 1045,
-              "goals": 0,
-              "assists": 0,
-              "xg": 1.28,
-              "rating": 6.59
-            }
-          },
-          {
-            "id": "fotmob-1354491",
-            "name": "Joaquín Lavega",
-            "number": 7,
-            "position": "Forward",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "stats": {
-              "apps": 33,
-              "starts": 22,
-              "minutes": 1730,
-              "goals": 5,
-              "assists": 2,
-              "xg": 3.09,
-              "rating": 6.64
-            }
-          },
-          {
-            "id": "fotmob-1436239",
-            "name": "Rodrigo Gelado",
-            "number": 66,
-            "position": "Defender",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "stats": {
-              "apps": 4,
-              "starts": 0,
-              "minutes": 72,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.17,
-              "rating": 6.07
-            }
-          },
-          {
             "id": "fotmob-1927900",
             "name": "Tissi",
             "number": 50,
             "position": "Midfielder",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 19,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "stats": {
               "apps": 9,
               "starts": 2,
@@ -8694,9 +9531,9 @@
             "name": "Paulo Roberto",
             "number": 18,
             "position": "Midfielder",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 21,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "stats": {
               "apps": 12,
               "starts": 3,
@@ -8706,14 +9543,142 @@
               "xg": 0.57,
               "rating": 6.64
             }
+          },
+          {
+            "id": "fotmob-1085975",
+            "name": "Rodrigo Rodrigues",
+            "number": 99,
+            "position": "Forward",
+            "age": 30,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 3,
+              "starts": 0,
+              "minutes": 100,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.06,
+              "rating": 6.01
+            }
+          },
+          {
+            "id": "fotmob-1476480",
+            "name": "Renato Marques",
+            "number": 78,
+            "position": "Forward",
+            "age": 22,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 10,
+              "starts": 3,
+              "minutes": 280,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.38,
+              "rating": 6.25
+            }
+          },
+          {
+            "id": "fotmob-1259119",
+            "name": "Vini Paulista",
+            "number": 36,
+            "position": "Forward",
+            "age": 25,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 29,
+              "starts": 8,
+              "minutes": 1045,
+              "goals": 0,
+              "assists": 0,
+              "xg": 1.28,
+              "rating": 6.59
+            }
+          },
+          {
+            "id": "fotmob-950286",
+            "name": "Brian Ocampo",
+            "number": 17,
+            "position": "Forward",
+            "age": 27,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "stats": {
+              "apps": 22,
+              "starts": 7,
+              "minutes": 736,
+              "goals": 3,
+              "assists": 2,
+              "xg": 0.63,
+              "rating": 6.54
+            }
+          },
+          {
+            "id": "fotmob-1354491",
+            "name": "Joaquín Lavega",
+            "number": 7,
+            "position": "Forward",
+            "age": 21,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "stats": {
+              "apps": 33,
+              "starts": 22,
+              "minutes": 1730,
+              "goals": 5,
+              "assists": 2,
+              "xg": 3.09,
+              "rating": 6.64
+            }
           }
         ],
         "unavailable": [
           {
+            "id": "fotmob-1509085",
+            "age": 22,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "name": "Pedro Morisco",
+            "reason": "en sélection",
+            "expectedReturn": "Mid November 2026",
+            "position": "Goalkeeper",
+            "stats": {
+              "apps": 17,
+              "starts": 17,
+              "minutes": 1496,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.19
+            }
+          },
+          {
+            "id": "fotmob-184500",
+            "age": 39,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "name": "Rodrigo Moledo",
+            "reason": "blessé",
+            "expectedReturn": "Early December 2026",
+            "position": "Defender",
+            "stats": {
+              "apps": 10,
+              "starts": 3,
+              "minutes": 520,
+              "goals": 3,
+              "assists": 0,
+              "xg": 0.48,
+              "rating": 6.76
+            }
+          },
+          {
             "id": "fotmob-1509078",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 21,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "name": "Lucas Ronier",
             "reason": "blessé",
             "expectedReturn": "Out for season",
@@ -8732,9 +9697,9 @@
         "usualStartersMissing": [
           {
             "id": "fotmob-1354491",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 21,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
             "name": "Joaquín Lavega",
             "position": "Midfielder",
             "starts": 22,
@@ -8744,37 +9709,17 @@
           },
           {
             "id": "fotmob-1509078",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 21,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "name": "Lucas Ronier",
             "position": "Midfielder",
             "starts": 19,
             "goals": 1,
             "assists": 2,
             "status": "blessé"
-          },
-          {
-            "id": "fotmob-1211858",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "name": "Pedro Rangel",
-            "position": "Goalkeeper",
-            "starts": 19,
-            "goals": 0,
-            "assists": 0,
-            "status": "remplaçant"
           }
-        ],
-        "lastMatch": {
-          "date": "2026-11-04",
-          "league": "Brazil Série A",
-          "home": "Internacional",
-          "away": "Coritiba",
-          "homeGoals": 1,
-          "awayGoals": 0
-        }
+        ]
       },
       "away": {
         "team": "Santos",
@@ -8785,153 +9730,13 @@
         "teamMatches": 52,
         "startXI": [
           {
-            "id": "fotmob-184536",
-            "name": "Philippe Coutinho",
-            "number": 11,
-            "position": "Midfielder",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "x": 0.678,
-            "y": 0.5,
-            "stats": {
-              "apps": 10,
-              "starts": 8,
-              "minutes": 633,
-              "goals": 3,
-              "assists": 1,
-              "xg": 3.08,
-              "rating": 7.18
-            }
-          },
-          {
-            "id": "fotmob-400256",
-            "name": "Rodinei",
-            "number": 23,
-            "position": "Defender",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "x": 0.292,
-            "y": 0.875,
-            "stats": {
-              "apps": 33,
-              "starts": 29,
-              "minutes": 2682,
-              "goals": 4,
-              "assists": 4,
-              "xg": 2.32,
-              "rating": 7.24
-            }
-          },
-          {
-            "id": "fotmob-450848",
-            "name": "Gabriel Barbosa",
-            "number": 9,
-            "position": "Forward",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "x": 0.87,
-            "y": 0.5,
-            "stats": {
-              "apps": 41,
-              "starts": 36,
-              "minutes": 3095,
-              "goals": 21,
-              "assists": 8,
-              "xg": 13.27,
-              "rating": 7.41
-            }
-          },
-          {
-            "id": "fotmob-528348",
-            "name": "Éverton",
-            "number": 7,
-            "position": "Midfielder",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "x": 0.678,
-            "y": 0.163,
-            "stats": {
-              "apps": 22,
-              "starts": 12,
-              "minutes": 979,
-              "goals": 1,
-              "assists": 3,
-              "xg": 1.26,
-              "rating": 6.87
-            }
-          },
-          {
-            "id": "fotmob-763386",
-            "name": "Luan Peres",
-            "number": 14,
-            "position": "Defender",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "x": 0.292,
-            "y": 0.375,
-            "stats": {
-              "apps": 40,
-              "starts": 35,
-              "minutes": 3186,
-              "goals": 2,
-              "assists": 0,
-              "xg": 0.73,
-              "rating": 6.94
-            }
-          },
-          {
-            "id": "fotmob-925841",
-            "name": "Christian Oliva",
-            "number": 28,
-            "position": "Midfielder",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "x": 0.485,
-            "y": 0.3,
-            "stats": {
-              "apps": 42,
-              "starts": 31,
-              "minutes": 2894,
-              "goals": 3,
-              "assists": 3,
-              "xg": 1.8,
-              "rating": 6.95
-            }
-          },
-          {
-            "id": "fotmob-959915",
-            "name": "Álvaro Barreal",
-            "number": 22,
-            "position": "Defender",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "x": 0.292,
-            "y": 0.125,
-            "stats": {
-              "apps": 42,
-              "starts": 33,
-              "minutes": 2657,
-              "goals": 5,
-              "assists": 1,
-              "xg": 2.7,
-              "rating": 7.1
-            }
-          },
-          {
             "id": "fotmob-1272356",
             "name": "Diógenes",
             "number": 1,
             "position": "Goalkeeper",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 25,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "x": 0.1,
             "y": 0.5,
             "stats": {
@@ -8945,23 +9750,83 @@
             }
           },
           {
-            "id": "fotmob-1712138",
-            "name": "Gabriel Bontempo",
-            "number": 8,
-            "position": "Midfielder",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "x": 0.678,
-            "y": 0.837,
+            "id": "fotmob-400256",
+            "name": "Rodinei",
+            "number": 23,
+            "position": "Defender",
+            "age": 34,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.292,
+            "y": 0.875,
             "stats": {
-              "apps": 47,
-              "starts": 40,
-              "minutes": 3322,
-              "goals": 5,
+              "apps": 33,
+              "starts": 29,
+              "minutes": 2682,
+              "goals": 4,
               "assists": 4,
-              "xg": 2.75,
-              "rating": 7.26
+              "xg": 2.32,
+              "rating": 7.24
+            }
+          },
+          {
+            "id": "fotmob-305713",
+            "name": "Willian Arão",
+            "number": 15,
+            "position": "Defender",
+            "age": 34,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 39,
+              "starts": 31,
+              "minutes": 2669,
+              "goals": 3,
+              "assists": 0,
+              "xg": 0.58,
+              "rating": 6.9
+            }
+          },
+          {
+            "id": "fotmob-763386",
+            "name": "Luan Peres",
+            "number": 14,
+            "position": "Defender",
+            "age": 32,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.292,
+            "y": 0.375,
+            "stats": {
+              "apps": 40,
+              "starts": 35,
+              "minutes": 3186,
+              "goals": 2,
+              "assists": 0,
+              "xg": 0.73,
+              "rating": 6.94
+            }
+          },
+          {
+            "id": "fotmob-1763623",
+            "name": "João Alencar",
+            "number": 42,
+            "position": "Defender",
+            "age": 19,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.292,
+            "y": 0.125,
+            "stats": {
+              "apps": 4,
+              "starts": 3,
+              "minutes": 277,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.82
             }
           },
           {
@@ -8969,9 +9834,9 @@
             "name": "Gustavo Henrique",
             "number": 48,
             "position": "Midfielder",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 21,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "x": 0.485,
             "y": 0.7,
             "stats": {
@@ -8985,53 +9850,15 @@
             }
           },
           {
-            "id": "fotmob-1763623",
-            "name": "João Alencar",
-            "number": 42,
-            "position": "Defender",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "x": 0.292,
-            "y": 0.625,
-            "stats": {
-              "apps": 4,
-              "starts": 3,
-              "minutes": 277,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.82
-            }
-          }
-        ],
-        "bench": [
-          {
-            "id": "fotmob-535896",
-            "name": "João Paulo",
-            "number": 34,
-            "position": "Goalkeeper",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "stats": {
-              "apps": 2,
-              "starts": 0,
-              "minutes": 92,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 5.31
-            }
-          },
-          {
             "id": "fotmob-654044",
             "name": "Arthur",
             "number": 6,
             "position": "Midfielder",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 30,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.485,
+            "y": 0.3,
             "stats": {
               "apps": 22,
               "starts": 12,
@@ -9043,39 +9870,103 @@
             }
           },
           {
-            "id": "fotmob-671606",
-            "name": "Lima",
-            "number": 45,
+            "id": "fotmob-19533",
+            "name": "Neymar",
+            "number": 10,
             "position": "Midfielder",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 34,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.678,
+            "y": 0.837,
             "stats": {
-              "apps": 19,
-              "starts": 3,
-              "minutes": 447,
-              "goals": 1,
-              "assists": 1,
-              "xg": 0.84,
-              "rating": 6.43
+              "apps": 25,
+              "starts": 22,
+              "minutes": 1982,
+              "goals": 10,
+              "assists": 7,
+              "xg": 6.63,
+              "rating": 7.59
             }
           },
           {
-            "id": "fotmob-796732",
-            "name": "Rony",
-            "number": 33,
-            "position": "Forward",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "id": "fotmob-184536",
+            "name": "Philippe Coutinho",
+            "number": 11,
+            "position": "Midfielder",
+            "age": 34,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.678,
+            "y": 0.5,
             "stats": {
-              "apps": 43,
-              "starts": 16,
-              "minutes": 1879,
-              "goals": 4,
+              "apps": 10,
+              "starts": 8,
+              "minutes": 633,
+              "goals": 3,
+              "assists": 1,
+              "xg": 3.08,
+              "rating": 7.18
+            }
+          },
+          {
+            "id": "fotmob-528348",
+            "name": "Éverton",
+            "number": 7,
+            "position": "Midfielder",
+            "age": 30,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.678,
+            "y": 0.163,
+            "stats": {
+              "apps": 22,
+              "starts": 12,
+              "minutes": 979,
+              "goals": 1,
+              "assists": 3,
+              "xg": 1.26,
+              "rating": 6.87
+            }
+          },
+          {
+            "id": "fotmob-450848",
+            "name": "Gabriel Barbosa",
+            "number": 9,
+            "position": "Forward",
+            "age": 30,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 41,
+              "starts": 36,
+              "minutes": 3095,
+              "goals": 21,
+              "assists": 8,
+              "xg": 13.27,
+              "rating": 7.41
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-535896",
+            "name": "João Paulo",
+            "number": 34,
+            "position": "Goalkeeper",
+            "age": 31,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 2,
+              "starts": 0,
+              "minutes": 92,
+              "goals": 0,
               "assists": 0,
-              "xg": 2.27,
-              "rating": 6.66
+              "xg": null,
+              "rating": 5.31
             }
           },
           {
@@ -9083,9 +9974,9 @@
             "name": "Igor Vinícius",
             "number": 18,
             "position": "Defender",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 29,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "stats": {
               "apps": 34,
               "starts": 29,
@@ -9097,21 +9988,93 @@
             }
           },
           {
-            "id": "fotmob-1073365",
-            "name": "Benjamín Rollheiser",
-            "number": 32,
-            "position": "Forward",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "id": "fotmob-751010",
+            "name": "Gonzalo Escobar",
+            "number": 31,
+            "position": "Defender",
+            "age": 29,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
             "stats": {
-              "apps": 44,
-              "starts": 19,
-              "minutes": 1907,
-              "goals": 4,
-              "assists": 5,
-              "xg": 3.62,
-              "rating": 6.98
+              "apps": 38,
+              "starts": 38,
+              "minutes": 3337,
+              "goals": 0,
+              "assists": 2,
+              "xg": 0.37,
+              "rating": 7.19
+            }
+          },
+          {
+            "id": "fotmob-925841",
+            "name": "Christian Oliva",
+            "number": 28,
+            "position": "Midfielder",
+            "age": 30,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "stats": {
+              "apps": 42,
+              "starts": 31,
+              "minutes": 2894,
+              "goals": 3,
+              "assists": 3,
+              "xg": 1.8,
+              "rating": 6.95
+            }
+          },
+          {
+            "id": "fotmob-1958443",
+            "name": "Samuel Mendes",
+            "number": 81,
+            "position": "Midfielder",
+            "age": 18,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 7,
+              "starts": 0,
+              "minutes": 112,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.01,
+              "rating": 6.3
+            }
+          },
+          {
+            "id": "fotmob-687496",
+            "name": "Thaciano",
+            "number": 16,
+            "position": "Midfielder",
+            "age": 31,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 30,
+              "starts": 10,
+              "minutes": 990,
+              "goals": 3,
+              "assists": 0,
+              "xg": 2.49,
+              "rating": 6.43
+            }
+          },
+          {
+            "id": "fotmob-345905",
+            "name": "João Schmidt",
+            "number": 5,
+            "position": "Midfielder",
+            "age": 33,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "stats": {
+              "apps": 27,
+              "starts": 18,
+              "minutes": 1532,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.58,
+              "rating": 6.95
             }
           },
           {
@@ -9119,9 +10082,9 @@
             "name": "Gabriel Menino",
             "number": 25,
             "position": "Midfielder",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 26,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "stats": {
               "apps": 19,
               "starts": 9,
@@ -9133,124 +10096,87 @@
             }
           },
           {
-            "id": "fotmob-1312459",
-            "name": "Miguelito",
-            "number": 30,
+            "id": "fotmob-671606",
+            "name": "Lima",
+            "number": 45,
             "position": "Midfielder",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 30,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "stats": {
-              "apps": 18,
-              "starts": 10,
-              "minutes": 817,
-              "goals": 2,
-              "assists": 2,
-              "xg": 0.9,
-              "rating": 6.86
-            }
-          },
-          {
-            "id": "fotmob-1347933",
-            "name": "Gustavo Caballero",
-            "number": 17,
-            "position": "Forward",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "stats": {
-              "apps": 26,
-              "starts": 16,
-              "minutes": 1265,
+              "apps": 19,
+              "starts": 3,
+              "minutes": 447,
               "goals": 1,
-              "assists": 0,
-              "xg": 1.59,
-              "rating": 6.53
+              "assists": 1,
+              "xg": 0.84,
+              "rating": 6.43
             }
           },
           {
-            "id": "fotmob-1797982",
-            "name": "João Ananias",
-            "number": 26,
-            "position": "Defender",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "stats": {
-              "apps": 13,
-              "starts": 9,
-              "minutes": 834,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.02,
-              "rating": 6.85
-            }
-          },
-          {
-            "id": "fotmob-1933452",
-            "name": "Rafael Gonzaga",
-            "number": 38,
-            "position": "Defender",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "id": "fotmob-1997442",
+            "name": "Davizinho",
+            "number": 27,
+            "position": "Forward",
+            "age": 18,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "stats": {
               "apps": 8,
               "starts": 1,
-              "minutes": 242,
+              "minutes": 220,
               "goals": 0,
               "assists": 0,
               "xg": null,
-              "rating": 6.68
+              "rating": 6.54
             }
           },
           {
-            "id": "fotmob-1958443",
-            "name": "Samuel Mendes",
-            "number": 81,
-            "position": "Midfielder",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "id": "fotmob-796732",
+            "name": "Rony",
+            "number": 33,
+            "position": "Forward",
+            "age": 31,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "stats": {
-              "apps": 7,
-              "starts": 0,
-              "minutes": 112,
-              "goals": 0,
+              "apps": 43,
+              "starts": 16,
+              "minutes": 1879,
+              "goals": 4,
               "assists": 0,
-              "xg": 0.01,
-              "rating": 6.3
+              "xg": 2.27,
+              "rating": 6.66
+            }
+          },
+          {
+            "id": "fotmob-1073365",
+            "name": "Benjamín Rollheiser",
+            "number": 32,
+            "position": "Forward",
+            "age": 26,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 44,
+              "starts": 19,
+              "minutes": 1907,
+              "goals": 4,
+              "assists": 5,
+              "xg": 3.62,
+              "rating": 6.98
             }
           }
         ],
         "unavailable": [
           {
-            "id": "fotmob-959915",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "name": "Álvaro Barreal",
-            "reason": "suspendu",
-            "expectedReturn": null,
-            "position": "Midfielder",
-            "stats": {
-              "apps": 42,
-              "starts": 33,
-              "minutes": 2657,
-              "goals": 5,
-              "assists": 1,
-              "xg": 2.7,
-              "rating": 7.1
-            }
-          },
-          {
             "id": "fotmob-1712138",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 21,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "name": "Gabriel Bontempo",
             "reason": "en sélection",
-            "expectedReturn": "",
+            "expectedReturn": "Mid November 2026",
             "position": "Midfielder",
             "stats": {
               "apps": 47,
@@ -9263,10 +10189,29 @@
             }
           },
           {
+            "id": "fotmob-959915",
+            "age": 26,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Álvaro Barreal",
+            "reason": "blessé",
+            "expectedReturn": "Out for season",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 42,
+              "starts": 33,
+              "minutes": 2657,
+              "goals": 5,
+              "assists": 1,
+              "xg": 2.7,
+              "rating": 7.1
+            }
+          },
+          {
             "id": "fotmob-699694",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 31,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "name": "Lucas Veríssimo",
             "reason": "blessé",
             "expectedReturn": "Late November 2026",
@@ -9283,9 +10228,9 @@
           },
           {
             "id": "fotmob-982426",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 26,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "name": "Gabriel Brazão",
             "reason": "blessé",
             "expectedReturn": "Out for season",
@@ -9302,9 +10247,9 @@
           },
           {
             "id": "fotmob-1733364",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 19,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "name": "Vinicius Lira",
             "reason": "blessé",
             "expectedReturn": "Out for season",
@@ -9323,9 +10268,9 @@
         "usualStartersMissing": [
           {
             "id": "fotmob-982426",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 26,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "name": "Gabriel Brazão",
             "position": "Goalkeeper",
             "starts": 41,
@@ -9334,34 +10279,58 @@
             "status": "blessé"
           },
           {
+            "id": "fotmob-1712138",
+            "age": 21,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "name": "Gabriel Bontempo",
+            "position": "Midfielder",
+            "starts": 40,
+            "goals": 5,
+            "assists": 4,
+            "status": "en sélection"
+          },
+          {
             "id": "fotmob-751010",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 29,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
             "name": "Gonzalo Escobar",
             "position": "Defender",
             "starts": 38,
             "goals": 0,
             "assists": 2,
-            "status": "absent de la feuille de match"
+            "status": "remplaçant"
           },
           {
-            "id": "fotmob-305713",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "name": "Willian Arão",
+            "id": "fotmob-959915",
+            "age": 26,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Álvaro Barreal",
+            "position": "Midfielder",
+            "starts": 33,
+            "goals": 5,
+            "assists": 1,
+            "status": "blessé"
+          },
+          {
+            "id": "fotmob-925841",
+            "age": 30,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "name": "Christian Oliva",
             "position": "Midfielder",
             "starts": 31,
             "goals": 3,
-            "assists": 0,
-            "status": "absent de la feuille de match"
+            "assists": 3,
+            "status": "remplaçant"
           },
           {
             "id": "fotmob-916348",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 29,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "name": "Igor Vinícius",
             "position": "Defender",
             "starts": 29,
@@ -9371,9 +10340,9 @@
           },
           {
             "id": "fotmob-699694",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
+            "age": 31,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
             "name": "Lucas Veríssimo",
             "position": "Defender",
             "starts": 29,
@@ -9381,15 +10350,7 @@
             "assists": 1,
             "status": "blessé"
           }
-        ],
-        "lastMatch": {
-          "date": "2026-11-02",
-          "league": "Brazil Série A",
-          "home": "RB Bragantino",
-          "away": "Santos",
-          "homeGoals": 2,
-          "awayGoals": 1
-        }
+        ]
       },
       "matchInfo": {
         "round": "35",
@@ -9399,78 +10360,89 @@
         "surface": "grass",
         "weather": "Mostly Cloudy",
         "temperature": 23,
-        "windSpeed": 7,
+        "windSpeed": 4,
         "precipitation": 0,
         "referee": {
           "name": "Braulio da Silva Machado",
           "country": "Brazil",
           "league": "Série B",
           "matches": 12,
-          "yellowCardsPerMatch": 4.42,
+          "yellowCardsPerMatch": 4.5,
           "yellowCardsLeagueAverage": 4.91,
           "redCards": 0,
           "penalties": 9,
           "foulsPerMatch": 25.58,
-          "foulsLeagueAverage": 28.04
+          "foulsLeagueAverage": 28.05
         }
       }
     },
     "analysis": {
-      "summary": "Coritiba (13e, 42 pts) est en méforme : 6 défaites sur 10 matchs, 10 buts marqués pour 20 encaissés. Son nouvel entraîneur, Guila Bossle, a perdu son premier match à Internacional. Santos (9e, 47 pts) est irrégulier : 1 point par match sur les 5 derniers, avec 1,5 but marqué et 1,5 concédé en moyenne sur 10 matchs. La composition de la fiche vient du magasin : c'est le onze probable, pas l'officiel. Santos devrait être privé de Barreal (suspendu) et de Bontempo (en sélection), mais Gabriel Barbosa (21 buts, 8 passes décisives) reste là.",
+      "summary": "Coritiba (13e, 42 pts) est en méforme : 2 V, 2 N, 6 D sur 10 matchs, 1 but marqué pour 2 encaissés par match, et un nouvel entraîneur, Guila Bossle, battu à Internacional pour son premier match. Santos (9e, 47 pts) est plus offensif (16,8 tirs, 5,5 cadrés par match) mais en baisse : 1 point par match sur les 5 derniers. Côté Santos, Neymar (10+7) et Gabriel Barbosa (21+8) sont titulaires. Plusieurs cadres manquent : Brazão, Barreal et Veríssimo sont blessés, Bontempo est en sélection, et Escobar, Oliva et Igor Vinícius sont sur le banc. Coritiba aligne Pedro Rocha et Breno Lopes, mais Lavega est remplaçant et Morisco absent.",
       "keyFactors": [
         {
           "factor": "forme récente",
-          "observation": "Coritiba enchaîne les défaites. Santos n'a pas gagné lors de ses 3 derniers matchs.",
-          "evidence": "Coritiba sur les 5 derniers : D V D D N. Santos : D N N V D."
+          "observation": "Coritiba enchaîne les défaites, Santos stagne.",
+          "evidence": "Coritiba : D V D D N sur les 5 derniers. Santos : D N N V D."
         },
         {
           "factor": "statistiques et moyennes",
-          "observation": "Coritiba produit peu et concède beaucoup de tirs et de corners. Santos est plus équilibré.",
-          "evidence": "Coritiba sur 10 matchs : 12,7 tirs produits pour 20,4 concédés, 4,8 corners pour 8,1. Santos : 16,8 tirs pour 14, 5,7 corners pour 6,5."
+          "observation": "Santos tire davantage que Coritiba, qui concède beaucoup.",
+          "evidence": "Coritiba 12,7 tirs produits / 20,4 concédés sur 10 matchs ; Santos 16,8 / 14. Corners : Coritiba 4,8 / 8,1."
         },
         {
-          "factor": "absences",
-          "observation": "Santos perd deux joueurs importants pour ce match. Coritiba n'a plus Lucas Ronier jusqu'à la fin de la saison.",
-          "evidence": "Barreal (42 matchs, 5+1) suspendu, Bontempo (47 matchs, 5+4) en sélection, Lucas Ronier (19 titularisations) blessé."
+          "factor": "classement",
+          "observation": "Santos est devant au classement, mais l'écart est modeste.",
+          "evidence": "Santos 9e, 47 pts ; Coritiba 13e, 42 pts."
+        },
+        {
+          "factor": "compositions",
+          "observation": "Santos a un onze offensif fort malgré les absences.",
+          "evidence": "Neymar 10+7, Gabriel Barbosa 21+8 ; Brazão, Barreal et Veríssimo blessés."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le marché est plus favorable que le moteur à Santos.",
+          "evidence": "Edge -10,1 %, mise PASS."
         }
       ],
-      "alignmentWithModel": "Le contexte va dans le sens du moteur : Santos est légèrement favori, mais l'avantage reste mince. Le moteur ne voit pas de value (PASS). Les absences côté Santos invitent à la prudence sur le résultat.",
-      "lineupImpact": "Source magasin : c'est la dernière composition alignée, pas celle du match. Coritiba (4-2-3-1, Bossle) s'appuie sur Pedro Rocha (9 buts), Breno Lopes (8+2) et Josué (11 passes décisives). Lavega (5+2) était remplaçant. Santos (4-2-3-1, Cuca) compte sur Gabriel Barbosa (21+8). Barreal et Bontempo manquent à Santos, ce qui retire du jeu et de la création. Le gardien Brazão est blessé pour la saison, donc Diógenes (11 matchs) garde les buts.",
+      "alignmentWithModel": "Le contexte va dans le sens du moteur : Santos a l'avantage offensif et Coritiba est en méforme. Mais la baisse de forme de Santos et ses absences incitent à la prudence sur le résultat. Le moteur ne trouve pas de value (PASS).",
+      "caveats": "L'historique d'entraîneur de Coritiba est déduit des compositions importées, il n'est donc pas fiable. Les statistiques à domicile de Coritiba portent sur 5 matchs seulement et celles de Santos à l'extérieur sur 6. Les marchés de buts sont volontairement exclus.",
+      "lineupImpact": "La composition vient de FotMob, relue 48 min avant le coup d'envoi : elle est probablement officielle ou proche de l'être. Santos aligne Neymar (10+7, xG 6,63), Coutinho et Gabriel Barbosa (21+8), mais avec un gardien remplaçant, Diógenes, puisque Brazão est blessé. Escobar, Oliva et Igor Vinícius, d'habitude titulaires, sont sur le banc. Coritiba joue avec Pedro Rocha (9 buts) et Breno Lopes (8 buts), sans Lavega (titulaire habituel, remplaçant) ni Morisco (en sélection). Pedro Rangel est dans les buts. Le nouveau coach est en place depuis un seul match.",
       "marketViews": [
         {
           "market": "Résultat",
           "pick": "Santos gagne",
           "verdict": "nuance",
           "confidence": "faible",
-          "explanation": "45 % : Santos produit 1,5 but par match et a 47 pts contre 42, mais Coritiba a des matchs serrés à domicile (1,4 / 1,4).",
-          "reasoning": "Santos est plus solide, mais sa forme baisse (1 point par match sur 5) et il perd Barreal et Bontempo. Coritiba reste fragile (6 défaites sur 10), donc le favori est peu net.",
+          "explanation": "45 % : Santos produit 1,5 but par match et sa forme est correcte, mais Coritiba a 1,4 but attendu et les 5 derniers matchs de Santos ne donnent que 1 point par match.",
+          "reasoning": "Santos a l'avantage offensif, mais sa forme baisse et ses absences pèsent. Le nul reste crédible. Mon bilan sur ce marché est médiocre (429/730).",
           "probability": 45
         },
         {
           "market": "Total corners",
           "pick": "Moins de 15.5 corners",
           "verdict": "confirme",
-          "confidence": "moyenne",
-          "explanation": "79 % : le moteur attend 12,43 corners au total, et la moyenne du championnat est de 10,6 par match.",
-          "reasoning": "Le total attendu laisse une marge confortable sous la ligne. Un scénario où Coritiba court après le score pourrait toutefois gonfler les corners.",
+          "confidence": "forte",
+          "explanation": "79 % : le moteur attend 12,43 corners, et Coritiba (4,8 / 8,1) et Santos (5,7 / 6,5) restent loin du seuil de 15,5.",
+          "reasoning": "Les moyennes sont nettement sous le seuil, et le championnat tourne à 10,6 corners par match. Ce marché est fiable dans mon bilan (655/803 en confiance forte).",
           "probability": 79
         },
         {
           "market": "Corners — Coritiba",
           "pick": "Coritiba — Plus de 3.5 corners",
-          "verdict": "confirme",
+          "verdict": "nuance",
           "confidence": "moyenne",
-          "explanation": "79 % : le moteur attend 6,22 corners pour Coritiba, qui en a produit 6,6 en moyenne à domicile malgré 4,8 sur 10 matchs.",
-          "reasoning": "La moyenne sur 10 matchs (4,8) est plus basse, mais Santos en concède 6,5. Les avis sur les corners d'une équipe se tiennent moins bien dans ce championnat (38/59), donc prudence.",
+          "explanation": "79 % : le moteur attend 6,22 corners pour Coritiba, qui en obtient 4,8 par match sur 10 matchs et 6,6 à domicile.",
+          "reasoning": "Le seuil est bas par rapport aux moyennes. Mais si Santos prend le score, Coritiba devra attaquer et en gagnerait plus. Ce marché m'a souvent trompé en Série A (38/59).",
           "probability": 79
         },
         {
           "market": "Corners — Santos",
           "pick": "Santos — Plus de 3.5 corners",
           "verdict": "nuance",
-          "confidence": "faible",
-          "explanation": "79 % : le moteur attend 6,21 corners pour Santos, qui en produit 5,7 sur 10 matchs mais seulement 4 en moyenne à l'extérieur.",
-          "reasoning": "La moyenne à l'extérieur (4 sur 6 matchs) est proche de la ligne. Les corners d'une équipe sont un marché où mes avis se tiennent peu dans ce championnat.",
+          "confidence": "moyenne",
+          "explanation": "79 % : le moteur attend 6,21 corners pour Santos, qui en fait 5,7 par match mais seulement 4 à l'extérieur.",
+          "reasoning": "La moyenne à l'extérieur (4) est proche du seuil. Coritiba concède 8,1 corners par match, ce qui soutient le pronostic.",
           "probability": 79
         },
         {
@@ -9478,8 +10450,8 @@
           "pick": "Moins de 37.5 tirs",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "82 % : le moteur attend 31,43 tirs au total, soit bien sous 37,5, avec Coritiba à 12,7 tirs par match sur 10 matchs.",
-          "reasoning": "Les deux équipes tirent peu en moyenne, donc la marge est large. Les 20,4 tirs concédés par Coritiba sont le seul risque.",
+          "explanation": "82 % : le moteur attend 31,43 tirs, loin du seuil de 37,5, et les 10 derniers matchs des deux équipes donnent des totaux autour de 29 à 33.",
+          "reasoning": "Le total attendu laisse une bonne marge. Les moyennes produites et concédées de chaque équipe vont dans ce sens.",
           "probability": 82
         },
         {
@@ -9487,8 +10459,8 @@
           "pick": "Coritiba — Moins de 19.5 tirs",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "83 % : le moteur attend 14,69 tirs pour Coritiba, qui en produit 12,7 sur 10 matchs et 17 à domicile.",
-          "reasoning": "La moyenne à domicile (17) reste sous la ligne, et Santos concède 14 tirs. Le pronostic tient.",
+          "explanation": "83 % : Coritiba tire 12,7 fois par match (17 à domicile), et le moteur en attend 14,69.",
+          "reasoning": "Même la meilleure moyenne à domicile (17) reste sous le seuil. Seul un match où Coritiba mène la course derrière pourrait le faire monter.",
           "probability": 83
         },
         {
@@ -9496,8 +10468,8 @@
           "pick": "Santos — Plus de 11.5 tirs",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "81 % : le moteur attend 16,74 tirs pour Santos, qui en produit 16,8 sur 10 matchs contre 20,4 concédés par Coritiba.",
-          "reasoning": "Santos tire moins à l'extérieur (13,5), mais reste au-dessus de la ligne, et Coritiba concède beaucoup de tirs.",
+          "explanation": "81 % : Santos tire 16,8 fois par match et le moteur en attend 16,74, même si sa moyenne à l'extérieur n'est que de 13,5.",
+          "reasoning": "Le seuil est inférieur aux deux moyennes de Santos, mais la moyenne à l'extérieur (13,5) laisse peu de marge.",
           "probability": 81
         },
         {
@@ -9505,8 +10477,8 @@
           "pick": "Plus de 7.5 tirs cadrés",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "77 % : le moteur attend 10,1 tirs cadrés au total, avec 5,5 produits par Santos et 6,8 concédés par Coritiba.",
-          "reasoning": "Le total attendu est nettement au-dessus de la ligne. Les moyennes à l'extérieur de Santos (4,2) sont plus basses, mais la défense de Coritiba concède beaucoup.",
+          "explanation": "77 % : le moteur attend 10,1 tirs cadrés, avec 5,5 pour Santos et 3,7 pour Coritiba par match, et Coritiba en concède 6,8.",
+          "reasoning": "Le total attendu dépasse le seuil de 2,6 tirs. La défense de Coritiba laisse beaucoup de tirs cadrés.",
           "probability": 77
         },
         {
@@ -9514,8 +10486,8 @@
           "pick": "Coritiba — Plus de 2.5 tirs cadrés",
           "verdict": "nuance",
           "confidence": "moyenne",
-          "explanation": "81 % : le moteur attend 4,57 tirs cadrés pour Coritiba, qui en produit 3,7 sur 10 matchs et 5,4 à domicile.",
-          "reasoning": "La marge est correcte, mais Coritiba a marqué 0 but lors de 3 de ses 5 derniers matchs. Le pronostic reste cohérent avec les moyennes.",
+          "explanation": "81 % : le moteur attend 4,57 tirs cadrés pour Coritiba, qui en fait 3,7 par match et 5,4 à domicile.",
+          "reasoning": "Le seuil est bas. Mais le nouvel entraîneur et la méforme invitent à la prudence, et ce type de marché d'équipe m'a surtout réussi quand j'étais confiant.",
           "probability": 81
         },
         {
@@ -9523,14 +10495,649 @@
           "pick": "Santos — Moins de 7.5 tirs cadrés",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "78 % : le moteur attend 5,54 tirs cadrés pour Santos, qui en produit 5,5 sur 10 matchs et 4,2 à l'extérieur.",
-          "reasoning": "Santos reste loin de 7,5 tirs cadrés en moyenne. Les absences de Barreal et Bontempo vont plutôt dans le même sens.",
+          "explanation": "78 % : Santos fait 5,5 tirs cadrés par match (4,2 à l'extérieur) et le moteur en attend 5,54, soit bien moins que 7,5.",
+          "reasoning": "Les moyennes laissent de la marge. Un match ouvert avec Neymar et Barbosa peut en produire davantage, mais les moyennes du championnat ne le suggèrent pas.",
           "probability": 78
         }
-      ],
-      "caveats": "La composition vient du magasin (dernière alignée), pas de FotMob pour ce match. Coritiba a changé d'entraîneur le 04/11 : un seul match avec Bossle, donc peu de recul sur son style. Pas de forme récente de Santos au-delà du 02/11."
+      ]
     },
-    "updatedAt": "2026-11-16T23:16:29.776Z",
-    "createdAt": "2026-11-16T23:16:29.776Z"
+    "updatedAt": "2026-11-19T09:07:00.714Z",
+    "createdAt": "2026-11-16T23:16:29.776Z",
+    "kickoffRuns": 1,
+    "earlierAnalysis": {
+      "analysis": {
+        "summary": "Coritiba (13e, 42 pts) est en méforme : 6 défaites sur 10 matchs, 10 buts marqués pour 20 encaissés. Son nouvel entraîneur, Guila Bossle, a perdu son premier match à Internacional. Santos (9e, 47 pts) est irrégulier : 1 point par match sur les 5 derniers, avec 1,5 but marqué et 1,5 concédé en moyenne sur 10 matchs. La composition de la fiche vient du magasin : c'est le onze probable, pas l'officiel. Santos devrait être privé de Barreal (suspendu) et de Bontempo (en sélection), mais Gabriel Barbosa (21 buts, 8 passes décisives) reste là.",
+        "keyFactors": [
+          {
+            "factor": "forme récente",
+            "observation": "Coritiba enchaîne les défaites. Santos n'a pas gagné lors de ses 3 derniers matchs.",
+            "evidence": "Coritiba sur les 5 derniers : D V D D N. Santos : D N N V D."
+          },
+          {
+            "factor": "statistiques et moyennes",
+            "observation": "Coritiba produit peu et concède beaucoup de tirs et de corners. Santos est plus équilibré.",
+            "evidence": "Coritiba sur 10 matchs : 12,7 tirs produits pour 20,4 concédés, 4,8 corners pour 8,1. Santos : 16,8 tirs pour 14, 5,7 corners pour 6,5."
+          },
+          {
+            "factor": "absences",
+            "observation": "Santos perd deux joueurs importants pour ce match. Coritiba n'a plus Lucas Ronier jusqu'à la fin de la saison.",
+            "evidence": "Barreal (42 matchs, 5+1) suspendu, Bontempo (47 matchs, 5+4) en sélection, Lucas Ronier (19 titularisations) blessé."
+          }
+        ],
+        "alignmentWithModel": "Le contexte va dans le sens du moteur : Santos est légèrement favori, mais l'avantage reste mince. Le moteur ne voit pas de value (PASS). Les absences côté Santos invitent à la prudence sur le résultat.",
+        "lineupImpact": "Source magasin : c'est la dernière composition alignée, pas celle du match. Coritiba (4-2-3-1, Bossle) s'appuie sur Pedro Rocha (9 buts), Breno Lopes (8+2) et Josué (11 passes décisives). Lavega (5+2) était remplaçant. Santos (4-2-3-1, Cuca) compte sur Gabriel Barbosa (21+8). Barreal et Bontempo manquent à Santos, ce qui retire du jeu et de la création. Le gardien Brazão est blessé pour la saison, donc Diógenes (11 matchs) garde les buts.",
+        "marketViews": [
+          {
+            "market": "Résultat",
+            "pick": "Santos gagne",
+            "verdict": "nuance",
+            "confidence": "faible",
+            "explanation": "45 % : Santos produit 1,5 but par match et a 47 pts contre 42, mais Coritiba a des matchs serrés à domicile (1,4 / 1,4).",
+            "reasoning": "Santos est plus solide, mais sa forme baisse (1 point par match sur 5) et il perd Barreal et Bontempo. Coritiba reste fragile (6 défaites sur 10), donc le favori est peu net.",
+            "probability": 45
+          },
+          {
+            "market": "Total corners",
+            "pick": "Moins de 15.5 corners",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "79 % : le moteur attend 12,43 corners au total, et la moyenne du championnat est de 10,6 par match.",
+            "reasoning": "Le total attendu laisse une marge confortable sous la ligne. Un scénario où Coritiba court après le score pourrait toutefois gonfler les corners.",
+            "probability": 79
+          },
+          {
+            "market": "Corners — Coritiba",
+            "pick": "Coritiba — Plus de 3.5 corners",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "79 % : le moteur attend 6,22 corners pour Coritiba, qui en a produit 6,6 en moyenne à domicile malgré 4,8 sur 10 matchs.",
+            "reasoning": "La moyenne sur 10 matchs (4,8) est plus basse, mais Santos en concède 6,5. Les avis sur les corners d'une équipe se tiennent moins bien dans ce championnat (38/59), donc prudence.",
+            "probability": 79
+          },
+          {
+            "market": "Corners — Santos",
+            "pick": "Santos — Plus de 3.5 corners",
+            "verdict": "nuance",
+            "confidence": "faible",
+            "explanation": "79 % : le moteur attend 6,21 corners pour Santos, qui en produit 5,7 sur 10 matchs mais seulement 4 en moyenne à l'extérieur.",
+            "reasoning": "La moyenne à l'extérieur (4 sur 6 matchs) est proche de la ligne. Les corners d'une équipe sont un marché où mes avis se tiennent peu dans ce championnat.",
+            "probability": 79
+          },
+          {
+            "market": "Total tirs",
+            "pick": "Moins de 37.5 tirs",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "82 % : le moteur attend 31,43 tirs au total, soit bien sous 37,5, avec Coritiba à 12,7 tirs par match sur 10 matchs.",
+            "reasoning": "Les deux équipes tirent peu en moyenne, donc la marge est large. Les 20,4 tirs concédés par Coritiba sont le seul risque.",
+            "probability": 82
+          },
+          {
+            "market": "Tirs — Coritiba",
+            "pick": "Coritiba — Moins de 19.5 tirs",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "83 % : le moteur attend 14,69 tirs pour Coritiba, qui en produit 12,7 sur 10 matchs et 17 à domicile.",
+            "reasoning": "La moyenne à domicile (17) reste sous la ligne, et Santos concède 14 tirs. Le pronostic tient.",
+            "probability": 83
+          },
+          {
+            "market": "Tirs — Santos",
+            "pick": "Santos — Plus de 11.5 tirs",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "81 % : le moteur attend 16,74 tirs pour Santos, qui en produit 16,8 sur 10 matchs contre 20,4 concédés par Coritiba.",
+            "reasoning": "Santos tire moins à l'extérieur (13,5), mais reste au-dessus de la ligne, et Coritiba concède beaucoup de tirs.",
+            "probability": 81
+          },
+          {
+            "market": "Total tirs cadrés",
+            "pick": "Plus de 7.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "77 % : le moteur attend 10,1 tirs cadrés au total, avec 5,5 produits par Santos et 6,8 concédés par Coritiba.",
+            "reasoning": "Le total attendu est nettement au-dessus de la ligne. Les moyennes à l'extérieur de Santos (4,2) sont plus basses, mais la défense de Coritiba concède beaucoup.",
+            "probability": 77
+          },
+          {
+            "market": "Tirs cadrés — Coritiba",
+            "pick": "Coritiba — Plus de 2.5 tirs cadrés",
+            "verdict": "nuance",
+            "confidence": "moyenne",
+            "explanation": "81 % : le moteur attend 4,57 tirs cadrés pour Coritiba, qui en produit 3,7 sur 10 matchs et 5,4 à domicile.",
+            "reasoning": "La marge est correcte, mais Coritiba a marqué 0 but lors de 3 de ses 5 derniers matchs. Le pronostic reste cohérent avec les moyennes.",
+            "probability": 81
+          },
+          {
+            "market": "Tirs cadrés — Santos",
+            "pick": "Santos — Moins de 7.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "78 % : le moteur attend 5,54 tirs cadrés pour Santos, qui en produit 5,5 sur 10 matchs et 4,2 à l'extérieur.",
+            "reasoning": "Santos reste loin de 7,5 tirs cadrés en moyenne. Les absences de Barreal et Bontempo vont plutôt dans le même sens.",
+            "probability": 78
+          }
+        ],
+        "caveats": "La composition vient du magasin (dernière alignée), pas de FotMob pour ce match. Coritiba a changé d'entraîneur le 04/11 : un seul match avec Bossle, donc peu de recul sur son style. Pas de forme récente de Santos au-delà du 02/11."
+      },
+      "engineSnapshot": {
+        "label": "Coritiba vs Santos",
+        "expectedGoals": {
+          "home": 1.39,
+          "away": 1.742,
+          "source": "fotmob"
+        },
+        "trueOdds": {
+          "home": 3.43,
+          "draw": 3.87,
+          "away": 2.22
+        },
+        "market": {
+          "odds1": 3.08,
+          "oddsDraw": 3.46,
+          "odds2": 2.07
+        },
+        "edgePercent": -2.46,
+        "staking": {
+          "action": "PASS",
+          "stake": null,
+          "reason": "pas_de_value",
+          "candidates": [
+            {
+              "outcome": "home",
+              "label": "Coritiba gagne",
+              "odds": 3.2,
+              "displayedOdds": 3.2,
+              "bookmaker": "coolbet",
+              "bookmakerTitle": "Coolbet",
+              "fairOdds": 3.43,
+              "ev": -0.0659,
+              "exclusion": "sous_le_seuil"
+            },
+            {
+              "outcome": "draw",
+              "label": "Match nul",
+              "odds": 3.6,
+              "displayedOdds": 3.6,
+              "bookmaker": "coolbet",
+              "bookmakerTitle": "Coolbet",
+              "fairOdds": 3.87,
+              "ev": -0.0691,
+              "exclusion": "sous_le_seuil"
+            },
+            {
+              "outcome": "away",
+              "label": "Santos gagne",
+              "odds": 2.17,
+              "displayedOdds": 2.17,
+              "bookmaker": "coolbet",
+              "bookmakerTitle": "Coolbet",
+              "fairOdds": 2.22,
+              "ev": -0.0246,
+              "exclusion": "sous_le_seuil"
+            }
+          ],
+          "limits": {
+            "edgeThresholdMin": 0.02,
+            "edgeThresholdMax": 0.25,
+            "maxValueOdds": 5
+          }
+        },
+        "statExpectations": {
+          "corners": {
+            "home": 6.22,
+            "away": 6.21,
+            "total": 12.43
+          },
+          "shots": {
+            "home": 14.69,
+            "away": 16.74,
+            "total": 31.43
+          },
+          "shotsOnTarget": {
+            "home": 4.57,
+            "away": 5.54,
+            "total": 10.1
+          }
+        },
+        "marketPredictions": [
+          {
+            "marketId": "result",
+            "params": {
+              "outcome": "away"
+            },
+            "market": "Résultat",
+            "predictedOutcome": "away",
+            "predictedLabel": "Santos gagne",
+            "predictedOdds": 2.22,
+            "probability": 45,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalGoals",
+            "params": {
+              "line": 1.5,
+              "side": "over"
+            },
+            "market": "Total buts",
+            "predictedOutcome": "over",
+            "predictedLabel": "Plus de 1.5 buts",
+            "predictedOdds": 1.21,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "bothTeamsScore",
+            "params": {
+              "outcome": "yes"
+            },
+            "market": "Les 2 équipes marquent",
+            "predictedOutcome": "yes",
+            "predictedLabel": "Oui",
+            "predictedOdds": 1.59,
+            "probability": 63,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "resultAndTotal",
+            "params": {
+              "line": 1.5,
+              "key": "awayOver"
+            },
+            "market": "Résultat + Total buts",
+            "predictedOutcome": "awayOver",
+            "predictedLabel": "Santos & Plus de 1.5 buts",
+            "predictedOdds": 2.62,
+            "probability": 38,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamGoals",
+            "params": {
+              "team": "home",
+              "line": 2.5,
+              "side": "under"
+            },
+            "market": "Buts — Coritiba",
+            "predictedOutcome": "under",
+            "predictedLabel": "Coritiba — Moins de 2.5 buts",
+            "predictedOdds": 1.2,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamGoals",
+            "params": {
+              "team": "away",
+              "line": 0.5,
+              "side": "over"
+            },
+            "market": "Buts — Santos",
+            "predictedOutcome": "over",
+            "predictedLabel": "Santos — Plus de 0.5 buts",
+            "predictedOdds": 1.21,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalCorners",
+            "params": {
+              "line": 15.5,
+              "side": "under"
+            },
+            "market": "Total corners",
+            "predictedOutcome": "under",
+            "predictedLabel": "Moins de 15.5 corners",
+            "predictedOdds": 1.27,
+            "probability": 79,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamCorners",
+            "params": {
+              "team": "home",
+              "line": 3.5,
+              "side": "over"
+            },
+            "market": "Corners — Coritiba",
+            "predictedOutcome": "over",
+            "predictedLabel": "Coritiba — Plus de 3.5 corners",
+            "predictedOdds": 1.26,
+            "probability": 79,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamCorners",
+            "params": {
+              "team": "away",
+              "line": 3.5,
+              "side": "over"
+            },
+            "market": "Corners — Santos",
+            "predictedOutcome": "over",
+            "predictedLabel": "Santos — Plus de 3.5 corners",
+            "predictedOdds": 1.26,
+            "probability": 79,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalShots",
+            "params": {
+              "line": 37.5,
+              "side": "under"
+            },
+            "market": "Total tirs",
+            "predictedOutcome": "under",
+            "predictedLabel": "Moins de 37.5 tirs",
+            "predictedOdds": 1.22,
+            "probability": 82,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShots",
+            "params": {
+              "team": "home",
+              "line": 19.5,
+              "side": "under"
+            },
+            "market": "Tirs — Coritiba",
+            "predictedOutcome": "under",
+            "predictedLabel": "Coritiba — Moins de 19.5 tirs",
+            "predictedOdds": 1.21,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShots",
+            "params": {
+              "team": "away",
+              "line": 11.5,
+              "side": "over"
+            },
+            "market": "Tirs — Santos",
+            "predictedOutcome": "over",
+            "predictedLabel": "Santos — Plus de 11.5 tirs",
+            "predictedOdds": 1.23,
+            "probability": 81,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalShotsOnTarget",
+            "params": {
+              "line": 7.5,
+              "side": "over"
+            },
+            "market": "Total tirs cadrés",
+            "predictedOutcome": "over",
+            "predictedLabel": "Plus de 7.5 tirs cadrés",
+            "predictedOdds": 1.3,
+            "probability": 77,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShotsOnTarget",
+            "params": {
+              "team": "home",
+              "line": 2.5,
+              "side": "over"
+            },
+            "market": "Tirs cadrés — Coritiba",
+            "predictedOutcome": "over",
+            "predictedLabel": "Coritiba — Plus de 2.5 tirs cadrés",
+            "predictedOdds": 1.24,
+            "probability": 81,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShotsOnTarget",
+            "params": {
+              "team": "away",
+              "line": 7.5,
+              "side": "under"
+            },
+            "market": "Tirs cadrés — Santos",
+            "predictedOutcome": "under",
+            "predictedLabel": "Santos — Moins de 7.5 tirs cadrés",
+            "predictedOdds": 1.28,
+            "probability": 78,
+            "minOdds": 1.2
+          }
+        ],
+        "engineVersion": 5
+      },
+      "analysedAt": "2026-11-16T23:16:29.775Z"
+    },
+    "postMatchReview": {
+      "summary": "Santos s'est imposé 0-1 sur un but tardif (90+2', confirmé par la VAR) de Gabriel Barbosa, après un match fermé. Ma lecture prudente (avantage offensif de Santos, nul crédible) était cohérente. Le xG (0,65 / 1,69) et les 4 grosses occasions contre 0 confirment la supériorité de Santos. Les marchés de tirs et de tirs cadrés ont tenu. Seul le marché des corners de Santos a échoué (3 corners).",
+      "whatWasRight": "Santos plus dangereux : xG 1,69 contre 0,65, grosses occasions 4 contre 0, tirs cadrés 6 contre 4. Les totaux de tirs sont restés bas (14+13 = 27 pour un seuil de 37,5), Coritiba sous 19,5 tirs (14) et Santos au-dessus de 11,5 (13). Tirs cadrés : total de 10 (plus de 7,5), Santos à 6 (moins de 7,5) et Coritiba à 4 (plus de 2,5). Corners : 8 au total, loin de 15,5. Ma prudence sur le 1N2 et sur les corners de Santos était justifiée.",
+      "whatWasMissed": "Je n'ai pas assez pesé la maîtrise de Santos (57 % de possession), qui produit beaucoup plus d'occasions franches malgré ses absences. J'ai aussi trop compté sur le bas corner de Santos (3, contre 4 en moyenne à l'extérieur), et sur le fait que Coritiba concède beaucoup de corners. Le but n'est arrivé qu'à la 92e minute : le nul a été proche jusqu'au bout.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur (Santos favori à 45 %, xG 1,74 contre 1,39). Le PASS sur le 1N2 reste neutre : le marché était plus favorable à Santos que le moteur, et Santos a gagné. Les marchés de tirs, tirs cadrés et corners totaux ont été bien calibrés. Seul le seuil de corners de Santos a été raté.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Santos gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Santos a gagné 0-1 grâce à Gabriel Barbosa (90+2', confirmé par la VAR), après 0-0 à la mi-temps. Santos a dominé en xG (1,69 contre 0,65) et en grosses occasions (4 contre 0).",
+          "lesson": "Le moteur avait raison de favoriser Santos. Ma nuance était trop prudente : quand le xG et les occasions penchent d'un côté, la victoire peut arriver tard. Ne pas surpondérer la méforme de Santos face à un Coritiba en crise."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Santos & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Coritiba",
+          "marketId": "teamGoals",
+          "pick": "Coritiba — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Santos",
+          "marketId": "teamGoals",
+          "pick": "Santos — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 15.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Seulement 8 corners (5 + 3) pour un seuil de 15,5, dans un match fermé.",
+          "lesson": "Confirmer les « moins de » sur des seuils très hauts quand les moyennes sont très inférieures : cela tient."
+        },
+        {
+          "market": "Corners — Coritiba",
+          "marketId": "teamCorners",
+          "pick": "Coritiba — Plus de 3.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Coritiba a obtenu 5 corners, au-dessus de 3,5. Il a couru derrière au score sans être très dangereux.",
+          "lesson": "Un seuil bas par rapport à la moyenne à domicile (6,6) était sûr. Ma nuance était trop prudente ici."
+        },
+        {
+          "market": "Corners — Santos",
+          "marketId": "teamCorners",
+          "pick": "Santos — Plus de 3.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Santos n'a eu que 3 corners (seuil 3,5), malgré ses 57 % de possession. Sa moyenne à l'extérieur (4) était proche du seuil.",
+          "lesson": "Quand la moyenne à l'extérieur frôle le seuil, le marché est fragile. Ma nuance était justifiée : ne pas surestimer les corners de Santos hors de chez lui."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 37.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "27 tirs au total (14 + 13) pour un seuil de 37,5, bien sous les 31,4 attendus.",
+          "lesson": "Garder ce raisonnement : un total attendu très en dessous du seuil donne un « moins de » fiable."
+        },
+        {
+          "market": "Tirs — Coritiba",
+          "marketId": "teamShots",
+          "pick": "Coritiba — Moins de 19.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Coritiba a tiré 14 fois, sous le seuil de 19,5, bien dans l'attendu du moteur (14,69).",
+          "lesson": "Garder ce raisonnement : la moyenne à domicile (17) restait sous le seuil, et Coritiba n'a pas forcé la fin de match."
+        },
+        {
+          "market": "Tirs — Santos",
+          "marketId": "teamShots",
+          "pick": "Santos — Plus de 11.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Santos a tiré 13 fois, au-dessus de 11,5 mais de peu. Sa moyenne à l'extérieur (13,5) laissait peu de marge, comme je l'avais noté.",
+          "lesson": "Garder la prudence : la marge était faible et la réussite est venue de peu."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "4 + 6 = 10 tirs cadrés, au-dessus du seuil de 7,5 et aligné avec les 10,1 attendus.",
+          "lesson": "Garder ce raisonnement : une défense qui concède beaucoup de tirs cadrés soutient le « plus de »."
+        },
+        {
+          "market": "Tirs cadrés — Coritiba",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Coritiba — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Coritiba a cadré 4 tirs, au-dessus de 2,5, malgré 0 grosse occasion.",
+          "lesson": "La nuance était trop prudente : à domicile, 5,4 de moyenne faisait de ce seuil bas un marché plutôt sûr."
+        },
+        {
+          "market": "Tirs cadrés — Santos",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Santos — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Santos a cadré 6 tirs, sous 7,5, comme attendu (5,54).",
+          "lesson": "Garder ce raisonnement : même avec Neymar et Barbosa, la moyenne à l'extérieur (4,2) laissait de la marge."
+        }
+      ],
+      "caveats": "Un seul match, décidé par un but à la 92e minute : avec un but de moins, le 1N2 aurait été faux alors que le déroulé était identique. Pas de données de tirs par minute, donc on ignore si Coritiba s'est découvert à la fin. Un blessé chez Santos (Coutinho, Luan Peres) n'a pas pu être pondéré.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 16,
+        "commentaire": 3
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 7001,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 2283,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 7001,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2283,
+            "cache_read_input_tokens": 0,
+            "cache_creation_input_tokens": 7001,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 7001
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.050838,
+      "createdAt": "2026-11-19T09:07:00.713Z"
+    }
   }
 ]
