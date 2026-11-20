@@ -50,4 +50,10 @@ app.listen(env.port, () => {
   // jobs/enregistreurs.js), plus ENREGISTREURS=false.
   if (env.matchStatsRefresh.enabled && env.enregistreurs.enabled) startEnregistreurs(env.enregistreurs);
   try { enregistrerLancements(); } catch (error) { console.warn(`[garde-fou de la mesure] lancements non notés au registre (le serveur tourne quand même) : ${error.message}`); } // étape 16 : date de mise en service des versions déclarées dans bench/lancements.js
+  // Étape 47 (recette générale) : le journal de la recette, une boucle à part qui ne fait que regarder (premier tour à
+  // +4 min, puis toutes les 10 min ; cf. data/recette/journalDeLaRecette.js). Il ne lève jamais ; s'il ne démarre pas,
+  // une ligne ici et le serveur tourne quand même.
+  import('./data/recette/journalDeLaRecette.js')
+    .then((m) => m.demarrerJournalDeLaRecette())
+    .catch((e) => console.warn(`[recette] journal non démarré (le serveur tourne quand même) : ${e?.message ?? e}`));
 });

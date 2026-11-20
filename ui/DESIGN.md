@@ -1296,6 +1296,23 @@ Composer avec ces classes AVANT d'écrire du CSS propre :
   des extrêmes et du gris au pied. Non calculée : `EmptyState` « Fin de saison non calculée » avec sa
   raison (« 2 clubs non reconnus : … », « rencontres en trop au calendrier… », « poules de fin de
   saison : … ne sont pas simulées »). Lue dans ce que la nuit a rangé, jamais calculée à l'ouverture.
+- **Essai général** (étape 47, lot 1, 17/11/2026) → `RecetteCarte` dans l'étape 47 de la feuille de route, AVANT la
+  preuve après lancement, seulement quand `etape.recette` existe ; mots dans `utils/recette.js`. Bloc teinté comme la preuve
+  (`--cm-surface-alt`) : la phrase du moment (pas commencé / rodage / « Essai général : jour N sur 14 » / « Second essai : … » /
+  deux semaines finies), « le journal ne tourne plus depuis… » en ambre pointillé, un fichier illisible nommé dans une ligne
+  ambre pointillée (« rien n'est perdu »), les phrases des pannes (nouvelles, causes connues vues « toutes connues au départ »,
+  à expliquer avec leur âge court et « (en retard) », comptées à part avec leur note), sauvegardes « sur N jours observés »,
+  « Appels à l'IA », direct ; au rodage, une seule ligne « Rodage : … rien n'est compté » à la place des phrases ; puis un
+  `.cm-table` TOUJOURS de 14 lignes (Jour · Passes (faites / avec un point à regarder) · Veille · Arrêté · Non observé (durée)
+  · Événements connus · Nouvelles · À expliquer · Sauvegarde · Appels à l'IA), la case « Non observé » (non observé + en
+  erreur) en ambre au-delà de 25 min avec le détail du jour en `title`, un jour passé sans fichier « non observé : aucun
+  fichier du journal ce jour-là (CôteMaster arrêté, PC éteint ou journal en panne) » sur toute la ligne, un jour à venir en
+  « — », Σ en `.is-strong` (« Σ du rodage (non compté) » au rodage, « Σ : non lu » quand rien ne se lit) et ⌀ au pied
+  (jamais de Σ d'un pourcentage) ; les événements d'un jour dans un `details` (`.cm-chip` rouge « nouvelle », ambre « à
+  expliquer », neutre « à part ») ; « Ce qui est compté comme connu (n) » dépliable, en phrases simples (statut « en cours ») ;
+  la ligne « Non surveillé par l'essai » ; au pied, d'où viennent les chiffres (« Lu dans : les fichiers du journal de
+  l'essai sur ce PC (…) ; dernier tour : aujourd'hui à 11 h 50 », ambre au-delà de 25 min) ; les six critères du bilan,
+  « à faire » en gris. Journal illisible : la tête et PH-23 restent, la structure aussi. Jamais le vert des paris.
 - **Erreur** → `.cm-note.is-danger` ; **avertissement** → `.cm-note.is-warning` ; **vide** →
   `EmptyState` avec une description qui dit quoi faire.
 

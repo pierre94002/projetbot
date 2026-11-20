@@ -38,8 +38,11 @@ const SETTINGS_FILES = new Set(['engine-config.json', 'ai-config.json', 'favorit
  * réécrit à chaque appel, et seule la carte « Budget Claude » l'affiche, qui
  * se relit elle-même. Le compter ferait annoncer « nouvelles données » à
  * chaque appel, même raté.
+ * Le journal de la recette (étape 47, P4b-1 RC-10) : son fichier du jour est
+ * réécrit à chaque tour qui voit du neuf, et seule la carte de la recette le
+ * lit. Le compter ferait annoncer « nouvelles données » toutes les 10 min.
  */
-const DOSSIERS_HORS_EMPREINTE = new Set(['journal-claude']);
+const DOSSIERS_HORS_EMPREINTE = new Set(['journal-claude', 'journal-recette']);
 
 /**
  * Fichiers de TRAVAIL de l'actualisation, exclus eux aussi : le verrou, les

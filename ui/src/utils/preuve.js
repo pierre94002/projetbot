@@ -52,7 +52,10 @@ export const VERDICTS = Object.freeze({
   retenu: Object.freeze({ texte: 'retenu', ton: 'is-accent', icone: 'check' }),
   'pas-prouve': Object.freeze({ texte: 'pas prouvé', ton: '', icone: 'info' }),
   'moins-bon': Object.freeze({ texte: 'moins bon', ton: 'is-danger', icone: 'alert' }),
-  'pas-assez-de-matchs': Object.freeze({ texte: 'pas assez de matchs', ton: 'is-warning', icone: 'clock' })
+  'pas-assez-de-matchs': Object.freeze({ texte: 'pas assez de matchs', ton: 'is-warning', icone: 'clock' }),
+  // Étape 47 (lot 1, P4a) : la recette générale ne change aucun pourcentage du moteur (gel pendant l'essai) ; son bilan
+  // le dit en clair, sans couleur de réussite ni d'échec.
+  'rien-a-mesurer': Object.freeze({ texte: 'rien à mesurer', ton: '', icone: 'info' })
 });
 const PAS_ENCORE_JUGEE = Object.freeze({ texte: 'pas encore jugée', ton: '', icone: 'clock' });
 
@@ -111,7 +114,9 @@ export function lignesPreuve(mesure) {
     const m = morceauxGain(j.enPourcent);
     gain = m
       ? { valeur: m.gain, reste: [m.fourchette, m.quoi].filter(Boolean).join(' '), texte: texteGain(j.enPourcent), manque: false }
-      : { texte: 'pas de gain calculé : pas assez de matchs', manque: true };
+      : j.verdict === 'rien-a-mesurer'
+        ? { texte: 'rien à mesurer : aucun pourcentage du moteur n’a changé', manque: true }
+        : { texte: 'pas de gain calculé : pas assez de matchs', manque: true };
   }
   const n = mesure.variantes;
   const auJugement = j?.seuil?.variantes;

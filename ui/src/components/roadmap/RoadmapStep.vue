@@ -27,6 +27,10 @@
  * complet (marché, version en service, nouveau modèle, verdict en mots, calibration du
  * pronostic retenu), la phrase sur les xG, la réserve acceptée, et où en est l'étape
  * (candidate à blanc, adoption à venir). Mots : utils/bancAvantApres.js.
+ *
+ * Étape 47 (lot 1, 17/11/2026) : pour l'étape qui porte `etape.recette` (lu par le serveur dans les fichiers du
+ * journal de la recette, jamais dans la base), la carte « Essai général » (RecetteCarte), AVANT la preuve après
+ * lancement ; quand la note du bilan existe, la preuve de la 47 dit le même verdict (le serveur la remplit, CR-10).
  */
 import { computed, ref } from 'vue';
 import AppButton from '@/components/common/AppButton.vue';
@@ -38,6 +42,7 @@ import { useBrouillonsNotes } from '@/composables/useBrouillonsNotes.js';
 import { formatDateTime } from '@/utils/format.js';
 import { lignesPreuve } from '@/utils/preuve.js';
 import { blocDuBancAvantApres } from '@/utils/bancAvantApres.js';
+import RecetteCarte from '@/components/roadmap/RecetteCarte.vue';
 
 const props = defineProps({
   etape: { type: Object, required: true },
@@ -261,6 +266,9 @@ async function enregistrer() {
       <p v-for="(r, i) in banc.reserves" :key="i" class="rstep__reserve">{{ r }}</p>
       <p class="rstep__texte rstep__banc-etat">{{ banc.etat }}</p>
     </section>
+
+    <!-- Étape 47 : la carte « Essai général » (journal de la recette lu par le serveur) ; seulement pour elle. -->
+    <RecetteCarte v-if="etape.recette" :recette="etape.recette" />
 
     <!-- La preuve après lancement (étape 16) : seulement quand l'étape a une mesure, et alors toujours ses cinq lignes. -->
     <section v-if="preuve" class="rstep__preuve">

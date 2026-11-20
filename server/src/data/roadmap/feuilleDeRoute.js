@@ -20,7 +20,14 @@
  *     jugement : la page n'ouvre jamais la base, elle ne peut pas compter ;
  *   - (étape 27, 21/10/2026) le bloc « Banc d'essai sur des matchs jamais vus
  *     (2019-2023) : avant / après » de l'étape 27, lu dans le code (note de
- *     départ et note du modèle de buts, data/roadmap/bancEtape27.js).
+ *     départ et note du modèle de buts, data/roadmap/bancEtape27.js) ;
+ *   - (étape 47, lot 1 P4a, 17/11/2026) la carte « Essai général » de l'étape
+ *     47 : ce que le journal de la recette a écrit (battement, fichiers du jour,
+ *     decisions.json), LU par data/recette/etatDeLaRecette.js (lecture
+ *     tolérante, jamais la base) et mis en forme par blocRecette.js ; la note du
+ *     bilan (P7), quand elle existe, remplit aussi la `mesure` de la 47 (CR-10 :
+ *     la carte et la preuve disent le même verdict). Un bloc qui lève devient
+ *     « journal illisible pour l'instant » : jamais la page en panne (R-S9).
  *
  * L'état d'une étape, dans cet ordre : « terminée » si l'historique a une
  * ligne qui la FINIT (une ligne `partielle` ne la finit pas : étape 27,
@@ -42,6 +49,18 @@ import { HISTORIQUE, ETAPES_EN_COURS, BILANS_DE_LOT } from './historique.js';
 import { lireDonneesPierre, FICHIER_FEUILLE_DE_ROUTE, LONGUEUR_NOTE_MAX } from '../repositories/roadmapRepository.js';
 import { etatPourFeuilleDeRoute, FICHIER_REGISTRE } from '../../bench/trialsRegistry.js';
 import { blocDuBancEtape27 } from './bancEtape27.js';
+import { etatDeLaRecette } from '../recette/etatDeLaRecette.js';
+import { blocDeLaRecette, mesureAvecLaNote, listeDesCauses } from './blocRecette.js';
+import { NON_SURVEILLE } from '../recette/classerLesEvenements.js';
+
+/** P4b-1 (RC-20) : la liste des causes du repli ; null si elle-même ne se construit pas (jamais d'exception ici). */
+function repliDeLaListe() {
+  try {
+    return listeDesCauses();
+  } catch {
+    return null;
+  }
+}
 
 export const ETATS = Object.freeze(['a-faire', 'en-cours', 'terminee', 'mise-de-cote']);
 export const VERSION_ETAT = 1;
@@ -56,7 +75,8 @@ const IDS = new Set(ETAPES.map((e) => e.id));
  * `maintenant` (instant, pour la semaine du plan), `historique`, `enCours` et
  * `bilans` (à la place de ceux du code), `pierre` (à la place du fichier lu),
  * `mesure` (à la place du registre de la mesure lu), `derive` (l'alerte de dérive du moteur, ou null :
- * la route la passe, rien ne la lit ici).
+ * la route la passe, rien ne la lit ici), `lireRecette` (à la place de la lecture du journal de la recette) et
+ * `noteDeLaRecette` (la note du bilan de la 47 ; null tant que bilanDeLaRecette.js, P7, n'existe pas).
  */
 export function etatFeuilleDeRoute({
   maintenant = Date.now(),
@@ -65,8 +85,18 @@ export function etatFeuilleDeRoute({
   bilans = BILANS_DE_LOT,
   pierre = lireDonneesPierre(),
   mesure = etatPourFeuilleDeRoute(),
-  derive = null
+  derive = null,
+  lireRecette = etatDeLaRecette,
+  noteDeLaRecette = null
 } = {}) {
+  // Étape 47 (CR-10, R-S9) : la carte « Essai général », calculée une fois ; une erreur ne fait jamais tomber la page.
+  let recette47;
+  try {
+    recette47 = blocDeLaRecette({ etat: lireRecette({ maintenant }), note: noteDeLaRecette, maintenant });
+  } catch (err) {
+    // P4b-1 (RC-20 point 4) : le repli garde la liste des causes et « Non surveillé » (jamais « (0) »).
+    recette47 = { indisponible: true, probleme: `journal illisible pour l’instant (${String(err?.message ?? err).slice(0, 200)})`, liste: repliDeLaListe(), nonSurveille: NON_SURVEILLE };
+  }
   const etapes = ETAPES.map((e) => {
     const lignes = historique.filter((h) => h.etape === e.id);
     // Une ligne partielle raconte ce qui a changé, sans finir l'étape (étape 27 : la candidate à blanc, l'adoption à venir).
@@ -93,9 +123,12 @@ export function etatFeuilleDeRoute({
       note: donnees?.note ? { texte: donnees.note, le: donnees.noteLe ?? null } : null,
       miseDeCote: donnees?.miseDeCote ?? null,
       // La preuve après lancement (étape 16) : null pour une étape qui ne touche pas aux chiffres et sans entrée au registre.
-      mesure: mesure.etapes?.[e.id] ?? null,
+      // Étape 47 : la note du bilan remplit le jugement (CR-10) ; sans note, la mesure du registre reste telle quelle.
+      mesure: e.id === '47' ? mesureAvecLaNote(mesure.etapes?.[e.id] ?? null, noteDeLaRecette) : mesure.etapes?.[e.id] ?? null,
       // Étape 27 : le banc d'essai « avant / après » (lu dans le code, jamais dans la base) ; seulement pour elle.
-      ...(e.id === '27' ? { bancAvantApres: blocDuBancEtape27() } : {})
+      ...(e.id === '27' ? { bancAvantApres: blocDuBancEtape27() } : {}),
+      // Étape 47 : la carte « Essai général » (état « essai ») ; seulement pour elle.
+      ...(e.id === '47' ? { recette: recette47 } : {})
     };
   });
 

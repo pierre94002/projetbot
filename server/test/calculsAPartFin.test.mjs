@@ -54,6 +54,15 @@ const LISTE_BLANCHE = Object.freeze({
   'data/simulation/simulationNuit.js': 'sceau-46'
 });
 
+/**
+ * P4b-1 (RC-13, 17/11/2026) : l'écoute du processus LUI-MÊME (pas d'un enfant, pas d'un fil), sous un autre nom que
+ * `process` (le processus y est injectable pour les essais). Un ensemble à part, jamais la liste blanche : sautée par
+ * l'étape 1, et vérifiée : le fichier ne lance ni enfant (fork) ni fil (new Worker).
+ */
+const ECOUTE_DU_PROCESSUS = Object.freeze({
+  'data/recette/journalDeLaRecette.js': 'CR-14 : écoute du processus lui-même'
+});
+
 /** Les quinze calculs à part qui concluent sur 'close' : les coupes (09/11), les débuts (10/11), puis les treize du 14/11. */
 const CORRIGES = Object.freeze([
   'data/coupes/coupesNuit.js',
@@ -119,7 +128,12 @@ test('T-CF1 (statique) : aucune écoute de « exit » pour conclure, hors de la 
   assert.ok(fichiers.length > 300, `le relevé a trouvé ${fichiers.length} fichiers sous server/src`);
   const lus = new Map(fichiers.map((f) => [f, lire(f)]));
   // 1. Qui écoute encore 'exit' : la liste blanche, exactement.
-  const ecouteExit = fichiers.filter((f) => lus.get(f).exits.length);
+  const ecouteExit = fichiers.filter((f) => lus.get(f).exits.length && !Object.hasOwn(ECOUTE_DU_PROCESSUS, f));
+  for (const f of Object.keys(ECOUTE_DU_PROCESSUS)) {
+    const l = lus.get(f);
+    assert.ok(l, `${f} : absent (ECOUTE_DU_PROCESSUS)`);
+    assert.ok(!l.enfant && !l.fil, `${f} : l'écoute du processus lui-même ne vaut que sans enfant (fork) ni fil (new Worker)`);
+  }
   const enTrop = ecouteExit.filter((f) => !Object.hasOwn(LISTE_BLANCHE, f));
   assert.deepEqual(enTrop, [], `écoute « exit » pour conclure : passer à « close » (piège du 09/11/2026) — ${enTrop.join(', ')}`);
   const plusLa = Object.keys(LISTE_BLANCHE).filter((f) => !ecouteExit.includes(f));
