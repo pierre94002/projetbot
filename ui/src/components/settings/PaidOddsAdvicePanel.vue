@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import AppButton from '@/components/common/AppButton.vue';
 import AppIcon from '@/components/common/AppIcon.vue';
 import AppSelect from '@/components/common/AppSelect.vue';
@@ -10,6 +10,7 @@ import KickoffCountdown from '@/components/common/KickoffCountdown.vue';
 import ProvenanceChip from '@/components/common/ProvenanceChip.vue';
 import LeagueBadge from '@/components/matches/LeagueBadge.vue';
 import { oddsApi } from '@/services/oddsApi.js';
+import { useSourcesStore } from '@/stores/sourcesStore.js';
 import { quandDit } from '@/utils/langageParis.js';
 import { liveNow } from '@/utils/liveClock.js';
 
@@ -17,16 +18,26 @@ import { liveNow } from '@/utils/liveClock.js';
  * Le CONSEIL DE RELEVÉ PAYANT (étape 7 du plan, 06/10/2026) : quand un relevé
  * The Odds API vaut le coup — quels championnats, combien de crédits, combien
  * il en reste (s'ils sont connus), et le bon moment (à l'annonce des
- * compositions des matchs proches). UN ENCART D'INFORMATION : il ne relève
- * rien. Le relevé reste le bouton « Actualiser » de la carte Données (Cotes
- * marché, The Odds API), que Pierre clique ; rien ne part tout seul.
+ * compositions des matchs proches).
+ *
+ * LE RELEVÉ CIBLÉ (18/11/2026) : en variante complète (Réglages seulement),
+ * l'encart porte un bouton qui relève SEULEMENT les championnats de la vague
+ * (bloc `releveCible` du conseil). AVANT le clic, il dit la liste des
+ * championnats, le coût en crédits et ce que deviennent les autres
+ * championnats (leurs cotes payantes sont retirées, leurs matchs restent).
+ * Toujours un clic de Pierre, confirmé en deux temps (« Relever… » puis
+ * « Confirmer : n crédits » ou « Annuler ») ; le conseil est relu au premier
+ * clic, pour confirmer la liste du moment. Jamais automatique. Le relevé
+ * complet reste le bouton « Actualiser » de la carte Données (Cotes marché,
+ * The Odds API). La version courte (page du match) n'a aucun bouton.
  *
  * `variante="complete"` (Réglages) : le conseil, les matchs concernés, les
  * crédits en chiffres clés, et le réglage de fraîcheur (délai, règle des
  * compositions ; PUT /api/odds/fraicheur, idempotent). `variante="compacte"`
  * (page d'un match dont la value est à rafraîchir) : le conseil en une ligne et
  * où est le bouton. LIT /api/odds/conseil-releve (et /api/odds/fraicheur en
- * variante complète), sans rien lancer.
+ * variante complète) ; le seul envoi est le relevé ciblé confirmé
+ * (POST /api/sources/odds/refresh-cible, par le magasin des sources).
  */
 const props = defineProps({
   variante: { type: String, default: 'complete' } // 'complete' | 'compacte'
@@ -39,6 +50,30 @@ const reglage = ref(null);
 const delai = ref(180);
 const avantCompos = ref(true);
 const enregistrement = ref({ enCours: false, message: null, erreur: null });
+const sourcesStore = useSourcesStore();
+/** Le relevé ciblé : 'repos' (un bouton) ou 'confirmer' (« Confirmer : n crédits » / « Annuler ») ; les clés confirmées. */
+const etape = ref('repos');
+const clesAConfirmer = ref([]);
+const releve = ref({ enCours: false, compteRendu: null, erreur: null });
+/**
+ * Correction S4 (18/11/2026) : la confirmation vaut 2 minutes, puis elle est annulée avec un message (la liste du moment
+ * a pu changer : matchs commencés, réglage changé). Le serveur relit de toute façon le conseil et refuse (409) une liste
+ * qui n'est plus la sienne ; après un refus, le conseil est relu (charger).
+ */
+const CONFIRMATION_MS = 2 * 60_000;
+const confirmeeA = ref(null);
+const MESSAGE_PERIMEE = "confirmation annulée : plus de 2 minutes depuis votre premier clic. Relisez l'encart, puis recliquez. Rien n'est parti.";
+const confirmationPerimee = () => confirmeeA.value !== null && Date.now() - confirmeeA.value > CONFIRMATION_MS;
+function annulerSiPerimee() {
+  if (etape.value !== 'confirmer' || !confirmationPerimee()) return false;
+  annuler();
+  releve.value = { enCours: false, compteRendu: null, erreur: MESSAGE_PERIMEE };
+  return true;
+}
+// L'horloge commune bat toutes les 30 s : une confirmation laissée ouverte disparaît d'elle-même.
+watch(liveNow, () => {
+  if (!releve.value.enCours) annulerSiPerimee();
+});
 
 /** Les délais proposés (le serveur accepte de 15 min à 24 h). */
 const OPTIONS_DELAI = [
@@ -73,6 +108,46 @@ async function charger() {
 onMounted(() => charger());
 
 const credits = computed(() => conseil.value?.credits ?? null);
+/** Le relevé ciblé proposé (montré seulement en variante complète, et s'il a des championnats). */
+const cible = computed(() => (props.variante === 'complete' && conseil.value?.releveCible?.cles?.length ? conseil.value.releveCible : null));
+
+/** Premier temps : le conseil est relu (la liste du moment), puis la confirmation, avec le coût, s'il est toujours conseillé. */
+async function demander() {
+  releve.value = { enCours: false, compteRendu: null, erreur: null };
+  try {
+    conseil.value = await oddsApi.conseilReleve();
+  } catch (error) {
+    releve.value = { enCours: false, compteRendu: null, erreur: `conseil illisible (${error.message}) : rien n'est parti.` };
+    return;
+  }
+  if (!cible.value?.actif) return;
+  clesAConfirmer.value = [...cible.value.cles];
+  confirmeeA.value = Date.now();
+  etape.value = 'confirmer';
+}
+
+function annuler() {
+  etape.value = 'repos';
+  clesAConfirmer.value = [];
+  confirmeeA.value = null;
+}
+
+/** Second temps : le relevé des seules clés montrées, puis le compte rendu et le conseil relu. */
+async function confirmer() {
+  if (annulerSiPerimee()) return;
+  const cles = clesAConfirmer.value;
+  if (!cles.length) return annuler();
+  releve.value = { enCours: true, compteRendu: null, erreur: null };
+  try {
+    const r = await sourcesStore.refreshOddsCible(cles);
+    releve.value = { enCours: false, compteRendu: r?.compteRendu ?? 'Relevé fait.', erreur: null };
+  } catch (error) {
+    releve.value = { enCours: false, compteRendu: null, erreur: error.message };
+  } finally {
+    annuler();
+  }
+  await charger();
+}
 const ICONES = { maintenant: 'bolt', 'plus-tard': 'clock', inutile: 'check' };
 const BOITES = { maintenant: 'is-warning', 'plus-tard': 'is-info', inutile: 'is-muted' };
 const icone = computed(() => ICONES[conseil.value?.conseil] ?? 'info');
@@ -125,6 +200,8 @@ async function enregistrer() {
     const r = await oddsApi.enregistrerFraicheur({ maxAgeMinutes: Number(delai.value), avantCompos: Boolean(avantCompos.value) });
     reglage.value = r;
     enregistrement.value = { enCours: false, message: r.enregistrement?.change ? 'Réglage enregistré : les pages le prennent au prochain affichage.' : 'Déjà enregistré : rien de changé.', erreur: null };
+    // Correction S4 : le conseil relu peut proposer une autre liste — une confirmation ouverte est annulée.
+    if (!releve.value.enCours) annuler();
     conseil.value = await oddsApi.conseilReleve();
   } catch (error) {
     enregistrement.value = { enCours: false, message: null, erreur: error.message };
@@ -177,9 +254,42 @@ async function enregistrer() {
         </li>
       </ul>
 
+      <!-- Le relevé ciblé : la liste, le coût et ce que deviennent les autres championnats, AVANT le clic. -->
+      <section v-if="cible" class="advice__cible" :class="{ 'is-actif': cible.actif }">
+        <h4 class="cm-section-title advice__cible-title">
+          Relevé ciblé
+          <span class="cm-section-title__hint">seulement les championnats de la vague</span>
+        </h4>
+        <p class="advice__cible-cout">{{ cible.textes.cout }}</p>
+        <p class="advice__detail">{{ cible.textes.credits }}</p>
+        <p v-if="cible.textes.encoreJouables" class="advice__detail">{{ cible.textes.encoreJouables }}</p>
+        <p class="advice__detail"><strong>Ce qui arrive aux autres championnats.</strong> {{ cible.textes.autres }}</p>
+        <details v-if="cible.retires.length" class="advice__retires">
+          <summary>Voir les {{ pluriel(cible.retires.length, 'championnat retiré', 'championnats retirés') }}</summary>
+          <ul class="advice__retires-list">
+            <li v-for="c in cible.retires" :key="c.cle">{{ c.nom }} ({{ pluriel(c.matchsAVenir, 'match à venir', 'matchs à venir') }})</li>
+          </ul>
+        </details>
+        <p v-if="cible.textes.tropDeCles" class="advice__detail">{{ cible.textes.tropDeCles }}</p>
+        <p v-else-if="!cible.actif && cible.textes.plusTard" class="advice__hint">{{ cible.textes.plusTard }}</p>
+        <div v-if="cible.actif" class="advice__cible-actions">
+          <AppButton v-if="etape === 'repos'" variant="secondary" size="sm" :disabled="releve.enCours || sourcesStore.refreshingOdds" @click="demander">
+            <template #icon><AppIcon name="bolt" :size="14" /></template>
+            {{ cible.textes.bouton }}
+          </AppButton>
+          <template v-else>
+            <AppButton variant="primary" size="sm" :loading="releve.enCours" @click="confirmer">{{ cible.textes.confirmer }}</AppButton>
+            <AppButton variant="ghost" size="sm" :disabled="releve.enCours" @click="annuler">Annuler</AppButton>
+          </template>
+        </div>
+        <p class="advice__hint">{{ cible.textes.pied }}</p>
+      </section>
+      <p v-if="releve.compteRendu" class="advice__hint" role="status">{{ releve.compteRendu }}</p>
+      <p v-if="releve.erreur" class="advice__error" role="alert">Relevé ciblé non fait : {{ releve.erreur }}</p>
+
       <div v-if="credits" class="cm-kpis advice__kpis">
         <div class="cm-kpi is-section">
-          <span class="cm-kpi__label">Coût d'un relevé</span>
+          <span class="cm-kpi__label">Coût d'un relevé complet</span>
           <span class="cm-kpi__value">{{ credits.parReleve }}</span>
           <span class="cm-kpi__detail">crédits au plus ({{ credits.competitions }} compétitions, une requête chacune)</span>
         </div>
@@ -189,7 +299,7 @@ async function enregistrer() {
           <span class="cm-kpi__detail">{{ restantsDetail }}</span>
         </div>
         <div class="cm-kpi">
-          <span class="cm-kpi__label">Après ce relevé</span>
+          <span class="cm-kpi__label">Après un relevé complet</span>
           <span class="cm-kpi__value">{{ credits.apres ?? 'inconnu' }}</span>
           <span class="cm-kpi__detail">{{ apresDetail }}</span>
         </div>
@@ -205,7 +315,9 @@ async function enregistrer() {
         <span class="cm-icon-box is-muted is-sm"><AppIcon name="lock" :size="14" /></span>
         <div>
           <p class="cm-note__title">C'est vous qui cliquez</p>
-          <p class="cm-note__text">{{ conseil.bouton.texte }} Le bouton : {{ conseil.bouton.ou }}.</p>
+          <!-- Correction S1 : deux boutons — ici, le relevé ciblé (la vague) ; dans Données, le relevé complet (tout). -->
+          <p v-if="cible && !cible.tropDeCles" class="cm-note__text">{{ conseil.bouton.texte }} Ici, le relevé ciblé, pour la vague ; dans Réglages › Données, le relevé complet, pour tout (jusqu'à {{ credits?.parReleve ?? '?' }} crédits, sans confirmation).</p>
+          <p v-else class="cm-note__text">{{ conseil.bouton.texte }} Le bouton : {{ conseil.bouton.ou }}.</p>
         </div>
       </div>
 
@@ -310,6 +422,59 @@ async function enregistrer() {
 .advice__match-name {
   font-weight: 700;
   color: var(--cm-text-primary);
+}
+
+/* Le relevé ciblé : un encadré neutre ; « maintenant » prend le bord ambre d'une action à faire (jamais le vert). */
+.advice__cible {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: var(--cm-radius-md);
+  border: 1px solid var(--cm-border-soft);
+  background: var(--cm-surface-alt);
+}
+
+.advice__cible.is-actif {
+  border-color: rgba(var(--cm-warning-rgb) / 0.4);
+}
+
+.advice__cible-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}
+
+.advice__cible-cout {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--cm-text-primary);
+}
+
+.advice__retires {
+  font-size: 12px;
+  color: var(--cm-text-secondary);
+}
+
+.advice__retires summary {
+  cursor: pointer;
+  color: var(--cm-text-primary);
+}
+
+.advice__retires-list {
+  margin: 6px 0 0;
+  padding-left: 18px;
+  color: var(--cm-text-muted);
+}
+
+.advice__cible-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .advice__setting {

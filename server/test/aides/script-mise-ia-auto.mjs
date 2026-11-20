@@ -108,10 +108,15 @@ async function pageDuMatch(enrichi, ctx, t = tilt) {
   const avecAV = avecAVerifierPourLeMoteur(enrichi, preparerAVerifierDuConseilParNoms()(enrichi));
   return analyseAvecLaMise(await analyzeMatch({ ...avecAV, contexteDeMise: contexteDuMoteur(ctx, avecAV) }, enService, t, sport, { maintenant: T0 }), { contexte: ctx, match: avecAV });
 }
-/** L'automatique : le VRAI calculerEngineResult ; ce que le gel recevrait est capturé. */
+/**
+ * L'automatique : le VRAI calculerEngineResult ; ce que le gel recevrait est capturé. Relevé ciblé (18/11/2026, élément A4) :
+ * la fraîcheur des cotes, que la vraie page et l'IA joignent de même (releveCible.test.mjs, A4), est laissée de côté ICI des
+ * deux côtés — les matchs fabriqués de cet essai (identifiants cal- « payants ») n'ont aucune heure de cote, et son sujet est
+ * la part de la mise (pageDuMatch ne la joint pas non plus).
+ */
 async function automatique(brut, options = {}) {
   const geles = [];
-  const ia = await calculerEngineResult(brut, { ...options, geler: (x) => geles.push(x) });
+  const ia = await calculerEngineResult(brut, { fraicheur: (m) => m, ...options, geler: (x) => geles.push(x) });
   return { ia, gele: geles[0] ?? null, nombreDeGels: geles.length };
 }
 /** Le résultat pour l'IA = celui du moteur, plus seulement la part de la page, la marque et la base (jamais modifié). */

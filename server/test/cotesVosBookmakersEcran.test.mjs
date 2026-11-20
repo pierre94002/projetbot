@@ -91,11 +91,27 @@ export function etatSaisies() {
 
 const BILAN = { source: 'enregistre', fichier: 'C:\\essai\\releve-payant.json', bilan: { at: iso(-26 * H), quota: { restants: 378, utilises: 122 }, cout: 18, matchsParCle: { soccer_epl: 10 } } };
 const proche = (extra) => ({ matchId: 'm', home: 'Man City', away: 'Liverpool', league: 'EPL', coupDEnvoi: iso(40 * MIN), heureSure: true, vosCotes: true, releveAt: iso(-5 * H), compos: { publiee: true, lueA: iso(-15 * MIN) }, ...extra });
+/** Relevé ciblé (18/11/2026) : deux autres championnats de l'instantané actuel, avec des matchs à venir (forme de championnatsDeLInstantane). */
+const AUTRES_AU_RELEVE = [
+  { cle: 'soccer_germany_bundesliga', nom: 'Bundesliga - Germany', matchsAVenir: 3, releveAt: iso(-5 * H), encoreJouable: false },
+  { cle: 'soccer_france_ligue_one', nom: 'Ligue 1 - France', matchsAVenir: 2, releveAt: iso(-5 * H), encoreJouable: false }
+];
 /** Le conseil, fabriqué par la VRAIE règle du serveur (conseilReleve.js). */
 const CONSEILS = {
   maintenant: () => conseilDeReleve({ maintenant: MAINTENANT, matchs: [proche(), proche({ matchId: 'm2', home: 'Arsenal', away: 'Chelsea', vosCotes: false, compos: null })], reglage: REGLAGE, dernierReleve: BILAN }),
   plusTard: () => conseilDeReleve({ maintenant: MAINTENANT, matchs: [proche({ coupDEnvoi: iso(5 * H), releveAt: iso(-30 * MIN), compos: null })], reglage: REGLAGE, dernierReleve: BILAN }),
-  inconnus: () => conseilDeReleve({ maintenant: MAINTENANT, matchs: [proche()], reglage: REGLAGE, dernierReleve: { source: 'absent', fichier: 'C:\\essai\\releve-payant.json', bilan: null } })
+  inconnus: () => conseilDeReleve({ maintenant: MAINTENANT, matchs: [proche()], reglage: REGLAGE, dernierReleve: { source: 'absent', fichier: 'C:\\essai\\releve-payant.json', bilan: null } }),
+  // Le relevé ciblé : une vague de trois championnats (compositions annoncées, cotes d'avant) ; deux autres seront retirés.
+  cible: () =>
+    conseilDeReleve({
+      maintenant: MAINTENANT,
+      matchs: [proche(), proche({ matchId: 'm2', league: 'La Liga - Spain', home: 'Betis', away: 'Sevilla' }), proche({ matchId: 'm3', league: 'Serie A - Italy', home: 'Roma', away: 'Lazio' })],
+      reglage: REGLAGE,
+      dernierReleve: BILAN,
+      instantane: AUTRES_AU_RELEVE
+    }),
+  // Cotes relevées après l'annonce des compositions : rien à relever.
+  inutile: () => conseilDeReleve({ maintenant: MAINTENANT, matchs: [proche({ releveAt: iso(-10 * MIN) })], reglage: REGLAGE, dernierReleve: BILAN, instantane: AUTRES_AU_RELEVE })
 };
 const REGLAGE_LU = { reglage: REGLAGE, source: 'enregistre', fichier: 'C:\\essai\\fraicheur-cotes.json', enregistreLe: iso(-H), defaut: REGLAGE, bornes: { min: 15, max: 1440 }, composAnnonceesMinutes: 60 };
 
@@ -321,12 +337,14 @@ test('PaidOddsAdvicePanel (Réglages) : « relevé conseillé maintenant », les
   assert.match(r.texte, /2 matchs · premier coup d'envoi .* · compositions publiées pour 1/);
   assert.match(r.texte, /Man City – Liverpool dans 40 min compositions publiées chez FotMob \(lues aujourd'hui à 13:45\) · vos cotes relevées aujourd'hui à 09:00 : à rafraîchir/);
   assert.match(r.texte, /Arsenal – Chelsea dans 40 min .* · pas encore de cote de vos bookmakers/);
-  assert.match(r.texte, /Coût d'un relevé 37 crédits au plus \(37 compétitions, une requête chacune\)/);
+  // Correction S1 : les chiffres clés sont ceux du relevé COMPLET, dits comme tels.
+  assert.match(r.texte, /Coût d'un relevé complet 37 crédits au plus \(37 compétitions, une requête chacune\)/);
   assert.match(r.texte, /Crédits restants 378 selon The Odds API, au relevé hier à 12:00 \(forfait de 500 par mois\)/);
-  assert.match(r.texte, /Après ce relevé 341 au pire, soit 10 relevés complets possibles/);
+  assert.match(r.texte, /Après un relevé complet 341 au pire, soit 10 relevés complets possibles/);
   assert.match(r.texte, /Dernier relevé 18 crédits décomptés au relevé hier à 12:00/);
-  assert.match(r.texte, /Le bouton relève les 37 compétitions suivies, une requête chacune \(1 région « eu » × 1 marché « h2h »\) : 37 crédits au plus par clic\./);
-  assert.match(r.texte, /C'est vous qui cliquez Rien ne part tout seul : le relevé ne se fait que si vous cliquez « Actualiser »\. Le bouton : Réglages › Données › Cotes marché \(The Odds API\) › « Actualiser »\./);
+  assert.match(r.texte, /Le relevé complet \(Réglages › Données\) relève les 37 compétitions suivies, une requête chacune \(1 région « eu » × 1 marché « h2h »\) : 37 crédits au plus par clic\./);
+  // Correction S1 : un relevé ciblé est proposé (1 championnat) — la note dit les deux boutons.
+  assert.match(r.texte, /C'est vous qui cliquez Rien ne part tout seul : le relevé ne se fait que si vous cliquez « Relever 1 championnat » puis confirmez\. Ici, le relevé ciblé, pour la vague ; dans Réglages › Données, le relevé complet, pour tout \(jusqu'à 37 crédits, sans confirmation\)\./);
   assert.match(r.texte, /Conseil calculé par CôteMaster calculé aujourd'hui à 14:00/);
   assert.ok(!/<button[^>]*>(?:(?!<\/button>)[\s\S])*Actualiser/.test(r.html), 'aucun bouton de relevé dans l’encart');
   // Le réglage : délai, règle des compositions, d'où il vient.
@@ -345,7 +363,7 @@ test('PaidOddsAdvicePanel : « vers 16 h 00 » quand les compositions ne sont pa
   scenario = { conseil: 'inconnus' };
   const inconnus = await rendre(composants.PaidOddsAdvicePanel, {});
   assert.match(inconnus.texte, /Crédits restants inconnus inconnus : aucun relevé fait depuis la mise à jour \(le prochain les donnera\)/);
-  assert.match(inconnus.texte, /Après ce relevé inconnu inconnu tant que les crédits restants ne le sont pas/);
+  assert.match(inconnus.texte, /Après un relevé complet inconnu inconnu tant que les crédits restants ne le sont pas/);
   assert.match(inconnus.texte, /Dernier relevé aucun aucun relevé gardé/);
   scenario = { conseil: 'maintenant' };
   const lecturesDuReglage = () => appels.filter((u) => /\/api\/odds\/fraicheur$/.test(u)).length;
@@ -353,9 +371,54 @@ test('PaidOddsAdvicePanel : « vers 16 h 00 » quand les compositions ne sont pa
   const court = await rendre(composants.PaidOddsAdvicePanel, { variante: 'compacte' });
   assert.equal(lecturesDuReglage(), avantCourt, 'la version courte ne lit pas le réglage');
   assert.deepEqual(court.avertissements, []);
-  assert.match(court.texte, /^Relevé conseillé maintenant : 1 championnat, 37 crédits au plus, maintenant \(compositions publiées\)\. 378 crédits restants\. Bouton : Réglages › Données › Cotes marché \(The Odds API\) › « Actualiser » — rien ne part tout seul\. Réglages$/);
+  // Correction S1 : la page du match envoie vers le relevé ciblé (1 crédit), plus vers « Actualiser » (37 crédits).
+  assert.match(court.texte, /^Relevé conseillé maintenant : 1 championnat, 1 crédit au plus, maintenant \(compositions publiées\)\. 378 crédits restants\. Bouton : Réglages › Cotes de vos bookmakers › « Relever 1 championnat » — rien ne part tout seul\. Réglages$/);
   assert.match(court.html, /<a [^>]*href="\/reglages"/);
   assert.ok(!court.texte.includes('Fraîcheur de vos cotes'), 'la version courte n’a pas le réglage');
+  scenario = {};
+});
+
+test('PaidOddsAdvicePanel : le relevé ciblé — la liste des championnats, « 3 crédits » et les championnats retirés dits AVANT tout clic ; un seul bouton « Relever », sa confirmation n’existe pas avant le premier clic ; jamais de bouton « Actualiser » ; rien quand le relevé est inutile ; la version courte sans bouton', options, async () => {
+  const { rendre, composants } = contexte;
+  /** Les boutons de relevé du rendu, en texte. */
+  const boutons = (html) => [...html.matchAll(/<button[^>]*>((?:(?!<\/button>)[\s\S])*)<\/button>/g)].map((m) => texteDe(m[1]).trim()).filter((b) => /Relever|Confirmer|Annuler|Actualiser/.test(b));
+  scenario = { conseil: 'cible' };
+  const r = await rendre(composants.PaidOddsAdvicePanel, {});
+  assert.deepEqual(r.avertissements, []);
+  assert.match(r.texte, /Relevé ciblé seulement les championnats de la vague/);
+  assert.match(r.texte, /Relever seulement ces 3 championnats \(EPL, La Liga - Spain et Serie A - Italy\) : 3 crédits au plus \(1 par championnat ; un championnat sans match ne coûte rien\)\./);
+  assert.match(r.texte, /Il vous reste 378 crédits \(compte le \d{2}\/\d{2} à \d{1,2} h \d{2}\)\. Après ce relevé : au moins 375\./);
+  assert.match(r.texte, /Ce qui arrive aux autres championnats\. Les cotes de 2 autres championnats, relevées le \d{2}\/\d{2} à \d{1,2} h \d{2}, seront retirées\. Leurs matchs restent sur la page Matchs, avec les cotes gratuites quand il y en a\. Aucune mise ne sera conseillée sur eux tant qu'ils ne seront pas relevés à leur tour\./);
+  assert.match(r.texte, /Voir les 2 championnats retirés Bundesliga - Germany \(3 matchs à venir\) Ligue 1 - France \(2 matchs à venir\)/);
+  assert.match(r.texte, /Rien ne part tout seul : le relevé ne se fait que si vous cliquez, puis confirmez\./);
+  // Un seul bouton : le premier temps. Le coût et les championnats retirés sont écrits avant lui.
+  assert.deepEqual(boutons(r.html), ['Relever 3 championnats (3 crédits)']);
+  const bouton = r.html.indexOf('Relever 3 championnats (3 crédits)');
+  assert.ok(r.html.indexOf('3 crédits au plus') < bouton && r.html.indexOf('Ligue 1 - France (2 matchs à venir)') < bouton, 'le coût et les championnats retirés sont dits avant le bouton');
+  assert.ok(!r.html.includes('is-value') && !/--cm-accent/.test(r.html), 'aucun vert dans le relevé ciblé');
+  // Rien à relever : ni l'encadré, ni le bouton.
+  scenario = { conseil: 'inutile' };
+  const inutile = await rendre(composants.PaidOddsAdvicePanel, {});
+  assert.deepEqual(inutile.avertissements, []);
+  assert.deepEqual(boutons(inutile.html), []);
+  assert.ok(!inutile.texte.includes('Relevé ciblé'));
+  // La version courte (page du match) : aucun bouton.
+  scenario = { conseil: 'cible' };
+  const court = await rendre(composants.PaidOddsAdvicePanel, { variante: 'compacte' });
+  assert.deepEqual(court.avertissements, []);
+  assert.deepEqual(boutons(court.html), []);
+  assert.ok(!court.texte.includes('Relevé ciblé'));
+  // Correction S1 (rendu côté serveur) : la version courte dit le coût ciblé et le bouton ciblé, jamais « 37 crédits au
+  // plus » ni « Actualiser » ; la version complète dit « relevé complet » sur ses deux chiffres clés.
+  assert.match(court.texte, /^Relevé conseillé maintenant : 3 championnats, 3 crédits au plus, maintenant \(compositions publiées\)\. 378 crédits restants\. Bouton : Réglages › Cotes de vos bookmakers › « Relever 3 championnats » — rien ne part tout seul\. Réglages$/);
+  assert.ok(!court.texte.includes('37 crédits au plus') && !court.texte.includes('« Actualiser »'), court.texte);
+  assert.match(r.texte, /Coût d'un relevé complet 37 crédits au plus/);
+  assert.match(r.texte, /Après un relevé complet 341 au pire/);
+  // Correction S4 (lecture du composant) : la confirmation vaut 2 minutes et toute relecture du conseil l'annule.
+  const source = fs.readFileSync(path.join(UI, 'src', 'components', 'settings', 'PaidOddsAdvicePanel.vue'), 'utf8');
+  assert.match(source, /const CONFIRMATION_MS = 2 \* 60_000;/);
+  assert.match(source, /async function confirmer\(\) \{\n  if \(annulerSiPerimee\(\)\) return;/);
+  assert.match(source, /\/\/ Correction S4 : le conseil relu peut proposer une autre liste — une confirmation ouverte est annulée\.\n    if \(!releve\.value\.enCours\) annuler\(\);\n    conseil\.value = await oddsApi\.conseilReleve\(\);/);
   scenario = {};
 });
 

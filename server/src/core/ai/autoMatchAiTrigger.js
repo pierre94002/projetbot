@@ -47,7 +47,7 @@ import { recentlyFinished, openDb } from '../../data/db/matchStatsDb.js';
 import { clubDuMagasin } from '../../data/db/oddsProfileRead.js';
 import { fetchMatchesByDate } from '../../data/providers/fotMobProvider.js';
 import { teamNamesLikelyMatch } from '../../utils/teamNameMatch.js';
-import { getByMatchId, findPreMatchAnalysisByTeams } from '../../data/repositories/matchAiAnalysisRepository.js';
+import { getByMatchId, findPreMatchAnalysisByTeams, listAll } from '../../data/repositories/matchAiAnalysisRepository.js';
 import { enregistrerUsage, jourParis, finDuJourParis } from '../../data/repositories/autoAiAnalysisRepository.js';
 import { buildLineupContext, derniereCompositionConnue, signatureDesOnzes, titulairesHabituelsChanges } from '../../data/providers/lineupContext.js';
 import { runPreMatchAnalysis, runPostMatchAnalysis, CODE_CLAUDE_CODE_INDISPONIBLE } from './matchAiAnalysisService.js';
@@ -56,6 +56,7 @@ import { modeBudget, lireFavoris, estFavori, favorisDabord, noterEffetEconome } 
 import { gelerAnalyse, ORIGINES } from '../../data/enregistreurs/gelPronostics.js';
 import { env } from '../../config/env.js';
 import { preparerAVerifierDuConseilParNoms, avecAVerifierPourLeMoteur } from '../../data/aVerifierPourLeMoteur.js';
+import { fraicheurDuMatch, coteDeLInstantanePayant } from '../../data/cotesDeVosBookmakers.js';
 // Lot A1 (17/11/2026, pendant l'essai n° 3 ; l'essai 27 est jugé, ce fichier est libre) : le contexte de la mise, lu comme la page.
 import { contexteDeLaMise, contexteDuMoteur, miseDuMatch, miseNonCalculee, ceQuiNaPasPuEtreLu } from '../../data/mise/miseRead.js';
 import { CONTEXTE_DE_MISE_ILLISIBLE } from './compactContext.js';
@@ -115,21 +116,110 @@ const enrichirSansRepliPayant = (match) => enrichMatchWithRealAverages(match, { 
 /**
  * Lot A1 (passe 2, K6) : exporté, avec ses lectures INJECTABLES pour les essais (`lire` le contexte de la mise, `geler`
  * l'analyse, `enrichir` le match) ; sans elles, le comportement en service, inchangé (miseLot2.test.mjs, T-A1 mise, l'appelle
- * dans une copie isolée).
+ * dans une copie isolée). Relevé ciblé (18/11/2026, élément A4) : `fraicheur` joint la fraîcheur des cotes au match donné au
+ * moteur (avecLaFraicheurDesCotes, comme la page) ; injectable pour les essais qui fabriquent des matchs sans heure de cote.
  */
-export async function calculerEngineResult(match, { lineups = null, origine = ORIGINES.avance, lire = lireLeContexteDeMise, geler = gelerEnService, enrichir = enrichirSansRepliPayant } = {}) {
+export async function calculerEngineResult(match, { lineups = null, origine = ORIGINES.avance, lire = lireLeContexteDeMise, geler = gelerEnService, enrichir = enrichirSansRepliPayant, fraicheur = avecLaFraicheurDesCotes } = {}) {
   // Lot A1 (17/11/2026, vérification des lots d'argent, mise C8) : le contexte de la mise est lu comme la page du match
   // (analysis.controller.js : contexteDeLaMise, puis contexteDuMoteur) et joint au match donné au moteur — la part écrite à
   // l'IA est celle de la page (compactContext.js, partPourIA). Le gel de l'analyse reçoit le même match qu'avant, et rien de
   // ce qu'il écrit ne dépend de la mise (miseLot2.test.mjs, T-A1).
   const lu = avecLeContexteDeMise(await enrichir(match), { lire });
-  const enrichi = lu.match;
+  // Élément A4 du relevé ciblé (18/11/2026, décision RC6) : la fraîcheur des cotes jointe au match donné au moteur, comme la
+  // page du match (avecLaFraicheurDesCotes ; la page la joint aussi AVANT « à vérifier »). Le gel reçoit le même `match`
+  // qu'avant et le même `aVerifier` (lu sur les noms, le championnat et la date : la fraîcheur n'y change rien) ; `lu` reste
+  // celui d'avant pour la part écrite à l'IA (resultatPourLIA).
+  const enrichi = fraicheur(lu.match);
   // Étape 38 (lot 2a, 16/11/2026) : aucun conseil de pari sur un match « à vérifier » — la donnée du contrôle quotidien est
   // jointe au match donné au moteur (data/aVerifierPourLeMoteur.js) ; l'IA lit alors « aucun pari conseillé », comme la page.
   const aVerifier = preparerAVerifierDuConseilParNoms()(enrichi);
   const engineResult = await analyzeMatch(avecAVerifierPourLeMoteur(enrichi, aVerifier), getEngineConfig('football'), getTiltState(), getSport('football'));
   geler({ match, engineResult, lineups, origine, aVerifier });
   return resultatPourLIA(engineResult, lu);
+}
+
+/**
+ * Élément A4 du relevé ciblé (18/11/2026, décision RC6) : la fraîcheur des cotes jointe au match, EXACTEMENT comme la page
+ * du match (analysis.controller.js : `source === 'odds-api' ? { ...m, fraicheurCotes: fraicheurDuMatch(m) } : m`) — même
+ * fonction, même condition de source. Les analyses automatiques lisent toujours la source « odds-api ». Sans elle, le
+ * verdict du pari ne contrôlait pas la fraîcheur (verdictPari.js) et l'IA lisait « RECOMMENDED » pour une cote de plus de
+ * 60 min ou d'avant les compositions, quand la page disait « à rafraîchir ».
+ */
+export function avecLaFraicheurDesCotes(match, source = 'odds-api') {
+  return source === 'odds-api' ? { ...match, fraicheurCotes: fraicheurDuMatch(match) } : match;
+}
+
+/**
+ * Lot 1b du relevé ciblé (18/11/2026, décision RC5) : l'analyse d'avant-match DÉJÀ FAITE pour ce match, même si son
+ * identifiant a changé. Un relevé ciblé fait basculer des identifiants (`cal-…` ↔ identifiant The Odds API) ; sans cette
+ * recherche, l'analyse (~24 400 jetons du quota de Pierre) serait refaite pour le même match. On cherche sous
+ * l'identifiant du moment ET par équipes, championnat et jour (la règle de findPreMatchAnalysisByTeams, la recherche des
+ * revues d'après-match, appliquée à TOUTES les analyses : elle ne rend que la première, qui peut être l'analyse d'avance
+ * quand celle du coup d'envoi est rangée sous l'autre identifiant). Par équipes, seulement une analyse qui porte son
+ * heure de coup d'envoi : une entrée sans heure répondrait pour n'importe quel jour et bloquerait la même affiche jouée
+ * plus tard. Rend la plus avancée : une analyse au coup d'envoi d'abord, puis la plus récente ; null s'il n'y en a pas.
+ * L'analyse neuve, elle, est toujours rangée sous l'identifiant du moment.
+ */
+export function analyseDejaFaite(m) {
+  const parIdentifiant = getByMatchId(m.matchId);
+  const jour = String(m.commenceTime ?? '').slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(jour) || !m.home || !m.away) return parIdentifiant;
+  const memeMatch = (e) =>
+    e.matchId !== m.matchId &&
+    !e.postMatchReview &&
+    typeof e.commenceTime === 'string' &&
+    // Le jour et le championnat d'abord (comparaisons simples), les noms ensuite (rapprochement souple, plus coûteux) :
+    // ce tri est passé pour chaque match candidat, sur toutes les analyses gardées.
+    Math.abs(Date.parse(e.commenceTime.slice(0, 10)) - Date.parse(jour)) <= JOUR_MS &&
+    !(m.league && e.league && e.league !== m.league) &&
+    teamNamesLikelyMatch(e.homeName, m.home) &&
+    teamNamesLikelyMatch(e.awayName, m.away);
+  const toutes = [parIdentifiant, ...listAll().filter(memeMatch)].filter(Boolean);
+  if (!toutes.length) return null;
+  return toutes.sort(plusAvanceeDabord)[0];
+}
+
+const JOUR_MS = 86_400_000;
+/** La plus avancée d'abord : une analyse au coup d'envoi avant une analyse d'avance, puis la plus récente. */
+const rangDAnalyse = (e) => (e.timing === 'coup-d-envoi' ? 1 : 0);
+const heureDAnalyse = (e) => Date.parse(e.analysedAt ?? e.updatedAt ?? 0) || 0;
+const plusAvanceeDabord = (a, b) => rangDAnalyse(b) - rangDAnalyse(a) || heureDAnalyse(b) - heureDAnalyse(a);
+
+/**
+ * Correction S6 (relecture Fable, décision RC5 bis, 18/11/2026) : l'analyse d'avant coup d'envoi compte-t-elle comme
+ * faite POUR CE MATCH ? Une analyse trouvée sous un identifiant `cal-` (faite sans aucune cote payante) ne compte PAS si
+ * le match a MAINTENANT des cotes payantes (relevé fait après elle) : elle est refaite UNE fois, sous l'identifiant du
+ * moment — ensuite on la trouve par l'identifiant, c'est fini. Sans cela, après un relevé ciblé, la page du match
+ * (qui lit l'analyse par l'identifiant) n'avait plus d'avis de l'IA, et l'IA n'avait jamais vu les cotes payées. Le cas
+ * inverse ne change pas (analyse sous l'identifiant The Odds API, match revenu au calendrier : faite).
+ */
+function faiteAuCoupDEnvoiPourCeMatch(entree, m, kickoffMs) {
+  if (!faiteAuCoupDEnvoi(entree, kickoffMs)) return false;
+  if (entree.matchId !== m.matchId && String(entree.matchId ?? '').startsWith('cal-') && coteDeLInstantanePayant(m)) return false;
+  return true;
+}
+
+/**
+ * Correction S8 (relecture Fable, 18/11/2026) : l'analyse d'avant-match à revoir après le match. Parmi les entrées du
+ * même match (mêmes équipes, même championnat quand les deux sont connus, coup d'envoi à un jour près), la PLUS AVANCÉE
+ * (celle du coup d'envoi d'abord, puis la plus récente) ; RIEN si l'une d'elles a déjà sa revue — sinon un match analysé
+ * sous deux identifiants (avance `cal-`, coup d'envoi The Odds API) recevait deux revues (un appel Claude de trop, et
+ * l'« expérience » redonnée à l'IA le comptait deux fois). Sans entrée datée de ce jour-là : la règle d'avant
+ * (findPreMatchAnalysisByTeams : les analyses sans heure de coup d'envoi).
+ */
+export function analysePourLaRevue({ homeName, awayName, league, day = null }) {
+  if (day) {
+    const soeurs = listAll().filter(
+      (e) =>
+        typeof e.commenceTime === 'string' &&
+        Math.abs(Date.parse(e.commenceTime.slice(0, 10)) - Date.parse(day)) <= JOUR_MS &&
+        !(league && e.league && e.league !== league) &&
+        teamNamesLikelyMatch(e.homeName, homeName) &&
+        teamNamesLikelyMatch(e.awayName, awayName)
+    );
+    if (soeurs.length) return soeurs.some((e) => e.postMatchReview) ? null : [...soeurs].sort(plusAvanceeDabord)[0];
+  }
+  return findPreMatchAnalysisByTeams({ homeName, awayName, league, day });
 }
 
 /**
@@ -228,7 +318,7 @@ export async function runAutoPreMatchAnalyses({ limit }) {
       const coupEnvoi = Date.parse(m.commenceTime ?? '');
       return Number.isFinite(coupEnvoi) && coupEnvoi - maintenant > AVANCE_MIN_MS && coupEnvoi - maintenant <= FENETRE_AVANT_MATCH_MS;
     })
-    .filter((m) => !getByMatchId(m.matchId))
+    .filter((m) => !analyseDejaFaite(m))
     .sort((a, b) => Date.parse(a.commenceTime) - Date.parse(b.commenceTime));
 
   let budget = modeBudget();
@@ -384,8 +474,8 @@ export async function runKickoffPreMatchAnalyses({ limit }) {
   bilan.raisonMode = budget.raison;
   let aFaire = [];
   for (const { m, minutes, fotmobMatchId, kickoff } of await matchsAuCoupDEnvoi()) {
-    const entree = getByMatchId(m.matchId);
-    if (faiteAuCoupDEnvoi(entree, kickoff)) {
+    const entree = analyseDejaFaite(m);
+    if (faiteAuCoupDEnvoiPourCeMatch(entree, m, kickoff)) {
       if (compositionChangee(entree)) {
         const { reprendre } = reprisePermise(entree, budget.politique);
         if (reprendre) aFaire.push({ m, minutes, fotmobMatchId, reprise: true });
@@ -457,7 +547,7 @@ export async function reserveCoupDEnvoi(maintenant = Date.now()) {
   return (await matchsAvecCoupDEnvoi(maintenant)).filter(({ m, kickoff }) => {
     if (kickoff <= maintenant + COUP_D_ENVOI_TROP_TARD_MIN * 60_000) return false;
     if (kickoff - COUP_D_ENVOI_FENETRE_MIN * 60_000 >= fin) return false;
-    return !faiteAuCoupDEnvoi(getByMatchId(m.matchId), kickoff);
+    return !faiteAuCoupDEnvoiPourCeMatch(analyseDejaFaite(m), m, kickoff);
   }).length;
 }
 
@@ -469,7 +559,8 @@ export async function runAutoPostMatchReviews({ limit }) {
   const since = new Date(Date.now() - FENETRE_APRES_MATCH_JOURS * 86_400_000).toISOString().slice(0, 10);
   let candidats = [];
   for (const m of recentlyFinished({ since })) {
-    const prior = findPreMatchAnalysisByTeams({ homeName: m.homeName, awayName: m.awayName, league: m.league, day: m.date });
+    // Correction S8 : l'entrée la plus avancée du match, rien si une entrée sœur a déjà sa revue.
+    const prior = analysePourLaRevue({ homeName: m.homeName, awayName: m.awayName, league: m.league, day: m.date });
     // Date et nom FotMob : l'analyse après-match relit les buts et statistiques du match dans le magasin.
     if (prior) candidats.push({ prior, resultat: { homeGoals: m.homeGoals, awayGoals: m.awayGoals, date: m.date, homeName: m.homeName } });
   }

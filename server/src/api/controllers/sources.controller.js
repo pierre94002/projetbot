@@ -4,7 +4,7 @@ import { getFixturesStatus, getFixturePaths } from '../../data/repositories/fixt
 import { CALENDAR_FILE_PATH } from '../../data/repositories/seasonCalendarRepository.js';
 import { resolveDbPath } from '../../data/db/matchStatsDb.js';
 import { DATA_SOURCE_KEYS } from '../../data/matchSources.js';
-import { refreshLiveOdds, refreshLiveCompetitions } from '../../data/providers/liveDataSync.js';
+import { refreshLiveOdds, refreshLiveOddsCible, refreshLiveCompetitions } from '../../data/providers/liveDataSync.js';
 import { quotesSummary } from '../../data/db/oddsQuotesRepository.js';
 import { NOMS_DES_SOURCES } from '../../data/freeMarketOdds.js';
 
@@ -59,6 +59,17 @@ export function listSources(req, res) {
 /** Rafraîchit les cotes en direct depuis The Odds API — consomme du quota, jamais automatique. */
 export async function postRefreshOdds(req, res) {
   const result = await refreshLiveOdds();
+  res.json(result);
+}
+
+/**
+ * Le relevé ciblé (18/11/2026) : seulement les championnats de la vague, ceux que l'encart du conseil de relevé a montrés
+ * à Pierre avec leur coût AVANT son clic confirmé (Réglages). Corps attendu : { cles: [clés The Odds API] }. Les clés
+ * sont contrôlées avant tout appel (400 sinon) ; un second relevé pendant le premier reçoit 409. Consomme du quota
+ * (1 crédit par clé au plus), jamais automatique.
+ */
+export async function postRefreshOddsCible(req, res) {
+  const result = await refreshLiveOddsCible(req.body?.cles);
   res.json(result);
 }
 

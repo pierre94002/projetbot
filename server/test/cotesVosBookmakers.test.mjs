@@ -648,7 +648,7 @@ test('copie : le Repérage — la cote jouable porte l’heure lue dans l’arch
 
 // --------------------------------- 6. rien de payant tout seul, et le conseil
 
-test('aucune route n’appelle The Odds API : toutes celles de l’étape 7 et les pages qui montrent vos cotes répondent sans un seul appel ; le seul chemin est POST /api/sources/odds/refresh, le bouton de Réglages', () => {
+test('aucune route n’appelle The Odds API : toutes celles de l’étape 7 et les pages qui montrent vos cotes répondent sans un seul appel ; les seuls chemins sont les boutons de Réglages — POST /api/sources/odds/refresh, et le relevé ciblé POST /api/sources/odds/refresh-cible (essayé dans releveCible.test.mjs)', () => {
   const s = routes();
   for (const r of s.reponses) assert.equal(r.code, 200, `${r.methode} ${r.url} : ${r.erreur}`);
   assert.deepEqual(s.appelsApresLesRoutes, [], 'aucun appel au client payant');
@@ -691,7 +691,7 @@ const SRC = path.join(SERVEUR, 'src');
 const tousLesFichiers = fs.readdirSync(SRC, { recursive: true }).filter((f) => f.endsWith('.js')).map((f) => path.join(SRC, f));
 const relatif = (f) => path.relative(SRC, f).split(path.sep).join('/');
 
-test('aucun appel payant possible ailleurs (lecture du code) : seul liveDataSync importe le client payant, seul le contrôleur des sources l’appelle, sur une seule route POST ; aucune boucle n’y touche ; les modules de l’étape 7 n’importent rien de payant', () => {
+test('aucun appel payant possible ailleurs (lecture du code) : seul liveDataSync importe le client payant, seul le contrôleur des sources l’appelle, sur deux routes POST (le relevé complet et, depuis le 18/11/2026, le relevé ciblé) ; aucune boucle n’y touche ; les modules de l’étape 7 n’importent rien de payant', () => {
   const importeurs = (cible) => tousLesFichiers.filter((f) => importsDe(f).includes(path.join(SRC, cible))).map(relatif).sort();
   assert.deepEqual(importeurs('data/providers/oddsApiClient.js'), ['data/providers/liveDataSync.js']);
   assert.deepEqual(importeurs('data/providers/liveDataSync.js'), ['api/controllers/sources.controller.js']);
@@ -700,6 +700,17 @@ test('aucun appel payant possible ailleurs (lecture du code) : seul liveDataSync
   assert.deepEqual([...routesSources.matchAll(/router\.(\w+)\('([^']+)',\s*asyncHandler\((\w+)\)\)/g)].filter((m) => m[3] === 'postRefreshOdds').map((m) => [m[1], m[2]]), [['post', '/odds/refresh']]);
   const appelants = tousLesFichiers.filter((f) => /\brefreshLiveOdds\s*\(/.test(fs.readFileSync(f, 'utf8'))).map(relatif).sort();
   assert.deepEqual(appelants, ['api/controllers/sources.controller.js', 'data/providers/liveDataSync.js']);
+  // Le relevé ciblé (18/11/2026) : exactement deux routes POST payantes, chacune vers sa fonction du contrôleur ; le
+  // contrôleur appelle chaque relevé une seule fois ; le relevé ciblé n'a pas d'autre appelant ; aucune minuterie.
+  assert.deepEqual(
+    [...routesSources.matchAll(/router\.(\w+)\('([^']+)',\s*asyncHandler\((\w+)\)\)/g)].filter((m) => /^postRefreshOdds/.test(m[3])).map((m) => [m[1], m[2], m[3]]),
+    [['post', '/odds/refresh', 'postRefreshOdds'], ['post', '/odds/refresh-cible', 'postRefreshOddsCible']]
+  );
+  const controleur = fs.readFileSync(path.join(SRC, 'api', 'controllers', 'sources.controller.js'), 'utf8');
+  assert.deepEqual([(controleur.match(/\brefreshLiveOdds\s*\(/g) ?? []).length, (controleur.match(/\brefreshLiveOddsCible\s*\(/g) ?? []).length], [1, 1]);
+  const appelantsCible = tousLesFichiers.filter((f) => /\brefreshLiveOddsCible\s*\(/.test(fs.readFileSync(f, 'utf8'))).map(relatif).sort();
+  assert.deepEqual(appelantsCible, ['api/controllers/sources.controller.js', 'data/providers/liveDataSync.js']);
+  assert.doesNotMatch(fs.readFileSync(path.join(SRC, 'data', 'providers', 'liveDataSync.js'), 'utf8'), /setInterval\s*\(|setTimeout\s*\(|\bfetch\s*\(/, 'liveDataSync : aucune minuterie, aucun appel réseau direct');
   // Les boucles et le démarrage n'importent ni le relevé payant ni son contrôleur.
   for (const f of tousLesFichiers.filter((x) => /[\\/]jobs[\\/]/.test(x) || /server\.js$|app\.js$/.test(x))) {
     for (const i of importsDe(f)) assert.doesNotMatch(i, /liveDataSync|oddsApiClient|sources\.controller/, `${relatif(f)} importe ${i}`);
@@ -774,10 +785,12 @@ test('conseil de relevé : compositions annoncées et cotes d’avant — « mai
   assert.equal(c.titre, 'Relevé conseillé maintenant');
   assert.deepEqual(c.matchs.map((m) => [m.matchId, m.cotes]), [['m', 'a-rafraichir'], ['m2', 'absentes']], 'le match de 21 h attend ses propres compositions');
   assert.deepEqual(c.championnats, [{ cle: 'soccer_epl', nom: 'EPL', matchs: 2, premierCoupDEnvoi: '2026-10-05T19:00:00.000Z', composPubliees: 1 }]);
-  assert.equal(c.resume, 'Relevé conseillé maintenant : 1 championnat, 37 crédits au plus, maintenant (compositions publiées).');
+  // Correction S1 (relevé ciblé, 18/11/2026) : un relevé ciblé est proposé (la vague : 1 championnat) — le résumé et le
+  // bouton sont les siens.
+  assert.equal(c.resume, 'Relevé conseillé maintenant : 1 championnat, 1 crédit au plus, maintenant (compositions publiées).');
   assert.match(c.raison, /^Compositions annoncées pour 2 matchs \(EPL\), coup d'envoi d'ici 21 h 00 : vos cotes y datent d’avant cette annonce ou sont à rafraîchir\. FotMob les a déjà publiées pour 1 match\.$/);
   assert.deepEqual([c.credits.parReleve, c.credits.restants, c.credits.apres, c.credits.relevesPossibles, c.credits.suffisants, c.credits.dernierCout], [37, 300, 263, 8, true, 18]);
-  assert.deepEqual(c.bouton, { ou: 'Réglages › Données › Cotes marché (The Odds API) › « Actualiser »', automatique: false, texte: "Rien ne part tout seul : le relevé ne se fait que si vous cliquez « Actualiser »." });
+  assert.deepEqual(c.bouton, { ou: 'Réglages › Cotes de vos bookmakers › « Relever 1 championnat »', automatique: false, texte: 'Rien ne part tout seul : le relevé ne se fait que si vous cliquez « Relever 1 championnat » puis confirmez.' });
 });
 
 test('conseil de relevé : sinon « vers 18 h 00 », à l’annonce des compositions du prochain match qui en aura besoin (ceux de la même demi-heure ensemble) ; cotes relevées après les compositions, hors saison, rien de proche : « pas de relevé »', () => {
@@ -810,7 +823,8 @@ test('conseil de relevé : crédits inconnus tant qu’aucun relevé n’a laiss
   const sans = conseilDeReleve({ maintenant: t('2026-10-05T18:15:00Z'), matchs: [proche()], reglage: R, dernierReleve: { source: 'absent', fichier: 'C:\\essai\\releve-payant.json', bilan: null } });
   assert.deepEqual([sans.credits.restants, sans.credits.apres, sans.credits.relevesPossibles, sans.credits.suffisants, sans.credits.dernierCout, sans.credits.source], [null, null, null, null, null, 'absent']);
   const peu = conseilDeReleve({ maintenant: t('2026-10-05T18:15:00Z'), matchs: [proche()], reglage: R, dernierReleve: { ...BILAN, bilan: { ...BILAN.bilan, quota: { restants: 20, utilises: 480 } } } });
-  assert.deepEqual([peu.credits.restants, peu.credits.apres, peu.credits.relevesPossibles, peu.credits.suffisants], [20, -17, 0, false]);
+  // Correction S5 : jamais de nombre négatif (« pas assez » est dit par suffisants).
+  assert.deepEqual([peu.credits.restants, peu.credits.apres, peu.credits.relevesPossibles, peu.credits.suffisants], [20, 0, 0, false]);
 });
 
 test('conseil de relevé dans une copie : la page Matchs, l’heure de vos cotes dans l’archive, les compositions déjà lues (sans requête), le bilan du dernier relevé — et la route en lecture seule', () => {

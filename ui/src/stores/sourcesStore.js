@@ -49,6 +49,21 @@ export const useSourcesStore = defineStore('sources', {
         this.refreshingOdds = false;
       }
     },
+    // Relevé ciblé (18/11/2026) : les seuls championnats de la vague (clés montrées par l'encart du conseil, avec leur
+    // coût, avant le clic confirmé). Même drapeau que le relevé complet : un seul relevé à la fois, l'écran aussi.
+    async refreshOddsCible(cles) {
+      this.refreshingOdds = true;
+      try {
+        const result = await sourcesApi.refreshOddsCible(cles);
+        this.lastOddsQuota = result.quota;
+        // Le relevé est FAIT (crédits dépensés) : une liste des sources illisible juste après ne doit pas le faire passer
+        // pour raté (Pierre relancerait et paierait deux fois). Elle sera relue au prochain chargement.
+        await this.fetchSources().catch(() => {});
+        return result;
+      } finally {
+        this.refreshingOdds = false;
+      }
+    },
     async refreshCompetitions() {
       this.refreshingCompetitions = true;
       try {
