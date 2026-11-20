@@ -1,0 +1,1260 @@
+{
+  "version": 1,
+  "jour": "2026-11-20",
+  "phase": "rodage",
+  "nonSurveille": "Non surveillé par l'essai : la boucle des compositions, la boucle des cotes gratuites, et le détail de l'analyse au coup d'envoi (ses échecs ne sont dits que dans la fenêtre du serveur). Coût de la veille (matchs commencés pendant que le PC dormait) : non compté : aucune heure de coup d’envoi lisible sans la base.",
+  "couverture": {
+    "minutesObservees": 4,
+    "minutesDeVeille": 0,
+    "minutesArret": 0,
+    "minutesEnErreur": 0,
+    "tours": 1,
+    "toursReussis": 1
+  },
+  "serveur": {
+    "demarrages": [
+      {
+        "le": "2026-11-20T14:29:39.512Z",
+        "pid": 21136,
+        "commit": "75c2c3e13d688cca12fc853b01f84861050586c7",
+        "type": "premier-demarrage-du-journal",
+        "id": "2026-11-20|premier-demarrage-du-journal|21136|14:29:39",
+        "empreinteDesCauses": "edbeea176827b15ba94a8367c549d97b5b5412ba"
+      }
+    ],
+    "trous": []
+  },
+  "passes": {
+    "total": 30,
+    "ok": 15,
+    "partielles": 15,
+    "enEchec": 0,
+    "nuit": null,
+    "rattrapages": [],
+    "liste": [
+      {
+        "id": "2026-11-15T21:02:28.565Z",
+        "raison": "au démarrage",
+        "debut": "2026-11-15T21:02:28.565Z",
+        "fin": "2026-11-15T21:09:06.901Z",
+        "dureeS": 398,
+        "issue": "ok",
+        "etapes": []
+      },
+      {
+        "id": "2026-11-16T06:20:21.080Z",
+        "raison": "périodique",
+        "debut": "2026-11-16T06:20:21.080Z",
+        "fin": "2026-11-16T06:40:09.622Z",
+        "dureeS": 1189,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "controle",
+            "statut": "warn",
+            "resume": "Depuis le 2026-10-17 : 2 001 rencontres contrôlées, 21 anomalies (buteurs : 18, gardien : 2, fichiers : 1). Rien n'est corrigé automatiquement."
+          },
+          {
+            "cle": "simulationSaisons",
+            "statut": "warn",
+            "resume": "Fins de saison : 37 championnats simulés 10 000 fois, 11 non calculés (Premiership - Scotland : calendrier incomplet : 120 rencontres connues sur 123 attendues, non calculé ; Swiss Superleague : calendrier incomplet : 54 rencontres connues sur 120 attendues, non calculé ; Eliteserien - Norway : 2 cl"
+          }
+        ]
+      },
+      {
+        "id": "2026-11-16T11:07:18.037Z",
+        "raison": "périodique",
+        "debut": "2026-11-16T11:07:18.037Z",
+        "fin": "2026-11-16T11:09:12.460Z",
+        "dureeS": 114,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "controleQuotidien",
+            "statut": "warn",
+            "resume": "Feu rouge : 35 contrôles en 3,4 s sur 2 260 rencontres des 30 derniers jours (le serveur jamais tenu plus de 339 ms d'affilée) — rouge : rencontre mal rangée — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, classement officiel, autres"
+          }
+        ]
+      },
+      {
+        "id": "2026-11-16T14:09:12.550Z",
+        "raison": "périodique",
+        "debut": "2026-11-16T14:09:12.550Z",
+        "fin": "2026-11-16T14:10:12.559Z",
+        "dureeS": 60,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "iaAutoAvantMatch",
+            "statut": "error",
+            "resume": "3 rencontres à venir entre 3 h et 48 h sans analyse : 0 analysée, 3 échecs — arrêt après plusieurs pannes de Claude Code d'affilée (quota, jeton ou réseau), reprise à la passe suivante."
+          },
+          {
+            "cle": "controleQuotidien",
+            "statut": "warn",
+            "resume": "Feu rouge : 35 contrôles en 4,1 s sur 2 260 rencontres des 30 derniers jours (le serveur jamais tenu plus de 472 ms d'affilée) — rouge : rencontre mal rangée — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, classement officiel, autres"
+          }
+        ]
+      },
+      {
+        "id": "2026-11-16T17:10:12.011Z",
+        "raison": "périodique",
+        "debut": "2026-11-16T17:10:12.011Z",
+        "fin": "2026-11-16T17:11:39.250Z",
+        "dureeS": 87,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "controleQuotidien",
+            "statut": "warn",
+            "resume": "Feu rouge : 35 contrôles en 3,9 s sur 2 260 rencontres des 30 derniers jours (le serveur jamais tenu plus de 345 ms d'affilée) — rouge : rencontre mal rangée — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, classement officiel, autres"
+          }
+        ]
+      },
+      {
+        "id": "2026-11-16T20:11:39.196Z",
+        "raison": "périodique",
+        "debut": "2026-11-16T20:11:39.196Z",
+        "fin": "2026-11-16T20:14:51.634Z",
+        "dureeS": 192,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "controleQuotidien",
+            "statut": "warn",
+            "resume": "Feu rouge : 35 contrôles en 5,4 s sur 2 261 rencontres des 30 derniers jours (le serveur jamais tenu plus de 484 ms d'affilée) — rouge : rencontre mal rangée — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, classement officiel, autres"
+          }
+        ]
+      },
+      {
+        "id": "2026-11-16T23:14:51.725Z",
+        "raison": "périodique",
+        "debut": "2026-11-16T23:14:51.725Z",
+        "fin": "2026-11-16T23:36:50.100Z",
+        "dureeS": 1318,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "controle",
+            "statut": "warn",
+            "resume": "Depuis le 2026-10-17 : 2 010 rencontres contrôlées, 21 anomalies (buteurs : 18, gardien : 2, fichiers : 1). Rien n'est corrigé automatiquement."
+          },
+          {
+            "cle": "carnetSante",
+            "statut": "warn",
+            "resume": "143 rencontres nouvelles ou modifiées contrôlées, 7 saisons recomptées en 4,3 s (le serveur jamais tenu plus de 78 ms d'affilée) : 4 277 anomalies au carnet (rencontre en double : 9, mauvaise compétition : 1, match manquant : 8, chiffre impossible : 258, zéro « non relevé » : 651, club ou joueur mal"
+          },
+          {
+            "cle": "simulationSaisons",
+            "statut": "warn",
+            "resume": "Fins de saison : 36 championnats simulés 10 000 fois, 12 non calculés (Serie B - Italy : table et magasin en désaccord : Palermo (table 11, magasin 12), Modena (table 11, magasin  ; Premiership - Scotland : calendrier incomplet : 120 rencontres connues sur 123 attendues, non calculé ; Swiss Superlea"
+          },
+          {
+            "cle": "controleQuotidien",
+            "statut": "warn",
+            "resume": "Feu rouge : 35 contrôles en 3,3 s sur 2 264 rencontres des 30 derniers jours (le serveur jamais tenu plus de 354 ms d'affilée) — rouge : rencontre mal rangée — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, classement officiel, autres"
+          }
+        ]
+      },
+      {
+        "id": "2026-11-17T02:36:50.369Z",
+        "raison": "périodique",
+        "debut": "2026-11-17T02:36:50.369Z",
+        "fin": "2026-11-17T02:39:05.356Z",
+        "dureeS": 135,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "iaAutoAvantMatch",
+            "statut": "warn",
+            "resume": "4 rencontres à venir entre 3 h et 48 h sans analyse : 3 analysées, 1 échec."
+          },
+          {
+            "cle": "controleQuotidien",
+            "statut": "warn",
+            "resume": "Feu rouge : 35 contrôles en 3,6 s sur 2 074 rencontres des 30 derniers jours (le serveur jamais tenu plus de 312 ms d'affilée) — rouge : rencontre mal rangée — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, classement officiel, autres"
+          }
+        ]
+      },
+      {
+        "id": "2026-11-17T05:39:05.493Z",
+        "raison": "périodique",
+        "debut": "2026-11-17T05:39:05.493Z",
+        "fin": "2026-11-17T05:41:43.869Z",
+        "dureeS": 158,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "controleQuotidien",
+            "statut": "warn",
+            "resume": "Feu rouge : 35 contrôles en 3,6 s sur 2 074 rencontres des 30 derniers jours (le serveur jamais tenu plus de 303 ms d'affilée) — rouge : rencontre mal rangée — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, classement officiel, autres"
+          }
+        ]
+      },
+      {
+        "id": "2026-11-17T08:41:44.023Z",
+        "raison": "périodique",
+        "debut": "2026-11-17T08:41:44.023Z",
+        "fin": "2026-11-17T08:42:34.216Z",
+        "dureeS": 50,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "controleQuotidien",
+            "statut": "warn",
+            "resume": "Feu rouge : 35 contrôles en 4 s sur 2 074 rencontres des 30 derniers jours (le serveur jamais tenu plus de 332 ms d'affilée) — rouge : rencontre mal rangée — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, classement officiel, autres z"
+          }
+        ]
+      },
+      {
+        "id": "2026-11-17T11:42:34.417Z",
+        "raison": "périodique",
+        "debut": "2026-11-17T11:42:34.417Z",
+        "fin": "2026-11-17T11:44:05.728Z",
+        "dureeS": 91,
+        "issue": "ok",
+        "etapes": []
+      },
+      {
+        "id": "2026-11-17T14:44:05.856Z",
+        "raison": "périodique",
+        "debut": "2026-11-17T14:44:05.856Z",
+        "fin": "2026-11-17T14:44:54.336Z",
+        "dureeS": 48,
+        "issue": "ok",
+        "etapes": []
+      },
+      {
+        "id": "2026-11-17T17:44:54.473Z",
+        "raison": "périodique",
+        "debut": "2026-11-17T17:44:54.473Z",
+        "fin": "2026-11-17T17:45:48.721Z",
+        "dureeS": 54,
+        "issue": "ok",
+        "etapes": []
+      },
+      {
+        "id": "2026-11-17T20:45:48.898Z",
+        "raison": "périodique",
+        "debut": "2026-11-17T20:45:48.898Z",
+        "fin": "2026-11-17T20:46:41.210Z",
+        "dureeS": 52,
+        "issue": "ok",
+        "etapes": []
+      },
+      {
+        "id": "2026-11-17T23:46:41.389Z",
+        "raison": "périodique",
+        "debut": "2026-11-17T23:46:41.389Z",
+        "fin": "2026-11-18T00:09:45.333Z",
+        "dureeS": 1384,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "controle",
+            "statut": "warn",
+            "resume": "Depuis le 2026-10-18 : 1 820 rencontres contrôlées, 20 anomalies (buteurs : 17, gardien : 2, fichiers : 1). Rien n'est corrigé automatiquement."
+          },
+          {
+            "cle": "simulationSaisons",
+            "statut": "warn",
+            "resume": "Fins de saison : 36 championnats simulés 10 000 fois, 12 non calculés (Serie B - Italy : table et magasin en désaccord : Palermo (table 11, magasin 12), Modena (table 11, magasin  ; Premiership - Scotland : calendrier incomplet : 120 rencontres connues sur 123 attendues, non calculé ; Swiss Superlea"
+          }
+        ]
+      },
+      {
+        "id": "2026-11-18T03:09:45.485Z",
+        "raison": "périodique",
+        "debut": "2026-11-18T03:09:45.485Z",
+        "fin": "2026-11-18T03:12:10.104Z",
+        "dureeS": 145,
+        "issue": "ok",
+        "etapes": []
+      },
+      {
+        "id": "2026-11-18T06:12:10.247Z",
+        "raison": "périodique",
+        "debut": "2026-11-18T06:12:10.247Z",
+        "fin": "2026-11-18T06:15:36.276Z",
+        "dureeS": 206,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "bulletin",
+            "statut": "warn",
+            "resume": "Texte refusé : il citait Trois, absent(s) de la fiche. Rien n’est affiché ; essai 1 sur 3, nouvel essai à la passe suivante."
+          }
+        ]
+      },
+      {
+        "id": "2026-11-18T09:15:36.393Z",
+        "raison": "périodique",
+        "debut": "2026-11-18T09:15:36.393Z",
+        "fin": "2026-11-18T09:18:25.673Z",
+        "dureeS": 169,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "bulletin",
+            "statut": "warn",
+            "resume": "Texte refusé : il citait Trois, absent(s) de la fiche. Rien n’est affiché ; essai 2 sur 3, nouvel essai à la passe suivante."
+          }
+        ]
+      },
+      {
+        "id": "2026-11-18T11:08:04.425Z",
+        "raison": "au démarrage",
+        "debut": "2026-11-18T11:08:04.425Z",
+        "fin": "2026-11-18T11:11:16.419Z",
+        "dureeS": 192,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "bulletin",
+            "statut": "warn",
+            "resume": "Texte refusé : il citait trois, absent(s) de la fiche. Rien n’est affiché ; essai 3 sur 3, nouvel essai à la passe suivante."
+          }
+        ]
+      },
+      {
+        "id": "2026-11-18T11:38:51.966Z",
+        "raison": "au démarrage",
+        "debut": "2026-11-18T11:38:51.966Z",
+        "fin": "2026-11-18T11:41:49.503Z",
+        "dureeS": 178,
+        "issue": "ok",
+        "etapes": []
+      },
+      {
+        "id": "2026-11-18T13:21:00.375Z",
+        "raison": "au démarrage",
+        "debut": "2026-11-18T13:21:00.375Z",
+        "fin": "2026-11-18T13:25:03.597Z",
+        "dureeS": 243,
+        "issue": "ok",
+        "etapes": []
+      },
+      {
+        "id": "2026-11-18T16:25:03.767Z",
+        "raison": "périodique",
+        "debut": "2026-11-18T16:25:03.767Z",
+        "fin": "2026-11-18T16:26:38.410Z",
+        "dureeS": 95,
+        "issue": "ok",
+        "etapes": []
+      },
+      {
+        "id": "2026-11-18T19:26:38.533Z",
+        "raison": "périodique",
+        "debut": "2026-11-18T19:26:38.533Z",
+        "fin": "2026-11-18T19:36:03.609Z",
+        "dureeS": 565,
+        "issue": "ok",
+        "etapes": []
+      },
+      {
+        "id": "2026-11-18T22:36:03.760Z",
+        "raison": "périodique",
+        "debut": "2026-11-18T22:36:03.760Z",
+        "fin": "2026-11-18T22:45:50.437Z",
+        "dureeS": 587,
+        "issue": "ok",
+        "etapes": []
+      },
+      {
+        "id": "2026-11-19T09:02:25.135Z",
+        "raison": "périodique",
+        "debut": "2026-11-19T09:02:25.135Z",
+        "fin": "2026-11-19T09:32:15.490Z",
+        "dureeS": 1790,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "controle",
+            "statut": "warn",
+            "resume": "Depuis le 2026-10-20 : 1 659 rencontres contrôlées, 17 anomalies (buteurs : 14, gardien : 2, fichiers : 1). Rien n'est corrigé automatiquement."
+          },
+          {
+            "cle": "simulationSaisons",
+            "statut": "warn",
+            "resume": "Fins de saison : 34 championnats simulés 10 000 fois, 14 non calculés (Serie B - Italy : table et magasin en désaccord : Palermo (table 11, magasin 12), Modena (table 11, magasin  ; Premiership - Scotland : calendrier incomplet : 120 rencontres connues sur 123 attendues, non calculé ; Swiss Superlea"
+          }
+        ]
+      },
+      {
+        "id": "2026-11-19T12:32:15.573Z",
+        "raison": "périodique",
+        "debut": "2026-11-19T12:32:15.573Z",
+        "fin": "2026-11-19T12:45:19.853Z",
+        "dureeS": 784,
+        "issue": "ok",
+        "etapes": []
+      },
+      {
+        "id": "2026-11-19T15:45:19.913Z",
+        "raison": "périodique",
+        "debut": "2026-11-19T15:45:19.913Z",
+        "fin": "2026-11-19T15:57:41.854Z",
+        "dureeS": 742,
+        "issue": "ok",
+        "etapes": []
+      },
+      {
+        "id": "2026-11-19T18:57:41.930Z",
+        "raison": "périodique",
+        "debut": "2026-11-19T18:57:41.930Z",
+        "fin": "2026-11-19T19:01:05.165Z",
+        "dureeS": 203,
+        "issue": "ok",
+        "etapes": []
+      },
+      {
+        "id": "2026-11-19T22:07:07.578Z",
+        "raison": "périodique",
+        "debut": "2026-11-19T22:07:07.578Z",
+        "fin": "2026-11-19T22:11:58.351Z",
+        "dureeS": 291,
+        "issue": "ok",
+        "etapes": []
+      },
+      {
+        "id": "2026-11-20T02:39:13.943Z",
+        "raison": "périodique",
+        "debut": "2026-11-20T02:39:13.943Z",
+        "fin": "2026-11-20T13:05:35.484Z",
+        "dureeS": 37582,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "controle",
+            "statut": "warn",
+            "resume": "Depuis le 2026-10-21 : 1 626 rencontres contrôlées, 17 anomalies (buteurs : 14, gardien : 2, fichiers : 1). Rien n'est corrigé automatiquement."
+          },
+          {
+            "cle": "simulationSaisons",
+            "statut": "warn",
+            "resume": "Fins de saison : 34 championnats simulés 10 000 fois, 14 non calculés (Serie B - Italy : table et magasin en désaccord : Palermo (table 11, magasin 12), Modena (table 11, magasin  ; Premiership - Scotland : calendrier incomplet : 120 rencontres connues sur 123 attendues, non calculé ; Swiss Superlea"
+          }
+        ]
+      }
+    ]
+  },
+  "alertes": {
+    "posees": [
+      "audit",
+      "simulationSaisons"
+    ],
+    "levees": [],
+    "changees": []
+  },
+  "controleDuJour": {
+    "releves": "2026-11-20T13:05:32.369Z",
+    "pire": "orange",
+    "rouges": [],
+    "oranges": [
+      "buteurs-score",
+      "gardiens-score",
+      "score-calendrier",
+      "club-deux-fois",
+      "mauvaise-competition",
+      "classement-officiel",
+      "zeros-non-releves",
+      "hors-reperes-buts",
+      "hors-reperes-statistiques"
+    ],
+    "presentsAuDepart": 84
+  },
+  "fotmob": {
+    "transitions": [
+      {
+        "le": "2026-11-20T14:33:39.699Z",
+        "de": null,
+        "vers": "ok",
+        "raison": null
+      }
+    ]
+  },
+  "sauvegarde": {
+    "le": "2026-11-20T12:57:17.960Z",
+    "ok": true,
+    "rencontres": 63072,
+    "derniereDate": "2026-11-20",
+    "octets": 571468844
+  },
+  "restauration": {
+    "le": "2026-11-16T23:31:41.234Z",
+    "saine": true,
+    "controle": "quick_check",
+    "rencontres": 63053,
+    "attendues": 63053,
+    "derniereDate": "2026-11-16",
+    "derniereDateAttendue": "2026-11-16",
+    "dureeMs": 87254
+  },
+  "ia": {
+    "appels": 80,
+    "ok": 80,
+    "echecs": 0,
+    "tokens": 1103138
+  },
+  "direct": {
+    "suspensions": 0,
+    "minutesSuspendu": 0
+  },
+  "instantaneDuDepart": null,
+  "evenements": [
+    {
+      "id": "2026-11-20|premier-demarrage-du-journal|21136|14:29:39",
+      "le": "2026-11-20T14:29:39.512Z",
+      "type": "premier-demarrage-du-journal",
+      "signal": "S11",
+      "cle": "21136",
+      "texte": "Premier démarrage du journal de la recette (rodage).",
+      "details": null,
+      "classe": "connue",
+      "cause": "premier-demarrage-du-journal",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-16|etape-en-alerte|controle|06:40:09",
+      "le": "2026-11-16T06:40:09.622Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controle",
+      "texte": "controle : Depuis le 2026-10-17 : 2 001 rencontres contrôlées, 21 anomalies (buteurs : 18, gardien : 2, fichiers : 1). Rien n'est corrigé automatiquement.",
+      "details": {
+        "passe": "2026-11-16T06:20:21.080Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "audit-buteurs-gardiens",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-16|etape-en-alerte|simulationSaisons|06:40:09",
+      "le": "2026-11-16T06:40:09.622Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "simulationSaisons",
+      "texte": "simulationSaisons : Fins de saison : 37 championnats simulés 10 000 fois, 11 non calculés (Premiership - Scotland : calendrier incomplet : 120 rencontres connues sur 123 attendues, non calculé ; Swiss Superleague : calendrier incomplet : 54 rencontres connues sur 120 attendues, non calculé ; Eliteserien - Norway : 2 cl",
+      "details": {
+        "passe": "2026-11-16T06:20:21.080Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "calendriers-incomplets",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-16|etape-en-alerte|controleQuotidien|11:09:12",
+      "le": "2026-11-16T11:09:12.460Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controleQuotidien",
+      "texte": "controleQuotidien : Feu rouge : 35 contrôles en 3,4 s sur 2 260 rencontres des 30 derniers jours (le serveur jamais tenu plus de 339 ms d'affilée) — rouge : rencontre mal rangée — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, classement officiel, autres",
+      "details": {
+        "passe": "2026-11-16T11:07:18.037Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "controle-du-jour",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-16|etape-en-echec|iaAutoAvantMatch|14:10:12",
+      "le": "2026-11-16T14:10:12.559Z",
+      "type": "etape-en-echec",
+      "signal": "S1",
+      "cle": "iaAutoAvantMatch",
+      "texte": "iaAutoAvantMatch : 3 rencontres à venir entre 3 h et 48 h sans analyse : 0 analysée, 3 échecs — arrêt après plusieurs pannes de Claude Code d'affilée (quota, jeton ou réseau), reprise à la passe suivante.",
+      "details": {
+        "passe": "2026-11-16T14:09:12.550Z",
+        "statut": "error",
+        "figeeParLaVeille": false
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-16|etape-en-alerte|controleQuotidien|14:10:12",
+      "le": "2026-11-16T14:10:12.559Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controleQuotidien",
+      "texte": "controleQuotidien : Feu rouge : 35 contrôles en 4,1 s sur 2 260 rencontres des 30 derniers jours (le serveur jamais tenu plus de 472 ms d'affilée) — rouge : rencontre mal rangée — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, classement officiel, autres",
+      "details": {
+        "passe": "2026-11-16T14:09:12.550Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "controle-du-jour",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-16|etape-en-alerte|controleQuotidien|17:11:39",
+      "le": "2026-11-16T17:11:39.250Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controleQuotidien",
+      "texte": "controleQuotidien : Feu rouge : 35 contrôles en 3,9 s sur 2 260 rencontres des 30 derniers jours (le serveur jamais tenu plus de 345 ms d'affilée) — rouge : rencontre mal rangée — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, classement officiel, autres",
+      "details": {
+        "passe": "2026-11-16T17:10:12.011Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "controle-du-jour",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-16|etape-en-alerte|controleQuotidien|20:14:51",
+      "le": "2026-11-16T20:14:51.634Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controleQuotidien",
+      "texte": "controleQuotidien : Feu rouge : 35 contrôles en 5,4 s sur 2 261 rencontres des 30 derniers jours (le serveur jamais tenu plus de 484 ms d'affilée) — rouge : rencontre mal rangée — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, classement officiel, autres",
+      "details": {
+        "passe": "2026-11-16T20:11:39.196Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "controle-du-jour",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-17|etape-en-alerte|controle|23:36:50",
+      "le": "2026-11-16T23:36:50.100Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controle",
+      "texte": "controle : Depuis le 2026-10-17 : 2 010 rencontres contrôlées, 21 anomalies (buteurs : 18, gardien : 2, fichiers : 1). Rien n'est corrigé automatiquement.",
+      "details": {
+        "passe": "2026-11-16T23:14:51.725Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "audit-buteurs-gardiens",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-17|etape-en-alerte|carnetSante|23:36:50",
+      "le": "2026-11-16T23:36:50.100Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "carnetSante",
+      "texte": "carnetSante : 143 rencontres nouvelles ou modifiées contrôlées, 7 saisons recomptées en 4,3 s (le serveur jamais tenu plus de 78 ms d'affilée) : 4 277 anomalies au carnet (rencontre en double : 9, mauvaise compétition : 1, match manquant : 8, chiffre impossible : 258, zéro « non relevé » : 651, club ou joueur mal",
+      "details": {
+        "passe": "2026-11-16T23:14:51.725Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-17|etape-en-alerte|simulationSaisons|23:36:50",
+      "le": "2026-11-16T23:36:50.100Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "simulationSaisons",
+      "texte": "simulationSaisons : Fins de saison : 36 championnats simulés 10 000 fois, 12 non calculés (Serie B - Italy : table et magasin en désaccord : Palermo (table 11, magasin 12), Modena (table 11, magasin  ; Premiership - Scotland : calendrier incomplet : 120 rencontres connues sur 123 attendues, non calculé ; Swiss Superlea",
+      "details": {
+        "passe": "2026-11-16T23:14:51.725Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "calendriers-incomplets",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-17|etape-en-alerte|controleQuotidien|23:36:50",
+      "le": "2026-11-16T23:36:50.100Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controleQuotidien",
+      "texte": "controleQuotidien : Feu rouge : 35 contrôles en 3,3 s sur 2 264 rencontres des 30 derniers jours (le serveur jamais tenu plus de 354 ms d'affilée) — rouge : rencontre mal rangée — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, classement officiel, autres",
+      "details": {
+        "passe": "2026-11-16T23:14:51.725Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "controle-du-jour",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-17|etape-en-alerte|iaAutoAvantMatch|02:39:05",
+      "le": "2026-11-17T02:39:05.356Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "iaAutoAvantMatch",
+      "texte": "iaAutoAvantMatch : 4 rencontres à venir entre 3 h et 48 h sans analyse : 3 analysées, 1 échec.",
+      "details": {
+        "passe": "2026-11-17T02:36:50.369Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "ia-echec-isole",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-17|etape-en-alerte|controleQuotidien|02:39:05",
+      "le": "2026-11-17T02:39:05.356Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controleQuotidien",
+      "texte": "controleQuotidien : Feu rouge : 35 contrôles en 3,6 s sur 2 074 rencontres des 30 derniers jours (le serveur jamais tenu plus de 312 ms d'affilée) — rouge : rencontre mal rangée — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, classement officiel, autres",
+      "details": {
+        "passe": "2026-11-17T02:36:50.369Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "controle-du-jour",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-17|etape-en-alerte|controleQuotidien|05:41:43",
+      "le": "2026-11-17T05:41:43.869Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controleQuotidien",
+      "texte": "controleQuotidien : Feu rouge : 35 contrôles en 3,6 s sur 2 074 rencontres des 30 derniers jours (le serveur jamais tenu plus de 303 ms d'affilée) — rouge : rencontre mal rangée — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, classement officiel, autres",
+      "details": {
+        "passe": "2026-11-17T05:39:05.493Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "controle-du-jour",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-17|etape-en-alerte|controleQuotidien|08:42:34",
+      "le": "2026-11-17T08:42:34.216Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controleQuotidien",
+      "texte": "controleQuotidien : Feu rouge : 35 contrôles en 4 s sur 2 074 rencontres des 30 derniers jours (le serveur jamais tenu plus de 332 ms d'affilée) — rouge : rencontre mal rangée — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, classement officiel, autres z",
+      "details": {
+        "passe": "2026-11-17T08:41:44.023Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "controle-du-jour",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-18|etape-en-alerte|controle|00:09:45",
+      "le": "2026-11-18T00:09:45.333Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controle",
+      "texte": "controle : Depuis le 2026-10-18 : 1 820 rencontres contrôlées, 20 anomalies (buteurs : 17, gardien : 2, fichiers : 1). Rien n'est corrigé automatiquement.",
+      "details": {
+        "passe": "2026-11-17T23:46:41.389Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "audit-buteurs-gardiens",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-18|etape-en-alerte|simulationSaisons|00:09:45",
+      "le": "2026-11-18T00:09:45.333Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "simulationSaisons",
+      "texte": "simulationSaisons : Fins de saison : 36 championnats simulés 10 000 fois, 12 non calculés (Serie B - Italy : table et magasin en désaccord : Palermo (table 11, magasin 12), Modena (table 11, magasin  ; Premiership - Scotland : calendrier incomplet : 120 rencontres connues sur 123 attendues, non calculé ; Swiss Superlea",
+      "details": {
+        "passe": "2026-11-17T23:46:41.389Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "calendriers-incomplets",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-18|etape-en-alerte|bulletin|06:15:36",
+      "le": "2026-11-18T06:15:36.276Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "bulletin",
+      "texte": "bulletin : Texte refusé : il citait Trois, absent(s) de la fiche. Rien n’est affiché ; essai 1 sur 3, nouvel essai à la passe suivante.",
+      "details": {
+        "passe": "2026-11-18T06:12:10.247Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-18|etape-en-alerte|bulletin|09:18:25",
+      "le": "2026-11-18T09:18:25.673Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "bulletin",
+      "texte": "bulletin : Texte refusé : il citait Trois, absent(s) de la fiche. Rien n’est affiché ; essai 2 sur 3, nouvel essai à la passe suivante.",
+      "details": {
+        "passe": "2026-11-18T09:15:36.393Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-18|etape-en-alerte|bulletin|11:11:16",
+      "le": "2026-11-18T11:11:16.419Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "bulletin",
+      "texte": "bulletin : Texte refusé : il citait trois, absent(s) de la fiche. Rien n’est affiché ; essai 3 sur 3, nouvel essai à la passe suivante.",
+      "details": {
+        "passe": "2026-11-18T11:08:04.425Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-19|etape-en-alerte|controle|09:32:15",
+      "le": "2026-11-19T09:32:15.490Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controle",
+      "texte": "controle : Depuis le 2026-10-20 : 1 659 rencontres contrôlées, 17 anomalies (buteurs : 14, gardien : 2, fichiers : 1). Rien n'est corrigé automatiquement.",
+      "details": {
+        "passe": "2026-11-19T09:02:25.135Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "audit-buteurs-gardiens",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-19|etape-en-alerte|simulationSaisons|09:32:15",
+      "le": "2026-11-19T09:32:15.490Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "simulationSaisons",
+      "texte": "simulationSaisons : Fins de saison : 34 championnats simulés 10 000 fois, 14 non calculés (Serie B - Italy : table et magasin en désaccord : Palermo (table 11, magasin 12), Modena (table 11, magasin  ; Premiership - Scotland : calendrier incomplet : 120 rencontres connues sur 123 attendues, non calculé ; Swiss Superlea",
+      "details": {
+        "passe": "2026-11-19T09:02:25.135Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "calendriers-incomplets",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-20|etape-en-alerte|controle|13:05:35",
+      "le": "2026-11-20T13:05:35.484Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controle",
+      "texte": "controle : Depuis le 2026-10-21 : 1 626 rencontres contrôlées, 17 anomalies (buteurs : 14, gardien : 2, fichiers : 1). Rien n'est corrigé automatiquement.",
+      "details": {
+        "passe": "2026-11-20T02:39:13.943Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "audit-buteurs-gardiens",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-20|etape-en-alerte|simulationSaisons|13:05:35",
+      "le": "2026-11-20T13:05:35.484Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "simulationSaisons",
+      "texte": "simulationSaisons : Fins de saison : 34 championnats simulés 10 000 fois, 14 non calculés (Serie B - Italy : table et magasin en désaccord : Palermo (table 11, magasin 12), Modena (table 11, magasin  ; Premiership - Scotland : calendrier incomplet : 120 rencontres connues sur 123 attendues, non calculé ; Swiss Superlea",
+      "details": {
+        "passe": "2026-11-20T02:39:13.943Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "calendriers-incomplets",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-20|alerte-posee|audit|14:33:39",
+      "le": "2026-11-20T14:33:39.699Z",
+      "type": "alerte-posee",
+      "signal": "S3",
+      "cle": "audit",
+      "texte": "Alerte « audit » posée.",
+      "details": {
+        "signature": "{\"parType\":[\"buteurs\",\"fichiers\",\"gardien\"]}",
+        "nombres": {
+          "anomalies": 17,
+          "parType.buteurs": 14,
+          "parType.gardien": 2,
+          "parType.fichiers": 1
+        }
+      },
+      "classe": "connue",
+      "cause": "audit-buteurs-gardiens",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-20|alerte-posee|simulationSaisons|14:33:39",
+      "le": "2026-11-20T14:33:39.699Z",
+      "type": "alerte-posee",
+      "signal": "S3",
+      "cle": "simulationSaisons",
+      "texte": "Alerte « simulationSaisons » posée.",
+      "details": {
+        "signature": "{\"inconnus\":[\"{\\\"league\\\":\\\"Allsvenskan - Sweden\\\",\\\"noms\\\":[\\\"Varbergs BoIS FC\\\",\\\"Östersunds FK\\\"]}\",\"{\\\"league\\\":\\\"Eliteserien - Norway\\\",\\\"noms\\\":[\\\"Bryne\\\",\\\"Odds Ballklubb\\\"]}\",\"{\\\"league\\\":\\\"MLS\\\",\\\"noms\\\":[\\\"Orlando City/FC Cincinnati\\\",\\\"Seattle Sounders FC/Real Salt Lake\\\"]}\"]}",
+        "nombres": {
+          "inconnus": 3
+        }
+      },
+      "classe": "connue",
+      "cause": "calendriers-incomplets",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-20|controle-couleur|buteurs-score|14:33:39",
+      "le": "2026-11-20T14:33:39.699Z",
+      "type": "controle-couleur",
+      "signal": "S4",
+      "cle": "buteurs-score",
+      "texte": "Contrôle « Buteurs et score » : non vu → orange.",
+      "details": {
+        "de": null,
+        "vers": "orange",
+        "constat": "14 constats, dont : Arouca – Nacional du 01/11/2026 (1-0) — 1 buts crédités aux joueurs (+ 1 csc adverses) pour un score de 1 : buteur en trop"
+      },
+      "classe": "connue",
+      "cause": "audit-buteurs-gardiens",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-20|controle-couleur|gardiens-score|14:33:39",
+      "le": "2026-11-20T14:33:39.699Z",
+      "type": "controle-couleur",
+      "signal": "S4",
+      "cle": "gardiens-score",
+      "texte": "Contrôle « Gardiens et score » : non vu → orange.",
+      "details": {
+        "de": null,
+        "vers": "orange",
+        "constat": "2 constats, dont : Don Benito – CD Extremadura du 27/10/2026 (2-4) — les gardiens de Don Benito encaissent 2 alors que l'adversaire marque 4"
+      },
+      "classe": "connue",
+      "cause": "audit-buteurs-gardiens",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-20|controle-couleur|score-calendrier|14:33:39",
+      "le": "2026-11-20T14:33:39.699Z",
+      "type": "controle-couleur",
+      "signal": "S4",
+      "cle": "score-calendrier",
+      "texte": "Contrôle « Score du calendrier et des résultats » : non vu → orange.",
+      "details": {
+        "de": null,
+        "vers": "orange",
+        "constat": "1 constat : 2026-11-07 Red Bull New York 3-0 Atlanta United : la base dit 3-0, le calendrier dit 1-0. (dernier contrôle des scores le 19/11/2026)"
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-20|controle-couleur|club-deux-fois|14:33:39",
+      "le": "2026-11-20T14:33:39.699Z",
+      "type": "controle-couleur",
+      "signal": "S4",
+      "cle": "club-deux-fois",
+      "texte": "Contrôle « Club deux fois le même jour » : non vu → orange.",
+      "details": {
+        "de": null,
+        "vers": "orange",
+        "constat": "4 constats, dont : LR Vicenza – Cremonese du 08/11/2026 (1-4) — Cremonese (fotmob-7801) joue deux fois le 2026-11-08 : LR Vicenza – Cremonese 1-4 (Serie B - Italy) et Vicenza – Cremonese 1-4 (Serie B - Italy) — club mal identifié (une équipe réserve sous le même identifiant ?) ou date fausse."
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-20|controle-couleur|mauvaise-competition|14:33:39",
+      "le": "2026-11-20T14:33:39.699Z",
+      "type": "controle-couleur",
+      "signal": "S4",
+      "cle": "mauvaise-competition",
+      "texte": "Contrôle « Rencontre mal rangée » : non vu → orange.",
+      "details": {
+        "de": null,
+        "vers": "orange",
+        "constat": "1 constat : LR Vicenza · classement officiel — LR Vicenza a 8 rencontres comptées au classement calculé mais n'est pas au classement officiel : rencontres rangées dans la mauvaise compétition, ou club mal identifié."
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-20|controle-couleur|classement-officiel|14:33:39",
+      "le": "2026-11-20T14:33:39.699Z",
+      "type": "controle-couleur",
+      "signal": "S4",
+      "cle": "classement-officiel",
+      "texte": "Contrôle « Classement officiel » : non vu → orange.",
+      "details": {
+        "de": null,
+        "vers": "orange",
+        "constat": "22 constats, dont : Maccabi Netanya · classement officiel — Maccabi Netanya : bilan différent à matchs égaux — officiel 10 J 4V 4N 2D 16-8, magasin 10 J 3V 5N 2D 14-9 : un score faux ?"
+      },
+      "classe": "connue",
+      "cause": "classement-officiel",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-20|controle-couleur|zeros-non-releves|14:33:39",
+      "le": "2026-11-20T14:33:39.699Z",
+      "type": "controle-couleur",
+      "signal": "S4",
+      "cle": "zeros-non-releves",
+      "texte": "Contrôle « Autres zéros « non relevé » » : non vu → orange.",
+      "details": {
+        "de": null,
+        "vers": "orange",
+        "constat": "35 constats, dont : Academia Puerto Cabello – Monagas SC du 12/11/2026 (0-1) — Academia Puerto Cabello : dégagements, interceptions, centres, longs ballons à 0 ; tirs dans et hors de la surface à 0 pour 14 tirs — Monagas SC : dégagements, interceptions, centres, longs ballons à 0 ; tirs dans et hors de la surface à 0 pour 14 tirs (couverture « lower » chez FotMob)."
+      },
+      "classe": "connue",
+      "cause": "chiffres-non-publies",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-20|controle-couleur|hors-reperes-buts|14:33:39",
+      "le": "2026-11-20T14:33:39.699Z",
+      "type": "controle-couleur",
+      "signal": "S4",
+      "cle": "hors-reperes-buts",
+      "texte": "Contrôle « Buts hors repères » : non vu → orange.",
+      "details": {
+        "de": null,
+        "vers": "orange",
+        "constat": "1 constat : Dutch Eredivisie 2026-27 : buts par match 3,89, attendu 3,05 (+3,7 écarts normaux, sur 108 matchs) — à regarder : le jeu évolue."
+      },
+      "classe": "connue",
+      "cause": "hors-reperes",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-20|controle-couleur|hors-reperes-statistiques|14:33:39",
+      "le": "2026-11-20T14:33:39.699Z",
+      "type": "controle-couleur",
+      "signal": "S4",
+      "cle": "hors-reperes-statistiques",
+      "texte": "Contrôle « Corners et tirs hors repères » : non vu → orange.",
+      "details": {
+        "de": null,
+        "vers": "orange",
+        "constat": "4 constats, dont : First League - Czechia 2026-27 : tirs par match 28,0, attendu 20,5 (+3,3 écarts normaux, sur 111 matchs) — à regarder : le jeu évolue."
+      },
+      "classe": "connue",
+      "cause": "hors-reperes",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-20|fotmob|ok|14:33:39",
+      "le": "2026-11-20T14:33:39.699Z",
+      "type": "fotmob",
+      "signal": "S5",
+      "cle": "ok",
+      "texte": "FotMob : non vu → ok.",
+      "details": {
+        "de": null,
+        "vers": "ok",
+        "raison": null,
+        "nature": null,
+        "detecteParLAppli": true
+      },
+      "classe": "info",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-20|sauvegarde|sauvegarde|12:57:17",
+      "le": "2026-11-20T12:57:17.960Z",
+      "type": "sauvegarde",
+      "signal": "S7",
+      "cle": "sauvegarde",
+      "texte": "Sauvegarde faite (63072 rencontres).",
+      "details": {
+        "le": "2026-11-20T12:57:17.960Z",
+        "ok": true,
+        "rencontres": 63072,
+        "derniereDate": "2026-11-20",
+        "octets": 571468844
+      },
+      "classe": "info",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-17|restauration|restauration|23:31:41",
+      "le": "2026-11-16T23:31:41.234Z",
+      "type": "restauration",
+      "signal": "S7",
+      "cle": "restauration",
+      "texte": "Restauration d’essai saine.",
+      "details": {
+        "le": "2026-11-16T23:31:41.234Z",
+        "saine": true,
+        "controle": "quick_check",
+        "rencontres": 63053,
+        "attendues": 63053,
+        "derniereDate": "2026-11-16",
+        "derniereDateAttendue": "2026-11-16",
+        "dureeMs": 87254
+      },
+      "classe": "info",
+      "cause": null,
+      "rodage": true
+    }
+  ],
+  "vus": {
+    "passes": [
+      "2026-11-15T21:02:28.565Z",
+      "2026-11-16T06:20:21.080Z",
+      "2026-11-16T11:07:18.037Z",
+      "2026-11-16T14:09:12.550Z",
+      "2026-11-16T17:10:12.011Z",
+      "2026-11-16T20:11:39.196Z",
+      "2026-11-16T23:14:51.725Z",
+      "2026-11-17T02:36:50.369Z",
+      "2026-11-17T05:39:05.493Z",
+      "2026-11-17T08:41:44.023Z",
+      "2026-11-17T11:42:34.417Z",
+      "2026-11-17T14:44:05.856Z",
+      "2026-11-17T17:44:54.473Z",
+      "2026-11-17T20:45:48.898Z",
+      "2026-11-17T23:46:41.389Z",
+      "2026-11-18T03:09:45.485Z",
+      "2026-11-18T06:12:10.247Z",
+      "2026-11-18T09:15:36.393Z",
+      "2026-11-18T11:08:04.425Z",
+      "2026-11-18T11:38:51.966Z",
+      "2026-11-18T13:21:00.375Z",
+      "2026-11-18T16:25:03.767Z",
+      "2026-11-18T19:26:38.533Z",
+      "2026-11-18T22:36:03.760Z",
+      "2026-11-19T09:02:25.135Z",
+      "2026-11-19T12:32:15.573Z",
+      "2026-11-19T15:45:19.913Z",
+      "2026-11-19T18:57:41.930Z",
+      "2026-11-19T22:07:07.578Z",
+      "2026-11-20T02:39:13.943Z"
+    ],
+    "alertes": {
+      "audit": "{\"parType\":[\"buteurs\",\"fichiers\",\"gardien\"]}",
+      "simulationSaisons": "{\"inconnus\":[\"{\\\"league\\\":\\\"Allsvenskan - Sweden\\\",\\\"noms\\\":[\\\"Varbergs BoIS FC\\\",\\\"Östersunds FK\\\"]}\",\"{\\\"league\\\":\\\"Eliteserien - Norway\\\",\\\"noms\\\":[\\\"Bryne\\\",\\\"Odds Ballklubb\\\"]}\",\"{\\\"league\\\":\\\"MLS\\\",\\\"noms\\\":[\\\"Orlando City/FC Cincinnati\\\",\\\"Seattle Sounders FC/Real Salt Lake\\\"]}\"]}"
+    },
+    "controles": {
+      "score-football-data": "vert",
+      "buteurs-score": "orange",
+      "gardiens-score": "orange",
+      "score-calendrier": "orange",
+      "score-futur": "vert",
+      "score-absent": "vert",
+      "doublon-meme-sens": "vert",
+      "doublon-sens-inverse": "vert",
+      "doublon-meme-identifiant": "vert",
+      "club-deux-fois": "orange",
+      "mauvaise-competition": "orange",
+      "clubs-sans-identifiant": "vert",
+      "rencontres-sans-identifiant": "vert",
+      "chiffres-equipe": "vert",
+      "chiffres-joueurs": "vert",
+      "classement-officiel": "orange",
+      "jaunes-non-releves": "vert",
+      "corners-non-releves": "vert",
+      "tirs-non-releves": "vert",
+      "zeros-non-releves": "orange",
+      "rencontres-manquantes": "vert",
+      "feuilles-en-retard": "vert",
+      "magasin-a-jour": "vert",
+      "hors-reperes-buts": "orange",
+      "hors-reperes-statistiques": "orange",
+      "hors-reperes-cartons": "vert",
+      "match-aberrant": "vert",
+      "source-fotmob": "vert",
+      "source-football-data": "vert",
+      "source-odds-api": "vert",
+      "source-api-football": "vert",
+      "source-claude": "vert",
+      "source-cotes-gratuites": "vert"
+    },
+    "constats": [],
+    "fotmob": "ok",
+    "sauvegarde": "2026-11-20T12:57:17.960Z",
+    "restauration": "2026-11-16T23:31:41.234Z",
+    "direct": null,
+    "ia": {},
+    "sansPasse": false,
+    "sansSauvegarde": false,
+    "premierJour": "2026-11-20",
+    "joursConnus": {
+      "premier-demarrage-du-journal": [
+        "2026-11-20"
+      ],
+      "audit-buteurs-gardiens": [
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20"
+      ],
+      "calendriers-incomplets": [
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20"
+      ],
+      "controle-du-jour": [
+        "2026-11-16",
+        "2026-11-17"
+      ],
+      "ia-echec-isole": [
+        "2026-11-17"
+      ],
+      "classement-officiel": [
+        "2026-11-20"
+      ],
+      "chiffres-non-publies": [
+        "2026-11-20"
+      ],
+      "hors-reperes": [
+        "2026-11-20"
+      ]
+    },
+    "fotmobPanne": null,
+    "depassements": {}
+  }
+}

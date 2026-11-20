@@ -7488,8 +7488,240 @@
         }
       ]
     },
-    "updatedAt": "2026-11-18T11:40:45.054Z",
-    "createdAt": "2026-11-18T11:40:45.054Z"
+    "updatedAt": "2026-11-20T14:34:56.062Z",
+    "createdAt": "2026-11-18T11:40:45.054Z",
+    "postMatchReview": {
+      "summary": "Shanghai Port a gagné 0-2, dans le sens du pick du moteur (37 %) que j'avais nuancé. Le match a basculé sur un événement imprévisible : un penalty pour main de Gang Wang, rouge direct à la 27e, puis 0-1 à la 30e. Les marchés de volume sont en grande partie bons, mais corners et tirs ont été faussés par la supériorité numérique et le contrôle de Shanghai.",
+      "whatWasRight": "Le volume de tirs total (32) et de tirs cadrés (11) a dépassé largement les seuils. Beijing est resté sous 17,5 tirs (14) et sous 6,5 cadrés (1). Shanghai a dépassé 2,5 cadrés (10). Les corners par équipe sont restés bas (3 chacun). Shanghai a été plus dangereux que ne le disait la prévision (9 grosses occasions).",
+      "whatWasMissed": "Je n'ai pas anticipé le scénario d'un rouge précoce : Beijing a été réduit à dix dès la 27e. J'ai aussi sous-estimé la domination de Shanghai en tirs (18 contre 17,5 de seuil) et en cadrés (10 contre 1 pour Beijing). J'ai surestimé les corners : seulement 6 au total, malgré 9,8 attendus. Le doute sur Shanghai en déplacement, fondé sur l'avantage du terrain de Beijing, a été démenti.",
+      "outcomeVsEngine": "Le résultat va dans le sens du pick 1N2 du moteur (Shanghai, sans edge). Il contredit le moteur sur les corners totaux et les tirs de Shanghai, où il affichait 83 % pour des marchés perdus.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Shanghai Port gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Shanghai a gagné 0-2 : penalty converti à la 30e par Lei Wu après la main de Gang Wang (rouge à la 27e), puis but de Vital à la 59e. Shanghai a eu 59 % de possession et 10 tirs cadrés contre 1.",
+          "lesson": "Mon avis nuancé a sous-pesé la forme et la qualité de Shanghai. L'avantage du terrain de Beijing ne doit pas trop atténuer un favori de forme en cas d'écart net. Les événements comme un rouge précoce restent imprévisibles."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Shanghai Port & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Beijing Guoan",
+          "marketId": "teamGoals",
+          "pick": "Beijing Guoan — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Shanghai Port",
+          "marketId": "teamGoals",
+          "pick": "Shanghai Port — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Seulement 3 corners de chaque côté, soit 6 au total, sous la ligne de 6,5. Le rouge à la 27e et l'avance de Shanghai ont réduit la pression de Beijing, et Shanghai a plus tiré qu'il n'a obtenu de corners.",
+          "lesson": "Une confiance forte sur les corners totaux est risquée : le volume de tirs ne se traduit pas toujours en corners. Un scénario déséquilibré par un rouge peut faire chuter le total."
+        },
+        {
+          "market": "Corners — Beijing Guoan",
+          "marketId": "teamCorners",
+          "pick": "Beijing Guoan — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Beijing n'a obtenu que 3 corners, à dix dès la 27e et menée, avec 41 % de possession.",
+          "lesson": "Le seuil bas pour Beijing était bon. Ma prudence sur la moyenne de 8,5 à domicile s'est avérée inutile ici ; le moteur était plus fiable que cette moyenne."
+        },
+        {
+          "market": "Corners — Shanghai Port",
+          "marketId": "teamCorners",
+          "pick": "Shanghai Port — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Shanghai a eu 3 corners, bien sous 7,5, malgré 18 tirs.",
+          "lesson": "Les moyennes de corners en déplacement sont fiables pour ce type de seuil ; à garder."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 20.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "32 tirs au total (14 + 18), nettement au-dessus de 20,5.",
+          "lesson": "Les deux équipes à fort volume offensif rendent ce marché solide, même avec un rouge. À garder."
+        },
+        {
+          "market": "Tirs — Beijing Guoan",
+          "marketId": "teamShots",
+          "pick": "Beijing Guoan — Moins de 17.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Beijing a tiré 14 fois, sous 17,5, alors qu'il jouait à dix dès la 27e.",
+          "lesson": "Confirmer un seuil bas pour l'équipe réduite à dix reste cohérent ; la domination adverse limite le volume."
+        },
+        {
+          "market": "Tirs — Shanghai Port",
+          "marketId": "teamShots",
+          "pick": "Shanghai Port — Moins de 17.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Shanghai a tiré 18 fois, soit au-dessus de 17,5, avec la supériorité numérique et le contrôle du jeu (59 % de possession, 9 grosses occasions).",
+          "lesson": "Un seuil de 17,5 est trop proche d'une moyenne de 14,9 dès qu'un scénario favorable apparaît. Une moyenne n'inclut pas la variance liée aux cartons rouges adverses ; confiance à modérer."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "11 tirs cadrés au total (1 + 10), très au-dessus de 6,5, grâce à la domination de Shanghai.",
+          "lesson": "Marché solide ; à garder, la production offensive de Shanghai tient."
+        },
+        {
+          "market": "Tirs cadrés — Beijing Guoan",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Beijing Guoan — Moins de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Beijing n'a cadré qu'un seul tir, bien sous 6,5.",
+          "lesson": "Le moins de 6,5 était sûr et a été conforté par le rouge. Confirmer."
+        },
+        {
+          "market": "Tirs cadrés — Shanghai Port",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Shanghai Port — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Shanghai a cadré 10 tirs, bien au-dessus de 2,5, avec un poteau de Leonardo à la 24e et 9 grosses occasions.",
+          "lesson": "Le plus de 2,5 cadrés était bien calibré, la barre était basse. Garder ce genre de ligne pour une attaque en forme."
+        }
+      ],
+      "caveats": "Un seul match, dont le déroulé a été dominé par un rouge et un penalty précoces, facteur non modélisable. Pas de xG relevé. La composition réelle n'est pas confrontée à la prévision.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 16,
+        "commentaire": 5
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 6569,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 2170,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 6569,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2170,
+            "cache_read_input_tokens": 0,
+            "cache_creation_input_tokens": 6569,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 6569
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.04798,
+      "createdAt": "2026-11-20T14:34:56.062Z"
+    }
   },
   {
     "matchId": "cal-2026-11-20-fc-porto-paredes",
@@ -8456,14 +8688,14 @@
         "source": "fotmob"
       },
       "trueOdds": {
-        "home": 1.79,
-        "draw": 4.1,
-        "away": 5.03
+        "home": 1.91,
+        "draw": 4.21,
+        "away": 4.21
       },
       "market": {
-        "odds1": 1.7,
-        "oddsDraw": 3.6,
-        "odds2": 4.33
+        "odds1": 1.8,
+        "oddsDraw": 3.7,
+        "odds2": 3.7
       },
       "edgePercent": null,
       "staking": {
@@ -8498,8 +8730,8 @@
           "market": "Résultat",
           "predictedOutcome": "home",
           "predictedLabel": "Botoșani gagne",
-          "predictedOdds": 1.79,
-          "probability": 56,
+          "predictedOdds": 1.91,
+          "probability": 52,
           "minOdds": 1.2
         },
         {
@@ -8536,8 +8768,8 @@
           "market": "Résultat + Total buts",
           "predictedOutcome": "homeOver",
           "predictedLabel": "Botoșani & Plus de 1.5 buts",
-          "predictedOdds": 2.01,
-          "probability": 50,
+          "predictedOdds": 2.13,
+          "probability": 47,
           "minOdds": 1.2
         },
         {
@@ -8700,9 +8932,9 @@
     },
     "usage": {
       "input_tokens": 2,
-      "cache_creation_input_tokens": 10210,
-      "cache_read_input_tokens": 0,
-      "output_tokens": 3080,
+      "cache_creation_input_tokens": 5614,
+      "cache_read_input_tokens": 4470,
+      "output_tokens": 3048,
       "output_tokens_details": {
         "thinking_tokens": 0
       },
@@ -8712,19 +8944,19 @@
       },
       "service_tier": "standard",
       "cache_creation": {
-        "ephemeral_1h_input_tokens": 10210,
+        "ephemeral_1h_input_tokens": 5614,
         "ephemeral_5m_input_tokens": 0
       },
       "inference_geo": "global",
       "iterations": [
         {
           "input_tokens": 2,
-          "output_tokens": 3080,
-          "cache_read_input_tokens": 0,
-          "cache_creation_input_tokens": 10210,
+          "output_tokens": 3048,
+          "cache_read_input_tokens": 4470,
+          "cache_creation_input_tokens": 5614,
           "cache_creation": {
             "ephemeral_5m_input_tokens": 0,
-            "ephemeral_1h_input_tokens": 10210
+            "ephemeral_1h_input_tokens": 5614
           },
           "type": "message"
         }
@@ -8732,15 +8964,15 @@
       "speed": "standard",
       "fallback_credit": null
     },
-    "costUsd": 0.071644,
-    "analysedAt": "2026-11-18T16:25:45.008Z",
-    "timing": "avance",
+    "costUsd": 0.05383400000000001,
+    "analysedAt": "2026-11-20T14:37:03.825Z",
+    "timing": "coup-d-envoi",
     "fiche": "compacte",
     "memoire": {
       "mots": 404,
       "tokens": 1277,
       "lecons": [],
-      "dossiersDu": "2026-11-18T00:05:37.382Z",
+      "dossiersDu": "2026-11-20T13:00:02.517Z",
       "equipes": {
         "home": {
           "id": "fotmob-188191",
@@ -8759,13 +8991,13 @@
     "lineupSnapshot": {
       "source": "FotMob",
       "fotmobMatchId": "5853557",
-      "fetchedAt": "2026-11-18T16:25:22.647Z",
-      "minutesBeforeKickoff": 2825,
+      "fetchedAt": "2026-11-20T14:36:40.826Z",
+      "minutesBeforeKickoff": 53,
       "home": {
         "team": "Botoșani",
         "teamId": "fotmob-188191",
         "formation": "4-3-3",
-        "coach": "Marius Croitoru",
+        "coach": null,
         "statsSince": "2026-07-01",
         "teamMatches": 15,
         "startXI": [
@@ -8830,83 +9062,43 @@
             }
           },
           {
-            "id": "fotmob-684112",
-            "name": "Elhadji Pape Diaw",
-            "number": 23,
+            "id": "fotmob-1670485",
+            "name": "Mamadou Diarra",
+            "number": 94,
             "position": "Defender",
-            "age": 31,
-            "countryCode": "SEN",
-            "countryName": "Senegal",
+            "age": 28,
+            "countryCode": "FRA",
+            "countryName": "France",
             "x": 0.357,
             "y": 0.375,
             "stats": {
-              "apps": 6,
-              "starts": 5,
-              "minutes": 454,
+              "apps": 10,
+              "starts": 10,
+              "minutes": 900,
               "goals": 0,
               "assists": 0,
               "xg": null,
-              "rating": 6.48
+              "rating": 6.98
             }
           },
           {
-            "id": "fotmob-1505933",
-            "name": "Răzvan Creţ",
-            "number": 5,
+            "id": "fotmob-1481328",
+            "name": "Narcis Ilaș",
+            "number": 73,
             "position": "Defender",
-            "age": 20,
+            "age": 19,
             "countryCode": "ROU",
             "countryName": "Romania",
             "x": 0.357,
             "y": 0.125,
             "stats": {
-              "apps": 6,
-              "starts": 5,
-              "minutes": 325,
+              "apps": 12,
+              "starts": 12,
+              "minutes": 1050,
               "goals": 0,
               "assists": 0,
               "xg": null,
-              "rating": 6.66
-            }
-          },
-          {
-            "id": "fotmob-950878",
-            "name": "Enriko Papa",
-            "number": 67,
-            "position": "Midfielder",
-            "age": 33,
-            "countryCode": "ALB",
-            "countryName": "Albania",
-            "x": 0.613,
-            "y": 0.79,
-            "stats": {
-              "apps": 13,
-              "starts": 13,
-              "minutes": 991,
-              "goals": 0,
-              "assists": 3,
-              "xg": null,
-              "rating": 6.8
-            }
-          },
-          {
-            "id": "fotmob-1089759",
-            "name": "Charles Petro",
-            "number": 3,
-            "position": "Midfielder",
-            "age": 25,
-            "countryCode": "MWI",
-            "countryName": "Malawi",
-            "x": 0.613,
-            "y": 0.5,
-            "stats": {
-              "apps": 13,
-              "starts": 9,
-              "minutes": 868,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.89
+              "rating": 6.85
             }
           },
           {
@@ -8918,7 +9110,7 @@
             "countryCode": "BRA",
             "countryName": "Brazil",
             "x": 0.613,
-            "y": 0.21,
+            "y": 0.79,
             "stats": {
               "apps": 14,
               "starts": 12,
@@ -8927,6 +9119,46 @@
               "assists": 1,
               "xg": null,
               "rating": 7.01
+            }
+          },
+          {
+            "id": "fotmob-950878",
+            "name": "Enriko Papa",
+            "number": 67,
+            "position": "Midfielder",
+            "age": 33,
+            "countryCode": "ALB",
+            "countryName": "Albania",
+            "x": 0.613,
+            "y": 0.5,
+            "stats": {
+              "apps": 13,
+              "starts": 13,
+              "minutes": 991,
+              "goals": 0,
+              "assists": 3,
+              "xg": null,
+              "rating": 6.8
+            }
+          },
+          {
+            "id": "fotmob-435960",
+            "name": "Hervin Ongenda",
+            "number": 26,
+            "position": "Midfielder",
+            "age": 31,
+            "countryCode": "FRA",
+            "countryName": "France",
+            "x": 0.613,
+            "y": 0.21,
+            "stats": {
+              "apps": 11,
+              "starts": 10,
+              "minutes": 775,
+              "goals": 0,
+              "assists": 2,
+              "xg": null,
+              "rating": 7.04
             }
           },
           {
@@ -8992,24 +9224,6 @@
         ],
         "bench": [
           {
-            "id": "fotmob-1688934",
-            "name": "David Dinca",
-            "number": 1,
-            "position": "Goalkeeper",
-            "age": 22,
-            "countryCode": "ROU",
-            "countryName": "Romania",
-            "stats": {
-              "apps": 0,
-              "starts": 0,
-              "minutes": 0,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": null
-            }
-          },
-          {
             "id": "fotmob-1089353",
             "name": "Ionuț Gurău",
             "number": 27,
@@ -9046,6 +9260,24 @@
             }
           },
           {
+            "id": "fotmob-1505933",
+            "name": "Răzvan Creţ",
+            "number": 5,
+            "position": "Defender",
+            "age": 20,
+            "countryCode": "ROU",
+            "countryName": "Romania",
+            "stats": {
+              "apps": 6,
+              "starts": 5,
+              "minutes": 325,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.66
+            }
+          },
+          {
             "id": "fotmob-749550",
             "name": "Rijad Sadiku",
             "number": 44,
@@ -9064,39 +9296,21 @@
             }
           },
           {
-            "id": "fotmob-2429588",
-            "name": "Teodor Afilipoae",
-            "number": 17,
-            "position": "Defender",
-            "age": 17,
-            "countryCode": "ROU",
-            "countryName": "Romania",
-            "stats": {
-              "apps": 0,
-              "starts": 0,
-              "minutes": 0,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": null
-            }
-          },
-          {
-            "id": "fotmob-1737912",
-            "name": "George Sorodoc",
-            "number": 14,
+            "id": "fotmob-1113766",
+            "name": "Roland Idowu",
+            "number": 8,
             "position": "Midfielder",
-            "age": 20,
-            "countryCode": "ROU",
-            "countryName": "Romania",
+            "age": 24,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
             "stats": {
-              "apps": 2,
-              "starts": 0,
-              "minutes": 8,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": null
+              "apps": 7,
+              "starts": 3,
+              "minutes": 250,
+              "goals": 1,
+              "assists": 1,
+              "xg": 0.08,
+              "rating": 6.52
             }
           },
           {
@@ -9118,21 +9332,39 @@
             }
           },
           {
-            "id": "fotmob-861209",
-            "name": "Jovan Marković",
-            "number": 9,
-            "position": "Forward",
-            "age": 25,
+            "id": "fotmob-1737912",
+            "name": "George Sorodoc",
+            "number": 14,
+            "position": "Midfielder",
+            "age": 20,
             "countryCode": "ROU",
             "countryName": "Romania",
             "stats": {
-              "apps": 10,
+              "apps": 2,
               "starts": 0,
-              "minutes": 146,
+              "minutes": 8,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1169576",
+            "name": "Ștefan Bodișteanu",
+            "number": 10,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "MDA",
+            "countryName": "Moldova",
+            "stats": {
+              "apps": 15,
+              "starts": 5,
+              "minutes": 581,
               "goals": 1,
               "assists": 0,
               "xg": null,
-              "rating": 6.07
+              "rating": 6.55
             }
           },
           {
@@ -9170,78 +9402,18 @@
               "xg": null,
               "rating": 6.52
             }
-          },
-          {
-            "id": "fotmob-1113766",
-            "name": "Roland Idowu",
-            "number": 8,
-            "position": "Forward",
-            "age": 24,
-            "countryCode": "IRL",
-            "countryName": "Ireland",
-            "stats": {
-              "apps": 7,
-              "starts": 3,
-              "minutes": 250,
-              "goals": 1,
-              "assists": 1,
-              "xg": 0.08,
-              "rating": 6.52
-            }
-          },
-          {
-            "id": "fotmob-1169576",
-            "name": "Ștefan Bodișteanu",
-            "number": 10,
-            "position": "Forward",
-            "age": 23,
-            "countryCode": "MDA",
-            "countryName": "Moldova",
-            "stats": {
-              "apps": 15,
-              "starts": 5,
-              "minutes": 581,
-              "goals": 1,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.55
-            }
           }
         ],
         "unavailable": [],
         "usualStartersMissing": [
           {
-            "id": "fotmob-1481328",
+            "id": "fotmob-1089759",
             "age": null,
             "countryCode": null,
             "countryName": null,
-            "name": "Narcis Ilaș",
-            "position": "Defender",
-            "starts": 12,
-            "goals": 0,
-            "assists": 0,
-            "status": "absent de la feuille de match"
-          },
-          {
-            "id": "fotmob-435960",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "name": "Hervin Ongenda",
+            "name": "Charles Petro",
             "position": "Midfielder",
-            "starts": 10,
-            "goals": 0,
-            "assists": 2,
-            "status": "absent de la feuille de match"
-          },
-          {
-            "id": "fotmob-1670485",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "name": "Mamadou Diarra",
-            "position": "Defender",
-            "starts": 10,
+            "starts": 9,
             "goals": 0,
             "assists": 0,
             "status": "absent de la feuille de match"
@@ -9251,29 +9423,29 @@
       "away": {
         "team": "FC Voluntari",
         "teamId": "fotmob-405332",
-        "formation": "5-3-2",
-        "coach": "Christian Florin Pirvu",
+        "formation": "4-4-2",
+        "coach": null,
         "statsSince": "2026-07-01",
         "teamMatches": 15,
         "startXI": [
           {
-            "id": "fotmob-1688832",
-            "name": "Eduard Chioveanu",
-            "number": 14,
+            "id": "fotmob-558661",
+            "name": "Metod Jurhar",
+            "number": 31,
             "position": "Goalkeeper",
-            "age": 21,
-            "countryCode": "ROU",
-            "countryName": "Romania",
+            "age": 28,
+            "countryCode": "SVN",
+            "countryName": "Slovenia",
             "x": 0.1,
             "y": 0.5,
             "stats": {
-              "apps": 1,
-              "starts": 1,
-              "minutes": 90,
+              "apps": 14,
+              "starts": 14,
+              "minutes": 1260,
               "goals": 0,
               "assists": 0,
               "xg": null,
-              "rating": 7.23
+              "rating": 6.52
             }
           },
           {
@@ -9285,7 +9457,7 @@
             "countryCode": "ROU",
             "countryName": "Romania",
             "x": 0.357,
-            "y": 0.695,
+            "y": 0.875,
             "stats": {
               "apps": 14,
               "starts": 13,
@@ -9297,75 +9469,55 @@
             }
           },
           {
-            "id": "fotmob-1185235",
-            "name": "Sava-Arangel Čestić",
-            "number": 6,
+            "id": "fotmob-950880",
+            "name": "Radu Crisan",
+            "number": 27,
             "position": "Defender",
-            "age": 25,
-            "countryCode": "SRB",
-            "countryName": "Serbia",
-            "x": 0.357,
-            "y": 0.5,
-            "stats": {
-              "apps": 5,
-              "starts": 5,
-              "minutes": 388,
-              "goals": 1,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.69
-            }
-          },
-          {
-            "id": "fotmob-1172044",
-            "name": "Mihael Onișa",
-            "number": 44,
-            "position": "Defender",
-            "age": 26,
+            "age": 30,
             "countryCode": "ROU",
             "countryName": "Romania",
             "x": 0.357,
-            "y": 0.305,
+            "y": 0.625,
+            "stats": {
+              "apps": 12,
+              "starts": 12,
+              "minutes": 1051,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.57
+            }
+          },
+          {
+            "id": "fotmob-949253",
+            "name": "Daniel Dumbrăvanu",
+            "number": 4,
+            "position": "Defender",
+            "age": 25,
+            "countryCode": "MDA",
+            "countryName": "Moldova",
+            "x": 0.357,
+            "y": 0.375,
             "stats": {
               "apps": 14,
               "starts": 10,
               "minutes": 937,
               "goals": 0,
-              "assists": 1,
+              "assists": 0,
               "xg": null,
-              "rating": 6.65
-            }
-          },
-          {
-            "id": "fotmob-1508337",
-            "name": "Matej Mamic",
-            "number": 23,
-            "position": "Midfielder",
-            "age": 24,
-            "countryCode": "CRO",
-            "countryName": "Croatia",
-            "x": 0.371,
-            "y": 0.89,
-            "stats": {
-              "apps": 13,
-              "starts": 6,
-              "minutes": 604,
-              "goals": 0,
-              "assists": 1,
-              "xg": null,
-              "rating": 6.76
+              "rating": 6.34
             }
           },
           {
             "id": "fotmob-1296278",
             "name": "Alexandru Suteu",
             "number": 30,
-            "position": "Midfielder",
+            "position": "Defender",
             "age": 22,
             "countryCode": "ROU",
             "countryName": "Romania",
-            "x": 0.371,
-            "y": 0.11,
+            "x": 0.357,
+            "y": 0.125,
             "stats": {
               "apps": 15,
               "starts": 14,
@@ -9377,43 +9529,63 @@
             }
           },
           {
-            "id": "fotmob-929871",
-            "name": "Ion Gheorghe",
-            "number": 8,
+            "id": "fotmob-1508337",
+            "name": "Matej Mamic",
+            "number": 23,
             "position": "Midfielder",
-            "age": 27,
-            "countryCode": "ROU",
-            "countryName": "Romania",
+            "age": 24,
+            "countryCode": "CRO",
+            "countryName": "Croatia",
             "x": 0.613,
-            "y": 0.79,
+            "y": 0.875,
             "stats": {
-              "apps": 15,
-              "starts": 14,
-              "minutes": 1094,
+              "apps": 13,
+              "starts": 6,
+              "minutes": 604,
               "goals": 0,
-              "assists": 4,
+              "assists": 1,
               "xg": null,
-              "rating": 6.79
+              "rating": 6.76
             }
           },
           {
-            "id": "fotmob-938524",
-            "name": "Godfried Roemeratoe",
-            "number": 80,
+            "id": "fotmob-558489",
+            "name": "Lovro Cvek",
+            "number": 40,
             "position": "Midfielder",
-            "age": 27,
-            "countryCode": "CUW",
-            "countryName": "Curacao",
+            "age": 31,
+            "countryCode": "CRO",
+            "countryName": "Croatia",
             "x": 0.613,
-            "y": 0.5,
+            "y": 0.625,
             "stats": {
-              "apps": 4,
-              "starts": 3,
-              "minutes": 300,
+              "apps": 9,
+              "starts": 8,
+              "minutes": 721,
               "goals": 1,
-              "assists": 1,
+              "assists": 0,
               "xg": null,
-              "rating": 7.02
+              "rating": 6.44
+            }
+          },
+          {
+            "id": "fotmob-1080251",
+            "name": "Nuno Rodrigues",
+            "number": 22,
+            "position": "Midfielder",
+            "age": 31,
+            "countryCode": "POR",
+            "countryName": "Portugal",
+            "x": 0.613,
+            "y": 0.375,
+            "stats": {
+              "apps": 6,
+              "starts": 0,
+              "minutes": 46,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 5.87
             }
           },
           {
@@ -9425,7 +9597,7 @@
             "countryCode": "ROU",
             "countryName": "Romania",
             "x": 0.613,
-            "y": 0.21,
+            "y": 0.125,
             "stats": {
               "apps": 15,
               "starts": 15,
@@ -9437,26 +9609,6 @@
             }
           },
           {
-            "id": "fotmob-1098053",
-            "name": "George Merloi",
-            "number": 10,
-            "position": "Forward",
-            "age": 27,
-            "countryCode": "ROU",
-            "countryName": "Romania",
-            "x": 0.87,
-            "y": 0.7,
-            "stats": {
-              "apps": 13,
-              "starts": 6,
-              "minutes": 521,
-              "goals": 1,
-              "assists": 2,
-              "xg": null,
-              "rating": 6.71
-            }
-          },
-          {
             "id": "fotmob-1181473",
             "name": "Adi Chică-Roșă",
             "number": 29,
@@ -9465,7 +9617,7 @@
             "countryCode": "ROU",
             "countryName": "Romania",
             "x": 0.87,
-            "y": 0.3,
+            "y": 0.7,
             "stats": {
               "apps": 13,
               "starts": 1,
@@ -9475,61 +9627,45 @@
               "xg": null,
               "rating": 6.27
             }
+          },
+          {
+            "id": "fotmob-196957",
+            "name": "Mihai Roman",
+            "number": 7,
+            "position": "Forward",
+            "age": 34,
+            "countryCode": "ROU",
+            "countryName": "Romania",
+            "x": 0.87,
+            "y": 0.3,
+            "stats": {
+              "apps": 13,
+              "starts": 10,
+              "minutes": 772,
+              "goals": 2,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.47
+            }
           }
         ],
         "bench": [
           {
-            "id": "fotmob-558661",
-            "name": "Metod Jurhar",
-            "number": 31,
+            "id": "fotmob-1688832",
+            "name": "Eduard Chioveanu",
+            "number": 14,
             "position": "Goalkeeper",
-            "age": 28,
-            "countryCode": "SVN",
-            "countryName": "Slovenia",
-            "stats": {
-              "apps": 14,
-              "starts": 14,
-              "minutes": 1260,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.52
-            }
-          },
-          {
-            "id": "fotmob-1026093",
-            "name": "Alexandru Git",
-            "number": 20,
-            "position": "Defender",
-            "age": 29,
+            "age": 21,
             "countryCode": "ROU",
             "countryName": "Romania",
             "stats": {
-              "apps": 0,
-              "starts": 0,
-              "minutes": 0,
+              "apps": 1,
+              "starts": 1,
+              "minutes": 90,
               "goals": 0,
               "assists": 0,
               "xg": null,
-              "rating": null
-            }
-          },
-          {
-            "id": "fotmob-949253",
-            "name": "Daniel Dumbrăvanu",
-            "number": 4,
-            "position": "Defender",
-            "age": 25,
-            "countryCode": "MDA",
-            "countryName": "Moldova",
-            "stats": {
-              "apps": 14,
-              "starts": 10,
-              "minutes": 937,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.34
+              "rating": 7.23
             }
           },
           {
@@ -9551,29 +9687,11 @@
             }
           },
           {
-            "id": "fotmob-950880",
-            "name": "Radu Crisan",
-            "number": 27,
+            "id": "fotmob-1026093",
+            "name": "Alexandru Git",
+            "number": 20,
             "position": "Defender",
-            "age": 30,
-            "countryCode": "ROU",
-            "countryName": "Romania",
-            "stats": {
-              "apps": 12,
-              "starts": 12,
-              "minutes": 1051,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.57
-            }
-          },
-          {
-            "id": "fotmob-2013385",
-            "name": "Mario Stefan",
-            "number": 28,
-            "position": "Midfielder",
-            "age": 17,
+            "age": 29,
             "countryCode": "ROU",
             "countryName": "Romania",
             "stats": {
@@ -9584,6 +9702,42 @@
               "assists": 0,
               "xg": null,
               "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1172044",
+            "name": "Mihael Onișa",
+            "number": 44,
+            "position": "Defender",
+            "age": 26,
+            "countryCode": "ROU",
+            "countryName": "Romania",
+            "stats": {
+              "apps": 14,
+              "starts": 10,
+              "minutes": 937,
+              "goals": 0,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.65
+            }
+          },
+          {
+            "id": "fotmob-938524",
+            "name": "Godfried Roemeratoe",
+            "number": 80,
+            "position": "Midfielder",
+            "age": 27,
+            "countryCode": "CUW",
+            "countryName": "Curacao",
+            "stats": {
+              "apps": 4,
+              "starts": 3,
+              "minutes": 300,
+              "goals": 1,
+              "assists": 1,
+              "xg": null,
+              "rating": 7.02
             }
           },
           {
@@ -9605,67 +9759,37 @@
             }
           },
           {
-            "id": "fotmob-196957",
-            "name": "Mihai Roman",
-            "number": 7,
+            "id": "fotmob-1098053",
+            "name": "George Merloi",
+            "number": 10,
             "position": "Forward",
-            "age": 34,
+            "age": 27,
             "countryCode": "ROU",
             "countryName": "Romania",
             "stats": {
               "apps": 13,
-              "starts": 10,
-              "minutes": 772,
-              "goals": 2,
-              "assists": 0,
+              "starts": 6,
+              "minutes": 521,
+              "goals": 1,
+              "assists": 2,
               "xg": null,
-              "rating": 6.47
-            }
-          },
-          {
-            "id": "fotmob-1080251",
-            "name": "Nuno Rodrigues",
-            "number": 22,
-            "position": "Forward",
-            "age": 31,
-            "countryCode": "POR",
-            "countryName": "Portugal",
-            "stats": {
-              "apps": 6,
-              "starts": 0,
-              "minutes": 46,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 5.87
+              "rating": 6.71
             }
           }
         ],
         "unavailable": [],
         "usualStartersMissing": [
           {
-            "id": "fotmob-558661",
+            "id": "fotmob-929871",
             "age": null,
             "countryCode": null,
             "countryName": null,
-            "name": "Metod Jurhar",
-            "position": "Goalkeeper",
+            "name": "Ion Gheorghe",
+            "position": "Midfielder",
             "starts": 14,
             "goals": 0,
-            "assists": 0,
-            "status": "remplaçant"
-          },
-          {
-            "id": "fotmob-950880",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "name": "Radu Crisan",
-            "position": "Defender",
-            "starts": 12,
-            "goals": 0,
-            "assists": 0,
-            "status": "remplaçant"
+            "assists": 4,
+            "status": "absent de la feuille de match"
           },
           {
             "id": "fotmob-637757",
@@ -9692,40 +9816,16 @@
             "status": "absent de la feuille de match"
           },
           {
-            "id": "fotmob-949253",
+            "id": "fotmob-1172044",
             "age": null,
             "countryCode": null,
             "countryName": null,
-            "name": "Daniel Dumbrăvanu",
-            "position": "Defender",
+            "name": "Mihael Onișa",
+            "position": "Midfielder",
             "starts": 10,
             "goals": 0,
-            "assists": 0,
+            "assists": 1,
             "status": "remplaçant"
-          },
-          {
-            "id": "fotmob-196957",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "name": "Mihai Roman",
-            "position": "Midfielder",
-            "starts": 10,
-            "goals": 2,
-            "assists": 0,
-            "status": "remplaçant"
-          },
-          {
-            "id": "fotmob-558489",
-            "age": null,
-            "countryCode": null,
-            "countryName": null,
-            "name": "Lovro Cvek",
-            "position": "Midfielder",
-            "starts": 8,
-            "goals": 1,
-            "assists": 0,
-            "status": "absent de la feuille de match"
           }
         ]
       },
@@ -9735,55 +9835,68 @@
         "city": "Botoşani",
         "capacity": 10600,
         "surface": "grass",
-        "weather": "Mostly Clear",
-        "temperature": 12,
-        "windSpeed": 11,
-        "precipitation": 0
+        "weather": "Partly Cloudy",
+        "temperature": 13,
+        "windSpeed": 18,
+        "precipitation": 0,
+        "referee": {
+          "name": "Viorel Flueran",
+          "country": "Romania",
+          "league": "Liga I",
+          "matches": 27,
+          "yellowCardsPerMatch": 2.44,
+          "yellowCardsLeagueAverage": 4.24,
+          "redCards": 1,
+          "penalties": 6,
+          "foulsPerMatch": 20.38,
+          "foulsLeagueAverage": 23.85
+        }
       }
     },
     "analysis": {
-      "summary": "Botoșani (12e, 15 pts) reçoit FC Voluntari (15e, 8 pts, 7 défaites de suite). Botoșani est irrégulier (0,8 pt/match sur les 5 derniers) mais solide à domicile (3V-3N-1D, 2 buts marqués / 0,8 encaissé sur 5 matchs). Voluntari a perdu 8 de ses 10 derniers matchs et concède 2,4 buts à l'extérieur. Le onze de Botoșani est amputé de Ilaș, Ongenda et Diarra. Voluntari aligne un gardien remplaçant habituel et plusieurs réservistes.",
+      "summary": "Botoșani (12e, 15 pts) reçoit FC Voluntari (15e, 8 pts, 7 défaites de suite). Botoșani est irrégulier (0,8 pt/match sur 5 derniers) mais solide à domicile (2 / 0,8 de moyenne, 3V-3N-1D). Voluntari encaisse 2,4 buts à l'extérieur et n'a pas gagné hors de ses bases. Côté compositions (FotMob, 53 min avant), Botoșani aligne son onze type sauf Petro ; Voluntari est remanié sans Gheorghe (14 titularisations, 0+4), Babić ni Schieb, et Onișa est remplaçant.",
       "keyFactors": [
         {
-          "factor": "forme récente",
-          "observation": "Voluntari est en grande difficulté, Botoșani est moyen.",
-          "evidence": "Voluntari : 5 défaites sur les 5 derniers matchs et 7 de suite. Botoșani : N, D, D, D, V."
+          "factor": "classement",
+          "observation": "Deux équipes de bas de tableau, Voluntari nettement plus fragile.",
+          "evidence": "Botoșani 12e, 15 pts, diff -1 ; Voluntari 15e, 8 pts, diff -18 ; Voluntari 0V-0N-7D à l'extérieur."
         },
         {
-          "factor": "statistiques à domicile / à l'extérieur",
-          "observation": "Botoșani domine à domicile, Voluntari concède beaucoup dehors.",
-          "evidence": "Botoșani à domicile : 2 / 0,8 buts, 14 tirs, 5,4 corners. Voluntari à l'extérieur : 1,2 / 2,4 buts, 12,8 tirs produits et 20,2 concédés."
+          "factor": "forme récente",
+          "observation": "Voluntari sur 5 défaites de suite dans la forme, Botoșani sans victoire depuis 4 matchs.",
+          "evidence": "Botoșani N D D D V ; Voluntari 5 D sur 5 (dossier : 7 défaites de suite)."
+        },
+        {
+          "factor": "statistiques et moyennes",
+          "observation": "Voluntari concède beaucoup de tirs et de tirs cadrés à l'extérieur ; Botoșani produit à domicile mais le moteur attend un volume modéré.",
+          "evidence": "Voluntari ext. : 20,2 tirs et 7,8 cadrés concédés ; Botoșani dom. : 14 tirs, 5,8 cadrés produits ; attendus moteur 16,06 / 12,78 tirs."
         },
         {
           "factor": "compositions",
-          "observation": "Les deux équipes sont remaniées.",
-          "evidence": "Botoșani sans Ilaș (12 tit.), Ongenda (10) et Diarra (10). Voluntari : gardien Chioveanu (1 match) à la place de Jurhar (14 tit.), Crisan, Dumbrăvanu et Roman sur le banc, Babić et Schieb absents."
-        },
-        {
-          "factor": "classement",
-          "observation": "Deux équipes de bas de tableau.",
-          "evidence": "12e contre 15e sur 16, 15 pts contre 8 pts."
+          "observation": "Voluntari privé de plusieurs cadres du milieu et de l'attaque.",
+          "evidence": "Absents : Gheorghe (14 tit.), Babić (11), Schieb (11) ; Botoșani sans Petro (9 tit.)."
         }
       ],
-      "alignmentWithModel": "Le contexte va dans le sens du moteur sur le résultat, avec un Botoșani favori à domicile face à une équipe en grande difficulté. Les marchés de tirs et de corners sont plus nuancés, car Voluntari concède énormément à l'extérieur.",
-      "lineupImpact": "La composition vient de FotMob, relue 2825 minutes avant le coup d'envoi : c'est donc probablement une prévision. Botoșani (4-3-3) aligne Anestis, Dumiter (7 buts) et Mailat (4+2), mais sans Ilaș, Ongenda ni Diarra, écartés de la feuille de match. Voluntari (5-3-2) est très remanié : le gardien Chioveanu (1 match) remplace Jurhar, Crisan, Dumbrăvanu et Roman sont remplaçants, et Babić, Schieb et Cvek sont absents. Gutea (6 buts) reste son principal danger. Le cadre pèse peu : temps clair, 12 °C, pas de pluie.",
+      "alignmentWithModel": "Le contexte va dans le sens du moteur : Botoșani favori à domicile face à une équipe en crise, même si l'écart reste modéré. Pas d'edge chiffré ni de mise, ce qui invite à la prudence.",
+      "lineupImpact": "Source FotMob, 53 min avant le coup d'envoi : composition probablement officielle ou très proche. Botoșani (4-3-3) aligne Dumiter (7 buts) et Mailat (4+2) devant, Mitrov (2+3) ; seul Petro manque. Voluntari (4-4-2) perd Gheorghe (0+4), Babić et Schieb, avec Gutea (6 buts) comme principal danger ; Onișa est sur le banc. Une équipe visiteuse amoindrie plaide pour la domination de Botoșani, sans forcément plus de tirs de sa part. Arbitre moins sévère que la moyenne (2,44 jaunes contre 4,24), sans effet net sur ces marchés.",
+      "caveats": "Pas d'xG disponible dans les moyennes. Coach de la fiche de composition non renseigné. Les marchés de buts sont volontairement exclus. Le dossier Botoșani date du 10/11, celui de Voluntari du 09/11.",
       "marketViews": [
         {
           "market": "Résultat",
           "pick": "Botoșani gagne",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "56 % : Botoșani marque 2 et encaisse 0,8 à domicile, Voluntari reste sur 7 défaites et concède 2,4 buts par match dehors.",
-          "reasoning": "L'écart de forme et le déséquilibre domicile/extérieur plaident pour Botoșani. Sa forme récente irrégulière et les trois absences expliquent que le chiffre reste modéré.",
-          "probability": 56
+          "explanation": "52 % : Botoșani produit 2 buts et en concède 0,8 à domicile, Voluntari a perdu ses 7 matchs à l'extérieur, mais le nul reste plausible.",
+          "reasoning": "Voluntari enchaîne les défaites et est amputé de cadres ; Botoșani reste pourtant sans victoire depuis 4 matchs, d'où une confiance moyenne.",
+          "probability": 52
         },
         {
           "market": "Total corners",
           "pick": "Plus de 6.5 corners",
           "verdict": "confirme",
-          "confidence": "moyenne",
-          "explanation": "79 % : le moteur attend 9,21 corners (5,39 + 3,83), et la moyenne du championnat est de 9,3.",
-          "reasoning": "Voluntari concède 5,4 corners par match dehors et Botoșani en produit 5,4 à domicile, ce qui soutient le seuil de 6,5.",
+          "confidence": "forte",
+          "explanation": "79 % : le moteur attend 9,21 corners au total (5,39 + 3,83), nettement au-dessus de 6,5.",
+          "reasoning": "La moyenne du championnat est de 9,3 corners par match, et Voluntari en concède 5,4 à l'extérieur : la ligne est confortable.",
           "probability": 79
         },
         {
@@ -9792,7 +9905,7 @@
           "verdict": "confirme",
           "confidence": "moyenne",
           "explanation": "79 % : 5,39 corners attendus pour Botoșani, qui en produit 5,4 à domicile et 4,4 sur 10 matchs.",
-          "reasoning": "Le seuil de 7,5 est nettement au-dessus de ses moyennes. Seule une domination très marquée pourrait le dépasser.",
+          "reasoning": "Il faudrait un match très déséquilibré pour dépasser 7 corners ; la moyenne reste bien en dessous.",
           "probability": 79
         },
         {
@@ -9800,8 +9913,8 @@
           "pick": "FC Voluntari — Moins de 5.5 corners",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "79 % : 3,83 corners attendus pour Voluntari, qui n'en produit que 3 par match à l'extérieur.",
-          "reasoning": "Voluntari sera surtout dominé. Sa moyenne de 4,9 corners sur 10 matchs reste sous 5,5.",
+          "explanation": "79 % : 3,83 corners attendus pour Voluntari, qui n'en obtient que 3 par match à l'extérieur.",
+          "reasoning": "Voluntari subira probablement le jeu, avec 47,6 % de possession à l'extérieur, ce qui limite ses corners.",
           "probability": 79
         },
         {
@@ -9809,8 +9922,8 @@
           "pick": "Moins de 34.5 tirs",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "82 % : 28,84 tirs attendus (16,06 + 12,78), bien sous le seuil de 34,5.",
-          "reasoning": "Les moyennes de Botoșani (11,3 tirs) et de Voluntari (12,8 dehors) restent loin du seuil. Il faudrait un match très ouvert pour le dépasser.",
+          "explanation": "82 % : 28,84 tirs attendus au total (16,06 + 12,78), bien sous 34,5.",
+          "reasoning": "Botoșani cumule 11,3 tirs sur 10 matchs et 14 à domicile ; Voluntari en tente 12,8 à l'extérieur, d'où une marge confortable.",
           "probability": 82
         },
         {
@@ -9818,8 +9931,8 @@
           "pick": "Botoșani — Moins de 20.5 tirs",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "79 % : 16,06 tirs attendus pour Botoșani, qui en tire 14 à domicile et 11,3 sur 10 matchs.",
-          "reasoning": "Même face à une défense qui concède 20,2 tirs dehors, dépasser 20 tirs serait inhabituel pour cette équipe.",
+          "explanation": "79 % : 16,06 tirs attendus contre 14 de moyenne à domicile, loin de 20,5.",
+          "reasoning": "Dépasser 20 tirs serait une performance exceptionnelle au regard de ses 11,3 de moyenne, même contre une défense poreuse.",
           "probability": 79
         },
         {
@@ -9827,26 +9940,26 @@
           "pick": "FC Voluntari — Plus de 8.5 tirs",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "81 % : 12,78 tirs attendus pour Voluntari, qui en tire 12,8 dehors et 15,1 sur 10 matchs.",
-          "reasoning": "Son volume reste suffisant pour dépasser 8,5, même si Botoșani concède seulement 10,4 tirs à domicile. Le risque vient d'un match où Voluntari est dominé.",
+          "explanation": "81 % : 12,78 tirs attendus pour Voluntari, qui en tente 15,1 sur 10 matchs et 12,8 à l'extérieur.",
+          "reasoning": "Même mené ou dominé, Voluntari atteint régulièrement ce volume ; Botoșani concède 10,4 tirs à domicile, la marge est un peu plus mince.",
           "probability": 81
         },
         {
           "market": "Total tirs cadrés",
           "pick": "Moins de 12.5 tirs cadrés",
           "verdict": "confirme",
-          "confidence": "moyenne",
-          "explanation": "83 % : 9,44 tirs cadrés attendus (5,39 + 4,05), sous le seuil de 12,5.",
-          "reasoning": "Les moyennes des deux équipes (3,9 et 4,2 cadrés) restent loin du seuil. Le chiffre est cohérent avec le contexte.",
+          "confidence": "forte",
+          "explanation": "83 % : 9,44 tirs cadrés attendus au total (5,39 + 4,05), sous 12,5.",
+          "reasoning": "Les deux équipes cadrent peu (3,9 et 4,8 par match) ; seule la défense de Voluntari (7,8 concédés à l'extérieur) laisse un risque.",
           "probability": 83
         },
         {
           "market": "Tirs cadrés — Botoșani",
           "pick": "Botoșani — Moins de 7.5 tirs cadrés",
-          "verdict": "confirme",
+          "verdict": "nuance",
           "confidence": "moyenne",
-          "explanation": "80 % : 5,39 tirs cadrés attendus pour Botoșani, qui en cadre 5,8 à domicile.",
-          "reasoning": "Voluntari concède 7,8 tirs cadrés dehors, donc un dépassement est possible. La moyenne de Botoșani reste pourtant sous 7,5.",
+          "explanation": "80 % : 5,39 tirs cadrés attendus, Botoșani en produit 5,8 à domicile.",
+          "reasoning": "Voluntari concède 7,8 cadrés à l'extérieur et Botoșani a 5,8 de moyenne à domicile : un dépassement est possible, mais 7,5 reste élevé.",
           "probability": 80
         },
         {
@@ -9854,15 +9967,388 @@
           "pick": "FC Voluntari — Moins de 5.5 tirs cadrés",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "76 % : 4,05 tirs cadrés attendus pour Voluntari, qui en cadre 4,2 dehors.",
-          "reasoning": "Botoșani concède 3,2 tirs cadrés à domicile et Voluntari est en grande difficulté, donc moins de 5,5 est cohérent. Le pourcentage reste plus bas que pour les autres marchés, car ses moyennes se rapprochent du seuil.",
+          "explanation": "76 % : 4,05 cadrés attendus, Voluntari en produit 4,2 à l'extérieur et 4,8 sur 10 matchs.",
+          "reasoning": "Sans Babić ni Gheorghe, l'attaque visiteuse est affaiblie ; le pourcentage est le plus bas des marchés car sa moyenne de 4,8 laisse une marge réduite.",
           "probability": 76
         }
-      ],
-      "caveats": "La composition date de 2825 minutes avant le coup d'envoi : c'est donc probablement une prévision, pas un onze officiel. Le moteur ne propose aucune mise (PASS, trop peu de bookmakers). Le total de buts, les deux équipes marquent et les marchés de buts sont retirés, donc je ne les commente pas. Les xG ne sont pas relevés."
+      ]
     },
-    "updatedAt": "2026-11-18T16:25:45.009Z",
-    "createdAt": "2026-11-18T16:25:45.009Z"
+    "updatedAt": "2026-11-20T14:37:03.825Z",
+    "createdAt": "2026-11-18T16:25:45.009Z",
+    "kickoffRuns": 1,
+    "earlierAnalysis": {
+      "analysis": {
+        "summary": "Botoșani (12e, 15 pts) reçoit FC Voluntari (15e, 8 pts, 7 défaites de suite). Botoșani est irrégulier (0,8 pt/match sur les 5 derniers) mais solide à domicile (3V-3N-1D, 2 buts marqués / 0,8 encaissé sur 5 matchs). Voluntari a perdu 8 de ses 10 derniers matchs et concède 2,4 buts à l'extérieur. Le onze de Botoșani est amputé de Ilaș, Ongenda et Diarra. Voluntari aligne un gardien remplaçant habituel et plusieurs réservistes.",
+        "keyFactors": [
+          {
+            "factor": "forme récente",
+            "observation": "Voluntari est en grande difficulté, Botoșani est moyen.",
+            "evidence": "Voluntari : 5 défaites sur les 5 derniers matchs et 7 de suite. Botoșani : N, D, D, D, V."
+          },
+          {
+            "factor": "statistiques à domicile / à l'extérieur",
+            "observation": "Botoșani domine à domicile, Voluntari concède beaucoup dehors.",
+            "evidence": "Botoșani à domicile : 2 / 0,8 buts, 14 tirs, 5,4 corners. Voluntari à l'extérieur : 1,2 / 2,4 buts, 12,8 tirs produits et 20,2 concédés."
+          },
+          {
+            "factor": "compositions",
+            "observation": "Les deux équipes sont remaniées.",
+            "evidence": "Botoșani sans Ilaș (12 tit.), Ongenda (10) et Diarra (10). Voluntari : gardien Chioveanu (1 match) à la place de Jurhar (14 tit.), Crisan, Dumbrăvanu et Roman sur le banc, Babić et Schieb absents."
+          },
+          {
+            "factor": "classement",
+            "observation": "Deux équipes de bas de tableau.",
+            "evidence": "12e contre 15e sur 16, 15 pts contre 8 pts."
+          }
+        ],
+        "alignmentWithModel": "Le contexte va dans le sens du moteur sur le résultat, avec un Botoșani favori à domicile face à une équipe en grande difficulté. Les marchés de tirs et de corners sont plus nuancés, car Voluntari concède énormément à l'extérieur.",
+        "lineupImpact": "La composition vient de FotMob, relue 2825 minutes avant le coup d'envoi : c'est donc probablement une prévision. Botoșani (4-3-3) aligne Anestis, Dumiter (7 buts) et Mailat (4+2), mais sans Ilaș, Ongenda ni Diarra, écartés de la feuille de match. Voluntari (5-3-2) est très remanié : le gardien Chioveanu (1 match) remplace Jurhar, Crisan, Dumbrăvanu et Roman sont remplaçants, et Babić, Schieb et Cvek sont absents. Gutea (6 buts) reste son principal danger. Le cadre pèse peu : temps clair, 12 °C, pas de pluie.",
+        "marketViews": [
+          {
+            "market": "Résultat",
+            "pick": "Botoșani gagne",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "56 % : Botoșani marque 2 et encaisse 0,8 à domicile, Voluntari reste sur 7 défaites et concède 2,4 buts par match dehors.",
+            "reasoning": "L'écart de forme et le déséquilibre domicile/extérieur plaident pour Botoșani. Sa forme récente irrégulière et les trois absences expliquent que le chiffre reste modéré.",
+            "probability": 56
+          },
+          {
+            "market": "Total corners",
+            "pick": "Plus de 6.5 corners",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "79 % : le moteur attend 9,21 corners (5,39 + 3,83), et la moyenne du championnat est de 9,3.",
+            "reasoning": "Voluntari concède 5,4 corners par match dehors et Botoșani en produit 5,4 à domicile, ce qui soutient le seuil de 6,5.",
+            "probability": 79
+          },
+          {
+            "market": "Corners — Botoșani",
+            "pick": "Botoșani — Moins de 7.5 corners",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "79 % : 5,39 corners attendus pour Botoșani, qui en produit 5,4 à domicile et 4,4 sur 10 matchs.",
+            "reasoning": "Le seuil de 7,5 est nettement au-dessus de ses moyennes. Seule une domination très marquée pourrait le dépasser.",
+            "probability": 79
+          },
+          {
+            "market": "Corners — FC Voluntari",
+            "pick": "FC Voluntari — Moins de 5.5 corners",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "79 % : 3,83 corners attendus pour Voluntari, qui n'en produit que 3 par match à l'extérieur.",
+            "reasoning": "Voluntari sera surtout dominé. Sa moyenne de 4,9 corners sur 10 matchs reste sous 5,5.",
+            "probability": 79
+          },
+          {
+            "market": "Total tirs",
+            "pick": "Moins de 34.5 tirs",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "82 % : 28,84 tirs attendus (16,06 + 12,78), bien sous le seuil de 34,5.",
+            "reasoning": "Les moyennes de Botoșani (11,3 tirs) et de Voluntari (12,8 dehors) restent loin du seuil. Il faudrait un match très ouvert pour le dépasser.",
+            "probability": 82
+          },
+          {
+            "market": "Tirs — Botoșani",
+            "pick": "Botoșani — Moins de 20.5 tirs",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "79 % : 16,06 tirs attendus pour Botoșani, qui en tire 14 à domicile et 11,3 sur 10 matchs.",
+            "reasoning": "Même face à une défense qui concède 20,2 tirs dehors, dépasser 20 tirs serait inhabituel pour cette équipe.",
+            "probability": 79
+          },
+          {
+            "market": "Tirs — FC Voluntari",
+            "pick": "FC Voluntari — Plus de 8.5 tirs",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "81 % : 12,78 tirs attendus pour Voluntari, qui en tire 12,8 dehors et 15,1 sur 10 matchs.",
+            "reasoning": "Son volume reste suffisant pour dépasser 8,5, même si Botoșani concède seulement 10,4 tirs à domicile. Le risque vient d'un match où Voluntari est dominé.",
+            "probability": 81
+          },
+          {
+            "market": "Total tirs cadrés",
+            "pick": "Moins de 12.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "83 % : 9,44 tirs cadrés attendus (5,39 + 4,05), sous le seuil de 12,5.",
+            "reasoning": "Les moyennes des deux équipes (3,9 et 4,2 cadrés) restent loin du seuil. Le chiffre est cohérent avec le contexte.",
+            "probability": 83
+          },
+          {
+            "market": "Tirs cadrés — Botoșani",
+            "pick": "Botoșani — Moins de 7.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "80 % : 5,39 tirs cadrés attendus pour Botoșani, qui en cadre 5,8 à domicile.",
+            "reasoning": "Voluntari concède 7,8 tirs cadrés dehors, donc un dépassement est possible. La moyenne de Botoșani reste pourtant sous 7,5.",
+            "probability": 80
+          },
+          {
+            "market": "Tirs cadrés — FC Voluntari",
+            "pick": "FC Voluntari — Moins de 5.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "76 % : 4,05 tirs cadrés attendus pour Voluntari, qui en cadre 4,2 dehors.",
+            "reasoning": "Botoșani concède 3,2 tirs cadrés à domicile et Voluntari est en grande difficulté, donc moins de 5,5 est cohérent. Le pourcentage reste plus bas que pour les autres marchés, car ses moyennes se rapprochent du seuil.",
+            "probability": 76
+          }
+        ],
+        "caveats": "La composition date de 2825 minutes avant le coup d'envoi : c'est donc probablement une prévision, pas un onze officiel. Le moteur ne propose aucune mise (PASS, trop peu de bookmakers). Le total de buts, les deux équipes marquent et les marchés de buts sont retirés, donc je ne les commente pas. Les xG ne sont pas relevés."
+      },
+      "engineSnapshot": {
+        "label": "Botoșani vs FC Voluntari",
+        "expectedGoals": {
+          "home": 2.8,
+          "away": 0.626,
+          "source": "fotmob"
+        },
+        "trueOdds": {
+          "home": 1.79,
+          "draw": 4.1,
+          "away": 5.03
+        },
+        "market": {
+          "odds1": 1.7,
+          "oddsDraw": 3.6,
+          "odds2": 4.33
+        },
+        "edgePercent": null,
+        "staking": {
+          "action": "PASS",
+          "stake": null,
+          "reason": "trop_peu_de_bookmakers",
+          "candidates": []
+        },
+        "statExpectations": {
+          "corners": {
+            "home": 5.39,
+            "away": 3.83,
+            "total": 9.21
+          },
+          "shots": {
+            "home": 16.06,
+            "away": 12.78,
+            "total": 28.84
+          },
+          "shotsOnTarget": {
+            "home": 5.39,
+            "away": 4.05,
+            "total": 9.44
+          }
+        },
+        "marketPredictions": [
+          {
+            "marketId": "result",
+            "params": {
+              "outcome": "home"
+            },
+            "market": "Résultat",
+            "predictedOutcome": "home",
+            "predictedLabel": "Botoșani gagne",
+            "predictedOdds": 1.79,
+            "probability": 56,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalGoals",
+            "params": {
+              "line": 2.5,
+              "side": "over"
+            },
+            "market": "Total buts",
+            "predictedOutcome": "over",
+            "predictedLabel": "Plus de 2.5 buts",
+            "predictedOdds": 1.5,
+            "probability": 67,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "bothTeamsScore",
+            "params": {
+              "outcome": "no"
+            },
+            "market": "Les 2 équipes marquent",
+            "predictedOutcome": "no",
+            "predictedLabel": "Non",
+            "predictedOdds": 1.79,
+            "probability": 56,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "resultAndTotal",
+            "params": {
+              "line": 1.5,
+              "key": "homeOver"
+            },
+            "market": "Résultat + Total buts",
+            "predictedOutcome": "homeOver",
+            "predictedLabel": "Botoșani & Plus de 1.5 buts",
+            "predictedOdds": 2.01,
+            "probability": 50,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamGoals",
+            "params": {
+              "team": "home",
+              "line": 1.5,
+              "side": "over"
+            },
+            "market": "Buts — Botoșani",
+            "predictedOutcome": "over",
+            "predictedLabel": "Botoșani — Plus de 1.5 buts",
+            "predictedOdds": 1.3,
+            "probability": 77,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamGoals",
+            "params": {
+              "team": "away",
+              "line": 0.5,
+              "side": "under"
+            },
+            "market": "Buts — FC Voluntari",
+            "predictedOutcome": "under",
+            "predictedLabel": "FC Voluntari — Moins de 0.5 buts",
+            "predictedOdds": 1.87,
+            "probability": 53,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalCorners",
+            "params": {
+              "line": 6.5,
+              "side": "over"
+            },
+            "market": "Total corners",
+            "predictedOutcome": "over",
+            "predictedLabel": "Plus de 6.5 corners",
+            "predictedOdds": 1.27,
+            "probability": 79,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamCorners",
+            "params": {
+              "team": "home",
+              "line": 7.5,
+              "side": "under"
+            },
+            "market": "Corners — Botoșani",
+            "predictedOutcome": "under",
+            "predictedLabel": "Botoșani — Moins de 7.5 corners",
+            "predictedOdds": 1.27,
+            "probability": 79,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamCorners",
+            "params": {
+              "team": "away",
+              "line": 5.5,
+              "side": "under"
+            },
+            "market": "Corners — FC Voluntari",
+            "predictedOutcome": "under",
+            "predictedLabel": "FC Voluntari — Moins de 5.5 corners",
+            "predictedOdds": 1.27,
+            "probability": 79,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalShots",
+            "params": {
+              "line": 34.5,
+              "side": "under"
+            },
+            "market": "Total tirs",
+            "predictedOutcome": "under",
+            "predictedLabel": "Moins de 34.5 tirs",
+            "predictedOdds": 1.22,
+            "probability": 82,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShots",
+            "params": {
+              "team": "home",
+              "line": 20.5,
+              "side": "under"
+            },
+            "market": "Tirs — Botoșani",
+            "predictedOutcome": "under",
+            "predictedLabel": "Botoșani — Moins de 20.5 tirs",
+            "predictedOdds": 1.26,
+            "probability": 79,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShots",
+            "params": {
+              "team": "away",
+              "line": 8.5,
+              "side": "over"
+            },
+            "market": "Tirs — FC Voluntari",
+            "predictedOutcome": "over",
+            "predictedLabel": "FC Voluntari — Plus de 8.5 tirs",
+            "predictedOdds": 1.23,
+            "probability": 81,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalShotsOnTarget",
+            "params": {
+              "line": 12.5,
+              "side": "under"
+            },
+            "market": "Total tirs cadrés",
+            "predictedOutcome": "under",
+            "predictedLabel": "Moins de 12.5 tirs cadrés",
+            "predictedOdds": 1.21,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShotsOnTarget",
+            "params": {
+              "team": "home",
+              "line": 7.5,
+              "side": "under"
+            },
+            "market": "Tirs cadrés — Botoșani",
+            "predictedOutcome": "under",
+            "predictedLabel": "Botoșani — Moins de 7.5 tirs cadrés",
+            "predictedOdds": 1.25,
+            "probability": 80,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShotsOnTarget",
+            "params": {
+              "team": "away",
+              "line": 5.5,
+              "side": "under"
+            },
+            "market": "Tirs cadrés — FC Voluntari",
+            "predictedOutcome": "under",
+            "predictedLabel": "FC Voluntari — Moins de 5.5 tirs cadrés",
+            "predictedOdds": 1.31,
+            "probability": 76,
+            "minOdds": 1.2
+          }
+        ],
+        "baseDuCalcul": {
+          "montant": 300.92,
+          "origine": "capital-regle"
+        },
+        "engineVersion": 6
+      },
+      "analysedAt": "2026-11-18T16:25:45.008Z"
+    }
   },
   {
     "matchId": "03a1ad22bba5384565fc8a60cb546a04",
