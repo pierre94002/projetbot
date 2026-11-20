@@ -1718,8 +1718,240 @@
       ],
       "caveats": "Compositions issues du magasin (onze probable). Le dossier de Fluminense signale un changement d'entraîneur, déjà en place depuis août. Les marchés de buts ne sont pas commentés. Échantillon récent de 10 matchs, 6 à domicile ou à l'extérieur."
     },
-    "updatedAt": "2026-11-18T03:10:27.814Z",
-    "createdAt": "2026-11-18T03:10:27.814Z"
+    "updatedAt": "2026-11-20T12:43:09.331Z",
+    "createdAt": "2026-11-18T03:10:27.814Z",
+    "postMatchReview": {
+      "summary": "Fluminense s'est imposé 0-1 à São Paulo grâce à un but de Hércules à la 32e. Ma lecture nuancée du résultat, avec une faible confiance, tenait : le moteur donnait São Paulo favori à 40 % et le match a tourné à l'avantage de l'extérieur. Les marchés de volume (tirs, corners) sont globalement bons. Les deux grosses erreurs concernent les tirs cadrés : São Paulo n'en a eu aucun, et le plafond de corners de Fluminense a sauté.",
+      "whatWasRight": "Les plafonds de tirs ont tenu : 12 tirs pour São Paulo, 9 pour Fluminense, 21 au total, sous les seuils de 19,5, 15,5 et 32,5. Le volume des corners a suivi : 8 pour São Paulo (plus de 3,5) et 14 au total (plus de 7,5). Les 4 tirs cadrés de Fluminense sont restés sous 5,5. J'avais aussi vu que les suspensions, dont Luciano, fragilisaient l'attaque de São Paulo, et mon avis nuancé sur le 1N2 était prudent. Le xG était serré (0,95 contre 0,78).",
+      "whatWasMissed": "J'ai surestimé la qualité offensive de São Paulo sans Luciano : 12 tirs, mais 0 cadré, pour 0,95 xG. J'ai aussi sous-estimé les corners de Fluminense, 6 contre un plafond à 5,5, alors que l'équipe a mené dès la 32e. Les moyennes de tirs cadrés sur 10 matchs étaient trompeuses, car elles intégraient Luciano. Le remplacement de Tolói dès la 25e a aussi perturbé São Paulo, ce que je ne pouvais pas modéliser.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1N2, qui favorisait São Paulo à 40 %. Il confirme la plupart des marchés de volume. Il contredit les marchés sur les tirs cadrés de São Paulo et le total des tirs cadrés, ainsi que le plafond de corners de Fluminense, à 75 %.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Sao Paulo gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Fluminense a gagné 0-1 sur un but de Hércules à la 32e. São Paulo, privé de Luciano, a dominé les tirs (12 contre 9) mais n'a jamais cadré. Il a aussi perdu Tolói sur blessure à la 25e.",
+          "lesson": "Quand le meilleur buteur est suspendu, les moyennes à domicile surestiment l'attaque. Garder la prudence sur le favori du moteur dans ce cas."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Sao Paulo & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Sao Paulo",
+          "marketId": "teamGoals",
+          "pick": "Sao Paulo — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Fluminense",
+          "marketId": "teamGoals",
+          "pick": "Fluminense — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "14 corners (8 et 6), au-dessus de 7,5. São Paulo a poussé après le but encaissé et Fluminense a lui aussi obtenu beaucoup de corners.",
+          "lesson": "Les totaux de corners avec un seuil bas par rapport à la moyenne sont fiables. À garder."
+        },
+        {
+          "market": "Corners — Sao Paulo",
+          "marketId": "teamCorners",
+          "pick": "Sao Paulo — Plus de 3.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "São Paulo a obtenu 8 corners, soit plus de 3,5. Mené dès la 32e, il a attaqué pendant tout le match, ce qui a gonflé ses corners.",
+          "lesson": "Mon doute sur un scénario où São Paulo mène était à l'envers : être mené fait monter les corners. À retenir."
+        },
+        {
+          "market": "Corners — Fluminense",
+          "marketId": "teamCorners",
+          "pick": "Fluminense — Moins de 5.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Fluminense a obtenu 6 corners, pour un plafond à 5,5 : le pari « moins de 5,5 » échoue d'un seul corner. Sa moyenne extérieure (3,2) n'a pas tenu, malgré 57 % de possession.",
+          "lesson": "Ne pas se fier à la seule moyenne extérieure d'une équipe peu productive. Un plafond proche de la moyenne reste fragile si l'équipe a la possession."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 32.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "21 tirs au total (12 et 9), loin du plafond de 32,5.",
+          "lesson": "Le plafond sur le total des tirs était large et s'est avéré sûr. À garder."
+        },
+        {
+          "market": "Tirs — Sao Paulo",
+          "marketId": "teamShots",
+          "pick": "Sao Paulo — Moins de 19.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "12 tirs pour São Paulo, sous 19,5. Le seuil était très haut par rapport à sa moyenne de 15.",
+          "lesson": "Un seuil nettement au-dessus de la moyenne offre une marge réelle. À garder."
+        },
+        {
+          "market": "Tirs — Fluminense",
+          "marketId": "teamShots",
+          "pick": "Fluminense — Moins de 15.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "9 tirs pour Fluminense, sous 15,5. Après son but, il a défendu son avantage au lieu d'attaquer.",
+          "lesson": "Une équipe qui mène à l'extérieur réduit ses tirs. Mon risque d'un Fluminense mené était à l'envers."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "4 tirs cadrés au total (0 et 4), sous le seuil de 5,5 : le pari « plus de 5,5 » échoue. São Paulo a tiré 12 fois sans cadrer une seule fois.",
+          "lesson": "Les moyennes cumulées de tirs cadrés dépendent de la qualité des attaquants. Sans Luciano, ce marché est plus fragile que ne le disent les moyennes."
+        },
+        {
+          "market": "Tirs cadrés — Sao Paulo",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Sao Paulo — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "0 tir cadré pour São Paulo, pour un seuil à 2,5, malgré 12 tirs et 0,95 xG. L'absence de Luciano et de Ferreira a dégradé la précision, ce que j'avais seulement entrevu.",
+          "lesson": "Quand le meilleur buteur est suspendu, le doute sur les tirs cadrés doit peser plus lourd. Je ne dois pas confirmer un seuil sur la seule moyenne."
+        },
+        {
+          "market": "Tirs cadrés — Fluminense",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Fluminense — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "4 tirs cadrés pour Fluminense, sous 5,5, conformément à sa moyenne à l'extérieur de 4,2.",
+          "lesson": "Le plafond sur les tirs cadrés d'une équipe qui tire peu à l'extérieur est cohérent. À garder."
+        }
+      ],
+      "caveats": "Un seul match : l'écart tient à peu de choses (un but, un corner de plus que le plafond). Les compositions étaient des onzes probables. L'effet exact de la blessure de Tolói à la 25e sur São Paulo n'est pas mesurable avec ces données.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 13,
+        "commentaire": 0
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4555,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2387,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 4555,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2387,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 4555,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 4555
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0425116,
+      "createdAt": "2026-11-20T12:43:09.331Z"
+    }
   },
   {
     "matchId": "ec0a3056ce896bd73059bffab79fc261",
@@ -1745,7 +1977,7 @@
         "oddsDraw": 3.86,
         "odds2": 2.44
       },
-      "edgePercent": -4.13,
+      "edgePercent": -9.83,
       "staking": {
         "action": "PASS",
         "stake": null,
@@ -1754,34 +1986,34 @@
           {
             "outcome": "home",
             "label": "Orlando City SC gagne",
-            "odds": 2.45,
-            "displayedOdds": 2.45,
-            "bookmaker": "nordicbet",
-            "bookmakerTitle": "Nordic Bet",
+            "odds": 2.22,
+            "displayedOdds": 2.22,
+            "bookmaker": "betclic_fr",
+            "bookmakerTitle": "Betclic (FR)",
             "fairOdds": 2.57,
-            "ev": -0.0482,
+            "ev": -0.1375,
             "exclusion": "sous_le_seuil"
           },
           {
             "outcome": "draw",
             "label": "Match nul",
-            "odds": 3.85,
-            "displayedOdds": 3.85,
-            "bookmaker": "nordicbet",
-            "bookmakerTitle": "Nordic Bet",
+            "odds": 3.78,
+            "displayedOdds": 3.78,
+            "bookmaker": "betclic_fr",
+            "bookmakerTitle": "Betclic (FR)",
             "fairOdds": 4.33,
-            "ev": -0.1104,
+            "ev": -0.1266,
             "exclusion": "sous_le_seuil"
           },
           {
             "outcome": "away",
             "label": "FC Cincinnati gagne",
-            "odds": 2.52,
-            "displayedOdds": 2.52,
-            "bookmaker": "nordicbet",
-            "bookmakerTitle": "Nordic Bet",
+            "odds": 2.37,
+            "displayedOdds": 2.37,
+            "bookmaker": "betclic_fr",
+            "bookmakerTitle": "Betclic (FR)",
             "fairOdds": 2.63,
-            "ev": -0.0413,
+            "ev": -0.0983,
             "exclusion": "sous_le_seuil"
           }
         ],
@@ -2011,13 +2243,17 @@
           "minOdds": 1.2
         }
       ],
-      "engineVersion": 5
+      "baseDuCalcul": {
+        "montant": 300.92,
+        "origine": "capital-regle"
+      },
+      "engineVersion": 6
     },
     "usage": {
       "input_tokens": 2,
-      "cache_creation_input_tokens": 6529,
-      "cache_read_input_tokens": 4470,
-      "output_tokens": 3138,
+      "cache_creation_input_tokens": 11051,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 2582,
       "output_tokens_details": {
         "thinking_tokens": 0
       },
@@ -2027,19 +2263,19 @@
       },
       "service_tier": "standard",
       "cache_creation": {
-        "ephemeral_1h_input_tokens": 6529,
+        "ephemeral_1h_input_tokens": 11051,
         "ephemeral_5m_input_tokens": 0
       },
       "inference_geo": "global",
       "iterations": [
         {
           "input_tokens": 2,
-          "output_tokens": 3138,
-          "cache_read_input_tokens": 4470,
-          "cache_creation_input_tokens": 6529,
+          "output_tokens": 2582,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 11051,
           "cache_creation": {
             "ephemeral_5m_input_tokens": 0,
-            "ephemeral_1h_input_tokens": 6529
+            "ephemeral_1h_input_tokens": 11051
           },
           "type": "message"
         }
@@ -2047,9 +2283,9 @@
       "speed": "standard",
       "fallback_credit": null
     },
-    "costUsd": 0.058394,
-    "analysedAt": "2026-11-18T03:10:53.253Z",
-    "timing": "avance",
+    "costUsd": 0.070028,
+    "analysedAt": "2026-11-19T23:37:30.718Z",
+    "timing": "coup-d-envoi",
     "fiche": "compacte",
     "memoire": {
       "mots": 478,
@@ -2057,7 +2293,7 @@
       "lecons": [
         "cal-2026-10-11-st-louis-city-la-galaxy|bothTeamsScore"
       ],
-      "dossiersDu": "2026-11-18T00:05:37.382Z",
+      "dossiersDu": "2026-11-19T09:26:34.491Z",
       "equipes": {
         "home": {
           "id": "fotmob-267810",
@@ -2076,8 +2312,8 @@
     "lineupSnapshot": {
       "source": "FotMob",
       "fotmobMatchId": "6580833",
-      "fetchedAt": "2026-11-18T03:10:30.520Z",
-      "minutesBeforeKickoff": 2719,
+      "fetchedAt": "2026-11-19T23:37:08.778Z",
+      "minutesBeforeKickoff": 53,
       "home": {
         "team": "Orlando City",
         "teamId": "fotmob-267810",
@@ -3070,55 +3306,67 @@
         "city": "Orlando, Florida",
         "capacity": 25527,
         "surface": "grass",
-        "weather": "Rain",
-        "temperature": 22,
+        "weather": "Showers",
+        "temperature": 21,
         "windSpeed": 18,
-        "precipitation": 0.63
+        "precipitation": 0.1,
+        "referee": {
+          "name": "Rubiel Vazquez",
+          "country": "United States",
+          "league": "MLS",
+          "matches": 50,
+          "yellowCardsPerMatch": 3.8,
+          "yellowCardsLeagueAverage": 4.15,
+          "redCards": 6,
+          "penalties": 18,
+          "foulsPerMatch": 23.22,
+          "foulsLeagueAverage": 24.09
+        }
       }
     },
     "analysis": {
-      "summary": "Orlando (8e, 46 pts) reçoit Cincinnati (9e, 46 pts) : deux équipes de playoffs à égalité. Orlando est invaincu à domicile en championnat depuis 7 matchs (VNVV sur ses 4 derniers à domicile), mais concède beaucoup (2,4 buts par match, 17,7 tirs). Cincinnati vient de perdre 0-2 contre Nashville après deux victoires et un nul. Chez Orlando, Griezmann et Martín Ojeda sont titulaires ; Jansson est blessé. Cincinnati aligne Denkey, Ferreira et Bucha.",
+      "summary": "Orlando (8e, 46 pts) reçoit Cincinnati (9e, 46 pts) : deux équipes à égalité. Orlando est invaincu à domicile en championnat depuis 7 matchs et en hausse (1,6 pt/match sur les 5 derniers), mais encaisse 2,4 buts par match. Cincinnati est lui aussi en reprise (2 pts/match sur 5), mais a perdu 0-2 contre Nashville le 7/11. Orlando aligne Griezmann et Martín Ojeda, ses deux principaux contributeurs. Cincinnati titularise Denkey, Ferreira et Bucha, avec Mboma Dem et Echenique sur le banc.",
       "keyFactors": [
         {
           "factor": "classement",
-          "observation": "Deux équipes à égalité de points, mais Orlando est nettement plus solide à domicile qu'à l'extérieur.",
+          "observation": "Égalité de points, avantage domicile pour Orlando.",
           "evidence": "Orlando 8e, 46 pts, 10-3-4 à domicile ; Cincinnati 9e, 46 pts, 3-7-7 à l'extérieur."
         },
         {
           "factor": "statistiques et moyennes",
-          "observation": "Orlando produit peu de tirs et en concède beaucoup. Cincinnati tire davantage.",
-          "evidence": "Orlando 12,7 / 17,7 tirs sur 10 matchs ; Cincinnati 15,9 / 12 tirs ; corners d'Orlando 3,7 / 7,7."
+          "observation": "Cincinnati tire plus, Orlando concède beaucoup de tirs et de corners.",
+          "evidence": "Cincinnati 15,9 tirs/match ; Orlando concède 17,7 tirs et 7,7 corners (10 derniers), 9 corners à domicile."
         },
         {
           "factor": "edge du modèle",
-          "observation": "Le moteur n'identifie aucune value sur le 1N2.",
-          "evidence": "edge -4,13 %, mise PASS."
+          "observation": "Le moteur est moins favorable à Orlando que le marché, mais l'edge reste négatif sur les trois issues : PASS.",
+          "evidence": "Edge -9,83 % ; cote juste Orlando 2,57 contre 2,35 au marché."
         },
         {
-          "factor": "compositions",
-          "observation": "Orlando est privé de Jansson mais garde son duo offensif. Cincinnati aligne son noyau offensif.",
-          "evidence": "Griezmann 20+14, M. Ojeda 17+4 ; Denkey 17+3, Ferreira 16+14."
+          "factor": "absences",
+          "observation": "Orlando amputé de Jansson, Spicer et Dorsey ; Cincinnati sans Hagglund ni Malatini.",
+          "evidence": "Jansson (25 tit.) blessé ; Hagglund 22 matchs blessé."
         }
       ],
-      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : match équilibré, avec un léger avantage à domicile pour Orlando. Les marchés de tirs et de corners sont plus incertains, car les moyennes récentes des deux équipes ne vont pas toutes dans le même sens que les attendus du moteur.",
-      "caveats": "La forme récente d'Orlando est introuvable chez FotMob ; seul le dossier du 08/11 la résume. Les compositions sont lues environ 45 h avant le coup d'envoi : ce sont probablement des prévisions. Les marchés de buts sont volontairement exclus.",
+      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : match équilibré avec léger avantage à Orlando à domicile, sans value sur le résultat. Les marchés de corners et de tirs sont plutôt nuancés par les moyennes concédées par Orlando.",
+      "caveats": "Forme récente d'Orlando non trouvée dans FotMob (les derniers résultats viennent du dossier). Peu de matchs à domicile pour Orlando (4) dans les moyennes. Composition relue 53 min avant le coup d'envoi : probablement officielle mais pas certaine. Pas de pronostic sur les marchés de buts, retirés.",
       "marketViews": [
         {
           "market": "Résultat",
           "pick": "Orlando City SC gagne",
           "verdict": "nuance",
           "confidence": "faible",
-          "explanation": "39 % : Orlando est invaincu à domicile depuis 7 matchs (10-3-4), mais Cincinnati produit 15,9 tirs par match et reste proche en niveau, d'où un pourcentage modeste.",
-          "reasoning": "L'avantage du terrain est réel, mais la défense d'Orlando concède 2,4 buts par match sans Jansson. Le match reste très ouvert, et le résultat est historiquement le marché où mes avis tiennent le moins.",
+          "explanation": "39 % : Orlando invaincu à domicile en championnat depuis 7 matchs, mais encaisse 2,4 buts par match et Cincinnati reste en reprise.",
+          "reasoning": "L'avantage du terrain et Griezmann/M. Ojeda soutiennent Orlando, mais l'équilibre au classement et la défense friable laissent un match très ouvert. Mon bilan sur le résultat est le plus faible.",
           "probability": 39
         },
         {
           "market": "Total corners",
           "pick": "Plus de 7.5 corners",
           "verdict": "confirme",
-          "confidence": "moyenne",
-          "explanation": "82 % : le moteur attend 10,81 corners au total (5,01 et 5,81), et la moyenne MLS est de 10,1 par match.",
-          "reasoning": "Le total attendu dépasse nettement la ligne et la moyenne du championnat la soutient. Les corners d'Orlando sont toutefois faibles à domicile (2,8 par match).",
+          "confidence": "forte",
+          "explanation": "82 % : 10,81 corners attendus au total, et Orlando en concède 7,7 par match contre 5,4 pour Cincinnati.",
+          "reasoning": "Les 10,1 corners moyens en MLS et les 9 corners concédés par Orlando à domicile appuient le seuil bas.",
           "probability": 82
         },
         {
@@ -3126,8 +3374,8 @@
           "pick": "Orlando City SC — Moins de 7.5 corners",
           "verdict": "confirme",
           "confidence": "forte",
-          "explanation": "83 % : Orlando n'obtient que 3,7 corners par match sur 10 matchs (2,8 à domicile), et le moteur en attend 5,01.",
-          "reasoning": "La production est très en dessous de la ligne. Les marchés de corners d'une équipe se sont bien tenus dans mon bilan.",
+          "explanation": "83 % : Orlando n'en obtient que 3,7 par match (2,8 à domicile) pour 5,01 attendus.",
+          "reasoning": "Très loin du seuil de 7,5 dans ses moyennes ; Cincinnati concède 5,4 corners.",
           "probability": 83
         },
         {
@@ -3135,8 +3383,8 @@
           "pick": "FC Cincinnati — Moins de 8.5 corners",
           "verdict": "confirme",
           "confidence": "forte",
-          "explanation": "82 % : Cincinnati obtient 5,2 corners par match (4,6 à l'extérieur), et le moteur en attend 5,81.",
-          "reasoning": "La ligne est bien au-dessus de la production habituelle de Cincinnati. Seul un match très déséquilibré pourrait la faire dépasser.",
+          "explanation": "82 % : Cincinnati en obtient 5,2 par match (4,6 à l'extérieur), 5,81 attendus.",
+          "reasoning": "Même avec les 7,7 concédés par Orlando, 8,5 reste haut ; le moteur est cohérent.",
           "probability": 82
         },
         {
@@ -3144,17 +3392,17 @@
           "pick": "Moins de 34.5 tirs",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "82 % : le moteur attend 28,71 tirs au total (13,59 et 15,12), bien sous la ligne de 34,5.",
-          "reasoning": "Les moyennes récentes vont dans le même sens : Orlando tire 12,7 fois et Cincinnati 15,9 fois. Orlando concède toutefois 17,7 tirs, ce qui laisse un risque de match plus ouvert.",
+          "explanation": "82 % : 28,71 tirs attendus, Orlando 12,7 et Cincinnati 15,9 de moyenne.",
+          "reasoning": "Même en additionnant les tirs concédés (17,7 et 12), on reste sous 34,5 ; seuil large.",
           "probability": 82
         },
         {
           "market": "Tirs — Orlando City SC",
           "pick": "Orlando City SC — Moins de 17.5 tirs",
           "verdict": "confirme",
-          "confidence": "forte",
-          "explanation": "79 % : Orlando tire 12,7 fois par match (14,3 à domicile) et le moteur en attend 13,59.",
-          "reasoning": "Même à domicile, sa meilleure moyenne reste nettement sous la ligne de 17,5.",
+          "confidence": "moyenne",
+          "explanation": "79 % : Orlando tire 12,7 fois par match (14,3 à domicile), 13,59 attendus.",
+          "reasoning": "Cincinnati en concède 12 ; le seuil de 17,5 est rarement atteint.",
           "probability": 79
         },
         {
@@ -3162,8 +3410,8 @@
           "pick": "FC Cincinnati — Plus de 10.5 tirs",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "80 % : Cincinnati tire 15,9 fois par match (15,8 à l'extérieur) et le moteur en attend 15,12.",
-          "reasoning": "Sa production dépasse largement la ligne. Orlando concède 17,7 tirs par match, ce qui renforce ce pronostic.",
+          "explanation": "80 % : Cincinnati tire 15,9 fois par match (15,8 à l'extérieur) et Orlando en concède 17,7.",
+          "reasoning": "Moyennes bien au-dessus du seuil, 15,12 attendus.",
           "probability": 80
         },
         {
@@ -3171,17 +3419,17 @@
           "pick": "Moins de 13.5 tirs cadrés",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "81 % : le moteur attend 10,5 tirs cadrés au total (5,06 et 5,45), sous la ligne de 13,5.",
-          "reasoning": "Les moyennes des deux équipes (5,1 chacune) confirment ce total. La pluie prévue ne change pas ce constat.",
+          "explanation": "81 % : 10,5 tirs cadrés attendus ; 5,1 de chaque côté en moyenne.",
+          "reasoning": "Il faudrait un match exceptionnel pour dépasser 13 ; seuil large.",
           "probability": 81
         },
         {
           "market": "Tirs cadrés — Orlando City SC",
           "pick": "Orlando City SC — Moins de 6.5 tirs cadrés",
-          "verdict": "confirme",
+          "verdict": "nuance",
           "confidence": "moyenne",
-          "explanation": "74 % : Orlando cadre 5,1 tirs par match (5,8 à domicile) et le moteur en attend 5,06.",
-          "reasoning": "Sa moyenne à domicile est proche de la ligne, d'où un pourcentage plus bas que sur les autres marchés. Cincinnati concède peu : 4,1 tirs cadrés par match.",
+          "explanation": "74 % : Orlando cadre 5,1 tirs par match (5,8 à domicile), 5,06 attendus.",
+          "reasoning": "Cincinnati en concède 4,1 seulement, mais à domicile Orlando approche 6 ; marge plus mince que sur les autres marchés.",
           "probability": 74
         },
         {
@@ -3189,15 +3437,654 @@
           "pick": "FC Cincinnati — Moins de 7.5 tirs cadrés",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "79 % : Cincinnati cadre 5,1 tirs par match (4,4 à l'extérieur) et le moteur en attend 5,45.",
-          "reasoning": "La moyenne est nettement sous la ligne de 7,5. Orlando concède toutefois 7 tirs cadrés par match, ce qui laisse un risque.",
+          "explanation": "79 % : Cincinnati cadre 5,1 tirs par match (4,4 à l'extérieur), 5,45 attendus.",
+          "reasoning": "Orlando en concède 7 : le seuil reste un peu au-dessus, donc un risque modéré.",
           "probability": 79
         }
-      ],
-      "lineupImpact": "Les compositions viennent de FotMob, lues environ 45 h avant le match : ce sont probablement des prévisions. Orlando (4-4-2, Perelman) aligne Griezmann (20+14) et Martín Ojeda (17+4), plus Angulo (7+6). Jansson (défenseur, 25 titularisations) est blessé jusqu'à fin novembre, et Spicer l'est aussi. Ellis (3+12) et Dorsey (5+1) sont sur le banc. Cincinnati (3-5-2, Noonan) aligne Denkey (17+3), Ferreira (16+14), Bucha (8+5) et Barlow (10+4). Mboma Dem, Valenzuela, Robinson et Echenique sont remplaçants, ce qui n'est pas une absence. Hagglund et Malatini sont blessés. Il pleut, avec un vent de 18 km/h : cela peut freiner le jeu, sans qu'on puisse en tirer de conclusion nette sur les marchés de tirs."
+      ]
     },
-    "updatedAt": "2026-11-18T03:10:53.253Z",
-    "createdAt": "2026-11-18T03:10:53.253Z"
+    "updatedAt": "2026-11-20T12:42:48.995Z",
+    "createdAt": "2026-11-18T03:10:53.253Z",
+    "kickoffRuns": 1,
+    "earlierAnalysis": {
+      "analysis": {
+        "summary": "Orlando (8e, 46 pts) reçoit Cincinnati (9e, 46 pts) : deux équipes de playoffs à égalité. Orlando est invaincu à domicile en championnat depuis 7 matchs (VNVV sur ses 4 derniers à domicile), mais concède beaucoup (2,4 buts par match, 17,7 tirs). Cincinnati vient de perdre 0-2 contre Nashville après deux victoires et un nul. Chez Orlando, Griezmann et Martín Ojeda sont titulaires ; Jansson est blessé. Cincinnati aligne Denkey, Ferreira et Bucha.",
+        "keyFactors": [
+          {
+            "factor": "classement",
+            "observation": "Deux équipes à égalité de points, mais Orlando est nettement plus solide à domicile qu'à l'extérieur.",
+            "evidence": "Orlando 8e, 46 pts, 10-3-4 à domicile ; Cincinnati 9e, 46 pts, 3-7-7 à l'extérieur."
+          },
+          {
+            "factor": "statistiques et moyennes",
+            "observation": "Orlando produit peu de tirs et en concède beaucoup. Cincinnati tire davantage.",
+            "evidence": "Orlando 12,7 / 17,7 tirs sur 10 matchs ; Cincinnati 15,9 / 12 tirs ; corners d'Orlando 3,7 / 7,7."
+          },
+          {
+            "factor": "edge du modèle",
+            "observation": "Le moteur n'identifie aucune value sur le 1N2.",
+            "evidence": "edge -4,13 %, mise PASS."
+          },
+          {
+            "factor": "compositions",
+            "observation": "Orlando est privé de Jansson mais garde son duo offensif. Cincinnati aligne son noyau offensif.",
+            "evidence": "Griezmann 20+14, M. Ojeda 17+4 ; Denkey 17+3, Ferreira 16+14."
+          }
+        ],
+        "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : match équilibré, avec un léger avantage à domicile pour Orlando. Les marchés de tirs et de corners sont plus incertains, car les moyennes récentes des deux équipes ne vont pas toutes dans le même sens que les attendus du moteur.",
+        "caveats": "La forme récente d'Orlando est introuvable chez FotMob ; seul le dossier du 08/11 la résume. Les compositions sont lues environ 45 h avant le coup d'envoi : ce sont probablement des prévisions. Les marchés de buts sont volontairement exclus.",
+        "marketViews": [
+          {
+            "market": "Résultat",
+            "pick": "Orlando City SC gagne",
+            "verdict": "nuance",
+            "confidence": "faible",
+            "explanation": "39 % : Orlando est invaincu à domicile depuis 7 matchs (10-3-4), mais Cincinnati produit 15,9 tirs par match et reste proche en niveau, d'où un pourcentage modeste.",
+            "reasoning": "L'avantage du terrain est réel, mais la défense d'Orlando concède 2,4 buts par match sans Jansson. Le match reste très ouvert, et le résultat est historiquement le marché où mes avis tiennent le moins.",
+            "probability": 39
+          },
+          {
+            "market": "Total corners",
+            "pick": "Plus de 7.5 corners",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "82 % : le moteur attend 10,81 corners au total (5,01 et 5,81), et la moyenne MLS est de 10,1 par match.",
+            "reasoning": "Le total attendu dépasse nettement la ligne et la moyenne du championnat la soutient. Les corners d'Orlando sont toutefois faibles à domicile (2,8 par match).",
+            "probability": 82
+          },
+          {
+            "market": "Corners — Orlando City SC",
+            "pick": "Orlando City SC — Moins de 7.5 corners",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "83 % : Orlando n'obtient que 3,7 corners par match sur 10 matchs (2,8 à domicile), et le moteur en attend 5,01.",
+            "reasoning": "La production est très en dessous de la ligne. Les marchés de corners d'une équipe se sont bien tenus dans mon bilan.",
+            "probability": 83
+          },
+          {
+            "market": "Corners — FC Cincinnati",
+            "pick": "FC Cincinnati — Moins de 8.5 corners",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "82 % : Cincinnati obtient 5,2 corners par match (4,6 à l'extérieur), et le moteur en attend 5,81.",
+            "reasoning": "La ligne est bien au-dessus de la production habituelle de Cincinnati. Seul un match très déséquilibré pourrait la faire dépasser.",
+            "probability": 82
+          },
+          {
+            "market": "Total tirs",
+            "pick": "Moins de 34.5 tirs",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "82 % : le moteur attend 28,71 tirs au total (13,59 et 15,12), bien sous la ligne de 34,5.",
+            "reasoning": "Les moyennes récentes vont dans le même sens : Orlando tire 12,7 fois et Cincinnati 15,9 fois. Orlando concède toutefois 17,7 tirs, ce qui laisse un risque de match plus ouvert.",
+            "probability": 82
+          },
+          {
+            "market": "Tirs — Orlando City SC",
+            "pick": "Orlando City SC — Moins de 17.5 tirs",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "79 % : Orlando tire 12,7 fois par match (14,3 à domicile) et le moteur en attend 13,59.",
+            "reasoning": "Même à domicile, sa meilleure moyenne reste nettement sous la ligne de 17,5.",
+            "probability": 79
+          },
+          {
+            "market": "Tirs — FC Cincinnati",
+            "pick": "FC Cincinnati — Plus de 10.5 tirs",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "80 % : Cincinnati tire 15,9 fois par match (15,8 à l'extérieur) et le moteur en attend 15,12.",
+            "reasoning": "Sa production dépasse largement la ligne. Orlando concède 17,7 tirs par match, ce qui renforce ce pronostic.",
+            "probability": 80
+          },
+          {
+            "market": "Total tirs cadrés",
+            "pick": "Moins de 13.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "81 % : le moteur attend 10,5 tirs cadrés au total (5,06 et 5,45), sous la ligne de 13,5.",
+            "reasoning": "Les moyennes des deux équipes (5,1 chacune) confirment ce total. La pluie prévue ne change pas ce constat.",
+            "probability": 81
+          },
+          {
+            "market": "Tirs cadrés — Orlando City SC",
+            "pick": "Orlando City SC — Moins de 6.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "74 % : Orlando cadre 5,1 tirs par match (5,8 à domicile) et le moteur en attend 5,06.",
+            "reasoning": "Sa moyenne à domicile est proche de la ligne, d'où un pourcentage plus bas que sur les autres marchés. Cincinnati concède peu : 4,1 tirs cadrés par match.",
+            "probability": 74
+          },
+          {
+            "market": "Tirs cadrés — FC Cincinnati",
+            "pick": "FC Cincinnati — Moins de 7.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "79 % : Cincinnati cadre 5,1 tirs par match (4,4 à l'extérieur) et le moteur en attend 5,45.",
+            "reasoning": "La moyenne est nettement sous la ligne de 7,5. Orlando concède toutefois 7 tirs cadrés par match, ce qui laisse un risque.",
+            "probability": 79
+          }
+        ],
+        "lineupImpact": "Les compositions viennent de FotMob, lues environ 45 h avant le match : ce sont probablement des prévisions. Orlando (4-4-2, Perelman) aligne Griezmann (20+14) et Martín Ojeda (17+4), plus Angulo (7+6). Jansson (défenseur, 25 titularisations) est blessé jusqu'à fin novembre, et Spicer l'est aussi. Ellis (3+12) et Dorsey (5+1) sont sur le banc. Cincinnati (3-5-2, Noonan) aligne Denkey (17+3), Ferreira (16+14), Bucha (8+5) et Barlow (10+4). Mboma Dem, Valenzuela, Robinson et Echenique sont remplaçants, ce qui n'est pas une absence. Hagglund et Malatini sont blessés. Il pleut, avec un vent de 18 km/h : cela peut freiner le jeu, sans qu'on puisse en tirer de conclusion nette sur les marchés de tirs."
+      },
+      "engineSnapshot": {
+        "label": "Orlando City SC vs FC Cincinnati",
+        "expectedGoals": {
+          "home": 2.53,
+          "away": 1.65,
+          "source": "league-baseline"
+        },
+        "trueOdds": {
+          "home": 2.57,
+          "draw": 4.33,
+          "away": 2.63
+        },
+        "market": {
+          "odds1": 2.35,
+          "oddsDraw": 3.86,
+          "odds2": 2.44
+        },
+        "edgePercent": -4.13,
+        "staking": {
+          "action": "PASS",
+          "stake": null,
+          "reason": "pas_de_value",
+          "candidates": [
+            {
+              "outcome": "home",
+              "label": "Orlando City SC gagne",
+              "odds": 2.45,
+              "displayedOdds": 2.45,
+              "bookmaker": "nordicbet",
+              "bookmakerTitle": "Nordic Bet",
+              "fairOdds": 2.57,
+              "ev": -0.0482,
+              "exclusion": "sous_le_seuil"
+            },
+            {
+              "outcome": "draw",
+              "label": "Match nul",
+              "odds": 3.85,
+              "displayedOdds": 3.85,
+              "bookmaker": "nordicbet",
+              "bookmakerTitle": "Nordic Bet",
+              "fairOdds": 4.33,
+              "ev": -0.1104,
+              "exclusion": "sous_le_seuil"
+            },
+            {
+              "outcome": "away",
+              "label": "FC Cincinnati gagne",
+              "odds": 2.52,
+              "displayedOdds": 2.52,
+              "bookmaker": "nordicbet",
+              "bookmakerTitle": "Nordic Bet",
+              "fairOdds": 2.63,
+              "ev": -0.0413,
+              "exclusion": "sous_le_seuil"
+            }
+          ],
+          "limits": {
+            "edgeThresholdMin": 0.02,
+            "edgeThresholdMax": 0.25,
+            "maxValueOdds": 5
+          }
+        },
+        "statExpectations": {
+          "corners": {
+            "home": 5.01,
+            "away": 5.81,
+            "total": 10.81
+          },
+          "shots": {
+            "home": 13.59,
+            "away": 15.12,
+            "total": 28.71
+          },
+          "shotsOnTarget": {
+            "home": 5.06,
+            "away": 5.45,
+            "total": 10.5
+          }
+        },
+        "marketPredictions": [
+          {
+            "marketId": "result",
+            "params": {
+              "outcome": "home"
+            },
+            "market": "Résultat",
+            "predictedOutcome": "home",
+            "predictedLabel": "Orlando City SC gagne",
+            "predictedOdds": 2.57,
+            "probability": 39,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalGoals",
+            "params": {
+              "line": 2.5,
+              "side": "over"
+            },
+            "market": "Total buts",
+            "predictedOutcome": "over",
+            "predictedLabel": "Plus de 2.5 buts",
+            "predictedOdds": 1.27,
+            "probability": 79,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "bothTeamsScore",
+            "params": {
+              "outcome": "yes"
+            },
+            "market": "Les 2 équipes marquent",
+            "predictedOutcome": "yes",
+            "predictedLabel": "Oui",
+            "predictedOdds": 1.34,
+            "probability": 75,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "resultAndTotal",
+            "params": {
+              "line": 1.5,
+              "key": "homeOver"
+            },
+            "market": "Résultat + Total buts",
+            "predictedOutcome": "homeOver",
+            "predictedLabel": "Orlando City SC & Plus de 1.5 buts",
+            "predictedOdds": 2.74,
+            "probability": 36,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamGoals",
+            "params": {
+              "team": "home",
+              "line": 3.5,
+              "side": "under"
+            },
+            "market": "Buts — Orlando City SC",
+            "predictedOutcome": "under",
+            "predictedLabel": "Orlando City SC — Moins de 3.5 buts",
+            "predictedOdds": 1.33,
+            "probability": 75,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamGoals",
+            "params": {
+              "team": "away",
+              "line": 0.5,
+              "side": "over"
+            },
+            "market": "Buts — FC Cincinnati",
+            "predictedOutcome": "over",
+            "predictedLabel": "FC Cincinnati — Plus de 0.5 buts",
+            "predictedOdds": 1.24,
+            "probability": 81,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalCorners",
+            "params": {
+              "line": 7.5,
+              "side": "over"
+            },
+            "market": "Total corners",
+            "predictedOutcome": "over",
+            "predictedLabel": "Plus de 7.5 corners",
+            "predictedOdds": 1.22,
+            "probability": 82,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamCorners",
+            "params": {
+              "team": "home",
+              "line": 7.5,
+              "side": "under"
+            },
+            "market": "Corners — Orlando City SC",
+            "predictedOutcome": "under",
+            "predictedLabel": "Orlando City SC — Moins de 7.5 corners",
+            "predictedOdds": 1.21,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamCorners",
+            "params": {
+              "team": "away",
+              "line": 8.5,
+              "side": "under"
+            },
+            "market": "Corners — FC Cincinnati",
+            "predictedOutcome": "under",
+            "predictedLabel": "FC Cincinnati — Moins de 8.5 corners",
+            "predictedOdds": 1.22,
+            "probability": 82,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalShots",
+            "params": {
+              "line": 34.5,
+              "side": "under"
+            },
+            "market": "Total tirs",
+            "predictedOutcome": "under",
+            "predictedLabel": "Moins de 34.5 tirs",
+            "predictedOdds": 1.22,
+            "probability": 82,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShots",
+            "params": {
+              "team": "home",
+              "line": 17.5,
+              "side": "under"
+            },
+            "market": "Tirs — Orlando City SC",
+            "predictedOutcome": "under",
+            "predictedLabel": "Orlando City SC — Moins de 17.5 tirs",
+            "predictedOdds": 1.26,
+            "probability": 79,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShots",
+            "params": {
+              "team": "away",
+              "line": 10.5,
+              "side": "over"
+            },
+            "market": "Tirs — FC Cincinnati",
+            "predictedOutcome": "over",
+            "predictedLabel": "FC Cincinnati — Plus de 10.5 tirs",
+            "predictedOdds": 1.25,
+            "probability": 80,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalShotsOnTarget",
+            "params": {
+              "line": 13.5,
+              "side": "under"
+            },
+            "market": "Total tirs cadrés",
+            "predictedOutcome": "under",
+            "predictedLabel": "Moins de 13.5 tirs cadrés",
+            "predictedOdds": 1.24,
+            "probability": 81,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShotsOnTarget",
+            "params": {
+              "team": "home",
+              "line": 6.5,
+              "side": "under"
+            },
+            "market": "Tirs cadrés — Orlando City SC",
+            "predictedOutcome": "under",
+            "predictedLabel": "Orlando City SC — Moins de 6.5 tirs cadrés",
+            "predictedOdds": 1.35,
+            "probability": 74,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShotsOnTarget",
+            "params": {
+              "team": "away",
+              "line": 7.5,
+              "side": "under"
+            },
+            "market": "Tirs cadrés — FC Cincinnati",
+            "predictedOutcome": "under",
+            "predictedLabel": "FC Cincinnati — Moins de 7.5 tirs cadrés",
+            "predictedOdds": 1.26,
+            "probability": 79,
+            "minOdds": 1.2
+          }
+        ],
+        "engineVersion": 5
+      },
+      "analysedAt": "2026-11-18T03:10:53.253Z"
+    },
+    "postMatchReview": {
+      "summary": "Orlando a dominé en volume (xG 2,91 contre 1,65, 27 tirs contre 10) mais a perdu 1-3 face à un Cincinnati très efficace : penalty de Ferreira (43e), but de Ferreira (50e) et but de Gidi (85e). Le PASS sur le 1N2 était prudent. Les marchés de corners ont bien tenu. Tous les marchés de tirs et de tirs cadrés ont échoué, car le match a été beaucoup plus ouvert que les moyennes.",
+      "whatWasRight": "Le PASS sur le résultat était justifié : l'équilibre était réel et Cincinnati a gagné à l'extérieur. Les trois marchés de corners sont passés : 8 corners au total (3 pour Orlando, 5 pour Cincinnati), donc Plus de 7.5 corners, Orlando moins de 7.5 et Cincinnati moins de 8.5. La méfiance sur la défense d'Orlando (2,4 buts encaissés par match) s'est confirmée avec 3 buts concédés. Le xG de Cincinnati (1,65) correspond exactement à l'attendu du moteur.",
+      "whatWasMissed": "J'ai sous-estimé la domination offensive d'Orlando : 27 tirs contre 13,59 attendus, et un xG de 2,91. Cela a fait échouer Total tirs, Orlando moins de 17,5 et le total des tirs cadrés. Les tirs cadrés de Cincinnati ont aussi été sous-estimés : 8 pour 10 tirs seulement, soit un taux d'efficacité inhabituel qui a fait échouer Moins de 7,5. À l'inverse, Cincinnati n'a tiré que 10 fois, ce qui a fait échouer Plus de 10,5 de justesse (10 tirs). Le total de tirs cadrés a atteint 16 (8 de chaque côté), alors que j'avais jugé qu'il faudrait un match exceptionnel pour dépasser 13. Orlando a tiré, mais sans convertir : un seul but marqué pour un xG de 2,91.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1N2 : il donnait Orlando légèrement favori (xG 2,53 contre 1,65) et c'est Cincinnati qui a gagné 3-1. Il a été juste sur les corners et sur le xG de Cincinnati. Il a été nettement trop bas sur le volume de tirs d'Orlando, et ses seuils larges sur tirs et tirs cadrés ont tous cédé. L'absence d'edge sur le 1N2 reste cohérente.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Orlando City SC gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Orlando a ouvert le score par Ojeda (26e) et a dominé (xG 2,91, 27 tirs). Cincinnati a égalisé sur penalty (43e), puis a marqué à la 50e et à la 85e (Gidi). Orlando a perdu 1-3 malgré sa domination.",
+          "lesson": "L'avis nuancé et le PASS étaient prudents et ont tenu. Un avantage de domicile et une domination en xG ne garantissent pas la victoire dans un match ouvert avec une défense friable. Garder la prudence sur ce type de duel équilibré."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Orlando City SC & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Orlando City SC",
+          "marketId": "teamGoals",
+          "pick": "Orlando City SC — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — FC Cincinnati",
+          "marketId": "teamGoals",
+          "pick": "FC Cincinnati — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 8 corners (3 et 5), donc le seuil de 7,5 est passé de justesse malgré la domination d'Orlando en tirs. Le total était à peine au-dessus.",
+          "lesson": "L'avis fort était juste, mais la marge n'était que d'un corner. Le volume de tirs ne se traduit pas toujours en corners : ne pas surestimer la confiance sur un seuil proche de la valeur réelle."
+        },
+        {
+          "market": "Corners — Orlando City SC",
+          "marketId": "teamCorners",
+          "pick": "Orlando City SC — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Orlando n'a obtenu que 3 corners malgré 27 tirs, bien sous le seuil de 7,5. Cela correspond à sa faible moyenne de corners (3,7 par match).",
+          "lesson": "Le marché de corners d'équipe sous un seuil élevé reste fiable, même quand l'équipe domine. À conserver."
+        },
+        {
+          "market": "Corners — FC Cincinnati",
+          "marketId": "teamCorners",
+          "pick": "FC Cincinnati — Moins de 8.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Cincinnati a obtenu 5 corners, soit moins que le seuil de 8,5 et proche de sa moyenne (5,2).",
+          "lesson": "Le seuil large sur la moyenne a bien tenu. À conserver."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 34.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Orlando a pris 27 tirs et Cincinnati 10, soit 37 au total, au-dessus des 34,5. Orlando a fait exploser son volume avec son pressing et ses occasions (7 grosses occasions).",
+          "lesson": "Mon avis d'avant-match était faux. Je m'étais appuyé sur les moyennes sans tenir compte d'un scénario de domination unilatérale. Un seuil de 34,5 peut être dépassé quand un camp atteint 27 tirs. Prendre en compte le risque de queue haute."
+        },
+        {
+          "market": "Tirs — Orlando City SC",
+          "marketId": "teamShots",
+          "pick": "Orlando City SC — Moins de 17.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Orlando a tiré 27 fois, bien au-dessus de 17,5. Les occasions se sont multipliées côté gauche avec Ojeda et Angulo (24e, 32e, 37e, 39e).",
+          "lesson": "Mon avis était faux. Orlando à domicile contre une défense qui laisse du temps et de l'espace peut très largement dépasser sa moyenne (12,7). Ne pas fermer le haut de la distribution quand l'adversaire concède 17,7 tirs."
+        },
+        {
+          "market": "Tirs — FC Cincinnati",
+          "marketId": "teamShots",
+          "pick": "FC Cincinnati — Plus de 10.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Cincinnati n'a tiré que 10 fois, un tir sous le seuil de 10,5, alors que sa moyenne est de 15,9. Orlando a dominé le ballon (58 %) et le volume.",
+          "lesson": "Mon avis était faux : un score favorable (1-3 dès la 85e) et la possession adverse réduisent le volume du camp qui mène. Cincinnati, efficace, n'a pas eu besoin de tirer beaucoup."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 13.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Il y a eu 16 tirs cadrés au total (8 de chaque côté), au-dessus de 13,5. Orlando a cadré beaucoup plus que prévu et Cincinnati a été très précis.",
+          "lesson": "Mon avis était faux. Les seuils larges sur tirs cadrés restent vulnérables à un match ouvert où les deux équipes cadrent 8 tirs. Moyennes de 5 par équipe sous-estiment la variance."
+        },
+        {
+          "market": "Tirs cadrés — Orlando City SC",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Orlando City SC — Moins de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Orlando a cadré 8 tirs, au-dessus de 6,5, conséquence de sa domination (27 tirs). Mon avis nuancé signalait déjà une marge mince.",
+          "lesson": "La nuance était justifiée : la marge était mince. Un volume offensif élevé d'Orlando à domicile fait facilement passer 6,5."
+        },
+        {
+          "market": "Tirs cadrés — FC Cincinnati",
+          "marketId": "teamShotsOnTarget",
+          "pick": "FC Cincinnati — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Cincinnati a cadré 8 tirs sur 10, au-dessus de 7,5, dont un penalty et deux buts. La précision exceptionnelle a fait passer le seuil malgré le faible volume.",
+          "lesson": "Mon avis était faux. J'avais signalé le risque modéré, mais 8 sur 10 est un taux anormal. Éviter une confiance moyenne sur un seuil proche de la concession adverse (7 tirs cadrés concédés par Orlando)."
+        }
+      ],
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 19,
+        "commentaire": 5
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4673,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2928,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 4673,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2928,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 4673,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 4673
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0483936,
+      "createdAt": "2026-11-20T12:42:48.995Z"
+    }
   },
   {
     "matchId": "d8eca71d848497deda0c022c1c27e3bc",
@@ -3223,7 +4110,7 @@
         "oddsDraw": 3.46,
         "odds2": 3.18
       },
-      "edgePercent": -3.14,
+      "edgePercent": -11.46,
       "staking": {
         "action": "PASS",
         "stake": null,
@@ -3232,34 +4119,34 @@
           {
             "outcome": "home",
             "label": "Seattle Sounders FC gagne",
-            "odds": 1.98,
-            "displayedOdds": 1.98,
-            "bookmaker": "nordicbet",
-            "bookmakerTitle": "Nordic Bet",
+            "odds": 1.81,
+            "displayedOdds": 1.81,
+            "bookmaker": "betclic_fr",
+            "bookmakerTitle": "Betclic (FR)",
             "fairOdds": 2.04,
-            "ev": -0.0314,
+            "ev": -0.1146,
             "exclusion": "sous_le_seuil"
           },
           {
             "outcome": "draw",
             "label": "Match nul",
-            "odds": 3.6,
-            "displayedOdds": 3.6,
-            "bookmaker": "nordicbet",
-            "bookmakerTitle": "Nordic Bet",
+            "odds": 3.55,
+            "displayedOdds": 3.55,
+            "bookmaker": "betclic_fr",
+            "bookmakerTitle": "Betclic (FR)",
             "fairOdds": 4.09,
-            "ev": -0.1196,
+            "ev": -0.1319,
             "exclusion": "sous_le_seuil"
           },
           {
             "outcome": "away",
             "label": "Real Salt Lake gagne",
-            "odds": 3.55,
-            "displayedOdds": 3.55,
-            "bookmaker": "nordicbet",
-            "bookmakerTitle": "Nordic Bet",
+            "odds": 3.27,
+            "displayedOdds": 3.27,
+            "bookmaker": "betclic_fr",
+            "bookmakerTitle": "Betclic (FR)",
             "fairOdds": 3.76,
-            "ev": -0.0547,
+            "ev": -0.1293,
             "exclusion": "sous_le_seuil"
           }
         ],
@@ -3489,13 +4376,17 @@
           "minOdds": 1.2
         }
       ],
-      "engineVersion": 5
+      "baseDuCalcul": {
+        "montant": 300.92,
+        "origine": "capital-regle"
+      },
+      "engineVersion": 6
     },
     "usage": {
       "input_tokens": 2,
-      "cache_creation_input_tokens": 6568,
-      "cache_read_input_tokens": 4470,
-      "output_tokens": 2702,
+      "cache_creation_input_tokens": 10740,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 2729,
       "output_tokens_details": {
         "thinking_tokens": 0
       },
@@ -3505,19 +4396,19 @@
       },
       "service_tier": "standard",
       "cache_creation": {
-        "ephemeral_1h_input_tokens": 6568,
+        "ephemeral_1h_input_tokens": 10740,
         "ephemeral_5m_input_tokens": 0
       },
       "inference_geo": "global",
       "iterations": [
         {
           "input_tokens": 2,
-          "output_tokens": 2702,
-          "cache_read_input_tokens": 4470,
-          "cache_creation_input_tokens": 6568,
+          "output_tokens": 2729,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 10740,
           "cache_creation": {
             "ephemeral_5m_input_tokens": 0,
-            "ephemeral_1h_input_tokens": 6568
+            "ephemeral_1h_input_tokens": 10740
           },
           "type": "message"
         }
@@ -3525,9 +4416,9 @@
       "speed": "standard",
       "fallback_credit": null
     },
-    "costUsd": 0.05419,
-    "analysedAt": "2026-11-18T03:11:14.791Z",
-    "timing": "avance",
+    "costUsd": 0.070254,
+    "analysedAt": "2026-11-20T12:13:55.753Z",
+    "timing": "coup-d-envoi",
     "fiche": "compacte",
     "memoire": {
       "mots": 426,
@@ -3535,7 +4426,7 @@
       "lecons": [
         "cal-2026-10-11-st-louis-city-la-galaxy|bothTeamsScore"
       ],
-      "dossiersDu": "2026-11-18T00:05:37.382Z",
+      "dossiersDu": "2026-11-19T09:26:34.491Z",
       "equipes": {
         "home": {
           "id": "fotmob-130394",
@@ -3552,10 +4443,7 @@
       }
     },
     "lineupSnapshot": {
-      "source": "FotMob",
-      "fotmobMatchId": "6580834",
-      "fetchedAt": "2026-11-18T03:10:55.020Z",
-      "minutesBeforeKickoff": 2869,
+      "source": "magasin",
       "home": {
         "team": "Seattle Sounders FC",
         "teamId": "fotmob-130394",
@@ -3564,46 +4452,6 @@
         "statsSince": "2026-01-01",
         "teamMatches": 37,
         "startXI": [
-          {
-            "id": "fotmob-1268000",
-            "name": "Andrew Thomas",
-            "number": 26,
-            "position": "Goalkeeper",
-            "age": 28,
-            "countryCode": "USA",
-            "countryName": "USA",
-            "x": 0.1,
-            "y": 0.5,
-            "stats": {
-              "apps": 34,
-              "starts": 34,
-              "minutes": 3060,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 7.21
-            }
-          },
-          {
-            "id": "fotmob-1610334",
-            "name": "Kalani Rienzi",
-            "number": 85,
-            "position": "Defender",
-            "age": 24,
-            "countryCode": "USA",
-            "countryName": "USA",
-            "x": 0.292,
-            "y": 0.875,
-            "stats": {
-              "apps": 35,
-              "starts": 25,
-              "minutes": 2234,
-              "goals": 3,
-              "assists": 0,
-              "xg": 1.94,
-              "rating": 6.82
-            }
-          },
           {
             "id": "fotmob-253836",
             "name": "Kee-Hee Kim",
@@ -3625,23 +4473,83 @@
             }
           },
           {
-            "id": "fotmob-1285885",
-            "name": "Jackson Ragen",
-            "number": 25,
-            "position": "Defender",
-            "age": 28,
+            "id": "fotmob-484858",
+            "name": "Albert Rusnák",
+            "number": 11,
+            "position": "Midfielder",
+            "age": 32,
+            "countryCode": "SVK",
+            "countryName": "Slovakia",
+            "x": 0.678,
+            "y": 0.5,
+            "stats": {
+              "apps": 35,
+              "starts": 30,
+              "minutes": 2744,
+              "goals": 6,
+              "assists": 13,
+              "xg": 7.38,
+              "rating": 7.37
+            }
+          },
+          {
+            "id": "fotmob-578643",
+            "name": "Jordan Morris",
+            "number": 13,
+            "position": "Midfielder",
+            "age": 32,
             "countryCode": "USA",
             "countryName": "USA",
-            "x": 0.292,
-            "y": 0.375,
+            "x": 0.678,
+            "y": 0.837,
             "stats": {
-              "apps": 28,
-              "starts": 26,
-              "minutes": 2417,
-              "goals": 0,
-              "assists": 0,
-              "xg": 1.55,
-              "rating": 6.94
+              "apps": 25,
+              "starts": 17,
+              "minutes": 1423,
+              "goals": 3,
+              "assists": 4,
+              "xg": 5.34,
+              "rating": 6.89
+            }
+          },
+          {
+            "id": "fotmob-621946",
+            "name": "Cristian Roldan",
+            "number": 7,
+            "position": "Midfielder",
+            "age": 31,
+            "countryCode": "USA",
+            "countryName": "USA",
+            "x": 0.485,
+            "y": 0.3,
+            "stats": {
+              "apps": 26,
+              "starts": 23,
+              "minutes": 2130,
+              "goals": 5,
+              "assists": 2,
+              "xg": 2.17,
+              "rating": 7.4
+            }
+          },
+          {
+            "id": "fotmob-749491",
+            "name": "Dejan Joveljić",
+            "number": 9,
+            "position": "Forward",
+            "age": 27,
+            "countryCode": "SRB",
+            "countryName": "Serbia",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 32,
+              "starts": 32,
+              "minutes": 2803,
+              "goals": 13,
+              "assists": 1,
+              "xg": 9.62,
+              "rating": 6.89
             }
           },
           {
@@ -3685,63 +4593,63 @@
             }
           },
           {
-            "id": "fotmob-621946",
-            "name": "Cristian Roldan",
-            "number": 7,
-            "position": "Midfielder",
-            "age": 31,
+            "id": "fotmob-1268000",
+            "name": "Andrew Thomas",
+            "number": 26,
+            "position": "Goalkeeper",
+            "age": 28,
             "countryCode": "USA",
             "countryName": "USA",
-            "x": 0.485,
-            "y": 0.3,
-            "stats": {
-              "apps": 26,
-              "starts": 23,
-              "minutes": 2130,
-              "goals": 5,
-              "assists": 2,
-              "xg": 2.17,
-              "rating": 7.4
-            }
-          },
-          {
-            "id": "fotmob-578643",
-            "name": "Jordan Morris",
-            "number": 13,
-            "position": "Midfielder",
-            "age": 32,
-            "countryCode": "USA",
-            "countryName": "USA",
-            "x": 0.678,
-            "y": 0.837,
-            "stats": {
-              "apps": 25,
-              "starts": 17,
-              "minutes": 1423,
-              "goals": 3,
-              "assists": 4,
-              "xg": 5.34,
-              "rating": 6.89
-            }
-          },
-          {
-            "id": "fotmob-484858",
-            "name": "Albert Rusnák",
-            "number": 11,
-            "position": "Midfielder",
-            "age": 32,
-            "countryCode": "SVK",
-            "countryName": "Slovakia",
-            "x": 0.678,
+            "x": 0.1,
             "y": 0.5,
             "stats": {
+              "apps": 34,
+              "starts": 34,
+              "minutes": 3060,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.21
+            }
+          },
+          {
+            "id": "fotmob-1285885",
+            "name": "Jackson Ragen",
+            "number": 25,
+            "position": "Defender",
+            "age": 28,
+            "countryCode": "USA",
+            "countryName": "USA",
+            "x": 0.292,
+            "y": 0.375,
+            "stats": {
+              "apps": 28,
+              "starts": 26,
+              "minutes": 2417,
+              "goals": 0,
+              "assists": 0,
+              "xg": 1.55,
+              "rating": 6.94
+            }
+          },
+          {
+            "id": "fotmob-1610334",
+            "name": "Kalani Rienzi",
+            "number": 85,
+            "position": "Defender",
+            "age": 24,
+            "countryCode": "USA",
+            "countryName": "USA",
+            "x": 0.292,
+            "y": 0.875,
+            "stats": {
               "apps": 35,
-              "starts": 30,
-              "minutes": 2744,
-              "goals": 6,
-              "assists": 13,
-              "xg": 7.38,
-              "rating": 7.37
+              "starts": 25,
+              "minutes": 2234,
+              "goals": 3,
+              "assists": 0,
+              "xg": 1.94,
+              "rating": 6.82
             }
           },
           {
@@ -3763,26 +4671,6 @@
               "xg": 2.59,
               "rating": 6.76
             }
-          },
-          {
-            "id": "fotmob-749491",
-            "name": "Dejan Joveljić",
-            "number": 9,
-            "position": "Forward",
-            "age": 27,
-            "countryCode": "SRB",
-            "countryName": "Serbia",
-            "x": 0.87,
-            "y": 0.5,
-            "stats": {
-              "apps": 32,
-              "starts": 32,
-              "minutes": 2803,
-              "goals": 13,
-              "assists": 1,
-              "xg": 9.62,
-              "rating": 6.89
-            }
           }
         ],
         "bench": [
@@ -3802,6 +4690,96 @@
               "assists": 0,
               "xg": null,
               "rating": 8.16
+            }
+          },
+          {
+            "id": "fotmob-462244",
+            "name": "Paul Arriola",
+            "number": 17,
+            "position": "Forward",
+            "age": 31,
+            "countryCode": "USA",
+            "countryName": "USA",
+            "stats": {
+              "apps": 25,
+              "starts": 8,
+              "minutes": 802,
+              "goals": 3,
+              "assists": 3,
+              "xg": 4.76,
+              "rating": 6.74
+            }
+          },
+          {
+            "id": "fotmob-825608",
+            "name": "Jesús Ferreira",
+            "number": 27,
+            "position": "Forward",
+            "age": 25,
+            "countryCode": "USA",
+            "countryName": "USA",
+            "stats": {
+              "apps": 28,
+              "starts": 20,
+              "minutes": 1630,
+              "goals": 2,
+              "assists": 4,
+              "xg": 3.62,
+              "rating": 6.98
+            }
+          },
+          {
+            "id": "fotmob-861186",
+            "name": "Paul Rothrock",
+            "number": 14,
+            "position": "Forward",
+            "age": 27,
+            "countryCode": "USA",
+            "countryName": "USA",
+            "stats": {
+              "apps": 26,
+              "starts": 21,
+              "minutes": 1964,
+              "goals": 5,
+              "assists": 3,
+              "xg": 3.49,
+              "rating": 6.94
+            }
+          },
+          {
+            "id": "fotmob-1083216",
+            "name": "Peter Kingston",
+            "number": 45,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "USA",
+            "countryName": "USA",
+            "stats": {
+              "apps": 28,
+              "starts": 12,
+              "minutes": 1217,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.67,
+              "rating": 6.52
+            }
+          },
+          {
+            "id": "fotmob-1171305",
+            "name": "Caden Clark",
+            "number": 8,
+            "position": "Forward",
+            "age": 23,
+            "countryCode": "USA",
+            "countryName": "USA",
+            "stats": {
+              "apps": 14,
+              "starts": 2,
+              "minutes": 240,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.39,
+              "rating": 6.42
             }
           },
           {
@@ -3841,24 +4819,6 @@
             }
           },
           {
-            "id": "fotmob-1083216",
-            "name": "Peter Kingston",
-            "number": 45,
-            "position": "Midfielder",
-            "age": 25,
-            "countryCode": "USA",
-            "countryName": "USA",
-            "stats": {
-              "apps": 28,
-              "starts": 12,
-              "minutes": 1217,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.67,
-              "rating": 6.52
-            }
-          },
-          {
             "id": "fotmob-1529380",
             "name": "Snyder Brunell",
             "number": 37,
@@ -3875,177 +4835,9 @@
               "xg": 2.31,
               "rating": 6.57
             }
-          },
-          {
-            "id": "fotmob-1171305",
-            "name": "Caden Clark",
-            "number": 8,
-            "position": "Forward",
-            "age": 23,
-            "countryCode": "USA",
-            "countryName": "USA",
-            "stats": {
-              "apps": 14,
-              "starts": 2,
-              "minutes": 240,
-              "goals": 1,
-              "assists": 0,
-              "xg": 0.39,
-              "rating": 6.42
-            }
-          },
-          {
-            "id": "fotmob-825608",
-            "name": "Jesús Ferreira",
-            "number": 27,
-            "position": "Forward",
-            "age": 25,
-            "countryCode": "USA",
-            "countryName": "USA",
-            "stats": {
-              "apps": 28,
-              "starts": 20,
-              "minutes": 1630,
-              "goals": 2,
-              "assists": 4,
-              "xg": 3.62,
-              "rating": 6.98
-            }
-          },
-          {
-            "id": "fotmob-462244",
-            "name": "Paul Arriola",
-            "number": 17,
-            "position": "Forward",
-            "age": 31,
-            "countryCode": "USA",
-            "countryName": "USA",
-            "stats": {
-              "apps": 25,
-              "starts": 8,
-              "minutes": 802,
-              "goals": 3,
-              "assists": 3,
-              "xg": 4.76,
-              "rating": 6.74
-            }
-          },
-          {
-            "id": "fotmob-861186",
-            "name": "Paul Rothrock",
-            "number": 14,
-            "position": "Forward",
-            "age": 27,
-            "countryCode": "USA",
-            "countryName": "USA",
-            "stats": {
-              "apps": 26,
-              "starts": 21,
-              "minutes": 1964,
-              "goals": 5,
-              "assists": 3,
-              "xg": 3.49,
-              "rating": 6.94
-            }
           }
         ],
-        "unavailable": [
-          {
-            "id": "fotmob-924391",
-            "age": 30,
-            "countryCode": "SLV",
-            "countryName": "El Salvador",
-            "name": "Álex Roldán",
-            "reason": "blessé",
-            "expectedReturn": "Early December 2026",
-            "position": "Midfielder",
-            "stats": {
-              "apps": 31,
-              "starts": 24,
-              "minutes": 1999,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.39,
-              "rating": 6.95
-            }
-          },
-          {
-            "id": "fotmob-590039",
-            "age": 34,
-            "countryCode": "COL",
-            "countryName": "Colombia",
-            "name": "Yeimar Gómez",
-            "reason": "blessé",
-            "expectedReturn": "Late November 2026",
-            "position": "Defender",
-            "stats": {
-              "apps": 7,
-              "starts": 5,
-              "minutes": 336,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.28,
-              "rating": 7.24
-            }
-          },
-          {
-            "id": "fotmob-933625",
-            "age": 30,
-            "countryCode": "MKD",
-            "countryName": "North Macedonia",
-            "name": "Danny Musovski",
-            "reason": "blessé",
-            "expectedReturn": "Doubtful",
-            "position": "Forward",
-            "stats": {
-              "apps": 24,
-              "starts": 14,
-              "minutes": 1161,
-              "goals": 3,
-              "assists": 0,
-              "xg": 4.51,
-              "rating": 6.39
-            }
-          },
-          {
-            "id": "fotmob-962665",
-            "age": 25,
-            "countryCode": "ARG",
-            "countryName": "Argentina",
-            "name": "Pedro De la Vega",
-            "reason": "blessé",
-            "expectedReturn": "Out for season",
-            "position": "Forward",
-            "stats": {
-              "apps": 1,
-              "starts": 0,
-              "minutes": 13,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.05
-            }
-          },
-          {
-            "id": "fotmob-1387072",
-            "age": 23,
-            "countryCode": "SRB",
-            "countryName": "Serbia",
-            "name": "Nikola Petković",
-            "reason": "blessé",
-            "expectedReturn": "Unknown",
-            "position": "Midfielder",
-            "stats": {
-              "apps": 4,
-              "starts": 2,
-              "minutes": 135,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.3,
-              "rating": 6.88
-            }
-          }
-        ],
+        "unavailable": [],
         "usualStartersMissing": [
           {
             "id": "fotmob-924391",
@@ -4057,7 +4849,7 @@
             "starts": 24,
             "goals": 0,
             "assists": 0,
-            "status": "blessé"
+            "status": "absent de la feuille de match"
           },
           {
             "id": "fotmob-861186",
@@ -4095,7 +4887,15 @@
             "assists": 1,
             "status": "remplaçant"
           }
-        ]
+        ],
+        "lastMatch": {
+          "date": "2026-11-08",
+          "league": "MLS",
+          "home": "Seattle Sounders FC",
+          "away": "Los Angeles FC",
+          "homeGoals": 2,
+          "awayGoals": 1
+        }
       },
       "away": {
         "team": "Real Salt Lake",
@@ -4126,43 +4926,83 @@
             }
           },
           {
-            "id": "fotmob-1338757",
-            "name": "Philip Quinton",
-            "number": 26,
-            "position": "Defender",
-            "age": 27,
-            "countryCode": "USA",
-            "countryName": "USA",
-            "x": 0.357,
-            "y": 0.695,
+            "id": "fotmob-614602",
+            "name": "Stijn Spierings",
+            "number": 6,
+            "position": "Midfielder",
+            "age": 30,
+            "countryCode": "NED",
+            "countryName": "Netherlands",
+            "x": 0.613,
+            "y": 0.625,
             "stats": {
-              "apps": 33,
-              "starts": 28,
-              "minutes": 2570,
-              "goals": 0,
+              "apps": 29,
+              "starts": 26,
+              "minutes": 2121,
+              "goals": 1,
               "assists": 1,
-              "xg": 0.59,
+              "xg": 1.45,
+              "rating": 7.07
+            }
+          },
+          {
+            "id": "fotmob-652955",
+            "name": "Saba Lobjanidze",
+            "number": 12,
+            "position": "Midfielder",
+            "age": 31,
+            "countryCode": "GEO",
+            "countryName": "Georgia",
+            "x": 0.613,
+            "y": 0.875,
+            "stats": {
+              "apps": 36,
+              "starts": 19,
+              "minutes": 1813,
+              "goals": 6,
+              "assists": 5,
+              "xg": 4.93,
               "rating": 6.76
             }
           },
           {
-            "id": "fotmob-1399943",
-            "name": "Luc De Fougerolles",
-            "number": 44,
-            "position": "Defender",
-            "age": 21,
-            "countryCode": "CAN",
-            "countryName": "Canada",
-            "x": 0.357,
-            "y": 0.5,
+            "id": "fotmob-1053963",
+            "name": "Juan Sanabria",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 26,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "x": 0.371,
+            "y": 0.11,
             "stats": {
-              "apps": 21,
-              "starts": 14,
-              "minutes": 1306,
-              "goals": 1,
-              "assists": 2,
-              "xg": 0.33,
-              "rating": 6.95
+              "apps": 36,
+              "starts": 31,
+              "minutes": 2857,
+              "goals": 3,
+              "assists": 7,
+              "xg": 2.12,
+              "rating": 7.34
+            }
+          },
+          {
+            "id": "fotmob-1092680",
+            "name": "Morgan Guilavogui",
+            "number": 9,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "GUI",
+            "countryName": "Guinea",
+            "x": 0.613,
+            "y": 0.125,
+            "stats": {
+              "apps": 34,
+              "starts": 28,
+              "minutes": 2368,
+              "goals": 6,
+              "assists": 8,
+              "xg": 6.95,
+              "rating": 7.38
             }
           },
           {
@@ -4206,63 +5046,43 @@
             }
           },
           {
-            "id": "fotmob-1053963",
-            "name": "Juan Sanabria",
-            "number": 8,
-            "position": "Midfielder",
-            "age": 26,
-            "countryCode": "URU",
-            "countryName": "Uruguay",
-            "x": 0.371,
-            "y": 0.11,
+            "id": "fotmob-1338757",
+            "name": "Philip Quinton",
+            "number": 26,
+            "position": "Defender",
+            "age": 27,
+            "countryCode": "USA",
+            "countryName": "USA",
+            "x": 0.357,
+            "y": 0.695,
             "stats": {
-              "apps": 36,
-              "starts": 31,
-              "minutes": 2857,
-              "goals": 3,
-              "assists": 7,
-              "xg": 2.12,
-              "rating": 7.34
-            }
-          },
-          {
-            "id": "fotmob-652955",
-            "name": "Saba Lobjanidze",
-            "number": 12,
-            "position": "Midfielder",
-            "age": 31,
-            "countryCode": "GEO",
-            "countryName": "Georgia",
-            "x": 0.613,
-            "y": 0.875,
-            "stats": {
-              "apps": 36,
-              "starts": 19,
-              "minutes": 1813,
-              "goals": 6,
-              "assists": 5,
-              "xg": 4.93,
+              "apps": 33,
+              "starts": 28,
+              "minutes": 2570,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.59,
               "rating": 6.76
             }
           },
           {
-            "id": "fotmob-614602",
-            "name": "Stijn Spierings",
-            "number": 6,
-            "position": "Midfielder",
-            "age": 30,
-            "countryCode": "NED",
-            "countryName": "Netherlands",
-            "x": 0.613,
-            "y": 0.625,
+            "id": "fotmob-1399943",
+            "name": "Luc De Fougerolles",
+            "number": 44,
+            "position": "Defender",
+            "age": 21,
+            "countryCode": "CAN",
+            "countryName": "Canada",
+            "x": 0.357,
+            "y": 0.5,
             "stats": {
-              "apps": 29,
-              "starts": 26,
-              "minutes": 2121,
+              "apps": 21,
+              "starts": 14,
+              "minutes": 1306,
               "goals": 1,
-              "assists": 1,
-              "xg": 1.45,
-              "rating": 7.07
+              "assists": 2,
+              "xg": 0.33,
+              "rating": 6.95
             }
           },
           {
@@ -4283,26 +5103,6 @@
               "assists": 8,
               "xg": 2.67,
               "rating": 7.33
-            }
-          },
-          {
-            "id": "fotmob-1092680",
-            "name": "Morgan Guilavogui",
-            "number": 9,
-            "position": "Midfielder",
-            "age": 28,
-            "countryCode": "GUI",
-            "countryName": "Guinea",
-            "x": 0.613,
-            "y": 0.125,
-            "stats": {
-              "apps": 34,
-              "starts": 28,
-              "minutes": 2368,
-              "goals": 6,
-              "assists": 8,
-              "xg": 6.95,
-              "rating": 7.38
             }
           },
           {
@@ -4327,24 +5127,6 @@
           }
         ],
         "bench": [
-          {
-            "id": "fotmob-729507",
-            "name": "Mason Stajduhar",
-            "number": 31,
-            "position": "Goalkeeper",
-            "age": 28,
-            "countryCode": "USA",
-            "countryName": "USA",
-            "stats": {
-              "apps": 1,
-              "starts": 1,
-              "minutes": 90,
-              "goals": 0,
-              "assists": 0,
-              "xg": null,
-              "rating": 6.28
-            }
-          },
           {
             "id": "fotmob-432040",
             "name": "DeAndre Yedlin",
@@ -4382,21 +5164,21 @@
             }
           },
           {
-            "id": "fotmob-860543",
-            "name": "Lukas Engel",
-            "number": 4,
-            "position": "Defender",
-            "age": 27,
-            "countryCode": "DEN",
-            "countryName": "Denmark",
+            "id": "fotmob-729507",
+            "name": "Mason Stajduhar",
+            "number": 31,
+            "position": "Goalkeeper",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
             "stats": {
-              "apps": 18,
-              "starts": 17,
-              "minutes": 1441,
-              "goals": 2,
+              "apps": 1,
+              "starts": 1,
+              "minutes": 90,
+              "goals": 0,
               "assists": 0,
-              "xg": 0.77,
-              "rating": 6.92
+              "xg": null,
+              "rating": 6.28
             }
           },
           {
@@ -4418,6 +5200,42 @@
             }
           },
           {
+            "id": "fotmob-860543",
+            "name": "Lukas Engel",
+            "number": 4,
+            "position": "Defender",
+            "age": 27,
+            "countryCode": "DEN",
+            "countryName": "Denmark",
+            "stats": {
+              "apps": 18,
+              "starts": 17,
+              "minutes": 1441,
+              "goals": 2,
+              "assists": 0,
+              "xg": 0.77,
+              "rating": 6.92
+            }
+          },
+          {
+            "id": "fotmob-1610777",
+            "name": "Ariath Piol",
+            "number": 19,
+            "position": "Forward",
+            "age": 22,
+            "countryCode": "AUS",
+            "countryName": "Australia",
+            "stats": {
+              "apps": 9,
+              "starts": 2,
+              "minutes": 277,
+              "goals": 1,
+              "assists": 0,
+              "xg": 1.69,
+              "rating": 6.21
+            }
+          },
+          {
             "id": "fotmob-1624002",
             "name": "Colin Guske",
             "number": 25,
@@ -4433,24 +5251,6 @@
               "assists": 0,
               "xg": 0.17,
               "rating": 6.2
-            }
-          },
-          {
-            "id": "fotmob-1663013",
-            "name": "Luca Moisa",
-            "number": 34,
-            "position": "Midfielder",
-            "age": 18,
-            "countryCode": "USA",
-            "countryName": "USA",
-            "stats": {
-              "apps": 7,
-              "starts": 7,
-              "minutes": 441,
-              "goals": 0,
-              "assists": 0,
-              "xg": 0.17,
-              "rating": 6.58
             }
           },
           {
@@ -4472,64 +5272,25 @@
             }
           },
           {
-            "id": "fotmob-1610777",
-            "name": "Ariath Piol",
-            "number": 19,
-            "position": "Forward",
-            "age": 22,
-            "countryCode": "AUS",
-            "countryName": "Australia",
-            "stats": {
-              "apps": 9,
-              "starts": 2,
-              "minutes": 277,
-              "goals": 1,
-              "assists": 0,
-              "xg": 1.69,
-              "rating": 6.21
-            }
-          }
-        ],
-        "unavailable": [
-          {
-            "id": "fotmob-1440013",
-            "age": 27,
+            "id": "fotmob-1663013",
+            "name": "Luca Moisa",
+            "number": 34,
+            "position": "Midfielder",
+            "age": 18,
             "countryCode": "USA",
             "countryName": "USA",
-            "name": "Emeka Eneli",
-            "reason": "blessé",
-            "expectedReturn": "Late November 2026",
-            "position": "Midfielder",
             "stats": {
-              "apps": 1,
-              "starts": 0,
-              "minutes": 25,
+              "apps": 7,
+              "starts": 7,
+              "minutes": 441,
               "goals": 0,
               "assists": 0,
-              "xg": null,
-              "rating": 6.24
-            }
-          },
-          {
-            "id": "fotmob-1252636",
-            "age": 23,
-            "countryCode": "USA",
-            "countryName": "USA",
-            "name": "Diego Luna",
-            "reason": "blessé",
-            "expectedReturn": "Late November 2026",
-            "position": "Midfielder",
-            "stats": {
-              "apps": 22,
-              "starts": 16,
-              "minutes": 1474,
-              "goals": 5,
-              "assists": 5,
-              "xg": 3.51,
-              "rating": 7.25
+              "xg": 0.17,
+              "rating": 6.58
             }
           }
         ],
+        "unavailable": [],
         "usualStartersMissing": [
           {
             "id": "fotmob-432040",
@@ -4543,53 +5304,47 @@
             "assists": 2,
             "status": "remplaçant"
           }
-        ]
+        ],
+        "lastMatch": {
+          "date": "2026-11-08",
+          "league": "MLS",
+          "home": "Real Salt Lake",
+          "away": "LA Galaxy",
+          "homeGoals": 2,
+          "awayGoals": 1
+        }
       },
-      "matchInfo": {
-        "stadium": "Lumen Field",
-        "city": "Seattle, Washington",
-        "capacity": 68740,
-        "surface": "artificial turf",
-        "weather": "Clear",
-        "temperature": 6,
-        "windSpeed": 4,
-        "precipitation": 0
-      }
+      "matchInfo": null
     },
     "analysis": {
-      "summary": "Seattle (15e, 46 pts, historique football-data) reçoit Real Salt Lake (18e, 45 pts) sur un bilan récent moyen : 2 N, 2 D, 1 V sur les 5 derniers, dont un 1-5 à Vancouver. RSL est en hausse (4 V sur 5) mais moins bon à l'extérieur (DVVDD). Seattle produit 1,6 but et 14 tirs par match, RSL 1,6 but et 15,5 tirs. Seattle manque d'Álex Roldán, de Yeimar Gómez et de Musovski. RSL est privé de Diego Luna (5+5).",
+      "summary": "Seattle (15e, 46 pts, historique football-data) reçoit Real Salt Lake (18e, 45 pts). Seattle est en baisse (1 point par match sur les 5 derniers), mais l'est à domicile : 1,67 / 0,83 de buts et 56,5 % de possession. RSL est en hausse (4 victoires sur ses 5 derniers matchs) et produit 5,7 tirs cadrés par match, mais ses sorties sont plus faibles (DVVDD). Les compositions sont celles du dernier match (onze probable) : Seattle avec Rusnák et Joveljić, RSL avec Solans (17 buts) et Guilavogui.",
       "keyFactors": [
         {
           "factor": "forme récente",
-          "observation": "Seattle en baisse, RSL en hausse, mais RSL gagne moins loin de chez lui.",
-          "evidence": "Seattle : V N N D D sur 5 derniers ; RSL : V D V V V ; RSL à l'extérieur DVVDD"
+          "observation": "Seattle en baisse, RSL en hausse, mais RSL moins à l'aise à l'extérieur.",
+          "evidence": "Seattle : V D D N N sur les 5 derniers ; RSL : V D V V V ; RSL à l'extérieur : DVVDD."
         },
         {
           "factor": "statistiques et moyennes",
-          "observation": "Volumes de tirs proches, avantage corners à Seattle.",
-          "evidence": "Seattle 14/14,2 tirs, 6,5 corners ; RSL 15,5/13,3 tirs, 5,1 corners ; attendus corners 7,04 / 4,77"
-        },
-        {
-          "factor": "absences",
-          "observation": "RSL perd son créateur Luna.",
-          "evidence": "Diego Luna 22 matchs, 5+5, retour fin novembre ; Seattle sans Musovski (3+0), Gómez"
+          "observation": "Seattle domine la possession à domicile, RSL tire davantage sur cadre.",
+          "evidence": "Seattle à domicile : 14,8 tirs, 6,7 corners, 56,5 % de possession ; RSL sur 10 matchs : 15,5 tirs, 5,7 cadrés, 5,1 corners."
         },
         {
           "factor": "edge du modèle",
-          "observation": "Le moteur donne Seattle gagnant, mais sans valeur face au marché.",
-          "evidence": "edge -3,14 %, mise PASS"
+          "observation": "Le marché est plus favorable à Seattle que le moteur, d'où l'absence de value.",
+          "evidence": "Moteur 2,04 / 4,09 / 3,76 contre marché 1,85 / 3,46 / 3,18 ; edge -11,46 %."
         }
       ],
-      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : Seattle est favori à domicile sur le papier, mais sa forme en baisse et l'absence de valeur appellent à la prudence sur le résultat. Les marchés de volume (tirs, corners) sont cohérents avec les moyennes.",
-      "lineupImpact": "La composition est publiée très tôt (environ 2869 min avant le coup d'envoi) : elle peut n'être qu'une prévision. Seattle aligne un 4-2-3-1 avec Rusnák (6+13), Joveljić (13+1) et Morris, et laisse Rothrock et Ferreira sur le banc. Álex Roldán est blessé. RSL joue en 5-4-1 avec Solans (17+4, xG 19,02) et Guilavogui, sans Luna (blessé). Yedlin est sur le banc. La pelouse est synthétique, sans météo gênante.",
+      "alignmentWithModel": "Le contexte va dans le sens du moteur : un léger avantage pour Seattle à domicile, sans certitude vu sa baisse de forme et la bonne dynamique de RSL. Les marchés de volume (corners, tirs) s'appuient sur des moyennes cohérentes avec les attendus.",
+      "caveats": "Classement issu de football-data.co.uk (historique), non direct. Compositions de source magasin : dernier onze aligné, pas celui du match. Aucun absent annoncé par FotMob. Historique d'entraîneur non vérifiable.",
       "marketViews": [
         {
           "market": "Résultat",
           "pick": "Seattle Sounders FC gagne",
           "verdict": "nuance",
           "confidence": "faible",
-          "explanation": "49 % : Seattle a 1,67 but et 0,83 concédé à domicile en 6 matchs, mais ne compte qu'1 point par match sur ses 5 derniers.",
-          "reasoning": "L'avantage du domicile et l'absence de Luna côté RSL jouent pour Seattle. Sa forme en baisse et la belle série de RSL (4 V sur 5) tempèrent. Le moteur ne voit pas de valeur.",
+          "explanation": "49 % : Seattle marque 1,67 et concède 0,83 à domicile, avec 1,461 but attendu contre 1,133, mais n'a pris qu'1 point par match sur les 5 derniers.",
+          "reasoning": "L'avantage du domicile est réel, mais la baisse de forme de Seattle (défaite 1-5 à Vancouver) et la forme de RSL (4 victoires sur 5) limitent la confiance. Mon bilan sur ce marché est médiocre (430/731).",
           "probability": 49
         },
         {
@@ -4597,8 +5352,8 @@
           "pick": "Moins de 15.5 corners",
           "verdict": "confirme",
           "confidence": "forte",
-          "explanation": "83 % : les corners attendus totalisent 11,81, soit nettement sous 15,5.",
-          "reasoning": "Les moyennes (6,5 pour Seattle, 5,1 pour RSL) restent loin du seuil. La ligne est large.",
+          "explanation": "83 % : 11,81 corners attendus au total, et Seattle (6,5) comme RSL (5,1) restent loin d'un total de 16.",
+          "reasoning": "Le seuil est très au-dessus des moyennes des deux équipes ; la MLS tourne à 10,1 corners par match.",
           "probability": 83
         },
         {
@@ -4606,17 +5361,17 @@
           "pick": "Seattle Sounders FC — Moins de 9.5 corners",
           "verdict": "confirme",
           "confidence": "forte",
-          "explanation": "78 % : Seattle en attend 7,04 et en produit 6,7 à domicile.",
-          "reasoning": "La possession de Seattle peut gonfler le total, mais 9,5 reste loin des moyennes.",
+          "explanation": "78 % : Seattle attendu à 7,04 corners, avec 6,7 par match à domicile.",
+          "reasoning": "Même en dominant la possession, Seattle dépasse rarement 9 corners selon ses moyennes.",
           "probability": 78
         },
         {
           "market": "Corners — Real Salt Lake",
           "pick": "Real Salt Lake — Plus de 2.5 corners",
           "verdict": "confirme",
-          "confidence": "forte",
-          "explanation": "79 % : RSL en attend 4,77 et en produit 5,2 à l'extérieur.",
-          "reasoning": "Seuil très bas par rapport aux 5,1 de moyenne. Seule une rencontre très fermée le menacerait.",
+          "confidence": "moyenne",
+          "explanation": "79 % : RSL attendu à 4,77 corners, avec 5,2 par match à l'extérieur.",
+          "reasoning": "Le seuil est bas par rapport à ses moyennes, même avec une possession proche de 50 %.",
           "probability": 79
         },
         {
@@ -4624,17 +5379,17 @@
           "pick": "Moins de 34.5 tirs",
           "verdict": "confirme",
           "confidence": "forte",
-          "explanation": "83 % : 28,38 tirs attendus au total, les deux équipes ayant 14 et 15,5 tirs par match.",
-          "reasoning": "Les volumes récents sont loin de 34,5. Le seuil est confortable.",
+          "explanation": "83 % : 28,38 tirs attendus au total, bien sous 34,5.",
+          "reasoning": "Seattle (14) et RSL (15,5) tirent chacun nettement moins que la moitié de ce seuil.",
           "probability": 83
         },
         {
           "market": "Tirs — Seattle Sounders FC",
           "pick": "Seattle Sounders FC — Moins de 19.5 tirs",
           "verdict": "confirme",
-          "confidence": "moyenne",
-          "explanation": "81 % : Seattle en attend 15,02 et en produit 14,8 à domicile.",
-          "reasoning": "Rien n'annonce un pic de tirs, malgré une possession de 56,5 % à domicile.",
+          "confidence": "forte",
+          "explanation": "81 % : Seattle attendu à 15,02 tirs, avec 14,8 par match à domicile.",
+          "reasoning": "Il faudrait un match nettement au-dessus de ses moyennes pour atteindre 20 tirs.",
           "probability": 81
         },
         {
@@ -4642,17 +5397,17 @@
           "pick": "Real Salt Lake — Moins de 17.5 tirs",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "81 % : RSL en attend 13,37 et en produit 14,4 à l'extérieur.",
-          "reasoning": "Sa moyenne sur 10 matchs est de 15,5 : il resterait de la marge. L'absence de Luna réduit aussi la création.",
+          "explanation": "81 % : RSL attendu à 13,37 tirs, avec 14,4 par match à l'extérieur.",
+          "reasoning": "Sa moyenne sur 10 matchs (15,5) est plus haute, mais reste sous 17,5.",
           "probability": 81
         },
         {
           "market": "Total tirs cadrés",
           "pick": "Moins de 12.5 tirs cadrés",
           "verdict": "confirme",
-          "confidence": "moyenne",
-          "explanation": "83 % : 9,46 tirs cadrés attendus, pour 5,1 et 5,7 de moyenne par équipe.",
-          "reasoning": "Même deux équipes en forme offensive font environ 10 à 11 tirs cadrés. Le seuil laisse de la marge.",
+          "confidence": "forte",
+          "explanation": "83 % : 9,46 tirs cadrés attendus (4,79 + 4,68), loin de 12,5.",
+          "reasoning": "Seattle (5,1) et RSL (5,7) cumulent environ 11 sur 10 matchs, donc marge limitée mais suffisante.",
           "probability": 83
         },
         {
@@ -4660,8 +5415,8 @@
           "pick": "Seattle Sounders FC — Plus de 2.5 tirs cadrés",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "83 % : Seattle en attend 4,79 et en réussit 5,2 à domicile.",
-          "reasoning": "Rusnák, Joveljić et Morris assurent un volume régulier. Le seuil est bas.",
+          "explanation": "83 % : Seattle attendu à 4,79 tirs cadrés, avec 5,2 par match à domicile.",
+          "reasoning": "Joveljić et Rusnák devraient assurer un volume suffisant, et RSL concède 3,6 tirs cadrés.",
           "probability": 83
         },
         {
@@ -4669,15 +5424,655 @@
           "pick": "Real Salt Lake — Plus de 2.5 tirs cadrés",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "81 % : RSL en attend 4,68 et en réussit 4,6 à l'extérieur.",
-          "reasoning": "Solans est un finisseur fiable et RSL a marqué dans ses 8 derniers matchs. L'absence de Luna est la seule réserve.",
+          "explanation": "81 % : RSL attendu à 4,68 tirs cadrés, avec 5,7 par match sur 10 et 4,6 à l'extérieur.",
+          "reasoning": "Solans (19,02 xG) mène l'attaque, et Seattle concède 4,7 tirs cadrés par match.",
           "probability": 81
         }
       ],
-      "caveats": "Le classement vient de football-data.co.uk (historique), pas du direct. La composition date de plus de 40 h avant le match et peut être une prévision. Les marchés de buts ne sont pas commentés, le moteur les ayant retirés. Mon carnet sur ces deux équipes est réduit (4 matchs chacune)."
+      "lineupImpact": "Compositions = dernier onze aligné, pas celui du match. Seattle : Joveljić (13 buts), Rusnák (6+13) et Gomez forment l'ossature ; Rothrock, Ferreira et Brunell, titulaires habituels, étaient sur le banc, Álex Roldán hors feuille. RSL : Solans (17 buts, 19,02 xG), Guilavogui (6+8) et Çalışkan (1+8) en place ; Yedlin remplaçant. Aucun absent annoncé. Cela soutient les marchés de tirs cadrés des deux équipes."
     },
-    "updatedAt": "2026-11-18T03:11:14.791Z",
-    "createdAt": "2026-11-18T03:11:14.791Z"
+    "updatedAt": "2026-11-20T12:43:29.801Z",
+    "createdAt": "2026-11-18T03:11:14.791Z",
+    "kickoffRuns": 1,
+    "earlierAnalysis": {
+      "analysis": {
+        "summary": "Seattle (15e, 46 pts, historique football-data) reçoit Real Salt Lake (18e, 45 pts) sur un bilan récent moyen : 2 N, 2 D, 1 V sur les 5 derniers, dont un 1-5 à Vancouver. RSL est en hausse (4 V sur 5) mais moins bon à l'extérieur (DVVDD). Seattle produit 1,6 but et 14 tirs par match, RSL 1,6 but et 15,5 tirs. Seattle manque d'Álex Roldán, de Yeimar Gómez et de Musovski. RSL est privé de Diego Luna (5+5).",
+        "keyFactors": [
+          {
+            "factor": "forme récente",
+            "observation": "Seattle en baisse, RSL en hausse, mais RSL gagne moins loin de chez lui.",
+            "evidence": "Seattle : V N N D D sur 5 derniers ; RSL : V D V V V ; RSL à l'extérieur DVVDD"
+          },
+          {
+            "factor": "statistiques et moyennes",
+            "observation": "Volumes de tirs proches, avantage corners à Seattle.",
+            "evidence": "Seattle 14/14,2 tirs, 6,5 corners ; RSL 15,5/13,3 tirs, 5,1 corners ; attendus corners 7,04 / 4,77"
+          },
+          {
+            "factor": "absences",
+            "observation": "RSL perd son créateur Luna.",
+            "evidence": "Diego Luna 22 matchs, 5+5, retour fin novembre ; Seattle sans Musovski (3+0), Gómez"
+          },
+          {
+            "factor": "edge du modèle",
+            "observation": "Le moteur donne Seattle gagnant, mais sans valeur face au marché.",
+            "evidence": "edge -3,14 %, mise PASS"
+          }
+        ],
+        "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : Seattle est favori à domicile sur le papier, mais sa forme en baisse et l'absence de valeur appellent à la prudence sur le résultat. Les marchés de volume (tirs, corners) sont cohérents avec les moyennes.",
+        "lineupImpact": "La composition est publiée très tôt (environ 2869 min avant le coup d'envoi) : elle peut n'être qu'une prévision. Seattle aligne un 4-2-3-1 avec Rusnák (6+13), Joveljić (13+1) et Morris, et laisse Rothrock et Ferreira sur le banc. Álex Roldán est blessé. RSL joue en 5-4-1 avec Solans (17+4, xG 19,02) et Guilavogui, sans Luna (blessé). Yedlin est sur le banc. La pelouse est synthétique, sans météo gênante.",
+        "marketViews": [
+          {
+            "market": "Résultat",
+            "pick": "Seattle Sounders FC gagne",
+            "verdict": "nuance",
+            "confidence": "faible",
+            "explanation": "49 % : Seattle a 1,67 but et 0,83 concédé à domicile en 6 matchs, mais ne compte qu'1 point par match sur ses 5 derniers.",
+            "reasoning": "L'avantage du domicile et l'absence de Luna côté RSL jouent pour Seattle. Sa forme en baisse et la belle série de RSL (4 V sur 5) tempèrent. Le moteur ne voit pas de valeur.",
+            "probability": 49
+          },
+          {
+            "market": "Total corners",
+            "pick": "Moins de 15.5 corners",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "83 % : les corners attendus totalisent 11,81, soit nettement sous 15,5.",
+            "reasoning": "Les moyennes (6,5 pour Seattle, 5,1 pour RSL) restent loin du seuil. La ligne est large.",
+            "probability": 83
+          },
+          {
+            "market": "Corners — Seattle Sounders FC",
+            "pick": "Seattle Sounders FC — Moins de 9.5 corners",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "78 % : Seattle en attend 7,04 et en produit 6,7 à domicile.",
+            "reasoning": "La possession de Seattle peut gonfler le total, mais 9,5 reste loin des moyennes.",
+            "probability": 78
+          },
+          {
+            "market": "Corners — Real Salt Lake",
+            "pick": "Real Salt Lake — Plus de 2.5 corners",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "79 % : RSL en attend 4,77 et en produit 5,2 à l'extérieur.",
+            "reasoning": "Seuil très bas par rapport aux 5,1 de moyenne. Seule une rencontre très fermée le menacerait.",
+            "probability": 79
+          },
+          {
+            "market": "Total tirs",
+            "pick": "Moins de 34.5 tirs",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "83 % : 28,38 tirs attendus au total, les deux équipes ayant 14 et 15,5 tirs par match.",
+            "reasoning": "Les volumes récents sont loin de 34,5. Le seuil est confortable.",
+            "probability": 83
+          },
+          {
+            "market": "Tirs — Seattle Sounders FC",
+            "pick": "Seattle Sounders FC — Moins de 19.5 tirs",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "81 % : Seattle en attend 15,02 et en produit 14,8 à domicile.",
+            "reasoning": "Rien n'annonce un pic de tirs, malgré une possession de 56,5 % à domicile.",
+            "probability": 81
+          },
+          {
+            "market": "Tirs — Real Salt Lake",
+            "pick": "Real Salt Lake — Moins de 17.5 tirs",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "81 % : RSL en attend 13,37 et en produit 14,4 à l'extérieur.",
+            "reasoning": "Sa moyenne sur 10 matchs est de 15,5 : il resterait de la marge. L'absence de Luna réduit aussi la création.",
+            "probability": 81
+          },
+          {
+            "market": "Total tirs cadrés",
+            "pick": "Moins de 12.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "83 % : 9,46 tirs cadrés attendus, pour 5,1 et 5,7 de moyenne par équipe.",
+            "reasoning": "Même deux équipes en forme offensive font environ 10 à 11 tirs cadrés. Le seuil laisse de la marge.",
+            "probability": 83
+          },
+          {
+            "market": "Tirs cadrés — Seattle Sounders FC",
+            "pick": "Seattle Sounders FC — Plus de 2.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "83 % : Seattle en attend 4,79 et en réussit 5,2 à domicile.",
+            "reasoning": "Rusnák, Joveljić et Morris assurent un volume régulier. Le seuil est bas.",
+            "probability": 83
+          },
+          {
+            "market": "Tirs cadrés — Real Salt Lake",
+            "pick": "Real Salt Lake — Plus de 2.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "81 % : RSL en attend 4,68 et en réussit 4,6 à l'extérieur.",
+            "reasoning": "Solans est un finisseur fiable et RSL a marqué dans ses 8 derniers matchs. L'absence de Luna est la seule réserve.",
+            "probability": 81
+          }
+        ],
+        "caveats": "Le classement vient de football-data.co.uk (historique), pas du direct. La composition date de plus de 40 h avant le match et peut être une prévision. Les marchés de buts ne sont pas commentés, le moteur les ayant retirés. Mon carnet sur ces deux équipes est réduit (4 matchs chacune)."
+      },
+      "engineSnapshot": {
+        "label": "Seattle Sounders FC vs Real Salt Lake",
+        "expectedGoals": {
+          "home": 1.461,
+          "away": 1.133,
+          "source": "fotmob"
+        },
+        "trueOdds": {
+          "home": 2.04,
+          "draw": 4.09,
+          "away": 3.76
+        },
+        "market": {
+          "odds1": 1.85,
+          "oddsDraw": 3.46,
+          "odds2": 3.18
+        },
+        "edgePercent": -3.14,
+        "staking": {
+          "action": "PASS",
+          "stake": null,
+          "reason": "pas_de_value",
+          "candidates": [
+            {
+              "outcome": "home",
+              "label": "Seattle Sounders FC gagne",
+              "odds": 1.98,
+              "displayedOdds": 1.98,
+              "bookmaker": "nordicbet",
+              "bookmakerTitle": "Nordic Bet",
+              "fairOdds": 2.04,
+              "ev": -0.0314,
+              "exclusion": "sous_le_seuil"
+            },
+            {
+              "outcome": "draw",
+              "label": "Match nul",
+              "odds": 3.6,
+              "displayedOdds": 3.6,
+              "bookmaker": "nordicbet",
+              "bookmakerTitle": "Nordic Bet",
+              "fairOdds": 4.09,
+              "ev": -0.1196,
+              "exclusion": "sous_le_seuil"
+            },
+            {
+              "outcome": "away",
+              "label": "Real Salt Lake gagne",
+              "odds": 3.55,
+              "displayedOdds": 3.55,
+              "bookmaker": "nordicbet",
+              "bookmakerTitle": "Nordic Bet",
+              "fairOdds": 3.76,
+              "ev": -0.0547,
+              "exclusion": "sous_le_seuil"
+            }
+          ],
+          "limits": {
+            "edgeThresholdMin": 0.02,
+            "edgeThresholdMax": 0.25,
+            "maxValueOdds": 5
+          }
+        },
+        "statExpectations": {
+          "corners": {
+            "home": 7.04,
+            "away": 4.77,
+            "total": 11.81
+          },
+          "shots": {
+            "home": 15.02,
+            "away": 13.37,
+            "total": 28.38
+          },
+          "shotsOnTarget": {
+            "home": 4.79,
+            "away": 4.68,
+            "total": 9.46
+          }
+        },
+        "marketPredictions": [
+          {
+            "marketId": "result",
+            "params": {
+              "outcome": "home"
+            },
+            "market": "Résultat",
+            "predictedOutcome": "home",
+            "predictedLabel": "Seattle Sounders FC gagne",
+            "predictedOdds": 2.04,
+            "probability": 49,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalGoals",
+            "params": {
+              "line": 1.5,
+              "side": "over"
+            },
+            "market": "Total buts",
+            "predictedOutcome": "over",
+            "predictedLabel": "Plus de 1.5 buts",
+            "predictedOdds": 1.35,
+            "probability": 74,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "bothTeamsScore",
+            "params": {
+              "outcome": "yes"
+            },
+            "market": "Les 2 équipes marquent",
+            "predictedOutcome": "yes",
+            "predictedLabel": "Oui",
+            "predictedOdds": 1.89,
+            "probability": 53,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "resultAndTotal",
+            "params": {
+              "line": 1.5,
+              "key": "homeOver"
+            },
+            "market": "Résultat + Total buts",
+            "predictedOutcome": "homeOver",
+            "predictedLabel": "Seattle Sounders FC & Plus de 1.5 buts",
+            "predictedOdds": 2.65,
+            "probability": 38,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamGoals",
+            "params": {
+              "team": "home",
+              "line": 2.5,
+              "side": "under"
+            },
+            "market": "Buts — Seattle Sounders FC",
+            "predictedOutcome": "under",
+            "predictedLabel": "Seattle Sounders FC — Moins de 2.5 buts",
+            "predictedOdds": 1.22,
+            "probability": 82,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamGoals",
+            "params": {
+              "team": "away",
+              "line": 1.5,
+              "side": "under"
+            },
+            "market": "Buts — Real Salt Lake",
+            "predictedOutcome": "under",
+            "predictedLabel": "Real Salt Lake — Moins de 1.5 buts",
+            "predictedOdds": 1.46,
+            "probability": 68,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalCorners",
+            "params": {
+              "line": 15.5,
+              "side": "under"
+            },
+            "market": "Total corners",
+            "predictedOutcome": "under",
+            "predictedLabel": "Moins de 15.5 corners",
+            "predictedOdds": 1.2,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamCorners",
+            "params": {
+              "team": "home",
+              "line": 9.5,
+              "side": "under"
+            },
+            "market": "Corners — Seattle Sounders FC",
+            "predictedOutcome": "under",
+            "predictedLabel": "Seattle Sounders FC — Moins de 9.5 corners",
+            "predictedOdds": 1.28,
+            "probability": 78,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamCorners",
+            "params": {
+              "team": "away",
+              "line": 2.5,
+              "side": "over"
+            },
+            "market": "Corners — Real Salt Lake",
+            "predictedOutcome": "over",
+            "predictedLabel": "Real Salt Lake — Plus de 2.5 corners",
+            "predictedOdds": 1.26,
+            "probability": 79,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalShots",
+            "params": {
+              "line": 34.5,
+              "side": "under"
+            },
+            "market": "Total tirs",
+            "predictedOutcome": "under",
+            "predictedLabel": "Moins de 34.5 tirs",
+            "predictedOdds": 1.2,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShots",
+            "params": {
+              "team": "home",
+              "line": 19.5,
+              "side": "under"
+            },
+            "market": "Tirs — Seattle Sounders FC",
+            "predictedOutcome": "under",
+            "predictedLabel": "Seattle Sounders FC — Moins de 19.5 tirs",
+            "predictedOdds": 1.24,
+            "probability": 81,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShots",
+            "params": {
+              "team": "away",
+              "line": 17.5,
+              "side": "under"
+            },
+            "market": "Tirs — Real Salt Lake",
+            "predictedOutcome": "under",
+            "predictedLabel": "Real Salt Lake — Moins de 17.5 tirs",
+            "predictedOdds": 1.24,
+            "probability": 81,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalShotsOnTarget",
+            "params": {
+              "line": 12.5,
+              "side": "under"
+            },
+            "market": "Total tirs cadrés",
+            "predictedOutcome": "under",
+            "predictedLabel": "Moins de 12.5 tirs cadrés",
+            "predictedOdds": 1.21,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShotsOnTarget",
+            "params": {
+              "team": "home",
+              "line": 2.5,
+              "side": "over"
+            },
+            "market": "Tirs cadrés — Seattle Sounders FC",
+            "predictedOutcome": "over",
+            "predictedLabel": "Seattle Sounders FC — Plus de 2.5 tirs cadrés",
+            "predictedOdds": 1.21,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShotsOnTarget",
+            "params": {
+              "team": "away",
+              "line": 2.5,
+              "side": "over"
+            },
+            "market": "Tirs cadrés — Real Salt Lake",
+            "predictedOutcome": "over",
+            "predictedLabel": "Real Salt Lake — Plus de 2.5 tirs cadrés",
+            "predictedOdds": 1.23,
+            "probability": 81,
+            "minOdds": 1.2
+          }
+        ],
+        "engineVersion": 5
+      },
+      "analysedAt": "2026-11-18T03:11:14.791Z"
+    },
+    "postMatchReview": {
+      "summary": "Nul 1-1 : Seattle a dominé (xG 3,19 contre 0,88, 19 tirs contre 11, 7 corners contre 1) mais n'a pas gagné, après un penalty manqué à la 31e. Mes marchés de volume (plafonds de corners et de tirs) ont bien tenu. Les deux planchers de RSL (corners, tirs cadrés) ont échoué car RSL a très peu produit (1 corner, 2 tirs cadrés). Le 1N2 est resté nuancé, ce qui était prudent.",
+      "whatWasRight": "Les plafonds de volume étaient justes : moins de 15,5 corners (8 au total), moins de 34,5 tirs (30), Seattle moins de 19,5 tirs (19), RSL moins de 17,5 tirs (11), moins de 12,5 tirs cadrés (8). Seattle a bien dépassé 2,5 tirs cadrés (6) et ses corners sont restés sous 9,5 (7). Ma prudence sur le 1N2, vu la forme de RSL et ma confiance faible, était justifiée : Seattle n'a pas gagné malgré sa domination.",
+      "whatWasMissed": "J'ai surestimé la production offensive de RSL à l'extérieur : 1 corner et 2 tirs cadrés seulement, face à une domination de Seattle (56 % de possession, xG 3,19). J'ai traité les seuils bas de RSL comme sûrs sans tenir compte du scénario où Seattle domine. Seattle a frôlé la limite de 19,5 tirs avec 19 tirs. Le moteur sous-estimait aussi l'écart de volume : 1,46 contre 1,13 xG attendus, pour un xG réel de 3,19 contre 0,88.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1N2 : il donnait Seattle favori à 49 % et le nul à environ 24 %. Le match a pourtant été nul, malgré une supériorité nette de Seattle dans le jeu. Sur le volume, le moteur voyait juste pour les totaux mais trop haut pour RSL. Le PASS décidé faute de value était cohérent.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Seattle Sounders FC gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Seattle a dominé (xG 3,19 contre 0,88) mais a manqué un penalty (Rusnák arrêté à la 31e), puis marqué à la 36e. Guilavogui a égalisé à la 63e sur l'une des rares occasions de RSL, d'où le 1-1.",
+          "lesson": "Le nul ne tient pas à un déséquilibre du jeu mais à la finition et à un penalty raté. Garder la confiance faible sur le 1N2 quand la forme est contrastée, et ne pas conclure à une erreur de lecture sur un match où le xG favorisait nettement l'équipe à domicile."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Seattle Sounders FC & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Seattle Sounders FC",
+          "marketId": "teamGoals",
+          "pick": "Seattle Sounders FC — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Real Salt Lake",
+          "marketId": "teamGoals",
+          "pick": "Real Salt Lake — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 15.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "8 corners au total (7 + 1), très loin de 15,5, en ligne avec les 11,8 attendus.",
+          "lesson": "Les plafonds de corners très au-dessus des moyennes sont fiables ; garder ce type de marché."
+        },
+        {
+          "market": "Corners — Seattle Sounders FC",
+          "marketId": "teamCorners",
+          "pick": "Seattle Sounders FC — Moins de 9.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Seattle a obtenu 7 corners, sous 9,5, conforme à sa moyenne à domicile de 6,7.",
+          "lesson": "Même en dominant largement, Seattle reste sous 9,5 corners ; le plafond tient."
+        },
+        {
+          "market": "Corners — Real Salt Lake",
+          "marketId": "teamCorners",
+          "pick": "Real Salt Lake — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "RSL n'a eu qu'1 corner, avec 44 % de possession, face à un Seattle dominant, malgré une moyenne de 5,2 à l'extérieur.",
+          "lesson": "Un plancher bas sur une équipe visiteuse est fragile si l'adversaire domine. Pondérer par le scénario probable (équipe acculée ou peu offensive) et pas seulement par la moyenne ; confiance moyenne trop haute."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 34.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "30 tirs au total (19 + 11), sous 34,5 comme attendu (28,4).",
+          "lesson": "Le plafond sur le total de tirs bien au-dessus de l'attendu est solide ; à conserver."
+        },
+        {
+          "market": "Tirs — Seattle Sounders FC",
+          "marketId": "teamShots",
+          "pick": "Seattle Sounders FC — Moins de 19.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Seattle a tiré 19 fois, juste sous 19,5, malgré un xG de 3,19. Le plafond a tenu de justesse.",
+          "lesson": "Seuil à 1 tir près de la limite : quand l'équipe domine nettement, la marge d'un plafond proche de +4 sur la moyenne est plus mince que ne le suggère 81 %. Prudence sur la confiance forte."
+        },
+        {
+          "market": "Tirs — Real Salt Lake",
+          "marketId": "teamShots",
+          "pick": "Real Salt Lake — Moins de 17.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "RSL n'a tiré que 11 fois, loin de 17,5, car Seattle a tenu le ballon (56 %).",
+          "lesson": "Le plafond sur l'équipe en infériorité de possession est sûr ; garder."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 12.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "8 tirs cadrés au total (6 + 2), bien sous 12,5.",
+          "lesson": "Plafond large sur le total de tirs cadrés, fiable ; la marge réelle était plus grande que mon estimation."
+        },
+        {
+          "market": "Tirs cadrés — Seattle Sounders FC",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Seattle Sounders FC — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Seattle a cadré 6 tirs, au-dessus de 2,5, avec 3 grosses occasions et un penalty arrêté.",
+          "lesson": "Le plancher sur l'équipe qui domine à domicile contre une défense concédant du volume tient ; à garder."
+        },
+        {
+          "market": "Tirs cadrés — Real Salt Lake",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Real Salt Lake — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "RSL n'a cadré que 2 tirs (xG 0,88, 1 grosse occasion), sous 2,5, malgré des occasions de Solans en début de match (11e et 13e).",
+          "lesson": "Le plancher de tirs cadrés d'un visiteur n'est pas sûr quand l'équipe est dominée. Une bonne dynamique de résultats (4 victoires sur 5) ne garantit pas un volume offensif en déplacement ; le chiffre à l'extérieur (4,6) était plus fiable que la moyenne sur 10 matchs (5,7)."
+        }
+      ],
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 19,
+        "commentaire": 5
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4969,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2297,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 4969,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2297,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 4969,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 4969
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0432676,
+      "createdAt": "2026-11-20T12:43:29.801Z"
+    }
   },
   {
     "matchId": "cal-2026-11-20-beijing-guoan-shanghai-port",

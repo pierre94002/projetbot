@@ -1,0 +1,1184 @@
+[
+  {
+    "matchId": "be2fcabc408be29ca01ce92ab266f8b7",
+    "homeName": "Juventus",
+    "awayName": "Venezia",
+    "league": "Serie A - Italy",
+    "commenceTime": "2026-11-22T11:30:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Juventus vs Venezia",
+      "expectedGoals": {
+        "home": 1.75,
+        "away": 0.5,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 1.37,
+        "draw": 6.03,
+        "away": 9.45
+      },
+      "market": {
+        "odds1": 1.33,
+        "oddsDraw": 5.08,
+        "odds2": 8.16
+      },
+      "edgePercent": -6.06,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "pas_de_value",
+        "candidates": [
+          {
+            "outcome": "home",
+            "label": "Juventus gagne",
+            "odds": 1.29,
+            "displayedOdds": 1.29,
+            "bookmaker": "pmu_fr",
+            "bookmakerTitle": "PMU (FR)",
+            "fairOdds": 1.37,
+            "ev": -0.0606,
+            "exclusion": "sous_le_seuil"
+          },
+          {
+            "outcome": "draw",
+            "label": "Match nul",
+            "odds": 4.6,
+            "displayedOdds": 4.6,
+            "bookmaker": "unibet_fr",
+            "bookmakerTitle": "Unibet (FR)",
+            "fairOdds": 6.03,
+            "ev": -0.2366,
+            "exclusion": "sous_le_seuil"
+          },
+          {
+            "outcome": "away",
+            "label": "Venezia gagne",
+            "odds": 7.5,
+            "displayedOdds": 7.5,
+            "bookmaker": "pmu_fr",
+            "bookmakerTitle": "PMU (FR)",
+            "fairOdds": 9.45,
+            "ev": -0.2061,
+            "exclusion": "cote_trop_haute"
+          }
+        ],
+        "limits": {
+          "edgeThresholdMin": 0.02,
+          "edgeThresholdMax": 0.25,
+          "maxValueOdds": 5
+        }
+      },
+      "statExpectations": {
+        "corners": {
+          "home": 7.32,
+          "away": 3.65,
+          "total": 10.96
+        },
+        "shots": {
+          "home": 17.44,
+          "away": 11.75,
+          "total": 29.18
+        },
+        "shotsOnTarget": {
+          "home": 6.05,
+          "away": 3.11,
+          "total": 9.16
+        }
+      },
+      "marketPredictions": [
+        {
+          "marketId": "result",
+          "params": {
+            "outcome": "home"
+          },
+          "market": "Résultat",
+          "predictedOutcome": "home",
+          "predictedLabel": "Juventus gagne",
+          "predictedOdds": 1.37,
+          "probability": 73,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 3.5,
+            "side": "under"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 3.5 buts",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "no"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "no",
+          "predictedLabel": "Non",
+          "predictedOdds": 1.5,
+          "probability": 67,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 3.5,
+            "key": "homeUnder"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "homeUnder",
+          "predictedLabel": "Juventus & Moins de 3.5 buts",
+          "predictedOdds": 1.8,
+          "probability": 56,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 0.5,
+            "side": "over"
+          },
+          "market": "Buts — Juventus",
+          "predictedOutcome": "over",
+          "predictedLabel": "Juventus — Plus de 0.5 buts",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 0.5,
+            "side": "under"
+          },
+          "market": "Buts — Venezia",
+          "predictedOutcome": "under",
+          "predictedLabel": "Venezia — Moins de 0.5 buts",
+          "predictedOdds": 1.65,
+          "probability": 61,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalCorners",
+          "params": {
+            "line": 14.5,
+            "side": "under"
+          },
+          "market": "Total corners",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 14.5 corners",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "home",
+            "line": 10.5,
+            "side": "under"
+          },
+          "market": "Corners — Juventus",
+          "predictedOutcome": "under",
+          "predictedLabel": "Juventus — Moins de 10.5 corners",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "away",
+            "line": 1.5,
+            "side": "over"
+          },
+          "market": "Corners — Venezia",
+          "predictedOutcome": "over",
+          "predictedLabel": "Venezia — Plus de 1.5 corners",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShots",
+          "params": {
+            "line": 23.5,
+            "side": "over"
+          },
+          "market": "Total tirs",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 23.5 tirs",
+          "predictedOdds": 1.23,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "home",
+            "line": 22.5,
+            "side": "under"
+          },
+          "market": "Tirs — Juventus",
+          "predictedOutcome": "under",
+          "predictedLabel": "Juventus — Moins de 22.5 tirs",
+          "predictedOdds": 1.23,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "away",
+            "line": 7.5,
+            "side": "over"
+          },
+          "market": "Tirs — Venezia",
+          "predictedOutcome": "over",
+          "predictedLabel": "Venezia — Plus de 7.5 tirs",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShotsOnTarget",
+          "params": {
+            "line": 6.5,
+            "side": "over"
+          },
+          "market": "Total tirs cadrés",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 6.5 tirs cadrés",
+          "predictedOdds": 1.27,
+          "probability": 79,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "home",
+            "line": 3.5,
+            "side": "over"
+          },
+          "market": "Tirs cadrés — Juventus",
+          "predictedOutcome": "over",
+          "predictedLabel": "Juventus — Plus de 3.5 tirs cadrés",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "away",
+            "line": 1.5,
+            "side": "over"
+          },
+          "market": "Tirs cadrés — Venezia",
+          "predictedOutcome": "over",
+          "predictedLabel": "Venezia — Plus de 1.5 tirs cadrés",
+          "predictedOdds": 1.26,
+          "probability": 79,
+          "minOdds": 1.2
+        }
+      ],
+      "baseDuCalcul": {
+        "montant": 300.92,
+        "origine": "capital-regle"
+      },
+      "engineVersion": 6
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 6287,
+      "cache_read_input_tokens": 4470,
+      "output_tokens": 2725,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 6287,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 2725,
+          "cache_read_input_tokens": 4470,
+          "cache_creation_input_tokens": 6287,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 6287
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.053295999999999996,
+    "analysedAt": "2026-11-20T12:41:36.880Z",
+    "timing": "avance",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 486,
+      "tokens": 1545,
+      "lecons": [
+        "cal-2026-10-28-genoa-juventus|teamCorners:away",
+        "cal-2026-10-25-inter-fiorentina|resultAndTotal",
+        "18d478f469da3bcc654dd4555b85c7e3|result"
+      ],
+      "dossiersDu": "2026-11-19T09:26:34.491Z",
+      "equipes": {
+        "home": {
+          "id": "fotmob-9885",
+          "dossier": true
+        },
+        "away": {
+          "id": "fotmob-7881",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "Serie A - Italy",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "FotMob",
+      "fotmobMatchId": "5749754",
+      "fetchedAt": "2026-11-20T12:41:16.478Z",
+      "minutesBeforeKickoff": 2809,
+      "home": {
+        "team": "Juventus",
+        "teamId": "fotmob-9885",
+        "formation": "4-4-2",
+        "coach": "Luciano Spalletti",
+        "statsSince": "2026-07-01",
+        "teamMatches": 15,
+        "startXI": [
+          {
+            "id": "fotmob-538501",
+            "name": "Guglielmo Vicario",
+            "number": 25,
+            "position": "Goalkeeper",
+            "age": 30,
+            "countryCode": "ITA",
+            "countryName": "Italy",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 14,
+              "starts": 14,
+              "minutes": 1259,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.72
+            }
+          },
+          {
+            "id": "fotmob-867225",
+            "name": "Zeki Çelik",
+            "number": 2,
+            "position": "Defender",
+            "age": 29,
+            "countryCode": "TUR",
+            "countryName": "Turkiye",
+            "x": 0.357,
+            "y": 0.875,
+            "stats": {
+              "apps": 10,
+              "starts": 9,
+              "minutes": 734,
+              "goals": 2,
+              "assists": 1,
+              "xg": 1.34,
+              "rating": 7.19
+            }
+          },
+          {
+            "id": "fotmob-857269",
+            "name": "Gleison Bremer",
+            "number": 3,
+            "position": "Defender",
+            "age": 29,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.357,
+            "y": 0.625,
+            "stats": {
+              "apps": 15,
+              "starts": 12,
+              "minutes": 1141,
+              "goals": 3,
+              "assists": 0,
+              "xg": 1.67,
+              "rating": 7.12
+            }
+          },
+          {
+            "id": "fotmob-860913",
+            "name": "Jhon Lucumí",
+            "number": 26,
+            "position": "Defender",
+            "age": 28,
+            "countryCode": "COL",
+            "countryName": "Colombia",
+            "x": 0.357,
+            "y": 0.375,
+            "stats": {
+              "apps": 14,
+              "starts": 12,
+              "minutes": 1031,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.38,
+              "rating": 6.9
+            }
+          },
+          {
+            "id": "fotmob-1083562",
+            "name": "Juan Cabal",
+            "number": 32,
+            "position": "Defender",
+            "age": 25,
+            "countryCode": "COL",
+            "countryName": "Colombia",
+            "x": 0.357,
+            "y": 0.125,
+            "stats": {
+              "apps": 5,
+              "starts": 2,
+              "minutes": 221,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.16,
+              "rating": 6.67
+            }
+          },
+          {
+            "id": "fotmob-848266",
+            "name": "Weston McKennie",
+            "number": 22,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "USA",
+            "countryName": "USA",
+            "x": 0.613,
+            "y": 0.875,
+            "stats": {
+              "apps": 11,
+              "starts": 11,
+              "minutes": 853,
+              "goals": 1,
+              "assists": 1,
+              "xg": 1.27,
+              "rating": 7.08
+            }
+          },
+          {
+            "id": "fotmob-866516",
+            "name": "Teun Koopmeiners",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "NED",
+            "countryName": "Netherlands",
+            "x": 0.613,
+            "y": 0.625,
+            "stats": {
+              "apps": 14,
+              "starts": 7,
+              "minutes": 711,
+              "goals": 2,
+              "assists": 1,
+              "xg": 0.84,
+              "rating": 7.13
+            }
+          },
+          {
+            "id": "fotmob-787350",
+            "name": "Douglas Luiz",
+            "number": 12,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.613,
+            "y": 0.375,
+            "stats": {
+              "apps": 15,
+              "starts": 13,
+              "minutes": 1080,
+              "goals": 1,
+              "assists": 2,
+              "xg": 1.21,
+              "rating": 7.37
+            }
+          },
+          {
+            "id": "fotmob-643229",
+            "name": "Jérémie Boga",
+            "number": 13,
+            "position": "Midfielder",
+            "age": 29,
+            "countryCode": "CIV",
+            "countryName": "Ivory Coast",
+            "x": 0.613,
+            "y": 0.125,
+            "stats": {
+              "apps": 10,
+              "starts": 2,
+              "minutes": 275,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.2,
+              "rating": 6.7
+            }
+          },
+          {
+            "id": "fotmob-823825",
+            "name": "Randal Kolo Muani",
+            "number": 9,
+            "position": "Forward",
+            "age": 27,
+            "countryCode": "FRA",
+            "countryName": "France",
+            "x": 0.87,
+            "y": 0.7,
+            "stats": {
+              "apps": 15,
+              "starts": 13,
+              "minutes": 1146,
+              "goals": 4,
+              "assists": 4,
+              "xg": 5.64,
+              "rating": 7.1
+            }
+          },
+          {
+            "id": "fotmob-1106563",
+            "name": "Nick Woltemade",
+            "number": 27,
+            "position": "Forward",
+            "age": 24,
+            "countryCode": "GER",
+            "countryName": "Germany",
+            "x": 0.87,
+            "y": 0.3,
+            "stats": {
+              "apps": 15,
+              "starts": 8,
+              "minutes": 855,
+              "goals": 4,
+              "assists": 3,
+              "xg": 5.14,
+              "rating": 7.09
+            }
+          }
+        ],
+        "bench": [],
+        "unavailable": [
+          {
+            "id": "fotmob-760722",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Kamil Grabara",
+            "reason": "blessé",
+            "expectedReturn": "Out for season",
+            "position": "Goalkeeper",
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 90,
+              "goals": 0,
+              "assists": 1,
+              "xg": null,
+              "rating": 8.25
+            }
+          },
+          {
+            "id": "fotmob-1131217",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Pierre Kalulu",
+            "reason": "blessé",
+            "expectedReturn": "Early December 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 15,
+              "starts": 14,
+              "minutes": 1305,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.31,
+              "rating": 7.27
+            }
+          },
+          {
+            "id": "fotmob-1078846",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Andrea Cambiaso",
+            "reason": "blessé",
+            "expectedReturn": "Doubtful",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 10,
+              "starts": 5,
+              "minutes": 447,
+              "goals": 0,
+              "assists": 2,
+              "xg": 0.07,
+              "rating": 6.82
+            }
+          },
+          {
+            "id": "fotmob-980793",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Khéphren Thuram-Ulien",
+            "reason": "blessé",
+            "expectedReturn": "Mid January 2027",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-624166",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Manuel Locatelli",
+            "reason": "blessé",
+            "expectedReturn": "Late March 2027",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 3,
+              "starts": 3,
+              "minutes": 270,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.56,
+              "rating": 7.82
+            }
+          },
+          {
+            "id": "fotmob-841672",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Nicolás González",
+            "reason": "blessé",
+            "expectedReturn": "Early December 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 9,
+              "starts": 6,
+              "minutes": 472,
+              "goals": 2,
+              "assists": 0,
+              "xg": 1.58,
+              "rating": 7.07
+            }
+          },
+          {
+            "id": "fotmob-1412132",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Kenan Yıldız",
+            "reason": "blessé",
+            "expectedReturn": "Back in training",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 69,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.19,
+              "rating": 7.62
+            }
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-1131217",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Pierre Kalulu",
+            "position": "Midfielder",
+            "starts": 14,
+            "goals": 0,
+            "assists": 0,
+            "status": "blessé"
+          },
+          {
+            "id": "fotmob-1684401",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Kerim Alajbegović",
+            "position": "Midfielder",
+            "starts": 9,
+            "goals": 2,
+            "assists": 1,
+            "status": "absent de la feuille de match"
+          }
+        ]
+      },
+      "away": {
+        "team": "Venezia",
+        "teamId": "fotmob-7881",
+        "formation": "3-5-2",
+        "coach": "Davide Nicola",
+        "statsSince": "2026-07-01",
+        "teamMatches": 13,
+        "startXI": [
+          {
+            "id": "fotmob-1130600",
+            "name": "Filip Stanković",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 24,
+            "countryCode": "SRB",
+            "countryName": "Serbia",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 12,
+              "starts": 12,
+              "minutes": 1080,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.05
+            }
+          },
+          {
+            "id": "fotmob-1298186",
+            "name": "Redouane Halhal",
+            "number": 25,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "MAR",
+            "countryName": "Morocco",
+            "x": 0.357,
+            "y": 0.79,
+            "stats": {
+              "apps": 10,
+              "starts": 9,
+              "minutes": 856,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.26,
+              "rating": 6.58
+            }
+          },
+          {
+            "id": "fotmob-1605748",
+            "name": "Matías Moreno",
+            "number": 2,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.357,
+            "y": 0.5,
+            "stats": {
+              "apps": 9,
+              "starts": 8,
+              "minutes": 689,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.51,
+              "rating": 6.39
+            }
+          },
+          {
+            "id": "fotmob-197352",
+            "name": "Juan Jesus",
+            "number": 15,
+            "position": "Defender",
+            "age": 35,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.357,
+            "y": 0.21,
+            "stats": {
+              "apps": 8,
+              "starts": 7,
+              "minutes": 651,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.18,
+              "rating": 6.83
+            }
+          },
+          {
+            "id": "fotmob-1290968",
+            "name": "Antoine Hainaut",
+            "number": 18,
+            "position": "Midfielder",
+            "age": 24,
+            "countryCode": "FRA",
+            "countryName": "France",
+            "x": 0.613,
+            "y": 0.89,
+            "stats": {
+              "apps": 12,
+              "starts": 12,
+              "minutes": 1020,
+              "goals": 2,
+              "assists": 2,
+              "xg": 2.21,
+              "rating": 7.13
+            }
+          },
+          {
+            "id": "fotmob-888167",
+            "name": "Kike Pérez",
+            "number": 71,
+            "position": "Midfielder",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.695,
+            "stats": {
+              "apps": 12,
+              "starts": 11,
+              "minutes": 950,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.63,
+              "rating": 7
+            }
+          },
+          {
+            "id": "fotmob-975242",
+            "name": "Simon Sohm",
+            "number": 19,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "SUI",
+            "countryName": "Switzerland",
+            "x": 0.613,
+            "y": 0.5,
+            "stats": {
+              "apps": 12,
+              "starts": 11,
+              "minutes": 886,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.35,
+              "rating": 6.76
+            }
+          },
+          {
+            "id": "fotmob-651435",
+            "name": "Toma Bašić",
+            "number": 26,
+            "position": "Midfielder",
+            "age": 29,
+            "countryCode": "CRO",
+            "countryName": "Croatia",
+            "x": 0.613,
+            "y": 0.305,
+            "stats": {
+              "apps": 8,
+              "starts": 6,
+              "minutes": 510,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.67,
+              "rating": 6.75
+            }
+          },
+          {
+            "id": "fotmob-1352744",
+            "name": "Joël Schingtienne",
+            "number": 3,
+            "position": "Midfielder",
+            "age": 24,
+            "countryCode": "BEL",
+            "countryName": "Belgium",
+            "x": 0.613,
+            "y": 0.11,
+            "stats": {
+              "apps": 8,
+              "starts": 6,
+              "minutes": 565,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.59,
+              "rating": 6.37
+            }
+          },
+          {
+            "id": "fotmob-845368",
+            "name": "John Yeboah",
+            "number": 10,
+            "position": "Forward",
+            "age": 26,
+            "countryCode": "ECU",
+            "countryName": "Ecuador",
+            "x": 0.87,
+            "y": 0.7,
+            "stats": {
+              "apps": 12,
+              "starts": 9,
+              "minutes": 855,
+              "goals": 2,
+              "assists": 0,
+              "xg": 3.78,
+              "rating": 6.84
+            }
+          },
+          {
+            "id": "fotmob-958640",
+            "name": "Akor Adams",
+            "number": 45,
+            "position": "Forward",
+            "age": 26,
+            "countryCode": "NGA",
+            "countryName": "Nigeria",
+            "x": 0.87,
+            "y": 0.3,
+            "stats": {
+              "apps": 13,
+              "starts": 12,
+              "minutes": 1044,
+              "goals": 4,
+              "assists": 1,
+              "xg": 3.88,
+              "rating": 6.83
+            }
+          }
+        ],
+        "bench": [],
+        "unavailable": [
+          {
+            "id": "fotmob-1072710",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Bartol Franjić",
+            "reason": "blessé",
+            "expectedReturn": "Doubtful",
+            "position": "Defender",
+            "stats": {
+              "apps": 2,
+              "starts": 2,
+              "minutes": 134,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.27,
+              "rating": 6.73
+            }
+          },
+          {
+            "id": "fotmob-782703",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Marin Šverko",
+            "reason": "blessé",
+            "expectedReturn": "Unknown",
+            "position": null,
+            "stats": null
+          },
+          {
+            "id": "fotmob-1024432",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Andrea Adorante",
+            "reason": "blessé",
+            "expectedReturn": "Unknown",
+            "position": null,
+            "stats": null
+          }
+        ],
+        "usualStartersMissing": []
+      },
+      "matchInfo": {
+        "round": "12",
+        "stadium": "Allianz Stadium",
+        "city": "Torino",
+        "capacity": 41700,
+        "surface": "grass",
+        "weather": "Light Rain",
+        "temperature": 7,
+        "windSpeed": 7,
+        "precipitation": 0.2,
+        "referee": {
+          "name": "Alberto Arena",
+          "country": "Italy",
+          "league": "Serie B",
+          "matches": 18,
+          "yellowCardsPerMatch": 4.44,
+          "yellowCardsLeagueAverage": 4.55,
+          "redCards": 0,
+          "penalties": 2,
+          "foulsPerMatch": 26.83,
+          "foulsLeagueAverage": 29.6
+        }
+      }
+    },
+    "analysis": {
+      "summary": "Juventus (7e, 18 pts) reçoit Venezia, 19e avec 6 pts et 9 défaites en 11 matchs. La Juve est stable (5 V, 3 N, 2 D sur 10) avec 1,5 but marqué et 1,2 encaissé ; Venezia concède 1,9 but et 16,6 tirs par match, et a perdu ses 5 sorties. Compositions FotMob relues très en avance (2809 min) : possiblement une prévision. Juve privée de Kalulu, Locatelli, Cambiaso, González, Yıldız ; Venezia sans titulaire habituel absent.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Gros écart entre les deux équipes.",
+          "evidence": "Juventus 7e, 18 pts ; Venezia 19e, 6 pts, diff -13."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Venezia en grande difficulté, surtout dehors.",
+          "evidence": "Venezia 5 défaites en 5 à l'extérieur, 0,8 but marqué / 2 encaissés ; Juve NVVDVNDVNV sur 10."
+        },
+        {
+          "factor": "statistiques et moyennes",
+          "observation": "Juve domine possession et corners, Venezia subit beaucoup de tirs cadrés.",
+          "evidence": "Juve 7,1 corners, 56,2 % de possession ; Venezia concède 6,4 tirs cadrés et 6,2 corners par match."
+        },
+        {
+          "factor": "absences",
+          "observation": "Milieu juventiniste très touché mais attaque présente.",
+          "evidence": "Kolo Muani 4+4 et Woltemade 4+3 alignés ; Kalulu, Locatelli, Cambiaso, González, Yıldız absents."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Pas de value sur le résultat.",
+          "evidence": "Juve juste 1,37 contre 1,29-1,33 au marché, edge -6,06 %."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va dans le sens du moteur : la Juve est nettement favorite. Le marché est cependant encore plus sévère, d'où l'absence de value. Les marchés de corners et tirs côté Juve sont à lire avec prudence selon les leçons du carnet.",
+      "caveats": "Compositions relues très tôt, donc possiblement des prévisions. Changements d'entraîneur récents des deux côtés (échantillons courts). Marchés de buts volontairement non commentés.",
+      "lineupImpact": "Juve en 4-4-2 avec Kolo Muani et Woltemade devant, Vicario dans le but ; Kalulu (14 titularisations) est blessé jusqu'à début décembre et Alajbegović hors feuille de match. Les absences au milieu (Locatelli, Cambiaso, González) pèsent peu sur la domination attendue. Venezia aligne son onze habituel en 3-5-2 (Adams, Yeboah), sans titulaire manquant. Composition à prendre avec prudence car relue très en avance.",
+      "marketViews": [
+        {
+          "market": "Résultat",
+          "pick": "Juventus gagne",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "73 % : Juve 1,75 but attendu contre 0,5, Venezia 19e avec 9 défaites en 11 matchs et 0 point à l'extérieur.",
+          "reasoning": "Écart de niveau net et Venezia battue 5 fois sur 5 dehors ; la Juve n'est toutefois pas intraitable (2 D sur 10). Mon bilan sur le résultat reste mitigé.",
+          "probability": 73
+        },
+        {
+          "market": "Total corners",
+          "pick": "Moins de 14.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : 10,96 corners attendus au total, loin de 14,5 ; Juve 7,1 et Venezia 3,7 par match.",
+          "reasoning": "La marge de près de 4 corners est large et les avis sur ce marché ont bien tenu.",
+          "probability": 83
+        },
+        {
+          "market": "Corners — Juventus",
+          "pick": "Juventus — Moins de 10.5 corners",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "82 % : 7,32 corners attendus pour la Juve, 7,3 à domicile, bien sous 10,5.",
+          "reasoning": "La ligne est haute par rapport aux moyennes ; la leçon du 28/10 concernait une ligne proche de la moyenne, ce qui n'est pas le cas ici.",
+          "probability": 82
+        },
+        {
+          "market": "Corners — Venezia",
+          "pick": "Venezia — Plus de 1.5 corners",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : 3,65 corners attendus pour Venezia, qui en produit 3,7 par match (4,4 dehors).",
+          "reasoning": "Ligne très basse ; même sous la domination juventiniste, Venezia en obtient en moyenne plus du double.",
+          "probability": 83
+        },
+        {
+          "market": "Total tirs",
+          "pick": "Plus de 23.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "81 % : 29,18 tirs attendus au total, Juve 17,4 et Venezia 11,8.",
+          "reasoning": "Venezia concède 16,6 tirs et la Juve en produit 15,1 : le total dépasse largement la ligne.",
+          "probability": 81
+        },
+        {
+          "market": "Tirs — Juventus",
+          "pick": "Juventus — Moins de 22.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "81 % : 17,44 tirs attendus pour la Juve, 15,1 de moyenne et 13,8 à domicile.",
+          "reasoning": "Il faudrait un match nettement hors norme pour atteindre 23 tirs.",
+          "probability": 81
+        },
+        {
+          "market": "Tirs — Venezia",
+          "pick": "Venezia — Plus de 7.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : 11,75 tirs attendus pour Venezia, qui en produit 13,4 par match (14,2 dehors).",
+          "reasoning": "Même contre la Juve (11 tirs concédés à domicile), Venezia reste au-dessus de la ligne.",
+          "probability": 83
+        },
+        {
+          "market": "Total tirs cadrés",
+          "pick": "Plus de 6.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "79 % : 9,16 tirs cadrés attendus ; Juve 4,6 et Venezia 3,9 produits, Venezia en concède 6,4.",
+          "reasoning": "Marge d'environ 2,5 tirs cadrés, mais la variance de ce marché reste notable.",
+          "probability": 79
+        },
+        {
+          "market": "Tirs cadrés — Juventus",
+          "pick": "Juventus — Plus de 3.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "82 % : 6,05 tirs cadrés attendus pour la Juve, face à une défense qui en concède 6,4 par match.",
+          "reasoning": "La Juve en tire 3,8 à domicile, proche de la ligne, mais la défense adverse est très perméable.",
+          "probability": 82
+        },
+        {
+          "market": "Tirs cadrés — Venezia",
+          "pick": "Venezia — Plus de 1.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "79 % : 3,11 tirs cadrés attendus pour Venezia, qui en produit 3,9 par match (3,6 dehors).",
+          "reasoning": "Ligne basse, mais Venezia marque peu dehors (0,8 but) et peut être étouffée par la possession juventiniste.",
+          "probability": 79
+        }
+      ]
+    },
+    "updatedAt": "2026-11-20T12:41:36.880Z",
+    "createdAt": "2026-11-20T12:41:36.880Z"
+  }
+]

@@ -2185,43 +2185,127 @@
       "variante": "modele-buts-v1~3"
     },
     "premiersChiffres": {
-      "regimes": {},
+      "regimes": {
+        "cotes-plusmoins-xg": 3,
+        "cotes-1n2-xg": 2
+      },
       "calibration": {
-        "a": {},
-        "b": {}
+        "a": {
+          "bothTeamsScore": {
+            "pronostics": 5,
+            "matchs": 5,
+            "biais": 0.22518,
+            "ece": 0.22518
+          },
+          "resultAndTotal": {
+            "pronostics": 5,
+            "matchs": 5,
+            "biais": -0.16068,
+            "ece": 0.38212
+          },
+          "teamGoals": {
+            "pronostics": 10,
+            "matchs": 5,
+            "biais": 0.23258,
+            "ece": 0.23258
+          },
+          "totalGoals": {
+            "pronostics": 5,
+            "matchs": 5,
+            "biais": 0.22876,
+            "ece": 0.22876
+          }
+        },
+        "b": {
+          "bothTeamsScore": {
+            "pronostics": 5,
+            "matchs": 5,
+            "biais": 0.40726,
+            "ece": 0.40726
+          },
+          "resultAndTotal": {
+            "pronostics": 5,
+            "matchs": 5,
+            "biais": -0.1706,
+            "ece": 0.21188
+          },
+          "teamGoals": {
+            "pronostics": 10,
+            "matchs": 5,
+            "biais": 0.06232,
+            "ece": 0.18964
+          },
+          "totalGoals": {
+            "pronostics": 5,
+            "matchs": 5,
+            "biais": 0.22,
+            "ece": 0.22
+          }
+        }
       },
       "temoins": {
-        "matchs": 0,
-        "a": null,
-        "b": null,
-        "exactA": null,
-        "exactB": null,
+        "matchs": 5,
+        "a": 2.491826,
+        "b": 2.49446,
+        "exactA": 20,
+        "exactB": 20,
         "horsGrille": 0,
         "ecartees": {
-          "sansResultat": 2
+          "sansResultat": 34,
+          "sansIdentifiant": 1
         },
         "juge": false
       },
-      "calculeLe": "2026-11-19T09:18:24.341Z",
-      "matchs": 0,
-      "lignes": 0,
-      "a": null,
-      "b": null,
-      "gainPct": null,
+      "calculeLe": "2026-11-20T12:51:00.417Z",
+      "matchs": 5,
+      "lignes": 25,
+      "a": 0.651266,
+      "b": 0.601786,
+      "gainPct": 7.598,
       "horizon": {
         "matchs": 800,
         "jours": 21
       },
-      "joursEcoules": 0,
+      "joursEcoules": 2,
       "auPlusTotLe": "2026-12-09T11:07:04.315Z",
       "aVenir": {
-        "pronostics": 2815,
-        "matchs": 563
+        "pronostics": 2880,
+        "matchs": 576
       },
       "ecartees": {
-        "autreEmpreinte": 8770
+        "autreEmpreinte": 8770,
+        "sansIdentifiant": 5
       },
-      "parMarche": []
+      "parMarche": [
+        {
+          "marketId": "bothTeamsScore",
+          "lignes": 5,
+          "matchs": 5,
+          "a": 0.594329,
+          "b": 0.531408
+        },
+        {
+          "marketId": "resultAndTotal",
+          "lignes": 5,
+          "matchs": 5,
+          "a": 1.287537,
+          "b": 1.240484
+        },
+        {
+          "marketId": "teamGoals",
+          "lignes": 10,
+          "matchs": 5,
+          "a": 0.540008,
+          "b": 0.494007
+        },
+        {
+          "marketId": "totalGoals",
+          "lignes": 5,
+          "matchs": 5,
+          "a": 0.294451,
+          "b": 0.249026
+        }
+      ]
     },
     "jugement": null,
     "jugementsPerimes": [],
@@ -4978,5 +5062,5 @@
       "fin": "modifiee"
     }
   ],
-  "majLe": "2026-11-19T09:18:24.341Z"
+  "majLe": "2026-11-20T12:51:00.417Z"
 }
