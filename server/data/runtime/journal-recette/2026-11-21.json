@@ -4,12 +4,12 @@
   "phase": "rodage",
   "nonSurveille": "Non surveillé par l'essai : la boucle des compositions, la boucle des cotes gratuites, et le détail de l'analyse au coup d'envoi (ses échecs ne sont dits que dans la fenêtre du serveur). Coût de la veille (matchs commencés pendant que le PC dormait) : non compté : aucune heure de coup d’envoi lisible sans la base.",
   "couverture": {
-    "minutesObservees": 24,
+    "minutesObservees": 214,
     "minutesDeVeille": 0,
     "minutesArret": 514,
     "minutesEnErreur": 0,
-    "tours": 3,
-    "toursReussis": 3
+    "tours": 22,
+    "toursReussis": 22
   },
   "serveur": {
     "demarrages": [
@@ -25,13 +25,48 @@
     "trous": []
   },
   "passes": {
-    "total": 0,
-    "ok": 0,
-    "partielles": 0,
+    "total": 2,
+    "ok": 1,
+    "partielles": 1,
     "enEchec": 0,
     "nuit": null,
     "rattrapages": [],
-    "liste": []
+    "liste": [
+      {
+        "id": "2026-11-21T07:34:48.745Z",
+        "raison": "au démarrage",
+        "debut": "2026-11-21T07:34:48.745Z",
+        "fin": "2026-11-21T08:01:44.159Z",
+        "dureeS": 1615,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "controle",
+            "statut": "warn",
+            "resume": "Depuis le 2026-10-22 : 1 638 rencontres contrôlées, 16 anomalies (gardien : 2, buteurs : 13, fichiers : 1). Rien n'est corrigé automatiquement."
+          },
+          {
+            "cle": "simulationSaisons",
+            "statut": "warn",
+            "resume": "Fins de saison : 34 championnats simulés 10 000 fois, 14 non calculés (Serie B - Italy : table et magasin en désaccord : Palermo (table 11, magasin 12), Modena (table 11, magasin  ; Premiership - Scotland : calendrier incomplet : 120 rencontres connues sur 123 attendues, non calculé ; Swiss Superlea"
+          },
+          {
+            "cle": "bulletin",
+            "statut": "warn",
+            "resume": "Texte refusé : il citait trois, absent(s) de la fiche. Rien n’est affiché ; essai 1 sur 3, nouvel essai à la passe suivante."
+          }
+        ]
+      },
+      {
+        "id": "2026-11-21T11:01:43.668Z",
+        "raison": "périodique",
+        "debut": "2026-11-21T11:01:43.668Z",
+        "fin": "2026-11-21T11:05:21.532Z",
+        "dureeS": 218,
+        "issue": "ok",
+        "etapes": []
+      }
+    ]
   },
   "alertes": {
     "posees": [],
@@ -39,7 +74,7 @@
     "changees": []
   },
   "controleDuJour": {
-    "releves": "2026-11-20T14:36:25.389Z",
+    "releves": "2026-11-21T11:05:18.282Z",
     "pire": "orange",
     "rouges": [],
     "oranges": [
@@ -53,7 +88,7 @@
       "hors-reperes-buts",
       "hors-reperes-statistiques"
     ],
-    "presentsAuDepart": 84
+    "presentsAuDepart": 82
   },
   "fotmob": {
     "transitions": []
@@ -67,10 +102,10 @@
   },
   "restauration": null,
   "ia": {
-    "appels": 1,
-    "ok": 1,
+    "appels": 6,
+    "ok": 6,
     "echecs": 0,
-    "tokens": 5189
+    "tokens": 73421
   },
   "direct": {
     "suspensions": 0,
@@ -116,6 +151,54 @@
       "classe": "info",
       "cause": null,
       "rodage": true
+    },
+    {
+      "id": "2026-11-21|etape-en-alerte|controle|08:01:44",
+      "le": "2026-11-21T08:01:44.159Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controle",
+      "texte": "controle : Depuis le 2026-10-22 : 1 638 rencontres contrôlées, 16 anomalies (gardien : 2, buteurs : 13, fichiers : 1). Rien n'est corrigé automatiquement.",
+      "details": {
+        "passe": "2026-11-21T07:34:48.745Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-21|etape-en-alerte|simulationSaisons|08:01:44",
+      "le": "2026-11-21T08:01:44.159Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "simulationSaisons",
+      "texte": "simulationSaisons : Fins de saison : 34 championnats simulés 10 000 fois, 14 non calculés (Serie B - Italy : table et magasin en désaccord : Palermo (table 11, magasin 12), Modena (table 11, magasin  ; Premiership - Scotland : calendrier incomplet : 120 rencontres connues sur 123 attendues, non calculé ; Swiss Superlea",
+      "details": {
+        "passe": "2026-11-21T07:34:48.745Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "calendriers-incomplets",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-21|etape-en-alerte|bulletin|08:01:44",
+      "le": "2026-11-21T08:01:44.159Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "bulletin",
+      "texte": "bulletin : Texte refusé : il citait trois, absent(s) de la fiche. Rien n’est affiché ; essai 1 sur 3, nouvel essai à la passe suivante.",
+      "details": {
+        "passe": "2026-11-21T07:34:48.745Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
     }
   ],
   "vus": {
@@ -150,7 +233,9 @@
       "2026-11-19T18:57:41.930Z",
       "2026-11-19T22:07:07.578Z",
       "2026-11-20T02:39:13.943Z",
-      "2026-11-20T14:30:39.554Z"
+      "2026-11-20T14:30:39.554Z",
+      "2026-11-21T07:34:48.745Z",
+      "2026-11-21T11:01:43.668Z"
     ],
     "alertes": {
       "audit": "{\"parType\":[\"buteurs\",\"fichiers\",\"gardien\"]}",
@@ -216,7 +301,8 @@
         "2026-11-17",
         "2026-11-18",
         "2026-11-19",
-        "2026-11-20"
+        "2026-11-20",
+        "2026-11-21"
       ],
       "controle-du-jour": [
         "2026-11-16",
