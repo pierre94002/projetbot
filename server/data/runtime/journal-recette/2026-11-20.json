@@ -4,12 +4,13 @@
   "phase": "rodage",
   "nonSurveille": "Non surveillé par l'essai : la boucle des compositions, la boucle des cotes gratuites, et le détail de l'analyse au coup d'envoi (ses échecs ne sont dits que dans la fenêtre du serveur). Coût de la veille (matchs commencés pendant que le PC dormait) : non compté : aucune heure de coup d’envoi lisible sans la base.",
   "couverture": {
-    "minutesObservees": 14,
+    "minutesObservees": 44,
     "minutesDeVeille": 0,
-    "minutesArret": 0,
+    "minutesArret": 418,
     "minutesEnErreur": 0,
-    "tours": 2,
-    "toursReussis": 2
+    "tours": 6,
+    "toursReussis": 6,
+    "minutesNonObservees": 978
   },
   "serveur": {
     "demarrages": [
@@ -22,7 +23,15 @@
         "empreinteDesCauses": "edbeea176827b15ba94a8367c549d97b5b5412ba"
       }
     ],
-    "trous": []
+    "trous": [
+      {
+        "de": "2026-11-20T15:13:39.772Z",
+        "a": "2026-11-20T16:01:43.330Z",
+        "minutes": 48,
+        "cause": null,
+        "id": "2026-11-20|trou|21136|16:01:43"
+      }
+    ]
   },
   "passes": {
     "total": 31,
@@ -1143,6 +1152,27 @@
         "dureeMs": 87254
       },
       "classe": "info",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-20|trou|21136|16:01:43",
+      "le": "2026-11-20T16:01:43.330Z",
+      "type": "trou",
+      "signal": "S10",
+      "cle": "21136",
+      "texte": "veille du PC trop courte : 0 min sur un trou de 48 min",
+      "details": {
+        "de": "2026-11-20T15:13:39.772Z",
+        "a": "2026-11-20T16:01:43.330Z",
+        "minutes": 48,
+        "minutesDeVeille": 0,
+        "pistes": [
+          "fenêtre du serveur figée ?",
+          "fil du serveur bloqué par un calcul ?"
+        ]
+      },
+      "classe": "a-expliquer",
       "cause": null,
       "rodage": true
     }

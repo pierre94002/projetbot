@@ -10614,9 +10614,9 @@
     },
     "usage": {
       "input_tokens": 2,
-      "cache_creation_input_tokens": 5920,
-      "cache_read_input_tokens": 4470,
-      "output_tokens": 3004,
+      "cache_creation_input_tokens": 10387,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 3160,
       "output_tokens_details": {
         "thinking_tokens": 0
       },
@@ -10626,19 +10626,19 @@
       },
       "service_tier": "standard",
       "cache_creation": {
-        "ephemeral_1h_input_tokens": 5920,
+        "ephemeral_1h_input_tokens": 10387,
         "ephemeral_5m_input_tokens": 0
       },
       "inference_geo": "global",
       "iterations": [
         {
           "input_tokens": 2,
-          "output_tokens": 3004,
-          "cache_read_input_tokens": 4470,
-          "cache_creation_input_tokens": 5920,
+          "output_tokens": 3160,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 10387,
           "cache_creation": {
             "ephemeral_5m_input_tokens": 0,
-            "ephemeral_1h_input_tokens": 5920
+            "ephemeral_1h_input_tokens": 10387
           },
           "type": "message"
         }
@@ -10646,15 +10646,15 @@
       "speed": "standard",
       "fallback_credit": null
     },
-    "costUsd": 0.054618,
-    "analysedAt": "2026-11-18T19:27:26.496Z",
-    "timing": "avance",
+    "costUsd": 0.073152,
+    "analysedAt": "2026-11-20T16:02:11.530Z",
+    "timing": "coup-d-envoi",
     "fiche": "compacte",
     "memoire": {
       "mots": 383,
       "tokens": 1184,
       "lecons": [],
-      "dossiersDu": "2026-11-18T00:05:37.382Z",
+      "dossiersDu": "2026-11-20T13:00:02.517Z",
       "equipes": {
         "home": {
           "id": "fotmob-8705",
@@ -11665,39 +11665,39 @@
       "matchInfo": null
     },
     "analysis": {
-      "summary": "Rostov (6e, 19 pts) est invaincu depuis 5 matchs sous Kirichenko (3 V, 2 N), mais produit peu : 1,2 but et 12,5 tirs par match. Krylya Sovetov (7e, 18 pts) est plus offensif (1,7 but, 14,5 tirs) et invaincu à l'extérieur en championnat depuis 6 matchs. Les compositions sont les derniers onze alignés, pas ceux du match : aucun absent annoncé. Côté Krylya, Kramarič et Oleynikov (3 buts chacun) étaient hors feuille de match le 08/11.",
+      "summary": "Rostov (6e, 19 pts) est invaincu depuis 5 matchs sous Kirichenko (3 V, 2 N), avec une moyenne de 1,2 but marqué et 12 tirs par match sur 10 matchs. Krylya Sovetov (7e, 18 pts) est invaincu à l'extérieur en championnat depuis 6 matchs mais ne produit que 11,5 tirs et 2,5 corners par match dehors. Les compositions sont celles du dernier match (onze probable). Chez Rostov, Komarov (12 titularisations) était remplaçant ; chez Krylya, Kramarič et Oleynikov étaient absents de la feuille de match.",
       "keyFactors": [
         {
           "factor": "forme récente",
-          "observation": "Rostov invaincu sur ses 5 derniers matchs, avec deux nuls dont un à Zenit. Krylya alterne : une défaite 0-3 contre Zenit puis une victoire 2-0 contre Orenburg.",
-          "evidence": "Rostov : N V V N V sur les 5 derniers ; Krylya : V D V D N."
+          "observation": "Rostov est invaincu depuis 5 matchs ; Krylya alterne victoires et défaites mais reste solide dehors.",
+          "evidence": "Rostov : V N V V N sur les 5 derniers ; Krylya : V D V D N, invaincu à l'extérieur depuis 6 matchs en championnat"
         },
         {
           "factor": "statistiques et moyennes",
-          "observation": "Les deux équipes jouent des matchs à volume modéré de tirs et de corners, ce qui va dans le sens des marchés « moins de ».",
-          "evidence": "Rostov 12,5 tirs et 3,7 corners par match ; Krylya 14,5 tirs et 4,1 corners ; en déplacement Krylya n'a que 11,5 tirs et 2,5 corners."
-        },
-        {
-          "factor": "compositions",
-          "observation": "Rostov devrait garder un onze stable, avec Komarov (12 titularisations) remplaçant. Krylya a fait tourner son milieu et son gardien : Kokarev titulaire, Pesyakov remplaçant.",
-          "evidence": "Komarov 3+0 et xG 2,43 ; Kramarič et Oleynikov (3 buts chacun) hors feuille de match."
+          "observation": "Les deux équipes produisent peu de volume, ce qui soutient les « moins de » sur corners et tirs.",
+          "evidence": "Rostov 12,5 tirs et 3,7 corners sur 10 matchs ; Krylya à l'extérieur 11,5 tirs et 2,5 corners ; attendus moteur : 8,03 corners, 25,84 tirs, 8,91 cadrés"
         },
         {
           "factor": "classement",
-          "observation": "Les deux équipes sont voisines au classement, avec un bilan identique de -1 en différence de buts.",
-          "evidence": "6e Rostov 19 pts ; 7e Krylya 18 pts."
+          "observation": "Deux équipes de milieu de tableau proches l'une de l'autre.",
+          "evidence": "6e Rostov 19 pts (diff -1), 7e Krylya 18 pts (diff -1)"
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur donne l'avantage à Rostov, mais le marché est quasi aligné et aucun edge n'est relevé.",
+          "evidence": "cote juste 1,99 contre 1,95 au marché ; buts attendus 0,834 contre 1,281 (FotMob), en sens inverse du pronostic"
         }
       ],
-      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : peu de volume attendu de tirs et de corners. Pour le résultat, il nuance : Rostov est en forme à domicile, mais Krylya produit davantage et reste invaincu à l'extérieur.",
-      "caveats": "Les compositions viennent du magasin (derniers onze alignés) et non de ce match. Les marchés de buts ne sont pas commentés. Les échantillons de stats à domicile et à l'extérieur sont de 4 matchs seulement. Le changement d'entraîneur de Rostov est déduit des compositions importées.",
+      "alignmentWithModel": "Le contexte confirme les marchés de volume (corners, tirs, cadrés), où les deux équipes produisent peu. Il nuance le résultat : Rostov est en forme à domicile, mais Krylya est solide dehors et les buts attendus de FotMob lui sont plus favorables.",
+      "caveats": "Les compositions viennent du magasin (dernier match), pas de ce match. Les échantillons à domicile et à l'extérieur sont réduits (4 matchs chacun). Le changement d'entraîneur de Rostov est récent (5 matchs). Aucun avis sur les marchés de buts, retirés.",
       "marketViews": [
         {
           "market": "Résultat",
           "pick": "FK Rostov gagne",
           "verdict": "nuance",
           "confidence": "faible",
-          "explanation": "50 % : Rostov a gagné 3 de ses 4 matchs à domicile et est invaincu depuis 5 matchs, mais Krylya produit plus (1,7 but et 14,5 tirs par match).",
-          "reasoning": "La forme et le domicile soutiennent Rostov, mais Krylya a un xG supérieur (1,73 contre 0,86) et est invaincu en déplacement en championnat. Le résultat reste incertain, d'autant que mon bilan sur ce marché est faible.",
+          "explanation": "50 % : Rostov est invaincu depuis 5 matchs et a pris 3 V sur 5 à domicile, mais Krylya est invaincu dehors depuis 6 matchs.",
+          "reasoning": "La forme de Rostov plaide pour lui, mais Krylya produit plus (1,73 xG contre 0,86) et ses buts attendus sont supérieurs. Mon bilan sur le résultat est faible (431/732).",
           "probability": 50
         },
         {
@@ -11705,8 +11705,8 @@
           "pick": "Moins de 10.5 corners",
           "verdict": "confirme",
           "confidence": "forte",
-          "explanation": "80 % : le moteur attend 8,03 corners, et Rostov (3,7) comme Krylya (4,1) en obtiennent peu par match.",
-          "reasoning": "Krylya ne gagne que 2,5 corners à l'extérieur et la moyenne du championnat est de 8,7. Le seuil de 10,5 laisse une marge confortable.",
+          "explanation": "80 % : le moteur attend 8,03 corners (4,57 + 3,46) et Krylya n'en obtient que 2,5 par match à l'extérieur.",
+          "reasoning": "Les deux équipes sont loin de 10,5 corners, la moyenne du championnat est de 8,7. Mes avis forts sur ce marché tiennent bien (661/813).",
           "probability": 80
         },
         {
@@ -11714,8 +11714,8 @@
           "pick": "FK Rostov — Moins de 6.5 corners",
           "verdict": "confirme",
           "confidence": "forte",
-          "explanation": "79 % : Rostov fait 3,7 corners par match (4,3 à domicile) et le moteur en attend 4,57.",
-          "reasoning": "Rostov est loin du seuil de 6,5 aussi bien sur ses 10 derniers matchs qu'à domicile. Krylya en concède 4,6 par match, ce qui ne change pas la lecture.",
+          "explanation": "79 % : Rostov attendu à 4,57 corners, pour 3,7 de moyenne sur 10 matchs et 4,3 à domicile.",
+          "reasoning": "Rostov a peu de possession (42,5 % à domicile) et le seuil est loin de ses moyennes. Le bilan sur ce marché est solide.",
           "probability": 79
         },
         {
@@ -11723,8 +11723,8 @@
           "pick": "Kryliya Sovetov — Moins de 5.5 corners",
           "verdict": "confirme",
           "confidence": "forte",
-          "explanation": "83 % : Krylya fait 4,1 corners par match, seulement 2,5 à l'extérieur, et le moteur en attend 3,46.",
-          "reasoning": "Krylya est peu portée sur les corners en déplacement, malgré 4,6 corners concédés par Rostov à domicile (3,8 sur ses 4 matchs à domicile). Le seuil de 5,5 est largement au-dessus de ses moyennes.",
+          "explanation": "83 % : Krylya attendu à 3,46 corners, avec 4,1 de moyenne sur 10 matchs et 2,5 à l'extérieur.",
+          "reasoning": "Même avec 4,6 corners concédés par Rostov, le seuil de 5,5 reste haut pour une équipe qui en obtient 2,5 dehors.",
           "probability": 83
         },
         {
@@ -11732,8 +11732,8 @@
           "pick": "Moins de 31.5 tirs",
           "verdict": "confirme",
           "confidence": "forte",
-          "explanation": "83 % : le moteur attend 25,84 tirs, et les moyennes de tirs produits sont de 12,5 pour Rostov et 14,5 pour Krylya.",
-          "reasoning": "Les deux équipes concèdent environ 12 tirs par match, soit un total bien sous 31,5. Un score ouvert pourrait faire monter le volume, mais rien ne l'annonce.",
+          "explanation": "83 % : le moteur attend 25,84 tirs, et les 10 derniers matchs donnent 12,5 pour Rostov et 14,5 pour Krylya.",
+          "reasoning": "Même en additionnant les maximums, on reste sous 31,5. Un match fermé est probable.",
           "probability": 83
         },
         {
@@ -11741,8 +11741,8 @@
           "pick": "FK Rostov — Moins de 18.5 tirs",
           "verdict": "confirme",
           "confidence": "forte",
-          "explanation": "83 % : Rostov tire 12,5 fois par match (14 à domicile) et le moteur en attend 13,92.",
-          "reasoning": "Même sa meilleure moyenne à domicile (14) reste loin de 18,5. Krylya concède 12,8 tirs par match, ce qui ne change pas la lecture.",
+          "explanation": "83 % : Rostov attendu à 13,92 tirs, avec 12,5 de moyenne et 14 à domicile.",
+          "reasoning": "Le seuil de 18,5 est bien au-dessus de ses moyennes, même à domicile.",
           "probability": 83
         },
         {
@@ -11750,8 +11750,8 @@
           "pick": "Kryliya Sovetov — Moins de 15.5 tirs",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "79 % : Krylya tire 14,5 fois par match (11,5 à l'extérieur) et le moteur en attend 11,93.",
-          "reasoning": "Sa moyenne sur 10 matchs est plus proche du seuil que celle de Rostov, d'où une marge plus faible. À l'extérieur elle ne tire que 11,5 fois, ce qui soutient le pronostic.",
+          "explanation": "79 % : Krylya attendu à 11,93 tirs, avec 14,5 de moyenne sur 10 matchs et 11,5 à l'extérieur.",
+          "reasoning": "La moyenne sur 10 matchs (14,5) est plus proche du seuil que celle du déplacement. Mes avis sur les tirs d'une équipe tiennent moins bien (25/33 dans ce championnat).",
           "probability": 79
         },
         {
@@ -11759,8 +11759,8 @@
           "pick": "Moins de 11.5 tirs cadrés",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "80 % : le moteur attend 8,91 tirs cadrés, avec 4,5 pour Rostov et 4,8 pour Krylya par match.",
-          "reasoning": "Le total moyen avoisine 9, sous le seuil de 11,5. Ce marché est plus volatil : mon bilan y est moins solide que sur les corners.",
+          "explanation": "80 % : le moteur attend 8,91 tirs cadrés, avec 4,5 pour Rostov et 4,8 pour Krylya sur 10 matchs.",
+          "reasoning": "Les moyennes cumulées (9,3) laissent une marge, mais les tirs cadrés sont plus volatils (1055/1309 pour mes avis).",
           "probability": 80
         },
         {
@@ -11768,8 +11768,8 @@
           "pick": "FK Rostov — Moins de 6.5 tirs cadrés",
           "verdict": "confirme",
           "confidence": "moyenne",
-          "explanation": "75 % : Rostov cadre 4,5 tirs par match (5,3 à domicile) et le moteur en attend 4,95.",
-          "reasoning": "Même à domicile, sa moyenne de 5,3 reste sous 6,5. La marge est plus mince que sur les tirs, et ce marché a un petit échantillon à domicile (4 matchs).",
+          "explanation": "75 % : Rostov attendu à 4,95 tirs cadrés, avec 4,5 de moyenne et 5,3 à domicile.",
+          "reasoning": "Sa moyenne à domicile (5,3) se rapproche du seuil, ce qui explique un pourcentage plus bas qu'ailleurs. Ce marché est le moins fiable de mon bilan (18/26 dans ce championnat).",
           "probability": 75
         },
         {
@@ -11777,14 +11777,393 @@
           "pick": "Kryliya Sovetov — Moins de 5.5 tirs cadrés",
           "verdict": "nuance",
           "confidence": "moyenne",
-          "explanation": "78 % : Krylya cadre 4,8 tirs par match et le moteur en attend 3,96.",
-          "reasoning": "À l'extérieur, Krylya cadre 5,8 tirs sur ses 4 derniers matchs, soit plus que le seuil, bien qu'elle tire peu (11,5). Le pronostic tient sur 10 matchs, mais cet écart invite à la prudence.",
+          "explanation": "78 % : Krylya attendu à 3,96 tirs cadrés, mais il en tire 4,8 en moyenne et 5,8 à l'extérieur.",
+          "reasoning": "Dehors, Krylya cadre plus que son attendu (5,8 sur 4 matchs, échantillon court). La marge est donc plus mince que le pourcentage ne le laisse penser.",
           "probability": 78
         }
-      ]
+      ],
+      "lineupImpact": "Source magasin : c'est le dernier onze aligné, pas celui du match. Rostov (4-3-3, Kirichenko) alignait Langovich (2+4) et Kuchaev (2+3), avec Komarov (3 buts, xG 2,43) sur le banc. Krylya (4-2-3-1, Bulatov) alignait Rahmanović (5 buts, xG 3,35) et Gorshkov (0+3). Kramarič (3+1) et Oleynikov (3+2) étaient absents de la feuille de match, ce qui limite sa créativité et soutient les « moins de » sur ses tirs cadrés. FotMob n'annonce aucun absent pour ce match."
     },
-    "updatedAt": "2026-11-18T19:27:26.496Z",
-    "createdAt": "2026-11-18T19:27:26.496Z"
+    "updatedAt": "2026-11-20T16:02:11.531Z",
+    "createdAt": "2026-11-18T19:27:26.496Z",
+    "kickoffRuns": 1,
+    "earlierAnalysis": {
+      "analysis": {
+        "summary": "Rostov (6e, 19 pts) est invaincu depuis 5 matchs sous Kirichenko (3 V, 2 N), mais produit peu : 1,2 but et 12,5 tirs par match. Krylya Sovetov (7e, 18 pts) est plus offensif (1,7 but, 14,5 tirs) et invaincu à l'extérieur en championnat depuis 6 matchs. Les compositions sont les derniers onze alignés, pas ceux du match : aucun absent annoncé. Côté Krylya, Kramarič et Oleynikov (3 buts chacun) étaient hors feuille de match le 08/11.",
+        "keyFactors": [
+          {
+            "factor": "forme récente",
+            "observation": "Rostov invaincu sur ses 5 derniers matchs, avec deux nuls dont un à Zenit. Krylya alterne : une défaite 0-3 contre Zenit puis une victoire 2-0 contre Orenburg.",
+            "evidence": "Rostov : N V V N V sur les 5 derniers ; Krylya : V D V D N."
+          },
+          {
+            "factor": "statistiques et moyennes",
+            "observation": "Les deux équipes jouent des matchs à volume modéré de tirs et de corners, ce qui va dans le sens des marchés « moins de ».",
+            "evidence": "Rostov 12,5 tirs et 3,7 corners par match ; Krylya 14,5 tirs et 4,1 corners ; en déplacement Krylya n'a que 11,5 tirs et 2,5 corners."
+          },
+          {
+            "factor": "compositions",
+            "observation": "Rostov devrait garder un onze stable, avec Komarov (12 titularisations) remplaçant. Krylya a fait tourner son milieu et son gardien : Kokarev titulaire, Pesyakov remplaçant.",
+            "evidence": "Komarov 3+0 et xG 2,43 ; Kramarič et Oleynikov (3 buts chacun) hors feuille de match."
+          },
+          {
+            "factor": "classement",
+            "observation": "Les deux équipes sont voisines au classement, avec un bilan identique de -1 en différence de buts.",
+            "evidence": "6e Rostov 19 pts ; 7e Krylya 18 pts."
+          }
+        ],
+        "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : peu de volume attendu de tirs et de corners. Pour le résultat, il nuance : Rostov est en forme à domicile, mais Krylya produit davantage et reste invaincu à l'extérieur.",
+        "caveats": "Les compositions viennent du magasin (derniers onze alignés) et non de ce match. Les marchés de buts ne sont pas commentés. Les échantillons de stats à domicile et à l'extérieur sont de 4 matchs seulement. Le changement d'entraîneur de Rostov est déduit des compositions importées.",
+        "marketViews": [
+          {
+            "market": "Résultat",
+            "pick": "FK Rostov gagne",
+            "verdict": "nuance",
+            "confidence": "faible",
+            "explanation": "50 % : Rostov a gagné 3 de ses 4 matchs à domicile et est invaincu depuis 5 matchs, mais Krylya produit plus (1,7 but et 14,5 tirs par match).",
+            "reasoning": "La forme et le domicile soutiennent Rostov, mais Krylya a un xG supérieur (1,73 contre 0,86) et est invaincu en déplacement en championnat. Le résultat reste incertain, d'autant que mon bilan sur ce marché est faible.",
+            "probability": 50
+          },
+          {
+            "market": "Total corners",
+            "pick": "Moins de 10.5 corners",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "80 % : le moteur attend 8,03 corners, et Rostov (3,7) comme Krylya (4,1) en obtiennent peu par match.",
+            "reasoning": "Krylya ne gagne que 2,5 corners à l'extérieur et la moyenne du championnat est de 8,7. Le seuil de 10,5 laisse une marge confortable.",
+            "probability": 80
+          },
+          {
+            "market": "Corners — FK Rostov",
+            "pick": "FK Rostov — Moins de 6.5 corners",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "79 % : Rostov fait 3,7 corners par match (4,3 à domicile) et le moteur en attend 4,57.",
+            "reasoning": "Rostov est loin du seuil de 6,5 aussi bien sur ses 10 derniers matchs qu'à domicile. Krylya en concède 4,6 par match, ce qui ne change pas la lecture.",
+            "probability": 79
+          },
+          {
+            "market": "Corners — Kryliya Sovetov",
+            "pick": "Kryliya Sovetov — Moins de 5.5 corners",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "83 % : Krylya fait 4,1 corners par match, seulement 2,5 à l'extérieur, et le moteur en attend 3,46.",
+            "reasoning": "Krylya est peu portée sur les corners en déplacement, malgré 4,6 corners concédés par Rostov à domicile (3,8 sur ses 4 matchs à domicile). Le seuil de 5,5 est largement au-dessus de ses moyennes.",
+            "probability": 83
+          },
+          {
+            "market": "Total tirs",
+            "pick": "Moins de 31.5 tirs",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "83 % : le moteur attend 25,84 tirs, et les moyennes de tirs produits sont de 12,5 pour Rostov et 14,5 pour Krylya.",
+            "reasoning": "Les deux équipes concèdent environ 12 tirs par match, soit un total bien sous 31,5. Un score ouvert pourrait faire monter le volume, mais rien ne l'annonce.",
+            "probability": 83
+          },
+          {
+            "market": "Tirs — FK Rostov",
+            "pick": "FK Rostov — Moins de 18.5 tirs",
+            "verdict": "confirme",
+            "confidence": "forte",
+            "explanation": "83 % : Rostov tire 12,5 fois par match (14 à domicile) et le moteur en attend 13,92.",
+            "reasoning": "Même sa meilleure moyenne à domicile (14) reste loin de 18,5. Krylya concède 12,8 tirs par match, ce qui ne change pas la lecture.",
+            "probability": 83
+          },
+          {
+            "market": "Tirs — Kryliya Sovetov",
+            "pick": "Kryliya Sovetov — Moins de 15.5 tirs",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "79 % : Krylya tire 14,5 fois par match (11,5 à l'extérieur) et le moteur en attend 11,93.",
+            "reasoning": "Sa moyenne sur 10 matchs est plus proche du seuil que celle de Rostov, d'où une marge plus faible. À l'extérieur elle ne tire que 11,5 fois, ce qui soutient le pronostic.",
+            "probability": 79
+          },
+          {
+            "market": "Total tirs cadrés",
+            "pick": "Moins de 11.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "80 % : le moteur attend 8,91 tirs cadrés, avec 4,5 pour Rostov et 4,8 pour Krylya par match.",
+            "reasoning": "Le total moyen avoisine 9, sous le seuil de 11,5. Ce marché est plus volatil : mon bilan y est moins solide que sur les corners.",
+            "probability": 80
+          },
+          {
+            "market": "Tirs cadrés — FK Rostov",
+            "pick": "FK Rostov — Moins de 6.5 tirs cadrés",
+            "verdict": "confirme",
+            "confidence": "moyenne",
+            "explanation": "75 % : Rostov cadre 4,5 tirs par match (5,3 à domicile) et le moteur en attend 4,95.",
+            "reasoning": "Même à domicile, sa moyenne de 5,3 reste sous 6,5. La marge est plus mince que sur les tirs, et ce marché a un petit échantillon à domicile (4 matchs).",
+            "probability": 75
+          },
+          {
+            "market": "Tirs cadrés — Kryliya Sovetov",
+            "pick": "Kryliya Sovetov — Moins de 5.5 tirs cadrés",
+            "verdict": "nuance",
+            "confidence": "moyenne",
+            "explanation": "78 % : Krylya cadre 4,8 tirs par match et le moteur en attend 3,96.",
+            "reasoning": "À l'extérieur, Krylya cadre 5,8 tirs sur ses 4 derniers matchs, soit plus que le seuil, bien qu'elle tire peu (11,5). Le pronostic tient sur 10 matchs, mais cet écart invite à la prudence.",
+            "probability": 78
+          }
+        ]
+      },
+      "engineSnapshot": {
+        "label": "FK Rostov vs Kryliya Sovetov",
+        "expectedGoals": {
+          "home": 0.834,
+          "away": 1.281,
+          "source": "fotmob"
+        },
+        "trueOdds": {
+          "home": 1.99,
+          "draw": 3.68,
+          "away": 4.42
+        },
+        "market": {
+          "odds1": 1.95,
+          "oddsDraw": 3.57,
+          "odds2": 4.15
+        },
+        "edgePercent": null,
+        "staking": {
+          "action": "PASS",
+          "stake": null,
+          "reason": "aucun_bookmaker_autorise",
+          "candidates": [],
+          "limits": {
+            "edgeThresholdMin": 0.02,
+            "edgeThresholdMax": 0.25,
+            "maxValueOdds": 5
+          }
+        },
+        "statExpectations": {
+          "corners": {
+            "home": 4.57,
+            "away": 3.46,
+            "total": 8.03
+          },
+          "shots": {
+            "home": 13.92,
+            "away": 11.93,
+            "total": 25.84
+          },
+          "shotsOnTarget": {
+            "home": 4.95,
+            "away": 3.96,
+            "total": 8.91
+          }
+        },
+        "marketPredictions": [
+          {
+            "marketId": "result",
+            "params": {
+              "outcome": "home"
+            },
+            "market": "Résultat",
+            "predictedOutcome": "home",
+            "predictedLabel": "FK Rostov gagne",
+            "predictedOdds": 1.99,
+            "probability": 50,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalGoals",
+            "params": {
+              "line": 3.5,
+              "side": "under"
+            },
+            "market": "Total buts",
+            "predictedOutcome": "under",
+            "predictedLabel": "Moins de 3.5 buts",
+            "predictedOdds": 1.2,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "bothTeamsScore",
+            "params": {
+              "outcome": "no"
+            },
+            "market": "Les 2 équipes marquent",
+            "predictedOutcome": "no",
+            "predictedLabel": "Non",
+            "predictedOdds": 1.72,
+            "probability": 58,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "resultAndTotal",
+            "params": {
+              "line": 3.5,
+              "key": "homeUnder"
+            },
+            "market": "Résultat + Total buts",
+            "predictedOutcome": "homeUnder",
+            "predictedLabel": "FK Rostov & Moins de 3.5 buts",
+            "predictedOdds": 2.34,
+            "probability": 43,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamGoals",
+            "params": {
+              "team": "home",
+              "line": 1.5,
+              "side": "under"
+            },
+            "market": "Buts — FK Rostov",
+            "predictedOutcome": "under",
+            "predictedLabel": "FK Rostov — Moins de 1.5 buts",
+            "predictedOdds": 1.26,
+            "probability": 79,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamGoals",
+            "params": {
+              "team": "away",
+              "line": 0.5,
+              "side": "over"
+            },
+            "market": "Buts — Kryliya Sovetov",
+            "predictedOutcome": "over",
+            "predictedLabel": "Kryliya Sovetov — Plus de 0.5 buts",
+            "predictedOdds": 1.38,
+            "probability": 72,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalCorners",
+            "params": {
+              "line": 10.5,
+              "side": "under"
+            },
+            "market": "Total corners",
+            "predictedOutcome": "under",
+            "predictedLabel": "Moins de 10.5 corners",
+            "predictedOdds": 1.25,
+            "probability": 80,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamCorners",
+            "params": {
+              "team": "home",
+              "line": 6.5,
+              "side": "under"
+            },
+            "market": "Corners — FK Rostov",
+            "predictedOutcome": "under",
+            "predictedLabel": "FK Rostov — Moins de 6.5 corners",
+            "predictedOdds": 1.27,
+            "probability": 79,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamCorners",
+            "params": {
+              "team": "away",
+              "line": 5.5,
+              "side": "under"
+            },
+            "market": "Corners — Kryliya Sovetov",
+            "predictedOutcome": "under",
+            "predictedLabel": "Kryliya Sovetov — Moins de 5.5 corners",
+            "predictedOdds": 1.2,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalShots",
+            "params": {
+              "line": 31.5,
+              "side": "under"
+            },
+            "market": "Total tirs",
+            "predictedOutcome": "under",
+            "predictedLabel": "Moins de 31.5 tirs",
+            "predictedOdds": 1.2,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShots",
+            "params": {
+              "team": "home",
+              "line": 18.5,
+              "side": "under"
+            },
+            "market": "Tirs — FK Rostov",
+            "predictedOutcome": "under",
+            "predictedLabel": "FK Rostov — Moins de 18.5 tirs",
+            "predictedOdds": 1.21,
+            "probability": 83,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShots",
+            "params": {
+              "team": "away",
+              "line": 15.5,
+              "side": "under"
+            },
+            "market": "Tirs — Kryliya Sovetov",
+            "predictedOutcome": "under",
+            "predictedLabel": "Kryliya Sovetov — Moins de 15.5 tirs",
+            "predictedOdds": 1.26,
+            "probability": 79,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "totalShotsOnTarget",
+            "params": {
+              "line": 11.5,
+              "side": "under"
+            },
+            "market": "Total tirs cadrés",
+            "predictedOutcome": "under",
+            "predictedLabel": "Moins de 11.5 tirs cadrés",
+            "predictedOdds": 1.25,
+            "probability": 80,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShotsOnTarget",
+            "params": {
+              "team": "home",
+              "line": 6.5,
+              "side": "under"
+            },
+            "market": "Tirs cadrés — FK Rostov",
+            "predictedOutcome": "under",
+            "predictedLabel": "FK Rostov — Moins de 6.5 tirs cadrés",
+            "predictedOdds": 1.33,
+            "probability": 75,
+            "minOdds": 1.2
+          },
+          {
+            "marketId": "teamShotsOnTarget",
+            "params": {
+              "team": "away",
+              "line": 5.5,
+              "side": "under"
+            },
+            "market": "Tirs cadrés — Kryliya Sovetov",
+            "predictedOutcome": "under",
+            "predictedLabel": "Kryliya Sovetov — Moins de 5.5 tirs cadrés",
+            "predictedOdds": 1.29,
+            "probability": 78,
+            "minOdds": 1.2
+          }
+        ],
+        "baseDuCalcul": {
+          "montant": 300.92,
+          "origine": "capital-regle"
+        },
+        "engineVersion": 6
+      },
+      "analysedAt": "2026-11-18T19:27:26.496Z"
+    }
   },
   {
     "matchId": "cal-2026-11-20-independiente-del-valle-csd-macara",

@@ -1,0 +1,241 @@
+{
+  "version": 1,
+  "jour": "2026-11-21",
+  "phase": "rodage",
+  "nonSurveille": "Non surveillé par l'essai : la boucle des compositions, la boucle des cotes gratuites, et le détail de l'analyse au coup d'envoi (ses échecs ne sont dits que dans la fenêtre du serveur). Coût de la veille (matchs commencés pendant que le PC dormait) : non compté : aucune heure de coup d’envoi lisible sans la base.",
+  "couverture": {
+    "minutesObservees": 24,
+    "minutesDeVeille": 0,
+    "minutesArret": 514,
+    "minutesEnErreur": 0,
+    "tours": 3,
+    "toursReussis": 3
+  },
+  "serveur": {
+    "demarrages": [
+      {
+        "le": "2026-11-21T07:33:44.709Z",
+        "pid": 18168,
+        "commit": "1eb5763e358dad6c51ceeb302853ac00860e6127",
+        "type": "arret-du-serveur",
+        "id": "2026-11-21|arret-du-serveur|18168|07:33:44",
+        "empreinteDesCauses": "edbeea176827b15ba94a8367c549d97b5b5412ba"
+      }
+    ],
+    "trous": []
+  },
+  "passes": {
+    "total": 0,
+    "ok": 0,
+    "partielles": 0,
+    "enEchec": 0,
+    "nuit": null,
+    "rattrapages": [],
+    "liste": []
+  },
+  "alertes": {
+    "posees": [],
+    "levees": [],
+    "changees": []
+  },
+  "controleDuJour": {
+    "releves": "2026-11-20T14:36:25.389Z",
+    "pire": "orange",
+    "rouges": [],
+    "oranges": [
+      "buteurs-score",
+      "gardiens-score",
+      "score-calendrier",
+      "club-deux-fois",
+      "mauvaise-competition",
+      "classement-officiel",
+      "zeros-non-releves",
+      "hors-reperes-buts",
+      "hors-reperes-statistiques"
+    ],
+    "presentsAuDepart": 84
+  },
+  "fotmob": {
+    "transitions": []
+  },
+  "sauvegarde": {
+    "le": "2026-11-21T07:54:08.367Z",
+    "ok": true,
+    "rencontres": 63107,
+    "derniereDate": "2026-11-21",
+    "octets": 573190153
+  },
+  "restauration": null,
+  "ia": {
+    "appels": 1,
+    "ok": 1,
+    "echecs": 0,
+    "tokens": 5189
+  },
+  "direct": {
+    "suspensions": 0,
+    "minutesSuspendu": 0
+  },
+  "instantaneDuDepart": null,
+  "evenements": [
+    {
+      "id": "2026-11-21|arret-du-serveur|18168|07:33:44",
+      "le": "2026-11-21T07:33:44.709Z",
+      "type": "arret-du-serveur",
+      "signal": "S11",
+      "cle": "18168",
+      "texte": "CôteMaster a été arrêté : par vous ? (annonce périmée ; arrêt sans trace)",
+      "details": {
+        "pidAvant": 21136,
+        "commitAvant": "75c2c3e13d688cca12fc853b01f84861050586c7",
+        "commit": "1eb5763e358dad6c51ceeb302853ac00860e6127",
+        "code": "change",
+        "ecartMin": 932,
+        "marque": null,
+        "message": null,
+        "rapide": false
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-21|sauvegarde|sauvegarde|07:54:08",
+      "le": "2026-11-21T07:54:08.367Z",
+      "type": "sauvegarde",
+      "signal": "S7",
+      "cle": "sauvegarde",
+      "texte": "Sauvegarde faite (63107 rencontres).",
+      "details": {
+        "le": "2026-11-21T07:54:08.367Z",
+        "ok": true,
+        "rencontres": 63107,
+        "derniereDate": "2026-11-21",
+        "octets": 573190153
+      },
+      "classe": "info",
+      "cause": null,
+      "rodage": true
+    }
+  ],
+  "vus": {
+    "passes": [
+      "2026-11-15T21:02:28.565Z",
+      "2026-11-16T06:20:21.080Z",
+      "2026-11-16T11:07:18.037Z",
+      "2026-11-16T14:09:12.550Z",
+      "2026-11-16T17:10:12.011Z",
+      "2026-11-16T20:11:39.196Z",
+      "2026-11-16T23:14:51.725Z",
+      "2026-11-17T02:36:50.369Z",
+      "2026-11-17T05:39:05.493Z",
+      "2026-11-17T08:41:44.023Z",
+      "2026-11-17T11:42:34.417Z",
+      "2026-11-17T14:44:05.856Z",
+      "2026-11-17T17:44:54.473Z",
+      "2026-11-17T20:45:48.898Z",
+      "2026-11-17T23:46:41.389Z",
+      "2026-11-18T03:09:45.485Z",
+      "2026-11-18T06:12:10.247Z",
+      "2026-11-18T09:15:36.393Z",
+      "2026-11-18T11:08:04.425Z",
+      "2026-11-18T11:38:51.966Z",
+      "2026-11-18T13:21:00.375Z",
+      "2026-11-18T16:25:03.767Z",
+      "2026-11-18T19:26:38.533Z",
+      "2026-11-18T22:36:03.760Z",
+      "2026-11-19T09:02:25.135Z",
+      "2026-11-19T12:32:15.573Z",
+      "2026-11-19T15:45:19.913Z",
+      "2026-11-19T18:57:41.930Z",
+      "2026-11-19T22:07:07.578Z",
+      "2026-11-20T02:39:13.943Z",
+      "2026-11-20T14:30:39.554Z"
+    ],
+    "alertes": {
+      "audit": "{\"parType\":[\"buteurs\",\"fichiers\",\"gardien\"]}",
+      "simulationSaisons": "{\"inconnus\":[\"{\\\"league\\\":\\\"Allsvenskan - Sweden\\\",\\\"noms\\\":[\\\"Varbergs BoIS FC\\\",\\\"Östersunds FK\\\"]}\",\"{\\\"league\\\":\\\"Eliteserien - Norway\\\",\\\"noms\\\":[\\\"Bryne\\\",\\\"Odds Ballklubb\\\"]}\",\"{\\\"league\\\":\\\"MLS\\\",\\\"noms\\\":[\\\"Orlando City/FC Cincinnati\\\",\\\"Seattle Sounders FC/Real Salt Lake\\\"]}\"]}"
+    },
+    "controles": {
+      "score-football-data": "vert",
+      "buteurs-score": "orange",
+      "gardiens-score": "orange",
+      "score-calendrier": "orange",
+      "score-futur": "vert",
+      "score-absent": "vert",
+      "doublon-meme-sens": "vert",
+      "doublon-sens-inverse": "vert",
+      "doublon-meme-identifiant": "vert",
+      "club-deux-fois": "orange",
+      "mauvaise-competition": "orange",
+      "clubs-sans-identifiant": "vert",
+      "rencontres-sans-identifiant": "vert",
+      "chiffres-equipe": "vert",
+      "chiffres-joueurs": "vert",
+      "classement-officiel": "orange",
+      "jaunes-non-releves": "vert",
+      "corners-non-releves": "vert",
+      "tirs-non-releves": "vert",
+      "zeros-non-releves": "orange",
+      "rencontres-manquantes": "vert",
+      "feuilles-en-retard": "vert",
+      "magasin-a-jour": "vert",
+      "hors-reperes-buts": "orange",
+      "hors-reperes-statistiques": "orange",
+      "hors-reperes-cartons": "vert",
+      "match-aberrant": "vert",
+      "source-fotmob": "vert",
+      "source-football-data": "vert",
+      "source-odds-api": "vert",
+      "source-api-football": "vert",
+      "source-claude": "vert",
+      "source-cotes-gratuites": "vert"
+    },
+    "constats": [],
+    "fotmob": "ok",
+    "sauvegarde": "2026-11-21T07:54:08.367Z",
+    "restauration": "2026-11-16T23:31:41.234Z",
+    "direct": null,
+    "ia": {},
+    "sansPasse": false,
+    "sansSauvegarde": false,
+    "premierJour": "2026-11-20",
+    "joursConnus": {
+      "premier-demarrage-du-journal": [
+        "2026-11-20"
+      ],
+      "audit-buteurs-gardiens": [
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20"
+      ],
+      "calendriers-incomplets": [
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20"
+      ],
+      "controle-du-jour": [
+        "2026-11-16",
+        "2026-11-17"
+      ],
+      "ia-echec-isole": [
+        "2026-11-17"
+      ],
+      "classement-officiel": [
+        "2026-11-20"
+      ],
+      "chiffres-non-publies": [
+        "2026-11-20"
+      ],
+      "hors-reperes": [
+        "2026-11-20"
+      ]
+    },
+    "fotmobPanne": null,
+    "depassements": {}
+  }
+}
