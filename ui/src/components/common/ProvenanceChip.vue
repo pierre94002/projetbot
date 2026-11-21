@@ -21,7 +21,9 @@ import { etatProvenance, RELEVE_ANCIEN_APRES_HEURES } from '@/utils/langageParis
  * Deux emplacements pour que l'appelant garde ses propres mots : `source` (le
  * nom) et `quand` (la partie « relevé le … », avec { texte, ancien, ilYA } pour
  * reprendre l'ambre et le « il y a N jours » à son compte). `detail` : une
- * précision de plus au survol. Le panneau complet des sources reste celui de
+ * précision de plus au survol. `titre` (étape 46, 13/11/2026) : le texte COMPLET
+ * du survol, quand l'appelant écrit l'heure à sa façon (le direct : « 21 h 34 ») ;
+ * absent, le survol est celui d'avant. Le panneau complet des sources reste celui de
  * DataOriginMenu ; ceci en est la pastille, posée à côté d'un chiffre.
  */
 const props = defineProps({
@@ -30,6 +32,7 @@ const props = defineProps({
   action: { type: String, default: 'relevé' },
   fichier: { type: String, default: null },
   detail: { type: String, default: null }, // une précision de plus pour le survol (la durée d'un calcul, ce que couvre le relevé)
+  titre: { type: String, default: null }, // le texte complet du survol (étape 46) ; null : celui d'etatProvenance
   payant: { type: Boolean, default: false },
   vieuxApresHeures: { type: Number, default: RELEVE_ANCIEN_APRES_HEURES },
   maintenant: { type: Number, default: null },
@@ -45,12 +48,12 @@ const lu = computed(() =>
     maintenant: props.maintenant ?? liveNow.value
   })
 );
-const titre = computed(() => `${lu.value.titre}${props.detail ? ` ${props.detail}` : ''}${props.fichier ? ` Lu dans ${props.fichier}.` : ''}${props.payant ? ' Source payante.' : ''}`);
+const survol = computed(() => props.titre ?? `${lu.value.titre}${props.detail ? ` ${props.detail}` : ''}${props.fichier ? ` Lu dans ${props.fichier}.` : ''}${props.payant ? ' Source payante.' : ''}`);
 const ICONES = { recent: 'database', ancien: 'clock', 'sans-heure': 'info', 'sans-source': 'alert' };
 </script>
 
 <template>
-  <span class="prov" :class="[`is-${lu.etat}`, `prov--${variante}`]" :title="titre">
+  <span class="prov" :class="[`is-${lu.etat}`, `prov--${variante}`]" :title="survol">
     <AppIcon :name="ICONES[lu.etat]" :size="11" class="prov__icon" />
     <span class="prov__source"><slot name="source">{{ lu.source ?? lu.texte }}</slot></span>
     <span v-if="lu.source" class="prov__when"><slot name="quand" :texte="lu.texte" :ancien="lu.ancien" :il-y-a="lu.ilYA">{{ lu.texte }}</slot></span>

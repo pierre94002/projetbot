@@ -15,7 +15,6 @@ import MarketPicksBoard from '@/components/analysis/MarketPicksBoard.vue';
 import { rencontreVueParEquipe } from '@/utils/rencontres.js';
 import { matchStatsApi } from '@/services/matchStatsApi.js';
 import { oddsApi } from '@/services/oddsApi.js';
-import { teamStatsApi } from '@/services/teamStatsApi.js';
 import { useMatchStatus } from '@/composables/useMatchStatus.js';
 import { useLineupPolling, compositionAttendue } from '@/composables/useLineupPolling.js';
 import AppCard from '@/components/common/AppCard.vue';
@@ -29,7 +28,6 @@ import EmptyState from '@/components/common/EmptyState.vue';
 import LeagueBadge from '@/components/matches/LeagueBadge.vue';
 import MatchStatBars from '@/components/matches/MatchStatBars.vue';
 import MatchInfoPanel from '@/components/matches/MatchInfoPanel.vue';
-import MatchStatsPanel from '@/components/matches/MatchStatsPanel.vue';
 import ResultPredictionCard from '@/components/analysis/ResultPredictionCard.vue';
 import ScorePredictionCard from '@/components/analysis/ScorePredictionCard.vue';
 import TeamNewsCard from '@/components/analysis/TeamNewsCard.vue';
@@ -53,6 +51,14 @@ import { phraseSansPari } from '@/utils/verdictParMarche.js';
 import { provenanceDesButs } from '@/utils/modeleDeButs.js';
 import { clubsDuMatch } from '@/utils/ficheDuPronostic.js';
 import { liveNow } from '@/utils/liveClock.js';
+// Étape 46 (12/11/2026) : l'encart « En direct » (FotMob, gratuit) remplace la carte payante d'API-Football.
+import { useRoute } from 'vue-router';
+import DirectEncart from '@/components/direct/DirectEncart.vue';
+import { fenetreDeLEncart, idDeClub, instantDeLAdresse } from '@/utils/direct.js';
+// Correctifs D2 de l'étape 46 (12/11/2026, point 2 e) : l'encart se monte aussi quand la boucle du direct suit CE match en
+// cours (l'ensemble des matchs en cours, par la paire d'identifiants FotMob des deux clubs), même sans heure de coup d'envoi.
+import { useDirectEnCours } from '@/composables/useDirectEnCours.js';
+import { teamIdFor } from '@/utils/teamIds.js';
 import { TEAM_STAT_GROUPS } from '@/constants/matchDetailTabs.js';
 // Étape 10 du plan : le comparateur de vos bookmakers et le ticket (« J'ai parié »).
 import { reactive } from 'vue';
@@ -125,7 +131,6 @@ const analyse = ref({ loading: false, error: null, result: null });
 const page = ref({ loading: false, error: null, data: null }); // page FotMob du match
 const moyennes = ref({ loading: false, home: null, away: null });
 const forme = ref({ loading: false, home: [], away: [] });
-const liveMatchDetails = ref(null);
 // Étape 9 : ce que lisent le verdict par marché et la courbe des cotes — le magasin local, jamais un appel payant.
 const cotes = ref({ loading: false, error: null, data: null }); // GET /api/odds/fixture : cotes relevées gratuitement et leurs mouvements
 const saisies = ref({ loading: false, error: null, data: null }); // GET /api/odds/saisies : cotes saisies à la main (onglet Marchés)
@@ -162,6 +167,12 @@ const duCalendrier = computed(() => String(match.value?.matchId ?? '').startsWit
 // Un match du calendrier coté gratuitement (ESPN, 365Scores, Kalshi, Smarkets…) connaît son heure par la source de ses cotes.
 const coupDEnvoi = computed(() => page.value.data?.kickoff ?? (duCalendrier.value ? match.value?.marketOdds?.kickoff ?? null : match.value?.commenceTime ?? null));
 const matchStatus = useMatchStatus(() => coupDEnvoi.value);
+// Étape 46 (12/11/2026, P6 question 2) : l'encart « En direct » se monte de 10 minutes avant le coup d'envoi à 4 heures
+// après (en rejeu, `?instant=` : à l'heure du rejeu) ; il lit le direct de FotMob par les identifiants des deux clubs
+// (clubsDeLaPage), jamais par un nom, et ouvre la page Direct sur ce match.
+const routeDeLaPage = useRoute();
+const instantDuRejeu = computed(() => instantDeLAdresse(routeDeLaPage.query));
+const encartDuDirect = computed(() => fenetreDeLEncart(coupDEnvoi.value, instantDuRejeu.value ? Date.parse(instantDuRejeu.value) : liveNow.value));
 const meta = computed(() => page.value.data?.meta ?? null);
 // Étape 37 : les identifiants FotMob des deux clubs, quand la composition (publiée ou dernière alignée) les donne.
 const idsDesClubs = computed(() => {
@@ -174,6 +185,32 @@ const idsDesClubs = computed(() => {
 const clubsDeLaPage = computed(() =>
   clubsDuMatch({ compo: page.value.data?.lineups ?? page.value.data?.lastLineups ?? null, combinaison: analyse.value.result?.combinaison ?? null })
 );
+// Correctifs D2 de l'étape 46 (12/11/2026, point 2 e ; demande de Pierre : le direct sur TOUS les matchs) : un match du
+// calendrier ne connaît souvent que son jour, et le seul témoin sûr qu'il se joue est la boucle du direct. L'encart se monte
+// donc AUSSI quand l'ensemble des matchs en cours (useDirectEnCours) contient la paire de la page — ses identifiants FotMob
+// (clubsDeLaPage, sinon ceux des logos de l'en-tête), jamais un nom — à un jour près ; il lit alors le direct par
+// l'identifiant FotMob du match. Sans heure, c'est le seul chemin. Vu en cours une fois, il reste monté sur cette page :
+// c'est lui qui dit la fin (« terminé », « coupure-4h », R11) quand le match quitte l'ensemble.
+const directEnCours = useDirectEnCours();
+const enCoursDeLaPage = computed(() => {
+  if (!directEnCours.compte.value || !match.value) return null;
+  const logo = (nom) => (nom ? idDeClub(teamIdFor(nom, match.value.league ?? null)) : null);
+  return directEnCours.dePaire({
+    homeId: clubsDeLaPage.value.home ?? logo(match.value.home),
+    awayId: clubsDeLaPage.value.away ?? logo(match.value.away),
+    jour: coupDEnvoi.value ?? match.value.commenceTime ?? null
+  });
+});
+const directVu = ref(null);
+watch(
+  enCoursDeLaPage,
+  (e) => {
+    if (e?.fotmobId) directVu.value = { matchId: props.matchId, fotmobId: String(e.fotmobId) };
+  },
+  { immediate: true }
+);
+const fotmobIdDuDirect = computed(() => (enCoursDeLaPage.value?.fotmobId ? String(enCoursDeLaPage.value.fotmobId) : directVu.value?.matchId === props.matchId ? directVu.value.fotmobId : null));
+const encartMonte = computed(() => Boolean(fotmobIdDuDirect.value) || encartDuDirect.value);
 // FotMob donne un numéro (« 35 ») ; le calendrier, « Round 35 » ou « Journée 2 ».
 const journee = computed(() => {
   // Étape 36 : pour un match de coupe, le libellé du tour que le serveur a reconnu (« Dernier tour de qualification » pour la « final » d'août).
@@ -301,7 +338,6 @@ async function chargerSaisies() {
 async function load() {
   chargement.value = true;
   tab.value = 'resume';
-  liveMatchDetails.value = null;
   cotes.value = { loading: false, error: null, data: null };
   saisies.value = { loading: false, error: null, data: null };
   // Étape 10 : un autre match, un ticket neuf.
@@ -357,17 +393,6 @@ async function lancerAnalyseIa() {
     await aiStore.runPreMatch(props.matchId, { home: m.home, away: m.away, league: m.league, engineResult: analyse.value.result });
   } catch (error) {
     toastStore.error(`Analyse IA impossible : ${error.message}`);
-  }
-}
-
-// Score et statistiques en direct : appel API-Football, seulement sur clic.
-async function voirLeDirect() {
-  liveMatchDetails.value = { loading: true, error: null, data: null };
-  try {
-    const data = await teamStatsApi.getLiveMatchByName(match.value.home, coupDEnvoi.value ?? match.value.commenceTime);
-    liveMatchDetails.value = { loading: false, error: null, data };
-  } catch (error) {
-    liveMatchDetails.value = { loading: false, error: error.message, data: null };
   }
 }
 
@@ -892,39 +917,17 @@ const prixJuste = usePrixJuste(
           <MatchInfoPanel :meta="meta" sans-contexte />
         </AppCard>
 
-        <AppCard v-if="matchStatus === 'live'" title="En direct" subtitle="Score et statistiques en cours de match (API-Football, sur demande)." icon="bolt">
-          <AppButton v-if="!liveMatchDetails" variant="primary" size="sm" @click="voirLeDirect">
-            <template #icon><AppIcon name="bolt" :size="14" /></template>
-            Voir le direct
-          </AppButton>
-          <LoadingSpinner v-else-if="liveMatchDetails.loading" label="Score et statistiques en direct…" />
-          <div v-else-if="liveMatchDetails.error" class="cm-note is-danger">
-            <span class="cm-icon-box is-danger"><AppIcon name="alert" :size="16" /></span>
-            <div>
-              <p class="cm-note__title">Direct indisponible</p>
-              <p class="cm-note__text">Erreur : {{ liveMatchDetails.error }}</p>
-            </div>
-          </div>
-          <div v-else-if="!liveMatchDetails.data?.available" class="cm-note">
-            <span class="cm-icon-box is-muted"><AppIcon name="info" :size="16" /></span>
-            <div>
-              <p class="cm-note__title">Direct</p>
-              <p class="cm-note__text">Détails en direct indisponibles pour ce match.</p>
-            </div>
-          </div>
-          <template v-else>
-            <div class="upcoming__live-board">
-              <span class="cm-chip is-danger"><span class="cm-live-dot"></span>Direct</span>
-              <p class="upcoming__live-score cm-numeric">{{ liveMatchDetails.data.score.home ?? '—' }} - {{ liveMatchDetails.data.score.away ?? '—' }}</p>
-            </div>
-            <MatchStatsPanel
-              v-if="liveMatchDetails.data.teams?.length"
-              :teams="liveMatchDetails.data.teams"
-              :fallback-primary-name="match.home"
-              :fallback-opponent-name="match.away"
-              :league="match.league"
-            />
-          </template>
+        <!-- Étape 46 (12/11/2026, P6 question 2 et P6 bis) : « En direct » — FotMob, gratuit — remplace la carte payante
+             d'API-Football ; l'encart ouvre la page Direct sur ce match. Correctifs D2 : monté aussi quand la boucle du direct
+             suit ce match en cours (même sans heure de coup d'envoi), il lit alors le direct par l'identifiant FotMob. -->
+        <AppCard
+          v-if="encartMonte"
+          id="upcoming-direct"
+          title="En direct"
+          subtitle="Score, minute et cartons rouges relevés chez FotMob ; les probabilités ne sont montrées que si le banc d'essai les a jugées."
+          icon="bolt"
+        >
+          <DirectEncart :fotmob-id="fotmobIdDuDirect" :home-id="clubsDeLaPage.home" :away-id="clubsDeLaPage.away" :coup-d-envoi="coupDEnvoi" :match-id="matchId" :instant="instantDuRejeu" />
         </AppCard>
 
         <!-- Plus de détail : les onglets du haut, à portée de clic depuis le bas de la page. -->
@@ -1330,22 +1333,6 @@ const prixJuste = usePrixJuste(
 
 .upcoming__lineup-note {
   margin-bottom: 14px;
-}
-
-/* Le score en direct : gros, à côté du point rouge qui pulse. */
-.upcoming__live-board {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 14px;
-}
-
-.upcoming__live-score {
-  margin: 0;
-  font-size: 26px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  color: var(--cm-text-primary);
 }
 
 /* Le pari conseillé : icône, logo, le pari en gras, la cote en pastille pleine. */

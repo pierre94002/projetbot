@@ -15,6 +15,15 @@ const routes = [
     meta: { title: 'Matchs', section: 'matches' }
   },
   {
+    // « Direct » (étape 46 du plan, 12/11/2026) : les matchs en cours des championnats suivis — score, minute, cartons rouges
+    // relevés chez FotMob — et ce que le calcul en dit. Couleur de « Matchs » (aucune couleur de plus) ; `meta.nav` la
+    // distingue dans le menu. `?match=` (ou `?home=&away=&coup=`) ouvre la page sur un match ; `?instant=` : un rejeu.
+    path: '/direct',
+    name: 'direct',
+    component: () => import('@/views/LiveView.vue'),
+    meta: { title: 'Direct', section: 'matches', nav: 'direct' }
+  },
+  {
     path: '/statistiques',
     redirect: '/matches'
   },

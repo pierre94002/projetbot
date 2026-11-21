@@ -656,8 +656,9 @@ test('T-F12 — le câblage : la page passe les identifiants des clubs au verdic
     assert.ok(!source.includes(`${String.fromCharCode(92)}u`), `${f.join('/')} : aucun code Unicode échappé`);
     assert.doesNotMatch(source, /toFixed\(/, `${f.join('/')} : la virgule par toLocaleString`);
   }
-  // Les services de la page : ceux d'avant, aucun de plus.
-  assert.deepEqual([...page.matchAll(/^import \{ (\w+) \} from '@\/services\/(\w+)\.js';$/gm)].map((x) => x[2]), ['analysisApi', 'matchesApi', 'matchStatsApi', 'oddsApi', 'teamStatsApi']);
+  // Les services de la page : ceux d'avant, aucun de plus. Étape 46 (12/11/2026) : sans `teamStatsApi`, qui ne servait qu'à
+  // la carte payante d'API-Football, remplacée par l'encart « En direct » (il lit le direct par son propre service).
+  assert.deepEqual([...page.matchAll(/^import \{ (\w+) \} from '@\/services\/(\w+)\.js';$/gm)].map((x) => x[2]), ['analysisApi', 'matchesApi', 'matchStatsApi', 'oddsApi']);
   // La fiche ne reçoit que ce que la page a déjà lu ; aucune puce de composition, ni « Ce qui manque », ni dépliant de l'IA.
   const carte = lireUi('components', 'analysis', 'PercentageWhyCard.vue');
   assert.match(carte, /^ {2}analyse: \{ type: Object, default: null \},/m);

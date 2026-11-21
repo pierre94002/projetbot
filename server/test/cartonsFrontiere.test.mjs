@@ -33,6 +33,9 @@ import { preparerCopie, executer, SERVEUR, FIXTURES, RACINE_ESSAIS } from './aid
 import { fichiersDuMoteur, empreinteDuCode, empreinteDeLaCandidate, CANDIDATE_EN_ESSAI, MODULES_DU_MOTEUR } from '../src/core/engine/engineVersions.js';
 import * as LANC from '../src/bench/lancements.js';
 import { octetsSansLesAjoutsDe36 } from './aides/ajouts36.mjs';
+// Étape 46 (partie C, 13/11/2026) : la 46 se pose au registre au scellement (« direct » à la fin de PORTEES, le lancement 46 à
+// la fin) ; ces essais la retirent d'abord et passent avec et sans elle (aides/ajouts46.mjs).
+import { porteesSans46, lancementsSans46 } from './aides/ajouts46.mjs';
 import { enregistrerLancements, fenetresVues, compterVariantes, lancementDe } from '../src/bench/trialsRegistry.js';
 import { MARCHES_CONNUS } from '../src/sports/football/markets.js';
 import { DECISION_DE_PIERRE, PERIODES_DU_BANC, PAR_CHAMPIONNAT } from '../src/data/cartons/reglagesCartons.js';
@@ -175,7 +178,7 @@ test('T-X5 la déclaration de l’étape 33 AVANT le regard : portée à la fin 
   // Étape 36 (lot 1, 09/11/2026) : « coupes » ajoutée APRÈS « combinaison » (coupesFrontiere T-X5).
   // Étape 35 (lot 1a, 09/11/2026) : « debuts-de-saison » ajoutée APRÈS « coupes » (debutsFrontiere T-X5).
   // Étape 39 (lot 1b, 09/11/2026) : « mise » ajoutée APRÈS « debuts-de-saison » (miseFrontiere T-X5).
-  assert.deepEqual([...LANC.PORTEES], ['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs', 'combinaison', 'coupes', 'debuts-de-saison', 'mise']);
+  assert.deepEqual(porteesSans46(LANC.PORTEES), ['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs', 'combinaison', 'coupes', 'debuts-de-saison', 'mise']);
   assert.equal(LANC.VUES_DE_L_ETAPE_33.length, 2);
   for (const v of LANC.VUES_DE_L_ETAPE_33) {
     assert.deepEqual([...v.pour], ['cartons-corners'], `${v.de} → ${v.a}`);
@@ -193,7 +196,7 @@ test('T-X5 la déclaration de l’étape 33 AVANT le regard : portée à la fin 
   // Étape 36 (lot 1, 09/11/2026) : puis le lancement 36.
   // Étape 35 (lot 1a, 09/11/2026) : puis le lancement 35.
   // Étape 39 (lot 1b, 09/11/2026) : puis le lancement 39.
-  assert.deepEqual(LANC.LANCEMENTS.slice(LANC.LANCEMENTS.indexOf(l33)).map((l) => l.etape), ['33', '34', '38', '36', '35', '39'], 'le lancement 33 ajouté à la fin, puis les lancements 34, 38, 36, 35 et 39');
+  assert.deepEqual(lancementsSans46(LANC.LANCEMENTS).slice(lancementsSans46(LANC.LANCEMENTS).indexOf(l33)).map((l) => l.etape), ['33', '34', '38', '36', '35', '39'], 'le lancement 33 ajouté à la fin, puis les lancements 34, 38, 36, 35 et 39');
   for (const portee of LANC.PORTEES.filter((p) => !['tout', 'cartons-corners'].includes(p))) assert.ok(!LANC.fenetresDeclarees({ portee }).some((f) => f.etape === '33'), portee);
   assert.ok(LANC.fenetresDeclarees({ portee: 'cartons-corners' }).some((f) => f.etape === '33'));
   // Le premier démarrage date le lancement ; les fenêtres et le compte de l'étape 27 n'en voient rien.

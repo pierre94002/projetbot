@@ -35,6 +35,7 @@ import bettingMapRoutes from './bettingMap.routes.js';
 import marketKnowledgeRoutes from './marketKnowledge.routes.js';
 import simulationRoutes from './simulation.routes.js';
 import correctionsRoutes from './corrections.routes.js';
+import directRoutes from './direct.routes.js'; // Étape 46 (12/11/2026) : le direct ; son contrôleur charge la lecture par import() dynamique (R24).
 
 const router = Router();
 
@@ -87,5 +88,7 @@ router.use('/market-knowledge', marketKnowledgeRoutes);
 router.use('/simulation', simulationRoutes);
 // Étape 26 du plan : la boucle de correction — le tri du mois (malchance ou vrai défaut), les corrections proposées et leur journal ; les clics de Pierre (jamais pendant une passe).
 router.use('/corrections', correctionsRoutes);
+// Étape 46 du plan (12/11/2026) : le direct — le tableau de tous les matchs suivis et le détail d'un match (lecture seule, rejeu d'un instant dans le bac seulement).
+router.use('/direct', directRoutes);
 
 export default router;

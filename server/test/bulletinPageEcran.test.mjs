@@ -592,7 +592,8 @@ test('câblage — la route /bulletin et son entrée du menu : couleur d’Histo
   const menu = lireUi('components', 'layout', 'AppSidebar.vue');
   assert.match(menu, /\{ to: '\/bulletin', section: 'history', nav: 'bulletin', label: 'Bulletin', hint: 'Texte du jour, fiabilité IA', icon: 'sparkles' \}/);
   const entrees = [...menu.matchAll(/^\s*\{ to: '([^']+)'/gm)].map((m) => m[1]);
-  assert.deepEqual(entrees, ['/matches', '/paris', '/bookmakers', '/historique-moteur', '/sante-moteur', '/bulletin', '/feuille-de-route', '/reglages']);
+  // Étape 46 (12/11/2026) : « Direct » (/direct) en 2e place, juste sous « Matchs ».
+  assert.deepEqual(entrees, ['/matches', '/direct', '/paris', '/bookmakers', '/historique-moteur', '/sante-moteur', '/bulletin', '/feuille-de-route', '/reglages']);
   assert.ok(entrees.indexOf('/bulletin') === entrees.indexOf('/sante-moteur') + 1, 'juste après Santé du moteur');
 });
 

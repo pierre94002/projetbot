@@ -1,0 +1,864 @@
+{
+ "format": 1,
+ "quoi": "Banc du direct (étape 46, lot 1) : le regard de SÛRETÉ (R15 point 1).",
+ "ou": "bac à sable",
+ "regard": "surete",
+ "premierRegard": "2026-11-19T09:44:42.351Z",
+ "fin": "2026-11-19T09:53:36.986Z",
+ "dureeS": 534.6,
+ "colonne": "non-adoptee",
+ "modele": {
+  "grille": "ancien-81",
+  "engineVersion": 5,
+  "candidateHash": null
+ },
+ "export": {
+  "fichier": "C:\\Users\\PC\\CoteMaster\\bac-a-sable\\banc46\\export-2026-11-17.jsonl",
+  "sha1": "916e0cd821289a2add75e409745a7fe6c949e307",
+  "matchs": 978,
+  "de": "2026-09-24",
+  "a": "2026-11-17",
+  "roles": {
+   "service": 978
+  },
+  "principal28": {
+   "le": "2026-11-17T23:59:59.666Z",
+   "verdict": "retenu",
+   "gain": 0.014456285827310837,
+   "fourchette": [
+    0.009957309221462013,
+    0.01895526243315966
+   ],
+   "matchs": 1020,
+   "garde": {
+    "ok": true,
+    "eteints": [],
+    "seuilPt": 4
+   },
+   "lancement": "2026-10-27",
+   "version": "simulation-v1",
+   "sansEffets": {
+    "le": "2026-11-17T23:59:59.666Z",
+    "parametres": "sans effets du score ni rouges (variante sim-stratifiee-sans-effets)",
+    "marchesDuBloc": 18,
+    "calcule": true,
+    "rejouees": 1020,
+    "matchs": 1015,
+    "lignes": 18270,
+    "marches": 18,
+    "verdict": "pas-prouve",
+    "pasMoinsBon": true,
+    "gain": 0.000014902855430440286,
+    "fourchette": [
+     -0.0005270212257402523,
+     0.0005568269366011328
+    ],
+    "pertes": {
+     "sansEffets": 0.46694408739533894,
+     "avecEffets": 0.46692918453991067
+    },
+    "sommes": {
+     "sansEffets": 8531.068476712842,
+     "avecEffets": 8530.796201544168
+    },
+    "raison": "La fourchette contient zéro : l’écart peut venir du hasard (1 015 matchs, 27 variantes essayées).",
+    "aPart": {
+     "pid": 3216,
+     "rssMaxOctets": 136626176,
+     "rssFinOctets": 105119744
+    },
+    "dureeMs": 304461
+   }
+  },
+  "exclus": {
+   "sansRemplacement": 32,
+   "sansResultat": 27,
+   "sansLigneAvantLeCoupDEnvoi": 4,
+   "nonReglableButs": 1,
+   "chronologieIncomplete": 5,
+   "memeRencontre": 3,
+   "attribue": 1
+  }
+ },
+ "comptes": {
+  "fichier": "C:\\Users\\PC\\CoteMaster\\bac-a-sable\\banc46\\comptes-2026-11-17.json",
+  "sha1": "565af68f4618c5ca6d0d59247dc7fad21b83523b"
+ },
+ "passeDePierre": {
+  "avant": {
+   "verifiee": true,
+   "attenduS": 0
+  },
+  "pendant": {
+   "relectures": 19,
+   "attenduS": 0
+  }
+ },
+ "regles": {
+  "fichier": "C:\\Users\\PC\\CoteMaster\\bac-a-sable\\banc46\\banc-regles-etape46.md",
+  "sha1": "e34769ed9224ada81ee4205325b6368da52b667e",
+  "copie": "test/fixtures/banc-regles-etape46.md"
+ },
+ "scellement": {
+  "sha1": "27a9727a9783b1f43f33259a93f65a41b76e6917",
+  "scelleLe": "2026-11-15T11:24:33.527Z",
+  "modules": {
+   "src/data/direct/reglagesDirect.js": "5e03db65fff210862301a3f1542cfa1828afd66a",
+   "src/data/direct/calculDuDirect.js": "3afe64ded927fb448bf5caeccfcf7102dd125211",
+   "src/data/direct/rejeuDuDirect.js": "78cb9f0f7454e369b6dcfa3567f2422d70670987",
+   "src/data/direct/bancDuDirect.js": "9f84c66e961aeb3d5e24c1ba91dd2dba920f3d0e",
+   "src/data/direct/declarationDuDirect.js": "c4cf038e4da5558393d3e9a52140aff797c1a79c",
+   "scripts/etape46.mjs": "ea7cd3ffc68915ead17be6f473261efea2af250f",
+   "src/data/simulation/reglages.js": "6484fa850c00e7d2a956cb230661f61851931c7b",
+   "src/data/simulation/simulationMatch.js": "a429d807e19399403887f74cf866a630a3b95b29",
+   "src/data/simulation/entreesSimulation.js": "147ef8d392d81eedc9ab957a527be468829c153e",
+   "src/data/simulation/simulationNuit.js": "135ca2a95aca899cdd1cb64f2036472cf7f4f884",
+   "src/data/simulation/simulationMatchsEnfant.js": "4e93366ba4af35cb81eddcbb2e287c35663a844f",
+   "src/data/simulation/simulationRead.js": "e486a3532a3ba32b3fcb2f2e63f6130502852500",
+   "src/data/simulation/etatSimulation.js": "50ef305f7cffed8ad158f7c938c142352d8e7c20",
+   "src/data/calibration.js": "0aeb1e51aace6724b549b96defbd7df0d43eebba",
+   "src/data/db/dayTable.js": "afc8d42ccc9028531da8d9efc2700ece449d6a97",
+   "src/bench/guard.js": "60551323d356d5502684ca32276793fcb946ef84",
+   "src/bench/metrics.js": "c40ebc02607830dec623d071c0d70778f26cf806",
+   "src/core/model/poisson.js": "78be7262cce935f745491e220804da4e8e093aa8",
+   "src/core/model/dixonColes.js": "83c4cf5111c071ca7f95422f826125ecd464484f",
+   "src/core/engine/goalModel.js": "236a33d7f952b12d4596b02ecb7c6090afca137d",
+   "src/core/engine/scorePrediction.js": "44bb6ed76ed724981de01b8d48b5a91ccb59dbed",
+   "src/core/market/marginRemoval.js": "b3deabcfcf1fe1d7f875d93a1b327b6efc0e883f",
+   "src/core/engine/noteDuModeleDeButs.js": "654e310c28e88de98c2f2ccf247b64ba5c3babaf",
+   "src/core/engine/motsDuModeleDeButs.js": "1c81f14ce0e25e3af595318028234c565798eea0"
+  },
+  "documents": {
+   "conception.md": "7c2e4b5c94d9f26f472e74bad9fefee0b43c9137",
+   "decisions-orchestrateur.md": "666925c3775051d8bf8ac33e30f6e17c4644a7d2",
+   "critique.md": "bfbedd454c5592edfea7e73ec4a3303542043ed9",
+   "consigne-ecriture-lot1.md": "921fcda8027faa507e059de3a6959146a0918153",
+   "consigne-partie-C.md": "f92f94ef0ebc5428cac00854516405709677908f",
+   "regle-gel-pendant-essai27.md": "8f680adecf164600094c7602bb8b21bd95715fe0",
+   "gel-46.json": "a5b2fe5ce5815bbcf3a188e4ddeeb9c4f8db5fb6"
+  }
+ },
+ "registre": {
+  "K": 7,
+  "version": "direct-ancre",
+  "le": "2026-11-17",
+  "finDeLaVue": "2026-11-17"
+ },
+ "verrou": {
+  "fichier": "C:\\Users\\PC\\CoteMaster\\bac-a-sable\\banc46\\verrou-surete.json",
+  "pose": "2026-11-19T09:44:42.351Z"
+ },
+ "rouges": {
+  "auBanc": "a-la-minute",
+  "retardMedianCreneaux": 0,
+  "partSansRouge": 0.000683526999316473,
+  "libelles": {
+   "fichier": "C:\\Users\\PC\\CoteMaster\\bac-a-sable\\banc46\\libelles-2026-11-19\\libelles.json",
+   "sha1": "e227c204068850a7b255bf5b1dec326d75f7870f"
+  },
+  "phrase": "au banc, les cartons rouges sont connus à la minute ; en direct, ils arrivent quelques minutes après"
+ },
+ "preuve": null,
+ "ecartsDesExports": null,
+ "rejeu": null,
+ "essai": null,
+ "etalonnage": {
+  "ok": true,
+  "matchs": 978,
+  "lectures": 219072,
+  "nEcarts": 0,
+  "ecarts": [],
+  "horsF1": {
+   "n": 0,
+   "tolere": true,
+   "seuil": {
+    "part": 0.01,
+    "max": 20
+   },
+   "matchs": []
+  }
+ },
+ "arret": false,
+ "banc": {
+  "regard": "surete",
+  "colonne": "non-adoptee",
+  "K": 7,
+  "z": 2.69,
+  "zTranches": 3.322,
+  "T": 2300,
+  "tirages": 2000,
+  "graine": 46,
+  "creneaux": [
+   0,
+   3,
+   6,
+   9,
+   12,
+   15,
+   18,
+   21,
+   24,
+   27,
+   30,
+   33,
+   36,
+   39,
+   42,
+   45,
+   46,
+   49,
+   52,
+   55,
+   58,
+   61,
+   64,
+   67,
+   70,
+   73,
+   76,
+   79,
+   82,
+   85,
+   88,
+   91
+  ],
+  "n": 978,
+  "points": 31296,
+  "exclus": {
+   "horsF1": 0
+  },
+  "horsF1": {
+   "n": 0,
+   "seuil": {
+    "part": 0.01,
+    "max": 20
+   },
+   "matchs": [],
+   "regle": "C11 : un match dont un état réel sort de F1 est retiré de tous les jugements des deux regards, nommé et compté ; au-delà de 1 % des matchs du passage ou de 20 matchs, rien n’est jugé."
+  },
+  "affichee": "direct-ancre",
+  "principal": {
+   "a": "temps-restant-ancre",
+   "b": "direct-ancre",
+   "repliJ4c": false
+  },
+  "jugements": [
+   {
+    "id": "J4c",
+    "a": "direct-v1",
+    "b": "direct-ancre",
+    "sur": "1n2",
+    "famille": null,
+    "tranche": null,
+    "role": "affichage",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 31296,
+     "blocs": 978,
+     "matchs": 978
+    }
+   },
+   {
+    "id": "principal",
+    "a": "temps-restant-ancre",
+    "b": "direct-ancre",
+    "sur": "1n2",
+    "famille": null,
+    "tranche": null,
+    "role": "decide",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 31296,
+     "blocs": 978,
+     "matchs": 978
+    },
+    "repliJ4c": false
+   },
+   {
+    "id": "J1-O4",
+    "a": "temps-restant",
+    "b": "direct-ancre",
+    "sur": "1n2",
+    "famille": null,
+    "tranche": null,
+    "role": "rapporte",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 31296,
+     "blocs": 978,
+     "matchs": 978
+    }
+   },
+   {
+    "id": "J2-totalGoals",
+    "a": "temps-restant",
+    "b": "direct-ancre",
+    "sur": "buts",
+    "famille": "totalGoals",
+    "tranche": null,
+    "role": "exige",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 85823,
+     "blocs": 978,
+     "matchs": 978
+    }
+   },
+   {
+    "id": "J2-bothTeamsScore",
+    "a": "temps-restant",
+    "b": "direct-ancre",
+    "sur": "buts",
+    "famille": "bothTeamsScore",
+    "tranche": null,
+    "role": "exige",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 24473,
+     "blocs": 978,
+     "matchs": 978
+    }
+   },
+   {
+    "id": "J2-teamGoals",
+    "a": "temps-restant",
+    "b": "direct-ancre",
+    "sur": "buts",
+    "famille": "teamGoals",
+    "tranche": null,
+    "role": "exige",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 209692,
+     "blocs": 978,
+     "matchs": 978
+    }
+   },
+   {
+    "id": "J2s-totalGoals",
+    "a": "temps-restant-championnat",
+    "b": "direct-ancre",
+    "sur": "buts",
+    "famille": "totalGoals",
+    "tranche": null,
+    "role": "exige",
+    "verdict": "moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 85823,
+     "blocs": 978,
+     "matchs": 978
+    }
+   },
+   {
+    "id": "J2s-bothTeamsScore",
+    "a": "temps-restant-championnat",
+    "b": "direct-ancre",
+    "sur": "buts",
+    "famille": "bothTeamsScore",
+    "tranche": null,
+    "role": "exige",
+    "verdict": "moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 24473,
+     "blocs": 978,
+     "matchs": 978
+    }
+   },
+   {
+    "id": "J2s-teamGoals",
+    "a": "temps-restant-championnat",
+    "b": "direct-ancre",
+    "sur": "buts",
+    "famille": "teamGoals",
+    "tranche": null,
+    "role": "exige",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 209692,
+     "blocs": 978,
+     "matchs": 978
+    }
+   },
+   {
+    "id": "J3",
+    "a": "direct-sans-effets",
+    "b": "direct-v1",
+    "sur": "1n2",
+    "famille": null,
+    "tranche": null,
+    "role": "rapporte",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 31296,
+     "blocs": 978,
+     "matchs": 978
+    }
+   },
+   {
+    "id": "J5",
+    "a": "direct-rouges-ignores",
+    "b": "direct-v1",
+    "sur": "1n2",
+    "famille": null,
+    "tranche": null,
+    "role": "rapporte",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 2290,
+     "blocs": 186,
+     "matchs": 186
+    }
+   },
+   {
+    "id": "profil-des-minutes",
+    "a": "temps-restant",
+    "b": "direct-sans-effets",
+    "sur": "1n2",
+    "famille": null,
+    "tranche": null,
+    "role": "rapporte",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 31296,
+     "blocs": 978,
+     "matchs": 978
+    }
+   }
+  ],
+  "tranches": [
+   {
+    "id": "principal@1-15",
+    "a": "temps-restant-ancre",
+    "b": "direct-ancre",
+    "sur": "1n2",
+    "famille": null,
+    "tranche": "1-15",
+    "role": "tranche",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 4890,
+     "blocs": 978,
+     "matchs": 978
+    }
+   },
+   {
+    "id": "J2@1-15",
+    "a": "temps-restant",
+    "b": "direct-ancre",
+    "sur": "buts",
+    "famille": null,
+    "tranche": "1-15",
+    "role": "tranche",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 62155,
+     "blocs": 978,
+     "matchs": 978
+    }
+   },
+   {
+    "id": "principal@16-30",
+    "a": "temps-restant-ancre",
+    "b": "direct-ancre",
+    "sur": "1n2",
+    "famille": null,
+    "tranche": "16-30",
+    "role": "tranche",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 4890,
+     "blocs": 978,
+     "matchs": 978
+    }
+   },
+   {
+    "id": "J2@16-30",
+    "a": "temps-restant",
+    "b": "direct-ancre",
+    "sur": "buts",
+    "famille": null,
+    "tranche": "16-30",
+    "role": "tranche",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 58062,
+     "blocs": 978,
+     "matchs": 978
+    }
+   },
+   {
+    "id": "principal@31-45",
+    "a": "temps-restant-ancre",
+    "b": "direct-ancre",
+    "sur": "1n2",
+    "famille": null,
+    "tranche": "31-45",
+    "role": "tranche",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 4890,
+     "blocs": 978,
+     "matchs": 978
+    }
+   },
+   {
+    "id": "J2@31-45",
+    "a": "temps-restant",
+    "b": "direct-ancre",
+    "sur": "buts",
+    "famille": null,
+    "tranche": "31-45",
+    "role": "tranche",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 53610,
+     "blocs": 978,
+     "matchs": 978
+    }
+   },
+   {
+    "id": "principal@45+",
+    "a": "temps-restant-ancre",
+    "b": "direct-ancre",
+    "sur": "1n2",
+    "famille": null,
+    "tranche": "45+",
+    "role": "tranche",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 978,
+     "blocs": 978,
+     "matchs": 978
+    }
+   },
+   {
+    "id": "J2@45+",
+    "a": "temps-restant",
+    "b": "direct-ancre",
+    "sur": "buts",
+    "famille": null,
+    "tranche": "45+",
+    "role": "tranche",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 10144,
+     "blocs": 978,
+     "matchs": 978
+    }
+   },
+   {
+    "id": "principal@46-60",
+    "a": "temps-restant-ancre",
+    "b": "direct-ancre",
+    "sur": "1n2",
+    "famille": null,
+    "tranche": "46-60",
+    "role": "tranche",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 4890,
+     "blocs": 978,
+     "matchs": 978
+    }
+   },
+   {
+    "id": "J2@46-60",
+    "a": "temps-restant",
+    "b": "direct-ancre",
+    "sur": "buts",
+    "famille": null,
+    "tranche": "46-60",
+    "role": "tranche",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 47931,
+     "blocs": 978,
+     "matchs": 978
+    }
+   },
+   {
+    "id": "principal@61-75",
+    "a": "temps-restant-ancre",
+    "b": "direct-ancre",
+    "sur": "1n2",
+    "famille": null,
+    "tranche": "61-75",
+    "role": "tranche",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 4890,
+     "blocs": 978,
+     "matchs": 978
+    }
+   },
+   {
+    "id": "J2@61-75",
+    "a": "temps-restant",
+    "b": "direct-ancre",
+    "sur": "buts",
+    "famille": null,
+    "tranche": "61-75",
+    "role": "tranche",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 42771,
+     "blocs": 978,
+     "matchs": 978
+    }
+   },
+   {
+    "id": "principal@76-90",
+    "a": "temps-restant-ancre",
+    "b": "direct-ancre",
+    "sur": "1n2",
+    "famille": null,
+    "tranche": "76-90",
+    "role": "tranche",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 4890,
+     "blocs": 978,
+     "matchs": 978
+    }
+   },
+   {
+    "id": "J2@76-90",
+    "a": "temps-restant",
+    "b": "direct-ancre",
+    "sur": "buts",
+    "famille": null,
+    "tranche": "76-90",
+    "role": "tranche",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 38214,
+     "blocs": 977,
+     "matchs": 977
+    }
+   },
+   {
+    "id": "principal@90+",
+    "a": "temps-restant-ancre",
+    "b": "direct-ancre",
+    "sur": "1n2",
+    "famille": null,
+    "tranche": "90+",
+    "role": "tranche",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 978,
+     "blocs": 978,
+     "matchs": 978
+    }
+   },
+   {
+    "id": "J2@90+",
+    "a": "temps-restant",
+    "b": "direct-ancre",
+    "sur": "buts",
+    "famille": null,
+    "tranche": "90+",
+    "role": "tranche",
+    "verdict": "rien-de-moins-bon",
+    "gain": null,
+    "fourchette": null,
+    "n": {
+     "lignes": 7101,
+     "blocs": 975,
+     "matchs": 975
+    }
+   }
+  ],
+  "filet": {
+   "ecartees": 0,
+   "nommees": []
+  },
+  "f1": {
+   "seuil": 0.00001,
+   "pire": {
+    "masse": 5.876665948078678e-9,
+    "ou": "fotmob:fotmob-343377|fotmob-8177|2026-10-28, créneau 0 (0-0, rouges 0-0), direct-ancre"
+   },
+   "tenu": true,
+   "nonTenuPar": []
+  },
+  "paires": {
+   "variante": "direct-ancre",
+   "unites": 16,
+   "tranches": 8,
+   "paires": 128,
+   "jugees": 128,
+   "nonJugees": 0,
+   "ecartees": [
+    {
+     "unite": "result.draw",
+     "tranche": "1-15",
+     "annonce": 0.2631,
+     "realise": 0.2157,
+     "n": 978,
+     "points": 4890,
+     "ecart": -0.0474,
+     "sigma": 0.0133
+    },
+    {
+     "unite": "result.draw",
+     "tranche": "16-30",
+     "annonce": 0.2587,
+     "realise": 0.2157,
+     "n": 978,
+     "points": 4890,
+     "ecart": -0.043,
+     "sigma": 0.0133
+    },
+    {
+     "unite": "totalGoals.0.5",
+     "tranche": "16-30",
+     "annonce": 0.8651,
+     "realise": 0.9126,
+     "n": 663,
+     "points": 2862,
+     "ecart": 0.0476,
+     "sigma": 0.0122
+    },
+    {
+     "unite": "totalGoals.1.5",
+     "tranche": "1-15",
+     "annonce": 0.7259,
+     "realise": 0.7911,
+     "n": 978,
+     "points": 4835,
+     "ecart": 0.0652,
+     "sigma": 0.0137
+    },
+    {
+     "unite": "totalGoals.1.5",
+     "tranche": "16-30",
+     "annonce": 0.71,
+     "realise": 0.7703,
+     "n": 922,
+     "points": 4397,
+     "ecart": 0.0603,
+     "sigma": 0.0143
+    },
+    {
+     "unite": "totalGoals.1.5",
+     "tranche": "31-45",
+     "annonce": 0.6692,
+     "realise": 0.7234,
+     "n": 794,
+     "points": 3652,
+     "ecart": 0.0542,
+     "sigma": 0.0161
+    },
+    {
+     "unite": "teamGoals.home.1.5",
+     "tranche": "1-15",
+     "annonce": 0.4331,
+     "realise": 0.4891,
+     "n": 978,
+     "points": 4874,
+     "ecart": 0.0561,
+     "sigma": 0.015
+    },
+    {
+     "unite": "teamGoals.home.1.5",
+     "tranche": "16-30",
+     "annonce": 0.4157,
+     "realise": 0.4701,
+     "n": 955,
+     "points": 4699,
+     "ecart": 0.0544,
+     "sigma": 0.0148
+    },
+    {
+     "unite": "teamGoals.home.1.5",
+     "tranche": "31-45",
+     "annonce": 0.3816,
+     "realise": 0.4325,
+     "n": 905,
+     "points": 4388,
+     "ecart": 0.051,
+     "sigma": 0.0148
+    }
+   ],
+   "aSurveiller": []
+  },
+  "additionnel": {
+   "premiere": {
+    "buts": 84,
+    "X": 11,
+    "ecartMax": 0.1112,
+    "x": 2
+   },
+   "seconde": {
+    "buts": 174,
+    "X": 14,
+    "ecartMax": 0.1685,
+    "x": 5
+   },
+   "ecartMax": 0.1685
+  },
+  "verdict": "montre-non-tranche",
+  "pourquoi": null,
+  "phrase": "Rien de moins bon : montré, pas encore jugé (978 matchs rejoués sur les 2 300 prévus) ; non montré : « plus/moins de buts », « les deux marquent ».",
+  "famillesNonMontrees": [
+   "totalGoals",
+   "bothTeamsScore"
+  ],
+  "tranchesNonMontrees": []
+ }
+}

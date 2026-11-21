@@ -41,6 +41,9 @@ import {
   etatPourFeuilleDeRoute
 } from '../src/bench/trialsRegistry.js';
 import { LANCEMENTS, DONNEES_VUES, ETAPES_A_JUGER, verifierLancements, LancementsInvalides } from '../src/bench/lancements.js';
+// Étape 46 (partie C, 13/11/2026) : la 46 se pose au registre au scellement seulement (son lancement à la fin, un « le » fixe :
+// le jour de l'export) ; les listes exactes d'avant elle sont lues sans elle (aides/ajouts46.mjs) : avec et sans elle.
+import { lancementsSans46 } from './aides/ajouts46.mjs';
 import { etatFeuilleDeRoute } from '../src/data/roadmap/feuilleDeRoute.js';
 import { HISTORIQUE } from '../src/data/roadmap/historique.js';
 import { etapeParId, IDS_ETAPES } from '../src/data/roadmap/plan.js';
@@ -218,7 +221,7 @@ test('registre : enregistrerLancements crée le fichier, daté du jour de PARIS 
   // Étape 32 (lot 1a, 29/10/2026) : le contexte du match, daté du premier démarrage avec ce code (variantes déclarées avant le regard).
   // Étape 33 (lot 1a, 02/11/2026) : les cartons et les réglages par championnat, datés du premier démarrage eux aussi.
   // Étape 36 (lot 1, 09/11/2026) : les coupes, datées du premier démarrage elles aussi.
-  assert.deepEqual(LANCEMENTS.map((l) => [l.etape, l.version, l.le]), [['29', 'indice-v1', '2026-10-14'], ['30', 'fiches-v1', null], ['37', 'style-v1', null], ['28', 'simulation-v1', null], ['32', 'contexte-v1', null], ['33', 'cartons-corners-v1', null], ['34', 'joueurs-v1', null], ['38', 'combinaison-v1', null], ['36', 'coupes-v1', null], ['35', 'debuts-de-saison-v1', null], ['39', 'mise-v1', null]]);
+  assert.deepEqual(lancementsSans46(LANCEMENTS).map((l) => [l.etape, l.version, l.le]), [['29', 'indice-v1', '2026-10-14'], ['30', 'fiches-v1', null], ['37', 'style-v1', null], ['28', 'simulation-v1', null], ['32', 'contexte-v1', null], ['33', 'cartons-corners-v1', null], ['34', 'joueurs-v1', null], ['38', 'combinaison-v1', null], ['36', 'coupes-v1', null], ['35', 'debuts-de-saison-v1', null], ['39', 'mise-v1', null]]);
   assert.deepEqual(enregistrerLancements({ fichier: vide, lancements: [] }), { nouveaux: [], source: 'absent', probleme: null });
   assert.equal(fs.existsSync(vide), false);
 
@@ -410,7 +413,7 @@ test('juge de preuve, « déjà vu » par PORTÉE (correction du 19/10) : DONNEE
   // Étape 28 (27/10) : sa déclaration (simulation-v1, « le: null ») est datée du démarrage comme 30 et 37 (§3.4 de 28).
   // Étape 32 (lot 1a, 29/10) : contexte-v1, « le: null », datée du démarrage elle aussi ; sa portée « contexte » n'est jamais
   // « déjà vue » par le moteur (la dernière ligne de ce test : fenetresVues('27') inchangé).
-  assert.deepEqual(enregistrerLancements({ fichier: vrai, maintenant: Date.parse('2026-10-19T08:00:00Z') }).nouveaux, [
+  assert.deepEqual(enregistrerLancements({ fichier: vrai, maintenant: Date.parse('2026-10-19T08:00:00Z') }).nouveaux.filter((x) => x.etape !== '46'), [
     { etape: '29', version: 'indice-v1', le: '2026-10-14' },
     { etape: '30', version: 'fiches-v1', le: '2026-10-19' },
     { etape: '37', version: 'style-v1', le: '2026-10-19' },

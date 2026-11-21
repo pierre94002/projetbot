@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { RouterLink, useRoute, useRouter } from 'vue-router';
 import { useMatchesStore } from '@/stores/matchesStore.js';
 import { useSourcesStore } from '@/stores/sourcesStore.js';
 import { useToastStore } from '@/stores/toastStore.js';
@@ -31,6 +31,10 @@ import { matchStatsApi } from '@/services/matchStatsApi.js';
 import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
 import { liveNow } from '@/utils/liveClock.js';
 import { computeMatchStatus } from '@/utils/matchStatus.js';
+// Correctifs D2 de l'étape 46 (12/11/2026, point 2 d) : « N en direct » compte les matchs que la boucle du direct suit en cours.
+import { useDirectEnCours } from '@/composables/useDirectEnCours.js';
+// Correctifs D3 de l'étape 46 (12/11/2026, point 3) : en rejeu, « N en direct » garde l'instant, comme la puce des cartes.
+import { adresseDuDirect } from '@/utils/direct.js';
 
 /**
  * La page d'accueil (refonte visuelle du 01/10/2026) : la barre d'onglets,
@@ -133,23 +137,28 @@ const filteredMatches = computed(() => {
 });
 
 // Les chiffres du bandeau (présentation seulement) : parmi les rencontres
-// listées, combien se jouent en ce moment, combien restent à jouer
-// aujourd'hui, et combien de compétitions. Même règle que les puces de
-// MatchesTable : l'heure « 12:00:00Z » d'un match du calendrier n'est pas un
-// coup d'envoi ; recalculé avec l'horloge partagée `liveNow`.
+// listées, combien restent à jouer aujourd'hui, et combien de compétitions.
+// Même règle que les puces de MatchesTable : l'heure « 12:00:00Z » d'un match
+// du calendrier n'est pas un coup d'envoi ; recalculé avec l'horloge partagée
+// `liveNow`. Correctifs D2 de l'étape 46 (12/11/2026, point 2 d) : « N en
+// direct » n'est plus compté à l'heure du coup d'envoi — c'est le compte de
+// l'ensemble des matchs que la boucle du direct suit en cours (FotMob,
+// useDirectEnCours), ceux du calendrier sans heure compris.
+const directEnCours = useDirectEnCours();
+// Correctifs D3 (point 3) : le lien « N en direct » ouvre la page Direct au même instant qu'un rejeu (`?instant=` de
+// l'adresse) ; hors rejeu, `/direct` tout court. La même adresse que la puce « Direct » d'une carte (adresseDuDirect).
+const lienDuDirect = computed(() => adresseDuDirect({ instant: directEnCours.instant.value }));
 const resume = computed(() => {
   const maintenant = liveNow.value;
   const aujourdhui = new Date(maintenant).toISOString().slice(0, 10);
   const competitions = new Set();
-  let enDirect = 0;
   let duJour = 0;
   for (const match of filteredMatches.value) {
     competitions.add(match.league);
     const statut = match.hasOdds === false ? 'upcoming' : computeMatchStatus(match.commenceTime, maintenant);
-    if (statut === 'live') enDirect++;
-    else if (statut !== 'finished' && toDateKey(match.commenceTime) === aujourdhui) duJour++;
+    if (statut !== 'live' && statut !== 'finished' && toDateKey(match.commenceTime) === aujourdhui) duJour++;
   }
-  return { enDirect, duJour, competitions: competitions.size };
+  return { enDirect: directEnCours.compte.value, duJour, competitions: competitions.size };
 });
 
 async function loadMatches() {
@@ -353,9 +362,18 @@ onMounted(() => {
             {{ filteredMatches.length }} rencontre{{ filteredMatches.length > 1 ? 's' : '' }}
             <span v-if="filteredMatches.length !== matchesStore.matches.length" class="matches-hero__of">sur {{ matchesStore.matches.length }}</span>
           </span>
-          <span v-if="resume.enDirect" class="cm-chip is-danger" title="Rencontres en cours en ce moment">
+          <!-- Étape 46 (12/11/2026, P6 bis) : le compte ouvre la page Direct. Correctifs D2 : il compte les matchs que la
+               boucle du direct suit en cours (FotMob), tous championnats suivis, même sans heure de coup d'envoi.
+               Correctifs D3 (point 3) : en rejeu, le lien garde l'instant (lienDuDirect). -->
+          <RouterLink
+            v-if="resume.enDirect"
+            :to="lienDuDirect"
+            class="cm-chip is-danger matches-hero__direct"
+            data-direct-link
+            title="Matchs que la boucle du direct suit en cours (FotMob) : la page Direct montre le score, la minute et les cartons rouges relevés chez FotMob"
+          >
             <span class="cm-live-dot"></span>{{ resume.enDirect }} en direct
-          </span>
+          </RouterLink>
           <span v-if="resume.duJour" class="cm-chip is-accent" title="Rencontres encore à jouer aujourd'hui">
             <AppIcon name="clock" :size="11" />{{ resume.duJour }} aujourd'hui
           </span>
@@ -467,6 +485,16 @@ onMounted(() => {
 .matches-hero__of {
   font-weight: 500;
   opacity: 0.75;
+}
+
+/* Étape 46 : « N en direct » est un lien vers la page Direct. */
+.matches-hero__direct {
+  text-decoration: none;
+}
+
+.matches-hero__direct:hover,
+.matches-hero__direct:focus-visible {
+  text-decoration: underline;
 }
 
 

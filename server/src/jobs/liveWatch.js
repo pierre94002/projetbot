@@ -52,6 +52,9 @@ import { listBets } from '../data/repositories/betsRepository.js';
 import { readJsonFile } from '../utils/atomicJson.js';
 import { mettreEnFile } from '../data/enregistreurs/file.js';
 import { iso, jourUtc, libelleSuivi, idRencontreValide, pause, JOUR_MS, MINUTE_MS } from '../data/enregistreurs/communs.js';
+// ---- étape 46 (début) : les compteurs du partage de la liste du jour (R4 : une copie n'est pas une lecture) ----
+import { sharedDayListStats } from '../data/providers/fotMobProvider.js';
+// ---- étape 46 (fin) ----
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FAVORIS = path.resolve(__dirname, '../../data/runtime/favorites.json');
@@ -157,6 +160,207 @@ export function getLiveState() {
   return [...suivis.values()].map((s) => ({ ...s.dernier, rang: s.rang, dernierDetail: s.dernierDetail ? iso(s.dernierDetail) : null }));
 }
 
+// ---- étape 46 (début) : la mémoire du direct, à côté de la boucle de E (conception § 3.1 ; critique R4, R25, R37) ----
+/*
+ * L'étape 46 (« Prédiction en direct ») LIT ce que la boucle voit, sans rien changer à ce qu'elle écrit ni à son rythme :
+ *   - le module de la mémoire (data/direct/memoireDuDirect.js) est chargé UNE fois, au premier tour, par import()
+ *     DYNAMIQUE : s'il manque ou casse, la boucle tourne comme avant (`suivi46` : undefined = pas encore essayé, null =
+ *     indisponible ; la raison dans `module46`) ;
+ *   - à chaque tour, la ligne de la liste et le détail lus pour un match sont notés en COPIES GELÉES (le détail sans ses
+ *     statistiques), puis passés à `suivre` UNE fois par match, liste et détail ensemble, juste avant l'oubli des matchs ;
+ *     une faute de `suivre` remet la mémoire de ce match à null et se compte (`erreurs46`) : elle n'arrête jamais E ;
+ *   - R4 : la liste servie par le partage d'une minute (fetchMatchesByDate) est une COPIE quand le compteur `servies` monte
+ *     sans `requetes` pendant la lecture ; une copie n'est pas une observation, sauf si la ligne du match a changé depuis
+ *     le tour d'avant (une autre boucle a relu la liste) ; `listeFotmobA` = l'heure de la dernière VRAIE lecture ;
+ *   - un match fini est gardé trois heures dans `finis46` (copie profonde de sa ligne, de l'instantané « fin », de sa
+ *     mémoire) ; redevenu « en cours », il en sort et reprend sa mémoire (R37 point 9) ;
+ *   - getEtatMinute() rend des COPIES PROFONDES : les modifier ne touche jamais la boucle (R25).
+ * Aucune requête de plus, aucune écriture, aucun calcul ici. Les heures sont en millisecondes.
+ */
+const FINIS_GARDES_46_MS = 3 * 3_600_000;
+let suivi46;
+let module46 = { etat: 'pas-charge', raison: null };
+let erreurs46 = { n: 0, derniere: null };
+let listeFotmobA = null;
+let copies46 = new WeakMap();
+const finis46 = new Map();
+
+/** Le module de la mémoire, une fois, par import() dynamique ; ne lève jamais. */
+async function charger46() {
+  try {
+    const module = await import('../data/direct/memoireDuDirect.js');
+    if (typeof module?.suivre !== 'function') throw new Error('memoireDuDirect.js ne rend pas suivre()');
+    suivi46 = module;
+    module46 = { etat: 'charge', raison: null };
+  } catch (error) {
+    suivi46 = null;
+    module46 = { etat: 'indisponible', raison: String(error?.message ?? error).slice(0, 200) };
+  }
+}
+
+/** Avant une lecture de la liste : combien de lignes déjà reçues, et les compteurs du partage. */
+function compteurs46(lus) {
+  try {
+    return { n: lus.length, stats: sharedDayListStats() };
+  } catch {
+    return { n: lus.length, stats: null };
+  }
+}
+
+/** Après la lecture : chaque ligne reçue marquée « copie du partage » ou « lue » (R4). Aucun compteur bougé = lue. */
+function noterListe46(avant, lus, maintenant) {
+  try {
+    const apres = avant?.stats ? sharedDayListStats() : null;
+    const copie = Boolean(apres) && apres.servies > avant.stats.servies && apres.requetes === avant.stats.requetes;
+    for (let i = avant.n; i < lus.length; i++) if (lus[i] && typeof lus[i] === 'object') copies46.set(lus[i], copie);
+    if (!copie) listeFotmobA = maintenant;
+  } catch {
+    // jamais une faute de la 46 dans le tour de E
+  }
+}
+
+/** La ligne d'un match, gelée ; une copie dont la ligne a changé depuis le tour d'avant compte comme une lecture (R4). */
+function ligne46(s, m) {
+  const signature = JSON.stringify(m);
+  const listeReelle = copies46.get(m) !== true || signature !== s.signature46;
+  s.signature46 = signature;
+  return { liste: Object.freeze({ ...m }), listeReelle };
+}
+
+/** Juste après `s.liste = m` : la ligne du tour, notée pour le suivi de fin de tour. */
+function observerListe46(s, m) {
+  try {
+    if (finis46.has(s.id)) {
+      if (s.memoire46 === undefined) s.memoire46 = finis46.get(s.id).memoire ?? null;
+      finis46.delete(s.id);
+    }
+    s.obs46 = { ...ligne46(s, m), detail: null };
+  } catch {
+    s.obs46 = null;
+  }
+}
+
+/** Juste après la lecture du détail d'un match : le détail du même tour, gelé, sans ses statistiques (R25). */
+function observerDetail46(s, detail) {
+  try {
+    if (!s.obs46 || !detail || typeof detail !== 'object') return;
+    const { stats, ...sansStats } = detail;
+    s.obs46.detail = Object.freeze(sansStats);
+  } catch {
+    // le détail n'est pas noté : la liste seule ce tour-ci
+  }
+}
+
+/** UN appel de suivre() pour ce match ; une faute remet sa mémoire à null et se compte (R25 point 2). */
+function noter46(s, observation, maintenant) {
+  if (!suivi46 || !observation) return;
+  try {
+    s.memoire46 = suivi46.suivre(s.memoire46 ?? null, { liste: observation.liste, detail: observation.detail, maintenant, listeReelle: observation.listeReelle });
+  } catch (error) {
+    s.memoire46 = null;
+    erreurs46 = { n: erreurs46.n + 1, derniere: { at: iso(maintenant), message: String(error?.message ?? error).slice(0, 200) } };
+  }
+}
+
+/** Fin du tour (avant l'oubli) : un suivi par match vu, liste et détail ensemble ; les finis de plus de trois heures oubliés. */
+function suivreLeTour46(maintenant) {
+  try {
+    for (const s of suivis.values()) {
+      if (!s.obs46) continue;
+      noter46(s, s.obs46, maintenant);
+      s.obs46 = null;
+    }
+    for (const [id, f] of finis46) if (maintenant - f.at >= FINIS_GARDES_46_MS) finis46.delete(id);
+  } catch {
+    // rien : le tour de E continue
+  }
+}
+
+/** Branche de fin : la dernière ligne suivie, puis le match gardé trois heures (copie profonde de l'instantané « fin »). */
+function finir46(s, m, fin, maintenant) {
+  try {
+    noter46(s, { ...ligne46(s, m), detail: null }, maintenant);
+    finis46.set(
+      s.id,
+      structuredClone({ id: s.id, league: s.league, leagueKey: s.leagueKey, date: s.date, kickoff: s.kickoff, homeId: s.homeId, awayId: s.awayId, homeName: s.homeName, awayName: s.awayName, at: maintenant, liste: m, fin, memoire: s.memoire46 ?? null })
+    );
+  } catch {
+    // le match fini n'est pas gardé pour la 46 : E n'en sait rien
+  }
+}
+
+/**
+ * L'ÉTAT DU DIRECT À CETTE MINUTE, pour l'étape 46 (data/direct/lectureDuDirect.js) : des COPIES PROFONDES, jamais les
+ * objets de la boucle. `matchs` : les matchs en cours suivis (leur ligne de liste, leur dernier instantané, leur mémoire) ;
+ * `finis` : ceux dont la fin a été relevée il y a moins de trois heures ; `charge.listesFotmob` = les lectures de la liste
+ * faites chez FotMob par TOUTES les boucles (le partage), `charge.listes` = les tours de celle-ci qui ont reçu une liste.
+ */
+export function getEtatMinute(maintenant = Date.now()) {
+  let partage = null;
+  try {
+    partage = sharedDayListStats();
+  } catch {
+    partage = null;
+  }
+  const matchs = [];
+  for (const s of suivis.values()) {
+    if (s.fini || !s.liste) continue;
+    matchs.push({
+      id: s.id,
+      league: s.league,
+      leagueKey: s.leagueKey,
+      date: s.date,
+      kickoff: s.kickoff,
+      homeId: s.homeId,
+      awayId: s.awayId,
+      homeName: s.homeName,
+      awayName: s.awayName,
+      rang: s.rang ?? null,
+      coverage: s.coverage ?? null,
+      vuA: s.vuA ?? null,
+      premiereVue: s.premiereVue ?? null,
+      dernierDetailA: s.dernierDetail ?? null,
+      liste: s.liste,
+      dernier: s.dernier ?? null,
+      memoire: s.memoire46 ?? null
+    });
+  }
+  return structuredClone({
+    v: 1,
+    at: maintenant,
+    module46,
+    erreurs46,
+    listeFotmobA,
+    derniereListe: etat.derniereListe || null,
+    prochainCoupDEnvoi: etat.prochainCoupDEnvoi,
+    suspenduJusqua: etat.suspenduJusqua > maintenant ? etat.suspenduJusqua : null,
+    startedAt: etat.startedAt,
+    dernierTour: etat.dernierTour,
+    charge: {
+      listesFotmob: partage?.requetes ?? null,
+      listesServies: partage?.servies ?? null,
+      listesEnEchec: partage?.echecs ?? null,
+      tours: etat.totaux.tours,
+      listes: etat.totaux.listes,
+      details: etat.totaux.details,
+      horsPlafond: etat.totaux.horsPlafond
+    },
+    matchs,
+    finis: [...finis46.values()].filter((f) => maintenant - f.at < FINIS_GARDES_46_MS)
+  });
+}
+
+/** Pour les tests (appelé par __reglerDirect) : la mémoire du direct oubliée, le module à recharger. */
+function reglerLe46() {
+  suivi46 = undefined;
+  module46 = { etat: 'pas-charge', raison: null };
+  erreurs46 = { n: 0, derniere: null };
+  listeFotmobA = null;
+  copies46 = new WeakMap();
+  finis46.clear();
+}
+
+// ---- étape 46 (fin) ----
 // ----------------------------------------------------------- priorités
 /**
  * Les rangs de la rotation (relus toutes les dix minutes au plus) : favoris,
@@ -303,6 +507,9 @@ export async function tourDuDirect({
   enCours = true;
   const bilan = { at: iso(maintenant), listeLue: false, enDirect: 0, details: 0, horsPlafond: 0, instantanes: 0, fins: 0, erreurs: 0 };
   try {
+    // ---- étape 46 (début) : le module de la mémoire, une fois, par import() dynamique (ne lève jamais) ----
+    if (suivi46 === undefined) await charger46();
+    // ---- étape 46 (fin) ----
     if (etat.suspenduJusqua > maintenant) {
       bilan.suspendu = iso(etat.suspenduJusqua);
       return bilan;
@@ -325,7 +532,13 @@ export async function tourDuDirect({
     let reussies = 0;
     for (const date of dates) {
       try {
+        // ---- étape 46 (début) : les compteurs du partage avant la lecture (R4) ----
+        const avant46 = compteurs46(lus);
+        // ---- étape 46 (fin) ----
         lus.push(...(await lireListe(date)));
+        // ---- étape 46 (début) : copie du partage ou vraie lecture, ligne par ligne (R4) ----
+        noterListe46(avant46, lus, maintenant);
+        // ---- étape 46 (fin) ----
         reussies++;
       } catch (error) {
         bilan.erreurs++;
@@ -386,10 +599,16 @@ export async function tourDuDirect({
           s.dernier = fin;
           s.fini = true;
           bilan.fins++;
+          // ---- étape 46 (début) : la dernière ligne suivie, et le match gardé trois heures (copie profonde) ----
+          finir46(s, m, fin, maintenant);
+          // ---- étape 46 (fin) ----
         }
         continue;
       }
       s.liste = m;
+      // ---- étape 46 (début) : la ligne du tour, gelée, notée pour le suivi de fin de tour ----
+      observerListe46(s, m);
+      // ---- étape 46 (fin) ----
       bilan.enDirect++;
     }
     etat.prochainCoupDEnvoi = prochain;
@@ -422,6 +641,9 @@ export async function tourDuDirect({
       etat.totaux.details++;
       bilan.details++;
       s.dernierDetail = maintenant;
+      // ---- étape 46 (début) : le détail du même tour, gelé, sans ses statistiques ----
+      observerDetail46(s, detail);
+      // ---- étape 46 (fin) ----
       if (detail && !detail.stats) s.sansStats = true;
       if (detail?.stats) s.sansStats = false;
       // La couverture du championnat (« xG », « lower »…) reste connue pour les instantanés de la liste seule.
@@ -445,6 +667,9 @@ export async function tourDuDirect({
       s.dernierInstantane = maintenant;
     }
 
+    // ---- étape 46 (début) : un seul suivi par match et par tour, liste et détail ensemble (R4, R25) ----
+    suivreLeTour46(maintenant);
+    // ---- étape 46 (fin) ----
     // 5. Oublier les matchs finis et ceux disparus de la liste.
     for (const [id, s] of suivis) {
       if (s.fini || maintenant - (s.vuA ?? 0) > OUBLI_MS) suivis.delete(id);
@@ -509,4 +734,7 @@ export function __reglerDirect(reglages = {}) {
     dernierTour: null,
     totaux: { tours: 0, listes: 0, details: 0, instantanes: 0, fins: 0, erreurs: 0, horsPlafond: 0 }
   });
+  // ---- étape 46 (début) : la mémoire du direct oubliée aussi ----
+  reglerLe46();
+  // ---- étape 46 (fin) ----
 }

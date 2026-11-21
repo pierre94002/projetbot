@@ -11,6 +11,9 @@ import { useTeamStatsModalStore } from '@/stores/teamStatsModalStore.js';
 import { useEnjeuxStore } from '@/stores/enjeuxStore.js';
 import { teamIdFor } from '@/utils/teamIds.js';
 import { tour } from '@/utils/fotmobLabels.js';
+import { router } from '@/router/index.js';
+import { adresseDuDirect, ageDit, idDeClub, minuteDeLaPuce } from '@/utils/direct.js';
+import { useDirectEnCours } from '@/composables/useDirectEnCours.js';
 
 /**
  * Une rencontre, dessinée pareil dans toute l'appli — demande de Pierre le
@@ -42,13 +45,31 @@ const props = defineProps({
   showCompetition: { type: Boolean, default: true },
   teamLinks: { type: Boolean, default: false },
   active: { type: Boolean, default: false },
-  favoriteToggles: { type: Boolean, default: false }
+  favoriteToggles: { type: Boolean, default: false },
+  // Étape 46 (12/11/2026) : la puce « Direct » d'un match en cours ouvre la page Direct (false : le mot seul).
+  directLink: { type: Boolean, default: true }
 });
 const emit = defineEmits(['select']);
 const slots = useSlots();
 const teamStatsModalStore = useTeamStatsModalStore();
 
-const m = computed(() => props.match);
+// Correctifs D2 de l'étape 46 (12/11/2026, point 2 c) : la puce « Direct » ne suit plus le statut que la page calcule à
+// l'horloge ; elle s'allume quand la boucle du direct suit CE match en cours — la paire d'identifiants FotMob de la carte
+// (les siens, sinon ceux de ses logos) et son jour (à un jour près) sont dans l'ensemble des matchs en cours de toute
+// l'appli (useDirectEnCours : une lecture par minute pour toute l'appli), jamais un nom. Une carte sans identifiants FotMob
+// n'a pas de puce. Le match en cours donne à la carte son identifiant FotMob (le clic ouvre la page Direct sur lui).
+const directEnCours = useDirectEnCours({ suivre: props.directLink });
+const enCours = computed(() => {
+  if (!props.directLink || !directEnCours.compte.value) return null;
+  const x = props.match;
+  const id = (donne, nom) => idDeClub(donne) ?? (nom ? idDeClub(teamIdFor(nom, x.league ?? null)) : null);
+  return directEnCours.dePaire({ homeId: id(x.homeId, x.homeName), awayId: id(x.awayId, x.awayName), jour: x.date ?? x.commenceTime ?? null });
+});
+const m = computed(() => (enCours.value?.fotmobId && !props.match.fotmobId ? { ...props.match, fotmobId: enCours.value.fotmobId } : props.match));
+// Correctif « écrans 3 » (13/11/2026) : le rouge (bordure de la carte, score sur fond rouge) suit le MOT « Direct » — la
+// boucle qui suit ce match (`enCours`) ; jamais l'horloge seule (la couleur jamais sans le mot). Le mot seul (`directLink`
+// faux : la page Direct et son encart) suit le statut, comme son mot.
+const enRouge = computed(() => (props.directLink ? Boolean(enCours.value) : statut.value === 'live'));
 const avecScore = computed(() => m.value.homeGoals !== null && m.value.homeGoals !== undefined && m.value.awayGoals !== null && m.value.awayGoals !== undefined);
 const statut = computed(() => m.value.status ?? (avecScore.value ? 'finished' : 'scheduled'));
 
@@ -68,7 +89,7 @@ const heure = computed(() => (heureConnue.value ? format({ hour: '2-digit', minu
 
 const centre = computed(() => {
   if (statut.value === 'postponed') return { texte: 'Reporté', classe: 'is-postponed' };
-  if (avecScore.value) return { texte: `${m.value.homeGoals} - ${m.value.awayGoals}`, classe: statut.value === 'live' ? 'is-live' : 'is-score' };
+  if (avecScore.value) return { texte: `${m.value.homeGoals} - ${m.value.awayGoals}`, classe: enRouge.value ? 'is-live' : 'is-score' };
   return { texte: heure.value ?? '—', classe: heure.value ? '' : 'is-unknown' };
 });
 
@@ -111,6 +132,45 @@ function ouvrirEquipe(nom) {
   teamStatsModalStore.openFor(nom, m.value.league ?? null, m.value.matchId ?? null);
 }
 
+// Étape 46 (12/11/2026, P6 bis) : sur chaque match en cours, la puce « Direct » (le mot, la minute quand la carte la
+// connaît : `match.minute`) ouvre la page Direct positionnée sur CE match — retrouvé par son identifiant FotMob
+// (`match.fotmobId`), sinon par ses deux clubs (identifiants FotMob, jamais un nom) et son coup d'envoi. Les identifiants
+// sont lus au clic : l'affichage ne lance aucun appel de plus. La page du match, quand la carte la connaît, suit (`page`).
+// Correctifs D2 : la puce cliquable vient de l'ensemble des matchs en cours (sa minute, ou « Mi-temps ») ; le clic ouvre
+// `/direct?match=<identifiant FotMob>` et garde l'instant d'un rejeu. Le mot seul (`directLink` faux : la page Direct et son
+// encart, qui SONT le direct) suit le statut et la minute que la carte reçoit.
+const minuteDuDirect = computed(() => {
+  if (enCours.value) return minuteDeLaPuce(enCours.value);
+  const v = m.value.minute;
+  if (Number.isInteger(v)) return `${v}e`;
+  return typeof v === 'string' && v.trim() ? v.trim() : null;
+});
+// Correctif « écrans 1 » (13/11/2026) : un relevé périmé (boucle suspendue ou arrêtée, match sorti de la liste) n'a plus de
+// minute sur la puce ; le survol du bouton dit l'âge du relevé. Sinon, le titre d'avant, mot pour mot.
+const titreDuDirect = computed(() => {
+  if (!enCours.value?.perime) return 'Voir ce match sur la page Direct';
+  const age = ageDit(enCours.value.ageS);
+  return age ? `État relevé il y a ${age} — périmé : voir ce match sur la page Direct` : 'État périmé, heure du relevé inconnue : voir ce match sur la page Direct';
+});
+function pageDuMatch() {
+  if (typeof props.to === 'string') return /^\/match-a-venir\/([^/?#]+)/.exec(props.to)?.[1] ?? null;
+  if (props.to?.params?.matchId) return String(props.to.params.matchId);
+  return m.value.matchId ? String(m.value.matchId) : null;
+}
+function ouvrirLeDirect() {
+  const id = (equipe) => equipe.id ?? teamIdFor(equipe.nom, m.value.league ?? null) ?? null;
+  router.push(
+    adresseDuDirect({
+      id: m.value.fotmobId ?? null,
+      home: id(equipes.value[0]),
+      away: id(equipes.value[1]),
+      coup: heureConnue.value ? m.value.commenceTime : null,
+      page: pageDuMatch(),
+      instant: directEnCours.instant.value
+    })
+  );
+}
+
 const avecInfo = computed(() => props.showCompetition || Boolean(slots.info));
 
 // Favoris : l'identifiant du club s'il est donné, sinon demandé (cf. teamIds.js).
@@ -146,7 +206,7 @@ const enjeu = computed(() => {
       {
         'is-link': estCliquable,
         'is-active': active,
-        'is-live': statut === 'live',
+        'is-live': enRouge,
         'is-postponed': statut === 'postponed',
         'has-date': dateDisplay === 'block',
         'has-info': avecInfo
@@ -192,7 +252,18 @@ const enjeu = computed(() => {
         <TeamCrest :name="equipes[0].nom" :league="match.league" :team-id="equipes[0].id" :size="variant === 'compact' ? 24 : 30" />
       </div>
       <div class="mcard__center">
-        <span v-if="statut === 'live'" class="mcard__status is-live"><span class="mcard__live-dot" />Direct</span>
+        <button
+          v-if="directLink && enCours"
+          type="button"
+          class="mcard__status is-live is-direct-link"
+          data-direct-link
+          :title="titreDuDirect"
+          @click.stop.prevent="ouvrirLeDirect"
+          @keydown.enter.stop
+        >
+          <span class="mcard__live-dot" />Direct<template v-if="minuteDuDirect"> · {{ minuteDuDirect }}</template>
+        </button>
+        <span v-else-if="!directLink && statut === 'live'" class="mcard__status is-live"><span class="mcard__live-dot" />Direct<template v-if="minuteDuDirect"> · {{ minuteDuDirect }}</template></span>
         <span class="mcard__pill" :class="centre.classe">{{ centre.texte }}</span>
         <span v-if="dateDisplay === 'none' && statut === 'finished' && !avecScore" class="mcard__status">Terminé</span>
       </div>
@@ -514,6 +585,20 @@ const enjeu = computed(() => {
   align-items: center;
   gap: 4px;
   color: var(--cm-danger);
+}
+
+/* Étape 46 : la puce « Direct » cliquable (bouton) garde l'allure du mot, avec un soulignement au survol. */
+.mcard__status.is-direct-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.mcard__status.is-direct-link:hover,
+.mcard__status.is-direct-link:focus-visible {
+  text-decoration: underline;
 }
 
 .mcard__live-dot {

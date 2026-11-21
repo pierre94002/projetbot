@@ -1296,6 +1296,30 @@ Composer avec ces classes AVANT d'écrire du CSS propre :
   des extrêmes et du gris au pied. Non calculée : `EmptyState` « Fin de saison non calculée » avec sa
   raison (« 2 clubs non reconnus : … », « rencontres en trop au calendrier… », « poules de fin de
   saison : … ne sont pas simulées »). Lue dans ce que la nuit a rangé, jamais calculée à l'ouverture.
+- **Le direct** (étape 46, lot 1, 12/11/2026) → la page « Direct » (`/direct`, `LiveView` puis `DirectBoard` ; 2e entrée
+  du menu, juste sous « Matchs », de la couleur de Matchs) : TOUS les matchs en cours que la boucle de FotMob suit, jamais
+  plafonnés, rangés par `favoritesFirst` (le rang de la boucle ne fait que départager), `ProvenanceChip` « FotMob (liste du
+  jour) » et l'heure de la liste en tête ; dessous, les matchs terminés depuis moins de 3 heures (`MatchCard` et le score de la
+  90e). Une carte (`DirectMatchCard`) a pour en-tête `MatchCard` (`status: 'live'`, `date-display="none"`, la minute PUBLIÉE
+  par FotMob dans la puce) et ne dessine que le dessous : l'âge de l'état (ambre au-delà de 150 s), les cartons rouges et les
+  notes, chacune avec son camp et le logo du club (`TeamCrest :team-id`), les barres du 1N2, le pronostic d'avant-match en
+  gris, la provenance de chaque chiffre (état, rouges, avant-match, calcul, référence : le fournisseur réel et l'heure). Toute
+  la carte est cliquable et déplie le détail : les marchés par famille, la courbe du 1N2 (le club qui reçoit en `--cm-info`
+  plein, le nul en `--cm-violet` à tirets, le visiteur en `--cm-cyan` pointillé : lisible sans la couleur ; coupée aux trous
+  des relevés), le prix de référence d'un bookmaker en gris, sans écart ni « cote juste ». Les barres sont en `--cm-info` au
+  sens « information » : une probabilité calculée par le code, pas un avis de l'IA. Tant que le banc d'essai n'a pas jugé le
+  calcul, AUCUN pourcentage : les faits seuls et « pas encore jugé » ; une famille que le banc ne juge pas (résultat + total,
+  score exact) le dit en gris. Sur la page d'un match, l'encart « En direct » (`DirectEncart`) se monte quand la boucle du
+  direct suit CE match (paire d'identifiants FotMob et jour, `useDirectEnCours`), sinon de 10 minutes avant le coup d'envoi
+  à 4 heures après ; il remplace la carte payante d'API-Football et ouvre la page Direct sur CE match. La puce « Direct »
+  d'une `MatchCard` s'allume quand la boucle suit ce match (jamais par l'horloge seule) ; sa minute disparaît quand le relevé
+  est périmé ; c'est un bouton qui ouvre aussi la page Direct ; « N en direct », en tête de la page Matchs, y mène aussi.
+  Rejeu (bac à sable seulement, `?instant=` dans l'adresse) : un bandeau ambre le dit, et l'instant suit chaque lien.
+  **Exception à « pas de calcul lourd à l'ouverture d'une page »** (décision O2) : un direct ne se prépare pas la nuit ; ses
+  probabilités se calculent à la demande, BORNÉES — une seconde au plus de calcul par requête (le budget relu à chaque match
+  et à chaque point de la courbe), la main rendue avant chaque calcul, les résultats gardés dans une table en mémoire (600
+  entrées, la plus ancienne oubliée d'abord) ; ce qui ne tient pas dans la seconde est dit « en attente » et calculé à la
+  relecture suivante (l'écran relit toutes les 30 s).
 - **Essai général** (étape 47, lot 1, 17/11/2026) → `RecetteCarte` dans l'étape 47 de la feuille de route, AVANT la
   preuve après lancement, seulement quand `etape.recette` existe ; mots dans `utils/recette.js`. Bloc teinté comme la preuve
   (`--cm-surface-alt`) : la phrase du moment (pas commencé / rodage / « Essai général : jour N sur 14 » / « Second essai : … » /
@@ -1354,6 +1378,11 @@ Composer avec ces classes AVANT d'écrire du CSS propre :
 - Pas de marché écarté par une preuve montré « pour information » : un marché que la porte 1 de l'étape 28 a écarté (« un but dans
   chaque mi-temps », « au moins un rouge ») n'apparaît ni dans le déroulé ni comme jambe d'un combiné ; la liste se lit dans
   `noteDeLaSimulation.js`, jamais recopiée à la main ; le rallumer demande une variante déclarée.
+- Pas de vert ni d'anneau pour une probabilité en direct (12/11/2026, étape 46) : ni `ProbabilityRing`, ni `ValueBadge`, ni
+  `--cm-accent`, ni `--cm-section` sur une barre — des barres `--cm-info` ; et aucun pourcentage du direct tant que le banc d'essai
+  ne l'a pas jugé (« Le direct », § 5, qui dit aussi la seule exception à « pas de calcul lourd à l'ouverture d'une page »).
+- Pas de minute extrapolée par l'horloge (12/11/2026, étape 46) : la minute du direct est celle que FotMob a publiée, dite avec
+  l'âge de son relevé ; jamais une minute avancée du temps écoulé depuis.
 
 ## 7. Vérifier
 

@@ -1,0 +1,866 @@
+{
+ "format": 1,
+ "mode": "mesurer-additionnel",
+ "fenetre": {
+  "de": "2023-07-01",
+  "a": "2026-09-23"
+ },
+ "base": {
+  "chemin": "C:\\Users\\PC\\CoteMaster\\bac-a-sable\\base\\match-stats.db",
+  "octets": 3031191552
+ },
+ "mesureLe": "2026-11-11T20:49:17.578Z",
+ "comptes": {
+  "rencontres": 57087,
+  "attribuees": 48,
+  "sansScore": 0,
+  "evenementsIllisibles": 0,
+  "incompletes": 1223,
+  "retenues": 55816,
+  "buts": 154535,
+  "buts45x": 5193,
+  "buts90x": 11089,
+  "horsForme": {
+   "minutePlusDe90NonProlonge": 4,
+   "ajoutHors45Et90": 107
+  }
+ },
+ "tempsAdditionnel": {
+  "regle": "conception § 2.5 : x* = argmax q ; S(x) = 1 pour x ≤ x*, min(S(x − 1), q(x)/q(x*)) ensuite ; reste(x) = (q(x)/2 + Σ_{y>x} q(y)) / S(x) / Σ q ; reste(x) ≤ reste(x − 1) ; X = dernier x où q(x) ≥ 200 ; plancher 0,05",
+  "qMin": 200,
+  "plancher": 0.05,
+  "premiere": {
+   "q": [
+    0,
+    1521,
+    1211,
+    892,
+    594,
+    397,
+    219,
+    152,
+    88,
+    49,
+    26,
+    20,
+    4,
+    9,
+    6,
+    0,
+    0,
+    2,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1
+   ],
+   "xEtoile": 1,
+   "X": 6,
+   "total": 5193,
+   "S": [
+    null,
+    1,
+    0.7961867192636424,
+    0.5864562787639711,
+    0.3905325443786982,
+    0.26101249178172253,
+    0.14398422090729784,
+    0.09993425378040763,
+    0.057856673241288625,
+    0.032215647600262985,
+    0.017094017094017096,
+    0.013149243918474688,
+    0.0026298487836949377,
+    0.0026298487836949377,
+    0.0026298487836949377,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "resteBrut": [
+    null,
+    0.8535528596187175,
+    0.7416683005436874,
+    0.6616389862517583,
+    0.6272079547642806,
+    0.5728776045645636,
+    0.6265797741427475
+   ],
+   "reste": [
+    null,
+    0.8535528596187175,
+    0.7416683005436874,
+    0.6616389862517583,
+    0.6272079547642806,
+    0.5728776045645636,
+    0.5728776045645636
+   ]
+  },
+  "seconde": {
+   "q": [
+    0,
+    1703,
+    1660,
+    1832,
+    1651,
+    1328,
+    1080,
+    685,
+    437,
+    287,
+    166,
+    102,
+    52,
+    41,
+    26,
+    6,
+    13,
+    6,
+    7,
+    1,
+    2,
+    2,
+    0,
+    0,
+    1,
+    1
+   ],
+   "xEtoile": 3,
+   "X": 9,
+   "total": 11089,
+   "S": [
+    null,
+    1,
+    1,
+    1,
+    0.9012008733624454,
+    0.7248908296943232,
+    0.5895196506550219,
+    0.37390829694323147,
+    0.23853711790393012,
+    0.1566593886462882,
+    0.0906113537117904,
+    0.055676855895196505,
+    0.028384279475982533,
+    0.02237991266375546,
+    0.014192139737991267,
+    0.0032751091703056767,
+    0.0032751091703056767,
+    0.0032751091703056767,
+    0.0032751091703056767,
+    0.0005458515283842794,
+    0.0005458515283842794,
+    0.0005458515283842794,
+    0,
+    0,
+    0,
+    0
+   ],
+   "resteBrut": [
+    null,
+    0.9232121922626025,
+    0.7715754351158806,
+    0.6141221029849401,
+    0.5071839052992256,
+    0.4452425990371441,
+    0.36330631289599635,
+    0.35996216412266246,
+    0.3521555263395209,
+    0.32782714954676184
+   ],
+   "reste": [
+    null,
+    0.9232121922626025,
+    0.7715754351158806,
+    0.6141221029849401,
+    0.5071839052992256,
+    0.4452425990371441,
+    0.36330631289599635,
+    0.35996216412266246,
+    0.3521555263395209,
+    0.32782714954676184
+   ]
+  },
+  "note": "R35 point 3 : S(x) = 1 jusqu’au pic suppose qu’aucun match ne finit avant x* ; si des matchs finissent avant (par exemple 10 % avant +3), reste(x) est sous-estimé (0,616 au lieu de 0,685 dans cet exemple), moins de 0,5 % des buts du match. Formule gardée telle quelle (critique du 11/11)."
+ },
+ "moyennes": {
+  "regle": "R14 : buts moyens à domicile et à l’extérieur de chaque championnat (rencontres jouées non attribuées et non prolongées), rappelés vers 1.45 / 1.15 sur 30 rencontres (LOI_TABLE de data/simulation/reglages.js) ; repli 1.45 / 1.15 pour un championnat absent",
+  "priorMatchs": 30,
+  "repli": {
+   "domicile": 1.45,
+   "exterieur": 1.15
+  },
+  "championnats": {
+   "Allsvenskan - Sweden": {
+    "matchs": 804,
+    "domicile": 1.5317745803357314,
+    "exterieur": 1.3087529976019185,
+    "brut": {
+     "domicile": 1.5348258706467661,
+     "exterieur": 1.314676616915423
+    }
+   },
+   "Austrian Football Bundesliga": {
+    "matchs": 627,
+    "domicile": 1.4756468797564688,
+    "exterieur": 1.2245053272450532,
+    "brut": {
+     "domicile": 1.4768740031897927,
+     "exterieur": 1.2280701754385965
+    }
+   },
+   "Belgium First Div": {
+    "matchs": 1004,
+    "domicile": 1.5420696324951644,
+    "exterieur": 1.2151837524177949,
+    "brut": {
+     "domicile": 1.544820717131474,
+     "exterieur": 1.2171314741035857
+    }
+   },
+   "Besta deildin - Iceland": {
+    "matchs": 551,
+    "domicile": 1.9819277108433735,
+    "exterieur": 1.5344234079173837,
+    "brut": {
+     "domicile": 2.010889292196007,
+     "exterieur": 1.5553539019963702
+    }
+   },
+   "Brazil Série A": {
+    "matchs": 1295,
+    "domicile": 1.4622641509433962,
+    "exterieur": 1.0562264150943397,
+    "brut": {
+     "domicile": 1.4625482625482626,
+     "exterieur": 1.054054054054054
+    }
+   },
+   "Bundesliga - Germany": {
+    "matchs": 957,
+    "domicile": 1.7512664640324216,
+    "exterieur": 1.4473150962512664,
+    "brut": {
+     "domicile": 1.760710553814002,
+     "exterieur": 1.4566353187042842
+    }
+   },
+   "Bundesliga 2 - Germany": {
+    "matchs": 977,
+    "domicile": 1.656901688182721,
+    "exterieur": 1.3599801390268123,
+    "brut": {
+     "domicile": 1.6632548618219039,
+     "exterieur": 1.3664278403275332
+    }
+   },
+   "Canadian Championship": {
+    "matchs": 52,
+    "domicile": 1.9329268292682926,
+    "exterieur": 1.0670731707317074,
+    "brut": {
+     "domicile": 2.2115384615384617,
+     "exterieur": 1.0192307692307692
+    }
+   },
+   "Canadian Premier League": {
+    "matchs": 389,
+    "domicile": 1.5214797136038185,
+    "exterieur": 1.2517899761336515,
+    "brut": {
+     "domicile": 1.5269922879177378,
+     "exterieur": 1.2596401028277635
+    }
+   },
+   "Championship": {
+    "matchs": 1763,
+    "domicile": 1.447573898494144,
+    "exterieur": 1.145844952593419,
+    "brut": {
+     "domicile": 1.4475326148610324,
+     "exterieur": 1.1457742484401587
+    }
+   },
+   "Copa Argentina": {
+    "matchs": 155,
+    "domicile": 1.5702702702702702,
+    "exterieur": 0.9864864864864865,
+    "brut": {
+     "domicile": 1.5935483870967742,
+     "exterieur": 0.9548387096774194
+    }
+   },
+   "Copa Chile": {
+    "matchs": 203,
+    "domicile": 1.6330472103004292,
+    "exterieur": 1.203862660944206,
+    "brut": {
+     "domicile": 1.6600985221674878,
+     "exterieur": 1.2118226600985222
+    }
+   },
+   "Copa Libertadores": {
+    "matchs": 458,
+    "domicile": 1.4149590163934427,
+    "exterieur": 0.9108606557377049,
+    "brut": {
+     "domicile": 1.4126637554585153,
+     "exterieur": 0.8951965065502183
+    }
+   },
+   "Copa Sudamericana": {
+    "matchs": 473,
+    "domicile": 1.4204771371769385,
+    "exterieur": 1.0129224652087476,
+    "brut": {
+     "domicile": 1.4186046511627908,
+     "exterieur": 1.0042283298097252
+    }
+   },
+   "Copa del Rey - Spain": {
+    "matchs": 268,
+    "domicile": 0.9983221476510067,
+    "exterieur": 2.2130872483221475,
+    "brut": {
+     "domicile": 0.9477611940298507,
+     "exterieur": 2.332089552238806
+    }
+   },
+   "Copa do Brasil": {
+    "matchs": 334,
+    "domicile": 1.289835164835165,
+    "exterieur": 1.0728021978021978,
+    "brut": {
+     "domicile": 1.2754491017964071,
+     "exterieur": 1.0658682634730539
+    }
+   },
+   "Coppa Italia - Italy": {
+    "matchs": 124,
+    "domicile": 2.029220779220779,
+    "exterieur": 0.9577922077922078,
+    "brut": {
+     "domicile": 2.1693548387096775,
+     "exterieur": 0.9112903225806451
+    }
+   },
+   "Coupe de Belgique": {
+    "matchs": 83,
+    "domicile": 1.7566371681415929,
+    "exterieur": 1.2964601769911503,
+    "brut": {
+     "domicile": 1.8674698795180722,
+     "exterieur": 1.3493975903614457
+    }
+   },
+   "Coupe de Chine": {
+    "matchs": 170,
+    "domicile": 1.2575,
+    "exterieur": 1.7275,
+    "brut": {
+     "domicile": 1.223529411764706,
+     "exterieur": 1.8294117647058823
+    }
+   },
+   "Coupe de France": {
+    "matchs": 813,
+    "domicile": 1.2983392645314353,
+    "exterieur": 2.17141162514828,
+    "brut": {
+     "domicile": 1.2927429274292743,
+     "exterieur": 2.20910209102091
+    }
+   },
+   "Coupe de Grèce": {
+    "matchs": 154,
+    "domicile": 1.513586956521739,
+    "exterieur": 1.1929347826086956,
+    "brut": {
+     "domicile": 1.525974025974026,
+     "exterieur": 1.2012987012987013
+    }
+   },
+   "DFB Pokal - Germany": {
+    "matchs": 178,
+    "domicile": 1.1322115384615385,
+    "exterieur": 2.4302884615384617,
+    "brut": {
+     "domicile": 1.0786516853932584,
+     "exterieur": 2.646067415730337
+    }
+   },
+   "Denmark Superliga": {
+    "matchs": 632,
+    "domicile": 1.603474320241692,
+    "exterieur": 1.3919939577039275,
+    "brut": {
+     "domicile": 1.610759493670886,
+     "exterieur": 1.4034810126582278
+    }
+   },
+   "División Profesional - Paraguay": {
+    "matchs": 856,
+    "domicile": 1.2838600451467268,
+    "exterieur": 1.1450338600451466,
+    "brut": {
+     "domicile": 1.27803738317757,
+     "exterieur": 1.144859813084112
+    }
+   },
+   "Dutch Eredivisie": {
+    "matchs": 1017,
+    "domicile": 1.7492836676217765,
+    "exterieur": 1.4169054441260744,
+    "brut": {
+     "domicile": 1.7581120943952802,
+     "exterieur": 1.424778761061947
+    }
+   },
+   "EFL Cup": {
+    "matchs": 282,
+    "domicile": 1.6362179487179487,
+    "exterieur": 1.501602564102564,
+    "brut": {
+     "domicile": 1.6560283687943262,
+     "exterieur": 1.5390070921985815
+    }
+   },
+   "EPL": {
+    "matchs": 1190,
+    "domicile": 1.605327868852459,
+    "exterieur": 1.365983606557377,
+    "brut": {
+     "domicile": 1.6092436974789917,
+     "exterieur": 1.3714285714285714
+    }
+   },
+   "Ekstraklasa - Poland": {
+    "matchs": 996,
+    "domicile": 1.5560428849902534,
+    "exterieur": 1.182748538011696,
+    "brut": {
+     "domicile": 1.5592369477911647,
+     "exterieur": 1.1837349397590362
+    }
+   },
+   "Eliteserien - Norway": {
+    "matchs": 807,
+    "domicile": 1.7138590203106332,
+    "exterieur": 1.3506571087216248,
+    "brut": {
+     "domicile": 1.7236679058240396,
+     "exterieur": 1.3581164807930608
+    }
+   },
+   "FA Cup - England": {
+    "matchs": 322,
+    "domicile": 1.8480113636363635,
+    "exterieur": 1.4247159090909092,
+    "brut": {
+     "domicile": 1.8850931677018634,
+     "exterieur": 1.450310559006211
+    }
+   },
+   "First League - Czechia": {
+    "matchs": 908,
+    "domicile": 1.5047974413646055,
+    "exterieur": 1.2084221748400852,
+    "brut": {
+     "domicile": 1.5066079295154184,
+     "exterieur": 1.210352422907489
+    }
+   },
+   "HNL - Croatia": {
+    "matchs": 579,
+    "domicile": 1.4786535303776682,
+    "exterieur": 1.1206896551724137,
+    "brut": {
+     "domicile": 1.4801381692573403,
+     "exterieur": 1.1191709844559585
+    }
+   },
+   "KNVB Cup - Netherlands": {
+    "matchs": 142,
+    "domicile": 1.8284883720930232,
+    "exterieur": 1.694767441860465,
+    "brut": {
+     "domicile": 1.908450704225352,
+     "exterieur": 1.8098591549295775
+    }
+   },
+   "La Liga - Spain": {
+    "matchs": 1209,
+    "domicile": 1.5137207425343018,
+    "exterieur": 1.1594027441485069,
+    "brut": {
+     "domicile": 1.5153019023986767,
+     "exterieur": 1.1596360628618694
+    }
+   },
+   "La Liga 2 - Spain": {
+    "matchs": 1469,
+    "domicile": 1.40527018012008,
+    "exterieur": 1.063709139426284,
+    "brut": {
+     "domicile": 1.404356705241661,
+     "exterieur": 1.0619469026548674
+    }
+   },
+   "League 1": {
+    "matchs": 1753,
+    "domicile": 1.434380257992148,
+    "exterieur": 1.1775098149186765,
+    "brut": {
+     "domicile": 1.4341129492298916,
+     "exterieur": 1.1779806046776953
+    }
+   },
+   "League 2": {
+    "matchs": 1753,
+    "domicile": 1.4618620302860348,
+    "exterieur": 1.209478407178912,
+    "brut": {
+     "domicile": 1.462065031374786,
+     "exterieur": 1.2104962920707358
+    }
+   },
+   "League of Ireland": {
+    "matchs": 586,
+    "domicile": 1.3952922077922079,
+    "exterieur": 1.1063311688311688,
+    "brut": {
+     "domicile": 1.3924914675767919,
+     "exterieur": 1.1040955631399318
+    }
+   },
+   "Leagues Cup": {
+    "matchs": 204,
+    "domicile": 1.9722222222222223,
+    "exterieur": 1.2158119658119657,
+    "brut": {
+     "domicile": 2.049019607843137,
+     "exterieur": 1.2254901960784315
+    }
+   },
+   "Liga 1 - Peru": {
+    "matchs": 1035,
+    "domicile": 1.6014084507042254,
+    "exterieur": 1.0230046948356808,
+    "brut": {
+     "domicile": 1.6057971014492753,
+     "exterieur": 1.0193236714975846
+    }
+   },
+   "Liga MX": {
+    "matchs": 1090,
+    "domicile": 1.6183035714285714,
+    "exterieur": 1.2111607142857144,
+    "brut": {
+     "domicile": 1.6229357798165138,
+     "exterieur": 1.2128440366972477
+    }
+   },
+   "Ligat ha'Al - Israel": {
+    "matchs": 751,
+    "domicile": 1.4615877080665813,
+    "exterieur": 1.3156209987195904,
+    "brut": {
+     "domicile": 1.4620505992010653,
+     "exterieur": 1.322237017310253
+    }
+   },
+   "Ligue 1 - France": {
+    "matchs": 971,
+    "domicile": 1.543956043956044,
+    "exterieur": 1.2782217782217782,
+    "brut": {
+     "domicile": 1.5468589083419155,
+     "exterieur": 1.282183316168898
+    }
+   },
+   "Ligue 2 - France": {
+    "matchs": 1056,
+    "domicile": 1.3798342541436464,
+    "exterieur": 1.1468692449355433,
+    "brut": {
+     "domicile": 1.3778409090909092,
+     "exterieur": 1.146780303030303
+    }
+   },
+   "MLS": {
+    "matchs": 1668,
+    "domicile": 1.7382214369846878,
+    "exterieur": 1.3454063604240283,
+    "brut": {
+     "domicile": 1.7434052757793765,
+     "exterieur": 1.3489208633093526
+    }
+   },
+   "Nike Liga - Slovakia": {
+    "matchs": 636,
+    "domicile": 1.5187687687687688,
+    "exterieur": 1.3055555555555556,
+    "brut": {
+     "domicile": 1.5220125786163523,
+     "exterieur": 1.3128930817610063
+    }
+   },
+   "Premier League - Russia": {
+    "matchs": 804,
+    "domicile": 1.4670263788968825,
+    "exterieur": 1.1672661870503598,
+    "brut": {
+     "domicile": 1.4676616915422886,
+     "exterieur": 1.1679104477611941
+    }
+   },
+   "Premiership - Scotland": {
+    "matchs": 743,
+    "domicile": 1.5633893919793014,
+    "exterieur": 1.2360931435963778,
+    "brut": {
+     "domicile": 1.5679676985195155,
+     "exterieur": 1.2395693135935397
+    }
+   },
+   "Primeira Liga - Portugal": {
+    "matchs": 986,
+    "domicile": 1.483759842519685,
+    "exterieur": 1.2199803149606299,
+    "brut": {
+     "domicile": 1.484787018255578,
+     "exterieur": 1.2221095334685599
+    }
+   },
+   "Primera A - Colombia": {
+    "matchs": 1402,
+    "domicile": 1.365572625698324,
+    "exterieur": 0.9521648044692738,
+    "brut": {
+     "domicile": 1.36376604850214,
+     "exterieur": 0.9479315263908702
+    }
+   },
+   "Primera División - Argentina": {
+    "matchs": 1763,
+    "domicile": 1.1720580033463468,
+    "exterieur": 0.8814835471277189,
+    "brut": {
+     "domicile": 1.1673284174702212,
+     "exterieur": 0.8769143505388542
+    }
+   },
+   "Primera División - Bolivia": {
+    "matchs": 856,
+    "domicile": 1.9294582392776525,
+    "exterieur": 1.2048532731376975,
+    "brut": {
+     "domicile": 1.9462616822429906,
+     "exterieur": 1.2067757009345794
+    }
+   },
+   "Primera División - Chile": {
+    "matchs": 782,
+    "domicile": 1.5449507389162562,
+    "exterieur": 1.2001231527093597,
+    "brut": {
+     "domicile": 1.5485933503836318,
+     "exterieur": 1.2020460358056266
+    }
+   },
+   "Primera División - Venezuela": {
+    "matchs": 767,
+    "domicile": 1.375784190715182,
+    "exterieur": 1.0646173149309912,
+    "brut": {
+     "domicile": 1.3728813559322033,
+     "exterieur": 1.061277705345502
+    }
+   },
+   "Serie A - Ecuador": {
+    "matchs": 921,
+    "domicile": 1.4053627760252365,
+    "exterieur": 1.0425867507886435,
+    "brut": {
+     "domicile": 1.4039087947882736,
+     "exterieur": 1.0390879478827362
+    }
+   },
+   "Serie A - Italy": {
+    "matchs": 1190,
+    "domicile": 1.3577868852459016,
+    "exterieur": 1.1913934426229509,
+    "brut": {
+     "domicile": 1.3554621848739496,
+     "exterieur": 1.192436974789916
+    }
+   },
+   "Serie B - Italy": {
+    "matchs": 1217,
+    "domicile": 1.3949478748997595,
+    "exterieur": 1.119887730553328,
+    "brut": {
+     "domicile": 1.3935907970419064,
+     "exterieur": 1.1191454396055875
+    }
+   },
+   "Super League - China": {
+    "matchs": 824,
+    "domicile": 1.7675644028103044,
+    "exterieur": 1.3225995316159251,
+    "brut": {
+     "domicile": 1.779126213592233,
+     "exterieur": 1.328883495145631
+    }
+   },
+   "Super League - Greece": {
+    "matchs": 745,
+    "domicile": 1.4651612903225806,
+    "exterieur": 1.189032258064516,
+    "brut": {
+     "domicile": 1.465771812080537,
+     "exterieur": 1.1906040268456375
+    }
+   },
+   "Super Liga - Serbia": {
+    "matchs": 959,
+    "domicile": 1.5293225480283115,
+    "exterieur": 1.2219413549039433,
+    "brut": {
+     "domicile": 1.5318039624608968,
+     "exterieur": 1.224191866527633
+    }
+   },
+   "Superliga - Romania": {
+    "matchs": 1035,
+    "domicile": 1.4192488262910798,
+    "exterieur": 1.0746478873239436,
+    "brut": {
+     "domicile": 1.4183574879227052,
+     "exterieur": 1.0724637681159421
+    }
+   },
+   "Swiss Superleague": {
+    "matchs": 743,
+    "domicile": 1.7056921086675292,
+    "exterieur": 1.3628719275549805,
+    "brut": {
+     "domicile": 1.7160161507402423,
+     "exterieur": 1.3714670255720054
+    }
+   },
+   "Taça da Liga - Portugal": {
+    "matchs": 40,
+    "domicile": 1.7642857142857142,
+    "exterieur": 1.0928571428571427,
+    "brut": {
+     "domicile": 2,
+     "exterieur": 1.05
+    }
+   },
+   "Taça de Portugal": {
+    "matchs": 299,
+    "domicile": 1.621580547112462,
+    "exterieur": 1.5638297872340425,
+    "brut": {
+     "domicile": 1.6387959866220736,
+     "exterieur": 1.605351170568562
+    }
+   },
+   "Turkey Super League": {
+    "matchs": 1080,
+    "domicile": 1.5752252252252252,
+    "exterieur": 1.2274774774774775,
+    "brut": {
+     "domicile": 1.5787037037037037,
+     "exterieur": 1.2296296296296296
+    }
+   },
+   "Türkiye Kupası": {
+    "matchs": 302,
+    "domicile": 1.9713855421686748,
+    "exterieur": 1.3569277108433735,
+    "brut": {
+     "domicile": 2.0231788079470197,
+     "exterieur": 1.3774834437086092
+    }
+   },
+   "UEFA Champions League": {
+    "matchs": 838,
+    "domicile": 1.7701612903225807,
+    "exterieur": 1.2966589861751152,
+    "brut": {
+     "domicile": 1.7816229116945108,
+     "exterieur": 1.301909307875895
+    }
+   },
+   "UEFA Europa Conference League": {
+    "matchs": 1373,
+    "domicile": 1.6568068424803992,
+    "exterieur": 1.1635780470420527,
+    "brut": {
+     "domicile": 1.6613255644573925,
+     "exterieur": 1.1638747268754552
+    }
+   },
+   "UEFA Europa League": {
+    "matchs": 774,
+    "domicile": 1.6598258706467661,
+    "exterieur": 1.169776119402985,
+    "brut": {
+     "domicile": 1.6679586563307494,
+     "exterieur": 1.1705426356589148
+    }
+   },
+   "US Open Cup": {
+    "matchs": 198,
+    "domicile": 1.9276315789473684,
+    "exterieur": 1.2960526315789473,
+    "brut": {
+     "domicile": 2,
+     "exterieur": 1.3181818181818181
+    }
+   },
+   "Veikkausliiga - Finland": {
+    "matchs": 588,
+    "domicile": 1.559061488673139,
+    "exterieur": 1.3341423948220066,
+    "brut": {
+     "domicile": 1.564625850340136,
+     "exterieur": 1.3435374149659864
+    }
+   },
+   "Virsliga - Latvia": {
+    "matchs": 599,
+    "domicile": 1.6414944356120826,
+    "exterieur": 1.2885532591414945,
+    "brut": {
+     "domicile": 1.651085141903172,
+     "exterieur": 1.2954924874791318
+    }
+   }
+  }
+ }
+}

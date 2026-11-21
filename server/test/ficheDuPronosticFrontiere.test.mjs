@@ -23,6 +23,9 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { SERVEUR } from './aides/isolement.mjs';
 import { sansLEntree40, DEBUT_40 } from './aides/ajouts40.mjs';
+// Étape 46 (partie C, 13/11/2026) : son ajout pur à bench/lancements.js (posé au scellement seulement) retiré avant la
+// comparaison au gel (aides/ajouts46.mjs) : cet essai passe avec et sans elle.
+import { octetsSansLesAjoutsDe46 } from './aides/ajouts46.mjs';
 import { empreinteDuCode, empreinteDeLaCandidate, CANDIDATE_EN_ESSAI } from '../src/core/engine/engineVersions.js';
 import { DEFAULT_ENGINE_CONFIG_BY_SPORT } from '../src/core/engine/engineConfig.js';
 import { HISTORIQUE, ETAPES_EN_COURS } from '../src/data/roadmap/historique.js';
@@ -309,7 +312,7 @@ test('T-G2 — le gel : les 235 fichiers de code identiques à l’octet ; histo
     if (declareParUnLot2(f)) continue; // Partie 0 des lots 2 (B) : déclaré par un lot 2, son sha1 de partie 0 est historique
     const octets = fs.readFileSync(path.join(RACINE, f));
     if (f !== HISTORIQUE_JS) {
-      assert.equal(sha1(octets), attendu, f);
+      assert.equal(sha1(octetsSansLesAjoutsDe46(f.replace(/^server\/src\//, ''), octets)), attendu, f);
       continue;
     }
     // L'ajout pur : la ligne `  })` de la 35 devient `  }),`, puis l'entrée 40 (aucune ligne entre les deux), jusqu'à `]);`.
@@ -349,7 +352,9 @@ test('T-G5 — la feuille de route : une seule entrée 40, la dernière, son lot
   const quarante = HISTORIQUE.filter((h) => h.etape === '40');
   assert.equal(quarante.length, 1, 'une seule entrée 40');
   const e = quarante[0];
-  assert.equal(HISTORIQUE.at(-1), e, 'la dernière');
+  // Étape 46 (12/11/2026) : la dernière jusqu'au 12/11 ; depuis, seule l'entrée 46 (ajout pur, lot 1 de la 46) vient après elle.
+  const apres40 = HISTORIQUE.slice(HISTORIQUE.indexOf(e) + 1);
+  assert.deepEqual(apres40.map((h) => h.etape), ['46'], 'la dernière, puis seulement l’entrée 46');
   assert.ok(typeof e.partielle === 'string' && e.partielle.length >= 10, 'le lot livré, dit : l’étape reste en cours');
   assert.match(e.partielle, /lot 1/);
   assert.ok(e.fin >= '2026-11-10', e.fin);

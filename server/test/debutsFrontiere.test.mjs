@@ -45,6 +45,9 @@ import { sansBlocs36 } from './aides/ajouts36.mjs';
 import { sansLesAjoutsDe35, sansBlocs35, FICHIERS_AJOUTS_35 } from './aides/ajouts35.mjs';
 // Étape 39 (lot 1b, 09/11/2026) : ses ajouts purs (lancements.js) retirés AVANT ceux de la 35 (aides/ajouts39.mjs ; miseFrontiere.test.mjs, T-X10).
 import { sansLesAjoutsDe39 } from './aides/ajouts39.mjs';
+// Étape 46 (partie C, 13/11/2026) : son ajout pur à lancements.js (posé au scellement seulement) retiré AVANT ceux de la 39 ;
+// PORTEES et LANCEMENTS lus sans elle (aides/ajouts46.mjs) : ces essais passent avec et sans elle.
+import { sansLesAjoutsDe46, porteesSans46, lancementsSans46 } from './aides/ajouts46.mjs';
 import { fichiersDuMoteur, empreinteDuCode, empreinteDeLaCandidate, CANDIDATE_EN_ESSAI, MODULES_DU_MOTEUR } from '../src/core/engine/engineVersions.js';
 import * as LANC from '../src/bench/lancements.js';
 import { enregistrerLancements, fenetresVues, compterVariantes, lancementDe } from '../src/bench/trialsRegistry.js';
@@ -336,7 +339,7 @@ test('T-X1 — les empreintes ne bougent pas ; rien de l’étape 35 sous core/ 
   for (const [f, attendu] of INTERDITS) {
     if (declareParUnLot2(f)) continue; // Partie 0 des lots 2 (B) : déclaré par un lot 2, son sha1 de partie 0 est historique
     // Étape 39 (lot 1b, 09/11/2026) : les ajouts de la 39 retirés d'abord.
-    const octets = PERMIS[f] ? Buffer.from(sansLesAjoutsDe35(f, sansLesAjoutsDe39(f, fs.readFileSync(path.join(SRC, f), 'utf8'))), 'utf8') : fs.readFileSync(path.join(SRC, f));
+    const octets = PERMIS[f] ? Buffer.from(sansLesAjoutsDe35(f, sansLesAjoutsDe39(f, sansLesAjoutsDe46(f, fs.readFileSync(path.join(SRC, f), 'utf8')))), 'utf8') : fs.readFileSync(path.join(SRC, f));
     assert.equal(sha1(octets), attendu, `${f} : retouché (gelé pendant l’essai 27${PERMIS[f] ? ', au-delà de son ajout pur' : ''})`);
   }
   for (const [f, attendu] of Object.entries(PERMIS)) assert.ok(INTERDITS.some(([g, s]) => g === f && s === attendu), `${f} : son sha1 de partie 0`);
@@ -426,7 +429,7 @@ after(() => fs.rmSync(DOSSIER, { recursive: true, force: true, maxRetries: 10, r
 
 test('T-X5 — la déclaration AVANT le regard : « debuts-de-saison » à la fin ; vues de la portée seulement, jamais P5 ; celles de la 30 recopiées ; 11 variantes ; lancement à la fin ; fenetresVues(27) et compterVariantes(27) inchangés', () => {
   // Étape 39 (lot 1b, 09/11/2026) : « mise » ajoutée APRÈS « debuts-de-saison » (miseFrontiere T-X5).
-  assert.deepEqual([...LANC.PORTEES], ['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs', 'combinaison', 'coupes', 'debuts-de-saison', 'mise']);
+  assert.deepEqual(porteesSans46(LANC.PORTEES), ['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs', 'combinaison', 'coupes', 'debuts-de-saison', 'mise']);
   assert.ok(LANC.verifierLancements());
   const v35 = LANC.VUES_DE_L_ETAPE_35;
   for (const v of v35) assert.deepEqual([...v.pour], ['debuts-de-saison'], `${v.de} → ${v.a}`);
@@ -443,8 +446,8 @@ test('T-X5 — la déclaration AVANT le regard : « debuts-de-saison » à la fi
   assert.equal(l35.variantes, LANC.VARIANTES_DE_L_ETAPE_35);
   assert.equal(l35.vues, LANC.VUES_DE_L_ETAPE_35);
   // Étape 39 (lot 1b, 09/11/2026) : puis le lancement 39.
-  assert.equal(LANC.LANCEMENTS.at(-2), l35, 'le lancement 35 ajouté à la fin, puis celui de la 39');
-  assert.equal(LANC.LANCEMENTS.at(-1).etape, '39');
+  assert.equal(lancementsSans46(LANC.LANCEMENTS).at(-2), l35, 'le lancement 35 ajouté à la fin, puis celui de la 39');
+  assert.equal(lancementsSans46(LANC.LANCEMENTS).at(-1).etape, '39');
   for (const portee of LANC.PORTEES.filter((p) => !['tout', 'debuts-de-saison'].includes(p))) assert.ok(!LANC.fenetresDeclarees({ portee }).some((f) => f.etape === '35'), portee);
   assert.ok(LANC.fenetresDeclarees({ portee: 'debuts-de-saison' }).some((f) => f.etape === '35'));
   const fichier = path.join(DOSSIER, 'registre-t-x5.json');
@@ -525,9 +528,9 @@ test('T-X10 — les cinq fichiers gelés SANS les ajouts de la 35 = la partie 0 
   for (const f of FICHIERS_AJOUTS_35) {
     if (declareParUnLot2(f)) continue; // Partie 0 des lots 2 (B) : déclaré par un lot 2, son sha1 de partie 0 est historique
     const texte = fs.readFileSync(path.join(SRC, f), 'utf8');
-    assert.equal(sha1(Buffer.from(sansLesAjoutsDe35(f, sansLesAjoutsDe39(f, texte)), 'utf8')), PERMIS[f], f);
+    assert.equal(sha1(Buffer.from(sansLesAjoutsDe35(f, sansLesAjoutsDe39(f, sansLesAjoutsDe46(f, texte))), 'utf8')), PERMIS[f], f);
     assert.notEqual(sha1(Buffer.from(texte, 'utf8')), PERMIS[f], `${f} porte bien son ajout`);
-    const avant = sansLesAjoutsDe35(f, sansLesAjoutsDe39(f, texte)).split('\n');
+    const avant = sansLesAjoutsDe35(f, sansLesAjoutsDe39(f, sansLesAjoutsDe46(f, texte))).split('\n');
     const maintenant = new Set(texte.split('\n'));
     const disparues = avant.filter((l) => !maintenant.has(l));
     assert.deepEqual(disparues, REMPLACEES[f] ?? [], `${f} : seules des lignes AJOUTÉES (et la ligne remplacée de PORTEES ou de la réponse)`);

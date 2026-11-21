@@ -23,6 +23,10 @@
  * Étape 40 (lot 1, 10/11/2026) : la place du « pourquoi ce pourcentage » est remplie (« Pourquoi ce pourcentage ? ») — T-F13
  * la rend sur la page entière, la composition officielle n'y entrant jamais ; la page passe les identifiants des clubs au
  * verdict et à la fiche (le reste : ficheDuPronosticEcran.test.mjs).
+ *
+ * Étape 46 (lot 1, correctifs D2, 12/11/2026, point 2 e) : un match du calendrier SANS heure de coup d'envoi a son encart
+ * « En direct » quand la boucle du direct le suit en cours (la paire d'identifiants FotMob de la page et son jour dans
+ * l'ensemble des matchs en cours, useDirectEnCours) ; absent de l'ensemble, aucun encart (le reste : directEcran.test.mjs).
  */
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
@@ -145,8 +149,9 @@ before(async () => {
         remplacer('watch(() => props.matchId, load, { immediate: true });', 'onServerPrefetch(load);');
         // Les chargements lancés sans attente (chargerAnalyse(); …) sont attendus : le rendu les voit tous arriver.
         c = c.replace(/\n {2}(charger\w+\(\));/g, '\n  await $1;').replace(/\n {2}(aiStore\.fetch\w+\([^)]*\)\.catch\(\(\) => \{\}\));/g, '\n  await $1;');
-        // L'onglet voulu (le test choisit lequel rendre).
-        remplacer("tab.value = 'resume';\n  liveMatchDetails.value = null;", "tab.value = globalThis.__ONGLET_ESSAI__ ?? 'resume';\n  liveMatchDetails.value = null;");
+        // L'onglet voulu (le test choisit lequel rendre). Étape 46 (12/11/2026) : la carte payante d'API-Football et
+        // `liveMatchDetails` ont quitté la page ; le repère passe sur la ligne qui suit et qui reste (les cotes remises à zéro).
+        remplacer("tab.value = 'resume';\n  cotes.value = { loading: false, error: null, data: null };", "tab.value = globalThis.__ONGLET_ESSAI__ ?? 'resume';\n  cotes.value = { loading: false, error: null, data: null };");
         return c;
       }
       if (!/(ManualOddsEntry|PaidOddsAdvicePanel)\.vue$/.test(id)) return null;
@@ -183,6 +188,8 @@ before(async () => {
   contexte = {
     vite,
     cache,
+    // Étape 46 (12/11/2026) : le routeur, pour rendre la page en rejeu (`?instant=` dans son adresse, T-U9).
+    routeur,
     composants: { Page: (await vite.ssrLoadModule('/src/views/UpcomingMatchView.vue')).default },
     /** Rend la page d'un match : { html, texte, avertissements }. `heure` : l'horloge de l'appli ; `onglet` : l'onglet ouvert. */
     async rendre(matchId, { heure = T0, onglet = null } = {}) {
@@ -642,7 +649,35 @@ test('rien de ce que montrait le Résumé d’avant ne disparaît : le détail l
   // En direct : seulement quand le match est en cours, comme avant.
   assert.doesNotMatch(t, /Voir le direct/);
   const enCours = await contexte.rendre('essai-a', { heure: Date.parse('2026-10-05T19:00:00Z') });
-  assert.match(texteDe(enCours.html.slice(position(enCours.html, 'upcoming-detail'))), /En direct Score et statistiques en cours de match \(API-Football, sur demande\)\. Voir le direct/);
+  // Étape 46 (12/11/2026, P6 question 2, R26) : la carte payante d'API-Football (« Voir le direct ») est remplacée par
+  // l'encart « En direct » de FotMob, monté de 10 minutes avant le coup d'envoi (18 h 30 UTC) à 4 heures après. Rendu côté
+  // serveur, il ne lit rien (il lit le direct au montage seulement) : son texte fixe et son lien vers la page Direct.
+  const detailEnCours = enCours.html.slice(position(enCours.html, 'upcoming-detail'));
+  assert.match(
+    texteDe(detailEnCours),
+    /En direct Score, minute et cartons rouges relevés chez FotMob ; les probabilités ne sont montrées que si le banc d'essai les a jugées\. Le direct de ce match : le score, la minute et les cartons rouges relevés chez FotMob\. Ouvrir la page Direct, sur ce match/
+  );
+  // P6 bis : l'encart ouvre la page Direct sur CE match, par les identifiants FotMob des deux clubs (jamais un nom).
+  const LIEN = 'href="/direct?home=fotmob-8456&amp;away=fotmob-8650&amp;coup=2026-10-05T18:30:00.000Z&amp;page=essai-a';
+  assert.ok(detailEnCours.includes(`<a ${LIEN}" class="cm-link" data-lien="direct">`), 'le lien de l’encart');
+  assert.match(detailEnCours, /data-bloc="direct-encart" data-etat="chargement"/);
+  assert.doesNotMatch(texteDe(enCours.html), /API-Football|Voir le direct/);
+  // Hors de la fenêtre (12 h UTC, six heures et demie avant le coup d'envoi) : pas d'encart.
+  assert.doesNotMatch(r.html, /id="upcoming-direct"|data-bloc="direct-encart"/);
+  // T-U9 (R28) : en rejeu (`?instant=` dans l'adresse), l'encart se monte à l'heure du REJEU alors que l'horloge de l'appli
+  // est hors de la fenêtre ; l'instant suit le lien.
+  await contexte.routeur.push('/match-a-venir/essai-a?instant=2026-10-05T19:00:00.000Z');
+  try {
+    const rejeu = await contexte.rendre('essai-a', { heure: T0 });
+    const encart = rejeu.html.slice(position(rejeu.html, 'upcoming-direct'));
+    assert.ok(position(rejeu.html, 'upcoming-direct') > 0, 'l’encart monté en rejeu');
+    assert.match(encart, /data-bloc="direct-encart" data-etat="chargement"/);
+    assert.ok(encart.includes(`<a ${LIEN}&amp;instant=2026-10-05T19:00:00.000Z" class="cm-link" data-lien="direct">`), 'l’instant suit le lien');
+  } finally {
+    await contexte.routeur.push('/');
+  }
+  // Le direct n'est lu qu'au montage (jamais au rendu côté serveur) ; plus aucun appel payant du direct.
+  assert.ok(!appels.some((u) => /\/api\/direct|live-match-by-name/.test(u)), appels.filter((u) => /direct|live/.test(u)).join(', '));
 });
 
 // ------------------------------------------------------------------ 6. hygiène et câblage
@@ -736,6 +771,58 @@ test('étape 27 — pendant l’essai à blanc, la page du match ne change pas :
       }
     }
   }
+});
+
+test('étape 46, correctifs D2 (point 2 e) — un match du calendrier SANS heure de coup d’envoi : l’encart « En direct » se monte quand la boucle du direct le suit en cours (la paire d’identifiants FotMob de la page et son jour dans l’ensemble des matchs en cours), et lira le direct par l’identifiant FotMob du match ; absent de l’ensemble, aucun encart', options, async () => {
+  const E = await contexte.vite.ssrLoadModule('/src/composables/useDirectEnCours.js');
+  const sc = lesScenarios().sansCotes;
+  const id = sc.match.matchId;
+  assert.match(id, /^cal-/, 'un match du calendrier');
+  assert.equal(sc.match.marketOdds ?? null, null, 'aucune cote, donc aucune heure de coup d’envoi');
+  // Les identifiants FotMob des deux clubs, posés par l'analyse (combinaison.clubs) — jamais un nom.
+  const sansNuit = { version: 1, etat: 'pas-encore-calcule', raison: 'match-pas-encore-range', date: '2026-10-07', nuit: null, pronostic: null, seuil: { ancre: null, basis: null, mesure: false }, livres: { relevees: 0, vos: [], dePierre: [] }, banc: null };
+  scenario = { ...sc, analyse: { ...sc.analyse, combinaison: { ...(sc.analyse.combinaison ?? sansNuit), clubs: { home: 'fotmob-4801', away: 'fotmob-4802' } } } };
+  const HEURE = Date.parse('2026-10-07T15:00:00Z');
+  const entree = (o = {}) => ({ fotmobId: '4800001', homeId: 'fotmob-4801', awayId: 'fotmob-4802', date: '2026-10-07', libelle: null, phase: 'jeu', minute: 50, ajout: null, creneau: null, score: { home: 1, away: 0 }, ...o });
+  const ensemble = (...matchs) => ({ version: 1, genereLe: new Date(HEURE).toISOString(), rejeu: null, boucle: { pourquoi: null }, matchs });
+  const encartDe = async (cas) => {
+    const r = await contexte.rendre(id, { heure: HEURE });
+    assert.deepEqual(r.avertissements, [], cas);
+    const i = position(r.html, 'upcoming-direct');
+    return i < 0 ? null : r.html.slice(i);
+  };
+  try {
+    // Absent de l'ensemble : la fenêtre seule décide — sans heure de coup d'envoi, aucun encart.
+    for (const [cas, reponse] of [
+      ['ensemble vide', null],
+      ['une autre paire', ensemble(entree({ awayId: 'fotmob-4803' }))],
+      ['la paire à l’envers', ensemble(entree({ homeId: 'fotmob-4802', awayId: 'fotmob-4801' }))],
+      ['un autre jour', ensemble(entree({ date: '2026-10-09' }))]
+    ]) {
+      E.__poserLesEnCours(reponse);
+      assert.equal(await encartDe(cas), null, cas);
+    }
+    // Dans l'ensemble : l'encart, monté sur l'identifiant FotMob du match (rendu côté serveur, il ne lit rien).
+    E.__poserLesEnCours(ensemble(entree()));
+    const encart = await encartDe('dans l’ensemble');
+    assert.ok(encart, 'l’encart monté par l’ensemble des matchs en cours');
+    assert.match(encart, /data-bloc="direct-encart" data-etat="chargement"/);
+    const lien = /<a href="\/direct\?match=4800001&amp;page=([^"&]+)" class="cm-link" data-lien="direct">/.exec(encart);
+    assert.ok(lien, 'le lien de l’encart, par l’identifiant FotMob du match');
+    assert.equal(decodeURIComponent(lien[1]), id, 'la page du match suit');
+    // En rejeu : l'ensemble de CET instant ; l'instant suit le lien. Un ensemble lu pour un autre instant ne vaut rien ici.
+    const I = '2026-10-07T15:00:00.000Z';
+    await contexte.routeur.push(`/match-a-venir/${id}?instant=${I}`);
+    E.__poserLesEnCours(ensemble(entree()), { instant: I });
+    const rejeu = await encartDe('en rejeu');
+    assert.ok(rejeu?.includes(`&amp;instant=${I}" class="cm-link" data-lien="direct">`), 'l’instant suit le lien');
+    E.__poserLesEnCours(ensemble(entree()), { instant: null });
+    assert.equal(await encartDe('un ensemble d’un autre instant'), null);
+  } finally {
+    E.__poserLesEnCours(null);
+    await contexte.routeur.push('/');
+  }
+  assert.ok(!appels.some((u) => /\/api\/direct/.test(u)), 'rendu côté serveur : aucune lecture du direct');
 });
 
 test('aucun appel hors liste pendant ces rendus — ni API payante, ni FotMob, ni Claude, ni la vraie appli — et aucun avertissement de Vue', options, () => {

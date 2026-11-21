@@ -1,0 +1,808 @@
+# Étape 46, étape 0 — les libellés et les faits de live_snapshots (--libelles)
+base : C:\Users\PC\CoteMaster\bac-a-sable\base\match-stats.db (3 031 191 552 octets) ; 28 136 instantanés, 1 403 matchs suivis
+
+## Patrons des libellés (nettoyés, chiffres → 9), par statut — sans LIMIT (R6 point 1a)
+statut | patron | type lu | n | formes brutes (hex, chiffres → 9) | plus petit | plus grand
+annulé | (null) | absent | 2 |  | — () | — ()
+en cours | 99' | minute | 20242 | 3939E2808EE28099E2808E×20242 | 10' (3130E2808EE28099E2808E) | 99' (3939E2808EE28099E2808E)
+en cours | 9' | minute | 2301 | 39E2808EE28099E2808E×2301 | 1' (31E2808EE28099E2808E) | 9' (39E2808EE28099E2808E)
+en cours | 999' | minute | 191 | 393939E2808EE28099E2808E×191 | 100' (313030E2808EE28099E2808E) | 186' (313836E2808EE28099E2808E)
+en cours | Pen | tirs-au-but | 30 | 50656E×30 | Pen (50656E) | Pen (50656E)
+en cours | IR | inconnu | 29 | 4952×29 | IR (4952) | IR (4952)
+en cours | ET | prolongation | 21 | 4554×21 | ET (4554) | ET (4554)
+en cours | PET | inconnu | 17 | 504554×17 | PET (504554) | PET (504554)
+en cours | 99 | minute | 4 | 3939×4 | 90 (3930) | 90 (3930)
+en cours | (null) | absent | 1 |  | — () | — ()
+mi-temps | HT | mi-temps | 4047 | 4854×4047 | HT (4854) | HT (4854)
+terminé | (null) | absent | 1251 |  | — () | — ()
+
+Libellés de type « inconnu » : en cours « IR » ×29 ; en cours « PET » ×17
+
+## Minute et ajout à partir de la 45e (R6 point 1b) — tous championnats
+minute | ajout | n
+45 | null | 83
+46 | null | 465
+47 | null | 523
+48 | null | 367
+49 | null | 281
+50 | null | 273
+51 | null | 249
+52 | null | 226
+53 | null | 233
+54 | null | 239
+55 | null | 235
+56 | null | 227
+57 | null | 209
+58 | null | 233
+59 | null | 245
+60 | null | 224
+61 | null | 218
+62 | null | 208
+63 | null | 236
+64 | null | 259
+65 | null | 247
+66 | null | 220
+67 | null | 212
+68 | null | 238
+69 | null | 251
+70 | null | 243
+71 | null | 240
+72 | null | 214
+73 | null | 218
+74 | null | 238
+75 | null | 246
+76 | null | 213
+77 | null | 217
+78 | null | 238
+79 | null | 241
+80 | null | 247
+81 | null | 216
+82 | null | 208
+83 | null | 228
+84 | null | 235
+85 | null | 250
+86 | null | 224
+87 | null | 204
+88 | null | 220
+89 | null | 232
+90 | null | 249
+91 | null | 219
+92 | null | 199
+93 | null | 246
+94 | null | 219
+95 | null | 163
+96 | null | 108
+97 | null | 52
+98 | null | 41
+99 | null | 26
+100 | null | 23
+101 | null | 14
+102 | null | 8
+103 | null | 7
+104 | null | 8
+105 | null | 5
+106 | null | 8
+107 | null | 4
+108 | null | 4
+109 | null | 12
+110 | null | 8
+111 | null | 5
+112 | null | 4
+113 | null | 4
+114 | null | 5
+115 | null | 5
+116 | null | 7
+117 | null | 7
+118 | null | 5
+119 | null | 5
+120 | null | 3
+121 | null | 6
+122 | null | 2
+123 | null | 1
+124 | null | 2
+126 | null | 3
+129 | null | 1
+131 | null | 3
+136 | null | 3
+141 | null | 3
+146 | null | 3
+151 | null | 3
+156 | null | 3
+161 | null | 3
+166 | null | 1
+171 | null | 1
+176 | null | 1
+181 | null | 1
+186 | null | 1
+
+### Par championnat, à partir de la 90e
+Allsvenskan - Sweden | 90 | null | 4
+Allsvenskan - Sweden | 91 | null | 6
+Allsvenskan - Sweden | 92 | null | 3
+Allsvenskan - Sweden | 93 | null | 4
+Allsvenskan - Sweden | 94 | null | 5
+Allsvenskan - Sweden | 95 | null | 1
+Allsvenskan - Sweden | 96 | null | 3
+Austrian Football Bundesliga | 90 | null | 5
+Austrian Football Bundesliga | 91 | null | 2
+Austrian Football Bundesliga | 93 | null | 1
+Austrian Football Bundesliga | 94 | null | 3
+Austrian Football Bundesliga | 95 | null | 2
+Austrian Football Bundesliga | 96 | null | 1
+Belgium First Div | 90 | null | 4
+Belgium First Div | 91 | null | 1
+Belgium First Div | 92 | null | 5
+Belgium First Div | 93 | null | 4
+Belgium First Div | 94 | null | 4
+Belgium First Div | 95 | null | 3
+Belgium First Div | 96 | null | 1
+Belgium First Div | 98 | null | 1
+Belgium First Div | 99 | null | 1
+Belgium First Div | 103 | null | 1
+Besta deildin - Iceland | 90 | null | 1
+Besta deildin - Iceland | 91 | null | 3
+Besta deildin - Iceland | 92 | null | 1
+Besta deildin - Iceland | 94 | null | 1
+Brazil Série A | 90 | null | 3
+Brazil Série A | 91 | null | 3
+Brazil Série A | 92 | null | 5
+Brazil Série A | 93 | null | 5
+Brazil Série A | 94 | null | 5
+Brazil Série A | 95 | null | 1
+Brazil Série A | 96 | null | 4
+Brazil Série A | 97 | null | 3
+Brazil Série A | 98 | null | 3
+Brazil Série A | 99 | null | 1
+Brazil Série A | 100 | null | 1
+Brazil Série A | 102 | null | 1
+Bundesliga - Germany | 90 | null | 3
+Bundesliga - Germany | 91 | null | 9
+Bundesliga - Germany | 92 | null | 4
+Bundesliga - Germany | 93 | null | 1
+Bundesliga - Germany | 94 | null | 5
+Bundesliga - Germany | 95 | null | 6
+Bundesliga - Germany | 96 | null | 2
+Bundesliga 2 - Germany | 90 | null | 7
+Bundesliga 2 - Germany | 91 | null | 3
+Bundesliga 2 - Germany | 92 | null | 3
+Bundesliga 2 - Germany | 93 | null | 2
+Bundesliga 2 - Germany | 94 | null | 1
+Bundesliga 2 - Germany | 95 | null | 4
+Bundesliga 2 - Germany | 96 | null | 1
+Bundesliga 2 - Germany | 108 | null | 1
+Canadian Premier League | 90 | null | 3
+Canadian Premier League | 91 | null | 1
+Canadian Premier League | 93 | null | 1
+Canadian Premier League | 94 | null | 1
+Canadian Premier League | 95 | null | 2
+Canadian Premier League | 98 | null | 1
+Canadian Premier League | 99 | null | 1
+Canadian Premier League | 100 | null | 1
+Canadian Premier League | 104 | null | 1
+Championship | 90 | null | 12
+Championship | 91 | null | 7
+Championship | 92 | null | 12
+Championship | 93 | null | 16
+Championship | 94 | null | 5
+Championship | 95 | null | 5
+Championship | 96 | null | 3
+Championship | 97 | null | 6
+Championship | 98 | null | 4
+Championship | 99 | null | 1
+Championship | 102 | null | 1
+Copa Argentina | 93 | null | 1
+Copa Chile | 91 | null | 2
+Copa Chile | 94 | null | 1
+Copa Sudamericana | 91 | null | 1
+Copa Sudamericana | 96 | null | 1
+Copa del Rey - Spain | 90 | null | 11
+Copa del Rey - Spain | 91 | null | 8
+Copa del Rey - Spain | 92 | null | 8
+Copa del Rey - Spain | 93 | null | 8
+Copa del Rey - Spain | 94 | null | 11
+Copa del Rey - Spain | 95 | null | 6
+Copa del Rey - Spain | 96 | null | 8
+Copa del Rey - Spain | 98 | null | 3
+Copa del Rey - Spain | 99 | null | 1
+Copa del Rey - Spain | 100 | null | 4
+Copa del Rey - Spain | 101 | null | 4
+Copa del Rey - Spain | 103 | null | 4
+Copa del Rey - Spain | 104 | null | 3
+Copa del Rey - Spain | 106 | null | 1
+Copa del Rey - Spain | 108 | null | 1
+Copa del Rey - Spain | 109 | null | 6
+Copa del Rey - Spain | 110 | null | 3
+Copa del Rey - Spain | 113 | null | 2
+Copa del Rey - Spain | 114 | null | 3
+Copa del Rey - Spain | 115 | null | 2
+Copa del Rey - Spain | 116 | null | 2
+Copa del Rey - Spain | 117 | null | 1
+Copa del Rey - Spain | 118 | null | 3
+Copa del Rey - Spain | 119 | null | 3
+Copa del Rey - Spain | 120 | null | 3
+Copa del Rey - Spain | 122 | null | 2
+Copa del Rey - Spain | 123 | null | 1
+Copa del Rey - Spain | 124 | null | 1
+Copa del Rey - Spain | 129 | null | 1
+Copa do Brasil | 90 | null | 1
+Copa do Brasil | 94 | null | 2
+Copa do Brasil | 95 | null | 1
+Coupe de Grèce | 90 | null | 1
+Coupe de Grèce | 91 | null | 1
+Coupe de Grèce | 93 | null | 1
+Coupe de Grèce | 94 | null | 2
+DFB Pokal - Germany | 90 | null | 2
+DFB Pokal - Germany | 91 | null | 4
+DFB Pokal - Germany | 92 | null | 3
+DFB Pokal - Germany | 93 | null | 6
+DFB Pokal - Germany | 94 | null | 1
+DFB Pokal - Germany | 95 | null | 3
+DFB Pokal - Germany | 96 | null | 1
+DFB Pokal - Germany | 100 | null | 1
+DFB Pokal - Germany | 101 | null | 1
+DFB Pokal - Germany | 106 | null | 1
+DFB Pokal - Germany | 107 | null | 1
+DFB Pokal - Germany | 112 | null | 1
+DFB Pokal - Germany | 117 | null | 1
+Denmark Superliga | 90 | null | 4
+Denmark Superliga | 91 | null | 2
+Denmark Superliga | 92 | null | 1
+Denmark Superliga | 94 | null | 2
+Denmark Superliga | 95 | null | 1
+Denmark Superliga | 96 | null | 2
+División Profesional - Paraguay | 90 | null | 3
+División Profesional - Paraguay | 91 | null | 3
+División Profesional - Paraguay | 92 | null | 2
+División Profesional - Paraguay | 93 | null | 3
+División Profesional - Paraguay | 94 | null | 6
+División Profesional - Paraguay | 95 | null | 2
+División Profesional - Paraguay | 96 | null | 2
+División Profesional - Paraguay | 98 | null | 1
+División Profesional - Paraguay | 101 | null | 1
+Dutch Eredivisie | 90 | null | 3
+Dutch Eredivisie | 91 | null | 2
+Dutch Eredivisie | 92 | null | 1
+Dutch Eredivisie | 93 | null | 5
+Dutch Eredivisie | 94 | null | 7
+Dutch Eredivisie | 96 | null | 2
+Dutch Eredivisie | 97 | null | 1
+Dutch Eredivisie | 115 | null | 1
+EFL Cup | 90 | null | 3
+EFL Cup | 91 | null | 2
+EFL Cup | 92 | null | 1
+EFL Cup | 93 | null | 1
+EFL Cup | 95 | null | 4
+EFL Cup | 100 | null | 1
+EPL | 90 | null | 5
+EPL | 91 | null | 5
+EPL | 92 | null | 2
+EPL | 93 | null | 7
+EPL | 94 | null | 5
+EPL | 95 | null | 5
+EPL | 96 | null | 3
+EPL | 97 | null | 1
+EPL | 98 | null | 3
+EPL | 99 | null | 1
+Ekstraklasa - Poland | 90 | null | 7
+Ekstraklasa - Poland | 91 | null | 3
+Ekstraklasa - Poland | 92 | null | 5
+Ekstraklasa - Poland | 93 | null | 4
+Ekstraklasa - Poland | 94 | null | 5
+Ekstraklasa - Poland | 95 | null | 5
+Ekstraklasa - Poland | 96 | null | 2
+Ekstraklasa - Poland | 97 | null | 2
+Ekstraklasa - Poland | 99 | null | 3
+Ekstraklasa - Poland | 100 | null | 1
+Ekstraklasa - Poland | 103 | null | 1
+Ekstraklasa - Poland | 104 | null | 1
+Ekstraklasa - Poland | 109 | null | 3
+Ekstraklasa - Poland | 112 | null | 1
+Eliteserien - Norway | 90 | null | 1
+Eliteserien - Norway | 91 | null | 3
+Eliteserien - Norway | 92 | null | 4
+Eliteserien - Norway | 93 | null | 1
+Eliteserien - Norway | 94 | null | 5
+Eliteserien - Norway | 95 | null | 1
+Eliteserien - Norway | 96 | null | 3
+Eliteserien - Norway | 97 | null | 2
+Eliteserien - Norway | 99 | null | 1
+Eliteserien - Norway | 102 | null | 1
+FA Cup - England | 90 | null | 8
+FA Cup - England | 91 | null | 4
+FA Cup - England | 92 | null | 8
+FA Cup - England | 93 | null | 10
+FA Cup - England | 94 | null | 12
+FA Cup - England | 95 | null | 2
+FA Cup - England | 96 | null | 6
+FA Cup - England | 97 | null | 4
+FA Cup - England | 98 | null | 3
+FA Cup - England | 99 | null | 3
+FA Cup - England | 101 | null | 2
+FA Cup - England | 102 | null | 2
+FA Cup - England | 103 | null | 1
+FA Cup - England | 104 | null | 2
+FA Cup - England | 106 | null | 1
+FA Cup - England | 107 | null | 1
+FA Cup - England | 108 | null | 2
+FA Cup - England | 109 | null | 3
+FA Cup - England | 110 | null | 1
+FA Cup - England | 113 | null | 2
+FA Cup - England | 114 | null | 2
+FA Cup - England | 115 | null | 1
+FA Cup - England | 117 | null | 2
+FA Cup - England | 118 | null | 1
+FA Cup - England | 119 | null | 2
+FA Cup - England | 121 | null | 1
+FA Cup - England | 124 | null | 1
+First League - Czechia | 90 | null | 1
+First League - Czechia | 91 | null | 5
+First League - Czechia | 92 | null | 4
+First League - Czechia | 93 | null | 4
+First League - Czechia | 94 | null | 3
+First League - Czechia | 95 | null | 1
+First League - Czechia | 96 | null | 3
+HNL - Croatia | 90 | null | 3
+HNL - Croatia | 91 | null | 2
+HNL - Croatia | 92 | null | 2
+HNL - Croatia | 93 | null | 1
+HNL - Croatia | 94 | null | 4
+HNL - Croatia | 95 | null | 2
+HNL - Croatia | 98 | null | 1
+HNL - Croatia | 99 | null | 1
+HNL - Croatia | 102 | null | 1
+KNVB Cup - Netherlands | 90 | null | 5
+KNVB Cup - Netherlands | 91 | null | 6
+KNVB Cup - Netherlands | 92 | null | 5
+KNVB Cup - Netherlands | 93 | null | 4
+KNVB Cup - Netherlands | 94 | null | 3
+KNVB Cup - Netherlands | 95 | null | 6
+KNVB Cup - Netherlands | 96 | null | 1
+KNVB Cup - Netherlands | 98 | null | 1
+KNVB Cup - Netherlands | 100 | null | 4
+KNVB Cup - Netherlands | 101 | null | 1
+KNVB Cup - Netherlands | 105 | null | 3
+KNVB Cup - Netherlands | 106 | null | 2
+KNVB Cup - Netherlands | 107 | null | 1
+KNVB Cup - Netherlands | 110 | null | 2
+KNVB Cup - Netherlands | 111 | null | 2
+KNVB Cup - Netherlands | 112 | null | 1
+KNVB Cup - Netherlands | 115 | null | 1
+KNVB Cup - Netherlands | 116 | null | 2
+KNVB Cup - Netherlands | 117 | null | 1
+KNVB Cup - Netherlands | 118 | null | 1
+KNVB Cup - Netherlands | 121 | null | 2
+La Liga - Spain | 90 | null | 4
+La Liga - Spain | 91 | null | 5
+La Liga - Spain | 92 | null | 6
+La Liga - Spain | 93 | null | 6
+La Liga - Spain | 94 | null | 3
+La Liga - Spain | 95 | null | 2
+La Liga - Spain | 96 | null | 1
+La Liga - Spain | 97 | null | 2
+La Liga - Spain | 98 | null | 1
+La Liga - Spain | 100 | null | 1
+La Liga - Spain | 101 | null | 1
+La Liga 2 - Spain | 90 | null | 8
+La Liga 2 - Spain | 91 | null | 3
+La Liga 2 - Spain | 92 | null | 5
+La Liga 2 - Spain | 93 | null | 4
+La Liga 2 - Spain | 94 | null | 7
+La Liga 2 - Spain | 95 | null | 6
+La Liga 2 - Spain | 96 | null | 1
+La Liga 2 - Spain | 98 | null | 1
+La Liga 2 - Spain | 99 | null | 2
+La Liga 2 - Spain | 117 | null | 1
+League 1 | 90 | null | 5
+League 1 | 91 | null | 6
+League 1 | 92 | null | 8
+League 1 | 93 | null | 11
+League 1 | 94 | null | 8
+League 1 | 95 | null | 6
+League 1 | 96 | null | 3
+League 1 | 97 | null | 3
+League 1 | 98 | null | 3
+League 2 | 90 | null | 5
+League 2 | 91 | null | 7
+League 2 | 92 | null | 5
+League 2 | 93 | null | 7
+League 2 | 94 | null | 9
+League 2 | 95 | null | 4
+League 2 | 96 | null | 3
+League 2 | 97 | null | 2
+League 2 | 98 | null | 1
+League of Ireland | 90 | null | 1
+League of Ireland | 91 | null | 1
+League of Ireland | 92 | null | 1
+League of Ireland | 94 | null | 1
+Liga 1 - Peru | 90 | null | 7
+Liga 1 - Peru | 91 | null | 4
+Liga 1 - Peru | 92 | null | 2
+Liga 1 - Peru | 93 | null | 7
+Liga 1 - Peru | 94 | null | 2
+Liga 1 - Peru | 95 | null | 4
+Liga 1 - Peru | 96 | null | 4
+Liga 1 - Peru | 98 | null | 2
+Liga 1 - Peru | 100 | null | 1
+Liga 1 - Peru | 101 | null | 2
+Liga 1 - Peru | 106 | null | 1
+Liga 1 - Peru | 110 | null | 1
+Liga 1 - Peru | 116 | null | 1
+Liga 1 - Peru | 121 | null | 1
+Liga 1 - Peru | 126 | null | 1
+Liga 1 - Peru | 131 | null | 1
+Liga 1 - Peru | 136 | null | 1
+Liga 1 - Peru | 141 | null | 1
+Liga 1 - Peru | 146 | null | 1
+Liga 1 - Peru | 151 | null | 1
+Liga 1 - Peru | 156 | null | 1
+Liga 1 - Peru | 161 | null | 1
+Liga MX | 91 | null | 1
+Liga MX | 93 | null | 1
+Liga MX | 94 | null | 1
+Liga MX | 96 | null | 1
+Ligat ha'Al - Israel | 90 | null | 4
+Ligat ha'Al - Israel | 91 | null | 7
+Ligat ha'Al - Israel | 92 | null | 5
+Ligat ha'Al - Israel | 93 | null | 3
+Ligat ha'Al - Israel | 94 | null | 2
+Ligat ha'Al - Israel | 95 | null | 2
+Ligat ha'Al - Israel | 96 | null | 2
+Ligat ha'Al - Israel | 97 | null | 1
+Ligat ha'Al - Israel | 99 | null | 2
+Ligue 1 - France | 90 | null | 2
+Ligue 1 - France | 91 | null | 2
+Ligue 1 - France | 92 | null | 1
+Ligue 1 - France | 93 | null | 3
+Ligue 1 - France | 94 | null | 7
+Ligue 1 - France | 95 | null | 2
+Ligue 1 - France | 96 | null | 1
+Ligue 1 - France | 98 | null | 2
+Ligue 1 - France | 99 | null | 1
+Ligue 1 - France | 102 | null | 1
+Ligue 2 - France | 90 | null | 6
+Ligue 2 - France | 91 | null | 3
+Ligue 2 - France | 92 | null | 3
+Ligue 2 - France | 93 | null | 6
+Ligue 2 - France | 94 | null | 4
+Ligue 2 - France | 95 | null | 5
+Ligue 2 - France | 97 | null | 4
+Ligue 2 - France | 100 | null | 1
+MLS | 90 | null | 7
+MLS | 91 | null | 6
+MLS | 92 | null | 6
+MLS | 93 | null | 7
+MLS | 94 | null | 2
+MLS | 95 | null | 7
+MLS | 96 | null | 3
+MLS | 97 | null | 4
+MLS | 98 | null | 4
+MLS | 99 | null | 2
+Nike Liga - Slovakia | 90 | null | 6
+Nike Liga - Slovakia | 91 | null | 2
+Nike Liga - Slovakia | 93 | null | 2
+Nike Liga - Slovakia | 94 | null | 2
+Nike Liga - Slovakia | 96 | null | 2
+Nike Liga - Slovakia | 100 | null | 1
+Premier League - Russia | 90 | null | 4
+Premier League - Russia | 91 | null | 2
+Premier League - Russia | 92 | null | 2
+Premier League - Russia | 93 | null | 4
+Premier League - Russia | 94 | null | 3
+Premier League - Russia | 95 | null | 4
+Premier League - Russia | 97 | null | 1
+Premiership - Scotland | 90 | null | 3
+Premiership - Scotland | 91 | null | 4
+Premiership - Scotland | 92 | null | 3
+Premiership - Scotland | 93 | null | 4
+Premiership - Scotland | 94 | null | 2
+Premiership - Scotland | 95 | null | 1
+Primeira Liga - Portugal | 90 | null | 6
+Primeira Liga - Portugal | 91 | null | 2
+Primeira Liga - Portugal | 92 | null | 7
+Primeira Liga - Portugal | 93 | null | 3
+Primeira Liga - Portugal | 94 | null | 2
+Primeira Liga - Portugal | 95 | null | 4
+Primeira Liga - Portugal | 96 | null | 1
+Primeira Liga - Portugal | 97 | null | 1
+Primeira Liga - Portugal | 98 | null | 1
+Primera A - Colombia | 90 | null | 1
+Primera A - Colombia | 91 | null | 2
+Primera A - Colombia | 92 | null | 3
+Primera A - Colombia | 93 | null | 7
+Primera A - Colombia | 94 | null | 2
+Primera A - Colombia | 95 | null | 1
+Primera A - Colombia | 96 | null | 3
+Primera A - Colombia | 97 | null | 1
+Primera A - Colombia | 98 | null | 2
+Primera A - Colombia | 99 | null | 1
+Primera División - Argentina | 90 | null | 3
+Primera División - Argentina | 91 | null | 9
+Primera División - Argentina | 92 | null | 7
+Primera División - Argentina | 93 | null | 9
+Primera División - Argentina | 94 | null | 1
+Primera División - Argentina | 95 | null | 4
+Primera División - Argentina | 96 | null | 6
+Primera División - Argentina | 97 | null | 3
+Primera División - Argentina | 98 | null | 1
+Primera División - Bolivia | 90 | null | 3
+Primera División - Bolivia | 91 | null | 5
+Primera División - Bolivia | 92 | null | 2
+Primera División - Bolivia | 93 | null | 6
+Primera División - Bolivia | 94 | null | 3
+Primera División - Bolivia | 95 | null | 1
+Primera División - Bolivia | 96 | null | 4
+Primera División - Bolivia | 97 | null | 2
+Primera División - Bolivia | 98 | null | 1
+Primera División - Chile | 90 | null | 2
+Primera División - Chile | 91 | null | 1
+Primera División - Chile | 92 | null | 3
+Primera División - Chile | 93 | null | 4
+Primera División - Chile | 94 | null | 3
+Primera División - Chile | 95 | null | 3
+Primera División - Chile | 96 | null | 2
+Primera División - Chile | 97 | null | 3
+Primera División - Chile | 99 | null | 2
+Primera División - Chile | 100 | null | 1
+Primera División - Chile | 102 | null | 1
+Primera División - Chile | 111 | null | 1
+Primera División - Chile | 116 | null | 1
+Primera División - Chile | 121 | null | 1
+Primera División - Chile | 126 | null | 1
+Primera División - Chile | 131 | null | 1
+Primera División - Chile | 136 | null | 1
+Primera División - Chile | 141 | null | 1
+Primera División - Chile | 146 | null | 1
+Primera División - Chile | 151 | null | 1
+Primera División - Chile | 156 | null | 1
+Primera División - Chile | 161 | null | 1
+Primera División - Chile | 166 | null | 1
+Primera División - Chile | 171 | null | 1
+Primera División - Chile | 176 | null | 1
+Primera División - Chile | 181 | null | 1
+Primera División - Chile | 186 | null | 1
+Primera División - Venezuela | 90 | null | 5
+Primera División - Venezuela | 91 | null | 4
+Primera División - Venezuela | 93 | null | 4
+Primera División - Venezuela | 94 | null | 1
+Primera División - Venezuela | 95 | null | 5
+Primera División - Venezuela | 96 | null | 3
+Primera División - Venezuela | 98 | null | 1
+Primera División - Venezuela | 100 | null | 1
+Primera División - Venezuela | 105 | null | 1
+Primera División - Venezuela | 110 | null | 1
+Serie A - Ecuador | 90 | null | 3
+Serie A - Ecuador | 91 | null | 6
+Serie A - Ecuador | 92 | null | 1
+Serie A - Ecuador | 93 | null | 5
+Serie A - Ecuador | 94 | null | 3
+Serie A - Ecuador | 95 | null | 2
+Serie A - Ecuador | 96 | null | 5
+Serie A - Ecuador | 97 | null | 1
+Serie A - Ecuador | 99 | null | 1
+Serie A - Ecuador | 104 | null | 1
+Serie A - Italy | 90 | null | 7
+Serie A - Italy | 91 | null | 7
+Serie A - Italy | 92 | null | 7
+Serie A - Italy | 93 | null | 3
+Serie A - Italy | 94 | null | 4
+Serie A - Italy | 95 | null | 4
+Serie A - Italy | 96 | null | 2
+Serie A - Italy | 100 | null | 1
+Serie B - Italy | 90 | null | 7
+Serie B - Italy | 91 | null | 7
+Serie B - Italy | 92 | null | 6
+Serie B - Italy | 93 | null | 6
+Serie B - Italy | 94 | null | 6
+Serie B - Italy | 95 | null | 5
+Serie B - Italy | 96 | null | 1
+Serie B - Italy | 97 | null | 1
+Serie B - Italy | 99 | null | 1
+Super League - Greece | 90 | null | 3
+Super League - Greece | 91 | null | 4
+Super League - Greece | 92 | null | 1
+Super League - Greece | 93 | null | 5
+Super League - Greece | 94 | null | 1
+Super League - Greece | 95 | null | 2
+Super League - Greece | 96 | null | 2
+Super League - Greece | 100 | null | 1
+Super Liga - Serbia | 90 | null | 4
+Super Liga - Serbia | 91 | null | 1
+Super Liga - Serbia | 92 | null | 1
+Super Liga - Serbia | 93 | null | 4
+Super Liga - Serbia | 94 | null | 5
+Super Liga - Serbia | 95 | null | 1
+Superliga - Romania | 90 | null | 6
+Superliga - Romania | 91 | null | 1
+Superliga - Romania | 92 | null | 2
+Superliga - Romania | 93 | null | 4
+Superliga - Romania | 94 | null | 6
+Superliga - Romania | 95 | null | 1
+Superliga - Romania | 97 | null | 1
+Swiss Superleague | 90 | null | 5
+Swiss Superleague | 91 | null | 4
+Swiss Superleague | 92 | null | 3
+Swiss Superleague | 94 | null | 1
+Swiss Superleague | 95 | null | 3
+Swiss Superleague | 97 | null | 1
+Taça da Liga - Portugal | 90 | null | 1
+Taça da Liga - Portugal | 91 | null | 2
+Taça da Liga - Portugal | 95 | null | 1
+Taça da Liga - Portugal | 96 | null | 1
+Taça da Liga - Portugal | 100 | null | 1
+Turkey Super League | 90 | null | 5
+Turkey Super League | 91 | null | 4
+Turkey Super League | 92 | null | 1
+Turkey Super League | 93 | null | 2
+Turkey Super League | 94 | null | 8
+Turkey Super League | 95 | null | 3
+Turkey Super League | 96 | null | 1
+Turkey Super League | 97 | null | 1
+Türkiye Kupası | 90 | null | 2
+Türkiye Kupası | 91 | null | 3
+Türkiye Kupası | 92 | null | 2
+Türkiye Kupası | 93 | null | 4
+Türkiye Kupası | 94 | null | 4
+Türkiye Kupası | 95 | null | 1
+Türkiye Kupası | 96 | null | 2
+Türkiye Kupası | 100 | null | 1
+Türkiye Kupası | 101 | null | 1
+Türkiye Kupası | 105 | null | 1
+Türkiye Kupası | 106 | null | 1
+Türkiye Kupası | 107 | null | 1
+Türkiye Kupası | 111 | null | 1
+Türkiye Kupası | 112 | null | 1
+Türkiye Kupası | 117 | null | 1
+UEFA Champions League | 90 | null | 6
+UEFA Champions League | 91 | null | 2
+UEFA Champions League | 92 | null | 5
+UEFA Champions League | 93 | null | 8
+UEFA Champions League | 94 | null | 6
+UEFA Champions League | 95 | null | 4
+UEFA Europa Conference League | 90 | null | 7
+UEFA Europa Conference League | 91 | null | 5
+UEFA Europa Conference League | 92 | null | 11
+UEFA Europa Conference League | 93 | null | 9
+UEFA Europa Conference League | 94 | null | 2
+UEFA Europa Conference League | 95 | null | 6
+UEFA Europa Conference League | 96 | null | 1
+UEFA Europa League | 90 | null | 10
+UEFA Europa League | 91 | null | 3
+UEFA Europa League | 92 | null | 6
+UEFA Europa League | 93 | null | 6
+UEFA Europa League | 94 | null | 6
+UEFA Europa League | 95 | null | 5
+UEFA Europa League | 96 | null | 3
+Veikkausliiga - Finland | 90 | null | 1
+Veikkausliiga - Finland | 91 | null | 3
+Veikkausliiga - Finland | 92 | null | 4
+Veikkausliiga - Finland | 94 | null | 3
+Veikkausliiga - Finland | 95 | null | 1
+Veikkausliiga - Finland | 97 | null | 1
+Virsliga - Latvia | 91 | null | 3
+Virsliga - Latvia | 92 | null | 1
+Virsliga - Latvia | 93 | null | 2
+Virsliga - Latvia | 96 | null | 1
+Virsliga - Latvia | 101 | null | 1
+Virsliga - Latvia | 106 | null | 1
+Virsliga - Latvia | 111 | null | 1
+Virsliga - Latvia | 116 | null | 1
+Virsliga - Latvia | 121 | null | 1
+Virsliga - Latvia | 126 | null | 1
+Virsliga - Latvia | 131 | null | 1
+Virsliga - Latvia | 136 | null | 1
+Virsliga - Latvia | 141 | null | 1
+Virsliga - Latvia | 146 | null | 1
+Virsliga - Latvia | 151 | null | 1
+Virsliga - Latvia | 156 | null | 1
+Virsliga - Latvia | 161 | null | 1
+
+## Libellés des instantanés pris plus de 110 minutes après le coup d’envoi (R6 point 1c)
+annulé | (null) | absent | 1 | — → —
+en cours | 99' | minute | 1474 | 46' → 99'
+en cours | 999' | minute | 189 | 100' → 186'
+en cours | Pen | tirs-au-but | 30 | Pen → Pen
+en cours | ET | prolongation | 20 | ET → ET
+en cours | PET | inconnu | 17 | PET → PET
+en cours | IR | inconnu | 15 | IR → IR
+mi-temps | HT | mi-temps | 9 | HT → HT
+terminé | (null) | absent | 1236 | — → —
+
+## Les rouges et l’âge du détail (R16 point 1)
+matchs suivis : 1 403 ; avec au moins un rouge lu (non null) : 1 402 ; sans aucun rouge lu : 1 (0,1 %) ; avec un rouge > 0 vu : 220 ; sans aucun détail : 1
+âge du dernier détail à chaque instantané « en cours » (minutes) : médiane 0, 75e centile 0, 90e centile 5, max 81,02 ; 22 783 mesures, 53 instantanés sans détail encore lu
+instantanés de la liste seule : 7 817 sur 28 136 (27,8 %)
+règle de R16 (écrite avant ce mode : retard médian > 2 créneaux, ou plus de 20 % des matchs sans rouge lu) : non déclenchée (M = 0)
+
+## Dossier § 1.6
+en cours sans minute : 97
+source | couverture | n | rouges null | rouges lus | xG | détails
+liste | null | 280 | 280 | 3 | 0 | 0
+liste | lower | 2479 | 2446 | 53 | 0 | 0
+liste | ratings | 1359 | 1326 | 61 | 0 | 0
+liste | xG | 3699 | 3613 | 147 | 0 | 0
+liste + détail | lower | 1591 | 0 | 1591 | 0 | 1591
+liste + détail | ratings | 4690 | 0 | 4690 | 0 | 4690
+liste + détail | xG | 14038 | 0 | 14038 | 13917 | 14038
+type | statut | n
+direct | en cours | 22835
+direct | mi-temps | 4047
+fin | annulé | 2
+fin | en cours | 1
+fin | terminé | 1251
+pic (dizaine de minutes UTC | matchs)
+2026-11-07T15:3 | 69
+2026-11-07T15:4 | 69
+2026-11-07T15:5 | 68
+2026-11-07T15:2 | 67
+2026-10-24T14:5 | 66
+2026-11-07T15:0 | 66
+2026-11-07T15:1 | 66
+2026-11-07T16:0 | 65
+2026-11-07T16:1 | 64
+2026-11-07T16:2 | 64
+jour | source | instantanés | matchs
+2026-10-06 | liste | 21 | 3
+2026-10-06 | liste + détail | 50 | 3
+2026-10-07 | liste | 12 | 3
+2026-10-07 | liste + détail | 60 | 3
+2026-10-08 | liste | 11 | 3
+2026-10-08 | liste + détail | 33 | 3
+2026-10-09 | liste | 120 | 34
+2026-10-09 | liste + détail | 372 | 34
+2026-10-11 | liste | 60 | 19
+2026-10-11 | liste + détail | 94 | 19
+2026-10-12 | liste | 181 | 37
+2026-10-12 | liste + détail | 595 | 38
+2026-10-13 | liste | 101 | 18
+2026-10-13 | liste + détail | 331 | 18
+2026-10-14 | liste | 7 | 1
+2026-10-14 | liste + détail | 18 | 1
+2026-10-15 | liste | 61 | 19
+2026-10-15 | liste + détail | 198 | 19
+2026-10-18 | liste | 102 | 26
+2026-10-18 | liste + détail | 240 | 27
+2026-10-20 | liste | 120 | 33
+2026-10-20 | liste + détail | 519 | 33
+2026-10-21 | liste | 65 | 13
+2026-10-21 | liste + détail | 233 | 13
+2026-10-22 | liste | 179 | 36
+2026-10-22 | liste + détail | 660 | 36
+2026-10-23 | liste | 117 | 41
+2026-10-23 | liste + détail | 377 | 45
+2026-10-24 | liste | 855 | 173
+2026-10-24 | liste + détail | 2188 | 173
+2026-10-25 | liste | 643 | 119
+2026-10-25 | liste + détail | 1862 | 119
+2026-10-26 | liste | 114 | 22
+2026-10-26 | liste + détail | 358 | 22
+2026-10-27 | liste | 732 | 78
+2026-10-27 | liste + détail | 1169 | 78
+2026-10-28 | liste | 341 | 66
+2026-10-28 | liste + détail | 1194 | 66
+2026-10-29 | liste | 510 | 58
+2026-10-29 | liste + détail | 803 | 58
+2026-10-30 | liste | 9 | 6
+2026-10-30 | liste + détail | 34 | 8
+2026-10-31 | liste | 868 | 145
+2026-10-31 | liste + détail | 2342 | 145
+2026-11-01 | liste | 77 | 20
+2026-11-01 | liste + détail | 253 | 22
+2026-11-02 | liste | 232 | 46
+2026-11-02 | liste + détail | 758 | 46
+2026-11-03 | liste | 188 | 34
+2026-11-03 | liste + détail | 599 | 34
+2026-11-04 | liste | 127 | 25
+2026-11-04 | liste + détail | 412 | 25
+2026-11-05 | liste | 214 | 42
+2026-11-05 | liste + détail | 742 | 42
+2026-11-06 | liste | 178 | 37
+2026-11-06 | liste + détail | 578 | 37
+2026-11-07 | liste | 1319 | 170
+2026-11-07 | liste + détail | 2598 | 170
+2026-11-08 | liste | 169 | 52
+2026-11-08 | liste + détail | 461 | 52
+2026-11-09 | liste | 38 | 8
+2026-11-09 | liste + détail | 146 | 8
+2026-11-10 | liste | 46 | 6
+2026-11-10 | liste + détail | 42 | 6
+

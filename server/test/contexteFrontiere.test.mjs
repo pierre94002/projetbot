@@ -27,6 +27,9 @@ import crypto from 'node:crypto';
 import { preparerCopie, executer, SERVEUR, FIXTURES, RACINE_ESSAIS } from './aides/isolement.mjs';
 import { fichiersDuMoteur, empreinteDuCode, empreinteDeLaCandidate, CANDIDATE_EN_ESSAI, MODULES_DU_MOTEUR } from '../src/core/engine/engineVersions.js';
 import * as LANC from '../src/bench/lancements.js';
+// Étape 46 (partie C, 13/11/2026) : la 46 se pose au registre au scellement (« direct » à la fin de PORTEES, le lancement 46 à
+// la fin, daté du jour de l'export) ; ces essais la retirent d'abord et passent avec et sans elle (aides/ajouts46.mjs).
+import { porteesSans46 } from './aides/ajouts46.mjs';
 import { enregistrerLancements, fenetresVues, compterVariantes, lancementDe } from '../src/bench/trialsRegistry.js';
 import { DECISION_DE_PIERRE, PERIODES_DU_BANC, JUGE_DU_BANC, AMPLEUR, COUPES_CONTINENTALES } from '../src/data/contexte/reglagesContexte.js';
 import { FOTMOB_LEAGUES } from '../src/data/providers/fotMobProvider.js';
@@ -119,7 +122,7 @@ test('T-X5 la déclaration de l’étape 32 AVANT le regard : portée « context
   // Étape 36 (lot 1, 09/11/2026) : sa portée « coupes » vient APRÈS « combinaison » (coupesFrontiere T-X5).
   // Étape 35 (lot 1a, 09/11/2026) : sa portée « debuts-de-saison » vient APRÈS « coupes » (debutsFrontiere T-X5).
   // Étape 39 (lot 1b, 09/11/2026) : sa portée « mise » vient APRÈS « debuts-de-saison » (miseFrontiere T-X5).
-  assert.deepEqual([...LANC.PORTEES].slice(9), ['cartons-corners', 'paris-joueurs', 'combinaison', 'coupes', 'debuts-de-saison', 'mise']);
+  assert.deepEqual(porteesSans46(LANC.PORTEES).slice(9), ['cartons-corners', 'paris-joueurs', 'combinaison', 'coupes', 'debuts-de-saison', 'mise']);
   assert.ok(LANC.VUES_DE_L_ETAPE_32.length >= 1);
   for (const v of LANC.VUES_DE_L_ETAPE_32) assert.deepEqual([...v.pour], ['contexte'], `${v.de} → ${v.a}`);
   for (const v of LANC.VUES_DE_L_ETAPE_32) assert.ok(v.a <= '2026-09-23', 'jamais P5 : la preuve après lancement');
@@ -208,9 +211,15 @@ test('T-X7 le jugement PROVISOIRE de l’essai de l’étape 27 (moteurABlanc, e
   delete registre.etapes['36'];
   delete registre.etapes['35'];
   delete registre.etapes['39'];
+  // Étape 46 (partie C, 13/11/2026) : posée au registre au scellement seulement, daté du jour de l'export (un « le » fixe,
+  // recopié tel quel) ; quand elle y est, elle est retirée de même (l'essai passe avec et sans elle).
+  if (registre.etapes['46']) {
+    assert.equal(registre.etapes['46'].lancements.length, 1);
+    delete registre.etapes['46'];
+  }
   assert.equal(JSON.stringify(registre), JSON.stringify(JSON.parse(figee.registreMesureTexte)), 'le registre de la mesure d’essai, à l’octet hors du lancement 32');
   assert.ok(!figee.lancementsNotes.some((x) => x.startsWith('32:')), 'avant : le premier démarrage ne note pas 32');
-  assert.deepEqual(s.lancementsNotes, [...figee.lancementsNotes, '32:contexte-v1:2026-09-23', '33:cartons-corners-v1:2026-09-23', '34:joueurs-v1:2026-09-23', '38:combinaison-v1:2026-09-23', '36:coupes-v1:2026-09-23', '35:debuts-de-saison-v1:2026-09-23', '39:mise-v1:2026-09-23'], 'après : 32, 33, 34, 38, 36, 35 et 39 notés au premier démarrage, rien d’autre de neuf');
+  assert.deepEqual(s.lancementsNotes.filter((x) => !x.startsWith('46:')), [...figee.lancementsNotes, '32:contexte-v1:2026-09-23', '33:cartons-corners-v1:2026-09-23', '34:joueurs-v1:2026-09-23', '38:combinaison-v1:2026-09-23', '36:coupes-v1:2026-09-23', '35:debuts-de-saison-v1:2026-09-23', '39:mise-v1:2026-09-23'], 'après : 32, 33, 34, 38, 36, 35 et 39 notés au premier démarrage, rien d’autre de neuf');
   assert.equal(s.variantes27, figee.variantes27);
   assert.equal(s.variantes27, 320);
   assert.ok(!figee.lancementsVus.includes('32:contexte-v1'), 'avant : pas de lancement 32');
@@ -224,7 +233,7 @@ test('T-X7 le jugement PROVISOIRE de l’essai de l’étape 27 (moteurABlanc, e
   assert.ok(s.lancementsVus.includes('35:debuts-de-saison-v1'), 'après : le lancement 35 est dans le registre du juge, et rien ne change');
   // Étape 39 (lot 1b, 09/11/2026) : de même.
   assert.ok(s.lancementsVus.includes('39:mise-v1'), 'après : le lancement 39 est dans le registre du juge, et rien ne change');
-  assert.deepEqual(s.lancementsVus.filter((x) => x !== '32:contexte-v1' && x !== '33:cartons-corners-v1' && x !== '34:joueurs-v1' && x !== '38:combinaison-v1' && x !== '36:coupes-v1' && x !== '35:debuts-de-saison-v1' && x !== '39:mise-v1'), figee.lancementsVus);
+  assert.deepEqual(s.lancementsVus.filter((x) => x !== '32:contexte-v1' && x !== '33:cartons-corners-v1' && x !== '34:joueurs-v1' && x !== '38:combinaison-v1' && x !== '36:coupes-v1' && x !== '35:debuts-de-saison-v1' && x !== '39:mise-v1' && !x.startsWith('46:')), figee.lancementsVus);
 });
 
 test('T-X8 openDb sur une copie de forme réelle (la base d’essai) crée les cinq tables et les deux index du contexte ; indexAttendus() complet ; une seconde ouverture ne change rien ; chaque entrée du DDL du contexte commence par son ordre', () => {

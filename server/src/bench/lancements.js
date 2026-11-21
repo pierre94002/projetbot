@@ -105,7 +105,9 @@ export const DONNEES_VUES = Object.freeze([
 // jamais lus par le moteur au lot 1 (la candidate du lot 2 recopierait ces vues avec `pour: ['moteur']`).
 // Étape 39 (lot 1b, 09/11/2026) : « mise » — le banc de la mise (data/mise/) : la forme de 1/8 de Kelly jugée à la clôture,
 // les niveaux et les creux du capital rapportés ; jamais lus par le moteur au lot 1.
-export const PORTEES = Object.freeze(['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs', 'combinaison', 'coupes', 'debuts-de-saison', 'mise']);
+// Étape 46 (lot 1, 12/11/2026) : « direct » — le banc du direct (data/direct/) : les probabilités en direct rejouées
+// créneau par créneau sur la période du banc et jugées en un ou deux regards nommés ; jamais lues par le moteur.
+export const PORTEES = Object.freeze(['tout', 'moteur', 'statistiques', 'marche', 'indice', 'joueurs', 'style', 'simulation', 'contexte', 'cartons-corners', 'paris-joueurs', 'combinaison', 'coupes', 'debuts-de-saison', 'mise', 'direct']);
 
 /** Une fenêtre vaut-elle pour cette mesure ? `tout` vaut pour toutes. */
 export const pourLaPortee = (pour, portee) => Array.isArray(pour) && (pour.includes(portee) || pour.includes('tout'));
@@ -978,6 +980,48 @@ export const VARIANTES_DE_L_ETAPE_39 = Object.freeze([
 ]);
 
 /**
+ * Les fenêtres REGARDÉES par l'étape 46 (le banc du direct, lot 1 ; data/direct/), portée « direct » (déclarée DANS chaque
+ * fenêtre : ni le juge de l'essai de l'étape 27 ni les autres mesures n'en voient rien) : la période du banc (du 24/09/2026
+ * au jour de l'export), la fenêtre déjà vue de la table du temps additionnel et des buts moyens des championnats, le
+ * constat du 11/11. Posées PAR SCRIPT (colonne « non-adoptee », export du 2026-11-14), recopiées de vuesDeLEtape46().
+ */
+export const VUES_DE_L_ETAPE_46 = Object.freeze([
+  Object.freeze({
+    de: '2026-09-24',
+    a: '2026-11-14',
+    quoi: 'Étape 46 : la période du banc du direct (P5, matchs joués depuis le 24/09/2026 avec une ligne d’avant-match et une chronologie complète) — les variantes du direct rejouées créneau par créneau, jugées en un ou deux regards nommés (sûreté, preuve) ; rien n’y est appris.',
+    pour: Object.freeze(['direct'])
+  }),
+  Object.freeze({
+    de: '2023-07-01',
+    a: '2026-09-23',
+    quoi: 'Étape 46 : la fenêtre déjà vue de PARAMS — la table du temps additionnel (RESTE_ADDITIONNEL) et les buts moyens des championnats (MOYENNES_DES_CHAMPIONNATS), comptés par script.',
+    pour: Object.freeze(['direct'])
+  }),
+  Object.freeze({
+    de: '2026-10-24',
+    a: '2026-11-11',
+    quoi: 'Étape 46 : le constat du 11/11 (pronostics réglés de la version 5 : « moins de … buts » et « les deux marquent : non » annoncés bien trop sûrs) — la référence temps-restant-championnat (J2s) en naît ; déclaré vu.',
+    pour: Object.freeze(['direct'])
+  })
+]);
+
+/**
+ * Les VARIANTES de l'étape 46, colonne « non-adoptee » (declarationDuDirect.js, O10), déclarées AVANT le regard : la retenue en
+ * tête (direct-ancre), K = 7 (z 2,69 ; tranches 3,322). Le banc relit K ici et refuse si la liste n'est pas
+ * celle de la colonne.
+ */
+export const VARIANTES_DE_L_ETAPE_46 = Object.freeze([
+  Object.freeze({ id: 'direct-ancre', quoi: 'la chaîne à (λ′, μ′) recalés sur le 1N2 de la ligne, total gardé, sans résiduel, bornés à [0,30 ; 4,0] (R7)' }),
+  Object.freeze({ id: 'direct-v1', quoi: 'la chaîne de l’étape 28 (PARAMS : effets du score, rouges), partie de la ligne d’avant-match, lecture brute' }),
+  Object.freeze({ id: 'direct-sans-effets', quoi: 'la même chaîne avec PARAMS_SANS_EFFETS (ni effet du score, ni rouge), passés par l’appelant (R34)' }),
+  Object.freeze({ id: 'temps-restant', quoi: 'la règle simple du temps restant (§2.11), partie des buts attendus de la ligne' }),
+  Object.freeze({ id: 'direct-rouges-ignores', quoi: 'direct-v1 avec les rouges de l’état forcés à 0-0 (ce que coûte un rouge inconnu)' }),
+  Object.freeze({ id: 'temps-restant-championnat', quoi: 'la règle simple partie des buts moyens du championnat (R14 ; repli 1,45 / 1,15)' }),
+  Object.freeze({ id: 'temps-restant-ancre', quoi: 'la règle simple partie des mêmes (λ′, μ′) recalés (O4, R33)' })
+]);
+
+/**
  * Les lancements déclarés par les étapes, dans l'ordre où elles sont faites. À la FIN d'une étape qui
  * touche aux chiffres : ajouter son entrée ici (version en service, ce qu'elle change, TOUTES les
  * variantes dont on a regardé le résultat pendant la construction, les fenêtres de données regardées).
@@ -1121,6 +1165,17 @@ export const LANCEMENTS = Object.freeze([
     le: null,
     variantes: VARIANTES_DE_L_ETAPE_39,
     vues: VUES_DE_L_ETAPE_39
+  }),
+  // Étape 46 (lot 1, 12/11/2026) : le banc du direct — les probabilités en direct (data/direct/) rejouées créneau
+  // par créneau, colonne « non-adoptee » ; il ne règle aucun chiffre du moteur (portée 'direct'). Posé PAR SCRIPT, daté du
+  // jour de l'export ; ses variantes et ses vues déclarées AVANT le regard.
+  Object.freeze({
+    etape: '46',
+    version: 'direct-ancre',
+    quoi: 'Les probabilités en direct : la chaîne de l’étape 28 reprise à chaque minute du match (score, cartons rouges, temps restant), jugée au banc d’essai sur les matchs joués depuis le 24/09/2026, créneau par créneau, en un ou deux regards nommés ; jamais lue par le moteur.',
+    le: '2026-11-14',
+    variantes: VARIANTES_DE_L_ETAPE_46,
+    vues: VUES_DE_L_ETAPE_46
   })
 ]);
 

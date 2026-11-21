@@ -10,6 +10,7 @@ import AppIcon from '@/components/common/AppIcon.vue';
  */
 const NAV_ITEMS = [
   { to: '/matches', section: 'matches', label: 'Matchs', hint: 'Cotes, calendrier, stats', icon: 'matches' },
+  { to: '/direct', section: 'matches', nav: 'direct', label: 'Direct', hint: 'Score, minute, cartons rouges', icon: 'bolt' },
   { to: '/paris', section: 'bets', label: 'Mes paris', hint: 'Value bets et carnet', icon: 'wallet' },
   { to: '/bookmakers', section: 'bets', nav: 'bookmakers', label: 'Bookmakers', hint: 'Justesse, marges, bon moment', icon: 'euro' },
   { to: '/historique-moteur', section: 'history', label: 'Historique moteur', hint: 'Pronostics et bilans', icon: 'history' },
@@ -22,7 +23,7 @@ const NAV_ITEMS = [
 const route = useRoute();
 const sectionActive = computed(() => route.meta?.section ?? 'matches');
 // Trois entrées partagent la couleur « history » (Historique moteur, Santé du moteur, Bulletin), deux autres la couleur « bets » (Mes paris,
-// Bookmakers) : `nav` désigne celle de la page.
+// Bookmakers), deux la couleur « matches » (Matchs, Direct : étape 46, 12/11/2026) : `nav` désigne celle de la page.
 const entreeActive = computed(() => route.meta?.nav ?? sectionActive.value);
 const estActive = (item) => (item.nav ? entreeActive.value === item.nav : entreeActive.value === item.section);
 </script>
@@ -110,6 +111,9 @@ const estActive = (item) => (item.nav ? entreeActive.value === item.nav : entree
   display: flex;
   flex-direction: column;
   gap: 4px;
+  /* Étape 46 (12/11/2026) : neuf entrées ; sur un écran bas, le menu défile au lieu de pousser le pied hors de la barre. */
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .sidebar__link {

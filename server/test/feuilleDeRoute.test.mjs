@@ -367,7 +367,10 @@ test('état : la ligne « Tests » vient de la dernière ligne de l’historique
   assert.deepEqual(reel.tests, { ...derniere.tests, le: derniere.fin, etape: derniere.etape });
   assert.ok(reel.tests.total >= 115 && reel.tests.echecs === 0);
   // Une étape suivante ajoute sa ligne ; une ligne sans tests ne remplace pas la précédente.
-  const [a, b] = LIBRES;
+  // Étape 46 (12/11/2026) : la 46 « en cours » à son tour, une seule étape libre reste (la 47) ; la seconde est la 46, que la
+  // ligne sans tests FINIT (elle quitte les étapes racontées en partie : une de moins « en cours »).
+  const [a] = LIBRES;
+  const b = LIBRES[1] ?? '46';
   const suivante = { etape: a, fin: '2026-12-30', heure: null, titre: null, change: 'Une étape de plus.', mesure: 'ok', tests: { total: derniere.tests.total + 20, reussis: derniere.tests.reussis + 20, todo: derniere.tests.todo, echecs: 0, duree: '~30 s' } };
   const sansTests = { etape: b, fin: '2026-12-31', heure: null, titre: null, change: 'Encore une.', mesure: 'ok', tests: null };
   const e = etatFeuilleDeRoute({ maintenant: MIDI, pierre: PIERRE_VIDE, historique: [...HISTORIQUE, suivante, sansTests], mesure: MESURE_ABSENTE });
@@ -375,7 +378,7 @@ test('état : la ligne « Tests » vient de la dernière ligne de l’historique
   const parId = Object.fromEntries(toutesLesEtapes(e).map((x) => [x.id, x]));
   assert.equal(parId[a].etat, 'terminee');
   assert.equal(parId[b].fin, '2026-12-31');
-  assert.deepEqual(e.avancement, avancementAttendu({ enPlus: 2 }));
+  assert.deepEqual(e.avancement, avancementAttendu({ enPlus: 2, enCours: LIBRES[1] ? 0 : -1 }));
   const lot = e.lots.find((l) => l.etapes.some((x) => x.id === a));
   const idsDuLot = ETAPES.filter((x) => x.lot === lot.numero).map((x) => x.id);
   assert.equal(lot.terminees, idsDuLot.filter((id) => TERMINEES.has(id) || id === a || id === b).length);
@@ -396,10 +399,10 @@ test('étape 27 — une ligne PARTIELLE ne finit pas l’étape : la 27 est « e
   // 29/10/2026, la 32 aussi, son lot 1 en partie livré : 4 en cours ; depuis le 03/11/2026, la 33 aussi, son lot 1 livré : 5 ;
   // la 34 aussi, son lot 1 livré : 6 ; depuis le 04/11/2026, la 39 aussi, son lot 1a livré : 7 ; le même jour, la 38, son lot 1 livré : 8 ;
   // depuis le 09/11/2026, la 36, son lot 1 livré : 9 ; depuis le 10/11/2026, la 35, son lot 1 livré : 10 ; le même jour, la 40,
-  // son lot 1 livré : 11).
-  assert.deepEqual([...PARTIELLES], ['27', '28', '26', '32', '33', '34', '39', '38', '36', '35', '40']);
+  // son lot 1 livré : 11 ; étape 46 (12/11/2026) : depuis le 12/11/2026, la 46, son lot 1 livré : 12).
+  assert.deepEqual([...PARTIELLES], ['27', '28', '26', '32', '33', '34', '39', '38', '36', '35', '40', '46']);
   assert.equal(e.avancement.terminees, NB_TERMINEES);
-  assert.equal(e.avancement.enCours, 11);
+  assert.equal(e.avancement.enCours, 12);
   assert.ok(!TERMINEES.has('27'));
   assert.equal(toutesLesEtapes(e).filter((x) => x.etat === 'terminee').length, NB_TERMINEES);
   const lot5 = e.lots.find((l) => l.numero === 5);
@@ -410,7 +413,8 @@ test('étape 27 — une ligne PARTIELLE ne finit pas l’étape : la 27 est « e
   // Étape 36 (lot 1, 09/11/2026) : la 36, son lot 1 livré, dit aussi ce qui lui reste.
   // Étape 35 (lot 1b, 10/11/2026) : la 35, son lot 1 livré, dit aussi ce qui lui reste.
   // Étape 40 (lot 1, 10/11/2026) : la 40, son lot 1 livré, dit aussi ce qui lui reste.
-  assert.deepEqual(toutesLesEtapes(e).filter((x) => x.reste).map((x) => x.id), ['26', '27', '28', '32', '33', '34', '35', '36', '38', '39', '40']);
+  // Étape 46 (lot 1, 12/11/2026) : la 46, son lot 1 livré, dit aussi ce qui lui reste.
+  assert.deepEqual(toutesLesEtapes(e).filter((x) => x.reste).map((x) => x.id), ['26', '27', '28', '32', '33', '34', '35', '36', '38', '39', '40', '46']);
   // Chaque ligne partielle dit ce qui reste (une chaîne, au moins quelques mots) ; les autres valent null.
   for (const h of HISTORIQUE) {
     assert.ok(h.partielle === null || (typeof h.partielle === 'string' && h.partielle.trim().length >= 10), `étape ${h.etape} du ${h.fin} : « partielle » dit ce qui reste, ou vaut null`);
@@ -424,7 +428,8 @@ test('étape 27 — une ligne PARTIELLE ne finit pas l’étape : la 27 est « e
   const fini = etatFeuilleDeRoute({ maintenant: MIDI, pierre: PIERRE_VIDE, historique: [...HISTORIQUE, adoption], mesure: MESURE_ABSENTE });
   const f27 = toutesLesEtapes(fini).find((x) => x.id === '27');
   assert.deepEqual([f27.etat, f27.fin, f27.heureFin, f27.reste, f27.historique.length], ['terminee', '2026-11-15', '~9 h', null, 2]);
-  assert.deepEqual([fini.avancement.terminees, fini.avancement.enCours], [NB_TERMINEES + 1, 10], 'la 26, la 28, la 32, la 33, la 34, la 35, la 36, la 38, la 39 et la 40 restent en cours');
+  // Étape 46 (12/11/2026) : la 46 aussi reste en cours (11).
+  assert.deepEqual([fini.avancement.terminees, fini.avancement.enCours], [NB_TERMINEES + 1, 11], 'la 26, la 28, la 32, la 33, la 34, la 35, la 36, la 38, la 39, la 40 et la 46 restent en cours');
   // Une étape dans ETAPES_EN_COURS sans ligne reste « en cours », sans rien qui reste dit.
   const libre = LIBRES[0];
   const enCours = toutesLesEtapes(etatFeuilleDeRoute({ maintenant: MIDI, pierre: PIERRE_VIDE, enCours: [libre], mesure: MESURE_ABSENTE })).find((x) => x.id === libre);
@@ -459,7 +464,8 @@ test('étape 28 — livrée à blanc : « en cours » (« livrée à blanc, preu
   const fini = etatFeuilleDeRoute({ maintenant: MIDI, pierre: PIERRE_VIDE, historique: [...HISTORIQUE, verdict], mesure: MESURE_ABSENTE });
   const f28 = toutesLesEtapes(fini).find((x) => x.id === '28');
   assert.deepEqual([f28.etat, f28.fin, f28.reste, f28.historique.length], ['terminee', '2026-11-17', null, 2]);
-  assert.deepEqual([fini.avancement.terminees, fini.avancement.enCours], [NB_TERMINEES + 1, 10], 'la 26, la 27, la 32, la 33, la 34, la 35, la 36, la 38, la 39 et la 40 restent en cours');
+  // Étape 46 (12/11/2026) : la 46 aussi reste en cours (11).
+  assert.deepEqual([fini.avancement.terminees, fini.avancement.enCours], [NB_TERMINEES + 1, 11], 'la 26, la 27, la 32, la 33, la 34, la 35, la 36, la 38, la 39, la 40 et la 46 restent en cours');
 });
 
 test('étape 26 — lot 1 livré : « en cours » (« lot 1 livré : … ; lot 2 au verdict de l’étape 27 : … »), sans date de fin ; son histoire dit en mots simples le tri du mois, rien qui parte seul, rien pendant l’essai de la 27, le résumé du mois dans le plafond, les écrans et le moteur inchangé ; le lot 2 la finira', () => {
@@ -504,7 +510,8 @@ test('étape 26 — lot 1 livré : « en cours » (« lot 1 livré : … ; lot 2
   const fini = etatFeuilleDeRoute({ maintenant: MIDI, pierre: PIERRE_VIDE, historique: [...HISTORIQUE, lot2], mesure: MESURE_ABSENTE });
   const f26 = toutesLesEtapes(fini).find((x) => x.id === '26');
   assert.deepEqual([f26.etat, f26.fin, f26.reste, f26.historique.length], ['terminee', '2026-11-17', null, 2]);
-  assert.deepEqual([fini.avancement.terminees, fini.avancement.enCours], [NB_TERMINEES + 1, 10], 'la 27, la 28, la 32, la 33, la 34, la 35, la 36, la 38, la 39 et la 40 restent en cours');
+  // Étape 46 (12/11/2026) : la 46 aussi reste en cours (11).
+  assert.deepEqual([fini.avancement.terminees, fini.avancement.enCours], [NB_TERMINEES + 1, 11], 'la 27, la 28, la 32, la 33, la 34, la 35, la 36, la 38, la 39, la 40 et la 46 restent en cours');
 });
 
 test('étape 26 — vérification finale, constat 9 : le résumé du mois dit ses trois essais au plus (un seul appel réussi par mois) ; le temps du tri chez Pierre est une attente (« quelques secondes »), plus une extrapolation chiffrée', () => {
@@ -522,9 +529,12 @@ test('état : terminée prime sur mise de côté, qui prime sur en cours, qui pr
   // « à faire », se lit sur la même feuille sans l'histoire de la 35 (seule différence).
   // Étape 40 (lot 1, 10/11/2026) : la 40 « en cours » à son tour, il ne reste que deux étapes libres ; la troisième, « en
   // cours » par la liste, est la 40, lue sur une feuille sans son histoire (seule différence : elle n'y est pas déjà en cours).
-  const [x, y] = LIBRES;
+  // Étape 46 (lot 1, 12/11/2026) : la 46 « en cours » à son tour, il ne reste qu'une étape libre (la 47) ; la deuxième, « en
+  // cours » par la liste et annotée, est la 46, lue elle aussi sur une feuille sans son histoire.
+  const [x] = LIBRES;
+  const y = LIBRES[1] ?? '46';
   const z = LIBRES[2] ?? '40';
-  const histoire = LIBRES[2] ? HISTORIQUE : HISTORIQUE.filter((h) => h.etape !== z);
+  const histoire = HISTORIQUE.filter((h) => (LIBRES[1] || h.etape !== y) && (LIBRES[2] || h.etape !== z));
   const w = LIBRES[3] ?? '35';
   const pierre = {
     ...PIERRE_VIDE,
@@ -545,7 +555,8 @@ test('état : terminée prime sur mise de côté, qui prime sur en cours, qui pr
   const sansW = LIBRES[3] ? e : etatFeuilleDeRoute({ maintenant: MIDI, pierre, enCours: [x, y, '5', z], historique: histoire.filter((h) => h.etape !== w), mesure: MESURE_ABSENTE });
   assert.equal(Object.fromEntries(toutesLesEtapes(sansW).map((s) => [s.id, s.etat]))[w], 'a-faire');
   // Sans l'histoire de la 40, elle n'est « en cours » que par la liste : une de moins parmi les étapes racontées en partie.
-  assert.deepEqual(e.avancement, avancementAttendu({ enCours: LIBRES[2] ? 2 : 1, miseDeCote: 1 }));
+  // Étape 46 (12/11/2026) : de même pour la 46 (y), lue sans son histoire : une de moins encore.
+  assert.deepEqual(e.avancement, avancementAttendu({ enCours: (LIBRES[1] ? 1 : 0) + (LIBRES[2] ? 1 : 0), miseDeCote: 1 }));
   assert.equal(toutesLesEtapes(e).find((s) => s.id === y).note.texte, 'Je la regarde demain.');
   // Le lot de la mise de côté : ses comptes, état par état.
   const lot = e.lots.find((l) => l.etapes.some((s) => s.id === x));
