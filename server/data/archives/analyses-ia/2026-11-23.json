@@ -1,0 +1,3930 @@
+[
+  {
+    "matchId": "99776445d5a5f4ed008f9a6d6a1495b7",
+    "homeName": "Monza",
+    "awayName": "Fiorentina",
+    "league": "Serie A - Italy",
+    "commenceTime": "2026-11-23T19:45:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Monza vs Fiorentina",
+      "expectedGoals": {
+        "home": 2.657,
+        "away": 2.421,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 3.77,
+        "draw": 4,
+        "away": 2.06
+      },
+      "market": {
+        "odds1": 3.46,
+        "oddsDraw": 3.68,
+        "odds2": 1.96
+      },
+      "edgePercent": -7.85,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "pas_de_value",
+        "candidates": [
+          {
+            "outcome": "home",
+            "label": "Monza gagne",
+            "odds": 3.3,
+            "displayedOdds": 3.3,
+            "bookmaker": "pmu_fr",
+            "bookmakerTitle": "PMU (FR)",
+            "fairOdds": 3.77,
+            "ev": -0.1253,
+            "exclusion": "sous_le_seuil",
+            "releveAt": "2026-11-09T16:42:13.050Z",
+            "origineReleve": "archive",
+            "fraicheur": {
+              "etat": "a-rafraichir",
+              "code": "trop-vieille",
+              "raison": "Relevée il y a 12 jours, au-delà du délai de 1 h : à relever de nouveau avant de parier.",
+              "ageMinutes": 18555,
+              "releveAt": "2026-11-09T16:42:13.050Z",
+              "coupDEnvoi": "2026-11-23T19:45:00.000Z",
+              "heureSure": true,
+              "composAnnonceesA": "2026-11-23T18:45:00.000Z",
+              "limiteMinutes": 60,
+              "reglage": {
+                "maxAgeMinutes": 60,
+                "avantCompos": true
+              },
+              "evalueeLe": "2026-11-22T13:57:50.193Z"
+            }
+          },
+          {
+            "outcome": "draw",
+            "label": "Match nul",
+            "odds": 3.45,
+            "displayedOdds": 3.45,
+            "bookmaker": "pmu_fr",
+            "bookmakerTitle": "PMU (FR)",
+            "fairOdds": 4,
+            "ev": -0.1377,
+            "exclusion": "sous_le_seuil",
+            "releveAt": "2026-11-09T16:42:13.050Z",
+            "origineReleve": "archive",
+            "fraicheur": {
+              "etat": "a-rafraichir",
+              "code": "trop-vieille",
+              "raison": "Relevée il y a 12 jours, au-delà du délai de 1 h : à relever de nouveau avant de parier.",
+              "ageMinutes": 18555,
+              "releveAt": "2026-11-09T16:42:13.050Z",
+              "coupDEnvoi": "2026-11-23T19:45:00.000Z",
+              "heureSure": true,
+              "composAnnonceesA": "2026-11-23T18:45:00.000Z",
+              "limiteMinutes": 60,
+              "reglage": {
+                "maxAgeMinutes": 60,
+                "avantCompos": true
+              },
+              "evalueeLe": "2026-11-22T13:57:50.193Z"
+            }
+          },
+          {
+            "outcome": "away",
+            "label": "Fiorentina gagne",
+            "odds": 1.9,
+            "displayedOdds": 1.9,
+            "bookmaker": "winamax_fr",
+            "bookmakerTitle": "Winamax (FR)",
+            "fairOdds": 2.06,
+            "ev": -0.0785,
+            "exclusion": "sous_le_seuil",
+            "releveAt": "2026-11-09T16:42:13.050Z",
+            "origineReleve": "archive",
+            "fraicheur": {
+              "etat": "a-rafraichir",
+              "code": "trop-vieille",
+              "raison": "Relevée il y a 12 jours, au-delà du délai de 1 h : à relever de nouveau avant de parier.",
+              "ageMinutes": 18555,
+              "releveAt": "2026-11-09T16:42:13.050Z",
+              "coupDEnvoi": "2026-11-23T19:45:00.000Z",
+              "heureSure": true,
+              "composAnnonceesA": "2026-11-23T18:45:00.000Z",
+              "limiteMinutes": 60,
+              "reglage": {
+                "maxAgeMinutes": 60,
+                "avantCompos": true
+              },
+              "evalueeLe": "2026-11-22T13:57:50.193Z"
+            }
+          }
+        ],
+        "limits": {
+          "edgeThresholdMin": 0.02,
+          "edgeThresholdMax": 0.25,
+          "maxValueOdds": 5
+        }
+      },
+      "statExpectations": {
+        "corners": {
+          "home": 5.06,
+          "away": 4.23,
+          "total": 9.29
+        },
+        "shots": {
+          "home": 15.07,
+          "away": 13.68,
+          "total": 28.75
+        },
+        "shotsOnTarget": {
+          "home": 6,
+          "away": 4.81,
+          "total": 10.81
+        }
+      },
+      "marketPredictions": [
+        {
+          "marketId": "result",
+          "params": {
+            "outcome": "away"
+          },
+          "market": "Résultat",
+          "predictedOutcome": "away",
+          "predictedLabel": "Fiorentina gagne",
+          "predictedOdds": 2.06,
+          "probability": 49,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 3.5,
+            "side": "over"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 3.5 buts",
+          "predictedOdds": 1.34,
+          "probability": 75,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 1.5,
+            "key": "awayOver"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "awayOver",
+          "predictedLabel": "Fiorentina & Plus de 1.5 buts",
+          "predictedOdds": 2.13,
+          "probability": 47,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 1.5,
+            "side": "over"
+          },
+          "market": "Buts — Monza",
+          "predictedOutcome": "over",
+          "predictedLabel": "Monza — Plus de 1.5 buts",
+          "predictedOdds": 1.35,
+          "probability": 74,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 3.5,
+            "side": "under"
+          },
+          "market": "Buts — Fiorentina",
+          "predictedOutcome": "under",
+          "predictedLabel": "Fiorentina — Moins de 3.5 buts",
+          "predictedOdds": 1.29,
+          "probability": 78,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalCorners",
+          "params": {
+            "line": 12.5,
+            "side": "under"
+          },
+          "market": "Total corners",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 12.5 corners",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "home",
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Corners — Monza",
+          "predictedOutcome": "over",
+          "predictedLabel": "Monza — Plus de 2.5 corners",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "away",
+            "line": 6.5,
+            "side": "under"
+          },
+          "market": "Corners — Fiorentina",
+          "predictedOutcome": "under",
+          "predictedLabel": "Fiorentina — Moins de 6.5 corners",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShots",
+          "params": {
+            "line": 34.5,
+            "side": "under"
+          },
+          "market": "Total tirs",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 34.5 tirs",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "home",
+            "line": 19.5,
+            "side": "under"
+          },
+          "market": "Tirs — Monza",
+          "predictedOutcome": "under",
+          "predictedLabel": "Monza — Moins de 19.5 tirs",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "away",
+            "line": 18.5,
+            "side": "under"
+          },
+          "market": "Tirs — Fiorentina",
+          "predictedOutcome": "under",
+          "predictedLabel": "Fiorentina — Moins de 18.5 tirs",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShotsOnTarget",
+          "params": {
+            "line": 7.5,
+            "side": "over"
+          },
+          "market": "Total tirs cadrés",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 7.5 tirs cadrés",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "home",
+            "line": 8.5,
+            "side": "under"
+          },
+          "market": "Tirs cadrés — Monza",
+          "predictedOutcome": "under",
+          "predictedLabel": "Monza — Moins de 8.5 tirs cadrés",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "away",
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Tirs cadrés — Fiorentina",
+          "predictedOutcome": "over",
+          "predictedLabel": "Fiorentina — Plus de 2.5 tirs cadrés",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        }
+      ],
+      "baseDuCalcul": {
+        "montant": 300.92,
+        "origine": "capital-regle"
+      },
+      "engineVersion": 6
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 7223,
+      "cache_read_input_tokens": 4470,
+      "output_tokens": 3098,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 7223,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 3098,
+          "cache_read_input_tokens": 4470,
+          "cache_creation_input_tokens": 7223,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 7223
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.060770000000000005,
+    "analysedAt": "2026-11-22T13:58:16.444Z",
+    "timing": "avance",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 488,
+      "tokens": 1538,
+      "lecons": [
+        "c0f72699f32ec193b64fd54092fe268d|result",
+        "cal-2026-10-25-inter-fiorentina|resultAndTotal",
+        "18d478f469da3bcc654dd4555b85c7e3|result"
+      ],
+      "dossiersDu": "2026-11-21T07:57:17.803Z",
+      "equipes": {
+        "home": {
+          "id": "fotmob-6504",
+          "dossier": true
+        },
+        "away": {
+          "id": "fotmob-8535",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "Serie A - Italy",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "FotMob",
+      "fotmobMatchId": "5749756",
+      "fetchedAt": "2026-11-22T13:57:51.018Z",
+      "minutesBeforeKickoff": 1787,
+      "home": {
+        "team": "Monza",
+        "teamId": "fotmob-6504",
+        "formation": "3-4-2-1",
+        "coach": "Matteo Paro",
+        "statsSince": "2026-07-01",
+        "teamMatches": 13,
+        "startXI": [
+          {
+            "id": "fotmob-1122424",
+            "name": "Noel Törnqvist",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 24,
+            "countryCode": "SWE",
+            "countryName": "Sweden",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 7,
+              "starts": 7,
+              "minutes": 630,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.69
+            }
+          },
+          {
+            "id": "fotmob-1676901",
+            "name": "Eddy Kouadio",
+            "number": 60,
+            "position": "Defender",
+            "age": 20,
+            "countryCode": "ITA",
+            "countryName": "Italy",
+            "x": 0.292,
+            "y": 0.79,
+            "stats": {
+              "apps": 12,
+              "starts": 11,
+              "minutes": 945,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.86,
+              "rating": 6.93
+            }
+          },
+          {
+            "id": "fotmob-1507697",
+            "name": "Saba Goglichidze",
+            "number": 2,
+            "position": "Defender",
+            "age": 22,
+            "countryCode": "GEO",
+            "countryName": "Georgia",
+            "x": 0.292,
+            "y": 0.5,
+            "stats": {
+              "apps": 6,
+              "starts": 5,
+              "minutes": 459,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.54,
+              "rating": 6.88
+            }
+          },
+          {
+            "id": "fotmob-1524139",
+            "name": "Lorenzo Lucchesi",
+            "number": 3,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "ITA",
+            "countryName": "Italy",
+            "x": 0.292,
+            "y": 0.21,
+            "stats": {
+              "apps": 12,
+              "starts": 11,
+              "minutes": 870,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.39,
+              "rating": 6.31
+            }
+          },
+          {
+            "id": "fotmob-731600",
+            "name": "Idrissa Touré",
+            "number": 27,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "GER",
+            "countryName": "Germany",
+            "x": 0.485,
+            "y": 0.875,
+            "stats": {
+              "apps": 3,
+              "starts": 1,
+              "minutes": 97,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.48
+            }
+          },
+          {
+            "id": "fotmob-1481909",
+            "name": "Ebenezer Akinsanmiro",
+            "number": 14,
+            "position": "Midfielder",
+            "age": 21,
+            "countryCode": "NGA",
+            "countryName": "Nigeria",
+            "x": 0.485,
+            "y": 0.625,
+            "stats": {
+              "apps": 10,
+              "starts": 8,
+              "minutes": 718,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.49,
+              "rating": 6.99
+            }
+          },
+          {
+            "id": "fotmob-1415623",
+            "name": "Leonardo Colombo",
+            "number": 21,
+            "position": "Midfielder",
+            "age": 21,
+            "countryCode": "ITA",
+            "countryName": "Italy",
+            "x": 0.485,
+            "y": 0.375,
+            "stats": {
+              "apps": 4,
+              "starts": 3,
+              "minutes": 274,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.09,
+              "rating": 6.25
+            }
+          },
+          {
+            "id": "fotmob-824655",
+            "name": "Ricardo Mangas",
+            "number": 7,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "POR",
+            "countryName": "Portugal",
+            "x": 0.485,
+            "y": 0.125,
+            "stats": {
+              "apps": 13,
+              "starts": 13,
+              "minutes": 1051,
+              "goals": 1,
+              "assists": 2,
+              "xg": 1.62,
+              "rating": 6.93
+            }
+          },
+          {
+            "id": "fotmob-737339",
+            "name": "Dany Mota",
+            "number": 47,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "POR",
+            "countryName": "Portugal",
+            "x": 0.678,
+            "y": 0.7,
+            "stats": {
+              "apps": 9,
+              "starts": 5,
+              "minutes": 449,
+              "goals": 1,
+              "assists": 2,
+              "xg": 2.56,
+              "rating": 7.13
+            }
+          },
+          {
+            "id": "fotmob-1453338",
+            "name": "Jay Robinson",
+            "number": 46,
+            "position": "Midfielder",
+            "age": 19,
+            "countryCode": "ENG",
+            "countryName": "England",
+            "x": 0.678,
+            "y": 0.3,
+            "stats": {
+              "apps": 10,
+              "starts": 8,
+              "minutes": 651,
+              "goals": 2,
+              "assists": 1,
+              "xg": 1.67,
+              "rating": 6.96
+            }
+          },
+          {
+            "id": "fotmob-1585676",
+            "name": "Gustavo Varela",
+            "number": 9,
+            "position": "Forward",
+            "age": 21,
+            "countryCode": "POR",
+            "countryName": "Portugal",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 11,
+              "starts": 11,
+              "minutes": 931,
+              "goals": 11,
+              "assists": 1,
+              "xg": 5.75,
+              "rating": 7.58
+            }
+          }
+        ],
+        "bench": [],
+        "unavailable": [
+          {
+            "id": "fotmob-1830551",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Yvan Kouadio Maye",
+            "reason": "blessé",
+            "expectedReturn": "Back in training",
+            "position": "Defender",
+            "stats": {
+              "apps": 4,
+              "starts": 1,
+              "minutes": 131,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.12,
+              "rating": 6.87
+            }
+          },
+          {
+            "id": "fotmob-41757",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Ivan Jurić",
+            "reason": "suspendu",
+            "expectedReturn": "Late November 2026",
+            "position": null,
+            "stats": null
+          },
+          {
+            "id": "fotmob-822440",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Michael Folorunsho",
+            "reason": "blessé",
+            "expectedReturn": "Early December 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 8,
+              "starts": 5,
+              "minutes": 477,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.41,
+              "rating": 6.69
+            }
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-799497",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Samuele Birindelli",
+            "position": "Midfielder",
+            "starts": 11,
+            "goals": 0,
+            "assists": 2,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1123969",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Andrea Carboni",
+            "position": "Defender",
+            "starts": 9,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1577900",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Manga Foe Ondoa",
+            "position": "Midfielder",
+            "starts": 7,
+            "goals": 0,
+            "assists": 1,
+            "status": "absent de la feuille de match"
+          }
+        ]
+      },
+      "away": {
+        "team": "Fiorentina",
+        "teamId": "fotmob-8535",
+        "formation": "4-2-3-1",
+        "coach": "Paolo Vanoli",
+        "statsSince": "2026-07-01",
+        "teamMatches": 13,
+        "startXI": [
+          {
+            "id": "fotmob-182917",
+            "name": "David de Gea",
+            "number": 43,
+            "position": "Goalkeeper",
+            "age": 36,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 13,
+              "starts": 13,
+              "minutes": 1170,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.39
+            }
+          },
+          {
+            "id": "fotmob-1526689",
+            "name": "Álex Jiménez",
+            "number": 20,
+            "position": "Defender",
+            "age": 21,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.292,
+            "y": 0.875,
+            "stats": {
+              "apps": 11,
+              "starts": 9,
+              "minutes": 804,
+              "goals": 2,
+              "assists": 3,
+              "xg": 0.38,
+              "rating": 7.11
+            }
+          },
+          {
+            "id": "fotmob-1203661",
+            "name": "Radu Drăgușin",
+            "number": 3,
+            "position": "Defender",
+            "age": 24,
+            "countryCode": "ROU",
+            "countryName": "Romania",
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 13,
+              "starts": 13,
+              "minutes": 1122,
+              "goals": 0,
+              "assists": 2,
+              "xg": 0.43,
+              "rating": 6.73
+            }
+          },
+          {
+            "id": "fotmob-935406",
+            "name": "Luca Ranieri",
+            "number": 6,
+            "position": "Defender",
+            "age": 27,
+            "countryCode": "ITA",
+            "countryName": "Italy",
+            "x": 0.292,
+            "y": 0.375,
+            "stats": {
+              "apps": 5,
+              "starts": 5,
+              "minutes": 399,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.53,
+              "rating": 6.3
+            }
+          },
+          {
+            "id": "fotmob-958421",
+            "name": "João Mário",
+            "number": 17,
+            "position": "Defender",
+            "age": 26,
+            "countryCode": "POR",
+            "countryName": "Portugal",
+            "x": 0.292,
+            "y": 0.125,
+            "stats": {
+              "apps": 9,
+              "starts": 7,
+              "minutes": 588,
+              "goals": 1,
+              "assists": 1,
+              "xg": 0.29,
+              "rating": 6.88
+            }
+          },
+          {
+            "id": "fotmob-1246009",
+            "name": "Cher Ndour",
+            "number": 27,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "ITA",
+            "countryName": "Italy",
+            "x": 0.485,
+            "y": 0.7,
+            "stats": {
+              "apps": 13,
+              "starts": 12,
+              "minutes": 1107,
+              "goals": 1,
+              "assists": 2,
+              "xg": 1.35,
+              "rating": 7.14
+            }
+          },
+          {
+            "id": "fotmob-1666494",
+            "name": "Christ Inao Oulaï",
+            "number": 42,
+            "position": "Midfielder",
+            "age": 20,
+            "countryCode": "CIV",
+            "countryName": "Ivory Coast",
+            "x": 0.485,
+            "y": 0.3,
+            "stats": {
+              "apps": 9,
+              "starts": 5,
+              "minutes": 427,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.16,
+              "rating": 6.81
+            }
+          },
+          {
+            "id": "fotmob-1607566",
+            "name": "Franco Mastantuono",
+            "number": 30,
+            "position": "Midfielder",
+            "age": 19,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.678,
+            "y": 0.837,
+            "stats": {
+              "apps": 13,
+              "starts": 12,
+              "minutes": 971,
+              "goals": 4,
+              "assists": 0,
+              "xg": 3.62,
+              "rating": 7.36
+            }
+          },
+          {
+            "id": "fotmob-875133",
+            "name": "Pote",
+            "number": 28,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "POR",
+            "countryName": "Portugal",
+            "x": 0.678,
+            "y": 0.5,
+            "stats": {
+              "apps": 9,
+              "starts": 2,
+              "minutes": 226,
+              "goals": 1,
+              "assists": 2,
+              "xg": 0.76,
+              "rating": 6.84
+            }
+          },
+          {
+            "id": "fotmob-1607014",
+            "name": "Alieu Njie",
+            "number": 25,
+            "position": "Midfielder",
+            "age": 21,
+            "countryCode": "SWE",
+            "countryName": "Sweden",
+            "x": 0.678,
+            "y": 0.163,
+            "stats": {
+              "apps": 11,
+              "starts": 8,
+              "minutes": 725,
+              "goals": 3,
+              "assists": 3,
+              "xg": 2.75,
+              "rating": 7.38
+            }
+          },
+          {
+            "id": "fotmob-1224237",
+            "name": "Mateo Pellegrino",
+            "number": 32,
+            "position": "Forward",
+            "age": 25,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 12,
+              "starts": 10,
+              "minutes": 885,
+              "goals": 5,
+              "assists": 0,
+              "xg": 2.46,
+              "rating": 6.9
+            }
+          }
+        ],
+        "bench": [],
+        "unavailable": [
+          {
+            "id": "fotmob-2018923",
+            "age": 16,
+            "countryCode": "ITA",
+            "countryName": "Italy",
+            "name": "Federico Croci",
+            "reason": "en sélection",
+            "expectedReturn": "Mid December 2026",
+            "position": "Forward",
+            "stats": {
+              "apps": 1,
+              "starts": 0,
+              "minutes": 25,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.17
+            }
+          },
+          {
+            "id": "fotmob-831474",
+            "age": 29,
+            "countryCode": "CRO",
+            "countryName": "Croatia",
+            "name": "Marin Pongračić",
+            "reason": "blessé",
+            "expectedReturn": "Early December 2026",
+            "position": "Defender",
+            "stats": {
+              "apps": 7,
+              "starts": 4,
+              "minutes": 301,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.61,
+              "rating": 6.81
+            }
+          },
+          {
+            "id": "fotmob-1093285",
+            "age": 26,
+            "countryCode": "ITA",
+            "countryName": "Italy",
+            "name": "Fabiano Parisi",
+            "reason": "blessé",
+            "expectedReturn": "Early December 2026",
+            "position": null,
+            "stats": null
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-951712",
+            "age": 25,
+            "countryCode": "ITA",
+            "countryName": "Italy",
+            "name": "Nicolò Fagioli",
+            "position": "Midfielder",
+            "starts": 10,
+            "goals": 0,
+            "assists": 2,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-950596",
+            "age": 26,
+            "countryCode": "ITA",
+            "countryName": "Italy",
+            "name": "Marco Brescianini",
+            "position": "Midfielder",
+            "starts": 7,
+            "goals": 0,
+            "assists": 2,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1501917",
+            "age": 21,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "name": "Viery",
+            "position": "Defender",
+            "starts": 7,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          }
+        ]
+      },
+      "matchInfo": {
+        "round": "12",
+        "stadium": "U-Power Stadium",
+        "city": "Monza",
+        "capacity": 18568,
+        "surface": "grass",
+        "weather": "Partly Cloudy",
+        "temperature": 6,
+        "windSpeed": 7,
+        "precipitation": 0,
+        "referee": {
+          "name": "Daniele Doveri",
+          "country": "Italy",
+          "league": "Serie A",
+          "matches": 37,
+          "yellowCardsPerMatch": 3.03,
+          "yellowCardsLeagueAverage": 3.67,
+          "redCards": 1,
+          "penalties": 7,
+          "foulsPerMatch": 23.3,
+          "foulsLeagueAverage": 24.75
+        }
+      }
+    },
+    "analysis": {
+      "summary": "Monza (18e, 7 pts) reste sur 4 défaites de suite et change d'entraîneur (Paro remplace Jurić, suspendu). La Fiorentina (15e, 9 pts) a marqué lors de ses 10 derniers matchs, mais n'a gagné qu'à 2 reprises. Les moyennes sont proches : Monza 14,4 tirs / 6,1 cadrés, Fiorentina 16,5 tirs / 5,5 cadrés sur 10 matchs. Les compositions sont publiées (3-4-2-1 contre 4-2-3-1), avec Varela (11 buts) côté Monza et Mastantuono, Njie et Pellegrino côté Fiorentina.",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Monza enchaîne les défaites, la Fiorentina alterne nuls et résultats mitigés.",
+          "evidence": "Monza : D D D D V sur les 5 derniers ; Fiorentina : N V N D D."
+        },
+        {
+          "factor": "classement",
+          "observation": "Deux équipes mal classées, avec le même bilan de buts.",
+          "evidence": "Monza 18e, 7 pts, 17-25 ; Fiorentina 15e, 9 pts, 17-25."
+        },
+        {
+          "factor": "statistiques et moyennes",
+          "observation": "Fiorentina un peu plus productive en tirs, Monza concède beaucoup à domicile.",
+          "evidence": "Monza à domicile : 15,8 tirs produits / 16,3 concédés ; Fiorentina à l'extérieur : 13,5 / 15 tirs, corners 3 / 4."
+        },
+        {
+          "factor": "compositions",
+          "observation": "Monza sans Birindelli et Carboni, Fiorentina sans Fagioli, Brescianini et Viery. Les deux attaques sont présentes.",
+          "evidence": "Varela 11+1 ; Mastantuono 4 buts, Njie 3+3, Pellegrino 5 buts."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Aucune value sur le résultat : le moteur ne mise pas.",
+          "evidence": "Edge -7,85 % ; cotes relevées il y a 12 jours."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur, qui donne la Fiorentina légèrement favorite. La forme de Monza le soutient, mais la Fiorentina n'a gagné aucun match à domicile et reste fragile. Les marchés de volume sont plus cohérents avec les moyennes que le résultat.",
+      "caveats": "Les cotes datent de 12 jours. Les changements d'entraîneur sont déduits des compositions importées, sans flux d'actualité. Les marchés de buts sont écartés (consigne). Composition relue très tôt (environ 30 h avant) : ce peut être une prévision. Échantillon récent réduit (4 matchs à domicile pour Monza, 4 à l'extérieur pour la Fiorentina).",
+      "marketViews": [
+        {
+          "market": "Résultat",
+          "pick": "Fiorentina gagne",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "49 % : Monza est sur 4 défaites et concède 1,8 but par match, mais la Fiorentina n'a pas gagné à domicile et n'a que 3 victoires en 10 matchs.",
+          "reasoning": "La forme de Monza (4 défaites de suite) soutient la Fiorentina, qui marque beaucoup (2,5 par match à l'extérieur). Ses résultats irréguliers et mon bilan sur ce marché (moyenne 388/636) invitent à la prudence.",
+          "probability": 49
+        },
+        {
+          "market": "Total corners",
+          "pick": "Moins de 12.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : 9,29 corners attendus au total, et les deux équipes tournent autour de 4,5 par match.",
+          "reasoning": "Les moyennes (4,7 et 4,5) sont très loin de 12,5. Mes avis forts sur ce marché tiennent bien (661/813).",
+          "probability": 83
+        },
+        {
+          "market": "Corners — Monza",
+          "pick": "Monza — Plus de 2.5 corners",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "82 % : 5,06 corners attendus pour Monza, qui en produit 4,7 par match sur 10 matchs.",
+          "reasoning": "Monza en tire 4,5 à domicile et la Fiorentina en concède 4 à l'extérieur, nettement au-dessus du seuil de 2,5.",
+          "probability": 82
+        },
+        {
+          "market": "Corners — Fiorentina",
+          "pick": "Fiorentina — Moins de 6.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : 4,23 corners attendus pour la Fiorentina, qui en produit 3 par match à l'extérieur.",
+          "reasoning": "Elle est à 4,5 sur 10 matchs et 3 à l'extérieur, loin de 6,5.",
+          "probability": 83
+        },
+        {
+          "market": "Total tirs",
+          "pick": "Moins de 34.5 tirs",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "82 % : 28,75 tirs attendus au total, avec 14,4 et 16,5 tirs par match.",
+          "reasoning": "Les moyennes cumulées avoisinent 30 tirs, sous le seuil. Monza à domicile (15,8 / 16,3) est le seul profil ouvert.",
+          "probability": 82
+        },
+        {
+          "market": "Tirs — Monza",
+          "pick": "Monza — Moins de 19.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "81 % : 15,07 tirs attendus pour Monza, qui en tente 14,4 par match.",
+          "reasoning": "Même son meilleur profil à domicile (15,8) reste sous 19,5, la Fiorentina n'en concédant que 13 en moyenne.",
+          "probability": 81
+        },
+        {
+          "market": "Tirs — Fiorentina",
+          "pick": "Fiorentina — Moins de 18.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : 13,68 tirs attendus pour la Fiorentina, qui en tente 16,5 sur 10 matchs et 13,5 à l'extérieur.",
+          "reasoning": "Sa moyenne extérieure de 13,5 laisse une marge confortable face au seuil.",
+          "probability": 83
+        },
+        {
+          "market": "Total tirs cadrés",
+          "pick": "Plus de 7.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "82 % : 10,81 tirs cadrés attendus, avec 6,1 pour Monza et 5,5 pour la Fiorentina par match.",
+          "reasoning": "Les moyennes cumulées (11,6) dépassent nettement 7,5. Les tirs cadrés restent plus variables, mon bilan sur ce marché est un peu plus faible.",
+          "probability": 82
+        },
+        {
+          "market": "Tirs cadrés — Monza",
+          "pick": "Monza — Moins de 8.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "82 % : 6 tirs cadrés attendus pour Monza, qui en produit 6,1 par match.",
+          "reasoning": "Même à domicile (6) et face à une défense concédant 4,8, atteindre 9 tirs cadrés demanderait un match exceptionnel.",
+          "probability": 82
+        },
+        {
+          "market": "Tirs cadrés — Fiorentina",
+          "pick": "Fiorentina — Plus de 2.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : 4,81 tirs cadrés attendus pour la Fiorentina, qui en produit 5,5 par match et 5,3 à l'extérieur.",
+          "reasoning": "Mastantuono, Njie et Pellegrino sont titulaires, et Monza en concède 5,2 en moyenne.",
+          "probability": 83
+        }
+      ],
+      "lineupImpact": "Source FotMob, relue environ 30 h avant le coup d'envoi : ce peut être une prévision. Monza aligne Varela (11 buts, xG 5,75) mais sans Birindelli (11 titularisations), Carboni (9) ni Foe Ondoa (7) ; Folorunsho est blessé et Jurić suspendu, Paro est donc sur le banc. La Fiorentina aligne Mastantuono (4 buts), Njie (3+3), Pellegrino (5 buts) et de Gea. Sans Fagioli, Brescianini ni Viery, le milieu est remanié. Les attaquants présents soutiennent les marchés de tirs cadrés de la Fiorentina. Le cadre (6 °C, pas de pluie, pelouse naturelle) ne pèse sur aucun marché."
+    },
+    "updatedAt": "2026-11-22T13:58:16.444Z",
+    "createdAt": "2026-11-22T13:58:16.444Z"
+  },
+  {
+    "matchId": "aa77e2a08a1a003b0bbb62a5f8e8ae42",
+    "homeName": "Brentford",
+    "awayName": "Everton",
+    "league": "EPL",
+    "commenceTime": "2026-11-23T20:00:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Brentford vs Everton",
+      "expectedGoals": {
+        "home": 1.305,
+        "away": 0.5,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 2.09,
+        "draw": 3.98,
+        "away": 3.69
+      },
+      "market": {
+        "odds1": 1.97,
+        "oddsDraw": 3.62,
+        "odds2": 3.5
+      },
+      "edgePercent": -7.78,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "pas_de_value",
+        "candidates": [
+          {
+            "outcome": "home",
+            "label": "Brentford gagne",
+            "odds": 1.92,
+            "displayedOdds": 1.92,
+            "bookmaker": "winamax_fr",
+            "bookmakerTitle": "Winamax (FR)",
+            "fairOdds": 2.09,
+            "ev": -0.0832,
+            "exclusion": "sous_le_seuil",
+            "releveAt": "2026-11-09T16:42:13.050Z",
+            "origineReleve": "archive",
+            "fraicheur": {
+              "etat": "a-rafraichir",
+              "code": "trop-vieille",
+              "raison": "Relevée il y a 12 jours, au-delà du délai de 1 h : à relever de nouveau avant de parier.",
+              "ageMinutes": 18556,
+              "releveAt": "2026-11-09T16:42:13.050Z",
+              "coupDEnvoi": "2026-11-23T20:00:00.000Z",
+              "heureSure": true,
+              "composAnnonceesA": "2026-11-23T19:00:00.000Z",
+              "limiteMinutes": 60,
+              "reglage": {
+                "maxAgeMinutes": 60,
+                "avantCompos": true
+              },
+              "evalueeLe": "2026-11-22T13:58:18.388Z"
+            }
+          },
+          {
+            "outcome": "draw",
+            "label": "Match nul",
+            "odds": 3.45,
+            "displayedOdds": 3.45,
+            "bookmaker": "winamax_fr",
+            "bookmakerTitle": "Winamax (FR)",
+            "fairOdds": 3.98,
+            "ev": -0.1332,
+            "exclusion": "sous_le_seuil",
+            "releveAt": "2026-11-09T16:42:13.050Z",
+            "origineReleve": "archive",
+            "fraicheur": {
+              "etat": "a-rafraichir",
+              "code": "trop-vieille",
+              "raison": "Relevée il y a 12 jours, au-delà du délai de 1 h : à relever de nouveau avant de parier.",
+              "ageMinutes": 18556,
+              "releveAt": "2026-11-09T16:42:13.050Z",
+              "coupDEnvoi": "2026-11-23T20:00:00.000Z",
+              "heureSure": true,
+              "composAnnonceesA": "2026-11-23T19:00:00.000Z",
+              "limiteMinutes": 60,
+              "reglage": {
+                "maxAgeMinutes": 60,
+                "avantCompos": true
+              },
+              "evalueeLe": "2026-11-22T13:58:18.388Z"
+            }
+          },
+          {
+            "outcome": "away",
+            "label": "Everton gagne",
+            "odds": 3.4,
+            "displayedOdds": 3.4,
+            "bookmaker": "pmu_fr",
+            "bookmakerTitle": "PMU (FR)",
+            "fairOdds": 3.69,
+            "ev": -0.0778,
+            "exclusion": "sous_le_seuil",
+            "releveAt": "2026-11-09T16:42:13.050Z",
+            "origineReleve": "archive",
+            "fraicheur": {
+              "etat": "a-rafraichir",
+              "code": "trop-vieille",
+              "raison": "Relevée il y a 12 jours, au-delà du délai de 1 h : à relever de nouveau avant de parier.",
+              "ageMinutes": 18556,
+              "releveAt": "2026-11-09T16:42:13.050Z",
+              "coupDEnvoi": "2026-11-23T20:00:00.000Z",
+              "heureSure": true,
+              "composAnnonceesA": "2026-11-23T19:00:00.000Z",
+              "limiteMinutes": 60,
+              "reglage": {
+                "maxAgeMinutes": 60,
+                "avantCompos": true
+              },
+              "evalueeLe": "2026-11-22T13:58:18.388Z"
+            }
+          }
+        ],
+        "limits": {
+          "edgeThresholdMin": 0.02,
+          "edgeThresholdMax": 0.25,
+          "maxValueOdds": 5
+        }
+      },
+      "statExpectations": {
+        "corners": {
+          "home": 5.17,
+          "away": 4.23,
+          "total": 9.4
+        },
+        "shots": {
+          "home": 15.24,
+          "away": 13.32,
+          "total": 28.56
+        },
+        "shotsOnTarget": {
+          "home": 4.4,
+          "away": 4.23,
+          "total": 8.63
+        }
+      },
+      "marketPredictions": [
+        {
+          "marketId": "result",
+          "params": {
+            "outcome": "home"
+          },
+          "market": "Résultat",
+          "predictedOutcome": "home",
+          "predictedLabel": "Brentford gagne",
+          "predictedOdds": 2.09,
+          "probability": 48,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 0.5,
+            "side": "over"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 0.5 buts",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "no"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "no",
+          "predictedLabel": "Non",
+          "predictedOdds": 1.42,
+          "probability": 70,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 3.5,
+            "key": "homeUnder"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "homeUnder",
+          "predictedLabel": "Brentford & Moins de 3.5 buts",
+          "predictedOdds": 2.45,
+          "probability": 41,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 0.5,
+            "side": "over"
+          },
+          "market": "Buts — Brentford",
+          "predictedOutcome": "over",
+          "predictedLabel": "Brentford — Plus de 0.5 buts",
+          "predictedOdds": 1.37,
+          "probability": 73,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 0.5,
+            "side": "under"
+          },
+          "market": "Buts — Everton",
+          "predictedOutcome": "under",
+          "predictedLabel": "Everton — Moins de 0.5 buts",
+          "predictedOdds": 1.65,
+          "probability": 61,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalCorners",
+          "params": {
+            "line": 12.5,
+            "side": "under"
+          },
+          "market": "Total corners",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 12.5 corners",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "home",
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Corners — Brentford",
+          "predictedOutcome": "over",
+          "predictedLabel": "Brentford — Plus de 2.5 corners",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "away",
+            "line": 6.5,
+            "side": "under"
+          },
+          "market": "Corners — Everton",
+          "predictedOutcome": "under",
+          "predictedLabel": "Everton — Moins de 6.5 corners",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShots",
+          "params": {
+            "line": 22.5,
+            "side": "over"
+          },
+          "market": "Total tirs",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 22.5 tirs",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "home",
+            "line": 10.5,
+            "side": "over"
+          },
+          "market": "Tirs — Brentford",
+          "predictedOutcome": "over",
+          "predictedLabel": "Brentford — Plus de 10.5 tirs",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "away",
+            "line": 17.5,
+            "side": "under"
+          },
+          "market": "Tirs — Everton",
+          "predictedOutcome": "under",
+          "predictedLabel": "Everton — Moins de 17.5 tirs",
+          "predictedOdds": 1.23,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShotsOnTarget",
+          "params": {
+            "line": 11.5,
+            "side": "under"
+          },
+          "market": "Total tirs cadrés",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 11.5 tirs cadrés",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "home",
+            "line": 6.5,
+            "side": "under"
+          },
+          "market": "Tirs cadrés — Brentford",
+          "predictedOutcome": "under",
+          "predictedLabel": "Brentford — Moins de 6.5 tirs cadrés",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "away",
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Tirs cadrés — Everton",
+          "predictedOutcome": "over",
+          "predictedLabel": "Everton — Plus de 2.5 tirs cadrés",
+          "predictedOdds": 1.31,
+          "probability": 76,
+          "minOdds": 1.2
+        }
+      ],
+      "baseDuCalcul": {
+        "montant": 300.92,
+        "origine": "capital-regle"
+      },
+      "engineVersion": 6
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 6986,
+      "cache_read_input_tokens": 4470,
+      "output_tokens": 2924,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 6986,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 2924,
+          "cache_read_input_tokens": 4470,
+          "cache_creation_input_tokens": 6986,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 6986
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.058081999999999995,
+    "analysedAt": "2026-11-22T13:58:42.117Z",
+    "timing": "avance",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 481,
+      "tokens": 1492,
+      "lecons": [
+        "cal-2026-10-25-hull-city-brentford|teamShotsOnTarget:away",
+        "cal-2026-10-31-bournemouth-leeds|bothTeamsScore"
+      ],
+      "dossiersDu": "2026-11-21T07:57:17.803Z",
+      "equipes": {
+        "home": {
+          "id": "fotmob-9937",
+          "dossier": true
+        },
+        "away": {
+          "id": "fotmob-8668",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "EPL",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "FotMob",
+      "fotmobMatchId": "5795517",
+      "fetchedAt": "2026-11-22T13:58:18.883Z",
+      "minutesBeforeKickoff": 1802,
+      "home": {
+        "team": "Brentford",
+        "teamId": "fotmob-9937",
+        "formation": "4-2-3-1",
+        "coach": "Keith Andrews",
+        "statsSince": "2026-07-01",
+        "teamMatches": 13,
+        "startXI": [
+          {
+            "id": "fotmob-776689",
+            "name": "Caoimhín Kelleher",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 27,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 10,
+              "starts": 10,
+              "minutes": 900,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.13
+            }
+          },
+          {
+            "id": "fotmob-1429912",
+            "name": "Michael Kayode",
+            "number": 33,
+            "position": "Defender",
+            "age": 22,
+            "countryCode": "ITA",
+            "countryName": "Italy",
+            "x": 0.292,
+            "y": 0.875,
+            "stats": {
+              "apps": 13,
+              "starts": 11,
+              "minutes": 915,
+              "goals": 1,
+              "assists": 0,
+              "xg": 1.25,
+              "rating": 6.87
+            }
+          },
+          {
+            "id": "fotmob-552718",
+            "name": "Kristoffer Ajer",
+            "number": 20,
+            "position": "Defender",
+            "age": 28,
+            "countryCode": "NOR",
+            "countryName": "Norway",
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 12,
+              "starts": 11,
+              "minutes": 1009,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.65,
+              "rating": 7.21
+            }
+          },
+          {
+            "id": "fotmob-919435",
+            "name": "Sepp van den Berg",
+            "number": 4,
+            "position": "Defender",
+            "age": 24,
+            "countryCode": "NED",
+            "countryName": "Netherlands",
+            "x": 0.292,
+            "y": 0.375,
+            "stats": {
+              "apps": 4,
+              "starts": 4,
+              "minutes": 321,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.2,
+              "rating": 6.85
+            }
+          },
+          {
+            "id": "fotmob-1010426",
+            "name": "Keane Lewis-Potter",
+            "number": 23,
+            "position": "Defender",
+            "age": 25,
+            "countryCode": "ENG",
+            "countryName": "England",
+            "x": 0.292,
+            "y": 0.125,
+            "stats": {
+              "apps": 12,
+              "starts": 11,
+              "minutes": 889,
+              "goals": 2,
+              "assists": 1,
+              "xg": 1.62,
+              "rating": 6.93
+            }
+          },
+          {
+            "id": "fotmob-1185211",
+            "name": "Mamadou Sangaré",
+            "number": 18,
+            "position": "Midfielder",
+            "age": 24,
+            "countryCode": "MLI",
+            "countryName": "Mali",
+            "x": 0.485,
+            "y": 0.7,
+            "stats": {
+              "apps": 13,
+              "starts": 9,
+              "minutes": 762,
+              "goals": 0,
+              "assists": 2,
+              "xg": 0.74,
+              "rating": 6.99
+            }
+          },
+          {
+            "id": "fotmob-688273",
+            "name": "Vitaly Janelt",
+            "number": 27,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "GER",
+            "countryName": "Germany",
+            "x": 0.485,
+            "y": 0.3,
+            "stats": {
+              "apps": 11,
+              "starts": 11,
+              "minutes": 971,
+              "goals": 2,
+              "assists": 1,
+              "xg": 0.77,
+              "rating": 7.35
+            }
+          },
+          {
+            "id": "fotmob-1250253",
+            "name": "Dango Ouattara",
+            "number": 11,
+            "position": "Midfielder",
+            "age": 24,
+            "countryCode": "BFA",
+            "countryName": "Burkina Faso",
+            "x": 0.678,
+            "y": 0.837,
+            "stats": {
+              "apps": 13,
+              "starts": 8,
+              "minutes": 596,
+              "goals": 1,
+              "assists": 2,
+              "xg": 1.67,
+              "rating": 6.92
+            }
+          },
+          {
+            "id": "fotmob-650616",
+            "name": "Mathias Jensen",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 30,
+            "countryCode": "DEN",
+            "countryName": "Denmark",
+            "x": 0.678,
+            "y": 0.5,
+            "stats": {
+              "apps": 7,
+              "starts": 4,
+              "minutes": 349,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.22,
+              "rating": 6.82
+            }
+          },
+          {
+            "id": "fotmob-1083796",
+            "name": "Kevin Schade",
+            "number": 7,
+            "position": "Midfielder",
+            "age": 24,
+            "countryCode": "GER",
+            "countryName": "Germany",
+            "x": 0.678,
+            "y": 0.163,
+            "stats": {
+              "apps": 12,
+              "starts": 9,
+              "minutes": 845,
+              "goals": 3,
+              "assists": 0,
+              "xg": 2.41,
+              "rating": 6.85
+            }
+          },
+          {
+            "id": "fotmob-184321",
+            "name": "Callum Wilson",
+            "number": 13,
+            "position": "Forward",
+            "age": 34,
+            "countryCode": "ENG",
+            "countryName": "England",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 10,
+              "starts": 3,
+              "minutes": 254,
+              "goals": 3,
+              "assists": 0,
+              "xg": 1.97,
+              "rating": 6.92
+            }
+          }
+        ],
+        "bench": [],
+        "unavailable": [
+          {
+            "id": "fotmob-963965",
+            "age": 24,
+            "countryCode": "POR",
+            "countryName": "Portugal",
+            "name": "Fábio Carvalho",
+            "reason": "blessé",
+            "expectedReturn": "Doubtful",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 2,
+              "starts": 1,
+              "minutes": 80,
+              "goals": 2,
+              "assists": 0,
+              "xg": 0.97,
+              "rating": 7.74
+            }
+          },
+          {
+            "id": "fotmob-1002039",
+            "age": 24,
+            "countryCode": "SCO",
+            "countryName": "Scotland",
+            "name": "Aaron Hickey",
+            "reason": "blessé",
+            "expectedReturn": "Late December 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 13,
+              "starts": 4,
+              "minutes": 486,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.16,
+              "rating": 6.51
+            }
+          },
+          {
+            "id": "fotmob-961306",
+            "age": 25,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "name": "Nathan Collins",
+            "reason": "blessé",
+            "expectedReturn": "Early January 2027",
+            "position": "Defender",
+            "stats": {
+              "apps": 6,
+              "starts": 5,
+              "minutes": 403,
+              "goals": 2,
+              "assists": 0,
+              "xg": 0.98,
+              "rating": 7.18
+            }
+          },
+          {
+            "id": "fotmob-562892",
+            "age": 29,
+            "countryCode": "JAM",
+            "countryName": "Jamaica",
+            "name": "Rico Henry",
+            "reason": "blessé",
+            "expectedReturn": "Late November 2026",
+            "position": "Defender",
+            "stats": {
+              "apps": 3,
+              "starts": 2,
+              "minutes": 163,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.15
+            }
+          },
+          {
+            "id": "fotmob-1276312",
+            "age": 21,
+            "countryCode": "NED",
+            "countryName": "Netherlands",
+            "name": "Antoni Milambo",
+            "reason": "blessé",
+            "expectedReturn": "Late November 2026",
+            "position": null,
+            "stats": null
+          },
+          {
+            "id": "fotmob-1302005",
+            "age": 25,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "name": "Igor Thiago",
+            "reason": "suspendu",
+            "expectedReturn": "Early December 2026",
+            "position": "Forward",
+            "stats": {
+              "apps": 13,
+              "starts": 11,
+              "minutes": 957,
+              "goals": 4,
+              "assists": 2,
+              "xg": 5.68,
+              "rating": 6.9
+            }
+          },
+          {
+            "id": "fotmob-759566",
+            "age": 28,
+            "countryCode": "ENG",
+            "countryName": "England",
+            "name": "Joshua Dasilva",
+            "reason": "blessé",
+            "expectedReturn": "Late November 2026",
+            "position": null,
+            "stats": null
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-1302005",
+            "age": 25,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "name": "Igor Thiago",
+            "position": "Forward",
+            "starts": 11,
+            "goals": 4,
+            "assists": 2,
+            "status": "suspendu"
+          },
+          {
+            "id": "fotmob-1171140",
+            "age": 26,
+            "countryCode": "ENG",
+            "countryName": "England",
+            "name": "Jaidon Anthony",
+            "position": "Midfielder",
+            "starts": 7,
+            "goals": 1,
+            "assists": 5,
+            "status": "absent de la feuille de match"
+          }
+        ]
+      },
+      "away": {
+        "team": "Everton",
+        "teamId": "fotmob-8668",
+        "formation": "4-2-3-1",
+        "coach": "David Moyes",
+        "statsSince": "2026-07-01",
+        "teamMatches": 13,
+        "startXI": [
+          {
+            "id": "fotmob-303919",
+            "name": "Jordan Pickford",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 32,
+            "countryCode": "ENG",
+            "countryName": "England",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 13,
+              "starts": 13,
+              "minutes": 1170,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.25
+            }
+          },
+          {
+            "id": "fotmob-1098607",
+            "name": "Jake O'Brien",
+            "number": 15,
+            "position": "Defender",
+            "age": 25,
+            "countryCode": "IRL",
+            "countryName": "Ireland",
+            "x": 0.292,
+            "y": 0.875,
+            "stats": {
+              "apps": 8,
+              "starts": 4,
+              "minutes": 405,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.3,
+              "rating": 6.73
+            }
+          },
+          {
+            "id": "fotmob-243138",
+            "name": "James Tarkowski",
+            "number": 6,
+            "position": "Defender",
+            "age": 34,
+            "countryCode": "ENG",
+            "countryName": "England",
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 12,
+              "starts": 12,
+              "minutes": 1080,
+              "goals": 1,
+              "assists": 1,
+              "xg": 0.27,
+              "rating": 7.5
+            }
+          },
+          {
+            "id": "fotmob-1030829",
+            "name": "Jarrad Branthwaite",
+            "number": 4,
+            "position": "Defender",
+            "age": 24,
+            "countryCode": "ENG",
+            "countryName": "England",
+            "x": 0.292,
+            "y": 0.375,
+            "stats": {
+              "apps": 9,
+              "starts": 9,
+              "minutes": 801,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.37,
+              "rating": 7.24
+            }
+          },
+          {
+            "id": "fotmob-874025",
+            "name": "Vitaliy Mykolenko",
+            "number": 16,
+            "position": "Defender",
+            "age": 27,
+            "countryCode": "UKR",
+            "countryName": "Ukraine",
+            "x": 0.292,
+            "y": 0.125,
+            "stats": {
+              "apps": 12,
+              "starts": 12,
+              "minutes": 1060,
+              "goals": 0,
+              "assists": 2,
+              "xg": 0.23,
+              "rating": 7.43
+            }
+          },
+          {
+            "id": "fotmob-1559637",
+            "name": "Harrison Armstrong",
+            "number": 45,
+            "position": "Midfielder",
+            "age": 19,
+            "countryCode": "ENG",
+            "countryName": "England",
+            "x": 0.485,
+            "y": 0.7,
+            "stats": {
+              "apps": 12,
+              "starts": 11,
+              "minutes": 977,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.69,
+              "rating": 7.04
+            }
+          },
+          {
+            "id": "fotmob-950474",
+            "name": "James Garner",
+            "number": 37,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "ENG",
+            "countryName": "England",
+            "x": 0.485,
+            "y": 0.3,
+            "stats": {
+              "apps": 13,
+              "starts": 12,
+              "minutes": 1024,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.6,
+              "rating": 7.34
+            }
+          },
+          {
+            "id": "fotmob-1210384",
+            "name": "Merlin Röhl",
+            "number": 34,
+            "position": "Midfielder",
+            "age": 24,
+            "countryCode": "GER",
+            "countryName": "Germany",
+            "x": 0.678,
+            "y": 0.837,
+            "stats": {
+              "apps": 9,
+              "starts": 9,
+              "minutes": 774,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.08,
+              "rating": 7.09
+            }
+          },
+          {
+            "id": "fotmob-886016",
+            "name": "Kiernan Dewsbury-Hall",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "ENG",
+            "countryName": "England",
+            "x": 0.678,
+            "y": 0.5,
+            "stats": {
+              "apps": 13,
+              "starts": 13,
+              "minutes": 1151,
+              "goals": 3,
+              "assists": 2,
+              "xg": 2.35,
+              "rating": 7.5
+            }
+          },
+          {
+            "id": "fotmob-1424875",
+            "name": "Tyrique George",
+            "number": 19,
+            "position": "Midfielder",
+            "age": 20,
+            "countryCode": "ENG",
+            "countryName": "England",
+            "x": 0.678,
+            "y": 0.163,
+            "stats": {
+              "apps": 13,
+              "starts": 8,
+              "minutes": 737,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.84,
+              "rating": 6.85
+            }
+          },
+          {
+            "id": "fotmob-1398392",
+            "name": "Thierno Barry",
+            "number": 11,
+            "position": "Forward",
+            "age": 24,
+            "countryCode": "FRA",
+            "countryName": "France",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 13,
+              "starts": 13,
+              "minutes": 1085,
+              "goals": 10,
+              "assists": 3,
+              "xg": 10.88,
+              "rating": 7.58
+            }
+          }
+        ],
+        "bench": [],
+        "unavailable": [],
+        "usualStartersMissing": []
+      },
+      "matchInfo": {
+        "round": "11",
+        "stadium": "Gtech Community Stadium",
+        "city": "Brentford, Middlesex",
+        "capacity": 17250,
+        "surface": "grass",
+        "weather": "Partly Cloudy",
+        "temperature": 5,
+        "windSpeed": 11,
+        "precipitation": 0,
+        "referee": {
+          "name": "Craig Pawson",
+          "country": "England",
+          "league": "Premier League",
+          "matches": 42,
+          "yellowCardsPerMatch": 3.55,
+          "yellowCardsLeagueAverage": 3.87,
+          "redCards": 4,
+          "penalties": 11,
+          "foulsPerMatch": 22.29,
+          "foulsLeagueAverage": 21.97
+        }
+      }
+    },
+    "analysis": {
+      "summary": "Brentford (10e) reçoit Everton (7e). Brentford est en baisse (1 victoire sur ses 5 derniers, défaite 0-2 à Brighton) mais solide à domicile (3-1-1, 10-3). Everton reste sur 2 victoires de suite et produit un peu plus de tirs cadrés (4,9) que Brentford (3,8). Côté compositions, Brentford est privé de son attaquant Igor Thiago (suspendu) ainsi que de plusieurs blessés ; Everton aligne son équipe type avec Barry (10 buts) et Dewsbury-Hall.",
+      "keyFactors": [
+        {
+          "factor": "forme récente",
+          "observation": "Brentford en baisse, Everton en série positive.",
+          "evidence": "Brentford 1V-2N-2D sur 5 matchs ; Everton 2V-1N-2D mais 2 victoires de suite (3-1 Coventry, 1-0 Newcastle)."
+        },
+        {
+          "factor": "statistiques à domicile/extérieur",
+          "observation": "Brentford solide à domicile défensivement, Everton peu prolifique dehors.",
+          "evidence": "Brentford à domicile 1,75 / 0,75 buts ; Everton à l'extérieur 0,75 / 1 buts, 4 V-D-N-N."
+        },
+        {
+          "factor": "absences",
+          "observation": "Brentford sans Igor Thiago (11 tit., 4+2), suspendu, ni Rico Henry, Collins, Hickey.",
+          "evidence": "Callum Wilson (3 titularisations, 3 buts) le remplace ; Everton sans absent annoncé."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Pas de value sur le résultat, cotes de marché anciennes.",
+          "evidence": "Edge -7,78 %, relevé vieux de 12 jours, PASS."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur : avantage domicile pour Brentford, mais l'absence de Thiago et la forme récente d'Everton nuancent l'écart sur le résultat. Les marchés de volume (tirs, corners) sont cohérents avec les moyennes des deux équipes.",
+      "lineupImpact": "Composition FotMob relue environ 30 h avant le coup d'envoi : c'est probablement une prévision, non officielle. Brentford aligne Wilson en pointe (10 matchs, 3 titularisations, 3 buts) avec Schade (3 buts, xG 2,41) et Ouattara derrière ; l'absence de Thiago réduit un peu le poids offensif, et Henry, Collins et Hickey manquent derrière. Everton présente son onze type : Pickford, Tarkowski, Branthwaite, Mykolenko, Dewsbury-Hall (3+2) et Barry (10+3, xG 10,88), sans aucun absent habituel.",
+      "caveats": "Cotes de marché relevées il y a 12 jours (archive). Composition possiblement prévisionnelle. Pas de donnée sur les matchs directs entre les deux équipes. Marchés de buts non commentés, comme demandé.",
+      "marketViews": [
+        {
+          "market": "Résultat",
+          "pick": "Brentford gagne",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "48 % : Brentford a 3-1-1 et 10-3 en buts à domicile, mais il perd Thiago et n'a pris qu'1 victoire sur ses 5 derniers matchs.",
+          "reasoning": "L'avantage du terrain est réel, mais la forme en baisse et l'absence de Thiago face à un Everton en série de 2 victoires rendent l'issue incertaine ; le nul reste crédible.",
+          "probability": 48
+        },
+        {
+          "market": "Total corners",
+          "pick": "Moins de 12.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : le moteur attend 9,4 corners au total, loin de 12,5, et la moyenne du championnat est de 9,5.",
+          "reasoning": "Les moyennes de corners des deux équipes (3,8 et 4,5 produits) confirment un total bien inférieur au seuil.",
+          "probability": 83
+        },
+        {
+          "market": "Corners — Brentford",
+          "pick": "Brentford — Plus de 2.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : 5,17 corners attendus pour Brentford, et Everton en concède 5,6 par match.",
+          "reasoning": "Brentford ne produit que 3,8 corners en moyenne, mais Everton en concède 5,6 ; le seuil de 2,5 est bas.",
+          "probability": 83
+        },
+        {
+          "market": "Corners — Everton",
+          "pick": "Everton — Moins de 6.5 corners",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : 4,23 corners attendus pour Everton, qui en produit 4,5 par match et 5 à l'extérieur.",
+          "reasoning": "Une moyenne de 4,5 à 5 corners laisse de la marge sous 6,5, d'autant qu'un Brentford en difficulté ne concède que 4,9 corners.",
+          "probability": 83
+        },
+        {
+          "market": "Total tirs",
+          "pick": "Plus de 22.5 tirs",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : 28,56 tirs attendus au total (15,24 + 13,32) ; Brentford en concède 15,8 et Everton en produit 13,8.",
+          "reasoning": "Les moyennes de tirs concédés des deux équipes (15,8 et 15,4) soutiennent un total nettement supérieur à 22,5.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs — Brentford",
+          "pick": "Brentford — Plus de 10.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "81 % : 15,24 tirs attendus pour Brentford, qui en produit 12,3 par match (10,5 à domicile) et dont l'adversaire en concède 15,4.",
+          "reasoning": "À domicile Brentford tombe à 10,5 tirs, tout juste au seuil ; l'absence de Thiago ajoute un risque, d'où une confiance moyenne.",
+          "probability": 81
+        },
+        {
+          "market": "Tirs — Everton",
+          "pick": "Everton — Moins de 17.5 tirs",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "81 % : 13,32 tirs attendus pour Everton, qui en produit 13,8 par match et 12,8 à l'extérieur.",
+          "reasoning": "Everton ne dépasse que rarement 17 tirs avec ces moyennes ; le seuil laisse de la marge.",
+          "probability": 81
+        },
+        {
+          "market": "Total tirs cadrés",
+          "pick": "Moins de 11.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : 8,63 tirs cadrés attendus au total, Brentford en produit 3,8 et Everton 4,9 par match.",
+          "reasoning": "Même en additionnant les tirs cadrés concédés (4,5 et 4,2), le total reste loin de 11,5.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs cadrés — Brentford",
+          "pick": "Brentford — Moins de 6.5 tirs cadrés",
+          "verdict": "nuance",
+          "confidence": "moyenne",
+          "explanation": "83 % : 4,4 tirs cadrés attendus pour Brentford, qui en produit 3,8 par match et 2,8 à domicile.",
+          "reasoning": "Les chiffres soutiennent le pronostic, mais la leçon du carnet (Hull-Brentford) invite à la prudence sur les tirs cadrés de Brentford, même si ici le seuil de 6,5 est large.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs cadrés — Everton",
+          "pick": "Everton — Plus de 2.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "76 % : 4,23 tirs cadrés attendus pour Everton, qui en produit 4,9 par match et 4,5 à l'extérieur.",
+          "reasoning": "Avec Barry (xG 10,88) et Dewsbury-Hall présents, Everton franchit régulièrement 2,5 tirs cadrés ; le pourcentage plus bas s'explique par la variance sur un petit seuil.",
+          "probability": 76
+        }
+      ]
+    },
+    "updatedAt": "2026-11-22T13:58:42.118Z",
+    "createdAt": "2026-11-22T13:58:42.118Z"
+  },
+  {
+    "matchId": "afae1c9d986e4ab2200dc9bd44b6b6c4",
+    "homeName": "Levante",
+    "awayName": "Elche CF",
+    "league": "La Liga - Spain",
+    "commenceTime": "2026-11-23T20:00:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Levante vs Elche CF",
+      "expectedGoals": {
+        "home": 2.6,
+        "away": 2.4,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 2.24,
+        "draw": 4.25,
+        "away": 3.14
+      },
+      "market": {
+        "odds1": 2.12,
+        "oddsDraw": 3.68,
+        "odds2": 3.06
+      },
+      "edgePercent": -6.09,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "pas_de_value",
+        "candidates": [
+          {
+            "outcome": "home",
+            "label": "Levante gagne",
+            "odds": 2,
+            "displayedOdds": 2,
+            "bookmaker": "winamax_fr",
+            "bookmakerTitle": "Winamax (FR)",
+            "fairOdds": 2.24,
+            "ev": -0.1077,
+            "exclusion": "sous_le_seuil",
+            "releveAt": "2026-11-09T16:42:13.050Z",
+            "origineReleve": "archive",
+            "fraicheur": {
+              "etat": "a-rafraichir",
+              "code": "trop-vieille",
+              "raison": "Relevée il y a 12 jours, au-delà du délai de 1 h : à relever de nouveau avant de parier.",
+              "ageMinutes": 18556,
+              "releveAt": "2026-11-09T16:42:13.050Z",
+              "coupDEnvoi": "2026-11-23T20:00:00.000Z",
+              "heureSure": true,
+              "composAnnonceesA": "2026-11-23T19:00:00.000Z",
+              "limiteMinutes": 60,
+              "reglage": {
+                "maxAgeMinutes": 60,
+                "avantCompos": true
+              },
+              "evalueeLe": "2026-11-22T13:58:43.617Z"
+            }
+          },
+          {
+            "outcome": "draw",
+            "label": "Match nul",
+            "odds": 3.65,
+            "displayedOdds": 3.65,
+            "bookmaker": "winamax_fr",
+            "bookmakerTitle": "Winamax (FR)",
+            "fairOdds": 4.25,
+            "ev": -0.1404,
+            "exclusion": "sous_le_seuil",
+            "releveAt": "2026-11-09T16:42:13.050Z",
+            "origineReleve": "archive",
+            "fraicheur": {
+              "etat": "a-rafraichir",
+              "code": "trop-vieille",
+              "raison": "Relevée il y a 12 jours, au-delà du délai de 1 h : à relever de nouveau avant de parier.",
+              "ageMinutes": 18556,
+              "releveAt": "2026-11-09T16:42:13.050Z",
+              "coupDEnvoi": "2026-11-23T20:00:00.000Z",
+              "heureSure": true,
+              "composAnnonceesA": "2026-11-23T19:00:00.000Z",
+              "limiteMinutes": 60,
+              "reglage": {
+                "maxAgeMinutes": 60,
+                "avantCompos": true
+              },
+              "evalueeLe": "2026-11-22T13:58:43.617Z"
+            }
+          },
+          {
+            "outcome": "away",
+            "label": "Elche CF gagne",
+            "odds": 2.95,
+            "displayedOdds": 2.95,
+            "bookmaker": "pmu_fr",
+            "bookmakerTitle": "PMU (FR)",
+            "fairOdds": 3.14,
+            "ev": -0.0609,
+            "exclusion": "sous_le_seuil",
+            "releveAt": "2026-11-09T16:42:13.050Z",
+            "origineReleve": "archive",
+            "fraicheur": {
+              "etat": "a-rafraichir",
+              "code": "trop-vieille",
+              "raison": "Relevée il y a 12 jours, au-delà du délai de 1 h : à relever de nouveau avant de parier.",
+              "ageMinutes": 18556,
+              "releveAt": "2026-11-09T16:42:13.050Z",
+              "coupDEnvoi": "2026-11-23T20:00:00.000Z",
+              "heureSure": true,
+              "composAnnonceesA": "2026-11-23T19:00:00.000Z",
+              "limiteMinutes": 60,
+              "reglage": {
+                "maxAgeMinutes": 60,
+                "avantCompos": true
+              },
+              "evalueeLe": "2026-11-22T13:58:43.617Z"
+            }
+          }
+        ],
+        "limits": {
+          "edgeThresholdMin": 0.02,
+          "edgeThresholdMax": 0.25,
+          "maxValueOdds": 5
+        }
+      },
+      "statExpectations": {
+        "corners": {
+          "home": 5.01,
+          "away": 4.32,
+          "total": 9.33
+        },
+        "shots": {
+          "home": 15.18,
+          "away": 13.14,
+          "total": 28.32
+        },
+        "shotsOnTarget": {
+          "home": 4.57,
+          "away": 4.09,
+          "total": 8.66
+        }
+      },
+      "marketPredictions": [
+        {
+          "marketId": "result",
+          "params": {
+            "outcome": "home"
+          },
+          "market": "Résultat",
+          "predictedOutcome": "home",
+          "predictedLabel": "Levante gagne",
+          "predictedOdds": 2.24,
+          "probability": 45,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 3.5,
+            "side": "over"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 3.5 buts",
+          "predictedOdds": 1.36,
+          "probability": 74,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 1.5,
+            "key": "homeOver"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "homeOver",
+          "predictedLabel": "Levante & Plus de 1.5 buts",
+          "predictedOdds": 2.32,
+          "probability": 43,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 3.5,
+            "side": "under"
+          },
+          "market": "Buts — Levante",
+          "predictedOutcome": "under",
+          "predictedLabel": "Levante — Moins de 3.5 buts",
+          "predictedOdds": 1.36,
+          "probability": 74,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 3.5,
+            "side": "under"
+          },
+          "market": "Buts — Elche CF",
+          "predictedOutcome": "under",
+          "predictedLabel": "Elche CF — Moins de 3.5 buts",
+          "predictedOdds": 1.28,
+          "probability": 78,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalCorners",
+          "params": {
+            "line": 12.5,
+            "side": "under"
+          },
+          "market": "Total corners",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 12.5 corners",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "home",
+            "line": 7.5,
+            "side": "under"
+          },
+          "market": "Corners — Levante",
+          "predictedOutcome": "under",
+          "predictedLabel": "Levante — Moins de 7.5 corners",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "away",
+            "line": 6.5,
+            "side": "under"
+          },
+          "market": "Corners — Elche CF",
+          "predictedOutcome": "under",
+          "predictedLabel": "Elche CF — Moins de 6.5 corners",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShots",
+          "params": {
+            "line": 22.5,
+            "side": "over"
+          },
+          "market": "Total tirs",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 22.5 tirs",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "home",
+            "line": 10.5,
+            "side": "over"
+          },
+          "market": "Tirs — Levante",
+          "predictedOutcome": "over",
+          "predictedLabel": "Levante — Plus de 10.5 tirs",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "away",
+            "line": 8.5,
+            "side": "over"
+          },
+          "market": "Tirs — Elche CF",
+          "predictedOutcome": "over",
+          "predictedLabel": "Elche CF — Plus de 8.5 tirs",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShotsOnTarget",
+          "params": {
+            "line": 11.5,
+            "side": "under"
+          },
+          "market": "Total tirs cadrés",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 11.5 tirs cadrés",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "home",
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Tirs cadrés — Levante",
+          "predictedOutcome": "over",
+          "predictedLabel": "Levante — Plus de 2.5 tirs cadrés",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "away",
+            "line": 5.5,
+            "side": "under"
+          },
+          "market": "Tirs cadrés — Elche CF",
+          "predictedOutcome": "under",
+          "predictedLabel": "Elche CF — Moins de 5.5 tirs cadrés",
+          "predictedOdds": 1.32,
+          "probability": 76,
+          "minOdds": 1.2
+        }
+      ],
+      "baseDuCalcul": {
+        "montant": 300.92,
+        "origine": "capital-regle"
+      },
+      "engineVersion": 6
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 7179,
+      "cache_read_input_tokens": 4470,
+      "output_tokens": 2598,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 7179,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 2598,
+          "cache_read_input_tokens": 4470,
+          "cache_creation_input_tokens": 7179,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 7179
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.055594,
+    "analysedAt": "2026-11-22T13:59:04.326Z",
+    "timing": "avance",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 465,
+      "tokens": 1411,
+      "lecons": [
+        "cal-2026-10-24-atletico-madrid-deportivo-a-coruna|totalGoals"
+      ],
+      "dossiersDu": "2026-11-21T07:57:17.803Z",
+      "equipes": {
+        "home": {
+          "id": "fotmob-8581",
+          "dossier": true
+        },
+        "away": {
+          "id": "fotmob-10268",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "La Liga - Spain",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "magasin",
+      "home": {
+        "team": "Levante",
+        "teamId": "fotmob-8581",
+        "formation": "4-3-3",
+        "coach": "Luís Castro",
+        "statsSince": "2026-07-01",
+        "teamMatches": 13,
+        "startXI": [
+          {
+            "id": "fotmob-952528",
+            "name": "Adrián De La Fuente",
+            "number": 4,
+            "position": "Defender",
+            "age": 27,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.875,
+            "stats": {
+              "apps": 11,
+              "starts": 9,
+              "minutes": 885,
+              "goals": 3,
+              "assists": 0,
+              "xg": 1.73,
+              "rating": 7
+            }
+          },
+          {
+            "id": "fotmob-977618",
+            "name": "Víctor García",
+            "number": 17,
+            "position": "Forward",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.87,
+            "y": 0.79,
+            "stats": {
+              "apps": 12,
+              "starts": 4,
+              "minutes": 463,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.62,
+              "rating": 6.26
+            }
+          },
+          {
+            "id": "fotmob-1237455",
+            "name": "Pablo Campos",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 120,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.86
+            }
+          },
+          {
+            "id": "fotmob-1254218",
+            "name": "Hugo Sotelo",
+            "number": 5,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.5,
+            "stats": {
+              "apps": 6,
+              "starts": 3,
+              "minutes": 205,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.11,
+              "rating": 6.35
+            }
+          },
+          {
+            "id": "fotmob-1332540",
+            "name": "Enzo Bardeli",
+            "number": 18,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "FRA",
+            "countryName": "France",
+            "x": 0.613,
+            "y": 0.79,
+            "stats": {
+              "apps": 8,
+              "starts": 6,
+              "minutes": 510,
+              "goals": 1,
+              "assists": 1,
+              "xg": 0.23,
+              "rating": 6.67
+            }
+          },
+          {
+            "id": "fotmob-1617146",
+            "name": "Jorge Cabello",
+            "number": 14,
+            "position": "Defender",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.375,
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 90,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.66
+            }
+          },
+          {
+            "id": "fotmob-1649293",
+            "name": "Paco Cortés",
+            "number": 27,
+            "position": "Forward",
+            "age": 19,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.87,
+            "y": 0.21,
+            "stats": {
+              "apps": 7,
+              "starts": 2,
+              "minutes": 148,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.06,
+              "rating": 6.37
+            }
+          },
+          {
+            "id": "fotmob-1836083",
+            "name": "Yanis Musuayi",
+            "number": 11,
+            "position": "Forward",
+            "age": 19,
+            "countryCode": "BEL",
+            "countryName": "Belgium",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 5,
+              "starts": 2,
+              "minutes": 243,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.38,
+              "rating": 6.23
+            }
+          },
+          {
+            "id": "fotmob-1859295",
+            "name": "Huseini Nakoha",
+            "number": 35,
+            "position": "Defender",
+            "age": 20,
+            "countryCode": "GHA",
+            "countryName": "Ghana",
+            "x": 0.357,
+            "y": 0.625,
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 45,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.16,
+              "rating": 7.08
+            }
+          },
+          {
+            "id": "fotmob-2141146",
+            "name": "Marc Santos",
+            "number": 33,
+            "position": "Defender",
+            "age": 16,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.125,
+            "stats": {
+              "apps": 4,
+              "starts": 1,
+              "minutes": 168,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.91
+            }
+          },
+          {
+            "id": "fotmob-2141152",
+            "name": "Manel Usedo",
+            "number": 34,
+            "position": "Midfielder",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "x": 0.613,
+            "y": 0.21,
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 120,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.11,
+              "rating": 6.69
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-210683",
+            "name": "Aïssa Mandi",
+            "number": 2,
+            "position": "Defender",
+            "age": 35,
+            "countryCode": "ALG",
+            "countryName": "Algeria",
+            "stats": {
+              "apps": 11,
+              "starts": 10,
+              "minutes": 903,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.05,
+              "rating": 6.76
+            }
+          },
+          {
+            "id": "fotmob-443966",
+            "name": "Jeremy Toljan",
+            "number": 22,
+            "position": "Defender",
+            "age": 32,
+            "countryCode": "GER",
+            "countryName": "Germany",
+            "stats": {
+              "apps": 12,
+              "starts": 6,
+              "minutes": 686,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.38,
+              "rating": 6.36
+            }
+          },
+          {
+            "id": null,
+            "name": "Alejandro Moya",
+            "number": 39,
+            "position": "Defender",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": null
+          },
+          {
+            "id": null,
+            "name": "Luismi Pérez",
+            "number": 26,
+            "position": "Forward",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "stats": null
+          },
+          {
+            "id": "fotmob-1131957",
+            "name": "Jon Olasagasti",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 26,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 13,
+              "starts": 11,
+              "minutes": 1034,
+              "goals": 1,
+              "assists": 1,
+              "xg": 0.86,
+              "rating": 6.81
+            }
+          },
+          {
+            "id": "fotmob-1286471",
+            "name": "Roger Brugué",
+            "number": 7,
+            "position": "Midfielder",
+            "age": 30,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 12,
+              "starts": 11,
+              "minutes": 974,
+              "goals": 5,
+              "assists": 1,
+              "xg": 4.27,
+              "rating": 7.02
+            }
+          },
+          {
+            "id": "fotmob-1302821",
+            "name": "Petar Ratkov",
+            "number": 10,
+            "position": "Forward",
+            "age": 23,
+            "countryCode": "SRB",
+            "countryName": "Serbia",
+            "stats": {
+              "apps": 9,
+              "starts": 3,
+              "minutes": 351,
+              "goals": 1,
+              "assists": 1,
+              "xg": 0.94,
+              "rating": 6.49
+            }
+          },
+          {
+            "id": "fotmob-1366374",
+            "name": "Álex Primo",
+            "number": 32,
+            "position": "Goalkeeper",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1392779",
+            "name": "Etta Eyong",
+            "number": 21,
+            "position": "Forward",
+            "age": 23,
+            "countryCode": "CMR",
+            "countryName": "Cameroon",
+            "stats": {
+              "apps": 7,
+              "starts": 2,
+              "minutes": 226,
+              "goals": 1,
+              "assists": 1,
+              "xg": 2,
+              "rating": 6.26
+            }
+          },
+          {
+            "id": "fotmob-1460063",
+            "name": "Thiago Fernández",
+            "number": 24,
+            "position": "Forward",
+            "age": 22,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 11,
+              "starts": 9,
+              "minutes": 757,
+              "goals": 0,
+              "assists": 1,
+              "xg": 1.2,
+              "rating": 6.82
+            }
+          },
+          {
+            "id": "fotmob-1481503",
+            "name": "Dani Requena",
+            "number": 6,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 9,
+              "starts": 6,
+              "minutes": 555,
+              "goals": 1,
+              "assists": 1,
+              "xg": 0.74,
+              "rating": 6.8
+            }
+          },
+          {
+            "id": "fotmob-2141153",
+            "name": "Alberto Calatrava",
+            "number": 38,
+            "position": "Midfielder",
+            "age": 21,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          }
+        ],
+        "unavailable": [],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-185644",
+            "age": 34,
+            "countryCode": "AUS",
+            "countryName": "Australia",
+            "name": "Mathew Ryan",
+            "position": "Goalkeeper",
+            "starts": 12,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1286471",
+            "age": 30,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Roger Brugué",
+            "position": "Midfielder",
+            "starts": 11,
+            "goals": 5,
+            "assists": 1,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-1131957",
+            "age": 26,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Jon Olasagasti",
+            "position": "Midfielder",
+            "starts": 11,
+            "goals": 1,
+            "assists": 1,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-210683",
+            "age": 35,
+            "countryCode": "ALG",
+            "countryName": "Algeria",
+            "name": "Aïssa Mandi",
+            "position": "Defender",
+            "starts": 10,
+            "goals": 0,
+            "assists": 0,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-1209441",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Iván Romero",
+            "position": "Midfielder",
+            "starts": 10,
+            "goals": 3,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1052330",
+            "age": 26,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Manuel Sánchez",
+            "position": "Defender",
+            "starts": 10,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1460063",
+            "age": 22,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Thiago Fernández",
+            "position": "Midfielder",
+            "starts": 9,
+            "goals": 0,
+            "assists": 1,
+            "status": "remplaçant"
+          },
+          {
+            "id": "fotmob-1800611",
+            "age": 18,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Nacho Pérez",
+            "position": "Defender",
+            "starts": 8,
+            "goals": 1,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-914401",
+            "age": 28,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Oriol Rey",
+            "position": "Midfielder",
+            "starts": 7,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          }
+        ],
+        "lastMatch": {
+          "date": "2026-11-12",
+          "league": "Copa del Rey - Spain",
+          "home": "CD Tarancon",
+          "away": "Levante",
+          "homeGoals": 1,
+          "awayGoals": 2
+        }
+      },
+      "away": {
+        "team": "Elche CF",
+        "teamId": "fotmob-10268",
+        "formation": "4-3-3",
+        "coach": "Martín Anselmi",
+        "statsSince": "2026-07-01",
+        "teamMatches": 13,
+        "startXI": [
+          {
+            "id": "fotmob-592412",
+            "name": "Matías Dituro",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 39,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 12,
+              "starts": 12,
+              "minutes": 1080,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.02,
+              "rating": 6.73
+            }
+          },
+          {
+            "id": "fotmob-1102708",
+            "name": "Germán Valera",
+            "number": 11,
+            "position": "Forward",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.87,
+            "y": 0.21,
+            "stats": {
+              "apps": 12,
+              "starts": 12,
+              "minutes": 979,
+              "goals": 2,
+              "assists": 0,
+              "xg": 1.09,
+              "rating": 6.97
+            }
+          },
+          {
+            "id": "fotmob-1127224",
+            "name": "Fer Niño",
+            "number": 14,
+            "position": "Forward",
+            "age": 26,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 12,
+              "starts": 10,
+              "minutes": 786,
+              "goals": 6,
+              "assists": 0,
+              "xg": 4.62,
+              "rating": 6.91
+            }
+          },
+          {
+            "id": "fotmob-1192393",
+            "name": "Víctor Chust",
+            "number": 23,
+            "position": "Defender",
+            "age": 26,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.375,
+            "stats": {
+              "apps": 12,
+              "starts": 12,
+              "minutes": 1080,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.51,
+              "rating": 6.79
+            }
+          },
+          {
+            "id": "fotmob-1226189",
+            "name": "Martim Neto",
+            "number": 16,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "POR",
+            "countryName": "Portugal",
+            "x": 0.613,
+            "y": 0.79,
+            "stats": {
+              "apps": 9,
+              "starts": 4,
+              "minutes": 403,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.68,
+              "rating": 6.49
+            }
+          },
+          {
+            "id": "fotmob-1277343",
+            "name": "Federico Redondo",
+            "number": 5,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "x": 0.357,
+            "y": 0.625,
+            "stats": {
+              "apps": 9,
+              "starts": 8,
+              "minutes": 652,
+              "goals": 1,
+              "assists": 0,
+              "xg": 1.39,
+              "rating": 6.98
+            }
+          },
+          {
+            "id": "fotmob-1280756",
+            "name": "Lucas Cepeda",
+            "number": 21,
+            "position": "Forward",
+            "age": 24,
+            "countryCode": "CHI",
+            "countryName": "Chile",
+            "x": 0.87,
+            "y": 0.79,
+            "stats": {
+              "apps": 12,
+              "starts": 5,
+              "minutes": 521,
+              "goals": 0,
+              "assists": 2,
+              "xg": 0.81,
+              "rating": 6.89
+            }
+          },
+          {
+            "id": "fotmob-1330035",
+            "name": "Rubén Sánchez",
+            "number": 22,
+            "position": "Defender",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.875,
+            "stats": {
+              "apps": 9,
+              "starts": 3,
+              "minutes": 424,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.43,
+              "rating": 6.81
+            }
+          },
+          {
+            "id": "fotmob-1337914",
+            "name": "Roy Revivo",
+            "number": 3,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "ISR",
+            "countryName": "Israel",
+            "x": 0.357,
+            "y": 0.125,
+            "stats": {
+              "apps": 16,
+              "starts": 15,
+              "minutes": 1333,
+              "goals": 1,
+              "assists": 5,
+              "xg": 0.71,
+              "rating": 7.37
+            }
+          },
+          {
+            "id": "fotmob-1670281",
+            "name": "Ali Houary",
+            "number": 29,
+            "position": "Midfielder",
+            "age": 21,
+            "countryCode": "MAR",
+            "countryName": "Morocco",
+            "x": 0.613,
+            "y": 0.21,
+            "stats": {
+              "apps": 5,
+              "starts": 5,
+              "minutes": 325,
+              "goals": 1,
+              "assists": 0,
+              "xg": 1.01,
+              "rating": 6.75
+            }
+          },
+          {
+            "id": "fotmob-1732412",
+            "name": "Javi Morcillo",
+            "number": 47,
+            "position": "Midfielder",
+            "age": 20,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.5,
+            "stats": {
+              "apps": 10,
+              "starts": 8,
+              "minutes": 745,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.11,
+              "rating": 6.9
+            }
+          }
+        ],
+        "bench": [
+          {
+            "id": "fotmob-291635",
+            "name": "Pedro Bigas",
+            "number": 6,
+            "position": "Defender",
+            "age": 36,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 7,
+              "starts": 3,
+              "minutes": 295,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.02,
+              "rating": 5.9
+            }
+          },
+          {
+            "id": "fotmob-493216",
+            "name": "Ezequiel Ponce",
+            "number": 9,
+            "position": "Forward",
+            "age": 29,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 8,
+              "starts": 5,
+              "minutes": 458,
+              "goals": 2,
+              "assists": 1,
+              "xg": 3.26,
+              "rating": 6.82
+            }
+          },
+          {
+            "id": "fotmob-623982",
+            "name": "Josan",
+            "number": 17,
+            "position": "Midfielder",
+            "age": 36,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 4,
+              "starts": 1,
+              "minutes": 87,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.08,
+              "rating": 7.03
+            }
+          },
+          {
+            "id": "fotmob-654091",
+            "name": "Grady Diangana",
+            "number": 19,
+            "position": "Midfielder",
+            "age": 28,
+            "countryCode": "COD",
+            "countryName": "DR Congo",
+            "stats": {
+              "apps": 3,
+              "starts": 1,
+              "minutes": 128,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.53,
+              "rating": 7.26
+            }
+          },
+          {
+            "id": "fotmob-801213",
+            "name": "Tete Morente",
+            "number": 20,
+            "position": "Midfielder",
+            "age": 29,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 13,
+              "starts": 6,
+              "minutes": 627,
+              "goals": 0,
+              "assists": 3,
+              "xg": 1.27,
+              "rating": 6.66
+            }
+          },
+          {
+            "id": "fotmob-884383",
+            "name": "Bambo Diaby",
+            "number": 4,
+            "position": "Defender",
+            "age": 28,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1206583",
+            "name": "Kevin Lomónaco",
+            "number": 15,
+            "position": "Defender",
+            "age": 24,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 9,
+              "starts": 7,
+              "minutes": 657,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.13,
+              "rating": 6.8
+            }
+          },
+          {
+            "id": "fotmob-1311126",
+            "name": "Alejandro Iturbe",
+            "number": 13,
+            "position": "Goalkeeper",
+            "age": 23,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 1,
+              "starts": 1,
+              "minutes": 90,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.3
+            }
+          },
+          {
+            "id": "fotmob-1336566",
+            "name": "Facundo Buonanotte",
+            "number": 10,
+            "position": "Midfielder",
+            "age": 21,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 9,
+              "starts": 3,
+              "minutes": 372,
+              "goals": 1,
+              "assists": 1,
+              "xg": 1.41,
+              "rating": 6.64
+            }
+          },
+          {
+            "id": "fotmob-1343195",
+            "name": "Abiel Osorio",
+            "number": 24,
+            "position": "Forward",
+            "age": 24,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "stats": {
+              "apps": 10,
+              "starts": 2,
+              "minutes": 363,
+              "goals": 1,
+              "assists": 1,
+              "xg": 1.12,
+              "rating": 6.3
+            }
+          },
+          {
+            "id": "fotmob-1670276",
+            "name": "Matia Barzić",
+            "number": 26,
+            "position": "Defender",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 2,
+              "starts": 1,
+              "minutes": 103,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.04,
+              "rating": 7.12
+            }
+          },
+          {
+            "id": "fotmob-1959218",
+            "name": "Alvaro Padilla",
+            "number": 30,
+            "position": "Forward",
+            "age": 20,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "stats": {
+              "apps": 2,
+              "starts": 0,
+              "minutes": 15,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          }
+        ],
+        "unavailable": [],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-881773",
+            "age": 28,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Gonzalo Villar",
+            "position": "Midfielder",
+            "starts": 11,
+            "goals": 0,
+            "assists": 1,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1583872",
+            "age": 19,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Buba Sangaré",
+            "position": "Midfielder",
+            "starts": 10,
+            "goals": 1,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          }
+        ],
+        "lastMatch": {
+          "date": "2026-11-08",
+          "league": "La Liga - Spain",
+          "home": "Elche",
+          "away": "Real Betis",
+          "homeGoals": 0,
+          "awayGoals": 2
+        }
+      },
+      "matchInfo": null
+    },
+    "analysis": {
+      "summary": "Duel de relégables : Levante 18e (11 pts) reçoit Elche 19e (10 pts). Levante reste sur 2 N et 2 D sur ses 5 derniers (0-0 à Vigo, 0-2 contre l'Atlético) ; Elche vient de perdre 0-2 contre le Betis, mais n'a perdu qu'une fois en 6 à l'extérieur (2 V, 3 N). Les compositions sont celles du dernier match (magasin), pas officielles : Levante avait fait tourner en Coupe, Elche a aligné son onze type.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Deux équipes de bas de tableau, à un point d'écart.",
+          "evidence": "Levante 18e, 11 pts, diff -5 ; Elche 19e, 10 pts, diff -6."
+        },
+        {
+          "factor": "forme récente",
+          "observation": "Levante peu convaincant, sans victoire sur ses 4 derniers de championnat ; Elche solide dehors.",
+          "evidence": "Levante : N-D-D-V-N sur 5 matchs ; Elche à l'extérieur : VVNVN, 2 marqués / 0,6 concédé."
+        },
+        {
+          "factor": "statistiques et moyennes",
+          "observation": "Volumes de tirs modestes des deux côtés, corners faibles.",
+          "evidence": "Levante 13,2 tirs et 4,4 corners ; Elche 13,6 tirs et 5 corners ; attendus 28,32 tirs et 9,33 corners au total."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur donne l'avantage à Levante, mais le marché est jugé sans valeur.",
+          "evidence": "Edge -6,09 %, PASS ; cotes relevées il y a 12 jours."
+        }
+      ],
+      "lineupImpact": "Source magasin : dernier onze aligné, pas celui du match. Levante (Copa del Rey, 12/11) a fait tourner : Mathew Ryan (12 titularisations), Iván Romero (3 buts), Manuel Sánchez et Oriol Rey absents de la feuille, Brugué (5+1), Olasagasti et Mandi sur le banc. Le onze probable sera donc plus fort que celui-ci, ce qui soutient plutôt les tirs de Levante. Elche aligne son onze type (Fer Niño 6 buts, Revivo 1+5), sans Villar ni Sangaré absents de la feuille. Aucun absent annoncé par FotMob.",
+      "alignmentWithModel": "Le contexte va globalement dans le sens du moteur (Levante légèrement favori à domicile), mais l'avantage reste mince : Elche est solide dehors et Levante peu régulier. Le moteur lui-même ne voit pas de valeur.",
+      "caveats": "Forme d'Elche non trouvée (seules les statistiques sont disponibles). Compositions non officielles (dernier match). Cotes du marché vieilles de 12 jours. Elche a un nouvel entraîneur depuis le 17/08. Marchés de buts non commentés.",
+      "marketViews": [
+        {
+          "market": "Résultat",
+          "pick": "Levante gagne",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "45 % : Levante a marqué 2 buts par match à domicile sur 4 matchs, mais Elche n'a concédé que 0,6 par match à l'extérieur.",
+          "reasoning": "Levante est mal en point (N-D-D-V-N) et Elche solide dehors : le match reste très ouvert. Mon bilan sur ce marché est le plus faible (431/732).",
+          "probability": 45
+        },
+        {
+          "market": "Total corners",
+          "pick": "Moins de 12.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : 9,33 corners attendus au total, avec 4,4 et 5 corners par match pour les deux équipes.",
+          "reasoning": "La marge est large par rapport à la ligne et la moyenne du championnat est de 9,7 corners.",
+          "probability": 83
+        },
+        {
+          "market": "Corners — Levante",
+          "pick": "Levante — Moins de 7.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : Levante attendu à 5,01 corners et il en produit 4,4 par match.",
+          "reasoning": "Levante a peu la balle (44,6 % de possession) et ses corners restent bas.",
+          "probability": 83
+        },
+        {
+          "market": "Corners — Elche CF",
+          "pick": "Elche CF — Moins de 6.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "82 % : Elche attendu à 4,32 corners, 5 par match sur 10 matchs et 4,4 à l'extérieur.",
+          "reasoning": "Les moyennes sont nettement sous la ligne.",
+          "probability": 82
+        },
+        {
+          "market": "Total tirs",
+          "pick": "Plus de 22.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "82 % : 28,32 tirs attendus, avec 13,2 et 13,6 tirs par match pour les deux équipes.",
+          "reasoning": "Le cumul des moyennes dépasse la ligne, et Levante rentre ses titulaires.",
+          "probability": 82
+        },
+        {
+          "market": "Tirs — Levante",
+          "pick": "Levante — Plus de 10.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "81 % : 15,18 tirs attendus et 16,3 tirs par match à domicile pour Levante.",
+          "reasoning": "Même avec 13,2 tirs sur 10 matchs, la marge reste correcte et les cadres reviennent.",
+          "probability": 81
+        },
+        {
+          "market": "Tirs — Elche CF",
+          "pick": "Elche CF — Plus de 8.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : 13,14 tirs attendus et 13,6 par match pour Elche, 12,6 à l'extérieur.",
+          "reasoning": "Même à 12,6 à l'extérieur, la ligne est loin.",
+          "probability": 83
+        },
+        {
+          "market": "Total tirs cadrés",
+          "pick": "Moins de 11.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "82 % : 8,66 tirs cadrés attendus, avec 4,2 et 4,3 par match pour les deux équipes.",
+          "reasoning": "Il faudrait un match très ouvert pour dépasser 11.",
+          "probability": 82
+        },
+        {
+          "market": "Tirs cadrés — Levante",
+          "pick": "Levante — Plus de 2.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "81 % : 4,57 tirs cadrés attendus et 6,5 par match à domicile pour Levante.",
+          "reasoning": "Levante en cadre 4,2 par match, loin des 2,5 nécessaires.",
+          "probability": 81
+        },
+        {
+          "market": "Tirs cadrés — Elche CF",
+          "pick": "Elche CF — Moins de 5.5 tirs cadrés",
+          "verdict": "nuance",
+          "confidence": "moyenne",
+          "explanation": "76 % : 4,09 tirs cadrés attendus, mais Elche en cadre 4,8 par match à l'extérieur.",
+          "reasoning": "La moyenne extérieure se rapproche de la ligne, ce qui explique un pourcentage plus bas que les autres marchés.",
+          "probability": 76
+        }
+      ]
+    },
+    "updatedAt": "2026-11-22T13:59:04.326Z",
+    "createdAt": "2026-11-22T13:59:04.326Z"
+  }
+]

@@ -4,12 +4,13 @@
   "phase": "rodage",
   "nonSurveille": "Non surveillé par l'essai : la boucle des compositions, la boucle des cotes gratuites, et le détail de l'analyse au coup d'envoi (ses échecs ne sont dits que dans la fenêtre du serveur). Coût de la veille (matchs commencés pendant que le PC dormait) : non compté : aucune heure de coup d’envoi lisible sans la base.",
   "couverture": {
-    "minutesObservees": 584,
+    "minutesObservees": 828,
     "minutesDeVeille": 0,
-    "minutesArret": 514,
+    "minutesArret": 593,
     "minutesEnErreur": 0,
-    "tours": 59,
-    "toursReussis": 59
+    "tours": 84,
+    "toursReussis": 84,
+    "minutesNonObservees": 19
   },
   "serveur": {
     "demarrages": [
@@ -20,14 +21,22 @@
         "type": "arret-du-serveur",
         "id": "2026-11-21|arret-du-serveur|18168|07:33:44",
         "empreinteDesCauses": "edbeea176827b15ba94a8367c549d97b5b5412ba"
+      },
+      {
+        "le": "2026-11-21T21:37:12.618Z",
+        "pid": 5456,
+        "commit": "70060819e03a5090f3e89493334fd89b3f709618",
+        "type": "mise-en-service",
+        "id": "2026-11-21|mise-en-service|5456|21:37:12",
+        "empreinteDesCauses": "edbeea176827b15ba94a8367c549d97b5b5412ba"
       }
     ],
     "trous": []
   },
   "passes": {
-    "total": 4,
+    "total": 6,
     "ok": 1,
-    "partielles": 3,
+    "partielles": 5,
     "enEchec": 0,
     "nuit": null,
     "rattrapages": [],
@@ -95,6 +104,36 @@
             "resume": "Feu rouge : 35 contrôles en 5 s sur 1 986 rencontres des 30 derniers jours (le serveur jamais tenu plus de 360 ms d'affilée) — rouge : classement officiel — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, rencontre mal rangée, autres z"
           }
         ]
+      },
+      {
+        "id": "2026-11-21T20:11:26.745Z",
+        "raison": "périodique",
+        "debut": "2026-11-21T20:11:26.745Z",
+        "fin": "2026-11-21T20:15:10.668Z",
+        "dureeS": 224,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "controleQuotidien",
+            "statut": "warn",
+            "resume": "Feu rouge : 35 contrôles en 3,7 s sur 2 018 rencontres des 30 derniers jours (le serveur jamais tenu plus de 310 ms d'affilée) — rouge : buteurs et score, classement officiel — orange : gardiens et score, score du calendrier et des résultats, club deux fois le même jour, rencontre mal rangée, autres"
+          }
+        ]
+      },
+      {
+        "id": "2026-11-21T21:38:12.632Z",
+        "raison": "au démarrage",
+        "debut": "2026-11-21T21:38:12.632Z",
+        "fin": "2026-11-21T21:41:55.526Z",
+        "dureeS": 223,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "controleQuotidien",
+            "statut": "warn",
+            "resume": "Feu rouge : 35 contrôles en 3,9 s sur 2 031 rencontres des 30 derniers jours (le serveur jamais tenu plus de 320 ms d'affilée) — rouge : buteurs et score — orange : gardiens et score, score du calendrier et des résultats, club deux fois le même jour, rencontre mal rangée, classement officiel, autres"
+          }
+        ]
       }
     ]
   },
@@ -104,22 +143,22 @@
     "changees": []
   },
   "controleDuJour": {
-    "releves": "2026-11-21T17:11:21.435Z",
+    "releves": "2026-11-21T21:41:51.504Z",
     "pire": "rouge",
     "rouges": [
-      "classement-officiel"
+      "buteurs-score"
     ],
     "oranges": [
-      "buteurs-score",
       "gardiens-score",
       "score-calendrier",
       "club-deux-fois",
       "mauvaise-competition",
+      "classement-officiel",
       "zeros-non-releves",
       "hors-reperes-buts",
       "hors-reperes-statistiques"
     ],
-    "presentsAuDepart": 77
+    "presentsAuDepart": 74
   },
   "fotmob": {
     "transitions": []
@@ -467,6 +506,161 @@
       "classe": "connue",
       "cause": "classement-officiel",
       "rodage": true
+    },
+    {
+      "id": "2026-11-21|etape-en-alerte|controleQuotidien|20:15:10",
+      "le": "2026-11-21T20:15:10.668Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controleQuotidien",
+      "texte": "controleQuotidien : Feu rouge : 35 contrôles en 3,7 s sur 2 018 rencontres des 30 derniers jours (le serveur jamais tenu plus de 310 ms d'affilée) — rouge : buteurs et score, classement officiel — orange : gardiens et score, score du calendrier et des résultats, club deux fois le même jour, rencontre mal rangée, autres",
+      "details": {
+        "passe": "2026-11-21T20:11:26.745Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "raison": "contrôle Buteurs et score : un constat non reconnu",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-21|controle-couleur|buteurs-score|20:17:45",
+      "le": "2026-11-21T20:17:45.017Z",
+      "type": "controle-couleur",
+      "signal": "S4",
+      "cle": "buteurs-score",
+      "texte": "Contrôle « Buteurs et score » : orange → rouge.",
+      "details": {
+        "de": "orange",
+        "vers": "rouge",
+        "constat": "14 constats, dont : Feyenoord – Excelsior du 21/11/2026 (2-3) — 1 buts crédités aux joueurs (+ 2 csc adverses) pour un score de 2 : buteur en trop"
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-21|constat-nouveau|buteurs-score:impossible:buteurs:2026-11-21-feyenoord-excelsior:home|20:15:06",
+      "le": "2026-11-21T20:15:06.945Z",
+      "type": "constat-nouveau",
+      "signal": "S4",
+      "cle": "buteurs-score:impossible:buteurs:2026-11-21-feyenoord-excelsior:home",
+      "texte": "Constat nouveau (buteurs-score) : Feyenoord – Excelsior du 21/11/2026 (2-3) — 1 buts crédités aux joueurs (+ 2 csc adverses) pour un score de 2 : buteur en trop",
+      "details": {
+        "controle": "buteurs-score",
+        "classe": "rouge",
+        "trouveLe": "2026-11-21T20:15:06.945Z",
+        "league": "Dutch Eredivisie"
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-21|constat-nouveau|classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-6479|20:15:06",
+      "le": "2026-11-21T20:15:06.945Z",
+      "type": "constat-nouveau",
+      "signal": "S4",
+      "cle": "classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-6479",
+      "texte": "Constat nouveau (classement-officiel) : Pisa · classement officiel — Pisa : bilan différent à matchs égaux — officiel 12 J 5V 4N 3D 21-17, magasin 12 J 5V 4N 3D 23-17 : un score faux ?",
+      "details": {
+        "controle": "classement-officiel",
+        "classe": "rouge",
+        "trouveLe": "2026-11-21T20:15:06.945Z",
+        "league": "Serie B - Italy"
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-21|constat-nouveau|classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-8534|20:15:06",
+      "le": "2026-11-21T20:15:06.945Z",
+      "type": "constat-nouveau",
+      "signal": "S4",
+      "cle": "classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-8534",
+      "texte": "Constat nouveau (classement-officiel) : Empoli · classement officiel — Empoli : bilan différent à matchs égaux — officiel 12 J 2V 3N 7D 12-20, magasin 12 J 2V 3N 7D 12-21 : un score faux ?",
+      "details": {
+        "controle": "classement-officiel",
+        "classe": "rouge",
+        "trouveLe": "2026-11-21T20:15:06.945Z",
+        "league": "Serie B - Italy"
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-21|mise-en-service|5456|21:37:12",
+      "le": "2026-11-21T21:37:12.618Z",
+      "type": "mise-en-service",
+      "signal": "S11",
+      "cle": "5456",
+      "texte": "Mise en service : étape 46, mise en service n° 1 (prédiction en direct)",
+      "details": {
+        "pidAvant": 18168,
+        "commitAvant": "1eb5763e358dad6c51ceeb302853ac00860e6127",
+        "commit": "70060819e03a5090f3e89493334fd89b3f709618",
+        "code": "change",
+        "ecartMin": 79,
+        "marque": null,
+        "message": "Étape 46, mise en service n° 1 : la prédiction en direct — la page « Direct », l'encart « En direct » de la page du match et la puce « Direct » des cartes ; probabilités calculées à blanc, aucun pourc",
+        "rapide": false
+      },
+      "classe": "connue",
+      "cause": "mise-en-service",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-21|etape-en-alerte|controleQuotidien|21:41:55",
+      "le": "2026-11-21T21:41:55.526Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controleQuotidien",
+      "texte": "controleQuotidien : Feu rouge : 35 contrôles en 3,9 s sur 2 031 rencontres des 30 derniers jours (le serveur jamais tenu plus de 320 ms d'affilée) — rouge : buteurs et score — orange : gardiens et score, score du calendrier et des résultats, club deux fois le même jour, rencontre mal rangée, classement officiel, autres",
+      "details": {
+        "passe": "2026-11-21T21:38:12.632Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "raison": "contrôle Buteurs et score : un constat non reconnu",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-21|controle-couleur|classement-officiel|21:51:12",
+      "le": "2026-11-21T21:51:12.638Z",
+      "type": "controle-couleur",
+      "signal": "S4",
+      "cle": "classement-officiel",
+      "texte": "Contrôle « Classement officiel » : rouge → orange.",
+      "details": {
+        "de": "rouge",
+        "vers": "orange",
+        "constat": "21 constats, dont : Maccabi Netanya · classement officiel — Maccabi Netanya : bilan différent à matchs égaux — officiel 10 J 4V 4N 2D 16-8, magasin 10 J 3V 5N 2D 14-9 : un score faux ? ; 31 clubs comptent au classement officiel un match en cours ou pas encore enregistré (une information, rien à corriger) — par exemple : Bahia · classement officiel — Bahia : 36 matchs joués au classement officiel, 35 au magasin — match en cours ou pas encore enregistré (Bahia – Coritiba du 21/11/2026) : une information, l’écart se referme quand le match est au magasin."
+      },
+      "classe": "connue",
+      "cause": "classement-officiel",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-21|constat-nouveau|classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-8540|20:15:06",
+      "le": "2026-11-21T20:15:06.945Z",
+      "type": "constat-nouveau",
+      "signal": "S4",
+      "cle": "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-8540",
+      "texte": "Constat nouveau (classement-officiel) : Palermo · classement officiel — Palermo : 13 matchs au magasin pour 12 au classement officiel — 1 rencontre en trop (doublon, ou match annulé par la fédération).",
+      "details": {
+        "controle": "classement-officiel",
+        "classe": "orange",
+        "trouveLe": "2026-11-21T20:15:06.945Z",
+        "league": "Serie B - Italy"
+      },
+      "classe": "connue",
+      "cause": "classement-officiel",
+      "rodage": true
     }
   ],
   "vus": {
@@ -505,7 +699,9 @@
       "2026-11-21T07:34:48.745Z",
       "2026-11-21T11:01:43.668Z",
       "2026-11-21T14:05:21.540Z",
-      "2026-11-21T17:08:33.867Z"
+      "2026-11-21T17:08:33.867Z",
+      "2026-11-21T20:11:26.745Z",
+      "2026-11-21T21:38:12.632Z"
     ],
     "alertes": {
       "audit": "{\"parType\":[\"buteurs\",\"fichiers\",\"gardien\"]}",
@@ -513,7 +709,7 @@
     },
     "controles": {
       "score-football-data": "vert",
-      "buteurs-score": "orange",
+      "buteurs-score": "rouge",
       "gardiens-score": "orange",
       "score-calendrier": "orange",
       "score-futur": "vert",
@@ -527,7 +723,7 @@
       "rencontres-sans-identifiant": "vert",
       "chiffres-equipe": "vert",
       "chiffres-joueurs": "vert",
-      "classement-officiel": "rouge",
+      "classement-officiel": "orange",
       "jaunes-non-releves": "vert",
       "corners-non-releves": "vert",
       "tirs-non-releves": "vert",
@@ -557,7 +753,11 @@
       "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-9887",
       "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-6266",
       "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-7801",
-      "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-208932"
+      "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-208932",
+      "buteurs-score:impossible:buteurs:2026-11-21-feyenoord-excelsior:home",
+      "classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-6479",
+      "classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-8534",
+      "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-8540"
     ],
     "fotmob": "ok",
     "sauvegarde": "2026-11-21T07:54:08.367Z",
@@ -602,6 +802,9 @@
       ],
       "hors-reperes": [
         "2026-11-20"
+      ],
+      "mise-en-service": [
+        "2026-11-21"
       ]
     },
     "fotmobPanne": null,

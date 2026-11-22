@@ -1,0 +1,561 @@
+{
+  "version": 1,
+  "jour": "2026-11-22",
+  "phase": "rodage",
+  "nonSurveille": "Non surveillé par l'essai : la boucle des compositions, la boucle des cotes gratuites, et le détail de l'analyse au coup d'envoi (ses échecs ne sont dits que dans la fenêtre du serveur). Coût de la veille (matchs commencés pendant que le PC dormait) : non compté : aucune heure de coup d’envoi lisible sans la base.",
+  "couverture": {
+    "minutesObservees": 420,
+    "minutesDeVeille": 0,
+    "minutesArret": 0,
+    "minutesEnErreur": 0,
+    "tours": 43,
+    "toursReussis": 43
+  },
+  "serveur": {
+    "demarrages": [],
+    "trous": [
+      {
+        "de": "2026-11-21T22:41:23.493Z",
+        "a": "2026-11-22T13:52:55.057Z",
+        "minutes": 912,
+        "cause": null,
+        "id": "2026-11-22|trou|5456|13:52:55"
+      }
+    ]
+  },
+  "passes": {
+    "total": 3,
+    "ok": 1,
+    "partielles": 2,
+    "enEchec": 0,
+    "nuit": null,
+    "rattrapages": [
+      {
+        "id": "2026-11-22T13:53:00.049Z",
+        "dureeS": 3119,
+        "apresUnTrouDe": 912
+      }
+    ],
+    "liste": [
+      {
+        "id": "2026-11-22T13:53:00.049Z",
+        "raison": "périodique",
+        "debut": "2026-11-22T13:53:00.049Z",
+        "fin": "2026-11-22T14:44:59.078Z",
+        "dureeS": 3119,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "controle",
+            "statut": "warn",
+            "resume": "Depuis le 2026-10-23 : 1 768 rencontres contrôlées, 17 anomalies (buteurs : 15, gardien : 1, fichiers : 1). Rien n'est corrigé automatiquement."
+          },
+          {
+            "cle": "carnetSante",
+            "statut": "warn",
+            "resume": "275 rencontres nouvelles ou modifiées contrôlées, 44 saisons recomptées en 17,5 s (le serveur jamais tenu plus de 200 ms d'affilée) : 4 351 anomalies au carnet (rencontre en double : 9, mauvaise compétition : 1, match manquant : 48, chiffre impossible : 258, zéro « non relevé » : 653, club ou joueur"
+          },
+          {
+            "cle": "simulationSaisons",
+            "statut": "warn",
+            "resume": "Fins de saison : 19 championnats simulés 10 000 fois, 29 non calculés (Championship : table et magasin en désaccord : Blackburn Rovers (table 16, magasin 15), Burnley (table 16 ; La Liga - Spain : table et magasin en désaccord : Barcelona (table 13, magasin 12), Villarreal (table 13, ma ; La Liga 2 "
+          },
+          {
+            "cle": "controleQuotidien",
+            "statut": "warn",
+            "resume": "Feu rouge : 35 contrôles en 3,2 s sur 2 024 rencontres des 30 derniers jours (le serveur jamais tenu plus de 203 ms d'affilée) — rouge : buteurs et score — orange : gardiens et score, score du calendrier et des résultats, club deux fois le même jour, rencontre mal rangée, classement officiel, autres"
+          }
+        ]
+      },
+      {
+        "id": "2026-11-22T17:44:59.210Z",
+        "raison": "périodique",
+        "debut": "2026-11-22T17:44:59.210Z",
+        "fin": "2026-11-22T17:46:51.006Z",
+        "dureeS": 112,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "controleQuotidien",
+            "statut": "warn",
+            "resume": "Feu rouge : 35 contrôles en 3,3 s sur 2 074 rencontres des 30 derniers jours (le serveur jamais tenu plus de 343 ms d'affilée) — rouge : buteurs et score — orange : gardiens et score, score du calendrier et des résultats, club deux fois le même jour, rencontre mal rangée, classement officiel, autres"
+          }
+        ]
+      },
+      {
+        "id": "2026-11-22T20:46:51.104Z",
+        "raison": "périodique",
+        "debut": "2026-11-22T20:46:51.104Z",
+        "fin": "2026-11-22T20:48:39.181Z",
+        "dureeS": 108,
+        "issue": "ok",
+        "etapes": []
+      }
+    ]
+  },
+  "alertes": {
+    "posees": [],
+    "levees": [],
+    "changees": [
+      "simulationSaisons"
+    ]
+  },
+  "controleDuJour": {
+    "releves": "2026-11-22T20:48:35.303Z",
+    "pire": "orange",
+    "rouges": [],
+    "oranges": [
+      "buteurs-score",
+      "gardiens-score",
+      "score-calendrier",
+      "club-deux-fois",
+      "mauvaise-competition",
+      "classement-officiel",
+      "zeros-non-releves",
+      "hors-reperes-buts",
+      "hors-reperes-statistiques"
+    ],
+    "presentsAuDepart": 73
+  },
+  "fotmob": {
+    "transitions": []
+  },
+  "sauvegarde": {
+    "le": "2026-11-22T14:37:16.044Z",
+    "ok": true,
+    "rencontres": 63281,
+    "derniereDate": "2026-11-22",
+    "octets": 577500195
+  },
+  "restauration": null,
+  "ia": {
+    "appels": 150,
+    "ok": 150,
+    "echecs": 0,
+    "tokens": 1982544
+  },
+  "direct": {
+    "suspensions": 0,
+    "minutesSuspendu": 0
+  },
+  "instantaneDuDepart": null,
+  "evenements": [
+    {
+      "id": "2026-11-22|trou|5456|13:52:55",
+      "le": "2026-11-22T13:52:55.057Z",
+      "type": "trou",
+      "signal": "S10",
+      "cle": "5456",
+      "texte": "aucune veille du PC pendant le trou de 912 min",
+      "details": {
+        "de": "2026-11-21T22:41:23.493Z",
+        "a": "2026-11-22T13:52:55.057Z",
+        "minutes": 912,
+        "minutesDeVeille": 0,
+        "pistes": [
+          "fenêtre du serveur figée ?",
+          "fil du serveur bloqué par un calcul ?"
+        ]
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-22|sauvegarde|sauvegarde|14:37:16",
+      "le": "2026-11-22T14:37:16.044Z",
+      "type": "sauvegarde",
+      "signal": "S7",
+      "cle": "sauvegarde",
+      "texte": "Sauvegarde faite (63281 rencontres).",
+      "details": {
+        "le": "2026-11-22T14:37:16.044Z",
+        "ok": true,
+        "rencontres": 63281,
+        "derniereDate": "2026-11-22",
+        "octets": 577500195
+      },
+      "classe": "info",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-22|etape-en-alerte|controle|14:44:59",
+      "le": "2026-11-22T14:44:59.078Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controle",
+      "texte": "controle : Depuis le 2026-10-23 : 1 768 rencontres contrôlées, 17 anomalies (buteurs : 15, gardien : 1, fichiers : 1). Rien n'est corrigé automatiquement.",
+      "details": {
+        "passe": "2026-11-22T13:53:00.049Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "audit-buteurs-gardiens",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-22|etape-en-alerte|carnetSante|14:44:59",
+      "le": "2026-11-22T14:44:59.078Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "carnetSante",
+      "texte": "carnetSante : 275 rencontres nouvelles ou modifiées contrôlées, 44 saisons recomptées en 17,5 s (le serveur jamais tenu plus de 200 ms d'affilée) : 4 351 anomalies au carnet (rencontre en double : 9, mauvaise compétition : 1, match manquant : 48, chiffre impossible : 258, zéro « non relevé » : 653, club ou joueur",
+      "details": {
+        "passe": "2026-11-22T13:53:00.049Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-22|etape-en-alerte|simulationSaisons|14:44:59",
+      "le": "2026-11-22T14:44:59.078Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "simulationSaisons",
+      "texte": "simulationSaisons : Fins de saison : 19 championnats simulés 10 000 fois, 29 non calculés (Championship : table et magasin en désaccord : Blackburn Rovers (table 16, magasin 15), Burnley (table 16 ; La Liga - Spain : table et magasin en désaccord : Barcelona (table 13, magasin 12), Villarreal (table 13, ma ; La Liga 2 ",
+      "details": {
+        "passe": "2026-11-22T13:53:00.049Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "calendriers-incomplets",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-22|etape-en-alerte|controleQuotidien|14:44:59",
+      "le": "2026-11-22T14:44:59.078Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controleQuotidien",
+      "texte": "controleQuotidien : Feu rouge : 35 contrôles en 3,2 s sur 2 024 rencontres des 30 derniers jours (le serveur jamais tenu plus de 203 ms d'affilée) — rouge : buteurs et score — orange : gardiens et score, score du calendrier et des résultats, club deux fois le même jour, rencontre mal rangée, classement officiel, autres",
+      "details": {
+        "passe": "2026-11-22T13:53:00.049Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "raison": "contrôle Buteurs et score : un constat non reconnu",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-22|alerte-changee|simulationSaisons|14:52:57",
+      "le": "2026-11-22T14:52:57.757Z",
+      "type": "alerte-changee",
+      "signal": "S3",
+      "cle": "simulationSaisons",
+      "texte": "Alerte « simulationSaisons » : son contenu a changé.",
+      "details": {
+        "signature": "{\"inconnus\":[\"{\\\"league\\\":\\\"Eliteserien - Norway\\\",\\\"noms\\\":[\\\"Bryne\\\",\\\"Odds Ballklubb\\\"]}\",\"{\\\"league\\\":\\\"MLS\\\",\\\"noms\\\":[\\\"Orlando City/FC Cincinnati\\\",\\\"Seattle Sounders FC/Real Salt Lake\\\"]}\"]}",
+        "avant": "{\"inconnus\":[\"{\\\"league\\\":\\\"Allsvenskan - Sweden\\\",\\\"noms\\\":[\\\"Varbergs BoIS FC\\\",\\\"Östersunds FK\\\"]}\",\"{\\\"league\\\":\\\"Eliteserien - Norway\\\",\\\"noms\\\":[\\\"Bryne\\\",\\\"Odds Ballklubb\\\"]}\",\"{\\\"league\\\":\\\"MLS\\\",\\\"noms\\\":[\\\"Orlando City/FC Cincinnati\\\",\\\"Seattle Sounders FC/Real Salt Lake\\\"]}\"]}",
+        "nombres": {
+          "inconnus": 2
+        }
+      },
+      "classe": "connue",
+      "cause": "calendriers-incomplets",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-22|constat-nouveau|buteurs-score:impossible:buteurs:2026-11-21-estoril-felgueiras-1932:home|14:44:55",
+      "le": "2026-11-22T14:44:55.825Z",
+      "type": "constat-nouveau",
+      "signal": "S4",
+      "cle": "buteurs-score:impossible:buteurs:2026-11-21-estoril-felgueiras-1932:home",
+      "texte": "Constat nouveau (buteurs-score) : Estoril – Felgueiras 1932 du 21/11/2026 (2-3) — buteurs absents ou incomplets chez la source : Estoril marque 2 buts, aucun n’a de buteur",
+      "details": {
+        "controle": "buteurs-score",
+        "classe": "orange",
+        "trouveLe": "2026-11-22T14:44:55.825Z",
+        "league": "Taça de Portugal"
+      },
+      "classe": "connue",
+      "cause": "audit-buteurs-gardiens",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-22|constat-nouveau|zeros-non-releves:zero:zeros:2026-11-21-carabobo-fc-portuguesa-fc|14:44:55",
+      "le": "2026-11-22T14:44:55.825Z",
+      "type": "constat-nouveau",
+      "signal": "S4",
+      "cle": "zeros-non-releves:zero:zeros:2026-11-21-carabobo-fc-portuguesa-fc",
+      "texte": "Constat nouveau (zeros-non-releves) : Carabobo FC – Portuguesa FC du 21/11/2026 (1-1) — Carabobo FC : dégagements, interceptions, centres, longs ballons à 0 ; tirs dans et hors de la surface à 0 pour 18 tirs — Portuguesa FC : dégagements,",
+      "details": {
+        "controle": "zeros-non-releves",
+        "classe": "orange",
+        "trouveLe": "2026-11-22T14:44:55.825Z",
+        "league": "Primera División - Venezuela"
+      },
+      "classe": "connue",
+      "cause": "chiffres-non-publies",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-22|constat-nouveau|zeros-non-releves:zero:zeros:2026-11-21-deportivo-tachira-caracas|14:44:55",
+      "le": "2026-11-22T14:44:55.825Z",
+      "type": "constat-nouveau",
+      "signal": "S4",
+      "cle": "zeros-non-releves:zero:zeros:2026-11-21-deportivo-tachira-caracas",
+      "texte": "Constat nouveau (zeros-non-releves) : Deportivo Táchira – Caracas du 21/11/2026 (2-1) — Deportivo Táchira : dégagements, interceptions, centres, longs ballons à 0 ; tirs dans et hors de la surface à 0 pour 12 tirs — Caracas : dégagements,",
+      "details": {
+        "controle": "zeros-non-releves",
+        "classe": "orange",
+        "trouveLe": "2026-11-22T14:44:55.825Z",
+        "league": "Primera División - Venezuela"
+      },
+      "classe": "connue",
+      "cause": "chiffres-non-publies",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-22|constat-nouveau|hors-reperes-buts:Dutch Eredivisie|2026-27|avantage_terrain|14:44:55",
+      "le": "2026-11-22T14:44:55.825Z",
+      "type": "constat-nouveau",
+      "signal": "S4",
+      "cle": "hors-reperes-buts:Dutch Eredivisie|2026-27|avantage_terrain",
+      "texte": "Constat nouveau (hors-reperes-buts) : Dutch Eredivisie 2026-27 : avantage du terrain (buts) -0,25, attendu 0,36 (−3,0 écarts normaux, sur 114 matchs) — à regarder : le jeu évolue.",
+      "details": {
+        "controle": "hors-reperes-buts",
+        "classe": "orange",
+        "trouveLe": "2026-11-22T14:44:55.825Z",
+        "league": "Dutch Eredivisie"
+      },
+      "classe": "connue",
+      "cause": "hors-reperes",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-22|etape-en-alerte|controleQuotidien|17:46:51",
+      "le": "2026-11-22T17:46:51.006Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controleQuotidien",
+      "texte": "controleQuotidien : Feu rouge : 35 contrôles en 3,3 s sur 2 074 rencontres des 30 derniers jours (le serveur jamais tenu plus de 343 ms d'affilée) — rouge : buteurs et score — orange : gardiens et score, score du calendrier et des résultats, club deux fois le même jour, rencontre mal rangée, classement officiel, autres",
+      "details": {
+        "passe": "2026-11-22T17:44:59.210Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "raison": "contrôle Buteurs et score : un constat non reconnu",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-22|controle-couleur|buteurs-score|20:53:00",
+      "le": "2026-11-22T20:53:00.220Z",
+      "type": "controle-couleur",
+      "signal": "S4",
+      "cle": "buteurs-score",
+      "texte": "Contrôle « Buteurs et score » : rouge → orange.",
+      "details": {
+        "de": "rouge",
+        "vers": "orange",
+        "constat": "15 constats, dont : Feyenoord – Excelsior du 21/11/2026 (2-3) — 1 buts crédités aux joueurs (+ 2 csc adverses) pour un score de 2 : buteur en trop"
+      },
+      "classe": "connue",
+      "cause": "audit-buteurs-gardiens",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-21|constat-nouveau|classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-6479|21:41:51",
+      "le": "2026-11-21T21:41:51.504Z",
+      "type": "constat-nouveau",
+      "signal": "S4",
+      "cle": "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-6479",
+      "texte": "Constat nouveau (classement-officiel) : Pisa · classement officiel — Pisa : 13 matchs au magasin pour 12 au classement officiel — 1 rencontre en trop (doublon, ou match annulé par la fédération).",
+      "details": {
+        "controle": "classement-officiel",
+        "classe": "orange",
+        "trouveLe": "2026-11-21T21:41:51.504Z",
+        "league": "Serie B - Italy"
+      },
+      "classe": "connue",
+      "cause": "classement-officiel",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-21|constat-nouveau|classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-8534|21:41:51",
+      "le": "2026-11-21T21:41:51.504Z",
+      "type": "constat-nouveau",
+      "signal": "S4",
+      "cle": "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-8534",
+      "texte": "Constat nouveau (classement-officiel) : Empoli · classement officiel — Empoli : 13 matchs au magasin pour 12 au classement officiel — 1 rencontre en trop (doublon, ou match annulé par la fédération).",
+      "details": {
+        "controle": "classement-officiel",
+        "classe": "orange",
+        "trouveLe": "2026-11-21T21:41:51.504Z",
+        "league": "Serie B - Italy"
+      },
+      "classe": "connue",
+      "cause": "classement-officiel",
+      "rodage": true
+    }
+  ],
+  "vus": {
+    "passes": [
+      "2026-11-15T21:02:28.565Z",
+      "2026-11-16T06:20:21.080Z",
+      "2026-11-16T11:07:18.037Z",
+      "2026-11-16T14:09:12.550Z",
+      "2026-11-16T17:10:12.011Z",
+      "2026-11-16T20:11:39.196Z",
+      "2026-11-16T23:14:51.725Z",
+      "2026-11-17T02:36:50.369Z",
+      "2026-11-17T05:39:05.493Z",
+      "2026-11-17T08:41:44.023Z",
+      "2026-11-17T11:42:34.417Z",
+      "2026-11-17T14:44:05.856Z",
+      "2026-11-17T17:44:54.473Z",
+      "2026-11-17T20:45:48.898Z",
+      "2026-11-17T23:46:41.389Z",
+      "2026-11-18T03:09:45.485Z",
+      "2026-11-18T06:12:10.247Z",
+      "2026-11-18T09:15:36.393Z",
+      "2026-11-18T11:08:04.425Z",
+      "2026-11-18T11:38:51.966Z",
+      "2026-11-18T13:21:00.375Z",
+      "2026-11-18T16:25:03.767Z",
+      "2026-11-18T19:26:38.533Z",
+      "2026-11-18T22:36:03.760Z",
+      "2026-11-19T09:02:25.135Z",
+      "2026-11-19T12:32:15.573Z",
+      "2026-11-19T15:45:19.913Z",
+      "2026-11-19T18:57:41.930Z",
+      "2026-11-19T22:07:07.578Z",
+      "2026-11-20T02:39:13.943Z",
+      "2026-11-20T14:30:39.554Z",
+      "2026-11-21T07:34:48.745Z",
+      "2026-11-21T11:01:43.668Z",
+      "2026-11-21T14:05:21.540Z",
+      "2026-11-21T17:08:33.867Z",
+      "2026-11-21T20:11:26.745Z",
+      "2026-11-21T21:38:12.632Z",
+      "2026-11-22T13:53:00.049Z",
+      "2026-11-22T17:44:59.210Z",
+      "2026-11-22T20:46:51.104Z"
+    ],
+    "alertes": {
+      "audit": "{\"parType\":[\"buteurs\",\"fichiers\",\"gardien\"]}",
+      "simulationSaisons": "{\"inconnus\":[\"{\\\"league\\\":\\\"Eliteserien - Norway\\\",\\\"noms\\\":[\\\"Bryne\\\",\\\"Odds Ballklubb\\\"]}\",\"{\\\"league\\\":\\\"MLS\\\",\\\"noms\\\":[\\\"Orlando City/FC Cincinnati\\\",\\\"Seattle Sounders FC/Real Salt Lake\\\"]}\"]}"
+    },
+    "controles": {
+      "score-football-data": "vert",
+      "buteurs-score": "orange",
+      "gardiens-score": "orange",
+      "score-calendrier": "orange",
+      "score-futur": "vert",
+      "score-absent": "vert",
+      "doublon-meme-sens": "vert",
+      "doublon-sens-inverse": "vert",
+      "doublon-meme-identifiant": "vert",
+      "club-deux-fois": "orange",
+      "mauvaise-competition": "orange",
+      "clubs-sans-identifiant": "vert",
+      "rencontres-sans-identifiant": "vert",
+      "chiffres-equipe": "vert",
+      "chiffres-joueurs": "vert",
+      "classement-officiel": "orange",
+      "jaunes-non-releves": "vert",
+      "corners-non-releves": "vert",
+      "tirs-non-releves": "vert",
+      "zeros-non-releves": "orange",
+      "rencontres-manquantes": "vert",
+      "feuilles-en-retard": "vert",
+      "magasin-a-jour": "vert",
+      "hors-reperes-buts": "orange",
+      "hors-reperes-statistiques": "orange",
+      "hors-reperes-cartons": "vert",
+      "match-aberrant": "vert",
+      "source-fotmob": "vert",
+      "source-football-data": "vert",
+      "source-odds-api": "vert",
+      "source-api-football": "vert",
+      "source-claude": "vert",
+      "source-cotes-gratuites": "vert"
+    },
+    "constats": [
+      "classement-officiel:manquant:classement-matchs:Serie B - Italy|2026|fotmob-9877",
+      "classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-9887",
+      "classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-6266",
+      "classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-7801",
+      "classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-208932",
+      "classement-officiel:manquant:classement-matchs:Ligue 1 - France|2026|fotmob-9847",
+      "classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-8540",
+      "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-9887",
+      "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-6266",
+      "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-7801",
+      "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-208932",
+      "buteurs-score:impossible:buteurs:2026-11-21-feyenoord-excelsior:home",
+      "classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-6479",
+      "classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-8534",
+      "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-8540",
+      "buteurs-score:impossible:buteurs:2026-11-21-estoril-felgueiras-1932:home",
+      "zeros-non-releves:zero:zeros:2026-11-21-carabobo-fc-portuguesa-fc",
+      "zeros-non-releves:zero:zeros:2026-11-21-deportivo-tachira-caracas",
+      "hors-reperes-buts:Dutch Eredivisie|2026-27|avantage_terrain",
+      "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-6479",
+      "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-8534"
+    ],
+    "fotmob": "ok",
+    "sauvegarde": "2026-11-22T14:37:16.044Z",
+    "restauration": "2026-11-16T23:31:41.234Z",
+    "direct": null,
+    "ia": {},
+    "sansPasse": false,
+    "sansSauvegarde": false,
+    "premierJour": "2026-11-20",
+    "joursConnus": {
+      "premier-demarrage-du-journal": [
+        "2026-11-20"
+      ],
+      "audit-buteurs-gardiens": [
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-22"
+      ],
+      "calendriers-incomplets": [
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-22"
+      ],
+      "controle-du-jour": [
+        "2026-11-16",
+        "2026-11-17"
+      ],
+      "ia-echec-isole": [
+        "2026-11-17"
+      ],
+      "classement-officiel": [
+        "2026-11-20",
+        "2026-11-21"
+      ],
+      "chiffres-non-publies": [
+        "2026-11-20",
+        "2026-11-22"
+      ],
+      "hors-reperes": [
+        "2026-11-20",
+        "2026-11-22"
+      ],
+      "mise-en-service": [
+        "2026-11-21"
+      ]
+    },
+    "fotmobPanne": null,
+    "depassements": {}
+  }
+}
