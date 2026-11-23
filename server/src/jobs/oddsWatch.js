@@ -27,6 +27,7 @@
  */
 
 import { fetchMatchesByDate, FOTMOB_LEAGUES, leagueKeyMatches } from '../data/providers/fotMobProvider.js';
+import { intituleDeLaTable } from '../data/providers/intitulesFotmob.js';
 import { collectUpcomingOdds, collectLiveOdds, backfillOdds, finalizeOdds } from '../data/providers/freeOdds.js';
 import { invalidateFreeMarketOdds } from '../data/freeMarketOdds.js';
 import { isRefreshRunning } from '../data/providers/refreshLock.js';
@@ -44,8 +45,15 @@ const DUREE_DIRECT_MIN = 150;
 
 const iso = (t) => new Date(t).toISOString().slice(0, 10);
 const LIBELLES = Object.entries(FOTMOB_LEAGUES);
-/** « ENG|Premier League » -> « EPL » : la compétition du magasin, ou null si elle n'est pas suivie. */
-const libelleDe = (leagueKey) => LIBELLES.find(([, matcher]) => leagueKeyMatches(matcher, leagueKey))?.[0] ?? null;
+/**
+ * « ENG|Premier League » -> « EPL » : la compétition du magasin, ou null si elle n'est pas suivie. Un intitulé renommé
+ * chez FotMob est d'abord traduit vers celui de la table (« TUR|Süper Lig » depuis le 08/11/2026, phases finales d'Argentine
+ * et de Liga MX : intitulesFotmob.js).
+ */
+const libelleDe = (leagueKey) => {
+  const intitule = intituleDeLaTable(leagueKey);
+  return LIBELLES.find(([, matcher]) => leagueKeyMatches(matcher, intitule))?.[0] ?? null;
+};
 
 let timer = null;
 let enCours = false;

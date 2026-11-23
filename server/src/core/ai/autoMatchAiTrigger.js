@@ -45,7 +45,8 @@ import { listAdaptedMatches } from '../../data/matchSources.js';
 import { enrichMatchWithRealAverages } from '../../data/providers/matchEnrichment.js';
 import { recentlyFinished, openDb } from '../../data/db/matchStatsDb.js';
 import { clubDuMagasin } from '../../data/db/oddsProfileRead.js';
-import { fetchMatchesByDate } from '../../data/providers/fotMobProvider.js';
+import { fetchMatchesByDate, FOTMOB_LEAGUES, leagueKeyMatches } from '../../data/providers/fotMobProvider.js';
+import { intituleDeLaTable } from '../../data/providers/intitulesFotmob.js';
 import { teamNamesLikelyMatch } from '../../utils/teamNameMatch.js';
 import { getByMatchId, findPreMatchAnalysisByTeams, listAll } from '../../data/repositories/matchAiAnalysisRepository.js';
 import { enregistrerUsage, jourParis, finDuJourParis } from '../../data/repositories/autoAiAnalysisRepository.js';
@@ -363,6 +364,67 @@ const normaliser = (nom) =>
     .trim();
 const isoJour = (ms) => new Date(ms).toISOString().slice(0, 10);
 
+/** Un match coté et son match FotMob : coup d'envoi à 6 h près au plus (idFotmobDUnMatchCote). */
+const ECART_COTE_FOTMOB_MS = 6 * 3_600_000;
+/** Un seul club connu : le match FotMob retenu a son coup d'envoi à 30 min près (l'unicité du club reste comptée sur 6 h). */
+const ECART_UN_SEUL_CLUB_MS = 30 * 60_000;
+/** L'identifiant FotMob d'un match coté n'est cherché qu'à l'approche du coup d'envoi : le seul moment où il sert. */
+const RECHERCHE_FOTMOB_AVANT_MS = (COUP_D_ENVOI_FENETRE_MIN + 15) * 60_000;
+
+/**
+ * L'IDENTIFIANT FOTMOB D'UN MATCH COTÉ (21/11/2026). Un match de The Odds API n'a pas d'identifiant FotMob : sa composition
+ * était cherchée par les noms (resolveFotMobMatchId, lineupPrefetch.js), qui exigent le MÊME nom pour l'équipe qui se
+ * déplace — « FC Baltika Kaliningrad » (The Odds API) s'écrit « Baltika » chez FotMob. La page du match restait
+ * introuvable : l'analyse attendait jusqu'à 30 min du coup d'envoi, puis lisait la dernière composition alignée au lieu de
+ * celle publiée (6 des 19 analyses au coup d'envoi de matchs cotés du 18 au 21/11/2026, dont Orenburg – Baltika et
+ * Gençlerbirliği – Gaziantep). Ici, dans la liste FotMob déjà lue, par les IDENTIFIANTS des clubs (annuaire du magasin,
+ * clubDuMagasin) — jamais le rapprocheur souple —, coup d'envoi à 6 h près, un seul candidat :
+ *  - les deux clubs connus de l'annuaire : les deux identifiants, chacun à sa place (domicile, extérieur) ; deux clubs
+ *    connus qui ne concordent pas avec FotMob = null (rien n'est deviné) ;
+ *  - un seul connu, l'autre nom inconnu de l'annuaire (« Stade Lavallois » chez The Odds API, « Laval » chez FotMob ;
+ *    « Amed SK » / « Amed Sportif », 21/11/2026) : ce club à SA place, vu une seule fois dans les 6 h — un club ne joue
+ *    pas deux matchs à 6 h d'écart —, ET dans la compétition du match coté (FOTMOB_LEAGUES, leagueKeyMatches : ni une
+ *    autre compétition, ni une compétition féminine, de jeunes ou de réserves), ET à 30 min près. Avec un seul club, tout
+ *    repose sur l'annuaire, qui peut rendre un homonyme d'une autre compétition (« Everton » du Chili lu comme celui de
+ *    l'EPL, s'il n'y est connu que sous ce nom) : la compétition et l'heure serrée l'écartent. Vu deux fois, de l'autre
+ *    côté, dans une autre compétition, une compétition absente de la table, à plus de 30 min : null. Un intitulé
+ *    renommé chez FotMob est traduit vers celui de la table avant la comparaison (« TUR|Süper Lig » depuis le
+ *    08/11/2026 : Amed SK – Çaykur Rizespor ; phases finales d'Argentine et de Liga MX : intitulesFotmob.js).
+ * Un même match lu deux fois (les listes de deux jours se recouvrent) ne compte qu'une fois.
+ * `null` (la recherche par les noms reprend, rien ne change) si aucun des deux clubs n'est connu, si aucun match ou
+ * plusieurs conviennent, ou sur une erreur. `club` : injectable pour les essais.
+ */
+export function idFotmobDUnMatchCote(m, kickoffMs, listeFotmob, database, { club = clubDuMagasin } = {}) {
+  try {
+    if (!Number.isFinite(kickoffMs)) return null;
+    const homeId = club(m?.home, m?.league ?? null, database) || null;
+    const awayId = club(m?.away, m?.league ?? null, database) || null;
+    if ((!homeId && !awayId) || homeId === awayId) return null;
+    const vus = new Set();
+    const proches = (Array.isArray(listeFotmob) ? listeFotmob : []).filter((f) => {
+      if (!f || !(Math.abs(Date.parse(f.kickoff) - kickoffMs) <= ECART_COTE_FOTMOB_MS)) return false;
+      if (f.matchId === null || f.matchId === undefined || f.matchId === '') return true;
+      const cle = String(f.matchId);
+      if (vus.has(cle)) return false;
+      vus.add(cle);
+      return true;
+    });
+    let candidats;
+    if (homeId && awayId) candidats = proches.filter((f) => f.homeId === homeId && f.awayId === awayId);
+    else {
+      const connu = homeId ?? awayId;
+      if (proches.filter((f) => f.homeId === connu || f.awayId === connu).length !== 1) return null;
+      const competition = FOTMOB_LEAGUES[m?.league] ?? null;
+      candidats = proches.filter((f) => (homeId ? f.homeId === homeId : f.awayId === awayId)
+        && leagueKeyMatches(competition, intituleDeLaTable(f.leagueKey))
+        && Math.abs(Date.parse(f.kickoff) - kickoffMs) <= ECART_UN_SEUL_CLUB_MS);
+    }
+    return candidats.length === 1 && candidats[0].matchId ? String(candidats[0].matchId) : null;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Les matchs suivis avec leur VRAI coup d'envoi. Un match coté porte celui de
  * The Odds API ; un match du calendrier ne connaît que son jour — l'adaptateur
@@ -391,7 +453,8 @@ async function matchsAvecCoupDEnvoi(maintenant = Date.now()) {
   for (const m of listAdaptedMatches('odds-api', 10000)) {
     if (!String(m.matchId ?? '').startsWith('cal-')) {
       const t = Date.parse(m.commenceTime ?? '');
-      if (Number.isFinite(t) && t > maintenant) resultat.push({ m, kickoff: t, fotmobMatchId: null });
+      // 21/11/2026 : son identifiant FotMob, par les identifiants des deux clubs (idFotmobDUnMatchCote), à l'approche du coup d'envoi.
+      if (Number.isFinite(t) && t > maintenant) resultat.push({ m, kickoff: t, fotmobMatchId: t - maintenant <= RECHERCHE_FOTMOB_AVANT_MS ? idFotmobDUnMatchCote(m, t, fotmob, database) : null });
       continue;
     }
     const jourCalendrier = String(m.commenceTime ?? '').slice(0, 10);
@@ -429,6 +492,16 @@ function faiteAuCoupDEnvoi(entree, kickoffMs) {
   return kickoffMs - Date.parse(entree.analysedAt ?? 0) <= (COUP_D_ENVOI_FENETRE_MIN + 15) * 60_000;
 }
 
+/**
+ * Le coup d'envoi est-il encore à plus de 3 min (COUP_D_ENVOI_TROP_TARD_MIN) ? Revu quand vient le tour de chaque match,
+ * puis juste avant chaque appel à Claude (21/11/2026) : la liste de la passe a été faite plus tôt, et le PC a pu dormir
+ * entre-temps. Une heure illisible : non.
+ */
+function encoreAvantLeCoupDEnvoi(kickoffMs, maintenantMs) {
+  if (!Number.isFinite(kickoffMs) || !Number.isFinite(maintenantMs)) return false;
+  return kickoffMs - maintenantMs > COUP_D_ENVOI_TROP_TARD_MIN * 60_000;
+}
+
 /** La composition a-t-elle changé depuis l'analyse ? (relue par la boucle des compositions, sans appel réseau) */
 function compositionChangee(entree) {
   const instantane = entree.lineupSnapshot;
@@ -463,10 +536,15 @@ function reprisePermise(entree, politique) {
  * après un changement de onze seulement si au moins deux titulaires
  * habituels changent (`reprisesEvitees` sinon) — et les favoris d'abord.
  *
- * @returns {{ ok, failed, candidates, enAttente, avecCompo, reprises, reprisesEvitees, laisses, samples, interrompu, mode, raisonMode }}
+ * `tropTard` (21/11/2026) : les matchs laissés parce que leur coup d'envoi était à moins de 3 min, ou passé, à l'une des
+ * revues de l'heure (encoreAvantLeCoupDEnvoi) : quand vient leur tour, après la composition, après le moteur, et en
+ * dernier juste avant l'appel à Claude (runPreMatchAnalysis, `avantLAppel`). Un match n'y est compté qu'une fois ; le
+ * gel des pronostics n'est fait, lui aussi, qu'avant le coup d'envoi.
+ *
+ * @returns {{ ok, failed, candidates, enAttente, avecCompo, reprises, reprisesEvitees, laisses, tropTard, samples, interrompu, mode, raisonMode }}
  */
 export async function runKickoffPreMatchAnalyses({ limit }) {
-  const bilan = { ok: 0, failed: 0, candidates: 0, enAttente: 0, avecCompo: 0, reprises: 0, reprisesEvitees: 0, laisses: 0, samples: [], interrompu: false };
+  const bilan = { ok: 0, failed: 0, candidates: 0, enAttente: 0, avecCompo: 0, reprises: 0, reprisesEvitees: 0, laisses: 0, tropTard: 0, samples: [], interrompu: false };
   if (!isClaudeCodeAuthenticated()) return { ...bilan, nonConfigure: true };
 
   const budget = modeBudget();
@@ -478,25 +556,39 @@ export async function runKickoffPreMatchAnalyses({ limit }) {
     if (faiteAuCoupDEnvoiPourCeMatch(entree, m, kickoff)) {
       if (compositionChangee(entree)) {
         const { reprendre } = reprisePermise(entree, budget.politique);
-        if (reprendre) aFaire.push({ m, minutes, fotmobMatchId, reprise: true });
+        if (reprendre) aFaire.push({ m, minutes, fotmobMatchId, kickoff, reprise: true });
         // Comptée une fois par match et par composition, même si la boucle repasse.
         else if (noterEffetEconome('reprise', `${m.matchId}|${derniereCompositionConnue(entree.lineupSnapshot?.fotmobMatchId)?.signature ?? ''}`)) bilan.reprisesEvitees++;
       }
       continue;
     }
-    aFaire.push({ m, minutes, fotmobMatchId, reprise: false });
+    aFaire.push({ m, minutes, fotmobMatchId, kickoff, reprise: false });
   }
   if (budget.politique.favorisDabord) aFaire = favorisDabord(aFaire, ({ m }) => ({ home: m.home, away: m.away, league: m.league }));
   bilan.candidates = aFaire.length;
 
   let pannes = 0;
-  for (const { m, minutes, fotmobMatchId, reprise } of aFaire) {
+  for (const { m, minutes, fotmobMatchId, kickoff, reprise } of aFaire) {
     if (bilan.ok + bilan.failed >= limit) {
       // Plafond du jour atteint : compté une seule fois par match, à sa
       // dernière passe avant le coup d'envoi (la boucle repasse toutes les 5 min).
       if (minutes <= COUP_D_ENVOI_TROP_TARD_MIN + 5) bilan.laisses++;
       continue;
     }
+    // 21/11/2026 : l'heure revue à chaque pas (encoreAvantLeCoupDEnvoi). La liste de la passe a été faite plus tôt, et une
+    // passe a pu dormir avec le PC : Seattle – Real Salt Lake, choisi avant son coup d'envoi (20/11, 03:00 UTC), a été
+    // analysé « au coup d'envoi » au réveil, à 12:13 UTC — le match était joué depuis neuf heures. Les analyses d'une passe
+    // s'enchaînent aussi (15 à 30 s chacune). Revue avant la composition (lue chez FotMob), avant le moteur et le gel des
+    // pronostics (calculerEngineResult), au moment du gel, avant l'analyse, et en dernier dans runPreMatchAnalysis juste
+    // avant l'appel à Claude (après les lectures FotMob de la fiche : actualités, composition de repli) : rien de tout cela
+    // pour un match commencé.
+    const encore = () => encoreAvantLeCoupDEnvoi(kickoff, Date.now());
+    const tropTard = () => {
+      if (encore()) return false;
+      bilan.tropTard++;
+      return true;
+    };
+    if (tropTard()) continue;
     const lineups = await buildLineupContext({ homeName: m.home, awayName: m.away, commenceTimeIso: m.commenceTime, league: m.league, fotmobMatchId });
     // Une reprise sans composition relue ne remplace pas une analyse qui en avait une.
     if (reprise && !lineups) continue;
@@ -505,8 +597,12 @@ export async function runKickoffPreMatchAnalyses({ limit }) {
       bilan.enAttente++;
       continue;
     }
+    if (tropTard()) continue;
     try {
-      const engineResult = await calculerEngineResult(m, { lineups, origine: ORIGINES.coupDEnvoi });
+      // Le gel, lui aussi, seulement avant le coup d'envoi (le moteur attend ses propres lectures).
+      const engineResult = await calculerEngineResult(m, { lineups, origine: ORIGINES.coupDEnvoi, geler: (a) => { if (encore()) gelerEnService(a); } });
+      if (tropTard()) continue;
+      let tard = false;
       await runPreMatchAnalysis({
         matchId: m.matchId,
         home: m.home,
@@ -516,8 +612,17 @@ export async function runKickoffPreMatchAnalyses({ limit }) {
         sansRepliPayant: true,
         lineups,
         timing: 'coup-d-envoi',
-        appel: { type: reprise ? 'reprise' : 'coup-d-envoi', mode: budget.mode }
+        appel: { type: reprise ? 'reprise' : 'coup-d-envoi', mode: budget.mode },
+        // 21/11/2026 : la composition de repli lue par l'identifiant FotMob, pas par les noms — celui d'un match coté
+        // (idFotmobDUnMatchCote) et, pour un match du calendrier, celui que sa composition publiée lisait déjà.
+        fotmobMatchId,
+        // 21/11/2026 : la dernière revue de l'heure, juste avant l'appel à Claude ; trop tard : rien d'appelé ni d'enregistré.
+        avantLAppel: () => {
+          tard = tropTard();
+          return !tard;
+        }
       });
+      if (tard) continue;
       enregistrerUsage(jourParis(), { preMatch: 1 });
       bilan.ok++;
       if (lineups) bilan.avecCompo++;
@@ -578,4 +683,4 @@ export async function runAutoPostMatchReviews({ limit }) {
 }
 
 /** Pour les tests : la décision de reprise, telle que la passe d'avant coup d'envoi la prend. */
-export const __testing = { compositionChangee, reprisePermise, faiteAuCoupDEnvoi };
+export const __testing = { compositionChangee, reprisePermise, faiteAuCoupDEnvoi, encoreAvantLeCoupDEnvoi };

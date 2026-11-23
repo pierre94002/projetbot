@@ -614,8 +614,15 @@ function compositionPourIA(lineups) {
  * ≥ 1,20, composition décrite par lineupContext.js (les absents avec leurs
  * chiffres quand le magasin les a). Ancienne forme : exactement le message
  * d'avant l'étape 41.
+ *
+ * `fotmobMatchId` (21/11/2026) : l'identifiant FotMob du match quand
+ * l'appelant le connaît (analyse au coup d'envoi, cf. autoMatchAiTrigger.js) :
+ * la composition de repli le lit au lieu de chercher le match par les noms,
+ * qui ne le trouvent pas quand les deux sources écrivent l'équipe qui se
+ * déplace autrement (« FC Baltika Kaliningrad » chez The Odds API,
+ * « Baltika » chez FotMob). Absent : comme avant.
  */
-export async function preparerAnalyseAvantMatch({ matchId, home, away, league, engineResult, sansRepliPayant = false, lineups = null, timing = 'avance', fiche = null }) {
+export async function preparerAnalyseAvantMatch({ matchId, home, away, league, engineResult, sansRepliPayant = false, lineups = null, timing = 'avance', fiche = null, fotmobMatchId = null }) {
   if (!matchId || !home || !away) {
     throw new DomainError('Match invalide : "matchId", "home" et "away" sont requis.', { status: 400 });
   }
@@ -633,7 +640,7 @@ export async function preparerAnalyseAvantMatch({ matchId, home, away, league, e
   let compo = lineups;
   if (!compo) {
     try {
-      compo = await compositionPourAnalyseIA({ homeName: home, awayName: away, commenceTimeIso: engineResult.commenceTime, league });
+      compo = await compositionPourAnalyseIA({ homeName: home, awayName: away, commenceTimeIso: engineResult.commenceTime, league, fotmobMatchId });
     } catch {
       compo = null;
     }
@@ -734,13 +741,24 @@ function memoireGardee(m) {
  *
  * `fiche` (étape 41) : 'compacte' ou 'ancienne' pour CET appel (essai,
  * comparaison) ; absent, le réglage AI_ANALYSIS_FICHE (compacte par défaut).
+ *
+ * `fotmobMatchId` (21/11/2026) : passé tel quel à preparerAnalyseAvantMatch
+ * (composition de repli lue par l'identifiant FotMob) ; absent : comme avant.
+ *
+ * `avantLAppel` (21/11/2026) : une revue de l'appelant, faite juste avant
+ * l'appel à Claude, APRÈS les lectures FotMob de la fiche (actualités
+ * d'équipe, composition de repli : jusqu'à ~77 s chacune, plus si le PC
+ * s'endort). Elle rend faux : rien n'est appelé ni enregistré, la fonction
+ * rend null (l'analyse au coup d'envoi d'un match commencé entre-temps,
+ * cf. autoMatchAiTrigger.js). Absente : comme avant.
  */
-export async function runPreMatchAnalysis({ matchId, home, away, league, engineResult, sansRepliPayant = false, lineups = null, timing = 'avance', appel = null, fiche = null }) {
+export async function runPreMatchAnalysis({ matchId, home, away, league, engineResult, sansRepliPayant = false, lineups = null, timing = 'avance', appel = null, fiche = null, fotmobMatchId = null, avantLAppel = null }) {
   if (!isClaudeCodeAuthenticated()) {
     throw new DomainError(CLAUDE_CODE_NON_CONNECTE, { status: 400, code: CODE_CLAUDE_CODE_INDISPONIBLE });
   }
-  const demande = await preparerAnalyseAvantMatch({ matchId, home, away, league, engineResult, sansRepliPayant, lineups, timing, fiche });
+  const demande = await preparerAnalyseAvantMatch({ matchId, home, away, league, engineResult, sansRepliPayant, lineups, timing, fiche, fotmobMatchId });
   const { engineSummary, marches, compo, forme, marchesRetires, memoire } = demande;
+  if (typeof avantLAppel === 'function' && !avantLAppel()) return null;
 
   let reponse;
   try {

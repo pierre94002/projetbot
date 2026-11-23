@@ -24,6 +24,7 @@ import { fileURLToPath } from 'node:url';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { FOTMOB_LEAGUES, leagueKeyMatches, fetchMatchesByDate } from './fotMobProvider.js';
+import { intituleDeLaTable, journeesARattraper } from './intitulesFotmob.js';
 
 const execFileAsync = promisify(execFile);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -42,6 +43,15 @@ const jour = (d) => d.toISOString().slice(0, 10);
  */
 let fusionResultats = false;
 export const isResultsMergeRunning = () => fusionResultats;
+
+/**
+ * Vrai dès qu'une passe (pas à blanc) a relu SANS FAUTE les journées qu'un
+ * intitulé renommé chez FotMob avait fait manquer (cf. intitulesFotmob.js) et
+ * fusionné ce qu'elle y a trouvé : les passes suivantes du même processus ne
+ * les relisent plus. Au redémarrage, une passe les relit une fois de plus
+ * (la fusion refuse de remplacer un score connu : rien ne change).
+ */
+let rattrapageFait = false;
 
 async function pool(items, size, worker) {
   let index = 0;
@@ -77,6 +87,12 @@ function bilanDe(stdout) {
  * @param {number} options.days       horizon en jours quand `to` est absent
  * @param {string[]|null} options.leagues  restreindre à ces championnats
  * @param {boolean} options.dryRun    relever sans rien écrire
+ *
+ * En plus de la période : les journées qu'un intitulé renommé chez FotMob a
+ * fait manquer (intitulesFotmob.js), relues pour cette seule compétition,
+ * une fois par processus — refaites tant que l'une d'elles est en échec ou
+ * revenue vide ; en échec, elles sont comptées dans `failures` mais pas dans
+ * `failedDates` — `report.rattrapage`, null s'il n'y en a pas.
  */
 export async function refreshCalendarFromFotMob({
   from = null,
@@ -94,7 +110,10 @@ export async function refreshCalendarFromFotMob({
     : Object.entries(FOTMOB_LEAGUES);
   if (!voulus.length) throw new Error(`Aucune compétition connue parmi : ${(leagues ?? []).join(', ')}`);
 
-  const dates = [];
+  // Journée -> compétitions à rattraper ce jour-là ; ces journées-là ne
+  // gardent QUE ces compétitions (les autres y ont déjà été relevées).
+  const rattrapage = rattrapageFait ? new Map() : journeesARattraper(debut, jour(new Date()), voulus.map(([nom]) => nom));
+  const dates = [...rattrapage.keys()];
   for (let d = new Date(`${debut}T12:00:00Z`); d <= new Date(`${fin}T12:00:00Z`); d.setUTCDate(d.getUTCDate() + 1)) {
     dates.push(jour(d));
   }
@@ -104,6 +123,10 @@ export async function refreshCalendarFromFotMob({
   // Les journées en échec sont gardées : l'actualisation repartira de la
   // première d'entre elles au lieu de les perdre (cf. matchStatsAutoRefresh.js).
   const joursEnEchec = [];
+  // Journées rattrapées revenues VIDES (aucun match, toutes compétitions) : une
+  // vraie journée de football ne l'est jamais, c'est un incident chez FotMob ;
+  // elles ne comptent pas comme relues (le rattrapage sera refait).
+  const rattrapeesVides = [];
   let faites = 0;
   await pool(dates, concurrency, async (date) => {
     let rencontres;
@@ -117,8 +140,13 @@ export async function refreshCalendarFromFotMob({
       faites++;
       if (onProgress && faites % 25 === 0) onProgress({ phase: 'scanning', done: faites, total: dates.length, found: sorties.length });
     }
+    if (rattrapage.has(date) && !rencontres.length) rattrapeesVides.push(date);
+    const motifs = rattrapage.has(date) ? voulus.filter(([nom]) => rattrapage.get(date).includes(nom)) : voulus;
     for (const m of rencontres) {
-      const league = voulus.find(([, motif]) => leagueKeyMatches(motif, m.leagueKey))?.[0];
+      // L'intitulé traduit vers celui de la table s'il a été renommé chez FotMob (« TUR|Süper Lig », phases finales
+      // d'Argentine et de Liga MX : intitulesFotmob.js).
+      const intitule = intituleDeLaTable(m.leagueKey);
+      const league = motifs.find(([, motif]) => leagueKeyMatches(motif, intitule))?.[0];
       if (!league || !m.homeName || !m.awayName) continue;
       // Un match REPORTÉ (motif « PP ») reste publié à sa date d'origine, sans
       // score. Il entre au calendrier comme tel : la page Matchs le retire,
@@ -160,16 +188,41 @@ export async function refreshCalendarFromFotMob({
     to: fin,
     days: dates.length,
     failures: echecs,
-    failedDates: joursEnEchec.sort(),
+    // Sans les journées rattrapées : en échec, elles seront relues par le
+    // rattrapage lui-même (pas fait) ; dedans, elles feraient reculer le repère
+    // de l'étape (resumeFrom) jusqu'au jour du renommage.
+    failedDates: joursEnEchec.filter((d) => !rattrapage.has(d)).sort(),
     matches: sorties.length,
     upcoming: sorties.filter((s) => s.status === 'scheduled').length,
     byLeague,
     merge: null,
     mergeError: null,
     results: null,
-    resultsError: null
+    resultsError: null,
+    rattrapage: null
   };
-  if (dryRun || !sorties.length) return report;
+  const joursRattrapes = [...rattrapage.keys()];
+  const rattrapesEnEchec = joursEnEchec.filter((d) => rattrapage.has(d)).sort();
+  if (joursRattrapes.length) {
+    report.rattrapage = {
+      from: joursRattrapes[0],
+      to: joursRattrapes.at(-1),
+      days: joursRattrapes.length,
+      leagues: [...new Set([...rattrapage.values()].flat())],
+      failures: rattrapesEnEchec.length,
+      failedDates: rattrapesEnEchec,
+      empty: rattrapeesVides.length,
+      matches: sorties.filter((s) => rattrapage.has(s.date)).length
+    };
+  }
+  // Fait une fois pour toutes (dans ce processus) seulement relu sans faute ni liste vide, et fusionné sans erreur.
+  const noterLeRattrapage = () => {
+    if (!dryRun && joursRattrapes.length && !rattrapesEnEchec.length && !rattrapeesVides.length && !report.mergeError && !report.resultsError) rattrapageFait = true;
+  };
+  if (dryRun || !sorties.length) {
+    noterLeRattrapage();
+    return report;
+  }
 
   // Les tampons vivent dans le dossier temporaire du système, hors du projet :
   // laissés dans data/runtime, ils ressemblaient à des données (20 253 lignes
@@ -209,6 +262,7 @@ export async function refreshCalendarFromFotMob({
       supprimerTampon(tamponR);
     }
   }
+  noterLeRattrapage();
   onProgress?.({ phase: 'done', ...report });
   return report;
 }

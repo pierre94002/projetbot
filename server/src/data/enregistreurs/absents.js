@@ -28,6 +28,7 @@ import { openDb, upcomingLineupByFotmobId } from '../db/matchStatsDb.js';
 import { lectureAbsentsFaite } from './depot.js';
 import { mettreEnFile } from './file.js';
 import { jourParis, jourUtc, iso, libelleSuivi, idRencontreValide, nomCle, pause, JOUR_MS } from './communs.js';
+import { intituleDeLaTable } from '../providers/intitulesFotmob.js';
 
 const FENETRE_MS = 48 * 3_600_000;
 /** Une lecture en échec est retentée à la passe suivante, trois fois par jour au plus. */
@@ -109,7 +110,8 @@ export async function passeAbsents({
         continue;
       }
       for (const m of liste) {
-        const league = libelleSuivi(m.leagueKey);
+        // Un intitulé renommé chez FotMob, traduit vers celui de la table (« TUR|Süper Lig », phases finales : intitulesFotmob.js).
+        const league = libelleSuivi(intituleDeLaTable(m.leagueKey));
         if (!league || !idRencontreValide(m.matchId) || vus.has(m.matchId)) continue;
         const coup = Date.parse(m.kickoff ?? '');
         if (!Number.isFinite(coup) || coup <= maintenant || coup - maintenant > FENETRE_MS) continue;
