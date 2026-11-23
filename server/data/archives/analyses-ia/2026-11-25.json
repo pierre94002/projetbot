@@ -4137,5 +4137,2467 @@
     },
     "updatedAt": "2026-11-23T07:09:08.999Z",
     "createdAt": "2026-11-23T07:09:08.999Z"
+  },
+  {
+    "matchId": "a7c87fac9e9cbcfc02ad0e0b29ca89e2",
+    "homeName": "Slavia Praha",
+    "awayName": "Villarreal",
+    "league": "UEFA Champions League",
+    "commenceTime": "2026-11-25T17:45:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Slavia Praha vs Villarreal",
+      "expectedGoals": {
+        "home": 1.727,
+        "away": 0.964,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 3.12,
+        "draw": 4.23,
+        "away": 2.26
+      },
+      "market": {
+        "odds1": 2.91,
+        "oddsDraw": 3.68,
+        "odds2": 2.21
+      },
+      "edgePercent": -7.01,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "pas_de_value",
+        "candidates": [
+          {
+            "outcome": "home",
+            "label": "Slavia Praha gagne",
+            "odds": 2.72,
+            "displayedOdds": 2.72,
+            "bookmaker": "betclic_fr",
+            "bookmakerTitle": "Betclic (FR)",
+            "fairOdds": 3.12,
+            "ev": -0.1282,
+            "exclusion": "sous_le_seuil",
+            "releveAt": "2026-11-09T16:42:13.050Z",
+            "origineReleve": "archive",
+            "fraicheur": {
+              "etat": "a-rafraichir",
+              "code": "trop-vieille",
+              "raison": "Relevée il y a 14 jours, au-delà du délai de 1 h : à relever de nouveau avant de parier.",
+              "ageMinutes": 20272,
+              "releveAt": "2026-11-09T16:42:13.050Z",
+              "coupDEnvoi": "2026-11-25T17:45:00.000Z",
+              "heureSure": true,
+              "composAnnonceesA": "2026-11-25T16:45:00.000Z",
+              "limiteMinutes": 60,
+              "reglage": {
+                "maxAgeMinutes": 60,
+                "avantCompos": true
+              },
+              "evalueeLe": "2026-11-23T18:34:33.178Z"
+            }
+          },
+          {
+            "outcome": "draw",
+            "label": "Match nul",
+            "odds": 3.5,
+            "displayedOdds": 3.5,
+            "bookmaker": "winamax_fr",
+            "bookmakerTitle": "Winamax (FR)",
+            "fairOdds": 4.23,
+            "ev": -0.1717,
+            "exclusion": "sous_le_seuil",
+            "releveAt": "2026-11-09T16:42:13.050Z",
+            "origineReleve": "archive",
+            "fraicheur": {
+              "etat": "a-rafraichir",
+              "code": "trop-vieille",
+              "raison": "Relevée il y a 14 jours, au-delà du délai de 1 h : à relever de nouveau avant de parier.",
+              "ageMinutes": 20272,
+              "releveAt": "2026-11-09T16:42:13.050Z",
+              "coupDEnvoi": "2026-11-25T17:45:00.000Z",
+              "heureSure": true,
+              "composAnnonceesA": "2026-11-25T16:45:00.000Z",
+              "limiteMinutes": 60,
+              "reglage": {
+                "maxAgeMinutes": 60,
+                "avantCompos": true
+              },
+              "evalueeLe": "2026-11-23T18:34:33.178Z"
+            }
+          },
+          {
+            "outcome": "away",
+            "label": "Villarreal gagne",
+            "odds": 2.1,
+            "displayedOdds": 2.1,
+            "bookmaker": "pmu_fr",
+            "bookmakerTitle": "PMU (FR)",
+            "fairOdds": 2.26,
+            "ev": -0.0701,
+            "exclusion": "sous_le_seuil",
+            "releveAt": "2026-11-09T16:42:13.050Z",
+            "origineReleve": "archive",
+            "fraicheur": {
+              "etat": "a-rafraichir",
+              "code": "trop-vieille",
+              "raison": "Relevée il y a 14 jours, au-delà du délai de 1 h : à relever de nouveau avant de parier.",
+              "ageMinutes": 20272,
+              "releveAt": "2026-11-09T16:42:13.050Z",
+              "coupDEnvoi": "2026-11-25T17:45:00.000Z",
+              "heureSure": true,
+              "composAnnonceesA": "2026-11-25T16:45:00.000Z",
+              "limiteMinutes": 60,
+              "reglage": {
+                "maxAgeMinutes": 60,
+                "avantCompos": true
+              },
+              "evalueeLe": "2026-11-23T18:34:33.178Z"
+            }
+          }
+        ],
+        "limits": {
+          "edgeThresholdMin": 0.02,
+          "edgeThresholdMax": 0.25,
+          "maxValueOdds": 5
+        }
+      },
+      "statExpectations": {
+        "corners": {
+          "home": 7.48,
+          "away": 3.6,
+          "total": 11.08
+        },
+        "shots": {
+          "home": 18.54,
+          "away": 11.21,
+          "total": 29.74
+        },
+        "shotsOnTarget": {
+          "home": 5.83,
+          "away": 3.42,
+          "total": 9.25
+        }
+      },
+      "marketPredictions": [
+        {
+          "marketId": "result",
+          "params": {
+            "outcome": "away"
+          },
+          "market": "Résultat",
+          "predictedOutcome": "away",
+          "predictedLabel": "Villarreal gagne",
+          "predictedOdds": 2.26,
+          "probability": 44,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 1.5,
+            "side": "over"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 1.5 buts",
+          "predictedOdds": 1.32,
+          "probability": 76,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "yes"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "yes",
+          "predictedLabel": "Oui",
+          "predictedOdds": 1.93,
+          "probability": 52,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 3.5,
+            "key": "awayUnder"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "awayUnder",
+          "predictedLabel": "Villarreal & Moins de 3.5 buts",
+          "predictedOdds": 2.97,
+          "probability": 34,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 0.5,
+            "side": "over"
+          },
+          "market": "Buts — Slavia Praha",
+          "predictedOutcome": "over",
+          "predictedLabel": "Slavia Praha — Plus de 0.5 buts",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 1.5,
+            "side": "under"
+          },
+          "market": "Buts — Villarreal",
+          "predictedOutcome": "under",
+          "predictedLabel": "Villarreal — Moins de 1.5 buts",
+          "predictedOdds": 1.34,
+          "probability": 75,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalCorners",
+          "params": {
+            "line": 7.5,
+            "side": "over"
+          },
+          "market": "Total corners",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 7.5 corners",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "home",
+            "line": 10.5,
+            "side": "under"
+          },
+          "market": "Corners — Slavia Praha",
+          "predictedOutcome": "under",
+          "predictedLabel": "Slavia Praha — Moins de 10.5 corners",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "away",
+            "line": 1.5,
+            "side": "over"
+          },
+          "market": "Corners — Villarreal",
+          "predictedOutcome": "over",
+          "predictedLabel": "Villarreal — Plus de 1.5 corners",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShots",
+          "params": {
+            "line": 23.5,
+            "side": "over"
+          },
+          "market": "Total tirs",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 23.5 tirs",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "home",
+            "line": 12.5,
+            "side": "over"
+          },
+          "market": "Tirs — Slavia Praha",
+          "predictedOutcome": "over",
+          "predictedLabel": "Slavia Praha — Plus de 12.5 tirs",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "away",
+            "line": 7.5,
+            "side": "over"
+          },
+          "market": "Tirs — Villarreal",
+          "predictedOutcome": "over",
+          "predictedLabel": "Villarreal — Plus de 7.5 tirs",
+          "predictedOdds": 1.25,
+          "probability": 80,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShotsOnTarget",
+          "params": {
+            "line": 6.5,
+            "side": "over"
+          },
+          "market": "Total tirs cadrés",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 6.5 tirs cadrés",
+          "predictedOdds": 1.26,
+          "probability": 79,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "home",
+            "line": 3.5,
+            "side": "over"
+          },
+          "market": "Tirs cadrés — Slavia Praha",
+          "predictedOutcome": "over",
+          "predictedLabel": "Slavia Praha — Plus de 3.5 tirs cadrés",
+          "predictedOdds": 1.25,
+          "probability": 80,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "away",
+            "line": 1.5,
+            "side": "over"
+          },
+          "market": "Tirs cadrés — Villarreal",
+          "predictedOutcome": "over",
+          "predictedLabel": "Villarreal — Plus de 1.5 tirs cadrés",
+          "predictedOdds": 1.2,
+          "probability": 83,
+          "minOdds": 1.2
+        }
+      ],
+      "baseDuCalcul": {
+        "montant": 300.92,
+        "origine": "capital-regle"
+      },
+      "engineVersion": 6
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 7307,
+      "cache_read_input_tokens": 4470,
+      "output_tokens": 3040,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 7307,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 3040,
+          "cache_read_input_tokens": 4470,
+          "cache_creation_input_tokens": 7307,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 7307
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.06052600000000001,
+    "analysedAt": "2026-11-23T18:34:54.142Z",
+    "timing": "avance",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 456,
+      "tokens": 1418,
+      "lecons": [
+        "cal-2026-10-21-aston-villa-viking|result",
+        "cal-2026-10-21-aston-villa-viking|resultAndTotal"
+      ],
+      "dossiersDu": "2026-11-23T09:16:38.408Z",
+      "equipes": {
+        "home": {
+          "id": "fotmob-7787",
+          "dossier": true
+        },
+        "away": {
+          "id": "fotmob-10205",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "UEFA Champions League",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "FotMob",
+      "fotmobMatchId": "6106391",
+      "fetchedAt": "2026-11-23T18:34:33.510Z",
+      "minutesBeforeKickoff": 2830,
+      "home": {
+        "team": "Slavia Prague",
+        "teamId": "fotmob-7787",
+        "formation": "4-2-3-1",
+        "coach": "Jindřich Trpišovský",
+        "statsSince": "2026-07-01",
+        "teamMatches": 19,
+        "startXI": [
+          {
+            "id": "fotmob-1666193",
+            "name": "Nazar Domchak",
+            "number": 29,
+            "position": "Goalkeeper",
+            "age": 19,
+            "countryCode": "UKR",
+            "countryName": "Ukraine",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 3,
+              "starts": 3,
+              "minutes": 270,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.57
+            }
+          },
+          {
+            "id": "fotmob-979540",
+            "name": "Tomás Vlček",
+            "number": 27,
+            "position": "Defender",
+            "age": 25,
+            "countryCode": "CZE",
+            "countryName": "Czechia",
+            "x": 0.292,
+            "y": 0.875,
+            "stats": {
+              "apps": 14,
+              "starts": 11,
+              "minutes": 961,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.87
+            }
+          },
+          {
+            "id": "fotmob-306168",
+            "name": "Tomás Holeš",
+            "number": 3,
+            "position": "Defender",
+            "age": 33,
+            "countryCode": "CZE",
+            "countryName": "Czechia",
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 14,
+              "starts": 14,
+              "minutes": 1117,
+              "goals": 1,
+              "assists": 1,
+              "xg": 0.12,
+              "rating": 7.36
+            }
+          },
+          {
+            "id": "fotmob-1085401",
+            "name": "David Zima",
+            "number": 4,
+            "position": "Defender",
+            "age": 26,
+            "countryCode": "CZE",
+            "countryName": "Czechia",
+            "x": 0.292,
+            "y": 0.375,
+            "stats": {
+              "apps": 15,
+              "starts": 15,
+              "minutes": 1216,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.14,
+              "rating": 7.1
+            }
+          },
+          {
+            "id": "fotmob-1782189",
+            "name": "Oskar Kubiak",
+            "number": 8,
+            "position": "Defender",
+            "age": 20,
+            "countryCode": "POL",
+            "countryName": "Poland",
+            "x": 0.292,
+            "y": 0.125,
+            "stats": {
+              "apps": 11,
+              "starts": 8,
+              "minutes": 667,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.38,
+              "rating": 6.91
+            }
+          },
+          {
+            "id": "fotmob-1509423",
+            "name": "David Moses",
+            "number": 16,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "NGA",
+            "countryName": "Nigeria",
+            "x": 0.485,
+            "y": 0.7,
+            "stats": {
+              "apps": 13,
+              "starts": 7,
+              "minutes": 717,
+              "goals": 0,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.99
+            }
+          },
+          {
+            "id": "fotmob-806551",
+            "name": "Michal Sadílek",
+            "number": 23,
+            "position": "Midfielder",
+            "age": 27,
+            "countryCode": "CZE",
+            "countryName": "Czechia",
+            "x": 0.485,
+            "y": 0.3,
+            "stats": {
+              "apps": 18,
+              "starts": 16,
+              "minutes": 1402,
+              "goals": 1,
+              "assists": 5,
+              "xg": 0.16,
+              "rating": 7.46
+            }
+          },
+          {
+            "id": "fotmob-1327747",
+            "name": "Emmanuel Ayaosi",
+            "number": 20,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "NGA",
+            "countryName": "Nigeria",
+            "x": 0.678,
+            "y": 0.837,
+            "stats": {
+              "apps": 18,
+              "starts": 13,
+              "minutes": 1247,
+              "goals": 5,
+              "assists": 4,
+              "xg": 0.7,
+              "rating": 7.44
+            }
+          },
+          {
+            "id": "fotmob-1840847",
+            "name": "Mubarak Suleiman",
+            "number": 15,
+            "position": "Midfielder",
+            "age": 19,
+            "countryCode": "NGA",
+            "countryName": "Nigeria",
+            "x": 0.678,
+            "y": 0.5,
+            "stats": {
+              "apps": 13,
+              "starts": 9,
+              "minutes": 869,
+              "goals": 3,
+              "assists": 4,
+              "xg": 0.11,
+              "rating": 7.45
+            }
+          },
+          {
+            "id": "fotmob-1270718",
+            "name": "Danijel Šturm",
+            "number": 10,
+            "position": "Midfielder",
+            "age": 27,
+            "countryCode": "SVN",
+            "countryName": "Slovenia",
+            "x": 0.678,
+            "y": 0.163,
+            "stats": {
+              "apps": 17,
+              "starts": 13,
+              "minutes": 1035,
+              "goals": 4,
+              "assists": 3,
+              "xg": 0.6,
+              "rating": 7.13
+            }
+          },
+          {
+            "id": "fotmob-1395322",
+            "name": "Wiktor Nowak",
+            "number": 30,
+            "position": "Forward",
+            "age": 22,
+            "countryCode": "POL",
+            "countryName": "Poland",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 18,
+              "starts": 15,
+              "minutes": 1312,
+              "goals": 6,
+              "assists": 1,
+              "xg": 1.3,
+              "rating": 7.2
+            }
+          }
+        ],
+        "bench": [],
+        "unavailable": [
+          {
+            "id": "fotmob-308841",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Ivan Schranz",
+            "reason": "blessé",
+            "expectedReturn": "Doubtful",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 9,
+              "starts": 0,
+              "minutes": 149,
+              "goals": 0,
+              "assists": 1,
+              "xg": null,
+              "rating": 6.27
+            }
+          },
+          {
+            "id": "fotmob-1553486",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Eliás Piták",
+            "reason": "blessé",
+            "expectedReturn": "Doubtful",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 3,
+              "starts": 3,
+              "minutes": 196,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.87
+            }
+          },
+          {
+            "id": "fotmob-1893761",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Adonija Ouanda",
+            "reason": "blessé",
+            "expectedReturn": "Late November 2026",
+            "position": "Forward",
+            "stats": {
+              "apps": 3,
+              "starts": 3,
+              "minutes": 181,
+              "goals": 1,
+              "assists": 1,
+              "xg": null,
+              "rating": 7.25
+            }
+          },
+          {
+            "id": "fotmob-928122",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Igoh Ogbu",
+            "reason": "blessé",
+            "expectedReturn": "Late November 2026",
+            "position": null,
+            "stats": null
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-1085744",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Jakub Markovič",
+            "position": "Goalkeeper",
+            "starts": 16,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-988769",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Mojmír Chytil",
+            "position": "Midfielder",
+            "starts": 11,
+            "goals": 7,
+            "assists": 1,
+            "status": "absent de la feuille de match"
+          }
+        ]
+      },
+      "away": {
+        "team": "Villarreal",
+        "teamId": "fotmob-10205",
+        "formation": "4-4-2",
+        "coach": "Íñigo Pérez",
+        "statsSince": "2026-07-01",
+        "teamMatches": 18,
+        "startXI": [
+          {
+            "id": "fotmob-151001",
+            "name": "Péter Gulácsi",
+            "number": 25,
+            "position": "Goalkeeper",
+            "age": 36,
+            "countryCode": "HUN",
+            "countryName": "Hungary",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 12,
+              "starts": 12,
+              "minutes": 1080,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.81
+            }
+          },
+          {
+            "id": "fotmob-1338696",
+            "name": "Alex Freeman",
+            "number": 3,
+            "position": "Defender",
+            "age": 22,
+            "countryCode": "USA",
+            "countryName": "USA",
+            "x": 0.357,
+            "y": 0.875,
+            "stats": {
+              "apps": 17,
+              "starts": 8,
+              "minutes": 936,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.42,
+              "rating": 6.98
+            }
+          },
+          {
+            "id": "fotmob-1407468",
+            "name": "Santiago Mouriño",
+            "number": 15,
+            "position": "Defender",
+            "age": 24,
+            "countryCode": "URU",
+            "countryName": "Uruguay",
+            "x": 0.357,
+            "y": 0.625,
+            "stats": {
+              "apps": 15,
+              "starts": 12,
+              "minutes": 990,
+              "goals": 2,
+              "assists": 0,
+              "xg": 1.22,
+              "rating": 6.88
+            }
+          },
+          {
+            "id": "fotmob-1343750",
+            "name": "Renato Veiga",
+            "number": 12,
+            "position": "Defender",
+            "age": 23,
+            "countryCode": "POR",
+            "countryName": "Portugal",
+            "x": 0.357,
+            "y": 0.375,
+            "stats": {
+              "apps": 16,
+              "starts": 16,
+              "minutes": 1440,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.76,
+              "rating": 6.55
+            }
+          },
+          {
+            "id": "fotmob-1395964",
+            "name": "Carlos Romero",
+            "number": 20,
+            "position": "Defender",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.357,
+            "y": 0.125,
+            "stats": {
+              "apps": 11,
+              "starts": 8,
+              "minutes": 760,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.7,
+              "rating": 6.77
+            }
+          },
+          {
+            "id": "fotmob-671865",
+            "name": "Santi Comesaña",
+            "number": 14,
+            "position": "Midfielder",
+            "age": 30,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.875,
+            "stats": {
+              "apps": 16,
+              "starts": 13,
+              "minutes": 993,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.68,
+              "rating": 6.55
+            }
+          },
+          {
+            "id": "fotmob-1841906",
+            "name": "Carlos Maciá",
+            "number": 16,
+            "position": "Midfielder",
+            "age": 18,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.613,
+            "y": 0.625,
+            "stats": {
+              "apps": 11,
+              "starts": 6,
+              "minutes": 553,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.2,
+              "rating": 6.82
+            }
+          },
+          {
+            "id": "fotmob-844544",
+            "name": "Pape Gueye",
+            "number": 18,
+            "position": "Midfielder",
+            "age": 27,
+            "countryCode": "SEN",
+            "countryName": "Senegal",
+            "x": 0.613,
+            "y": 0.375,
+            "stats": {
+              "apps": 16,
+              "starts": 14,
+              "minutes": 1253,
+              "goals": 3,
+              "assists": 0,
+              "xg": 2.67,
+              "rating": 7.12
+            }
+          },
+          {
+            "id": "fotmob-1026135",
+            "name": "Tajon Buchanan",
+            "number": 17,
+            "position": "Midfielder",
+            "age": 27,
+            "countryCode": "CAN",
+            "countryName": "Canada",
+            "x": 0.613,
+            "y": 0.125,
+            "stats": {
+              "apps": 14,
+              "starts": 11,
+              "minutes": 936,
+              "goals": 2,
+              "assists": 0,
+              "xg": 2.42,
+              "rating": 6.96
+            }
+          },
+          {
+            "id": "fotmob-575735",
+            "name": "Nicolas Pépé",
+            "number": 19,
+            "position": "Forward",
+            "age": 31,
+            "countryCode": "CIV",
+            "countryName": "Ivory Coast",
+            "x": 0.87,
+            "y": 0.7,
+            "stats": {
+              "apps": 12,
+              "starts": 7,
+              "minutes": 689,
+              "goals": 3,
+              "assists": 1,
+              "xg": 1.76,
+              "rating": 7.03
+            }
+          },
+          {
+            "id": "fotmob-479020",
+            "name": "Ayoze Pérez",
+            "number": 22,
+            "position": "Forward",
+            "age": 33,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.87,
+            "y": 0.3,
+            "stats": {
+              "apps": 16,
+              "starts": 9,
+              "minutes": 763,
+              "goals": 1,
+              "assists": 5,
+              "xg": 4.1,
+              "rating": 6.76
+            }
+          }
+        ],
+        "bench": [],
+        "unavailable": [
+          {
+            "id": "fotmob-833219",
+            "age": 28,
+            "countryCode": "ARG",
+            "countryName": "Argentina",
+            "name": "Juan Foyth",
+            "reason": "blessé",
+            "expectedReturn": "Back in training",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 8,
+              "starts": 6,
+              "minutes": 539,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.32,
+              "rating": 6.91
+            }
+          },
+          {
+            "id": "fotmob-1695966",
+            "age": 21,
+            "countryCode": "SEN",
+            "countryName": "Senegal",
+            "name": "Alassane Diatta",
+            "reason": "blessé",
+            "expectedReturn": "Early December 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 2,
+              "starts": 1,
+              "minutes": 105,
+              "goals": 1,
+              "assists": 1,
+              "xg": 0.11,
+              "rating": 7.41
+            }
+          },
+          {
+            "id": "fotmob-246438",
+            "age": 34,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Gerard Moreno",
+            "reason": "blessé",
+            "expectedReturn": "Back in training",
+            "position": "Forward",
+            "stats": {
+              "apps": 13,
+              "starts": 6,
+              "minutes": 516,
+              "goals": 2,
+              "assists": 1,
+              "xg": 2.62,
+              "rating": 6.8
+            }
+          },
+          {
+            "id": "fotmob-1311915",
+            "age": 22,
+            "countryCode": "MAR",
+            "countryName": "Morocco",
+            "name": "Ilias Akhomach",
+            "reason": "blessé",
+            "expectedReturn": "Back in training",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 9,
+              "starts": 5,
+              "minutes": 388,
+              "goals": 0,
+              "assists": 2,
+              "xg": 0.44,
+              "rating": 6.8
+            }
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-1184694",
+            "age": 23,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Alberto Moleiro",
+            "position": "Midfielder",
+            "starts": 13,
+            "goals": 2,
+            "assists": 6,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1531887",
+            "age": 21,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Pau Navarro",
+            "position": "Defender",
+            "starts": 10,
+            "goals": 0,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1117069",
+            "age": 26,
+            "countryCode": "GEO",
+            "countryName": "Georgia",
+            "name": "Georges Mikautadze",
+            "position": "Forward",
+            "starts": 10,
+            "goals": 5,
+            "assists": 2,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1059657",
+            "age": 27,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Sergi Cardona",
+            "position": "Defender",
+            "starts": 9,
+            "goals": 2,
+            "assists": 1,
+            "status": "absent de la feuille de match"
+          }
+        ]
+      },
+      "matchInfo": {
+        "round": "5",
+        "stadium": "Fortuna Arena",
+        "city": "Praha",
+        "capacity": 19370,
+        "surface": "grass",
+        "weather": "Cloudy",
+        "temperature": 0,
+        "windSpeed": 14,
+        "precipitation": 0,
+        "referee": {
+          "name": "Rade Obrenović",
+          "country": "Slovenia",
+          "league": "Saudi Pro League",
+          "matches": 5,
+          "yellowCardsPerMatch": 4.4,
+          "yellowCardsLeagueAverage": 4.09,
+          "redCards": 1,
+          "penalties": 3,
+          "foulsPerMatch": 23.6,
+          "foulsLeagueAverage": 23.28
+        }
+      }
+    },
+    "analysis": {
+      "summary": "Slavia Prague (34e, 1 pt) est en difficulté en Ligue des champions (0-1-3) mais domine ses 10 derniers matchs : 1,8 but, 20,5 tirs et 57,7 % de possession par match. Villarreal (28e, 3 pts) est irrégulier : 1,7 but marqué et 1,7 concédé, avec un 0-6 contre le PSG. Les compositions sont de source FotMob, relues bien avant le coup d'envoi, donc ce peut être une prévision. Villarreal est privé de Moleiro, Mikautadze et Cardona. Chez Slavia, Chytil et le gardien Markovič ne sont pas dans le onze.",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Les deux équipes sont dans le bas du classement de la phase de ligue.",
+          "evidence": "Slavia 34e, 1 pt en 4 matchs ; Villarreal 28e, 3 pts en 4 matchs."
+        },
+        {
+          "factor": "statistiques et moyennes",
+          "observation": "Slavia produit nettement plus de volume à domicile. Villarreal produit peu à l'extérieur et concède beaucoup.",
+          "evidence": "Slavia à domicile : 24,8 tirs, 8,4 corners. Villarreal à l'extérieur : 14 tirs, 3,8 corners produits, 15,6 tirs et 7,4 corners concédés."
+        },
+        {
+          "factor": "absences",
+          "observation": "Villarreal est privé de plusieurs cadres offensifs.",
+          "evidence": "Absents du onze : Moleiro (2+6), Mikautadze (5+2), Cardona. Blessés : Gerard Moreno, Foyth, Akhomach."
+        },
+        {
+          "factor": "edge du modèle",
+          "observation": "Le moteur donne Villarreal gagnant, mais la mise est PASS.",
+          "evidence": "Edge -7,01 %. Les cotes datent du 09/11, soit 14 jours."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va dans le sens des marchés de volume (tirs, corners de Slavia), car Slavia domine ses matchs. Il nuance le résultat : Villarreal gagnant est fragile, au vu de sa forme à l'extérieur et de ses absences.",
+      "marketViews": [
+        {
+          "market": "Résultat",
+          "pick": "Villarreal gagne",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "44 % : Villarreal a plus de qualité individuelle, mais ses 5 derniers matchs à l'extérieur donnent 3 défaites (1,8 but concédé) et Slavia affiche 1,73 xG attendu.",
+          "reasoning": "Slavia est solide à domicile en championnat, mais en Ligue des champions elle n'a pas gagné. Villarreal est sans Moleiro et Mikautadze, et le résultat reste très incertain. Mon bilan sur ce marché est faible.",
+          "probability": 44
+        },
+        {
+          "market": "Total corners",
+          "pick": "Plus de 7.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : le moteur attend 11,08 corners, Slavia en produit 8,4 à domicile et Villarreal en concède 7,4 à l'extérieur.",
+          "reasoning": "Le volume offensif de Slavia à domicile soutient ce seuil bas. Mes avis forts sur ce marché tiennent bien.",
+          "probability": 83
+        },
+        {
+          "market": "Corners — Slavia Praha",
+          "pick": "Slavia Praha — Moins de 10.5 corners",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "81 % : Slavia attend 7,48 corners et en produit 8,4 à domicile, loin de 10,5.",
+          "reasoning": "Dépasser 10 corners reste rare au vu des moyennes. Le seuil laisse une grande marge.",
+          "probability": 81
+        },
+        {
+          "market": "Corners — Villarreal",
+          "pick": "Villarreal — Plus de 1.5 corners",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : Villarreal attend 3,6 corners, même s'il n'en produit que 3,8 à l'extérieur et qu'il fait face à une équipe à 57,7 % de possession.",
+          "reasoning": "Le seuil est très bas. Le risque vient d'un match où Slavia garde le ballon.",
+          "probability": 83
+        },
+        {
+          "market": "Total tirs",
+          "pick": "Plus de 23.5 tirs",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : le moteur attend 29,74 tirs ; Slavia en produit 20,5 et Villarreal en concède 13,2 par match.",
+          "reasoning": "Slavia seule en tire plus de 20 en moyenne, donc le seuil est atteignable. Mes avis sur ce marché tiennent bien.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs — Slavia Praha",
+          "pick": "Slavia Praha — Plus de 12.5 tirs",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : Slavia attend 18,54 tirs et en produit 24,8 à domicile, contre 15,6 concédés par Villarreal à l'extérieur.",
+          "reasoning": "La marge est confortable face à la moyenne. Seul un match fermé la menacerait.",
+          "probability": 83
+        },
+        {
+          "market": "Tirs — Villarreal",
+          "pick": "Villarreal — Plus de 7.5 tirs",
+          "verdict": "nuance",
+          "confidence": "moyenne",
+          "explanation": "80 % : Villarreal attend 11,21 tirs, mais n'en produit que 14 à l'extérieur et Slavia n'en concède que 8,8 à domicile.",
+          "reasoning": "Slavia concède peu à domicile et Villarreal est privé de ses créateurs. Le seuil de 7,5 reste cependant bas.",
+          "probability": 80
+        },
+        {
+          "market": "Total tirs cadrés",
+          "pick": "Plus de 6.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "79 % : le moteur attend 9,25 tirs cadrés, avec 6 produits par Slavia et 5,2 par Villarreal à l'extérieur.",
+          "reasoning": "Les deux équipes cadrent assez pour dépasser le seuil. Ce marché est plus variable que les tirs.",
+          "probability": 79
+        },
+        {
+          "market": "Tirs cadrés — Slavia Praha",
+          "pick": "Slavia Praha — Plus de 3.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "80 % : Slavia attend 5,83 tirs cadrés et en produit 6,2 à domicile.",
+          "reasoning": "Les moyennes soutiennent le seuil. Nowak (1,3 xG) et Ayaosi (0,7 xG) sont titulaires.",
+          "probability": 80
+        },
+        {
+          "market": "Tirs cadrés — Villarreal",
+          "pick": "Villarreal — Plus de 1.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "83 % : Villarreal attend 3,42 tirs cadrés et en produit 5,2 à l'extérieur, très au-dessus de 1,5.",
+          "reasoning": "Le seuil est très bas, et Pépé et Ayoze Pérez sont titulaires. Seul un match très fermé le menacerait.",
+          "probability": 83
+        }
+      ],
+      "lineupImpact": "La source est FotMob, relue 2830 minutes avant le coup d'envoi : c'est donc probablement une prévision. Slavia aligne un 4-2-3-1 avec Domchak (3 titularisations) dans les buts à la place de Markovič (16 titularisations), et sans Chytil (7+1). Nowak (6 buts, 1,3 xG) et Ayaosi (5+4) portent l'attaque, ce qui soutient les marchés de tirs. Villarreal joue en 4-4-2 sans Moleiro, Mikautadze ni Cardona, avec Pépé et Ayoze Pérez devant : cela affaiblit la création et nuance le résultat et les tirs de Villarreal. Le cadre du match (0 °C, vent faible, arbitre proche de la moyenne) ne pèse sur aucun marché.",
+      "caveats": "Les cotes du marché datent du 09/11, 14 jours avant le match. Les compositions sont lues très tôt et peuvent changer. La forme FotMob ne couvre que 5 matchs, dont un en janvier. Les marchés de buts sont retirés, donc je ne donne aucun avis dessus. Les changements d'entraîneur signalés ne sont que des variantes d'orthographe."
+    },
+    "updatedAt": "2026-11-23T18:34:54.143Z",
+    "createdAt": "2026-11-23T18:34:54.143Z"
+  },
+  {
+    "matchId": "e6fa007f93e0cef004be920f96ee95ba",
+    "homeName": "Sabah FK",
+    "awayName": "Barcelona",
+    "league": "UEFA Champions League",
+    "commenceTime": "2026-11-25T17:45:00Z",
+    "model": "claude-code:sonnet",
+    "engineSnapshot": {
+      "label": "Sabah FK vs Barcelona",
+      "expectedGoals": {
+        "home": 2.156,
+        "away": 0.856,
+        "source": "fotmob"
+      },
+      "trueOdds": {
+        "home": 31.66,
+        "draw": 22.71,
+        "away": 1.08
+      },
+      "market": {
+        "odds1": 20.62,
+        "oddsDraw": 12.25,
+        "odds2": 1.07
+      },
+      "edgePercent": -2.94,
+      "staking": {
+        "action": "PASS",
+        "stake": null,
+        "reason": "pas_de_value",
+        "candidates": [
+          {
+            "outcome": "home",
+            "label": "Sabah FK gagne",
+            "odds": 17,
+            "displayedOdds": 17,
+            "bookmaker": "pmu_fr",
+            "bookmakerTitle": "PMU (FR)",
+            "fairOdds": 31.66,
+            "ev": -0.463,
+            "exclusion": "cote_trop_haute",
+            "releveAt": "2026-11-09T16:42:13.050Z",
+            "origineReleve": "archive",
+            "fraicheur": {
+              "etat": "a-rafraichir",
+              "code": "trop-vieille",
+              "raison": "Relevée il y a 14 jours, au-delà du délai de 1 h : à relever de nouveau avant de parier.",
+              "ageMinutes": 20271,
+              "releveAt": "2026-11-09T16:42:13.050Z",
+              "coupDEnvoi": "2026-11-25T17:45:00.000Z",
+              "heureSure": true,
+              "composAnnonceesA": "2026-11-25T16:45:00.000Z",
+              "limiteMinutes": 60,
+              "reglage": {
+                "maxAgeMinutes": 60,
+                "avantCompos": true
+              },
+              "evalueeLe": "2026-11-23T18:34:10.084Z"
+            }
+          },
+          {
+            "outcome": "draw",
+            "label": "Match nul",
+            "odds": 10.5,
+            "displayedOdds": 10.5,
+            "bookmaker": "pmu_fr",
+            "bookmakerTitle": "PMU (FR)",
+            "fairOdds": 22.71,
+            "ev": -0.5377,
+            "exclusion": "cote_trop_haute",
+            "releveAt": "2026-11-09T16:42:13.050Z",
+            "origineReleve": "archive",
+            "fraicheur": {
+              "etat": "a-rafraichir",
+              "code": "trop-vieille",
+              "raison": "Relevée il y a 14 jours, au-delà du délai de 1 h : à relever de nouveau avant de parier.",
+              "ageMinutes": 20271,
+              "releveAt": "2026-11-09T16:42:13.050Z",
+              "coupDEnvoi": "2026-11-25T17:45:00.000Z",
+              "heureSure": true,
+              "composAnnonceesA": "2026-11-25T16:45:00.000Z",
+              "limiteMinutes": 60,
+              "reglage": {
+                "maxAgeMinutes": 60,
+                "avantCompos": true
+              },
+              "evalueeLe": "2026-11-23T18:34:10.084Z"
+            }
+          },
+          {
+            "outcome": "away",
+            "label": "Barcelona gagne",
+            "odds": 1.05,
+            "displayedOdds": 1.05,
+            "bookmaker": "betclic_fr",
+            "bookmakerTitle": "Betclic (FR)",
+            "fairOdds": 1.08,
+            "ev": -0.0294,
+            "exclusion": "sous_le_seuil",
+            "releveAt": "2026-11-09T16:42:13.050Z",
+            "origineReleve": "archive",
+            "fraicheur": {
+              "etat": "a-rafraichir",
+              "code": "trop-vieille",
+              "raison": "Relevée il y a 14 jours, au-delà du délai de 1 h : à relever de nouveau avant de parier.",
+              "ageMinutes": 20271,
+              "releveAt": "2026-11-09T16:42:13.050Z",
+              "coupDEnvoi": "2026-11-25T17:45:00.000Z",
+              "heureSure": true,
+              "composAnnonceesA": "2026-11-25T16:45:00.000Z",
+              "limiteMinutes": 60,
+              "reglage": {
+                "maxAgeMinutes": 60,
+                "avantCompos": true
+              },
+              "evalueeLe": "2026-11-23T18:34:10.084Z"
+            }
+          }
+        ],
+        "limits": {
+          "edgeThresholdMin": 0.02,
+          "edgeThresholdMax": 0.25,
+          "maxValueOdds": 5
+        }
+      },
+      "statExpectations": {
+        "corners": {
+          "home": 4.29,
+          "away": 4.81,
+          "total": 9.11
+        },
+        "shots": {
+          "home": 13.42,
+          "away": 15.71,
+          "total": 29.13
+        },
+        "shotsOnTarget": {
+          "home": 5.23,
+          "away": 5.99,
+          "total": 11.21
+        }
+      },
+      "marketPredictions": [
+        {
+          "marketId": "totalGoals",
+          "params": {
+            "line": 1.5,
+            "side": "over"
+          },
+          "market": "Total buts",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 1.5 buts",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "bothTeamsScore",
+          "params": {
+            "outcome": "yes"
+          },
+          "market": "Les 2 équipes marquent",
+          "predictedOutcome": "yes",
+          "predictedLabel": "Oui",
+          "predictedOdds": 1.94,
+          "probability": 52,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "resultAndTotal",
+          "params": {
+            "line": 3.5,
+            "key": "awayUnder"
+          },
+          "market": "Résultat + Total buts",
+          "predictedOutcome": "awayUnder",
+          "predictedLabel": "Barcelona & Moins de 3.5 buts",
+          "predictedOdds": 1.45,
+          "probability": 69,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "home",
+            "line": 3.5,
+            "side": "under"
+          },
+          "market": "Buts — Sabah FK",
+          "predictedOutcome": "under",
+          "predictedLabel": "Sabah FK — Moins de 3.5 buts",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamGoals",
+          "params": {
+            "team": "away",
+            "line": 1.5,
+            "side": "under"
+          },
+          "market": "Buts — Barcelona",
+          "predictedOutcome": "under",
+          "predictedLabel": "Barcelona — Moins de 1.5 buts",
+          "predictedOdds": 1.27,
+          "probability": 79,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalCorners",
+          "params": {
+            "line": 6.5,
+            "side": "over"
+          },
+          "market": "Total corners",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 6.5 corners",
+          "predictedOdds": 1.28,
+          "probability": 78,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "home",
+            "line": 6.5,
+            "side": "under"
+          },
+          "market": "Corners — Sabah FK",
+          "predictedOutcome": "under",
+          "predictedLabel": "Sabah FK — Moins de 6.5 corners",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamCorners",
+          "params": {
+            "team": "away",
+            "line": 2.5,
+            "side": "over"
+          },
+          "market": "Corners — Barcelona",
+          "predictedOutcome": "over",
+          "predictedLabel": "Barcelona — Plus de 2.5 corners",
+          "predictedOdds": 1.25,
+          "probability": 80,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShots",
+          "params": {
+            "line": 23.5,
+            "side": "over"
+          },
+          "market": "Total tirs",
+          "predictedOutcome": "over",
+          "predictedLabel": "Plus de 23.5 tirs",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "home",
+            "line": 17.5,
+            "side": "under"
+          },
+          "market": "Tirs — Sabah FK",
+          "predictedOutcome": "under",
+          "predictedLabel": "Sabah FK — Moins de 17.5 tirs",
+          "predictedOdds": 1.24,
+          "probability": 81,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShots",
+          "params": {
+            "team": "away",
+            "line": 10.5,
+            "side": "over"
+          },
+          "market": "Tirs — Barcelona",
+          "predictedOutcome": "over",
+          "predictedLabel": "Barcelona — Plus de 10.5 tirs",
+          "predictedOdds": 1.21,
+          "probability": 83,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "totalShotsOnTarget",
+          "params": {
+            "line": 14.5,
+            "side": "under"
+          },
+          "market": "Total tirs cadrés",
+          "predictedOutcome": "under",
+          "predictedLabel": "Moins de 14.5 tirs cadrés",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "home",
+            "line": 7.5,
+            "side": "under"
+          },
+          "market": "Tirs cadrés — Sabah FK",
+          "predictedOutcome": "under",
+          "predictedLabel": "Sabah FK — Moins de 7.5 tirs cadrés",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        },
+        {
+          "marketId": "teamShotsOnTarget",
+          "params": {
+            "team": "away",
+            "line": 8.5,
+            "side": "under"
+          },
+          "market": "Tirs cadrés — Barcelona",
+          "predictedOutcome": "under",
+          "predictedLabel": "Barcelona — Moins de 8.5 tirs cadrés",
+          "predictedOdds": 1.22,
+          "probability": 82,
+          "minOdds": 1.2
+        }
+      ],
+      "baseDuCalcul": {
+        "montant": 300.92,
+        "origine": "capital-regle"
+      },
+      "engineVersion": 6
+    },
+    "usage": {
+      "input_tokens": 2,
+      "cache_creation_input_tokens": 11501,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 2823,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 11501,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 2823,
+          "cache_read_input_tokens": 0,
+          "cache_creation_input_tokens": 11501,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 11501
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "costUsd": 0.074238,
+    "analysedAt": "2026-11-23T18:34:31.627Z",
+    "timing": "avance",
+    "fiche": "compacte",
+    "memoire": {
+      "mots": 437,
+      "tokens": 1353,
+      "lecons": [
+        "cal-2026-10-21-aston-villa-viking|result",
+        "cal-2026-10-21-aston-villa-viking|resultAndTotal"
+      ],
+      "dossiersDu": "2026-11-23T09:16:38.408Z",
+      "equipes": {
+        "home": {
+          "id": "fotmob-951893",
+          "dossier": true
+        },
+        "away": {
+          "id": "fotmob-8634",
+          "dossier": true
+        }
+      },
+      "championnat": {
+        "league": "UEFA Champions League",
+        "dossier": true
+      }
+    },
+    "lineupSnapshot": {
+      "source": "FotMob",
+      "fotmobMatchId": "6106421",
+      "fetchedAt": "2026-11-23T18:34:10.541Z",
+      "minutesBeforeKickoff": 2831,
+      "home": {
+        "team": "Sabah FK",
+        "teamId": "fotmob-951893",
+        "formation": "4-2-3-1",
+        "coach": "Valdas Dambrauskas",
+        "statsSince": "2026-07-01",
+        "teamMatches": 12,
+        "startXI": [
+          {
+            "id": "fotmob-489507",
+            "name": "Stas Pokatilov",
+            "number": 92,
+            "position": "Goalkeeper",
+            "age": 33,
+            "countryCode": "KAZ",
+            "countryName": "Kazakhstan",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 12,
+              "starts": 12,
+              "minutes": 1110,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.67
+            }
+          },
+          {
+            "id": "fotmob-542777",
+            "name": "Akim Zedadka",
+            "number": 80,
+            "position": "Defender",
+            "age": 31,
+            "countryCode": "ALG",
+            "countryName": "Algeria",
+            "x": 0.292,
+            "y": 0.875,
+            "stats": {
+              "apps": 12,
+              "starts": 12,
+              "minutes": 1049,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.08,
+              "rating": 6.85
+            }
+          },
+          {
+            "id": "fotmob-764834",
+            "name": "Steve Solvet",
+            "number": 3,
+            "position": "Defender",
+            "age": 30,
+            "countryCode": "GLP",
+            "countryName": "Guadeloupe",
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 10,
+              "starts": 10,
+              "minutes": 911,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.65,
+              "rating": 6.7
+            }
+          },
+          {
+            "id": "fotmob-1337091",
+            "name": "Aden McCarthy",
+            "number": 4,
+            "position": "Defender",
+            "age": 22,
+            "countryCode": "RSA",
+            "countryName": "South Africa",
+            "x": 0.292,
+            "y": 0.375,
+            "stats": {
+              "apps": 5,
+              "starts": 4,
+              "minutes": 377,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.59,
+              "rating": 6.48
+            }
+          },
+          {
+            "id": "fotmob-823121",
+            "name": "Tymoteusz Puchacz",
+            "number": 27,
+            "position": "Defender",
+            "age": 27,
+            "countryCode": "POL",
+            "countryName": "Poland",
+            "x": 0.292,
+            "y": 0.125,
+            "stats": {
+              "apps": 12,
+              "starts": 12,
+              "minutes": 1080,
+              "goals": 0,
+              "assists": 6,
+              "xg": 0.28,
+              "rating": 7.14
+            }
+          },
+          {
+            "id": "fotmob-1429286",
+            "name": "Umarali Rakhmonaliev",
+            "number": 7,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "UZB",
+            "countryName": "Uzbekistan",
+            "x": 0.485,
+            "y": 0.7,
+            "stats": {
+              "apps": 12,
+              "starts": 12,
+              "minutes": 989,
+              "goals": 1,
+              "assists": 2,
+              "xg": 1.28,
+              "rating": 7.18
+            }
+          },
+          {
+            "id": "fotmob-906920",
+            "name": "Ivan Lepinjica",
+            "number": 13,
+            "position": "Midfielder",
+            "age": 27,
+            "countryCode": "CRO",
+            "countryName": "Croatia",
+            "x": 0.485,
+            "y": 0.3,
+            "stats": {
+              "apps": 12,
+              "starts": 12,
+              "minutes": 1089,
+              "goals": 0,
+              "assists": 2,
+              "xg": 0.15,
+              "rating": 7.11
+            }
+          },
+          {
+            "id": "fotmob-1624072",
+            "name": "Christian Nwachukwu",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 20,
+            "countryCode": "NGA",
+            "countryName": "Nigeria",
+            "x": 0.678,
+            "y": 0.837,
+            "stats": {
+              "apps": 7,
+              "starts": 3,
+              "minutes": 229,
+              "goals": 1,
+              "assists": 0,
+              "xg": 1.14,
+              "rating": 6.55
+            }
+          },
+          {
+            "id": "fotmob-1351085",
+            "name": "Abdulakh Khaybulaev",
+            "number": 6,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "AZE",
+            "countryName": "Azerbaijan",
+            "x": 0.678,
+            "y": 0.5,
+            "stats": {
+              "apps": 8,
+              "starts": 1,
+              "minutes": 150,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.35,
+              "rating": 6.47
+            }
+          },
+          {
+            "id": "fotmob-458807",
+            "name": "Veljko Simić",
+            "number": 21,
+            "position": "Midfielder",
+            "age": 31,
+            "countryCode": "SRB",
+            "countryName": "Serbia",
+            "x": 0.678,
+            "y": 0.163,
+            "stats": {
+              "apps": 12,
+              "starts": 12,
+              "minutes": 986,
+              "goals": 6,
+              "assists": 0,
+              "xg": 1.51,
+              "rating": 7.11
+            }
+          },
+          {
+            "id": "fotmob-1197093",
+            "name": "Orphé Mbina",
+            "number": 99,
+            "position": "Forward",
+            "age": 26,
+            "countryCode": "GAB",
+            "countryName": "Gabon",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 12,
+              "starts": 2,
+              "minutes": 408,
+              "goals": 2,
+              "assists": 2,
+              "xg": 2.28,
+              "rating": 6.83
+            }
+          }
+        ],
+        "bench": [],
+        "unavailable": [],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-617465",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Joy-Lance Mickels",
+            "position": "Midfielder",
+            "starts": 11,
+            "goals": 5,
+            "assists": 1,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1441450",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Rəhman Daşdəmirov",
+            "position": "Defender",
+            "starts": 9,
+            "goals": 1,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-876149",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Kaheem Parris",
+            "position": "Midfielder",
+            "starts": 7,
+            "goals": 2,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-688887",
+            "age": null,
+            "countryCode": null,
+            "countryName": null,
+            "name": "Aleksey İsayev",
+            "position": "Midfielder",
+            "starts": 7,
+            "goals": 0,
+            "assists": 4,
+            "status": "absent de la feuille de match"
+          }
+        ]
+      },
+      "away": {
+        "team": "Barcelona",
+        "teamId": "fotmob-8634",
+        "formation": "4-2-3-1",
+        "coach": "Hans-Dieter Flick",
+        "statsSince": "2026-07-01",
+        "teamMatches": 17,
+        "startXI": [
+          {
+            "id": "fotmob-1167220",
+            "name": "Joan García",
+            "number": 1,
+            "position": "Goalkeeper",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.1,
+            "y": 0.5,
+            "stats": {
+              "apps": 16,
+              "starts": 16,
+              "minutes": 1395,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 7.14
+            }
+          },
+          {
+            "id": "fotmob-1821727",
+            "name": "Brian Fariñas",
+            "number": 4,
+            "position": "Defender",
+            "age": 20,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.292,
+            "y": 0.875,
+            "stats": {
+              "apps": 3,
+              "starts": 3,
+              "minutes": 217,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": 6.88
+            }
+          },
+          {
+            "id": "fotmob-1532137",
+            "name": "Pau Cubarsí",
+            "number": 5,
+            "position": "Defender",
+            "age": 19,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.292,
+            "y": 0.625,
+            "stats": {
+              "apps": 13,
+              "starts": 13,
+              "minutes": 1142,
+              "goals": 0,
+              "assists": 2,
+              "xg": 0.49,
+              "rating": 7.24
+            }
+          },
+          {
+            "id": "fotmob-1598982",
+            "name": "Gerard Martín",
+            "number": 18,
+            "position": "Defender",
+            "age": 24,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.292,
+            "y": 0.375,
+            "stats": {
+              "apps": 15,
+              "starts": 13,
+              "minutes": 1119,
+              "goals": 1,
+              "assists": 0,
+              "xg": 0.56,
+              "rating": 7.2
+            }
+          },
+          {
+            "id": "fotmob-361757",
+            "name": "João Cancelo",
+            "number": 2,
+            "position": "Defender",
+            "age": 32,
+            "countryCode": "POR",
+            "countryName": "Portugal",
+            "x": 0.292,
+            "y": 0.125,
+            "stats": {
+              "apps": 14,
+              "starts": 10,
+              "minutes": 868,
+              "goals": 2,
+              "assists": 3,
+              "xg": 0.67,
+              "rating": 7.25
+            }
+          },
+          {
+            "id": "fotmob-1279040",
+            "name": "Gavi",
+            "number": 6,
+            "position": "Midfielder",
+            "age": 22,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.485,
+            "y": 0.7,
+            "stats": {
+              "apps": 10,
+              "starts": 2,
+              "minutes": 227,
+              "goals": 0,
+              "assists": 0,
+              "xg": 0.15,
+              "rating": 6.55
+            }
+          },
+          {
+            "id": "fotmob-1083323",
+            "name": "Pedri",
+            "number": 8,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.485,
+            "y": 0.3,
+            "stats": {
+              "apps": 17,
+              "starts": 15,
+              "minutes": 1202,
+              "goals": 1,
+              "assists": 4,
+              "xg": 0.88,
+              "rating": 7.56
+            }
+          },
+          {
+            "id": "fotmob-696679",
+            "name": "Raphinha",
+            "number": 11,
+            "position": "Midfielder",
+            "age": 29,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.678,
+            "y": 0.837,
+            "stats": {
+              "apps": 15,
+              "starts": 14,
+              "minutes": 1104,
+              "goals": 19,
+              "assists": 3,
+              "xg": 12.93,
+              "rating": 8.3
+            }
+          },
+          {
+            "id": "fotmob-1404415",
+            "name": "Fermín López",
+            "number": 7,
+            "position": "Midfielder",
+            "age": 23,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "x": 0.678,
+            "y": 0.5,
+            "stats": {
+              "apps": 16,
+              "starts": 12,
+              "minutes": 1078,
+              "goals": 9,
+              "assists": 7,
+              "xg": 6.21,
+              "rating": 7.55
+            }
+          },
+          {
+            "id": "fotmob-906937",
+            "name": "Anthony Gordon",
+            "number": 17,
+            "position": "Midfielder",
+            "age": 25,
+            "countryCode": "ENG",
+            "countryName": "England",
+            "x": 0.678,
+            "y": 0.163,
+            "stats": {
+              "apps": 16,
+              "starts": 11,
+              "minutes": 971,
+              "goals": 3,
+              "assists": 4,
+              "xg": 5.08,
+              "rating": 7.31
+            }
+          },
+          {
+            "id": "fotmob-576165",
+            "name": "Gabriel Jesus",
+            "number": 9,
+            "position": "Forward",
+            "age": 29,
+            "countryCode": "BRA",
+            "countryName": "Brazil",
+            "x": 0.87,
+            "y": 0.5,
+            "stats": {
+              "apps": 10,
+              "starts": 2,
+              "minutes": 286,
+              "goals": 4,
+              "assists": 1,
+              "xg": 2.13,
+              "rating": 7.42
+            }
+          }
+        ],
+        "bench": [],
+        "unavailable": [
+          {
+            "id": "fotmob-1901980",
+            "age": 17,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Jordi Pesquer",
+            "reason": "en sélection",
+            "expectedReturn": "Mid December 2026",
+            "position": "Defender",
+            "stats": {
+              "apps": 0,
+              "starts": 0,
+              "minutes": 0,
+              "goals": 0,
+              "assists": 0,
+              "xg": null,
+              "rating": null
+            }
+          },
+          {
+            "id": "fotmob-1467236",
+            "age": 19,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Lamine Yamal",
+            "reason": "blessé",
+            "expectedReturn": "A few days",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 17,
+              "starts": 17,
+              "minutes": 1445,
+              "goals": 13,
+              "assists": 13,
+              "xg": 10.64,
+              "rating": 8.61
+            }
+          },
+          {
+            "id": "fotmob-449232",
+            "age": 30,
+            "countryCode": "DEN",
+            "countryName": "Denmark",
+            "name": "Andreas Christensen",
+            "reason": "blessé",
+            "expectedReturn": "About 1-2 weeks",
+            "position": "Defender",
+            "stats": {
+              "apps": 8,
+              "starts": 5,
+              "minutes": 522,
+              "goals": 0,
+              "assists": 1,
+              "xg": 0.54,
+              "rating": 7
+            }
+          },
+          {
+            "id": "fotmob-675088",
+            "age": 30,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Rodri",
+            "reason": "blessé",
+            "expectedReturn": "Early December 2026",
+            "position": "Midfielder",
+            "stats": {
+              "apps": 14,
+              "starts": 11,
+              "minutes": 945,
+              "goals": 1,
+              "assists": 1,
+              "xg": 1.05,
+              "rating": 7.54
+            }
+          },
+          {
+            "id": "fotmob-1815149",
+            "age": 19,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Xavi Espart",
+            "reason": "blessé",
+            "expectedReturn": "Early January 2027",
+            "position": "Defender",
+            "stats": {
+              "apps": 9,
+              "starts": 9,
+              "minutes": 724,
+              "goals": 2,
+              "assists": 2,
+              "xg": 0.57,
+              "rating": 7.58
+            }
+          },
+          {
+            "id": "fotmob-1315475",
+            "age": 21,
+            "countryCode": "SWE",
+            "countryName": "Sweden",
+            "name": "Roony Bardghji",
+            "reason": "blessé",
+            "expectedReturn": "Late February 2027",
+            "position": null,
+            "stats": null
+          }
+        ],
+        "usualStartersMissing": [
+          {
+            "id": "fotmob-1467236",
+            "age": 19,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Lamine Yamal",
+            "position": "Midfielder",
+            "starts": 17,
+            "goals": 13,
+            "assists": 13,
+            "status": "blessé"
+          },
+          {
+            "id": "fotmob-675088",
+            "age": 30,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Rodri",
+            "position": "Midfielder",
+            "starts": 11,
+            "goals": 1,
+            "assists": 1,
+            "status": "blessé"
+          },
+          {
+            "id": "fotmob-940573",
+            "age": 25,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Eric García",
+            "position": "Defender",
+            "starts": 9,
+            "goals": 1,
+            "assists": 0,
+            "status": "absent de la feuille de match"
+          },
+          {
+            "id": "fotmob-1815149",
+            "age": 19,
+            "countryCode": "ESP",
+            "countryName": "Spain",
+            "name": "Xavi Espart",
+            "position": "Defender",
+            "starts": 9,
+            "goals": 2,
+            "assists": 2,
+            "status": "blessé"
+          }
+        ]
+      },
+      "matchInfo": {
+        "round": "5",
+        "stadium": "Bakı Olimpiya Stadionu",
+        "city": "Baku",
+        "capacity": 68700,
+        "surface": "grass",
+        "weather": "Showers",
+        "temperature": 8,
+        "windSpeed": 22,
+        "precipitation": 0.2,
+        "referee": {
+          "name": "Nick Walsh",
+          "country": "Scotland",
+          "league": "Premiership",
+          "matches": 50,
+          "yellowCardsPerMatch": 4.04,
+          "yellowCardsLeagueAverage": 3.81,
+          "redCards": 6,
+          "penalties": 15,
+          "foulsPerMatch": 25.35,
+          "foulsLeagueAverage": 23.17
+        }
+      }
+    },
+    "analysis": {
+      "summary": "Sabah FK (31e, 3 pts) a perdu 3 de ses 4 matchs de Ligue des champions, dont 0-4 à Manchester United et 1-4 à Viking, mais produit 2,6 buts et 20,6 tirs par match à domicile. Barcelona (5e, 9 pts) vient de battre Aston Villa 3-0 et domine ses stats : 3,2 buts, 20,1 tirs, 68 % de possession sur 10 matchs. Barcelona est privé de Yamal (blessé, retour dans quelques jours), Rodri et Christensen, mais aligne Raphinha, Pedri, Fermín López et Gordon. Sabah joue sans plusieurs titulaires habituels (Mickels, Daşdəmirov, Parris, İsayev).",
+      "keyFactors": [
+        {
+          "factor": "classement",
+          "observation": "Fossé net entre les deux équipes.",
+          "evidence": "Sabah 31e, 1-0-3, diff -6 ; Barcelona 5e, 3-0-1, diff +8."
+        },
+        {
+          "factor": "statistiques et moyennes",
+          "observation": "Barcelona produit beaucoup et concède peu de tirs ; Sabah est plus ouvert.",
+          "evidence": "Barcelona 20,1 tirs produits / 8,3 concédés ; Sabah 16,1 / 14,8 (10 derniers)."
+        },
+        {
+          "factor": "absences",
+          "observation": "Barcelona sans Yamal ni Rodri, Sabah sans quatre titulaires habituels.",
+          "evidence": "Yamal 13+13 en 17 matchs ; Mickels 11 titularisations."
+        },
+        {
+          "factor": "cadre du match",
+          "observation": "Météo humide et venteuse, arbitre un peu plus sévère que la moyenne.",
+          "evidence": "Averses, 8 °C, vent 22 km/h ; arbitre 4,04 jaunes contre 3,81 en championnat."
+        }
+      ],
+      "alignmentWithModel": "Le contexte va dans le sens du moteur : Barcelona domine le jeu, et Sabah, en mauvaise forme, produit moins qu'à domicile habituellement. L'écart de marché 1N2 est jugé sans valeur, et ce point ne relève pas de mon avis. Les marchés de volume sont cohérents avec les attendus.",
+      "caveats": "Les cotes ont 14 jours (relevé d'archive). La forme de Sabah date du 04/11 et son dossier du 05/11. La composition a été relue 2831 min avant le coup d'envoi, ce peut donc être une prévision. Les marchés de buts sont volontairement exclus.",
+      "lineupImpact": "Les compositions sont probablement des prévisions, relues bien avant le match. Barcelona sans Yamal ni Rodri garde Raphinha (19 buts, 3 passes), Pedri, Fermín López et Gordon, donc un volume offensif élevé. Sabah aligne Mbina (xG 2,28) seul en pointe et Simić (6 buts), mais sans Mickels ni Parris, ce qui limite son volume. Le banc n'apporte rien de notable des deux côtés. Averses et vent à Bakou peuvent gêner un peu le jeu.",
+      "marketViews": [
+        {
+          "market": "Total corners",
+          "pick": "Plus de 6.5 corners",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "78 % : le moteur attend 9,11 corners (4,29 Sabah, 4,81 Barcelona), nettement au-dessus de 6,5.",
+          "reasoning": "Barcelona produit 5,1 corners par match et Sabah en concède 5,6, ce qui soutient le total. À l'extérieur toutefois, Barcelona n'en produit que 3,8.",
+          "probability": 78
+        },
+        {
+          "market": "Corners — Sabah FK",
+          "pick": "Sabah FK — Moins de 6.5 corners",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "82 % : Sabah est attendu à 4,29 corners, contre 4,9 produits sur 10 matchs, et Barcelona n'en concède que 2,9.",
+          "reasoning": "Face à une équipe qui garde 68 % de possession, Sabah aura peu le ballon. Son pic à domicile (5,8) reste sous la ligne.",
+          "probability": 82
+        },
+        {
+          "market": "Corners — Barcelona",
+          "pick": "Barcelona — Plus de 2.5 corners",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "80 % : 4,81 corners attendus pour Barcelona, qui en produit 5,1 par match et 3,8 à l'extérieur.",
+          "reasoning": "Même sa moyenne extérieure (3,8) dépasse la ligne, et Sabah en concède 5,6. Un match à sens unique réduirait pourtant les corners.",
+          "probability": 80
+        },
+        {
+          "market": "Total tirs",
+          "pick": "Plus de 23.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "81 % : 29,13 tirs attendus (13,42 Sabah, 15,71 Barcelona), bien au-dessus de 23,5.",
+          "reasoning": "Barcelona tire 20,1 fois par match et Sabah en concède 14,8. Sabah tire 20,6 fois à domicile, ce qui porte le total.",
+          "probability": 81
+        },
+        {
+          "market": "Tirs — Sabah FK",
+          "pick": "Sabah FK — Moins de 17.5 tirs",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "81 % : 13,42 tirs attendus pour Sabah, qui en produit 16,1 sur 10 matchs et dont l'adversaire n'en concède que 8,3.",
+          "reasoning": "Sabah tire plus à domicile (20,6), ce qui est le risque. La défense de Barcelona et l'absence de Mickels et Parris plaident pour la ligne basse.",
+          "probability": 81
+        },
+        {
+          "market": "Tirs — Barcelona",
+          "pick": "Barcelona — Plus de 10.5 tirs",
+          "verdict": "confirme",
+          "confidence": "forte",
+          "explanation": "83 % : 15,71 tirs attendus pour Barcelona, qui en tire 20,1 par match (20,2 à l'extérieur).",
+          "reasoning": "Sa moyenne dépasse nettement la ligne, malgré l'absence de Yamal. Sabah concède 14,8 tirs par match.",
+          "probability": 83
+        },
+        {
+          "market": "Total tirs cadrés",
+          "pick": "Moins de 14.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "82 % : 11,21 tirs cadrés attendus au total (5,23 et 5,99), sous 14,5.",
+          "reasoning": "Les moyennes cumulées (7,5 pour Barcelona, 5,4 pour Sabah) restent sous la ligne. Un match très ouvert pourrait la dépasser.",
+          "probability": 82
+        },
+        {
+          "market": "Tirs cadrés — Sabah FK",
+          "pick": "Sabah FK — Moins de 7.5 tirs cadrés",
+          "verdict": "confirme",
+          "confidence": "moyenne",
+          "explanation": "82 % : 5,23 tirs cadrés attendus pour Sabah, qui en produit 5,4 sur 10 matchs.",
+          "reasoning": "Sa moyenne à domicile (7,4) frôle la ligne, mais Barcelona n'en concède que 4,1 par match.",
+          "probability": 82
+        },
+        {
+          "market": "Tirs cadrés — Barcelona",
+          "pick": "Barcelona — Moins de 8.5 tirs cadrés",
+          "verdict": "nuance",
+          "confidence": "faible",
+          "explanation": "82 % : 5,99 tirs cadrés attendus pour Barcelona, contre 7,5 produits par match sur 10 matchs.",
+          "reasoning": "Barcelona en produit 7,4 à l'extérieur, et Sabah en concède 5,8, ce qui rapproche de la ligne. Un match dominé pourrait donc l'atteindre.",
+          "probability": 82
+        }
+      ]
+    },
+    "updatedAt": "2026-11-23T18:34:31.627Z",
+    "createdAt": "2026-11-23T18:34:31.627Z"
   }
 ]

@@ -4,15 +4,24 @@
   "phase": "rodage",
   "nonSurveille": "Non surveillé par l'essai : la boucle des compositions, la boucle des cotes gratuites, et le détail de l'analyse au coup d'envoi (ses échecs ne sont dits que dans la fenêtre du serveur). Coût de la veille (matchs commencés pendant que le PC dormait) : non compté : aucune heure de coup d’envoi lisible sans la base.",
   "couverture": {
-    "minutesObservees": 80,
+    "minutesObservees": 124,
     "minutesDeVeille": 358,
-    "minutesArret": 0,
+    "minutesArret": 98,
     "minutesEnErreur": 0,
-    "tours": 11,
-    "toursReussis": 11
+    "tours": 17,
+    "toursReussis": 17
   },
   "serveur": {
-    "demarrages": [],
+    "demarrages": [
+      {
+        "le": "2026-11-23T18:32:43.478Z",
+        "pid": 21324,
+        "commit": "95943d409fe1f61c57a5d684629c93a8ae4fae2a",
+        "type": "mise-en-service",
+        "id": "2026-11-23|mise-en-service|21324|18:32:43",
+        "empreinteDesCauses": "edbeea176827b15ba94a8367c549d97b5b5412ba"
+      }
+    ],
     "trous": [
       {
         "de": "2026-11-22T23:13:19.687Z",
@@ -34,27 +43,66 @@
         "minutes": 91,
         "cause": "veille-du-pc",
         "id": "2026-11-23|trou|5456|08:48:18"
+      },
+      {
+        "de": "2026-11-23T09:58:18.956Z",
+        "a": "2026-11-23T16:55:02.883Z",
+        "minutes": 417,
+        "cause": null,
+        "id": "2026-11-23|trou|5456|16:55:02"
       }
     ]
   },
   "passes": {
-    "total": 0,
+    "total": 1,
     "ok": 0,
-    "partielles": 0,
+    "partielles": 1,
     "enEchec": 0,
     "nuit": null,
-    "rattrapages": [],
-    "liste": []
+    "rattrapages": [
+      {
+        "id": "2026-11-23T02:14:35.933Z",
+        "dureeS": 25658,
+        "apresUnTrouDe": 91
+      }
+    ],
+    "liste": [
+      {
+        "id": "2026-11-23T02:14:35.933Z",
+        "raison": "périodique",
+        "debut": "2026-11-23T02:14:35.933Z",
+        "fin": "2026-11-23T09:22:14.276Z",
+        "dureeS": 25658,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "controle",
+            "statut": "warn",
+            "resume": "Depuis le 2026-10-24 : 1 827 rencontres contrôlées, 17 anomalies (buteurs : 15, gardien : 1, fichiers : 1). Rien n'est corrigé automatiquement."
+          },
+          {
+            "cle": "simulationSaisons",
+            "statut": "warn",
+            "resume": "Fins de saison : 35 championnats simulés 10 000 fois, 13 non calculés (Serie B - Italy : table et magasin en désaccord : Palermo (table 12, magasin 13), Modena (table 12, magasin  ; Premiership - Scotland : calendrier incomplet : 114 rencontres connues sur 117 attendues, non calculé ; Swiss Superlea"
+          }
+        ],
+        "figeeParLaVeille": true
+      }
+    ]
   },
   "alertes": {
     "posees": [
       "enregistreurs"
     ],
-    "levees": [],
-    "changees": []
+    "levees": [
+      "enregistreurs"
+    ],
+    "changees": [
+      "simulationSaisons"
+    ]
   },
   "controleDuJour": {
-    "releves": "2026-11-22T20:48:35.303Z",
+    "releves": "2026-11-23T09:22:10.919Z",
     "pire": "orange",
     "rouges": [],
     "oranges": [
@@ -68,7 +116,7 @@
       "hors-reperes-buts",
       "hors-reperes-statistiques"
     ],
-    "presentsAuDepart": 73
+    "presentsAuDepart": 72
   },
   "fotmob": {
     "transitions": []
@@ -82,10 +130,10 @@
   },
   "restauration": null,
   "ia": {
-    "appels": 133,
-    "ok": 133,
+    "appels": 139,
+    "ok": 139,
     "echecs": 0,
-    "tokens": 1665979
+    "tokens": 1777057
   },
   "direct": {
     "suspensions": 0,
@@ -183,6 +231,130 @@
       "classe": "info",
       "cause": null,
       "rodage": true
+    },
+    {
+      "id": "2026-11-23|etape-en-alerte|controle|09:22:14",
+      "le": "2026-11-23T09:22:14.276Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controle",
+      "texte": "controle : Depuis le 2026-10-24 : 1 827 rencontres contrôlées, 17 anomalies (buteurs : 15, gardien : 1, fichiers : 1). Rien n'est corrigé automatiquement.",
+      "details": {
+        "passe": "2026-11-23T02:14:35.933Z",
+        "statut": "warn",
+        "figeeParLaVeille": true
+      },
+      "classe": "connue",
+      "cause": "audit-buteurs-gardiens",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-23|etape-en-alerte|simulationSaisons|09:22:14",
+      "le": "2026-11-23T09:22:14.276Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "simulationSaisons",
+      "texte": "simulationSaisons : Fins de saison : 35 championnats simulés 10 000 fois, 13 non calculés (Serie B - Italy : table et magasin en désaccord : Palermo (table 12, magasin 13), Modena (table 12, magasin  ; Premiership - Scotland : calendrier incomplet : 114 rencontres connues sur 117 attendues, non calculé ; Swiss Superlea",
+      "details": {
+        "passe": "2026-11-23T02:14:35.933Z",
+        "statut": "warn",
+        "figeeParLaVeille": true
+      },
+      "classe": "connue",
+      "cause": "calendriers-incomplets",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-23|alerte-levee|enregistreurs|09:28:18",
+      "le": "2026-11-23T09:28:18.917Z",
+      "type": "alerte-levee",
+      "signal": "S3",
+      "cle": "enregistreurs",
+      "texte": "Alerte « enregistreurs » levée.",
+      "details": {
+        "signature": null
+      },
+      "classe": "info",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-23|alerte-changee|simulationSaisons|09:28:18",
+      "le": "2026-11-23T09:28:18.917Z",
+      "type": "alerte-changee",
+      "signal": "S3",
+      "cle": "simulationSaisons",
+      "texte": "Alerte « simulationSaisons » : son contenu a changé.",
+      "details": {
+        "signature": "{\"inconnus\":[\"{\\\"league\\\":\\\"Allsvenskan - Sweden\\\",\\\"noms\\\":[\\\"Varbergs BoIS FC\\\",\\\"Östersunds FK\\\"]}\",\"{\\\"league\\\":\\\"Eliteserien - Norway\\\",\\\"noms\\\":[\\\"Odds Ballklubb\\\",\\\"Stabæk\\\"]}\",\"{\\\"league\\\":\\\"MLS\\\",\\\"noms\\\":[\\\"Orlando City/FC Cincinnati\\\",\\\"Seattle Sounders FC/Real Salt Lake\\\"]}\"]}",
+        "avant": "{\"inconnus\":[\"{\\\"league\\\":\\\"Eliteserien - Norway\\\",\\\"noms\\\":[\\\"Bryne\\\",\\\"Odds Ballklubb\\\"]}\",\"{\\\"league\\\":\\\"MLS\\\",\\\"noms\\\":[\\\"Orlando City/FC Cincinnati\\\",\\\"Seattle Sounders FC/Real Salt Lake\\\"]}\"]}",
+        "nombres": {
+          "inconnus": 3
+        }
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "raison": "un problème de plus dans l’alerte (2)",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-23|constat-nouveau|zeros-non-releves:zero:zeros:2026-11-22-metropolitanos-fc-deportivo-la-guaira|09:22:10",
+      "le": "2026-11-23T09:22:10.919Z",
+      "type": "constat-nouveau",
+      "signal": "S4",
+      "cle": "zeros-non-releves:zero:zeros:2026-11-22-metropolitanos-fc-deportivo-la-guaira",
+      "texte": "Constat nouveau (zeros-non-releves) : Metropolitanos FC – Deportivo La Guaira du 22/11/2026 (1-5) — Metropolitanos FC : dégagements, interceptions, centres, longs ballons à 0 ; tirs dans et hors de la surface à 0 pour 15 tirs — Deportivo ",
+      "details": {
+        "controle": "zeros-non-releves",
+        "classe": "orange",
+        "trouveLe": "2026-11-23T09:22:10.919Z",
+        "league": "Primera División - Venezuela"
+      },
+      "classe": "connue",
+      "cause": "chiffres-non-publies",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-23|trou|5456|16:55:02",
+      "le": "2026-11-23T16:55:02.883Z",
+      "type": "trou",
+      "signal": "S10",
+      "cle": "5456",
+      "texte": "veille du PC trop courte : 0 min sur un trou de 417 min",
+      "details": {
+        "de": "2026-11-23T09:58:18.956Z",
+        "a": "2026-11-23T16:55:02.883Z",
+        "minutes": 417,
+        "minutesDeVeille": 0,
+        "pistes": [
+          "fenêtre du serveur figée ?",
+          "fil du serveur bloqué par un calcul ?"
+        ]
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-23|mise-en-service|21324|18:32:43",
+      "le": "2026-11-23T18:32:43.478Z",
+      "type": "mise-en-service",
+      "signal": "S11",
+      "cle": "21324",
+      "texte": "Mise en service : lot compo-ko, mise en service n° 1 (compositions des matchs cotés, intitulés FotMob renommés)",
+      "details": {
+        "pidAvant": 5456,
+        "commitAvant": "70060819e03a5090f3e89493334fd89b3f709618",
+        "commit": "95943d409fe1f61c57a5d684629c93a8ae4fae2a",
+        "code": "change",
+        "ecartMin": 98,
+        "marque": null,
+        "message": "Lot « compo-ko » : l'analyse IA « au coup d'envoi » d'un match coté lit le match FotMob par les identifiants des clubs (vraie composition, absents) ; l'heure du coup d'envoi revue trois fois ; les int",
+        "rapide": false
+      },
+      "classe": "connue",
+      "cause": "mise-en-service",
+      "rodage": true
     }
   ],
   "vus": {
@@ -226,12 +398,12 @@
       "2026-11-21T21:38:12.632Z",
       "2026-11-22T13:53:00.049Z",
       "2026-11-22T17:44:59.210Z",
-      "2026-11-22T20:46:51.104Z"
+      "2026-11-22T20:46:51.104Z",
+      "2026-11-23T02:14:35.933Z"
     ],
     "alertes": {
       "audit": "{\"parType\":[\"buteurs\",\"fichiers\",\"gardien\"]}",
-      "simulationSaisons": "{\"inconnus\":[\"{\\\"league\\\":\\\"Eliteserien - Norway\\\",\\\"noms\\\":[\\\"Bryne\\\",\\\"Odds Ballklubb\\\"]}\",\"{\\\"league\\\":\\\"MLS\\\",\\\"noms\\\":[\\\"Orlando City/FC Cincinnati\\\",\\\"Seattle Sounders FC/Real Salt Lake\\\"]}\"]}",
-      "enregistreurs": "{\"releves\":[\"file\"]}"
+      "simulationSaisons": "{\"inconnus\":[\"{\\\"league\\\":\\\"Allsvenskan - Sweden\\\",\\\"noms\\\":[\\\"Varbergs BoIS FC\\\",\\\"Östersunds FK\\\"]}\",\"{\\\"league\\\":\\\"Eliteserien - Norway\\\",\\\"noms\\\":[\\\"Odds Ballklubb\\\",\\\"Stabæk\\\"]}\",\"{\\\"league\\\":\\\"MLS\\\",\\\"noms\\\":[\\\"Orlando City/FC Cincinnati\\\",\\\"Seattle Sounders FC/Real Salt Lake\\\"]}\"]}"
     },
     "controles": {
       "score-football-data": "vert",
@@ -289,7 +461,8 @@
       "zeros-non-releves:zero:zeros:2026-11-21-deportivo-tachira-caracas",
       "hors-reperes-buts:Dutch Eredivisie|2026-27|avantage_terrain",
       "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-6479",
-      "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-8534"
+      "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-8534",
+      "zeros-non-releves:zero:zeros:2026-11-22-metropolitanos-fc-deportivo-la-guaira"
     ],
     "fotmob": "ok",
     "sauvegarde": "2026-11-23T09:14:58.008Z",
@@ -309,7 +482,8 @@
         "2026-11-18",
         "2026-11-19",
         "2026-11-20",
-        "2026-11-22"
+        "2026-11-22",
+        "2026-11-23"
       ],
       "calendriers-incomplets": [
         "2026-11-16",
@@ -318,7 +492,8 @@
         "2026-11-19",
         "2026-11-20",
         "2026-11-21",
-        "2026-11-22"
+        "2026-11-22",
+        "2026-11-23"
       ],
       "controle-du-jour": [
         "2026-11-16",
@@ -333,14 +508,16 @@
       ],
       "chiffres-non-publies": [
         "2026-11-20",
-        "2026-11-22"
+        "2026-11-22",
+        "2026-11-23"
       ],
       "hors-reperes": [
         "2026-11-20",
         "2026-11-22"
       ],
       "mise-en-service": [
-        "2026-11-21"
+        "2026-11-21",
+        "2026-11-23"
       ],
       "veille-du-pc": [
         "2026-11-23"

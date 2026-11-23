@@ -92726,7 +92726,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-22T19:18:16.258Z",
+    "updatedAt": "2026-11-23T18:35:18.085Z",
     "createdAt": "2026-11-22T13:56:55.404Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -93194,6 +93194,238 @@
         "engineVersion": 6
       },
       "analysedAt": "2026-11-22T13:56:55.404Z"
+    },
+    "postMatchReview": {
+      "summary": "Match nul 4-4 (Inter menait 3-1 à la 52e, puis Atalanta a égalisé sur penalty à la 90+1). Les marchés de volume (corners, tirs, tirs cadrés totaux) ont été bien lus. Le favori Inter a été mis en échec, et la défense d'Inter, jugée solide, a concédé 10 tirs cadrés.",
+      "whatWasRight": "Les marchés de volume ont tenu : 11 corners au total (5 + 6), 31 tirs (15 + 16) et 16 tirs cadrés. Les seuils bas sur les corners par équipe (5 et 6 corners, soit plus de 2,5) et les 16 tirs d'Inter (plus de 10,5) étaient bien calibrés. Le moteur attendait 30,53 tirs et on en a compté 31. Atalanta à 15 tirs (moins de 19,5) a aussi été bien vu. Le contexte offensif des deux équipes évoqué avant le match s'est confirmé avec 8 buts.",
+      "whatWasMissed": "La solidité défensive d'Inter a été surestimée : Atalanta a cadré 10 tirs alors que la moyenne concédée était de 3,5, pour un xG de 2,92. J'avais sous-pesé le risque de scénario ouvert, alors que le chiffrage du moteur (xG 1,8 contre 1,2) était loin des 3,33 contre 2,92 réels. Les deux penaltys (Sučić à la 76e, Kessié à la 90+1) et la blessure de Çalhanoğlu à la 33e ont ajouté de la variance. Le nul tardif n'était pas anticipable, mais l'Inter à 61 % était trop confiant.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1N2 : Inter favori à 61 % et nul seulement autour de 20 %. Il va dans son sens sur tous les marchés de corners et de tirs. Le PASS faute de value était prudent.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Inter Milan gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Inter menait 3-1 à la 52e (triplé d'Esposito), mais Atalanta est revenue : De Ketelaere à la 72e et à la 81e, puis penalty de Kessié à la 90+1 pour le 4-4. Atalanta a cadré 10 tirs contre 6, avec un xG de 2,92 contre 3,33.",
+          "lesson": "Ne pas confirmer un favori avec trop de confiance quand l'adversaire est offensif à domicile (20 tirs, 2,7 xG). Les moyennes défensives de l'Inter ne protègent pas d'un match ouvert. Mes avis sur ce marché tiennent peu souvent : rester prudent."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Inter Milan & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Atalanta BC",
+          "marketId": "teamGoals",
+          "pick": "Atalanta BC — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Inter Milan",
+          "marketId": "teamGoals",
+          "pick": "Inter Milan — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 12.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "11 corners au total (5 + 6), sous la ligne de 12,5. Cela correspond à l'attente du moteur de 9,52 et aux 9,7 de moyenne de la Serie A.",
+          "lesson": "Une ligne de 12,5 corners reste sûre même dans un match à 8 buts. Cet avis fort mérite d'être gardé."
+        },
+        {
+          "market": "Corners — Atalanta BC",
+          "marketId": "teamCorners",
+          "pick": "Atalanta BC — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Atalanta a obtenu 5 corners, soit plus de 2,5, conformément à sa production de 5,9 par match.",
+          "lesson": "Les seuils très bas par rapport à la moyenne d'équipe tiennent bien. À garder."
+        },
+        {
+          "market": "Corners — Inter Milan",
+          "marketId": "teamCorners",
+          "pick": "Inter Milan — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Inter a obtenu 6 corners, malgré la possession de 59 %. L'équipe a mené jusqu'à la 90e sans s'effondrer sur ce plan.",
+          "lesson": "Le seuil de 2,5 est atteignable même pour une équipe qui gère. À garder."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 24.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "31 tirs au total (15 + 16), au-dessus de 24,5 et proche des 30,53 attendus par le moteur. Le match ouvert à 8 buts a aidé.",
+          "lesson": "La ligne de 24,5 tirs est confortable quand les deux équipes sont offensives. Avis fort à garder."
+        },
+        {
+          "market": "Tirs — Atalanta BC",
+          "marketId": "teamShots",
+          "pick": "Atalanta BC — Moins de 19.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Atalanta a tiré 15 fois, sous la ligne de 19,5, malgré ses 20 tirs de moyenne à domicile. Inter a limité le volume mais pas la qualité.",
+          "lesson": "La moyenne à domicile surestime le volume contre Inter. Le marché a tenu, mais la qualité des tirs échappait à ce chiffre."
+        },
+        {
+          "market": "Tirs — Inter Milan",
+          "marketId": "teamShots",
+          "pick": "Inter Milan — Plus de 10.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Inter a tiré 16 fois, bien au-dessus de 10,5, avec 7 grosses occasions et 3 buts d'Esposito avant la 52e.",
+          "lesson": "Un seuil bien sous la production habituelle d'une équipe forte est fiable. À garder."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "16 tirs cadrés au total (10 + 6), bien au-dessus de 7,5. Le moteur en attendait 10,62.",
+          "lesson": "Le total tirs cadrés a été plus élevé que prévu à cause du match ouvert. L'avis tenait, avec une variance réelle."
+        },
+        {
+          "market": "Tirs cadrés — Atalanta BC",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Atalanta BC — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Atalanta a cadré 10 tirs, au-dessus de 7,5, alors que le moteur en attendait 5,17 et qu'Inter n'en concédait que 3,5. Le xG de 2,92 le confirme. Ses 4 buts, dont 2 sur penalty ou en fin de match, ont été favorisés par un scénario de remontée.",
+          "lesson": "Ne pas confirmer un « moins de » sur une équipe offensive à domicile (moyenne 8) quand elle est menée. Le retard au score gonfle les tirs cadrés."
+        },
+        {
+          "market": "Tirs cadrés — Inter Milan",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Inter Milan — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Inter a cadré 6 tirs, sous 7,5, dans la ligne de sa moyenne de 6,7. Esposito a marqué 3 fois sur ces tirs cadrés, et le match a basculé en faveur d'Atalanta ensuite.",
+          "lesson": "Mon avis nuancé a été juste : un seuil proche de la moyenne reste incertain. Garder la prudence sur ce type de ligne."
+        }
+      ],
+      "caveats": "Un seul match, dont l'issue a tenu à des événements peu prévisibles : deux penaltys (76e, 90+1), la blessure de Çalhanoğlu (33e) et un arrêt de Martínez à la 87e. Les compositions étaient probables et non officielles. Les cotes de marché dataient de 13 jours.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 21,
+        "commentaire": 4
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 8019,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 2454,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 8019,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2454,
+            "cache_read_input_tokens": 0,
+            "cache_creation_input_tokens": 8019,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 8019
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.056620000000000004,
+      "createdAt": "2026-11-23T18:35:18.085Z"
     }
   },
   {
