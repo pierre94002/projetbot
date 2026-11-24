@@ -2,20 +2,20 @@
   "version": 1,
   "jour": "2026-11-24",
   "canal": "claude-code",
-  "majLe": "2026-11-24T01:36:08.352Z",
+  "majLe": "2026-11-24T05:02:07.398Z",
   "totaux": {
-    "appels": 117,
-    "ok": 116,
+    "appels": 119,
+    "ok": 118,
     "echecs": 1,
     "sansTokens": 0,
     "tokens": {
-      "entree": 394,
-      "ecritureCache": 752630,
-      "lectureCache": 941221,
-      "sortie": 440326,
-      "total": 2134571
+      "entree": 402,
+      "ecritureCache": 767110,
+      "lectureCache": 952790,
+      "sortie": 447187,
+      "total": 2167489
     },
-    "equivalentApiUsd": 7.602819,
+    "equivalentApiUsd": 7.731679,
     "parType": {
       "coup-d-envoi": {
         "appels": 3,
@@ -60,18 +60,32 @@
         "equivalentApiUsd": 1.735797
       },
       "revue": {
-        "appels": 87,
-        "ok": 86,
+        "appels": 88,
+        "ok": 87,
         "echecs": 1,
         "sansTokens": 0,
         "tokens": {
-          "entree": 312,
-          "ecritureCache": 547629,
-          "lectureCache": 685668,
-          "sortie": 329961,
-          "total": 1563570
+          "entree": 316,
+          "ecritureCache": 557306,
+          "lectureCache": 693647,
+          "sortie": 334864,
+          "total": 1586133
         },
-        "equivalentApiUsd": 5.627891
+        "equivalentApiUsd": 5.717233
+      },
+      "bulletin": {
+        "appels": 1,
+        "ok": 1,
+        "echecs": 0,
+        "sansTokens": 0,
+        "tokens": {
+          "entree": 4,
+          "ecritureCache": 4803,
+          "lectureCache": 3590,
+          "sortie": 1958,
+          "total": 10355
+        },
+        "equivalentApiUsd": 0.039518
       }
     }
   },
@@ -3936,6 +3950,67 @@
         "total": 20863
       },
       "equivalentApiUsd": 0.081728
+    },
+    {
+      "id": "2026-11-24T04:59:39.804Z-21324-133-eacb23",
+      "at": "2026-11-24T04:59:39.804Z",
+      "jour": "2026-11-24",
+      "debut": "2026-11-24T04:59:03.358Z",
+      "dureeMs": 36446,
+      "canal": "claude-code",
+      "type": "revue",
+      "detail": "après-match",
+      "match": {
+        "matchId": "76d4698a8417f32cb059f14a469939f3",
+        "home": "Sassuolo",
+        "away": "Genoa",
+        "league": "Serie A - Italy"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 2466,
+        "message": 10400
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 9677,
+        "lectureCache": 7979,
+        "sortie": 4903,
+        "total": 22563
+      },
+      "equivalentApiUsd": 0.089342
+    },
+    {
+      "id": "2026-11-24T05:02:07.395Z-21324-134-45de85",
+      "at": "2026-11-24T05:02:07.395Z",
+      "jour": "2026-11-24",
+      "debut": "2026-11-24T05:01:54.469Z",
+      "dureeMs": 12926,
+      "canal": "claude-code",
+      "type": "bulletin",
+      "detail": "bulletin du 2026-11-24",
+      "match": null,
+      "mode": "econome",
+      "fiche": null,
+      "taille": {
+        "consignes": 2595,
+        "message": 2583
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 4803,
+        "lectureCache": 3590,
+        "sortie": 1958,
+        "total": 10355
+      },
+      "equivalentApiUsd": 0.039518
     }
   ]
 }
