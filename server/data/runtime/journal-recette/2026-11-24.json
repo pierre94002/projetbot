@@ -4,20 +4,37 @@
   "phase": "rodage",
   "nonSurveille": "Non surveillé par l'essai : la boucle des compositions, la boucle des cotes gratuites, et le détail de l'analyse au coup d'envoi (ses échecs ne sont dits que dans la fenêtre du serveur). Coût de la veille (matchs commencés pendant que le PC dormait) : non compté : aucune heure de coup d’envoi lisible sans la base.",
   "couverture": {
-    "minutesObservees": 370,
+    "minutesObservees": 574,
     "minutesDeVeille": 0,
-    "minutesArret": 0,
+    "minutesArret": 18,
     "minutesEnErreur": 0,
-    "tours": 37,
-    "toursReussis": 37
+    "tours": 59,
+    "toursReussis": 59
   },
   "serveur": {
-    "demarrages": [],
-    "trous": []
+    "demarrages": [
+      {
+        "le": "2026-11-24T16:50:13.115Z",
+        "pid": 16644,
+        "commit": "ff3fcb6c31ed10b699f1ee111cee790ca359f7ba",
+        "type": "mise-en-service",
+        "id": "2026-11-24|mise-en-service|16644|16:50:13",
+        "empreinteDesCauses": "edbeea176827b15ba94a8367c549d97b5b5412ba"
+      }
+    ],
+    "trous": [
+      {
+        "de": "2026-11-24T08:26:44.680Z",
+        "a": "2026-11-24T16:32:00.304Z",
+        "minutes": 485,
+        "cause": null,
+        "id": "2026-11-24|trou|21324|16:32:00"
+      }
+    ]
   },
   "passes": {
-    "total": 2,
-    "ok": 1,
+    "total": 5,
+    "ok": 4,
     "partielles": 1,
     "enEchec": 0,
     "nuit": null,
@@ -56,6 +73,33 @@
         "dureeS": 235,
         "issue": "ok",
         "etapes": []
+      },
+      {
+        "id": "2026-11-24T08:02:10.505Z",
+        "raison": "périodique",
+        "debut": "2026-11-24T08:02:10.505Z",
+        "fin": "2026-11-24T08:03:25.449Z",
+        "dureeS": 75,
+        "issue": "ok",
+        "etapes": []
+      },
+      {
+        "id": "2026-11-24T16:32:01.069Z",
+        "raison": "périodique",
+        "debut": "2026-11-24T16:32:01.069Z",
+        "fin": "2026-11-24T16:34:18.047Z",
+        "dureeS": 137,
+        "issue": "ok",
+        "etapes": []
+      },
+      {
+        "id": "2026-11-24T16:51:13.155Z",
+        "raison": "au démarrage",
+        "debut": "2026-11-24T16:51:13.155Z",
+        "fin": "2026-11-24T16:53:23.159Z",
+        "dureeS": 130,
+        "issue": "ok",
+        "etapes": []
       }
     ]
   },
@@ -67,7 +111,7 @@
     ]
   },
   "controleDuJour": {
-    "releves": "2026-11-24T05:02:07.462Z",
+    "releves": "2026-11-24T16:52:44.277Z",
     "pire": "orange",
     "rouges": [],
     "oranges": [
@@ -104,10 +148,10 @@
     "dureeMs": 140191
   },
   "ia": {
-    "appels": 119,
-    "ok": 118,
+    "appels": 121,
+    "ok": 120,
     "echecs": 1,
-    "tokens": 2167489
+    "tokens": 2231110
   },
   "direct": {
     "suspensions": 0,
@@ -220,6 +264,48 @@
       "cause": null,
       "raison": "un problème de plus dans l’alerte (1)",
       "rodage": true
+    },
+    {
+      "id": "2026-11-24|trou|21324|16:32:00",
+      "le": "2026-11-24T16:32:00.304Z",
+      "type": "trou",
+      "signal": "S10",
+      "cle": "21324",
+      "texte": "veille du PC trop courte : 0 min sur un trou de 485 min",
+      "details": {
+        "de": "2026-11-24T08:26:44.680Z",
+        "a": "2026-11-24T16:32:00.304Z",
+        "minutes": 485,
+        "minutesDeVeille": 0,
+        "pistes": [
+          "fenêtre du serveur figée ?",
+          "fil du serveur bloqué par un calcul ?"
+        ]
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-24|mise-en-service|16644|16:50:13",
+      "le": "2026-11-24T16:50:13.115Z",
+      "type": "mise-en-service",
+      "signal": "S11",
+      "cle": "16644",
+      "texte": "Mise en service : lot bulletin-comptes, mise en service n° 1 (chaque tableau des fiches du bulletin dit son nombre de lignes)",
+      "details": {
+        "pidAvant": 21324,
+        "commitAvant": "95943d409fe1f61c57a5d684629c93a8ae4fae2a",
+        "commit": "ff3fcb6c31ed10b699f1ee111cee790ca359f7ba",
+        "code": "change",
+        "ecartMin": 18,
+        "marque": null,
+        "message": "Lot « bulletin-comptes » : chaque tableau des fiches du bulletin du jour et du bilan de la semaine dit son nombre de lignes (« 3 lignes sur 7 »)",
+        "rapide": false
+      },
+      "classe": "connue",
+      "cause": "mise-en-service",
+      "rodage": true
     }
   ],
   "vus": {
@@ -268,7 +354,10 @@
       "2026-11-23T18:33:43.500Z",
       "2026-11-23T21:37:39.669Z",
       "2026-11-24T00:39:57.525Z",
-      "2026-11-24T04:58:15.623Z"
+      "2026-11-24T04:58:15.623Z",
+      "2026-11-24T08:02:10.505Z",
+      "2026-11-24T16:32:01.069Z",
+      "2026-11-24T16:51:13.155Z"
     ],
     "alertes": {
       "audit": "{\"parType\":[\"buteurs\",\"fichiers\",\"gardien\"]}",
@@ -389,7 +478,8 @@
       ],
       "mise-en-service": [
         "2026-11-21",
-        "2026-11-23"
+        "2026-11-23",
+        "2026-11-24"
       ],
       "veille-du-pc": [
         "2026-11-23"

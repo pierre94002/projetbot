@@ -2,34 +2,34 @@
   "version": 1,
   "jour": "2026-11-24",
   "canal": "claude-code",
-  "majLe": "2026-11-24T05:02:07.398Z",
+  "majLe": "2026-11-24T16:53:56.617Z",
   "totaux": {
-    "appels": 119,
-    "ok": 118,
+    "appels": 121,
+    "ok": 120,
     "echecs": 1,
     "sansTokens": 0,
     "tokens": {
-      "entree": 402,
-      "ecritureCache": 767110,
-      "lectureCache": 952790,
-      "sortie": 447187,
-      "total": 2167489
+      "entree": 410,
+      "ecritureCache": 789397,
+      "lectureCache": 980995,
+      "sortie": 460308,
+      "total": 2231110
     },
-    "equivalentApiUsd": 7.731679,
+    "equivalentApiUsd": 7.957694,
     "parType": {
       "coup-d-envoi": {
-        "appels": 3,
-        "ok": 3,
+        "appels": 5,
+        "ok": 5,
         "echecs": 0,
         "sansTokens": 0,
         "tokens": {
-          "entree": 8,
-          "ecritureCache": 19626,
-          "lectureCache": 24033,
-          "sortie": 9787,
-          "total": 53454
+          "entree": 16,
+          "ecritureCache": 41913,
+          "lectureCache": 52238,
+          "sortie": 22908,
+          "total": 117075
         },
-        "equivalentApiUsd": 0.181197
+        "equivalentApiUsd": 0.407212
       },
       "reprise": {
         "appels": 1,
@@ -4011,6 +4011,72 @@
         "total": 10355
       },
       "equivalentApiUsd": 0.039518
+    },
+    {
+      "id": "2026-11-24T16:53:00.685Z-16644-1-f429d7",
+      "at": "2026-11-24T16:53:00.685Z",
+      "jour": "2026-11-24",
+      "debut": "2026-11-24T16:52:18.194Z",
+      "dureeMs": 42491,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "e422af92d1fc06c0a330838c1c2f2e08",
+        "home": "Galatasaray",
+        "away": "Aston Villa",
+        "league": "UEFA Champions League"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12317
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 13411,
+        "lectureCache": 11896,
+        "sortie": 6961,
+        "total": 32272
+      },
+      "equivalentApiUsd": 0.125641
+    },
+    {
+      "id": "2026-11-24T16:53:56.614Z-16644-2-5f03f7",
+      "at": "2026-11-24T16:53:56.614Z",
+      "jour": "2026-11-24",
+      "debut": "2026-11-24T16:53:16.230Z",
+      "dureeMs": 40384,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "50b80f3ebd38bf63663b11ae0afc575b",
+        "home": "Bodø/Glimt",
+        "away": "LASK",
+        "league": "UEFA Champions League"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 12101
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 4,
+        "ecritureCache": 8876,
+        "lectureCache": 16309,
+        "sortie": 6160,
+        "total": 31349
+      },
+      "equivalentApiUsd": 0.100374
     }
   ]
 }
