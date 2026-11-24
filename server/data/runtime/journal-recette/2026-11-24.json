@@ -4,20 +4,20 @@
   "phase": "rodage",
   "nonSurveille": "Non surveillé par l'essai : la boucle des compositions, la boucle des cotes gratuites, et le détail de l'analyse au coup d'envoi (ses échecs ne sont dits que dans la fenêtre du serveur). Coût de la veille (matchs commencés pendant que le PC dormait) : non compté : aucune heure de coup d’envoi lisible sans la base.",
   "couverture": {
-    "minutesObservees": 190,
+    "minutesObservees": 370,
     "minutesDeVeille": 0,
     "minutesArret": 0,
     "minutesEnErreur": 0,
-    "tours": 19,
-    "toursReussis": 19
+    "tours": 37,
+    "toursReussis": 37
   },
   "serveur": {
     "demarrages": [],
     "trous": []
   },
   "passes": {
-    "total": 1,
-    "ok": 0,
+    "total": 2,
+    "ok": 1,
     "partielles": 1,
     "enEchec": 0,
     "nuit": null,
@@ -47,6 +47,15 @@
             "resume": "Fins de saison : 32 championnats simulés 10 000 fois, 16 non calculés (Serie B - Italy : table et magasin en désaccord : Palermo (table 12, magasin 13), Modena (table 12, magasin  ; Premiership - Scotland : calendrier incomplet : 114 rencontres connues sur 117 attendues, non calculé ; Swiss Superlea"
           }
         ]
+      },
+      {
+        "id": "2026-11-24T04:58:15.623Z",
+        "raison": "périodique",
+        "debut": "2026-11-24T04:58:15.623Z",
+        "fin": "2026-11-24T05:02:10.357Z",
+        "dureeS": 235,
+        "issue": "ok",
+        "etapes": []
       }
     ]
   },
@@ -58,7 +67,7 @@
     ]
   },
   "controleDuJour": {
-    "releves": "2026-11-24T01:58:12.388Z",
+    "releves": "2026-11-24T05:02:07.462Z",
     "pire": "orange",
     "rouges": [],
     "oranges": [
@@ -95,10 +104,10 @@
     "dureeMs": 140191
   },
   "ia": {
-    "appels": 117,
-    "ok": 116,
+    "appels": 119,
+    "ok": 118,
     "echecs": 1,
-    "tokens": 2134571
+    "tokens": 2167489
   },
   "direct": {
     "suspensions": 0,
@@ -258,7 +267,8 @@
       "2026-11-23T02:14:35.933Z",
       "2026-11-23T18:33:43.500Z",
       "2026-11-23T21:37:39.669Z",
-      "2026-11-24T00:39:57.525Z"
+      "2026-11-24T00:39:57.525Z",
+      "2026-11-24T04:58:15.623Z"
     ],
     "alertes": {
       "audit": "{\"parType\":[\"buteurs\",\"fichiers\",\"gardien\"]}",
