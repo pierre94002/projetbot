@@ -17,7 +17,7 @@
  * -----------------------------------------------------------------------
  */
 
-import { jourCourt, jourEtHeureDits, ERREURS_PAR_MATCH } from './bulletinFiches.js';
+import { jourCourt, jourEtHeureDits, ERREURS_PAR_MATCH, LIMITES } from './bulletinFiches.js';
 // Lot 0 (masque des buts, data/masqueDesButs.js) : la fiche du jour sans ligne de buts ; le bilan de la semaine n'y passe pas.
 import { masqueEnService, ficheDuJourSansLesButs } from '../../data/masqueDesButs.js';
 
@@ -30,6 +30,16 @@ const eurosSignes = (n) => `${signe(n)}${fr(Math.abs(n), 2)} €`;
 const euros = (n) => `${fr(n, 2)} €`;
 const ou = (x, f = (v) => v) => (x === null || x === undefined ? '–' : f(x));
 const pluriel = (n, un, plusieurs) => `${fr(n)} ${n > 1 ? plusieurs : un}`;
+/**
+ * Correctif « bulletin-comptes » (23/11/2026) : chaque tableau de la fiche dit en tête combien de lignes il montre, et sur
+ * combien quand il est coupé (« 3 lignes sur 7 »). Le 18/11, l'IA a écrit « Trois chutes de cote ressortent » et « Pour ces
+ * trois lignes » en comptant les lignes d'un tableau qui ne disait pas son nombre : la garde des chiffres (gardeDesChiffres.js,
+ * INCHANGÉE) a refusé trois fois un compte vrai mais absent de la fiche, et le bulletin du jour n'a pas paru. Désormais le
+ * compte est dans la fiche, donc citable.
+ */
+const lignesDites = (n, total = n) => (total > n ? `${pluriel(n, 'ligne', 'lignes')} sur ${fr(total)}` : pluriel(n, 'ligne', 'lignes'));
+/** Les limites de la fiche dans son mode : un tableau qui l'atteint peut être coupé (son total n'est pas dans la fiche). */
+const limitesDe = (f) => (f.mode === 'econome' ? LIMITES.econome : LIMITES.normal);
 
 const ETATS_DE_COMPOSITION = Object.freeze({ officielle: 'officielle', probable: 'probable', 'derniere-alignee': 'dernière alignée (rien publié par FotMob)', 'non-publiee': 'non publiée' });
 const COULEURS_DE_CASE = Object.freeze({ vert: 'verte', rouge: 'rouge', gris: 'grise' });
@@ -65,7 +75,7 @@ export function rendreLaFicheDuJour(fiche, masque = masqueEnService()) {
     );
     if (o.carteOuParier) sortie.push(`Carte « où parier » du mois ${o.carteOuParier.mois}${o.carteOuParier.aJour ? '' : ' : réglages du moteur changés depuis, ses couleurs sont suspendues'}.`);
     if (o.retenues.length) {
-      sortie.push(`VALUES VERTES (la plus forte d'abord${o.valuesVertes > o.retenues.length ? `, ${pluriel(o.retenues.length, 'ligne', 'lignes')} sur ${fr(o.valuesVertes)}` : ''})`);
+      sortie.push(`VALUES VERTES (la plus forte d'abord, ${lignesDites(o.retenues.length, o.valuesVertes)})`);
       sortie.push(ligne('match', 'championnat', 'heure', 'pari', 'cote', 'bookmaker', 'proba moteur', 'cote juste', 'value', 'cote relevée', 'case', 'compo'));
       for (const l of o.retenues) {
         sortie.push(
@@ -76,7 +86,7 @@ export function rendreLaFicheDuJour(fiche, masque = masqueEnService()) {
       sortie.push("Aucune value verte aujourd'hui.");
     }
     if (o.chutesRetenues.length) {
-      sortie.push(`CHUTES DE COTE (sans value verte, la plus forte d'abord)`);
+      sortie.push(`CHUTES DE COTE (sans value verte, la plus forte d'abord, ${lignesDites(o.chutesRetenues.length, o.chutes)})`);
       sortie.push(ligne('match', 'championnat', 'heure', 'pari', 'chute de la cote juste depuis l’ouverture', 'cote', 'bookmaker', 'compo'));
       for (const l of o.chutesRetenues) {
         sortie.push(ligne(l.match, ou(l.championnat), l.heure ?? 'heure inconnue', ou(l.pari), ou(l.chutePct, (c) => pct(c, 1)), ou(l.cote, (c) => fr(c, 2)), ou(l.bookmaker), ETATS_DE_COMPOSITION[l.compo]));
@@ -97,6 +107,7 @@ export function rendreLaFicheDuJour(fiche, masque = masqueEnService()) {
   } else {
     sortie.push(`${pluriel(v.equipes, 'équipe', 'équipes')} et ${pluriel(v.championnats, 'championnat', 'championnats')} en favoris ; ${pluriel(v.matchsDuJour, 'match de vos favoris', 'matchs de vos favoris')} aujourd'hui.`);
     if (v.matchs.length) {
+      sortie.push(`MATCHS DE VOS FAVORIS (le plus tôt d'abord, ${lignesDites(v.matchs.length, v.matchsDuJour)})`);
       sortie.push(ligne('match', 'championnat', 'heure', 'pourquoi', 'compo', 'values vertes'));
       for (const m of v.matchs) sortie.push(ligne(m.match, ou(m.championnat), m.heure ?? 'heure inconnue', m.pourquoi, ETATS_DE_COMPOSITION[m.compo], fr(m.valuesVertes)));
       if (v.matchsDuJour > v.matchs.length) sortie.push(`(${pluriel(v.matchsDuJour - v.matchs.length, 'autre match non listé', 'autres matchs non listés')})`);
@@ -111,6 +122,7 @@ export function rendreLaFicheDuJour(fiche, masque = masqueEnService()) {
       `${pluriel(c.dernieresAlignees, 'dernière alignée', 'dernières alignées')}, ${pluriel(c.nonPubliees, 'non publiée', 'non publiées')}.`
   );
   if (c.lu && c.matchs.length) {
+    sortie.push(`COMPOSITIONS LUES CHEZ FOTMOB (${lignesDites(c.matchs.length)})`);
     sortie.push(ligne('match', 'composition', 'minutes avant le coup d’envoi', 'absents annoncés (domicile)', 'absents annoncés (extérieur)'));
     for (const m of c.matchs) sortie.push(ligne(m.match, ETATS_DE_COMPOSITION[m.etat], ou(m.minutesAvantLeCoupDEnvoi, (x) => fr(x)), m.absentsDomicile.join(', ') || 'aucun', m.absentsExterieur.join(', ') || 'aucun'));
   }
@@ -121,6 +133,7 @@ export function rendreLaFicheDuJour(fiche, masque = masqueEnService()) {
     const n = k.compte ?? {};
     const total = (n.vert ?? 0) + (n.orange ?? 0) + (n.rouge ?? 0) + (n.nonFait ?? 0) + (n.erreur ?? 0);
     sortie.push(`Feu ${FEUX[k.feu] ?? k.feu} au ${ou(k.le && jourEtHeureDits(k.le))} : ${pluriel(total, 'contrôle', 'contrôles')} — ${fr(n.vert ?? 0)} vert, ${fr(n.orange ?? 0)} orange, ${fr(n.rouge ?? 0)} rouge.`);
+    if (k.enEchec.length) sortie.push(`CONTRÔLES EN ÉCHEC (${lignesDites(k.enEchec.length, k.enEchecTotal)})`);
     for (const x of k.enEchec) sortie.push(`- ${STATUTS_DE_CONTROLE[x.statut] ?? x.statut} : ${x.libelle} (${pluriel(x.constats, 'constat', 'constats')})`);
     if (k.enEchecTotal > k.enEchec.length) sortie.push(`(${pluriel(k.enEchecTotal - k.enEchec.length, 'autre contrôle en échec non listé', 'autres contrôles en échec non listés')})`);
   } else if (k.etat === 'jamais') {
@@ -155,8 +168,12 @@ export function rendreLaFicheDeLaSemaine(f) {
     sortie.push('Aucun pronostic réglé cette semaine.');
   } else {
     sortie.push(`${pluriel(p.regles, 'pronostic réglé', 'pronostics réglés')} : ${pluriel(p.justes, 'juste', 'justes')}, ${fr(p.faux)} faux, réussite ${pct(p.tauxPct)}.`);
+    // Un tableau coupé (limite du mode) se voit sans nombre neuf : les réglés de ses lignes n'atteignent pas le total des réglés.
+    const coupe = (groupes) => groupes.reduce((s, g) => s + g.regles, 0) < p.regles;
+    sortie.push(`PAR MARCHÉ (le plus fourni d'abord, ${lignesDites(p.parMarche.length)}${coupe(p.parMarche) ? ` ; d'autres marchés non montrés` : ''})`);
     sortie.push(ligne('marché', 'réglés', 'justes', 'réussite'));
     for (const g of p.parMarche) sortie.push(ligne(g.libelle, fr(g.regles), fr(g.justes), ou(g.tauxPct, (x) => pct(x))));
+    sortie.push(`PAR CHAMPIONNAT (le plus fourni d'abord, ${lignesDites(p.parChampionnat.length)}${coupe(p.parChampionnat) ? ` ; d'autres championnats non montrés` : ''})`);
     sortie.push(ligne('championnat', 'réglés', 'justes', 'réussite'));
     for (const g of p.parChampionnat) sortie.push(ligne(g.libelle, fr(g.regles), fr(g.justes), ou(g.tauxPct, (x) => pct(x))));
   }
@@ -181,11 +198,13 @@ export function rendreLaFicheDeLaSemaine(f) {
     }
     if (b.meilleurs.length) {
       sortie.push('MEILLEURS PARIS');
+      sortie.push(`(${lignesDites(b.meilleurs.length)}${b.meilleurs.length >= limitesDe(f).extremes ? ` ; la limite de la fiche : d'autres paris gagnants peuvent exister` : ''})`);
       sortie.push(ligne('pari', 'cote', 'mise', 'gain', 'bookmaker'));
       for (const x of b.meilleurs) sortie.push(ligne(x.pari, fr(x.cote, 2), euros(x.mise), eurosSignes(x.gain), ou(x.bookmaker)));
     }
     if (b.pires.length) {
       sortie.push('PIRES PARIS');
+      sortie.push(`(${lignesDites(b.pires.length)}${b.pires.length >= limitesDe(f).extremes ? ` ; la limite de la fiche : d'autres paris perdants peuvent exister` : ''})`);
       sortie.push(ligne('pari', 'cote', 'mise', 'gain', 'bookmaker'));
       for (const x of b.pires) sortie.push(ligne(x.pari, fr(x.cote, 2), euros(x.mise), eurosSignes(x.gain), ou(x.bookmaker)));
     }
@@ -206,6 +225,9 @@ export function rendreLaFicheDeLaSemaine(f) {
     sortie.push('Aucun avis de l’IA jugé cette semaine.');
   } else {
     sortie.push(`${pluriel(ia.semaine.avis, 'avis jugé', 'avis jugés')} ; tenus : ${tauxDit(ia.semaine.tenus, ia.semaine.avis)}.`);
+    // Chaque avis compté tombe dans un seul groupe : des avis hors des lignes montrées = un tableau coupé.
+    const avisMontres = ia.semaine.parMarche.reduce((s, g) => s + g.avis, 0);
+    sortie.push(`SES AVIS PAR MARCHÉ (${lignesDites(ia.semaine.parMarche.length)}${avisMontres < ia.semaine.avis ? ` ; d'autres marchés non montrés` : ''})`);
     sortie.push(ligne('marché', 'avis', 'tenus', 'taux'));
     for (const g of ia.semaine.parMarche) sortie.push(ligne(g.libelle, fr(g.avis), fr(g.tenus), ou(g.tauxPct, (x) => pct(x))));
     if (ia.semaine.erreurs.length) {
@@ -219,7 +241,7 @@ export function rendreLaFicheDeLaSemaine(f) {
   if (car.etat === 'lu') {
     sortie.push(`Carnet de l'IA depuis le ${ou(car.depuis && jourCourt(car.depuis))} (calculé le ${ou(car.calculeLe && jourEtHeureDits(car.calculeLe))}) : ${pluriel(car.matchsAnalysesEtJoues ?? 0, 'match analysé et joué', 'matchs analysés et joués')} ; avis tenus : ${tauxDit(car.tenus, car.avis)}.`);
     if (car.parMarche.length) {
-      sortie.push(`Marchés d'au moins ${fr(car.seuilAvis)} avis, du moins fiable au plus fiable${car.marchesDuMilieu ? ` (${pluriel(car.marchesDuMilieu, 'marché du milieu non montré', 'marchés du milieu non montrés')})` : ''} :`);
+      sortie.push(`Marchés d'au moins ${fr(car.seuilAvis)} avis, du moins fiable au plus fiable${car.marchesDuMilieu ? ` (${pluriel(car.marchesDuMilieu, 'marché du milieu non montré', 'marchés du milieu non montrés')})` : ''} : ${lignesDites(car.parMarche.length, car.parMarche.length + (car.marchesDuMilieu ?? 0))}`);
       sortie.push(ligne('marché', 'avis', 'tenus', 'taux'));
       for (const g of car.parMarche) sortie.push(ligne(g.libelle, fr(g.avis), fr(g.tenus), ou(g.tauxPct, (x) => pct(x))));
     }
@@ -238,7 +260,9 @@ export function rendreLaFicheDeLaSemaine(f) {
   } else if (!ch.rentables.length && !ch.perdants.length) {
     sortie.push('Aucun pari réglé cette semaine, donc aucun championnat à classer.');
   } else {
+    const aLaLimite = ch.rentables.length >= limitesDe(f).ligues || ch.perdants.length >= limitesDe(f).ligues;
     sortie.push('VOS PARIS DE LA SEMAINE, CHAMPIONNAT PAR CHAMPIONNAT');
+    sortie.push(`(les rentables d'abord, ${lignesDites(ch.rentables.length + ch.perdants.length)}, sans les championnats à gain nul${aLaLimite ? ` ; la limite de la fiche : d'autres championnats peuvent exister` : ''})`);
     sortie.push(ligne('championnat', 'réglés', 'gagnés', 'perdus', 'gain', 'ROI'));
     for (const x of [...ch.rentables, ...ch.perdants]) sortie.push(ligne(x.championnat, fr(x.regles), fr(x.gagnes), fr(x.perdus), eurosSignes(x.gain), ou(x.roiPct, (r) => pctSigne(r))));
   }
@@ -248,6 +272,7 @@ export function rendreLaFicheDeLaSemaine(f) {
       `Carte « où parier » du mois ${carte.mois}${carte.aJour ? '' : ' (réglages du moteur changés depuis : couleurs suspendues)'} : ${pluriel(carte.cases, 'case', 'cases')}, ${pluriel(carte.vertes, 'verte', 'vertes')}, ${pluriel(carte.rouges, 'rouge', 'rouges')}, ${pluriel(carte.grises, 'grise', 'grises')}.`
     );
     if (carte.listeDesVertes.length) {
+      sortie.push(`CASES VERTES (${lignesDites(carte.listeDesVertes.length, carte.vertes)})`);
       sortie.push(ligne('championnat', 'marché', 'matchs mesurés'));
       for (const x of carte.listeDesVertes) sortie.push(ligne(x.championnat, x.marche, ou(x.matchs, (m) => fr(m))));
     } else {
