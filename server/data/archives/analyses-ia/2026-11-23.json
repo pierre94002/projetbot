@@ -1368,8 +1368,240 @@
       ]
     },
     "kickoffRuns": 1,
-    "updatedAt": "2026-11-22T23:03:16.868Z",
-    "createdAt": "2026-11-22T23:03:16.868Z"
+    "updatedAt": "2026-11-24T01:14:42.193Z",
+    "createdAt": "2026-11-22T23:03:16.868Z",
+    "postMatchReview": {
+      "summary": "Chivas gagne 1-0 (but d'Efraín Álvarez à la 21e) dans un match plus fermé que prévu côté corners (8 au total). Le 1N2 du moteur est juste et ma lecture nuancée était prudente. Les marchés de tirs et de tirs cadrés ont tenu. Seul le total de corners a échoué.",
+      "whatWasRight": "Les volumes de tirs : 27 au total (12 et 15), au-dessus de 23,5. Chivas est resté sous 21,5 tirs et Cruz Azul au-dessus de 8,5. Les tirs cadrés (11 au total, 8 pour Chivas) ont dépassé les seuils. Les corners par équipe sont restés bas (3 et 5). La prudence sur le résultat était justifiée : match serré, xG 0,97 contre 1,64.",
+      "whatWasMissed": "Le total de corners : 8 (3+5) contre 11,63 attendus. La domination de Chivas à domicile ne s'est pas vue : possession 51 % contre 49 %. Le xG favorisait Cruz Azul, mais Chivas a été plus efficace (8 tirs cadrés contre 3). Un but précoce à la 21e a aussi pesé sur le scénario.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le 1N2 (Chivas favori à 44 %) et sur tous les marchés de tirs, de tirs cadrés et de corners par équipe. Il contredit le moteur sur le total de corners (pick à 79 %).",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Chivas gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Chivas gagne 1-0 grâce au but d'Efraín Álvarez à la 21e, malgré un xG inférieur (0,97 contre 1,64). Cruz Azul a touché le poteau à la 64e.",
+          "lesson": "Garder la nuance sur un duel de tête serré : l'avantage du terrain a suffi, mais le score est resté fragile."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Chivas & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Chivas",
+          "marketId": "teamGoals",
+          "pick": "Chivas — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Cruz Azul",
+          "marketId": "teamGoals",
+          "pick": "Cruz Azul — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 8.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Seulement 8 corners (3 pour Chivas, 5 pour Cruz Azul), sous le seuil de 8,5. La possession de Chivas n'a pas été dominante (51 %).",
+          "lesson": "Ne pas se fier à la moyenne du championnat ni aux moyennes domicile de Chivas pour un total de corners. Ma confiance moyenne était trop élevée. Un match équilibré en possession réduit les corners."
+        },
+        {
+          "market": "Corners — Chivas",
+          "marketId": "teamCorners",
+          "pick": "Chivas — Moins de 9.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Chivas n'a obtenu que 3 corners, loin de 9,5.",
+          "lesson": "Garder ce type de plafond bas : la moyenne de 6,7 laissait une grande marge."
+        },
+        {
+          "market": "Corners — Cruz Azul",
+          "marketId": "teamCorners",
+          "pick": "Cruz Azul — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Cruz Azul a eu 5 corners, sous 6,5, mais proche du seuil.",
+          "lesson": "Le plafond a tenu, avec une marge faible. Les moyennes basses de Cruz Azul restent fiables."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 23.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "27 tirs (12 et 15), au-dessus de 23,5.",
+          "lesson": "Les totaux de tirs avec un seuil bien en dessous des moyennes sont fiables."
+        },
+        {
+          "market": "Tirs — Chivas",
+          "marketId": "teamShots",
+          "pick": "Chivas — Moins de 21.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Chivas a tiré 12 fois, loin de 21,5.",
+          "lesson": "Le plafond au-dessus de la moyenne domicile est sûr."
+        },
+        {
+          "market": "Tirs — Cruz Azul",
+          "marketId": "teamShots",
+          "pick": "Cruz Azul — Plus de 8.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Cruz Azul a tiré 15 fois, au-dessus de 8,5, malgré un onze remanié.",
+          "lesson": "Le remaniement n'a pas freiné ses volumes : un seuil bas reste solide."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "11 tirs cadrés (8 et 3), au-dessus de 7,5, porté par Chivas.",
+          "lesson": "Le total tient, mais la répartition était très déséquilibrée. Un seuil bas protège de ce type de scénario."
+        },
+        {
+          "market": "Tirs cadrés — Chivas",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Chivas — Plus de 3.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Chivas a cadré 8 tirs, au-dessus de 3,5, pour un xG de seulement 0,97.",
+          "lesson": "La moyenne au-dessus du seuil a suffi. L'absence de Marín au coup d'envoi n'a pas pesé (il est entré à la 67e)."
+        },
+        {
+          "market": "Tirs cadrés — Cruz Azul",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Cruz Azul — Moins de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Cruz Azul n'a cadré que 3 tirs, sous 6,5, malgré 15 tirs et un xG de 1,64.",
+          "lesson": "Ma nuance était pertinente : la moyenne de 6,8 était trompeuse. Cruz Azul tire beaucoup mais cadre moins quand il est mené."
+        }
+      ],
+      "caveats": "Un seul match. Le déroulé fourni est partiel : peu de détails sur les corners et la possession par période. Le résultat 1-0 tient en partie à l'efficacité, difficile à modéliser.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 16,
+        "commentaire": 2
+      },
+      "usage": {
+        "input_tokens": 6,
+        "cache_creation_input_tokens": 7794,
+        "cache_read_input_tokens": 16108,
+        "output_tokens": 4476,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 7794,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1857,
+            "cache_read_input_tokens": 7627,
+            "cache_creation_input_tokens": 2255,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2255
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0791696,
+      "createdAt": "2026-11-24T01:14:42.191Z"
+    }
   },
   {
     "matchId": "cal-2026-11-22-chicago-fire-fc-charlotte-fc",
@@ -2713,8 +2945,240 @@
       ]
     },
     "kickoffRuns": 1,
-    "updatedAt": "2026-11-22T23:04:01.893Z",
-    "createdAt": "2026-11-22T23:04:01.893Z"
+    "updatedAt": "2026-11-24T01:14:10.489Z",
+    "createdAt": "2026-11-22T23:04:01.893Z",
+    "postMatchReview": {
+      "summary": "Charlotte a gagné 2-1 à Chicago, au bout du temps additionnel (but de Biel sur penalty à la 90+12, après un penalty arrêté). Le favori du moteur a donc perdu. Les marchés de volume (corners, tirs) ont été plus mitigés: Chicago a tiré beaucoup plus que prévu (27) et Charlotte a eu 8 corners, soit plus que la ligne basse que j'avais confirmée.",
+      "whatWasRight": "Chicago a dominé en volume (27 tirs, 58 % de possession), comme je l'attendais. Le total de corners a dépassé 7,5 (13). Chicago est resté sous 9,5 corners (5). Charlotte a dépassé 6,5 tirs (19) et 2,5 tirs cadrés (5). Le total de tirs cadrés est resté sous 14,5 (9). Mon avis nuancé et peu confiant sur le 1N2 s'est montré prudent.",
+      "whatWasMissed": "J'ai sous-estimé l'ouverture du match et l'efficacité de Charlotte: xG de 3,46 pour 1,88, avec 19 tirs alors que j'en attendais environ 10. Chicago a gâché ses occasions et n'a cadré que 4 tirs, malgré 27 tirs et Lewandowski. J'ai trop fait confiance à la faible production à l'extérieur de Charlotte (9,5 tirs, 2,7 corners) et à la solidité de Chicago.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1N2: il donnait Chicago gagnant à 62 % et Charlotte l'a emporté. Le but décisif est venu sur un penalty, après un penalty arrêté, donc dans un contexte très aléatoire. Les xG de FotMob (3,46 pour Charlotte) vont plutôt dans le sens du résultat. Pour les marchés de corners et de tirs, le moteur a eu raison sur plusieurs lignes et tort sur les plus serrées.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Chicago Fire FC gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Charlotte a ouvert le score par Abada à la 48e, Lewandowski a égalisé à la 69e, puis Biel a marqué sur penalty à la 90+12 après un premier penalty arrêté. Le penalty venait d'une main d'Elliott repérée à la VAR. Chicago avait plus de tirs (27 contre 19) mais un xG inférieur (1,88 contre 3,46).",
+          "lesson": "Un favori à 62 % reste fragile quand l'écart au classement est d'un point. Il ne faut pas surpondérer le domicile ni la faible production extérieure d'une équipe de playoffs. Un résultat décidé en toute fin par un penalty est très variable."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Chicago Fire FC & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Chicago Fire FC",
+          "marketId": "teamGoals",
+          "pick": "Chicago Fire FC — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Charlotte FC",
+          "marketId": "teamGoals",
+          "pick": "Charlotte FC — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 13 corners (5 pour Chicago, 8 pour Charlotte), largement au-dessus de 7,5. Le match très ouvert avec 46 tirs a produit beaucoup de corners.",
+          "lesson": "Ce marché à ligne basse tient bien quand le volume de tirs est élevé. Il vaut la peine de le garder, car il dépend peu de qui gagne."
+        },
+        {
+          "market": "Corners — Chicago Fire FC",
+          "marketId": "teamCorners",
+          "pick": "Chicago Fire FC — Moins de 9.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Chicago a obtenu 5 corners, très loin de 9,5. Sa moyenne de 5,1 et l'attendu de 6,49 collaient.",
+          "lesson": "Une ligne très haute sur les corners d'une équipe est une base fiable, même avec 27 tirs de sa part. Garder cette approche."
+        },
+        {
+          "market": "Corners — Charlotte FC",
+          "marketId": "teamCorners",
+          "pick": "Charlotte FC — Moins de 5.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Charlotte a eu 8 corners, bien au-dessus de 5,5, alors que sa moyenne extérieure était de 2,7. Ses 19 tirs et les phases de pression en fin de match ont gonflé le total.",
+          "lesson": "Ne pas se fier à la seule moyenne extérieure basse en corners. Charlotte a été bien plus productive que ses chiffres de saison, donc éviter les « moins de » corners sur une équipe qui produit un match ouvert."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 36.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Il y a eu 46 tirs (27 + 19), très au-dessus de 36,5 et du 30,46 attendu. Le match a été ouvert dans les deux sens, avec 4 grosses occasions de chaque côté.",
+          "lesson": "Une probabilité de 83 % sur un « moins de » tirs était trop confiante. Le total peut dépasser nettement l'attendu quand les deux équipes sont offensives et que la défense extérieure concède 25,8 tirs."
+        },
+        {
+          "market": "Tirs — Chicago Fire FC",
+          "marketId": "teamShots",
+          "pick": "Chicago Fire FC — Moins de 25.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Chicago a tiré 27 fois, au-dessus de 25,5. Charlotte menait ou égalisait, et Chicago a poussé pour revenir. Cela a dépassé l'attendu de 20,02.",
+          "lesson": "Quand j'ai signalé un risque de dépassement pour une défense qui concède 25,8 tirs, il fallait en tenir compte. Une équipe qui doit pousser en fin de match peut dépasser nettement son attendu."
+        },
+        {
+          "market": "Tirs — Charlotte FC",
+          "marketId": "teamShots",
+          "pick": "Charlotte FC — Plus de 6.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Charlotte a tiré 19 fois, bien au-dessus de 6,5. Elle a été plus offensive que prévu avec 3,46 xG.",
+          "lesson": "Ligne basse très sûre. Garder ce type de « plus de » sur une équipe qui marque régulièrement."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 14.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 9 tirs cadrés (4 + 5), sous 14,5. Malgré 46 tirs, peu d'entre eux étaient cadrés.",
+          "lesson": "La ligne de tirs cadrés a tenu même dans un match très ouvert. Garder les marges larges sur ce marché."
+        },
+        {
+          "market": "Tirs cadrés — Chicago Fire FC",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Chicago Fire FC — Plus de 4.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Chicago n'a cadré que 4 tirs sur 27, sous 4,5. Le seul but est venu de Lewandowski à la 69e. Beaucoup de tirs ont été bloqués ou hors cadre malgré 4 grosses occasions.",
+          "lesson": "Un gros volume de tirs ne garantit pas les tirs cadrés. La ligne de 4,5 avec 81 % était trop confiante, car la moyenne de Chicago était de 5,2. Vérifier le taux de tirs cadrés, pas seulement le volume."
+        },
+        {
+          "market": "Tirs cadrés — Charlotte FC",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Charlotte FC — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Charlotte a cadré 5 tirs, au-dessus de 2,5, avec un but d'Abada à la 48e, un penalty arrêté puis le penalty de Biel à la 90+12.",
+          "lesson": "La ligne basse a tenu avec une marge, conforme à ce que Charlotte produit. À garder pour une équipe qui marque chaque match."
+        }
+      ],
+      "caveats": "Il s'agit d'un seul match, dont l'issue a dépendu d'un penalty tardif après une main à la VAR (90+10) et d'un autre penalty arrêté. La fiche ne détaille pas les causes de l'écart entre le xG de Chicago et sa finition. Les cotes du marché n'étaient pas exploitables (aucun edge chiffré), donc l'exercice reste qualitatif.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 15,
+        "commentaire": 5
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4660,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2685,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 4660,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2685,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 4660,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 4660
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0459116,
+      "createdAt": "2026-11-24T01:14:10.488Z"
+    }
   },
   {
     "matchId": "cal-2026-11-22-san-antonio-bulo-bulo-always-ready",
@@ -4092,8 +4556,240 @@
       "lineupImpact": "Compositions officielles (26 min avant). San Antonio, en 4-3-3 avec Edivaldo Rojas, n'a ni Giossa (gardien, 26 titularisations) ni Terrazas (8+6, 23 titularisations) ; Machado et Mercado, habituels titulaires, sont sur le banc, et Ricaldez et Campos sont inconnus du magasin : une équipe remaniée. Menacho Miranda (6+3) est son principal danger. Always Ready, en 4-1-4-1 avec Pablo Godoy, aligne Triverio (23 buts), Maraude (6+7), Amoroso (2+10) et Baroja au but ; seuls Pablo Lima et Medina sont sur le banc. Cela soutient le favori visiteur et les volumes de tirs d'Always Ready, mais l'attaque de San Antonio perd en créativité."
     },
     "kickoffRuns": 1,
-    "updatedAt": "2026-11-22T23:04:25.463Z",
-    "createdAt": "2026-11-22T23:04:25.463Z"
+    "updatedAt": "2026-11-24T01:35:30.195Z",
+    "createdAt": "2026-11-22T23:04:25.463Z",
+    "postMatchReview": {
+      "summary": "Always Ready a gagné 0-3 (Triverio 17', Godoy 88', Quiroga 90+3'), comme la lecture d'avant-match l'indiquait. Les marchés de corners et le total de tirs ont tenu. Deux avis ont échoué sur San Antonio : ses tirs (5) et ses tirs cadrés (1) sont restés très bas. Always Ready a aussi cadré 9 fois, au-dessus du seuil de 8,5.",
+      "whatWasRight": "Le favori visiteur était le bon : 0-3, avec 14 tirs contre 5 et 9 cadrés contre 1. Les corners faibles ont été vus : 3 pour San Antonio, 5 pour Always Ready, soit 8 au total. Le total de tirs est resté bas (19 au total). Le plafond de tirs d'Always Ready (14 contre un seuil de 23,5) a tenu. Le seuil de 7,5 tirs cadrés au total a été dépassé (10). Le doute sur les tirs cadrés de San Antonio à domicile (2 de moyenne) était fondé.",
+      "whatWasMissed": "J'ai sous-estimé l'effondrement offensif de San Antonio : 5 tirs seulement, alors que j'avais confirmé « plus de 9,5 tirs » sur sa moyenne de 13,8. Les absences (gardien, Terrazas) ont été notées côté défense, mais pas côté création. J'ai aussi sous-estimé l'efficacité de tir d'Always Ready : 9 cadrés sur 14 tirs, dépassant le seuil de 8,5 que je jugeais loin de sa moyenne de 6,7. Le but de Triverio (17') a placé Always Ready en position de contrôle, avec une possession de 55 % et un adversaire mené.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le 1N2 (2,18 xG contre 0,57, victoire visiteuse). Il le contredit sur le volume de tirs de San Antonio (14,47 attendus, 5 réels) et sur les cadrés d'Always Ready (5,99 attendus, 9 réels).",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Always Ready gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Always Ready a mené dès la 17' (Triverio, validé par le VAR). Il a ensuite creusé l'écart à la 88' (Godoy) et à la 90+3' (Quiroga). Il a dominé les tirs (14-5) et les cadrés (9-1).",
+          "lesson": "Quand un grand écart de classement s'ajoute à des absences adverses clés, la victoire du favori est fiable. Il faut garder ce critère."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Always Ready & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — San Antonio Bulo Bulo",
+          "marketId": "teamGoals",
+          "pick": "San Antonio Bulo Bulo — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Always Ready",
+          "marketId": "teamGoals",
+          "pick": "Always Ready — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 11.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Seulement 8 corners (3+5), sous la ligne de 11,5. Le match n'a pas été ouvert avant les buts tardifs.",
+          "lesson": "Quand les deux équipes ont des moyennes basses de corners, le « moins de » à ligne haute est fiable. À garder."
+        },
+        {
+          "market": "Corners — San Antonio Bulo Bulo",
+          "marketId": "teamCorners",
+          "pick": "San Antonio Bulo Bulo — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "San Antonio a obtenu 3 corners, au-dessus de 2,5, mais de justesse. Son faible volume offensif (5 tirs) a presque fait échouer le pari.",
+          "lesson": "Le seuil était juste. Les marges étaient minces quand l'équipe est dominée, et la moyenne à domicile (3,3) était le bon repère."
+        },
+        {
+          "market": "Corners — Always Ready",
+          "marketId": "teamCorners",
+          "pick": "Always Ready — Moins de 5.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Always Ready a obtenu 5 corners, sous 5,5, malgré sa domination. C'est conforme à sa moyenne à l'extérieur (3,2).",
+          "lesson": "La domination se traduit peu en corners pour cette équipe. Sa moyenne à l'extérieur est le bon repère."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 38.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "19 tirs au total (5+14), très loin de 38,5. Les 14 tirs d'Always Ready n'ont pas compensé l'effacement de San Antonio.",
+          "lesson": "Le « moins de » sur le total de tirs est solide. Il faut retenir qu'un match déséquilibré réduit le total."
+        },
+        {
+          "market": "Tirs — San Antonio Bulo Bulo",
+          "marketId": "teamShots",
+          "pick": "San Antonio Bulo Bulo — Plus de 9.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "San Antonio n'a tiré que 5 fois, bien sous 9,5. Il a été mené dès la 17' et a perdu de la créativité avec Terrazas absent. Sa possession a été de 45 %.",
+          "lesson": "Pour un outsider remanié, face à un favori net, la moyenne de tirs surestime le volume réel. Je dois être plus prudent sur un « plus de » pour une équipe sans milieu créateur. Je dois aussi tenir compte du fait que le score déséquilibre le match."
+        },
+        {
+          "market": "Tirs — Always Ready",
+          "marketId": "teamShots",
+          "pick": "Always Ready — Moins de 23.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Always Ready a tiré 14 fois, très en dessous de 23,5. Sa moyenne à l'extérieur est de 15,6.",
+          "lesson": "Le seuil de 23,5 était très haut. Un « moins de » éloigné de la moyenne extérieure est fiable."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "10 tirs cadrés (1+9), au-dessus de 7,5. Tout est venu d'Always Ready.",
+          "lesson": "Le total tient grâce au favori même si l'autre équipe cadre peu. La dépendance à une seule équipe reste un risque."
+        },
+        {
+          "market": "Tirs cadrés — San Antonio Bulo Bulo",
+          "marketId": "teamShotsOnTarget",
+          "pick": "San Antonio Bulo Bulo — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Un seul tir cadré, sous 2,5. C'est conforme à l'inquiétude exprimée (2 de moyenne à domicile, Terrazas absent).",
+          "lesson": "Le doute à faible confiance était justifié. Une moyenne à domicile sous le seuil, avec des absences offensives, doit peser davantage que l'attente du moteur."
+        },
+        {
+          "market": "Tirs cadrés — Always Ready",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Always Ready — Moins de 8.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Always Ready a cadré 9 fois, au-dessus de 8,5, avec 14 tirs. L'avance précoce a permis un jeu plus libre contre une défense fragile. Je n'avais pas anticipé que 64 % des tirs seraient cadrés.",
+          "lesson": "Contre une défense qui concède 6,6 tirs cadrés, avec un favori à 2,18 xG, un « moins de » à 8,5 est trop confiant. Il faut garder une marge sur un pic de 9 cadrés."
+        }
+      ],
+      "caveats": "Il s'agit d'un seul match. Les xG réels ne sont pas relevés. Deux buts tardifs (88' et 90+3') ont gonflé l'écart. Un but a été refusé après le VAR à la 58', ce qui a pu modifier le déroulé. La fiche ne détaille pas les tirs par période.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 16,
+        "commentaire": 5
+      },
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4906,
+        "cache_read_input_tokens": 2088,
+        "output_tokens": 2465,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 4906,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2465,
+            "cache_read_input_tokens": 2088,
+            "cache_creation_input_tokens": 4906,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 4906
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0446956,
+      "createdAt": "2026-11-24T01:35:30.195Z"
+    }
   },
   {
     "matchId": "9ae45509a586b2f638a9dd014793ab3b",
@@ -5599,8 +6295,240 @@
       ]
     },
     "kickoffRuns": 1,
-    "updatedAt": "2026-11-22T23:03:38.390Z",
-    "createdAt": "2026-11-22T23:03:38.390Z"
+    "updatedAt": "2026-11-24T01:15:27.885Z",
+    "createdAt": "2026-11-22T23:03:38.390Z",
+    "postMatchReview": {
+      "summary": "La Serena a gagné 2-1 à Limache, alors que le moteur et ma lecture penchaient plutôt pour Limache. Tous les marchés de volume (corners, tirs, tirs cadrés) sont passés. Le 1N2 a été contredit, et mon avis nuancé à faible confiance sur ce marché était prudent.",
+      "whatWasRight": "Les volumes étaient bien anticipés. Il y a eu 8 corners au total (sous 13,5), dont 8 pour Limache (au-dessus de 3,5) et 0 pour La Serena (sous 5,5). Il y a eu 30 tirs (au-dessus de 22,5), avec 15 tirs par équipe (sous 19,5 et sous 17,5). Il y a eu 10 tirs cadrés (sous 12,5), dont 4 pour Limache (sous 7,5) et 6 pour La Serena (au-dessus de 2,5). La prudence sur le 1N2 (nuance, faible confiance, PASS) s'est aussi justifiée.",
+      "whatWasMissed": "J'ai sous-estimé l'efficacité de La Serena malgré ses absences. Elle a marqué dès la 46e (Rubio) et a pris l'avantage à la 67e (Vargas), avec 6 tirs cadrés et 2 grosses occasions contre 1. Elle a aussi égalé Limache en tirs (15-15), alors que sa moyenne à l'extérieur était de 8,6. Le penalty de Limache à la 53e (main de Rasso) n'a pas suffi. L'écart de classement et de xG a été surestimé.",
+      "outcomeVsEngine": "Le résultat contredit le moteur sur le 1N2. Il donnait Limache à 45 % avec 2,24 xG contre 1,28, et La Serena a gagné. Il confirme le moteur sur les marchés de volume, dont les attentes (10,16 corners, 28,13 tirs, 9,93 cadrés) étaient proches du réel (8, 30 et 10).",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Deportes Limache gagne",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Limache a perdu 1-2. Le score était de 0-0 à la mi-temps. Rubio a marqué à la 46e. Castro a égalisé sur penalty à la 53e. Vargas a donné la victoire à La Serena à la 67e. Les tirs étaient égaux (15-15) et La Serena a cadré plus (6 contre 4).",
+          "lesson": "Le 1N2 reste le marché le moins fiable. Un favori à domicile selon le xG n'est pas fiable face à un adversaire efficace, même diminué. Garder la prudence et le PASS sans cote fraîche."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Deportes Limache & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Deportes Limache",
+          "marketId": "teamGoals",
+          "pick": "Deportes Limache — Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — La Serena",
+          "marketId": "teamGoals",
+          "pick": "La Serena — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 13.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Il n'y a eu que 8 corners (8 pour Limache, 0 pour La Serena), très loin de 13,5.",
+          "lesson": "Les seuils hauts de corners totaux sont sûrs quand la moyenne de la ligue est d'environ 10. À garder."
+        },
+        {
+          "market": "Corners — Deportes Limache",
+          "marketId": "teamCorners",
+          "pick": "Deportes Limache — Plus de 3.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Limache a obtenu 8 corners, bien au-dessus de 3,5. Il a dominé le territoire dans les corners malgré une possession de 48 %.",
+          "lesson": "Contre une équipe qui concède beaucoup de corners à l'extérieur, la concession adverse a primé sur la moyenne basse de Limache à domicile. À garder."
+        },
+        {
+          "market": "Corners — La Serena",
+          "marketId": "teamCorners",
+          "pick": "La Serena — Moins de 5.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "La Serena n'a eu aucun corner, très sous 5,5. Elle était peu portée vers l'avant en corners malgré 15 tirs.",
+          "lesson": "Le profil extérieur à faible production de corners a bien tenu. À garder, même quand l'équipe gagne."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Plus de 22.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 30 tirs (15-15), au-dessus de 22,5. Le match était ouvert après les buts de la seconde période.",
+          "lesson": "Le total attendu de 28 tirs était bien calibré. La moyenne extérieure basse de La Serena (8,6) a été dépassée, donc ne pas la surpondérer."
+        },
+        {
+          "market": "Tirs — Deportes Limache",
+          "marketId": "teamShots",
+          "pick": "Deportes Limache — Moins de 19.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Limache a tiré 15 fois, bien sous 19,5, même en étant mené pendant une partie du match.",
+          "lesson": "Le plafond de 19,5 était sûr, car atteindre 20 tirs reste exceptionnel. À garder."
+        },
+        {
+          "market": "Tirs — La Serena",
+          "marketId": "teamShots",
+          "pick": "La Serena — Moins de 17.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "La Serena a tiré 15 fois, sous 17,5, mais plus que sa moyenne extérieure de 8,6.",
+          "lesson": "Le seuil large a absorbé l'écart. Ne pas descendre la marge de sécurité trop près des 15 tirs pour cette équipe."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 12.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 10 tirs cadrés (4 et 6), sous 12,5, avec une attente de 9,93.",
+          "lesson": "Les attentes de tirs cadrés étaient justes. À garder."
+        },
+        {
+          "market": "Tirs cadrés — Deportes Limache",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Deportes Limache — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Limache n'a cadré que 4 fois, loin de 7,5, malgré 15 tirs.",
+          "lesson": "La précision de Limache est modeste, ce qui rend le seuil de 7,5 sûr. À garder."
+        },
+        {
+          "market": "Tirs cadrés — La Serena",
+          "marketId": "teamShotsOnTarget",
+          "pick": "La Serena — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "La Serena a cadré 6 fois, au-dessus de 2,5, avec 2 grosses occasions et 2 buts.",
+          "lesson": "Ma nuance sur la moyenne extérieure de 2,8 était trop prudente. La moyenne sur 10 matchs (4,5) et le xG de 4,59 étaient plus fiables que la moyenne extérieure seule."
+        }
+      ],
+      "caveats": "Il s'agit d'un seul match. Les compositions du jour n'étaient pas confirmées, donc l'effet réel des absences de La Serena est inconnu. Les cotes avaient 13 jours. Les blessures de Delgado (14e) et Rasso (35e) côté La Serena n'ont pas été mesurées.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 14,
+        "commentaire": 3
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 6790,
+        "cache_read_input_tokens": 9681,
+        "output_tokens": 3124,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 6790,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2238,
+            "cache_read_input_tokens": 7593,
+            "cache_creation_input_tokens": 1285,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1285
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0603442,
+      "createdAt": "2026-11-24T01:15:27.885Z"
+    }
   },
   {
     "matchId": "0fb066b5cf1107b140d0aea5e6b2e682",
