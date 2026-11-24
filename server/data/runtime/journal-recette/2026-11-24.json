@@ -4,12 +4,12 @@
   "phase": "rodage",
   "nonSurveille": "Non surveillé par l'essai : la boucle des compositions, la boucle des cotes gratuites, et le détail de l'analyse au coup d'envoi (ses échecs ne sont dits que dans la fenêtre du serveur). Coût de la veille (matchs commencés pendant que le PC dormait) : non compté : aucune heure de coup d’envoi lisible sans la base.",
   "couverture": {
-    "minutesObservees": 574,
+    "minutesObservees": 761,
     "minutesDeVeille": 0,
     "minutesArret": 18,
     "minutesEnErreur": 0,
-    "tours": 59,
-    "toursReussis": 59
+    "tours": 77,
+    "toursReussis": 77
   },
   "serveur": {
     "demarrages": [
@@ -33,9 +33,9 @@
     ]
   },
   "passes": {
-    "total": 5,
+    "total": 6,
     "ok": 4,
-    "partielles": 1,
+    "partielles": 2,
     "enEchec": 0,
     "nuit": null,
     "rattrapages": [],
@@ -100,32 +100,52 @@
         "dureeS": 130,
         "issue": "ok",
         "etapes": []
+      },
+      {
+        "id": "2026-11-24T19:53:23.255Z",
+        "raison": "périodique",
+        "debut": "2026-11-24T19:53:23.255Z",
+        "fin": "2026-11-24T19:54:53.252Z",
+        "dureeS": 90,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "controleQuotidien",
+            "statut": "warn",
+            "resume": "Feu rouge : 35 contrôles en 3 s sur 1 854 rencontres des 30 derniers jours (le serveur jamais tenu plus de 332 ms d'affilée) — rouge : classement officiel — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, rencontre mal rangée, autres z"
+          }
+        ]
       }
     ]
   },
   "alertes": {
-    "posees": [],
-    "levees": [],
+    "posees": [
+      "enregistreurs"
+    ],
+    "levees": [
+      "enregistreurs"
+    ],
     "changees": [
       "simulationSaisons"
     ]
   },
   "controleDuJour": {
-    "releves": "2026-11-24T16:52:44.277Z",
-    "pire": "orange",
-    "rouges": [],
+    "releves": "2026-11-24T19:54:50.147Z",
+    "pire": "rouge",
+    "rouges": [
+      "classement-officiel"
+    ],
     "oranges": [
       "buteurs-score",
       "gardiens-score",
       "score-calendrier",
       "club-deux-fois",
       "mauvaise-competition",
-      "classement-officiel",
       "zeros-non-releves",
       "hors-reperes-buts",
       "hors-reperes-statistiques"
     ],
-    "presentsAuDepart": 69
+    "presentsAuDepart": 68
   },
   "fotmob": {
     "transitions": []
@@ -148,10 +168,10 @@
     "dureeMs": 140191
   },
   "ia": {
-    "appels": 121,
-    "ok": 120,
+    "appels": 151,
+    "ok": 150,
     "echecs": 1,
-    "tokens": 2231110
+    "tokens": 2837455
   },
   "direct": {
     "suspensions": 0,
@@ -306,6 +326,120 @@
       "classe": "connue",
       "cause": "mise-en-service",
       "rodage": true
+    },
+    {
+      "id": "2026-11-24|alerte-posee|enregistreurs|19:40:48",
+      "le": "2026-11-24T19:40:48.316Z",
+      "type": "alerte-posee",
+      "signal": "S3",
+      "cle": "enregistreurs",
+      "texte": "Alerte « enregistreurs » posée.",
+      "details": {
+        "signature": "{\"releves\":[\"direct\"]}",
+        "nombres": null
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "raison": "alerte des enregistreurs hors d’une panne de FotMob",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-24|alerte-levee|enregistreurs|19:50:49",
+      "le": "2026-11-24T19:50:49.022Z",
+      "type": "alerte-levee",
+      "signal": "S3",
+      "cle": "enregistreurs",
+      "texte": "Alerte « enregistreurs » levée.",
+      "details": {
+        "signature": null
+      },
+      "classe": "info",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-24|etape-en-alerte|controleQuotidien|19:54:53",
+      "le": "2026-11-24T19:54:53.252Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controleQuotidien",
+      "texte": "controleQuotidien : Feu rouge : 35 contrôles en 3 s sur 1 854 rencontres des 30 derniers jours (le serveur jamais tenu plus de 332 ms d'affilée) — rouge : classement officiel — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, rencontre mal rangée, autres z",
+      "details": {
+        "passe": "2026-11-24T19:53:23.255Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "raison": "contrôle Buteurs et score : un constat non reconnu",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-24|controle-couleur|classement-officiel|20:00:49",
+      "le": "2026-11-24T20:00:49.016Z",
+      "type": "controle-couleur",
+      "signal": "S4",
+      "cle": "classement-officiel",
+      "texte": "Contrôle « Classement officiel » : orange → rouge.",
+      "details": {
+        "de": "orange",
+        "vers": "rouge",
+        "constat": "22 constats, dont : Maccabi Netanya · classement officiel — Maccabi Netanya : bilan différent à matchs égaux — officiel 10 J 4V 4N 2D 16-8, magasin 10 J 3V 5N 2D 14-9 : un score faux ? ; 30 clubs comptent au classement officiel un match en cours ou pas encore enregistré (une information, rien à corriger) — par exemple : Middlesbrough · classement officiel — Middlesbrough : 17 matchs joués au classement officiel, 16 au magasin — match en cours ou pas encore enregistré (Middlesbrough – Swansea du 24/11/2026) : une information, l’écart se referme quand le match est au magasin."
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-24|constat-nouveau|classement-officiel:manquant:classement-matchs:Premiership - Scotland|2026|fotmob-8284|19:54:50",
+      "le": "2026-11-24T19:54:50.147Z",
+      "type": "constat-nouveau",
+      "signal": "S4",
+      "cle": "classement-officiel:manquant:classement-matchs:Premiership - Scotland|2026|fotmob-8284",
+      "texte": "Constat nouveau (classement-officiel) : Dundee FC · classement officiel — Dundee FC : 14 matchs joués au classement officiel, 13 au magasin — 1 rencontre manquante au moins.",
+      "details": {
+        "controle": "classement-officiel",
+        "classe": "rouge",
+        "trouveLe": "2026-11-24T19:54:50.147Z",
+        "league": "Premiership - Scotland"
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-24|constat-nouveau|classement-officiel:manquant:classement-matchs:Premiership - Scotland|2026|fotmob-10251|19:54:50",
+      "le": "2026-11-24T19:54:50.147Z",
+      "type": "constat-nouveau",
+      "signal": "S4",
+      "cle": "classement-officiel:manquant:classement-matchs:Premiership - Scotland|2026|fotmob-10251",
+      "texte": "Constat nouveau (classement-officiel) : Hibernian · classement officiel — Hibernian : 14 matchs joués au classement officiel, 13 au magasin — 1 rencontre manquante au moins.",
+      "details": {
+        "controle": "classement-officiel",
+        "classe": "rouge",
+        "trouveLe": "2026-11-24T19:54:50.147Z",
+        "league": "Premiership - Scotland"
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-24|constat-nouveau|classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-9876|19:54:50",
+      "le": "2026-11-24T19:54:50.147Z",
+      "type": "constat-nouveau",
+      "signal": "S4",
+      "cle": "classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-9876",
+      "texte": "Constat nouveau (classement-officiel) : Hellas Verona · classement officiel — Hellas Verona : bilan différent à matchs égaux — officiel 13 J 4V 5N 4D 20-16, magasin 13 J 5V 4N 4D 21-16 : un score faux ?",
+      "details": {
+        "controle": "classement-officiel",
+        "classe": "rouge",
+        "trouveLe": "2026-11-24T19:54:50.147Z",
+        "league": "Serie B - Italy"
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
     }
   ],
   "vus": {
@@ -357,7 +491,8 @@
       "2026-11-24T04:58:15.623Z",
       "2026-11-24T08:02:10.505Z",
       "2026-11-24T16:32:01.069Z",
-      "2026-11-24T16:51:13.155Z"
+      "2026-11-24T16:51:13.155Z",
+      "2026-11-24T19:53:23.255Z"
     ],
     "alertes": {
       "audit": "{\"parType\":[\"buteurs\",\"fichiers\",\"gardien\"]}",
@@ -379,7 +514,7 @@
       "rencontres-sans-identifiant": "vert",
       "chiffres-equipe": "vert",
       "chiffres-joueurs": "vert",
-      "classement-officiel": "orange",
+      "classement-officiel": "rouge",
       "jaunes-non-releves": "vert",
       "corners-non-releves": "vert",
       "tirs-non-releves": "vert",
@@ -420,7 +555,10 @@
       "hors-reperes-buts:Dutch Eredivisie|2026-27|avantage_terrain",
       "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-6479",
       "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-8534",
-      "zeros-non-releves:zero:zeros:2026-11-22-metropolitanos-fc-deportivo-la-guaira"
+      "zeros-non-releves:zero:zeros:2026-11-22-metropolitanos-fc-deportivo-la-guaira",
+      "classement-officiel:manquant:classement-matchs:Premiership - Scotland|2026|fotmob-8284",
+      "classement-officiel:manquant:classement-matchs:Premiership - Scotland|2026|fotmob-10251",
+      "classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-9876"
     ],
     "fotmob": "ok",
     "sauvegarde": "2026-11-24T01:49:58.541Z",
