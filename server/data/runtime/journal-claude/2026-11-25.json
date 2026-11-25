@@ -2,48 +2,48 @@
   "version": 1,
   "jour": "2026-11-25",
   "canal": "claude-code",
-  "majLe": "2026-11-25T07:20:52.944Z",
+  "majLe": "2026-11-25T11:47:52.226Z",
   "totaux": {
-    "appels": 122,
-    "ok": 113,
-    "echecs": 9,
-    "sansTokens": 0,
+    "appels": 125,
+    "ok": 115,
+    "echecs": 10,
+    "sansTokens": 1,
     "tokens": {
-      "entree": 400,
-      "ecritureCache": 773292,
-      "lectureCache": 998951,
-      "sortie": 452533,
-      "total": 2225176
+      "entree": 404,
+      "ecritureCache": 790133,
+      "lectureCache": 1003421,
+      "sortie": 458799,
+      "total": 2252757
     },
-    "equivalentApiUsd": 7.819092,
+    "equivalentApiUsd": 7.950018,
     "parType": {
       "coup-d-envoi": {
-        "appels": 4,
-        "ok": 3,
-        "echecs": 1,
-        "sansTokens": 0,
+        "appels": 6,
+        "ok": 4,
+        "echecs": 2,
+        "sansTokens": 1,
         "tokens": {
-          "entree": 12,
-          "ecritureCache": 33746,
+          "entree": 14,
+          "ecritureCache": 44427,
           "lectureCache": 36530,
-          "sortie": 19650,
-          "total": 89938
+          "sortie": 22831,
+          "total": 103802
         },
-        "equivalentApiUsd": 0.338814
+        "equivalentApiUsd": 0.413352
       },
       "reprise": {
-        "appels": 1,
-        "ok": 1,
+        "appels": 2,
+        "ok": 2,
         "echecs": 0,
         "sansTokens": 0,
         "tokens": {
-          "entree": 2,
-          "ecritureCache": 6087,
-          "lectureCache": 4470,
-          "sortie": 2823,
-          "total": 13382
+          "entree": 4,
+          "ecritureCache": 12247,
+          "lectureCache": 8940,
+          "sortie": 5908,
+          "total": 27099
         },
-        "equivalentApiUsd": 0.053476
+        "equivalentApiUsd": 0.109864
       },
       "avance": {
         "appels": 41,
@@ -4110,6 +4110,99 @@
         "total": 4649
       },
       "equivalentApiUsd": 0.025012
+    },
+    {
+      "id": "2026-11-25T11:09:24.570Z-16644-155-ffa3d9",
+      "at": "2026-11-25T11:09:24.570Z",
+      "jour": "2026-11-25",
+      "debut": "2026-11-25T11:07:24.218Z",
+      "dureeMs": 120352,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-25-radnicki-nis-zeleznicar-pancevo",
+        "home": "Radnički Niš",
+        "away": "Železničar Pančevo",
+        "league": "Super Liga - Serbia"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10173
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "echec",
+      "erreur": "Claude Code (headless) n'a pas répondu : Command failed: C:\\Users\\PC\\AppData\\Roaming\\npm\\node_modules\\@anthropic-ai\\claude-code\\bin\\claude.exe -p --output-format json --json-schema {\"type\":\"object\",\"properties\":{\"summary\":{\"type\":\"string\",\"description\":\"Synthèse qualitative en 2-4 phrases : la forme",
+      "tokens": null,
+      "equivalentApiUsd": null
+    },
+    {
+      "id": "2026-11-25T11:12:45.774Z-16644-156-75f0b0",
+      "at": "2026-11-25T11:12:45.774Z",
+      "jour": "2026-11-25",
+      "debut": "2026-11-25T11:12:24.237Z",
+      "dureeMs": 21537,
+      "canal": "claude-code",
+      "type": "coup-d-envoi",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-25-radnicki-nis-zeleznicar-pancevo",
+        "home": "Radnički Niš",
+        "away": "Železničar Pančevo",
+        "league": "Super Liga - Serbia"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10173
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 10681,
+        "lectureCache": 0,
+        "sortie": 3181,
+        "total": 13864
+      },
+      "equivalentApiUsd": 0.074538
+    },
+    {
+      "id": "2026-11-25T11:47:52.223Z-16644-157-fc7f08",
+      "at": "2026-11-25T11:47:52.223Z",
+      "jour": "2026-11-25",
+      "debut": "2026-11-25T11:47:28.179Z",
+      "dureeMs": 24044,
+      "canal": "claude-code",
+      "type": "reprise",
+      "detail": "avant-match (coup-d-envoi)",
+      "match": {
+        "matchId": "cal-2026-11-25-radnicki-nis-zeleznicar-pancevo",
+        "home": "Radnički Niš",
+        "away": "Železničar Pančevo",
+        "league": "Super Liga - Serbia"
+      },
+      "mode": "econome",
+      "fiche": "compacte",
+      "taille": {
+        "consignes": 6612,
+        "message": 10101
+      },
+      "modele": "claude-code:sonnet",
+      "statut": "ok",
+      "erreur": null,
+      "tokens": {
+        "entree": 2,
+        "ecritureCache": 6160,
+        "lectureCache": 4470,
+        "sortie": 3085,
+        "total": 13717
+      },
+      "equivalentApiUsd": 0.056388
     }
   ]
 }
