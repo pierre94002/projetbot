@@ -4,21 +4,29 @@
   "phase": "rodage",
   "nonSurveille": "Non surveillé par l'essai : la boucle des compositions, la boucle des cotes gratuites, et le détail de l'analyse au coup d'envoi (ses échecs ne sont dits que dans la fenêtre du serveur). Coût de la veille (matchs commencés pendant que le PC dormait) : non compté : aucune heure de coup d’envoi lisible sans la base.",
   "couverture": {
-    "minutesObservees": 220,
+    "minutesObservees": 360,
     "minutesDeVeille": 0,
     "minutesArret": 0,
     "minutesEnErreur": 0,
-    "tours": 22,
-    "toursReussis": 22
+    "tours": 37,
+    "toursReussis": 37
   },
   "serveur": {
     "demarrages": [],
-    "trous": []
+    "trous": [
+      {
+        "de": "2026-11-25T04:51:29.650Z",
+        "a": "2026-11-25T06:37:15.412Z",
+        "minutes": 106,
+        "cause": null,
+        "id": "2026-11-25|trou|16644|06:37:15"
+      }
+    ]
   },
   "passes": {
-    "total": 1,
+    "total": 2,
     "ok": 1,
-    "partielles": 0,
+    "partielles": 1,
     "enEchec": 0,
     "nuit": null,
     "rattrapages": [],
@@ -31,6 +39,36 @@
         "dureeS": 104,
         "issue": "ok",
         "etapes": []
+      },
+      {
+        "id": "2026-11-25T01:56:37.294Z",
+        "raison": "périodique",
+        "debut": "2026-11-25T01:56:37.294Z",
+        "fin": "2026-11-25T02:33:31.347Z",
+        "dureeS": 2214,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "iaAutoAvantMatch",
+            "statut": "warn",
+            "resume": "42 rencontres à venir entre 3 h et 48 h sans analyse : 31 analysées, 5 échecs — arrêt après plusieurs pannes de Claude Code d'affilée (quota, jeton ou réseau), reprise à la passe suivante — Mode économe : 93 % du budget de la semaine (5 584 846 / 6 000 000 tokens)."
+          },
+          {
+            "cle": "iaAutoApresMatch",
+            "statut": "error",
+            "resume": "70 rencontres terminées avec analyse avant-match, sans revue : 0 revue faite, 3 échecs — arrêt après plusieurs pannes de Claude Code d'affilée (quota, jeton ou réseau), reprise à la passe suivante — Mode économe : 93 % du budget de la semaine (5 584 846 / 6 000 000 tokens)."
+          },
+          {
+            "cle": "controle",
+            "statut": "warn",
+            "resume": "Depuis le 2026-10-26 : 1 568 rencontres contrôlées, 17 anomalies (buteurs : 15, gardien : 1, fichiers : 1). Rien n'est corrigé automatiquement."
+          },
+          {
+            "cle": "simulationSaisons",
+            "statut": "warn",
+            "resume": "Fins de saison : 34 championnats simulés 10 000 fois, 14 non calculés (Serie B - Italy : table et magasin en désaccord : Palermo (table 13, magasin 14), Modena (table 12, magasin  ; Premiership - Scotland : calendrier incomplet : 111 rencontres connues sur 115 attendues, non calculé ; Swiss Superlea"
+          }
+        ]
       }
     ]
   },
@@ -40,7 +78,7 @@
     "changees": []
   },
   "controleDuJour": {
-    "releves": "2026-11-24T22:56:34.213Z",
+    "releves": "2026-11-25T02:33:28.160Z",
     "pire": "orange",
     "rouges": [],
     "oranges": [
@@ -54,7 +92,7 @@
       "hors-reperes-buts",
       "hors-reperes-statistiques"
     ],
-    "presentsAuDepart": 68
+    "presentsAuDepart": 62
   },
   "fotmob": {
     "transitions": []
@@ -68,10 +106,10 @@
   },
   "restauration": null,
   "ia": {
-    "appels": 43,
-    "ok": 34,
+    "appels": 44,
+    "ok": 35,
     "echecs": 9,
-    "tokens": 735482
+    "tokens": 765449
   },
   "direct": {
     "suspensions": 0,
@@ -171,6 +209,92 @@
       "classe": "info",
       "cause": null,
       "rodage": true
+    },
+    {
+      "id": "2026-11-25|etape-en-alerte|iaAutoAvantMatch|02:33:31",
+      "le": "2026-11-25T02:33:31.347Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "iaAutoAvantMatch",
+      "texte": "iaAutoAvantMatch : 42 rencontres à venir entre 3 h et 48 h sans analyse : 31 analysées, 5 échecs — arrêt après plusieurs pannes de Claude Code d'affilée (quota, jeton ou réseau), reprise à la passe suivante — Mode économe : 93 % du budget de la semaine (5 584 846 / 6 000 000 tokens).",
+      "details": {
+        "passe": "2026-11-25T01:56:37.294Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "raison": "arrêt après plusieurs pannes de suite : jamais reconnu d’office",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-25|etape-en-echec|iaAutoApresMatch|02:33:31",
+      "le": "2026-11-25T02:33:31.347Z",
+      "type": "etape-en-echec",
+      "signal": "S1",
+      "cle": "iaAutoApresMatch",
+      "texte": "iaAutoApresMatch : 70 rencontres terminées avec analyse avant-match, sans revue : 0 revue faite, 3 échecs — arrêt après plusieurs pannes de Claude Code d'affilée (quota, jeton ou réseau), reprise à la passe suivante — Mode économe : 93 % du budget de la semaine (5 584 846 / 6 000 000 tokens).",
+      "details": {
+        "passe": "2026-11-25T01:56:37.294Z",
+        "statut": "error",
+        "figeeParLaVeille": false
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-25|etape-en-alerte|controle|02:33:31",
+      "le": "2026-11-25T02:33:31.347Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controle",
+      "texte": "controle : Depuis le 2026-10-26 : 1 568 rencontres contrôlées, 17 anomalies (buteurs : 15, gardien : 1, fichiers : 1). Rien n'est corrigé automatiquement.",
+      "details": {
+        "passe": "2026-11-25T01:56:37.294Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "audit-buteurs-gardiens",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-25|etape-en-alerte|simulationSaisons|02:33:31",
+      "le": "2026-11-25T02:33:31.347Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "simulationSaisons",
+      "texte": "simulationSaisons : Fins de saison : 34 championnats simulés 10 000 fois, 14 non calculés (Serie B - Italy : table et magasin en désaccord : Palermo (table 13, magasin 14), Modena (table 12, magasin  ; Premiership - Scotland : calendrier incomplet : 111 rencontres connues sur 115 attendues, non calculé ; Swiss Superlea",
+      "details": {
+        "passe": "2026-11-25T01:56:37.294Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "calendriers-incomplets",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-25|trou|16644|06:37:15",
+      "le": "2026-11-25T06:37:15.412Z",
+      "type": "trou",
+      "signal": "S10",
+      "cle": "16644",
+      "texte": "veille du PC trop courte : 0 min sur un trou de 106 min",
+      "details": {
+        "de": "2026-11-25T04:51:29.650Z",
+        "a": "2026-11-25T06:37:15.412Z",
+        "minutes": 106,
+        "minutesDeVeille": 0,
+        "pistes": [
+          "fenêtre du serveur figée ?",
+          "fil du serveur bloqué par un calcul ?"
+        ]
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
     }
   ],
   "vus": {
@@ -224,7 +348,8 @@
       "2026-11-24T16:32:01.069Z",
       "2026-11-24T16:51:13.155Z",
       "2026-11-24T19:53:23.255Z",
-      "2026-11-24T22:54:53.094Z"
+      "2026-11-24T22:54:53.094Z",
+      "2026-11-25T01:56:37.294Z"
     ],
     "alertes": {
       "audit": "{\"parType\":[\"buteurs\",\"fichiers\",\"gardien\"]}",
@@ -318,7 +443,8 @@
         "2026-11-20",
         "2026-11-22",
         "2026-11-23",
-        "2026-11-24"
+        "2026-11-24",
+        "2026-11-25"
       ],
       "calendriers-incomplets": [
         "2026-11-16",
@@ -329,7 +455,8 @@
         "2026-11-21",
         "2026-11-22",
         "2026-11-23",
-        "2026-11-24"
+        "2026-11-24",
+        "2026-11-25"
       ],
       "controle-du-jour": [
         "2026-11-16",

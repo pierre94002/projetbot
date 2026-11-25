@@ -1404,7 +1404,7 @@
       ],
       "caveats": "Classement indisponible dans la fiche (le dossier signale seulement un groupe de quadrangulaire à 1 match joué). Les deux équipes ont un entraîneur récent, avec peu de recul (Gamero 13 matchs, Peirano 4 matchs). Les marchés de buts ne sont pas commentés, comme demandé. Les stats à l'extérieur de Bucaramanga portent sur 3 matchs seulement."
     },
-    "updatedAt": "2026-11-24T23:01:28.105Z",
+    "updatedAt": "2026-11-25T07:10:14.317Z",
     "createdAt": "2026-11-23T07:08:25.307Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -1783,6 +1783,238 @@
         "engineVersion": 6
       },
       "analysedAt": "2026-11-23T07:08:25.307Z"
+    },
+    "postMatchReview": {
+      "summary": "Millonarios a gagné 4-1, comme la lecture d'avant-match le supposait (favori à domicile). Le volume de tirs a pourtant été inversé : 9 tirs pour Millonarios contre 15 pour Bucaramanga. Millonarios a été très efficace (4 buts pour 1,5 xG, dont un penalty). Les corners (10 au total) ont fait échouer deux avis.",
+      "whatWasRight": "Le vainqueur était le bon. Le plafond de tirs total a tenu (24 tirs, sous 31,5). Bucaramanga a dépassé 6,5 tirs (15) et 1,5 cadré (3). Millonarios est resté sous 7,5 cadrés (6), et le total de cadrés a dépassé 5,5 (9). Millonarios a obtenu plus de 2,5 corners (3).",
+      "whatWasMissed": "Le volume de tirs de Millonarios a été surestimé : 9 tirs pour un seuil de 10,5, avec une confiance « forte ». Il a mené 2-0 dès la 19e minute puis a laissé jouer. Bucaramanga a obtenu 7 corners (seuil de 4,5 pour lui, 9,5 au total). L'effet du scénario a été sous-estimé : l'équipe qui mène cède le terrain et l'autre accumule tirs et corners. Le xG de Bucaramanga (1,36) était bien au-dessus de l'attendu de 0,69.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur le 1N2 et sur les cadrés. Il le contredit sur les corners (total et Bucaramanga) et sur les tirs de Millonarios, où les probabilités de 77 à 83 % étaient trop hautes.",
+      "caveats": "Un seul match. Le penalty de la 70e (4-1) et le but validé après VAR à la 14e ont pesé sur le scénario. Les blessures de Guerrero (65e) et de Contreras (74e) ont aussi pu jouer, et les moyennes d'avant-match reposaient sur de petits échantillons.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Millonarios gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Millonarios a mené 2-0 dès la 19e minute (Chaverra 14e, Contreras 19e). Bucaramanga a réduit à 2-1 à la 28e, puis Ureña (49e) et un penalty de Contreras (70e) ont scellé le 4-1.",
+          "lesson": "Le favori à domicile avec une bonne efficacité devant a confirmé. Garder la prudence sur la forme, mais le favori net du moteur a tenu."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Millonarios & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Millonarios",
+          "marketId": "teamGoals",
+          "pick": "Millonarios — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Bucaramanga",
+          "marketId": "teamGoals",
+          "pick": "Bucaramanga — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 9.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "10 corners au total (3 pour Millonarios, 7 pour Bucaramanga), au-dessus de 9,5. Bucaramanga, mené dès la 19e, a poussé et accumulé 15 tirs et 7 corners.",
+          "lesson": "Ne pas mettre une confiance forte sur un total de corners bas quand l'un des camps peut être mené tôt. Un score déséquilibré gonfle les corners du perdant."
+        },
+        {
+          "market": "Corners — Millonarios",
+          "marketId": "teamCorners",
+          "pick": "Millonarios — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Millonarios a eu 3 corners, juste au-dessus de 2,5. Il a mené tôt et a été dominé en volume (9 tirs contre 15).",
+          "lesson": "Le seuil bas a tenu de justesse. Un favori qui mène tôt produit moins de corners, et la marge était mince."
+        },
+        {
+          "market": "Corners — Bucaramanga",
+          "marketId": "teamCorners",
+          "pick": "Bucaramanga — Moins de 4.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Bucaramanga a obtenu 7 corners, bien au-dessus de 4,5. Mené 2-0 puis 3-1, il a dominé en tirs (15) avec un xG de 1,36.",
+          "lesson": "Les moyennes de corners concédés à domicile par Millonarios (2,8) ne protègent pas contre un scénario où il mène et recule. Tenir compte de l'effet du score."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 31.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "24 tirs au total (9 + 15), bien sous 31,5. Le match a été décidé par l'efficacité plus que par le volume.",
+          "lesson": "Le plafond sur le total de tirs est solide, car il se compense entre les deux camps. À garder."
+        },
+        {
+          "market": "Tirs — Millonarios",
+          "marketId": "teamShots",
+          "pick": "Millonarios — Plus de 10.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": false,
+          "explanation": "Millonarios n'a tiré que 9 fois, sous 10,5. Après 2-0 à la 19e et 3-1 à la 49e, il a géré, avec une possession de 50 % seulement.",
+          "lesson": "Une confiance forte sur le volume de tirs d'un favori est fragile s'il marque tôt. Ses 20 tirs à domicile ne garantissaient rien, car le volume baisse quand il mène."
+        },
+        {
+          "market": "Tirs — Bucaramanga",
+          "marketId": "teamShots",
+          "pick": "Bucaramanga — Plus de 6.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Bucaramanga a tiré 15 fois, largement au-dessus de 6,5, porté par le scénario où il courait après le score.",
+          "lesson": "Le seuil bas sur les tirs de l'outsider est confirmé et gagne en marge quand il est mené."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "9 tirs cadrés au total (6 + 3), au-dessus de 5,5.",
+          "lesson": "Un seuil bas sur le total de cadrés est sûr quand les deux équipes marquent. À garder."
+        },
+        {
+          "market": "Tirs cadrés — Millonarios",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Millonarios — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "Millonarios a cadré 6 tirs sur 9, sous 7,5. Très efficace (4 buts), mais volume faible.",
+          "lesson": "L'avis nuancé était pertinent. Sur un volume faible, le plafond a tenu même avec une grosse efficacité."
+        },
+        {
+          "market": "Tirs cadrés — Bucaramanga",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Bucaramanga — Plus de 1.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Bucaramanga a cadré 3 tirs sur 15, au-dessus de 1,5, dont le but de García (28e).",
+          "lesson": "Le seuil bas a tenu, mais seulement 3 cadrés sur 15 tirs. Surveiller la précision de l'outsider quand le volume est élevé."
+        }
+      ],
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 19,
+        "commentaire": 3
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 6077,
+        "cache_read_input_tokens": 9040,
+        "output_tokens": 2968,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 6077,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2210,
+            "cache_read_input_tokens": 6952,
+            "cache_creation_input_tokens": 1213,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1213
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.055804,
+      "createdAt": "2026-11-25T07:10:14.317Z"
     }
   },
   {
@@ -3175,7 +3407,7 @@
       ],
       "caveats": "Classement indisponible dans la fiche ; seul le dossier donne la position dans le groupe, après 1 match. Les compositions sont de source FotMob, relues 14 min avant le coup d'envoi. Les marchés de buts sont exclus depuis le 15/11."
     },
-    "updatedAt": "2026-11-25T01:16:11.681Z",
+    "updatedAt": "2026-11-25T07:16:34.143Z",
     "createdAt": "2026-11-23T07:08:48.192Z",
     "kickoffRuns": 2,
     "earlierAnalysis": {
@@ -3550,6 +3782,238 @@
         "engineVersion": 6
       },
       "analysedAt": "2026-11-23T07:08:48.192Z"
+    },
+    "postMatchReview": {
+      "summary": "América s'est imposé 2-1 (mi-temps 1-0) grâce à un doublé de Tomás Ángel (38' et 48'). Cali a réduit à la 51'. La lecture prudente, avec un léger avantage à domicile, a tenu. Cali a pourtant dominé les volumes (19 tirs contre 10), ce qui a fait échouer les deux seuils « moins de » sur Cali.",
+      "whatWasRight": "L'avantage léger d'América à domicile s'est confirmé, et ma prudence sur le nul restait raisonnable. Les marchés de volume bas ont tenu : total de tirs sous 29,5 (29 tirs réels), tirs cadrés totaux sous 10,5 (10) et tirs cadrés d'América sous 5,5 (4). Les corners d'América au-dessus de 2,5 (6) et le total de corners au-dessus de 5,5 (13) sont passés. Ángel, que j'avais signalé comme titulaire en attaque, a fait la différence.",
+      "whatWasMissed": "J'ai sous-estimé la production de Cali : 19 tirs, 6 cadrés, 7 corners et 1,25 xG, très au-dessus de ses 9 tirs et 2,5 corners habituels en déplacement. Mené dès la 38', Cali a dû pousser, et il a fait entrer Martínez à la 27' (Bello blessé) puis Reynoso et Bacca en fin de match. J'ai aussi sous-estimé l'efficacité d'América, qui a marqué deux fois avec seulement 10 tirs.",
+      "outcomeVsEngine": "Pour le 1N2, le résultat va dans le sens du moteur, qui voyait América favori à 43 %. Il le contredit sur les deux marchés « moins de » de Cali (corners et tirs cadrés), car Cali a produit plus que l'attendu, avec 19 tirs contre 11,2 attendus. Les autres marchés de volume sont cohérents avec le moteur.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "América de Cali gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "América a gagné 2-1 avec un doublé d'Ángel (38', 48'). Cali a réduit à la 51' sans égaliser, malgré 19 tirs et 1,25 xG contre 1,61 pour América.",
+          "lesson": "La nuance prudente avec un léger avantage au domicile était la bonne. Le moteur à 43 % était cohérent. Un favori modeste à domicile contre une équipe invaincue reste jouable, mais la marge est mince."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "América de Cali & Moins de 3.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — América de Cali",
+          "marketId": "teamGoals",
+          "pick": "América de Cali — Moins de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Deportivo Cali",
+          "marketId": "teamGoals",
+          "pick": "Deportivo Cali — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Plus de 5.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 13 corners (6 pour América, 7 pour Cali), bien au-dessus de 5,5. Cali, mené, a poussé.",
+          "lesson": "Un seuil bas par rapport à la moyenne du championnat (9,1) est fiable. À garder pour ce type de match."
+        },
+        {
+          "market": "Corners — América de Cali",
+          "marketId": "teamCorners",
+          "pick": "América de Cali — Plus de 2.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "América a obtenu 6 corners, au-dessus de 2,5, avec 55 % de possession à domicile.",
+          "lesson": "Le seuil de 2,5 pour un hôte qui en produit 5,8 à domicile est solide. À garder."
+        },
+        {
+          "market": "Corners — Deportivo Cali",
+          "marketId": "teamCorners",
+          "pick": "Deportivo Cali — Moins de 5.5 corners",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Cali a obtenu 7 corners, au-dessus de 5,5, bien plus que ses 2,5 de moyenne à l'extérieur. Mené 2-0 dès la 48', le visiteur a attaqué, avec 19 tirs.",
+          "lesson": "La moyenne à l'extérieur sous-estime un visiteur qui court derrière le score. Pour un « moins de » sur un visiteur, il faut tenir compte du risque de scénario où il est mené."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 29.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 29 tirs (10 + 19), juste sous 29,5. C'est passé de justesse, car Cali a tiré bien plus que prévu.",
+          "lesson": "Le résultat était juste mais la marge était très faible, car l'attendu était 24,4. Garder la prudence sur ce seuil proche de 30."
+        },
+        {
+          "market": "Tirs — América de Cali",
+          "marketId": "teamShots",
+          "pick": "América de Cali — Plus de 8.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "América n'a tiré que 10 fois, mais cela dépasse 8,5. Le seuil a tenu de peu, car l'avance a réduit son besoin d'attaquer.",
+          "lesson": "Un seuil sous la moyenne à domicile (14,2) a servi de marge, car América a tiré nettement moins que sa moyenne. À garder, mais avec la marge en tête."
+        },
+        {
+          "market": "Tirs — Deportivo Cali",
+          "marketId": "teamShots",
+          "pick": "Deportivo Cali — Plus de 7.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Cali a tiré 19 fois, largement au-dessus de 7,5, en poussant pour revenir après les buts d'Ángel.",
+          "lesson": "La nuance sur ce marché était prudente à juste titre, mais Cali l'a dépassé largement. Un visiteur mené tire beaucoup plus que sa moyenne."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 10.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 10 tirs cadrés (4 + 6), sous 10,5 de justesse malgré les 19 tirs de Cali.",
+          "lesson": "Le résultat est passé mais à une unité du seuil. Un seuil à 10,5 laisse peu de marge quand un des deux camps domine le volume."
+        },
+        {
+          "market": "Tirs cadrés — América de Cali",
+          "marketId": "teamShotsOnTarget",
+          "pick": "América de Cali — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "América a cadré 4 tirs, sous 5,5. Il a marqué deux fois sur 4 cadrés (2 grosses occasions), grâce à l'efficacité d'Ángel.",
+          "lesson": "Confirmé : la défense adverse concédait peu et l'absence de Valencia a réduit le volume. À garder."
+        },
+        {
+          "market": "Tirs cadrés — Deportivo Cali",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Deportivo Cali — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Cali a cadré 6 tirs, au-dessus du seuil (moins de 5,5), avec un but de Rodríguez à la 51'. Ses 19 tirs ont produit plus de cadrés que ses 3,3 de moyenne à l'extérieur.",
+          "lesson": "Quand un visiteur est mené, son volume de tirs augmente nettement. Un « moins de » sur ses tirs cadrés devrait tenir compte du scénario de match, pas seulement de sa moyenne à l'extérieur."
+        }
+      ],
+      "caveats": "Un seul match : les écarts sur Cali tiennent en partie au scénario (but d'América à la 38', puis un second à la 48') et aux blessures (Bello, Murillo), qui ne sont pas modélisables. Les tirs réels (10 et 19) viennent des statistiques FotMob, sans détail de la qualité des occasions de Cali.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 16,
+        "commentaire": 5
+      },
+      "usage": {
+        "input_tokens": 6,
+        "cache_creation_input_tokens": 9010,
+        "cache_read_input_tokens": 16689,
+        "output_tokens": 5680,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 9010,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2438,
+            "cache_read_input_tokens": 7974,
+            "cache_creation_input_tokens": 3124,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3124
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0961898,
+      "createdAt": "2026-11-25T07:16:34.143Z"
     }
   },
   {
@@ -4918,7 +5382,7 @@
         }
       ]
     },
-    "updatedAt": "2026-11-25T02:31:52.036Z",
+    "updatedAt": "2026-11-25T07:17:25.863Z",
     "createdAt": "2026-11-23T07:09:08.999Z",
     "kickoffRuns": 1,
     "earlierAnalysis": {
@@ -5293,6 +5757,238 @@
         "engineVersion": 6
       },
       "analysedAt": "2026-11-23T07:09:08.999Z"
+    },
+    "postMatchReview": {
+      "summary": "San Jose a gagné 2-1 après avoir mené 2-0 à la mi-temps (Vieira 11', Löwen 24'). Houston a réduit le score à la 80e (McGuire) et a fini à dix après le rouge de Resch à la 81e. Ma lecture prudente (léger avantage pour San Jose, match à faible volume) s'est confirmée. Seul le volume de tirs de San Jose a été à peine au niveau de la barre.",
+      "whatWasRight": "Les marchés de corners et de tirs cadrés étaient bien orientés. Les corners ont fini à 7 et 5 (12 au total, sous 13,5). Les tirs cadrés ont fini à 5 et 5, sous 6,5 et 5,5. Le total de tirs a été de 20, très loin de 32,5. Le léger avantage de San Jose à domicile s'est vérifié. Mon avis nuancé et peu confiant sur le 1N2 convenait à un match serré (xG 0,91 contre 0,61).",
+      "whatWasMissed": "Je n'avais pas vu que San Jose pouvait gagner avec peu de tirs. Le club n'en a pris que 11, contre 15,8 attendus, et il a cédé la possession (37 % contre 63 %). Il a fait la différence très tôt (deux buts avant la 25e) et a ensuite subi. Houston a cadré 5 tirs, plus que sa moyenne extérieure de 3,2. Le marché du « plus de 7,5 tirs » de Houston (9 tirs) est passé sans grande marge.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur sur les 10 marchés, tous gagnés. Le 1N2 est juste, avec un avantage modeste pour San Jose. Le moteur surestimait toutefois le volume de tirs de San Jose (11 réels pour 15,84 attendus). Le 10,5 n'a été dépassé que d'un tir.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "San Jose Earthquakes gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "faible",
+          "aiWasRight": null,
+          "explanation": "San Jose a gagné 2-1 grâce à Vieira (11') et Löwen (24'), puis a géré. McGuire a réduit l'écart à la 80e, et Houston a terminé à dix après le rouge de Resch (81e). Les xG étaient serrés (0,91 contre 0,61).",
+          "lesson": "La nuance prudente était la bonne posture : le match a été plus serré que le score ne le laisse croire. L'avantage de San Jose à domicile se confirme, mais il reste modeste."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Oui",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "San Jose Earthquakes & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — San Jose Earthquakes",
+          "marketId": "teamGoals",
+          "pick": "San Jose Earthquakes — Plus de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Houston Dynamo FC",
+          "marketId": "teamGoals",
+          "pick": "Houston Dynamo FC — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 13.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 12 corners (7 et 5), sous 13,5. Le moteur en attendait 10,25.",
+          "lesson": "Garder cette lecture : deux équipes aux corners modestes laissent une marge large sous 13,5."
+        },
+        {
+          "market": "Corners — San Jose Earthquakes",
+          "marketId": "teamCorners",
+          "pick": "San Jose Earthquakes — Moins de 8.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "San Jose a obtenu 7 corners, sous 8,5, malgré seulement 37 % de possession.",
+          "lesson": "La barre de 8,5 reste haute par rapport à la moyenne de San Jose à domicile (7,2). Une marge d'environ un corner suffit, mais elle est mince."
+        },
+        {
+          "market": "Corners — Houston Dynamo FC",
+          "marketId": "teamCorners",
+          "pick": "Houston Dynamo FC — Moins de 6.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Houston a obtenu 5 corners avec 63 % de possession, sous 6,5. Houston a dominé le ballon et a dû marquer pour revenir.",
+          "lesson": "Même avec la possession, Houston reste sous sa barre. La barre de 6,5 était large, ce qui se confirme."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 32.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 20 tirs (11 et 9), très loin de 32,5. Le moteur en attendait 27.",
+          "lesson": "À confirmer : la barre de 32,5 était trop haute pour ces deux équipes à faible volume."
+        },
+        {
+          "market": "Tirs — San Jose Earthquakes",
+          "marketId": "teamShots",
+          "pick": "San Jose Earthquakes — Plus de 10.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "San Jose a pris 11 tirs, juste au-dessus de 10,5, alors qu'il en attendait 15,84. Il menait 2-0 après 24 minutes et a cédé le ballon (37 %).",
+          "lesson": "Le marché est passé de justesse. Quand San Jose marque tôt, il baisse son volume : il faut tenir compte du scénario avant de prendre cette barre."
+        },
+        {
+          "market": "Tirs — Houston Dynamo FC",
+          "marketId": "teamShots",
+          "pick": "Houston Dynamo FC — Plus de 7.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Houston a pris 9 tirs, au-dessus de 7,5. Il a dominé la possession (63 %) en étant mené.",
+          "lesson": "La prudence était justifiée : la marge était mince (9 contre 7,5). Mené, Houston a bien produit du volume."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Moins de 11.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Il y a eu 10 tirs cadrés (5 et 5), sous 11,5. Le moteur en attendait 8,82.",
+          "lesson": "À garder : deux équipes modestes en tirs cadrés laissent une marge sous 11,5. Le total était pourtant plus proche de la barre qu'attendu (10 contre 8,82)."
+        },
+        {
+          "market": "Tirs cadrés — San Jose Earthquakes",
+          "marketId": "teamShotsOnTarget",
+          "pick": "San Jose Earthquakes — Moins de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "San Jose a cadré 5 tirs sur 11, sous 6,5.",
+          "lesson": "Le pourcentage plus bas (75 %) était cohérent : la marge n'était que d'un tir cadré."
+        },
+        {
+          "market": "Tirs cadrés — Houston Dynamo FC",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Houston Dynamo FC — Moins de 5.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Houston a cadré 5 tirs sur 9, juste sous 5,5. Sa moyenne extérieure était de 3,2.",
+          "lesson": "Le marché est passé de justesse (5 contre 5,5). Mené et dominant, Houston a dépassé ses habitudes. Il ne faut pas se fier à la moyenne seule."
+        }
+      ],
+      "caveats": "Un seul match. Un but en fin de match (80e) et un rouge (81e) ont pesé sur la fin de partie. Les xG sont ceux de FotMob et le classement vient d'une source historique. On ne peut pas conclure sur la tendance des deux équipes à partir de ce seul résultat.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 19,
+        "commentaire": 4
+      },
+      "usage": {
+        "input_tokens": 6,
+        "cache_creation_input_tokens": 9032,
+        "cache_read_input_tokens": 17148,
+        "output_tokens": 7763,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 9032,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2248,
+            "cache_read_input_tokens": 8367,
+            "cache_creation_input_tokens": 2753,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2753
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.11719959999999999,
+      "createdAt": "2026-11-25T07:17:25.862Z"
     }
   },
   {

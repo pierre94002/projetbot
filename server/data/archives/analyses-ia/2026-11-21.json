@@ -9713,8 +9713,240 @@
       ],
       "caveats": "Composition issue du magasin (dernier match), non officielle. Historique d'entraîneur approximatif : Herrera n'a que 3 matchs à Atlante. Échantillons à domicile/extérieur réduits (4 et 5 matchs). Pas d'avis sur les marchés de buts, retirés."
     },
-    "updatedAt": "2026-11-19T09:06:37.737Z",
-    "createdAt": "2026-11-19T09:06:37.737Z"
+    "updatedAt": "2026-11-25T06:47:36.830Z",
+    "createdAt": "2026-11-19T09:06:37.737Z",
+    "postMatchReview": {
+      "summary": "Tijuana a gagné 1-0 sur un penalty de Mora à la 77e, après avoir dominé les occasions (xG 2,38 contre 0,47, 6 grosses occasions contre 0). La lecture d'avant-match (domicile solide, Atlante en crise et amoindri) était juste. Seul le marché des tirs d'Atlante a échoué, avec 10 tirs pour un seuil de plus de 10,5.",
+      "whatWasRight": "Le vainqueur a été bien identifié. Tijuana a créé nettement plus (xG 2,38 contre 0,47, 7 tirs cadrés contre 3). Les marchés de corners, de tirs de Tijuana et de tirs cadrés se sont réalisés (14 corners, 16 tirs de Tijuana, 10 tirs cadrés au total, 3 pour Atlante). La défense d'Atlante, affaiblie par les suspensions, a concédé un penalty à la 74e.",
+      "whatWasMissed": "Atlante a fini à 10 tirs, juste sous le seuil. Je n'avais pas assez pesé le risque d'une équipe qui subit en déplacement et ne crée aucune grosse occasion. Le match est aussi resté fermé jusqu'à la 77e (0-0 à la mi-temps) malgré l'écart de xG : la victoire a tenu à un penalty.",
+      "outcomeVsEngine": "Le résultat va dans le sens du moteur : victoire de Tijuana (61 %), xG attendus 1,96 contre 0,69, réalisés 2,38 contre 0,47. Seul le marché des tirs d'Atlante contredit le chiffrage, de peu.",
+      "marketReviews": [
+        {
+          "market": "Résultat",
+          "marketId": "result",
+          "pick": "Tijuana gagne",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Tijuana a dominé en xG (2,38 contre 0,47) mais n'a marqué qu'à la 77e, sur un penalty de Mora après une faute de Sánchez à la 74e.",
+          "lesson": "Confiance moyenne justifiée : l'avantage de Tijuana à domicile contre une équipe en crise se confirme, mais le score peut rester serré avec peu de buts."
+        },
+        {
+          "market": "Total buts",
+          "marketId": "totalGoals",
+          "pick": "Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Les 2 équipes marquent",
+          "marketId": "bothTeamsScore",
+          "pick": "Non",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Résultat + Total buts",
+          "marketId": "resultAndTotal",
+          "pick": "Tijuana & Plus de 1.5 buts",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Tijuana",
+          "marketId": "teamGoals",
+          "pick": "Tijuana — Moins de 2.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Buts — Atlante",
+          "marketId": "teamGoals",
+          "pick": "Atlante — Moins de 0.5 buts",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": null,
+          "aiConfidence": null,
+          "aiWasRight": null,
+          "explanation": null,
+          "lesson": null
+        },
+        {
+          "market": "Total corners",
+          "marketId": "totalCorners",
+          "pick": "Moins de 15.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "forte",
+          "aiWasRight": true,
+          "explanation": "5 + 9 = 14 corners, sous 15,5, mais plus haut que les 11,96 attendus à cause des 9 corners d'Atlante.",
+          "lesson": "La marge était bonne, mais 14 est proche du seuil quand une équipe poussée en fin de match accumule les corners. Avis à garder, avec prudence sur la marge."
+        },
+        {
+          "market": "Corners — Tijuana",
+          "marketId": "teamCorners",
+          "pick": "Tijuana — Moins de 7.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "nuance",
+          "aiConfidence": "moyenne",
+          "aiWasRight": null,
+          "explanation": "Tijuana n'a obtenu que 5 corners, sous 7,5, malgré 16 tirs, avec seulement 42 % de possession.",
+          "lesson": "La nuance sur les 8,3 corners à domicile était superflue : avec peu de possession, Tijuana a eu peu de corners. Garder la moyenne sur 10 matchs."
+        },
+        {
+          "market": "Corners — Atlante",
+          "marketId": "teamCorners",
+          "pick": "Atlante — Plus de 3.5 corners",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Atlante a obtenu 9 corners avec 58 % de possession, bien au-dessus de 3,5.",
+          "lesson": "Une équipe qui a le ballon mais peu de danger produit des corners. Avis confirmé."
+        },
+        {
+          "market": "Total tirs",
+          "marketId": "totalShots",
+          "pick": "Moins de 35.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "16 + 10 = 26 tirs, sous 35,5, conforme aux 29,9 attendus.",
+          "lesson": "Marge confortable. Les moyennes cumulées sont un bon repère pour ce marché."
+        },
+        {
+          "market": "Tirs — Tijuana",
+          "marketId": "teamShots",
+          "pick": "Tijuana — Plus de 9.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "16 tirs, au-dessus de 9,5, cohérent avec les 14,19 attendus.",
+          "lesson": "Seuil bas par rapport aux moyennes, avis à conserver."
+        },
+        {
+          "market": "Tirs — Atlante",
+          "marketId": "teamShots",
+          "pick": "Atlante — Plus de 10.5 tirs",
+          "minOdds": 1.2,
+          "outcome": "faux",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": false,
+          "explanation": "Atlante a fini à 10 tirs, un de moins que le seuil de 10,5, avec 3 tirs cadrés et aucune grosse occasion. Les moyennes (16,6, 13 à l'extérieur) ne se sont pas retrouvées.",
+          "lesson": "À l'extérieur, contre une équipe qui domine les occasions, il faut décoter sa moyenne de tirs. Un seuil à 10,5 pour une équipe à 13 hors de ses bases laisse peu de marge, surtout avec des absents."
+        },
+        {
+          "market": "Total tirs cadrés",
+          "marketId": "totalShotsOnTarget",
+          "pick": "Plus de 6.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "7 + 3 = 10 tirs cadrés, au-dessus de 6,5, proche des 9,8 attendus.",
+          "lesson": "Avis confirmé : la production de Tijuana (7 tirs cadrés) suffit à tenir le seuil."
+        },
+        {
+          "market": "Tirs cadrés — Tijuana",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Tijuana — Plus de 2.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Tijuana a cadré 7 tirs, au-dessus de 2,5.",
+          "lesson": "Marge large à domicile, avis à garder."
+        },
+        {
+          "market": "Tirs cadrés — Atlante",
+          "marketId": "teamShotsOnTarget",
+          "pick": "Atlante — Moins de 7.5 tirs cadrés",
+          "minOdds": 1.2,
+          "outcome": "juste",
+          "aiVerdict": "confirme",
+          "aiConfidence": "moyenne",
+          "aiWasRight": true,
+          "explanation": "Atlante n'a cadré que 3 tirs, sous 7,5, sans grosse occasion.",
+          "lesson": "Le seuil était très large pour une équipe à 4,6 tirs cadrés à l'extérieur. Avis à garder."
+        }
+      ],
+      "caveats": "Un seul match, décidé par un penalty. Les statistiques sont celles de la fiche, sans détail des tirs par période. La composition d'avant-match n'était pas officielle.",
+      "model": "claude-code:sonnet",
+      "fiche": "compacte",
+      "deroule": {
+        "disponible": true,
+        "faits": 17,
+        "commentaire": 4
+      },
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 5669,
+        "cache_read_input_tokens": 8548,
+        "output_tokens": 2807,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 5669,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 1959,
+            "cache_read_input_tokens": 6460,
+            "cache_creation_input_tokens": 1297,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1297
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0524636,
+      "createdAt": "2026-11-25T06:47:36.828Z"
+    }
   },
   {
     "matchId": "5cdd9c5a74b4753f36d6bd4569aa532d",
