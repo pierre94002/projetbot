@@ -4,12 +4,13 @@
   "phase": "rodage",
   "nonSurveille": "Non surveillé par l'essai : la boucle des compositions, la boucle des cotes gratuites, et le détail de l'analyse au coup d'envoi (ses échecs ne sont dits que dans la fenêtre du serveur). Coût de la veille (matchs commencés pendant que le PC dormait) : non compté : aucune heure de coup d’envoi lisible sans la base.",
   "couverture": {
-    "minutesObservees": 950,
+    "minutesObservees": 1340,
     "minutesDeVeille": 0,
     "minutesArret": 0,
     "minutesEnErreur": 0,
-    "tours": 96,
-    "toursReussis": 96
+    "tours": 135,
+    "toursReussis": 135,
+    "minutesNonObservees": 100
   },
   "serveur": {
     "demarrages": [],
@@ -24,9 +25,9 @@
     ]
   },
   "passes": {
-    "total": 6,
+    "total": 8,
     "ok": 1,
-    "partielles": 5,
+    "partielles": 7,
     "enEchec": 0,
     "nuit": null,
     "rattrapages": [
@@ -140,6 +141,36 @@
             "resume": "Feu rouge : 35 contrôles en 2,8 s sur 1 669 rencontres des 30 derniers jours (le serveur jamais tenu plus de 303 ms d'affilée) — rouge : classement officiel — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, rencontre mal rangée, autres"
           }
         ]
+      },
+      {
+        "id": "2026-11-25T19:26:01.291Z",
+        "raison": "périodique",
+        "debut": "2026-11-25T19:26:01.291Z",
+        "fin": "2026-11-25T19:28:27.579Z",
+        "dureeS": 146,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "controleQuotidien",
+            "statut": "warn",
+            "resume": "Feu rouge : 35 contrôles en 3,2 s sur 1 669 rencontres des 30 derniers jours (le serveur jamais tenu plus de 336 ms d'affilée) — rouge : classement officiel — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, rencontre mal rangée, autres"
+          }
+        ]
+      },
+      {
+        "id": "2026-11-25T22:28:27.711Z",
+        "raison": "périodique",
+        "debut": "2026-11-25T22:28:27.711Z",
+        "fin": "2026-11-25T22:36:30.697Z",
+        "dureeS": 483,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "controleQuotidien",
+            "statut": "warn",
+            "resume": "Feu rouge : 35 contrôles en 3,1 s sur 1 686 rencontres des 30 derniers jours (le serveur jamais tenu plus de 424 ms d'affilée) — rouge : classement officiel — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, rencontre mal rangée, autres"
+          }
+        ]
       }
     ]
   },
@@ -149,7 +180,7 @@
     "changees": []
   },
   "controleDuJour": {
-    "releves": "2026-11-25T16:25:58.328Z",
+    "releves": "2026-11-25T22:36:27.520Z",
     "pire": "rouge",
     "rouges": [
       "classement-officiel"
@@ -178,10 +209,10 @@
   },
   "restauration": null,
   "ia": {
-    "appels": 126,
-    "ok": 115,
+    "appels": 161,
+    "ok": 150,
     "echecs": 11,
-    "tokens": 2252757
+    "tokens": 3043467
   },
   "direct": {
     "suspensions": 0,
@@ -484,6 +515,40 @@
       "cause": null,
       "raison": "contrôle Buteurs et score : un constat non reconnu",
       "rodage": true
+    },
+    {
+      "id": "2026-11-25|etape-en-alerte|controleQuotidien|19:28:27",
+      "le": "2026-11-25T19:28:27.579Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controleQuotidien",
+      "texte": "controleQuotidien : Feu rouge : 35 contrôles en 3,2 s sur 1 669 rencontres des 30 derniers jours (le serveur jamais tenu plus de 336 ms d'affilée) — rouge : classement officiel — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, rencontre mal rangée, autres",
+      "details": {
+        "passe": "2026-11-25T19:26:01.291Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "raison": "contrôle Buteurs et score : un constat non reconnu",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-25|etape-en-alerte|controleQuotidien|22:36:30",
+      "le": "2026-11-25T22:36:30.697Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controleQuotidien",
+      "texte": "controleQuotidien : Feu rouge : 35 contrôles en 3,1 s sur 1 686 rencontres des 30 derniers jours (le serveur jamais tenu plus de 424 ms d'affilée) — rouge : classement officiel — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, rencontre mal rangée, autres",
+      "details": {
+        "passe": "2026-11-25T22:28:27.711Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "raison": "contrôle Buteurs et score : un constat non reconnu",
+      "rodage": true
     }
   ],
   "vus": {
@@ -542,7 +607,9 @@
       "2026-11-25T06:37:15.474Z",
       "2026-11-25T10:20:57.305Z",
       "2026-11-25T13:22:25.018Z",
-      "2026-11-25T16:23:53.183Z"
+      "2026-11-25T16:23:53.183Z",
+      "2026-11-25T19:26:01.291Z",
+      "2026-11-25T22:28:27.711Z"
     ],
     "alertes": {
       "audit": "{\"parType\":[\"buteurs\",\"fichiers\",\"gardien\"]}",

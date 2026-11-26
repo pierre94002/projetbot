@@ -1,0 +1,328 @@
+{
+  "version": 1,
+  "jour": "2026-11-26",
+  "phase": "rodage",
+  "nonSurveille": "Non surveillé par l'essai : la boucle des compositions, la boucle des cotes gratuites, et le détail de l'analyse au coup d'envoi (ses échecs ne sont dits que dans la fenêtre du serveur). Coût de la veille (matchs commencés pendant que le PC dormait) : non compté : aucune heure de coup d’envoi lisible sans la base.",
+  "couverture": {
+    "minutesObservees": 70,
+    "minutesDeVeille": 971,
+    "minutesArret": 0,
+    "minutesEnErreur": 0,
+    "tours": 8,
+    "toursReussis": 8
+  },
+  "serveur": {
+    "demarrages": [],
+    "trous": [
+      {
+        "de": "2026-11-25T23:27:16.967Z",
+        "a": "2026-11-26T18:40:26.787Z",
+        "minutes": 1153,
+        "cause": null,
+        "id": "2026-11-26|trou|16644|18:40:26"
+      }
+    ]
+  },
+  "passes": {
+    "total": 0,
+    "ok": 0,
+    "partielles": 0,
+    "enEchec": 0,
+    "nuit": null,
+    "rattrapages": [],
+    "liste": []
+  },
+  "alertes": {
+    "posees": [],
+    "levees": [],
+    "changees": []
+  },
+  "controleDuJour": {
+    "releves": "2026-11-25T22:36:27.520Z",
+    "pire": "rouge",
+    "rouges": [
+      "classement-officiel"
+    ],
+    "oranges": [
+      "buteurs-score",
+      "gardiens-score",
+      "score-calendrier",
+      "club-deux-fois",
+      "mauvaise-competition",
+      "zeros-non-releves",
+      "hors-reperes-buts",
+      "hors-reperes-statistiques"
+    ],
+    "presentsAuDepart": 62
+  },
+  "fotmob": {
+    "transitions": []
+  },
+  "sauvegarde": {
+    "le": "2026-11-26T19:19:00.968Z",
+    "ok": true,
+    "rencontres": 63473,
+    "derniereDate": "2026-11-26",
+    "octets": 583462842
+  },
+  "restauration": null,
+  "ia": {
+    "appels": 52,
+    "ok": 52,
+    "echecs": 0,
+    "tokens": 1058035
+  },
+  "direct": {
+    "suspensions": 0,
+    "minutesSuspendu": 0
+  },
+  "instantaneDuDepart": null,
+  "evenements": [
+    {
+      "id": "2026-11-26|trou|16644|18:40:26",
+      "le": "2026-11-26T18:40:26.787Z",
+      "type": "trou",
+      "signal": "S10",
+      "cle": "16644",
+      "texte": "veille du PC trop courte : 971 min sur un trou de 1153 min",
+      "details": {
+        "de": "2026-11-25T23:27:16.967Z",
+        "a": "2026-11-26T18:40:26.787Z",
+        "minutes": 1153,
+        "minutesDeVeille": 971,
+        "pistes": [
+          "fenêtre du serveur figée ?",
+          "fil du serveur bloqué par un calcul ?"
+        ]
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-26|sauvegarde|sauvegarde|19:19:00",
+      "le": "2026-11-26T19:19:00.968Z",
+      "type": "sauvegarde",
+      "signal": "S7",
+      "cle": "sauvegarde",
+      "texte": "Sauvegarde faite (63473 rencontres).",
+      "details": {
+        "le": "2026-11-26T19:19:00.968Z",
+        "ok": true,
+        "rencontres": 63473,
+        "derniereDate": "2026-11-26",
+        "octets": 583462842
+      },
+      "classe": "info",
+      "cause": null,
+      "rodage": true
+    }
+  ],
+  "vus": {
+    "passes": [
+      "2026-11-15T21:02:28.565Z",
+      "2026-11-16T06:20:21.080Z",
+      "2026-11-16T11:07:18.037Z",
+      "2026-11-16T14:09:12.550Z",
+      "2026-11-16T17:10:12.011Z",
+      "2026-11-16T20:11:39.196Z",
+      "2026-11-16T23:14:51.725Z",
+      "2026-11-17T02:36:50.369Z",
+      "2026-11-17T05:39:05.493Z",
+      "2026-11-17T08:41:44.023Z",
+      "2026-11-17T11:42:34.417Z",
+      "2026-11-17T14:44:05.856Z",
+      "2026-11-17T17:44:54.473Z",
+      "2026-11-17T20:45:48.898Z",
+      "2026-11-17T23:46:41.389Z",
+      "2026-11-18T03:09:45.485Z",
+      "2026-11-18T06:12:10.247Z",
+      "2026-11-18T09:15:36.393Z",
+      "2026-11-18T11:08:04.425Z",
+      "2026-11-18T11:38:51.966Z",
+      "2026-11-18T13:21:00.375Z",
+      "2026-11-18T16:25:03.767Z",
+      "2026-11-18T19:26:38.533Z",
+      "2026-11-18T22:36:03.760Z",
+      "2026-11-19T09:02:25.135Z",
+      "2026-11-19T12:32:15.573Z",
+      "2026-11-19T15:45:19.913Z",
+      "2026-11-19T18:57:41.930Z",
+      "2026-11-19T22:07:07.578Z",
+      "2026-11-20T02:39:13.943Z",
+      "2026-11-20T14:30:39.554Z",
+      "2026-11-21T07:34:48.745Z",
+      "2026-11-21T11:01:43.668Z",
+      "2026-11-21T14:05:21.540Z",
+      "2026-11-21T17:08:33.867Z",
+      "2026-11-21T20:11:26.745Z",
+      "2026-11-21T21:38:12.632Z",
+      "2026-11-22T13:53:00.049Z",
+      "2026-11-22T17:44:59.210Z",
+      "2026-11-22T20:46:51.104Z",
+      "2026-11-23T02:14:35.933Z",
+      "2026-11-23T18:33:43.500Z",
+      "2026-11-23T21:37:39.669Z",
+      "2026-11-24T00:39:57.525Z",
+      "2026-11-24T04:58:15.623Z",
+      "2026-11-24T08:02:10.505Z",
+      "2026-11-24T16:32:01.069Z",
+      "2026-11-24T16:51:13.155Z",
+      "2026-11-24T19:53:23.255Z",
+      "2026-11-24T22:54:53.094Z",
+      "2026-11-25T01:56:37.294Z",
+      "2026-11-25T06:37:15.474Z",
+      "2026-11-25T10:20:57.305Z",
+      "2026-11-25T13:22:25.018Z",
+      "2026-11-25T16:23:53.183Z",
+      "2026-11-25T19:26:01.291Z",
+      "2026-11-25T22:28:27.711Z"
+    ],
+    "alertes": {
+      "audit": "{\"parType\":[\"buteurs\",\"fichiers\",\"gardien\"]}",
+      "simulationSaisons": "{\"inconnus\":[\"{\\\"league\\\":\\\"Allsvenskan - Sweden\\\",\\\"noms\\\":[\\\"Varbergs BoIS FC\\\",\\\"Östersunds FK\\\"]}\",\"{\\\"league\\\":\\\"Eliteserien - Norway\\\",\\\"noms\\\":[\\\"Odds Ballklubb\\\",\\\"Stabæk\\\"]}\",\"{\\\"league\\\":\\\"Liga MX\\\",\\\"noms\\\":[\\\"1st ranked\\\",\\\"2nd ranked\\\",\\\"3rd ranked\\\",\\\"4th ranked\\\"]}\",\"{\\\"league\\\":\\\"MLS\\\",\\\"noms\\\":[\\\"Orlando City/FC Cincinnati\\\",\\\"Seattle Sounders FC/Real Salt Lake\\\"]}\"]}"
+    },
+    "controles": {
+      "score-football-data": "vert",
+      "buteurs-score": "orange",
+      "gardiens-score": "orange",
+      "score-calendrier": "orange",
+      "score-futur": "vert",
+      "score-absent": "vert",
+      "doublon-meme-sens": "vert",
+      "doublon-sens-inverse": "vert",
+      "doublon-meme-identifiant": "vert",
+      "club-deux-fois": "orange",
+      "mauvaise-competition": "orange",
+      "clubs-sans-identifiant": "vert",
+      "rencontres-sans-identifiant": "vert",
+      "chiffres-equipe": "vert",
+      "chiffres-joueurs": "vert",
+      "classement-officiel": "rouge",
+      "jaunes-non-releves": "vert",
+      "corners-non-releves": "vert",
+      "tirs-non-releves": "vert",
+      "zeros-non-releves": "orange",
+      "rencontres-manquantes": "vert",
+      "feuilles-en-retard": "vert",
+      "magasin-a-jour": "vert",
+      "hors-reperes-buts": "orange",
+      "hors-reperes-statistiques": "orange",
+      "hors-reperes-cartons": "vert",
+      "match-aberrant": "vert",
+      "source-fotmob": "vert",
+      "source-football-data": "vert",
+      "source-odds-api": "vert",
+      "source-api-football": "vert",
+      "source-claude": "vert",
+      "source-cotes-gratuites": "vert"
+    },
+    "constats": [
+      "classement-officiel:manquant:classement-matchs:Serie B - Italy|2026|fotmob-9877",
+      "classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-9887",
+      "classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-6266",
+      "classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-7801",
+      "classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-208932",
+      "classement-officiel:manquant:classement-matchs:Ligue 1 - France|2026|fotmob-9847",
+      "classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-8540",
+      "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-9887",
+      "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-6266",
+      "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-7801",
+      "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-208932",
+      "buteurs-score:impossible:buteurs:2026-11-21-feyenoord-excelsior:home",
+      "classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-6479",
+      "classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-8534",
+      "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-8540",
+      "buteurs-score:impossible:buteurs:2026-11-21-estoril-felgueiras-1932:home",
+      "zeros-non-releves:zero:zeros:2026-11-21-carabobo-fc-portuguesa-fc",
+      "zeros-non-releves:zero:zeros:2026-11-21-deportivo-tachira-caracas",
+      "hors-reperes-buts:Dutch Eredivisie|2026-27|avantage_terrain",
+      "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-6479",
+      "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-8534",
+      "zeros-non-releves:zero:zeros:2026-11-22-metropolitanos-fc-deportivo-la-guaira",
+      "classement-officiel:manquant:classement-matchs:Premiership - Scotland|2026|fotmob-8284",
+      "classement-officiel:manquant:classement-matchs:Premiership - Scotland|2026|fotmob-10251",
+      "classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-9876",
+      "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-9876",
+      "classement-officiel:impossible:classement-bilan:Primera A - Colombia|2026|fotmob-10280"
+    ],
+    "fotmob": "ok",
+    "sauvegarde": "2026-11-26T19:19:00.968Z",
+    "restauration": "2026-11-24T01:52:26.566Z",
+    "direct": null,
+    "ia": {
+      "2026-11-25": {
+        "deSuite": true,
+        "part": true
+      }
+    },
+    "sansPasse": false,
+    "sansSauvegarde": false,
+    "premierJour": "2026-11-20",
+    "joursConnus": {
+      "premier-demarrage-du-journal": [
+        "2026-11-20"
+      ],
+      "audit-buteurs-gardiens": [
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-24",
+        "2026-11-25"
+      ],
+      "calendriers-incomplets": [
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19",
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-23",
+        "2026-11-24",
+        "2026-11-25"
+      ],
+      "controle-du-jour": [
+        "2026-11-16",
+        "2026-11-17"
+      ],
+      "ia-echec-isole": [
+        "2026-11-17",
+        "2026-11-24",
+        "2026-11-25"
+      ],
+      "classement-officiel": [
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-25",
+        "2026-11-24"
+      ],
+      "chiffres-non-publies": [
+        "2026-11-20",
+        "2026-11-22",
+        "2026-11-23"
+      ],
+      "hors-reperes": [
+        "2026-11-20",
+        "2026-11-22"
+      ],
+      "mise-en-service": [
+        "2026-11-21",
+        "2026-11-23",
+        "2026-11-24"
+      ],
+      "veille-du-pc": [
+        "2026-11-23"
+      ],
+      "quota-abonnement": [
+        "2026-11-25"
+      ]
+    },
+    "fotmobPanne": null,
+    "depassements": {}
+  }
+}
