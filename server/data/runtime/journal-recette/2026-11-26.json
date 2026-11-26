@@ -4,12 +4,12 @@
   "phase": "rodage",
   "nonSurveille": "Non surveillé par l'essai : la boucle des compositions, la boucle des cotes gratuites, et le détail de l'analyse au coup d'envoi (ses échecs ne sont dits que dans la fenêtre du serveur). Coût de la veille (matchs commencés pendant que le PC dormait) : non compté : aucune heure de coup d’envoi lisible sans la base.",
   "couverture": {
-    "minutesObservees": 70,
+    "minutesObservees": 90,
     "minutesDeVeille": 971,
     "minutesArret": 0,
     "minutesEnErreur": 0,
-    "tours": 8,
-    "toursReussis": 8
+    "tours": 10,
+    "toursReussis": 10
   },
   "serveur": {
     "demarrages": [],
@@ -24,13 +24,50 @@
     ]
   },
   "passes": {
-    "total": 0,
+    "total": 1,
     "ok": 0,
-    "partielles": 0,
+    "partielles": 1,
     "enEchec": 0,
     "nuit": null,
-    "rattrapages": [],
-    "liste": []
+    "rattrapages": [
+      {
+        "id": "2026-11-26T18:40:30.056Z",
+        "dureeS": 3053,
+        "apresUnTrouDe": 1153
+      }
+    ],
+    "liste": [
+      {
+        "id": "2026-11-26T18:40:30.056Z",
+        "raison": "périodique",
+        "debut": "2026-11-26T18:40:30.056Z",
+        "fin": "2026-11-26T19:31:22.665Z",
+        "dureeS": 3053,
+        "issue": "partial",
+        "etapes": [
+          {
+            "cle": "controle",
+            "statut": "warn",
+            "resume": "Depuis le 2026-10-27 : 1 567 rencontres contrôlées, 17 anomalies (buteurs : 15, gardien : 1, fichiers : 1). Rien n'est corrigé automatiquement."
+          },
+          {
+            "cle": "carnetSante",
+            "statut": "warn",
+            "resume": "136 rencontres nouvelles ou modifiées contrôlées, 14 saisons recomptées en 9 s (le serveur jamais tenu plus de 229 ms d'affilée) : 4 361 anomalies au carnet (rencontre en double : 9, mauvaise compétition : 1, match manquant : 26, chiffre impossible : 258, zéro « non relevé » : 654, club ou joueur ma"
+          },
+          {
+            "cle": "simulationSaisons",
+            "statut": "warn",
+            "resume": "Fins de saison : 34 championnats simulés 10 000 fois, 14 non calculés (Serie B - Italy : table et magasin en désaccord : Palermo (table 13, magasin 14), Modena (table 13, magasin  ; Premiership - Scotland : calendrier incomplet : 111 rencontres connues sur 115 attendues, non calculé ; Swiss Superlea"
+          },
+          {
+            "cle": "controleQuotidien",
+            "statut": "warn",
+            "resume": "Feu rouge : 35 contrôles en 4 s sur 1 665 rencontres des 30 derniers jours (le serveur jamais tenu plus de 243 ms d'affilée) — rouge : classement officiel — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, rencontre mal rangée, autres z"
+          }
+        ]
+      }
+    ]
   },
   "alertes": {
     "posees": [],
@@ -38,7 +75,7 @@
     "changees": []
   },
   "controleDuJour": {
-    "releves": "2026-11-25T22:36:27.520Z",
+    "releves": "2026-11-26T19:31:18.608Z",
     "pire": "rouge",
     "rouges": [
       "classement-officiel"
@@ -53,7 +90,7 @@
       "hors-reperes-buts",
       "hors-reperes-statistiques"
     ],
-    "presentsAuDepart": 62
+    "presentsAuDepart": 61
   },
   "fotmob": {
     "transitions": []
@@ -67,10 +104,10 @@
   },
   "restauration": null,
   "ia": {
-    "appels": 52,
-    "ok": 52,
+    "appels": 53,
+    "ok": 53,
     "echecs": 0,
-    "tokens": 1058035
+    "tokens": 1062552
   },
   "direct": {
     "suspensions": 0,
@@ -114,6 +151,105 @@
         "octets": 583462842
       },
       "classe": "info",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-26|etape-en-alerte|controle|19:31:22",
+      "le": "2026-11-26T19:31:22.665Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controle",
+      "texte": "controle : Depuis le 2026-10-27 : 1 567 rencontres contrôlées, 17 anomalies (buteurs : 15, gardien : 1, fichiers : 1). Rien n'est corrigé automatiquement.",
+      "details": {
+        "passe": "2026-11-26T18:40:30.056Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "audit-buteurs-gardiens",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-26|etape-en-alerte|carnetSante|19:31:22",
+      "le": "2026-11-26T19:31:22.665Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "carnetSante",
+      "texte": "carnetSante : 136 rencontres nouvelles ou modifiées contrôlées, 14 saisons recomptées en 9 s (le serveur jamais tenu plus de 229 ms d'affilée) : 4 361 anomalies au carnet (rencontre en double : 9, mauvaise compétition : 1, match manquant : 26, chiffre impossible : 258, zéro « non relevé » : 654, club ou joueur ma",
+      "details": {
+        "passe": "2026-11-26T18:40:30.056Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-26|etape-en-alerte|simulationSaisons|19:31:22",
+      "le": "2026-11-26T19:31:22.665Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "simulationSaisons",
+      "texte": "simulationSaisons : Fins de saison : 34 championnats simulés 10 000 fois, 14 non calculés (Serie B - Italy : table et magasin en désaccord : Palermo (table 13, magasin 14), Modena (table 13, magasin  ; Premiership - Scotland : calendrier incomplet : 111 rencontres connues sur 115 attendues, non calculé ; Swiss Superlea",
+      "details": {
+        "passe": "2026-11-26T18:40:30.056Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "connue",
+      "cause": "calendriers-incomplets",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-26|etape-en-alerte|controleQuotidien|19:31:22",
+      "le": "2026-11-26T19:31:22.665Z",
+      "type": "etape-en-alerte",
+      "signal": "S2",
+      "cle": "controleQuotidien",
+      "texte": "controleQuotidien : Feu rouge : 35 contrôles en 4 s sur 1 665 rencontres des 30 derniers jours (le serveur jamais tenu plus de 243 ms d'affilée) — rouge : classement officiel — orange : buteurs et score, gardiens et score, score du calendrier et des résultats, club deux fois le même jour, rencontre mal rangée, autres z",
+      "details": {
+        "passe": "2026-11-26T18:40:30.056Z",
+        "statut": "warn",
+        "figeeParLaVeille": false
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "raison": "contrôle Buteurs et score : un constat non reconnu",
+      "rodage": true
+    },
+    {
+      "id": "2026-11-26|constat-nouveau|classement-officiel:manquant:classement-matchs:UEFA Europa Conference League|2026|fotmob-545012|19:31:18",
+      "le": "2026-11-26T19:31:18.608Z",
+      "type": "constat-nouveau",
+      "signal": "S4",
+      "cle": "classement-officiel:manquant:classement-matchs:UEFA Europa Conference League|2026|fotmob-545012",
+      "texte": "Constat nouveau (classement-officiel) : Lincoln Red Imps FC · classement officiel — Lincoln Red Imps FC : 4 matchs joués au classement officiel, 3 au magasin — 1 rencontre manquante au moins.",
+      "details": {
+        "controle": "classement-officiel",
+        "classe": "rouge",
+        "trouveLe": "2026-11-26T19:31:18.608Z",
+        "league": "UEFA Europa Conference League"
+      },
+      "classe": "a-expliquer",
+      "cause": null,
+      "rodage": true
+    },
+    {
+      "id": "2026-11-26|constat-nouveau|classement-officiel:manquant:classement-matchs:UEFA Europa Conference League|2026|fotmob-439132|19:31:18",
+      "le": "2026-11-26T19:31:18.608Z",
+      "type": "constat-nouveau",
+      "signal": "S4",
+      "cle": "classement-officiel:manquant:classement-matchs:UEFA Europa Conference League|2026|fotmob-439132",
+      "texte": "Constat nouveau (classement-officiel) : FK Kauno Žalgiris · classement officiel — FK Kauno Žalgiris : 4 matchs joués au classement officiel, 3 au magasin — 1 rencontre manquante au moins.",
+      "details": {
+        "controle": "classement-officiel",
+        "classe": "rouge",
+        "trouveLe": "2026-11-26T19:31:18.608Z",
+        "league": "UEFA Europa Conference League"
+      },
+      "classe": "a-expliquer",
       "cause": null,
       "rodage": true
     }
@@ -176,7 +312,8 @@
       "2026-11-25T13:22:25.018Z",
       "2026-11-25T16:23:53.183Z",
       "2026-11-25T19:26:01.291Z",
-      "2026-11-25T22:28:27.711Z"
+      "2026-11-25T22:28:27.711Z",
+      "2026-11-26T18:40:30.056Z"
     ],
     "alertes": {
       "audit": "{\"parType\":[\"buteurs\",\"fichiers\",\"gardien\"]}",
@@ -244,7 +381,9 @@
       "classement-officiel:manquant:classement-matchs:Premiership - Scotland|2026|fotmob-10251",
       "classement-officiel:impossible:classement-bilan:Serie B - Italy|2026|fotmob-9876",
       "classement-officiel:doublon:classement-en-trop:Serie B - Italy|2026|fotmob-9876",
-      "classement-officiel:impossible:classement-bilan:Primera A - Colombia|2026|fotmob-10280"
+      "classement-officiel:impossible:classement-bilan:Primera A - Colombia|2026|fotmob-10280",
+      "classement-officiel:manquant:classement-matchs:UEFA Europa Conference League|2026|fotmob-545012",
+      "classement-officiel:manquant:classement-matchs:UEFA Europa Conference League|2026|fotmob-439132"
     ],
     "fotmob": "ok",
     "sauvegarde": "2026-11-26T19:19:00.968Z",
@@ -272,7 +411,8 @@
         "2026-11-22",
         "2026-11-23",
         "2026-11-24",
-        "2026-11-25"
+        "2026-11-25",
+        "2026-11-26"
       ],
       "calendriers-incomplets": [
         "2026-11-16",
@@ -284,7 +424,8 @@
         "2026-11-22",
         "2026-11-23",
         "2026-11-24",
-        "2026-11-25"
+        "2026-11-25",
+        "2026-11-26"
       ],
       "controle-du-jour": [
         "2026-11-16",
